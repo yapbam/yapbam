@@ -1,0 +1,72 @@
+package net.astesana.comptes.date.helpers;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+public class MonthDateStepper implements DateStepper {
+	private static final boolean DEBUG = false;
+
+	private int period;
+	private int day;
+	private int lastDate;
+	
+	/**
+	 * Constructor.
+	 * The time limit is the end of times. 
+	 * @see #MonthDateIterator(int, int, Date)
+	 */
+	public MonthDateStepper(int nb, int day) {
+		this(nb, day, null);
+	}
+	
+	/**
+	 * Constructor
+	 * @param nb Number of months between two dates
+	 * @param day day of month (1->31)
+	 * If the day is 31 and, for instance, the month of next date would be February,
+	 * the day would automatically set to the last day of the month 
+	 * @param timeLimit timeLimit or null if there is no time limit
+	 */
+	public MonthDateStepper(int nb, int day, Date timeLimit) {
+		super();
+		this.period = nb;
+		this.day = day;
+		this.lastDate = timeLimit==null?Integer.MAX_VALUE:DateHelper.dateToInteger(timeLimit);
+	}
+	
+	/* (non-Javadoc)
+	 * @see net.astesana.comptes.data.helpers.DateIterator#getNextDate(java.util.Date)
+	 */
+	public Date getNextStep(Date date) {
+		if (DEBUG) {
+			System.out.println("date : "+DateFormat.getDateInstance().format(date));
+			System.out.println("  number of months : "+this.period);
+		}
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(date);
+		gc.set(GregorianCalendar.DAY_OF_MONTH, 1);
+		gc.add(GregorianCalendar.MONTH, this.period);
+		int max = gc.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+		gc.set(GregorianCalendar.DAY_OF_MONTH, Math.min(max, this.day));
+		if (DEBUG) {
+			System.out.println("  -> nextDate : "+DateFormat.getDateInstance().format(gc.getTime()));
+			System.out.println("----------------------");
+		}
+		Date result = gc.getTime();
+		if (DateHelper.dateToInteger(result)>this.lastDate) result = null;
+		return result;
+	}
+
+	public int getPeriod() {
+		return period;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public Date getLastDate() {
+		return this.lastDate==Integer.MAX_VALUE?null:DateHelper.integerToDate(this.lastDate);
+	}
+}

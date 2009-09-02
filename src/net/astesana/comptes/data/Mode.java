@@ -1,0 +1,64 @@
+package net.astesana.comptes.data;
+
+import java.io.Serializable;
+
+import net.astesana.comptes.date.helpers.DateStepper;
+
+/** This class represents a paiement mode (Blue card, cheque ...) */
+public class Mode implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	/** Undefined mode (useable for receipts and expenses, the date value is the operation date). */ 
+	public static final Mode UNDEFINED = new Mode(null,DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
+	
+	private String name;
+	private DateStepper receiptVDC;
+	private DateStepper expenseVDC;
+	private boolean useChequeBook;
+
+	/** Construtor
+	 * @param name The name
+	 * @param receiptVDC A ValueDateComputer used to compute value date for receipts, or null this mode
+	 *  can't be used for receipts
+	 * @param expenseVDC A ValueDateComputer used to compute value date for expenditures, or null this mode
+	 *  can't be used for receipts
+	 * @param useChequeBook true if this mode use a cheque book
+	 * @throws IllegalArgumentException if useChequeBook is true and vdcForExpenditure is false;
+	 */
+	public Mode(String name, DateStepper receiptVDC,
+			DateStepper expenseVDC, boolean useChequeBook) {
+		super();
+		if (useChequeBook && (expenseVDC==null)) throw new IllegalArgumentException();
+		this.name = name;
+		this.receiptVDC = receiptVDC;
+		this.expenseVDC = expenseVDC;
+		this.useChequeBook = useChequeBook;
+	}
+
+	public String getName() {
+		return name == null?"Indéfini":name;//LOCAL
+	}
+
+	public DateStepper getReceiptVdc() {
+		return receiptVDC;
+	}
+
+	public DateStepper getExpenseVdc() {
+		return expenseVDC;
+	}
+
+	public boolean isUseChequeBook() {
+		return useChequeBook;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this.getName().equals(((Mode)obj).getName());
+	}
+
+	@Override
+	public int hashCode() {
+		return this.getName().hashCode();
+	}
+	
+}
