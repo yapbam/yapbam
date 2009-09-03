@@ -16,7 +16,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	
 	private Object result;
 
-	private JButton cancelButton;
+	protected JButton cancelButton;
 	protected JButton okButton;
 
 	/**
@@ -92,10 +92,9 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 
 	/** Return the window which contains the component */
 	public static Window getOwnerWindow(Component component) {
-		Container wd = component.getParent();
-		while (!(wd instanceof Window)) {
-			wd = wd.getParent();
+		while (!(component instanceof Window)) {
+			component = component.getParent();
 		}
-		return (Window) wd;
+		return (Window) component;
 	}
 }
