@@ -1,5 +1,0 @@
-Splash screen is based on a picture from Darren Hester (http://www.flickr.com/photos/ppdigital/)
-
-Thank's for posting that great picture.
-I will use it as a splash screen for an open source personal bank account manager : ""
-As I'm a newbie for reusing someoneelse work, please tell me if the mention in the readme file is not enough.

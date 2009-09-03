@@ -10,7 +10,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
@@ -26,6 +25,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.ihm.actions.*;
+import net.yapbam.ihm.dialogs.AboutDialog;
 import net.yapbam.ihm.dialogs.NewBankAccountDialog;
 
 public class MainMenuBar extends JMenuBar implements ActionListener, DataListener, ChangeListener {
@@ -185,9 +185,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		} else if (source.equals(this.menuItemSaveAs)) {
 			SaveManager.MANAGER.saveAs(this.frame);
 		} else if (source.equals(this.menuItemAbout)) {
-			JOptionPane.showMessageDialog(this.getRootPane(),
-					MessageFormat.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion()), //$NON-NLS-1$ //$NON-NLS-2$
-				    LocalizationData.get("ApplicationName"),JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
+			new AboutDialog(MainMenuBar.this.frame).setVisible(true);
 		}
 	}
 
