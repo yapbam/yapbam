@@ -5,8 +5,8 @@
     <target name="create_run_jar">
         <jar destfile="yapbam.jar">
             <manifest>
-                <attribute name="Main-Class" value="net.astesana.comptes.ihm.MainFrame"/>
-                <attribute name="SplashScreen-Image" value="net/astesana/comptes/ihm/images/splash.png"/>
+                <attribute name="Main-Class" value="net.yapbam.ihm.MainFrame"/>
+                <attribute name="SplashScreen-Image" value="net/yapbam/ihm/images/splash.png"/>
                 <!--attribute name="Class-Path" value="."/-->
             </manifest>
             <fileset dir="bin"/>
