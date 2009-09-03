@@ -1,0 +1,28 @@
+package net.yapbam.ihm.actions;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
+import net.yapbam.data.Transaction;
+import net.yapbam.ihm.IconManager;
+import net.yapbam.ihm.LocalizationData;
+import net.yapbam.ihm.MainFrame;
+
+@SuppressWarnings("serial")
+public class DeleteTransactionAction extends AbstractAction {
+	private MainFrame frame;
+	
+	public DeleteTransactionAction(MainFrame frame) {
+		super(LocalizationData.get("MainMenu.Transactions.Delete"), IconManager.DELETE_TRANSACTION);
+        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Delete.ToolTip"));
+        this.frame = frame;
+        this.setEnabled(false);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Transaction transaction = frame.getSelectedTransaction();
+		frame.getData().removeTransaction(transaction);
+	}
+}
