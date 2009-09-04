@@ -11,28 +11,24 @@ import javax.swing.JLabel;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.VersionManager;
 
-import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.MessageFormat;
-import javax.swing.JTextPane;
-import javax.swing.JScrollPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 import java.awt.Dimension;
+import javax.swing.JTabbedPane;
+import net.yapbam.ihm.widget.HTMLPane;
 
 public class AboutPanel extends JPanel {
 
+	private static final Dimension PREFERED_HTML_PANE_SIZE = new Dimension(480,240);  //  @jve:decl-index=0:
 	private static final long serialVersionUID = 1L;
 	private JPanel northPanel = null;
 	private JLabel iconLabel = null;
 	private JLabel textLabel = null;
-	private JTextPane jTextPane = null;
-	private JScrollPane jScrollPane = null;
+	private JTabbedPane jTabbedPane = null;
+	private HTMLPane relnotesPane = null;
+	private HTMLPane licensePane = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -50,7 +46,7 @@ public class AboutPanel extends JPanel {
 		this.setSize(309, 281);
 		this.setLayout(new BorderLayout());
 		this.add(getNorthPanel(), BorderLayout.NORTH);
-		this.add(getJScrollPane(), BorderLayout.CENTER);
+		this.add(getJTabbedPane(), BorderLayout.EAST);
 	}
 
 	/**
@@ -96,56 +92,43 @@ public class AboutPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jTextPane	
+	 * This method initializes jTabbedPane	
 	 * 	
-	 * @return javax.swing.JTextPane	
+	 * @return javax.swing.JTabbedPane	
 	 */
-	private JTextPane getJTextPane() {
-		if (jTextPane == null) {
-			jTextPane = new JTextPane();
-			jTextPane.setEditable(false);
-			jTextPane.addHyperlinkListener(new HyperlinkListener() {
-				@Override
-				public void hyperlinkUpdate(HyperlinkEvent e) {
-					if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
-						URL url = e.getURL();
-						try {
-							Desktop.getDesktop().browse(url.toURI()); 
-						} catch (IOException e1) {
-							System.err.println("Attempted to read a bad URL: " + url);
-						} catch (URISyntaxException e2) {
-							e2.printStackTrace();
-						}
-					}
-				}
-			});
-			java.net.URL url = Object.class.getResource("/greetings.html");
-			if (url != null) {
-				try {
-					jTextPane.setPage(url);
-				} catch (IOException e) {
-					System.err.println("Attempted to read a bad URL: " + url);
-				}
-			} else {
-				System.err.println("Couldn't find file: greetings.html");
-			}
+	private JTabbedPane getJTabbedPane() {
+		if (jTabbedPane == null) {
+			jTabbedPane = new JTabbedPane();
+			jTabbedPane.addTab(LocalizationData.get("AboutDialog.License.TabName"), null, getLicensePane(), null);
+			jTabbedPane.addTab(LocalizationData.get("AboutDialog.RelNotes.TabName"), null, getRelnotesPane(), null);
 		}
-		return jTextPane;
+		return jTabbedPane;
 	}
 
 	/**
-	 * This method initializes jScrollPane	
+	 * This method initializes relnotesPane	
 	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * @return net.yapbam.ihm.widget.relnotesPane	
 	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			jScrollPane.setPreferredSize(new Dimension(480, 161));
-			jScrollPane.setViewportView(getJTextPane());
+	private HTMLPane getRelnotesPane() {
+		if (relnotesPane == null) {
+			relnotesPane = new HTMLPane(LocalizationData.getURL("Release notes.html"));
+			relnotesPane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
 		}
-		return jScrollPane;
+		return relnotesPane;
+	}
+
+	/**
+	 * This method initializes licensePane	
+	 * 	
+	 * @return net.yapbam.ihm.widget.HTMLPane	
+	 */
+	private HTMLPane getLicensePane() {
+		if (licensePane == null) {
+			licensePane = new HTMLPane(LocalizationData.getURL("license.html"));
+			licensePane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
+		}
+		return licensePane;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
