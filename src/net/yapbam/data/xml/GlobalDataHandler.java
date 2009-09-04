@@ -35,7 +35,6 @@ class GlobalDataHandler extends DefaultHandler {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
@@ -106,7 +105,6 @@ class GlobalDataHandler extends DefaultHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
