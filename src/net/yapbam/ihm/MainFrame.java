@@ -5,15 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableColumnModel;
 
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
@@ -26,15 +23,6 @@ public class MainFrame extends JFrame implements DataListener {
 	//TODO CheckBook support
 	//TODO periodic transaction support
 	
-	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
-	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
-	private static final String FRAME_SIZE_WIDTH = "frame.size.width"; //$NON-NLS-1$
-	private static final String FRAME_SIZE_HEIGHT = "frame.size.height"; //$NON-NLS-1$
-	private static final String FRAME_LOCATION_Y = "frame.location.y"; //$NON-NLS-1$
-	private static final String FRAME_LOCATION_X = "frame.location.x"; //$NON-NLS-1$
-
-	private static final String STATE_FILENAME = ".yapbam"; //$NON-NLS-1$
-
 	private static final long serialVersionUID = 1L;
     
     private GlobalData data;
@@ -90,15 +78,9 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.data.addListener(mainMenu);
 	    
 	    // Restore initial state (last opened file and window position)
-	    Properties restoreInformation = this.restoreState();
-		TableColumnModel model = this.transactionTable.getColumnModel();
-		for (int i = 0; i < model.getColumnCount(); i++) {
-			String valueString = (String) restoreInformation.get(COLUMN_WIDTH+i);
-			if (valueString!=null) {
-				int width = Integer.parseInt(valueString);
-				if (width>0) model.getColumn(i).setPreferredWidth(width);
-			}
-		}
+	    YapbamState.INSTANCE.restoreMainFramePosition(this);
+	    YapbamState.INSTANCE.restoreGlobalData(this);
+	    YapbamState.INSTANCE.restoreTransactionTableColumns(this);
 	
 	    //Display the window.
 	    setVisible(true);
@@ -222,80 +204,6 @@ public class MainFrame extends JFrame implements DataListener {
 		currentBalance.setValue(accountFilter.getCurrentBalance());
 		finalBalance.setValue(accountFilter.getFinalBalance());
 	    checkedBalance.setValue(accountFilter.getCheckedBalance());
-	}
-
-	public void saveState() {
-		Properties properties = new Properties();
-		if (this.data.getPath()!=null) {
-			properties.put(FILE_PATH, this.data.getPath().toString());
-		}
-		Point location = this.getLocation();
-		properties.put(FRAME_LOCATION_X, Integer.toString(location.x));
-		properties.put(FRAME_LOCATION_Y, Integer.toString(location.y));
-		Dimension size = this.getSize();
-		int h = ((this.getExtendedState() & Frame.MAXIMIZED_VERT) == 0) ? size.height : -1;
-		properties.put(FRAME_SIZE_HEIGHT, Integer.toString(h));
-		int w = ((this.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
-		properties.put(FRAME_SIZE_WIDTH, Integer.toString(w));
-		TableColumnModel model = this.transactionTable.getColumnModel();
-		for (int i = 0; i < model.getColumnCount(); i++) {
-			properties.put(COLUMN_WIDTH+i, Integer.toString(model.getColumn(i).getWidth()));
-		}
-		//TODO Save the column order (if two or more columns were inverted
-		try {
-			properties.store(new FileOutputStream(STATE_FILENAME), "start data"); //$NON-NLS-1$
-		} catch (IOException e) {
-			//TODO What could we do ?
-		}
-	}
-	
-	private Properties restoreState() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Properties properties = new Properties();
-		try {
-			boolean fileIsRead = false;
-			try {
-				properties.load(new FileInputStream(STATE_FILENAME));
-				fileIsRead = true;
-			} catch (Throwable e) {
-				this.setSize(screenSize.width/2, screenSize.height/2);
-			}
-	        if (fileIsRead) {
-				int x = Integer.parseInt((String) properties.get(FRAME_LOCATION_X));
-				int y = Integer.parseInt((String) properties.get(FRAME_LOCATION_Y));
-				int width = Integer.parseInt((String) properties.get(FRAME_SIZE_WIDTH));
-				int height = Integer.parseInt((String) properties.get(FRAME_SIZE_HEIGHT));
-		        this.setExtendedState(Frame.MAXIMIZED_BOTH); //TODO Save the maximized state
-				//TODO Beware of a screen size change (especially of a reduction) ?
-		  /*
-				if ((width==0) || (width+x>screenSize.width)) {
-					x=0;
-					width = screenSize.width/2;
-				}
-				if ((height==0) || (height+y>screenSize.height)) {
-					y=0;
-					height = screenSize.height/2;
-				}*/
-		        this.setLocation(x,y);
-				this.setSize(width,height); //FIXME if window is maximized, demaximized it results in a 0x0 window
-				int extendedState = Frame.NORMAL;
-				if (height<0) extendedState = extendedState | Frame.MAXIMIZED_VERT;
-				if (width<0) extendedState = extendedState | Frame.MAXIMIZED_HORIZ;
-				this.setExtendedState(extendedState);
-		    }
-			if (properties.containsKey(FILE_PATH)) {
-				File file = new File((String) properties.get(FILE_PATH));
-				try {
-					this.data.read(file);
-				} catch (IOException e) {
-					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),file)); //$NON-NLS-1$
-				}
-			}
-	    } catch (Throwable e) {
-			e.printStackTrace(); //TODO What do do there ? Probably log this problem somewhere
-			// It doesn't matter, it's just initialization state
-		}
-	    return properties;
 	}
 
 	public void processEvent(DataEvent event) {
