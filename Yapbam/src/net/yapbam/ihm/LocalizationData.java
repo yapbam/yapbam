@@ -1,5 +1,6 @@
 package net.yapbam.ihm;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -27,5 +28,12 @@ public abstract class LocalizationData {
 
 	public static DecimalFormat getCurrencyInstance() {
 		return (DecimalFormat) NumberFormat.getCurrencyInstance(getLocale());
+	}
+	
+	public static URL getURL(String document) {
+		System.out.println (getLocale().getLanguage());
+		URL url = Object.class.getResource("/localization/"+getLocale().getLanguage()+"/"+document);
+		if (url==null) url = Object.class.getResource("/localization/"+document);
+		return url;
 	}
 }
