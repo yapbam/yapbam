@@ -19,7 +19,6 @@ import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.ihm.LocalizationData;
 
-//LOCAL
 class TransactionsTableModel extends AbstractTableModel implements DataListener, GenericTransactionTableModel {
 	private static final long serialVersionUID = 1L;
 
@@ -47,17 +46,17 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return "S/O";
-		if (columnIndex==1) return "Compte";
-		if (columnIndex==2) return "Date";
-		if (columnIndex==3) return "Libellé";
-		if (columnIndex==4) return "Montant";
-		if (columnIndex==5) return "Catégorie";
-		if (columnIndex==6) return "Mode";
-		if (columnIndex==7) return "Numéro";
-		if (columnIndex==8) return "Date de valeur";
-		if (columnIndex==9) return "Relevé";
-		return "?";
+		if (columnIndex==0) return LocalizationData.get("Transaction.0"); //$NON-NLS-1$
+		if (columnIndex==1) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+		if (columnIndex==2) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
+		if (columnIndex==3) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+		if (columnIndex==4) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+		if (columnIndex==5) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+		if (columnIndex==6) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
+		if (columnIndex==7) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
+		if (columnIndex==8) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
+		if (columnIndex==9) return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
+		return "?"; //$NON-NLS-1$
 	}
 
 	public int getRowCount() {
@@ -75,14 +74,14 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 		else if (columnIndex==2) return transaction.getDate();
 		else if (columnIndex==3) {
 			if (spread) {
-				StringBuffer buf = new StringBuffer("<html><body>").append(transaction.getDescription());
+				StringBuffer buf = new StringBuffer("<html><body>").append(transaction.getDescription()); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription());
+					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription()); //$NON-NLS-1$
 				}
 				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append("Reste");
+					buf.append("<BR>&nbsp;&nbsp;").append(LocalizationData.get("Transaction.14")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				buf.append("</body></html>");
+				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
 				return transaction.getDescription();
@@ -104,21 +103,21 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 			}
 		} else if (columnIndex==5) {
 			if (spread) {
-				StringBuffer buf = new StringBuffer("<html><body>").append(getName(transaction.getCategory()));
+				StringBuffer buf = new StringBuffer("<html><body>").append(getName(transaction.getCategory())); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getSubTransaction(i).getCategory()));
+					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getSubTransaction(i).getCategory())); //$NON-NLS-1$
 				}
 				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getCategory()));
+					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getCategory())); //$NON-NLS-1$
 				}
-				buf.append("</body></html>");
+				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
 				return getName(transaction.getCategory());
 			}
 		} else if (columnIndex==6) {
 			Mode mode = transaction.getMode();
-			return mode.equals(Mode.UNDEFINED) ? "" : mode.getName();
+			return mode.equals(Mode.UNDEFINED) ? "" : mode.getName(); //$NON-NLS-1$
 		} else if (columnIndex==7) return transaction.getNumber();
 		else if (columnIndex==8) return transaction.getValueDate();
 		else if (columnIndex==9) return transaction.getStatement();
@@ -126,7 +125,7 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 	}
 
 	private Object getName(Category category) {
-		return category.equals(Category.UNDEFINED) ? "" : category.getName();
+		return category.equals(Category.UNDEFINED) ? "" : category.getName(); //$NON-NLS-1$
 	}
 	
 	@Override
