@@ -39,7 +39,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private BalanceHistoryPane balanceHistoryPane;
 	
 	public static void main(String[] args) {
-		Locale.setDefault(new Locale(Locale.ENGLISH.getLanguage(), Locale.US.getCountry()));//TODO Remove
+//		Locale.setDefault(new Locale(Locale.ENGLISH.getLanguage(), Locale.US.getCountry()));//TODO Remove
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {}

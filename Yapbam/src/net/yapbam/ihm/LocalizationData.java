@@ -17,7 +17,7 @@ public abstract class LocalizationData {
 		return bundle.getString(key);
 	}
 	
-	static char getChar(String key) {
+	public static char getChar(String key) {
 		return get(key).charAt(0);
 	}
 

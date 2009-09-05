@@ -3,6 +3,7 @@ package net.yapbam.ihm.actions;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 import net.yapbam.data.Transaction;
 import net.yapbam.ihm.IconManager;
@@ -16,6 +17,7 @@ public class DeleteTransactionAction extends AbstractAction {
 	public DeleteTransactionAction(MainFrame frame) {
 		super(LocalizationData.get("MainMenu.Transactions.Delete"), IconManager.DELETE_TRANSACTION);
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Delete.ToolTip"));
+        putValue(Action.MNEMONIC_KEY,(int)LocalizationData.getChar("MainMenu.Transactions.Delete.Mnemonic")); //$NON-NLS-1$
         this.frame = frame;
         this.setEnabled(false);
 	}
