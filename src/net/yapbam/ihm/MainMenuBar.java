@@ -44,6 +44,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	Action editTransactionAction;
 	Action duplicateTransactionAction;
 	Action deleteTransactionAction;
+	private Action generatePeriodical;
     
 	private JMenuItem menuItemAbout;
 	
@@ -111,7 +112,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         
         this.newTransactionAction = new NewTransactionAction(frame);
         JMenuItem item = new JMenuItem(newTransactionAction);
-        item.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.New.Mnemonic")); //$NON-NLS-1$
         item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         transactionMenu.add(item);
         this.duplicateTransactionAction = new DuplicateTransactionAction(frame);
@@ -122,12 +122,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         transactionMenu.add(item);
         this.deleteTransactionAction = new DeleteTransactionAction(frame);
         item = new JMenuItem(deleteTransactionAction); //$NON-NLS-1$
-        item.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Delete.Mnemonic")); //$NON-NLS-1$
         item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         transactionMenu.add(item);
         transactionMenu.addSeparator();
-        item = new JMenuItem(new GeneratePeriodicalTransactionsAction(frame));
-        item.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Periodical.Mnemonic")); //$NON-NLS-1$
+        generatePeriodical = new GeneratePeriodicalTransactionsAction(frame);
+		item = new JMenuItem(generatePeriodical);
         transactionMenu.add(item);
         this.add(transactionMenu);
         
@@ -190,11 +189,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	}
 
 	public void processEvent(DataEvent event) {
+		GlobalData data = (GlobalData) event.getSource();
 		if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent)) {
-			this.refreshState((GlobalData) event.getSource());
+			this.refreshState(data);
 			if (event instanceof EverythingChangedEvent) {
 				this.updateFilterMenu();
 				this.updateAccountMenu();
+				this.generatePeriodical.setEnabled(data.getPeriodicalTransactionsNumber()>0);
+				//TODO Do the same if a periodicalTransaction is add or removed
 			}
 		} else if ((event instanceof AccountAddedEvent)) {
 			this.updateFilterMenu();
