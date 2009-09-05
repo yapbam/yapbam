@@ -13,10 +13,11 @@ import javax.swing.JButton;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.IconManager;
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.CoolJComboBox;
 
 public class CategoryPanel extends JPanel {
-
+	private static final String CATEGORY_PROPERTY = "category"; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 	private CoolJComboBox comboBox = null;
 	private JButton newButton = null;
@@ -63,6 +64,7 @@ public class CategoryPanel extends JPanel {
 	private JComboBox getComboBox() {
 		if (comboBox == null) {
 			comboBox = new CoolJComboBox();
+			//FIXME Need to fire a property change event when the selection changes
 		}
 		return comboBox;
 	}
@@ -78,7 +80,7 @@ public class CategoryPanel extends JPanel {
 	        Dimension dimension = getComboBox().getPreferredSize();
 	        newButton.setFocusable(false);
 	        newButton.setPreferredSize(new Dimension(dimension.height, dimension.height));
-			newButton.setToolTipText("Cliquez ici pour créer une nouvelle catégorie");
+			newButton.setToolTipText(LocalizationData.get("TransactionDialog.category.new.tooltip")); //$NON-NLS-1$
 			newButton.setIcon(IconManager.NEW_CATEGORY);
 			newButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -105,8 +107,8 @@ public class CategoryPanel extends JPanel {
 
 	public void setCategory(Category category) {
 		Object oldValue = this.getCategory();
-		this.firePropertyChange("category", oldValue, category);
 		this.comboBox.setSelectedIndex(this.data.indexOf(category));
+		this.firePropertyChange(CATEGORY_PROPERTY, oldValue, category);
 	}
 
 	public void setData(GlobalData data) {

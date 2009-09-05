@@ -59,7 +59,7 @@ public class TransactionDialog extends AbstractDialog {
 	public static Transaction open(GlobalData data, MainFrame frame, Transaction transaction) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
-			NewBankAccountDialog.open(data, frame, "Avant de pouvoir créer une opération, il est nécessaire d'avoir créé au moins un compte");
+			NewBankAccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (data.getAccountsNumber()==0) return null;
 		}
 		TransactionDialog dialog = new TransactionDialog(frame, data, transaction);
@@ -73,7 +73,7 @@ public class TransactionDialog extends AbstractDialog {
 	}
 	
 	private TransactionDialog(JFrame owner, GlobalData data, Transaction transaction) {
-		super(owner, "Nouvelle opération", data); //LOCAL
+		super(owner, LocalizationData.get("TransactionDialog.title.new"), data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
 		this.data = data;
 	}
@@ -144,15 +144,15 @@ public class TransactionDialog extends AbstractDialog {
         accounts.setSelectedIndex(selectedAccount);
         AccountsListener accountListener = new AccountsListener();
 		accounts.addActionListener(accountListener);
-        accounts.setToolTipText("Sélectionnez dans ce menu le compte sur lequel s'effectue l'opération");
+        accounts.setToolTipText(LocalizationData.get("TransactionDialog.account.tooltip")); //$NON-NLS-1$
         JButton newAccount = new JButton(IconManager.NEW_ACCOUNT);
         newAccount.setFocusable(false);
         newAccount.addActionListener(accountListener);
-        newAccount.setToolTipText("Cliquez ici pour créer un nouveau compte");
+        newAccount.setToolTipText(LocalizationData.get("TransactionDialog.account.new.tooltip")); //$NON-NLS-1$
         c.gridx=1; c.gridwidth =5; c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1;
         centerPane.add(combine(accounts, newAccount), c);
         
-     	JLabel titleLibelle = new JLabel("Libellé :");
+     	JLabel titleLibelle = new JLabel(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
         c = new GridBagConstraints();
         c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(titleLibelle, c);
@@ -161,7 +161,7 @@ public class TransactionDialog extends AbstractDialog {
         c.gridx=1; c.gridwidth=5; c.fill = GridBagConstraints.HORIZONTAL;
     	centerPane.add(description,c);
        
-    	JLabel titleDate = new JLabel("Date de l'opération :");
+    	JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
         c = new GridBagConstraints();
         c.insets = insets; c.gridx=0; c.gridy=2; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(titleDate, c);
@@ -181,56 +181,56 @@ public class TransactionDialog extends AbstractDialog {
         c.gridx=1; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(date,c);
         c.gridx=2; c.fill=GridBagConstraints.NONE; c.anchor = GridBagConstraints.WEST; c.weightx = 0;
-        centerPane.add(new JLabel("Montant :"),c);
+        centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.amount")),c); //$NON-NLS-1$
         amount = new AmountWidget();
         amount.addFocusListener(focusListener);
         amount.addKeyListener(listener);
         amount.setValue(new Double(0));
-        amount.setToolTipText("Entrez le montant de l'opération");
+        amount.setToolTipText(LocalizationData.get("TransactionDialog.amount.tooltip")); //$NON-NLS-1$
         c.gridx=3; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
         centerPane.add(amount,c);
-        receipt = new JCheckBox("Recette");
+        receipt = new JCheckBox(LocalizationData.get("TransactionDialog.receipt")); //$NON-NLS-1$
         receipt.addItemListener(new ReceiptListener());
         c.gridx=4; c.weightx=0; c.anchor = GridBagConstraints.WEST;
         centerPane.add(receipt, c);
         
         c = new GridBagConstraints();
         c.insets = insets; c.gridx=0; c.gridy=3; c.anchor = GridBagConstraints.WEST;
-		centerPane.add(new JLabel("Mode de paiement :"), c);
+		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.mode")), c); //$NON-NLS-1$
         modes = new CoolJComboBox();
         buildModes();
         selectedMode = 0;
         ModesListener modeListener = new ModesListener();
 		modes.addActionListener(modeListener);
-        modes.setToolTipText("Sélectionnez dans ce menu le mode de paiement");
+        modes.setToolTipText(LocalizationData.get("TransactionDialog.mode.tooltip")); //$NON-NLS-1$
         c.gridx=1; c.weightx=0;
         JButton newMode = new JButton(IconManager.NEW_MODE);
         newMode.setFocusable(false);
         newMode.addActionListener(modeListener);
-        newMode.setToolTipText("Cliquez ici pour créer un nouveau mode de paiement");
+        newMode.setToolTipText(LocalizationData.get("TransactionDialog.mode.new.tooltip")); //$NON-NLS-1$
         centerPane.add(combine(modes, newMode), c);
         c.gridx=2;
-        centerPane.add(new JLabel("Numéro :"), c);
+        centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.number")), c); //$NON-NLS-1$
         transactionNumber = new JTextField(15);
         transactionNumber.addFocusListener(focusListener);
         c.gridx=3;
         centerPane.add(transactionNumber, c);
         c.gridx=4;
-        centerPane.add(new JLabel("Catégorie :"),c);
+        centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.category")),c); //$NON-NLS-1$
         categories = new CategoryPanel(this.data);
         c.gridx=5; c.weightx=1; c.fill=GridBagConstraints.HORIZONTAL;
         centerPane.add(categories, c);
         
         c = new GridBagConstraints();
 		c.insets = insets; c.gridx=0; c.gridy=5; c.anchor = GridBagConstraints.WEST;
-		centerPane.add(new JLabel("Date de valeur :"), c);
+		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
 		defDate = new DateWidget();
 		defDate.addFocusListener(focusListener);
 		defDate.addKeyListener(listener);
         c.gridx=1; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(defDate,c);
         c.gridx=2; c.fill=GridBagConstraints.NONE; c.weightx = 0;
-        centerPane.add(new JLabel("Relevé :"), c);
+        centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.statement")), c); //$NON-NLS-1$
         statement = new JTextField(15);
         statement.addFocusListener(focusListener);
         c.gridx=3;
@@ -308,7 +308,7 @@ public class TransactionDialog extends AbstractDialog {
 				int index = accounts.getSelectedIndex();
 				if (index!=selectedAccount) {
 					selectedAccount = index;
-					if (DEBUG) System.out.println ("Account "+selectedAccount+" is selected");
+					if (DEBUG) System.out.println ("Account "+selectedAccount+" is selected"); //$NON-NLS-1$ //$NON-NLS-2$
 					buildModes();
 					modes.setSelectedItem(0);
 				}
@@ -350,11 +350,11 @@ public class TransactionDialog extends AbstractDialog {
 				int index = modes.getSelectedIndex();
 				if (index!=selectedMode) {
 					selectedMode = index;
-					if (DEBUG) System.out.println("Mode "+selectedMode+" is selected");
+					if (DEBUG) System.out.println("Mode "+selectedMode+" is selected"); //$NON-NLS-1$ //$NON-NLS-2$
 					boolean expense = !receipt.isSelected();
 					Mode mode = getCurrentMode();
 					//TODO transaction number may depend on the new selected mode
-					transactionNumber.setText("");
+					transactionNumber.setText(""); //$NON-NLS-1$
 					DateStepper vdc = expense?mode.getExpenseVdc():mode.getReceiptVdc();
 					defDate.setDate(vdc.getNextStep(date.getDate()));
 				}
@@ -371,9 +371,9 @@ public class TransactionDialog extends AbstractDialog {
 
 	@Override
 	protected String getOkDisabledCause() {
-		if (this.amount.getValue()==null) return "Ce bouton est inactif car le montant de l'opération est incorrect";
-		if (this.date.getDate()==null) return "Ce bouton est inactif car la date de l'opération est incorrecte";
-		if (this.defDate.getDate()==null) return "Ce bouton est inactif car la date de valeur de l'opération est incorrecte";
+		if (this.amount.getValue()==null) return LocalizationData.get("TransactionDialog.bad.amount"); //$NON-NLS-1$
+		if (this.date.getDate()==null) return LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
+		if (this.defDate.getDate()==null) return LocalizationData.get("TransactionDialog.bad.valueDate"); //$NON-NLS-1$
 		return null;
 	}
 }

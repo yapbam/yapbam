@@ -2,10 +2,12 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 
-/** Cette classe représente une catégorie (Loisirs, Salaire, etc ...) */
+import net.yapbam.ihm.LocalizationData;
+
+/** This class represents a category (Food, Sport, etc ...) */
 public class Category implements Serializable, Comparable<Category> {
 	private static final long serialVersionUID = 1L;
-	public static final Category UNDEFINED = new Category("");
+	public static final Category UNDEFINED = new Category(""); //$NON-NLS-1$
 
 	private String name;
 
@@ -15,7 +17,7 @@ public class Category implements Serializable, Comparable<Category> {
 	}
 
 	public String getName() {
-		return this.name.length()==0 ? "Indéfinie" : this.name; //LOCAL
+		return this.name.length()==0 ? LocalizationData.get("Category.undefined") : this.name; //$NON-NLS-1$
 	}
 
 	@Override

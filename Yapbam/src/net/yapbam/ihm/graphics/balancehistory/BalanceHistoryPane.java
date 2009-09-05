@@ -39,7 +39,7 @@ public class BalanceHistoryPane extends JPanel {
 		createGraphic();
 		
 		JPanel southPane = new JPanel(new BorderLayout());
-		this.isGridVisible = new JCheckBox("Afficher la grille"); //LOCAL
+		this.isGridVisible = new JCheckBox(LocalizationData.get("BalanceHistory.showGrid")); //$NON-NLS-1$
 		this.isGridVisible.addItemListener( new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				graph.setGridVisible(e.getStateChange() == ItemEvent.SELECTED);
