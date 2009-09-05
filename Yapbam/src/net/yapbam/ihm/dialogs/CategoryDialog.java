@@ -14,14 +14,14 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 
-public class NewCategoryDialog extends AbstractDialog {
+public class CategoryDialog extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField categoryField;
 	private GlobalData data;
 
-	private NewCategoryDialog(Window owner, String message, GlobalData data) {
-		super(owner, LocalizationData.get("NewCategoryDialog.title"), message); //$NON-NLS-1$
+	private CategoryDialog(Window owner, String message, GlobalData data) {
+		super(owner, LocalizationData.get("CategoryDialog.title"), message); //$NON-NLS-1$
 		this.data = data;
 	}
 	
@@ -38,12 +38,12 @@ public class NewCategoryDialog extends AbstractDialog {
             c.gridy++;
         }
         
-        JLabel titleCompte = new JLabel(LocalizationData.get("NewCategoryDialog.category")); //$NON-NLS-1$
+        JLabel titleCompte = new JLabel(LocalizationData.get("CategoryDialog.category")); //$NON-NLS-1$
         centerPane.add(titleCompte, c);
         categoryField = new JTextField(20);
         categoryField.addFocusListener(focusListener);
         categoryField.addKeyListener(listener);
-        categoryField.setToolTipText(LocalizationData.get("NewCategoryDialog.category.tooltip")); //$NON-NLS-1$
+        categoryField.setToolTipText(LocalizationData.get("CategoryDialog.category.tooltip")); //$NON-NLS-1$
         c.weightx=1; c.fill=GridBagConstraints.HORIZONTAL; c.gridx=1;
         centerPane.add(categoryField,c);
                 
@@ -67,7 +67,7 @@ public class NewCategoryDialog extends AbstractDialog {
 	 * @return The newly created account or null if the operation was canceled
 	 */
 	public static Category open(GlobalData data, Window owner, String message) {
-		NewCategoryDialog dialog = new NewCategoryDialog(owner, message, data);
+		CategoryDialog dialog = new CategoryDialog(owner, message, data);
 		dialog.setVisible(true);
 		Category newCategory = dialog.getCategory();
 		if (newCategory!=null) {
@@ -80,9 +80,9 @@ public class NewCategoryDialog extends AbstractDialog {
 	protected String getOkDisabledCause() {
 		String name = this.categoryField.getText().trim();
 		if (name.length()==0) {
-			return LocalizationData.get("NewCategoryDialog.err1"); //$NON-NLS-1$
+			return LocalizationData.get("CategoryDialog.err1"); //$NON-NLS-1$
 		} else if (this.data.getCategory(name)!=null) {
-			return LocalizationData.get("NewCategoryDialog.err2"); //$NON-NLS-1$
+			return LocalizationData.get("CategoryDialog.err2"); //$NON-NLS-1$
 		}
 		return null;
 	}

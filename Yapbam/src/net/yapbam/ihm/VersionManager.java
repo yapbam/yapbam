@@ -8,7 +8,7 @@ public class VersionManager {
 	private static Properties properties;
 	
 	static {
-		InputStream inStream = ClassLoader.getSystemResourceAsStream("version.txt");
+		InputStream inStream = ClassLoader.getSystemResourceAsStream("version.txt"); //$NON-NLS-1$
 		properties = new Properties();
 		try {
 			properties.load(inStream);
@@ -21,7 +21,7 @@ public class VersionManager {
 	}
 	
 	public static String getVersion() {
-		return properties.getProperty("version", "Inconnue"); //LOCAL
+		return properties.getProperty("version", LocalizationData.get("VersionManager.unknown")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

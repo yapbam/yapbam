@@ -26,7 +26,7 @@ import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.ihm.actions.*;
 import net.yapbam.ihm.dialogs.AboutDialog;
-import net.yapbam.ihm.dialogs.NewBankAccountDialog;
+import net.yapbam.ihm.dialogs.BankAccountDialog;
 
 public class MainMenuBar extends JMenuBar implements ActionListener, DataListener, ChangeListener {
 	private static final long serialVersionUID = 1L;
@@ -98,7 +98,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemQuit.addActionListener(this);
         menu.add(this.menuItemQuit);
 
-        accountMenu = new JMenu(LocalizationData.get("MainMenu.Accounts"));
+        accountMenu = new JMenu(LocalizationData.get("MainMenu.Accounts")); //$NON-NLS-1$
         accountMenu.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.Mnemonic")); //$NON-NLS-1$
         accountMenu.setToolTipText(LocalizationData.get("MainMenu.Accounts.ToolTip")); //$NON-NLS-1$
         updateAccountMenu();
@@ -176,7 +176,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 					try {
 						frame.getData().read(file);
 					} catch (Exception exception) {
-						ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format("Désolé, impossible de lire le fichier {0}.\n Il est sans doute corrompu.",file)); //LOCAL
+						ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent"),file)); //$NON-NLS-1$
 					}
 				}
 			}
@@ -217,7 +217,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	    menuItemNewAccount.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewBankAccountDialog.open(frame.getData(), frame, null);
+				BankAccountDialog.open(frame.getData(), frame, null);
 			}
 		});
 	    this.accountMenu.add(menuItemNewAccount);
