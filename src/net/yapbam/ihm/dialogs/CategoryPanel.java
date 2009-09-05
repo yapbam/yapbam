@@ -89,7 +89,7 @@ public class CategoryPanel extends JPanel {
 					while (!(wd instanceof Window)) {
 						wd = wd.getParent();
 					}
-					Category c = NewCategoryDialog.open(data, (Window) wd, null);;
+					Category c = CategoryDialog.open(data, (Window) wd, null);;
 					if (c!=null) {
 						buildCategories();
 						comboBox.setSelectedIndex(data.indexOf(c));

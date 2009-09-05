@@ -13,9 +13,10 @@ import javax.swing.*;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Mode;
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 
-public class NewModeDialog extends AbstractDialog {
+public class ModeDialog extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
@@ -26,8 +27,8 @@ public class NewModeDialog extends AbstractDialog {
 	private ModePanel rightPane;
 	private Account account;
 	
-	private NewModeDialog(Window owner, Account account) {
-		super(owner, "Nouveau mode de paiement", account); //LOCAL
+	private ModeDialog(Window owner, Account account) {
+		super(owner, LocalizationData.get("ModeDialog.new.title"), account); //$NON-NLS-1$
 		this.account = account;
 	}
 	
@@ -35,25 +36,25 @@ public class NewModeDialog extends AbstractDialog {
 		Account account = (Account) data;
         //Create the content pane.
         JPanel centerPane = new JPanel(new BorderLayout());
-        centerPane.add(new JLabel(MessageFormat.format("Compte : {0}", account.getName())), BorderLayout.NORTH);
+        centerPane.add(new JLabel(MessageFormat.format(LocalizationData.get("ModeDialog.account"), account.getName())), BorderLayout.NORTH); //$NON-NLS-1$
         JPanel main = new JPanel(new GridBagLayout());
-        if (DEBUG) main.setBorder(BorderFactory.createTitledBorder("main"));
+        if (DEBUG) main.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
         centerPane.add(main, BorderLayout.CENTER);
         
         JPanel idPanel = new JPanel(new GridBagLayout());
-        if (DEBUG) idPanel.setBorder(BorderFactory.createTitledBorder("idPanel"));
+        if (DEBUG) idPanel.setBorder(BorderFactory.createTitledBorder("idPanel")); //$NON-NLS-1$
         GridBagConstraints c = new GridBagConstraints(); c.insets = new Insets(10,5,5,5);
         c.anchor=GridBagConstraints.WEST;
-        idPanel.add(new JLabel("Nom :"),c);
+        idPanel.add(new JLabel(LocalizationData.get("ModeDialog.name")),c); //$NON-NLS-1$
         c.gridx=1; c.weightx=1.0; c.fill=GridBagConstraints.HORIZONTAL;
         name = new JTextField(10);
         name.addKeyListener(new AutoUpdateOkButtonKeyListener(this));
         name.addFocusListener(new AutoSelectFocusListener());
 		idPanel.add(name,c);       
         
-        chequeBook = new JCheckBox("Utiliser un chéquier");
-		leftPane = new ModePanel("Utilisable pour les dépenses", chequeBook, this);    
-        rightPane = new ModePanel("Utilisable pour les recettes", null, this);
+        chequeBook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
+		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), chequeBook, this);     //$NON-NLS-1$
+        rightPane = new ModePanel(LocalizationData.get("ModeDialog.forReceipts"), null, this); //$NON-NLS-1$
         Listener listener = new Listener();
 		leftPane.addPropertyChangeListener(listener);
 		rightPane.addPropertyChangeListener(listener);
@@ -85,7 +86,7 @@ public class NewModeDialog extends AbstractDialog {
 	 * @return Mode the mode which was added, null if the operation was canceled
 	 */
 	public static Mode open(Account account, Window owner) {
-		NewModeDialog dialog = new NewModeDialog(owner, account);
+		ModeDialog dialog = new ModeDialog(owner, account);
 		dialog.setVisible(true);
 		Mode newMode = dialog.getMode();
 		if (newMode!=null) {
@@ -98,15 +99,15 @@ public class NewModeDialog extends AbstractDialog {
 	protected String getOkDisabledCause() {
 		String name = this.name.getText().trim();
 		if (name.length()==0) {
-			return "Ce bouton est désactivé car le nom du mode est vide";
+			return LocalizationData.get("ModeDialog.bad.emptyName"); //$NON-NLS-1$
 		} else if (this.account.getMode(name)!=null) {
-			return MessageFormat.format("Ce bouton est désactivé car le mode {0} existe déjà dans le compte {1}",name, account.getName());
+			return MessageFormat.format(LocalizationData.get("ModeDialog.bad.duplicateMode"),name, account.getName()); //$NON-NLS-1$
 		} else if (!(leftPane.isSelected()||rightPane.isSelected())) {
-			return "Ce bouton est désactivé car le mode n'est utilisable ni pour les recettes, ni pour les dépenses";
+			return LocalizationData.get("ModeDialog.bad.neverAvalaible"); //$NON-NLS-1$
 		} else if (leftPane.isSelected() && !leftPane.hasValidContent()) {
-			return "Ce bouton est désactivé car les informations d'utilisation pour les dépenses sont incohérentes";
+			return LocalizationData.get("ModeDialog.bad.debt"); //$NON-NLS-1$
 		} else if (rightPane.isSelected() && !rightPane.hasValidContent()) {
-			return "Ce bouton est désactivé car les informations d'utilisation pour les recettes sont incohérentes";
+			return LocalizationData.get("ModeDialog.bad.receipt"); //$NON-NLS-1$
 		}
 		return null;
 	}

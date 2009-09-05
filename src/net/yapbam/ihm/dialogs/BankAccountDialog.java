@@ -15,15 +15,15 @@ import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.AmountWidget;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 
-public class NewBankAccountDialog extends AbstractDialog {
+public class BankAccountDialog extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField bankAccountField;
 	private AmountWidget balanceField;
 	private GlobalData data;
 
-	private NewBankAccountDialog(Window owner, String message, GlobalData data) {
-		super(owner, LocalizationData.get("NewAccountDialog.title"), message); //$NON-NLS-1$
+	private BankAccountDialog(Window owner, String message, GlobalData data) {
+		super(owner, LocalizationData.get("AccountDialog.title"), message); //$NON-NLS-1$
 		this.data = data;
 	}
 	
@@ -40,23 +40,23 @@ public class NewBankAccountDialog extends AbstractDialog {
             c.gridy++;
         }
         
-        JLabel titleCompte = new JLabel(LocalizationData.get("NewBankAccountDialog.account")); //$NON-NLS-1$
+        JLabel titleCompte = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
         centerPane.add(titleCompte, c);
         bankAccountField = new JTextField(20);
         bankAccountField.addFocusListener(focusListener);
         bankAccountField.addKeyListener(listener);
-        bankAccountField.setToolTipText(LocalizationData.get("NewBankAccountDialog.account.tooltip")); //$NON-NLS-1$
+        bankAccountField.setToolTipText(LocalizationData.get("AccountDialog.account.tooltip")); //$NON-NLS-1$
         c.weightx=1; c.fill=GridBagConstraints.HORIZONTAL; c.gridx=1;
         centerPane.add(bankAccountField,c);
         
-        JLabel titleBalance = new JLabel(LocalizationData.get("NewBankAccountDialog.balance")); //$NON-NLS-1$
+        JLabel titleBalance = new JLabel(LocalizationData.get("AccountDialog.balance")); //$NON-NLS-1$
         c.weightx=0; c.fill=GridBagConstraints.NONE; c.gridy++; c.gridx=0;
         centerPane.add(titleBalance,c);
         balanceField = new AmountWidget();
         balanceField.addFocusListener(focusListener);
         balanceField.setValue(new Double(0));
         balanceField.addKeyListener(listener);
-        balanceField.setToolTipText(LocalizationData.get("NewBankAccountDialog.balance.tooltip")); //$NON-NLS-1$
+        balanceField.setToolTipText(LocalizationData.get("AccountDialog.balance.tooltip")); //$NON-NLS-1$
         c.weightx=1; c.fill=GridBagConstraints.HORIZONTAL; c.gridx=1;
         centerPane.add(balanceField,c);
         
@@ -81,7 +81,7 @@ public class NewBankAccountDialog extends AbstractDialog {
 	 * @return The newly created account or null if the operation was canceled
 	 */
 	public static Account open(GlobalData data, Window owner, String message) {
-		NewBankAccountDialog dialog = new NewBankAccountDialog(owner, message, data);
+		BankAccountDialog dialog = new BankAccountDialog(owner, message, data);
 		dialog.setVisible(true);
 		Account newAccount = dialog.getAccount();
 		if (newAccount!=null) {
@@ -94,11 +94,11 @@ public class NewBankAccountDialog extends AbstractDialog {
 	protected String getOkDisabledCause() {
 		String name = this.bankAccountField.getText().trim();
 		if (name.length()==0) {
-			return LocalizationData.get("NewBankAccountDialog.err1"); //$NON-NLS-1$
+			return LocalizationData.get("AccountDialog.err1"); //$NON-NLS-1$
 		} else if (this.data.getAccount(name)!=null) {
-			return LocalizationData.get("NewBankAccountDialog.err2"); //$NON-NLS-1$
+			return LocalizationData.get("AccountDialog.err2"); //$NON-NLS-1$
 		} else if (this.balanceField.getValue()==null) {
-			return LocalizationData.get("NewBankAccountDialog.err3"); //$NON-NLS-1$
+			return LocalizationData.get("AccountDialog.err3"); //$NON-NLS-1$
 		}
 		return null;
 	}

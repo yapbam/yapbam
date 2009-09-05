@@ -59,7 +59,7 @@ public class TransactionDialog extends AbstractDialog {
 	public static Transaction open(GlobalData data, MainFrame frame, Transaction transaction) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
-			NewBankAccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			BankAccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (data.getAccountsNumber()==0) return null;
 		}
 		TransactionDialog dialog = new TransactionDialog(frame, data, transaction);
@@ -73,7 +73,7 @@ public class TransactionDialog extends AbstractDialog {
 	}
 	
 	private TransactionDialog(JFrame owner, GlobalData data, Transaction transaction) {
-		super(owner, LocalizationData.get("TransactionDialog.title.new"), data); //$NON-NLS-1$
+		super(owner, (transaction==null?LocalizationData.get("TransactionDialog.title.new"):LocalizationData.get("TransactionDialog.title.edit")), data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
 		this.data = data;
 	}
@@ -135,7 +135,7 @@ public class TransactionDialog extends AbstractDialog {
         KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
 
         Insets insets = new Insets(5,5,5,5);
-        JLabel titleCompte = new JLabel(LocalizationData.get("NewBankAccountDialog.account")); //$NON-NLS-1$
+        JLabel titleCompte = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
         GridBagConstraints c = new GridBagConstraints();
 		c.insets = insets; c.gridx=0; c.gridy=0; c.anchor=GridBagConstraints.WEST;
         centerPane.add(titleCompte,c);
@@ -290,7 +290,7 @@ public class TransactionDialog extends AbstractDialog {
 
 	private Mode displayNewModeDialog() {
 		Account ac = data.getAccount(selectedAccount);
-		Mode mode = NewModeDialog.open(ac, this);
+		Mode mode = ModeDialog.open(ac, this);
 		if (mode==null) return null;
 		boolean expense = !receipt.isSelected();
 		DateStepper vdc = expense ? mode.getExpenseVdc() : mode.getReceiptVdc();
@@ -313,7 +313,7 @@ public class TransactionDialog extends AbstractDialog {
 					modes.setSelectedItem(0);
 				}
 			} else {
-				Account ac = NewBankAccountDialog.open(data, TransactionDialog.this, null);
+				Account ac = BankAccountDialog.open(data, TransactionDialog.this, null);
 				if (ac!=null) {
 					accounts.addItem(ac.getName());
 					accounts.setSelectedIndex(accounts.getItemCount()-1);

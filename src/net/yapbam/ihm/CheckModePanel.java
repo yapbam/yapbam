@@ -22,7 +22,7 @@ import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.ihm.widget.DateWidget;
 
-public class CheckModePanel extends JPanel { //Local
+public class CheckModePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static final Cursor CHECK_CURSOR;
@@ -37,9 +37,9 @@ public class CheckModePanel extends JPanel { //Local
 	private MainFrame frame;
 
 	static {
-	    URL imgURL = MainMenuBar.class.getResource("images/checkCursor.png");
+	    URL imgURL = MainMenuBar.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
 	    Toolkit toolkit = Toolkit.getDefaultToolkit();
-		CHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(5, 13), "checked");
+		CHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(5, 13), "checked"); //$NON-NLS-1$
 	}
 
 	public CheckModePanel(MainFrame frame) {
@@ -53,7 +53,8 @@ public class CheckModePanel extends JPanel { //Local
 				refreshOk();
 			}
 		};
-        checkModeBox = new JCheckBox("Mode pointage");
+        checkModeBox = new JCheckBox(LocalizationData.get("CheckModePanel.title")); //$NON-NLS-1$
+        checkModeBox.setToolTipText(LocalizationData.get("CheckModePanel.title.tooltip")); //$NON-NLS-1$
         checkModeBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -61,15 +62,18 @@ public class CheckModePanel extends JPanel { //Local
 			}
 		});
         add(checkModeBox);
-        statementLabel = new JLabel("Relevé : ");
+        statementLabel = new JLabel(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 		add(statementLabel);
         statement = new JTextField(5);
         statement.addKeyListener(listener);
+        statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
         add(statement);
-        valueDateLabel = new JCheckBox("Remplacer la date de valeur par : ");
+        valueDateLabel = new JCheckBox(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
+        valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
 		add(valueDateLabel);
 		valueDate = new DateWidget();
 		valueDate.addKeyListener(listener);
+        valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
         add(valueDate);
         
         setSelected(false);
@@ -82,10 +86,6 @@ public class CheckModePanel extends JPanel { //Local
 	
 	private void refresh() {
 		boolean selected = checkModeBox.isSelected();
-//		statementLabel.setEnabled(selected);
-//        statement.setEnabled(selected);
-//        valueDateLabel.setEnabled(selected);
-//        valueDate.setEnabled(selected);
 		statementLabel.setVisible(selected);
         statement.setVisible(selected);
         valueDateLabel.setVisible(selected);

@@ -21,11 +21,13 @@ import javax.swing.JPanel;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.DeferredValueDateComputer;
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 import net.yapbam.ihm.widget.IntegerWidget;
 
 /** This panel allows to create or modify a valueDateComputer */
 class ModePanel extends JPanel {
+	static final String IS_VALID_PROPERTY = "IS_VALID"; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 	
@@ -53,7 +55,7 @@ class ModePanel extends JPanel {
         FocusListener focusListener = new AutoSelectFocusListener();
         KeyListener keyListener = new AutoUpdateOkButtonKeyListener(dialog);
         Insets insets = new Insets(5,5,5,5);
-        this.setBorder(BorderFactory.createTitledBorder(""));
+        this.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER; c.insets=insets; c.anchor=GridBagConstraints.WEST;
@@ -70,16 +72,16 @@ class ModePanel extends JPanel {
 				debtLabel.setEnabled(ok);
 				relLabel.setEnabled(ok);
 				if (optionalComponent!=null) optionalComponent.setEnabled(ok);
-				firePropertyChange("IS_VALID", !ok, ok);
+				firePropertyChange(IS_VALID_PROPERTY, !ok, ok);
 			}});
 		this.add(isSelectedBox, c);
 
 		c = new GridBagConstraints();
 		c.gridy=1; c.anchor=GridBagConstraints.WEST; c.insets=insets; c.gridwidth=1;
-		comboLabel = new JLabel("Date de valeur :");
+		comboLabel = new JLabel(LocalizationData.get("TransactionDialog.valueDate")); //$NON-NLS-1$
 		comboLabel.setEnabled(false);
 		this.add(comboLabel,c);
-		combo = new JComboBox(new String[]{"Immédiate","Relative","Différée"});
+		combo = new JComboBox(new String[]{LocalizationData.get("ModeDialog.immediate"),LocalizationData.get("ModeDialog.relative"),LocalizationData.get("ModeDialog.deferred")}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		combo.setEditable(false);
 		combo.setEnabled(false);
 		combo.addActionListener(new ActionListener(){
@@ -94,9 +96,9 @@ class ModePanel extends JPanel {
 		this.add(combo, c);
 		
 		relativePanel = new JPanel(new GridBagLayout());
-        if (DEBUG) relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel"));
+        if (DEBUG) relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
         GridBagConstraints c2 = new GridBagConstraints(); c2.insets=insets; c2.anchor=GridBagConstraints.WEST;
-        relLabel = new JLabel("Nombre de jours :");
+        relLabel = new JLabel(LocalizationData.get("ModeDialog.daysNumber")); //$NON-NLS-1$
 		relativePanel.add(relLabel, c2);
         c2.gridx=1; c2.weightx=1.0;
         relField = new IntegerWidget();
@@ -107,9 +109,9 @@ class ModePanel extends JPanel {
         relativePanel.setVisible(false);
         
 		deferedPanel = new JPanel(new GridBagLayout());
-        if (DEBUG) deferedPanel.setBorder(BorderFactory.createTitledBorder("defferedPanel"));
+        if (DEBUG) deferedPanel.setBorder(BorderFactory.createTitledBorder("defferedPanel")); //$NON-NLS-1$
         c2 = new GridBagConstraints(); c2.weightx=1.0; c2.insets=insets;
-        stopLabel = new JLabel("Arrêt le :");
+        stopLabel = new JLabel(LocalizationData.get("ModeDialog.stop")); //$NON-NLS-1$
 		deferedPanel.add(stopLabel, c2);
         c2.gridx=1;
         stopField = new IntegerWidget(1, 31);
@@ -118,7 +120,7 @@ class ModePanel extends JPanel {
         stopField.setColumns(2);
 		deferedPanel.add(stopField, c2);
         c2.gridx=2;
-        debtLabel = new JLabel("Débit le :");
+        debtLabel = new JLabel(LocalizationData.get("ModeDialog.debt")); //$NON-NLS-1$
 		deferedPanel.add(debtLabel, c2);
 		debtField = new IntegerWidget(1, 31);
 		debtField.addFocusListener(focusListener);
@@ -129,7 +131,7 @@ class ModePanel extends JPanel {
         deferedPanel.setVisible(false);
         
 		emptyPanel = new JPanel();
-        if (DEBUG) emptyPanel.setBorder(BorderFactory.createTitledBorder("emptyPanel"));
+        if (DEBUG) emptyPanel.setBorder(BorderFactory.createTitledBorder("emptyPanel")); //$NON-NLS-1$
 
 		homogeneizePreferedSize(new JPanel[]{emptyPanel,relativePanel,deferedPanel});
 		c.gridy = 2; c.gridx=0; c.gridwidth=GridBagConstraints.REMAINDER; c.fill=GridBagConstraints.HORIZONTAL;
