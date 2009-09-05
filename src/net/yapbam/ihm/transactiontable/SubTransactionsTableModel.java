@@ -8,8 +8,8 @@ import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
+import net.yapbam.ihm.LocalizationData;
 
-//LOCAL
 public class SubTransactionsTableModel extends AbstractTableModel implements GenericTransactionTableModel {
 	private static final long serialVersionUID = 1L;
 
@@ -31,10 +31,10 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Gen
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return "Libellé";
-		if (columnIndex==1) return "Montant";
-		if (columnIndex==2) return "Catégorie";
-		return "?";
+		if (columnIndex==0) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+		if (columnIndex==1) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+		if (columnIndex==2) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+		return "?"; //$NON-NLS-1$
 	}
 
 	public int getRowCount() {

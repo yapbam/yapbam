@@ -30,14 +30,15 @@ import javax.swing.event.ListSelectionListener;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.transactiontable.AmountRenderer;
 import net.yapbam.ihm.transactiontable.ObjectRenderer;
 import net.yapbam.ihm.transactiontable.SubTransactionsTableModel;
 
-class SubtransactionListPanel extends JPanel { //LOCAL
+class SubtransactionListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String SUM_PROPERTY = "sum";
+	public static final String SUM_PROPERTY = "sum"; //$NON-NLS-1$
 	
 	private SubTransactionsTableModel tableModel;
 	private JButton delete;
@@ -50,15 +51,15 @@ class SubtransactionListPanel extends JPanel { //LOCAL
 	public SubtransactionListPanel(final GlobalData data) {
 		super(new BorderLayout());
 		this.sum = 0;
-		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), "Sous-opérations"));
+		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), LocalizationData.get("TransactionDialog.SubPanel.title"))); //$NON-NLS-1$
 		
 		JPanel pane = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(); c.weightx=1; c.anchor=GridBagConstraints.WEST;
-		addToTransaction = new JCheckBox("Ajouter à la transaction");
+		addToTransaction = new JCheckBox(LocalizationData.get("TransactionDialog.SubPanel.add")); //$NON-NLS-1$
 		addToTransaction.setSelected(true);
-		addToTransaction.setToolTipText("Cochez cette case pour que le montant global de l'opération soit mis à jour automatiquement");
+		addToTransaction.setToolTipText(LocalizationData.get("TransactionDialog.SubPanel.add.tooltip")); //$NON-NLS-1$
 		pane.add(addToTransaction, c);
-		sumLabel = new JLabel("");
+		sumLabel = new JLabel(""); //$NON-NLS-1$
 		c.anchor=GridBagConstraints.EAST; c.gridx = 1;
 		pane.add(sumLabel, c);
 		this.add(pane, BorderLayout.NORTH);
@@ -115,15 +116,14 @@ class SubtransactionListPanel extends JPanel { //LOCAL
         JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
 		JPanel buttonsPanel = new JPanel();
-		JButton newSubTransactionButton = new JButton("Nouvelle sous-opération");
-		buttonsPanel.add(newSubTransactionButton);
+		JButton newSubTransactionButton = new JButton(LocalizationData.get("TransactionDialog.SubPanel.new")); //$NON-NLS-1$
 		newSubTransactionButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				create(data);
 			}
 		});
-		delete = new JButton("Supprimer");
+		delete = new JButton(LocalizationData.get("TransactionDialog.SubPanel.delete")); //$NON-NLS-1$
 		delete.setEnabled(false);
 		delete.addActionListener(new ActionListener() {
 			@Override
@@ -131,9 +131,7 @@ class SubtransactionListPanel extends JPanel { //LOCAL
 				deleteSelected();
 			}
 		});
-		buttonsPanel.add(delete);
-		edit = new JButton("Modifier");
-		buttonsPanel.add(edit);
+		edit = new JButton(LocalizationData.get("TransactionDialog.SubPanel.modify")); //$NON-NLS-1$
 		edit.setEnabled(false);
 		edit.addActionListener(new ActionListener() {
 			@Override
@@ -141,14 +139,17 @@ class SubtransactionListPanel extends JPanel { //LOCAL
 				editSelected(data);
 			}
 		});
+		buttonsPanel.add(newSubTransactionButton);
+		buttonsPanel.add(edit);
+		buttonsPanel.add(delete);
 		add(buttonsPanel, BorderLayout.SOUTH);
 		this.addPropertyChangeListener(SUM_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (getSubtransactionsCount()==0) {
-					sumLabel.setText("");
+					sumLabel.setText(""); //$NON-NLS-1$
 				} else {
-					sumLabel.setText(MessageFormat.format("Total des sous-opérations : {0,number,currency}", evt.getNewValue()));
+					sumLabel.setText(MessageFormat.format(LocalizationData.get("TransactionDialog.SubPanel.total"), evt.getNewValue())); //$NON-NLS-1$
 				}
 			}
 		});

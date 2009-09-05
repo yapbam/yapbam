@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.AmountWidget;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 
@@ -19,9 +20,9 @@ import javax.swing.JCheckBox;
 public class SubTransactionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String AMOUNT_PROPERTY = "amount";  //  @jve:decl-index=0:
-	public static final String DESCRIPTION_PROPERTY = "description";  //  @jve:decl-index=0:
-	private static final String CATEGORY_PROPERTY = "category";
+	public static final String AMOUNT_PROPERTY = "amount";  //  @jve:decl-index=0: //$NON-NLS-1$
+	public static final String DESCRIPTION_PROPERTY = "description";  //  @jve:decl-index=0: //$NON-NLS-1$
+	private static final String CATEGORY_PROPERTY = "category"; //$NON-NLS-1$
 	
 	private JLabel jLabel = null;
 	private JTextField descriptionField = null;
@@ -57,7 +58,7 @@ public class SubTransactionPanel extends JPanel {
 		gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints11.gridy = 2;
 		jLabel2 = new JLabel();
-		jLabel2.setText("Catégorie :");
+		jLabel2.setText(LocalizationData.get("TransactionDialog.category")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 1;
 		gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
@@ -77,7 +78,7 @@ public class SubTransactionPanel extends JPanel {
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridy = 1;
 		jLabel1 = new JLabel();
-		jLabel1.setText("Montant :");
+		jLabel1.setText(LocalizationData.get("TransactionDialog.amount")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints1.gridy = 0;
@@ -91,7 +92,7 @@ public class SubTransactionPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints.gridy = 0;
 		jLabel = new JLabel();
-		jLabel.setText("Libellé :");
+		jLabel.setText(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
 		this.setSize(333, 106);
 		this.setLayout(new GridBagLayout());
 		this.add(jLabel, gridBagConstraints);
@@ -109,7 +110,7 @@ public class SubTransactionPanel extends JPanel {
 			public void keyReleased(KeyEvent arg0) {
 				String old = description;
 				description = descriptionField.getText();
-				SubTransactionPanel.this.firePropertyChange("description", old, description);
+				SubTransactionPanel.this.firePropertyChange(DESCRIPTION_PROPERTY, old, description);
 			}
 		});
 		descriptionField.addFocusListener(focusListener);
@@ -133,8 +134,8 @@ public class SubTransactionPanel extends JPanel {
 	private JTextField getDescriptionField() {
 		if (descriptionField == null) {
 			descriptionField = new JTextField();
-			descriptionField.setToolTipText("Tapez le descrition de la sous-opération ici");
-			descriptionField.setText("");
+			descriptionField.setToolTipText(LocalizationData.get("SubTransactionDialog.description.tooltip")); //$NON-NLS-1$
+			descriptionField.setText(""); //$NON-NLS-1$
 			descriptionField.setColumns(50);
 		}
 		return descriptionField;
@@ -172,8 +173,8 @@ public class SubTransactionPanel extends JPanel {
 	private JCheckBox getJCheckBox() {
 		if (jCheckBox == null) {
 			jCheckBox = new JCheckBox();
-			jCheckBox.setText("Recette");
-			jCheckBox.setToolTipText("Cochez cette case si la sous-opération est une recette");
+			jCheckBox.setText(LocalizationData.get("TransactionDialog.receipt")); //$NON-NLS-1$
+			jCheckBox.setToolTipText(LocalizationData.get("SubTransactionDialog.receipt.tooltip")); //$NON-NLS-1$
 			jCheckBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amount!=0) {
