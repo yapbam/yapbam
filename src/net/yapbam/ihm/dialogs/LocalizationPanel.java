@@ -26,6 +26,8 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -82,10 +84,15 @@ public class LocalizationPanel extends JPanel {
 	private void reset() {
 		Locale locale = Preferences.INSTANCE.getLocale();
 		boolean defaultCountry = Preferences.INSTANCE.isDefaultCountry();
-		boolean defaultLanguage = Preferences.INSTANCE.isDefaultLanguage();
-		defaultCButton.setSelected(defaultCountry);
-		customButton.setSelected(!defaultCountry);
+		if (defaultCountry) {
+			defaultCButton.setSelected(defaultCountry);
+		} else {
+			int index = Arrays.asList(Locale.getISOCountries()).indexOf(locale.getCountry());
+			jList.setSelectedIndex(index);
+			jList.ensureIndexIsVisible(index);
+		}
 		
+		boolean defaultLanguage = Preferences.INSTANCE.isDefaultLanguage();
 		if (defaultLanguage) {
 			defaultLButton.setSelected(true);
 		} else if (locale.getLanguage().equals(Locale.FRENCH)) {
@@ -93,10 +100,6 @@ public class LocalizationPanel extends JPanel {
 		} else {
 			englishButton.setSelected(true);
 		}
-		
-		int index = Arrays.asList(Locale.getISOCountries()).indexOf(locale.getCountry());
-		jList.setSelectedIndex(index);
-		jList.ensureIndexIsVisible(index);
 	}
 
 	/**
@@ -364,6 +367,12 @@ public class LocalizationPanel extends JPanel {
 		if (revertButton == null) {
 			revertButton = new JButton();
 			revertButton.setText("Annuler");
+			revertButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					reset();
+				}
+			});
 		}
 		return revertButton;
 	}
