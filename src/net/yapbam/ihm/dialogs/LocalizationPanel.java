@@ -272,15 +272,20 @@ public class LocalizationPanel extends JPanel {
 	}
 
 	void checkSomethingChanged() {
+		southPanel.setVisible(isChanged());
+	}
+
+	/** Returns true if the panel reflects something different from Preferences.INSTANCE */
+	public boolean isChanged() {
 		Locale loc = Preferences.INSTANCE.getLocale();
 		boolean change = !(loc.equals(getBuiltLocale()) &&
 				(Preferences.INSTANCE.isDefaultCountry()==isDefaultCountry()) &&
 				(Preferences.INSTANCE.isDefaultLanguage()==isDefaultLanguage()));
-		southPanel.setVisible(change);
+		return change;
 	}
 
-	public Object getBuiltLocale() {
-		String country = (String) (isDefaultCountry()?Locale.getDefault().getCountry():jList.getSelectedValue());
+	public Locale getBuiltLocale() {
+		String country = (String) (isDefaultCountry()?Locale.getDefault().getCountry():Locale.getISOCountries()[jList.getSelectedIndex()]);
 		String lang = Locale.getDefault().getLanguage();
 		if (getFrenchButton().isSelected()) {
 			lang = Locale.FRENCH.getLanguage();

@@ -9,6 +9,7 @@ class MainFrameListener extends WindowAdapter {
 		MainFrame frame = (MainFrame) event.getWindow();
 		if (SaveManager.MANAGER.verify(frame)) {
 			YapbamState.save(frame);
+			Preferences.INSTANCE.save();
 			super.windowClosing(event);
 			System.exit(0);
 		}

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.io.*;
 
 import javax.swing.*;
@@ -57,7 +58,7 @@ public class MainFrame extends JFrame implements DataListener {
 		super();
 		this.setMinimumSize(new Dimension(800,300));
 		
-	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    this.addWindowListener(new MainFrameListener());
 	
 	    this.data = new GlobalData();
@@ -216,5 +217,11 @@ public class MainFrame extends JFrame implements DataListener {
 	
 	boolean isTransactionTableVisible() {
 		return this.mainPane.getSelectedIndex()==0;
+	}
+
+	public void restart() {
+		// TODO Restart with a new deferred thread
+		System.out.println ("restart is called");
+		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 }
