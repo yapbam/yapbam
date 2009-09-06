@@ -49,7 +49,7 @@ public class Preferences {
 		this.properties.put(LOOK_AND_FEEL, LOOK_AND_FEEL_CUSTOM_VALUE);
 	}
 
-	private void save() {
+	public void save() {
 		try {
 			properties.store(new FileOutputStream(FILENAME), "Yapbam preferences"); //$NON-NLS-1$
 		} catch (IOException e) {
@@ -89,5 +89,10 @@ public class Preferences {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
 		if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) return UIManager.getCrossPlatformLookAndFeelClassName(); 
 		return UIManager.getSystemLookAndFeelClassName();
+	}
+
+	public void setLocale(Locale locale, boolean defaultCountry, boolean defaultLanguage) {
+		this.properties.put(LANGUAGE, defaultLanguage?LANGUAGE_DEFAULT_VALUE:locale.getLanguage());
+		this.properties.put(COUNTRY, defaultCountry?COUNTRY_DEFAULT_VALUE:locale.getCountry());
 	}
 }

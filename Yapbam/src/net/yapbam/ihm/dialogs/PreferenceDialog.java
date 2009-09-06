@@ -1,10 +1,12 @@
 package net.yapbam.ihm.dialogs;
 
 import java.awt.BorderLayout;
-import java.awt.Window;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import net.yapbam.ihm.MainFrame;
+import net.yapbam.ihm.Preferences;
 
 import java.lang.Object;
 import java.lang.String;
@@ -12,14 +14,18 @@ import java.lang.String;
 @SuppressWarnings("serial")
 public class PreferenceDialog extends AbstractDialog {
 
-	public PreferenceDialog(Window owner) {
-		super(owner, "Préférences", null); //LOCAL
-		this.cancelButton.setVisible(false);
+	private LocalizationPanel localizationPanel;
+
+	public PreferenceDialog(MainFrame frame) {
+		super(frame, "Préférences", null); //LOCAL
 	}
 
 	@Override
 	protected Object buildResult() {
-		//TODO
+		boolean restart = localizationPanel.isChanged();
+		Preferences.INSTANCE.setLocale(localizationPanel.getBuiltLocale(), localizationPanel.isDefaultCountry(), localizationPanel.isDefaultLanguage());
+		//TODO Other panels
+		if (restart) ((MainFrame)this.getOwner()).restart();
 		return null;
 	}
 
@@ -27,7 +33,8 @@ public class PreferenceDialog extends AbstractDialog {
 	protected JPanel createCenterPane(Object data) {
 		JPanel panel = new JPanel(new BorderLayout());
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.add("Localisation", new LocalizationPanel());
+		localizationPanel = new LocalizationPanel();
+		tabbedPane.add("Localisation", localizationPanel);
 		tabbedPane.add("Présentation", new JPanel()); //TODO
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
