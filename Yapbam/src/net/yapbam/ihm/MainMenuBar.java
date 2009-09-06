@@ -44,7 +44,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	Action editTransactionAction;
 	Action duplicateTransactionAction;
 	Action deleteTransactionAction;
+	private Action managePeriodical;
 	private Action generatePeriodical;
+	private Action editPreferences;
     
 	private JMenuItem menuItemAbout;
 	
@@ -91,7 +93,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         menu.add(this.menuItemSaveAs);
 
         menu.addSeparator();
+        editPreferences = new EditPreferenceAction(frame);
+        menu.add(editPreferences);
 
+        menu.addSeparator();
         this.menuItemQuit = new JMenuItem(LocalizationData.get("MainMenu.Quit")); //$NON-NLS-1$
         this.menuItemQuit.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Quit.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         this.menuItemQuit.setMnemonic(LocalizationData.getChar("MainMenu.Quit.Mnemonic")); //$NON-NLS-1$
@@ -125,9 +130,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         transactionMenu.add(item);
         transactionMenu.addSeparator();
+        managePeriodical = new ManagePeriodicalTransactionsAction(frame);
+        transactionMenu.add(new JMenuItem(managePeriodical));
         generatePeriodical = new GeneratePeriodicalTransactionsAction(frame);
-		item = new JMenuItem(generatePeriodical);
-        transactionMenu.add(item);
+        transactionMenu.add(new JMenuItem(generatePeriodical));
         this.add(transactionMenu);
         
         //Build the filter menu
