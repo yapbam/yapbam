@@ -7,6 +7,7 @@ import javax.swing.Action;
 
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.MainFrame;
+import net.yapbam.ihm.dialogs.PreferenceDialog;
 
 @SuppressWarnings("serial")
 public class EditPreferenceAction extends AbstractAction {
@@ -21,6 +22,6 @@ public class EditPreferenceAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println ("not already implemented ... but it will come very, very soon"); //TODO
+		new PreferenceDialog(frame).setVisible(true);
 	}
 }
