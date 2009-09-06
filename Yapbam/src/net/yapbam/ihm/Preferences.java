@@ -12,6 +12,8 @@ import javax.swing.UIManager;
 public class Preferences {
 	private static final String LANGUAGE = "lang"; //$NON-NLS-1$
 	private static final String COUNTRY = "country"; //$NON-NLS-1$
+	private static final String LANGUAGE_DEFAULT_VALUE = "default"; //$NON-NLS-1$
+	private static final String COUNTRY_DEFAULT_VALUE = "default"; //$NON-NLS-1$
 	private static final String LOOK_AND_FEEL = "look"; //$NON-NLS-1$
 	private static final String LOOK_AND_FEEL_JAVA_VALUE = "java"; //$NON-NLS-1$
 	private static final String LOOK_AND_FEEL_CUSTOM_VALUE = "custom"; //$NON-NLS-1$
@@ -55,7 +57,19 @@ public class Preferences {
 
 	public Locale getLocale() {
 //		String[] countries = Locale.getISOCountries();
-		return new Locale(this.properties.getProperty(LANGUAGE), this.properties.getProperty(COUNTRY));
+		String lang = this.properties.getProperty(LANGUAGE);
+		if (lang.equalsIgnoreCase(LANGUAGE_DEFAULT_VALUE)) lang = Locale.getDefault().getLanguage();
+		String country = this.properties.getProperty(COUNTRY);
+		if (country.equalsIgnoreCase(COUNTRY_DEFAULT_VALUE)) lang = Locale.getDefault().getCountry();
+		return new Locale(lang, country);
+	}
+	
+	public boolean isDefaultCountry() {
+		return COUNTRY_DEFAULT_VALUE.equalsIgnoreCase((String) this.properties.get(COUNTRY));
+	}
+	
+	public boolean isDefaultLanguage() {
+		return LANGUAGE_DEFAULT_VALUE.equalsIgnoreCase((String) this.properties.get(LANGUAGE));
 	}
 	
 	public String getLookAndFeel() {

@@ -8,8 +8,18 @@ import java.util.ResourceBundle;
 
 public abstract class LocalizationData {
 	private static ResourceBundle bundle;
+	private static Locale locale;
 	
-	static void setBundle(ResourceBundle aBundle) {
+	static {
+		locale = Preferences.INSTANCE.getLocale();
+		Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
+		Locale.setDefault(locale);
+		ResourceBundle res = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
+		Locale.setDefault(oldDefault);
+		setBundle(res);
+	}
+	
+	private static void setBundle(ResourceBundle aBundle) {
 		bundle = aBundle;
 	}
 	
@@ -22,8 +32,7 @@ public abstract class LocalizationData {
 	}
 
 	public static Locale getLocale() {
-		// TODO Need to be configurable ?
-		return Locale.getDefault();
+		return locale;
 	}
 
 	public static DecimalFormat getCurrencyInstance() {
