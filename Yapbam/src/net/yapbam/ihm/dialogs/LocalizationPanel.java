@@ -5,6 +5,9 @@ import javax.swing.JPanel;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JRadioButton;
@@ -23,8 +26,13 @@ import net.yapbam.ihm.Preferences;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
-import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class LocalizationPanel extends JPanel {
 
@@ -36,17 +44,12 @@ public class LocalizationPanel extends JPanel {
 	private JScrollPane jScrollPane = null;
 	private JList jList = null;
 	
-	private Locale currentLocale;  //  @jve:decl-index=0:
-	private boolean defaultCountry;
-	private boolean defaultLanguage;
-	
-	private Vector<String> countries;
 	private JRadioButton defaultLButton = null;
 	private JRadioButton frenchButton = null;
 	private JRadioButton englishButton = null;
 	private JPanel jPanel = null;
 	private JButton revertButton = null;
-	private JPanel jPanel1 = null;
+	private JPanel southPanel = null;
 	private JLabel mustRestart = null;
 
 	/**
@@ -66,41 +69,28 @@ public class LocalizationPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setSize(548, 200);
 		this.add(getJPanel(), BorderLayout.CENTER);
-		this.add(getJPanel1(), BorderLayout.SOUTH);
+		this.add(getSouthPanel(), BorderLayout.SOUTH);
 		reset();
 	}
 	
 	private void reset() {
-		currentLocale = Preferences.INSTANCE.getLocale();
-		defaultCountry = Preferences.INSTANCE.isDefaultCountry();
-		defaultLanguage = Preferences.INSTANCE.isDefaultLanguage();
+		Locale locale = Preferences.INSTANCE.getLocale();
+		boolean defaultCountry = Preferences.INSTANCE.isDefaultCountry();
+		boolean defaultLanguage = Preferences.INSTANCE.isDefaultLanguage();
 		defaultCButton.setSelected(defaultCountry);
 		customButton.setSelected(!defaultCountry);
 		
 		if (defaultLanguage) {
 			defaultLButton.setSelected(true);
-		} else if (currentLocale.getLanguage().equals(Locale.FRENCH)) {
+		} else if (locale.getLanguage().equals(Locale.FRENCH)) {
 			frenchButton.setSelected(true);
 		} else {
 			englishButton.setSelected(true);
 		}
 		
-		Locale old = Locale.getDefault();
-		Locale.setDefault(currentLocale);
-		String defaultDisplayCountry = old.getDisplayCountry();
-		String tip = MessageFormat.format("En sélectionnant ce choix, le pays retenu sera celui par défaut pour votre système ({0})", defaultDisplayCountry);
-		defaultCButton.setToolTipText(tip);
-		defaultCButton.setText(MessageFormat.format("Par défaut ({0})",defaultDisplayCountry));
-		
-		String[] countriesCodes = Locale.getISOCountries();
-		for (int i = 0; i < countriesCodes.length; i++) {
-			countries.add(new Locale(currentLocale.getLanguage(), countriesCodes[i]).getDisplayCountry());
-		}
-		int index = Arrays.asList(countriesCodes).indexOf(currentLocale.getCountry());
+		int index = Arrays.asList(Locale.getISOCountries()).indexOf(locale.getCountry());
 		jList.setSelectedIndex(index);
 		jList.ensureIndexIsVisible(index);
-		
-		Locale.setDefault(old);
 	}
 
 	/**
@@ -134,6 +124,10 @@ public class LocalizationPanel extends JPanel {
 			group.add(getDefaultCButton());
 			group.add(getCustomButton());
 			countryPanel.add(getJScrollPane(), gridBagConstraints2);
+			group = new ButtonGroup();
+			group.add(getDefaultLButton());
+			group.add(getEnglishButton());
+			group.add(getFrenchButton());
 		}
 		return countryPanel;
 	}
@@ -180,7 +174,17 @@ public class LocalizationPanel extends JPanel {
 	private JRadioButton getDefaultCButton() {
 		if (defaultCButton == null) {
 			defaultCButton = new JRadioButton();
-			defaultCButton.setName("");
+			String defaultDisplayCountry = Locale.getDefault().getDisplayCountry(Preferences.INSTANCE.getLocale());
+			String tip = MessageFormat.format("En sélectionnant ce choix, le pays retenu sera celui par défaut pour votre système ({0})", defaultDisplayCountry);
+			defaultCButton.setToolTipText(tip);
+			defaultCButton.setText(MessageFormat.format("Par défaut ({0})",defaultDisplayCountry));
+			defaultCButton.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					System.out.println (e.getStateChange());
+					//TODO select default country
+				}
+			});
 		}
 		return defaultCButton;
 	}
@@ -219,11 +223,34 @@ public class LocalizationPanel extends JPanel {
 	 */
 	private JList getJList() {
 		if (jList == null) {
-			countries = new Vector<String>();
+			String[] countryCodes = Locale.getISOCountries();
+			String[] countries = new String[countryCodes.length];
+			for (int i = 0; i < countryCodes.length; i++) {
+				countries[i] = new Locale(Preferences.INSTANCE.getLocale().getLanguage(), countryCodes[i]).getDisplayCountry(Preferences.INSTANCE.getLocale());
+			}
 			jList = new JList(countries);
 			jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			jList.addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					if (e.getValueIsAdjusting() == false) {
+				        if (jList.getSelectedIndex() == -1) {
+				        	System.err.println ("What's that"); //TODO
+				        } else {
+				            customButton.setSelected(true);
+				        }
+				        checkSomethingChanged();
+				    }
+				}
+			});
 		}
 		return jList;
+	}
+
+	void checkSomethingChanged() {
+		boolean ok;
+		ok = true; //TODO
+		southPanel.setVisible(ok);
 	}
 
 	/**
@@ -297,12 +324,12 @@ public class LocalizationPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jPanel1	
+	 * This method initializes southPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
+	private JPanel getSouthPanel() {
+		if (southPanel == null) {
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.anchor = GridBagConstraints.WEST;
 			gridBagConstraints8.gridy = 0;
@@ -316,12 +343,13 @@ public class LocalizationPanel extends JPanel {
 			gridBagConstraints7.gridy = 0;
 			mustRestart = new JLabel();
 			mustRestart.setText("Les modifications seront prises en compte au prochain redémarrage");
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.add(getRevertButton(), gridBagConstraints8);
-			jPanel1.add(mustRestart, gridBagConstraints7);
+			southPanel = new JPanel();
+			southPanel.setLayout(new GridBagLayout());
+			southPanel.setVisible(false);
+			southPanel.add(getRevertButton(), gridBagConstraints8);
+			southPanel.add(mustRestart, gridBagConstraints7);
 		}
-		return jPanel1;
+		return southPanel;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
