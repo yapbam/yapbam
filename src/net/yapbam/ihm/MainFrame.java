@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.util.ResourceBundle;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -41,8 +40,6 @@ public class MainFrame extends JFrame implements DataListener {
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
 		} catch (Exception e) {}
-		ResourceBundle res = ResourceBundle.getBundle("Resources",Preferences.INSTANCE.getLocale()); //$NON-NLS-1$
-		LocalizationData.setBundle(res);
 	    //Schedule a job for the event-dispatching thread:
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
