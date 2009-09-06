@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
@@ -39,12 +38,10 @@ public class MainFrame extends JFrame implements DataListener {
 	private BalanceHistoryPane balanceHistoryPane;
 	
 	public static void main(String[] args) {
-//		Locale.setDefault(new Locale(Locale.ENGLISH.getLanguage(), Locale.US.getCountry()));//TODO Remove
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
 		} catch (Exception e) {}
-		Locale locale = Locale.getDefault();
-		ResourceBundle res = ResourceBundle.getBundle("Resources",locale); //$NON-NLS-1$
+		ResourceBundle res = ResourceBundle.getBundle("Resources",Preferences.INSTANCE.getLocale()); //$NON-NLS-1$
 		LocalizationData.setBundle(res);
 	    //Schedule a job for the event-dispatching thread:
 	    //creating and showing this application's GUI.
