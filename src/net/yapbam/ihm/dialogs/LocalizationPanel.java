@@ -15,7 +15,6 @@ import java.awt.GridBagConstraints;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JScrollPane;
@@ -27,12 +26,8 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class LocalizationPanel extends JPanel {
 
@@ -44,6 +39,8 @@ public class LocalizationPanel extends JPanel {
 	private JScrollPane jScrollPane = null;
 	private JList jList = null;
 	
+	private boolean jListIsAdjusting = false;
+	
 	private JRadioButton defaultLButton = null;
 	private JRadioButton frenchButton = null;
 	private JRadioButton englishButton = null;
@@ -51,12 +48,21 @@ public class LocalizationPanel extends JPanel {
 	private JButton revertButton = null;
 	private JPanel southPanel = null;
 	private JLabel mustRestart = null;
-
+	private ItemListener basicItemListener;
+	
 	/**
 	 * This is the default constructor
 	 */
 	public LocalizationPanel() {
 		super();
+		basicItemListener = new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange()==ItemEvent.SELECTED) {
+					checkSomethingChanged();
+				}
+			}
+		};
 		initialize();
 	}
 
@@ -181,8 +187,10 @@ public class LocalizationPanel extends JPanel {
 			defaultCButton.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					System.out.println (e.getStateChange());
-					//TODO select default country
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						jList.clearSelection();
+						checkSomethingChanged();
+					}
 				}
 			});
 		}
@@ -199,6 +207,19 @@ public class LocalizationPanel extends JPanel {
 			customButton = new JRadioButton();
 			customButton.setText("Personnalisé");
 			customButton.setToolTipText("Cliquez sur ce choix, puis sélectionnez le pays dans la liste ci-dessous pour choisir un pays différent de celui de votre système");
+			customButton.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						if ((!jListIsAdjusting) && (jList.getSelectedIndex()<0)) {
+							int index = Arrays.asList(Locale.getISOCountries()).indexOf(Locale.getDefault().getCountry());
+							jList.setSelectedIndex(index);
+							jList.ensureIndexIsVisible(index);
+						}
+						checkSomethingChanged();
+					}
+				}
+			});
 		}
 		return customButton;
 	}
@@ -234,10 +255,10 @@ public class LocalizationPanel extends JPanel {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					if (e.getValueIsAdjusting() == false) {
-				        if (jList.getSelectedIndex() == -1) {
-				        	System.err.println ("What's that"); //TODO
-				        } else {
+				        if (jList.getSelectedIndex() > 0) {
+				        	jListIsAdjusting = true;
 				            customButton.setSelected(true);
+				        	jListIsAdjusting = false;
 				        }
 				        checkSomethingChanged();
 				    }
@@ -248,9 +269,30 @@ public class LocalizationPanel extends JPanel {
 	}
 
 	void checkSomethingChanged() {
-		boolean ok;
-		ok = true; //TODO
-		southPanel.setVisible(ok);
+		Locale loc = Preferences.INSTANCE.getLocale();
+		boolean change = !(loc.equals(getBuiltLocale()) &&
+				(Preferences.INSTANCE.isDefaultCountry()==isDefaultCountry()) &&
+				(Preferences.INSTANCE.isDefaultLanguage()==isDefaultLanguage()));
+		southPanel.setVisible(change);
+	}
+
+	public Object getBuiltLocale() {
+		String country = (String) (isDefaultCountry()?Locale.getDefault().getCountry():jList.getSelectedValue());
+		String lang = Locale.getDefault().getLanguage();
+		if (getFrenchButton().isSelected()) {
+			lang = Locale.FRENCH.getLanguage();
+		} else if (getEnglishButton().isSelected()) {
+			lang = Locale.ENGLISH.getLanguage();
+		}
+		return new Locale(lang, country);
+	}
+
+	public boolean isDefaultCountry() {
+		return getDefaultCButton().isSelected();
+	}
+
+	public boolean isDefaultLanguage() {
+		return getDefaultLButton().isSelected();
 	}
 
 	/**
@@ -263,6 +305,7 @@ public class LocalizationPanel extends JPanel {
 			defaultLButton = new JRadioButton();
 			defaultLButton.setText("Langue du système (Anglais par défaut)");
 			defaultLButton.setToolTipText("Cliquer ici pour utiliser la langue par défaut du système ou, à si elle n'est pas disponible, l'anglais");
+			defaultLButton.addItemListener(basicItemListener);
 		}
 		return defaultLButton;
 	}
@@ -276,6 +319,7 @@ public class LocalizationPanel extends JPanel {
 		if (frenchButton == null) {
 			frenchButton = new JRadioButton();
 			frenchButton.setText(Locale.FRENCH.getDisplayLanguage(Preferences.INSTANCE.getLocale()));
+			frenchButton.addItemListener(basicItemListener);
 		}
 		return frenchButton;
 	}
@@ -289,6 +333,7 @@ public class LocalizationPanel extends JPanel {
 		if (englishButton == null) {
 			englishButton = new JRadioButton();
 			englishButton.setText(Locale.ENGLISH.getDisplayLanguage(Preferences.INSTANCE.getLocale()));
+			englishButton.addItemListener(basicItemListener);
 		}
 		return englishButton;
 	}
