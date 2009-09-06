@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import javax.swing.UIManager;
 
+/** This class represents the Yabpam application preferences */
 public class Preferences {
 	private static final String LANGUAGE = "lang"; //$NON-NLS-1$
 	private static final String COUNTRY = "country"; //$NON-NLS-1$
@@ -20,6 +21,7 @@ public class Preferences {
 
 	private static final String FILENAME = ".yapbampref"; //$NON-NLS-1$
 
+	/** Current instance */
 	public static final Preferences INSTANCE = new Preferences();
 	
 	private Properties properties;
@@ -55,8 +57,10 @@ public class Preferences {
 		}
 	}
 
+	/** Get the preferred locale
+	 * @return the preferred locale
+	 */
 	public Locale getLocale() {
-//		String[] countries = Locale.getISOCountries();
 		String lang = this.properties.getProperty(LANGUAGE);
 		if (lang.equalsIgnoreCase(LANGUAGE_DEFAULT_VALUE)) lang = Locale.getDefault().getLanguage();
 		String country = this.properties.getProperty(COUNTRY);
@@ -64,14 +68,23 @@ public class Preferences {
 		return new Locale(lang, country);
 	}
 	
+	/** @return true if the preferred country is the OS default.
+	 * If the user explicitly choose a country which is the same as the OS default, this method returns false.
+	 */
 	public boolean isDefaultCountry() {
 		return COUNTRY_DEFAULT_VALUE.equalsIgnoreCase((String) this.properties.get(COUNTRY));
 	}
 	
+	/** @return true if the preferred language is the OS default.
+	 * If the user explicitly choose a language which is the same as the OS default, this method returns false.
+	 */
 	public boolean isDefaultLanguage() {
 		return LANGUAGE_DEFAULT_VALUE.equalsIgnoreCase((String) this.properties.get(LANGUAGE));
 	}
 	
+	/** Get the preferred look and feel.
+	 * @return the name of the look and feel class
+	 */
 	public String getLookAndFeel() {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
 		if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) return UIManager.getCrossPlatformLookAndFeelClassName(); 
