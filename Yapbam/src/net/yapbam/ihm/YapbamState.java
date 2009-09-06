@@ -105,7 +105,7 @@ public class YapbamState {
 		}
 		//TODO Save the column order (if two or more columns were inverted
 		try {
-			properties.store(new FileOutputStream(STATE_FILENAME), "start data"); //$NON-NLS-1$
+			properties.store(new FileOutputStream(STATE_FILENAME), "Yapbam statup state"); //$NON-NLS-1$
 		} catch (IOException e) {
 			//TODO What could we do ?
 		}
