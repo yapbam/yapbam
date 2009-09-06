@@ -64,7 +64,7 @@ public class Preferences {
 		String lang = this.properties.getProperty(LANGUAGE);
 		if (lang.equalsIgnoreCase(LANGUAGE_DEFAULT_VALUE)) lang = Locale.getDefault().getLanguage();
 		String country = this.properties.getProperty(COUNTRY);
-		if (country.equalsIgnoreCase(COUNTRY_DEFAULT_VALUE)) lang = Locale.getDefault().getCountry();
+		if (country.equalsIgnoreCase(COUNTRY_DEFAULT_VALUE)) country = Locale.getDefault().getCountry();
 		return new Locale(lang, country);
 	}
 	
