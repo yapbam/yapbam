@@ -233,7 +233,6 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	public void restart() {
-		System.out.println ("restart is called");
 		this.data.clearListeners();
 		this.accountFilter.clearListeners();
 		this.filteredData.clearListeners();
