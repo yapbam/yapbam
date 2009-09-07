@@ -94,4 +94,12 @@ public class Preferences {
 		this.properties.put(LANGUAGE, defaultLanguage?LANGUAGE_DEFAULT_VALUE:locale.getLanguage());
 		this.properties.put(COUNTRY, defaultCountry?COUNTRY_DEFAULT_VALUE:locale.getCountry());
 	}
+	
+	public void setJavaLookAndFeel(boolean java) {
+		this.properties.put(LOOK_AND_FEEL, java?LOOK_AND_FEEL_JAVA_VALUE:LOOK_AND_FEEL_CUSTOM_VALUE);
+	}
+	
+	public boolean isJavaLookAndFeel() {
+		return this.properties.get(LOOK_AND_FEEL).equals(LOOK_AND_FEEL_JAVA_VALUE);
+	}
 }
