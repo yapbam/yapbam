@@ -32,4 +32,8 @@ public abstract class DefaultListenable implements Serializable {
 		if (listeners==null) this.listeners = new ArrayList<DataListener>();
 		listeners.add(listener);
 	}
+	
+	public void clearListeners() {
+		this.listeners.clear();
+	}
 }

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 
@@ -45,7 +46,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	            new MainFrame();
+	            new MainFrame(null, null, null);
 	        }
 	    });
 	}
@@ -53,17 +54,29 @@ public class MainFrame extends JFrame implements DataListener {
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
 	 * event-dispatching thread.
 	 */
-	private MainFrame() {
+	private MainFrame(GlobalData data, AccountFilteredData acFilter, FilteredData fData) {
+		//TODO Recreate acFilter and fData with state file (needs the state is saved)
 	    //Create and set up the window.
 		super();
 		this.setMinimumSize(new Dimension(800,300));
 		
 	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	    this.addWindowListener(new MainFrameListener());
+	    this.addWindowListener(new WindowAdapter() {
+	    	@Override
+	    	public void windowClosing(WindowEvent event) {
+	    		MainFrame frame = (MainFrame) event.getWindow();
+	    		if (SaveManager.MANAGER.verify(frame)) {
+	    			YapbamState.save(frame);
+	    			Preferences.INSTANCE.save();
+	    			super.windowClosing(event);
+//	    			System.exit(0);
+	    		}
+	    	}
+		});
 	
-	    this.data = new GlobalData();
-	    this.accountFilter = new AccountFilteredData(data);
-	    this.filteredData = new FilteredData(data);
+	    this.data = (data==null)?new GlobalData():data;
+	    this.accountFilter = acFilter==null?new AccountFilteredData(this.data):acFilter;
+	    this.filteredData = fData==null?new FilteredData(this.data):fData;
 
 	    mainMenu = new MainMenuBar(this);
 	    setContentPane(this.createContentPane());
@@ -74,7 +87,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    
 	    // Restore initial state (last opened file and window position)
 	    YapbamState.INSTANCE.restoreMainFramePosition(this);
-	    YapbamState.INSTANCE.restoreGlobalData(this);
+	    if (data==null) YapbamState.INSTANCE.restoreGlobalData(this);
 	    YapbamState.INSTANCE.restoreTransactionTableColumns(this);
 	
 	    //Display the window.
@@ -113,7 +126,7 @@ public class MainFrame extends JFrame implements DataListener {
         topPanel.add(deleteTransactionButton,c);
         
         transactionTable = new TransactionTable(getFilteredData());
-        checkModePane = new CheckModePanel(this);       
+        checkModePane = new CheckModePanel(this);
         c.gridx = 4; c.anchor=GridBagConstraints.EAST; c.weightx=1;
         topPanel.add(checkModePane,c);
         
@@ -220,8 +233,20 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	public void restart() {
-		// TODO Restart with a new deferred thread
 		System.out.println ("restart is called");
+		this.data.clearListeners();
+		this.accountFilter.clearListeners();
+		this.filteredData.clearListeners();
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		try {
+			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
+		} catch (Exception e) {}
+	    //Schedule a job for the event-dispatching thread:
+	    //creating and showing this application's GUI.
+	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	        public void run() {
+	            new MainFrame(null, null, null);
+	        }
+	    });
 	}
 }

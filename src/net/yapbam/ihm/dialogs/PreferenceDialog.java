@@ -6,6 +6,7 @@ import java.awt.Window;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.Preferences;
 
 import java.lang.Object;
@@ -13,6 +14,8 @@ import java.lang.String;
 
 @SuppressWarnings("serial")
 public class PreferenceDialog extends AbstractDialog {
+	public static final long LOCALIZATION_CHANGED = 1;
+	public static final long LOOK_AND_FEEL_CHANGED = 2;
 
 	private LocalizationPanel localizationPanel;
 
@@ -24,8 +27,12 @@ public class PreferenceDialog extends AbstractDialog {
 	protected Object buildResult() {
 		long result = 0;
 		if (localizationPanel.isChanged()) {
+			boolean needIHMRefresh = !localizationPanel.getBuiltLocale().equals(Preferences.INSTANCE.getLocale());
 			Preferences.INSTANCE.setLocale(localizationPanel.getBuiltLocale(), localizationPanel.isDefaultCountry(), localizationPanel.isDefaultLanguage());
-			result += LOCALIZATION_CHANGED;
+			if (needIHMRefresh) {
+				result = result + LOCALIZATION_CHANGED;
+				LocalizationData.reset();
+			}
 		}
 		//TODO Other panels
 		return result;
@@ -47,10 +54,7 @@ public class PreferenceDialog extends AbstractDialog {
 		return null;
 	}
 	
-	public static final long LOCALIZATION_CHANGED = 1;
-	public static final long LOOK_AND_FEEL_CHANGED = 2;
-
 	public Long getChanges() {
-		return (Long) buildResult();
+		return (Long) getResult();
 	}
 }

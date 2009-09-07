@@ -11,7 +11,12 @@ public abstract class LocalizationData {
 	private static Locale locale;
 	
 	static {
+		reset();
+	}
+	
+	public static void reset() {
 		locale = Preferences.INSTANCE.getLocale();
+		System.out.println ("initializing LocalizationData with locale "+locale);//TODO
 		Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
 		Locale.setDefault(locale);
 		ResourceBundle res = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
