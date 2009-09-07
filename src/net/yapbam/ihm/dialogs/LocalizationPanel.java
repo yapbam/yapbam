@@ -21,11 +21,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.Preferences;
-import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -49,7 +48,6 @@ public class LocalizationPanel extends JPanel {
 	private JPanel jPanel = null;
 	private JButton revertButton = null;
 	private JPanel southPanel = null;
-	private JLabel mustRestart = null;
 	private ItemListener basicItemListener;
 	
 	/**
@@ -126,7 +124,7 @@ public class LocalizationPanel extends JPanel {
 			gridBagConstraints.gridy = 0;
 			countryPanel = new JPanel();
 			countryPanel.setLayout(new GridBagLayout());
-			countryPanel.setBorder(BorderFactory.createTitledBorder(null, "Pays", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			countryPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.country"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			countryPanel.add(getDefaultCButton(), gridBagConstraints);
 			countryPanel.add(getCustomButton(), gridBagConstraints1);
 			ButtonGroup group = new ButtonGroup();
@@ -167,7 +165,7 @@ public class LocalizationPanel extends JPanel {
 			gridBagConstraints3.gridy = 0;
 			languagePanel = new JPanel();
 			languagePanel.setLayout(new GridBagLayout());
-			languagePanel.setBorder(BorderFactory.createTitledBorder(null, "Langue", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			languagePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.language"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			languagePanel.add(getDefaultLButton(), gridBagConstraints3);
 			languagePanel.add(getFrenchButton(), gridBagConstraints4);
 			languagePanel.add(getEnglishButton(), gridBagConstraints5);
@@ -184,9 +182,9 @@ public class LocalizationPanel extends JPanel {
 		if (defaultCButton == null) {
 			defaultCButton = new JRadioButton();
 			String defaultDisplayCountry = Locale.getDefault().getDisplayCountry(Preferences.INSTANCE.getLocale());
-			String tip = MessageFormat.format("En sélectionnant ce choix, le pays retenu sera celui par défaut pour votre système ({0})", defaultDisplayCountry);
+			String tip = MessageFormat.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry.toolTip"), defaultDisplayCountry); //$NON-NLS-1$
 			defaultCButton.setToolTipText(tip);
-			defaultCButton.setText(MessageFormat.format("Par défaut ({0})",defaultDisplayCountry));
+			defaultCButton.setText(MessageFormat.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry"),defaultDisplayCountry)); //$NON-NLS-1$
 			defaultCButton.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
@@ -208,8 +206,8 @@ public class LocalizationPanel extends JPanel {
 	private JRadioButton getCustomButton() {
 		if (customButton == null) {
 			customButton = new JRadioButton();
-			customButton.setText("Personnalisé");
-			customButton.setToolTipText("Cliquez sur ce choix, puis sélectionnez le pays dans la liste ci-dessous pour choisir un pays différent de celui de votre système");
+			customButton.setText(LocalizationData.get("PreferencesDialog.Localization.customCountry")); //$NON-NLS-1$
+			customButton.setToolTipText(LocalizationData.get("PreferencesDialog.Localization.customCountry.tooTip")); //$NON-NLS-1$
 			customButton.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
@@ -311,8 +309,8 @@ public class LocalizationPanel extends JPanel {
 	private JRadioButton getDefaultLButton() {
 		if (defaultLButton == null) {
 			defaultLButton = new JRadioButton();
-			defaultLButton.setText("Langue du système (Anglais par défaut)");
-			defaultLButton.setToolTipText("Cliquer ici pour utiliser la langue par défaut du système ou, à si elle n'est pas disponible, l'anglais");
+			defaultLButton.setText(LocalizationData.get("PreferencesDialog.Localization.defaultLanguage")); //$NON-NLS-1$
+			defaultLButton.setToolTipText(LocalizationData.get("PreferencesDialog.Localization.defaultLanguage.toolTip")); //$NON-NLS-1$
 			defaultLButton.addItemListener(basicItemListener);
 		}
 		return defaultLButton;
@@ -371,7 +369,8 @@ public class LocalizationPanel extends JPanel {
 	private JButton getRevertButton() {
 		if (revertButton == null) {
 			revertButton = new JButton();
-			revertButton.setText("Annuler");
+			revertButton.setText(LocalizationData.get("PreferencesDialog.Localization.revert")); //$NON-NLS-1$
+			revertButton.setToolTipText(LocalizationData.get("PreferencesDialog.Localization.revert.toolTip")); //$NON-NLS-1$
 			revertButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -393,20 +392,10 @@ public class LocalizationPanel extends JPanel {
 			gridBagConstraints8.anchor = GridBagConstraints.WEST;
 			gridBagConstraints8.gridy = 0;
 			gridBagConstraints8.gridx = 0;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 1;
-			gridBagConstraints7.anchor = GridBagConstraints.WEST;
-			gridBagConstraints7.fill = GridBagConstraints.NONE;
-			gridBagConstraints7.weightx = 1.0D;
-			gridBagConstraints7.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints7.gridy = 0;
-			mustRestart = new JLabel();
-			mustRestart.setText("Les modifications seront prises en compte au prochain redémarrage");
 			southPanel = new JPanel();
 			southPanel.setLayout(new GridBagLayout());
 			southPanel.setVisible(false);
 			southPanel.add(getRevertButton(), gridBagConstraints8);
-			southPanel.add(mustRestart, gridBagConstraints7);
 		}
 		return southPanel;
 	}
