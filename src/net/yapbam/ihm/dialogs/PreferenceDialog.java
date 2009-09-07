@@ -18,6 +18,7 @@ public class PreferenceDialog extends AbstractDialog {
 	public static final long LOOK_AND_FEEL_CHANGED = 2;
 
 	private LocalizationPanel localizationPanel;
+	private LookAndFeelPanel lookAndFeelPanel;
 
 	public PreferenceDialog(Window owner) {
 		super(owner, LocalizationData.get("PreferencesDialog.title"), null);
@@ -34,7 +35,10 @@ public class PreferenceDialog extends AbstractDialog {
 				LocalizationData.reset();
 			}
 		}
-		//TODO Other panels
+		if (lookAndFeelPanel.isCustomLookAndFeel()==Preferences.INSTANCE.isJavaLookAndFeel()) {
+			result = result + LOOK_AND_FEEL_CHANGED;
+			Preferences.INSTANCE.setJavaLookAndFeel(!Preferences.INSTANCE.isJavaLookAndFeel());
+		}
 		return result;
 	}
 
@@ -44,7 +48,8 @@ public class PreferenceDialog extends AbstractDialog {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		localizationPanel = new LocalizationPanel();
 		tabbedPane.add(LocalizationData.get("PreferencesDialog.Localization.title"), localizationPanel); //$NON-NLS-1$
-		tabbedPane.add(LocalizationData.get("PreferencesDialog.LookAndFeel.title"), new JPanel()); //$NON-NLS-1$ //TODO
+		lookAndFeelPanel = new LookAndFeelPanel();
+		tabbedPane.add(LocalizationData.get("PreferencesDialog.LookAndFeel.title"), lookAndFeelPanel); //$NON-NLS-1$
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
 	}
