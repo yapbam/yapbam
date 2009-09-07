@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 
 import javax.swing.ButtonGroup;
@@ -49,6 +50,7 @@ public class LocalizationPanel extends JPanel {
 	private JButton revertButton = null;
 	private JPanel southPanel = null;
 	private ItemListener basicItemListener;
+	private HashMap<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
 	
 	/**
 	 * This is the default constructor
@@ -85,9 +87,7 @@ public class LocalizationPanel extends JPanel {
 		if (defaultCountry) {
 			defaultCButton.setSelected(defaultCountry);
 		} else {
-			int index = Arrays.asList(Locale.getISOCountries()).indexOf(locale.getCountry());
-			jList.setSelectedIndex(index);
-			jList.ensureIndexIsVisible(index);
+			jList.setSelectedValue(locale.getDisplayCountry(locale), true);
 		}
 		
 		boolean defaultLanguage = Preferences.INSTANCE.isDefaultLanguage();
@@ -213,9 +213,7 @@ public class LocalizationPanel extends JPanel {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if ((!jListIsAdjusting) && (jList.getSelectedIndex()<0)) {
-							int index = Arrays.asList(Locale.getISOCountries()).indexOf(Locale.getDefault().getCountry());
-							jList.setSelectedIndex(index);
-							jList.ensureIndexIsVisible(index);
+							jList.setSelectedValue(Locale.getDefault().getDisplayCountry(Preferences.INSTANCE.getLocale()), true);
 						}
 						checkSomethingChanged();
 					}
@@ -247,9 +245,12 @@ public class LocalizationPanel extends JPanel {
 		if (jList == null) {
 			String[] countryCodes = Locale.getISOCountries();
 			String[] countries = new String[countryCodes.length];
+			displayCountrytoCode = new HashMap<String,String>();
 			for (int i = 0; i < countryCodes.length; i++) {
 				countries[i] = new Locale(Preferences.INSTANCE.getLocale().getLanguage(), countryCodes[i]).getDisplayCountry(Preferences.INSTANCE.getLocale());
+				displayCountrytoCode.put(countries[i], countryCodes[i]);
 			}
+			Arrays.sort(countries);
 			jList = new JList(countries);
 			jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jList.addListSelectionListener(new ListSelectionListener() {
@@ -283,7 +284,8 @@ public class LocalizationPanel extends JPanel {
 	}
 
 	public Locale getBuiltLocale() {
-		String country = (String) (isDefaultCountry()?Locale.getDefault().getCountry():Locale.getISOCountries()[jList.getSelectedIndex()]);
+		String country = getDefaultCButton().isSelected()?Locale.getDefault().getCountry():displayCountrytoCode.get((String) jList.getSelectedValue());
+		
 		String lang = Locale.getDefault().getLanguage();
 		if (getFrenchButton().isSelected()) {
 			lang = Locale.FRENCH.getLanguage();
