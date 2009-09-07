@@ -91,6 +91,7 @@ public class Preferences {
 	}
 
 	public void setLocale(Locale locale, boolean defaultCountry, boolean defaultLanguage) {
+		System.out.println ("Set preference locale to "+locale+" - "+defaultCountry+" - "+defaultLanguage);//TODO
 		this.properties.put(LANGUAGE, defaultLanguage?LANGUAGE_DEFAULT_VALUE:locale.getLanguage());
 		this.properties.put(COUNTRY, defaultCountry?COUNTRY_DEFAULT_VALUE:locale.getCountry());
 	}

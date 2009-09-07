@@ -95,7 +95,7 @@ public class LocalizationPanel extends JPanel {
 		boolean defaultLanguage = Preferences.INSTANCE.isDefaultLanguage();
 		if (defaultLanguage) {
 			defaultLButton.setSelected(true);
-		} else if (locale.getLanguage().equals(Locale.FRENCH)) {
+		} else if (locale.getLanguage().equals(Locale.FRENCH.getLanguage())) {
 			frenchButton.setSelected(true);
 		} else {
 			englishButton.setSelected(true);
