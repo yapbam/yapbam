@@ -20,7 +20,7 @@ public class PreferenceDialog extends AbstractDialog {
 	private LocalizationPanel localizationPanel;
 
 	public PreferenceDialog(Window owner) {
-		super(owner, "Préférences", null); //LOCAL
+		super(owner, LocalizationData.get("PreferencesDialog.title"), null);
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class PreferenceDialog extends AbstractDialog {
 		JPanel panel = new JPanel(new BorderLayout());
 		JTabbedPane tabbedPane = new JTabbedPane();
 		localizationPanel = new LocalizationPanel();
-		tabbedPane.add("Localisation", localizationPanel);
-		tabbedPane.add("Présentation", new JPanel()); //TODO
+		tabbedPane.add(LocalizationData.get("PreferencesDialog.Localization.title"), localizationPanel); //$NON-NLS-1$
+		tabbedPane.add(LocalizationData.get("PreferencesDialog.LookAndFeel.title"), new JPanel()); //$NON-NLS-1$ //TODO
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
 	}
