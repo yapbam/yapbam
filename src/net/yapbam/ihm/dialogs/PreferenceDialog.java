@@ -1,11 +1,11 @@
 package net.yapbam.ihm.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Window;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import net.yapbam.ihm.MainFrame;
 import net.yapbam.ihm.Preferences;
 
 import java.lang.Object;
@@ -16,17 +16,19 @@ public class PreferenceDialog extends AbstractDialog {
 
 	private LocalizationPanel localizationPanel;
 
-	public PreferenceDialog(MainFrame frame) {
-		super(frame, "Préférences", null); //LOCAL
+	public PreferenceDialog(Window owner) {
+		super(owner, "Préférences", null); //LOCAL
 	}
 
 	@Override
 	protected Object buildResult() {
-		boolean restart = localizationPanel.isChanged();
-		Preferences.INSTANCE.setLocale(localizationPanel.getBuiltLocale(), localizationPanel.isDefaultCountry(), localizationPanel.isDefaultLanguage());
+		long result = 0;
+		if (localizationPanel.isChanged()) {
+			Preferences.INSTANCE.setLocale(localizationPanel.getBuiltLocale(), localizationPanel.isDefaultCountry(), localizationPanel.isDefaultLanguage());
+			result += LOCALIZATION_CHANGED;
+		}
 		//TODO Other panels
-		if (restart) ((MainFrame)this.getOwner()).restart();
-		return null;
+		return result;
 	}
 
 	@Override
@@ -43,5 +45,12 @@ public class PreferenceDialog extends AbstractDialog {
 	@Override
 	protected String getOkDisabledCause() {
 		return null;
+	}
+	
+	public static final long LOCALIZATION_CHANGED = 1;
+	public static final long LOOK_AND_FEEL_CHANGED = 2;
+
+	public Long getChanges() {
+		return (Long) buildResult();
 	}
 }

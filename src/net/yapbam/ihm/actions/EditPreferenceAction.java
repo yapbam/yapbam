@@ -22,6 +22,13 @@ public class EditPreferenceAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new PreferenceDialog(frame).setVisible(true);
+		PreferenceDialog dialog = new PreferenceDialog(frame);
+		dialog.setVisible(true);
+		Long result = dialog.getChanges();
+		if (result!=null) {
+			if ((result & (PreferenceDialog.LOCALIZATION_CHANGED+PreferenceDialog.LOOK_AND_FEEL_CHANGED)) != 0) {
+				frame.restart();
+			}
+		}
 	}
 }
