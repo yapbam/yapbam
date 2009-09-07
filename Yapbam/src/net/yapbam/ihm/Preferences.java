@@ -43,9 +43,8 @@ public class Preferences {
 	
 	private void setToDefault() {
 		this.properties.clear();
-		Locale locale = Locale.getDefault();
-		this.properties.put(LANGUAGE, locale.getLanguage());
-		this.properties.put(COUNTRY, Locale.getDefault().getCountry());
+		this.properties.put(LANGUAGE, LANGUAGE_DEFAULT_VALUE);
+		this.properties.put(COUNTRY, COUNTRY_DEFAULT_VALUE);
 		this.properties.put(LOOK_AND_FEEL, LOOK_AND_FEEL_CUSTOM_VALUE);
 	}
 
