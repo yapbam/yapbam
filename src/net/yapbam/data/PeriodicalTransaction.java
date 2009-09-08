@@ -6,7 +6,7 @@ import java.util.List;
 import net.yapbam.date.helpers.DateHelper;
 import net.yapbam.date.helpers.DateStepper;
 
-public class PeriodicalTransaction {
+public class PeriodicalTransaction { //TODO factoriser les champs communs avec Transaction
 	private String id;
 	private String description;
 	private double amount;
@@ -69,10 +69,17 @@ public class PeriodicalTransaction {
 	public DateStepper getNextDateBuilder() {
 		return nextDateBuilder;
 	}
-	public int getSubTransactionsSize() {
+	public int getSubTransactionSize() {
 		return this.subTransactions.size();
 	}
 	public SubTransaction getSubTransaction(int index) {
 		return this.subTransactions.get(index);
+	}
+	public double getComplement() {
+		double result = getAmount();
+		for (int i = 0; i < getSubTransactionSize(); i++) {
+			result -= getSubTransaction(i).getAmount();
+		}
+		return result;
 	}
 }

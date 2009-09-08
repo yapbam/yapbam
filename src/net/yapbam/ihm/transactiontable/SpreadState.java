@@ -1,6 +1,6 @@
 package net.yapbam.ihm.transactiontable;
 
-class SpreadState {
+public class SpreadState {
 	boolean spreadable;
 	boolean spread;
 	
