@@ -14,6 +14,7 @@ import javax.swing.event.ListSelectionListener;
 
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
+import net.yapbam.ihm.administration.AdministrationPanel;
 import net.yapbam.ihm.graphics.balancehistory.BalanceHistoryPane;
 import net.yapbam.ihm.transactiontable.TransactionTable;
 
@@ -182,7 +183,7 @@ public class MainFrame extends JFrame implements DataListener {
 			}
 		});
 		mainPane.add(LocalizationData.get("MainFrame.BalanceHistory"), balanceHistoryPane); //$NON-NLS-1$
-
+		mainPane.add("Administration",new AdministrationPanel());
         return mainPane;
     }
 
