@@ -183,7 +183,7 @@ public class MainFrame extends JFrame implements DataListener {
 			}
 		});
 		mainPane.add(LocalizationData.get("MainFrame.BalanceHistory"), balanceHistoryPane); //$NON-NLS-1$
-		mainPane.add("Administration",new AdministrationPanel());
+		mainPane.add("Administration",new AdministrationPanel(getData()));//LOCAL
         return mainPane;
     }
 

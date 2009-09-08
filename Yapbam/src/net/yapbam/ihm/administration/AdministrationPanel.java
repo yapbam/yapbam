@@ -4,21 +4,23 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
 
 import java.awt.GridBagConstraints;
 
 public class AdministrationPanel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
-	private JTabbedPane jTabbedPane = null;
-	private PeriodicTransactionListPanel periodicalTransactionPanel = null;
+
+	private GlobalData data;
+	
 	/**
-	 * This is the default constructor
+	 * This is the constructor
 	 */
-	public AdministrationPanel() {
+	public AdministrationPanel(GlobalData data) {
 		super();
-		this.setToolTipText("Ajout, suppression, modification des comptes, des catégories, etc ...");
+		this.data = data;
+		this.setToolTipText("Ajout, suppression, modification des comptes, des catégories, etc ..."); //LOCAL
 		initialize();
 	}
 
@@ -36,32 +38,13 @@ public class AdministrationPanel extends JPanel {
 		gridBagConstraints.gridx = 0;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
-		this.add(getJTabbedPane(), gridBagConstraints);
+		JTabbedPane jTabbedPane = new JTabbedPane();
+		AccountListPanel accountPanel = new AccountListPanel(data);
+		jTabbedPane.addTab("Gestion des comptes", null, accountPanel, accountPanel.getPanelToolTip());
+		CategoryListPanel categoryPanel = new CategoryListPanel(data);
+		jTabbedPane.addTab("Gestion des catégories", null, categoryPanel, categoryPanel.getToolTipText());
+		PeriodicTransactionListPanel periodicTransactionPanel = new PeriodicTransactionListPanel(data);
+		jTabbedPane.addTab(LocalizationData.get("PeriodicManagementDialog.title"), null, periodicTransactionPanel, periodicTransactionPanel.getToolTipText());
+		this.add(jTabbedPane, gridBagConstraints);
 	}
-
-	/**
-	 * This method initializes jTabbedPane	
-	 * 	
-	 * @return javax.swing.JTabbedPane	
-	 */
-	private JTabbedPane getJTabbedPane() {
-		if (jTabbedPane == null) {
-			jTabbedPane = new JTabbedPane();
-			jTabbedPane.addTab(LocalizationData.get("PeriodicManagementDialog.title"), getPeriodicalTransactionPanel());
-		}
-		return jTabbedPane;
-	}
-
-	/**
-	 * This method initializes periodicalTransactionPanel	
-	 * 	
-	 * @return net.yapbam.ihm.administration.PeriodicTransactionListPanel	
-	 */
-	private PeriodicTransactionListPanel getPeriodicalTransactionPanel() {
-		if (periodicalTransactionPanel == null) {
-			periodicalTransactionPanel = new PeriodicTransactionListPanel();
-		}
-		return periodicalTransactionPanel;
-	}
-
 }

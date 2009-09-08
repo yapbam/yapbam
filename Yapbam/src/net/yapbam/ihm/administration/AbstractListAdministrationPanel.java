@@ -73,7 +73,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 * This method initializes jTable	
 	 * @return javax.swing.JTable	
 	 */
-	private JTable getJTable() {
+	protected JTable getJTable() {
 		if (jTable == null) {
 			jTable = new JTable();
 			jTable.setModel(getTableModel());
@@ -135,7 +135,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getNewButton() {
+	protected JButton getNewButton() {
 		if (newButton == null) {
 			newButton = new JButton();
 			newButtonAction = getNewButtonAction();
@@ -149,7 +149,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getEditButton() {
+	protected JButton getEditButton() {
 		if (editButton == null) {
 			editButton = new JButton();
 			editButtonAction = new EditPeriodicalTransactionAction();
@@ -163,7 +163,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getDeleteButton() {
+	protected JButton getDeleteButton() {
 		if (deleteButton == null) {
 			deleteButton = new JButton();
 			deleteButtonAction = getDeleteButtonAction();

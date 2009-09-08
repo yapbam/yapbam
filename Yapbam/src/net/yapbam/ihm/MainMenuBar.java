@@ -44,7 +44,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	Action editTransactionAction;
 	Action duplicateTransactionAction;
 	Action deleteTransactionAction;
-	private Action managePeriodical;
 	private Action generatePeriodical;
 	private Action editPreferences;
     
@@ -130,8 +129,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         transactionMenu.add(item);
         transactionMenu.addSeparator();
-        managePeriodical = new ManagePeriodicalTransactionsAction(frame);
-        transactionMenu.add(new JMenuItem(managePeriodical));
         generatePeriodical = new GeneratePeriodicalTransactionsAction(frame);
         transactionMenu.add(new JMenuItem(generatePeriodical));
         this.add(transactionMenu);

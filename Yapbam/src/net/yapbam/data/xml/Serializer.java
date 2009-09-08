@@ -238,7 +238,7 @@ public class Serializer {
 		atts.addAttribute("","",ENABLED_ATTRIBUTE,"CDATA",Boolean.toString(periodicalTransaction.isEnabled()));
 		hd.startElement("","",PERIODICAL_TAG,atts);
 		serialize(periodicalTransaction.getNextDateBuilder());
-		for (int i = 0; i < periodicalTransaction.getSubTransactionsSize(); i++) {
+		for (int i = 0; i < periodicalTransaction.getSubTransactionSize(); i++) {
 			serialize(periodicalTransaction.getSubTransaction(i));
 		}
 		hd.endElement("","",PERIODICAL_TAG);
