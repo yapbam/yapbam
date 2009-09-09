@@ -2,10 +2,10 @@ package net.yapbam.ihm.transactiontable;
 
 import net.yapbam.ihm.IconManager;
 
-class SpreadStateRenderer extends ObjectRenderer {
+public class SpreadStateRenderer extends ObjectRenderer {
 	private static final long serialVersionUID = 1L;
 	
-	SpreadStateRenderer () {
+	public SpreadStateRenderer () {
 		super();
 		this.setHorizontalAlignment(CENTER);
 		this.setVerticalAlignment(TOP);
