@@ -12,15 +12,16 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.ModeAddedEvent;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.actions.DeletePeriodicalTransactionAction;
-import net.yapbam.ihm.actions.EditPeriodicalTransactionAction;
-import net.yapbam.ihm.actions.NewPeriodicalTransactionAction;
+import net.yapbam.ihm.actions.DeleteAccountAction;
+import net.yapbam.ihm.actions.EditAccountAction;
+import net.yapbam.ihm.actions.NewAccountTransactionAction;
 
 import java.lang.Object;
 
 public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("serial")
 	private final class AccountTableModel extends AbstractTableModel implements DataListener {
 		public AccountTableModel() {
 			((GlobalData)data).addListener(this);
@@ -85,12 +86,12 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		return new AccountTableModel();
 	}
 	protected Action getNewButtonAction() {
-		return new NewPeriodicalTransactionAction(); //TODO
+		return new NewAccountTransactionAction((GlobalData) data);
 	}
 	protected Action getEditButtonAction() {
-		return new EditPeriodicalTransactionAction(); //TODO
+		return new EditAccountAction((GlobalData) data);
 	}
 	protected Action getDeleteButtonAction() {
-		return new DeletePeriodicalTransactionAction(); //TODO
+		return new DeleteAccountAction((GlobalData) data);
 	}
 }
