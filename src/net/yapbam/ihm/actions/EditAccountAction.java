@@ -23,6 +23,12 @@ public class EditAccountAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//TODO
+		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
+		BankAccountDialog dialog = new BankAccountDialog(owner, null, data);
+		dialog.setContent(data.getAccount(0)); //TODO
+		dialog.setVisible(true);
+		if (dialog.getAccount()!=null) {
+			System.out.println("Account modified");
+		}
 	}
 }

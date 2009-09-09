@@ -37,7 +37,6 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	private Action editButtonAction;
 	private Action deleteButtonAction;
 
-	
 	protected Object data;
 	
 	/**
@@ -168,7 +167,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	protected JButton getEditButton() {
 		if (editButton == null) {
 			editButton = new JButton();
-			editButtonAction = new EditPeriodicalTransactionAction();
+			editButtonAction = getEditButtonAction();
 			editButton.setAction(editButtonAction);
 		}
 		return editButton;
