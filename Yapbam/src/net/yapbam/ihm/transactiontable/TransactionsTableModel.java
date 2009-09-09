@@ -20,7 +20,7 @@ import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.ihm.LocalizationData;
 
-class TransactionsTableModel extends AbstractTableModel implements DataListener, GenericTransactionTableModel {
+class TransactionsTableModel extends AbstractTableModel implements DataListener, GenericTransactionTableModel, SpreadableTableModel {
 	private static final long serialVersionUID = 1L;
 
 	private transient DateFormat dateFormater;
@@ -156,14 +156,31 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 		return this.data.getTransaction(row).isChecked();
 	}
 	
-	public AbstractTransaction getTransaction (int row) {
-		return this.data.getTransaction(row);
-	}
-
 	@Override
 	public int getAlignment(int column) {
 		if (column==4) return SwingConstants.RIGHT;
     	if ((column==1) || (column==3)) return SwingConstants.LEFT;
     	else return SwingConstants.CENTER;
+	}
+
+	public AbstractTransaction getTransaction (int row) {
+		return this.data.getTransaction(row);
+	}
+
+	@Override
+	public boolean isSpreadable(int row) {
+		return this.data.getTransaction(row).getSubTransactionSize()>0;
+	}
+
+	@Override
+	public int getSpreadColumnNumber() {
+		return 0;
+	}
+
+	@Override
+	public int getSpreadLines(int row) {
+		int lines = this.data.getTransaction(row).getSubTransactionSize()+1;
+		if (getTransaction(row).getComplement()!=0) lines++;
+		return lines;
 	}
 }

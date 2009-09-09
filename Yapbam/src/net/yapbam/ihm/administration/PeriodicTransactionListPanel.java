@@ -5,10 +5,12 @@ import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.PeriodicalTransaction;
+import net.yapbam.data.Transaction;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.DeletePeriodicalTransactionAction;
 import net.yapbam.ihm.actions.EditPeriodicalTransactionAction;
@@ -19,6 +21,8 @@ import net.yapbam.ihm.transactiontable.GenericTransactionTableModel;
 import net.yapbam.ihm.transactiontable.ObjectRenderer;
 import net.yapbam.ihm.transactiontable.SpreadState;
 import net.yapbam.ihm.transactiontable.SpreadStateRenderer;
+import net.yapbam.ihm.transactiontable.SpreadableMouseAdapter;
+import net.yapbam.ihm.transactiontable.SpreadableTableModel;
 
 import java.lang.Object;
 import java.util.Date;
@@ -32,13 +36,13 @@ public class PeriodicTransactionListPanel extends AbstractListAdministrationPane
 		this.getJTable().setDefaultRenderer(double[].class, new AmountRenderer());
 		this.getJTable().setDefaultRenderer(SpreadState.class, new SpreadStateRenderer());
 		this.getJTable().setDefaultRenderer(Object.class, new ObjectRenderer());
+		this.getJTable().addMouseListener(new SpreadableMouseAdapter());
 	}
 	
 	public String getPanelToolTip() {
 		return "Cet onglet permet de gérer les opérations périodiques";
 	}
 	
-	@SuppressWarnings("serial")
 	protected TableModel getTableModel() {
 		return new PeriodicTransactionTableModel();
 	}
@@ -53,7 +57,8 @@ public class PeriodicTransactionListPanel extends AbstractListAdministrationPane
 	}
 
 	@SuppressWarnings("serial")
-	private final class PeriodicTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel {
+	private final class PeriodicTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {
+		//TODO à fusionner avec TransactionsTableModel
 		@Override
 		public String getColumnName(int columnIndex) {
 			if (columnIndex==0) return LocalizationData.get("Transaction.0"); //$NON-NLS-1$
@@ -164,6 +169,24 @@ public class PeriodicTransactionListPanel extends AbstractListAdministrationPane
 		@Override
 		public boolean isExpense(int row) {
 			return ((GlobalData)data).getPeriodicalTransaction(row).getAmount()<0;
+		}
+
+		@Override
+		public boolean isSpreadable(int row) {
+			return ((GlobalData)data).getPeriodicalTransaction(row).getSubTransactionSize()>0;
+		}
+
+		@Override
+		public int getSpreadColumnNumber() {
+			return 0;
+		}
+
+		@Override
+		public int getSpreadLines(int row) {
+			AbstractTransaction transaction = ((GlobalData)data).getPeriodicalTransaction(row);
+			int lines = transaction.getSubTransactionSize()+1;
+			if (transaction.getComplement()!=0) lines++;
+			return lines;
 		}
 	}
 }
