@@ -1,6 +1,7 @@
 package net.yapbam.ihm.administration;
 
 import java.awt.GridBagLayout;
+import java.awt.Point;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -18,6 +19,9 @@ import javax.swing.table.TableModel;
 import net.yapbam.ihm.actions.EditPeriodicalTransactionAction;
 
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.Object;
 
 public abstract class AbstractListAdministrationPanel extends JPanel {
@@ -87,6 +91,18 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 					}
 				}
 			});
+			jTable.addMouseListener(new MouseAdapter() {
+	            public void mousePressed(MouseEvent e) {
+	                if (e.getClickCount() == 2) {
+	                  Point p = e.getPoint();
+	                  int row = jTable.rowAtPoint(p);
+	                  if (row >= 0) {
+	                	  editButtonAction.actionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
+	                  }
+	                }
+	              }
+			});
+
 		}
 		return jTable;
 	}

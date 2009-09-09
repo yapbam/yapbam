@@ -224,7 +224,7 @@ public class Serializer {
 	
 	private void serialize(PeriodicalTransaction periodicalTransaction) throws SAXException {
 		atts.clear();
-		atts.addAttribute("", "", ID_ATTRIBUTE, "CDATA", periodicalTransaction.getId());
+//		atts.addAttribute("", "", ID_ATTRIBUTE, "CDATA", periodicalTransaction.getId());
 		atts.addAttribute("","",ACCOUNT_ATTRIBUTE,"CDATA",periodicalTransaction.getAccount().getName());
 		String description = periodicalTransaction.getDescription();
 		if (description!=null) atts.addAttribute("","",DESCRIPTION_ATTRIBUTE,"CDATA",description);

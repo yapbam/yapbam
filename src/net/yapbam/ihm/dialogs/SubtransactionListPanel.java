@@ -27,9 +27,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
-import net.yapbam.data.Transaction;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.transactiontable.AmountRenderer;
 import net.yapbam.ihm.transactiontable.ObjectRenderer;
@@ -155,7 +155,7 @@ class SubtransactionListPanel extends JPanel {
 		});
 	}
 	
-	public void fill(Transaction transaction) {
+	public void fill(AbstractTransaction transaction) {
 		double oldValue = this.sum;
 		tableModel.fill(transaction);
 		this.sum = 0;
