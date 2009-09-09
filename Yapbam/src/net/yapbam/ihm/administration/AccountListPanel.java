@@ -30,7 +30,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		public String getColumnName(int columnIndex) {
 			if (columnIndex==0) return "Compte";
 			if (columnIndex==1) return "Solde initial";
-			if (columnIndex==2) return "Modes de paiement";
 			return "?"; //$NON-NLS-1$
 		}
 
@@ -39,10 +38,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			Account account = ((GlobalData)data).getAccount(rowIndex);
 			if (columnIndex==0) return account.getName();
 			else if (columnIndex==1) return account.getInitialBalance();
-			else if (columnIndex==2) {
-				//TODO
-				return "TODO";
-			}
 			return "?";
 		}
 
@@ -53,7 +48,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 
 		@Override
 		public int getColumnCount() {
-			return 3;
+			return 2;
 		}
 
 		@Override
@@ -67,8 +62,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			} else if (event instanceof AccountAddedEvent) {
 				int index = ((AccountAddedEvent)event).getAccountIndex();
 				this.fireTableRowsDeleted(index, index);
-			} else if (event instanceof ModeAddedEvent) {
-				System.out.println ("How to find the rigth line to update ?"); //TODO
 			}
 		}
 	}
