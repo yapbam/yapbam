@@ -1,5 +1,6 @@
 package net.yapbam.ihm.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -21,50 +22,64 @@ public class BankAccountDialog extends AbstractDialog {
 	private JTextField bankAccountField;
 	private AmountWidget balanceField;
 	private GlobalData data;
+	private ModeListPanel modesPanel;
 
-	private BankAccountDialog(Window owner, String message, GlobalData data) {
+	public BankAccountDialog(Window owner, String message, GlobalData data) {
 		super(owner, LocalizationData.get("AccountDialog.title"), message); //$NON-NLS-1$
 		this.data = data;
 	}
 	
 	protected JPanel createCenterPane(Object message) {
         //Create the content pane.
-        JPanel centerPane = new JPanel(new GridBagLayout());
+        JPanel northPanel = new JPanel(new GridBagLayout());
         KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
         FocusListener focusListener = new AutoSelectFocusListener();
         GridBagConstraints c = new GridBagConstraints(); c.gridx = 0; c.gridy = 0; c.insets=new Insets(5, 5, 5, 5); c.anchor=GridBagConstraints.WEST;
         if (message!=null) {
             c.fill=GridBagConstraints.HORIZONTAL; c.gridwidth=GridBagConstraints.REMAINDER;
-        	centerPane.add(new JLabel((String) message), c);
+        	northPanel.add(new JLabel((String) message), c);
             c.fill=GridBagConstraints.NONE; c.gridwidth=1;
             c.gridy++;
         }
         
         JLabel titleCompte = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
-        centerPane.add(titleCompte, c);
+        northPanel.add(titleCompte, c);
         bankAccountField = new JTextField(20);
         bankAccountField.addFocusListener(focusListener);
         bankAccountField.addKeyListener(listener);
         bankAccountField.setToolTipText(LocalizationData.get("AccountDialog.account.tooltip")); //$NON-NLS-1$
         c.weightx=1; c.fill=GridBagConstraints.HORIZONTAL; c.gridx=1;
-        centerPane.add(bankAccountField,c);
+        northPanel.add(bankAccountField,c);
         
         JLabel titleBalance = new JLabel(LocalizationData.get("AccountDialog.balance")); //$NON-NLS-1$
         c.weightx=0; c.fill=GridBagConstraints.NONE; c.gridy++; c.gridx=0;
-        centerPane.add(titleBalance,c);
+        northPanel.add(titleBalance,c);
         balanceField = new AmountWidget();
         balanceField.addFocusListener(focusListener);
         balanceField.setValue(new Double(0));
         balanceField.addKeyListener(listener);
         balanceField.setToolTipText(LocalizationData.get("AccountDialog.balance.tooltip")); //$NON-NLS-1$
         c.weightx=1; c.fill=GridBagConstraints.HORIZONTAL; c.gridx=1;
-        centerPane.add(balanceField,c);
+        northPanel.add(balanceField,c);
+        
+        JPanel centerPane = new JPanel(new BorderLayout());
+        
+        modesPanel = new ModeListPanel();
+        modesPanel.setBorder(BorderFactory.createTitledBorder("Modes de paiement"));//LOCAL
+        centerPane.add(northPanel,BorderLayout.NORTH);
+        centerPane.add(modesPanel,BorderLayout.CENTER);
         
         return centerPane;
     }
 	
 	public Account getAccount() {
 		return (Account) getResult();
+	}
+	
+	public void setContent(Account account) {
+		this.bankAccountField.setText(account.getName());
+		this.balanceField.setValue(account.getInitialBalance());
+		this.modesPanel.setContent(account);
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import net.yapbam.data.event.DefaultListenable;
 import net.yapbam.data.event.ModeAddedEvent;
@@ -13,9 +13,9 @@ public class Account extends DefaultListenable implements Serializable {
 	
 	private String name;
 	private double initialBalance;
-	private ArrayList<Mode> receiptModes;
-	private ArrayList<Mode> expenseModes;
-	private HashMap<String, Mode> modes;
+	private List<Mode> receiptModes;
+	private List<Mode> expenseModes;
+	private List<Mode> modes;
 //	private ArrayList<Transaction> transactions;
 	
 	public Account(String name, double initialBalance) {
@@ -23,7 +23,7 @@ public class Account extends DefaultListenable implements Serializable {
 		this.initialBalance = initialBalance;
 		this.receiptModes = new ArrayList<Mode>();
 		this.expenseModes = new ArrayList<Mode>();
-		this.modes = new HashMap<String, Mode>();
+		this.modes = new ArrayList<Mode>();
 		this.add(Mode.UNDEFINED);
 //		this.transactions = new ArrayList<Transaction>();
 	}
@@ -45,7 +45,10 @@ public class Account extends DefaultListenable implements Serializable {
 	}
 	
 	public Mode getMode(String name) {
-		return this.modes.get(name.toUpperCase());
+		for (int i = 0; i < this.modes.size(); i++) {
+			if (this.modes.get(i).getName().equalsIgnoreCase(name)) return this.modes.get(i);
+		}
+		return null;
 	}
 	
 	/*	public int getTransactionsNumber() {
@@ -60,7 +63,7 @@ public class Account extends DefaultListenable implements Serializable {
 		if (this.getMode(newMode.getName())!=null) {
 			throw new IllegalArgumentException("This account already contains the mode "+newMode.getName());
 		}
-		this.modes.put(newMode.getName().toUpperCase(), newMode);
+		this.modes.add(newMode);
 		if (newMode.getExpenseVdc()!=null) this.expenseModes.add(newMode);
 		if (newMode.getReceiptVdc()!=null) this.receiptModes.add(newMode);
 		this.fireEvent(new ModeAddedEvent(this));
@@ -73,5 +76,13 @@ public class Account extends DefaultListenable implements Serializable {
 
 	public int findMode(Mode mode, boolean expense) {
 		return expense?this.expenseModes.indexOf(mode):this.receiptModes.indexOf(mode);
+	}
+	
+	public int getModesSize() {
+		return this.modes.size();
+	}
+	
+	public Mode getMode(int index) {
+		return this.modes.get(index);
 	}
 }
