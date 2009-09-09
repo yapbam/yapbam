@@ -14,7 +14,7 @@ import net.yapbam.data.event.ModeAddedEvent;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.DeleteAccountAction;
 import net.yapbam.ihm.actions.EditAccountAction;
-import net.yapbam.ihm.actions.NewAccountTransactionAction;
+import net.yapbam.ihm.actions.NewAccountAction;
 
 import java.lang.Object;
 
@@ -86,7 +86,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		return new AccountTableModel();
 	}
 	protected Action getNewButtonAction() {
-		return new NewAccountTransactionAction((GlobalData) data);
+		return new NewAccountAction((GlobalData) data);
 	}
 	protected Action getEditButtonAction() {
 		return new EditAccountAction((GlobalData) data);

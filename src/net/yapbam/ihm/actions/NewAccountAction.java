@@ -12,17 +12,18 @@ import net.yapbam.ihm.dialogs.AbstractDialog;
 import net.yapbam.ihm.dialogs.BankAccountDialog;
 
 @SuppressWarnings("serial")
-public class NewAccountTransactionAction extends AbstractAction {
+public class NewAccountAction extends AbstractAction {
 	private GlobalData data;
 	
-	public NewAccountTransactionAction(GlobalData Data) {
-		super("Editer");
-        putValue(SHORT_DESCRIPTION, "bulle d'aide");
+	public NewAccountAction(GlobalData data) {
+		super(LocalizationData.get("MainMenu.Accounts.New"));
+        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Accounts.New.ToolTip"));
         this.data = data;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//TODO
+		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
+		BankAccountDialog.open(data, owner, null);
 	}
 }
