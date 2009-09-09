@@ -6,8 +6,8 @@ import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
+import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.SubTransaction;
-import net.yapbam.data.Transaction;
 import net.yapbam.ihm.LocalizationData;
 
 public class SubTransactionsTableModel extends AbstractTableModel implements GenericTransactionTableModel {
@@ -54,7 +54,7 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Gen
 		return false;
 	}
 
-	public void fill(Transaction transaction) {
+	public void fill(AbstractTransaction transaction) {
 		this.subTransactions.clear();
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			this.subTransactions.add(transaction.getSubTransaction(i));

@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
+import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Mode;
@@ -155,7 +156,7 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 		return this.data.getTransaction(row).isChecked();
 	}
 	
-	public Transaction getTransaction (int row) {
+	public AbstractTransaction getTransaction (int row) {
 		return this.data.getTransaction(row);
 	}
 

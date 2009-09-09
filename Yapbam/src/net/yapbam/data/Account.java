@@ -52,7 +52,7 @@ public class Account extends DefaultListenable implements Serializable {
 		return transactions.size();
 	}*/
 
-	public void add(Transaction transaction) {
+	public void add(AbstractTransaction transaction) {
 //		this.transactions.add(transaction);
 	}
 

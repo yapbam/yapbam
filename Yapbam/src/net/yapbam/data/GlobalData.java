@@ -182,7 +182,7 @@ public class GlobalData extends DefaultListenable {
 		int index = -Collections.binarySearch(this.periodicals, periodical, new Comparator<PeriodicalTransaction>() {
 			@Override
 			public int compare(PeriodicalTransaction o1, PeriodicalTransaction o2) {
-				return o1.getId().compareTo(o2.getId());
+				return o1.getDescription().compareToIgnoreCase(o2.getDescription());
 			}
 		})-1;
 		this.periodicals.add(index, periodical);

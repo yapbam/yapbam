@@ -56,7 +56,7 @@ public class TransactionDialog extends AbstractDialog {
 	 * @param transaction the transaction we want to edit, or null if we want to create a new transaction
 	 * @return the new transaction or the edited one
 	 */
-	public static Transaction open(GlobalData data, MainFrame frame, Transaction transaction) {
+	public static AbstractTransaction open(GlobalData data, MainFrame frame, Transaction transaction) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
 			BankAccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
