@@ -15,15 +15,14 @@ import net.yapbam.ihm.dialogs.BankAccountDialog;
 public class DeleteAccountAction extends AbstractAction {
 	private GlobalData data;
 	
-	public DeleteAccountAction(GlobalData Data) {
-		super(LocalizationData.get("MainMenu.Accounts.New"));
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Accounts.New.ToolTip"));
+	public DeleteAccountAction(GlobalData data) { //LOCAL
+		super("Supprimer");
+        putValue(SHORT_DESCRIPTION, "tooltip");
         this.data = data;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
-		BankAccountDialog.open(data, owner, null);
+		//TODO
 	}
 }

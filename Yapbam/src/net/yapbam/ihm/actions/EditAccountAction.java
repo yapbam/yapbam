@@ -15,15 +15,14 @@ import net.yapbam.ihm.dialogs.BankAccountDialog;
 public class EditAccountAction extends AbstractAction {
 	private GlobalData data;
 	
-	public EditAccountAction(GlobalData Data) {
-		super(LocalizationData.get("MainMenu.Accounts.New"));
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Accounts.New.ToolTip"));
+	public EditAccountAction(GlobalData data) {
+		super("Editer");
+        putValue(SHORT_DESCRIPTION, "bulle d'aide");
         this.data = data;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
-		BankAccountDialog.open(data, owner, null);
+		//TODO
 	}
 }
