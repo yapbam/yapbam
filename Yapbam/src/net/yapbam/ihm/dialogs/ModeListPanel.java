@@ -9,12 +9,10 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.yapbam.data.Account;
-import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.DeleteModeAction;
@@ -132,6 +130,10 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 			}
 
 		};
+	}
+
+	public List<Mode> getModes() {
+		return (List<Mode>) this.data;
 	}
 	
 }
