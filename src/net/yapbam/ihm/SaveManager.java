@@ -11,7 +11,7 @@ class SaveManager {
 
 	/** This method give a last chance to save unsaved data.
 	 * @param data The data currently edited
-	 * @return true if the process can continue (everything is saved of the user wants to discard the changes).
+	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
 	boolean verify(MainFrame frame) {
 		if (frame.getData().somethingHasChanged()) { // Some modifications has not been saved

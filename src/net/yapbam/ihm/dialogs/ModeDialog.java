@@ -25,12 +25,12 @@ public class ModeDialog extends AbstractDialog {
 	private JCheckBox chequeBook;
 	private ModePanel leftPane;
 	private ModePanel rightPane;
-	private Account account;
+	
 	private String initialName;
 	
-	private ModeDialog(Window owner, Account account) {
+	public ModeDialog(Window owner, Account account) {
 		super(owner, LocalizationData.get("ModeDialog.new.title"), account); //$NON-NLS-1$
-		this.account = account;
+		this.initialName = null;
 	}
 	
 	protected JPanel createCenterPane(Object data) {
@@ -99,9 +99,10 @@ public class ModeDialog extends AbstractDialog {
 	@Override
 	protected String getOkDisabledCause() {
 		String name = this.name.getText().trim();
+		Account account = (Account) this.data;
 		if (name.length()==0) {
 			return LocalizationData.get("ModeDialog.bad.emptyName"); //$NON-NLS-1$
-		} else if ((this.account.getMode(name)!=null) && !name.equalsIgnoreCase(initialName)) {
+		} else if ((account.getMode(name)!=null) && !name.equalsIgnoreCase(initialName)) {
 			return MessageFormat.format(LocalizationData.get("ModeDialog.bad.duplicateMode"),name, account.getName()); //$NON-NLS-1$
 		} else if (!(leftPane.isSelected()||rightPane.isSelected())) {
 			return LocalizationData.get("ModeDialog.bad.neverAvalaible"); //$NON-NLS-1$

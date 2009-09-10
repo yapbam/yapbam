@@ -38,6 +38,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private BalanceReportField finalBalance;
 	private BalanceReportField checkedBalance;
 	private BalanceHistoryPane balanceHistoryPane;
+	private boolean isRestarting = false;
 	
 	public static void main(String[] args) {
 		try {
@@ -61,16 +62,20 @@ public class MainFrame extends JFrame implements DataListener {
 		super();
 		this.setMinimumSize(new Dimension(800,300));
 		
-	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	    this.addWindowListener(new WindowAdapter() {
 	    	@Override
 	    	public void windowClosing(WindowEvent event) {
 	    		MainFrame frame = (MainFrame) event.getWindow();
-	    		if (SaveManager.MANAGER.verify(frame)) {
+	    		if (frame.isRestarting) {
+	    			YapbamState.save(frame);
+	    			super.windowClosing(event);
+	    			frame.dispose();
+	    		} else if (SaveManager.MANAGER.verify(frame)) {
 	    			YapbamState.save(frame);
 	    			Preferences.INSTANCE.save();
 	    			super.windowClosing(event);
-//	    			System.exit(0);
+	    			frame.dispose();
 	    		}
 	    	}
 		});
@@ -237,6 +242,7 @@ public class MainFrame extends JFrame implements DataListener {
 		this.data.clearListeners();
 		this.accountFilter.clearListeners();
 		this.filteredData.clearListeners();
+		this.isRestarting = true;
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
@@ -245,7 +251,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	            new MainFrame(null, null, null);
+	            new MainFrame(data, accountFilter, filteredData);
 	        }
 	    });
 	}

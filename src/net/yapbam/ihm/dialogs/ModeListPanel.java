@@ -1,10 +1,12 @@
 package net.yapbam.ihm.dialogs;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -14,19 +16,21 @@ import net.yapbam.data.Mode;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.DeleteModeAction;
 import net.yapbam.ihm.actions.EditModeAction;
-import net.yapbam.ihm.actions.NewModeAction;
 import net.yapbam.ihm.administration.AbstractListAdministrationPanel;
-import net.yapbam.ihm.transactiontable.SpreadState;
 
 @SuppressWarnings("serial")
 public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
+	private Account account;
+	
 	public ModeListPanel() {
 		super(new ArrayList<Mode>());
+        this.account = new Account("",0);
         getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void setContent(Account account) {
+		this.account = account;
 		((List<Mode>)data).clear();
 		for (int i = 0; i < account.getModesSize(); i++) {
 			Mode mode = account.getMode(i);
@@ -52,9 +56,29 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 
 	@Override
 	protected String getPanelToolTip() {
-		return "tooltip";
+		return null;
 	}
-
+	
+	class NewModeAction extends AbstractAction {
+		
+		public NewModeAction() {
+			super("Nouveau mode");
+	        putValue(SHORT_DESCRIPTION, "Ce bouton permet de créer un nouveau mode");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
+			dialog.setVisible(true);
+			Mode mode = dialog.getMode();
+			if (mode!=null) {
+				account.add(mode);
+				((List<Mode>)data).add(mode);
+				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+			}
+		}
+	}
+	
 	@Override
 	protected TableModel getTableModel() {
 		return new AbstractTableModel(){

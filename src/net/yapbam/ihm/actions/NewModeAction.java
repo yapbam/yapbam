@@ -12,7 +12,7 @@ import net.yapbam.ihm.dialogs.AbstractDialog;
 import net.yapbam.ihm.dialogs.AccountDialog;
 
 @SuppressWarnings("serial")
-public class NewModeAction extends AbstractAction {
+public class NewModeAction extends AbstractAction { //USELESS
 	
 	public NewModeAction() { //LOCAL
 		super("Nouveau mode");
