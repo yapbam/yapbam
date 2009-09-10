@@ -193,7 +193,21 @@ class ModePanel extends JPanel {
 		return true;
 	}
 
-	public void setContent(DateStepper expenseVdc) {
-		// TODO Auto-generated method stub
+	public void setContent(DateStepper vdc) {
+		isSelectedBox.setSelected(vdc!=null);
+		if (vdc!=null) {
+			if (vdc == DateStepper.IMMEDIATE) {
+				combo.setSelectedIndex(0);
+			} else if (vdc instanceof DayDateStepper) {
+				combo.setSelectedIndex(1);
+				relField.setValue(((DayDateStepper)vdc).getStep());
+			} else if (vdc instanceof DeferredValueDateComputer) {
+				combo.setSelectedIndex(2);
+				stopField.setValue(((DeferredValueDateComputer)vdc).getStopDay());
+				debtField.setValue(((DeferredValueDateComputer)vdc).getDebtDay());
+			} else {
+				throw new IllegalArgumentException();
+			}
+		}
 	}
 }
