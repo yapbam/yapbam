@@ -40,6 +40,8 @@ public class AccountFilteredData extends AccountFilter {
 						balanceHistory.add(account.getInitialBalance(), null);
 						fireEvent(new AccountAddedEvent(AccountFilteredData.this, index));
 					}
+				} else if (event instanceof AccountRemovedEvent) {
+					System.out.println ("Do something with this AccountRemovedEvent"); //FIXME
 				}
 			}
 		});

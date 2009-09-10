@@ -125,7 +125,7 @@ public class CheckModePanel extends JPanel {
 			}
 			Transaction tChecked = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
 					date, statementId, list);
-			frame.getData().removeTransaction(t);
+			frame.getData().remove(t);
 			frame.getData().add(tChecked);
 		}
 	}

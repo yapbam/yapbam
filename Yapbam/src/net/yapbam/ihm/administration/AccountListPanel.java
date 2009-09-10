@@ -2,6 +2,7 @@ package net.yapbam.ihm.administration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -9,6 +10,7 @@ import javax.swing.table.TableModel;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
+import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -16,7 +18,6 @@ import net.yapbam.data.event.ModeAddedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.actions.DeleteAccountAction;
 import net.yapbam.ihm.actions.NewAccountAction;
 import net.yapbam.ihm.dialogs.AbstractDialog;
 import net.yapbam.ihm.dialogs.AccountDialog;
@@ -25,8 +26,7 @@ import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.lang.Object;
-import java.util.HashSet;
-import java.util.Map;
+import java.text.MessageFormat;
 
 public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
@@ -35,9 +35,9 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	class EditAccountAction extends AbstractAction {
 		private GlobalData data;
 		
-		public EditAccountAction(GlobalData data) {
+		EditAccountAction(GlobalData data) {
 			super("Editer");
-	        putValue(SHORT_DESCRIPTION, "Ce bouton permet d'éditer le compte");
+	        putValue(SHORT_DESCRIPTION, "Ce bouton permet d'éditer le compte sélectionné");
 	        this.data = data;
 		}
 		
@@ -51,6 +51,33 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			dialog.setVisible(true);
 			if (dialog.getAccount()!=null) {
 				System.out.println("Account modified");//TODO
+			}
+		}
+	}
+	
+	class DeleteAccountAction extends AbstractAction {
+		private GlobalData data;
+		DeleteAccountAction (GlobalData data) {
+			super("Supprimer");
+			putValue(SHORT_DESCRIPTION, "Ce bouton permet de supprimer le compte sélectionné");
+			this.data = data;
+		}
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int selectedRow = getJTable().getSelectedRow();
+			Account account = data.getAccount(selectedRow);
+			boolean confirmed = true;
+			int nb = account.getTransactionsNumber();
+			if (nb!=0) {
+				String mess = nb==1?"La suppression de ce compte implique la suppression de son unique opération":
+						MessageFormat.format("<HTML>La suppression de ce compte implique la suppression de ses {0,number,integer} opérations.<BR>"+
+						"Confirmez-vous la suppression</HTML>", nb);
+				int ok = JOptionPane.showConfirmDialog(getJTable(), mess, "Suppression d'un compte contenant des opérations", JOptionPane.OK_CANCEL_OPTION);
+				confirmed = (ok==0);
+			}
+			if (confirmed) {
+				data.remove(account);
 			}
 		}
 	}
@@ -103,6 +130,9 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 				this.fireTableDataChanged();
 			} else if (event instanceof AccountAddedEvent) {
 				int index = ((AccountAddedEvent)event).getAccountIndex();
+				this.fireTableRowsInserted(index, index);
+			} else if (event instanceof AccountRemovedEvent) {
+				int index = ((AccountRemovedEvent)event).getIndex();
 				this.fireTableRowsDeleted(index, index);
 			} else if (event instanceof TransactionAddedEvent) {
 				int row = ((TransactionAddedEvent)event).getTransactionIndex();

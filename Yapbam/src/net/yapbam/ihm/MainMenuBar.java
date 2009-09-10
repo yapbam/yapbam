@@ -20,10 +20,13 @@ import net.yapbam.data.AccountFilteredData;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
+import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
+import net.yapbam.data.event.PeriodicalTransactionAddedEvent;
+import net.yapbam.data.event.PeriodicalTransactionRemovedEvent;
 import net.yapbam.ihm.actions.*;
 import net.yapbam.ihm.dialogs.AboutDialog;
 import net.yapbam.ihm.dialogs.AccountDialog;
@@ -198,12 +201,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 			if (event instanceof EverythingChangedEvent) {
 				this.updateFilterMenu();
 				this.updateAccountMenu();
-				this.generatePeriodical.setEnabled(data.getPeriodicalTransactionsNumber()>0);
-				//TODO Do the same if a periodicalTransaction is add or removed
 			}
-		} else if ((event instanceof AccountAddedEvent)) {
+		} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent)) {
 			this.updateFilterMenu();
 			this.updateAccountMenu();
+		} else if ((event instanceof PeriodicalTransactionAddedEvent) || (event instanceof PeriodicalTransactionRemovedEvent)) {
+			this.generatePeriodical.setEnabled(data.getPeriodicalTransactionsNumber()>0);
 		}
 	}
 
