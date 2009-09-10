@@ -2,35 +2,37 @@ package net.yapbam.ihm.dialogs;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.yapbam.data.Account;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.DeleteModeAction;
-import net.yapbam.ihm.actions.EditModeAction;
 import net.yapbam.ihm.administration.AbstractListAdministrationPanel;
 
 @SuppressWarnings("serial")
 public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
-	private Account account;
+	private String accountName;
 	
 	public ModeListPanel() {
 		super(new ArrayList<Mode>());
-        this.account = new Account("",0);
+        this.accountName = "";
         getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void setContent(Account account) {
-		this.account = account;
+		this.accountName = account.getName();
 		((List<Mode>)data).clear();
 		for (int i = 0; i < account.getModesSize(); i++) {
 			Mode mode = account.getMode(i);
@@ -60,19 +62,33 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 	}
 	
 	class NewModeAction extends AbstractAction {
-		
 		public NewModeAction() {
-			super("Nouveau mode");
+			super("Créer");
 	        putValue(SHORT_DESCRIPTION, "Ce bouton permet de créer un nouveau mode");
 		}
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
+			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
 			dialog.setVisible(true);
 			Mode mode = dialog.getMode();
 			if (mode!=null) {
-				account.add(mode);
+				((List<Mode>)data).add(mode);
+				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+			}
+		}
+	}
+	class EditModeAction extends AbstractAction {
+		public EditModeAction() {
+			super("Editer");
+	        putValue(SHORT_DESCRIPTION, "Ce bouton permet d'éditer le mode de paiement sélectionné");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
+			dialog.setContent(((List<Mode>)data).get(getJTable().getSelectedRow()));
+			dialog.setVisible(true);
+			Mode mode = dialog.getMode();
+			if (mode!=null) {
 				((List<Mode>)data).add(mode);
 				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
 			}
@@ -117,4 +133,5 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 
 		};
 	}
+	
 }

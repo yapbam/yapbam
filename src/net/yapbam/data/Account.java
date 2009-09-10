@@ -28,6 +28,13 @@ public class Account extends DefaultListenable implements Serializable {
 //		this.transactions = new ArrayList<Transaction>();
 	}
 
+	public Account(String name, double initialBalance, List<Mode> modes) {
+		this(name, initialBalance);
+		for (int i = 0; i < modes.size(); i++) {
+			this.add(modes.get(i));
+		}
+	}
+
 	public String getName() {
 		return name;
 	}
