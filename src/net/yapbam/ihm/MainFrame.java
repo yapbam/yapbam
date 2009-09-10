@@ -83,17 +83,18 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.data = (data==null)?new GlobalData():data;
 	    this.accountFilter = acFilter==null?new AccountFilteredData(this.data):acFilter;
 	    this.filteredData = fData==null?new FilteredData(this.data):fData;
+	    if (data==null) YapbamState.INSTANCE.restoreGlobalData(this);
 
 	    mainMenu = new MainMenuBar(this);
 	    setContentPane(this.createContentPane());
 		setJMenuBar(mainMenu);
+		newDataOccured();
 	    
 	    this.data.addListener(this);
 	    this.data.addListener(mainMenu);
 	    
 	    // Restore initial state (last opened file and window position)
 	    YapbamState.INSTANCE.restoreMainFramePosition(this);
-	    if (data==null) YapbamState.INSTANCE.restoreGlobalData(this);
 	    YapbamState.INSTANCE.restoreTransactionTableColumns(this);
 	
 	    //Display the window.
