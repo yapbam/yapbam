@@ -41,6 +41,7 @@ public class Serializer {
 	static final String MONTHLY_DATE_STEPPER_KIND = "monthly";
 	static final String DEFERRED_DATE_STEPPER_KIND = "deferred";
 	static final String RELATIVE_DATE_STEPPER_KIND = "daily";
+	static final String CHEQUE_BOOK_ATTRIBUTE = "chequeBook";
 
 	static final String INITIAL_BALANCE_ATTRIBUTE = "initialBalance";
 	static final String ID_ATTRIBUTE = "id";
@@ -146,6 +147,7 @@ public class Serializer {
 	private void serialize(Mode mode) throws SAXException {
 		atts.clear();
 		atts.addAttribute("","",ID_ATTRIBUTE,"CDATA",mode.getName());
+		if (mode.isUseChequeBook()) atts.addAttribute("", "", CHEQUE_BOOK_ATTRIBUTE, "CDATA", "true");
 		hd.startElement("","",MODE_TAG,atts);
 		DateStepper expense = mode.getExpenseVdc();
 		if (expense!=null) {

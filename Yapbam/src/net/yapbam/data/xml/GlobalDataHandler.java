@@ -50,6 +50,7 @@ class GlobalDataHandler extends DefaultHandler {
 			this.data.add(cat);
 		} else if (qName.equals(Serializer.MODE_TAG)) {
 			this.tempData.push(attributes.getValue(Serializer.ID_ATTRIBUTE));
+			this.tempData.push(attributes.getValue(Serializer.CHEQUE_BOOK_ATTRIBUTE)!=null?true:false);
 			this.tempData.push(new DateStepper[2]);
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG) || qName.equals(Serializer.RECEIPT_VDC_TAG)) {
 			DateStepper vdc;
@@ -113,8 +114,9 @@ class GlobalDataHandler extends DefaultHandler {
 		} else if (qName.equals(Serializer.CATEGORY_TAG)) {
 		} else if (qName.equals(Serializer.MODE_TAG)) {
 			DateStepper[] vdcs = (DateStepper[]) this.tempData.pop();
+			boolean useChequeBook = (Boolean) this.tempData.pop();
 			String id = (String) this.tempData.pop();
-			Mode mode = new Mode(id, vdcs[1], vdcs[0], false); //TODO cheque book support
+			Mode mode = new Mode(id, vdcs[1], vdcs[0], useChequeBook);
 			Account account = (Account) this.tempData.peek();
 			account.add(mode);
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG)) {
