@@ -18,6 +18,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 
 	protected JButton cancelButton;
 	protected JButton okButton;
+	protected Object data;
 
 	/**
 	 * Construtor
@@ -27,14 +28,15 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	 */
 	public AbstractDialog(Window owner, String title, Object data) {
 		super(owner, title, ModalityType.APPLICATION_MODAL);
+		this.data = data;
 		this.result = null;
-		this.setContentPane(this.createContentPane(data));
+		this.setContentPane(this.createContentPane());
 		this.pack();
 		this.setLocationRelativeTo(owner);
-//TODO		this.setResizable(false);
+		this.setResizable(false);
 	}
 	
-	private Container createContentPane(Object data) {
+	private Container createContentPane() {
         //Create the content pane.
         JPanel contentPane = new JPanel(new BorderLayout(5,5));
         contentPane.setOpaque(true);
