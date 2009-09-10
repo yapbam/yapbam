@@ -18,6 +18,13 @@ public class GlobalData extends DefaultListenable {
 	private File path;
 	private boolean somethingChanged;
 	private List<Category> categories;
+
+	private static final Comparator<PeriodicalTransaction> PERIODICAL_COMPARATOR = new Comparator<PeriodicalTransaction>() {
+		@Override
+		public int compare(PeriodicalTransaction o1, PeriodicalTransaction o2) {
+			return o1.getDescription().compareToIgnoreCase(o2.getDescription());
+		}
+	};
 	
 	public GlobalData() {
 		super();
@@ -140,7 +147,7 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	public int indexOf(Category category) {
-		return this.categories.indexOf(category);
+		return this.categories.indexOf(category); //TODO use a binary search
 	}
 
 	public void add(Category category) {
@@ -162,7 +169,7 @@ public class GlobalData extends DefaultListenable {
 		fireEvent(new EverythingChangedEvent(this));
 	}
 
-	public boolean removeTransaction(Transaction transaction) {
+	public boolean remove(Transaction transaction) {
 		int index = Collections.binarySearch(this.transactions, transaction, TransactionComparator.INSTANCE);
 		if (index>=0) {
 			this.removeTransaction(index);
@@ -180,12 +187,7 @@ public class GlobalData extends DefaultListenable {
 	}
 	
 	public void add(PeriodicalTransaction periodical) {
-		int index = -Collections.binarySearch(this.periodicals, periodical, new Comparator<PeriodicalTransaction>() {
-			@Override
-			public int compare(PeriodicalTransaction o1, PeriodicalTransaction o2) {
-				return o1.getDescription().compareToIgnoreCase(o2.getDescription());
-			}
-		})-1;
+		int index = -Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR)-1;
 		this.periodicals.add(index, periodical);
 		fireEvent(new PeriodicalTransactionAddedEvent(this, index));
 		setChanged();
@@ -198,11 +200,44 @@ public class GlobalData extends DefaultListenable {
 	public PeriodicalTransaction getPeriodicalTransaction(int index) {
 		return this.periodicals.get(index);
 	}
+	
+	public boolean remove (PeriodicalTransaction periodical) {
+		int index = Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR);
+		if (index>=0) {
+			this.removePeriodicalTransaction(index);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void removePeriodicalTransaction(int index) {
+		PeriodicalTransaction removed = this.periodicals.remove(index);
+		this.fireEvent(new PeriodicalTransactionRemovedEvent(this, index, removed));
+		setChanged();
+	}
 
 	private void setChanged() {
 		if (!this.somethingChanged) {
 			this.somethingChanged = true;
 			this.fireEvent(new NeedToBeSavedChangedEvent(this));
+		}
+	}
+
+	public void remove(Account account) {
+		int index = this.accounts.indexOf(account);
+		if (index>=0){
+			if (account.getTransactionsNumber()!=0) {
+				for (int i = this.transactions.size()-1; i >= 0 ; i--) {
+					if (this.transactions.get(i).getAccount()==account) removeTransaction(i);
+				}
+			}
+			for (int i = this.periodicals.size()-1; i >= 0 ; i--) {
+				if (this.periodicals.get(i).getAccount()==account) removePeriodicalTransaction(i);
+			}
+			this.accounts.remove(index);
+			this.fireEvent(new AccountRemovedEvent(this, index, account));
+			this.setChanged();
 		}
 	}
 }

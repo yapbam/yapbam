@@ -45,6 +45,8 @@ public class FilteredData extends AccountFilter {
 					if (isOk(account) && isOk(CHECKED)) {
 						fireEvent(new AccountAddedEvent(FilteredData.this, index));
 					}
+				} else if (event instanceof AccountRemovedEvent) {
+					System.out.println ("Need to do something if account removed is the last in filter"); //FIXME
 				}
 			}
 
