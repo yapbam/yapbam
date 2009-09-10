@@ -26,7 +26,7 @@ public class AccountDialog extends AbstractDialog {
 	private String initialName;
 
 	public AccountDialog(Window owner, String message, GlobalData data) {
-		super(owner, LocalizationData.get("AccountDialog.title"), message); //$NON-NLS-1$
+		super(owner, LocalizationData.get("AccountDialog.title.new"), message); //$NON-NLS-1$
 		this.data = data;
 		this.initialName = null;
 	}
@@ -79,6 +79,7 @@ public class AccountDialog extends AbstractDialog {
 	}
 	
 	public void setContent(Account account) {
+		this.setTitle(LocalizationData.get("AccountDialog.title.edit")); //$NON-NLS-1$
 		this.initialName = account.getName();
 		this.bankAccountField.setText(this.initialName);
 		this.balanceField.setValue(account.getInitialBalance());

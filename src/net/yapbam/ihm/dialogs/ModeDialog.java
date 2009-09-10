@@ -29,7 +29,7 @@ public class ModeDialog extends AbstractDialog {
 	private String initialName;
 	
 	public ModeDialog(Window owner, Account account) {
-		super(owner, LocalizationData.get("ModeDialog.new.title"), account); //$NON-NLS-1$
+		super(owner, LocalizationData.get("ModeDialog.title.new"), account); //$NON-NLS-1$
 		this.initialName = null;
 	}
 	
@@ -121,6 +121,7 @@ public class ModeDialog extends AbstractDialog {
 	}
 
 	public void setContent(Mode mode) {
+		setTitle(LocalizationData.get("ModeDialog.title.edit")); //$NON-NLS-1$
 		chequeBook.setSelected(mode.isUseChequeBook());
 		this.initialName = mode.getName();
 		name.setText(this.initialName);
