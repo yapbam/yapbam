@@ -90,7 +90,7 @@ public class AccountDialog extends AbstractDialog {
 	@Override
 	protected Object buildResult() {
 		Number value = (Number) this.balanceField.getValue();
-		return new Account(this.bankAccountField.getText(), value.doubleValue());
+		return new Account(this.bankAccountField.getText(), value.doubleValue(), modesPanel.getModes());
 	}
 
 	/** Opens the dialog, and add the newly created account to the data
