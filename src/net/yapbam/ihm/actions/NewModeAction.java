@@ -9,7 +9,7 @@ import javax.swing.AbstractAction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.dialogs.AbstractDialog;
-import net.yapbam.ihm.dialogs.BankAccountDialog;
+import net.yapbam.ihm.dialogs.AccountDialog;
 
 @SuppressWarnings("serial")
 public class NewModeAction extends AbstractAction {

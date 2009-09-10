@@ -2,6 +2,7 @@ package net.yapbam.ihm.dialogs;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.Action;
@@ -15,6 +16,7 @@ import net.yapbam.ihm.actions.DeleteModeAction;
 import net.yapbam.ihm.actions.EditModeAction;
 import net.yapbam.ihm.actions.NewModeAction;
 import net.yapbam.ihm.administration.AbstractListAdministrationPanel;
+import net.yapbam.ihm.transactiontable.SpreadState;
 
 @SuppressWarnings("serial")
 public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
@@ -23,10 +25,12 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
         getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void setContent(Account account) {
 		((List<Mode>)data).clear();
 		for (int i = 0; i < account.getModesSize(); i++) {
-			((List<Mode>)data).add(account.getMode(i));
+			Mode mode = account.getMode(i);
+			if (!mode.equals(Mode.UNDEFINED)) ((List<Mode>)data).add(mode);
 		}
 		((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
 	}
@@ -81,6 +85,12 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
 				return false;
 			}
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				if ((columnIndex==1)||(columnIndex==2)) return Boolean.class;
+				return String.class;
+			}
+
 		};
 	}
 }

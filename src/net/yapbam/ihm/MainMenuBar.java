@@ -26,7 +26,7 @@ import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.ihm.actions.*;
 import net.yapbam.ihm.dialogs.AboutDialog;
-import net.yapbam.ihm.dialogs.BankAccountDialog;
+import net.yapbam.ihm.dialogs.AccountDialog;
 
 public class MainMenuBar extends JMenuBar implements ActionListener, DataListener, ChangeListener {
 	private static final long serialVersionUID = 1L;
@@ -222,7 +222,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	    menuItemNewAccount.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BankAccountDialog.open(frame.getData(), frame, null);
+				AccountDialog.open(frame.getData(), frame, null);
 			}
 		});
 	    this.accountMenu.add(menuItemNewAccount);
