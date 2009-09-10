@@ -192,4 +192,8 @@ class ModePanel extends JPanel {
 		}
 		return true;
 	}
+
+	public void setContent(DateStepper expenseVdc) {
+		// TODO Auto-generated method stub
+	}
 }

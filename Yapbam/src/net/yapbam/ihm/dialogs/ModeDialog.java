@@ -119,6 +119,13 @@ public class ModeDialog extends AbstractDialog {
 			updateOkButtonEnabled();
 		}
 	}
-	
 
+	public void setContent(Mode mode) {
+		chequeBook.setSelected(mode.isUseChequeBook());
+		this.initialName = mode.getName();
+		name.setText(this.initialName);
+		leftPane.setContent(mode.getExpenseVdc());
+		rightPane.setContent(mode.getReceiptVdc());
+		this.updateOkButtonEnabled();
+	}
 }
