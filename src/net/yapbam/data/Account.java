@@ -16,6 +16,7 @@ public class Account extends DefaultListenable implements Serializable {
 	private List<Mode> receiptModes;
 	private List<Mode> expenseModes;
 	private List<Mode> modes;
+	private int transactionNumber;
 //	private ArrayList<Transaction> transactions;
 	
 	public Account(String name, double initialBalance) {
@@ -58,12 +59,16 @@ public class Account extends DefaultListenable implements Serializable {
 		return null;
 	}
 	
-	/*	public int getTransactionsNumber() {
-		return transactions.size();
-	}*/
+	public int getTransactionsNumber() {
+		return transactionNumber;
+	}
 
 	public void add(AbstractTransaction transaction) {
-//		this.transactions.add(transaction);
+		transactionNumber++;
+	}
+	
+	public void removeTransaction(Transaction transaction) {
+		transactionNumber--;
 	}
 
 	public void add(Mode newMode) {
@@ -85,7 +90,7 @@ public class Account extends DefaultListenable implements Serializable {
 		return expense?this.expenseModes.indexOf(mode):this.receiptModes.indexOf(mode);
 	}
 	
-	public int getModesSize() {
+	public int getModesNumber() {
 		return this.modes.size();
 	}
 	

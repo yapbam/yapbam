@@ -32,7 +32,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 	public void setContent(Account account) {
 		this.accountName = account.getName();
 		((List<Mode>)data).clear();
-		for (int i = 0; i < account.getModesSize(); i++) {
+		for (int i = 0; i < account.getModesNumber(); i++) {
 			Mode mode = account.getMode(i);
 			if (!mode.equals(Mode.UNDEFINED)) ((List<Mode>)data).add(mode);
 		}
@@ -128,7 +128,6 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 				if ((columnIndex==1)||(columnIndex==2)) return Boolean.class;
 				return String.class;
 			}
-
 		};
 	}
 
