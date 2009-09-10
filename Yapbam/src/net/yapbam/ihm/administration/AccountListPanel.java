@@ -13,6 +13,8 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.ModeAddedEvent;
+import net.yapbam.data.event.TransactionAddedEvent;
+import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.DeleteAccountAction;
 import net.yapbam.ihm.actions.NewAccountAction;
@@ -23,6 +25,8 @@ import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.lang.Object;
+import java.util.HashSet;
+import java.util.Map;
 
 public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
@@ -53,13 +57,20 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 
 	@SuppressWarnings("serial")
 	private final class AccountTableModel extends AbstractTableModel implements DataListener {
-		public AccountTableModel() {
-			((GlobalData)data).addListener(this);
+		public AccountTableModel(GlobalData data) {
+			data.addListener(this);
+		}
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			if (columnIndex==1) return Double.class;
+			else if (columnIndex==2) return Integer.class;
+			return String.class;
 		}
 		@Override
 		public String getColumnName(int columnIndex) {
 			if (columnIndex==0) return "Compte";
 			if (columnIndex==1) return "Solde initial";
+			if (columnIndex==2) return "Nombre d'opérations";
 			return "?"; //$NON-NLS-1$
 		}
 
@@ -68,6 +79,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			Account account = ((GlobalData)data).getAccount(rowIndex);
 			if (columnIndex==0) return account.getName();
 			else if (columnIndex==1) return account.getInitialBalance();
+			else if (columnIndex==2) return account.getTransactionsNumber();
 			return "?";
 		}
 
@@ -78,7 +90,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 
 		@Override
 		public int getColumnCount() {
-			return 2;
+			return 3;
 		}
 
 		@Override
@@ -92,11 +104,18 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			} else if (event instanceof AccountAddedEvent) {
 				int index = ((AccountAddedEvent)event).getAccountIndex();
 				this.fireTableRowsDeleted(index, index);
+			} else if (event instanceof TransactionAddedEvent) {
+				int row = ((TransactionAddedEvent)event).getTransactionIndex();
+				this.fireTableRowsUpdated(row, row);
+			} else if (event instanceof TransactionRemovedEvent) {
+				Account account = ((TransactionRemovedEvent)event).getRemoved().getAccount();
+				int row = ((GlobalData)data).indexOf(account);
+				this.fireTableRowsUpdated(row, row);				
 			}
 		}
 	}
 
-	public AccountListPanel(Object data) {
+	public AccountListPanel(GlobalData data) {
 		super(data);
 	}
 	
@@ -106,7 +125,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	
 	@SuppressWarnings("serial")
 	protected TableModel getTableModel() {
-		return new AccountTableModel();
+		return new AccountTableModel((GlobalData) data);
 	}
 	protected Action getNewButtonAction() {
 		return new NewAccountAction((GlobalData) data);

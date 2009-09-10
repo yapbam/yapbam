@@ -174,6 +174,7 @@ public class GlobalData extends DefaultListenable {
 	
 	public void removeTransaction(int index) {
 		Transaction removed = this.transactions.remove(index);
+		removed.getAccount().removeTransaction(removed);
 		this.fireEvent(new TransactionRemovedEvent(this, index, removed));
 		setChanged();
 	}
