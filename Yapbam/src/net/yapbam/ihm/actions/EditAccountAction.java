@@ -5,11 +5,12 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JTable;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.dialogs.AbstractDialog;
-import net.yapbam.ihm.dialogs.BankAccountDialog;
+import net.yapbam.ihm.dialogs.AccountDialog;
 
 @SuppressWarnings("serial")
 public class EditAccountAction extends AbstractAction {
@@ -23,12 +24,14 @@ public class EditAccountAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
-		BankAccountDialog dialog = new BankAccountDialog(owner, null, data);
-		dialog.setContent(data.getAccount(0)); //TODO
+		JTable table = (JTable)e.getSource();
+		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow(table):null;
+		AccountDialog dialog = new AccountDialog(owner, null, data);
+		int selectedRow = table.getSelectedRow();
+		dialog.setContent(data.getAccount(selectedRow));
 		dialog.setVisible(true);
 		if (dialog.getAccount()!=null) {
-			System.out.println("Account modified");
+			System.out.println("Account modified");//TODO
 		}
 	}
 }

@@ -16,17 +16,19 @@ import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.AmountWidget;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 
-public class BankAccountDialog extends AbstractDialog {
+public class AccountDialog extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField bankAccountField;
 	private AmountWidget balanceField;
 	private GlobalData data;
 	private ModeListPanel modesPanel;
+	private String initialName;
 
-	public BankAccountDialog(Window owner, String message, GlobalData data) {
+	public AccountDialog(Window owner, String message, GlobalData data) {
 		super(owner, LocalizationData.get("AccountDialog.title"), message); //$NON-NLS-1$
 		this.data = data;
+		this.initialName = null;
 	}
 	
 	protected JPanel createCenterPane(Object message) {
@@ -77,9 +79,11 @@ public class BankAccountDialog extends AbstractDialog {
 	}
 	
 	public void setContent(Account account) {
-		this.bankAccountField.setText(account.getName());
+		this.initialName = account.getName();
+		this.bankAccountField.setText(this.initialName);
 		this.balanceField.setValue(account.getInitialBalance());
 		this.modesPanel.setContent(account);
+		this.updateOkButtonEnabled();
 	}
 
 	@Override
@@ -96,7 +100,7 @@ public class BankAccountDialog extends AbstractDialog {
 	 * @return The newly created account or null if the operation was canceled
 	 */
 	public static Account open(GlobalData data, Window owner, String message) {
-		BankAccountDialog dialog = new BankAccountDialog(owner, message, data);
+		AccountDialog dialog = new AccountDialog(owner, message, data);
 		dialog.setVisible(true);
 		Account newAccount = dialog.getAccount();
 		if (newAccount!=null) {
@@ -110,7 +114,7 @@ public class BankAccountDialog extends AbstractDialog {
 		String name = this.bankAccountField.getText().trim();
 		if (name.length()==0) {
 			return LocalizationData.get("AccountDialog.err1"); //$NON-NLS-1$
-		} else if (this.data.getAccount(name)!=null) {
+		} else if ((this.data.getAccount(name)!=null) && !name.equalsIgnoreCase(this.initialName)) {
 			return LocalizationData.get("AccountDialog.err2"); //$NON-NLS-1$
 		} else if (this.balanceField.getValue()==null) {
 			return LocalizationData.get("AccountDialog.err3"); //$NON-NLS-1$

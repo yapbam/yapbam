@@ -59,7 +59,7 @@ public class TransactionDialog extends AbstractDialog {
 	public static AbstractTransaction open(GlobalData data, MainFrame frame, Transaction transaction) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
-			BankAccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			AccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (data.getAccountsNumber()==0) return null;
 		}
 		TransactionDialog dialog = new TransactionDialog(frame, data, transaction);
@@ -313,7 +313,7 @@ public class TransactionDialog extends AbstractDialog {
 					modes.setSelectedItem(0);
 				}
 			} else {
-				Account ac = BankAccountDialog.open(data, TransactionDialog.this, null);
+				Account ac = AccountDialog.open(data, TransactionDialog.this, null);
 				if (ac!=null) {
 					accounts.addItem(ac.getName());
 					accounts.setSelectedIndex(accounts.getItemCount()-1);

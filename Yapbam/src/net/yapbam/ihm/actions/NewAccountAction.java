@@ -9,7 +9,7 @@ import javax.swing.AbstractAction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.dialogs.AbstractDialog;
-import net.yapbam.ihm.dialogs.BankAccountDialog;
+import net.yapbam.ihm.dialogs.AccountDialog;
 
 @SuppressWarnings("serial")
 public class NewAccountAction extends AbstractAction {
@@ -24,6 +24,6 @@ public class NewAccountAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
-		BankAccountDialog.open(data, owner, null);
+		AccountDialog.open(data, owner, null);
 	}
 }
