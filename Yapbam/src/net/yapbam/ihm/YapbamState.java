@@ -3,6 +3,7 @@ package net.yapbam.ihm;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,14 +11,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
 public class YapbamState {
-	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
-	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
+	private static final String COLUMN_WIDTH = "net.yapbam.transactionTable.column.width."; //$NON-NLS-1$
+	private static final String COLUMN_INDEX = "net.yapbam.transactionTable.column.index."; //$NON-NLS-1$
+	private static final String SELECTED_ROW = "net.yapbam.transactionTable.selectedRow"; //$NON-NLS-1$
+	private static final String SCROLL_POSITION = "net.yapbam.transactionTable.scrollPosition"; //$NON-NLS-1$
+	
 	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
+	
 	private static final String FRAME_SIZE_WIDTH = "frame.size.width"; //$NON-NLS-1$
 	private static final String FRAME_SIZE_HEIGHT = "frame.size.height"; //$NON-NLS-1$
 	private static final String FRAME_LOCATION_Y = "frame.location.y"; //$NON-NLS-1$
@@ -93,18 +99,40 @@ public class YapbamState {
 				if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
 			}
 		}
+		// Now the selected row
+		String valueString = (String) properties.get(SELECTED_ROW);
+		if (valueString!=null) {
+			int index = Integer.parseInt(valueString);
+			if (index < table.getRowCount()) table.getSelectionModel().setSelectionInterval(index, index);
+		}
+		// And the scroll position
+		Rectangle visibleRect = getRectangle(SCROLL_POSITION);
+		table.scrollRectToVisible(visibleRect);
+	}
+	
+	private static String toString(Rectangle rect) {
+		return rect.x+","+rect.y+","+rect.width+","+rect.height;
+	}
+	
+	private Rectangle getRectangle(String property) {
+		String value = properties.getProperty(property);
+		if (value==null) return null;
+		StringTokenizer tokens = new StringTokenizer(value, ",");
+		return new Rectangle(Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()),
+				Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()));
 	}
 
-	private static void saveTransactionTableState(MainFrame frame, Properties properties) {
-		JTable transactionTable = frame.getTransactionTable();
-		TableColumnModel model = transactionTable.getColumnModel();
+	private static void saveTransactionTableState(JTable table, Properties properties) {
+		TableColumnModel model = table.getColumnModel();
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			properties.put(COLUMN_WIDTH+transactionTable.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
+			properties.put(COLUMN_WIDTH+table.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
 		}
 		// Save the column order (if two or more columns were inverted)
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			properties.put(COLUMN_INDEX+i, Integer.toString(transactionTable.convertColumnIndexToModel(i)));
+			properties.put(COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
 		}
+		properties.put(SELECTED_ROW, Integer.toString(table.getSelectedRow()));
+		properties.put(SCROLL_POSITION,toString(table.getVisibleRect()));
 	}
 	
 	static void save(MainFrame frame) {
@@ -120,7 +148,7 @@ public class YapbamState {
 		properties.put(FRAME_SIZE_HEIGHT, Integer.toString(h));
 		int w = ((frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
 		properties.put(FRAME_SIZE_WIDTH, Integer.toString(w));
-		saveTransactionTableState(frame, properties);
+		saveTransactionTableState(frame.getTransactionTable(), properties);
 		try {
 			properties.store(new FileOutputStream(STATE_FILENAME), "Yapbam statup state"); //$NON-NLS-1$
 		} catch (IOException e) {

@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import net.yapbam.data.Transaction;
-import net.yapbam.data.TransactionComparator;
 import net.yapbam.ihm.IconManager;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.MainFrame;

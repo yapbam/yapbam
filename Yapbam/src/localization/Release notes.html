@@ -7,8 +7,13 @@
 .bugFix {
 color: #009900;
 }
+<!--
+.beAware {
+color: #AA0000;
+}
 -->
-</style></head>
+</style>
+</head>
 <body>
 <h1>Version &nbsp;0.1.13 (11/09/2009)</h1>
 <p>This version is a preview with somme missing functionnalities
@@ -23,7 +28,8 @@ still a preview ;-) <br>
 </p>
 The next functionnalities I hope to add :
 <ol>
-<li>The ability to define and manage periodic transactions.</li><li>Something
+<li>The ability to define and manage periodic transactions.</li>
+<li>Something
 to manage accounts, category ... (currently, you can add them, but not
 edit or remove what you've added). For now, you have to manually edit
 the XML file ... at your own risks.</li>
@@ -35,7 +41,8 @@ to deduce other informations (especially categories).</li>
 </ol>
 <h2>New in this version</h2>
 <ul>
-<li>A lot of undergroud work in order to implement account management in a future release.</li>
+<li>A lot of undergroud work in order to implement account
+management in a future release.</li>
 <li>The bank account creation dialog allows you to create
 payment method.</li>
 <li><span class="bugFix">Bug 2856006 fixed</span>
@@ -47,12 +54,26 @@ chance to save is broken in v0.1.12"</a>.</li>
 change"</a>.</li>
 <li>Improve the sort of the transactions list (in previous
 versions a duplicated transaction could appear far away for its clone).</li>
-<li><span class="bugFix">Bug fixed</span> : When first transaction table column (the
+<li><span class="bugFix">Bug fixed</span> :
+When first transaction table column (the
 open/close subtransactions control) was moved, you still had to click
-the first column to deploy the subtrasctions view.</li><li>Improve the "last state save" :</li><ul><li>The
+the first column to deploy the subtransactions view.</li>
+<li>Improve the "last state save" :</li>
+<ul>
+<li><span class="beAware">Be aware</span> :
+In order to prepare a plugin architecture, the
+state file format changed. Your previous column sizes wiln not be
+restored when you will upgrade to this version.</li>
+</ul>
+<ul>
+<li>The
 order of the columns is saved (in previous releases, column order where
 always reset to the default order, and the saved column size where
-applied tothe default column order ... which could be considered as a bug). </li></ul>
+applied tothe default column order ... which could be considered as a
+bug).</li>
+<li>The selected index in the transactions table and the
+scroll position are now saved.</li>
+</ul>
 </ul>
 <hr>
 <h1>Older releases</h1>
