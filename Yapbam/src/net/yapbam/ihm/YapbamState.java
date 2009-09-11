@@ -107,7 +107,7 @@ public class YapbamState {
 //		}
 		// And the scroll position
 		Rectangle visibleRect = getRectangle(SCROLL_POSITION);
-		table.scrollRectToVisible(visibleRect);
+		if (visibleRect!=null) table.scrollRectToVisible(visibleRect);
 	}
 	
 	private static String toString(Rectangle rect) {
