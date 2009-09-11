@@ -46,10 +46,9 @@ public class FilteredData extends AccountFilter {
 						fireEvent(new AccountAddedEvent(FilteredData.this, index));
 					}
 				} else if (event instanceof AccountRemovedEvent) {
-					System.out.println ("Need to do something if account removed is the last in filter"); //FIXME
+					// Nothing to do, all the account's transactions are removed when the Account is removed
 				}
 			}
-
 		});
 	}
 		

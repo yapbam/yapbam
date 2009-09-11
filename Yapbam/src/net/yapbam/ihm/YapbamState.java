@@ -86,8 +86,6 @@ public class YapbamState {
 	
 	static void save(MainFrame frame) {
 		Properties properties = INSTANCE.properties;
-//		properties.put("localization.language",LocalizationData.getLocale().getLanguage());
-//		properties.put("localization.country",LocalizationData.getLocale().getCountry());
 		if (frame.getData().getPath()!=null) {
 			properties.put(FILE_PATH, frame.getData().getPath().toString());
 		}
