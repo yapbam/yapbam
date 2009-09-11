@@ -40,13 +40,28 @@ public class AccountFilteredData extends AccountFilter {
 						balanceHistory.add(account.getInitialBalance(), null);
 						fireEvent(new AccountAddedEvent(AccountFilteredData.this, index));
 					}
-				} else if (event instanceof AccountRemovedEvent) {
-					System.out.println ("Do something with this AccountRemovedEvent"); //FIXME
 				}
 			}
 		});
 	}
 	
+	@Override
+	protected boolean process(AccountRemovedEvent event) {
+		boolean ok = super.process(event);
+		// When a account is removed, its transactions are automatically removed
+		// So, no need to deal with them
+		if (ok) {
+			Account account = event.getRemoved();
+			double initialBalance = account.getInitialBalance();
+			if (initialBalance!=0) {
+				updateBalance(initialBalance, false);
+				balanceHistory.add(-account.getInitialBalance(), null);
+				fireEvent(new AccountRemovedEvent(AccountFilteredData.this, -1, account));
+			}
+		}
+		return ok;
+	}
+
 	protected void filter() {
 		double initialBalance = getInitialBalance();
 		this.balanceHistory = new BalanceHistory(initialBalance);
