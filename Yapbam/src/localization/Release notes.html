@@ -8,10 +8,9 @@
 color: #009900;
 }
 -->
-</style>
-</head>
+</style></head>
 <body>
-<h1>Version &nbsp;0.2.0 (work in progress)</h1>
+<h1>Version &nbsp;0.1.13 (11/09/2009)</h1>
 <p>This version is a preview with somme missing functionnalities
 and, probably, a lot of bugs.<br>
 You will also find a lot of GUI items without any
@@ -24,7 +23,10 @@ still a preview ;-) <br>
 </p>
 The next functionnalities I hope to add :
 <ol>
-<li>The ability to manage periodic transactions.</li>
+<li>The ability to define and manage periodic transactions.</li><li>Something
+to manage accounts, category ... (currently, you can add them, but not
+edit or remove what you've added). For now, you have to manually edit
+the XML file ... at your own risks.</li>
 <li>Some statistics or charts about categories.</li>
 <li>Maybe - The ability to compress and encrypt data files.</li>
 <li>Maybe - An auto-complete wizard in the "new transaction"
@@ -33,8 +35,7 @@ to deduce other informations (especially categories).</li>
 </ol>
 <h2>New in this version</h2>
 <ul>
-<li>Add the "Administration" tab which allows you to manage
-accounts and categories.</li>
+<li>A lot of undergroud work in order to implement account management in a future release.</li>
 <li>The bank account creation dialog allows you to create
 payment method.</li>
 <li><span class="bugFix">Bug 2856006 fixed</span>
@@ -48,7 +49,10 @@ change"</a>.</li>
 versions a duplicated transaction could appear far away for its clone).</li>
 <li><span class="bugFix">Bug fixed</span> : When first transaction table column (the
 open/close subtransactions control) was moved, you still had to click
-the first column to deploy the subtrasctions view.</li>
+the first column to deploy the subtrasctions view.</li><li>Improve the "last state save" :</li><ul><li>The
+order of the columns is saved (in previous releases, column order where
+always reset to the default order, and the saved column size where
+applied tothe default column order ... which could be considered as a bug). </li></ul>
 </ul>
 <hr>
 <h1>Older releases</h1>

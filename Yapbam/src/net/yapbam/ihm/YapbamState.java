@@ -76,13 +76,34 @@ public class YapbamState {
 	}
 
 	void restoreTransactionTableColumns(MainFrame frame) {
-		TableColumnModel model = frame.getTransactionTable().getColumnModel();
+		JTable table = frame.getTransactionTable();
+		TableColumnModel model = table.getColumnModel();
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			String valueString = (String) properties.get(COLUMN_WIDTH+i);
 			if (valueString!=null) {
 				int width = Integer.parseInt(valueString);
 				if (width>0) model.getColumn(i).setPreferredWidth(width);
 			}
+		}
+		// Restore column order
+		for (int i = model.getColumnCount()-1; i>=0 ; i--) {
+			String valueString = (String) properties.get(COLUMN_INDEX+i);
+			if (valueString!=null) {
+				int modelIndex = Integer.parseInt(valueString);
+				if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
+			}
+		}
+	}
+
+	private static void saveTransactionTableState(MainFrame frame, Properties properties) {
+		JTable transactionTable = frame.getTransactionTable();
+		TableColumnModel model = transactionTable.getColumnModel();
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			properties.put(COLUMN_WIDTH+transactionTable.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
+		}
+		// Save the column order (if two or more columns were inverted)
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			properties.put(COLUMN_INDEX+i, Integer.toString(transactionTable.convertColumnIndexToModel(i)));
 		}
 	}
 	
@@ -99,15 +120,7 @@ public class YapbamState {
 		properties.put(FRAME_SIZE_HEIGHT, Integer.toString(h));
 		int w = ((frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
 		properties.put(FRAME_SIZE_WIDTH, Integer.toString(w));
-		JTable transactionTable = frame.getTransactionTable();
-		TableColumnModel model = transactionTable.getColumnModel();
-		for (int i = 0; i < model.getColumnCount(); i++) {
-			properties.put(COLUMN_WIDTH+i, Integer.toString(model.getColumn(i).getWidth()));
-		}
-		for (int i = 0; i < model.getColumnCount(); i++) {
-			properties.put(COLUMN_INDEX+i, Integer.toString(transactionTable.convertColumnIndexToView(i)));
-		}
-		//TODO Save the column order (if two or more columns were inverted
+		saveTransactionTableState(frame, properties);
 		try {
 			properties.store(new FileOutputStream(STATE_FILENAME), "Yapbam statup state"); //$NON-NLS-1$
 		} catch (IOException e) {

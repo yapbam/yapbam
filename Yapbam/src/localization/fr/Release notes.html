@@ -10,7 +10,7 @@ color: #009900;
 -->
 </style></head>
 <body>
-<h1>Version &nbsp;0.2.0 (travail en cours ...)</h1>
+<h1>Version &nbsp;0.1.13 (11/09/2009)</h1>
 <p>Cette version&nbsp;est&nbsp;une pre-version à laquelle
 manquent quelques fonctionnalités, et qui,
 probablement,&nbsp;comporte beaucoup de bugs. Vous trouverez
@@ -24,7 +24,11 @@ d'être indulgent, ce n'est que pré-version ;-) <br>
 Quelques fonctionnalités que j'espère ajouter prochainement :
 <ol>
 <li>La possibilité de gérer des opérations périodiques (paye,
-abonnement, ...).</li>
+abonnement, ...).</li><li>La
+gestion des comptes, des catégories, etc ... (pour l'instant, on peut
+en ajouter, mais pas les éditer ou les supprimer). On peut éditer le
+fichier de données (au format XML) ... mais c'est à vos risques à
+périls.</li>
 <li>Des statistiques et des graphiques sur les catégories (sans
 quoi, leur saisie n'aurait aucun intérêt).</li>
 <li>Peut-être la possibilité de compresser le fichier de
@@ -36,8 +40,7 @@ informations (typiquement la catégorie).</li>
 </ol>
 <h2>Nouveautés de cette version</h2>
 <ul>
-<li>Ajout d'un onglet "Administration" permettant d'ajouter, de
-supprimer ou d'éditer les comptes et les catégories.</li>
+<li>Beaucoup de travail souterrain pour préparer l'implémentation de la gestion des comptes, des catégories, etc ...</li>
 <li>Le dialogue de création de comptes permet à présent
 également de créer des modes de paiement.</li>
 <li><span class="bugFix">Correction du bug 2856006</span>
@@ -48,7 +51,15 @@ sauvegardées' ne fonctionne pas"</a>.</li>
 disparaissent lors de rechargement de l'interface après un changement
 de préférence"</a>.</li><li>Amélioration
 du tri de la liste des opérations (dans les pécédentes versions, une
-opération dupliquée pouvait apparaitre très loin de son original).</li><li><span class="bugFix">Bug fixed</span> : Quand la première colonne de la table des opérations (la zone qui permet de déployer/replier la vue des sous-opérations) était déplacée, ce contrôle restait effectué par la première colonne de la table.</li>
+opération dupliquée pouvait apparaitre très loin de son original).</li><li><span class="bugFix">Bug fixed</span>
+: Quand la première colonne de la table des opérations (la zone qui
+permet de déployer/replier la vue des sous-opérations) était déplacée,
+ce contrôle restait effectué par la première colonne de la table.</li><li>Amélioration de la sauvegarde du dernier état :</li><ul><li>L'odre
+des colonnes de la table des transaction est sauvegardé (dans les
+versions précédentes, les colonnes étaient systématiquement remises
+dans l'odre par défaut. La taille mémorisée était appliquée aux
+colonnes dans l'ordre par défaut ... ce qui peut-être considéré comme
+un bug). </li></ul>
 </ul>
 <hr>
 <h1>Versions précédentes</h1>
