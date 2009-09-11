@@ -7,8 +7,13 @@
 .bugFix {
 color: #009900;
 }
+<!--
+.beAware {
+color: #AA0000;
+}
 -->
-</style></head>
+</style>
+</head>
 <body>
 <h1>Version &nbsp;0.1.13 (11/09/2009)</h1>
 <p>Cette version&nbsp;est&nbsp;une pre-version à laquelle
@@ -24,7 +29,8 @@ d'être indulgent, ce n'est que pré-version ;-) <br>
 Quelques fonctionnalités que j'espère ajouter prochainement :
 <ol>
 <li>La possibilité de gérer des opérations périodiques (paye,
-abonnement, ...).</li><li>La
+abonnement, ...).</li>
+<li>La
 gestion des comptes, des catégories, etc ... (pour l'instant, on peut
 en ajouter, mais pas les éditer ou les supprimer). On peut éditer le
 fichier de données (au format XML) ... mais c'est à vos risques à
@@ -33,33 +39,47 @@ périls.</li>
 quoi, leur saisie n'aurait aucun intérêt).</li>
 <li>Peut-être la possibilité de compresser le fichier de
 données et de le protéger par mot de passe.</li>
-<li>Peut-être un auto-complétion dans le dialogue de création
+<li>Peut-être une auto-complétion dans le dialogue de création
 d'une opération. Celui-ci serait chargé de completer les descriptions
 possibles au fur et à mesure de la saisie et en déduire les
 informations (typiquement la catégorie).</li>
 </ol>
 <h2>Nouveautés de cette version</h2>
 <ul>
-<li>Beaucoup de travail souterrain pour préparer l'implémentation de la gestion des comptes, des catégories, etc ...</li>
+<li>Beaucoup de travail souterrain pour préparer
+l'implémentation de la gestion des comptes, des catégories, etc ...</li>
 <li>Le dialogue de création de comptes permet à présent
 également de créer des modes de paiement.</li>
 <li><span class="bugFix">Correction du bug 2856006</span>
-<a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2852451&amp;group_id=276272&amp;atid=1173518">
-"Le bouton annuler du dialogue 'Des modifications n'ont pas été
+<a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2852451&amp;group_id=276272&amp;atid=1173518">"Le
+bouton annuler du dialogue 'Des modifications n'ont pas été
 sauvegardées' ne fonctionne pas"</a>.</li>
 <li><span class="bugFix">Correction du bug 2856394</span><a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2856394&amp;group_id=276272&amp;atid=1173518">"Les&nbsp;soldes
 disparaissent lors de rechargement de l'interface après un changement
-de préférence"</a>.</li><li>Amélioration
+de préférence"</a>.</li>
+<li>Amélioration
 du tri de la liste des opérations (dans les pécédentes versions, une
-opération dupliquée pouvait apparaitre très loin de son original).</li><li><span class="bugFix">Bug fixed</span>
+opération dupliquée pouvait apparaitre très loin de son original).</li>
+<li><span class="bugFix">Bug fixed</span>
 : Quand la première colonne de la table des opérations (la zone qui
 permet de déployer/replier la vue des sous-opérations) était déplacée,
-ce contrôle restait effectué par la première colonne de la table.</li><li>Amélioration de la sauvegarde du dernier état :</li><ul><li>L'odre
+ce contrôle restait effectué par la première colonne de la table.</li>
+<li>Amélioration de la sauvegarde du dernier état :</li>
+<ul>
+<li><span class="beAware">Attention</span> :
+Dans le but de préparer une architecture de plug-in, le format du
+fichier dans lequel on sauvegarde le dernier état a changé. Lors du
+passage à cette version, la taille des colonnes sauvegardées dans la
+version précédente sera perdue.</li>
+<li>L'odre
 des colonnes de la table des transaction est sauvegardé (dans les
 versions précédentes, les colonnes étaient systématiquement remises
 dans l'odre par défaut. La taille mémorisée était appliquée aux
 colonnes dans l'ordre par défaut ... ce qui peut-être considéré comme
-un bug). </li></ul>
+un bug).</li><li>La
+ligne actuellement sélectionnée dans la table des transactions ainsi
+que le défilement de cette table sont à présent sauvegardés.</li>
+</ul>
 </ul>
 <hr>
 <h1>Versions précédentes</h1>
