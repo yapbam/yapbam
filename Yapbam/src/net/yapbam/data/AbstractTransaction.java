@@ -27,10 +27,15 @@ public class AbstractTransaction implements Cloneable {
 	
 	@Override
 	public Object clone() {
-		AbstractTransaction result = (AbstractTransaction) this.clone();
-		result.subTransactions = new ArrayList<SubTransaction>();
-		for (int i=0;i<getSubTransactionSize();i++) {
-			result.subTransactions.add(getSubTransaction(i));
+		AbstractTransaction result = null;
+		try {
+			result = (AbstractTransaction) super.clone();
+			result.id = currentId++;
+			result.subTransactions = new ArrayList<SubTransaction>();
+			for (int i=0;i<getSubTransactionSize();i++) {
+				result.subTransactions.add(getSubTransaction(i));
+			}
+		} catch (CloneNotSupportedException e) {
 		}
 		return result;
 	}

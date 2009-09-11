@@ -109,7 +109,7 @@ public class TransactionDialog extends AbstractDialog {
 		for (int i = 0; i < subtransactionsPanel.getSubtransactionsCount(); i++) {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
-		return new Transaction(date.getDate(), transactionNumber.getText(), description.getText().trim(), amount,
+		return new Transaction(date.getDate(), number, description.getText().trim(), amount,
 				this.data.getAccount(selectedAccount), getCurrentMode(), categories.getCategory(),
 				defDate.getDate(), statementId, subTransactions);
 	}
