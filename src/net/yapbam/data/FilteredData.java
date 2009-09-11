@@ -18,6 +18,7 @@ public class FilteredData extends AccountFilter {
 
 	private ArrayList<Transaction> transactions;
 	private int filter;
+	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	
 	public FilteredData(GlobalData data) {
 	    super(data);
@@ -28,13 +29,13 @@ public class FilteredData extends AccountFilter {
 					int index = ((TransactionAddedEvent)event).getTransactionIndex();
 					Transaction transaction = ((GlobalData)event.getSource()).getTransaction(index);
 					if (isOk(transaction)) { // If the added transaction match with the filter
-						index = -Collections.binarySearch(transactions, transaction, TransactionComparator.INSTANCE)-1;
+						index = -Collections.binarySearch(transactions, transaction, comparator)-1;
 						transactions.add(index, transaction);
 						fireEvent(new TransactionAddedEvent(FilteredData.this, index));
 					}
 				} else if (event instanceof TransactionRemovedEvent) {
 					Transaction transaction = ((TransactionRemovedEvent)event).getRemoved();
-					int index = Collections.binarySearch(transactions, transaction, TransactionComparator.INSTANCE);
+					int index = Collections.binarySearch(transactions, transaction, comparator);
 					if (index>=0) {
 						transactions.remove(index);
 						fireEvent(new TransactionRemovedEvent(FilteredData.this, index, transaction));
@@ -82,7 +83,6 @@ public class FilteredData extends AccountFilter {
 		this.filter = (this.filter & mask) | property;
 		if (DEBUG) System.out.println("filter : "+this.filter);
 		filter();
-		fireEvent(new EverythingChangedEvent(this));
 	}
 
 	protected void filter() {
@@ -90,9 +90,11 @@ public class FilteredData extends AccountFilter {
 	    for (int i = 0; i < data.getTransactionsNumber(); i++) {
 			Transaction transaction = data.getTransaction(i);
 			if (isOk(transaction)) {
-				this.transactions.add(transaction);				
+				int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
+				transactions.add(index, transaction);
 			}
 		}
+		fireEvent(new EverythingChangedEvent(this));
 	}
 
 	public int getTransactionsNumber() {

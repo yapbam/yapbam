@@ -3,7 +3,7 @@ package net.yapbam.data;
 import java.util.Comparator;
 
 public class TransactionComparator implements Comparator<Transaction> {
-	public static final TransactionComparator INSTANCE = new TransactionComparator();
+	static final TransactionComparator INSTANCE = new TransactionComparator();
 	
 	public int compare(Transaction o1, Transaction o2) {
 		int result = o1.getDate().compareTo(o2.getDate());

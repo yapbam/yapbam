@@ -16,8 +16,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
-import net.yapbam.ihm.actions.EditPeriodicalTransactionAction;
-
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -80,6 +78,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		if (jTable == null) {
 			jTable = new JTable();
 			jTable.setModel(getTableModel());
+		    jTable.getTableHeader().setReorderingAllowed(false);
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
 					ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();

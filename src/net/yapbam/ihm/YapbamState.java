@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 
+import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
 public class YapbamState {
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
+	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
 	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
 	private static final String FRAME_SIZE_WIDTH = "frame.size.width"; //$NON-NLS-1$
 	private static final String FRAME_SIZE_HEIGHT = "frame.size.height"; //$NON-NLS-1$
@@ -97,9 +99,13 @@ public class YapbamState {
 		properties.put(FRAME_SIZE_HEIGHT, Integer.toString(h));
 		int w = ((frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
 		properties.put(FRAME_SIZE_WIDTH, Integer.toString(w));
-		TableColumnModel model = frame.getTransactionTable().getColumnModel();
+		JTable transactionTable = frame.getTransactionTable();
+		TableColumnModel model = transactionTable.getColumnModel();
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			properties.put(COLUMN_WIDTH+i, Integer.toString(model.getColumn(i).getWidth()));
+		}
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			properties.put(COLUMN_INDEX+i, Integer.toString(transactionTable.convertColumnIndexToView(i)));
 		}
 		//TODO Save the column order (if two or more columns were inverted
 		try {
