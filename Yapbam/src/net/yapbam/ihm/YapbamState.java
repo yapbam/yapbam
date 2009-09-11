@@ -19,7 +19,7 @@ import javax.swing.table.TableColumnModel;
 public class YapbamState {
 	private static final String COLUMN_WIDTH = "net.yapbam.transactionTable.column.width."; //$NON-NLS-1$
 	private static final String COLUMN_INDEX = "net.yapbam.transactionTable.column.index."; //$NON-NLS-1$
-	private static final String SELECTED_ROW = "net.yapbam.transactionTable.selectedRow"; //$NON-NLS-1$
+//	private static final String SELECTED_ROW = "net.yapbam.transactionTable.selectedRow"; //$NON-NLS-1$
 	private static final String SCROLL_POSITION = "net.yapbam.transactionTable.scrollPosition"; //$NON-NLS-1$
 	
 	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
@@ -99,12 +99,12 @@ public class YapbamState {
 				if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
 			}
 		}
-		// Now the selected row
-		String valueString = (String) properties.get(SELECTED_ROW);
-		if (valueString!=null) {
-			int index = Integer.parseInt(valueString);
-			if (index < table.getRowCount()) table.getSelectionModel().setSelectionInterval(index, index);
-		}
+		// Now the selected row (not a very good idea).
+//		String valueString = (String) properties.get(SELECTED_ROW);
+//		if (valueString!=null) {
+//			int index = Integer.parseInt(valueString);
+//			if (index < table.getRowCount()) table.getSelectionModel().setSelectionInterval(index, index);
+//		}
 		// And the scroll position
 		Rectangle visibleRect = getRectangle(SCROLL_POSITION);
 		table.scrollRectToVisible(visibleRect);
@@ -131,7 +131,7 @@ public class YapbamState {
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			properties.put(COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
 		}
-		properties.put(SELECTED_ROW, Integer.toString(table.getSelectedRow()));
+//		properties.put(SELECTED_ROW, Integer.toString(table.getSelectedRow()));
 		properties.put(SCROLL_POSITION,toString(table.getVisibleRect()));
 	}
 	
