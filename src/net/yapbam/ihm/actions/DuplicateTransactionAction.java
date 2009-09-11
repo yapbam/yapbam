@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import net.yapbam.data.Transaction;
+import net.yapbam.data.TransactionComparator;
 import net.yapbam.ihm.IconManager;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.MainFrame;
@@ -23,7 +24,7 @@ public class DuplicateTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = frame.getSelectedTransaction();
-		transaction = (Transaction) transaction.clone();
-		frame.getData().add(transaction);
+		Transaction newTransaction = (Transaction) transaction.clone();
+		frame.getData().add(newTransaction);
 	}
 }

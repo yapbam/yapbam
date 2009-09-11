@@ -124,6 +124,20 @@ public class GlobalData extends DefaultListenable {
 		this.setChanged();
 	}
 	
+	public boolean remove(Transaction transaction) {
+		int index = indexOf(transaction);
+		if (index>=0) {
+			this.removeTransaction(index);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public int indexOf(Transaction transaction) {
+		return Collections.binarySearch(this.transactions, transaction, TransactionComparator.INSTANCE);
+	}
+
 	public int getCategoriesNumber() {
 		return this.categories.size();
 	}
@@ -169,16 +183,6 @@ public class GlobalData extends DefaultListenable {
 		fireEvent(new EverythingChangedEvent(this));
 	}
 
-	public boolean remove(Transaction transaction) {
-		int index = Collections.binarySearch(this.transactions, transaction, TransactionComparator.INSTANCE);
-		if (index>=0) {
-			this.removeTransaction(index);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
 	public void removeTransaction(int index) {
 		Transaction removed = this.transactions.remove(index);
 		removed.getAccount().removeTransaction(removed);
