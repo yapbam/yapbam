@@ -18,6 +18,12 @@ public class GlobalData extends DefaultListenable {
 	private File path;
 	private boolean somethingChanged;
 	private List<Category> categories;
+	private static final Comparator<Transaction> COMPARATOR = new Comparator<Transaction>() {
+		@Override
+		public int compare(Transaction o1, Transaction o2) {
+			return Long.signum(o1.getId()-o2.getId());
+		}
+	};
 
 	private static final Comparator<PeriodicalTransaction> PERIODICAL_COMPARATOR = new Comparator<PeriodicalTransaction>() {
 		@Override
@@ -117,7 +123,7 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	public void add(Transaction transaction) {
-		int index = -Collections.binarySearch(this.transactions, transaction, TransactionComparator.INSTANCE)-1;
+		int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
 		this.transactions.add(index, transaction);
 		transaction.getAccount().add(transaction);
 		fireEvent(new TransactionAddedEvent(this, index));
@@ -135,7 +141,7 @@ public class GlobalData extends DefaultListenable {
 	}
 	
 	public int indexOf(Transaction transaction) {
-		return Collections.binarySearch(this.transactions, transaction, TransactionComparator.INSTANCE);
+		return Collections.binarySearch(this.transactions, transaction, COMPARATOR);
 	}
 
 	public int getCategoriesNumber() {
