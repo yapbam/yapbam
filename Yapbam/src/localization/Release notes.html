@@ -11,9 +11,10 @@ color: #009900;
 color: #AA0000;
 }
 -->
-</style></head>
+</style>
+</head>
 <body>
-<h1>Version &nbsp;0.1.13 (11/09/2009)</h1>
+<h1>Version &nbsp;0.1.14 (work in progress)</h1>
 <p>This version is a preview with somme missing functionnalities
 and, probably, a lot of bugs.<br>
 You will also find a lot of GUI items without any
@@ -25,6 +26,7 @@ it for my own). Feel free to report any bug. Please be indulgent, it's
 still a preview ;-) <br>
 </p>
 <p>The next functionnalities I hope to add :
+</p>
 <ol>
 <li>The ability to define and manage periodic transactions.</li>
 <li>Something
@@ -38,6 +40,14 @@ dialog that would be able to complete the description as you type and
 to deduce other informations (especially categories).</li>
 </ol>
 <h2>New in this version</h2>
+<ul>
+<li><span class="bugFix">Bug fixed</span> :
+When the preffered localization changed, the dates in the transaction
+table were still displayed using the initial localization.</li>
+</ul>
+<hr>
+<h1>Older releases</h1>
+<h2>Version &nbsp;0.1.13 (11/09/2009)</h2>
 <ul>
 <li>A lot of undergroud work in order to implement account
 management in a future release.</li>
@@ -58,7 +68,8 @@ open/close subtransactions control) was moved, you still had to click
 the first column to deploy the subtransactions view.</li>
 <li>Improve the "last state save" :
 <ul>
-<li><span class="beAware">Be aware</span> :
+<li><span class="beAware">Be aware</span>
+:
 In order to prepare a plugin architecture, the
 state file format changed. Your previous column sizes wiln not be
 restored when you will upgrade to this version.</li>
@@ -67,11 +78,11 @@ order of the columns is saved (in previous releases, column order where
 always reset to the default order, and the saved column size where
 applied tothe default column order ... which could be considered as a
 bug).</li>
-<li>The&nbsp;scroll position of&nbsp; the transactions table is now saved.</li>
-</ul></li>
+<li>The&nbsp;scroll position of&nbsp; the
+transactions table is now saved.</li>
 </ul>
-<hr>
-<h1>Older releases</h1>
+</li>
+</ul>
 <h2>Version &nbsp;0.1.12 (07/09/2009)</h2>
 <ul>
 <li>Add a Preference item in the File menu. The localization
