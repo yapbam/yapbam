@@ -154,6 +154,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemAbout.setToolTipText(LocalizationData.get("MainMenu.About.ToolTip")); //$NON-NLS-1$
         this.menuItemAbout.addActionListener(this);
         menu.add(this.menuItemAbout);
+        menu.add(new CheckNewReleaseAction(this.frame));
     }
 
 	private void refreshState(GlobalData data) {
