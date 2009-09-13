@@ -12,17 +12,20 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-public abstract class InfoPanel extends JPanel {
+public abstract class AbstractInfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel northPanel = null;
 	private JLabel iconLabel = null;
 	private JLabel textLabel = null;
+	
+	protected Object data;
 
 	/**
 	 * This is the default constructor
 	 */
-	public InfoPanel() {
+	public AbstractInfoPanel(Object data) {
 		super();
+		this.data = data;
 		initialize();
 	}
 
@@ -52,7 +55,6 @@ public abstract class InfoPanel extends JPanel {
 			gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints1.gridy = 0;
 			textLabel = new JLabel();
-			textLabel.setText(getNorthMessage());
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -66,7 +68,9 @@ public abstract class InfoPanel extends JPanel {
 		return northPanel;
 	}
 
-	protected abstract String getNorthMessage();
+	protected void setHeaderMessage(String message) {
+		this.textLabel.setText(message);
+	}
 
 	/**
 	 * This method initializes iconLabel	
@@ -83,9 +87,9 @@ public abstract class InfoPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jTabbedPane	
+	 * This method initializes the center Component	
 	 * 	
-	 * @return javax.swing.JTabbedPane	
+	 * @return javax.swing.JComponent
 	 */
 	protected abstract JComponent getCenterComponent();
 }  //  @jve:decl-index=0:visual-constraint="10,10"

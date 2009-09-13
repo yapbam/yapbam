@@ -11,8 +11,7 @@ import javax.swing.JTabbedPane;
 import net.yapbam.ihm.widget.HTMLPane;
 import net.yapbam.update.VersionManager;
 
-public class AboutPanel extends InfoPanel {
-
+public class AboutPanel extends AbstractInfoPanel {
 	private static final Dimension PREFERED_HTML_PANE_SIZE = new Dimension(480,240);  //  @jve:decl-index=0:
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane jTabbedPane = null;
@@ -22,11 +21,8 @@ public class AboutPanel extends InfoPanel {
 	 * This is the default constructor
 	 */
 	public AboutPanel() {
-		super();
-	}
-
-	protected String getNorthMessage() {
-		return MessageFormat.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion());
+		super(null);
+		this.setHeaderMessage(MessageFormat.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion()));
 	}
 
 	/**

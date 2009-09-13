@@ -5,14 +5,15 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.ihm.LocalizationData;
+
 import java.lang.Object;
 import java.lang.String;
 
 @SuppressWarnings("serial")
-public class AboutDialog extends AbstractDialog {
+public class DefaultHTMLInfoDialog extends AbstractDialog {
 
-	public AboutDialog(Window owner) {
-		super(owner, LocalizationData.get("ApplicationName"), null);
+	public DefaultHTMLInfoDialog(Window owner, String title, String header, String message) {
+		super(owner, title, new String[]{header, message});
 		this.cancelButton.setVisible(false);
 		this.okButton.setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
 		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
@@ -20,13 +21,12 @@ public class AboutDialog extends AbstractDialog {
 
 	@Override
 	protected Object buildResult() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected JPanel createCenterPane(Object data) {
-		return new AboutPanel();
+		return new DefaultHTMLInfoPanel(((String[])data)[0], ((String[])data)[1]);
 	}
 
 	@Override
