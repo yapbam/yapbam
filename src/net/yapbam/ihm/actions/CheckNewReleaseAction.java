@@ -9,6 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
 import net.yapbam.ihm.LocalizationData;
+import net.yapbam.ihm.dialogs.DefaultHTMLInfoDialog;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
 
@@ -32,9 +33,12 @@ public class CheckNewReleaseAction extends AbstractAction {
 				JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE);				 //$NON-NLS-1$
 			} else {
 				if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) {
-					String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success"); //$NON-NLS-1$
+					String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
 					String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(),update.getUpdateURL());
-					JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
+					new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"),
+							message).setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.NoUpdate"), LocalizationData.get("MainMenu.CheckUpdate.NoUpdate.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
 				}
 			}
 		} catch (Exception e1) {

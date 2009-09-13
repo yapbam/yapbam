@@ -37,11 +37,12 @@ public class HTMLPane extends JScrollPane {
 		this.setViewportView(textPane);
 	}
 	
-	public void setContent (String text) {
+	private void setContent (String text) {
+		textPane.setContentType("text/html");
 		textPane.setText(text);
 	}
 	
-	public void setContent (URL url) {
+	private void setContent (URL url) {
 		if (url != null) {
 			try {
 				textPane.setPage(url);
@@ -54,5 +55,9 @@ public class HTMLPane extends JScrollPane {
 	public HTMLPane (URL url) {
 		this();
 		setContent(url);
+	}
+	public HTMLPane (String text) {
+		this();
+		setContent(text);
 	}
 }
