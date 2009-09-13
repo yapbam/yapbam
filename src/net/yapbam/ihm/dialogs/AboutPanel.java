@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.VersionManager;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -18,6 +17,7 @@ import java.text.MessageFormat;
 import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import net.yapbam.ihm.widget.HTMLPane;
+import net.yapbam.update.VersionManager;
 
 public class AboutPanel extends JPanel {
 

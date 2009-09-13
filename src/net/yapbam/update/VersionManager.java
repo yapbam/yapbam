@@ -1,7 +1,9 @@
-package net.yapbam.ihm;
+package net.yapbam.update;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 public class VersionManager {
@@ -20,8 +22,12 @@ public class VersionManager {
 		}
 	}
 	
-	public static String getVersion() {
-		return properties.getProperty("version", LocalizationData.get("VersionManager.unknown")); //$NON-NLS-1$ //$NON-NLS-2$
+	public static ReleaseInfo getVersion() {
+		return new ReleaseInfo(properties.getProperty("version")); //$NON-NLS-1$
+//		, LocalizationData.get("VersionManager.unknown")
 	}
 
+	public static URL getUpdateURL() throws MalformedURLException {
+		return new URL(properties.getProperty("updateURL", "http://yapbam.sourceforge.net/updateInfo.properties")); //$NON-NLS-1$ //$NON-NLS-2$
+	}
 }
