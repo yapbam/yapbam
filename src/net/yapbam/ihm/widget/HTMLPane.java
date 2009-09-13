@@ -12,12 +12,14 @@ import javax.swing.event.HyperlinkListener;
 
 @SuppressWarnings("serial")
 public class HTMLPane extends JScrollPane {
-	public HTMLPane (URL url) {
+	private JTextPane textPane;
+
+	public HTMLPane () {
 		super();
 		this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		JTextPane jTextPane = new JTextPane();
-		jTextPane.setEditable(false);
-		jTextPane.addHyperlinkListener(new HyperlinkListener() {
+		textPane = new JTextPane();
+		textPane.setEditable(false);
+		textPane.addHyperlinkListener(new HyperlinkListener() {
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
@@ -32,13 +34,25 @@ public class HTMLPane extends JScrollPane {
 				}
 			}
 		});
+		this.setViewportView(textPane);
+	}
+	
+	public void setContent (String text) {
+		textPane.setText(text);
+	}
+	
+	public void setContent (URL url) {
 		if (url != null) {
 			try {
-				jTextPane.setPage(url);
+				textPane.setPage(url);
 			} catch (IOException e) {
 				System.err.println("Attempted to read a bad URL: " + url);//TODO
 			}
 		}
-		this.setViewportView(jTextPane);
+	}
+	
+	public HTMLPane (URL url) {
+		this();
+		setContent(url);
 	}
 }
