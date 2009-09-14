@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.Authenticator;
+import java.net.InetAddress;
+import java.net.PasswordAuthentication;
+import java.net.UnknownHostException;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.swing.UIManager;
 
@@ -18,6 +23,8 @@ public class Preferences {
 	private static final String LOOK_AND_FEEL = "look"; //$NON-NLS-1$
 	private static final String LOOK_AND_FEEL_JAVA_VALUE = "java"; //$NON-NLS-1$
 	private static final String LOOK_AND_FEEL_CUSTOM_VALUE = "custom"; //$NON-NLS-1$
+	private static final String PROXY = "proxy"; //$NON-NLS-1$
+	private static final String PROXY_AUTHENTICATION = "proxy_pass"; //$NON-NLS-1$
 
 	private static final String FILENAME = ".yapbampref"; //$NON-NLS-1$
 
@@ -31,6 +38,7 @@ public class Preferences {
 		if (new File(FILENAME).exists()) {
 			try {
 				properties.load(new FileInputStream(FILENAME));
+			    setAuthentication();
 			} catch (Throwable e) {
 				// If there's another error, maybe it would be better to do something else //TODO
 			}
@@ -101,5 +109,55 @@ public class Preferences {
 	
 	public boolean isJavaLookAndFeel() {
 		return this.properties.get(LOOK_AND_FEEL).equals(LOOK_AND_FEEL_JAVA_VALUE);
+	}
+	
+	public InetAddress getHttpProxyHost() throws UnknownHostException {
+		String property = properties.getProperty(PROXY);
+		if (property==null) return null;
+		return InetAddress.getByName(new StringTokenizer(property,":").nextToken());
+	}
+	
+	public int getHttpProxyPort() {
+		String property = properties.getProperty(PROXY);
+		if (property==null) return -1;
+		StringTokenizer tokens = new StringTokenizer(property,":");
+		tokens.nextToken();
+		return Integer.parseInt(tokens.nextToken());
+	}
+
+	public String getHttpProxyAuthentification() {
+		return this.properties.getProperty(PROXY_AUTHENTICATION);
+	}
+	
+	public void setHttpProxy(String proxyHost, int proxyPort, String user, String password) {
+		if (proxyHost==null) {
+			this.properties.remove(PROXY);
+	        user=null;
+		} else {
+			this.properties.put(PROXY, proxyHost+":"+proxyPort);
+		}
+		if (user==null) {
+	        Authenticator.setDefault(null);
+	        this.properties.remove(PROXY_AUTHENTICATION);
+		} else {
+		    this.properties.setProperty(PROXY_AUTHENTICATION, user+":"+password);
+		    setAuthentication();
+		}
+	}
+	
+	private void setAuthentication() {
+		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+		if (property==null) {
+			Authenticator.setDefault(null);
+		} else {
+			StringTokenizer tokens = new StringTokenizer(property,":");
+			final String user = tokens.nextToken();
+			final String pwd = tokens.nextToken();
+		    Authenticator.setDefault(new Authenticator() {
+		        protected PasswordAuthentication getPasswordAuthentication() {
+		        	System.out.println ("Authenticator is called");//TODO
+		          return new PasswordAuthentication(user,pwd.toCharArray());
+		      }});
+		}
 	}
 }
