@@ -20,7 +20,6 @@ public class AboutDialog extends AbstractDialog {
 
 	@Override
 	protected Object buildResult() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

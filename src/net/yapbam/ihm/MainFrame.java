@@ -57,7 +57,6 @@ public class MainFrame extends JFrame implements DataListener {
 	 * event-dispatching thread.
 	 */
 	private MainFrame(GlobalData data, AccountFilteredData acFilter, FilteredData fData) {
-		//TODO Recreate acFilter and fData with state file (needs the state is saved)
 	    //Create and set up the window.
 		super();
 		this.setMinimumSize(new Dimension(800,300));
@@ -240,9 +239,10 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	public void restart() {
-		this.data.clearListeners();
-		this.accountFilter.clearListeners();
-		this.filteredData.clearListeners();
+//		this.data.clearListeners();
+//		this.accountFilter.clearListeners();
+//		this.filteredData.clearListeners();
+		//FIXME We would need to remove the obsoletes listeners (from the closing window) ... but don't know how to do that efficiently
 		this.isRestarting = true;
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		try {
