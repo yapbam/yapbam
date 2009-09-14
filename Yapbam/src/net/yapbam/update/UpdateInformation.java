@@ -2,9 +2,6 @@ package net.yapbam.update;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Properties;
@@ -17,9 +14,7 @@ public class UpdateInformation {
 	private URL updateURL;
 	
 	UpdateInformation (URL url) throws UnknownHostException, IOException {
-		InetAddress host = Preferences.INSTANCE.getHttpProxyHost();
-		Proxy proxy = host==null?Proxy.NO_PROXY:new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, Preferences.INSTANCE.getHttpProxyPort()));
-		HttpURLConnection ct = (HttpURLConnection) url.openConnection(proxy);
+		HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 		errorCode = ct.getResponseCode();
 		if (errorCode==HttpURLConnection.HTTP_OK) {
 			Properties p = new Properties();
@@ -28,7 +23,7 @@ public class UpdateInformation {
 			updateURL = new URL(p.getProperty("updateURL"));
 		}
 	}
-	
+
 	public int getHttpErrorCode() {
 		return errorCode;
 	}
