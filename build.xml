@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project Comptes">
-    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
-    <!--ANT 1.7 is required                                        -->
+<project default="build" name="Create Runnable Jar for Yapbam project">
+	<property name="yapbamVersion" value="0.1.15"/>
+	<property name="date" value="14/09/2009"/> <!-- Probably a way to do better-->
+
+    <target name="build">
+    	<mkdir dir="releaseCompile"/>
+    	<echo message="version=${yapbamVersion} (${date})" file="src/version.txt"/>
+    	<javac srcdir="src" destdir="releaseCompile" target="1.6"/>
+        <jar destfile="yapbam.jar">
+            <manifest>
+                <attribute name="Main-Class" value="net.yapbam.ihm.MainFrame"/>
+                <attribute name="SplashScreen-Image" value="net/yapbam/ihm/images/splash.png"/>
+            </manifest>
+            <fileset dir="releaseCompile"/>
+        </jar>
+    </target>
+    
     <target name="create_run_jar">
         <jar destfile="yapbam.jar">
             <manifest>
                 <attribute name="Main-Class" value="net.yapbam.ihm.MainFrame"/>
                 <attribute name="SplashScreen-Image" value="net/yapbam/ihm/images/splash.png"/>
-                <!--attribute name="Class-Path" value="."/-->
             </manifest>
             <fileset dir="bin"/>
         </jar>
     </target>
+    
 </project>

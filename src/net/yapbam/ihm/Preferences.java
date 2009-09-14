@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Authenticator;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.util.Locale;
 import java.util.Properties;
@@ -111,10 +113,10 @@ public class Preferences {
 		return this.properties.get(LOOK_AND_FEEL).equals(LOOK_AND_FEEL_JAVA_VALUE);
 	}
 	
-	public InetAddress getHttpProxyHost() throws UnknownHostException {
+	public String getHttpProxyHost() {
 		String property = properties.getProperty(PROXY);
 		if (property==null) return null;
-		return InetAddress.getByName(new StringTokenizer(property,":").nextToken());
+		return new StringTokenizer(property,":").nextToken();
 	}
 	
 	public int getHttpProxyPort() {
@@ -125,8 +127,25 @@ public class Preferences {
 		return Integer.parseInt(tokens.nextToken());
 	}
 
-	public String getHttpProxyAuthentification() {
-		return this.properties.getProperty(PROXY_AUTHENTICATION);
+	public Proxy getHttpProxy() throws UnknownHostException {
+		String property = getHttpProxyHost();
+		if (property==null) return Proxy.NO_PROXY;
+		InetAddress host = InetAddress.getByName(property);
+		return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, Preferences.INSTANCE.getHttpProxyPort()));
+	}
+
+	public String getHttpProxyUser() {
+		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+		if (property==null) return null;
+		return new StringTokenizer(property,":").nextToken();
+	}
+	
+	public String getHttpProxyPassword() {
+		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+		if (property==null) return null;
+		StringTokenizer tokens = new StringTokenizer(property,":");
+		tokens.nextToken();
+		return tokens.nextToken();
 	}
 	
 	public void setHttpProxy(String proxyHost, int proxyPort, String user, String password) {
