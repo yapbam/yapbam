@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="build" name="Create Runnable Jar for Yapbam project">
-	<property name="yapbamVersion" value="0.1.15"/>
-	<property name="date" value="14/09/2009"/> <!-- Probably a way to do better-->
-
-    <target name="build">
-    	<mkdir dir="releaseCompile"/>
-    	<echo message="version=${yapbamVersion} (${date})" file="src/version.txt"/>
-    	<javac srcdir="src" destdir="releaseCompile" target="1.6"/>
-        <jar destfile="yapbam.jar">
-            <manifest>
-                <attribute name="Main-Class" value="net.yapbam.ihm.MainFrame"/>
-                <attribute name="SplashScreen-Image" value="net/yapbam/ihm/images/splash.png"/>
-            </manifest>
-            <fileset dir="releaseCompile"/>
-        </jar>
-    </target>
-    
-    <target name="create_run_jar">
-        <jar destfile="yapbam.jar">
-            <manifest>
-                <attribute name="Main-Class" value="net.yapbam.ihm.MainFrame"/>
-                <attribute name="SplashScreen-Image" value="net/yapbam/ihm/images/splash.png"/>
-            </manifest>
-            <fileset dir="bin"/>
-        </jar>
-    </target>
-    
+	<property name="yapbamVersion" value="0.1.16"/>
+	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
+	
+	<target name="build">
+		<echo message="${TODAY}"/>
+		<mkdir dir="releaseCompile"/>
+		<echo message="version=${yapbamVersion} (${date})" file="src/version.txt"/>
+		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
+		<jar destfile="yapbam.jar">
+			<manifest>
+				<attribute name="Main-Class" value="net.yapbam.ihm.MainFrame"/>
+				<attribute name="SplashScreen-Image" value="net/yapbam/ihm/images/splash.png"/>
+			</manifest>
+			<fileset dir="releaseCompile"/>
+		</jar>
+	</target>
 </project>
