@@ -19,6 +19,7 @@ public class PreferenceDialog extends AbstractDialog {
 
 	private LocalizationPanel localizationPanel;
 	private LookAndFeelPanel lookAndFeelPanel;
+	private NetworkPanel networkPanel;
 
 	public PreferenceDialog(Window owner) {
 		super(owner, LocalizationData.get("PreferencesDialog.title"), null);
@@ -39,6 +40,7 @@ public class PreferenceDialog extends AbstractDialog {
 			result = result + LOOK_AND_FEEL_CHANGED;
 			Preferences.INSTANCE.setJavaLookAndFeel(!Preferences.INSTANCE.isJavaLookAndFeel());
 		}
+		Preferences.INSTANCE.setHttpProxy(networkPanel.getProxyHost(), networkPanel.getProxyPort(), networkPanel.getProxyUser(), networkPanel.getProxyPassword());
 		return result;
 	}
 
@@ -50,6 +52,8 @@ public class PreferenceDialog extends AbstractDialog {
 		tabbedPane.add(LocalizationData.get("PreferencesDialog.Localization.title"), localizationPanel); //$NON-NLS-1$
 		lookAndFeelPanel = new LookAndFeelPanel();
 		tabbedPane.add(LocalizationData.get("PreferencesDialog.LookAndFeel.title"), lookAndFeelPanel); //$NON-NLS-1$
+		networkPanel = new NetworkPanel();
+		tabbedPane.add(LocalizationData.get("PreferencesDialog.Network.title"),networkPanel); //$NON-NLS-1$
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
 	}

@@ -4,9 +4,8 @@
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
-		<echo message="${TODAY}"/>
 		<mkdir dir="releaseCompile"/>
-		<echo message="version=${yapbamVersion} (${date})" file="src/version.txt"/>
+		<echo message="version=${yapbamVersion} (${TODAY})" file="src/version.txt"/>
 		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
 		<jar destfile="yapbam.jar">
 			<manifest>
