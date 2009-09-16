@@ -16,6 +16,8 @@ import java.util.StringTokenizer;
 
 import javax.swing.UIManager;
 
+import net.yapbam.util.Crypto;
+
 /** This class represents the Yabpam application preferences */
 public class Preferences {
 	private static final String LANGUAGE = "lang"; //$NON-NLS-1$
@@ -27,6 +29,9 @@ public class Preferences {
 	private static final String LOOK_AND_FEEL_CUSTOM_VALUE = "custom"; //$NON-NLS-1$
 	private static final String PROXY = "proxy"; //$NON-NLS-1$
 	private static final String PROXY_AUTHENTICATION = "proxy_pass"; //$NON-NLS-1$
+	
+	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
+
 
 	private static final String FILENAME = ".yapbampref"; //$NON-NLS-1$
 
@@ -137,13 +142,13 @@ public class Preferences {
 	public String getHttpProxyUser() {
 		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
 		if (property==null) return null;
-		return new StringTokenizer(property,":").nextToken();
+		return new StringTokenizer(Crypto.decrypt(KEY,property),":").nextToken();
 	}
 	
 	public String getHttpProxyPassword() {
 		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
 		if (property==null) return null;
-		StringTokenizer tokens = new StringTokenizer(property,":");
+		StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":");
 		tokens.nextToken();
 		return tokens.nextToken();
 	}
@@ -159,7 +164,7 @@ public class Preferences {
 	        Authenticator.setDefault(null);
 	        this.properties.remove(PROXY_AUTHENTICATION);
 		} else {
-		    this.properties.setProperty(PROXY_AUTHENTICATION, user+":"+password);
+		    this.properties.setProperty(PROXY_AUTHENTICATION, Crypto.encrypt(KEY,user+":"+password));
 		    setAuthentication();
 		}
 	}
