@@ -121,11 +121,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         JMenuItem item = new JMenuItem(newTransactionAction);
         item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         transactionMenu.add(item);
-        this.duplicateTransactionAction = new DuplicateTransactionAction(frame);
-        item = new JMenuItem(this.duplicateTransactionAction);
-        transactionMenu.add(item);
         this.editTransactionAction = new EditTransactionAction(frame);
         item = new JMenuItem(this.editTransactionAction);
+        transactionMenu.add(item);
+        this.duplicateTransactionAction = new DuplicateTransactionAction(frame);
+        item = new JMenuItem(this.duplicateTransactionAction);
         transactionMenu.add(item);
         this.deleteTransactionAction = new DeleteTransactionAction(frame);
         item = new JMenuItem(deleteTransactionAction); //$NON-NLS-1$
