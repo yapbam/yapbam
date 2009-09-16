@@ -139,8 +139,11 @@ public class MainFrame extends JFrame implements DataListener {
         transactionPane.add(topPanel, BorderLayout.NORTH);
         
         transactionTable.addMouseListener(new MouseAdapter() {
+        	public void mouseReleased(MouseEvent e) {
+        		maybeShowPopup(e);
+        	}
             public void mousePressed(MouseEvent e) {
-                if ((e.getClickCount()==2) && (e.getButton()==MouseEvent.BUTTON1)) {
+           		if ((e.getClickCount()==2) && (e.getButton()==MouseEvent.BUTTON1)) {
                   Point p = e.getPoint();
                   int row = transactionTable.rowAtPoint(p);
                   if (row >= 0) {
@@ -150,10 +153,22 @@ public class MainFrame extends JFrame implements DataListener {
                 		  mainMenu.editTransactionAction.actionPerformed(new ActionEvent(transactionTable, 0, null));
                 	  }
                   }
-                } else if ((e.getButton()==MouseEvent.BUTTON2) && (e.getClickCount()==1)) {
-                	//TODO contextual menu
+                } else {
+                	maybeShowPopup(e);
                 }
-              }
+            }
+            private void maybeShowPopup(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    Point p = e.getPoint();
+                    int row = transactionTable.rowAtPoint(p);
+                    transactionTable.getSelectionModel().setSelectionInterval(row, row);
+                	JPopupMenu popup = new JPopupMenu();
+                    popup.add(new JMenuItem(MainFrame.this.mainMenu.editTransactionAction));
+                    popup.add(new JMenuItem(MainFrame.this.mainMenu.duplicateTransactionAction));
+                    popup.add(new JMenuItem(MainFrame.this.mainMenu.deleteTransactionAction));
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
 		});
         JScrollPane scrollPane = new JScrollPane(transactionTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         transactionPane.add(scrollPane, BorderLayout.CENTER);
