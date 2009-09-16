@@ -4,7 +4,13 @@
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
+		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
+		  <copy todir="releaseCompile">
+		    <fileset dir="src">
+		      <exclude name="**/*.java"/>
+		    </fileset>
+		  </copy>
 		<echo message="version=${yapbamVersion} (${TODAY})" file="src/version.txt"/>
 		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
 		<jar destfile="yapbam.jar">
