@@ -140,7 +140,7 @@ public class MainFrame extends JFrame implements DataListener {
         
         transactionTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if ((e.getClickCount()==2) && (e.getButton()==MouseEvent.BUTTON1)) {
                   Point p = e.getPoint();
                   int row = transactionTable.rowAtPoint(p);
                   if (row >= 0) {
@@ -150,6 +150,8 @@ public class MainFrame extends JFrame implements DataListener {
                 		  mainMenu.editTransactionAction.actionPerformed(new ActionEvent(transactionTable, 0, null));
                 	  }
                   }
+                } else if ((e.getButton()==MouseEvent.BUTTON2) && (e.getClickCount()==1)) {
+                	//TODO contextual menu
                 }
               }
 		});
