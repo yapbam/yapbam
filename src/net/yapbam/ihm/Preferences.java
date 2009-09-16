@@ -174,7 +174,6 @@ public class Preferences {
 			final String pwd = tokens.nextToken();
 		    Authenticator.setDefault(new Authenticator() {
 		        protected PasswordAuthentication getPasswordAuthentication() {
-		        	System.out.println ("Authenticator is called");//TODO
 		          return new PasswordAuthentication(user,pwd.toCharArray());
 		      }});
 		}

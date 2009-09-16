@@ -13,11 +13,13 @@ import javax.swing.border.TitledBorder;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
 
 import javax.swing.JPasswordField;
 
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.Preferences;
+import javax.swing.JCheckBox;
 
 public class NetworkPanel extends JPanel {
 
@@ -34,6 +36,7 @@ public class NetworkPanel extends JPanel {
 	private JTextField userField = null;
 	private JLabel passwordLabel = null;
 	private JPasswordField passwordField = null;
+	private JCheckBox showPassCheckBox = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -212,6 +215,10 @@ public class NetworkPanel extends JPanel {
 	 */
 	private JPanel getAuthenticationPanel() {
 		if (authenticationPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 2;
+			gridBagConstraints12.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints12.gridy = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints11.gridy = 1;
@@ -230,6 +237,7 @@ public class NetworkPanel extends JPanel {
 			gridBagConstraints9.gridy = 0;
 			gridBagConstraints9.weightx = 1.0;
 			gridBagConstraints9.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints9.gridwidth = 2;
 			gridBagConstraints9.gridx = 1;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
@@ -244,6 +252,7 @@ public class NetworkPanel extends JPanel {
 			authenticationPanel.add(getUserField(), gridBagConstraints9);
 			authenticationPanel.add(passwordLabel, gridBagConstraints10);
 			authenticationPanel.add(getPasswordField(), gridBagConstraints11);
+			authenticationPanel.add(getShowPassCheckBox(), gridBagConstraints12);
 		}
 		return authenticationPanel;
 	}
@@ -308,5 +317,29 @@ public class NetworkPanel extends JPanel {
 		if (getProxyUser()==null) return null;
 		String password = new String(getPasswordField().getPassword()).trim();
 		return password.length()==0?null:password;
+	}
+
+	/**
+	 * This method initializes showPassCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getShowPassCheckBox() {
+		if (showPassCheckBox == null) {
+			showPassCheckBox = new JCheckBox();
+			showPassCheckBox.setText("Afficher le mot de passe");
+			showPassCheckBox.addItemListener(new java.awt.event.ItemListener() {
+				char oldEcho;
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (e.getStateChange()==ItemEvent.DESELECTED) {
+						passwordField.setEchoChar(oldEcho);
+					} else {
+						oldEcho = passwordField.getEchoChar();
+						passwordField.setEchoChar((char) 0);
+					}
+				}
+			});
+		}
+		return showPassCheckBox;
 	}
 }
