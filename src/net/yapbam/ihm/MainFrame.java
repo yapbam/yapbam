@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
@@ -27,7 +30,8 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private MainMenuBar mainMenu;
 	private JTabbedPane mainPane;
-	private TransactionsPlugIn[] plugins;
+	private AbstractPlugIn[] plugins;
+	private ArrayList<AbstractPlugIn> paneledPlugins;
 	private BalanceHistoryPane balanceHistoryPane;
 	private boolean isRestarting = false;
 	
@@ -75,12 +79,22 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.filteredData = fData==null?new FilteredData(this.data):fData;
 	    if (data==null) YapbamState.INSTANCE.restoreGlobalData(this);
 	    
-	    this.plugins=new TransactionsPlugIn[]{new TransactionsPlugIn(this.accountFilter, filteredData)};
+	    this.plugins=new AbstractPlugIn[]{new TransactionsPlugIn(this.accountFilter, filteredData)};
+	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 
 	    setContentPane(this.createContentPane());
 	    mainMenu = new MainMenuBar(this);
 		setJMenuBar(mainMenu);
-		mainPane.addChangeListener(mainMenu);
+		mainPane.addChangeListener(new ChangeListener() {
+			private int lastSelected = 0;
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				paneledPlugins.get(lastSelected).setDisplayed(false);
+				int selectedIndex = mainPane.getSelectedIndex();
+				if (selectedIndex<paneledPlugins.size()) paneledPlugins.get(selectedIndex).setDisplayed(true);
+			}
+		});
 		
 		newDataOccured();
 	    
@@ -102,7 +116,10 @@ public class MainFrame extends JFrame implements DataListener {
 		
         for (int i = 0; i < plugins.length; i++) {
             JPanel pane = plugins[i].getPanel();
-    		if (pane!=null) mainPane.add(plugins[i].getPanelTitle(), pane); //$NON-NLS-1$
+    		if (pane!=null) {
+    			paneledPlugins.add(plugins[i]);
+    			mainPane.add(plugins[i].getPanelTitle(), pane);
+    		}
 		}
 		
 		balanceHistoryPane = new BalanceHistoryPane(accountFilter.getBalanceHistory());
@@ -133,7 +150,7 @@ public class MainFrame extends JFrame implements DataListener {
 		return plugins.length;
 	}
 
-	public TransactionsPlugIn getPlugIn(int index) {
+	public AbstractPlugIn getPlugIn(int index) {
 		return plugins[index];
 	}
 

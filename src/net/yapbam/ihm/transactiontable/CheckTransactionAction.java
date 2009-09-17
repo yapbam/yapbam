@@ -16,7 +16,7 @@ class CheckTransactionAction extends AbstractAction {
 	private TransactionsPlugInPanel tPanel;
 	
 	CheckTransactionAction (TransactionsPlugInPanel plugin) {
-		super(LocalizationData.get("MainMenu.Transactions.Check"), IconManager.EDIT_TRANSACTION); //$NON-NLS-1$
+		super(LocalizationData.get("MainMenu.Transactions.Check"), IconManager.CHECK_TRANSACTION); //$NON-NLS-1$
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Check.ToolTip")); //$NON-NLS-1$
 		this.tPanel = plugin;
 	}

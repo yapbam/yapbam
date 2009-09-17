@@ -52,4 +52,8 @@ public class TransactionTable extends JTable {
 	public GlobalData getGlobalData() {
 		return data.getGlobalData();
 	}
+	
+	FilteredData getFilteredData() {
+		return data;
+	}
 }
