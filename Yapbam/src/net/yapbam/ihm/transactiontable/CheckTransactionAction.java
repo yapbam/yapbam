@@ -13,17 +13,17 @@ import net.yapbam.ihm.LocalizationData;
 
 class CheckTransactionAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
-	private TransactionsPlugIn plugin;
+	private TransactionsPlugInPanel tPanel;
 	
-	CheckTransactionAction (TransactionsPlugIn plugin) {
+	CheckTransactionAction (TransactionsPlugInPanel plugin) {
 		super(LocalizationData.get("MainMenu.Transactions.Check"), IconManager.EDIT_TRANSACTION); //$NON-NLS-1$
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Check.ToolTip")); //$NON-NLS-1$
-		this.plugin = plugin;
+		this.tPanel = plugin;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction t = plugin.getTransactionTable().getSelectedTransaction();
+		Transaction t = tPanel.getTransactionTable().getSelectedTransaction();
 		ArrayList<SubTransaction> list = new ArrayList<SubTransaction>(t.getSubTransactionSize());
 		for (int i = 0; i < t.getSubTransactionSize(); i++) {
 			list.add(t.getSubTransaction(i));
@@ -31,13 +31,13 @@ class CheckTransactionAction extends AbstractAction {
 		String statementId = null;
 		Date date = t.getValueDate();
 		if (t.getStatement()==null) {
-			Date ckDate = plugin.getCheckModePane().getValueDate();
+			Date ckDate = tPanel.getCheckModePane().getValueDate();
 			if (ckDate!=null) date = ckDate;
-			statementId = plugin.getCheckModePane().getStatement();
+			statementId = tPanel.getCheckModePane().getStatement();
 		}
 		Transaction tChecked = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
 				date, statementId, list);
-		plugin.getTransactionTable().getGlobalData().remove(t);
-		plugin.getTransactionTable().getGlobalData().add(tChecked);
+		tPanel.getTransactionTable().getGlobalData().remove(t);
+		tPanel.getTransactionTable().getGlobalData().add(tChecked);
 	}
 }

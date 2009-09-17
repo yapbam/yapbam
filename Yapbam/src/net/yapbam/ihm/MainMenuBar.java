@@ -105,9 +105,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         updateAccountMenu();
         this.add(accountMenu);
 
-        //Build transactions menu item
-        transactionMenu = this.frame.getTransactionPlugIn().getPlugInMenu();
-		this.add(transactionMenu);
+        //Build plugins menus
+        for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
+            transactionMenu = this.frame.getPlugIn(i).getPlugInMenu(); //TODO
+    		if (transactionMenu!=null) this.add(transactionMenu);
+		}
         
         //Build the filter menu
         filterMenu = new JMenu(LocalizationData.get("MainMenuBar.Filter")); //$NON-NLS-1$

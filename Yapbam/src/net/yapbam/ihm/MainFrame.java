@@ -27,10 +27,7 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private MainMenuBar mainMenu;
 	private JTabbedPane mainPane;
-	private TransactionsPlugIn transactionPane;
-//	private BalanceReportField currentBalance;
-//	private BalanceReportField finalBalance;
-//	private BalanceReportField checkedBalance;
+	private TransactionsPlugIn[] plugins;
 	private BalanceHistoryPane balanceHistoryPane;
 	private boolean isRestarting = false;
 	
@@ -77,6 +74,8 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.accountFilter = acFilter==null?new AccountFilteredData(this.data):acFilter;
 	    this.filteredData = fData==null?new FilteredData(this.data):fData;
 	    if (data==null) YapbamState.INSTANCE.restoreGlobalData(this);
+	    
+	    this.plugins=new TransactionsPlugIn[]{new TransactionsPlugIn(this.accountFilter, filteredData)};
 
 	    setContentPane(this.createContentPane());
 	    mainMenu = new MainMenuBar(this);
@@ -90,7 +89,9 @@ public class MainFrame extends JFrame implements DataListener {
 	    
 	    // Restore initial state (last opened file and window position)
 	    YapbamState.INSTANCE.restoreMainFramePosition(this);
-		getTransactionPlugIn().restoreState(YapbamState.INSTANCE.getProperties());
+	    for (int i = 0; i < plugins.length; i++) {
+			plugins[i].restoreState(YapbamState.INSTANCE.getProperties());
+		}
 	
 	    //Display the window.
 	    setVisible(true);
@@ -99,16 +100,16 @@ public class MainFrame extends JFrame implements DataListener {
 	private Container createContentPane() {
         mainPane = new JTabbedPane(JTabbedPane.TOP);
 		
-        transactionPane = new TransactionsPlugIn(accountFilter, filteredData);
-
-		mainPane.add(LocalizationData.get("MainFrame.Transactions"), transactionPane); //$NON-NLS-1$
+        for (int i = 0; i < plugins.length; i++) {
+            JPanel pane = plugins[i].getPanel();
+    		if (pane!=null) mainPane.add(plugins[i].getPanelTitle(), pane); //$NON-NLS-1$
+		}
 		
 		balanceHistoryPane = new BalanceHistoryPane(accountFilter.getBalanceHistory());
 		accountFilter.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				balanceHistoryPane.setBalanceHistory(accountFilter.getBalanceHistory());
-				transactionPane.updateBalances();
 			}
 		});
 		mainPane.add(LocalizationData.get("MainFrame.BalanceHistory"), balanceHistoryPane); //$NON-NLS-1$
@@ -128,8 +129,12 @@ public class MainFrame extends JFrame implements DataListener {
 		return this.filteredData;
 	}
 
-	public TransactionsPlugIn getTransactionPlugIn() {
-		return transactionPane;
+	public int getPlugInsNumber() {
+		return plugins.length;
+	}
+
+	public TransactionsPlugIn getPlugIn(int index) {
+		return plugins[index];
 	}
 
 	public void processEvent(DataEvent event) {
@@ -143,7 +148,6 @@ public class MainFrame extends JFrame implements DataListener {
 		File file = data.getPath();
 		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
 		this.setTitle(title);
-		this.transactionPane.updateBalances();
 	}
 	
 	boolean isTransactionTableVisible() {

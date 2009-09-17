@@ -97,7 +97,9 @@ public class YapbamState {
 		properties.put(FRAME_SIZE_HEIGHT, Integer.toString(h));
 		int w = ((frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
 		properties.put(FRAME_SIZE_WIDTH, Integer.toString(w));
-		frame.getTransactionPlugIn().saveTransactionTableState(properties);
+		for (int i = 0; i < frame.getPlugInsNumber(); i++) {
+			frame.getPlugIn(i).saveState(properties);
+		}
 		try {
 			properties.store(new FileOutputStream(STATE_FILENAME), "Yapbam statup state"); //$NON-NLS-1$
 		} catch (IOException e) {
