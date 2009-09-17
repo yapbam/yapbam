@@ -1,22 +1,17 @@
 package net.yapbam.ihm;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.ihm.administration.AdministrationPanel;
 import net.yapbam.ihm.graphics.balancehistory.BalanceHistoryPane;
-import net.yapbam.ihm.transactiontable.TransactionTable;
+import net.yapbam.ihm.transactiontable.TransactionsPlugIn;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
@@ -32,11 +27,10 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private MainMenuBar mainMenu;
 	private JTabbedPane mainPane;
-	private CheckModePanel checkModePane;
-	private JTable transactionTable;
-	private BalanceReportField currentBalance;
-	private BalanceReportField finalBalance;
-	private BalanceReportField checkedBalance;
+	private TransactionsPlugIn transactionPane;
+//	private BalanceReportField currentBalance;
+//	private BalanceReportField finalBalance;
+//	private BalanceReportField checkedBalance;
 	private BalanceHistoryPane balanceHistoryPane;
 	private boolean isRestarting = false;
 	
@@ -84,9 +78,11 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.filteredData = fData==null?new FilteredData(this.data):fData;
 	    if (data==null) YapbamState.INSTANCE.restoreGlobalData(this);
 
-	    mainMenu = new MainMenuBar(this);
 	    setContentPane(this.createContentPane());
+	    mainMenu = new MainMenuBar(this);
 		setJMenuBar(mainMenu);
+		mainPane.addChangeListener(mainMenu);
+		
 		newDataOccured();
 	    
 	    this.data.addListener(this);
@@ -94,7 +90,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    
 	    // Restore initial state (last opened file and window position)
 	    YapbamState.INSTANCE.restoreMainFramePosition(this);
-	    YapbamState.INSTANCE.restoreTransactionTableColumns(this);
+		getTransactionPlugIn().restoreState(YapbamState.INSTANCE.getProperties());
 	
 	    //Display the window.
 	    setVisible(true);
@@ -102,97 +98,8 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private Container createContentPane() {
         mainPane = new JTabbedPane(JTabbedPane.TOP);
-		mainPane.addChangeListener(mainMenu);
-        JPanel transactionPane = new JPanel(new BorderLayout());
-        transactionPane.setOpaque(true);
-        
-        String noText=""; //$NON-NLS-1$
-        JPanel topPanel = new JPanel(new GridBagLayout());
-        JButton newTransactionButton = new JButton(this.mainMenu.newTransactionAction);
-        newTransactionButton.setText(noText);
-        Dimension dimension = newTransactionButton.getPreferredSize();
-        dimension.width = dimension.height;
-        newTransactionButton.setPreferredSize(dimension);
-        final JButton editTransactionButton = new JButton(this.mainMenu.editTransactionAction);
-        editTransactionButton.setText(noText);
-        editTransactionButton.setPreferredSize(dimension);
-        final JButton duplicateTransactionButton = new JButton(this.mainMenu.duplicateTransactionAction);
-        duplicateTransactionButton.setText(noText);
-        duplicateTransactionButton.setPreferredSize(dimension);
-        final JButton deleteTransactionButton = new JButton(this.mainMenu.deleteTransactionAction);
-        deleteTransactionButton.setText(noText);
-        deleteTransactionButton.setPreferredSize(dimension);
-        GridBagConstraints c = new GridBagConstraints();
-        topPanel.add(newTransactionButton,c);
-        c.gridx = 1;
-        topPanel.add(editTransactionButton,c);
-        c.gridx = 2;
-        topPanel.add(duplicateTransactionButton,c);
-        c.gridx = 3;
-        topPanel.add(deleteTransactionButton,c);
-        
-        transactionTable = new TransactionTable(getFilteredData());
-        checkModePane = new CheckModePanel(this);
-        c.gridx = 4; c.anchor=GridBagConstraints.EAST; c.weightx=1;
-        topPanel.add(checkModePane,c);
-        
-        transactionPane.add(topPanel, BorderLayout.NORTH);
-        
-        transactionTable.addMouseListener(new MouseAdapter() {
-        	public void mouseReleased(MouseEvent e) {
-        		maybeShowPopup(e);
-        	}
-            public void mousePressed(MouseEvent e) {
-           		if ((e.getClickCount()==2) && (e.getButton()==MouseEvent.BUTTON1)) {
-                  Point p = e.getPoint();
-                  int row = transactionTable.rowAtPoint(p);
-                  if (row >= 0) {
-                	  if (checkModePane.isSelected()) {
-                		  checkModePane.check();
-                	  } else {
-                		  mainMenu.editTransactionAction.actionPerformed(new ActionEvent(transactionTable, 0, null));
-                	  }
-                  }
-                } else {
-                	maybeShowPopup(e);
-                }
-            }
-            private void maybeShowPopup(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    Point p = e.getPoint();
-                    int row = transactionTable.rowAtPoint(p);
-                    transactionTable.getSelectionModel().setSelectionInterval(row, row);
-                	JPopupMenu popup = new JPopupMenu();
-                    popup.add(new JMenuItem(MainFrame.this.mainMenu.editTransactionAction));
-                    popup.add(new JMenuItem(MainFrame.this.mainMenu.duplicateTransactionAction));
-                    popup.add(new JMenuItem(MainFrame.this.mainMenu.deleteTransactionAction));
-                    popup.show(e.getComponent(), e.getX(), e.getY());
-                }
-            }
-		});
-        JScrollPane scrollPane = new JScrollPane(transactionTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        transactionPane.add(scrollPane, BorderLayout.CENTER);
-		ListSelectionModel selModel = transactionTable.getSelectionModel();
-		selModel.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();
-				if (!e.getValueIsAdjusting()) {
-					boolean ok = m.getMinSelectionIndex()>=0;
-					mainMenu.duplicateTransactionAction.setEnabled(ok);
-					mainMenu.editTransactionAction.setEnabled(ok);
-					mainMenu.deleteTransactionAction.setEnabled(ok);
-				}
-			}
-		});
-
-		JPanel bottomPane = new JPanel(new GridLayout(1,3));
-        currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance")); //$NON-NLS-1$
-        finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance")); //$NON-NLS-1$
-        checkedBalance = new BalanceReportField(LocalizationData.get("MainFrame.CheckedBalance")); //$NON-NLS-1$
-        bottomPane.add(currentBalance);
-        bottomPane.add(finalBalance);
-        bottomPane.add(checkedBalance);
-        transactionPane.add(bottomPane, BorderLayout.SOUTH);
+		
+        transactionPane = new TransactionsPlugIn(accountFilter, filteredData);
 
 		mainPane.add(LocalizationData.get("MainFrame.Transactions"), transactionPane); //$NON-NLS-1$
 		
@@ -201,11 +108,11 @@ public class MainFrame extends JFrame implements DataListener {
 			@Override
 			public void processEvent(DataEvent event) {
 				balanceHistoryPane.setBalanceHistory(accountFilter.getBalanceHistory());
-				updateBalances();
+				transactionPane.updateBalances();
 			}
 		});
 		mainPane.add(LocalizationData.get("MainFrame.BalanceHistory"), balanceHistoryPane); //$NON-NLS-1$
-//		mainPane.add("Administration",new AdministrationPanel(getData()));//LOCAL
+		mainPane.add("Administration",new AdministrationPanel(getData()));//LOCAL
         return mainPane;
     }
 
@@ -221,20 +128,8 @@ public class MainFrame extends JFrame implements DataListener {
 		return this.filteredData;
 	}
 
-	public JTable getTransactionTable() {
-		return transactionTable;
-	}
-
-	public Transaction getSelectedTransaction() {
-		ListSelectionModel listSelectionModel = transactionTable.getSelectionModel();
-		int index = listSelectionModel.getMinSelectionIndex();
-		return getFilteredData().getTransaction(index);
-	}
-
-	private void updateBalances() {
-		currentBalance.setValue(accountFilter.getCurrentBalance());
-		finalBalance.setValue(accountFilter.getFinalBalance());
-	    checkedBalance.setValue(accountFilter.getCheckedBalance());
+	public TransactionsPlugIn getTransactionPlugIn() {
+		return transactionPane;
 	}
 
 	public void processEvent(DataEvent event) {
@@ -248,7 +143,7 @@ public class MainFrame extends JFrame implements DataListener {
 		File file = data.getPath();
 		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
 		this.setTitle(title);
-		this.updateBalances();
+		this.transactionPane.updateBalances();
 	}
 	
 	boolean isTransactionTableVisible() {

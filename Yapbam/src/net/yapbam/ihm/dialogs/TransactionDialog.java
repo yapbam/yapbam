@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -56,7 +57,7 @@ public class TransactionDialog extends AbstractDialog {
 	 * @param transaction the transaction we want to edit, or null if we want to create a new transaction
 	 * @return the new transaction or the edited one
 	 */
-	public static AbstractTransaction open(GlobalData data, MainFrame frame, Transaction transaction) {
+	public static AbstractTransaction open(GlobalData data, Window frame, Transaction transaction) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
 			AccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
@@ -72,7 +73,7 @@ public class TransactionDialog extends AbstractDialog {
 		return newTransaction;
 	}
 	
-	private TransactionDialog(JFrame owner, GlobalData data, Transaction transaction) {
+	private TransactionDialog(Window owner, GlobalData data, Transaction transaction) {
 		super(owner, (transaction==null?LocalizationData.get("TransactionDialog.title.new"):LocalizationData.get("TransactionDialog.title.edit")), data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
 		this.data = data;

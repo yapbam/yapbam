@@ -95,7 +95,11 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	/** Return the window which contains the component */
 	public static Window getOwnerWindow(Component component) {
 		while (!(component instanceof Window)) {
-			component = component.getParent();
+			if (component instanceof JPopupMenu) {
+				component = ((JPopupMenu)component).getInvoker();
+			} else {
+				component = component.getParent();
+			}
 		}
 		return (Window) component;
 	}

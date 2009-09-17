@@ -1,4 +1,4 @@
-package net.yapbam.ihm.actions;
+package net.yapbam.ihm.transactiontable;
 
 import java.awt.event.ActionEvent;
 
@@ -6,17 +6,16 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.MainFrame;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsAction extends AbstractAction {
-	private MainFrame frame;
+	private TransactionTable table;
 	
-	public GeneratePeriodicalTransactionsAction(MainFrame frame) {
+	public GeneratePeriodicalTransactionsAction(TransactionTable table) {
 		super(LocalizationData.get("MainMenu.Transactions.Periodical")); //$NON-NLS-1$
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Periodical.ToolTip")); //$NON-NLS-1$
         putValue(Action.MNEMONIC_KEY, (int)LocalizationData.getChar("MainMenu.Transactions.Periodical.Mnemonic")); //$NON-NLS-1$
-        this.frame = frame;
+        this.table = table;
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package net.yapbam.ihm;
+package net.yapbam.ihm.transactiontable;
 
 import java.awt.Color;
 import java.text.MessageFormat;
@@ -7,6 +7,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+
+import net.yapbam.ihm.LocalizationData;
 
 public class BalanceReportField extends JLabel {
 	private static final long serialVersionUID = 1L;
