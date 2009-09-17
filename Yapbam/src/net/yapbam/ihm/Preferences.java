@@ -140,17 +140,25 @@ public class Preferences {
 	}
 
 	public String getHttpProxyUser() {
-		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
-		if (property==null) return null;
-		return new StringTokenizer(Crypto.decrypt(KEY,property),":").nextToken();
+		try {
+			String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+			if (property==null) return null;
+			return new StringTokenizer(Crypto.decrypt(KEY,property),":").nextToken();
+		} catch (RuntimeException e) {
+			return null; //TODO log the exception
+		}
 	}
 	
 	public String getHttpProxyPassword() {
-		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
-		if (property==null) return null;
-		StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":");
-		tokens.nextToken();
-		return tokens.nextToken();
+		try {
+			String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+			if (property==null) return null;
+			StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":");
+			tokens.nextToken();
+			return tokens.nextToken();
+		} catch (RuntimeException e) {
+			return null; //TODO log the exception
+		}
 	}
 	
 	public void setHttpProxy(String proxyHost, int proxyPort, String user, String password) {
@@ -170,7 +178,7 @@ public class Preferences {
 	}
 	
 	private void setAuthentication() {
-		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+		String property = Crypto.decrypt(KEY,this.properties.getProperty(PROXY_AUTHENTICATION));
 		if (property==null) {
 			Authenticator.setDefault(null);
 		} else {
