@@ -20,6 +20,7 @@ public abstract class IconManager {
 	public static final Icon DUPLICATE_TRANSACTION = create("images/duplicate.png");
 	public static final Icon SPREAD = create("images/spread.png");
 	public static final Icon SPREADABLE = create("images/spreadable.png");
+	public static final Icon CHECK_TRANSACTION = create("images/check.png");
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon create(String path) {

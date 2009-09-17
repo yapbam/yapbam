@@ -12,12 +12,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.AccountFilteredData;
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
@@ -29,7 +26,7 @@ import net.yapbam.ihm.actions.*;
 import net.yapbam.ihm.dialogs.AboutDialog;
 import net.yapbam.ihm.dialogs.AccountDialog;
 
-public class MainMenuBar extends JMenuBar implements ActionListener, DataListener, ChangeListener {
+public class MainMenuBar extends JMenuBar implements ActionListener, DataListener {
 	private static final long serialVersionUID = 1L;
 
 	private MainFrame frame;
@@ -40,14 +37,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
     private JMenuItem menuItemSaveAs;
     private JMenuItem menuItemQuit;
 
-	private JMenu transactionMenu;
 	private Action editPreferences;
     
 	private JMenuItem menuItemAbout;
 	
-	private JMenu filterMenu;
 	private JMenu accountMenu;
-
 
     MainMenuBar (MainFrame frame) {
         super();
@@ -107,17 +101,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 
         //Build plugins menus
         for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
-            transactionMenu = this.frame.getPlugIn(i).getPlugInMenu(); //TODO
-    		if (transactionMenu!=null) this.add(transactionMenu);
+            JMenu[] menus = this.frame.getPlugIn(i).getPlugInMenu(); //TODO What if a plugin just wants to add a menuItem to an existing Menu ?
+    		if (menus!=null) {
+    			for (int j = 0; j < menus.length; j++) {
+					this.add(menus[j]);
+				}
+    		}
 		}
         
-        //Build the filter menu
-        filterMenu = new JMenu(LocalizationData.get("MainMenuBar.Filter")); //$NON-NLS-1$
-        filterMenu.setToolTipText(LocalizationData.get("MainMenuBar.Filter.Tooltip")); //$NON-NLS-1$
-        filterMenu.setMnemonic(LocalizationData.getChar("MainMenuBar.Filter.Mnemonic")); //$NON-NLS-1$
-        updateFilterMenu();
-        this.add(filterMenu);
-
         //Build Help menu.
         menu = new JMenu(LocalizationData.get("MainMenu.QuestionMark")); //$NON-NLS-1$
         menu.setMnemonic(LocalizationData.getChar("MainMenu.QuestionMark.Mnemonic")); //$NON-NLS-1$
@@ -176,20 +167,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent)) {
 			this.refreshState(data);
 			if (event instanceof EverythingChangedEvent) {
-				this.updateFilterMenu();
 				this.updateAccountMenu();
 			}
 		} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent)) {
-			this.updateFilterMenu();
 			this.updateAccountMenu();
 		}
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// called when the main frame tabbed pane switch from one pane to another
-		this.transactionMenu.setVisible(this.frame.isTransactionTableVisible());
-		this.filterMenu.setVisible(this.frame.isTransactionTableVisible());
 	}
 	
 	private void updateAccountMenu() {
@@ -239,53 +221,5 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         	accountMenu.add(item);
         	group.add(item);
 	    }
-	}
-
-	private void updateFilterMenu() {
-		filterMenu.removeAll();
-		GlobalData data = this.frame.getData();
-		if (data!=null) {
-        	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
-        			LocalizationData.get("MainMenuBar.notChecked")}, new int[]{FilteredData.CHECKED, FilteredData.NOT_CHECKED}); //$NON-NLS-1$
-        	filterMenu.addSeparator();
-        	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.Expenses"), LocalizationData.get("MainMenuBar.Receipts")}, //$NON-NLS-1$ //$NON-NLS-2$
-        			new int[]{FilteredData.EXPENSE, FilteredData.RECEIPT});
-			
-        	//TODO filterMenu.addSeparator();
-	        //JMenuItem perso = new JCheckBoxMenuItem(LocalizationData.get("MainMenuBar.customizedFilter")); //$NON-NLS-1$
-			//filterMenu.add(perso);
-		}
-	}
-	
-	private void buildBooleanFilterChoiceMenu(String[] texts, int[] properties) {
-        FilteredData filter = frame.getFilteredData();
-        ButtonGroup group = new ButtonGroup();
-        JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(texts[0]);
-        menuItem.setSelected(filter.isOk(properties[0]) && !filter.isOk(properties[0]));
-		filterMenu.add(menuItem);
-		group.add(menuItem);
-		menuItem.addActionListener(new FilterActionItem(properties[0]));
-		menuItem = new JRadioButtonMenuItem(texts[1]);
-        menuItem.setSelected(!filter.isOk(properties[0]) && filter.isOk(properties[1]));
-        filterMenu.add(menuItem);
-		group.add(menuItem);
-		menuItem.addActionListener(new FilterActionItem(properties[1]));
-		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
-        menuItem.setSelected(filter.isOk(properties[0]) && filter.isOk(properties[1]));
-        filterMenu.add(menuItem);
-		group.add(menuItem);
-		menuItem.addActionListener(new FilterActionItem(properties[0] | properties[1]));
-	}
-
-	class FilterActionItem implements ActionListener {
-		private int property;
-		FilterActionItem (int property) {
-			this.property = property;
-		}
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			frame.getFilteredData().setFilter(property);
-		}
-		
 	}
 }
