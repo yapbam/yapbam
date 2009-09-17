@@ -179,9 +179,4 @@ public class TransactionsPlugInPanel extends JPanel {
 	TransactionTable getTransactionTable() {
 		return transactionTable;
 	}
-		
-//TODO	 else if ((event instanceof PeriodicalTransactionAddedEvent) || (event instanceof PeriodicalTransactionRemovedEvent)) {
-//			this.generatePeriodical.setEnabled(data.getPeriodicalTransactionsNumber()>0);
-//	 }
-
 }

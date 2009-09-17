@@ -42,7 +42,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 			@Override
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent) || (event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent)) {
-					System.out.println ("Event trapped by TransactionsPlugIn "+event);
 					updateFilterMenu();
 				}
 			}
