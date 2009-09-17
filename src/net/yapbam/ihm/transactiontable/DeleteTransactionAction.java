@@ -1,4 +1,4 @@
-package net.yapbam.ihm.actions;
+package net.yapbam.ihm.transactiontable;
 
 import java.awt.event.ActionEvent;
 
@@ -8,23 +8,22 @@ import javax.swing.Action;
 import net.yapbam.data.Transaction;
 import net.yapbam.ihm.IconManager;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.MainFrame;
 
 @SuppressWarnings("serial")
 public class DeleteTransactionAction extends AbstractAction {
-	private MainFrame frame;
+	private TransactionTable table;
 	
-	public DeleteTransactionAction(MainFrame frame) {
+	public DeleteTransactionAction(TransactionTable table) {
 		super(LocalizationData.get("MainMenu.Transactions.Delete"), IconManager.DELETE_TRANSACTION);
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Delete.ToolTip"));
         putValue(Action.MNEMONIC_KEY,(int)LocalizationData.getChar("MainMenu.Transactions.Delete.Mnemonic")); //$NON-NLS-1$
-        this.frame = frame;
+        this.table = table;
         this.setEnabled(false);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction transaction = frame.getSelectedTransaction();
-		frame.getData().remove(transaction);
+		Transaction transaction = table.getSelectedTransaction();
+		table.getGlobalData().remove(transaction);
 	}
 }

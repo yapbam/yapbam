@@ -25,8 +25,6 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
-import net.yapbam.data.event.PeriodicalTransactionAddedEvent;
-import net.yapbam.data.event.PeriodicalTransactionRemovedEvent;
 import net.yapbam.ihm.actions.*;
 import net.yapbam.ihm.dialogs.AboutDialog;
 import net.yapbam.ihm.dialogs.AccountDialog;
@@ -43,11 +41,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
     private JMenuItem menuItemQuit;
 
 	private JMenu transactionMenu;
-	Action newTransactionAction;
-	Action editTransactionAction;
-	Action duplicateTransactionAction;
-	Action deleteTransactionAction;
-	private Action generatePeriodical;
 	private Action editPreferences;
     
 	private JMenuItem menuItemAbout;
@@ -113,28 +106,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.add(accountMenu);
 
         //Build transactions menu item
-        transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
-        transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
-        transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
-        
-        this.newTransactionAction = new NewTransactionAction(frame);
-        JMenuItem item = new JMenuItem(newTransactionAction);
-        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        transactionMenu.add(item);
-        this.editTransactionAction = new EditTransactionAction(frame);
-        item = new JMenuItem(this.editTransactionAction);
-        transactionMenu.add(item);
-        this.duplicateTransactionAction = new DuplicateTransactionAction(frame);
-        item = new JMenuItem(this.duplicateTransactionAction);
-        transactionMenu.add(item);
-        this.deleteTransactionAction = new DeleteTransactionAction(frame);
-        item = new JMenuItem(deleteTransactionAction); //$NON-NLS-1$
-        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        transactionMenu.add(item);
-        transactionMenu.addSeparator();
-        generatePeriodical = new GeneratePeriodicalTransactionsAction(frame);
-        transactionMenu.add(new JMenuItem(generatePeriodical));
-        this.add(transactionMenu);
+        transactionMenu = this.frame.getTransactionPlugIn().getPlugInMenu();
+		this.add(transactionMenu);
         
         //Build the filter menu
         filterMenu = new JMenu(LocalizationData.get("MainMenuBar.Filter")); //$NON-NLS-1$
@@ -207,8 +180,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent)) {
 			this.updateFilterMenu();
 			this.updateAccountMenu();
-		} else if ((event instanceof PeriodicalTransactionAddedEvent) || (event instanceof PeriodicalTransactionRemovedEvent)) {
-			this.generatePeriodical.setEnabled(data.getPeriodicalTransactionsNumber()>0);
 		}
 	}
 
