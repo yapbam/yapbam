@@ -55,6 +55,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	class DeleteAccountAction extends AbstractAction {
 		private GlobalData data;
 		DeleteAccountAction (GlobalData data) {
@@ -82,6 +83,11 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		}
 	}
 
+	@Override
+	protected JTable instantiateJTable() {
+		return new JTable(getTableModel());
+	}
+	
 	@SuppressWarnings("serial")
 	private final class AccountTableModel extends AbstractTableModel implements DataListener {
 		public AccountTableModel(GlobalData data) {
@@ -153,8 +159,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		return "Cet onglet permet de gérer les comptes";
 	}
 	
-	@SuppressWarnings("serial")
-	protected TableModel getTableModel() {
+	private TableModel getTableModel() {
 		return new AccountTableModel((GlobalData) data);
 	}
 	protected Action getNewButtonAction() {
