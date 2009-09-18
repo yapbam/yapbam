@@ -19,16 +19,16 @@ import net.yapbam.ihm.actions.DeleteModeAction;
 import net.yapbam.ihm.administration.AbstractListAdministrationPanel;
 
 @SuppressWarnings("serial")
-public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
+public class ModeListPanel extends AbstractListAdministrationPanel {
 	private String accountName;
+	private JTable table;
 	
 	public ModeListPanel() {
 		super(new ArrayList<Mode>());
-        this.accountName = "";
+        this.accountName = ""; //$NON-NLS-1$
         getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void setContent(Account account) {
 		this.accountName = account.getName();
 		((List<Mode>)data).clear();
@@ -61,8 +61,8 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 	
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
-			super("Créer");
-	        putValue(SHORT_DESCRIPTION, "Ce bouton permet de créer un nouveau mode");
+			super(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
+	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.New.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -77,8 +77,8 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 	}
 	class EditModeAction extends AbstractAction {
 		public EditModeAction() {
-			super("Editer");
-	        putValue(SHORT_DESCRIPTION, "Ce bouton permet d'éditer le mode de paiement sélectionné");
+			super(LocalizationData.get("GenericButton.edit")); //$NON-NLS-1$
+	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -94,7 +94,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 	}
 	
 	@Override
-	protected JTable getJTable() {
+	protected JTable instantiateJTable() {
 		return new JTable(getTableModel());
 	}
 	
@@ -102,9 +102,9 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 		return new AbstractTableModel(){
 			@Override
 			public String getColumnName(int columnIndex) {
-				if (columnIndex==0) return "Nom";
-				if (columnIndex==1) return "Dépenses";
-				if (columnIndex==2) return "Recettes";
+				if (columnIndex==0) return LocalizationData.get("ModeDialog.name.short"); //$NON-NLS-1$
+				if (columnIndex==1) return LocalizationData.get("ModeDialog.forDebts.short"); //$NON-NLS-1$
+				if (columnIndex==2) return LocalizationData.get("ModeDialog.forReceipts.short"); //$NON-NLS-1$
 				return "?"; //$NON-NLS-1$
 			}
 			@Override
@@ -113,7 +113,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 			}
 			@Override
 			public int getRowCount() {
-				return ((List)data).size();
+				return ((List<Mode>)data).size();
 			}
 			@Override
 			public Object getValueAt(int rowIndex, int columnIndex) {
@@ -121,7 +121,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 				if (columnIndex==0) return mode.getName();
 				if (columnIndex==1) return mode.getExpenseVdc()!=null;
 				if (columnIndex==2) return mode.getReceiptVdc()!=null;
-				return "?";
+				return "?"; //$NON-NLS-1$
 			}
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
