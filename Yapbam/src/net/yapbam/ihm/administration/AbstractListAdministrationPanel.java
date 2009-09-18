@@ -14,7 +14,6 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableModel;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -52,7 +51,6 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	}
 	
 	protected abstract String getPanelToolTip();
-	protected abstract TableModel getTableModel();
 	protected abstract Action getNewButtonAction();
 	protected abstract Action getEditButtonAction();
 	protected abstract Action getDeleteButtonAction();
@@ -76,8 +74,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 */
 	protected JTable getJTable() {
 		if (jTable == null) {
-			jTable = new JTable();
-			jTable.setModel(getTableModel());
+			jTable = instantiateJTable();
 		    jTable.getTableHeader().setReorderingAllowed(false);
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
@@ -103,6 +100,10 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 
 		}
 		return jTable;
+	}
+
+	protected JTable instantiateJTable() {
+		return new JTable();
 	}
 
 	/**

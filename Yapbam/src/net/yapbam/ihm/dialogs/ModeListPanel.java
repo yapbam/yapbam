@@ -2,13 +2,13 @@ package net.yapbam.ihm.dialogs;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -94,7 +94,11 @@ public class ModeListPanel extends AbstractListAdministrationPanel {//LOCAL
 	}
 	
 	@Override
-	protected TableModel getTableModel() {
+	protected JTable getJTable() {
+		return new JTable(getTableModel());
+	}
+	
+	private  TableModel getTableModel() {
 		return new AbstractTableModel(){
 			@Override
 			public String getColumnName(int columnIndex) {

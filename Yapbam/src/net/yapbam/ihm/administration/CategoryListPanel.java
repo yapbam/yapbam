@@ -1,6 +1,7 @@
 package net.yapbam.ihm.administration;
 
 import javax.swing.Action;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -24,8 +25,13 @@ public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
 		return "Cet onglet permet de gérer les catégories";
 	}
 	
+	@Override
+	protected JTable instantiateJTable() {
+		return new JTable(getTableModel());
+	}
+
 	@SuppressWarnings("serial")
-	protected TableModel getTableModel() {
+	private TableModel getTableModel() {
 		return new AbstractTableModel() {
 			@Override
 			public String getColumnName(int columnIndex) {
