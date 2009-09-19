@@ -79,8 +79,8 @@ public class MainFrame extends JFrame implements DataListener {
 	    
 	    this.plugins=new AbstractPlugIn[]{
 	    		new TransactionsPlugIn(this.accountFilter, filteredData),
-	    		new BalanceHistoryPlugIn(accountFilter)/*,
-	    		new AdministrationPlugIn(accountFilter)*/};
+	    		new BalanceHistoryPlugIn(accountFilter),
+	    		new AdministrationPlugIn(accountFilter)};
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 
 	    setContentPane(this.createContentPane());

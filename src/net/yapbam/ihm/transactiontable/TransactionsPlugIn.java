@@ -179,10 +179,4 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 			panel.getTransactionTable().getFilteredData().setFilter(property);
 		}
 	}
-
-		
-//TODO	 else if ((event instanceof PeriodicalTransactionAddedEvent) || (event instanceof PeriodicalTransactionRemovedEvent)) {
-//			this.generatePeriodical.setEnabled(data.getPeriodicalTransactionsNumber()>0);
-//	 }
-
 }
