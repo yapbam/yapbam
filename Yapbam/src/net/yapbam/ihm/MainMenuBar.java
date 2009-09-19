@@ -72,13 +72,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemSave.setMnemonic(LocalizationData.getChar("MainMenu.Save.Mnemonic")); //$NON-NLS-1$
         this.menuItemSave.setToolTipText(LocalizationData.get("MainMenu.Save.ToolTip")); //$NON-NLS-1$
         this.menuItemSave.addActionListener(this);
-        this.menuItemSave.setEnabled(false);
+        this.menuItemSave.setEnabled(frame.getData().somethingHasChanged());
         menu.add(this.menuItemSave);
         this.menuItemSaveAs = new JMenuItem(LocalizationData.get("MainMenu.SaveAs"), IconManager.SAVE_AS); //$NON-NLS-1$
         this.menuItemSaveAs.setMnemonic(LocalizationData.getChar("MainMenu.SaveAs.Mnemonic")); //$NON-NLS-1$
         this.menuItemSaveAs.setToolTipText(LocalizationData.get("MainMenu.SaveAs.ToolTip")); //$NON-NLS-1$
         this.menuItemSaveAs.addActionListener(this);
-        this.menuItemSaveAs.setEnabled(false);
+        this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
         menu.add(this.menuItemSaveAs);
 
         menu.addSeparator();

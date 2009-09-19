@@ -150,8 +150,11 @@ public class TransactionsPlugInPanel extends JPanel {
 
 		JPanel bottomPane = new JPanel(new GridLayout(1, 3));
 		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance"));
+		currentBalance.setToolTipText(LocalizationData.get("MainFrame.CurrentBalance.ToolTip"));
 		finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance"));
+		finalBalance.setToolTipText(LocalizationData.get("MainFrame.FinalBalance.ToolTip"));
 		checkedBalance = new BalanceReportField(LocalizationData.get("MainFrame.CheckedBalance"));
+		checkedBalance.setToolTipText(LocalizationData.get("MainFrame.CheckedBalance.ToolTip"));
 		bottomPane.add(currentBalance);
 		bottomPane.add(finalBalance);
 		bottomPane.add(checkedBalance);
