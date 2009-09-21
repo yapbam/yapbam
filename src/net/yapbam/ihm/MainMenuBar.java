@@ -194,7 +194,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 				public void actionPerformed(ActionEvent e) {
 					JMenuItem item = (JMenuItem) e.getSource();
 					Account account = frame.getData().getAccount(item.getText());
-					frame.getFilteredData().setAccounts(new Account[]{account});
 					frame.getAccountFilter().setAccounts(new Account[]{account});
 				}
 			};
@@ -213,8 +212,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         	item.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					frame.getFilteredData().clearAccounts();
-					frame.getAccountFilter().clear();
+					frame.getAccountFilter().setAccounts(null);
 				}
 			});
         	item.setSelected(!hasAccountFilter);

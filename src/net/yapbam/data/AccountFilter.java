@@ -13,12 +13,12 @@ public abstract class AccountFilter extends DefaultListenable {
 	public AccountFilter(GlobalData data) {
 	    super();
 	    this.data = data;
-	    this.clear();
+	    this.setAccounts(null);
 	    this.data.addListener(new DataListener() {		
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof EverythingChangedEvent) {
-					clear();
+					setAccounts(null);
 					fireEvent(new EverythingChangedEvent(this));
 				} else if (event instanceof AccountRemovedEvent) {
 					process((AccountRemovedEvent) event);
@@ -28,7 +28,7 @@ public abstract class AccountFilter extends DefaultListenable {
 	}
 	
 	/** Process the AccountRemovedEvent.
-	 * This implements just ensure that the account is no more allowed by the filter.
+	 * This implementation only ensure that the account is no more allowed by the filter.
 	 * As, the transaction are deleted from the GlobalData when the account is removed, this method does
 	 * nothing to deal with the transactions. It doesn't call the filter method nor fire any event
 	 * If a subclass wants to perform something when an account is removed, I advise to override this method
@@ -44,15 +44,13 @@ public abstract class AccountFilter extends DefaultListenable {
 		return validAccounts.remove(account);
 	}
 		
-	public void clear() {
-		this.validAccounts=null;
-		this.filter();
-		fireEvent(new EverythingChangedEvent(this));
-	}
-	
+	/** Returns the valid accounts for this filter.
+	 * There's no side effect between this instance and the returned array.
+	 * @param accounts the accounts (null to allow every accounts).
+	 */
 	public void setAccounts(Account[] accounts) {
-		if (accounts.length==data.getAccountsNumber()) {
-			this.clear();
+		if ((accounts==null) || (accounts.length==data.getAccountsNumber())) {
+			this.validAccounts=null;
 		} else {
 			this.validAccounts = new HashSet<Account>(accounts.length);
 			for (int i = 0; i < accounts.length; i++) {
@@ -61,6 +59,20 @@ public abstract class AccountFilter extends DefaultListenable {
 		}
 		this.filter();
 		fireEvent(new EverythingChangedEvent(this));
+	}
+
+	/** Returns the valid accounts for this filter.
+	 * There's no side effect between this instance and the returned array.
+	 * @return the valid accounts (null means, all accounts are ok).
+	 */
+	public Account[] getAccounts() {
+		if (this.validAccounts==null) return null;
+		Account[] result = new Account[validAccounts.size()];
+		Iterator<Account> iterator = validAccounts.iterator();
+		for (int i = 0; i < result.length; i++) {
+			result[i] = iterator.next();
+		}
+		return result;
 	}
 
 	protected abstract void filter();
