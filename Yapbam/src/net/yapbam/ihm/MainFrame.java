@@ -134,10 +134,6 @@ public class MainFrame extends JFrame implements DataListener {
 		return this.accountFilter;
 	}
 	
-	public FilteredData getFilteredData() {
-		return this.filteredData; //TODO
-	}
-
 	public int getPlugInsNumber() {
 		return plugins.length;
 	}

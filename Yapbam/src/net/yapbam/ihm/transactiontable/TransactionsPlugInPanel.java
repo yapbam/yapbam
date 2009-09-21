@@ -25,6 +25,7 @@ import net.yapbam.data.AccountFilteredData;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
+import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.NewTransactionAction;
 
@@ -164,6 +165,13 @@ public class TransactionsPlugInPanel extends JPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				updateBalances();
+				if (event instanceof EverythingChangedEvent) {
+					if (TransactionsPlugInPanel.this.acFilter.hasFilterAccount()) {
+						transactionTable.getFilteredData().setAccounts(TransactionsPlugInPanel.this.acFilter.getAccounts());
+					} else {
+						transactionTable.getFilteredData().clearAccounts();
+					}
+				}
 			}
 		});
 		updateBalances();

@@ -51,17 +51,19 @@ public class FilteredData extends AccountFilter {
 				}
 			}
 		});
+	    this.clear();
 	}
 		
-	@Override
 	public void clear() {
 		this.filter = ALL;
-		super.clear();
+		super.setAccounts(null);
 	}
 
 	public boolean isOk(Transaction transaction) {
-		return isOk(transaction.getAccount()) && isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED) &&
-		isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE);
+		boolean accountOk = isOk(transaction.getAccount());
+		boolean checkedOk = isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED);
+		boolean amountOk = isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE);
+		return accountOk && checkedOk && amountOk;
 	}
 
 	public boolean isOk(int property) {
@@ -86,7 +88,7 @@ public class FilteredData extends AccountFilter {
 	}
 
 	protected void filter() {
-	    this.transactions = new ArrayList<Transaction>(0);
+	    this.transactions = new ArrayList<Transaction>();
 	    for (int i = 0; i < data.getTransactionsNumber(); i++) {
 			Transaction transaction = data.getTransaction(i);
 			if (isOk(transaction)) {
@@ -110,6 +112,6 @@ public class FilteredData extends AccountFilter {
 	}
 
 	public void clearAccounts() {
-		super.clear();
+		super.setAccounts(null);
 	}	
 }
