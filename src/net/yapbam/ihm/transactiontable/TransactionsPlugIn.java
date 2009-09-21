@@ -15,7 +15,6 @@ import javax.swing.KeyStroke;
 import javax.swing.table.TableColumnModel;
 
 import net.yapbam.data.AccountFilteredData;
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
@@ -36,7 +35,9 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	private JMenu transactionMenu;
 	private JMenu filterMenu;
 
-	public TransactionsPlugIn(AccountFilteredData acFilter, FilteredData data) {
+	public TransactionsPlugIn(AccountFilteredData acFilter, Object restoreData) {
+		FilteredData data = (FilteredData) restoreData;
+		if (data == null) data = new FilteredData(acFilter.getGlobalData());
 		this.panel = new TransactionsPlugInPanel(acFilter, data);
 		data.addListener(new DataListener() {
 			@Override
@@ -48,6 +49,13 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		});
 	}
 	
+	@Override
+	public Object getRestartData() {
+		return this.panel.getTransactionTable().getFilteredData();
+	}
+
+
+
 	public JMenu[] getPlugInMenu() {
         //Build the transactions menu
         transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions"));

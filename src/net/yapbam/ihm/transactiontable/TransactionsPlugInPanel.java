@@ -22,7 +22,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.yapbam.data.AccountFilteredData;
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -165,7 +164,7 @@ public class TransactionsPlugInPanel extends JPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				updateBalances();
-				if (event instanceof EverythingChangedEvent) {
+				if (event instanceof EverythingChangedEvent) {//TODO must be in FilteredData
 					if (TransactionsPlugInPanel.this.acFilter.hasFilterAccount()) {
 						transactionTable.getFilteredData().setAccounts(TransactionsPlugInPanel.this.acFilter.getAccounts());
 					} else {

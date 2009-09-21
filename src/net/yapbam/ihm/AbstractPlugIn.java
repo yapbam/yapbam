@@ -31,4 +31,8 @@ public abstract class AbstractPlugIn {
 
 	public void setDisplayed(boolean displayed) {
 	}
+	
+	public Object getRestartData() {
+		return null;
+	}
 }
