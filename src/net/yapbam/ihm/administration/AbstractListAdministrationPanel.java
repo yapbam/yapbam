@@ -76,6 +76,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		if (jTable == null) {
 			jTable = instantiateJTable();
 		    jTable.getTableHeader().setReorderingAllowed(false);
+			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
 					ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();

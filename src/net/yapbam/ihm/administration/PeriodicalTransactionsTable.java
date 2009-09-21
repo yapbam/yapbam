@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.swing.JTable;
 
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.ihm.transactiontable.AmountRenderer;
 import net.yapbam.ihm.transactiontable.DateRenderer;
@@ -27,6 +28,10 @@ class PeriodicalTransactionsTable extends JTable {
 	public PeriodicalTransaction getSelectedTransaction() {
 		int index = getSelectedRow();
 		if (index < 0) return null;
-		return ((PeriodicalTransactionTableModel)this.getModel()).getGlobalData().getPeriodicalTransaction(index);
+		return getGlobalData().getPeriodicalTransaction(index);
+	}
+
+	public GlobalData getGlobalData() {
+		return ((PeriodicalTransactionTableModel)this.getModel()).getGlobalData();
 	}
 }
