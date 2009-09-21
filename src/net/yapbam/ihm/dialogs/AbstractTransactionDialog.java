@@ -207,7 +207,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		return result;
 	}
 
-	public Transaction getTransaction() {
+	public AbstractTransaction getTransaction() {
 		return (Transaction) super.getResult();
 	}
 

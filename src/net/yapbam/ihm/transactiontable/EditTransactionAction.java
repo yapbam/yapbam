@@ -9,7 +9,6 @@ import javax.swing.Action;
 import net.yapbam.data.Transaction;
 import net.yapbam.ihm.IconManager;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.MainFrame;
 import net.yapbam.ihm.dialogs.AbstractDialog;
 import net.yapbam.ihm.dialogs.TransactionDialog;
 
@@ -28,6 +27,6 @@ public class EditTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = table.getSelectedTransaction();
-		TransactionDialog.open(table.getGlobalData(), (MainFrame) AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction);
+		TransactionDialog.open(table.getGlobalData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction);
 	}
 }
