@@ -1,7 +1,11 @@
-package net.yapbam.data;
+package net.yapbam.ihm.transactiontable;
 
 import java.util.*;
 
+import net.yapbam.data.Account;
+import net.yapbam.data.AccountFilter;
+import net.yapbam.data.GlobalData;
+import net.yapbam.data.Transaction;
 import net.yapbam.data.event.*;
 
 public class FilteredData extends AccountFilter {

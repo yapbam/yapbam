@@ -26,7 +26,6 @@ public class MainFrame extends JFrame implements DataListener {
     
     private GlobalData data;
 	private AccountFilteredData accountFilter;
-	private FilteredData filteredData;//TODO
 
 	private JTabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
@@ -41,7 +40,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	            new MainFrame(null, null, null);
+	            new MainFrame(null, null);
 	        }
 	    });
 	}
@@ -49,7 +48,7 @@ public class MainFrame extends JFrame implements DataListener {
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
 	 * event-dispatching thread.
 	 */
-	private MainFrame(GlobalData data, AccountFilteredData acFilter, FilteredData fData) {
+	private MainFrame(AccountFilteredData acFilter, Object[] restartData) {
 	    //Create and set up the window.
 		super();
 		this.setMinimumSize(new Dimension(800,300));
@@ -72,15 +71,20 @@ public class MainFrame extends JFrame implements DataListener {
 	    	}
 		});
 	
-	    this.data = (data==null)?new GlobalData():data;
-	    this.accountFilter = acFilter==null?new AccountFilteredData(this.data):acFilter;
-	    this.filteredData = fData==null?new FilteredData(this.data):fData;
-	    if (data==null) YapbamState.INSTANCE.restoreGlobalData(this);
+	    if (acFilter==null) {
+	    	this.data = new GlobalData();
+	    	this.accountFilter = new AccountFilteredData(this.data);
+	    } else {
+	    	this.data = acFilter.getGlobalData();
+	    	this.accountFilter = acFilter;
+	    }
+	    if (acFilter==null) YapbamState.INSTANCE.restoreGlobalData(this);
 	    
+	    if (restartData==null) restartData = new Object[3];
 	    this.plugins=new AbstractPlugIn[]{
-	    		new TransactionsPlugIn(this.accountFilter, filteredData),
-	    		new BalanceHistoryPlugIn(accountFilter)
-	    		,new AdministrationPlugIn(accountFilter)
+	    		new TransactionsPlugIn(accountFilter, restartData[0]),
+	    		new BalanceHistoryPlugIn(accountFilter, restartData[1])
+	    		,new AdministrationPlugIn(accountFilter, restartData[2])
 	    		};
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 
@@ -160,11 +164,12 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	public void restart() {
-//		this.data.clearListeners();
-//		this.accountFilter.clearListeners();
-//		this.filteredData.clearListeners();
-		//FIXME We would need to remove the obsoletes listeners (from the closing window) ... but don't know how to do that efficiently
+		//FIXME MemoryLeak : We would need to remove the obsoletes listeners (from the closing window) ... but don't know how to do that efficiently
 		this.isRestarting = true;
+		final Object[] restartData = new Object[this.plugins.length];
+		for (int i = 0; i < restartData.length; i++) {
+			restartData[i] = this.plugins[i].getRestartData();
+		}
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
@@ -173,7 +178,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	            new MainFrame(data, accountFilter, filteredData);
+	            new MainFrame(accountFilter, restartData);
 	        }
 	    });
 	}

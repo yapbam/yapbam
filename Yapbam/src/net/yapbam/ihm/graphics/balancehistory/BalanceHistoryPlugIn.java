@@ -12,7 +12,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	private BalanceHistoryPane panel;
 	private AccountFilteredData data;
 
-	public BalanceHistoryPlugIn(AccountFilteredData acFilter) {
+	public BalanceHistoryPlugIn(AccountFilteredData acFilter, Object restartData) {
 		this.data = acFilter;
 		this.panel = new BalanceHistoryPane(data.getBalanceHistory());
 		data.addListener(new DataListener() {

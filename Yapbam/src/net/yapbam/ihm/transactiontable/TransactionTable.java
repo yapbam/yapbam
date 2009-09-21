@@ -9,7 +9,6 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.ihm.MainMenuBar;
