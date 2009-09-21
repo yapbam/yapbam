@@ -8,7 +8,6 @@ import javax.swing.table.TableModel;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.actions.DeletePeriodicalTransactionAction;
 import net.yapbam.ihm.actions.EditPeriodicalTransactionAction;
 import net.yapbam.ihm.actions.NewPeriodicalTransactionAction;
 
@@ -64,6 +63,6 @@ public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
 		return new EditPeriodicalTransactionAction(); //TODO
 	}
 	protected Action getDeleteButtonAction() {
-		return new DeletePeriodicalTransactionAction(); //TODO
+		return new NewPeriodicalTransactionAction(); //TODO
 	}
 }

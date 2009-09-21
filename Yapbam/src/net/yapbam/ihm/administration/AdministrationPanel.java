@@ -43,7 +43,7 @@ public class AdministrationPanel extends JPanel {
 		jTabbedPane.addTab("Gestion des comptes", null, accountPanel, accountPanel.getPanelToolTip());
 		CategoryListPanel categoryPanel = new CategoryListPanel(data);
 		jTabbedPane.addTab("Gestion des catégories", null, categoryPanel, categoryPanel.getToolTipText());
-		PeriodicTransactionListPanel periodicTransactionPanel = new PeriodicTransactionListPanel(data);
+		PeriodicalTransactionListPanel periodicTransactionPanel = new PeriodicalTransactionListPanel(data);
 		jTabbedPane.addTab(LocalizationData.get("PeriodicManagementDialog.title"), null, periodicTransactionPanel, periodicTransactionPanel.getToolTipText());
 		this.add(jTabbedPane, gridBagConstraints);
 	}
