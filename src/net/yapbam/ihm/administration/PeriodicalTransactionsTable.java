@@ -15,7 +15,7 @@ import net.yapbam.ihm.transactiontable.SpreadableMouseAdapter;
 class PeriodicalTransactionsTable extends JTable {
 	private static final long serialVersionUID = 1L;
 
-	public PeriodicalTransactionsTable(PeriodicTransactionTableModel model) {
+	public PeriodicalTransactionsTable(PeriodicalTransactionTableModel model) {
 		super(model);
 		this.setDefaultRenderer(Date.class, new DateRenderer());
 		this.setDefaultRenderer(double[].class, new AmountRenderer());
@@ -27,6 +27,6 @@ class PeriodicalTransactionsTable extends JTable {
 	public PeriodicalTransaction getSelectedTransaction() {
 		int index = getSelectedRow();
 		if (index < 0) return null;
-		return ((PeriodicTransactionTableModel)this.getModel()).getGlobalData().getPeriodicalTransaction(index);
+		return ((PeriodicalTransactionTableModel)this.getModel()).getGlobalData().getPeriodicalTransaction(index);
 	}
 }

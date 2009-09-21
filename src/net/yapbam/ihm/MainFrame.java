@@ -44,10 +44,16 @@ public class MainFrame extends JFrame implements DataListener {
 	        }
 	    });
 	}
+	
+	@SuppressWarnings("unchecked")
+	private static final Class[] getPlugins() {
+		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, AdministrationPlugIn.class};
+	}
 
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
 	 * event-dispatching thread.
 	 */
+	@SuppressWarnings("unchecked")
 	private MainFrame(AccountFilteredData acFilter, Object[] restartData) {
 	    //Create and set up the window.
 		super();
@@ -80,12 +86,17 @@ public class MainFrame extends JFrame implements DataListener {
 	    }
 	    if (acFilter==null) YapbamState.INSTANCE.restoreGlobalData(this);
 	    
-	    if (restartData==null) restartData = new Object[3];
-	    this.plugins=new AbstractPlugIn[]{
-	    		new TransactionsPlugIn(accountFilter, restartData[0]),
-	    		new BalanceHistoryPlugIn(accountFilter, restartData[1])
-	    		,new AdministrationPlugIn(accountFilter, restartData[2])
-	    		};
+	    Class[] pluginClasses = getPlugins();
+	    if (restartData==null) restartData = new Object[pluginClasses.length];
+	    this.plugins=new AbstractPlugIn[pluginClasses.length];
+	    for (int i = 0; i < pluginClasses.length; i++) {
+			try {
+				this.plugins[i] = (AbstractPlugIn) pluginClasses[i].getConstructor(AccountFilteredData.class, Object.class).newInstance(accountFilter, restartData[0]);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 
 	    setContentPane(this.createContentPane());

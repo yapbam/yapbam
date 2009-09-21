@@ -10,17 +10,36 @@ import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.PeriodicalTransaction;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
+import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.PeriodicalTransactionAddedEvent;
+import net.yapbam.data.event.PeriodicalTransactionRemovedEvent;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.transactiontable.GenericTransactionTableModel;
 import net.yapbam.ihm.transactiontable.SpreadState;
 import net.yapbam.ihm.transactiontable.SpreadableTableModel;
 
 @SuppressWarnings("serial")
-final class PeriodicTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {
-	private final PeriodicTransactionListPanel periodicTransactionListPanel;
+final class PeriodicalTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {
+	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
 
-	PeriodicTransactionTableModel(PeriodicTransactionListPanel periodicTransactionListPanel) {
+	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
 		this.periodicTransactionListPanel = periodicTransactionListPanel;
+		this.getGlobalData().addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				if (event instanceof PeriodicalTransactionAddedEvent) {
+					int index = ((PeriodicalTransactionAddedEvent)event).getPeriodicalTransactionIndex();
+					fireTableRowsInserted(index, index);
+				} else if (event instanceof PeriodicalTransactionRemovedEvent) {
+					int index = ((PeriodicalTransactionRemovedEvent)event).getIndex();
+					fireTableRowsDeleted(index, index);
+				} else if (event instanceof EverythingChangedEvent) {
+					fireTableDataChanged();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -102,7 +121,7 @@ final class PeriodicTransactionTableModel extends AbstractTableModel implements 
 
 	@Override
 	public int getRowCount() {
-		return ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransactionsNumber();
+		return getGlobalData().getPeriodicalTransactionsNumber();
 	}
 
 	@Override
