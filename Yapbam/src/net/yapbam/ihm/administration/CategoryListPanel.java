@@ -1,5 +1,6 @@
 package net.yapbam.ihm.administration;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -8,9 +9,8 @@ import javax.swing.table.TableModel;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.actions.EditPeriodicalTransactionAction;
-import net.yapbam.ihm.actions.NewPeriodicalTransactionAction;
 
+import java.awt.event.ActionEvent;
 import java.lang.Object;
 
 public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
@@ -56,13 +56,34 @@ public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
 			}
 		};
 	}
+	@SuppressWarnings("serial")
 	protected Action getNewButtonAction() {
-		return new NewPeriodicalTransactionAction(); //TODO
+		return new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println ("Not yet implemented");
+				// TODO Auto-generated method stub
+			}
+		};
 	}
+	@SuppressWarnings("serial")
 	protected Action getEditButtonAction() {
-		return new EditPeriodicalTransactionAction(); //TODO
+		return new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println ("Not yet implemented");
+				// TODO Auto-generated method stub
+			}
+		};
 	}
+	@SuppressWarnings("serial")
 	protected Action getDeleteButtonAction() {
-		return new NewPeriodicalTransactionAction(); //TODO
+		return new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println ("Not yet implemented");
+				// TODO Auto-generated method stub
+			}
+		};
 	}
 }
