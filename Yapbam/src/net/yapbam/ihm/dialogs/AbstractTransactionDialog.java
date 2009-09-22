@@ -42,8 +42,8 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	
 	protected GlobalData data;
 
-	protected AbstractTransactionDialog(Window owner, GlobalData data, AbstractTransaction transaction) {
-		super(owner, (transaction==null?LocalizationData.get("TransactionDialog.title.new"):LocalizationData.get("TransactionDialog.title.edit")), data); //$NON-NLS-1$
+	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
+		super(owner, title, data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
 		this.data = data;
 	}

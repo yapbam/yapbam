@@ -47,7 +47,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	}
 	
 	private TransactionDialog(Window owner, GlobalData data, Transaction transaction) {
-		super(owner, data, transaction);
+		super(owner, (transaction==null?LocalizationData.get("TransactionDialog.title.new"):LocalizationData.get("TransactionDialog.title.edit")), data, transaction);
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
