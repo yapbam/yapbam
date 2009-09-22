@@ -53,15 +53,15 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		selectedAccount = data.indexOf(account);
 		accounts.setSelectedIndex(selectedAccount);
 		description.setText(transaction.getDescription());
+		subtransactionsPanel.fill(transaction);
+		// Danger, subtransaction.fill throws Property Change events that may alter the amount field content.
+		// So, set up the amountField after the subtransactions list.
 		amount.setValue(Math.abs(transaction.getAmount()));
 		receipt.setSelected(transaction.getAmount()>0);
 		// Be aware, as its listener change the selectedMode, receipt must always be set before mode.
 		selectedMode = account.findMode(transaction.getMode(), transaction.getAmount()<=0);
 		modes.setSelectedIndex(selectedMode);
 		categories.setCategory(transaction.getCategory());
-		subtransactionsPanel.fill(transaction);
-		// Danger, subtransaction.fill throws Property Change events that may alter the amount field content.
-		// So, set up the amountField after the subtransactions list.
 	}
 
 /**/	private JPanel combine (JComboBox box, JButton button) {
