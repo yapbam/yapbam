@@ -5,11 +5,15 @@ import javax.swing.JPanel;
 import javax.swing.JCheckBox;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
 import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.date.helpers.DayDateStepper;
+import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 import net.yapbam.ihm.widget.DateWidget;
 import net.yapbam.ihm.widget.IntegerWidget;
@@ -30,14 +34,6 @@ public class GenerationPanel extends JPanel { //LOCAL
 	private JLabel jLabel2 = null;
 	private IntegerWidget day = null;
 
-	/**
-	 * This is the default constructor.
-	 * Needed by the Visual Editor
-	 */
-	public GenerationPanel() {
-		this(null);
-	}
-	
 	public GenerationPanel(AbstractDialog dialog) {
 		super();
 		this.dialog = dialog;
@@ -96,6 +92,12 @@ public class GenerationPanel extends JPanel { //LOCAL
 			activated.setText("Activée");
 			activated.setSelected(true);
 			activated.setToolTipText("Décochez cette case pour suspendre la génération de cette opération");
+			activated.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					dialog.updateOkButtonEnabled();
+				}
+			});
 		}
 		return activated;
 	}
@@ -140,16 +142,42 @@ public class GenerationPanel extends JPanel { //LOCAL
 	private JComboBox getKind() {
 		if (kind == null) {
 			kind = new JComboBox(new String[]{"mois","jours"});
+			kind.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					boolean visible = isMonthly();
+					jLabel2.setVisible(visible);
+					day.setVisible(visible);
+				}
+			});
 		}
 		return kind;
 	}
 	
 	public DateStepper getDateStepper() {
-		return null; //TODO
+		if (nb.getValue()==null) return null;
+		if (isMonthly()) {
+			if (day.getValue()==null) return null;
+			return new MonthDateStepper(nb.getValue(), day.getValue());
+		} else {
+			return new DayDateStepper(nb.getValue());
+		}
 	}
 
 	public void setDateStepper(DateStepper nextDateBuilder) {
-		// TODO Auto-generated method stub
+		if (nextDateBuilder instanceof MonthDateStepper) {
+			kind.setSelectedIndex(0);
+			nb.setValue(((MonthDateStepper)nextDateBuilder).getPeriod());
+			day.setValue(((MonthDateStepper)nextDateBuilder).getDay());
+		} else if (nextDateBuilder instanceof DayDateStepper) {
+			kind.setSelectedIndex(1);
+			nb.setValue(((DayDateStepper)nextDateBuilder).getStep());
+		} else if (nextDateBuilder==null) {
+			kind.setSelectedIndex(-1);
+			nb.setText("");
+			day.setText("");
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	/**
@@ -204,11 +232,15 @@ public class GenerationPanel extends JPanel { //LOCAL
 	 */
 	private IntegerWidget getDay() {
 		if (day == null) {
-			day = new IntegerWidget(1, Integer.MAX_VALUE);
-			day.setToolTipText("Entrez ici l\'interval entre deux opérations");
+			day = new IntegerWidget(1, 31);
+			day.setToolTipText("Entrez ici le jour de l'opération");
 			day.setColumns(2);
 		}
 		return day;
+	}
+
+	private boolean isMonthly() {
+		return (kind.getSelectedIndex()==0);
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
