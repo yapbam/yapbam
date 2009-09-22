@@ -42,6 +42,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //L
 		generationPanel.getActivated().setSelected(t.isEnabled());
 		generationPanel.getDate().setDate(t.getNextDate());
 		generationPanel.setDateStepper(t.getNextDateBuilder());
+		updateOkButtonEnabled();
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //L
 	private GenerationPanel generationPanel;
 	
 	private JComponent buildPeriodicalPanel() {
-		generationPanel = new GenerationPanel();
+		generationPanel = new GenerationPanel(this);
 		generationPanel.setBorder(BorderFactory.createTitledBorder("Génération"));
 		return generationPanel;
 	}
@@ -88,7 +89,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //L
 	@Override
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause(); 
-		if ((disabledCause!=null) || generationPanel.getActivated().isSelected()) return disabledCause;
+		if ((disabledCause!=null) || !generationPanel.getActivated().isSelected()) return disabledCause;
 		if (generationPanel.getDate().getDate()==null) return "La prochaine date est incorrecte";
 		if (generationPanel.getDateStepper()==null) return "Comment expliquer ça simplement ?";
 		return null;
