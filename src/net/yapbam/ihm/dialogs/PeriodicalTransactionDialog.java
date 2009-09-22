@@ -1,5 +1,6 @@
 package net.yapbam.ihm.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.FocusListener;
@@ -12,7 +13,6 @@ import javax.swing.*;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.widget.DateWidget;
 
 /** This dialog allows to create or edit a transaction */
 public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
@@ -35,13 +35,32 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	}
 	
 	private PeriodicalTransactionDialog(Window owner, GlobalData data, PeriodicalTransaction transaction) {
-		super(owner, data, transaction);
+		super(owner, (transaction==null?LocalizationData.get("PeriodicalTransactionDialog.title.new"):LocalizationData.get("PeriodicalTransactionDialog.title.edit")), data, transaction);
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
 		super.setContent(transaction);
 		PeriodicalTransaction t = (PeriodicalTransaction) transaction;
+		generationPanel.getActivated().setSelected(t.isEnabled());
 		//TODO
+	}
+
+	@Override
+	protected JPanel createCenterPane(Object data) {
+		JPanel center = new JPanel(new BorderLayout());
+		center.add(buildPeriodicalPanel(),BorderLayout.NORTH);
+		JPanel transactionPane = super.createCenterPane(data);
+		transactionPane.setBorder(BorderFactory.createTitledBorder("Opération"));
+		center.add (transactionPane, BorderLayout.CENTER);
+		return center;
+	}
+	
+	private GenerationPanel generationPanel;
+	
+	private JComponent buildPeriodicalPanel() {
+		generationPanel = new GenerationPanel();
+		generationPanel.setBorder(BorderFactory.createTitledBorder("Génération"));
+		return generationPanel;
 	}
 
 	@Override
@@ -53,7 +72,8 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
 		return new PeriodicalTransaction(description.getText().trim(), amount, this.data.getAccount(selectedAccount),
-				getCurrentMode(), categories.getCategory(), subTransactions, new Date(), true, 0, DateStepper.IMMEDIATE); //TODO
+				getCurrentMode(), categories.getCategory(), subTransactions, new Date(), generationPanel.getActivated().isSelected(),
+				0, DateStepper.IMMEDIATE); //TODO
 	}
 	
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {}
