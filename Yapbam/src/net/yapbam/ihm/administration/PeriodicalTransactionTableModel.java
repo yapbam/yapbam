@@ -1,5 +1,6 @@
 package net.yapbam.ihm.administration;
 
+import java.text.MessageFormat;
 import java.util.Date;
 
 import javax.swing.SwingConstants;
@@ -15,13 +16,16 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.PeriodicalTransactionAddedEvent;
 import net.yapbam.data.event.PeriodicalTransactionRemovedEvent;
+import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.date.helpers.DayDateStepper;
+import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.transactiontable.GenericTransactionTableModel;
 import net.yapbam.ihm.transactiontable.SpreadState;
 import net.yapbam.ihm.transactiontable.SpreadableTableModel;
 
 @SuppressWarnings("serial")
-final class PeriodicalTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {
+final class PeriodicalTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {//LOCAL
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
@@ -51,6 +55,8 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 		if (columnIndex==4) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
 		if (columnIndex==5) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
 		if (columnIndex==6) return "Prochaine échéance";
+		if (columnIndex==7) return "Tous les";
+		if (columnIndex==8) return "Active";
 		return "?"; //$NON-NLS-1$
 	}
 
@@ -59,6 +65,7 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 		if (columnIndex==0) return SpreadState.class;
 		if (columnIndex==6) return Date.class;
 		if (columnIndex==3) return double[].class;
+		if (columnIndex==8) return Boolean.class;
 		return String.class;
 	}
 
@@ -115,7 +122,20 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 		} else if (columnIndex==5) {
 			Mode mode = transaction.getMode();
 			return mode.equals(Mode.UNDEFINED) ? "" : mode.getName(); //$NON-NLS-1$
-		} else if (columnIndex==6) return transaction.getNextDate();
+		} else if (columnIndex==6) {
+			return transaction.getNextDate();
+		} else if (columnIndex==7) {
+			DateStepper period = transaction.getNextDateBuilder();
+			String result;
+			if (period instanceof DayDateStepper) {
+				result = MessageFormat.format("{0,number} jours", ((DayDateStepper)period).getStep());
+			} else if (period instanceof MonthDateStepper) {
+				result = MessageFormat.format("{0,number} mois le {1,number}", ((MonthDateStepper)period).getPeriod(), ((MonthDateStepper)period).getDay());
+			} else {
+				result = "?";
+			}
+			return result;
+		} else if (columnIndex==8) return transaction.isEnabled();
 		return "?";
 	}
 
@@ -126,7 +146,7 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 
 	@Override
 	public int getColumnCount() {
-		return 7;
+		return 9;
 	}
 
 	private Object getName(Category category) {

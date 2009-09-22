@@ -12,6 +12,7 @@ import net.yapbam.ihm.transactiontable.ObjectRenderer;
 import net.yapbam.ihm.transactiontable.SpreadState;
 import net.yapbam.ihm.transactiontable.SpreadStateRenderer;
 import net.yapbam.ihm.transactiontable.SpreadableMouseAdapter;
+import net.yapbam.ihm.transactiontable.BooleanRenderer;
 
 class PeriodicalTransactionsTable extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -21,6 +22,7 @@ class PeriodicalTransactionsTable extends JTable {
 		this.setDefaultRenderer(Date.class, new DateRenderer());
 		this.setDefaultRenderer(double[].class, new AmountRenderer());
 		this.setDefaultRenderer(SpreadState.class, new SpreadStateRenderer());
+		this.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 		this.setDefaultRenderer(Object.class, new ObjectRenderer());
 		this.addMouseListener(new SpreadableMouseAdapter());
 	}
