@@ -13,7 +13,7 @@ import net.yapbam.data.*;
 import net.yapbam.ihm.LocalizationData;
 
 /** This dialog allows to create or edit a transaction */
-public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
+public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //LOCAL
 	private static final long serialVersionUID = 1L;
 	
 	public static PeriodicalTransaction open(GlobalData data, Window frame, PeriodicalTransaction transaction) {

@@ -39,10 +39,10 @@ public class AdministrationPanel extends JPanel {
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		JTabbedPane jTabbedPane = new JTabbedPane();
-		AccountListPanel accountPanel = new AccountListPanel(data);
-		jTabbedPane.addTab("Gestion des comptes", null, accountPanel, accountPanel.getPanelToolTip());
-		CategoryListPanel categoryPanel = new CategoryListPanel(data);
-		jTabbedPane.addTab("Gestion des catégories", null, categoryPanel, categoryPanel.getToolTipText());
+//		AccountListPanel accountPanel = new AccountListPanel(data);
+//		jTabbedPane.addTab("Gestion des comptes", null, accountPanel, accountPanel.getPanelToolTip());
+//		CategoryListPanel categoryPanel = new CategoryListPanel(data);
+//		jTabbedPane.addTab("Gestion des catégories", null, categoryPanel, categoryPanel.getToolTipText());
 		PeriodicalTransactionListPanel periodicTransactionPanel = new PeriodicalTransactionListPanel(data);
 		jTabbedPane.addTab(LocalizationData.get("PeriodicManagementDialog.title"), null, periodicTransactionPanel, periodicTransactionPanel.getToolTipText());
 		this.add(jTabbedPane, gridBagConstraints);

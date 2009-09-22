@@ -1,18 +1,16 @@
 package net.yapbam.ihm.transactiontable;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
+import javax.swing.JCheckBox;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
-public class ObjectRenderer extends DefaultTableCellRenderer {
+public class BooleanRenderer extends JCheckBox implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
-	static Color CASHIN = new Color(240,255,240);
-	static Color CASHOUT = new Color(255,240,240);
 	
-	public ObjectRenderer () {
+	public BooleanRenderer () {
 		super();
 	}
 
@@ -27,12 +25,12 @@ public class ObjectRenderer extends DefaultTableCellRenderer {
 	    } else {
 	        boolean expense = model.isExpense(row);  	
 	        setForeground(table.getForeground());
-	        setBackground(expense?CASHOUT:CASHIN);
+	        setBackground(expense?ObjectRenderer.CASHOUT:ObjectRenderer.CASHIN);
 	    }
 	    boolean isChecked = model.isChecked(row);
     	Font font = this.getFont().deriveFont(isChecked ? Font.ITALIC : Font.PLAIN + Font.BOLD);
     	this.setFont(font);
-	    setValue(value);
+	    setSelected((Boolean)value);
     	return this;
     }
 }
