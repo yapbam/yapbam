@@ -6,12 +6,10 @@ import java.awt.Window;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.*;
 
 import net.yapbam.data.*;
-import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.ihm.LocalizationData;
 
 /** This dialog allows to create or edit a transaction */
@@ -42,7 +40,8 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		super.setContent(transaction);
 		PeriodicalTransaction t = (PeriodicalTransaction) transaction;
 		generationPanel.getActivated().setSelected(t.isEnabled());
-		//TODO
+		generationPanel.getDate().setDate(t.getNextDate());
+		generationPanel.setDateStepper(t.getNextDateBuilder());
 	}
 
 	@Override
@@ -72,8 +71,8 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
 		return new PeriodicalTransaction(description.getText().trim(), amount, this.data.getAccount(selectedAccount),
-				getCurrentMode(), categories.getCategory(), subTransactions, new Date(), generationPanel.getActivated().isSelected(),
-				0, DateStepper.IMMEDIATE); //TODO
+				getCurrentMode(), categories.getCategory(), subTransactions, generationPanel.getDate().getDate(), generationPanel.getActivated().isSelected(),
+				0, generationPanel.getDateStepper());
 	}
 	
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {}
@@ -89,7 +88,9 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	@Override
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause(); 
-		if (disabledCause!=null) return disabledCause;
+		if ((disabledCause!=null) || generationPanel.getActivated().isSelected()) return disabledCause;
+		if (generationPanel.getDate().getDate()==null) return "La prochaine date est incorrecte";
+		if (generationPanel.getDateStepper()==null) return "Comment expliquer ça simplement ?";
 		return null;
 	}
 }

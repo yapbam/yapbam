@@ -5,25 +5,39 @@ import javax.swing.JPanel;
 import javax.swing.JCheckBox;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+
+import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.ihm.widget.AutoSelectFocusListener;
+import net.yapbam.ihm.widget.DateWidget;
+import net.yapbam.ihm.widget.IntegerWidget;
 
 public class GenerationPanel extends JPanel { //LOCAL
 
 	private static final long serialVersionUID = 1L;
 	private JCheckBox activated = null;
 	private JLabel jLabel = null;
-	private JTextField date = null;
+	private DateWidget date = null;
 	private JLabel jLabel1 = null;
-	private JTextField nb = null;
+	private IntegerWidget nb = null;
 	private JComboBox kind = null;
+	
+	private AbstractDialog dialog;
 
 	/**
-	 * This is the default constructor
+	 * This is the default constructor.
+	 * Needed by the Visual Editor
 	 */
 	public GenerationPanel() {
+		this(null);
+	}
+	
+	public GenerationPanel(AbstractDialog dialog) {
 		super();
+		this.dialog = dialog;
 		initialize();
 	}
 
@@ -89,7 +103,7 @@ public class GenerationPanel extends JPanel { //LOCAL
 	 * 	
 	 * @return javax.swing.JCheckBox	
 	 */
-	protected JCheckBox getActivated() {
+	public JCheckBox getActivated() {
 		if (activated == null) {
 			activated = new JCheckBox();
 			activated.setText("Activée");
@@ -104,9 +118,11 @@ public class GenerationPanel extends JPanel { //LOCAL
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getDate() {
+	public DateWidget getDate() {
 		if (date == null) {
-			date = new JTextField();
+			date = new DateWidget();
+			date.addKeyListener(new AutoUpdateOkButtonKeyListener(this.dialog));
+			date.addFocusListener(new AutoSelectFocusListener());
 			date.setColumns(6);
 			date.setToolTipText("Entrez ici la date de la prochaine opération");
 		}
@@ -118,9 +134,11 @@ public class GenerationPanel extends JPanel { //LOCAL
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getNb() {
+	private IntegerWidget getNb() {
 		if (nb == null) {
-			nb = new JTextField();
+	        nb = new IntegerWidget(1, Integer.MAX_VALUE);
+	        nb.addFocusListener(new AutoSelectFocusListener());
+	        nb.addKeyListener(new AutoUpdateOkButtonKeyListener(dialog));
 			nb.setColumns(2);
 			nb.setToolTipText("Entrez ici l'interval entre deux opérations");
 		}
@@ -137,6 +155,14 @@ public class GenerationPanel extends JPanel { //LOCAL
 			kind = new JComboBox(new String[]{"mois","jours"});
 		}
 		return kind;
+	}
+	
+	public DateStepper getDateStepper() {
+		return null; //TODO
+	}
+
+	public void setDateStepper(DateStepper nextDateBuilder) {
+		// TODO Auto-generated method stub
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
