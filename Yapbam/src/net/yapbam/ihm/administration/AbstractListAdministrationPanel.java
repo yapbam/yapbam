@@ -32,9 +32,12 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	private JButton deleteButton = null;
 	private Action newButtonAction;
 	private Action editButtonAction;
+	private Action duplicateButtonAction;  //  @jve:decl-index=0:
 	private Action deleteButtonAction;
 
 	protected Object data;
+
+	private JButton duplicateButton = null;
 	
 	/**
 	 * This is the default constructor
@@ -51,9 +54,11 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	}
 	
 	protected abstract String getPanelToolTip();
+	protected abstract String getTitle();
 	protected abstract Action getNewButtonAction();
 	protected abstract Action getEditButtonAction();
 	protected abstract Action getDeleteButtonAction();
+	protected abstract Action getDuplicateButtonAction();
 
 	/**
 	 * This method initializes this
@@ -84,6 +89,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 						boolean ok = m.getMinSelectionIndex()>=0;
 						editButtonAction.setEnabled(ok);
 						deleteButtonAction.setEnabled(ok);
+						duplicateButtonAction.setEnabled(ok);
 					}
 				}
 			});
@@ -127,9 +133,15 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 */
 	private JPanel getSouthPanel() {
 		if (southPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 2;
+			gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints11.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
+			gridBagConstraints2.gridx = 3;
+			gridBagConstraints2.gridy = 0;
 			gridBagConstraints2.weightx = 1.0D;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new Insets(0, 5, 0, 5);
@@ -142,6 +154,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 			southPanel.add(getNewButton(), gridBagConstraints1);
 			southPanel.add(getEditButton(), gridBagConstraints);
 			southPanel.add(getDeleteButton(), gridBagConstraints2);
+			southPanel.add(getDuplicateButton(), gridBagConstraints11);
 		}
 		return southPanel;
 	}
@@ -186,5 +199,19 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 			deleteButton.setAction(deleteButtonAction);
 		}
 		return deleteButton;
+	}
+
+	/**
+	 * This method initializes duplicateButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getDuplicateButton() {
+		if (duplicateButton == null) {
+			duplicateButton = new JButton();
+			duplicateButtonAction = getDuplicateButtonAction();
+			duplicateButton.setAction(duplicateButtonAction);
+		}
+		return duplicateButton;
 	}
 }

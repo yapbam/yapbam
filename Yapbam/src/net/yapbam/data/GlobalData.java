@@ -28,7 +28,9 @@ public class GlobalData extends DefaultListenable {
 	private static final Comparator<PeriodicalTransaction> PERIODICAL_COMPARATOR = new Comparator<PeriodicalTransaction>() {
 		@Override
 		public int compare(PeriodicalTransaction o1, PeriodicalTransaction o2) {
-			return o1.getDescription().compareToIgnoreCase(o2.getDescription());
+			int result = o1.getDescription().compareToIgnoreCase(o2.getDescription());
+			if (result==0) result = Long.signum(o1.getId()-o2.getId());
+			return result;
 		}
 	};
 	

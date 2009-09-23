@@ -41,11 +41,11 @@ public class AdministrationPanel extends JPanel {
 		JTabbedPane jTabbedPane = new JTabbedPane();
 		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
 //		AccountListPanel accountPanel = new AccountListPanel(data);
-//		jTabbedPane.addTab("Gestion des comptes", null, accountPanel, accountPanel.getPanelToolTip());
+//		jTabbedPane.addTab(accountPanel.getTitle(), null, accountPanel, accountPanel.getPanelToolTip());
 //		CategoryListPanel categoryPanel = new CategoryListPanel(data);
-//		jTabbedPane.addTab("Gestion des catégories", null, categoryPanel, categoryPanel.getToolTipText());
+//		jTabbedPane.addTab(categoryPanel.getTitle(), null, categoryPanel, categoryPanel.getToolTipText());
 		PeriodicalTransactionListPanel periodicTransactionPanel = new PeriodicalTransactionListPanel(data);
-		jTabbedPane.addTab(LocalizationData.get("PeriodicManagementDialog.title"), null, periodicTransactionPanel, periodicTransactionPanel.getToolTipText());
+		jTabbedPane.addTab(periodicTransactionPanel.getTitle(), null, periodicTransactionPanel, periodicTransactionPanel.getToolTipText());
 		this.add(jTabbedPane, gridBagConstraints);
 	}
 }

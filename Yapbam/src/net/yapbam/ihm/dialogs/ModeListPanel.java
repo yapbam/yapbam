@@ -59,6 +59,13 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 		return null;
 	}
 	
+	@Override
+	protected String getTitle() {
+		return null;
+	}
+
+
+
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
 			super(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
@@ -138,5 +145,10 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	public List<Mode> getModes() {
 		return (List<Mode>) this.data;
 	}
-	
+
+	@Override
+	protected Action getDuplicateButtonAction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

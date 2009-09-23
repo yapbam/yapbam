@@ -7,6 +7,8 @@ import javax.swing.AbstractAction;
 import net.yapbam.data.Transaction;
 import net.yapbam.ihm.IconManager;
 import net.yapbam.ihm.LocalizationData;
+import net.yapbam.ihm.dialogs.AbstractTransactionDialog;
+import net.yapbam.ihm.dialogs.TransactionDialog;
 
 @SuppressWarnings("serial")
 public class DuplicateTransactionAction extends AbstractAction {
@@ -21,8 +23,8 @@ public class DuplicateTransactionAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction transaction = table.getSelectedTransaction();
-		Transaction newTransaction = (Transaction) transaction.clone();
-		table.getGlobalData().add(newTransaction);
+		TransactionDialog.open(table.getGlobalData(),
+				AbstractTransactionDialog.getOwnerWindow(table),
+				(Transaction)table.getSelectedTransaction().clone());
 	}
 }
