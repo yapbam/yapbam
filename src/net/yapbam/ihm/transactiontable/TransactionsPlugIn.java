@@ -48,8 +48,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		return this.panel.getTransactionTable().getFilteredData();
 	}
 
-
-
 	public JMenu[] getPlugInMenu() {
         //Build the transactions menu
         transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions"));
@@ -88,6 +86,11 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	public String getPanelTitle() {
 		return LocalizationData.get("MainFrame.Transactions");
+	}
+
+	@Override
+	public String getPanelToolIp() {
+		return LocalizationData.get("MainFrame.Transactions.toolTip");
 	}
 
 	public JPanel getPanel() {

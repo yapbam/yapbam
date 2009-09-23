@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 
 import net.yapbam.data.AccountFilteredData;
 import net.yapbam.ihm.AbstractPlugIn;
-import net.yapbam.ihm.YapbamState;
+import net.yapbam.ihm.LocalizationData;
 
-public class AdministrationPlugIn extends AbstractPlugIn {//LOCAL
+public class AdministrationPlugIn extends AbstractPlugIn {
 	private AdministrationPanel panel;
 
 	public AdministrationPlugIn(AccountFilteredData acFilter, Object restartData) {
@@ -16,7 +16,12 @@ public class AdministrationPlugIn extends AbstractPlugIn {//LOCAL
 	}
 	
 	public String getPanelTitle() {
-		return "Administration";
+		return LocalizationData.get("AdministrationPlugIn.title"); //$NON-NLS-1$
+	}
+
+	@Override
+	public String getPanelToolIp() {
+		return 	LocalizationData.get("AdministrationPlugIn.toolTip"); //$NON-NLS-1$
 	}
 
 	public JPanel getPanel() {
@@ -26,11 +31,12 @@ public class AdministrationPlugIn extends AbstractPlugIn {//LOCAL
 	@Override
 	public void restoreState(Properties properties) {
 		super.restoreState(properties);
+		panel.restoreState(properties);
 	}
 
 	@Override
 	public void saveState(Properties properties) {
 		super.saveState(properties);
-		//TODO Save the table state YapbamState.saveState(properties, table, "net.yapbam.ihm.administration.PeriodicalTransactionsPanel.");
+		panel.saveState(properties);
 	}
 }

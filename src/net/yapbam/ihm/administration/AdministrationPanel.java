@@ -5,14 +5,15 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import net.yapbam.data.GlobalData;
-import net.yapbam.ihm.LocalizationData;
 
 import java.awt.GridBagConstraints;
+import java.util.Properties;
 
 public class AdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GlobalData data;
+	private AbstractListAdministrationPanel[] panels;
 	
 	/**
 	 * This is the constructor
@@ -20,7 +21,6 @@ public class AdministrationPanel extends JPanel {
 	public AdministrationPanel(GlobalData data) {
 		super();
 		this.data = data;
-		this.setToolTipText("Ajout, suppression, modification des comptes, des catégories, etc ..."); //LOCAL
 		initialize();
 	}
 
@@ -40,12 +40,26 @@ public class AdministrationPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		JTabbedPane jTabbedPane = new JTabbedPane();
 		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
-//		AccountListPanel accountPanel = new AccountListPanel(data);
-//		jTabbedPane.addTab(accountPanel.getTitle(), null, accountPanel, accountPanel.getPanelToolTip());
-//		CategoryListPanel categoryPanel = new CategoryListPanel(data);
-//		jTabbedPane.addTab(categoryPanel.getTitle(), null, categoryPanel, categoryPanel.getToolTipText());
-		PeriodicalTransactionListPanel periodicTransactionPanel = new PeriodicalTransactionListPanel(data);
-		jTabbedPane.addTab(periodicTransactionPanel.getTitle(), null, periodicTransactionPanel, periodicTransactionPanel.getToolTipText());
+		panels = new AbstractListAdministrationPanel[]{
+/*				new AccountListPanel(data),
+				new CategoryListPanel(data),*/
+				new PeriodicalTransactionListPanel(data)
+		};
+		for (int i = 0; i < panels.length; i++) {
+			jTabbedPane.addTab(panels[i].getTitle(), null, panels[i], panels[i].getToolTipText());
+		}
 		this.add(jTabbedPane, gridBagConstraints);
+	}
+
+	void saveState(Properties properties) {
+		for (int i = 0; i < panels.length; i++) {
+			panels[i].saveState(properties);
+		}
+	}
+
+	void restoreState(Properties properties) {
+		for (int i = 0; i < panels.length; i++) {
+			panels[i].restoreState(properties);
+		}
 	}
 }

@@ -24,10 +24,16 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	}
 	
 	public String getPanelTitle() {
-		return LocalizationData.get("MainFrame.BalanceHistory");
+		return LocalizationData.get("BalanceHistory.title");
 	}
 
 	public JPanel getPanel() {
 		return panel;
 	}
+
+	@Override
+	public String getPanelToolIp() {
+		return LocalizationData.get("BalanceHistory.toolTip");
+	}
+
 }
