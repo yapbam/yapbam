@@ -155,6 +155,11 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		super(data);
 	}
 	
+	@Override
+	protected String getTitle() {
+		return "Gestion des comptes";
+	}
+
 	public String getPanelToolTip() {
 		return "Cet onglet permet de gérer les comptes";
 	}
@@ -170,5 +175,11 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	}
 	protected Action getDeleteButtonAction() {
 		return new DeleteAccountAction((GlobalData) data);
+	}
+
+	@Override
+	protected Action getDuplicateButtonAction() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

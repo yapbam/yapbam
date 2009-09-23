@@ -6,16 +6,18 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import net.yapbam.data.PeriodicalTransaction;
+import net.yapbam.ihm.IconManager;
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.dialogs.AbstractDialog;
 import net.yapbam.ihm.dialogs.PeriodicalTransactionDialog;
 
 @SuppressWarnings("serial")
-public class EditPeriodicalTransactionAction extends AbstractAction {//LOCAL
+public class EditPeriodicalTransactionAction extends AbstractAction {
 	private PeriodicalTransactionsTable table;
 	
 	public EditPeriodicalTransactionAction(PeriodicalTransactionsTable table) {
-		super("Editer");
-        putValue(SHORT_DESCRIPTION, "Ouvre le dialogue d'édition de l'opération périodique sélectionnée");
+		super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT); //$NON-NLS-1$
+        putValue(SHORT_DESCRIPTION, LocalizationData.get("PeriodicalTransactionManager.edit.toolTip")); //$NON-NLS-1$
         this.table = table;
 	}
 	

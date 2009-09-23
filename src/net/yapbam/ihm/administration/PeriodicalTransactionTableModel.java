@@ -25,7 +25,7 @@ import net.yapbam.ihm.transactiontable.SpreadState;
 import net.yapbam.ihm.transactiontable.SpreadableTableModel;
 
 @SuppressWarnings("serial")
-final class PeriodicalTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {//LOCAL
+final class PeriodicalTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
@@ -54,9 +54,9 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 		if (columnIndex==3) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
 		if (columnIndex==4) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
 		if (columnIndex==5) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
-		if (columnIndex==6) return "Prochaine échéance";
-		if (columnIndex==7) return "Tous les";
-		if (columnIndex==8) return "Active";
+		if (columnIndex==6) return LocalizationData.get("PeriodicalTransactionManager.nextDate.column"); //$NON-NLS-1$
+		if (columnIndex==7) return LocalizationData.get("PeriodicalTransactionManager.period.column"); //$NON-NLS-1$
+		if (columnIndex==8) return LocalizationData.get("PeriodicalTransactionManager.active.column"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
 
@@ -128,15 +128,15 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 			DateStepper period = transaction.getNextDateBuilder();
 			String result;
 			if (period instanceof DayDateStepper) {
-				result = MessageFormat.format("{0,number} jours", ((DayDateStepper)period).getStep());
+				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.daily.content"), ((DayDateStepper)period).getStep()); //$NON-NLS-1$
 			} else if (period instanceof MonthDateStepper) {
-				result = MessageFormat.format("{0,number} mois le {1,number}", ((MonthDateStepper)period).getPeriod(), ((MonthDateStepper)period).getDay());
+				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.monthly.content"), ((MonthDateStepper)period).getPeriod(), ((MonthDateStepper)period).getDay()); //$NON-NLS-1$
 			} else {
-				result = "?";
+				result = "?"; //$NON-NLS-1$
 			}
 			return result;
 		} else if (columnIndex==8) return transaction.isEnabled();
-		return "?";
+		throw new IllegalArgumentException();
 	}
 
 	@Override

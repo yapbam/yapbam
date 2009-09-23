@@ -20,6 +20,11 @@ public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
 		super(data);
 	}
 	
+	@Override
+	protected String getTitle() {
+		return "Gestion des catégories";
+	}
+
 	public String getPanelToolTip() {
 		return "Cet onglet permet de gérer les catégories";
 	}
@@ -85,5 +90,11 @@ public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
 				// TODO Auto-generated method stub
 			}
 		};
+	}
+
+	@Override
+	protected Action getDuplicateButtonAction() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

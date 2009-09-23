@@ -28,7 +28,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		dialog.setVisible(true);
 		PeriodicalTransaction newTransaction = dialog.getTransaction();
 		if (newTransaction!=null) {
-			if (transaction!=null) data.remove(transaction);
+			if (transaction!=null) System.out.println(data.remove(transaction));//TODO
 			data.add(newTransaction);
 		}
 		return newTransaction;
