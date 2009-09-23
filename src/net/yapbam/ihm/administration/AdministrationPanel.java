@@ -39,6 +39,7 @@ public class AdministrationPanel extends JPanel {
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		JTabbedPane jTabbedPane = new JTabbedPane();
+		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
 //		AccountListPanel accountPanel = new AccountListPanel(data);
 //		jTabbedPane.addTab("Gestion des comptes", null, accountPanel, accountPanel.getPanelToolTip());
 //		CategoryListPanel categoryPanel = new CategoryListPanel(data);

@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -13,7 +15,7 @@ import net.yapbam.data.*;
 import net.yapbam.ihm.LocalizationData;
 
 /** This dialog allows to create or edit a transaction */
-public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //LOCAL
+public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	private static final long serialVersionUID = 1L;
 	
 	public static PeriodicalTransaction open(GlobalData data, Window frame, PeriodicalTransaction transaction) {
@@ -33,14 +35,14 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //L
 	}
 	
 	private PeriodicalTransactionDialog(Window owner, GlobalData data, PeriodicalTransaction transaction) {
-		super(owner, (transaction==null?LocalizationData.get("PeriodicalTransactionDialog.title.new"):LocalizationData.get("PeriodicalTransactionDialog.title.edit")), data, transaction);
+		super(owner, (transaction==null?LocalizationData.get("PeriodicalTransactionDialog.title.new"):LocalizationData.get("PeriodicalTransactionDialog.title.edit")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
 		super.setContent(transaction);
 		PeriodicalTransaction t = (PeriodicalTransaction) transaction;
-		generationPanel.getActivated().setSelected(t.isEnabled());
-		generationPanel.getDate().setDate(t.getNextDate());
+		generationPanel.setActivated(t.isEnabled());
+		generationPanel.setNextDate(t.getNextDate());
 		generationPanel.setDateStepper(t.getNextDateBuilder());
 		updateOkButtonEnabled();
 	}
@@ -48,18 +50,24 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //L
 	@Override
 	protected JPanel createCenterPane(Object data) {
 		JPanel center = new JPanel(new BorderLayout());
-		center.add(buildPeriodicalPanel(),BorderLayout.NORTH);
 		JPanel transactionPane = super.createCenterPane(data);
-		transactionPane.setBorder(BorderFactory.createTitledBorder("Opération"));
+		transactionPane.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PeriodicalTransactionDialog.transactionBorderTitle"))); //$NON-NLS-1$
 		center.add (transactionPane, BorderLayout.CENTER);
+		center.add(buildPeriodicalPanel(),BorderLayout.NORTH);
 		return center;
 	}
 	
 	private GenerationPanel generationPanel;
 	
 	private JComponent buildPeriodicalPanel() {
-		generationPanel = new GenerationPanel(this);
-		generationPanel.setBorder(BorderFactory.createTitledBorder("Génération"));
+		generationPanel = new GenerationPanel();
+		generationPanel.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		});
+		generationPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PeriodicalTransactionDialog.generationBorderTitle"))); //$NON-NLS-1$
 		return generationPanel;
 	}
 
@@ -72,7 +80,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //L
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
 		return new PeriodicalTransaction(description.getText().trim(), amount, this.data.getAccount(selectedAccount),
-				getCurrentMode(), categories.getCategory(), subTransactions, generationPanel.getDate().getDate(), generationPanel.getActivated().isSelected(),
+				getCurrentMode(), categories.getCategory(), subTransactions, generationPanel.getNextDate(), generationPanel.isActivated(),
 				0, generationPanel.getDateStepper());
 	}
 	
@@ -89,9 +97,9 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog { //L
 	@Override
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause(); 
-		if ((disabledCause!=null) || !generationPanel.getActivated().isSelected()) return disabledCause;
-		if (generationPanel.getDate().getDate()==null) return "La prochaine date est incorrecte";
-		if (generationPanel.getDateStepper()==null) return "Comment expliquer ça simplement ?";
+		if ((disabledCause!=null) || !generationPanel.isActivated()) return disabledCause;
+		if (generationPanel.getNextDate()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
+		if (generationPanel.getDateStepper()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper0"); //$NON-NLS-1$
 		return null;
 	}
 }
