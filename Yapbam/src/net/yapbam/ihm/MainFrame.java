@@ -135,7 +135,7 @@ public class MainFrame extends JFrame implements DataListener {
             JPanel pane = plugins[i].getPanel();
     		if (pane!=null) {
     			paneledPlugins.add(plugins[i]);
-    			mainPane.add(plugins[i].getPanelTitle(), pane);
+    			mainPane.addTab(plugins[i].getPanelTitle(), null, plugins[i].getPanel(), plugins[i].getPanelToolIp());
     		}
 		}
         return mainPane;

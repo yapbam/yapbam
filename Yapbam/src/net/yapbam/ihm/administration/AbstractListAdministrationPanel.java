@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.Object;
+import java.util.Properties;
 
 public abstract class AbstractListAdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -213,5 +214,11 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 			duplicateButton.setAction(duplicateButtonAction);
 		}
 		return duplicateButton;
+	}
+
+	public void saveState(Properties properties) {
+	}
+
+	public void restoreState(Properties properties) {
 	}
 }

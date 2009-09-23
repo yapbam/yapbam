@@ -5,11 +5,14 @@ import javax.swing.JTable;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.ihm.LocalizationData;
+import net.yapbam.ihm.YapbamState;
 import net.yapbam.ihm.actions.NewPeriodicalTransactionAction;
 
 import java.lang.Object;
+import java.util.Properties;
 
 public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel {
+	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration.";
 	private static final long serialVersionUID = 1L;
 
 	public PeriodicalTransactionListPanel(Object data) {
@@ -39,5 +42,15 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	@Override
 	protected JTable instantiateJTable() {
 		return new PeriodicalTransactionsTable(new PeriodicalTransactionTableModel(this));
+	}
+	@Override
+	public void restoreState(Properties properties) {
+		super.restoreState(properties);
+		YapbamState.restoreState(properties, getJTable(), STATE_PREFIX);
+	}
+	@Override
+	public void saveState(Properties properties) {
+		super.saveState(properties);
+		YapbamState.saveState(properties, getJTable(), STATE_PREFIX);
 	}
 }

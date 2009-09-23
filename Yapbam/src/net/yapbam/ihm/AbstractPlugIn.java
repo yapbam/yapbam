@@ -24,6 +24,10 @@ public abstract class AbstractPlugIn {
 	public String getPanelTitle() {
 		return null;
 	}
+	
+	public String getPanelToolIp() {
+		return null;
+	}
 
 	public JPanel getPanel() {
 		return null;
