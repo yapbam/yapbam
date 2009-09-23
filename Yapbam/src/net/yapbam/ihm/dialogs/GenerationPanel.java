@@ -153,6 +153,7 @@ public class GenerationPanel extends JPanel {
 		if (!areEquals(next, currentNextDate)) {
 			Object old = currentNextDate;
 			currentNextDate = next;
+			this.getDate().setDate(currentNextDate);
 			firePropertyChange(NEXT_DATE_PROPERTY, old, currentNextDate);
 		}
 	}

@@ -18,6 +18,8 @@ import net.yapbam.ihm.LocalizationData;
 public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	private static final long serialVersionUID = 1L;
 	
+	private GenerationPanel generationPanel;
+	
 	public static PeriodicalTransaction open(GlobalData data, Window frame, PeriodicalTransaction transaction) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
@@ -28,7 +30,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		dialog.setVisible(true);
 		PeriodicalTransaction newTransaction = dialog.getTransaction();
 		if (newTransaction!=null) {
-			if (transaction!=null) System.out.println(data.remove(transaction));//TODO
+			if (transaction!=null) data.remove(transaction);
 			data.add(newTransaction);
 		}
 		return newTransaction;
@@ -44,7 +46,6 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		generationPanel.setActivated(t.isEnabled());
 		generationPanel.setNextDate(t.getNextDate());
 		generationPanel.setDateStepper(t.getNextDateBuilder());
-		updateOkButtonEnabled();
 	}
 
 	@Override
@@ -57,17 +58,15 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		return center;
 	}
 	
-	private GenerationPanel generationPanel;
-	
 	private JComponent buildPeriodicalPanel() {
 		generationPanel = new GenerationPanel();
+		generationPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PeriodicalTransactionDialog.generationBorderTitle"))); //$NON-NLS-1$
 		generationPanel.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateOkButtonEnabled();
 			}
 		});
-		generationPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PeriodicalTransactionDialog.generationBorderTitle"))); //$NON-NLS-1$
 		return generationPanel;
 	}
 
@@ -80,8 +79,8 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
 		return new PeriodicalTransaction(description.getText().trim(), amount, this.data.getAccount(selectedAccount),
-				getCurrentMode(), categories.getCategory(), subTransactions, generationPanel.getNextDate(), generationPanel.isActivated(),
-				0, generationPanel.getDateStepper());
+				getCurrentMode(), categories.getCategory(), subTransactions, generationPanel.getNextDate(),
+				generationPanel.isActivated(), generationPanel.getDateStepper());
 	}
 	
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {}
@@ -99,7 +98,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		String disabledCause = super.getOkDisabledCause(); 
 		if ((disabledCause!=null) || !generationPanel.isActivated()) return disabledCause;
 		if (generationPanel.getNextDate()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
-		if (generationPanel.getDateStepper()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper0"); //$NON-NLS-1$
+		if (generationPanel.getDateStepper()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper"); //$NON-NLS-1$
 		return null;
 	}
 }

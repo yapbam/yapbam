@@ -1,9 +1,11 @@
 package net.yapbam.ihm.transactiontable;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.DataEvent;
@@ -35,6 +37,6 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println ("not already implemented ... but it will come very, very soon"); //TODO
+		JOptionPane.showMessageDialog((Component)e.getSource(), "not already implemented ... but it will come very, very soon","Not yet",JOptionPane.INFORMATION_MESSAGE); //TODO
 	}
 }
