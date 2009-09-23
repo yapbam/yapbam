@@ -7,6 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -14,35 +16,41 @@ import javax.swing.JComboBox;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.MonthDateStepper;
+import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.widget.AutoSelectFocusListener;
 import net.yapbam.ihm.widget.DateWidget;
 import net.yapbam.ihm.widget.IntegerWidget;
 import java.lang.Integer;
+import java.util.Date;
 
-public class GenerationPanel extends JPanel { //LOCAL
+public class GenerationPanel extends JPanel {
+	// Properties
+	public static final String ACTIVATED_PROPERTY = "activated";  //  @jve:decl-index=0: //$NON-NLS-1$
+	public static final String DATE_STEPPER_PROPERTY = "dateStepper"; //$NON-NLS-1$
+	public static final String NEXT_DATE_PROPERTY = "nextDate"; //$NON-NLS-1$
 
 	private static final long serialVersionUID = 1L;
-	private JCheckBox activated = null;
+	private JCheckBox activatedBox = null;
 	private JLabel jLabel = null;
 	private DateWidget date = null;
 	private JLabel jLabel1 = null;
 	private IntegerWidget nb = null;
 	private JComboBox kind = null;
 	
-	private AbstractDialog dialog;
 	private JPanel jPanel = null;
 	private JLabel jLabel2 = null;
 	private IntegerWidget day = null;
 
-	public GenerationPanel(AbstractDialog dialog) {
+	private DateStepper currentDateStepper;  //  @jve:decl-index=0:
+	private Date currentNextDate;
+
+	public GenerationPanel() {
 		super();
-		this.dialog = dialog;
 		initialize();
 	}
 
 	/**
 	 * This method initializes this
-	 * 
 	 * @return void
 	 */
 	private void initialize() {
@@ -52,7 +60,7 @@ public class GenerationPanel extends JPanel { //LOCAL
 		gridBagConstraints11.anchor = GridBagConstraints.WEST;
 		gridBagConstraints11.gridy = 3;
 		jLabel1 = new JLabel();
-		jLabel1.setText("Puis tous les");
+		jLabel1.setText(LocalizationData.get("PeriodicalTransactionDialog.period")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.NONE;
 		gridBagConstraints2.gridy = 0;
@@ -67,7 +75,7 @@ public class GenerationPanel extends JPanel { //LOCAL
 		gridBagConstraints1.anchor = GridBagConstraints.EAST;
 		gridBagConstraints1.gridy = 0;
 		jLabel = new JLabel();
-		jLabel.setText("Prochaine date : ");
+		jLabel.setText(LocalizationData.get("PeriodicalTransactionDialog.nextDate")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -75,31 +83,42 @@ public class GenerationPanel extends JPanel { //LOCAL
 		gridBagConstraints.gridy = 0;
 		this.setSize(479, 200);
 		this.setLayout(new GridBagLayout());
-		this.add(getActivated(), gridBagConstraints);
+		this.setActivated(true);
+		this.add(getActivatedBox(), gridBagConstraints);
 		this.add(jLabel, gridBagConstraints1);
 		this.add(getDate(), gridBagConstraints2);
 		this.add(getJPanel(), gridBagConstraints11);
+		updateDateStepper();
+		currentNextDate = getDate().getDate();
 	}
 
 	/**
-	 * This method initializes activated	
+	 * This method initializes activatedBox	
 	 * 	
 	 * @return javax.swing.JCheckBox	
 	 */
-	public JCheckBox getActivated() {
-		if (activated == null) {
-			activated = new JCheckBox();
-			activated.setText("Activée");
-			activated.setSelected(true);
-			activated.setToolTipText("Décochez cette case pour suspendre la génération de cette opération");
-			activated.addItemListener(new ItemListener() {
+	private JCheckBox getActivatedBox() {
+		if (activatedBox == null) {
+			activatedBox = new JCheckBox();
+			activatedBox.setText(LocalizationData.get("PeriodicalTransactionDialog.activated")); //$NON-NLS-1$
+			activatedBox.setSelected(true);
+			activatedBox.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.activated.toolTip")); //$NON-NLS-1$
+			activatedBox.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					dialog.updateOkButtonEnabled();
+					firePropertyChange(ACTIVATED_PROPERTY, !activatedBox.isSelected(), activatedBox.isSelected());
 				}
 			});
 		}
-		return activated;
+		return activatedBox;
+	}
+	
+	public boolean isActivated() {
+		return getActivatedBox().isSelected();
+	}
+	
+	public void setActivated(boolean activated) {
+		getActivatedBox().setSelected(activated);
 	}
 
 	/**
@@ -107,17 +126,45 @@ public class GenerationPanel extends JPanel { //LOCAL
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	public DateWidget getDate() {
+	private DateWidget getDate() {
 		if (date == null) {
 			date = new DateWidget();
-			date.addKeyListener(new AutoUpdateOkButtonKeyListener(this.dialog));
+			date.addKeyListener(new KeyAdapter() {
+				public void keyReleased(KeyEvent e) {
+					Date old = currentNextDate;
+					currentNextDate = date.getDate();
+					if (!areEquals(old, currentNextDate)) {
+						firePropertyChange(NEXT_DATE_PROPERTY, old, currentNextDate);
+					}
+				}
+			});
 			date.addFocusListener(new AutoSelectFocusListener());
 			date.setColumns(6);
-			date.setToolTipText("Entrez ici la date de la prochaine opération");
+			date.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.nextDate.toolTip")); //$NON-NLS-1$
 		}
 		return date;
 	}
+	
+	public Date getNextDate() {
+		return currentNextDate;
+	}
+	
+	public void setNextDate(Date next) {
+		if (!areEquals(next, currentNextDate)) {
+			Object old = currentNextDate;
+			currentNextDate = next;
+			firePropertyChange(NEXT_DATE_PROPERTY, old, currentNextDate);
+		}
+	}
 
+	private boolean areEquals (Date d1, Date d2) {
+		if (d1==null) {
+			return (d2==null);
+		} else {
+			return d1.equals(d2);
+		}
+	}
+	
 	/**
 	 * This method initializes nb	
 	 * 	
@@ -127,9 +174,13 @@ public class GenerationPanel extends JPanel { //LOCAL
 		if (nb == null) {
 	        nb = new IntegerWidget(1, Integer.MAX_VALUE);
 	        nb.addFocusListener(new AutoSelectFocusListener());
-	        nb.addKeyListener(new AutoUpdateOkButtonKeyListener(dialog));
+	        nb.addKeyListener(new KeyAdapter() {
+				public void keyReleased(KeyEvent e) {
+					updateDateStepper();
+				}
+			});
 			nb.setColumns(2);
-			nb.setToolTipText("Entrez ici l'interval entre deux opérations");
+			nb.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.step.toolTip")); //$NON-NLS-1$
 		}
 		return nb;
 	}
@@ -141,42 +192,77 @@ public class GenerationPanel extends JPanel { //LOCAL
 	 */
 	private JComboBox getKind() {
 		if (kind == null) {
-			kind = new JComboBox(new String[]{"mois","jours"});
+			kind = new JComboBox(new String[]{LocalizationData.get("PeriodicalTransactionDialog.months"),LocalizationData.get("PeriodicalTransactionDialog.days")}); //$NON-NLS-1$ //$NON-NLS-2$
 			kind.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					boolean visible = isMonthly();
 					jLabel2.setVisible(visible);
 					day.setVisible(visible);
+					updateDateStepper();
 				}
 			});
 		}
 		return kind;
 	}
 	
-	public DateStepper getDateStepper() {
-		if (nb.getValue()==null) return null;
-		if (isMonthly()) {
-			if (day.getValue()==null) return null;
-			return new MonthDateStepper(nb.getValue(), day.getValue());
+	private void updateDateStepper() {
+		DateStepper newStepper;
+		if (nb.getValue()==null) {
+			newStepper = null;
+		} else if (isMonthly()) {
+			if (day.getValue()==null) {
+				newStepper = null;
+			} else {
+				newStepper = new MonthDateStepper(nb.getValue(), day.getValue());
+			}
 		} else {
-			return new DayDateStepper(nb.getValue());
+			newStepper = new DayDateStepper(nb.getValue());
 		}
+		if (!areEquals(newStepper,currentDateStepper)) {
+			Object old = currentDateStepper;
+			currentDateStepper = newStepper;
+			firePropertyChange(DATE_STEPPER_PROPERTY, old, currentDateStepper);
+		}
+	}
+	
+	private boolean areEquals (DateStepper s1, DateStepper s2) {
+		if (s1==null) {
+			return (s2==null);
+		} else if (s2 == null) {
+			return false;
+		} else if (s1 instanceof DayDateStepper) {
+			if (!(s2 instanceof DayDateStepper)) return false;
+			return ((DayDateStepper)s1).equals((DayDateStepper)s2);
+		} else if (s1 instanceof MonthDateStepper) {
+			return ((MonthDateStepper)s1).equals((MonthDateStepper)s2);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public DateStepper getDateStepper() {
+		return currentDateStepper;
 	}
 
 	public void setDateStepper(DateStepper nextDateBuilder) {
-		if (nextDateBuilder instanceof MonthDateStepper) {
-			kind.setSelectedIndex(0);
-			nb.setValue(((MonthDateStepper)nextDateBuilder).getPeriod());
-			day.setValue(((MonthDateStepper)nextDateBuilder).getDay());
-		} else if (nextDateBuilder instanceof DayDateStepper) {
-			kind.setSelectedIndex(1);
-			nb.setValue(((DayDateStepper)nextDateBuilder).getStep());
-		} else if (nextDateBuilder==null) {
-			kind.setSelectedIndex(-1);
-			nb.setText("");
-			day.setText("");
-		} else {
-			throw new IllegalArgumentException();
+		if (!areEquals(nextDateBuilder, currentDateStepper)) {
+			if (nextDateBuilder instanceof MonthDateStepper) {
+				kind.setSelectedIndex(0);
+				nb.setValue(((MonthDateStepper)nextDateBuilder).getPeriod());
+				day.setValue(((MonthDateStepper)nextDateBuilder).getDay());
+			} else if (nextDateBuilder instanceof DayDateStepper) {
+				kind.setSelectedIndex(1);
+				nb.setValue(((DayDateStepper)nextDateBuilder).getStep());
+			} else if (nextDateBuilder==null) {
+				kind.setSelectedIndex(-1);
+				nb.setText(""); //$NON-NLS-1$
+				day.setText(""); //$NON-NLS-1$
+			} else {
+				throw new IllegalArgumentException();
+			}
+			Object old = currentDateStepper;
+			currentDateStepper = nextDateBuilder;
+			firePropertyChange(DATE_STEPPER_PROPERTY, old, currentDateStepper);
 		}
 	}
 
@@ -198,7 +284,7 @@ public class GenerationPanel extends JPanel { //LOCAL
 			gridBagConstraints6.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints6.gridy = 0;
 			jLabel2 = new JLabel();
-			jLabel2.setText("le");
+			jLabel2.setText(LocalizationData.get("PeriodicalTransactionDialog.the")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints5.weightx = 1.0;
@@ -233,7 +319,13 @@ public class GenerationPanel extends JPanel { //LOCAL
 	private IntegerWidget getDay() {
 		if (day == null) {
 			day = new IntegerWidget(1, 31);
-			day.setToolTipText("Entrez ici le jour de l'opération");
+			day.addFocusListener(new AutoSelectFocusListener());
+	        day.addKeyListener(new KeyAdapter() {
+				public void keyReleased(KeyEvent e) {
+					updateDateStepper();
+				}
+			});
+			day.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.day.toolTip")); //$NON-NLS-1$
 			day.setColumns(2);
 		}
 		return day;
