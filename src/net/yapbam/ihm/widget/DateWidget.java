@@ -63,6 +63,6 @@ public class DateWidget extends JTextField {
 	}
 
 	public void setDate(Date date) {
-		this.setText(formatter.format(date));
+		this.setText(date==null?"":formatter.format(date));
 	}
 }

@@ -132,7 +132,7 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 			} else if (period instanceof MonthDateStepper) {
 				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.monthly.content"), ((MonthDateStepper)period).getPeriod(), ((MonthDateStepper)period).getDay()); //$NON-NLS-1$
 			} else {
-				result = "?"; //$NON-NLS-1$
+				result = ""; //$NON-NLS-1$
 			}
 			return result;
 		} else if (columnIndex==8) return transaction.isEnabled();

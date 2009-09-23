@@ -136,11 +136,10 @@ class GlobalDataHandler extends DefaultHandler {
 			DateStepper stepper = (DateStepper) this.tempData.pop();
 			Map<String, String> attributes = (Map<String, String>) this.tempData.pop();
 			PartialTransaction p = new PartialTransaction(this.data, attributes);
-//			String id = attributes.get(Serializer.ID_ATTRIBUTE);
-			Date nextDate = Serializer.toDate(attributes.get(Serializer.NEXT_DATE_ATTRIBUTE));
+			String attribute = attributes.get(Serializer.NEXT_DATE_ATTRIBUTE);
+			Date nextDate = attribute==null?null:Serializer.toDate(attribute);
 			boolean enabled = Boolean.parseBoolean(attributes.get(Serializer.ENABLED_ATTRIBUTE));
-			int anticipation = Integer.parseInt(attributes.get(Serializer.ANTICIPATION_ATTRIBUTE));
-			this.data.add(new PeriodicalTransaction(p.description, p.amount, p.account, p.mode, p.category, lst, nextDate, enabled, anticipation, stepper));
+			this.data.add(new PeriodicalTransaction(p.description, p.amount, p.account, p.mode, p.category, lst, nextDate, enabled, stepper));
 		} else if (qName.equals(Serializer.DATE_STEPPER_TAG)) {
 		} else {
 			System.err.println ("Unknown tag "+qName);

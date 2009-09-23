@@ -46,7 +46,6 @@ public class Serializer {
 	static final String INITIAL_BALANCE_ATTRIBUTE = "initialBalance";
 	static final String ID_ATTRIBUTE = "id";
 	static final String NEXT_DATE_ATTRIBUTE = "next";
-	static final String ANTICIPATION_ATTRIBUTE = "anticipation";
 	static final String LAST_DATE_ATTRIBUTE = "last";
 	static final String ENABLED_ATTRIBUTE = "enabled";
 
@@ -226,7 +225,6 @@ public class Serializer {
 	
 	private void serialize(PeriodicalTransaction periodicalTransaction) throws SAXException {
 		atts.clear();
-//		atts.addAttribute("", "", ID_ATTRIBUTE, "CDATA", periodicalTransaction.getId());
 		atts.addAttribute("","",ACCOUNT_ATTRIBUTE,"CDATA",periodicalTransaction.getAccount().getName());
 		String description = periodicalTransaction.getDescription();
 		if (description!=null) atts.addAttribute("","",DESCRIPTION_ATTRIBUTE,"CDATA",description);
@@ -235,11 +233,12 @@ public class Serializer {
 		if (!mode.equals(Mode.UNDEFINED)) atts.addAttribute("","",MODE_ATTRIBUTE,"CDATA",mode.getName());
 		Category category = periodicalTransaction.getCategory();
 		if (!category.equals(Category.UNDEFINED)) atts.addAttribute("","",CATEGORY_ATTRIBUTE,"CDATA",category.getName());
-		atts.addAttribute("","",NEXT_DATE_ATTRIBUTE,"CDATA",toString(periodicalTransaction.getNextDate()));
-		atts.addAttribute("","",ANTICIPATION_ATTRIBUTE,"CDATA",Integer.toString(periodicalTransaction.getAnticipation()));
 		atts.addAttribute("","",ENABLED_ATTRIBUTE,"CDATA",Boolean.toString(periodicalTransaction.isEnabled()));
+		Date nextDate = periodicalTransaction.getNextDate();
+		if (nextDate!=null) atts.addAttribute("","",NEXT_DATE_ATTRIBUTE,"CDATA",toString(nextDate));
 		hd.startElement("","",PERIODICAL_TAG,atts);
-		serialize(periodicalTransaction.getNextDateBuilder());
+		DateStepper nextDateBuilder = periodicalTransaction.getNextDateBuilder();
+		if (nextDateBuilder!=null) serialize(nextDateBuilder);
 		for (int i = 0; i < periodicalTransaction.getSubTransactionSize(); i++) {
 			serialize(periodicalTransaction.getSubTransaction(i));
 		}

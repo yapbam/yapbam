@@ -13,9 +13,17 @@ import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import javax.swing.JTable;
+import javax.swing.table.TableColumnModel;
+
 public class YapbamState {
 	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
 	
+	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
+	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
+//	private static final String SELECTED_ROW = "selectedRow"; //$NON-NLS-1$
+	private static final String SCROLL_POSITION = "scrollPosition"; //$NON-NLS-1$
+
 	private static final String FRAME_SIZE_WIDTH = "frame.size.width"; //$NON-NLS-1$
 	private static final String FRAME_SIZE_HEIGHT = "frame.size.height"; //$NON-NLS-1$
 	private static final String FRAME_LOCATION_Y = "frame.location.y"; //$NON-NLS-1$
@@ -110,4 +118,47 @@ public class YapbamState {
 	public Properties getProperties() {
 		return properties;
 	}
+	
+	public static void restoreState(Properties properties, JTable table, String prefix) {
+		TableColumnModel model = table.getColumnModel();
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			String valueString = (String) properties.get(prefix+COLUMN_WIDTH+i);
+			if (valueString!=null) {
+				int width = Integer.parseInt(valueString);
+				if (width>0) model.getColumn(i).setPreferredWidth(width);
+			}
+		}
+		// Restore column order
+		for (int i = model.getColumnCount()-1; i>=0 ; i--) {
+			String valueString = (String) properties.get(prefix+COLUMN_INDEX+i);
+			if (valueString!=null) {
+				int modelIndex = Integer.parseInt(valueString);
+				if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
+			}
+		}
+		// Now the selected row (not a very good idea).
+//		String valueString = (String) properties.get(prefix+SELECTED_ROW);
+//		if (valueString!=null) {
+//			int index = Integer.parseInt(valueString);
+//			if (index < table.getRowCount()) table.getSelectionModel().setSelectionInterval(index, index);
+//		}
+		// And the scroll position
+		Rectangle visibleRect = YapbamState.getRectangle(properties.getProperty(prefix+SCROLL_POSITION));
+		if (visibleRect!=null) table.scrollRectToVisible(visibleRect);
+	}
+
+	public static void saveState(Properties properties, JTable table, String prefix) {
+		TableColumnModel model = table.getColumnModel();
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			properties.put(prefix+COLUMN_WIDTH+table.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
+		}
+		// Save the column order (if two or more columns were inverted)
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			properties.put(prefix+COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
+		}
+//		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
+		properties.put(prefix+SCROLL_POSITION, YapbamState.toString(table.getVisibleRect()));
+	}
+
+
 }
