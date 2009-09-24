@@ -67,7 +67,7 @@ public class AccountDialog extends AbstractDialog {
         JPanel centerPane = new JPanel(new BorderLayout());
         
         modesPanel = new ModeListPanel();
-        modesPanel.setBorder(BorderFactory.createTitledBorder("Modes de paiement"));//LOCAL
+        modesPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("AccountDialog.modes.border.title"))); //$NON-NLS-1$
         centerPane.add(northPanel,BorderLayout.NORTH);
         centerPane.add(modesPanel,BorderLayout.CENTER);
         
