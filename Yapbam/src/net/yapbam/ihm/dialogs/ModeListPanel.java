@@ -15,13 +15,11 @@ import javax.swing.table.TableModel;
 import net.yapbam.data.Account;
 import net.yapbam.data.Mode;
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.actions.DeleteModeAction;
 import net.yapbam.ihm.administration.AbstractListAdministrationPanel;
 
 @SuppressWarnings("serial")
 public class ModeListPanel extends AbstractListAdministrationPanel {
 	private String accountName;
-	private JTable table;
 	
 	public ModeListPanel() {
 		super(new ArrayList<Mode>());
@@ -64,8 +62,6 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 		return null;
 	}
 
-
-
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
 			super(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
@@ -89,17 +85,33 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			int row = getJTable().getSelectedRow();
+			Mode old = ((List<Mode>)data).remove(row);
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
-			dialog.setContent(((List<Mode>)data).get(getJTable().getSelectedRow()));
+			dialog.setContent(old);
 			dialog.setVisible(true);
 			Mode mode = dialog.getMode();
-			if (mode!=null) {
-				((List<Mode>)data).add(mode);
-				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+			if (mode==null) {
+				((List<Mode>)data).add(row,old);
+			} else {
+				((List<Mode>)data).add(row,mode);
 			}
+			((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);
 		}
 	}
-	
+	class DeleteModeAction extends AbstractAction {			
+		public DeleteModeAction() {
+			super(LocalizationData.get("GenericButton.delete"));
+	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Delete.tooltip"));
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int row = getJTable().getSelectedRow();
+			((List<Mode>)data).remove(row);
+			((AbstractTableModel)getJTable().getModel()).fireTableRowsDeleted(row,row);
+		}
+	}
 	class DuplicateModeAction extends AbstractAction {
 		public DuplicateModeAction() {
 			super(LocalizationData.get("GenericButton.duplicate")); //$NON-NLS-1$
@@ -112,7 +124,6 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 			dialog.setVisible(true);
 			Mode mode = dialog.getMode();
 			if (mode!=null) {
-				//TODO
 				((List<Mode>)data).add(mode);
 				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
 			}
