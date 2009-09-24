@@ -71,6 +71,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		this.add(getJScrollPane(), BorderLayout.CENTER);
 		this.add(getSouthPanel(), BorderLayout.SOUTH);
 		editButtonAction.setEnabled(false);
+		duplicateButtonAction.setEnabled(false);
 		deleteButtonAction.setEnabled(false);
 	}
 

@@ -241,6 +241,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 				if (ac!=null) {
 					accounts.addItem(ac.getName());
 					accounts.setSelectedIndex(accounts.getItemCount()-1);
+					pack();
 				}
 			}
 		}
@@ -283,6 +284,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 				if (m!=null) {
 					modes.addItem(m.getName());
 					modes.setSelectedIndex(modes.getItemCount()-1);
+					pack();
 				}
 			}
 		}

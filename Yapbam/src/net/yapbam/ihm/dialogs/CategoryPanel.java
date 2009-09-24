@@ -93,6 +93,7 @@ public class CategoryPanel extends JPanel {
 					if (c!=null) {
 						buildCategories();
 						comboBox.setSelectedIndex(data.indexOf(c));
+						AbstractDialog.getOwnerWindow(newButton).pack();
 					}
 				}
 			});

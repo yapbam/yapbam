@@ -100,6 +100,25 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 		}
 	}
 	
+	class DuplicateModeAction extends AbstractAction {
+		public DuplicateModeAction() {
+			super(LocalizationData.get("GenericButton.duplicate")); //$NON-NLS-1$
+	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Duplicate.tooltip")); //$NON-NLS-1$
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
+			dialog.setContent(((List<Mode>)data).get(getJTable().getSelectedRow()));
+			dialog.setVisible(true);
+			Mode mode = dialog.getMode();
+			if (mode!=null) {
+				//TODO
+				((List<Mode>)data).add(mode);
+				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+			}
+		}
+	}
+	
 	@Override
 	protected JTable instantiateJTable() {
 		return new JTable(getTableModel());
@@ -148,7 +167,6 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 
 	@Override
 	protected Action getDuplicateButtonAction() {
-		// TODO Auto-generated method stub
-		return null;
+		return new DuplicateModeAction();
 	}
 }
