@@ -26,6 +26,6 @@ public class EditTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = table.getSelectedTransaction();
-		TransactionDialog.open(table.getGlobalData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction);
+		TransactionDialog.open(table.getGlobalData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction, true);
 	}
 }

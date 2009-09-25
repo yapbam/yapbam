@@ -24,6 +24,6 @@ public class DuplicateTransactionAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		TransactionDialog.open(table.getGlobalData(),
 				AbstractTransactionDialog.getOwnerWindow(table),
-				(Transaction)table.getSelectedTransaction().clone());
+				(Transaction)table.getSelectedTransaction().clone(), false);
 	}
 }
