@@ -20,13 +20,13 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	
 	private GenerationPanel generationPanel;
 	
-	public static PeriodicalTransaction open(GlobalData data, Window frame, PeriodicalTransaction transaction) {
+	public static PeriodicalTransaction open(GlobalData data, Window frame, PeriodicalTransaction transaction, boolean edit) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
 			AccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (data.getAccountsNumber()==0) return null;
 		}
-		PeriodicalTransactionDialog dialog = new PeriodicalTransactionDialog(frame, data, transaction);
+		PeriodicalTransactionDialog dialog = new PeriodicalTransactionDialog(frame, data, transaction, edit);
 		dialog.setVisible(true);
 		PeriodicalTransaction newTransaction = dialog.getTransaction();
 		if (newTransaction!=null) {
@@ -36,8 +36,8 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		return newTransaction;
 	}
 	
-	private PeriodicalTransactionDialog(Window owner, GlobalData data, PeriodicalTransaction transaction) {
-		super(owner, (transaction==null?LocalizationData.get("PeriodicalTransactionDialog.title.new"):LocalizationData.get("PeriodicalTransactionDialog.title.edit")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
+	private PeriodicalTransactionDialog(Window owner, GlobalData data, PeriodicalTransaction transaction, boolean edit) {
+		super(owner, (edit?LocalizationData.get("PeriodicalTransactionDialog.title.edit"):LocalizationData.get("PeriodicalTransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected void setContent(AbstractTransaction transaction) {

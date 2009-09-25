@@ -18,7 +18,6 @@ public class DeleteTransactionAction extends AbstractAction {
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Delete.ToolTip"));
         putValue(Action.MNEMONIC_KEY,(int)LocalizationData.getChar("MainMenu.Transactions.Delete.Mnemonic")); //$NON-NLS-1$
         this.table = table;
-        this.setEnabled(false);
 	}
 	
 	@Override

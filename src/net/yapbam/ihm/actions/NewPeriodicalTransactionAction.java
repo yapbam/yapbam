@@ -22,6 +22,6 @@ public class NewPeriodicalTransactionAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		PeriodicalTransactionDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), null);
+		PeriodicalTransactionDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), null, false);
 	}
 }
