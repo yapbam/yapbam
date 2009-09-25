@@ -25,6 +25,6 @@ public class DuplicatePeriodicTransactionAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		PeriodicalTransactionDialog.open(table.getGlobalData(),
 				AbstractTransactionDialog.getOwnerWindow(table),
-				(PeriodicalTransaction)table.getSelectedTransaction().clone());
+				(PeriodicalTransaction)table.getSelectedTransaction().clone(), false);
 	}
 }

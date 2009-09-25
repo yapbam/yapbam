@@ -18,7 +18,6 @@ public class DuplicateTransactionAction extends AbstractAction {
 		super(LocalizationData.get("MainMenu.Transactions.Duplicate"), IconManager.DUPLICATE_TRANSACTION);
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Duplicate.ToolTip"));
         this.table = table;
-        this.setEnabled(false);
 	}
 	
 	@Override

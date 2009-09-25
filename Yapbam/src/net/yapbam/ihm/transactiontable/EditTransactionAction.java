@@ -21,7 +21,6 @@ public class EditTransactionAction extends AbstractAction {
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Edit.ToolTip")); //$NON-NLS-1$
         putValue(Action.MNEMONIC_KEY, (int)LocalizationData.getChar("MainMenu.Transactions.Edit.Mnemonic")); //$NON-NLS-1$
         this.table = table;
-        this.setEnabled(false);
 	}
 	
 	@Override

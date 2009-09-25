@@ -37,6 +37,8 @@ public class TransactionsPlugInPanel extends JPanel {
 	Action deleteTransactionAction;
 	Action generatePeriodical;
 	Action checkTransactionAction;
+	Action convertToPericalTransactionAction;
+
 	
 	private AccountFilteredData acFilter;
 	
@@ -58,10 +60,16 @@ public class TransactionsPlugInPanel extends JPanel {
         this.duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
         this.deleteTransactionAction = new DeleteTransactionAction(transactionTable);
         this.checkTransactionAction = new CheckTransactionAction(this);
+        this.convertToPericalTransactionAction = new ConvertToPeriodicalTransactionAction(transactionTable);
         this.generatePeriodical = new GeneratePeriodicalTransactionsAction(transactionTable);
         
+        this.editTransactionAction.setEnabled(false);
+        this.duplicateTransactionAction.setEnabled(false);
+        this.deleteTransactionAction.setEnabled(false);
+        this.convertToPericalTransactionAction.setEnabled(false);
+        
         transactionTable.addMouseListener(new MouseAdapter() {
-        	public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
         		maybeShowPopup(e);
         	}
             public void mousePressed(MouseEvent e) {
@@ -92,6 +100,8 @@ public class TransactionsPlugInPanel extends JPanel {
                     popup.add(new JMenuItem(editTransactionAction));
                     popup.add(new JMenuItem(duplicateTransactionAction));
                     popup.add(new JMenuItem(deleteTransactionAction));
+                    popup.addSeparator();
+                    popup.add(new JMenuItem(convertToPericalTransactionAction));
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -105,6 +115,7 @@ public class TransactionsPlugInPanel extends JPanel {
 					duplicateTransactionAction.setEnabled(ok);
 					editTransactionAction.setEnabled(ok);
 					deleteTransactionAction.setEnabled(ok);
+					convertToPericalTransactionAction.setEnabled(ok);
 				}
 			}
 		});
