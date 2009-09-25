@@ -30,13 +30,13 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @param transaction the transaction we want to edit, or null if we want to create a new transaction
 	 * @return the new transaction or the edited one
 	 */
-	public static Transaction open(GlobalData data, Window frame, Transaction transaction) {
+	public static Transaction open(GlobalData data, Window frame, Transaction transaction, boolean edit) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
 			AccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (data.getAccountsNumber()==0) return null;
 		}
-		TransactionDialog dialog = new TransactionDialog(frame, data, transaction);
+		TransactionDialog dialog = new TransactionDialog(frame, data, transaction, edit);
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if (newTransaction!=null) {
@@ -46,8 +46,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return newTransaction;
 	}
 	
-	private TransactionDialog(Window owner, GlobalData data, Transaction transaction) {
-		super(owner, (transaction==null?LocalizationData.get("TransactionDialog.title.new"):LocalizationData.get("TransactionDialog.title.edit")), data, transaction);
+	private TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
+		super(owner, (edit?LocalizationData.get("TransactionDialog.title.edit"):LocalizationData.get("TransactionDialog.title.new")), data, transaction);
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
