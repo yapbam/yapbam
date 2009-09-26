@@ -2,12 +2,15 @@ package net.yapbam.data;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
+import net.yapbam.date.helpers.DateStepper;
 
 public class GlobalData extends DefaultListenable {
 	private static final long serialVersionUID = 1L;
@@ -227,6 +230,29 @@ public class GlobalData extends DefaultListenable {
 		PeriodicalTransaction removed = this.periodicals.remove(index);
 		this.fireEvent(new PeriodicalTransactionRemovedEvent(this, index, removed));
 		setChanged();
+	}
+	
+	/** Generate transactions from the periodical transactions until a date.
+	 * The transactions are not added to the global data and the periodical transactions
+	 * are not changed : their next date fields remains unchanged.
+	 * @param date Date until the transactions had to be generated (inclusive)
+	 * @return a transaction array.
+	 */
+	public Transaction[] generateTransactionsFromPeriodicals(Date date) {
+		List<Transaction> result = new ArrayList<Transaction>();
+		for (int i=0; i<getPeriodicalTransactionsNumber(); i++) {
+			PeriodicalTransaction p = getPeriodicalTransaction(i);
+			if (p.isEnabled() && (p.getNextDate().compareTo(date)<=0)) {
+				double amount = p.getAmount();
+				Mode mode = p.getMode();
+				DateStepper vdStepper = amount<0?mode.getExpenseVdc():mode.getReceiptVdc();
+				for (Date tDate = p.getNextDate();tDate.compareTo(date)<=0;tDate=p.getNextDateBuilder().getNextStep(tDate)) {
+					result.add(new Transaction(tDate, null, p.getDescription(), amount, p.getAccount(), mode, p.getCategory(),
+							vdStepper.getNextStep(tDate), null, Arrays.asList(p.getSubTransactions())));
+				}
+			}
+		}
+		return result.toArray(new Transaction[result.size()]);
 	}
 
 	private void setChanged() {

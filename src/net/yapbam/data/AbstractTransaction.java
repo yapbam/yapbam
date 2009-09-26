@@ -67,6 +67,10 @@ public class AbstractTransaction implements Cloneable {
 	public SubTransaction getSubTransaction(int index) {
 		return this.subTransactions.get(index);
 	}
+	
+	public SubTransaction[] getSubTransactions() {
+		return this.subTransactions.toArray(new SubTransaction[this.subTransactions.size()]);
+	}
 
 	public long getId() {
 		return id;
