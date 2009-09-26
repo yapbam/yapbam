@@ -26,7 +26,6 @@ import net.yapbam.ihm.widget.CoolJComboBox;
 
 /** This dialog allows to create or edit a transaction */
 public abstract class AbstractTransactionDialog extends AbstractDialog {
-	//FIXME Bug when a long mode name is added, the window is refreshed badly
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 	
