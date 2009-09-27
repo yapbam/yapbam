@@ -14,7 +14,7 @@ import net.yapbam.ihm.dialogs.AbstractDialog;
 import net.yapbam.ihm.dialogs.PeriodicalTransactionDialog;
 
 @SuppressWarnings("serial")
-class ConvertToPeriodicalTransactionAction extends AbstractAction {//LOCAL
+class ConvertToPeriodicalTransactionAction extends AbstractAction {
 	private TransactionTable table;
 
 	public ConvertToPeriodicalTransactionAction(TransactionTable table) {

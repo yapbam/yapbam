@@ -15,40 +15,42 @@ color: #ff9900;
 -->
  </style></head>
 <body>
-<h1>Version &nbsp;0.1.21 (???)</h1>
-<p>This version is a preview with somme missing functionnalities
-and, probably, a lot of bugs.<br>
-You will also find a lot of GUI items without any
+<h1>Version &nbsp;0.2.00 (09/27/2009)</h1>
+<p>This version is a partial implementation with some missing functionnalities
+and, probably, some bugs.<br>
+You will also find some GUI items without any
 tooltip.<br>
 <br>
 Nevertheless it's already useful to manage some bank account (I
 currently use
 it for my own). Feel free to report any bug. Please be indulgent, it's
-still a preview ;-) <br>
+still under development ;-) <br>
 </p>
 <p>The next functionnalities I hope to add :
 </p>
 <ol>
-<li>The&nbsp;periodic transactions generation ... very, very soon.</li>
-<li>Something
+
+</ol><ul><li>Something
 to manage accounts, category ... (currently, you can add them, but not
 edit or remove what you've added). For now, you have to manually edit
-the XML file ... at your own risks.</li>
-<li>Some statistics or charts about categories.</li>
-<li>Maybe - The ability to compress and encrypt data files.</li>
-<li>Maybe - An auto-complete wizard in the "new transaction"
+the XML file ... at your own risks.</li><li>Some statistics or charts about categories.</li><li>Maybe - The ability to compress and encrypt data files.</li><li>Maybe - An auto-complete wizard in the "new transaction"
 dialog that would be able to complete the description as you type and
-to deduce other informations (especially categories).</li>
+to deduce other informations (especially categories).</li></ul><ol>
+
+
+
 </ol>
 <h2>New in this version</h2>
-<ul><li>Add menu items to convert a transaction into a periodical transaction.</li>
+<ul><li>Introduce full periodic transactions support (now, they can be
+generated). I plan to improve this fucntionnality which the ability to
+edit generated transactions in the generation dialog.</li><li>Add menu items to convert a transaction into a periodical transaction.</li>
 </ul>
 <hr>
 <h1>Older releases</h1>
-<h2>Version 0.1.20 (24/09/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> : In the new/edit transaction dialog, 
+<h2>Version 0.1.20 (09/24/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> : In the new/edit transaction dialog, 
     when you created a new mode, account or category with a very long name, the 
     window appearence was broken.</li><li>Oups ! Some wording were not translated in the new Account dialog.</li><li><span class="bugFix">Bug fixed</span> : The duplicate button in the new 
-    account dialog had no wording ... and did nothing.</li><li><span class="bugFix">Bug fixed</span> : A lot of problems in the new account dialog with the mode list buttons.</li></ul><h2>Version 0.1.19 (23/09/2009)</h2>
+    account dialog had no wording ... and did nothing.</li><li><span class="bugFix">Bug fixed</span> : A lot of problems in the new account dialog with the mode list buttons.</li></ul><h2>Version 0.1.19 (09/23/2009)</h2>
 <ul>
   <li>Add an administration panel, with the ability to define and manage periodical 
     transactions.</li>
@@ -56,14 +58,14 @@ to deduce other informations (especially categories).</li>
   <li>Change the "duplicate" button behaviour (in the transactions panel). Now, 
     the edition dialog is automatically opened when you duplicate a transaction.</li>
 </ul>
-<h2>Version 0.1.18 (19/09/2009)</h2>
-<ul><li><span class="bugFix">Bug fixed</span> : Some problems in menu items refresh. Some of them were enabled or disabled ... but they'd rather not.</li><li>Add some toolTips.</li><li>Add an alert dialog when Yapbam is launched with an incompatible old java version (prior to 1.6).</li></ul><h2>Version 0.1.17 (18/09/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> :
+<h2>Version 0.1.18 (09/19/2009)</h2>
+<ul><li><span class="bugFix">Bug fixed</span> : Some problems in menu items refresh. Some of them were enabled or disabled ... but they'd rather not.</li><li>Add some toolTips.</li><li>Add an alert dialog when Yapbam is launched with an incompatible old java version (prior to 1.6).</li></ul><h2>Version 0.1.17 (09/18/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> :
 The proxy authentication was broken.</li><li><span class="bugFix">Bug fixed</span> :
 When an account was added, sometimes, the filter menu was broken.</li><li>Add a menuItem to check the selected transaction in the
 transactions table contextual menu.</li><li>Oups ! Some wording were not translated in the new Account
 dialog.</li><li><span class="develop">Developpers</span>
 : Switch to a plug-in architecture for all the
-panels in the main window.</li></ul><h2>Version 0.1.16 (17/09/2009)</h2>
+panels in the main window.</li></ul><h2>Version 0.1.16 (09/17/2009)</h2>
 <ul>
 <li>Add support to proxid Internet connections.</li>
 <li>Add a contextual menu on the transactions table.</li>
@@ -72,7 +74,7 @@ A double click with the right button (or the central one) edited the
 selected transaction (not the one clicked). Now right double clicks are
 ignored</li>
 </ul>
-<h2>Version 0.1.15 (14/09/2009)</h2>
+<h2>Version 0.1.15 (09/14/2009)</h2>
 <ul>
 <li><span class="bugFix">Bug2858596 fixed </span>
 : <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2858596&amp;group_id=276272&amp;atid=1173518">"Deleted
@@ -80,14 +82,14 @@ or added transactions has no effect on display"</a>.</li>
 <li>Add underground Internet proxied connection support (need
 to edit the preference file by hand).</li>
 </ul>
-<h2>Version 0.1.14 (13/09/2009)</h2>
+<h2>Version 0.1.14 (09/13/2009)</h2>
 <ul>
 <li><span class="bugFix">Bug fixed</span> :
 When the preferred localization changed, the dates in the transaction
 table were still displayed using the initial localization.</li>
 <li>Add a new menu item to check for updates.</li>
 </ul>
-<h2>Version &nbsp;0.1.13 (11/09/2009)</h2>
+<h2>Version &nbsp;0.1.13 (09/11/2009)</h2>
 <ul>
 <li>A lot of undergroud work in order to implement account
 management in a future release.</li>
@@ -123,23 +125,23 @@ transactions table is now saved.</li>
 </ul>
 </li>
 </ul>
-<h2>Version &nbsp;0.1.12 (07/09/2009)</h2>
+<h2>Version &nbsp;0.1.12 (09/07/2009)</h2>
 <ul>
 <li>Add a Preference item in the File menu. The localization
 and the application's look &amp; feel can be choosed</li>
 </ul>
-<h2>Version &nbsp;0.1.11 (05/09/2009)</h2>
+<h2>Version &nbsp;0.1.11 (09/05/2009)</h2>
 <ul>
 <li>The english translation is complete</li>
 <li><span class="bugFix">Bug
 2852451 fixed</span> : <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2852451&amp;group_id=276272&amp;atid=1173518">"No
 difference between new and modify dialogs title"</a></li>
 </ul>
-<h2>Version &nbsp;0.1.10 (04/09/2009)</h2>
+<h2>Version &nbsp;0.1.10 (09/04/2009)</h2>
 <ul>
 <li>Improved About dialog.</li>
 </ul>
-<h2>Version &nbsp;0.1.09 (01/09/2009)</h2>
+<h2>Version &nbsp;0.1.09 (09/01/2009)</h2>
 <ul>
 <li>First pre-alpha release.</li>
 </ul>

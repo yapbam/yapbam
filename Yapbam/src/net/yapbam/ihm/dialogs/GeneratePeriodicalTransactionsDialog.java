@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Transaction;
 import net.yapbam.ihm.LocalizationData;
 
 import java.lang.Object;
@@ -17,11 +18,19 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
 	private PeriodicalTransactionGeneratorPanel panel;
 
 	public GeneratePeriodicalTransactionsDialog(Window owner, GlobalData data) {
-		super(owner, "Génération des opérations périodiques", data);//LOCAL
+		super(owner, LocalizationData.get("GeneratePeriodicalTransactionsDialog.title"), data); //$NON-NLS-1$
 	}
 
 	@Override
 	protected Object buildResult() {
+		panel.saveState();
+		Transaction[] transactions = panel.getTransactions();
+		for (int i = 0; i < transactions.length; i++) {
+			((GlobalData)data).add(transactions[i]);
+		}
+		for (int i=0; i < ((GlobalData)data).getPeriodicalTransactionsNumber(); i++) {
+			((GlobalData)data).setPeriodicalTransactionNextDate(i, panel.getDate());
+		}
 		return null;
 	}
 
@@ -39,8 +48,8 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
 
 	@Override
 	protected String getOkDisabledCause() {
-		if (panel.getDate()==null) return "La date saisie est incorrecte";
-		if (panel.getTransactions().length==0) return "Aucune opération n'est à générer";
+		if (panel.getDate()==null) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.date"); //$NON-NLS-1$
+		if (panel.getTransactions().length==0) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.noTransaction"); //$NON-NLS-1$
 		return null;
 	}
 }
