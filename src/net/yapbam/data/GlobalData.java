@@ -232,6 +232,26 @@ public class GlobalData extends DefaultListenable {
 		setChanged();
 	}
 	
+
+	public void setPeriodicalTransactionNextDate(int index, Date date) {
+		PeriodicalTransaction pt = getPeriodicalTransaction(index);
+		Date nextDate = pt.getNextDate();
+		if (nextDate!=null) {
+			DateStepper ds = pt.getNextDateBuilder();
+			if (ds == null) {
+				nextDate = date;
+			} else {
+				while (nextDate.compareTo(date)<0) {
+					nextDate = ds.getNextStep(nextDate);
+				}
+			}
+			pt = new PeriodicalTransaction(pt.getDescription(), pt.getAmount(), pt.getAccount(), pt.getMode(),
+					pt.getCategory(), Arrays.asList(pt.getSubTransactions()), nextDate, pt.isEnabled(), ds);
+			removePeriodicalTransaction(index);
+			add(pt);
+		}
+	}
+	
 	/** Generate transactions from the periodical transactions until a date.
 	 * The transactions are not added to the global data and the periodical transactions
 	 * are not changed : their next date fields remains unchanged.

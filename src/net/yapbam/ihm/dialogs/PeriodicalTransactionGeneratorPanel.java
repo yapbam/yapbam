@@ -10,12 +10,11 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.date.helpers.DateHelper;
 import net.yapbam.ihm.LocalizationData;
+import net.yapbam.ihm.YapbamState;
 import net.yapbam.ihm.transactiontable.AmountRenderer;
 import net.yapbam.ihm.transactiontable.DateRenderer;
 import net.yapbam.ihm.transactiontable.GenericTransactionTableModel;
 import net.yapbam.ihm.transactiontable.ObjectRenderer;
-import net.yapbam.ihm.transactiontable.SpreadState;
-import net.yapbam.ihm.transactiontable.SpreadStateRenderer;
 import net.yapbam.ihm.widget.DateWidget;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
@@ -30,8 +29,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
-public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
-
+public class PeriodicalTransactionGeneratorPanel extends JPanel {
+	private static final String STATE_PROPERTIES_PREFIX = "net.yapbam.ihm.dialogs.PeriodicalGeneratorPanel.table."; //$NON-NLS-1$
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;
@@ -60,7 +60,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 	 */
 	private void initialize() {
 		jLabel = new JLabel();
-		jLabel.setText("Générer les opérations jusqu'au :");
+		jLabel.setText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate")); //$NON-NLS-1$
 		this.setSize(360, 200);
 		this.setLayout(new BorderLayout());
 		this.add(getJPanel(), BorderLayout.NORTH);
@@ -82,7 +82,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 			gridBagConstraints3.gridy = 1;
 			gridBagConstraints3.gridwidth=GridBagConstraints.REMAINDER;
 			summary = new JLabel();
-			summary.setText(" ");
+			summary.setText(" "); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
@@ -112,7 +112,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 		if (dateField == null) {
 			dateField = new DateWidget();
 			dateField.setColumns(6);
-			dateField.setToolTipText("Entrez ici la date jusqu'à laquelle générer les opérations");
+			dateField.setToolTipText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate.toolTip")); //$NON-NLS-1$
 			dateField.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {
 					updateTransactions();
@@ -210,8 +210,13 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 			jTable.setDefaultRenderer(double[].class, new AmountRenderer());
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			YapbamState.restoreState(YapbamState.INSTANCE.getProperties(), jTable, STATE_PROPERTIES_PREFIX);
 		}
 		return jTable;
+	}
+	
+	void saveState() {
+		YapbamState.saveState(YapbamState.INSTANCE.getProperties(), getJTable(), STATE_PROPERTIES_PREFIX);
 	}
 
 	private void updateTransactions() {
@@ -219,7 +224,6 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 		boolean change = DateHelper.dateToInteger(endDate)!=DateHelper.dateToInteger(lastDate);
 		Transaction[] transactions;
 		if (change) {
-			System.out.println (lastDate+" -> "+endDate);//TODO
 			if (endDate==null) {
 				transactions = new Transaction[0];
 			} else {
@@ -227,7 +231,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 			}
 			String message;
 			if (endDate==null) {
-				message = " ";
+				message = " "; //$NON-NLS-1$
 			} else {
 				double debts = 0;
 				double receipts = 0;
@@ -238,7 +242,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 						debts += transactions[i].getAmount();
 					}
 				}
-				message = MessageFormat.format("{0} opérations. Recettes : {1}, dépenses {2}, total : {3}", transactions.length,
+				message = MessageFormat.format(LocalizationData.get("GeneratePeriodicalTransactionsDialog.summary"), transactions.length, //$NON-NLS-1$
 						LocalizationData.getCurrencyInstance().format(receipts), LocalizationData.getCurrencyInstance().format(-debts),
 						LocalizationData.getCurrencyInstance().format(receipts+debts));
 			}
@@ -250,7 +254,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel { //LOCAL
 			}
 			Date old = lastDate;
 			lastDate=endDate;
-			this.firePropertyChange("endDate", old, lastDate);
+			this.firePropertyChange("endDate", old, lastDate); //$NON-NLS-1$
 		}
 	}
 
