@@ -5,10 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -16,10 +12,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
+import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import net.yapbam.data.AccountFilteredData;
 import net.yapbam.data.event.DataEvent;
@@ -27,6 +21,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.actions.NewTransactionAction;
+import net.yapbam.ihm.util.JTableListener;
 
 public class TransactionsPlugInPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -62,65 +57,10 @@ public class TransactionsPlugInPanel extends JPanel {
         this.checkTransactionAction = new CheckTransactionAction(this);
         this.convertToPericalTransactionAction = new ConvertToPeriodicalTransactionAction(transactionTable);
         this.generatePeriodical = new GeneratePeriodicalTransactionsAction(transactionTable);
+                
+        new MyListener(transactionTable, new Action[]{editTransactionAction, duplicateTransactionAction, deleteTransactionAction,
+        		null, convertToPericalTransactionAction}, editTransactionAction);
         
-        this.editTransactionAction.setEnabled(false);
-        this.duplicateTransactionAction.setEnabled(false);
-        this.deleteTransactionAction.setEnabled(false);
-        this.convertToPericalTransactionAction.setEnabled(false);
-        
-        transactionTable.addMouseListener(new MouseAdapter() {
-			public void mouseReleased(MouseEvent e) {
-        		maybeShowPopup(e);
-        	}
-            public void mousePressed(MouseEvent e) {
-           		if ((e.getClickCount()==2) && (e.getButton()==MouseEvent.BUTTON1)) {
-                  Point p = e.getPoint();
-                  int row = transactionTable.rowAtPoint(p);
-                  if (row >= 0) {
-                	  if (checkModePane.isSelected()) {
-                		  checkTransactionAction.actionPerformed(new ActionEvent(transactionTable, 0, null));
-                	  } else {
-                		  editTransactionAction.actionPerformed(new ActionEvent(transactionTable, 0, null));
-                	  }
-                  }
-                } else {
-                	maybeShowPopup(e);
-                }
-            }
-            private void maybeShowPopup(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    Point p = e.getPoint();
-                    int row = transactionTable.rowAtPoint(p);
-                    transactionTable.getSelectionModel().setSelectionInterval(row, row);
-                	JPopupMenu popup = new JPopupMenu();
-                	if (checkModePane.isSelected()) {
-                		popup.add(new JMenuItem(checkTransactionAction));
-                		popup.addSeparator();
-                	}
-                    popup.add(new JMenuItem(editTransactionAction));
-                    popup.add(new JMenuItem(duplicateTransactionAction));
-                    popup.add(new JMenuItem(deleteTransactionAction));
-                    popup.addSeparator();
-                    popup.add(new JMenuItem(convertToPericalTransactionAction));
-                    popup.show(e.getComponent(), e.getX(), e.getY());
-                }
-            }
-		});
-		ListSelectionModel selModel = transactionTable.getSelectionModel();
-		selModel.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();
-				if (!e.getValueIsAdjusting()) {
-					boolean ok = m.getMinSelectionIndex()>=0;
-					duplicateTransactionAction.setEnabled(ok);
-					editTransactionAction.setEnabled(ok);
-					deleteTransactionAction.setEnabled(ok);
-					convertToPericalTransactionAction.setEnabled(ok);
-				}
-			}
-		});
-
-
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		String noText = ""; //$NON-NLS-1$
 		JButton newTransactionButton = new JButton(newTransactionAction);
@@ -185,6 +125,32 @@ public class TransactionsPlugInPanel extends JPanel {
 			}
 		});
 		updateBalances();
+	}
+	
+	class MyListener extends JTableListener {
+
+		public MyListener(JTable jTable, Action[] actions, Action defaultAction) {
+			super(jTable, actions, defaultAction);
+		}
+
+		@Override
+		protected void fillPopUp(JPopupMenu popup) {
+        	if (checkModePane.isOk()) {
+        		popup.add(new JMenuItem(checkTransactionAction));
+        		popup.addSeparator();
+        	}
+			super.fillPopUp(popup);
+		}
+
+		@Override
+		protected Action getDoubleClickAction() {
+      	  if (checkModePane.isOk()) {
+    		  return checkTransactionAction;
+    	  } else {
+    		  return super.getDoubleClickAction();
+    	  }
+		}
+		
 	}
 	
 	public void updateBalances() {
