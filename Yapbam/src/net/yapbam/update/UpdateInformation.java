@@ -1,12 +1,14 @@
 package net.yapbam.update;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
 import net.yapbam.ihm.Preferences;
+import net.yapbam.ihm.YapbamState;
 
 public class UpdateInformation {
 	private int errorCode;
@@ -18,7 +20,9 @@ public class UpdateInformation {
 		errorCode = ct.getResponseCode();
 		if (errorCode==HttpURLConnection.HTTP_OK) {
 			Properties p = new Properties();
-			p.load(ct.getInputStream());
+			p.load(new InputStreamReader(ct.getInputStream(),ct.getContentEncoding()));
+			String serialNumber = p.getProperty("serialNumber");
+			YapbamState.INSTANCE.getProperties().put(VersionManager.SERIAL_NUMBER, serialNumber);
 			lastestRelease = new ReleaseInfo(p.getProperty("lastestRelease"));
 			updateURL = new URL(p.getProperty("updateURL"));
 		}
