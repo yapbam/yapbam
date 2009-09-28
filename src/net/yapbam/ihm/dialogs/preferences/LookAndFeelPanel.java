@@ -1,4 +1,4 @@
-package net.yapbam.ihm.dialogs;
+package net.yapbam.ihm.dialogs.preferences;
 
 import java.awt.GridBagLayout;
 
