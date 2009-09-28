@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="build" name="Create Runnable Jar for Yapbam project">
-	<property name="yapbamVersion" value="0.2.00"/>
+	<property name="yapbamVersion" value="0.2.1"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
