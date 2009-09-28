@@ -178,11 +178,11 @@ public class Preferences {
 	}
 	
 	private void setAuthentication() {
-		String property = Crypto.decrypt(KEY,this.properties.getProperty(PROXY_AUTHENTICATION));
+		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
 		if (property==null) {
 			Authenticator.setDefault(null);
 		} else {
-			StringTokenizer tokens = new StringTokenizer(property,":");
+			StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":");
 			final String user = tokens.nextToken();
 			final String pwd = tokens.nextToken();
 		    Authenticator.setDefault(new Authenticator() {
