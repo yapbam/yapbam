@@ -31,7 +31,6 @@ public class CheckModePanel extends JPanel {
 	public CheckModePanel(TransactionTable table) {
 		super();
 		this.table = table;
-		this.ok = false;
 		
 		KeyListener listener = new KeyAdapter() {
 			@Override
@@ -86,7 +85,7 @@ public class CheckModePanel extends JPanel {
 		valueDateLabel.setForeground(!selected || dateOk ? Color.black : Color.red);
 		statementLabel.setForeground(!selected || statementOk ? Color.black : Color.red);
 		this.ok = selected && dateOk && statementOk;
-		table.setCheckMode ((isSelected()&&ok));
+		table.setCheckMode (ok);
 	}
 
 	public boolean isSelected() {
@@ -99,5 +98,9 @@ public class CheckModePanel extends JPanel {
 
 	public Date getValueDate() {
 		return valueDateLabel.isSelected()?valueDate.getDate():null;
+	}
+	
+	public boolean isOk() {
+		return this.ok;
 	}
 }

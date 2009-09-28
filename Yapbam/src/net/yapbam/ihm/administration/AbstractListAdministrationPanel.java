@@ -1,7 +1,6 @@
 package net.yapbam.ihm.administration;
 
 import java.awt.GridBagLayout;
-import java.awt.Point;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -12,13 +11,10 @@ import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+
+import net.yapbam.ihm.util.JTableListener;
 
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.lang.Object;
 import java.util.Properties;
 
@@ -68,8 +64,9 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	private void initialize() {
 		this.setSize(300, 200);
 		this.setLayout(new BorderLayout());
-		this.add(getJScrollPane(), BorderLayout.CENTER);
 		this.add(getSouthPanel(), BorderLayout.SOUTH);
+		this.add(getJScrollPane(), BorderLayout.CENTER);
+		new JTableListener(jTable, new Action[]{editButtonAction, duplicateButtonAction, deleteButtonAction}, editButtonAction);
 		editButtonAction.setEnabled(false);
 		duplicateButtonAction.setEnabled(false);
 		deleteButtonAction.setEnabled(false);
@@ -84,29 +81,6 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 			jTable = instantiateJTable();
 		    jTable.getTableHeader().setReorderingAllowed(false);
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-				public void valueChanged(ListSelectionEvent e) {
-					ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();
-					if (!e.getValueIsAdjusting()) {
-						boolean ok = m.getMinSelectionIndex()>=0;
-						editButtonAction.setEnabled(ok);
-						deleteButtonAction.setEnabled(ok);
-						duplicateButtonAction.setEnabled(ok);
-					}
-				}
-			});
-			jTable.addMouseListener(new MouseAdapter() {
-	            public void mousePressed(MouseEvent e) {
-	                if (e.getClickCount() == 2) {
-	                  Point p = e.getPoint();
-	                  int row = jTable.rowAtPoint(p);
-	                  if (row >= 0) {
-	                	  editButtonAction.actionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
-	                  }
-	                }
-	              }
-			});
-
 		}
 		return jTable;
 	}
