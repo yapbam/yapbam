@@ -1,4 +1,4 @@
-package net.yapbam.ihm.dialogs;
+package net.yapbam.ihm.dialogs.preferences;
 
 import java.awt.BorderLayout;
 import java.awt.Window;
@@ -8,6 +8,7 @@ import javax.swing.JTabbedPane;
 
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.Preferences;
+import net.yapbam.ihm.dialogs.AbstractDialog;
 
 import java.lang.Object;
 import java.lang.String;

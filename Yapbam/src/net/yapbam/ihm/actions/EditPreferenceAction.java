@@ -7,7 +7,7 @@ import javax.swing.Action;
 
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.MainFrame;
-import net.yapbam.ihm.dialogs.PreferenceDialog;
+import net.yapbam.ihm.dialogs.preferences.PreferenceDialog;
 
 @SuppressWarnings("serial")
 public class EditPreferenceAction extends AbstractAction {
