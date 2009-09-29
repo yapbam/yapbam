@@ -31,7 +31,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-public class LocalizationPanel extends JPanel {
+public class LocalizationPanel extends PreferencePanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel countryPanel = null;
@@ -400,6 +400,29 @@ public class LocalizationPanel extends JPanel {
 			southPanel.add(getRevertButton(), gridBagConstraints8);
 		}
 		return southPanel;
+	}
+
+	@Override
+	public String getTitle() {
+		return LocalizationData.get("PreferencesDialog.Localization.title");
+	}
+
+	@Override
+	public String getToolTip() {
+		return LocalizationData.get("PreferencesDialog.Localization.toolTip");
+	}
+
+	@Override
+	public boolean updatePreferences() {
+		boolean needIHMRefresh = false;
+		if (isChanged()) {
+			needIHMRefresh = !getBuiltLocale().equals(Preferences.INSTANCE.getLocale());
+			Preferences.INSTANCE.setLocale(getBuiltLocale(), isDefaultCountry(), isDefaultLanguage());
+			if (needIHMRefresh) {
+				LocalizationData.reset();
+			}
+		}
+		return needIHMRefresh;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

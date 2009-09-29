@@ -10,11 +10,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
+
+import net.yapbam.date.helpers.DateHelper;
 
 public class YapbamState {
 	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
@@ -106,7 +109,7 @@ public class YapbamState {
 		int w = ((frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
 		properties.put(FRAME_SIZE_WIDTH, Integer.toString(w));
 		for (int i = 0; i < frame.getPlugInsNumber(); i++) {
-			frame.getPlugIn(i).saveState(properties);
+			frame.getPlugIn(i).saveState();
 		}
 		try {
 			properties.store(new FileOutputStream(STATE_FILENAME), "Yapbam statup state"); //$NON-NLS-1$
@@ -114,15 +117,11 @@ public class YapbamState {
 			//TODO What could we do ?
 		}
 	}
-
-	public Properties getProperties() {
-		return properties;
-	}
 	
-	public static void restoreState(Properties properties, JTable table, String prefix) {
+	public static void restoreState(JTable table, String prefix) {
 		TableColumnModel model = table.getColumnModel();
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			String valueString = (String) properties.get(prefix+COLUMN_WIDTH+i);
+			String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_WIDTH+i);
 			if (valueString!=null) {
 				int width = Integer.parseInt(valueString);
 				if (width>0) model.getColumn(i).setPreferredWidth(width);
@@ -130,7 +129,7 @@ public class YapbamState {
 		}
 		// Restore column order
 		for (int i = model.getColumnCount()-1; i>=0 ; i--) {
-			String valueString = (String) properties.get(prefix+COLUMN_INDEX+i);
+			String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_INDEX+i);
 			if (valueString!=null) {
 				int modelIndex = Integer.parseInt(valueString);
 				if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
@@ -143,22 +142,38 @@ public class YapbamState {
 //			if (index < table.getRowCount()) table.getSelectionModel().setSelectionInterval(index, index);
 //		}
 		// And the scroll position
-		Rectangle visibleRect = YapbamState.getRectangle(properties.getProperty(prefix+SCROLL_POSITION));
+		Rectangle visibleRect = YapbamState.getRectangle(INSTANCE.properties.getProperty(prefix+SCROLL_POSITION));
 		if (visibleRect!=null) table.scrollRectToVisible(visibleRect);
 	}
 
-	public static void saveState(Properties properties, JTable table, String prefix) {
+	public static void saveState(JTable table, String prefix) {
 		TableColumnModel model = table.getColumnModel();
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			properties.put(prefix+COLUMN_WIDTH+table.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
+			INSTANCE.properties.put(prefix+COLUMN_WIDTH+table.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
 		}
 		// Save the column order (if two or more columns were inverted)
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			properties.put(prefix+COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
+			INSTANCE.properties.put(prefix+COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
 		}
 //		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
-		properties.put(prefix+SCROLL_POSITION, YapbamState.toString(table.getVisibleRect()));
+		INSTANCE.properties.put(prefix+SCROLL_POSITION, YapbamState.toString(table.getVisibleRect()));
 	}
 
+	public static String get(String key) {
+		return INSTANCE.properties.getProperty(key);
+	}
 
+	public static void put(String key, String value) {
+		INSTANCE.properties.put(key, value);
+	}
+
+	public static Date getDate(String key) {
+		String dummy = INSTANCE.properties.getProperty(key);
+		if (dummy==null) return new Date(0);
+		return DateHelper.integerToDate(Integer.parseInt(dummy));
+	}
+	
+	public static void put (String key, Date date) {
+		INSTANCE.properties.put(key, Integer.toString(DateHelper.dateToInteger(date)));
+	}
 }

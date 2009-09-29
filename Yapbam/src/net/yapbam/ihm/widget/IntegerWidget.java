@@ -49,6 +49,6 @@ public class IntegerWidget extends JTextField {
 	}
 
 	public void setValue(Integer value) {
-		this.setText(Integer.toString(value));
+		this.setText(value==null?"":Integer.toString(value));
 	}
 }

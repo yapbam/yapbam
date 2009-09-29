@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.Preferences;
 import net.yapbam.ihm.dialogs.AbstractDialog;
 
 import java.lang.Object;
@@ -18,9 +17,7 @@ public class PreferenceDialog extends AbstractDialog {
 	public static final long LOCALIZATION_CHANGED = 1;
 	public static final long LOOK_AND_FEEL_CHANGED = 2;
 
-	private LocalizationPanel localizationPanel;
-	private LookAndFeelPanel lookAndFeelPanel;
-	private NetworkPanel networkPanel;
+	private PreferencePanel[] panels;
 
 	public PreferenceDialog(Window owner) {
 		super(owner, LocalizationData.get("PreferencesDialog.title"), null);
@@ -28,20 +25,10 @@ public class PreferenceDialog extends AbstractDialog {
 
 	@Override
 	protected Object buildResult() {
-		long result = 0;
-		if (localizationPanel.isChanged()) {
-			boolean needIHMRefresh = !localizationPanel.getBuiltLocale().equals(Preferences.INSTANCE.getLocale());
-			Preferences.INSTANCE.setLocale(localizationPanel.getBuiltLocale(), localizationPanel.isDefaultCountry(), localizationPanel.isDefaultLanguage());
-			if (needIHMRefresh) {
-				result = result + LOCALIZATION_CHANGED;
-				LocalizationData.reset();
-			}
+		boolean result = false;
+		for (int i = 0; i < panels.length; i++) {
+			result = panels[i].updatePreferences() || result;
 		}
-		if (lookAndFeelPanel.isCustomLookAndFeel()==Preferences.INSTANCE.isJavaLookAndFeel()) {
-			result = result + LOOK_AND_FEEL_CHANGED;
-			Preferences.INSTANCE.setJavaLookAndFeel(!Preferences.INSTANCE.isJavaLookAndFeel());
-		}
-		Preferences.INSTANCE.setHttpProxy(networkPanel.getProxyHost(), networkPanel.getProxyPort(), networkPanel.getProxyUser(), networkPanel.getProxyPassword());
 		return result;
 	}
 
@@ -49,12 +36,10 @@ public class PreferenceDialog extends AbstractDialog {
 	protected JPanel createCenterPane(Object data) {
 		JPanel panel = new JPanel(new BorderLayout());
 		JTabbedPane tabbedPane = new JTabbedPane();
-		localizationPanel = new LocalizationPanel();
-		tabbedPane.add(LocalizationData.get("PreferencesDialog.Localization.title"), localizationPanel); //$NON-NLS-1$
-		lookAndFeelPanel = new LookAndFeelPanel();
-		tabbedPane.add(LocalizationData.get("PreferencesDialog.LookAndFeel.title"), lookAndFeelPanel); //$NON-NLS-1$
-		networkPanel = new NetworkPanel();
-		tabbedPane.add(LocalizationData.get("PreferencesDialog.Network.title"),networkPanel); //$NON-NLS-1$
+		this.panels = new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(), new NetworkPanel(), new AutoUpdatePanel()};
+		for (int i = 0; i < panels.length; i++) {
+			tabbedPane.addTab(panels[i].getTitle(), null, panels[i], panels[i].getToolTip());
+		}
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
 	}
@@ -64,7 +49,7 @@ public class PreferenceDialog extends AbstractDialog {
 		return null;
 	}
 	
-	public Long getChanges() {
-		return (Long) getResult();
+	public Boolean getChanges() {
+		return (Boolean) getResult();
 	}
 }

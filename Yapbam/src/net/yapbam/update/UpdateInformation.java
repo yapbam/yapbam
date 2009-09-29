@@ -22,7 +22,7 @@ public class UpdateInformation {
 			Properties p = new Properties();
 			p.load(new InputStreamReader(ct.getInputStream(),ct.getContentEncoding()));
 			String serialNumber = p.getProperty("serialNumber");
-			YapbamState.INSTANCE.getProperties().put(VersionManager.SERIAL_NUMBER, serialNumber);
+			YapbamState.put(VersionManager.SERIAL_NUMBER, serialNumber);
 			lastestRelease = new ReleaseInfo(p.getProperty("lastestRelease"));
 			updateURL = new URL(p.getProperty("updateURL"));
 		}

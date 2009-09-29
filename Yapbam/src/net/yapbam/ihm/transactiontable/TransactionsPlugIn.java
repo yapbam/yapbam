@@ -2,7 +2,6 @@ package net.yapbam.ihm.transactiontable;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Properties;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
@@ -76,12 +75,12 @@ public class TransactionsPlugIn extends AbstractPlugIn {
         return new JMenu[]{transactionMenu, filterMenu};
 	}
 
-	public void restoreState(Properties properties) {
-		YapbamState.restoreState(properties, panel.getTransactionTable(), STATE_PREFIX);
+	public void restoreState() {
+		YapbamState.restoreState(panel.getTransactionTable(), STATE_PREFIX);
 	}
 
-	public void saveState(Properties properties) {
-		YapbamState.saveState(properties, panel.getTransactionTable(), STATE_PREFIX);
+	public void saveState() {
+		YapbamState.saveState(panel.getTransactionTable(), STATE_PREFIX);
 	}
 
 	public String getPanelTitle() {

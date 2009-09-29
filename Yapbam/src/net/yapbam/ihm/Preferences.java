@@ -29,9 +29,9 @@ public class Preferences {
 	private static final String LOOK_AND_FEEL_CUSTOM_VALUE = "custom"; //$NON-NLS-1$
 	private static final String PROXY = "proxy"; //$NON-NLS-1$
 	private static final String PROXY_AUTHENTICATION = "proxy_pass"; //$NON-NLS-1$
-	
+	private static final String AUTO_UPDATE_PERIOD = "auto_update_period"; //$NON-NLS-1$
+	private static final String AUTO_UPDATE_SILENT_FAIL	= "auto_update_silent_fail"; //$NON-NLS-1$
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
-
 
 	private static final String FILENAME = ".yapbampref"; //$NON-NLS-1$
 
@@ -190,5 +190,26 @@ public class Preferences {
 		          return new PasswordAuthentication(user,pwd.toCharArray());
 		      }});
 		}
+	}
+
+	public int getAutoUpdatePeriod() {
+		try {
+			return Integer.parseInt(this.properties.getProperty(AUTO_UPDATE_PERIOD));
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	
+	public boolean getAutoUpdateSilentFail() {
+		try {
+			return Boolean.parseBoolean(this.properties.getProperty(AUTO_UPDATE_SILENT_FAIL));
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public void setAutoUpdate(int days, boolean silentFail) {
+		this.properties.setProperty(AUTO_UPDATE_PERIOD, Integer.toString(days));
+		this.properties.setProperty(AUTO_UPDATE_SILENT_FAIL, Boolean.toString(silentFail));
 	}
 }
