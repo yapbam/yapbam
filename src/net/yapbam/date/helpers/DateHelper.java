@@ -25,9 +25,10 @@ public abstract class DateHelper {
 	}
 
 	@SuppressWarnings("deprecation")
-	/** Converts a date into an integer
+	/** Converts a date into an integer.
 	 * @param date the date to be converted or null
-	 * @return the date in its integer format (null is coded by a negative number)
+	 * @return the date in its integer format (null is coded by a negative number).
+	 * It is guaranteed that if two dates are separated by x days the difference between their integer representation is x 
 	 */
 	public static int dateToInteger(Date date) {
 		if (date==null) return -1;

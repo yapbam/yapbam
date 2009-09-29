@@ -21,7 +21,7 @@ import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.Preferences;
 import javax.swing.JCheckBox;
 
-public class NetworkPanel extends JPanel {
+public class NetworkPanel extends PreferencePanel {
 
 	private static final long serialVersionUID = 1L;
 	private JRadioButton noProxyButton = null;
@@ -341,5 +341,21 @@ public class NetworkPanel extends JPanel {
 			});
 		}
 		return showPassCheckBox;
+	}
+
+	@Override
+	public String getTitle() {
+		return LocalizationData.get("PreferencesDialog.Network.title");
+	}
+
+	@Override
+	public String getToolTip() {
+		return LocalizationData.get("PreferencesDialog.Network.toolTip");
+	}
+
+	@Override
+	public boolean updatePreferences() {
+		Preferences.INSTANCE.setHttpProxy(getProxyHost(), getProxyPort(), getProxyUser(), getProxyPassword());
+		return false;
 	}
 }

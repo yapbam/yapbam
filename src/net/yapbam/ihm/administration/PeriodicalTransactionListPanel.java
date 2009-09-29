@@ -9,7 +9,6 @@ import net.yapbam.ihm.YapbamState;
 import net.yapbam.ihm.actions.NewPeriodicalTransactionAction;
 
 import java.lang.Object;
-import java.util.Properties;
 
 public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration.";
@@ -44,13 +43,13 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 		return new PeriodicalTransactionsTable(new PeriodicalTransactionTableModel(this));
 	}
 	@Override
-	public void restoreState(Properties properties) {
-		super.restoreState(properties);
-		YapbamState.restoreState(properties, getJTable(), STATE_PREFIX);
+	public void restoreState() {
+		super.restoreState();
+		YapbamState.restoreState(getJTable(), STATE_PREFIX);
 	}
 	@Override
-	public void saveState(Properties properties) {
-		super.saveState(properties);
-		YapbamState.saveState(properties, getJTable(), STATE_PREFIX);
+	public void saveState() {
+		super.saveState();
+		YapbamState.saveState(getJTable(), STATE_PREFIX);
 	}
 }

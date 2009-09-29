@@ -7,7 +7,6 @@ import javax.swing.JTabbedPane;
 import net.yapbam.data.GlobalData;
 
 import java.awt.GridBagConstraints;
-import java.util.Properties;
 
 public class AdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -51,15 +50,15 @@ public class AdministrationPanel extends JPanel {
 		this.add(jTabbedPane, gridBagConstraints);
 	}
 
-	void saveState(Properties properties) {
+	void saveState() {
 		for (int i = 0; i < panels.length; i++) {
-			panels[i].saveState(properties);
+			panels[i].saveState();
 		}
 	}
 
-	void restoreState(Properties properties) {
+	void restoreState() {
 		for (int i = 0; i < panels.length; i++) {
-			panels[i].restoreState(properties);
+			panels[i].restoreState();
 		}
 	}
 }

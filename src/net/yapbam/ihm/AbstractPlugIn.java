@@ -1,7 +1,5 @@
 package net.yapbam.ihm;
 
-import java.util.Properties;
-
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 
@@ -15,10 +13,10 @@ public abstract class AbstractPlugIn {
         return null;
 	}
 
-	public void restoreState(Properties properties) {
+	public void restoreState() {
 	}
 
-	public void saveState(Properties properties) {
+	public void saveState() {
 	}
 
 	public String getPanelTitle() {

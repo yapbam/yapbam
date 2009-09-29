@@ -1,7 +1,5 @@
 package net.yapbam.ihm.administration;
 
-import java.util.Properties;
-
 import javax.swing.JPanel;
 
 import net.yapbam.data.AccountFilteredData;
@@ -29,14 +27,14 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 	}
 
 	@Override
-	public void restoreState(Properties properties) {
-		super.restoreState(properties);
-		panel.restoreState(properties);
+	public void restoreState() {
+		super.restoreState();
+		panel.restoreState();
 	}
 
 	@Override
-	public void saveState(Properties properties) {
-		super.saveState(properties);
-		panel.saveState(properties);
+	public void saveState() {
+		super.saveState();
+		panel.saveState();
 	}
 }

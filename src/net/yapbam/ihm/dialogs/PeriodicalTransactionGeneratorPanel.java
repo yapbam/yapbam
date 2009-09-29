@@ -210,13 +210,13 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			jTable.setDefaultRenderer(double[].class, new AmountRenderer());
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			YapbamState.restoreState(YapbamState.INSTANCE.getProperties(), jTable, STATE_PROPERTIES_PREFIX);
+			YapbamState.restoreState(jTable, STATE_PROPERTIES_PREFIX);
 		}
 		return jTable;
 	}
 	
 	void saveState() {
-		YapbamState.saveState(YapbamState.INSTANCE.getProperties(), getJTable(), STATE_PROPERTIES_PREFIX);
+		YapbamState.saveState(getJTable(), STATE_PROPERTIES_PREFIX);
 	}
 
 	private void updateTransactions() {

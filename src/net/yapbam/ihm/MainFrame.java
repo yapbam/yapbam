@@ -12,6 +12,7 @@ import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
+import net.yapbam.ihm.actions.CheckNewReleaseAction;
 import net.yapbam.ihm.administration.AdministrationPlugIn;
 import net.yapbam.ihm.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.ihm.transactiontable.TransactionsPlugIn;
@@ -40,6 +41,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
+	        	CheckNewReleaseAction.doAutoCheck();
 	            new MainFrame(null, null);
 	        }
 	    });
@@ -121,7 +123,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    // Restore initial state (last opened file and window position)
 	    YapbamState.INSTANCE.restoreMainFramePosition(this);
 	    for (int i = 0; i < plugins.length; i++) {
-			plugins[i].restoreState(YapbamState.INSTANCE.getProperties());
+			plugins[i].restoreState();
 		}
 	
 	    //Display the window.
@@ -130,7 +132,6 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private Container createContentPane() {
         mainPane = new JTabbedPane(JTabbedPane.TOP);
-		
         for (int i = 0; i < plugins.length; i++) {
             JPanel pane = plugins[i].getPanel();
     		if (pane!=null) {

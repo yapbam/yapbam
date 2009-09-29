@@ -3,7 +3,6 @@ package net.yapbam.ihm.dialogs.preferences;
 import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import java.awt.GridBagConstraints;
@@ -12,8 +11,7 @@ import javax.swing.JLabel;
 import net.yapbam.ihm.LocalizationData;
 import net.yapbam.ihm.Preferences;
 
-public class LookAndFeelPanel extends JPanel {
-
+public class LookAndFeelPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 	private JRadioButton platformButton = null;
 	private JRadioButton javaButton = null;
@@ -90,5 +88,22 @@ public class LookAndFeelPanel extends JPanel {
 
 	public boolean isCustomLookAndFeel() {
 		return this.getPlatformButton().isSelected();
+	}
+
+	@Override
+	public String getTitle() {
+		return LocalizationData.get("PreferencesDialog.LookAndFeel.title");
+	}
+
+	@Override
+	public String getToolTip() {
+		return LocalizationData.get("PreferencesDialog.LookAndFeel.toolTip");
+	}
+
+	@Override
+	public boolean updatePreferences() {
+		boolean result = isCustomLookAndFeel()==Preferences.INSTANCE.isJavaLookAndFeel();
+		if (result) Preferences.INSTANCE.setJavaLookAndFeel(!Preferences.INSTANCE.isJavaLookAndFeel());
+		return result;
 	}
 }

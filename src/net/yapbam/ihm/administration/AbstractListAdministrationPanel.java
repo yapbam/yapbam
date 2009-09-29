@@ -16,7 +16,6 @@ import net.yapbam.ihm.util.JTableListener;
 
 import java.awt.Insets;
 import java.lang.Object;
-import java.util.Properties;
 
 public abstract class AbstractListAdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -191,9 +190,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		return duplicateButton;
 	}
 
-	public void saveState(Properties properties) {
-	}
+	public void saveState() {}
 
-	public void restoreState(Properties properties) {
-	}
+	public void restoreState() {}
 }
