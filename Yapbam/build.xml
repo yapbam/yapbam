@@ -22,4 +22,7 @@
 			<fileset dir="releaseCompile"/>
 		</jar>
 	</target>
+	<target name="doc">
+		<javadoc sourcepath="src" packagenames="net.yapbam.ihm,net.yapbam.data,net.yapbam.data.events" destdir="doc"/>
+	</target>
 </project>
