@@ -7,8 +7,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
-import net.yapbam.ihm.Preferences;
-import net.yapbam.ihm.YapbamState;
+import net.yapbam.gui.Preferences;
+import net.yapbam.gui.YapbamState;
 
 public class UpdateInformation {
 	private int errorCode;

@@ -3,7 +3,7 @@ package net.yapbam.data;
 import java.io.Serializable;
 
 import net.yapbam.date.helpers.DateStepper;
-import net.yapbam.ihm.LocalizationData;
+import net.yapbam.gui.LocalizationData;
 
 /** This class represents a paiement mode (Blue card, cheque ...) */
 public class Mode implements Serializable {
