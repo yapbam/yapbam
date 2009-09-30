@@ -1,39 +1,127 @@
 package net.yapbam.ihm;
 
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-public abstract class AbstractPlugIn {
+import net.yapbam.ihm.transactiontable.TransactionsPlugIn;
+
+/** This abstract class represents a Yapbam plugin.
+ * Such a plugin can define (or not) some GUI elements that will be added to the Yapbam interface :<UL>
+ * <LI>A panel to add to the main TabbedPanel<LI> 
+ * <LI>Some specific menus<LI>
+ * <LI>Some specific menu items to insert in standard menus<LI></UL>
+ * This implementation is a totally empty plugin which does ... nothing.
+ * You may override its methods in order to implement a fully functional plugin.
+ * A plugin has to had a public constructor with two arguments :<OL><LI>AccountFilteredData</LI>
+ * <LI>Object an object representing the state of the plugin (returned by getRestartData()) or null if no previous state
+ * was saved.</LI></OL>
+ * The net.yapbam.ihm.transactiontable.TransactionsPlugIn is a good example of what could be done by a plugin.
+ * @see #AbstractPlugIn()
+ * @see TransactionsPlugIn
+ */
+public abstract class AbstractPlugIn { //TODO Define interactions with Preferences dialog
+	/** The open, save ... part of the file menu */
+	public static final int FILE_MANIPULATION = 1;
+	/** The preference part of the file menu */
+	public static final int PREFERENCES = 2;
+	/** The first part of the accounts menu. Menu items inserted there will be placed before the account list */
+	public static final int ACCOUNTS = 3;
+	/** The first part of the transactions menu. Menu items inserted there will be placed after the "new transaction" item */
+	public static final int TRANSACTIONS = 4;
+	/** The second part of the transactions menu. Menu items inserted there will be placed after the "new periodic transaction" item */
+	public static final int PERIODIC_TRANSACTIONS = 5;
+	/** The first part of the "?" menu. Menu items inserted there will be placed after the "About" item */
+	public static final int ABOUT = 6;
+	/** The second part of the "?" menu. Menu items inserted there will be placed after the "check for updates" item */
+	public static final int UPDATES = 7;
 	
-	public AbstractPlugIn() { //What about the arguments (GlobalData, ...)
+	/** Constructor.
+	 * Be aware that a Yapbam plugin has to had a public constructor with two arguments :<OL><LI>AccountFilteredData</LI>
+	 * <LI>Object an object representing the state of the plugin (returned by getRestartData()) or null if no previous state
+	 * was save.</LI>
+	 */
+	protected AbstractPlugIn() {
 		super();
 	}
 	
+	/** Get the plugin specific menus.
+	 *  These menus are inserted in the menu bar just before the "?" menu.
+	 *  A plugin may hide its specific menus when its panel is not shown. This could be done with the
+	 *  setDisplayed method.
+	 * @return The menus or null if the plugin has no specific menus.
+	 * @see #setDisplayed(boolean)
+	 */
 	public JMenu[] getPlugInMenu() {
         return null;
 	}
-
-	public void restoreState() {
-	}
-
-	public void saveState() {
-	}
-
-	public String getPanelTitle() {
-		return null;
-	}
 	
-	public String getPanelToolIp() {
+	/** Get the plugin specific menu items for a part of a standard menu.
+	 * @param part an integer that specific the part of the menu.
+	 * The possible values are the one of this class constants.
+	 * @return Menus items or null if nothing has to be added to that part of the menu.
+	 * A null item means a separator.
+	 */
+	public JMenuItem[] getMenuItem(int part) {
 		return null;
 	}
 
+	/** Get the main panel of the plugin.
+	 *  This panel will be added to the main tabbed pane.
+	 * @return the panel or null if the plugin has no panel (for instance for a import/export plugin that's just define menu items)
+	 */
 	public JPanel getPanel() {
 		return null;
 	}
 
+	/** Get the tab title of this plugin.
+	 * @return the title or null if there's no panel
+	 * @see #getPanel()
+	 */
+	public String getPanelTitle() {
+		return null;
+	}
+	
+	/** Get the tab tooltip of this plugin.
+	 * @return the tooltip or null if there's no panel
+	 * @see #getPanel()
+	 */
+	public String getPanelToolIp() {
+		return null;
+	}
+
+	/** This method is called when the plugin panel gain or loose the focus.
+	 * The plugin may perform some actions like showing/hidding its specifics menus when such an event occurs.
+	 * @param displayed true if the panel obtains the focus, false if it looses it
+	 */
 	public void setDisplayed(boolean displayed) {
 	}
 	
+	/** Restore the state of this panel.
+	 * This method is called when needed (usually at Yapbam startup) in order to let the plugin restore its previous state
+	 * (for instance, the column sizes of a JTable in the plugin panel).
+	 * The plugin may use YabamState class to perform its restore.
+	 * @see YapbamState
+	 */
+	public void restoreState() {
+	}
+
+	/** Save the state of this panel.
+	 * This method is called when needed (usually just before Yapbam quits) in order to let the plugin save its state
+	 * (for instance, the column sizes of a JTable in the plugin panel).
+	 * The plugin may use YabamState class to perform these backups.
+	 * @see YapbamState
+	 */
+	public void saveState() {
+	}
+
+	/** On some events, the GUI has to be restarted (for instance if the look and feel is changed).
+	 * The plugin has to be unloaded and then reloaded.
+	 * Before the unload this method is called its result is sent to the constructor during the restart.
+	 * The goal is to retrieve exactly the state of the plugin after the restart. Of course, it occurs not
+	 * very often, so, if the complete backup is to hard ... it could be acceptable to perform some shortcuts. 
+	 * @return An object representing the plugin state.
+	 */
 	public Object getRestartData() {
 		return null;
 	}
