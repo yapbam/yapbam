@@ -8,12 +8,13 @@ import net.yapbam.ihm.transactiontable.TransactionsPlugIn;
 
 /** This abstract class represents a Yapbam plugin.
  * Such a plugin can define (or not) some GUI elements that will be added to the Yapbam interface :<UL>
- * <LI>A panel to add to the main TabbedPanel<LI> 
- * <LI>Some specific menus<LI>
- * <LI>Some specific menu items to insert in standard menus<LI></UL>
+ * <LI>A panel to add to the main TabbedPanel</LI> 
+ * <LI>Some specific menus</LI>
+ * <LI>Some specific menu items to insert in standard menus</LI></UL>
  * This implementation is a totally empty plugin which does ... nothing.
  * You may override its methods in order to implement a fully functional plugin.
- * A plugin has to had a public constructor with two arguments :<OL><LI>AccountFilteredData</LI>
+ * A plugin has to had a public constructor with two arguments :<OL>
+ * <LI>AccountFilteredData : The root object of Yapbam's data</LI>
  * <LI>Object an object representing the state of the plugin (returned by getRestartData()) or null if no previous state
  * was saved.</LI></OL>
  * The net.yapbam.ihm.transactiontable.TransactionsPlugIn is a good example of what could be done by a plugin.
@@ -37,9 +38,9 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	public static final int UPDATES = 7;
 	
 	/** Constructor.
-	 * Be aware that a Yapbam plugin has to had a public constructor with two arguments :<OL><LI>AccountFilteredData</LI>
-	 * <LI>Object an object representing the state of the plugin (returned by getRestartData()) or null if no previous state
-	 * was save.</LI>
+	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>
+	 * <LI>AccountFilteredData : The root object of Yapbam's data</LI>
+	 * <LI>Object : an object representing the state of the plugin (returned by getRestartData()) or null if no previous state was save.</LI>
 	 */
 	protected AbstractPlugIn() {
 		super();
@@ -47,7 +48,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	
 	/** Get the plugin specific menus.
 	 *  These menus are inserted in the menu bar just before the "?" menu.
-	 *  A plugin may hide its specific menus when its panel is not shown. This could be done with the
+	 *  <br>A plugin may (probably) hide its specific menus when its panel is not shown. This could be done with the
 	 *  setDisplayed method.
 	 * @return The menus or null if the plugin has no specific menus.
 	 * @see #setDisplayed(boolean)
@@ -58,7 +59,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	
 	/** Get the plugin specific menu items for a part of a standard menu.
 	 * @param part an integer that specific the part of the menu.
-	 * The possible values are the one of this class constants.
+	 * The possible values are the ones of this class constants.
 	 * @return Menus items or null if nothing has to be added to that part of the menu.
 	 * A null item means a separator.
 	 */
@@ -67,7 +68,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	}
 
 	/** Get the main panel of the plugin.
-	 *  This panel will be added to the main tabbed pane.
+	 *  <br>This panel will be added to the main tabbed pane.
 	 * @return the panel or null if the plugin has no panel (for instance for a import/export plugin that's just define menu items)
 	 */
 	public JPanel getPanel() {
@@ -91,34 +92,34 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	}
 
 	/** This method is called when the plugin panel gain or loose the focus.
-	 * The plugin may perform some actions like showing/hidding its specifics menus when such an event occurs.
+	 * <br>The plugin may perform some actions like showing/hidding its specifics menus when such an event occurs.
 	 * @param displayed true if the panel obtains the focus, false if it looses it
 	 */
 	public void setDisplayed(boolean displayed) {
 	}
 	
-	/** Restore the state of this panel.
-	 * This method is called when needed (usually at Yapbam startup) in order to let the plugin restore its previous state
-	 * (for instance, the column sizes of a JTable in the plugin panel).
-	 * The plugin may use YabamState class to perform its restore.
-	 * @see YapbamState
-	 */
-	public void restoreState() {
-	}
-
 	/** Save the state of this panel.
 	 * This method is called when needed (usually just before Yapbam quits) in order to let the plugin save its state
 	 * (for instance, the column sizes of a JTable in the plugin panel).
-	 * The plugin may use YabamState class to perform these backups.
+	 * <br>The plugin may use YabamState class to perform these backups.
 	 * @see YapbamState
 	 */
 	public void saveState() {
 	}
 
+	/** Restore the state of this panel.
+	 * This method is called when needed (usually at Yapbam startup) in order to let the plugin restore its previous state
+	 * (for instance, the column sizes of a JTable in the plugin panel).
+	 * <br>The plugin may use YabamState class to perform its restore.
+	 * @see YapbamState
+	 */
+	public void restoreState() {
+	}
+
 	/** On some events, the GUI has to be restarted (for instance if the look and feel is changed).
-	 * The plugin has to be unloaded and then reloaded.
-	 * Before the unload this method is called its result is sent to the constructor during the restart.
-	 * The goal is to retrieve exactly the state of the plugin after the restart. Of course, it occurs not
+	 * Then, the plugin has to be unloaded and then reloaded.
+	 * <br>Before the unload this method is called. Its result is, then, sent to the constructor during the restart.
+	 * <br>The goal is to retrieve exactly the state of the plugin after the restart. Of course, it occurs not
 	 * very often, so, if the complete backup is to hard ... it could be acceptable to perform some shortcuts. 
 	 * @return An object representing the plugin state.
 	 */
