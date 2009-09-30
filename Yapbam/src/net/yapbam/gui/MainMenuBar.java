@@ -25,6 +25,7 @@ import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
+import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 
 public class MainMenuBar extends JMenuBar implements ActionListener, DataListener {
 	private static final long serialVersionUID = 1L;
@@ -64,9 +65,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemOpen.setToolTipText(LocalizationData.get("MainMenu.Open.ToolTip")); //$NON-NLS-1$
         this.menuItemOpen.addActionListener(this);
         menu.add(this.menuItemOpen);
-
-        menu.addSeparator();
-
         this.menuItemSave = new JMenuItem(LocalizationData.get("MainMenu.Save"), IconManager.SAVE); //$NON-NLS-1$
         this.menuItemSave.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Save.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         this.menuItemSave.setMnemonic(LocalizationData.getChar("MainMenu.Save.Mnemonic")); //$NON-NLS-1$
@@ -80,10 +78,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemSaveAs.addActionListener(this);
         this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
         menu.add(this.menuItemSaveAs);
+        insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION);
 
         menu.addSeparator();
         editPreferences = new EditPreferenceAction(frame);
         menu.add(editPreferences);
+        insertPluginMenuItems(menu, AbstractPlugIn.PREFERENCES);
 
         menu.addSeparator();
         this.menuItemQuit = new JMenuItem(LocalizationData.get("MainMenu.Quit")); //$NON-NLS-1$
@@ -98,6 +98,18 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         accountMenu.setToolTipText(LocalizationData.get("MainMenu.Accounts.ToolTip")); //$NON-NLS-1$
         updateAccountMenu();
         this.add(accountMenu);
+        
+        menu = new JMenu(LocalizationData.get("MainMenu.Transactions"));
+        menu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
+        menu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
+        JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getData()));
+        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+        menu.add(item);
+        insertPluginMenuItems(menu, AbstractPlugIn.TRANSACTIONS);
+        menu.addSeparator();
+        menu.add(new JMenuItem(new GeneratePeriodicalTransactionsAction(frame.getData())));
+        insertPluginMenuItems(menu, AbstractPlugIn.PERIODIC_TRANSACTIONS);
+        this.add(menu);
 
         //Build plugins menus
         for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
@@ -120,9 +132,26 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemAbout.setToolTipText(LocalizationData.get("MainMenu.About.ToolTip")); //$NON-NLS-1$
         this.menuItemAbout.addActionListener(this);
         menu.add(this.menuItemAbout);
+        insertPluginMenuItems(menu, AbstractPlugIn.ABOUT);
         menu.addSeparator();
         menu.add(new CheckNewReleaseAction(this.frame));
+        insertPluginMenuItems(menu, AbstractPlugIn.UPDATES);
     }
+
+	private void insertPluginMenuItems(JMenu menu, int part) {
+		for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
+            JMenuItem[] items = this.frame.getPlugIn(i).getMenuItem(part);
+    		if (items!=null) {
+    			for (int j = 0; j < items.length; j++) {
+    				if (items[i]==null) {
+    					menu.addSeparator();
+    				} else {
+    					menu.add(items[j]);
+    				}
+				}
+    		}
+		}
+	}
 
 	private void refreshState(GlobalData data) {
     	boolean somethingToSave = !data.isEmpty();
@@ -186,6 +215,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 			}
 		});
 	    this.accountMenu.add(menuItemNewAccount);
+        insertPluginMenuItems(this.accountMenu, AbstractPlugIn.ACCOUNTS);
 	    this.accountMenu.addSeparator();
 	    GlobalData data = this.frame.getData();
 	    if (data!=null) {

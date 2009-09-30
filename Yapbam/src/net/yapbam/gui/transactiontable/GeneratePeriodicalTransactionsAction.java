@@ -18,14 +18,14 @@ import net.yapbam.gui.dialogs.GeneratePeriodicalTransactionsDialog;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsAction extends AbstractAction {
-	private TransactionTable table;
+	private GlobalData data;
 	
-	public GeneratePeriodicalTransactionsAction(TransactionTable table) {
+	public GeneratePeriodicalTransactionsAction(GlobalData data) {
 		super(LocalizationData.get("MainMenu.Transactions.Periodical")); //$NON-NLS-1$
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Periodical.ToolTip")); //$NON-NLS-1$
         putValue(Action.MNEMONIC_KEY, (int)LocalizationData.getChar("MainMenu.Transactions.Periodical.Mnemonic")); //$NON-NLS-1$
-        this.table = table;
-        table.getGlobalData().addListener(new DataListener() {
+        this.data = data;
+        data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionRemovedEvent) ||
@@ -38,6 +38,6 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new GeneratePeriodicalTransactionsDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), table.getGlobalData()).setVisible(true);
+		new GeneratePeriodicalTransactionsDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), data).setVisible(true);
 	}
 }
