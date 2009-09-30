@@ -2,7 +2,7 @@ package net.yapbam.junit;
 
 import static org.junit.Assert.*;
 
-import net.yapbam.ihm.graphics.balancehistory.RuleBuilder;
+import net.yapbam.gui.graphics.balancehistory.RuleBuilder;
 
 import org.junit.Test;
 
