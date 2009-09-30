@@ -26,11 +26,9 @@ import net.yapbam.gui.util.JTableListener;
 public class TransactionsPlugInPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	Action newTransactionAction;
 	Action editTransactionAction;
 	Action duplicateTransactionAction;
 	Action deleteTransactionAction;
-	Action generatePeriodical;
 	Action checkTransactionAction;
 	Action convertToPericalTransactionAction;
 
@@ -38,7 +36,7 @@ public class TransactionsPlugInPanel extends JPanel {
 	private AccountFilteredData acFilter;
 	
 	private CheckModePanel checkModePane;
-	private TransactionTable transactionTable;
+	TransactionTable transactionTable;
 	private BalanceReportField currentBalance;
 	private BalanceReportField finalBalance;
 	private BalanceReportField checkedBalance;
@@ -50,20 +48,18 @@ public class TransactionsPlugInPanel extends JPanel {
 		transactionTable = new TransactionTable(data);
 		this.acFilter = acFilter;
 		
-        this.newTransactionAction = new NewTransactionAction(transactionTable.getGlobalData());
         this.editTransactionAction = new EditTransactionAction(transactionTable);
         this.duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
         this.deleteTransactionAction = new DeleteTransactionAction(transactionTable);
         this.checkTransactionAction = new CheckTransactionAction(this);
         this.convertToPericalTransactionAction = new ConvertToPeriodicalTransactionAction(transactionTable);
-        this.generatePeriodical = new GeneratePeriodicalTransactionsAction(transactionTable);
                 
         new MyListener(transactionTable, new Action[]{editTransactionAction, duplicateTransactionAction, deleteTransactionAction,
         		null, convertToPericalTransactionAction}, editTransactionAction);
         
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		String noText = ""; //$NON-NLS-1$
-		JButton newTransactionButton = new JButton(newTransactionAction);
+		JButton newTransactionButton = new JButton(new NewTransactionAction(transactionTable.getGlobalData()));
 		newTransactionButton.setText(noText);
 		Dimension dimension = newTransactionButton.getPreferredSize();
 		dimension.width = dimension.height;

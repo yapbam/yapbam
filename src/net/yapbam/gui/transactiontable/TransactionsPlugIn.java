@@ -2,6 +2,8 @@ package net.yapbam.gui.transactiontable;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
@@ -25,7 +27,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.transactionTable."; //$NON-NLS-1$
 	
 	private TransactionsPlugInPanel panel;
-	private JMenu transactionMenu;
 	private JMenu filterMenu;
 
 	public TransactionsPlugIn(AccountFilteredData acFilter, Object restoreData) {
@@ -48,31 +49,30 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	}
 
 	public JMenu[] getPlugInMenu() {
-        //Build the transactions menu
-        transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions"));
-        transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
-        transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
-        
-        JMenuItem item = new JMenuItem(panel.newTransactionAction);
-        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        transactionMenu.add(item);
-        item = new JMenuItem(panel.editTransactionAction);
-        transactionMenu.add(item);
-        item = new JMenuItem(panel.duplicateTransactionAction);
-        transactionMenu.add(item);
-        item = new JMenuItem(panel.deleteTransactionAction); //$NON-NLS-1$
-        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        transactionMenu.add(item);
-        transactionMenu.addSeparator();
-        transactionMenu.add(new JMenuItem(panel.generatePeriodical));
-        
         //Build the filter menu
         filterMenu = new JMenu(LocalizationData.get("MainMenuBar.Filter")); //$NON-NLS-1$
         filterMenu.setToolTipText(LocalizationData.get("MainMenuBar.Filter.Tooltip")); //$NON-NLS-1$
         filterMenu.setMnemonic(LocalizationData.getChar("MainMenuBar.Filter.Mnemonic")); //$NON-NLS-1$
         updateFilterMenu();
 
-        return new JMenu[]{transactionMenu, filterMenu};
+        return new JMenu[]{filterMenu};
+	}
+
+	@Override
+	public JMenuItem[] getMenuItem(int part) {
+		if (part==TRANSACTIONS) {
+			List<JMenuItem> result = new ArrayList<JMenuItem>();
+			result.add(new JMenuItem(panel.editTransactionAction)); 
+	        result.add(new JMenuItem(panel.duplicateTransactionAction));
+	        JMenuItem item = new JMenuItem(panel.deleteTransactionAction); //$NON-NLS-1$
+	        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+	        result.add(item);
+			return result.toArray(new JMenuItem[result.size()]);
+		} else if (part==PERIODIC_TRANSACTIONS) {
+			return new JMenuItem[]{new JMenuItem(panel.convertToPericalTransactionAction)};
+		} else {
+			return null;
+		}
 	}
 
 	public void restoreState() {
@@ -98,7 +98,10 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	@Override
 	public void setDisplayed(boolean displayed) {
-		this.transactionMenu.setVisible(displayed);
+		boolean rowIsSelected = panel.transactionTable.getSelectedRow()>0;
+		panel.editTransactionAction.setEnabled(displayed && rowIsSelected); 
+        panel.duplicateTransactionAction.setEnabled(displayed && rowIsSelected);
+        panel.deleteTransactionAction.setEnabled(displayed && rowIsSelected);
 		this.filterMenu.setVisible(displayed);
 	}
 	
