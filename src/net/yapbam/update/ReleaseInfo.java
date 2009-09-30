@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
-import net.yapbam.ihm.LocalizationData;
+import net.yapbam.gui.LocalizationData;
 
 public class ReleaseInfo implements Comparable<ReleaseInfo> {
 	private int majorRevision;

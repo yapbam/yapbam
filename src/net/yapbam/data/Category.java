@@ -2,7 +2,7 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 
-import net.yapbam.ihm.LocalizationData;
+import net.yapbam.gui.LocalizationData;
 
 /** This class represents a category (Food, Sport, etc ...) */
 public class Category implements Serializable, Comparable<Category> {

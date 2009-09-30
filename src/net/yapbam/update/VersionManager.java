@@ -8,8 +8,8 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
-import net.yapbam.ihm.LocalizationData;
-import net.yapbam.ihm.YapbamState;
+import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 
 public class VersionManager {
 	static final String SERIAL_NUMBER = "serialNumber";
