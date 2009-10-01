@@ -143,6 +143,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
+	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
 			tableModel = new GenerateTableModel();
@@ -156,8 +157,12 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			new JTableListener(jTable, null, new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					System.out.println ("not yet implemented");
+					int row = jTable.getSelectedRow();
+					Transaction transaction = tableModel.getTransactions()[row];
+					transaction = TransactionDialog.open(data, AbstractDialog.getOwnerWindow(jTable), transaction, true, false);
+					if (transaction==null) {
+						tableModel.setTransaction(row, transaction);
+					}
 				}
 			});
 		}

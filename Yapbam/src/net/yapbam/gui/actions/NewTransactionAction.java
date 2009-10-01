@@ -25,6 +25,6 @@ public class NewTransactionAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		TransactionDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), null, true);
+		TransactionDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), null, true, true);
 	}
 }
