@@ -28,9 +28,13 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @param data the global data
 	 * @param frame the dialog's parent frame
 	 * @param transaction the transaction we want to edit, or null if we want to create a new transaction
+	 * @param edit True if we edit an existing transaction, false if we edit a new transaction. Note : Maybe you're thinking
+	 * that this argument is redundant with transaction!=null, but it is not. You have to think of transaction argument as a model
+	 * to create a new transaction.
+	 * @param autoAdd if true, the created or edited transaction is automatically added to the global data instance.
 	 * @return the new transaction or the edited one
 	 */
-	public static Transaction open(GlobalData data, Window frame, Transaction transaction, boolean edit) {
+	public static Transaction open(GlobalData data, Window frame, Transaction transaction, boolean edit, boolean autoAdd) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
 			AccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
@@ -39,7 +43,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		TransactionDialog dialog = new TransactionDialog(frame, data, transaction, edit);
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
-		if (newTransaction!=null) {
+		if ((newTransaction!=null) && autoAdd) {
 			if (transaction!=null) data.remove(transaction);
 			data.add(newTransaction);
 		}

@@ -103,4 +103,9 @@ class GenerateTableModel extends AbstractTableModel implements GenericTransactio
 		this.enabled[rowIndex] = !this.enabled[rowIndex];
 		this.fireTableRowsUpdated(rowIndex, rowIndex);
 	}
+
+	public void setTransaction(int row, Transaction transaction) {
+		this.transactions[row] = transaction;
+		this.fireTableRowsUpdated(row, row);	
+	}
 }
