@@ -26,7 +26,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
 		panel.saveState();
 		Transaction[] transactions = panel.getTransactions();
 		for (int i = 0; i < transactions.length; i++) {
-			((GlobalData)data).add(transactions[i]);
+			if (panel.isValid(i)) ((GlobalData)data).add(transactions[i]);
 		}
 		for (int i=0; i < ((GlobalData)data).getPeriodicalTransactionsNumber(); i++) {
 			((GlobalData)data).setPeriodicalTransactionNextDate(i, panel.getDate());

@@ -12,8 +12,8 @@ import net.yapbam.date.helpers.DateHelper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
+import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
-import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.widget.DateWidget;
 
@@ -27,8 +27,6 @@ import java.util.Date;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.table.AbstractTableModel;
 
 public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private static final String STATE_PROPERTIES_PREFIX = "net.yapbam.ihm.dialogs.PeriodicalGeneratorPanel.table."; //$NON-NLS-1$
@@ -136,67 +134,6 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 		return jScrollPane;
 	}
 
-	@SuppressWarnings("serial")
-	class GenerateTableModel extends AbstractTableModel implements GenericTransactionTableModel {
-		Transaction[] transactions;
-		
-		GenerateTableModel() {
-			this.transactions = new Transaction[0];
-		}
-
-		@Override
-		public int getColumnCount() {
-			return 4;
-		}
-
-		@Override
-		public String getColumnName(int columnIndex) {
-			if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-			if (columnIndex==1) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-			if (columnIndex==2) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
-			if (columnIndex==3) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-			throw new IllegalArgumentException();
-		}
-
-		@Override
-		public Class<?> getColumnClass(int columnIndex) {
-			if (columnIndex==2) return Date.class;
-			if (columnIndex==3) return double[].class;
-			return String.class;
-		}
-
-		@Override
-		public int getAlignment(int column) {
-			if (column==3) return SwingConstants.RIGHT;
-	    	if ((column==0) || (column==1)) return SwingConstants.LEFT;
-	    	else return SwingConstants.CENTER;
-		}
-
-		@Override
-		public int getRowCount() {
-			return transactions.length;
-		}
-
-		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			Transaction t = transactions[rowIndex];
-			if (columnIndex==0) return t.getAccount().getName();
-			if (columnIndex==1) return t.getDescription();
-			if (columnIndex==2) return t.getDate();
-			if (columnIndex==3) return new double[]{t.getAmount()};
-			throw new IllegalArgumentException();
-		}
-
-		@Override
-		public boolean isChecked(int row) {
-			return false;
-		}
-
-		@Override
-		public boolean isExpense(int row) {
-			return transactions[row].getAmount()<0;
-		}
-	}
 	
 	/**
 	 * This method initializes jTable	
@@ -209,6 +146,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			jTable = new JTable(tableModel);
 			jTable.setDefaultRenderer(Date.class, new DateRenderer());
 			jTable.setDefaultRenderer(double[].class, new AmountRenderer());
+			jTable.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			YapbamState.restoreState(jTable, STATE_PROPERTIES_PREFIX);
@@ -248,10 +186,8 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 						LocalizationData.getCurrencyInstance().format(receipts+debts));
 			}
 			summary.setText(message);
-			int oldSize = tableModel.transactions.length;
-			if (transactions.length!=oldSize) {
-				tableModel.transactions = transactions;
-				tableModel.fireTableDataChanged();
+			if (transactions.length!=tableModel.getTransactions().length) {
+				tableModel.setTransactions(transactions);
 			}
 			Date old = lastDate;
 			lastDate=endDate;
@@ -260,7 +196,11 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	}
 
 	Transaction[] getTransactions() {
-		return tableModel.transactions.clone();
+		return tableModel.getTransactions().clone();
+	}
+
+	public boolean isValid(int i) {
+		return tableModel.isValid(i);
 	}
 	
 	Date getDate() {
