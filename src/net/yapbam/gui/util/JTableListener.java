@@ -13,9 +13,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 /** This is a standard JTable listener.
- * It has action attributes (typically edit/delete/duplicate row) which are automatically enabled/disabled when a row is selected/deselected.
- * When a double click occurs on the JTable, a default action is invoked (typically the editAction).
- * A popup menu is shown when needed (when a right click occurs under windows).
+ * <br>It has action attributes (typically edit/delete/duplicate row) which are automatically enabled/disabled when a row is selected/deselected.
+ * <br>When a double click occurs on the JTable, a default action is invoked (typically and edit action).
+ * <br>A pop-up menu is shown when needed (when a right click occurs under windows).
  * This class register itself with the JTable in order to receive interesting events, you just have to call the constructor.
  */
 public class JTableListener extends MouseAdapter implements ListSelectionListener {
@@ -25,8 +25,10 @@ public class JTableListener extends MouseAdapter implements ListSelectionListene
 
 	/** Constructor.
 	 * @param jTable The JTable to be listened
-	 * @param actions The actions that will appear in the popupMenu. Insert a null in this array to have a separator in the popup manu
-	 * @param defaultAction The default action which will be invoked when a double click occurs
+	 * @param actions The actions that will appear in the popupMenu. Insert a null in this array to have a separator in the pop-up menu.
+	 * If actions is null or contains no item, no pop-up menu is shown.
+	 * @param defaultAction The default action which will be invoked when a double click occurs. This action is not necessarily one of the actions array.
+	 * If defaultAction is null, nothing occurs on a double click.
 	 */
 	public JTableListener(JTable jTable, Action[] actions, Action defaultAction) {
 		super();
@@ -47,9 +49,12 @@ public class JTableListener extends MouseAdapter implements ListSelectionListene
 
 	private void refreshActions() {
 		boolean ok = jTable.getSelectedRow()>=0;
-		for (int i = 0; i < actions.length; i++) {
-			if (actions[i] != null) actions[i].setEnabled(ok);
+		if (actions!=null) {
+			for (int i = 0; i < actions.length; i++) {
+				if (actions[i] != null) actions[i].setEnabled(ok);
+			}
 		}
+		if (defaultAction != null) defaultAction.setEnabled(ok);
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -61,7 +66,7 @@ public class JTableListener extends MouseAdapter implements ListSelectionListene
 			Point p = e.getPoint();
 			int row = jTable.rowAtPoint(p);
 			if (row >= 0) {
-              defaultAction.actionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
+              if (defaultAction!=null) defaultAction.actionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
             }
         } else {
         	maybeShowPopup(e);
@@ -83,9 +88,11 @@ public class JTableListener extends MouseAdapter implements ListSelectionListene
 			Point p = e.getPoint();
 		    int row = jTable.rowAtPoint(p);
 		    jTable.getSelectionModel().setSelectionInterval(row, row);
-			JPopupMenu popup = new JPopupMenu();
-			fillPopUp(popup);
-		    popup.show(e.getComponent(), e.getX(), e.getY());
+		    if ((actions!=null) && (actions.length>0)) {
+				JPopupMenu popup = new JPopupMenu();
+				fillPopUp(popup);
+			    popup.show(e.getComponent(), e.getX(), e.getY());
+		    }
 		}
 	}
 
