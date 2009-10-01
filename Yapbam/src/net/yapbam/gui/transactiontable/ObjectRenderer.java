@@ -20,6 +20,7 @@ public class ObjectRenderer extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
     		boolean hasFocus, int row, int column) {
 	    GenericTransactionTableModel model = (GenericTransactionTableModel)table.getModel();
+	    row = table.convertRowIndexToModel(row);
 	    this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
 		if (isSelected) {
 	        setBackground(table.getSelectionBackground());
