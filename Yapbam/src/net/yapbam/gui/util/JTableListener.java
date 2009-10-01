@@ -14,9 +14,9 @@ import javax.swing.event.ListSelectionListener;
 
 /** This is a standard JTable listener.
  * <br>It has action attributes (typically edit/delete/duplicate row) which are automatically enabled/disabled when a row is selected/deselected.
- * <br>When a double click occurs on the JTable, a default action is invoked (typically and edit action).
+ * <br>When a double click occurs on the JTable, a default action is invoked (typically an edit action).
  * <br>A pop-up menu is shown when needed (when a right click occurs under windows).
- * This class register itself with the JTable in order to receive interesting events, you just have to call the constructor.
+ * <br>This class register itself with the JTable in order to receive interesting events, you just have to call the constructor.
  */
 public class JTableListener extends MouseAdapter implements ListSelectionListener {
 	private Action[] actions;
