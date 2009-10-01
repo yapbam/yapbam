@@ -10,7 +10,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 
 @SuppressWarnings("serial")
-class GenerateTableModel extends AbstractTableModel implements GenericTransactionTableModel {//LOCAL
+class GenerateTableModel extends AbstractTableModel implements GenericTransactionTableModel {
 	private Transaction[] transactions;
 	private boolean[] enabled;
 	
@@ -30,7 +30,7 @@ class GenerateTableModel extends AbstractTableModel implements GenericTransactio
 		if (columnIndex==1) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
 		if (columnIndex==2) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
 		if (columnIndex==3) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-		if (columnIndex==4) return "Ignorer";
+		if (columnIndex==4) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.ignored"); //$NON-NLS-1$
 		throw new IllegalArgumentException();
 	}
 
@@ -103,6 +103,4 @@ class GenerateTableModel extends AbstractTableModel implements GenericTransactio
 		this.enabled[rowIndex] = !this.enabled[rowIndex];
 		this.fireTableRowsUpdated(rowIndex, rowIndex);
 	}
-	
-
 }

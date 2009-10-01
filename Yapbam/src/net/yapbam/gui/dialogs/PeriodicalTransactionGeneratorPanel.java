@@ -15,15 +15,18 @@ import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
+import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.DateWidget;
 
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import java.text.MessageFormat;
 import java.util.Date;
 
+import javax.swing.AbstractAction;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -150,6 +153,13 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			YapbamState.restoreState(jTable, STATE_PROPERTIES_PREFIX);
+			new JTableListener(jTable, null, new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					System.out.println ("not yet implemented");
+				}
+			});
 		}
 		return jTable;
 	}
