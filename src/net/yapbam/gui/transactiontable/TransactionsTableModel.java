@@ -64,7 +64,7 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		boolean spread = this.table.getRowHeight()!=this.table.getRowHeight(rowIndex);
+		boolean spread = this.table.getRowHeight()!=this.table.getRowHeight(this.table.convertRowIndexToView(rowIndex));
 		if (dateFormater==null) {
 			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, LocalizationData.getLocale());
 		}

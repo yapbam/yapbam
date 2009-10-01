@@ -1,8 +1,10 @@
 package net.yapbam.gui.administration;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.swing.JTable;
+import javax.swing.table.TableRowSorter;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
@@ -25,12 +27,19 @@ class PeriodicalTransactionsTable extends JTable {
 		this.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 		this.setDefaultRenderer(Object.class, new ObjectRenderer());
 		this.addMouseListener(new SpreadableMouseAdapter());
+		TableRowSorter<PeriodicalTransactionTableModel> sorter = new TableRowSorter<PeriodicalTransactionTableModel>(model);
+		sorter.setComparator(3, new Comparator<double[]>() {
+			@Override
+			public int compare(double[] o1, double[] o2) {
+				return (int) Math.signum(o1[0]-o2[0]);
+			}
+		});
+		this.setRowSorter(sorter);
 	}
 
 	public PeriodicalTransaction getSelectedTransaction() {
 		int index = getSelectedRow();
-		if (index < 0) return null;
-		return getGlobalData().getPeriodicalTransaction(index);
+		return (index < 0)?null:getGlobalData().getPeriodicalTransaction(convertRowIndexToModel(index));
 	}
 
 	public GlobalData getGlobalData() {

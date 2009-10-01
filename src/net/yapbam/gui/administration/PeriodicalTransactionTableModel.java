@@ -3,6 +3,7 @@ package net.yapbam.gui.administration;
 import java.text.MessageFormat;
 import java.util.Date;
 
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
@@ -72,7 +73,8 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 	//TODO à fusionner avec TransactionsTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		boolean spread = this.periodicTransactionListPanel.getJTable().getRowHeight()!=this.periodicTransactionListPanel.getJTable().getRowHeight(rowIndex);
+		JTable table = this.periodicTransactionListPanel.getJTable();
+		boolean spread = table.getRowHeight()!=table.getRowHeight(table.convertRowIndexToView(rowIndex));
 		PeriodicalTransaction transaction = ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransaction(rowIndex);
 		if (columnIndex==0) return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
 		else if (columnIndex==1) return transaction.getAccount().getName();
