@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 import javax.swing.UIManager;
 
 import net.yapbam.util.Crypto;
+import net.yapbam.util.Portable;
 
 /** This class represents the Yabpam application preferences */
 public class Preferences {
@@ -33,8 +34,6 @@ public class Preferences {
 	private static final String AUTO_UPDATE_SILENT_FAIL	= "auto_update_silent_fail"; //$NON-NLS-1$
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
 
-	private static final String FILENAME = ".yapbampref"; //$NON-NLS-1$
-
 	/** Current instance */
 	public static final Preferences INSTANCE = new Preferences();
 	
@@ -42,9 +41,9 @@ public class Preferences {
 
 	private Preferences() {
 		this.properties = new Properties();
-		if (new File(FILENAME).exists()) {
+		if (getFile().exists()) {
 			try {
-				properties.load(new FileInputStream(FILENAME));
+				properties.load(new FileInputStream(getFile()));
 			    setAuthentication();
 			} catch (Throwable e) {
 				// If there's another error, maybe it would be better to do something else //TODO
@@ -54,6 +53,10 @@ public class Preferences {
 			setToDefault();
 			save();
 		}
+	}
+
+	private static File getFile() {
+		return new File (Portable.getLaunchDirectory(), ".yapbampref"); //$NON-NLS-1$
 	}
 	
 	private void setToDefault() {
@@ -65,7 +68,7 @@ public class Preferences {
 
 	public void save() {
 		try {
-			properties.store(new FileOutputStream(FILENAME), "Yapbam preferences"); //$NON-NLS-1$
+			properties.store(new FileOutputStream(getFile()), "Yapbam preferences"); //$NON-NLS-1$
 		} catch (IOException e) {
 			//TODO What could we do ?
 		}
