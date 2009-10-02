@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
 import net.yapbam.date.helpers.DateHelper;
+import net.yapbam.util.Portable;
 
 public class YapbamState {
 	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
@@ -32,8 +33,6 @@ public class YapbamState {
 	private static final String FRAME_LOCATION_Y = "frame.location.y"; //$NON-NLS-1$
 	private static final String FRAME_LOCATION_X = "frame.location.x"; //$NON-NLS-1$
 
-	private static final String STATE_FILENAME = ".yapbam"; //$NON-NLS-1$
-
 	public static final YapbamState INSTANCE = new YapbamState();
 	
 	private Properties properties;
@@ -41,11 +40,15 @@ public class YapbamState {
 	private YapbamState() {
 		this.properties = new Properties();
 		try {
-			properties.load(new FileInputStream(STATE_FILENAME));
+			properties.load(new FileInputStream(getFile()));
 		} catch (Throwable e) {
 			// On the first run, the file doesn't exist
 			// If there's another error, maybe it would be better to do something else //TODO
 		}
+	}
+
+	private static File getFile() {
+		return new File (Portable.getLaunchDirectory(), ".yapbam");
 	}
 	
 	void restoreMainFramePosition(MainFrame frame) {
@@ -112,7 +115,7 @@ public class YapbamState {
 			frame.getPlugIn(i).saveState();
 		}
 		try {
-			properties.store(new FileOutputStream(STATE_FILENAME), "Yapbam statup state"); //$NON-NLS-1$
+			properties.store(new FileOutputStream(getFile()), "Yapbam startup state"); //$NON-NLS-1$
 		} catch (IOException e) {
 			//TODO What could we do ?
 		}

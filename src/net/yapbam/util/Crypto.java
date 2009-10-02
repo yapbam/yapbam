@@ -1,14 +1,20 @@
 package net.yapbam.util;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+/** This class provides utilities to encrypt data.
+ * <BR>It uses a symetric AES algorithm. */
 public class Crypto {
+	private Crypto(){}
+	
+	/** Decrypt a text
+	 * @param key The secret key used for the encryption
+	 * @param message The encrypted message we want to decrypt
+	 * @return the decrypted message
+	 */
 	public static String decrypt(String key, String message) {
 		SecretKeySpec skeySpec;
 		Cipher cipher;
@@ -23,6 +29,11 @@ public class Crypto {
 		}
 	}
 
+	/** Encrypt a text
+	 * @param key The secret key used for the encryption (oups secret key has to have some properties (128 bits long ?) ... but I don't remember)
+	 * @param message The message we want to encrypt
+	 * @return the encrypted message
+	 */
 	public static String encrypt(String key, String message) {
 		SecretKeySpec skeySpec = new SecretKeySpec(asByteArray(key), "AES");
 		try {
@@ -33,17 +44,6 @@ public class Crypto {
 		} catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public static String generateKey() throws NoSuchAlgorithmException {
-		KeyGenerator kgen = KeyGenerator.getInstance("AES");
-		kgen.init(128); // 192 and 256 bits may not be available
-
-		// Generate the secret key specs.
-		SecretKey skey = kgen.generateKey();
-		byte[] raw = skey.getEncoded();
-		String key = asHex(raw);
-		return key;
 	}
 
 	/**
@@ -59,6 +59,17 @@ public class Crypto {
 		return new BigInteger(str, 16).toByteArray();
 	}
 /*
+	private static String generateKey() throws NoSuchAlgorithmException {
+		KeyGenerator kgen = KeyGenerator.getInstance("AES");
+		kgen.init(128); // 192 and 256 bits may not be available
+
+		// Generate the secret key specs.
+		SecretKey skey = kgen.generateKey();
+		byte[] raw = skey.getEncoded();
+		String key = asHex(raw);
+		return key;
+	}
+
 	public static void main(String[] args) throws Exception {
 		String message = "Source forge is great";
 		String encrypt = encrypt(key, message);
