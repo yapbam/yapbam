@@ -13,6 +13,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import net.yapbam.data.AccountFilteredData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
@@ -31,7 +32,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	public TransactionsPlugIn(AccountFilteredData acFilter, Object restoreData) {
 		FilteredData data = (FilteredData) restoreData;
-		if (data == null) data = new FilteredData(acFilter.getGlobalData());
+		if (data == null) data = new FilteredData(acFilter);
 		this.panel = new TransactionsPlugInPanel(acFilter, data);
 		data.addListener(new DataListener() {
 			@Override

@@ -97,4 +97,12 @@ public class Account extends DefaultListenable implements Serializable {
 	public Mode getMode(int index) {
 		return this.modes.get(index);
 	}
+
+	void setName(String name) {
+		this.name = name;
+	}
+
+	void setInitialBalance(double value) {
+		this.initialBalance = value;
+	}
 }

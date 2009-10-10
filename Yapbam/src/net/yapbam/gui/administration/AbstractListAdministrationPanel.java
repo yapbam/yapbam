@@ -66,9 +66,6 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		this.add(getSouthPanel(), BorderLayout.SOUTH);
 		this.add(getJScrollPane(), BorderLayout.CENTER);
 		new JTableListener(jTable, new Action[]{editButtonAction, duplicateButtonAction, deleteButtonAction}, editButtonAction);
-		editButtonAction.setEnabled(false);
-		duplicateButtonAction.setEnabled(false);
-		deleteButtonAction.setEnabled(false);
 	}
 
 	/**
@@ -78,7 +75,6 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	protected JTable getJTable() {
 		if (jTable == null) {
 			jTable = instantiateJTable();
-		    jTable.getTableHeader().setReorderingAllowed(false);
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
 		return jTable;
@@ -127,9 +123,11 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 			southPanel = new JPanel();
 			southPanel.setLayout(new GridBagLayout());
 			southPanel.add(getNewButton(), gridBagConstraints1);
-			southPanel.add(getEditButton(), gridBagConstraints);
+			JButton dummy = getEditButton();
+			if (dummy!=null) southPanel.add(dummy, gridBagConstraints);
 			southPanel.add(getDeleteButton(), gridBagConstraints2);
-			southPanel.add(getDuplicateButton(), gridBagConstraints11);
+			dummy = getDuplicateButton();
+			if (dummy!=null) southPanel.add(dummy, gridBagConstraints11);
 		}
 		return southPanel;
 	}
@@ -155,9 +153,11 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 */
 	protected JButton getEditButton() {
 		if (editButton == null) {
-			editButton = new JButton();
 			editButtonAction = getEditButtonAction();
-			editButton.setAction(editButtonAction);
+			if (editButtonAction!=null) {
+				editButton = new JButton();
+				editButton.setAction(editButtonAction);
+			}
 		}
 		return editButton;
 	}
@@ -183,9 +183,11 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 */
 	private JButton getDuplicateButton() {
 		if (duplicateButton == null) {
-			duplicateButton = new JButton();
 			duplicateButtonAction = getDuplicateButtonAction();
-			duplicateButton.setAction(duplicateButtonAction);
+			if (duplicateButtonAction!= null) {
+				duplicateButton = new JButton();
+				duplicateButton.setAction(duplicateButtonAction);
+			}
 		}
 		return duplicateButton;
 	}

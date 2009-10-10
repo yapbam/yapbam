@@ -40,8 +40,8 @@ public class AdministrationPanel extends JPanel {
 		JTabbedPane jTabbedPane = new JTabbedPane();
 		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
 		panels = new AbstractListAdministrationPanel[]{
-/*				new AccountListPanel(data),
-				new CategoryListPanel(data),*/
+				new AccountListPanel(data),
+/*				new CategoryListPanel(data),*/
 				new PeriodicalTransactionListPanel(data)
 		};
 		for (int i = 0; i < panels.length; i++) {

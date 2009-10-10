@@ -1,11 +1,7 @@
-package net.yapbam.gui.transactiontable;
+package net.yapbam.data;
 
 import java.util.*;
 
-import net.yapbam.data.Account;
-import net.yapbam.data.AccountFilter;
-import net.yapbam.data.GlobalData;
-import net.yapbam.data.Transaction;
 import net.yapbam.data.event.*;
 
 public class FilteredData extends AccountFilter {
@@ -24,18 +20,18 @@ public class FilteredData extends AccountFilter {
 	private int filter;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	
-	public FilteredData(GlobalData data) {
-	    super(data);
+	public FilteredData(AccountFilteredData data) {
+	    super(data.getGlobalData());
 	    this.data.addListener(new DataListener() {		
 			@Override
 			public void processEvent(DataEvent event) {
+				if (eventImplySorting(event)) Collections.sort(transactions, comparator);
 				if (event instanceof TransactionAddedEvent) {
-					int index = ((TransactionAddedEvent)event).getTransactionIndex();
-					Transaction transaction = ((GlobalData)event.getSource()).getTransaction(index);
+					Transaction transaction = ((TransactionAddedEvent)event).getTransaction();
 					if (isOk(transaction)) { // If the added transaction match with the filter
-						index = -Collections.binarySearch(transactions, transaction, comparator)-1;
+						int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
 						transactions.add(index, transaction);
-						fireEvent(new TransactionAddedEvent(FilteredData.this, index));
+						fireEvent(new TransactionAddedEvent(FilteredData.this, transaction));
 					}
 				} else if (event instanceof TransactionRemovedEvent) {
 					Transaction transaction = ((TransactionRemovedEvent)event).getRemoved();
@@ -45,19 +41,34 @@ public class FilteredData extends AccountFilter {
 						fireEvent(new TransactionRemovedEvent(FilteredData.this, index, transaction));
 					}
 				} else if (event instanceof AccountAddedEvent) {
-					int index = ((AccountAddedEvent)event).getAccountIndex();
-					Account account = ((GlobalData)event.getSource()).getAccount(index);
+					Account account = ((AccountAddedEvent)event).getAccount();
 					if (isOk(account) && isOk(CHECKED)) {
-						fireEvent(new AccountAddedEvent(FilteredData.this, index));
+						fireEvent(new AccountAddedEvent(FilteredData.this, account));
 					}
 				} else if (event instanceof AccountRemovedEvent) {
 					// Nothing to do, all the account's transactions are removed when the Account is removed
+					Account removed = ((AccountRemovedEvent)event).getRemoved();
+					if (isOk(removed)) { // Propagate the event
+						fireEvent(new AccountRemovedEvent(FilteredData.this, -1, removed));
+					}
+				} else if (event instanceof AccountPropertyChangedEvent) {
+					AccountPropertyChangedEvent evt = (AccountPropertyChangedEvent) event;
+					if (isOk(evt.getAccount())) {
+						fireEvent(event);
+					}
 				}
 			}
 		});
 	    this.clear();
 	}
-		
+	
+	private boolean eventImplySorting (DataEvent event) {
+		return ((event instanceof AccountPropertyChangedEvent) &&
+				((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME) &&
+				isOk(((AccountPropertyChangedEvent)event).getAccount()) ||
+				false); //TODO other change events
+	}
+	
 	public void clear() {
 		this.filter = ALL;
 		super.setAccounts(null);
@@ -109,6 +120,10 @@ public class FilteredData extends AccountFilter {
 
 	public Transaction getTransaction(int index) {
 		return this.transactions.get(index);
+	}
+	
+	public int indexOf(Transaction transaction) {
+		return Collections.binarySearch(transactions, transaction, comparator);
 	}
 
 	public GlobalData getGlobalData() {

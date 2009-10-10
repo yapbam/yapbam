@@ -4,6 +4,7 @@ import java.util.*;
 
 import net.yapbam.data.event.*;
 
+/** This class is subject to a complete rewrite */ //TODO
 public class AccountFilteredData extends AccountFilter {
 	private static final long serialVersionUID = 1L;
 
@@ -18,12 +19,11 @@ public class AccountFilteredData extends AccountFilter {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof TransactionAddedEvent) {
-					int index = ((TransactionAddedEvent)event).getTransactionIndex();
-					Transaction transaction = ((GlobalData)event.getSource()).getTransaction(index);
+					Transaction transaction = ((TransactionAddedEvent)event).getTransaction();
 					if (isOk(transaction)) { // If the added transaction match with the filter
 						updateBalance(new Date(), transaction, true);
 						balanceHistory.add(transaction.getAmount(), transaction.getValueDate());
-						fireEvent(new TransactionAddedEvent(AccountFilteredData.this, index));
+						fireEvent(new TransactionAddedEvent(AccountFilteredData.this, transaction));
 					}
 				} else if (event instanceof TransactionRemovedEvent) {
 					Transaction transaction = ((TransactionRemovedEvent)event).getRemoved();
@@ -33,12 +33,19 @@ public class AccountFilteredData extends AccountFilter {
 						fireEvent(new TransactionRemovedEvent(AccountFilteredData.this, -1, transaction));
 					}
 				} else if (event instanceof AccountAddedEvent) {
-					int index = ((AccountAddedEvent)event).getAccountIndex();
-					Account account = ((GlobalData)event.getSource()).getAccount(index);
+					Account account = ((AccountAddedEvent)event).getAccount();
 					if (isOk(account)) {
 						updateBalance(account.getInitialBalance(), true);
 						balanceHistory.add(account.getInitialBalance(), null);
-						fireEvent(new AccountAddedEvent(AccountFilteredData.this, index));
+						fireEvent(new AccountAddedEvent(AccountFilteredData.this, account));
+					}
+				} else if (event instanceof AccountPropertyChangedEvent) {
+					AccountPropertyChangedEvent evt = (AccountPropertyChangedEvent) event;
+					if ((evt.getProperty().equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) && isOk(evt.getAccount())) {
+						double amount = ((Double)evt.getNewValue())-((Double)evt.getOldValue());
+						updateBalance(amount, true);
+						balanceHistory.add(amount, null);
+						fireEvent(event);
 					}
 				}
 			}
