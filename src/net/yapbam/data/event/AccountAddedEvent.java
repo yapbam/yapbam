@@ -1,14 +1,16 @@
 package net.yapbam.data.event;
 
-public class AccountAddedEvent extends DataEvent {
-	private int accountIndex;
+import net.yapbam.data.Account;
 
-	public AccountAddedEvent(Object source, int accountIndex) {
+public class AccountAddedEvent extends DataEvent {
+	private Account account;
+
+	public AccountAddedEvent(Object source, Account account) {
 		super(source);
-		this.accountIndex = accountIndex;
+		this.account = account;
 	}
 
-	public int getAccountIndex() {
-		return accountIndex;
+	public Account getAccount() {
+		return this.account;
 	}
 }

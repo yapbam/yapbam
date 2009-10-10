@@ -10,8 +10,10 @@ import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
+import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -137,11 +139,15 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 		if (event instanceof EverythingChangedEvent) {
 			fireTableDataChanged();
 		} else if (event instanceof TransactionAddedEvent) {
-			int index = ((TransactionAddedEvent)event).getTransactionIndex();
+			int index = this.data.indexOf(((TransactionAddedEvent)event).getTransaction());;
 			fireTableRowsInserted(index, index);
 		} else if (event instanceof TransactionRemovedEvent) {
 			int index = ((TransactionRemovedEvent)event).getIndex();
 			fireTableRowsDeleted(index, index);
+		} else if (event instanceof AccountPropertyChangedEvent) {
+			if (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)) {
+				fireTableDataChanged();			
+			}
 		}
 	}
 

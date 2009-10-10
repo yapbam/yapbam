@@ -115,7 +115,7 @@ public class GlobalData extends DefaultListenable {
 			public void processEvent(DataEvent event) {
 				setChanged();
 			}});
-		fireEvent(new AccountAddedEvent(this, this.accounts.size()-1));
+		fireEvent(new AccountAddedEvent(this, account));
 		this.setChanged();
 	}
 
@@ -131,7 +131,7 @@ public class GlobalData extends DefaultListenable {
 		int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
 		this.transactions.add(index, transaction);
 		transaction.getAccount().add(transaction);
-		fireEvent(new TransactionAddedEvent(this, index));
+		fireEvent(new TransactionAddedEvent(this, transaction));
 		this.setChanged();
 	}
 	
@@ -282,6 +282,10 @@ public class GlobalData extends DefaultListenable {
 		}
 	}
 
+	/** Removes an account from the data.
+	 * If there's some transactions were attached to the account, all these transactions will be also removed.
+	 * @param account the account to be removed
+	 */
 	public void remove(Account account) {
 		int index = this.accounts.indexOf(account);
 		if (index>=0){
@@ -295,6 +299,36 @@ public class GlobalData extends DefaultListenable {
 			}
 			this.accounts.remove(index);
 			this.fireEvent(new AccountRemovedEvent(this, index, account));
+			this.setChanged();
+		}
+	}
+
+	/** Changes the name of an account.
+	 * @param account the account to be changed
+	 * @param value the new account name
+	 * @throws IllegalArgumentException if the name is already used for another account.
+	 */
+	public void setName(Account account, String value) {
+		String old = account.getName();
+		if (!old.equals(value)) {
+			// Check that this account name is not already used
+			if (getAccount(value) != null) throw new IllegalArgumentException("Account name already exists");
+			account.setName(value);
+			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.NAME, account, old,value));
+			this.setChanged();
+		}
+	}
+
+	/** Changes the initial balance of an account.
+	 * @param account the account to be changed
+	 * @param value the new initial balance
+	 * @throws IllegalArgumentException if the name is already used for another account.
+	 */
+	public void setInitialBalance(Account account, double value) {
+		double old = account.getInitialBalance();
+		if (old != value) {
+			account.setInitialBalance(value);
+			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.INITIAL_BALANCE, account, old, value));
 			this.setChanged();
 		}
 	}

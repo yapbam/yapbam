@@ -1,10 +1,9 @@
-package net.yapbam.gui.transactiontable;
+package net.yapbam.data;
 
 import java.util.Comparator;
 
-import net.yapbam.data.Transaction;
 
-public class TransactionComparator implements Comparator<Transaction> {
+class TransactionComparator implements Comparator<Transaction> {
 	static final TransactionComparator INSTANCE = new TransactionComparator();
 	
 	public int compare(Transaction o1, Transaction o2) {

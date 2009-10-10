@@ -16,9 +16,10 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
 import net.yapbam.data.AccountFilteredData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
-import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.FilterUpdatedEvent;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewTransactionAction;
 import net.yapbam.gui.util.JTableListener;
@@ -31,7 +32,6 @@ public class TransactionsPlugInPanel extends JPanel {
 	Action deleteTransactionAction;
 	Action checkTransactionAction;
 	Action convertToPericalTransactionAction;
-
 	
 	private AccountFilteredData acFilter;
 	
@@ -111,7 +111,7 @@ public class TransactionsPlugInPanel extends JPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				updateBalances();
-				if (event instanceof EverythingChangedEvent) {//TODO must be in FilteredData
+				if (event instanceof FilterUpdatedEvent) {//TODO must be in FilteredData
 					if (TransactionsPlugInPanel.this.acFilter.hasFilterAccount()) {
 						transactionTable.getFilteredData().setAccounts(TransactionsPlugInPanel.this.acFilter.getAccounts());
 					} else {

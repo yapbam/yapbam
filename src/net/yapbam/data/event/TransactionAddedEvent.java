@@ -1,14 +1,16 @@
 package net.yapbam.data.event;
 
+import net.yapbam.data.Transaction;
+
 public class TransactionAddedEvent extends DataEvent {
-	private int transactionIndex;
+	private Transaction transaction;
 	
-	public TransactionAddedEvent(Object source, int transactionIndex) {
+	public TransactionAddedEvent(Object source, Transaction transaction) {
 		super(source);
-		this.transactionIndex = transactionIndex;
+		this.transaction = transaction;
 	}
 
-	public int getTransactionIndex() {
-		return transactionIndex;
+	public Transaction getTransaction() {
+		return transaction;
 	}
 }

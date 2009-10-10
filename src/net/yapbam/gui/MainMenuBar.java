@@ -17,6 +17,7 @@ import net.yapbam.data.Account;
 import net.yapbam.data.AccountFilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
+import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -198,7 +199,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 			if (event instanceof EverythingChangedEvent) {
 				this.updateAccountMenu();
 			}
-		} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent)) {
+		} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
+				((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
 			this.updateAccountMenu();
 		}
 	}

@@ -4,27 +4,36 @@ import java.util.*;
 
 import net.yapbam.data.event.*;
 
-public abstract class AccountFilter extends DefaultListenable {
+/** The global data class represents the whole data of a Yapbam running instance.
+ * This class represents a filter on the data (retaining only the account(s) the user choose to view).
+ * The only event sent is the FilterChanged event.
+ */
+public abstract class AccountFilter extends DefaultListenable implements DataListener {
 	private static final long serialVersionUID = 1L;
 
 	private HashSet<Account> validAccounts;
 	protected GlobalData data;
 	
+	/** Constructor. */
 	public AccountFilter(GlobalData data) {
 	    super();
 	    this.data = data;
 	    this.setAccounts(null);
-	    this.data.addListener(new DataListener() {		
-			@Override
-			public void processEvent(DataEvent event) {
-				if (event instanceof EverythingChangedEvent) {
-					setAccounts(null);
-					fireEvent(new EverythingChangedEvent(this));
-				} else if (event instanceof AccountRemovedEvent) {
-					process((AccountRemovedEvent) event);
-				}
-			}
-		});
+	    this.data.addListener(this);
+	}
+	
+	/** Process event that occurs on the globalData.
+	 * This implementation only deals with changing the filter state and doesn't forward any event.
+	 * For instance if a account is removed, this method will update the filter (changing to "All" is the
+	 * removed account was the selected account), but will not throw any AccountRemovedEvent.
+	 * @param event The event.
+	 */
+	public void processEvent(DataEvent event) {
+		if (event instanceof EverythingChangedEvent) {
+			setAccounts(null);
+		} else if (event instanceof AccountRemovedEvent) {
+			process((AccountRemovedEvent) event);
+		}
 	}
 	
 	/** Process the AccountRemovedEvent.
@@ -36,15 +45,50 @@ public abstract class AccountFilter extends DefaultListenable {
 	 * will already been called and there will be no way for the listener to know if the account was allowed
 	 * by the filter or not.
 	 * @param event the event
-	 * @return true if the removed account was allowed byt the filter.
+	 * @return true if the removed account was allowed by the filter.
 	 */
 	protected boolean process(AccountRemovedEvent event) {
 		Account account = ((AccountRemovedEvent)event).getRemoved();
 		if (validAccounts==null) return true;
 		return validAccounts.remove(account);
 	}
+	
+	/** Returns the filtered event : the one which seems to happen to someone listening at the filtered data.
+	 * @param event The original global data event
+	 * @return null if the event would not occurs on the filtered data or the event on filtered data.
+	 */
+	/*public boolean getFilteredEvent(DataEvent event) {
+		if (event instanceof AccountAddedEvent) {
+			return isOk(((AccountAddedEvent)event).getAccount());
+		} else if (event instanceof AccountPropertyChangedEvent) {
+			return isOk(((AccountPropertyChangedEvent)event).getAccount());
+		} else if (event instanceof AccountRemovedEvent) {
+			return isOk(((AccountRemovedEvent)event).getRemoved());			
+		} else if (event instanceof CategoryAddedEvent) {
+			return true; //TODO
+		} else if (event instanceof EverythingChangedEvent) {
+			return true;
+		} else if (event instanceof FileChangedEvent) {
+			return true;
+		} else if (event instanceof FilterUpdatedEvent) {
+			return false;
+		} else if (event instanceof ModeAddedEvent) {
+			return true; //TODO
+		} else if (event instanceof NeedToBeSavedChangedEvent) {
+			return true;
+		} else if ((event instanceof PeriodicalTransactionAddedEvent) ||
+				(event instanceof PeriodicalTransactionRemovedEvent)) {
+			return true; //Filters never applies to periodicalTransactions
+		} else if (event instanceof TransactionAddedEvent) {
+			return isOk(((TransactionAddedEvent)event).getTransaction());
+		} else if (event instanceof TransactionRemovedEvent) {
+			return isOk(((TransactionRemovedEvent)event).getRemoved());			
+		} else {
+			throw new IllegalArgumentException("event "+event+" not supported");
+		}
+	}*/
 		
-	/** Returns the valid accounts for this filter.
+	/** Set the valid accounts for this filter.
 	 * There's no side effect between this instance and the returned array.
 	 * @param accounts the accounts (null to allow every accounts).
 	 */
@@ -58,7 +102,7 @@ public abstract class AccountFilter extends DefaultListenable {
 			}
 		}
 		this.filter();
-		fireEvent(new EverythingChangedEvent(this));
+		fireEvent(new FilterUpdatedEvent(this));
 	}
 
 	/** Returns the valid accounts for this filter.

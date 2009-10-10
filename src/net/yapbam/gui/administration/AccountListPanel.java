@@ -14,10 +14,8 @@ import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.data.event.ModeAddedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
-import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
 import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
@@ -32,7 +30,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("serial")
-	class EditAccountAction extends AbstractAction {
+	private class EditAccountAction extends AbstractAction {
 		private GlobalData data;
 		
 		EditAccountAction(GlobalData data) {
@@ -115,6 +113,18 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			else if (columnIndex==2) return account.getTransactionsNumber();
 			return "?";
 		}
+		public void setValueAt(Object value, int row, int col) {
+			Account account = ((GlobalData)data).getAccount(row);
+			if (col==0) { // Account name
+				((GlobalData)data).setName(account, (String)value);
+			} else if (col==1) { // Initial Balance
+				double val = (Double)value;
+				((GlobalData)data).setInitialBalance(account, val);
+			} else { //Unexpected
+				throw new IllegalArgumentException();
+			}
+	        fireTableCellUpdated(row, col);
+	    }
 
 		@Override
 		public int getRowCount() {
@@ -128,20 +138,21 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return false;
+			return columnIndex!=2;
 		}
 		@Override
 		public void processEvent(DataEvent event) {
 			if (event instanceof EverythingChangedEvent) {
 				this.fireTableDataChanged();
 			} else if (event instanceof AccountAddedEvent) {
-				int index = ((AccountAddedEvent)event).getAccountIndex();
+				int index = ((GlobalData)data).indexOf(((AccountAddedEvent)event).getAccount());
 				this.fireTableRowsInserted(index, index);
 			} else if (event instanceof AccountRemovedEvent) {
 				int index = ((AccountRemovedEvent)event).getIndex();
 				this.fireTableRowsDeleted(index, index);
 			} else if (event instanceof TransactionAddedEvent) {
-				int row = ((TransactionAddedEvent)event).getTransactionIndex();
+				Account account = ((TransactionAddedEvent)event).getTransaction().getAccount();
+				int row = ((GlobalData)data).indexOf(account);
 				this.fireTableRowsUpdated(row, row);
 			} else if (event instanceof TransactionRemovedEvent) {
 				Account account = ((TransactionRemovedEvent)event).getRemoved().getAccount();
@@ -149,6 +160,10 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 				this.fireTableRowsUpdated(row, row);				
 			}
 		}
+	}
+	
+	public AccountListPanel() {
+		this(null);
 	}
 
 	public AccountListPanel(GlobalData data) {
@@ -171,15 +186,12 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		return new NewAccountAction((GlobalData) data);
 	}
 	protected Action getEditButtonAction() {
-		return new EditAccountAction((GlobalData) data);
+		return null;
 	}
 	protected Action getDeleteButtonAction() {
 		return new DeleteAccountAction((GlobalData) data);
 	}
-
-	@Override
 	protected Action getDuplicateButtonAction() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
