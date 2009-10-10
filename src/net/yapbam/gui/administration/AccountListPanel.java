@@ -16,49 +16,23 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
-import net.yapbam.gui.dialogs.AbstractDialog;
-import net.yapbam.gui.dialogs.AccountDialog;
 
-import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.lang.Object;
 import java.text.MessageFormat;
 
-public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
+public class AccountListPanel extends AbstractListAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("serial")
-	private class EditAccountAction extends AbstractAction {
-		private GlobalData data;
-		
-		EditAccountAction(GlobalData data) {
-			super("Editer");
-	        putValue(SHORT_DESCRIPTION, "Ce bouton permet d'éditer le compte sélectionné");
-	        this.data = data;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow(getJTable()):null;
-			AccountDialog dialog = new AccountDialog(owner, null, data);
-			int selectedRow = getJTable().getSelectedRow();
-			Account account = data.getAccount(selectedRow);
-			dialog.setContent(account);
-			dialog.setVisible(true);
-			if (dialog.getAccount()!=null) {
-				System.out.println("Account modified");//TODO
-			}
-		}
-	}
-	
 	@SuppressWarnings("serial")
 	class DeleteAccountAction extends AbstractAction {
 		private GlobalData data;
 		DeleteAccountAction (GlobalData data) {
-			super("Supprimer");
-			putValue(SHORT_DESCRIPTION, "Ce bouton permet de supprimer le compte sélectionné");
+			super(LocalizationData.get("GenericButton.delete")); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("AccountManager.deleteAccount.toolTip")); //$NON-NLS-1$
 			this.data = data;
 		}
 	
@@ -69,10 +43,12 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			boolean confirmed = true;
 			int nb = account.getTransactionsNumber();
 			if (nb!=0) {
-				String mess = nb==1?"La suppression de ce compte implique la suppression de son unique opération":
-						MessageFormat.format("<HTML>La suppression de ce compte implique la suppression de ses {0,number,integer} opérations.<BR>"+
-						"Confirmez-vous la suppression</HTML>", nb);
-				int ok = JOptionPane.showConfirmDialog(getJTable(), mess, "Suppression d'un compte contenant des opérations", JOptionPane.OK_CANCEL_OPTION);
+				String mess = nb==1?LocalizationData.get("AccountManager.deleteMessage.one"): //$NON-NLS-1$
+						MessageFormat.format("<HTML>"+LocalizationData.get("AccountManager.deleteMessage.more")+ //$NON-NLS-1$ //$NON-NLS-2$
+						"<BR>"+LocalizationData.get("AccountManager.deleteMessage.confirm")+"</HTML>", nb); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				Object[] options = {LocalizationData.get("GenericButton.ok"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
+				int ok = JOptionPane.showOptionDialog(getJTable(), mess, LocalizationData.get("AccountManager.deleteMessage.title"), //$NON-NLS-1$
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);		
 				confirmed = (ok==0);
 			}
 			if (confirmed) {
@@ -81,9 +57,26 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		}
 	}
 
+	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		return new JTable(getTableModel());
+		return new JTable(getTableModel()) {
+		    //Implement table cell tool tips.
+		    public String getToolTipText(MouseEvent e) {
+		        String tip;
+		        int column = convertColumnIndexToModel(columnAtPoint(e.getPoint()));
+		        if (column == 0) {
+		            tip = LocalizationData.get("AccountManager.nameColumn.toolTip"); //$NON-NLS-1$
+		        } else if (column == 1) {
+		            tip = LocalizationData.get("AccountManager.balanceColumn.toolTip"); //$NON-NLS-1$
+		        } else if (column == 2) {
+		            tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
+		        } else { //another column
+		            tip = super.getToolTipText(e);
+		        }
+		        return tip;
+		    }
+		};
 	}
 	
 	@SuppressWarnings("serial")
@@ -99,9 +92,9 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 		}
 		@Override
 		public String getColumnName(int columnIndex) {
-			if (columnIndex==0) return "Compte";
-			if (columnIndex==1) return "Solde initial";
-			if (columnIndex==2) return "Nombre d'opérations";
+			if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+			if (columnIndex==1) return LocalizationData.get("AccountManager.balanceColumn.title"); //$NON-NLS-1$
+			if (columnIndex==2) return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
 			return "?"; //$NON-NLS-1$
 		}
 
@@ -111,7 +104,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 			if (columnIndex==0) return account.getName();
 			else if (columnIndex==1) return account.getInitialBalance();
 			else if (columnIndex==2) return account.getTransactionsNumber();
-			return "?";
+			return "?"; //$NON-NLS-1$
 		}
 		public void setValueAt(Object value, int row, int col) {
 			Account account = ((GlobalData)data).getAccount(row);
@@ -172,11 +165,11 @@ public class AccountListPanel extends AbstractListAdministrationPanel { //LOCAL
 	
 	@Override
 	protected String getTitle() {
-		return "Gestion des comptes";
+		return LocalizationData.get("AccountManager.title"); //$NON-NLS-1$
 	}
 
 	public String getPanelToolTip() {
-		return "Cet onglet permet de gérer les comptes";
+		return LocalizationData.get("AccountManager.toolTip"); //$NON-NLS-1$
 	}
 	
 	private TableModel getTableModel() {
