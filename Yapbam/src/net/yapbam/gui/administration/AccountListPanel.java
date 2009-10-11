@@ -2,6 +2,7 @@ package net.yapbam.gui.administration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -24,7 +25,7 @@ import java.awt.event.MouseEvent;
 import java.lang.Object;
 import java.text.MessageFormat;
 
-public class AccountListPanel extends AbstractListAdministrationPanel {
+public class AccountListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("serial")
@@ -163,15 +164,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		super(data);
 	}
 	
-	@Override
-	protected String getTitle() {
-		return LocalizationData.get("AccountManager.title"); //$NON-NLS-1$
-	}
-
-	public String getPanelToolTip() {
-		return LocalizationData.get("AccountManager.toolTip"); //$NON-NLS-1$
-	}
-	
 	private TableModel getTableModel() {
 		return new AccountTableModel((GlobalData) data);
 	}
@@ -186,5 +178,27 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 	}
 	protected Action getDuplicateButtonAction() {
 		return null;
+	}
+
+	@Override
+	public JComponent getPanel() {
+		return this;
+	}
+
+	@Override
+	public void restoreState() {
+	}
+
+	@Override
+	public void saveState() {
+	}
+	
+	@Override
+	public String getPanelTitle() {
+		return LocalizationData.get("AccountManager.title"); //$NON-NLS-1$
+	}
+
+	public String getPanelToolTip() {
+		return LocalizationData.get("AccountManager.toolTip"); //$NON-NLS-1$
 	}
 }

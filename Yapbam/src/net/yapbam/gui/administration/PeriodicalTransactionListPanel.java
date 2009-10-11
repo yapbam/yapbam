@@ -1,6 +1,7 @@
 package net.yapbam.gui.administration;
 
 import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 
 import net.yapbam.data.GlobalData;
@@ -10,7 +11,7 @@ import net.yapbam.gui.actions.NewPeriodicalTransactionAction;
 
 import java.lang.Object;
 
-public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel {
+public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration.";
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +23,7 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 		return LocalizationData.get("PeriodicalTransactionManager.toolTip"); //$NON-NLS-1$
 	}
 	@Override
-	public String getTitle() {
+	public String getPanelTitle() {
 		return LocalizationData.get("PeriodicalTransactionManager.title"); //$NON-NLS-1$
 	}
 
@@ -44,12 +45,15 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	}
 	@Override
 	public void restoreState() {
-		super.restoreState();
 		YapbamState.restoreState(getJTable(), STATE_PREFIX);
 	}
 	@Override
 	public void saveState() {
-		super.saveState();
 		YapbamState.saveState(getJTable(), STATE_PREFIX);
+	}
+
+	@Override
+	public JComponent getPanel() {
+		return this;
 	}
 }
