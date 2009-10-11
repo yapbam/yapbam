@@ -16,6 +16,7 @@ import net.yapbam.gui.util.JTableListener;
 
 import java.awt.Insets;
 import java.lang.Object;
+import java.util.ArrayList;
 
 /** This panel is an abstract panel containing a table and "create", "delete", "duplicate", "edit" buttons.
  *  The "edit" and "duplicates" button can be ommited.
@@ -62,11 +63,15 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
+//		this.setSize(300, 200);
 		this.setLayout(new BorderLayout());
 		this.add(getSouthPanel(), BorderLayout.SOUTH);
 		this.add(getJScrollPane(), BorderLayout.CENTER);
-		new JTableListener(jTable, new Action[]{editButtonAction, duplicateButtonAction, deleteButtonAction}, editButtonAction);
+		ArrayList<Action> actions = new ArrayList<Action>();
+		if (editButtonAction!=null) actions.add(editButtonAction);
+		if (duplicateButtonAction!=null) actions.add(duplicateButtonAction);
+		if (deleteButtonAction!=null) actions.add(deleteButtonAction);
+		new JTableListener(jTable, actions.toArray(new Action[actions.size()]), editButtonAction);
 	}
 
 	/**
