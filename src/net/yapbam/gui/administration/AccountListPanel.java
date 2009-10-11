@@ -2,7 +2,6 @@ package net.yapbam.gui.administration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -17,6 +16,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
 
@@ -25,14 +25,14 @@ import java.awt.event.MouseEvent;
 import java.lang.Object;
 import java.text.MessageFormat;
 
-public class AccountListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel {
+public class AccountListPanel extends AbstractListAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("serial")
 	class DeleteAccountAction extends AbstractAction {
 		private GlobalData data;
 		DeleteAccountAction (GlobalData data) {
-			super(LocalizationData.get("GenericButton.delete")); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("AccountManager.deleteAccount.toolTip")); //$NON-NLS-1$
 			this.data = data;
 		}
@@ -178,27 +178,5 @@ public class AccountListPanel extends AbstractListAdministrationPanel implements
 	}
 	protected Action getDuplicateButtonAction() {
 		return null;
-	}
-
-	@Override
-	public JComponent getPanel() {
-		return this;
-	}
-
-	@Override
-	public void restoreState() {
-	}
-
-	@Override
-	public void saveState() {
-	}
-	
-	@Override
-	public String getPanelTitle() {
-		return LocalizationData.get("AccountManager.title"); //$NON-NLS-1$
-	}
-
-	public String getPanelToolTip() {
-		return LocalizationData.get("AccountManager.toolTip"); //$NON-NLS-1$
 	}
 }

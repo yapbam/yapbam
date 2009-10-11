@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="build" name="Create Runnable Jar for Yapbam project">
-	<property name="yapbamVersion" value="0.2.5"/>
+	<property name="yapbamVersion" value="0.2.6"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
@@ -33,6 +33,6 @@
 		<delete dir="${releaseDir}"/>
 	</target>
 	<target name="doc">
-		<javadoc sourcepath="src" packagenames="net.yapbam.data,net.yapbam.data.event,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget" destdir="doc"/>
+		<javadoc header="${yapbamVersion}" sourcepath="src" packagenames="net.yapbam.data,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget" destdir="doc"/>
 	</target>
 </project>

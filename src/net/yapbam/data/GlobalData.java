@@ -179,7 +179,7 @@ public class GlobalData extends DefaultListenable {
 		if (category.getName()==null) throw new IllegalArgumentException();
 		int index = -Collections.binarySearch(categories, category)-1;
 		this.categories.add(index, category);
-		fireEvent(new CategoryAddedEvent(this, index));
+		fireEvent(new CategoryAddedEvent(this, category));
 		setChanged();
 	}
 

@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
@@ -16,7 +17,7 @@ public class NewAccountAction extends AbstractAction {
 	private GlobalData data;
 	
 	public NewAccountAction(GlobalData data) {
-		super(LocalizationData.get("MainMenu.Accounts.New"));
+		super(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT);
         putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Accounts.New.ToolTip"));
         this.data = data;
 	}

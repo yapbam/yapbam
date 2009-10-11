@@ -1,14 +1,16 @@
 package net.yapbam.data.event;
 
-public class CategoryAddedEvent extends DataEvent {
-	private int categoryIndex;
+import net.yapbam.data.Category;
 
-	public CategoryAddedEvent(Object source, int accountIndex) {
+public class CategoryAddedEvent extends DataEvent {
+	private Category category;
+
+	public CategoryAddedEvent(Object source, Category category) {
 		super(source);
-		this.categoryIndex = accountIndex;
+		this.category = category;
 	}
 
-	public int getCategoryIndex() {
-		return categoryIndex;
+	public Category getCategory() {
+		return this.category;
 	}
 }

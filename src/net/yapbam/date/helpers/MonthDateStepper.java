@@ -14,7 +14,7 @@ public class MonthDateStepper implements DateStepper {
 	/**
 	 * Constructor.
 	 * The time limit is the end of times. 
-	 * @see #MonthDateIterator(int, int, Date)
+	 * @see #MonthDateStepper(int, int, Date)
 	 */
 	public MonthDateStepper(int nb, int day) {
 		this(nb, day, null);
