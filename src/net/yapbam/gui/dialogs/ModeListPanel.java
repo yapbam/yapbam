@@ -52,16 +52,6 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 		return new NewModeAction();
 	}
 
-	@Override
-	protected String getPanelToolTip() {
-		return null;
-	}
-	
-	@Override
-	protected String getTitle() {
-		return null;
-	}
-
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
 			super(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$

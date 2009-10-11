@@ -12,7 +12,7 @@ public class AdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GlobalData data;
-	private AbstractListAdministrationPanel[] panels;
+	private AbstractAdministrationPanel[] panels;
 	
 	/**
 	 * This is the constructor
@@ -39,13 +39,13 @@ public class AdministrationPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		JTabbedPane jTabbedPane = new JTabbedPane();
 		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
-		panels = new AbstractListAdministrationPanel[]{
+		panels = new AbstractAdministrationPanel[]{
 				new AccountListPanel(data),
 /*				new CategoryListPanel(data),*/
 				new PeriodicalTransactionListPanel(data)
 		};
 		for (int i = 0; i < panels.length; i++) {
-			jTabbedPane.addTab(panels[i].getTitle(), null, panels[i], panels[i].getToolTipText());
+			jTabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());
 		}
 		this.add(jTabbedPane, gridBagConstraints);
 	}

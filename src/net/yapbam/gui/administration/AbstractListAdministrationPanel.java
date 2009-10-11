@@ -17,6 +17,10 @@ import net.yapbam.gui.util.JTableListener;
 import java.awt.Insets;
 import java.lang.Object;
 
+/** This panel is an abstract panel containing a table and "create", "delete", "duplicate", "edit" buttons.
+ *  The "edit" and "duplicates" button can be ommited.
+ *  If there's an edit button, its action is called when a double-clic occurs on the table.
+ */
 public abstract class AbstractListAdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -46,11 +50,8 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		super();
 		this.data = data;
 		initialize();
-		this.setToolTipText(getPanelToolTip());
 	}
 	
-	protected abstract String getPanelToolTip();
-	protected abstract String getTitle();
 	protected abstract Action getNewButtonAction();
 	protected abstract Action getEditButtonAction();
 	protected abstract Action getDeleteButtonAction();
@@ -191,8 +192,4 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		}
 		return duplicateButton;
 	}
-
-	public void saveState() {}
-
-	public void restoreState() {}
 }

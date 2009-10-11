@@ -2,31 +2,22 @@ package net.yapbam.gui.administration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 
 import java.awt.event.ActionEvent;
 import java.lang.Object;
 
-public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
+public class CategoryListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
 
 	public CategoryListPanel(Object data) {
 		super(data);
-	}
-	
-	@Override
-	protected String getTitle() {
-		return "Gestion des catégories";
-	}
-
-	public String getPanelToolTip() {
-		return "Cet onglet permet de gérer les catégories";
 	}
 	
 	@Override
@@ -96,5 +87,27 @@ public class CategoryListPanel extends AbstractListAdministrationPanel { //LOCAL
 	protected Action getDuplicateButtonAction() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public String getPanelTitle() {
+		return "Gestion des catégories";
+	}
+
+	public String getPanelToolTip() {
+		return "Cet onglet permet de gérer les catégories";
+	}
+
+	@Override
+	public JComponent getPanel() {
+		return this;
+	}
+
+	@Override
+	public void restoreState() {
+	}
+
+	@Override
+	public void saveState() {
 	}
 }
