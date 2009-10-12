@@ -84,4 +84,15 @@ public class AbstractTransaction implements Cloneable {
 		return result;
 	}
 
+	/** check if the transaction or one of its subtransaction has a specified category.
+	 * @param category The category to check
+	 * @return true if the category is used
+	 */
+	public boolean hasCategory(Category category) {
+		if (getCategory().equals(category)) return true;
+		for (int j = 0; j < getSubTransactionSize(); j++) {
+			if (getSubTransaction(j).getCategory().equals(category)) return true;
+		}
+		return false;
+	}
 }
