@@ -2,9 +2,11 @@ package net.yapbam.gui.dialogs;
 
 import java.awt.GridBagConstraints;
 import java.awt.Window;
-import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Date;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -16,7 +18,6 @@ import net.yapbam.gui.widget.DateWidget;
 
 /** This dialog allows to create or edit a transaction */
 public class TransactionDialog extends AbstractTransactionDialog {
-	//FIXME Bug when you press return during editing the date, the valueDate is not refreshed
 	private static final long serialVersionUID = 1L;
 	
 	private DateWidget date;
@@ -26,7 +27,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	
 	/** Display the creation dialog, if the creation is confirmed, add the transaction to the global data 
 	 * @param data the global data
-	 * @param frame the dialog's parent frame
+	 * @param owner the dialog's parent frame
 	 * @param transaction the transaction we want to edit, or null if we want to create a new transaction
 	 * @param edit True if we edit an existing transaction, false if we edit a new transaction. Note : Maybe you're thinking
 	 * that this argument is redundant with transaction!=null, but it is not. You have to think of transaction argument as a model
@@ -34,13 +35,13 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @param autoAdd if true, the created or edited transaction is automatically added to the global data instance.
 	 * @return the new transaction or the edited one
 	 */
-	public static Transaction open(GlobalData data, Window frame, Transaction transaction, boolean edit, boolean autoAdd) {
+	public static Transaction open(GlobalData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd) {
 		if (data.getAccountsNumber()==0) {
 			//Need to create an account first
-			AccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			AccountDialog.open(data, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (data.getAccountsNumber()==0) return null;
 		}
-		TransactionDialog dialog = new TransactionDialog(frame, data, transaction, edit);
+		TransactionDialog dialog = new TransactionDialog(owner, data, transaction, edit);
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if ((newTransaction!=null) && autoAdd) {
@@ -50,10 +51,14 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return newTransaction;
 	}
 	
-	private TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
+	public TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
 		super(owner, (edit?LocalizationData.get("TransactionDialog.title.edit"):LocalizationData.get("TransactionDialog.title.new")), data, transaction);
 	}
 
+	public void setTransactionDate (Date date) {
+		this.date.setDate(date);
+	}
+	
 	protected void setContent(AbstractTransaction transaction) {
 		super.setContent(transaction);
 		Transaction t = (Transaction) transaction;
@@ -109,7 +114,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		centerPane.add(titleDate, c);
 		date = new DateWidget();
 		date.addFocusListener(focusListener);
-		date.addFocusListener(new FocusListener() {
+/*		date.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
 				Mode m = getCurrentMode();
@@ -118,6 +123,17 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			}
 			@Override
 			public void focusGained(FocusEvent e) {}
+		});
+*/
+		date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getNewValue()!=null) {
+					Mode m = getCurrentMode();
+					DateStepper vdc = receipt.isSelected()?m.getReceiptVdc():m.getExpenseVdc();
+					defDate.setDate(vdc.getNextStep(date.getDate()));
+				}
+			}
 		});
 		date.addKeyListener(listener);
         c.gridx++; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;

@@ -1,6 +1,7 @@
 package net.yapbam.gui.transactiontable;
 
 import java.awt.event.ActionEvent;
+import java.util.Date;
 
 import javax.swing.AbstractAction;
 
@@ -22,7 +23,16 @@ public class DuplicateTransactionAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		TransactionDialog.open(table.getGlobalData(), AbstractTransactionDialog.getOwnerWindow(table),
-				(Transaction)table.getSelectedTransaction().clone(), false, true);
+		TransactionDialog dialog = new TransactionDialog(AbstractTransactionDialog.getOwnerWindow(table),
+				table.getGlobalData(), table.getSelectedTransaction(), false);
+		dialog.setTransactionDate(new Date());
+		dialog.setVisible(true);
+		Transaction newTransaction = dialog.getTransaction();
+		if (newTransaction!=null) {
+			table.getGlobalData().add(newTransaction);
+		}
+//
+//		TransactionDialog.open(table.getGlobalData(), AbstractTransactionDialog.getOwnerWindow(table),
+//				(Transaction)table.getSelectedTransaction().clone(), false, true);
 	}
 }
