@@ -14,6 +14,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
+import net.yapbam.data.event.CategoryPropertyChangedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -148,6 +149,8 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 			if (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)) {
 				fireTableDataChanged();			
 			}
+		} else if (event instanceof CategoryPropertyChangedEvent) {
+			fireTableDataChanged();			
 		}
 	}
 

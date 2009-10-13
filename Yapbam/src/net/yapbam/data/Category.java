@@ -40,4 +40,9 @@ public class Category implements Serializable, Comparable<Category> {
 	public String toString() {
 		return name;
 	}
+
+	void setName(String name) {
+		if (name==null) throw new IllegalArgumentException();
+		this.name = name;
+	}
 }
