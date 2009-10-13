@@ -7,22 +7,56 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
+import javax.swing.AbstractListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 
 @SuppressWarnings("serial")
 public class PopupTextFieldList extends JTextField {
-	private String[] values;
+	
+	private final class PopupListModel extends AbstractListModel {
+		Comparable[] values;
+		
+		PopupListModel() {
+			this.values = new Comparable[0];
+		}
+		
+		@Override
+		public int getSize() {
+			return values.length;
+		}
+
+		@Override
+		public Object getElementAt(int index) {
+			return values[index];
+		}
+
+		public void setValues(Comparable[] values) {
+			int n = this.values.length;
+			if (n>0) {
+				this.values = new Comparable[0];
+				fireIntervalRemoved(this, 0, n);
+			}
+			this.values = values.clone();
+			Arrays.sort(this.values);
+			fireIntervalAdded(this, 0, this.values.length);
+		}
+		
+		/** Same result as Arrays.binarySearch */
+		public int indexOf(Comparable value) {
+			return Arrays.binarySearch(values, value);
+		}
+	}
+
 	private JPopupMenu popup;
 	private JList list;
 
-	public PopupTextFieldList (String[] predefinedValues) {
-		this.values = predefinedValues;
-		Arrays.sort(this.values);
+	public PopupTextFieldList () {
 		popup = new JPopupMenu();
-		list = new AutoScrolJList(values);
+		list = new AutoScrolJList(new PopupListModel());
 		popup.add(new JScrollPane(list));
 		list.addMouseListener(new MouseAdapter() {
 			@Override
@@ -68,6 +102,7 @@ public class PopupTextFieldList extends JTextField {
 					if (popup.isVisible()) {
 						if (list.getSelectedIndex()>=0) setText((String) list.getSelectedValue());
 						popup.setVisible(false);
+						e.consume();
 					}
 				}
 			}
@@ -76,7 +111,7 @@ public class PopupTextFieldList extends JTextField {
 			public void keyReleased(KeyEvent e) {
 				String text = getText();
 				if (!text.equals(lastText)) {
-					int index = Arrays.binarySearch(values, text);
+					int index = ((PopupListModel)list.getModel()).indexOf(text);
 					if (index<0) {
 						index = -index-1;
 						if (index >= list.getModel().getSize()) {
@@ -98,12 +133,16 @@ public class PopupTextFieldList extends JTextField {
 			}
 		});
 	}
+
+	public void setPredefined(String[] array) {
+		((PopupListModel)this.list.getModel()).setValues(array);
+	}
 }
 
 @SuppressWarnings("serial")
 class AutoScrolJList extends JList {
-	public AutoScrolJList(String[] values) {
-		super(values);
+	public AutoScrolJList(ListModel model) {
+		super(model);
 		setAutoscrolls(true);
 	}
 
