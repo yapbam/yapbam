@@ -19,6 +19,7 @@ import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
+import net.yapbam.gui.dialogs.AbstractDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -110,8 +111,24 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		public void setValueAt(Object value, int row, int col) {
 			Account account = ((GlobalData)data).getAccount(row);
 			if (col==0) { // Account name
-				//FIXME What if account already exists
-				((GlobalData)data).setName(account, (String)value);
+				String name = ((String)value).trim();
+				String errorMessage = null;
+				if (name.length()==0) {
+					errorMessage = LocalizationData.get("AccountManager.error.message.empty"); //$NON-NLS-1$
+				} else {
+					Account matchAccount = ((GlobalData)data).getAccount(name);
+					if (matchAccount!=null) {
+						if (matchAccount==account) return;
+						errorMessage = MessageFormat.format(LocalizationData.get("AccountManager.error.message.alreadyUsed"), name); //$NON-NLS-1$
+					}
+				}
+				if (errorMessage!=null) {
+					JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(AccountListPanel.this),
+							errorMessage, LocalizationData.get("AccountManager.error.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
+					fireTableRowsUpdated(row, row);
+				} else {
+					((GlobalData)data).setName(account, (String)value);
+				}
 			} else if (col==1) { // Initial Balance
 				double val = (Double)value;
 				((GlobalData)data).setInitialBalance(account, val);
