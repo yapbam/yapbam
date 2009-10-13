@@ -20,18 +20,26 @@ import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.CategoryDialog;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.lang.Object;
+import java.text.MessageFormat;
 
-public class CategoryListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel { //TODO Add merge and split functions
+public class CategoryListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel { //TODO Add split functions
 	private static final long serialVersionUID = 1L;
 
 	public CategoryListPanel(Object data) {
 		super(data);
 	}
 	
+	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		return new JTable(getTableModel());
+		return new JTable(getTableModel()) {
+		    //Implement table cell tool tips.
+		    public String getToolTipText(MouseEvent e) {
+		        return LocalizationData.get("CategoryManager.nameColumn.toolTip"); //$NON-NLS-1$;
+		    }
+		};
 	}
 
 	private TableModel getTableModel() {
@@ -52,13 +60,40 @@ public class CategoryListPanel extends AbstractListAdministrationPanel implement
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			if (columnIndex==0) return ((GlobalData)data).getCategory(rowIndex).getName();
-			return "?"; //$NON-NLS-1$
+			return getCategory(rowIndex).getName();
+		}
+		
+		Category getCategory(int row) {
+			return ((GlobalData)data).getCategory(row+1); // rowIndex+1 because the undefined category is ommited
 		}
 
 		@Override
+		public void setValueAt(Object value, int row, int col) {
+			String name = ((String)value).trim();
+			String errorMessage = null;
+			if (name.length()==0) {
+				errorMessage = LocalizationData.get("CategoryManager.error.message.empty"); //$NON-NLS-1$
+			} else {
+				Category category = ((GlobalData)data).getCategory(name);
+				if (category!=null) {
+					if (category==getCategory(row)) return;
+					errorMessage = MessageFormat.format(LocalizationData.get("CategoryManager.error.message.alreadyUsed"), name); //$NON-NLS-1$
+					//TODO We could merge the two categories, on demand
+				}
+			}
+			if (errorMessage!=null) {
+				JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(CategoryListPanel.this),
+						errorMessage, LocalizationData.get("CategoryManager.error.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
+				fireTableRowsUpdated(row, row);
+			} else {
+				((GlobalData)data).setName(getCategory(row), name);
+		        fireTableDataChanged();
+			}
+	    }
+
+		@Override
 		public int getRowCount() {
-			return ((GlobalData)data).getCategoriesNumber();
+			return ((GlobalData)data).getCategoriesNumber()-1; // The undefined category is omitted
 		}
 
 		@Override
@@ -68,16 +103,16 @@ public class CategoryListPanel extends AbstractListAdministrationPanel implement
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return false;
+			return true;
 		}
 
 		@Override
 		public void processEvent(DataEvent event) {
 			if (event instanceof CategoryAddedEvent) {
-				int row = ((GlobalData)data).indexOf(((CategoryAddedEvent)event).getCategory());
+				int row = ((GlobalData)data).indexOf(((CategoryAddedEvent)event).getCategory())-1; // -1 because undefined category is omitted
 				fireTableRowsInserted(row, row);
 			} else if (event instanceof CategoryRemovedEvent) {
-				int row = ((CategoryRemovedEvent)event).getIndex();
+				int row = ((CategoryRemovedEvent)event).getIndex()-1; // -1 because undefined category is omitted
 				fireTableRowsDeleted(row, row);
 			}
 		}
@@ -111,9 +146,8 @@ public class CategoryListPanel extends AbstractListAdministrationPanel implement
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			GlobalData gData = (GlobalData)data;
 			int selectedRow = getJTable().getSelectedRow();
-			Category category = gData.getCategory(selectedRow);
+			Category category = ((CategoryTableModel)getJTable().getModel()).getCategory(selectedRow);
 			boolean confirmed = true;
 			if (isUsed(category)) {
 				String mess = ("<HTML>"+LocalizationData.get("CategoryManager.deleteMessage.head")+ //$NON-NLS-1$ //$NON-NLS-2$

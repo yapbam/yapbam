@@ -359,4 +359,19 @@ public class GlobalData extends DefaultListenable {
 			this.setChanged();
 		}
 	}
+
+	public void setName(Category category, String value) {
+		String old = category.getName();
+		if (!old.equals(value)) {
+			// Check that this category name is not already used
+			if (getCategory(value) != null) throw new IllegalArgumentException("Category name already exists");
+			category.setName(value);
+			// Category list is sorted by name => we have to change the category position
+			this.categories.remove(indexOf(category));
+			int index = -Collections.binarySearch(categories, category)-1;
+			this.categories.add(index, category);
+			this.fireEvent(new CategoryPropertyChangedEvent(this, CategoryPropertyChangedEvent.NAME, category, old,value));
+			this.setChanged();
+		}
+	}
 }

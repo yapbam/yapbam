@@ -110,6 +110,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		public void setValueAt(Object value, int row, int col) {
 			Account account = ((GlobalData)data).getAccount(row);
 			if (col==0) { // Account name
+				//FIXME What if account already exists
 				((GlobalData)data).setName(account, (String)value);
 			} else if (col==1) { // Initial Balance
 				double val = (Double)value;

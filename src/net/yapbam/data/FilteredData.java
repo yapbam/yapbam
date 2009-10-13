@@ -56,6 +56,11 @@ public class FilteredData extends AccountFilter {
 					if (isOk(evt.getAccount())) {
 						fireEvent(event);
 					}
+				} else if (event instanceof CategoryPropertyChangedEvent) {
+					CategoryPropertyChangedEvent evt = (CategoryPropertyChangedEvent) event;
+					if (isOk(evt.getCategory())) {
+						fireEvent(event);
+					}
 				}
 			}
 		});
@@ -63,10 +68,13 @@ public class FilteredData extends AccountFilter {
 	}
 	
 	private boolean eventImplySorting (DataEvent event) {
-		return ((event instanceof AccountPropertyChangedEvent) &&
+		boolean accountRenamed = (event instanceof AccountPropertyChangedEvent) &&
 				((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME) &&
-				isOk(((AccountPropertyChangedEvent)event).getAccount()) ||
-				false); //TODO other change events
+				isOk(((AccountPropertyChangedEvent)event).getAccount());
+		boolean categoryRenamed = (event instanceof CategoryPropertyChangedEvent) &&
+		isOk(((CategoryPropertyChangedEvent)event).getCategory());
+		boolean result = (accountRenamed || categoryRenamed); //TODO other change events
+		return result;
 	}
 	
 	public void clear() {
@@ -79,6 +87,10 @@ public class FilteredData extends AccountFilter {
 		boolean checkedOk = isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED);
 		boolean amountOk = isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE);
 		return accountOk && checkedOk && amountOk;
+	}
+	
+	public boolean isOk(Category category) {
+		return true; // For now, no filter no categories
 	}
 
 	public boolean isOk(int property) {
