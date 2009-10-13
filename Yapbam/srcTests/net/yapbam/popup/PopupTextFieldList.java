@@ -55,7 +55,6 @@ public class PopupTextFieldList extends JTextField {
 
 	private JPopupMenu popup;
 	private JList list;
-	private boolean popupIsShowing;
 
 	public PopupTextFieldList () {
 		popup = new JPopupMenu();
@@ -65,7 +64,6 @@ public class PopupTextFieldList extends JTextField {
 		addFocusListener(new FocusListener() {		
 			@Override
 			public void focusLost(FocusEvent e) {
-				System.out.println (e);
 				if (popup.isVisible() && !e.isTemporary()) {
 					popup.setVisible(false);
 					e.getOppositeComponent().requestFocus();
@@ -98,9 +96,7 @@ public class PopupTextFieldList extends JTextField {
 					if (!popup.isVisible()) {
 						Dimension size = popup.getPreferredSize();
 						if (getWidth()>size.width) popup.setPreferredSize(new Dimension(getWidth(), size.height));
-						popupIsShowing = true;
 						popup.show(PopupTextFieldList.this, 0, getHeight());
-						popupIsShowing = false;
 						requestFocus(false);
 					} else {
 						int index = list.getSelectedIndex();
