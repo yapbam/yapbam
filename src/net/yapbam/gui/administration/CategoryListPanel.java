@@ -122,9 +122,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel implement
 				confirmed = (ok==0);
 			}
 			if (confirmed) {
-			System.out.println ("Not yet implemented");
-			// TODO Auto-generated method stub
-//				data.remove(category);
+				((GlobalData)data).remove(category);
 			}
 		}
 	}

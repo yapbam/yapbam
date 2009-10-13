@@ -33,4 +33,13 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	public DateStepper getNextDateBuilder() {
 		return nextDateBuilder;
 	}
+	
+	PeriodicalTransaction change(Category oldCategory, Category newCategory) {
+		if (!hasCategory(oldCategory)) return null;
+		List<SubTransaction> subTransactions = changeSubTransactions(oldCategory, newCategory);
+		return new PeriodicalTransaction(getDescription(), getAmount(), getAccount(), getMode(),
+				(getCategory().equals(oldCategory)?newCategory:getCategory()), subTransactions,
+				getNextDate(), isEnabled(), getNextDateBuilder());
+	}
+
 }

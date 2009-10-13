@@ -49,4 +49,11 @@ public class Transaction extends AbstractTransaction implements Serializable, Cl
 	public boolean isChecked() {
 		return this.statementId!=null;
 	}
+	
+	Transaction change(Category oldCategory, Category newCategory) {
+		if (!hasCategory(oldCategory)) return null;
+		List<SubTransaction> subTransactions = changeSubTransactions(oldCategory, newCategory);
+		return new Transaction(getDate(), getNumber(), getDescription(), getAmount(), getAccount(), getMode(),
+				(getCategory().equals(oldCategory)?newCategory:getCategory()), getValueDate(), getStatement(), subTransactions);
+	}
 }
