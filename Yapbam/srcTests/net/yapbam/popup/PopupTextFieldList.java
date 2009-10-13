@@ -1,6 +1,8 @@
 package net.yapbam.popup;
 
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -53,11 +55,27 @@ public class PopupTextFieldList extends JTextField {
 
 	private JPopupMenu popup;
 	private JList list;
+	private boolean popupIsShowing;
 
 	public PopupTextFieldList () {
 		popup = new JPopupMenu();
 		list = new AutoScrolJList(new PopupListModel());
 		popup.add(new JScrollPane(list));
+
+		addFocusListener(new FocusListener() {		
+			@Override
+			public void focusLost(FocusEvent e) {
+				System.out.println (e);
+				if (popup.isVisible() && !e.isTemporary()) {
+					popup.setVisible(false);
+					e.getOppositeComponent().requestFocus();
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
 		list.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -71,7 +89,6 @@ public class PopupTextFieldList extends JTextField {
 				requestFocus();
 			}
 		});
-		
         addKeyListener(new KeyAdapter() {
 			private String lastText="";
 
@@ -81,7 +98,9 @@ public class PopupTextFieldList extends JTextField {
 					if (!popup.isVisible()) {
 						Dimension size = popup.getPreferredSize();
 						if (getWidth()>size.width) popup.setPreferredSize(new Dimension(getWidth(), size.height));
+						popupIsShowing = true;
 						popup.show(PopupTextFieldList.this, 0, getHeight());
+						popupIsShowing = false;
 						requestFocus(false);
 					} else {
 						int index = list.getSelectedIndex();
