@@ -61,7 +61,7 @@ class GenerateTableModel extends AbstractTableModel implements GenericTransactio
 		if (columnIndex==1) return t.getDescription();
 		if (columnIndex==2) return t.getDate();
 		if (columnIndex==3) return new double[]{t.getAmount()};
-		if (columnIndex==4) return enabled[rowIndex];
+		if (columnIndex==4) return !enabled[rowIndex];
 		throw new IllegalArgumentException();
 	}
 
