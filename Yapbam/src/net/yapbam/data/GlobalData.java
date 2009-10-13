@@ -332,4 +332,31 @@ public class GlobalData extends DefaultListenable {
 			this.setChanged();
 		}
 	}
+
+	/** Removes a category from the data
+	 * All the transactions and the subtransactions attached to the deleted category are moved to the "undifined" category.
+	 * @param category
+	 */
+	public void remove(Category category) {
+		int index = this.categories.indexOf(category);
+		if (index>=0){
+			for (int i = 0; i < getTransactionsNumber(); i++) {
+				Transaction t = getTransaction(i).change(category, Category.UNDEFINED);
+				if (t!=null) {
+					remove(getTransaction(i));
+					add(t);
+				}
+			}
+			for (int i = 0; i < getPeriodicalTransactionsNumber(); i++) {
+				PeriodicalTransaction pt = getPeriodicalTransaction(i).change(category, Category.UNDEFINED);
+				if (pt!=null) {
+					remove(getPeriodicalTransaction(i));
+					add(pt);
+				}
+			}
+			this.categories.remove(index);
+			this.fireEvent(new CategoryRemovedEvent(this, index, category));
+			this.setChanged();
+		}
+	}
 }
