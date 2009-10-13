@@ -11,6 +11,7 @@ import javax.swing.table.TableModel;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.CategoryAddedEvent;
+import net.yapbam.data.event.CategoryRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.IconManager;
@@ -75,8 +76,9 @@ public class CategoryListPanel extends AbstractListAdministrationPanel implement
 			if (event instanceof CategoryAddedEvent) {
 				int row = ((GlobalData)data).indexOf(((CategoryAddedEvent)event).getCategory());
 				fireTableRowsInserted(row, row);
-/*			} else if (event instanceof CategoryRemovedEvent) {
-				//TODO*/
+			} else if (event instanceof CategoryRemovedEvent) {
+				int row = ((CategoryRemovedEvent)event).getIndex();
+				fireTableRowsDeleted(row, row);
 			}
 		}
 	}
