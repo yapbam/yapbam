@@ -20,7 +20,7 @@ import net.yapbam.update.VersionManager;
 /** This class is in charge of checking for Yapbam updates over the Internet */
 @SuppressWarnings("serial")
 public class CheckNewReleaseAction extends AbstractAction {
-	private static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck";
+	private static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck"; //$NON-NLS-1$
 	private Window owner;
 
 	/** Constructor
@@ -56,10 +56,10 @@ public class CheckNewReleaseAction extends AbstractAction {
 				if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) {
 					String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
 					String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(),update.getUpdateURL());
-					new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"),
+					new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"), //$NON-NLS-1$ //$NON-NLS-2$
 							message).setVisible(true);
 				} else {
-					if (!auto) JOptionPane.showMessageDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.NoUpdate"), LocalizationData.get("MainMenu.CheckUpdate.NoUpdate.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
+					if (!auto) JOptionPane.showMessageDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.NoUpdate"), LocalizationData.get("MainMenu.CheckUpdate.NoUpdate.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		} catch (Exception e1) {
@@ -72,11 +72,17 @@ public class CheckNewReleaseAction extends AbstractAction {
 	}
 	
 	public static void doAutoCheck() {
-		//TODO It could be cool to display an information window (maybe the check is very, very, long and the user is waiting) 
+		if (Preferences.INSTANCE.isFirstRun()) {
+			int option = JOptionPane.showOptionDialog(null, LocalizationData.get("MainMenu.CheckUpdate.FirstRun.message"), //$NON-NLS-1$
+					LocalizationData.get("MainMenu.CheckUpdate.FirstRun.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, //$NON-NLS-1$
+					new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")}, LocalizationData.get("GenericButton.yes")); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			Preferences.INSTANCE.setAutoUpdate(-option, false);
+		}
     	int days = Preferences.INSTANCE.getAutoUpdatePeriod();
 		if (days>=0) {
 			Date last = YapbamState.getDate(LAST_UPDATE_CHECK_KEY);
 			if (DateHelper.dateToInteger(new Date())-DateHelper.dateToInteger(last)>=days) {
+				//TODO It could be cool to display an information window (maybe the check is very, very, long and the user is waiting) 
 				check (null, true);
 			}
 		}
