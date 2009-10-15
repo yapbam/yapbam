@@ -66,7 +66,8 @@ public class JTableListener extends MouseAdapter implements ListSelectionListene
 			Point p = e.getPoint();
 			int row = jTable.rowAtPoint(p);
 			if (row >= 0) {
-              if (defaultAction!=null) defaultAction.actionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
+				Action action = getDoubleClickAction();
+				if (action!=null) action.actionPerformed(new ActionEvent(e.getSource(), e.getID(), ""));
             }
         } else {
         	maybeShowPopup(e);
