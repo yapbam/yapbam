@@ -38,11 +38,14 @@ public class Preferences {
 	public static final Preferences INSTANCE = new Preferences();
 	
 	private Properties properties;
+	private boolean firstRun;
 
 	private Preferences() {
 		this.properties = new Properties();
+		this.firstRun = true;
 		if (getFile().exists()) {
 			try {
+				this.firstRun = false;
 				properties.load(new FileInputStream(getFile()));
 			    setAuthentication();
 			} catch (Throwable e) {
@@ -64,6 +67,10 @@ public class Preferences {
 		this.properties.put(LANGUAGE, LANGUAGE_DEFAULT_VALUE);
 		this.properties.put(COUNTRY, COUNTRY_DEFAULT_VALUE);
 		this.properties.put(LOOK_AND_FEEL, LOOK_AND_FEEL_CUSTOM_VALUE);
+	}
+	
+	public boolean isFirstRun() {
+		return this.firstRun;
 	}
 
 	public void save() {
@@ -211,6 +218,10 @@ public class Preferences {
 		}
 	}
 	
+	/** Set the autoupdate period
+	 * @param days number of days between two new versions checks (a negative number means "no auto check")
+	 * @param silentFail true if a communication problem during auto check may be silent. false to have an error dialog displayed.
+	 */
 	public void setAutoUpdate(int days, boolean silentFail) {
 		this.properties.setProperty(AUTO_UPDATE_PERIOD, Integer.toString(days));
 		this.properties.setProperty(AUTO_UPDATE_SILENT_FAIL, Boolean.toString(silentFail));
