@@ -197,4 +197,9 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 	protected Action getDuplicateButtonAction() {
 		return null;
 	}
+
+	@Override
+	public JTable getJTable() {
+		return super.getJTable();
+	}
 }
