@@ -4,6 +4,8 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+
 import java.awt.GridBagConstraints;
 
 import net.yapbam.data.GlobalData;
@@ -11,6 +13,9 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.ModeListPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Font;
 import java.awt.Color;
 
@@ -24,6 +29,18 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 		super();
 		this.data = data;
 		initialize();
+		final JTable jTable = this.getAccountListPanel().getJTable();
+		jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) {
+					int row = jTable.getSelectedRow();
+					if (row>=0) {
+						getModeListPanel().setContent(AccountAdministrationPanel.this.data.getAccount(row));
+					}
+				}
+			}
+		});
 	}
 	
 	/**
@@ -39,6 +56,12 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.fill = GridBagConstraints.BOTH;
+		gridBagConstraints1.weightx = 0.0D;
+		gridBagConstraints1.weighty = 0.75D;
+		gridBagConstraints1.gridy = 1;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.weighty = 1.0D;
@@ -54,6 +77,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getAccountListPanel(), gridBagConstraints);
+		this.add(getModeListPanel(), gridBagConstraints1);
 	}
 
 	/**

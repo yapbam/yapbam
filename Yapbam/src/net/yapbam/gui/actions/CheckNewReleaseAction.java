@@ -75,7 +75,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 		if (Preferences.INSTANCE.isFirstRun()) {
 			int option = JOptionPane.showOptionDialog(null, LocalizationData.get("MainMenu.CheckUpdate.FirstRun.message"), //$NON-NLS-1$
 					LocalizationData.get("MainMenu.CheckUpdate.FirstRun.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, //$NON-NLS-1$
-					new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")}, LocalizationData.get("GenericButton.yes")); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")}, LocalizationData.get("GenericButton.yes")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			Preferences.INSTANCE.setAutoUpdate(-option, false);
 		}
     	int days = Preferences.INSTANCE.getAutoUpdatePeriod();
