@@ -213,7 +213,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 
 	private Mode displayNewModeDialog() {
 		Account ac = data.getAccount(selectedAccount);
-		Mode mode = ModeDialog.open(ac, this);
+		Mode mode = ModeDialog.open(data, ac, this);
 		if (mode==null) return null;
 		boolean expense = !receipt.isSelected();
 		DateStepper vdc = expense ? mode.getExpenseVdc() : mode.getReceiptVdc();

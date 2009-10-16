@@ -12,6 +12,7 @@ import java.text.MessageFormat;
 import javax.swing.*;
 
 import net.yapbam.data.Account;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
@@ -20,7 +21,7 @@ public class ModeDialog extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
-
+	
 	private JTextField name;
 	private JCheckBox chequeBook;
 	private ModePanel leftPane;
@@ -83,12 +84,12 @@ public class ModeDialog extends AbstractDialog {
 	 * @param owner The frame upon which the dialog will be displayed
 	 * @return Mode the mode which was added, null if the operation was canceled
 	 */
-	public static Mode open(Account account, Window owner) {
+	public static Mode open(GlobalData data, Account account, Window owner) {
 		ModeDialog dialog = new ModeDialog(owner, account);
 		dialog.setVisible(true);
 		Mode newMode = dialog.getMode();
 		if (newMode!=null) {
-			account.add(newMode);
+			data.add(account, newMode);
 		}
 		return newMode;
 	}

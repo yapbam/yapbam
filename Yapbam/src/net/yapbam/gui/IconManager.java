@@ -16,6 +16,9 @@ public abstract class IconManager {
 	public static final Icon NEW_ACCOUNT = NEW;
 	public static final Icon NEW_TRANSACTION = NEW;
 	public static final Icon NEW_MODE = NEW;
+	public static final Icon EDIT_MODE = EDIT;
+	public static final Icon DELETE_MODE = DELETE;
+	public static final Icon DUPLICATE_MODE = DUPLICATE;
 	public static final Icon NEW_CATEGORY = NEW;
 	public static final Icon DELETE_TRANSACTION = DELETE;
 	public static final Icon EDIT_TRANSACTION = EDIT;

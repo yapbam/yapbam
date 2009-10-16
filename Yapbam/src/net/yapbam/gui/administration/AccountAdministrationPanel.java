@@ -35,9 +35,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					int row = jTable.getSelectedRow();
-					if (row>=0) {
-						getModeListPanel().setContent(AccountAdministrationPanel.this.data.getAccount(row));
-					}
+					getModeListPanel().setContent(row>=0?AccountAdministrationPanel.this.data.getAccount(row):null);
 				}
 			}
 		});
@@ -99,7 +97,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	 */
 	private ModeListPanel getModeListPanel() {
 		if (modeListPanel == null) {
-			modeListPanel = new ModeListPanel();
+			modeListPanel = new AdministrationModeListPanel(data);
 			modeListPanel.setBorder(BorderFactory.createTitledBorder(null, "Modes de paiement", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 		}
 		return modeListPanel;

@@ -118,7 +118,7 @@ class GlobalDataHandler extends DefaultHandler {
 			String id = (String) this.tempData.pop();
 			Mode mode = new Mode(id, vdcs[1], vdcs[0], useChequeBook);
 			Account account = (Account) this.tempData.peek();
-			account.add(mode);
+			this.data.add(account, mode);
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG)) {
 		} else if (qName.equals(Serializer.RECEIPT_VDC_TAG)) {
 		} else if (qName.equals(Serializer.TRANSACTION_TAG)) {

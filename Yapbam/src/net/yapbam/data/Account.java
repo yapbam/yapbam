@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.yapbam.data.event.DefaultListenable;
-import net.yapbam.data.event.ModeAddedEvent;
-
 /** This class represents a bank account */
-public class Account extends DefaultListenable implements Serializable {
+public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
@@ -17,7 +14,6 @@ public class Account extends DefaultListenable implements Serializable {
 	private List<Mode> expenseModes;
 	private List<Mode> modes;
 	private int transactionNumber;
-//	private ArrayList<Transaction> transactions;
 	
 	public Account(String name, double initialBalance) {
 		this.name = name;
@@ -26,7 +22,6 @@ public class Account extends DefaultListenable implements Serializable {
 		this.expenseModes = new ArrayList<Mode>();
 		this.modes = new ArrayList<Mode>();
 		this.add(Mode.UNDEFINED);
-//		this.transactions = new ArrayList<Transaction>();
 	}
 
 	public Account(String name, double initialBalance, List<Mode> modes) {
@@ -71,14 +66,13 @@ public class Account extends DefaultListenable implements Serializable {
 		transactionNumber--;
 	}
 
-	public void add(Mode newMode) {
+	void add(Mode newMode) {
 		if (this.getMode(newMode.getName())!=null) {
 			throw new IllegalArgumentException("This account already contains the mode "+newMode.getName());
 		}
 		this.modes.add(newMode);
 		if (newMode.getExpenseVdc()!=null) this.expenseModes.add(newMode);
 		if (newMode.getReceiptVdc()!=null) this.receiptModes.add(newMode);
-		this.fireEvent(new ModeAddedEvent(this));
 	}
 
 	@Override
@@ -98,6 +92,10 @@ public class Account extends DefaultListenable implements Serializable {
 		return this.modes.get(index);
 	}
 
+	public int indexOf(Mode mode) {
+		return this.modes.indexOf(mode);
+	}
+	
 	void setName(String name) {
 		this.name = name;
 	}
