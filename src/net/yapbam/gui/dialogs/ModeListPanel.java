@@ -14,17 +14,22 @@ import javax.swing.table.TableModel;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Mode;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
 
 @SuppressWarnings("serial")
 public class ModeListPanel extends AbstractListAdministrationPanel {
-	private String accountName;
+	protected String accountName;
 	
-	public ModeListPanel() {
-		super(new ArrayList<Mode>());
+	protected ModeListPanel (Object data) {
+		super(data);
         this.accountName = ""; //$NON-NLS-1$
         getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
+	}
+	
+	ModeListPanel() {
+		this(new ArrayList<Mode>());
 	}
 	
 	public void setContent(Account account) {
@@ -54,7 +59,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
-			super(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.New.tooltip")); //$NON-NLS-1$
 		}
 		@Override
@@ -70,7 +75,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	}
 	class EditModeAction extends AbstractAction {
 		public EditModeAction() {
-			super(LocalizationData.get("GenericButton.edit")); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
@@ -91,7 +96,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	}
 	class DeleteModeAction extends AbstractAction {			
 		public DeleteModeAction() {
-			super(LocalizationData.get("GenericButton.delete"));
+			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE);
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Delete.tooltip"));
 		}
 		
@@ -125,39 +130,15 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 		return new JTable(getTableModel());
 	}
 	
-	private  TableModel getTableModel() {
-		return new AbstractTableModel(){
-			@Override
-			public String getColumnName(int columnIndex) {
-				if (columnIndex==0) return LocalizationData.get("ModeDialog.name.short"); //$NON-NLS-1$
-				if (columnIndex==1) return LocalizationData.get("ModeDialog.forDebts.short"); //$NON-NLS-1$
-				if (columnIndex==2) return LocalizationData.get("ModeDialog.forReceipts.short"); //$NON-NLS-1$
-				return "?"; //$NON-NLS-1$
-			}
-			@Override
-			public int getColumnCount() {
-				return 3;
-			}
+	protected TableModel getTableModel() {
+		return new AbstractModeListModel() {
 			@Override
 			public int getRowCount() {
 				return ((List<Mode>)data).size();
 			}
-			@Override
-			public Object getValueAt(int rowIndex, int columnIndex) {
-				Mode mode = ((List<Mode>)data).get(rowIndex);
-				if (columnIndex==0) return mode.getName();
-				if (columnIndex==1) return mode.getExpenseVdc()!=null;
-				if (columnIndex==2) return mode.getReceiptVdc()!=null;
-				return "?"; //$NON-NLS-1$
-			}
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				if ((columnIndex==1)||(columnIndex==2)) return Boolean.class;
-				return String.class;
+			
+			protected Mode getMode(int rowIndex) {
+				return ((List<Mode>)data).get(rowIndex);
 			}
 		};
 	}

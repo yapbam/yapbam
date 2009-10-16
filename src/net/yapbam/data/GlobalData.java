@@ -111,10 +111,6 @@ public class GlobalData extends DefaultListenable {
 	public void add(Account account) {
 		if (getAccount(account.getName())!=null) throw new IllegalArgumentException("Duplicate account name : "+account);
 		this.accounts.add(account);
-		account.addListener(new DataListener(){
-			public void processEvent(DataEvent event) {
-				setChanged();
-			}});
 		fireEvent(new AccountAddedEvent(this, account));
 		this.setChanged();
 	}
@@ -373,5 +369,11 @@ public class GlobalData extends DefaultListenable {
 			this.fireEvent(new CategoryPropertyChangedEvent(this, CategoryPropertyChangedEvent.NAME, category, old,value));
 			this.setChanged();
 		}
+	}
+
+	public void add(Account account, Mode mode) {
+		account.add(mode);
+		this.fireEvent(new ModeAddedEvent(this, account, mode));
+		this.setChanged();
 	}
 }
