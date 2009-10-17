@@ -75,6 +75,12 @@ public class Account implements Serializable {
 		if (newMode.getReceiptVdc()!=null) this.receiptModes.add(newMode);
 	}
 
+	void remove(Mode mode) {
+		this.expenseModes.remove(mode);
+		this.receiptModes.remove(mode);
+		this.modes.remove(mode);
+	}
+
 	@Override
 	public String toString() {
 		return this.getName()+"["+this.initialBalance+"]";

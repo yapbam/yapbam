@@ -1,5 +1,6 @@
 package net.yapbam.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,4 +43,16 @@ public class PeriodicalTransaction extends AbstractTransaction {
 				getNextDate(), isEnabled(), getNextDateBuilder());
 	}
 
+	public PeriodicalTransaction change(Account account, Mode oldMode, Mode newMode) {
+		if (getAccount().equals(account) && getMode().equals(oldMode)) {
+			ArrayList<SubTransaction> subTransactionsClone = new ArrayList<SubTransaction>();
+			for (int i=0;i<getSubTransactionSize();i++) {
+				subTransactionsClone.add(getSubTransaction(i));
+			}
+			return new PeriodicalTransaction(getDescription(), getAmount(), getAccount(), newMode,
+					getCategory(), subTransactionsClone, getNextDate(), isEnabled(), getNextDateBuilder());
+		} else {
+			return null;
+		}
+	}
 }

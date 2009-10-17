@@ -329,6 +329,27 @@ public class GlobalData extends DefaultListenable {
 		}
 	}
 
+	class CategoryUpdater extends AbstractTransactionUpdater {
+		private Category oldCategory;
+		private Category newCategory;
+
+		CategoryUpdater (Category oldMode, Category newMode) {
+			super(GlobalData.this);
+			this.oldCategory = oldMode;
+			this.newCategory = newMode;
+		}
+		
+		@Override
+		Transaction change(Transaction t) {
+			return t.change(oldCategory, newCategory);
+		}
+
+		@Override
+		PeriodicalTransaction change(PeriodicalTransaction t) {
+			return t.change(oldCategory, newCategory);
+		}
+	}
+
 	/** Removes a category from the data
 	 * All the transactions and the subtransactions attached to the deleted category are moved to the "undifined" category.
 	 * @param category
@@ -336,20 +357,7 @@ public class GlobalData extends DefaultListenable {
 	public void remove(Category category) {
 		int index = this.categories.indexOf(category);
 		if (index>=0){
-			for (int i = 0; i < getTransactionsNumber(); i++) {
-				Transaction t = getTransaction(i).change(category, Category.UNDEFINED);
-				if (t!=null) {
-					remove(getTransaction(i));
-					add(t);
-				}
-			}
-			for (int i = 0; i < getPeriodicalTransactionsNumber(); i++) {
-				PeriodicalTransaction pt = getPeriodicalTransaction(i).change(category, Category.UNDEFINED);
-				if (pt!=null) {
-					remove(getPeriodicalTransaction(i));
-					add(pt);
-				}
-			}
+			new CategoryUpdater(category, Category.UNDEFINED);
 			this.categories.remove(index);
 			this.fireEvent(new CategoryRemovedEvent(this, index, category));
 			this.setChanged();
@@ -375,5 +383,38 @@ public class GlobalData extends DefaultListenable {
 		account.add(mode);
 		this.fireEvent(new ModeAddedEvent(this, account, mode));
 		this.setChanged();
+	}
+	
+	class ModeUpdater extends AbstractTransactionUpdater {
+		private Account account;
+		private Mode oldMode;
+		private Mode newMode;
+
+		ModeUpdater (Account account, Mode oldMode, Mode newMode) {
+			super(GlobalData.this);
+			this.account = account;
+			this.oldMode = oldMode;
+			this.newMode = newMode;
+		}
+		
+		@Override
+		Transaction change(Transaction t) {
+			return t.change(account, oldMode, newMode);
+		}
+
+		@Override
+		PeriodicalTransaction change(PeriodicalTransaction t) {
+			return t.change(account, oldMode, newMode);
+		}
+	}
+
+	public void remove(Account account, Mode mode) {
+		int index = account.indexOf(mode);
+		if (index>=0){
+			new ModeUpdater(account, mode, Mode.UNDEFINED).doIt();
+			account.remove(mode);
+			this.fireEvent(new ModeRemovedEvent(this, index, account, mode));
+			this.setChanged();
+		}
 	}
 }

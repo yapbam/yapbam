@@ -5,15 +5,19 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
+import net.yapbam.data.PeriodicalTransaction;
+import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.ModeAddedEvent;
+import net.yapbam.data.event.ModeRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
@@ -71,6 +75,11 @@ class AdministrationModeListPanel extends ModeListPanel {
 							int row = account.indexOf(((ModeAddedEvent)event).getMode());
 							fireTableRowsInserted(row, row);
 						}
+					} else if (event instanceof ModeRemovedEvent) {
+						ModeRemovedEvent e = (ModeRemovedEvent) event;
+						if (account==((ModeRemovedEvent)event).getAccount()) {
+							fireTableRowsDeleted(e.getIndex(), e.getIndex());
+						}
 					}
 				}
 			});
@@ -86,6 +95,20 @@ class AdministrationModeListPanel extends ModeListPanel {
 			return account.getMode(rowIndex+1);
 		}
 	}
+	
+	private boolean isUsed(Mode mode) {
+		GlobalData gData = (GlobalData)data;
+		for (int i = 0; i < gData.getTransactionsNumber(); i++) {
+			Transaction transaction = gData.getTransaction(i);
+			if (transaction.getAccount().equals(account) && transaction.getMode().equals(mode)) return true;
+		}
+		for (int i = 0; i < gData.getPeriodicalTransactionsNumber(); i++) {
+			PeriodicalTransaction periodicalTransaction = gData.getPeriodicalTransaction(i);
+			if (periodicalTransaction.getAccount().equals(account) && periodicalTransaction.getMode().equals(mode)) return true;			
+		}
+		return false;
+	}
+
 	
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
@@ -133,11 +156,20 @@ class AdministrationModeListPanel extends ModeListPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			/*
-			int row = getJTable().getSelectedRow();
-			((List<Mode>)data).remove(row);
-			((AbstractTableModel)getJTable().getModel()).fireTableRowsDeleted(row,row);*/
-			System.out.println ("Not implemented");
+			int selectedRow = getJTable().getSelectedRow();
+			Mode mode = ((ModeListTableModel)getJTable().getModel()).getMode(selectedRow);
+			boolean confirmed = true;
+			if (isUsed(mode)) {
+				String mess = ("<HTML>"+LocalizationData.get("ModeManager.deleteMessage.head")+ //$NON-NLS-1$ //$NON-NLS-2$
+						"<BR>"+LocalizationData.get("ModeManager.deleteMessage.confirm")+"</HTML>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				Object[] options = {LocalizationData.get("GenericButton.ok"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
+				int ok = JOptionPane.showOptionDialog(getJTable(), mess, LocalizationData.get("ModeManager.deleteMessage.title"), //$NON-NLS-1$
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);		
+				confirmed = (ok==0);
+			}
+			if (confirmed) {
+				((GlobalData)data).remove(account, mode);
+			}
 		}
 	}
 }

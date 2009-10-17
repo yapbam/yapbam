@@ -95,7 +95,7 @@ public class AbstractTransaction implements Cloneable {
 		}
 		return false;
 	}
-
+	
 	List<SubTransaction> changeSubTransactions(Category oldCategory, Category newCategory) {
 		List<SubTransaction> subTransactions = new ArrayList<SubTransaction>(getSubTransactionSize());
 		for (int i = 0; i < getSubTransactionSize(); i++) {
