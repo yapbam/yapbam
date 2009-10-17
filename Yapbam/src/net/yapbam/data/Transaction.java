@@ -1,6 +1,7 @@
 package net.yapbam.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,5 +56,18 @@ public class Transaction extends AbstractTransaction implements Serializable, Cl
 		List<SubTransaction> subTransactions = changeSubTransactions(oldCategory, newCategory);
 		return new Transaction(getDate(), getNumber(), getDescription(), getAmount(), getAccount(), getMode(),
 				(getCategory().equals(oldCategory)?newCategory:getCategory()), getValueDate(), getStatement(), subTransactions);
+	}
+
+	Transaction change(Account account, Mode oldMode, Mode newMode) {
+		if (getAccount().equals(account) && getMode().equals(oldMode)) {
+			ArrayList<SubTransaction> subTransactionsClone = new ArrayList<SubTransaction>();
+			for (int i=0;i<getSubTransactionSize();i++) {
+				subTransactionsClone.add(getSubTransaction(i));
+			}
+			return new Transaction(getDate(), getNumber(), getDescription(), getAmount(), getAccount(), newMode,
+					getCategory(), getValueDate(), getStatement(), subTransactionsClone);
+		} else {
+			return null;
+		}
 	}
 }

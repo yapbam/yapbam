@@ -75,7 +75,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getAccountListPanel(), gridBagConstraints);
-//TODO		this.add(getModeListPanel(), gridBagConstraints1);
+		this.add(getModeListPanel(), gridBagConstraints1);
 	}
 
 	/**
