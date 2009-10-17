@@ -40,7 +40,8 @@ class AdministrationModeListPanel extends ModeListPanel {
 
 	@Override
 	protected Action getEditButtonAction() {
-		return new EditModeAction();
+		return null;
+		//TODO return new EditModeAction();
 	}
 
 	@Override
