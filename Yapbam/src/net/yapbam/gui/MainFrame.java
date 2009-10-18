@@ -15,13 +15,13 @@ import net.yapbam.data.event.*;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
+import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
 	//TODO CheckBook support
-	//TODO periodic transaction support
 	
 	private static final long serialVersionUID = 1L;
     
@@ -49,7 +49,7 @@ public class MainFrame extends JFrame implements DataListener {
 	
 	@SuppressWarnings("unchecked")
 	private static final Class[] getPlugins() {
-		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, AdministrationPlugIn.class};
+		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, AdministrationPlugIn.class, StatisticsPlugin.class};
 	}
 
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
