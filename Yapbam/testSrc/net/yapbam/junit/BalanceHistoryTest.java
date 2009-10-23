@@ -46,6 +46,8 @@ public class BalanceHistoryTest {
 		assertEquals(-5, history.getBalance(date2), 0.01);
 		assertEquals(25, history.getBalance(date3), 0.01);
 		assertEquals(3, history.size());
-}
-
+		
+		history.add(-30, date3);
+		assertEquals(2, history.size());
+	}
 }
