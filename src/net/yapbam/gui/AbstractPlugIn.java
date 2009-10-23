@@ -14,7 +14,7 @@ import net.yapbam.gui.transactiontable.TransactionsPlugIn;
  * This implementation is a totally empty plugin which does ... nothing.
  * You may override its methods in order to implement a fully functional plugin.
  * A plugin has to had a public constructor with two arguments :<OL>
- * <LI>AccountFilteredData : The root object of Yapbam's data</LI>
+ * <LI>FilteredData : The root object of Yapbam's data</LI>
  * <LI>Object an object representing the state of the plugin (returned by getRestartData()) or null if no previous state
  * was saved.</LI></OL>
  * The net.yapbam.ihm.transactiontable.TransactionsPlugIn is a good example of what could be done by a plugin.

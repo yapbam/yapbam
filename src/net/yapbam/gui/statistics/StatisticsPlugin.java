@@ -13,8 +13,8 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
-import net.yapbam.data.AccountFilteredData;
 import net.yapbam.data.Category;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
@@ -22,9 +22,9 @@ import net.yapbam.gui.LocalizationData;
 public class StatisticsPlugin extends AbstractPlugIn {
 	//TODO work with filtered data
 	//FIXME Listen for events
-	private AccountFilteredData data;
+	private FilteredData data;
 	
-	public StatisticsPlugin(AccountFilteredData acFilter, Object restartData) {
+	public StatisticsPlugin(FilteredData acFilter, Object restartData) {
 		this.data = acFilter;
 	}
 

@@ -2,7 +2,8 @@ package net.yapbam.gui.graphics.balancehistory;
 
 import javax.swing.JPanel;
 
-import net.yapbam.data.AccountFilteredData;
+import net.yapbam.data.BalanceData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
@@ -10,10 +11,10 @@ import net.yapbam.gui.LocalizationData;
 
 public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	private BalanceHistoryPane panel;
-	private AccountFilteredData data;
+	private BalanceData data;
 
-	public BalanceHistoryPlugIn(AccountFilteredData acFilter, Object restartData) {
-		this.data = acFilter;
+	public BalanceHistoryPlugIn(FilteredData filteredData, Object restartData) {
+		this.data = filteredData.getBalanceData();
 		this.panel = new BalanceHistoryPane(data.getBalanceHistory());
 		data.addListener(new DataListener() {
 			@Override

@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
-import net.yapbam.data.AccountFilteredData;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
@@ -30,10 +29,9 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	private TransactionsPlugInPanel panel;
 	private JMenu filterMenu;
 
-	public TransactionsPlugIn(AccountFilteredData acFilter, Object restoreData) {
-		FilteredData data = (FilteredData) restoreData;
-		if (data == null) data = new FilteredData(acFilter);
-		this.panel = new TransactionsPlugInPanel(acFilter, data);
+	public TransactionsPlugIn(FilteredData filteredData, Object restoreData) {
+		FilteredData data = filteredData;
+		this.panel = new TransactionsPlugInPanel(data);
 		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
@@ -44,11 +42,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		});
 	}
 	
-	@Override
-	public Object getRestartData() {
-		return this.panel.getTransactionTable().getFilteredData();
-	}
-
 	public JMenu[] getPlugInMenu() {
         //Build the filter menu
         filterMenu = new JMenu(LocalizationData.get("MainMenuBar.Filter")); //$NON-NLS-1$

@@ -14,7 +14,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import net.yapbam.data.Account;
-import net.yapbam.data.AccountFilteredData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
@@ -226,10 +226,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 				public void actionPerformed(ActionEvent e) {
 					JMenuItem item = (JMenuItem) e.getSource();
 					Account account = frame.getData().getAccount(item.getText());
-					frame.getAccountFilter().setAccounts(new Account[]{account});
+					frame.getFilteredData().setAccounts(new Account[]{account});
 				}
 			};
-	        AccountFilteredData filter = frame.getAccountFilter();
+	        FilteredData filter = frame.getFilteredData();
 			ButtonGroup group = new ButtonGroup();
 			boolean hasAccountFilter = filter.hasFilterAccount();
 	        for (int i=0;i<data.getAccountsNumber();i++) {
@@ -244,7 +244,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         	item.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					frame.getAccountFilter().setAccounts(null);
+					frame.getFilteredData().setAccounts(null);
 				}
 			});
         	item.setSelected(!hasAccountFilter);
