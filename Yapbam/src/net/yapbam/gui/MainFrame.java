@@ -26,7 +26,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private static final long serialVersionUID = 1L;
     
     private GlobalData data;
-	private AccountFilteredData accountFilter;
+	private FilteredData filteredData;
 
 	private JTabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
@@ -56,7 +56,7 @@ public class MainFrame extends JFrame implements DataListener {
 	 * event-dispatching thread.
 	 */
 	@SuppressWarnings("unchecked")
-	private MainFrame(AccountFilteredData acFilter, Object[] restartData) {
+	private MainFrame(FilteredData filteredData, Object[] restartData) {
 	    //Create and set up the window.
 		super();
 		this.setMinimumSize(new Dimension(800,300));
@@ -79,21 +79,21 @@ public class MainFrame extends JFrame implements DataListener {
 	    	}
 		});
 	
-	    if (acFilter==null) {
+	    if (filteredData==null) {
 	    	this.data = new GlobalData();
-	    	this.accountFilter = new AccountFilteredData(this.data);
+	    	this.filteredData = new FilteredData(this.data);
 	    } else {
-	    	this.data = acFilter.getGlobalData();
-	    	this.accountFilter = acFilter;
+	    	this.data = filteredData.getGlobalData();
+	    	this.filteredData = filteredData;
 	    }
-	    if (acFilter==null) YapbamState.INSTANCE.restoreGlobalData(this);
+	    if (filteredData==null) YapbamState.INSTANCE.restoreGlobalData(this);
 	    
 	    Class[] pluginClasses = getPlugins();
 	    if (restartData==null) restartData = new Object[pluginClasses.length];
 	    this.plugins=new AbstractPlugIn[pluginClasses.length];
 	    for (int i = 0; i < pluginClasses.length; i++) {
 			try {
-				this.plugins[i] = (AbstractPlugIn) pluginClasses[i].getConstructor(AccountFilteredData.class, Object.class).newInstance(accountFilter, restartData[0]);
+				this.plugins[i] = (AbstractPlugIn) pluginClasses[i].getConstructor(FilteredData.class, Object.class).newInstance(this.filteredData, restartData[0]);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -146,8 +146,8 @@ public class MainFrame extends JFrame implements DataListener {
 		return data;
 	}
 	
-	public AccountFilteredData getAccountFilter() {
-		return this.accountFilter;
+	public FilteredData getFilteredData() {
+		return this.filteredData;
 	}
 	
 	public int getPlugInsNumber() {
@@ -190,7 +190,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	            new MainFrame(accountFilter, restartData);
+	            new MainFrame(filteredData, restartData);
 	        }
 	    });
 	}

@@ -2,15 +2,15 @@ package net.yapbam.gui.administration;
 
 import javax.swing.JPanel;
 
-import net.yapbam.data.AccountFilteredData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 
 public class AdministrationPlugIn extends AbstractPlugIn {
 	private AdministrationPanel panel;
 
-	public AdministrationPlugIn(AccountFilteredData acFilter, Object restartData) {
-		this.panel = new AdministrationPanel(acFilter.getGlobalData());
+	public AdministrationPlugIn(FilteredData filteredData, Object restartData) {
+		this.panel = new AdministrationPanel(filteredData.getGlobalData());
 	}
 	
 	public String getPanelTitle() {

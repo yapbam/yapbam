@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="build" name="Create Runnable Jar for Yapbam project">
-	<property name="yapbamVersion" value="0.2.8"/>
+	<property name="yapbamVersion" value="0.2.9"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
@@ -10,7 +10,7 @@
 		<copy todir="releaseCompile">
 	    	<fileset dir="src" excludes="**/*.java"/>
 		</copy>
-		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
+		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" classpath="jfree.jar"/>
 		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" encoding="ISO8859-1"/>
 		<jar destfile="yapbam.jar">
 			<manifest>

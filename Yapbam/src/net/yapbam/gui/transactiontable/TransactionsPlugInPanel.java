@@ -15,11 +15,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
-import net.yapbam.data.AccountFilteredData;
+import net.yapbam.data.BalanceData;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
-import net.yapbam.data.event.FilterUpdatedEvent;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewTransactionAction;
 import net.yapbam.gui.util.JTableListener;
@@ -33,7 +32,7 @@ public class TransactionsPlugInPanel extends JPanel {
 	Action checkTransactionAction;
 	Action convertToPericalTransactionAction;
 	
-	private AccountFilteredData acFilter;
+	private BalanceData acFilter;
 	
 	private CheckModePanel checkModePane;
 	TransactionTable transactionTable;
@@ -41,12 +40,12 @@ public class TransactionsPlugInPanel extends JPanel {
 	private BalanceReportField finalBalance;
 	private BalanceReportField checkedBalance;
 
-	public TransactionsPlugInPanel(AccountFilteredData acFilter, FilteredData data) {
+	public TransactionsPlugInPanel(FilteredData data) {
 		super(new BorderLayout());
 		setOpaque(true);
 
 		transactionTable = new TransactionTable(data);
-		this.acFilter = acFilter;
+		this.acFilter = data.getBalanceData();
 		
         this.editTransactionAction = new EditTransactionAction(transactionTable);
         this.duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
@@ -111,13 +110,6 @@ public class TransactionsPlugInPanel extends JPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				updateBalances();
-				if (event instanceof FilterUpdatedEvent) {//TODO must be in FilteredData
-					if (TransactionsPlugInPanel.this.acFilter.hasFilterAccount()) {
-						transactionTable.getFilteredData().setAccounts(TransactionsPlugInPanel.this.acFilter.getAccounts());
-					} else {
-						transactionTable.getFilteredData().clearAccounts();
-					}
-				}
 			}
 		});
 		updateBalances();
@@ -149,7 +141,7 @@ public class TransactionsPlugInPanel extends JPanel {
 		
 	}
 	
-	public void updateBalances() {
+	private void updateBalances() {
 		currentBalance.setValue(acFilter.getCurrentBalance());
 		finalBalance.setValue(acFilter.getFinalBalance());
 	    checkedBalance.setValue(acFilter.getCheckedBalance());

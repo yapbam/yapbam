@@ -4,7 +4,11 @@ import java.util.*;
 
 import net.yapbam.data.event.*;
 
-public class FilteredData extends AccountFilter {
+/** The global data class represents the whole data of a Yapbam running instance.
+ * This class represents a filter on that data retaining only the account(s) and transaction(s) the user choose to view.
+ * The only event sent is the FilterChanged event.
+ */
+public class FilteredData extends DefaultListenable {
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 	
@@ -16,44 +20,64 @@ public class FilteredData extends AccountFilter {
 	private static final int CHECKED_MASK = (ALL ^ CHECKED) ^ NOT_CHECKED;
 	private static final int EXPENSE_RECEIPT_MASK = (ALL ^ RECEIPT) ^ EXPENSE;
 
+	private GlobalData data;
 	private ArrayList<Transaction> transactions;
 	private int filter;
+	private HashSet<Account> validAccounts;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
+	private BalanceData balanceData;
 	
-	public FilteredData(AccountFilteredData data) {
-	    super(data.getGlobalData());
+	public FilteredData(GlobalData data) {
+	    this.data = data;
 	    this.data.addListener(new DataListener() {		
 			@Override
 			public void processEvent(DataEvent event) {
 				if (eventImplySorting(event)) Collections.sort(transactions, comparator);
-				if (event instanceof TransactionAddedEvent) {
+				if (event instanceof EverythingChangedEvent) {
+					clear(); // If everything changed, reset the filter
+					fireEvent(new EverythingChangedEvent(FilteredData.this));
+				} else if (event instanceof AccountRemovedEvent) {
+					Account account = ((AccountRemovedEvent)event).getRemoved();
+					if ((validAccounts==null) || validAccounts.remove(account)) {
+						double initialBalance = account.getInitialBalance();
+						balanceData.updateBalance(initialBalance, false);
+						fireEvent(new AccountRemovedEvent(FilteredData.this, -1, account)); //TODO index is not the right one
+					}
+				} else if (event instanceof TransactionAddedEvent) {
 					Transaction transaction = ((TransactionAddedEvent)event).getTransaction();
-					if (isOk(transaction)) { // If the added transaction match with the filter
-						int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
-						transactions.add(index, transaction);
-						fireEvent(new TransactionAddedEvent(FilteredData.this, transaction));
+					if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
+						balanceData.updateBalance(new Date(), transaction, true);
+						if (isOk(transaction)) { // If the added transaction match with the whole filter
+							int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
+							transactions.add(index, transaction);
+							fireEvent(new TransactionAddedEvent(FilteredData.this, transaction));
+						}
 					}
 				} else if (event instanceof TransactionRemovedEvent) {
 					Transaction transaction = ((TransactionRemovedEvent)event).getRemoved();
-					int index = Collections.binarySearch(transactions, transaction, comparator);
-					if (index>=0) {
-						transactions.remove(index);
-						fireEvent(new TransactionRemovedEvent(FilteredData.this, index, transaction));
+					if (isOk(transaction.getAccount())) {
+						balanceData.updateBalance(new Date(), transaction, false);
+						int index = Collections.binarySearch(transactions, transaction, comparator);
+						if (index>=0) {
+							transactions.remove(index);
+							fireEvent(new TransactionRemovedEvent(FilteredData.this, index, transaction));
+						}
 					}
 				} else if (event instanceof AccountAddedEvent) {
 					Account account = ((AccountAddedEvent)event).getAccount();
-					if (isOk(account) && isOk(CHECKED)) {
-						fireEvent(new AccountAddedEvent(FilteredData.this, account));
-					}
-				} else if (event instanceof AccountRemovedEvent) {
-					// Nothing to do, all the account's transactions are removed when the Account is removed
-					Account removed = ((AccountRemovedEvent)event).getRemoved();
-					if (isOk(removed)) { // Propagate the event
-						fireEvent(new AccountRemovedEvent(FilteredData.this, -1, removed));
+					if (isOk(account)) {
+						balanceData.updateBalance(account.getInitialBalance(), true);
+						if (isOk(CHECKED)) {
+							fireEvent(new AccountAddedEvent(FilteredData.this, account));
+						}
 					}
 				} else if (event instanceof AccountPropertyChangedEvent) {
 					AccountPropertyChangedEvent evt = (AccountPropertyChangedEvent) event;
 					if (isOk(evt.getAccount())) {
+						if (evt.getProperty().equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) {
+							double amount = ((Double)evt.getNewValue())-((Double)evt.getOldValue());
+							balanceData.updateBalance(amount, true);
+						}
 						fireEvent(event);
 					}
 				} else if (event instanceof CategoryPropertyChangedEvent) {
@@ -64,7 +88,12 @@ public class FilteredData extends AccountFilter {
 				}
 			}
 		});
+	    this.balanceData = new BalanceData(this);
 	    this.clear();
+	}
+	
+	public BalanceData getBalanceData() {
+		return this.balanceData;
 	}
 	
 	private boolean eventImplySorting (DataEvent event) {
@@ -79,7 +108,51 @@ public class FilteredData extends AccountFilter {
 	
 	public void clear() {
 		this.filter = ALL;
-		super.setAccounts(null);
+		clearAccounts();
+	}
+
+
+	public void clearAccounts() {
+		setAccounts(null);
+	}	
+
+	/** Set the valid accounts for this filter.
+	 * There's no side effect between this instance and the argument array.
+	 * @param accounts the accounts that are allowed (null to allow every accounts).
+	 */
+	public void setAccounts(Account[] accounts) {
+		if ((accounts==null) || (accounts.length==data.getAccountsNumber())) {
+			this.validAccounts=null;
+		} else {
+			this.validAccounts = new HashSet<Account>(accounts.length);
+			for (int i = 0; i < accounts.length; i++) {
+				this.validAccounts.add(accounts[i]);
+			}
+		}
+		this.filter();
+		fireEvent(new FilterUpdatedEvent(this));
+	}
+	
+	/** Returns the valid accounts for this filter.
+	 * There's no side effect between this instance and the returned array.
+	 * @return the valid accounts (null means, all accounts are ok).
+	 */
+	public Account[] getAccounts() {
+		if (this.validAccounts==null) return null;
+		Account[] result = new Account[validAccounts.size()];
+		Iterator<Account> iterator = validAccounts.iterator();
+		for (int i = 0; i < result.length; i++) {
+			result[i] = iterator.next();
+		}
+		return result;
+	}
+	
+	public boolean hasFilterAccount() {
+		return this.validAccounts != null;
+	}
+
+	public boolean isOk(Account account) {
+		return (this.validAccounts==null) || (this.validAccounts.contains(account));
 	}
 
 	public boolean isOk(Transaction transaction) {
@@ -115,14 +188,26 @@ public class FilteredData extends AccountFilter {
 	}
 
 	protected void filter() {
+		double initialBalance = 0;
+		for (int i = 0; i < this.getGlobalData().getAccountsNumber(); i++) {
+			Account account = this.getGlobalData().getAccount(i);
+			if (isOk(account)) initialBalance += account.getInitialBalance();
+		}
+		balanceData.enableEvents(false);
+		balanceData.clear(initialBalance);
+	    Date today = new Date();
 	    this.transactions = new ArrayList<Transaction>();
 	    for (int i = 0; i < data.getTransactionsNumber(); i++) {
 			Transaction transaction = data.getTransaction(i);
-			if (isOk(transaction)) {
-				int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
-				transactions.add(index, transaction);
+			if (isOk(transaction.getAccount())) {
+				balanceData.updateBalance(today, transaction, true);
+				if (isOk(transaction)) {
+					int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
+					transactions.add(index, transaction);
+				}
 			}
 		}
+		balanceData.enableEvents(true);
 		fireEvent(new EverythingChangedEvent(this));
 	}
 
@@ -141,8 +226,4 @@ public class FilteredData extends AccountFilter {
 	public GlobalData getGlobalData() {
 		return this.data;
 	}
-
-	public void clearAccounts() {
-		super.setAccounts(null);
-	}	
 }
