@@ -5,7 +5,7 @@ import java.util.*;
 import net.yapbam.data.event.*;
 
 /** The global data class represents the whole data of a Yapbam running instance.
- * This class represents a filter on the data (retaining only the account(s) the user choose to view).
+ * This class represents a filter on the data retaining only the account(s) the user choose to view.
  * The only event sent is the FilterChanged event.
  */
 public abstract class AccountFilter extends DefaultListenable implements DataListener {
@@ -24,7 +24,7 @@ public abstract class AccountFilter extends DefaultListenable implements DataLis
 	
 	/** Process event that occurs on the globalData.
 	 * This implementation only deals with changing the filter state and doesn't forward any event.
-	 * For instance if a account is removed, this method will update the filter (changing to "All" is the
+	 * For instance if an account is removed, this method will update the filter (changing to "All" is the
 	 * removed account was the selected account), but will not throw any AccountRemovedEvent.
 	 * @param event The event.
 	 */
