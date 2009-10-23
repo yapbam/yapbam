@@ -36,7 +36,8 @@ public class BalanceHistoryElement {
 	}
 
 	/**
-	 * Returns the end
+	 * Returns the end.
+	 * The end date is excluded from the time interval of this element.
 	 * @return the end or null if the end is "end of time"
 	 */
 	public Date getTo() {
@@ -45,7 +46,7 @@ public class BalanceHistoryElement {
 
 	@Override
 	public String toString() {
-		return MessageFormat.format("[{0,date,short}->{1,date,short}:{2,number,currency}]", from, to, balance);
+		return MessageFormat.format("[{0,date,short}->{1,date,short}:{2,number,currency}[", from, to, balance);
 	}
 
 	/** Returns the position of this element relative to a date.
