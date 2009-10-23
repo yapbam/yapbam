@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/** This class represents the balance history.
+ */
 public class BalanceHistory {
 	@SuppressWarnings("unchecked")
 	private static final Comparator<Object> COMPARATOR = new Comparator() {
@@ -95,6 +97,10 @@ public class BalanceHistory {
 				element.setTo(date);
 				index++;
 				this.elements.add(index, el2);
+			} else {
+				// Maybe the amount is now the same as previous element.
+				// In such a case, we have to merge these elements
+				//FIXME
 			}
 			for (int i = index; i < this.elements.size(); i++) {
 				element = this.elements.get(i);
