@@ -3,6 +3,7 @@ package net.yapbam.currency.converter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Currency;
 
 import etudes.CurrencyConverter;
 
@@ -13,7 +14,11 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 		try {
-			System.out.println (Arrays.asList(CurrencyConverter.getInstance().getCurrencies()));
+			String[] currencies = CurrencyConverter.getInstance().getCurrencies();
+			System.out.println (Arrays.asList(currencies));
+			for (int i = 0; i < currencies.length; i++) {
+				System.out.println(Currency.getInstance(currencies[i]).getSymbol());
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
