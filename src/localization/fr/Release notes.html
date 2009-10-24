@@ -16,7 +16,7 @@ color: #ff9900;
 -->
 </style></head>
 <body>
-<h1>Version &nbsp;0.2.9 (24/10/2009)</h1>
+<h1>Version &nbsp;0.3.0 (25/10/2009)</h1>
 <p>Cette version&nbsp;est&nbsp;une pre-version à laquelle
 manquent quelques fonctionnalités, et qui,
 probablement,&nbsp;comporte quelques bugs. Vous trouverez
@@ -31,7 +31,7 @@ N'hésitez pas à signaler les bugs que vous pourriez trouver.<br>
 <ul><li>L'édition des modes de paiement (pour l'instant, on peut
 en ajouter, les supprimer, mais pas les éditer). On peut éditer le
 fichier de données (au format XML) ... mais c'est à vos risques à
-périls.</li><li>Des statistiques et des graphiques sur les catégories (sans
+périls.</li><li>Des statistiques et d'autres graphiques sur les catégories (sans
 quoi, leur saisie n'aurait aucun intérêt).</li><li>La possibilité de compresser le fichier de
 données, de le protéger par mot de passe, et de le stocker/lire sur Internet.</li><li>Une auto-complétion dans le dialogue de création
 d'une opération. Celui-ci serait chargé de completer les descriptions
@@ -40,13 +40,13 @@ informations (typiquement la catégorie).</li><li>Peut-être
 la prise en charge des fichiers au format OFX (issus de Money ou de
 votre banque) ... ça dépendra du nombre de demandes.</li></ul>
 <h2>Nouveautés de cette version</h2>
-<ul><li><span class="develop">Développeurs</span>
-: Réécriture du filtrage des opérations pour préparer l'arrivée du plugin "statistiques".</li><li><span class="bugFix">Correction de bug </span> : &nbsp;Quand des&nbsp;opérations
-étaient supprimées, l'historique du solde pouvait contenir des segments
-surnuméraires (typiquement lorsqu'on supprimait toutes les opérations.</li></ul>
+<ul><li>Ajout d'un panneau de statistiques (répartition des dépenses par catégorie).</li></ul>
 <hr>
 <h1>Versions précédentes</h1>
-<h2>Version &nbsp;0.2.8 (18/10/2009)</h2><ul><li>Ajout d'un panneau d'administration des modes de paiement permettant l'ajout et la suppression de modes.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Lorsqu'une catégorie était supprimée, elle n'était parfois pas retirée de toutes les opérations.</li></ul><h2>Version &nbsp;0.2.7 (16/10/2009)</h2><ul><li>Au premier démarrage, Yapbam demande l'autorisation de se connecter pour&nbsp;rechercher automatiquement des mises à jour.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Un double-clic
+<h2>Version &nbsp;0.2.9 (24/10/2009)</h2><ul><li><span class="develop">Développeurs</span>
+: Réécriture du filtrage des opérations pour préparer l'arrivée du plugin "statistiques".</li><li><span class="bugFix">Correction de bug </span> : &nbsp;Quand des&nbsp;opérations
+étaient supprimées, l'historique du solde pouvait contenir des segments
+surnuméraires (typiquement lorsqu'on supprimait toutes les opérations.</li></ul><h2>Version &nbsp;0.2.8 (18/10/2009)</h2><ul><li>Ajout d'un panneau d'administration des modes de paiement permettant l'ajout et la suppression de modes.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Lorsqu'une catégorie était supprimée, elle n'était parfois pas retirée de toutes les opérations.</li></ul><h2>Version &nbsp;0.2.7 (16/10/2009)</h2><ul><li>Au premier démarrage, Yapbam demande l'autorisation de se connecter pour&nbsp;rechercher automatiquement des mises à jour.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Un double-clic
 sur la liste des opérations en mode "pointage" ouvrait le dialogue
 d'édition de l'opération au lieu de la marquer "pointée".</li></ul><h2>Version &nbsp;0.2.6 (13/10/2009)</h2><ul><li>Ajout d'un panneau d'administration pour gérer les catégories.<span class="bugFix"></span><span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Le popup menu&nbsp;dans l'écran d'administration des comptes comportait de nombreux séparateurs.</li><li><span class="bugFix">Correction de bug</span>&nbsp;: Dans l'écran d'administration, on contrôle à présent que le nouveau nom n'est ni vide, ni déjà utilisé.</li><li><span class="bugFix">Correction de bug </span> : Quand on pressait la touche "Entrée" lors de l'édition d'une date d'opération, la date de valeur n'était pas mise à jour.</li><li><span class="bugFix">Correction de bug</span><span class="bugFix">&nbsp;</span>: L'état des cases à cocher "ignorée" était inversé dans le dialogue "Générer les opérations périodiques".</li><li>Amélioration : Un champ date laissé à vide est à présent équivalent à "aujourd'hui". Lors de
 la duplication d'une opération, la date de l'opération crée est

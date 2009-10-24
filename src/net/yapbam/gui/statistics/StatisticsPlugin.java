@@ -1,7 +1,7 @@
 package net.yapbam.gui.statistics;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import javax.swing.JPanel;
 
@@ -23,12 +23,12 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	private FilteredData data;
 	private boolean displayed;
 	private DefaultPieDataset dataset;
-	private HashMap<Category, Summary> categoryToAmount;
+	private TreeMap<Category, Summary> categoryToAmount;
 	private OptimizedToolTipGenerator toolTipGenerator;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
-		categoryToAmount = new HashMap<Category, Summary>(this.data.getGlobalData().getCategoriesNumber());
+		categoryToAmount = new TreeMap<Category, Summary>();
         dataset = new DefaultPieDataset();
         toolTipGenerator = new OptimizedToolTipGenerator();
 		this.data.addListener(new DataListener() {
@@ -48,11 +48,11 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		buildSummaries();
         buildDataSet();
         
-        JFreeChart chart = ChartFactory.createPieChart("Dépenses par catégorie", dataset, false, true, false);
+        JFreeChart chart = ChartFactory.createPieChart(LocalizationData.get("StatisticsPlugin.byCategory.title"), dataset, false, true, false); //$NON-NLS-1$
         PiePlot plot = (PiePlot) chart.getPlot();
 		plot.setToolTipGenerator(toolTipGenerator);
         plot.setSectionOutlinesVisible(true);
-        plot.setNoDataMessage("Rien à afficher");
+        plot.setNoDataMessage(LocalizationData.get("StatisticsPlugin.byCategory.empty")); //$NON-NLS-1$
 		return new ChartPanel(chart);
 	}
 
@@ -88,12 +88,12 @@ public class StatisticsPlugin extends AbstractPlugIn {
 
 	@Override
 	public String getPanelTitle() {
-		return "Statistiques"; //LOCAL
+		return LocalizationData.get("StatisticsPlugin.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getPanelToolIp() {
-		return "Ce panneau affiche les statistiques sur votre compte";
+		return LocalizationData.get("StatisticsPlugin.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override
