@@ -1,6 +1,5 @@
 package net.yapbam.gui.statistics;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -9,34 +8,61 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.PieToolTipGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 
 public class StatisticsPlugin extends AbstractPlugIn {
-	//TODO work with filtered data
-	//FIXME Listen for events
 	private FilteredData data;
+	private boolean displayed;
+	private DefaultPieDataset dataset;
+	private HashMap<Category, Summary> categoryToAmount;
+	private OptimizedToolTipGenerator toolTipGenerator;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
+		categoryToAmount = new HashMap<Category, Summary>(this.data.getGlobalData().getCategoriesNumber());
+        dataset = new DefaultPieDataset();
+        toolTipGenerator = new OptimizedToolTipGenerator();
+		this.data.addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				if (displayed) {
+					toolTipGenerator.clear();
+					buildSummaries();
+					buildDataSet();
+				}
+			}
+		});
 	}
 
 	@Override
 	public JPanel getPanel() {
-		HashMap<Category, Summary> categoryToAmount = new HashMap<Category, Summary>(this.data.getGlobalData().getCategoriesNumber());
+		buildSummaries();
+        buildDataSet();
+        
+        JFreeChart chart = ChartFactory.createPieChart("Dépenses par catégorie", dataset, false, true, false);
+        PiePlot plot = (PiePlot) chart.getPlot();
+		plot.setToolTipGenerator(toolTipGenerator);
+        plot.setSectionOutlinesVisible(true);
+        plot.setNoDataMessage("Rien à afficher");
+		return new ChartPanel(chart);
+	}
+
+	private void buildSummaries() {
+		categoryToAmount.clear();
 		for (int i = 0; i < this.data.getGlobalData().getCategoriesNumber(); i++) {
 			categoryToAmount.put(this.data.getGlobalData().getCategory(i), new Summary());
 		}
-		for (int i = 0; i < this.data.getGlobalData().getTransactionsNumber(); i++) {
-			Transaction transaction = this.data.getGlobalData().getTransaction(i);
+		for (int i = 0; i < this.data.getTransactionsNumber(); i++) {
+			Transaction transaction = this.data.getTransaction(i);
 			if (this.data.isOk(transaction)) {
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 					categoryToAmount.get(transaction.getSubTransaction(j).getCategory()).add(transaction.getSubTransaction(j).getAmount());
@@ -44,7 +70,10 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				categoryToAmount.get(transaction.getCategory()).add(transaction.getComplement());				
 			}
 		}
-        DefaultPieDataset dataset = new DefaultPieDataset();
+	}
+
+	private void buildDataSet() {
+		dataset.clear();
         Iterator<Category> it = categoryToAmount.keySet().iterator();
         while (it.hasNext()) {
 			Category category = (Category) it.next();
@@ -55,28 +84,6 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				dataset.setValue(title, expense);
 			}
 		}
-        JFreeChart chart = ChartFactory.createPieChart("Dépenses par catégorie", dataset, false, true, false);
-        PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setToolTipGenerator(new PieToolTipGenerator() {
-        	private Double total = null;
-
-        	@SuppressWarnings("unchecked")
-			@Override
-			public String generateToolTip(PieDataset dataset, Comparable key) {
-				if (total == null) {
-					total = 0.0;
-					for (int i = 0; i < dataset.getItemCount(); i++) {
-						total = total + (Double)dataset.getValue(i);
-					}
-				}
-				Double amount = (Double) dataset.getValue(key);
-				String amountString = LocalizationData.getCurrencyInstance().format(amount);
-				return MessageFormat.format("{0} ({1,number,#.#}%)", amountString, amount/total*100);
-			}
-		});
-        plot.setSectionOutlinesVisible(true);
-        plot.setNoDataMessage("Rien à afficher");
-		return new ChartPanel(chart);
 	}
 
 	@Override
@@ -89,4 +96,13 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		return "Ce panneau affiche les statistiques sur votre compte";
 	}
 
+	@Override
+	public void setDisplayed(boolean displayed) {
+		super.setDisplayed(displayed);
+		this.displayed = displayed;
+		if (displayed) {
+			buildSummaries();
+	        buildDataSet();
+		}
+	}
 }
