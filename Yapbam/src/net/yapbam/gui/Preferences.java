@@ -16,6 +16,10 @@ import java.util.StringTokenizer;
 
 import javax.swing.UIManager;
 
+import net.yapbam.gui.administration.AdministrationPlugIn;
+import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
+import net.yapbam.gui.statistics.StatisticsPlugin;
+import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
 
@@ -225,5 +229,9 @@ public class Preferences {
 	public void setAutoUpdate(int days, boolean silentFail) {
 		this.properties.setProperty(AUTO_UPDATE_PERIOD, Integer.toString(days));
 		this.properties.setProperty(AUTO_UPDATE_SILENT_FAIL, Boolean.toString(silentFail));
+	}
+
+	public static Class<AbstractPlugIn>[] getPlugins() {
+		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, AdministrationPlugIn.class};
 	}
 }

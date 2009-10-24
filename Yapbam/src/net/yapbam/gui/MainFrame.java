@@ -13,10 +13,6 @@ import javax.swing.event.ChangeListener;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
-import net.yapbam.gui.administration.AdministrationPlugIn;
-import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
-import net.yapbam.gui.statistics.StatisticsPlugin;
-import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
@@ -47,15 +43,9 @@ public class MainFrame extends JFrame implements DataListener {
 	    });
 	}
 	
-	@SuppressWarnings("unchecked")
-	private static final Class[] getPlugins() {
-		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, AdministrationPlugIn.class, StatisticsPlugin.class};
-	}
-
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
 	 * event-dispatching thread.
 	 */
-	@SuppressWarnings("unchecked")
 	private MainFrame(FilteredData filteredData, Object[] restartData) {
 	    //Create and set up the window.
 		super();
@@ -88,7 +78,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    }
 	    if (filteredData==null) YapbamState.INSTANCE.restoreGlobalData(this);
 	    
-	    Class[] pluginClasses = getPlugins();
+	    Class<AbstractPlugIn>[] pluginClasses = Preferences.getPlugins();
 	    if (restartData==null) restartData = new Object[pluginClasses.length];
 	    this.plugins=new AbstractPlugIn[pluginClasses.length];
 	    for (int i = 0; i < pluginClasses.length; i++) {
