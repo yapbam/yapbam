@@ -20,6 +20,10 @@ public class BalanceData extends DefaultListenable { //TODO send event when bala
 	
 	BalanceData(FilteredData fdata) {}
 	
+	public void setCurrency(Currency currency) {
+		balanceHistory.setCurrency(currency);
+	}
+	
 	void clear(double initialBalance) {
 		this.balanceHistory = new BalanceHistory(initialBalance);
 		this.finalBalance = initialBalance;
