@@ -1,7 +1,8 @@
 package net.yapbam.gui.statistics;
 
-import java.text.NumberFormat;
+import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -24,35 +25,34 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	//FIXME Listen for events
 	private FilteredData data;
 	
-	public StatisticsPlugin(FilteredData acFilter, Object restartData) {
-		this.data = acFilter;
+	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
+		this.data = filteredData;
 	}
 
 	@Override
 	public JPanel getPanel() {
-		HashMap<Category, double[]> categoryToAmount = new HashMap<Category, double[]>(this.data.getGlobalData().getCategoriesNumber());
+		HashMap<Category, Summary> categoryToAmount = new HashMap<Category, Summary>(this.data.getGlobalData().getCategoriesNumber());
 		for (int i = 0; i < this.data.getGlobalData().getCategoriesNumber(); i++) {
-			categoryToAmount.put(this.data.getGlobalData().getCategory(i), new double[]{0,0});
+			categoryToAmount.put(this.data.getGlobalData().getCategory(i), new Summary());
 		}
 		for (int i = 0; i < this.data.getGlobalData().getTransactionsNumber(); i++) {
 			Transaction transaction = this.data.getGlobalData().getTransaction(i);
 			if (this.data.isOk(transaction)) {
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
-					add(categoryToAmount, transaction.getSubTransaction(j).getAmount(), transaction.getSubTransaction(j).getCategory());
+					categoryToAmount.get(transaction.getSubTransaction(j).getCategory()).add(transaction.getSubTransaction(j).getAmount());
 				}
-				add(categoryToAmount, transaction.getComplement(), transaction.getCategory());				
+				categoryToAmount.get(transaction.getCategory()).add(transaction.getComplement());				
 			}
 		}
-/*        double totalDebts = 0; 
-        for (int i = 0; i < this.data.getGlobalData().getCategoriesNumber(); i++) {
-			totalDebts += categoryToAmount.get(this.data.getGlobalData().getCategory(i))[1];
-		}*/
         DefaultPieDataset dataset = new DefaultPieDataset();
-        for (int i = 0; i < this.data.getGlobalData().getCategoriesNumber(); i++) {
-            double amount = categoryToAmount.get(this.data.getGlobalData().getCategory(i))[1];
-			if (amount>0) {
-				String title = this.data.getGlobalData().getCategory(i).getName();
-				dataset.setValue(title, amount);
+        Iterator<Category> it = categoryToAmount.keySet().iterator();
+        while (it.hasNext()) {
+			Category category = (Category) it.next();
+            Summary summary = categoryToAmount.get(category);
+            double expense = - summary.getReceipts() - summary.getDebts();
+			if (expense>0) {
+				String title = category.getName();
+				dataset.setValue(title, expense);
 			}
 		}
         JFreeChart chart = ChartFactory.createPieChart("Dépenses par catégorie", dataset, false, true, false);
@@ -70,18 +70,13 @@ public class StatisticsPlugin extends AbstractPlugIn {
 					}
 				}
 				Double amount = (Double) dataset.getValue(key);
-				return LocalizationData.getCurrencyInstance().format(amount)+" ("+amount/total*100+"%)";
+				String amountString = LocalizationData.getCurrencyInstance().format(amount);
+				return MessageFormat.format("{0} ({1,number,#.#}%)", amountString, amount/total*100);
 			}
 		});
         plot.setSectionOutlinesVisible(true);
-        plot.setNoDataMessage("No data available");
+        plot.setNoDataMessage("Rien à afficher");
 		return new ChartPanel(chart);
-	}
-
-	private static void add(HashMap<Category, double[]> categoryToAmount, double amount, Category category) {
-		double[] values = categoryToAmount.get(category);
-		if (amount>0) values[0] = values[0]+amount;
-		else values[1] = values[1]-amount;
 	}
 
 	@Override
