@@ -11,7 +11,7 @@ import org.junit.Test;
 public class BalanceHistoryTest {
 
 	@Test
-	public void testGetNormalizedStep() {
+	public void testGetNormalizedStep() {		
 		Date date1 = new Date(109,5,1);
 		BalanceHistory history = new BalanceHistory(0);
 		assertEquals(0, history.getBalance(date1), 0.01);
@@ -47,7 +47,7 @@ public class BalanceHistoryTest {
 		assertEquals(25, history.getBalance(date3), 0.01);
 		assertEquals(3, history.size());
 		
-		history.add(-30, date3);
+		history.add(15, date2);
 		assertEquals(2, history.size());
 	}
 }
