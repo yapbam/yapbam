@@ -37,10 +37,10 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	@Override
 	public JPanel getPanel() {
 		JTabbedPane tabbedPane = new JTabbedPane();
-		this.pie = new PieChartPanel(categoryToAmount);
-		tabbedPane.add("Camembert", this.pie);
 		this.bar = new BarChartPanel(categoryToAmount);
-		tabbedPane.add("Recettes/dépenses", this.bar);
+		tabbedPane.addTab("Recettes/dépenses", null, this.bar, "Ce graphique présente le montant des dépenses et des recettes par catégorie"); //LOCAL
+		this.pie = new PieChartPanel(categoryToAmount);
+		tabbedPane.addTab("Camembert", null, this.pie, "Ce graphique présente la répartition des dépenses nettes (dépenses - recettes) par catégorie"); //LOCAL
 		buildSummaries();
 		JPanel result = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
