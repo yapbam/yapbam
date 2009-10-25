@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.UIManager;
 
+import net.yapbam.currency.converter.UtilitiesPlugIn;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.gui.statistics.StatisticsPlugin;
@@ -232,6 +233,6 @@ public class Preferences {
 	}
 
 	public static Class<AbstractPlugIn>[] getPlugins() {
-		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, AdministrationPlugIn.class};
+		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, AdministrationPlugIn.class, UtilitiesPlugIn.class};
 	}
 }

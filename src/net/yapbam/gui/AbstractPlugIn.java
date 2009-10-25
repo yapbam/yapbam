@@ -46,7 +46,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	
 	/** Constructor.
 	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>
-	 * <LI>AccountFilteredData : The root object of Yapbam's data</LI>
+	 * <LI>FilteredData : The root object of Yapbam's data</LI>
 	 * <LI>Object : an object representing the state of the plugin (returned by getRestartData()) or null if no previous state was save.</LI>
 	 */
 	protected AbstractPlugIn() {

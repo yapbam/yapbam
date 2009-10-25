@@ -11,7 +11,7 @@ import javax.swing.*;
 
 import net.yapbam.gui.LocalizationData;
 
-public abstract class AbstractDialog extends JDialog implements ActionListener {
+public abstract class AbstractDialog extends JDialog implements ActionListener { //TODO Use a internal ActionListener
 	private static final long serialVersionUID = 1L;
 	
 	private Object result;
