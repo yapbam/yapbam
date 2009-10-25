@@ -56,7 +56,7 @@ public class AccountDialog extends AbstractDialog {
         JLabel titleBalance = new JLabel(LocalizationData.get("AccountDialog.balance")); //$NON-NLS-1$
         c.weightx=0; c.fill=GridBagConstraints.NONE; c.gridy++; c.gridx=0;
         northPanel.add(titleBalance,c);
-        balanceField = new AmountWidget();
+        balanceField = new AmountWidget(LocalizationData.getLocale());
         balanceField.addFocusListener(focusListener);
         balanceField.setValue(new Double(0));
         balanceField.addKeyListener(listener);
