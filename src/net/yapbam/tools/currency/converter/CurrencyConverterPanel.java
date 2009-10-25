@@ -1,4 +1,4 @@
-package net.yapbam.currency.converter;
+package net.yapbam.tools.currency.converter;
 
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
@@ -13,6 +13,8 @@ import java.util.Currency;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
+import net.yapbam.tools.Messages;
+
 import javax.swing.JLabel;
 import java.awt.Insets;
 import java.awt.Color;
@@ -47,10 +49,10 @@ public class CurrencyConverterPanel extends JPanel {
 			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
 			currency1.setSelectedIndex(index);
 			currency2.setSelectedIndex(index);
-			String title = MessageFormat.format("Les taux de conversion utilisés sont ceux de la European Central Bank au {0,date,long}", CurrencyConverter.getInstance().getReferenceDate());
+			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), CurrencyConverter.getInstance().getReferenceDate()); //$NON-NLS-1$
 			this.title.setText(title);
 		} catch (Exception e) {
-			errField.setText(MessageFormat.format("L''erreur \"{0}\" est survenue.", e.toString()));
+			errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
 		}
 	}
 
@@ -68,7 +70,7 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints6.gridwidth = 0;
 		gridBagConstraints6.gridy = 2;
 		errField = new JLabel();
-		errField.setText("");
+		errField.setText(""); //$NON-NLS-1$
 		errField.setForeground(new Color(255, 64, 64));
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
@@ -78,13 +80,13 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints4.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints4.gridwidth = GridBagConstraints.REMAINDER;
 		title = new JLabel();
-		title.setText("");
+		title.setText(""); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 2;
 		gridBagConstraints31.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints31.gridy = 1;
 		jLabel = new JLabel();
-		jLabel.setText("=");
+		jLabel.setText("="); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints21.gridy = 1;
@@ -138,7 +140,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private JComboBox getCurrency1() {
 		if (currency1 == null) {
 			currency1 = new JComboBox();
-			currency1.setToolTipText("Sélectionnez la devise d'origine");
+			currency1.setToolTipText(Messages.getString("CurrencyConverterPanel.origin.toolTip")); //$NON-NLS-1$
 			currency1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount1.setCurrency(Currency.getInstance(codes[currency1.getSelectedIndex()]));
@@ -157,7 +159,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private JComboBox getCurrency2() {
 		if (currency2 == null) {
 			currency2 = new JComboBox();
-			currency2.setToolTipText("Sélectionnez la devise de destination");
+			currency2.setToolTipText(Messages.getString("CurrencyConverterPanel.destination.toolTip")); //$NON-NLS-1$
 			currency2.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount2.setCurrency(Currency.getInstance(codes[currency2.getSelectedIndex()]));
@@ -177,7 +179,7 @@ public class CurrencyConverterPanel extends JPanel {
 		if (amount1 == null) {
 			amount1 = new AmountWidget(LocalizationData.getLocale());
 			amount1.setColumns(5);
-			amount1.setToolTipText("Tapez le montant à convertir ici, terminez par la touche <Tab>");
+			amount1.setToolTipText(Messages.getString("CurrencyConverterPanel.amount.toolTip")); //$NON-NLS-1$
 			amount1.setValue(0.0);
 			amount1.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 				@Override
@@ -198,7 +200,7 @@ public class CurrencyConverterPanel extends JPanel {
 		if (amount2 == null) {
 			amount2 = new AmountWidget(LocalizationData.getLocale());
 			amount2.setColumns(5);
-			amount2.setToolTipText("Ce champ contient le montant converti");
+			amount2.setToolTipText(Messages.getString("CurrencyConverterPanel.result.toolTip")); //$NON-NLS-1$
 			amount2.setEditable(false);
 		}
 		return amount2;
@@ -212,7 +214,7 @@ public class CurrencyConverterPanel extends JPanel {
 			try {
 				amount2.setValue(CurrencyConverter.getInstance().convert(value, from, to));
 			} catch (Exception e) {
-				errField.setText(MessageFormat.format("L''erreur \"{0}\" est survenue.", e.toString()));
+				errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
 			}
 		}
 	}
