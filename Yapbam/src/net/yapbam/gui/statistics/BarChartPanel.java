@@ -22,19 +22,16 @@ import org.jfree.data.category.DefaultCategoryDataset;
 class BarChartPanel extends ChartPanel {
 	private DefaultCategoryDataset dataset;
 	private Map<Category, Summary> categoryToAmount;
-	private OptimizedToolTipGenerator toolTipGenerator;
 	
 	BarChartPanel(Map<Category, Summary> map) {
 		super(null);
 		this.categoryToAmount = map;
         dataset = new DefaultCategoryDataset();
-        toolTipGenerator = new OptimizedToolTipGenerator();
         updateDataSet();
         
-    	JFreeChart chart = ChartFactory.createStackedBarChart("Recettes et dépenses par catégories", null, null, dataset, PlotOrientation.VERTICAL, true, true, false);
+    	JFreeChart chart = ChartFactory.createStackedBarChart(LocalizationData.get("StatisticsPlugin.bar.title"), null, null, dataset, PlotOrientation.VERTICAL, true, true, false); //$NON-NLS-1$
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
-//		plot.setToolTipGenerator(toolTipGenerator);
-        plot.setNoDataMessage("todo");
+        plot.setNoDataMessage(LocalizationData.get("StatisticsPlugin.bar.empty")); //$NON-NLS-1$
         // disable bar outlines...
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
@@ -54,7 +51,6 @@ class BarChartPanel extends ChartPanel {
 
 	void updateDataSet() {
 		dataset.clear();
-		toolTipGenerator.clear();
         Iterator<Category> it = categoryToAmount.keySet().iterator();
         while (it.hasNext()) {
 			Category category = (Category) it.next();
@@ -62,8 +58,8 @@ class BarChartPanel extends ChartPanel {
 			String title = category.getName();
 			if (!LocalizationData.areEqualsCurrenciesAmounts(summary.getReceipts(),0) ||
 					!LocalizationData.areEqualsCurrenciesAmounts(summary.getDebts(),0)) {
-				dataset.addValue(summary.getReceipts(), "Recettes", title); //LOCAL
-				dataset.addValue(summary.getDebts(), "Dépenses", title); //LOCAL
+				dataset.addValue(summary.getReceipts(), LocalizationData.get("StatisticsPlugin.bar.receipt"), title); //$NON-NLS-1$
+				dataset.addValue(summary.getDebts(), LocalizationData.get("StatisticsPlugin.bar.debts"), title); //$NON-NLS-1$
 			}
 		}
 	}

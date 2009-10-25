@@ -25,11 +25,11 @@ class PieChartPanel extends ChartPanel {
         toolTipGenerator = new OptimizedToolTipGenerator();
         updateDataSet();
         
-        JFreeChart chart = ChartFactory.createPieChart(LocalizationData.get("StatisticsPlugin.byCategory.title"), dataset, false, true, false); //$NON-NLS-1$
+        JFreeChart chart = ChartFactory.createPieChart(LocalizationData.get("StatisticsPlugin.pie.byCategory.title"), dataset, false, true, false); //$NON-NLS-1$
         PiePlot plot = (PiePlot) chart.getPlot();
 		plot.setToolTipGenerator(toolTipGenerator);
         plot.setSectionOutlinesVisible(true);
-        plot.setNoDataMessage(LocalizationData.get("StatisticsPlugin.byCategory.empty")); //$NON-NLS-1$
+        plot.setNoDataMessage(LocalizationData.get("StatisticsPlugin.pie.byCategory.empty")); //$NON-NLS-1$
         this.setChart(chart);
 	}
 
