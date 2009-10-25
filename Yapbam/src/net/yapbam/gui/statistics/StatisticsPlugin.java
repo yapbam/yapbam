@@ -40,7 +40,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.bar = new BarChartPanel(categoryToAmount);
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.bar.tabname"), null, this.bar, LocalizationData.get("StatisticsPlugin.bar.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.pie = new PieChartPanel(categoryToAmount);
-		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.pie.tabname"), null, this.pie, LocalizationData.get("StatisticsPlugin.pie.tooltip")); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$
+		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.pie.tabname"), null, this.pie, LocalizationData.get("StatisticsPlugin.pie.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		buildSummaries();
 		JPanel result = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
