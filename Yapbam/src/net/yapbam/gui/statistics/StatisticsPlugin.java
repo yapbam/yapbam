@@ -1,15 +1,12 @@
 package net.yapbam.gui.statistics;
 
-import java.util.Iterator;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.data.general.DefaultPieDataset;
+import javax.swing.JTabbedPane;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
@@ -22,38 +19,34 @@ import net.yapbam.gui.LocalizationData;
 public class StatisticsPlugin extends AbstractPlugIn {
 	private FilteredData data;
 	private boolean displayed;
-	private DefaultPieDataset dataset;
 	private TreeMap<Category, Summary> categoryToAmount;
-	private OptimizedToolTipGenerator toolTipGenerator;
+	private PieChartPanel pie;
+	private BarChartPanel bar;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
 		categoryToAmount = new TreeMap<Category, Summary>();
-        dataset = new DefaultPieDataset();
-        toolTipGenerator = new OptimizedToolTipGenerator();
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if (displayed) {
-					toolTipGenerator.clear();
-					buildSummaries();
-					buildDataSet();
-				}
+				if (displayed) buildSummaries();
 			}
 		});
 	}
 
 	@Override
 	public JPanel getPanel() {
+		JTabbedPane tabbedPane = new JTabbedPane();
+		this.pie = new PieChartPanel(categoryToAmount);
+		tabbedPane.add("Camembert", this.pie);
+		this.bar = new BarChartPanel(categoryToAmount);
+		tabbedPane.add("Recettes/dépenses", this.bar);
 		buildSummaries();
-        buildDataSet();
-        
-        JFreeChart chart = ChartFactory.createPieChart(LocalizationData.get("StatisticsPlugin.byCategory.title"), dataset, false, true, false); //$NON-NLS-1$
-        PiePlot plot = (PiePlot) chart.getPlot();
-		plot.setToolTipGenerator(toolTipGenerator);
-        plot.setSectionOutlinesVisible(true);
-        plot.setNoDataMessage(LocalizationData.get("StatisticsPlugin.byCategory.empty")); //$NON-NLS-1$
-		return new ChartPanel(chart);
+		JPanel result = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+				new Insets(5, 0, 0, 0), 0, 0);
+		result.add(tabbedPane, c);
+		return result;
 	}
 
 	private void buildSummaries() {
@@ -70,20 +63,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				categoryToAmount.get(transaction.getCategory()).add(transaction.getComplement());				
 			}
 		}
-	}
-
-	private void buildDataSet() {
-		dataset.clear();
-        Iterator<Category> it = categoryToAmount.keySet().iterator();
-        while (it.hasNext()) {
-			Category category = (Category) it.next();
-            Summary summary = categoryToAmount.get(category);
-            double expense = - summary.getReceipts() - summary.getDebts();
-			if (expense>0) {
-				String title = category.getName();
-				dataset.setValue(title, expense);
-			}
-		}
+        pie.updateDataSet();
+        bar.updateDataSet();
 	}
 
 	@Override
@@ -100,9 +81,6 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	public void setDisplayed(boolean displayed) {
 		super.setDisplayed(displayed);
 		this.displayed = displayed;
-		if (displayed) {
-			buildSummaries();
-	        buildDataSet();
-		}
+		if (displayed) buildSummaries();
 	}
 }
