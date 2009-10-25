@@ -108,10 +108,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getData()));
         item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         transactionMenu.add(item);
-        insertPluginMenuItems(menu, AbstractPlugIn.TRANSACTIONS_PART);
+        insertPluginMenuItems(transactionMenu, AbstractPlugIn.TRANSACTIONS_PART);
         transactionMenu.addSeparator();
         transactionMenu.add(new JMenuItem(new GeneratePeriodicalTransactionsAction(frame.getData())));
-        insertPluginMenuItems(menu, AbstractPlugIn.PERIODIC_TRANSACTIONS_PART);
+        insertPluginMenuItems(transactionMenu, AbstractPlugIn.PERIODIC_TRANSACTIONS_PART);
         this.add(transactionMenu);
         
         //Build the filter menu
