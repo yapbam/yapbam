@@ -117,7 +117,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
         
         c.fill=GridBagConstraints.NONE; c.anchor = GridBagConstraints.WEST; c.weightx = 0;
         centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.amount")),c); //$NON-NLS-1$
-        amount = new AmountWidget();
+        amount = new AmountWidget(LocalizationData.getLocale());
         amount.addFocusListener(focusListener);
         amount.addKeyListener(listener);
         amount.setValue(new Double(0));

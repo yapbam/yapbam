@@ -148,7 +148,7 @@ public class SubTransactionPanel extends JPanel {
 	 */
 	private JTextField getAmountField() {
 		if (amountField == null) {
-			amountField = new AmountWidget();
+			amountField = new AmountWidget(LocalizationData.getLocale());
 			amountField.setColumns(10);
 	        amountField.setValue(new Double(0));
 		}
