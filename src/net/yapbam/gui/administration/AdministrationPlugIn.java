@@ -37,4 +37,10 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 		super.saveState();
 		panel.saveState();
 	}
+
+	@Override
+	public boolean allowMenu(int menuId) {
+		if ((menuId==ACCOUNT_MENU) || (menuId==FILTER_MENU)) return false;
+		return super.allowMenu(menuId);
+	}
 }

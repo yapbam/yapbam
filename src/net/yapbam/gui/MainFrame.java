@@ -92,7 +92,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 
 	    setContentPane(this.createContentPane());
-	    MainMenuBar mainMenu = new MainMenuBar(this);
+	    final MainMenuBar mainMenu = new MainMenuBar(this);
 		setJMenuBar(mainMenu);
 		mainPane.addChangeListener(new ChangeListener() {
 			private int lastSelected = 0;
@@ -102,6 +102,7 @@ public class MainFrame extends JFrame implements DataListener {
 				paneledPlugins.get(lastSelected).setDisplayed(false);
 				int selectedIndex = mainPane.getSelectedIndex();
 				if (selectedIndex<paneledPlugins.size()) paneledPlugins.get(selectedIndex).setDisplayed(true);
+				mainMenu.updateMenu(paneledPlugins.get(selectedIndex));
 			}
 		});
 		
