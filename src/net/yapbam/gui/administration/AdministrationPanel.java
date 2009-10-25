@@ -7,6 +7,7 @@ import javax.swing.JTabbedPane;
 import net.yapbam.data.GlobalData;
 
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class AdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -34,20 +35,21 @@ public class AdministrationPanel extends JPanel {
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.weighty = 1.0;
+		gridBagConstraints.insets = new Insets(5, 0, 0, 0);
 		gridBagConstraints.gridx = 0;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		JTabbedPane jTabbedPane = new JTabbedPane();
-		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
+//		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
+		this.add(jTabbedPane, gridBagConstraints);
 		panels = new AbstractAdministrationPanel[]{
+				new PeriodicalTransactionListPanel(data),
 				new AccountAdministrationPanel(data),
-/**/				new CategoryListPanel(data),
-				new PeriodicalTransactionListPanel(data)
+				new CategoryListPanel(data)
 		};
 		for (int i = 0; i < panels.length; i++) {
 			jTabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());
 		}
-		this.add(jTabbedPane, gridBagConstraints);
 	}
 
 	void saveState() {
