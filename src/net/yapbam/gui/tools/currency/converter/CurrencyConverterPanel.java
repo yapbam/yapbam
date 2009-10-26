@@ -13,6 +13,7 @@ import java.util.Currency;
 
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.tools.Messages;
 
@@ -40,9 +41,11 @@ public class CurrencyConverterPanel extends JPanel {
 		super();
 		initialize();
 		try {
+			CurrencyConverter.getInstance().setProxy(Preferences.INSTANCE.getHttpProxy());
 			this.codes = CurrencyConverter.getInstance().getCurrencies();
+			Arrays.sort(this.codes);
 			for (int i = 0; i < codes.length; i++) {
-				String symbol = Currency.getInstance(this.codes[i]).getSymbol();
+				String symbol = CurrencyNames.getString(this.codes[i]);
 				currency1.addItem(symbol);
 				currency2.addItem(symbol);
 			}
@@ -179,7 +182,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private AmountWidget getAmount1() {
 		if (amount1 == null) {
 			amount1 = new AmountWidget(LocalizationData.getLocale());
-			amount1.setColumns(5);
+			amount1.setColumns(10);
 			amount1.setToolTipText(Messages.getString("CurrencyConverterPanel.amount.toolTip")); //$NON-NLS-1$
 			amount1.setValue(0.0);
 			amount1.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
@@ -200,7 +203,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private AmountWidget getAmount2() {
 		if (amount2 == null) {
 			amount2 = new AmountWidget(LocalizationData.getLocale());
-			amount2.setColumns(5);
+			amount2.setColumns(10);
 			amount2.setToolTipText(Messages.getString("CurrencyConverterPanel.result.toolTip")); //$NON-NLS-1$
 			amount2.setEditable(false);
 		}
