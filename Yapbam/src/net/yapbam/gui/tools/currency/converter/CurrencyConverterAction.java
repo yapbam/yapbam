@@ -1,4 +1,4 @@
-package net.yapbam.tools.currency.converter;
+package net.yapbam.gui.tools.currency.converter;
 
 import java.awt.event.ActionEvent;
 
