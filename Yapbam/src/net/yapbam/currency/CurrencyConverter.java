@@ -1,4 +1,5 @@
 /*
+ * This class is a modified version of Thomas Knierim original Currency Converter.
  * Copyright (c) 2007 Thomas Knierim
  * http://www.thomasknierim.com
  *
@@ -19,6 +20,7 @@ package net.yapbam.currency;
 
 import java.net.*;
 import java.io.*;
+
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 import java.text.*;
@@ -40,43 +42,38 @@ import java.util.*;
  * updated automatically when new exchange rates become available. It is
  * created/updated the first time a call to convert() is made.
  *
- * @version 1.0 2008-16-02
- * @author Thomas Knierim
+ * @version 1.01 2009-26-10
+ * @author Thomas Knierim (modified by Jean-Marc Astesana : proxy support)
  *
  */
 public final class CurrencyConverter {
-
-    
     private static CurrencyConverter instance = null;
+    private static final String ECB_RATES_URL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 
-    
-    private final String ecbRatesURL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
-
-    
     transient private File cacheFile = null;
-
-    
     private String cacheFileName = null;
-
-    
-    private HashMap<String, Long> fxRates = new HashMap<String, Long>(40);
-
-    
+    private HashMap<String, Long> fxRates = new HashMap<String, Long>(40);    
     private Date referenceDate = null;
-
-    
     private String lastError = null;
-
+    private Proxy proxy = Proxy.NO_PROXY;
     
     private CurrencyConverter() {}
+    
+    /** Sets the proxy used to connect with ECB.
+     * By default, the proxy is set to Proxy.NoProxy
+     * Changing the proxy do not force a new connection to ECB.
+     * @param proxy The new proxy to use
+     */
+    public void setProxy(Proxy proxy) {
+    	this.proxy = proxy;
+    }
 
     /**
      * Returns a singleton instance of CurrencyConverter.
      * @return CurrencyConverter instance
      */
     public static CurrencyConverter getInstance() {
-        if (instance == null)
-            instance = new CurrencyConverter();
+        if (instance == null) instance = new CurrencyConverter();
         return instance;
     }
 
@@ -317,23 +314,28 @@ public final class CurrencyConverter {
     private void refreshCacheFile() throws IOException {
         lastError = null;
         initCacheFile();
-        InputStreamReader in;
-        FileWriter out;
         try {
-            URL ecbRates = new URL(ecbRatesURL);
-            in = new InputStreamReader(ecbRates.openStream());
-            out = new FileWriter(cacheFile);
-            try {
-                int c;
-                while ((c = in.read()) != -1)
-                    out.write(c);
-            } catch (IOException e) {
-                lastError = "Read/Write Error: " + e.getMessage();
-            } finally {
-                out.flush();
-                out.close();
-                in.close();
-            }
+    		HttpURLConnection ct = (HttpURLConnection) new URL(ECB_RATES_URL).openConnection(proxy);
+    		int errorCode = ct.getResponseCode();
+    		if (errorCode==HttpURLConnection.HTTP_OK) {
+                InputStreamReader in = new InputStreamReader(ct.getInputStream(),ct.getContentEncoding());
+                try {
+	                FileWriter out = new FileWriter(cacheFile);
+	                try {
+	                    int c;
+	                    while ((c = in.read()) != -1) out.write(c);
+	                } catch (IOException e) {
+	                    lastError = "Read/Write Error: " + e.getMessage();
+	                } finally {
+	                    out.flush();
+	                    out.close();
+	                }
+                } finally {
+                    in.close();
+                }
+    		} else {
+    			throw new IOException ("Http Error "+errorCode);
+    		}
         } catch (IOException e) {
             lastError = "Connection/Open Error: " + e.getMessage();
         }

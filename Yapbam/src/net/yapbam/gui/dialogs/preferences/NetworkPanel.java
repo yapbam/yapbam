@@ -98,14 +98,14 @@ public class NetworkPanel extends PreferencePanel {
 			noProxyButton.setToolTipText(LocalizationData.get("PreferencesDialog.Network.direct.tooltip")); //$NON-NLS-1$
 			noProxyButton.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					setProxyEnaled(!getNoProxyButton().isSelected());
+					setProxyEnabled(!getNoProxyButton().isSelected());
 				}
 			});
 		}
 		return noProxyButton;
 	}
 	
-	private void setProxyEnaled(boolean enabled) {
+	private void setProxyEnabled(boolean enabled) {
 		proxyLabel.setEnabled(enabled);
 		proxyPortLabel.setEnabled(enabled);
 		userLabel.setEnabled(enabled);
