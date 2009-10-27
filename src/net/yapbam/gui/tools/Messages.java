@@ -1,4 +1,4 @@
-package net.yapbam.tools;
+package net.yapbam.gui.tools;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import net.yapbam.gui.Preferences;
 
 public class Messages {
-	private static final String BUNDLE_NAME = "net.yapbam.tools.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "net.yapbam.gui.tools.messages"; //$NON-NLS-1$
 
 	private static ResourceBundle RESOURCE_BUNDLE;
 	

@@ -1,15 +1,15 @@
-package net.yapbam.tools;
+package net.yapbam.gui.tools;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
-import net.yapbam.gui.tools.currency.converter.CurrencyConverterAction;
 
 public class ToolsPlugIn extends AbstractPlugIn {
 	public ToolsPlugIn(FilteredData data, Object restoreData) {
 		Messages.reset();
+		CurrencyNames.reset();
 	}
 	
 	@Override

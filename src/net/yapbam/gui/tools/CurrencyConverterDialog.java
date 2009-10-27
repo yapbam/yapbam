@@ -1,4 +1,4 @@
-package net.yapbam.gui.tools.currency.converter;
+package net.yapbam.gui.tools;
 
 import java.awt.Window;
 

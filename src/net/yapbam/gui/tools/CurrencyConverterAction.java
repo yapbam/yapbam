@@ -1,10 +1,9 @@
-package net.yapbam.gui.tools.currency.converter;
+package net.yapbam.gui.tools;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.yapbam.tools.Messages;
 
 @SuppressWarnings("serial")
 final public class CurrencyConverterAction extends AbstractAction {

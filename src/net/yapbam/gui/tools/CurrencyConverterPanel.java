@@ -1,4 +1,4 @@
-package net.yapbam.gui.tools.currency.converter;
+package net.yapbam.gui.tools;
 
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
@@ -15,7 +15,6 @@ import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.widget.AmountWidget;
-import net.yapbam.tools.Messages;
 
 import javax.swing.JLabel;
 import java.awt.Insets;
