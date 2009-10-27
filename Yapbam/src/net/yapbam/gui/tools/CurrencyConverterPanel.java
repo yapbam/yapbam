@@ -19,6 +19,8 @@ import net.yapbam.gui.widget.AmountWidget;
 import javax.swing.JLabel;
 import java.awt.Insets;
 import java.awt.Color;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class CurrencyConverterPanel extends JPanel {
 
@@ -32,6 +34,9 @@ public class CurrencyConverterPanel extends JPanel {
 	private String[] codes;
 	private JLabel title = null;
 	private JLabel errField = null;
+	private JScrollPane jScrollPane = null;
+	private JTable jTable = null;
+	private CurrencyTableModel tableModel;
 	
 	/**
 	 * This is the default constructor
@@ -53,6 +58,8 @@ public class CurrencyConverterPanel extends JPanel {
 			currency1.setSelectedIndex(index);
 			currency2.setSelectedIndex(index);
 			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), CurrencyConverter.getInstance().getReferenceDate()); //$NON-NLS-1$
+			tableModel = new CurrencyTableModel(this.codes[index]);
+			getJTable().setModel(tableModel);
 			this.title.setText(title);
 		} catch (Exception e) {
 			errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
@@ -65,6 +72,14 @@ public class CurrencyConverterPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+		gridBagConstraints12.fill = GridBagConstraints.BOTH;
+		gridBagConstraints12.weighty = 1.0;
+		gridBagConstraints12.gridwidth = 0;
+		gridBagConstraints12.gridx = 0;
+		gridBagConstraints12.gridy = 3;
+		gridBagConstraints12.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints12.weightx = 1.0;
 		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 		gridBagConstraints6.gridx = 0;
 		gridBagConstraints6.anchor = GridBagConstraints.WEST;
@@ -133,6 +148,7 @@ public class CurrencyConverterPanel extends JPanel {
 		this.add(jLabel, gridBagConstraints31);
 		this.add(title, gridBagConstraints4);
 		this.add(errField, gridBagConstraints6);
+		this.add(getJScrollPane(), gridBagConstraints12);
 	}
 
 	/**
@@ -147,6 +163,7 @@ public class CurrencyConverterPanel extends JPanel {
 			currency1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount1.setCurrency(Currency.getInstance(codes[currency1.getSelectedIndex()]));
+					if (tableModel!=null) tableModel.setCurrency(codes[currency1.getSelectedIndex()]);
 					doConvert();
 				}
 			});
@@ -220,5 +237,30 @@ public class CurrencyConverterPanel extends JPanel {
 				errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
 			}
 		}
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getJTable());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes jTable	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	private JTable getJTable() {
+		if (jTable == null) {
+			jTable = new JTable();
+		}
+		return jTable;
 	}
 }
