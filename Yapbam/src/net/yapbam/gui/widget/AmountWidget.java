@@ -27,6 +27,8 @@ public class AmountWidget extends JTextField {
 		format = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
 		this.setInputVerifier(new DefaultInputVerifier() {
 			protected boolean check(JComponent input, boolean change) {
+				//FIXME If change is false, this method MUST NOT have any side effect !!! (view JDK source comments)
+				//So, we need to split into a pure check method and a change method.
 				if (DEBUG) System.out.println ("AmountWidget.check is called");
 				AmountWidget widget = (AmountWidget)input;
 				updateValue();

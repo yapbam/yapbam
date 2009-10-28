@@ -1,8 +1,11 @@
 package net.yapbam.gui.tools;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+
+import net.yapbam.gui.dialogs.AbstractDialog;
 
 
 @SuppressWarnings("serial")
@@ -15,6 +18,6 @@ final public class CurrencyConverterAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new CurrencyConverterDialog(null, Messages.getString("ToolsPlugIn.currencyConverter.title"), null).setVisible(true); //$NON-NLS-1$
+		new CurrencyConverterDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), Messages.getString("ToolsPlugIn.currencyConverter.title"), null).setVisible(true); //$NON-NLS-1$
 	}
 }
