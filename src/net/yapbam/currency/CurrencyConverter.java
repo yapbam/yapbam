@@ -318,7 +318,7 @@ public final class CurrencyConverter {
     		HttpURLConnection ct = (HttpURLConnection) new URL(ECB_RATES_URL).openConnection(proxy);
     		int errorCode = ct.getResponseCode();
     		if (errorCode==HttpURLConnection.HTTP_OK) {
-                InputStreamReader in = new InputStreamReader(ct.getInputStream(),ct.getContentEncoding());
+				InputStreamReader in = new InputStreamReader(ct.getInputStream());
                 try {
 	                FileWriter out = new FileWriter(cacheFile);
 	                try {
