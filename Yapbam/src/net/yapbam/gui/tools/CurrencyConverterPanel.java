@@ -62,7 +62,7 @@ public class CurrencyConverterPanel extends JPanel {
 			getJTable().setModel(tableModel);
 			this.title.setText(title);
 		} catch (Exception e) {
-			errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
+			doError(e);
 		}
 	}
 
@@ -234,9 +234,14 @@ public class CurrencyConverterPanel extends JPanel {
 			try {
 				amount2.setValue(CurrencyConverter.getInstance().convert(value, from, to));
 			} catch (Exception e) {
-				errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
+				doError(e);
 			}
 		}
+	}
+
+	private void doError(Exception e) {
+		e.printStackTrace();
+		errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
 	}
 
 	/**
