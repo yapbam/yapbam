@@ -35,16 +35,16 @@ class PieChartPanel extends ChartPanel {
 
 	void updateDataSet() {
 		dataset.clear();
-		toolTipGenerator.clear();
         Iterator<Category> it = categoryToAmount.keySet().iterator();
         while (it.hasNext()) {
 			Category category = (Category) it.next();
             Summary summary = categoryToAmount.get(category);
             double expense = - summary.getReceipts() - summary.getDebts();
-			if (!LocalizationData.areEqualsCurrenciesAmounts(expense,0)) {
+			if (expense>0) {
 				String title = category.getName();
 				dataset.setValue(title, expense);
 			}
 		}
+		toolTipGenerator.clear();
 	}
 }
