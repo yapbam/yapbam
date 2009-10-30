@@ -49,8 +49,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 
 	protected void setContent(AbstractTransaction transaction) {
 		Account account = transaction.getAccount();
-		selectedAccount = data.indexOf(account);
-		accounts.setSelectedIndex(selectedAccount);
+		accounts.setSelectedIndex(data.indexOf(account));
 		description.setText(transaction.getDescription());
 		subtransactionsPanel.fill(transaction);
 		// Danger, subtransaction.fill throws Property Change events that may alter the amount field content.
@@ -58,8 +57,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		amount.setValue(Math.abs(transaction.getAmount()));
 		receipt.setSelected(transaction.getAmount()>0);
 		// Be aware, as its listener change the selectedMode, receipt must always be set before mode.
-		selectedMode = account.findMode(transaction.getMode(), transaction.getAmount()<=0);
-		modes.setSelectedIndex(selectedMode);
+		modes.setSelectedIndex(account.findMode(transaction.getMode(), transaction.getAmount()<=0));
 		categories.setCategory(transaction.getCategory());
 	}
 
