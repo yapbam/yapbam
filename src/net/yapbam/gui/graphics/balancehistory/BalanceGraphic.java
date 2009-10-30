@@ -14,6 +14,7 @@ import java.awt.Stroke;
 import java.awt.event.*;
 import java.text.DateFormatSymbols;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -217,8 +218,14 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	private void setLinePosition(double x) {
-		long day = ((int)x-X_OFFSET)/PIXEL_PER_DAY;
-		long time = this.getStartDate().getTime()+3600000*24*day;
+		int day = ((int)x-X_OFFSET)/PIXEL_PER_DAY;
+		// The following line introduce a bug when there's a summer/winter time change, because theses days doesn't
+		// have 24 hours. So, we will use a gregorianCalendar and add the amount of days to it.
+		// long time = this.getStartDate().getTime()+3600000*24*day;
+		GregorianCalendar dummy = new GregorianCalendar();
+		dummy.setTime(this.getStartDate());
+		dummy.add(GregorianCalendar.DATE, day);
+		long time = dummy.getTimeInMillis();
 		long max = Math.max(xToTime(this.getSize().width-1), this.getEndDate().getTime());
 		if (time>max) {
 			time = max;
