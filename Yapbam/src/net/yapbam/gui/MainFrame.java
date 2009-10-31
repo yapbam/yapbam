@@ -150,7 +150,7 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	public void processEvent(DataEvent event) {
-		if ((event instanceof FileChangedEvent) || (event instanceof EverythingChangedEvent)) {
+		if ((event instanceof FileChangedEvent) || (event instanceof EverythingChangedEvent) || (event instanceof NeedToBeSavedChangedEvent)) {
 			newDataOccured();
 		}
 	}
@@ -159,6 +159,7 @@ public class MainFrame extends JFrame implements DataListener {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
 		File file = data.getPath();
 		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
+		if (data.somethingHasChanged()) title = title+" *";
 		this.setTitle(title);
 	}
 	

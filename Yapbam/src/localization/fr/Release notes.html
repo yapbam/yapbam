@@ -16,7 +16,7 @@ color: #ff9900;
 -->
 </style></head>
 <body>
-<h1>Version &nbsp;0.3.1 (31/10/2009)</h1>
+<h1>Version &nbsp;0.3.2 (??/11/2009)</h1>
 <p>Cette version&nbsp;est&nbsp;une pre-version à laquelle
 manquent quelques fonctionnalités, et qui,
 probablement,&nbsp;comporte quelques bugs. Vous trouverez
@@ -39,7 +39,12 @@ informations (typiquement la catégorie).</li><li>Peut-être
 la prise en charge des fichiers au format OFX (issus de Money ou de
 votre banque) ... ça dépendra du nombre de demandes.</li></ul>
 <h2>Nouveautés de cette version</h2>
-<ul><li>L'outil de conversion des devises fonctionne à présent avec les
+<ul><li>Le titre de la fenêtre principale indique à présent que des
+modifications ont étés apportées depuis la dernière sauvegarde (le
+titre se termine alors par une étoile).</li></ul>
+<hr>
+<h1>Versions précédentes</h1>
+<h2>Version &nbsp;0.3.1 (31/10/2009)</h2><ul><li>L'outil de conversion des devises fonctionne à présent avec les
 connexions Internet par proxy et affiche à présent une table de
 conversion des devises.</li><li><span class="bugFix">Correction de bug </span>
 : &nbsp;Quand l'outil de conversion des devises avait été appelé,
@@ -47,10 +52,7 @@ fermer la fenêtre principale n'arrêtait pas la machine virtuelle
 java.&nbsp;</li><li><span class="bugFix">Correction de bug </span> : &nbsp;Les pourcentages affichés dans les bulles d'aide du camembert des dépenses nettes étaient faux.</li><li><span class="bugFix">Correction de bug</span>&nbsp;:
 Parfois, quand une opération était dupliquée ou transformée en
 opération périodique, l'opération créée avait un mode de paiement
-erroné.</li><li><span class="bugFix">Correction de bug</span>&nbsp;: L'historique du solde était décalé d'un jour quand il y avait un passage heure d'été à heure d'hiver dans son scope.</li></ul>
-<hr>
-<h1>Versions précédentes</h1>
-<h2>Version &nbsp;0.3.0 (25/10/2009)</h2><ul><li>Ajout d'un panneau de statistiques sur les catégories.</li><li>Ajout d'un outil de conversion de devises (en version expérimentale : ne fonctionne pas avec les connexions Internet par proxy).</li><li>Change l'apparence du panneau d'administration.</li><li><span class="bugFix">Correction de bug </span> : &nbsp;L'item de menu "convertir en opération périodique" restaient valide quand on quittait le panneau "opérations"</li></ul><h2>Version &nbsp;0.2.9 (24/10/2009)</h2><ul><li><span class="develop">Développeurs</span>
+erroné.</li><li><span class="bugFix">Correction de bug</span>&nbsp;: L'historique du solde était décalé d'un jour quand il y avait un passage heure d'été à heure d'hiver dans son scope.</li></ul><h2>Version &nbsp;0.3.0 (25/10/2009)</h2><ul><li>Ajout d'un panneau de statistiques sur les catégories.</li><li>Ajout d'un outil de conversion de devises (en version expérimentale : ne fonctionne pas avec les connexions Internet par proxy).</li><li>Change l'apparence du panneau d'administration.</li><li><span class="bugFix">Correction de bug </span> : &nbsp;L'item de menu "convertir en opération périodique" restaient valide quand on quittait le panneau "opérations"</li></ul><h2>Version &nbsp;0.2.9 (24/10/2009)</h2><ul><li><span class="develop">Développeurs</span>
 : Réécriture du filtrage des opérations pour préparer l'arrivée du plugin "statistiques".</li><li><span class="bugFix">Correction de bug </span> : &nbsp;Quand des&nbsp;opérations
 étaient supprimées, l'historique du solde pouvait contenir des segments
 surnuméraires (typiquement lorsqu'on supprimait toutes les opérations.</li></ul><h2>Version &nbsp;0.2.8 (18/10/2009)</h2><ul><li>Ajout d'un panneau d'administration des modes de paiement permettant l'ajout et la suppression de modes.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Lorsqu'une catégorie était supprimée, elle n'était parfois pas retirée de toutes les opérations.</li></ul><h2>Version &nbsp;0.2.7 (16/10/2009)</h2><ul><li>Au premier démarrage, Yapbam demande l'autorisation de se connecter pour&nbsp;rechercher automatiquement des mises à jour.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Un double-clic

@@ -60,7 +60,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 					categoryToAmount.get(transaction.getSubTransaction(j).getCategory()).add(transaction.getSubTransaction(j).getAmount());
 				}
-				categoryToAmount.get(transaction.getCategory()).add(transaction.getComplement());				
+				categoryToAmount.get(transaction.getCategory()).add(transaction.getComplement());
 			}
 		}
         pie.updateDataSet();
