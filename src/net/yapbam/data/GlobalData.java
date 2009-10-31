@@ -12,6 +12,10 @@ import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
 
+/** This class represents the whole Yapbam data.
+ *  You can also have a look at FilteredData which presents a filtered view of Yapbam data.
+ *  @see FilteredData
+ */
 public class GlobalData extends DefaultListenable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,11 +41,25 @@ public class GlobalData extends DefaultListenable {
 		}
 	};
 	
+	/** Constructor
+	 * Builds a new empty instance.
+	 */
 	public GlobalData() {
 		super();
 	    this.clear();
 	}
 
+	/** Tests if the data is empty (no accounts, no transactions, no category, etc... , really nothing !)
+	 * @return true if the data is empty
+	 */
+	public boolean isEmpty() {
+		return this.accounts.size()==0;
+	}
+	
+	/** Tests if the data needs to be saved.
+	 * @return true if the data needs to be saved, false, if there's nothing to change (no changes since last save).
+	 * @see #save(File)
+	 */
 	public boolean somethingHasChanged() {
 		return this.somethingChanged;
 	}
@@ -50,10 +68,11 @@ public class GlobalData extends DefaultListenable {
 		return path;
 	}
 
-	public boolean isEmpty() {
-		return this.accounts.size()==0;
-	}
-	
+	/** Saves the data into a file.
+	 * @param file The file where to save the data.
+	 * @throws IOException if a problem occurs while saving the data.
+	 * @see #read(File)
+	 */
 	public void save(File file) throws IOException {
 		if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed");
 		// Proceed safely, it means not to erase the old version until the new version is written
@@ -79,6 +98,12 @@ public class GlobalData extends DefaultListenable {
 		Serializer.write(this,writed);
 	}
 	
+	/** Reads the data from a file.
+	 * The only DataEvent sent during the read is EverythingChangedEvent, where the read is successfully finished.
+	 * @param file The file we want to read the data from.
+	 * @throws IOException if a problem occurs while reading the data.
+	 * @see EverythingChangedEvent
+	 */	
 	public void read(File file) throws IOException {
 		this.setEventsEnabled(false);
 		Serializer.read(this, file);
