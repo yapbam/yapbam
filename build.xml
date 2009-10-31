@@ -2,7 +2,7 @@
 <project default="build" name="Create Runnable Jar for Yapbam project">
 	<!--======================================  README ================================================>
 	| if you want to run this build file, you have to set the following jcommonpath and jfreechartpath |
-	| properties. They have to reference the jfreeChart sources and the JCommon sources.               |
+	| properties below. They have to reference the jfreeChart sources and the JCommon sources.         |
 	| These sources are available at http://www.jfree.org                                              |
 	<================================================================================================-->
 	<property name="jcommonpath" value="C:/Users/Jean-Marc/workspace/jcommon-1.0.16/sourceJCommon"/>
