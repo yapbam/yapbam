@@ -16,6 +16,7 @@ public class AbstractTransaction implements Cloneable {
 
 	public AbstractTransaction(String description, double amount, Account account, Mode mode, Category category, List<SubTransaction> subTransactions) {
 		super();
+		if ((mode==null) || (category==null) || (description==null) || (subTransactions==null)) throw new IllegalArgumentException();
 		this.id = currentId++;
 		this.description = description;
 		this.amount = amount;
