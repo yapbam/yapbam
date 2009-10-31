@@ -382,7 +382,7 @@ public class GlobalData extends DefaultListenable {
 	public void remove(Category category) {
 		int index = this.categories.indexOf(category);
 		if (index>=0){
-			new CategoryUpdater(category, Category.UNDEFINED);
+			new CategoryUpdater(category, Category.UNDEFINED).doIt();
 			this.categories.remove(index);
 			this.fireEvent(new CategoryRemovedEvent(this, index, category));
 			this.setChanged();
