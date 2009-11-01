@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DATA>
 <ACCOUNT id="Current Account" initialBalance="588.0">
-<MODE id="Carte bleue">
+<MODE id="Credit card">
 <EXPENSE stopDay="15" debtDay="31" kind="deferred"/>
 </MODE>
-<MODE id="Prélévement">
+<MODE id="Banker's order">
 <EXPENSE kind="immediate"/>
 </MODE>
-<MODE id="Virement">
+<MODE id="Transfer">
 <EXPENSE kind="immediate"/>
 <RECEIPT kind="immediate"/>
 </MODE>
-<MODE id="Chèque">
+<MODE id="Check">
 <EXPENSE period="2" kind="daily"/>
 <RECEIPT period="2" kind="daily"/>
 </MODE>
-<MODE id="TIP">
+<MODE id="Interbank payment order">
 <EXPENSE kind="immediate"/>
 </MODE>
 </ACCOUNT>
 <ACCOUNT id="Savings A" initialBalance="2500.0"/>
 <ACCOUNT id="Savings B" initialBalance="3000.0">
-<MODE id="Virement">
+<MODE id="Transfer">
 <EXPENSE kind="immediate"/>
 <RECEIPT kind="immediate"/>
 </MODE>
@@ -55,279 +55,279 @@
 <CATEGORY id="Transport/Car"/>
 <CATEGORY id="Transport/Transit"/>
 <CATEGORY id="Transportation/MotorBike"/>
-<PERIODICAL account="Current Account" description="Abonnement Internet Maman" amount="-35.78" mode="Carte bleue" category="Leisure/Computing/Subscriptions" enabled="true" next="2010/1/10">
-<DATE_STEPPER kind="monthly" period="2" day="10"/>
+<PERIODICAL account="Current Account" description="Service charges" amount="-61.16" mode="Banker's order" category="Home/Service Charges" enabled="true" next="2009/12/5">
+<DATE_STEPPER kind="monthly" period="1" day="5"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Abonnement mobile JM" amount="-31.9" mode="Carte bleue" category="Phone/Mobile/Subscriptions" enabled="true" next="2009/12/11">
+<PERIODICAL account="Current Account" description="Water" amount="-24.53" mode="Banker's order" category="Home/Service Charges" enabled="true" next="2009/12/8">
+<DATE_STEPPER kind="monthly" period="1" day="8"/>
+</PERIODICAL>
+<PERIODICAL account="Current Account" description="Electricity" amount="-46.0" mode="Banker's order" category="Home/Service Charges" enabled="true" next="2009/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Current Account" description="Boiler maintenance" amount="-126.0" mode="Check" category="Home/Upkeep" enabled="true" next="2010/10/30">
+<DATE_STEPPER kind="monthly" period="12" day="30"/>
+</PERIODICAL>
+<PERIODICAL account="Current Account" description="FlickR" amount="-34.66" mode="Credit card" category="Leisure/Computing/Subscriptions" enabled="true" next="2011/7/23">
+<DATE_STEPPER kind="monthly" period="24" day="23"/>
+</PERIODICAL>
+<PERIODICAL account="Current Account" description="Gas" amount="-115.11" mode="Banker's order" category="Home/Service Charges" enabled="true" next="2009/12/14">
 <DATE_STEPPER kind="monthly" period="1" day="11"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Assurance" amount="-281.09" mode="TIP" enabled="true" next="2010/3/10">
+<PERIODICAL account="Current Account" description="Property tax" amount="-95.0" mode="Banker's order" category="Tax/Property" enabled="true" next="2009/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Current Account" description="Local tax" amount="-95.0" mode="Banker's order" category="Tax/Local" enabled="true" next="2010/1/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Current Account" description="Income tax" amount="-216.0" mode="Banker's order" category="Tax/Income" enabled="true" next="2009/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Current Account" description="Insurance" amount="-281.09" mode="Interbank payment order" enabled="true" next="2010/3/10">
 <DATE_STEPPER kind="monthly" period="6" day="10"/>
 <SUBTRANSACTION description="Fazer" amount="-125.69" category="Transportation/MotorBike"/>
 <SUBTRANSACTION description="125 SR" amount="-11.7" category="Transportation/MotorBike"/>
-<SUBTRANSACTION description="Maison" amount="-93.63" category="Home/Service Charges"/>
-<SUBTRANSACTION description="Prévoyance" amount="-33.57"/>
-<SUBTRANSACTION description="Catastrophes naturelles" amount="-10.66"/>
+<SUBTRANSACTION description="Home" amount="-93.63" category="Home/Service Charges"/>
+<SUBTRANSACTION description="Contingency" amount="-33.57"/>
+<SUBTRANSACTION description="Natural disasters" amount="-10.66"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Charges" amount="-61.16" mode="Prélévement" category="Home/Service Charges" enabled="true" next="2009/12/5">
-<DATE_STEPPER kind="monthly" period="1" day="5"/>
-</PERIODICAL>
-<PERIODICAL account="Current Account" description="Eau" amount="-24.53" mode="Prélévement" category="Home/Service Charges" enabled="true" next="2009/12/8">
-<DATE_STEPPER kind="monthly" period="1" day="8"/>
-</PERIODICAL>
-<PERIODICAL account="Current Account" description="EDF" amount="-46.0" mode="Prélévement" category="Home/Service Charges" enabled="true" next="2009/12/15">
-<DATE_STEPPER kind="monthly" period="1" day="15"/>
-</PERIODICAL>
-<PERIODICAL account="Current Account" description="Entretien chaudière" amount="-126.0" mode="Chèque" category="Home/Upkeep" enabled="true" next="2010/10/30">
-<DATE_STEPPER kind="monthly" period="12" day="30"/>
-</PERIODICAL>
-<PERIODICAL account="Current Account" description="FlickR" amount="-34.66" mode="Carte bleue" category="Leisure/Computing/Subscriptions" enabled="true" next="2011/7/23">
-<DATE_STEPPER kind="monthly" period="24" day="23"/>
-</PERIODICAL>
-<PERIODICAL account="Current Account" description="GDF" amount="-115.11" mode="Prélévement" category="Home/Service Charges" enabled="true" next="2009/12/14">
+<PERIODICAL account="Current Account" description="JM's mobile phone subscription" amount="-31.9" mode="Credit card" category="Phone/Mobile/Subscriptions" enabled="true" next="2009/12/11">
 <DATE_STEPPER kind="monthly" period="1" day="11"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Impôt sur le revenu" amount="-216.0" mode="Prélévement" category="Tax/Income" enabled="true" next="2009/12/15">
-<DATE_STEPPER kind="monthly" period="1" day="15"/>
+<PERIODICAL account="Current Account" description="Ma Internet Subscription" amount="-35.78" mode="Credit card" category="Leisure/Computing/Subscriptions" enabled="true" next="2010/1/10">
+<DATE_STEPPER kind="monthly" period="2" day="10"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Impôts fonciers" amount="-95.0" mode="Prélévement" category="Tax/Property" enabled="true" next="2009/12/15">
-<DATE_STEPPER kind="monthly" period="1" day="15"/>
-</PERIODICAL>
-<PERIODICAL account="Current Account" description="Impôts locaux" amount="-95.0" mode="Prélévement" category="Tax/Local" enabled="true" next="2010/1/15">
-<DATE_STEPPER kind="monthly" period="1" day="15"/>
-</PERIODICAL>
-<PERIODICAL account="Current Account" description="Numéricable" amount="-24.5" mode="Prélévement" category="Leisure/Computing/Subscriptions" enabled="true" next="2009/12/10">
+<PERIODICAL account="Current Account" description="Internet subscription" amount="-24.5" mode="Banker's order" category="Leisure/Computing/Subscriptions" enabled="true" next="2009/12/10">
 <DATE_STEPPER kind="monthly" period="1" day="10"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Paye" amount="3245.0" mode="Virement" category="Salary" enabled="true" next="2009/11/30">
+<PERIODICAL account="Current Account" description="Salary" amount="3245.0" mode="Transfer" category="Salary" enabled="true" next="2009/11/30">
 <DATE_STEPPER kind="monthly" period="1" day="30"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Renouvellement yapbam.net" amount="-14.35" mode="Carte bleue" category="Leisure/Computing/Subscriptions" enabled="true" next="2010/9/11">
+<PERIODICAL account="Current Account" description="yapbam.net domain name" amount="-14.35" mode="Credit card" category="Leisure/Computing/Subscriptions" enabled="true" next="2010/9/11">
 <DATE_STEPPER kind="monthly" period="12" day="11"/>
 </PERIODICAL>
-<PERIODICAL account="Current Account" description="Virement fiston" amount="-200.0" mode="Virement" enabled="true" next="2009/12/1">
+<PERIODICAL account="Current Account" description="Transfer to son's account" amount="-200.0" mode="Transfer" enabled="true" next="2009/12/1">
 <DATE_STEPPER kind="monthly" period="1" day="1"/>
-<SUBTRANSACTION description="Argent de poche" amount="-60.0" category="Spending money/Son"/>
-<SUBTRANSACTION description="Repas midi" amount="-100.0" category="Everyday life/Food"/>
-<SUBTRANSACTION description="Abonnement mobile" amount="-40.0" category="Phone/Mobile/Subscriptions"/>
+<SUBTRANSACTION description="Spending money" amount="-60.0" category="Spending money/Son"/>
+<SUBTRANSACTION description="Lunch" amount="-100.0" category="Everyday life/Food"/>
+<SUBTRANSACTION description="Mobile phone subscription" amount="-40.0" category="Phone/Mobile/Subscriptions"/>
 </PERIODICAL>
-<TRANSACTION account="Current Account" description="Parking gare de Lyon" date="2009/5/17" amount="-2.8" mode="Carte bleue" category="Transport/Car" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Scala rider passenger" date="2009/5/19" amount="-120.0" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Abonnement Internet Maman" date="2009/5/20" amount="-17.9" mode="Carte bleue" category="Leisure/Computing/Subscriptions" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/5/22" amount="-105.44" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/5/22" amount="-20.59" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/5/25" amount="-40.0" mode="Carte bleue" category="Cash" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/5/31" amount="-21.75" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Cantine" date="2009/6/4" amount="-30.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/6/5" amount="-33.84" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Abonnement Numéricable" date="2009/6/10" amount="-61.03" mode="Prélévement" category="Leisure/Computing/Subscriptions" valueDate="2009/6/10" statement="200907"/>
-<TRANSACTION account="Current Account" description="Charges" date="2009/6/10" amount="-59.91" mode="Prélévement" category="Home/Service Charges" valueDate="2009/6/10" statement="200907"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/6/11" amount="-21.65" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="GDF" date="2009/6/12" amount="-134.69" mode="Prélévement" category="Home/Service Charges" valueDate="2009/6/11" statement="200907"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/6/12" amount="-28.79" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="EDF" date="2009/6/15" amount="-46.0" mode="Prélévement" category="Home/Service Charges" valueDate="2009/6/16" statement="200907"/>
-<TRANSACTION account="Current Account" description="Coiffeur" date="2009/6/17" amount="-22.0" mode="Carte bleue" category="Everyday life/Miscellaneous" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/6/19" amount="-33.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Cantine" date="2009/6/19" amount="-30.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/6/19" amount="-22.57" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Solde vacances" date="2009/6/23" amount="-1419.93" mode="Carte bleue" category="Holiday" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/6/23" amount="-86.18" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Eau" date="2009/6/25" amount="-24.53" mode="Prélévement" category="Home/Service Charges" valueDate="2009/6/25" statement="200907"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/6/26" amount="6.6" mode="Virement" category="Everyday life/Health" valueDate="2009/6/26" statement="200907"/>
-<TRANSACTION account="Current Account" description="Radio" date="2009/6/26" amount="-157.71" mode="Carte bleue" category="Everyday life/Health" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/6/27" amount="-35.7" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Plein Twingo" date="2009/6/27" amount="-34.0" mode="Carte bleue" category="Transport/Car" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Vers LDD" date="2009/6/30" amount="-2000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/6/30" statement="200907"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/6/30" amount="-17.79" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/7/3" amount="10.37" mode="Virement" category="Everyday life/Health" valueDate="2009/7/3" statement="200907"/>
-<TRANSACTION account="Current Account" description="Moniteur 24&quot;" date="2009/7/3" amount="-249.0" mode="Carte bleue" category="Leisure/Computing/Hardware" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Raquettes de tennis" date="2009/7/3" amount="-149.5" mode="Carte bleue" category="Leisure/Sport" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Réparation enceinte" date="2009/7/3" amount="-39.1" mode="Carte bleue" category="Leisure/TV-Hifi-Video" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Parking Roissy" date="2009/7/5" amount="-120.0" mode="Carte bleue" category="Holiday" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Cantine" date="2009/7/6" amount="-30.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/7/7" amount="-18.71" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Charges" date="2009/7/10" amount="-61.16" mode="Prélévement" category="Home/Service Charges" valueDate="2009/7/10" statement="200908"/>
-<TRANSACTION account="Current Account" description="Retrait CL" date="2009/7/10" amount="-40.0" mode="Carte bleue" category="Cash" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Abonnement Internet Maman" date="2009/7/10" amount="-35.78" mode="Carte bleue" category="Leisure/Computing/Subscriptions" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Celio" date="2009/7/10" amount="-24.99" mode="Carte bleue" category="Everyday life/Clothing" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/7/10" amount="-21.8" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Magazines" date="2009/7/11" amount="-18.05" mode="Carte bleue" category="Holiday" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="GDF" date="2009/7/12" amount="-134.69" mode="Prélévement" category="Home/Service Charges" valueDate="2009/7/12" statement="200908"/>
-<TRANSACTION account="Current Account" description="Sandwichs" date="2009/7/12" amount="-52.0" mode="Carte bleue" category="Holiday" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Magazines" date="2009/7/12" amount="-27.65" mode="Carte bleue" category="Holiday" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile JM" date="2009/7/12" amount="-32.66" mode="Carte bleue" category="Phone/Mobile/Subscriptions" valueDate="2009/7/31" statement="200908"/>
-<TRANSACTION account="Current Account" description="Retrait 80 DT" date="2009/7/13" amount="-47.34" mode="Carte bleue" category="Holiday" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="EDF" date="2009/7/15" amount="-46.0" mode="Prélévement" category="Home/Service Charges" valueDate="2009/7/15" statement="200908"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/7/15" amount="6.9" mode="Virement" category="Everyday life/Health" valueDate="2009/7/15" statement="200908"/>
-<TRANSACTION account="Current Account" description="Eau" date="2009/7/27" amount="-24.53" mode="Prélévement" category="Home/Service Charges" valueDate="2009/7/27" statement="200908"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/7/28" amount="6.9" mode="Virement" category="Everyday life/Health" valueDate="2009/7/28" statement="200908"/>
-<TRANSACTION account="Current Account" description="Reçu de LDD" date="2009/7/28" amount="2000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/7/28" statement="200908"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/8/4" amount="6.9" mode="Virement" category="Everyday life/Health" valueDate="2009/8/4" statement="200908"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile JM (solde orange)" date="2009/8/7" amount="-11.16" mode="Prélévement" category="Phone/Mobile/Subscriptions" valueDate="2009/8/7" statement="200908"/>
-<TRANSACTION account="Current Account" description="Pneu moto" date="2009/7/24" amount="-120.2" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="FlickR" date="2009/7/23" amount="-34.66" mode="Carte bleue" category="Leisure/Computing/Subscriptions" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/7/24" amount="-80.0" mode="Carte bleue" category="Cash" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/7/28" amount="-26.72" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Cantine" date="2009/7/28" amount="-30.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/7/31" amount="-12.76" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/7/31" amount="-21.36" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/8/4" amount="-87.15" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Kart" date="2009/8/5" amount="-26.0" mode="Carte bleue" category="Leisure/Miscellaneous" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Parking hopital" date="2009/8/6" amount="-2.0" mode="Carte bleue" category="Transport/Car" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/8/6" amount="-54.48" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Parking hopital" date="2009/8/7" amount="-1.0" mode="Carte bleue" category="Transport/Car" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Cables audio" date="2009/8/7" amount="-19.99" mode="Carte bleue" category="Leisure/TV-Hifi-Video" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Parking hopital" date="2009/8/9" amount="-1.0" mode="Carte bleue" category="Transport/Car" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Plein 125" date="2009/8/9" amount="-4.84" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/8/9" amount="-20.35" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/7/21" amount="-40.0" mode="Carte bleue" category="Cash" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Numéricable" date="2009/8/10" amount="-12.7" mode="Prélévement" category="Leisure/Computing/Subscriptions" valueDate="2009/8/10" statement="200909"/>
-<TRANSACTION account="Current Account" description="Charges" date="2009/8/10" amount="-61.16" mode="Prélévement" category="Home/Service Charges" valueDate="2009/8/10" statement="200909"/>
-<TRANSACTION account="Current Account" description="GDF" date="2009/8/11" amount="-134.69" mode="Prélévement" category="Home/Service Charges" valueDate="2009/8/11" statement="200909"/>
-<TRANSACTION account="Current Account" description="EDF" date="2009/8/15" amount="-46.0" mode="Prélévement" category="Home/Service Charges" valueDate="2009/8/15" statement="200909"/>
-<TRANSACTION account="Current Account" description="De livret A" date="2009/8/18" amount="2450.0" mode="Virement" category="Investment/Savings B" valueDate="2009/8/18" statement="200909"/>
-<TRANSACTION account="Current Account" description="Reliquat communications Orange" date="2009/9/7" amount="-6.55" mode="Prélévement" category="Phone/Mobile/Subscriptions" valueDate="2009/9/7" statement="200909"/>
-<TRANSACTION account="Current Account" description="Eau" date="2009/9/8" amount="-24.53" mode="Prélévement" category="Home/Service Charges" valueDate="2009/9/8" statement="200909"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/9/15" amount="-29.64" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/30"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/9/17" amount="-40.0" mode="Carte bleue" category="Cash" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/9/18" amount="-20.5" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Cantine" date="2009/9/21" amount="-60.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/9/25" amount="-168.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/9/28" amount="-50.0" mode="Carte bleue" category="Cash" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/9/30" amount="-21.22" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/9/30" amount="-32.74" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/10/7" amount="-40.0" mode="Carte bleue" category="Cash" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Numéricable" date="2009/10/10" amount="-27.5" mode="Prélévement" category="Leisure/Computing/Subscriptions" valueDate="2009/10/10"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/10/9" amount="-44.42" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Vacances ski" date="2009/9/28" amount="-880.0" mode="Chèque" number="0555379" category="Holiday" valueDate="2010/1/15"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile JM" date="2009/10/11" amount="-35.33" mode="Carte bleue" category="Phone/Mobile/Subscriptions" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Trop perçu EDF" date="2009/10/9" amount="38.4" category="Home/Service Charges" valueDate="2009/10/9"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/10/13" amount="6.9" mode="Virement" category="Everyday life/Health" valueDate="2009/10/13"/>
-<TRANSACTION account="Current Account" description="Remboursement sécu" date="2009/6/24" amount="13.9" mode="Virement" category="Everyday life/Health" valueDate="2009/6/24" statement="200907"/>
-<TRANSACTION account="Current Account" description="Remboursement sécu" date="2009/7/1" amount="144.84" mode="Virement" category="Everyday life/Health" valueDate="2009/7/1" statement="200907"/>
-<TRANSACTION account="Current Account" description="Remboursement sécu" date="2009/7/10" amount="15.1" mode="Virement" category="Everyday life/Health" valueDate="2009/7/10" statement="200908"/>
-<TRANSACTION account="Current Account" description="Remboursement sécu" date="2009/7/24" amount="14.1" mode="Virement" category="Everyday life/Health" valueDate="2009/7/24" statement="200908"/>
-<TRANSACTION account="Current Account" description="Remboursement sécu" date="2009/7/31" amount="15.1" mode="Virement" category="Everyday life/Health" valueDate="2009/7/31" statement="200908"/>
-<TRANSACTION account="Current Account" description="Abonnement Internet Maman" date="2009/11/10" amount="-35.78" mode="Carte bleue" category="Leisure/Computing/Subscriptions" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile fiston" date="2009/11/20" amount="-32.0" mode="Carte bleue" category="Phone/Mobile/Subscriptions" valueDate="2009/12/31"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile JM" date="2009/11/11" amount="-31.9" mode="Carte bleue" category="Phone/Mobile/Subscriptions" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Charges" date="2009/11/5" amount="-61.16" mode="Prélévement" category="Home/Service Charges" valueDate="2009/11/5"/>
-<TRANSACTION account="Current Account" description="Eau" date="2009/11/8" amount="-24.53" mode="Prélévement" category="Home/Service Charges" valueDate="2009/11/8"/>
-<TRANSACTION account="Current Account" description="EDF" date="2009/11/15" amount="-46.0" mode="Prélévement" category="Home/Service Charges" valueDate="2009/11/15"/>
-<TRANSACTION account="Current Account" description="Numéricable" date="2009/11/10" amount="-24.5" mode="Prélévement" category="Leisure/Computing/Subscriptions" valueDate="2009/11/10"/>
-<TRANSACTION account="Current Account" description="Vers LDD" date="2009/10/15" amount="-2000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/10/15"/>
-<TRANSACTION account="Current Account" description="MacDo" date="2009/8/16" amount="-17.3" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/8/17" amount="-43.16" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/8/19" amount="-51.35" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/8/20" amount="-22.12" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Cantine" date="2009/8/24" amount="-60.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Coiffeur" date="2009/8/26" amount="-22.0" mode="Carte bleue" category="Everyday life/Miscellaneous" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/8/28" amount="-44.83" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/8/29" amount="-20.13" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/8/29" amount="-60.0" mode="Carte bleue" category="Cash" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/9/2" amount="-36.92" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Chaussures de foot et autres bricoles sportives" date="2009/9/3" amount="-60.8" mode="Carte bleue" category="Leisure/Sport" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/9/5" amount="-40.0" mode="Carte bleue" category="Cash" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/9/5" amount="-50.28" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/9/9" amount="-21.27" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Abonnement Internet Maman" date="2009/9/10" amount="-35.78" mode="Carte bleue" category="Leisure/Computing/Subscriptions" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Achat yapbam.net" date="2009/9/11" amount="-14.35" mode="Carte bleue" category="Leisure/Computing/Subscriptions" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/9/11" amount="-41.95" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile JM" date="2009/9/11" amount="-64.86" mode="Carte bleue" category="Phone/Mobile/Subscriptions" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Numéricable" date="2009/9/10" amount="-27.55" mode="Prélévement" category="Leisure/Computing/Subscriptions" valueDate="2009/9/10" statement="200910"/>
-<TRANSACTION account="Current Account" description="Charges" date="2009/9/10" amount="-61.15" mode="Prélévement" category="Home/Service Charges" valueDate="2009/9/10" statement="200910"/>
-<TRANSACTION account="Current Account" description="GDF" date="2009/9/11" amount="-134.69" mode="Prélévement" category="Home/Service Charges" valueDate="2009/9/11" statement="200910"/>
-<TRANSACTION account="Current Account" description="EDF" date="2009/9/15" amount="-46.0" mode="Prélévement" category="Home/Service Charges" valueDate="2009/9/15" statement="200910"/>
-<TRANSACTION account="Current Account" description="Remboursement sécu" date="2009/9/23" amount="14.4" mode="Virement" category="Everyday life/Health" valueDate="2009/9/23" statement="200910"/>
-<TRANSACTION account="Current Account" description="Eau" date="2009/9/25" amount="-24.53" mode="Prélévement" category="Home/Service Charges" valueDate="2009/10/8" statement="200910"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/9/25" amount="6.6" mode="Virement" category="Everyday life/Health" valueDate="2009/9/25" statement="200910"/>
-<TRANSACTION account="Current Account" description="Remboursement sécu" date="2009/9/28" amount="57.36" mode="Virement" category="Everyday life/Health" valueDate="2009/9/28" statement="200910"/>
-<TRANSACTION account="Current Account" description="De LDD" date="2009/10/1" amount="500.0" mode="Virement" category="Investment/Savings A" valueDate="2009/10/1" statement="200910"/>
-<TRANSACTION account="Current Account" description="License Foot" date="2009/9/12" amount="-31.3" mode="Chèque" number="0555375" category="Leisure/Sport" valueDate="2009/9/30" statement="200910"/>
-<TRANSACTION account="Current Account" description="Remb mutuelle" date="2009/10/1" amount="24.58" mode="Virement" category="Everyday life/Health" valueDate="2009/10/1" statement="200910"/>
-<TRANSACTION account="Current Account" description="Charges" date="2009/10/5" amount="-61.16" mode="Prélévement" category="Home/Service Charges" valueDate="2009/10/5" statement="200910"/>
-<TRANSACTION account="Current Account" description="Trop perçu GDF" date="2009/10/6" amount="44.35" category="Home/Service Charges" valueDate="2009/10/6" statement="200910"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/10/9" amount="-21.11" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/10/15" amount="-46.71" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/10/17" amount="-20.72" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Cantine" date="2009/10/20" amount="-60.0" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Plein moto" date="2009/10/22" amount="-19.09" mode="Carte bleue" category="Transportation/MotorBike" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Supermarché" date="2009/10/23" amount="-12.29" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/11/30"/>
-<TRANSACTION account="Savings B" description="Reçu de HSBC" date="2009/6/30" amount="2000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/6/30" statement="x"/>
-<TRANSACTION account="Savings B" description="Reçu de HSBC" date="2009/10/15" amount="2000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/10/15" statement="x"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile fiston" date="2009/10/20" amount="-40.57" mode="Prélévement" category="Phone/Mobile/Subscriptions" valueDate="2009/10/20"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/10/28" amount="-20.72" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Coiffeur" date="2009/10/27" amount="-22.0" mode="Carte bleue" category="Everyday life/Miscellaneous" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Plein Twingo" date="2009/10/30" amount="-35.5" mode="Carte bleue" category="Transport/Car" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Entretien chaudière" date="2009/10/30" amount="-126.0" mode="Chèque" number="0555383" category="Home/Upkeep" valueDate="2009/11/1"/>
-<TRANSACTION account="Current Account" description="De LDD" date="2009/11/2" amount="3000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/11/2"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/10/30" amount="-19.73" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Papier peint + divers" date="2009/5/19" amount="-135.6" mode="Carte bleue" category="Home/Upkeep" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Achat mobile" date="2009/5/18" amount="-188.22" mode="Carte bleue" category="Phone/Mobile/Hardware" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Parfum" date="2009/6/2" amount="-67.3" mode="Carte bleue" category="Gifts" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Impôt sur le revenu" date="2009/6/15" amount="-216.0" mode="Prélévement" category="Tax/Income" valueDate="2009/6/15" statement="200907"/>
-<TRANSACTION account="Current Account" description="Impôt sur le revenu" date="2009/7/15" amount="-216.0" mode="Prélévement" category="Tax/Income" valueDate="2009/7/15" statement="200908"/>
-<TRANSACTION account="Current Account" description="Impôt sur le revenu" date="2009/8/15" amount="-216.0" mode="Prélévement" category="Tax/Income" valueDate="2009/8/15" statement="200909"/>
-<TRANSACTION account="Current Account" description="Impôt sur le revenu" date="2009/9/15" amount="-216.0" mode="Prélévement" category="Tax/Income" valueDate="2009/9/15" statement="200910"/>
-<TRANSACTION account="Current Account" description="Impôt sur le revenu" date="2009/10/15" amount="-216.0" mode="Prélévement" category="Tax/Income" valueDate="2009/10/15"/>
-<TRANSACTION account="Current Account" description="Impôt sur le revenu" date="2009/11/15" amount="-216.0" mode="Prélévement" category="Tax/Income" valueDate="2009/11/15"/>
-<TRANSACTION account="Current Account" description="Divers bricolage" date="2009/7/24" amount="-20.9" mode="Carte bleue" category="Home/Upkeep" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Moniteur 22&quot;" date="2009/6/29" amount="-164.0" mode="Carte bleue" category="Leisure/Computing/Hardware" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Fleurs amis" date="2009/9/19" amount="-25.0" mode="Carte bleue" category="Gifts" valueDate="2009/10/31"/>
-<TRANSACTION account="Current Account" description="Consultation hopital" date="2009/9/18" amount="-6.9" mode="Chèque" number="0555378" category="Everyday life/Health" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Impôts fonciers" date="2009/6/15" amount="-95.0" mode="Prélévement" category="Tax/Property" valueDate="2009/6/15" statement="200907"/>
-<TRANSACTION account="Current Account" description="Impôts fonciers" date="2009/7/15" amount="-95.0" mode="Prélévement" category="Tax/Property" valueDate="2009/6/15" statement="200908"/>
-<TRANSACTION account="Current Account" description="Impôts fonciers" date="2009/8/15" amount="-95.0" mode="Prélévement" category="Tax/Property" valueDate="2009/8/15" statement="200909"/>
-<TRANSACTION account="Current Account" description="Impôts fonciers" date="2009/9/15" amount="-95.0" mode="Prélévement" category="Tax/Property" valueDate="2009/9/15" statement="200910"/>
-<TRANSACTION account="Current Account" description="Impôts fonciers" date="2009/10/15" amount="-95.0" mode="Prélévement" category="Tax/Property" valueDate="2009/10/15"/>
-<TRANSACTION account="Current Account" description="Impôts fonciers" date="2009/11/15" amount="-95.0" mode="Prélévement" category="Tax/Property" valueDate="2009/11/15"/>
-<TRANSACTION account="Current Account" description="Impôts locaux" date="2009/6/15" amount="-95.0" mode="Prélévement" category="Tax/Local" valueDate="2009/6/15" statement="200907"/>
-<TRANSACTION account="Current Account" description="Impôts locaux" date="2009/7/15" amount="-95.0" mode="Prélévement" category="Tax/Local" valueDate="2009/6/15" statement="200908"/>
-<TRANSACTION account="Current Account" description="Impôts locaux" date="2009/8/15" amount="-95.0" mode="Prélévement" category="Tax/Local" valueDate="2009/8/15" statement="200909"/>
-<TRANSACTION account="Current Account" description="Impôts locaux" date="2009/9/15" amount="-95.0" mode="Prélévement" category="Tax/Local" valueDate="2009/9/15" statement="200910"/>
-<TRANSACTION account="Current Account" description="Impôts locaux" date="2009/10/15" amount="-95.0" mode="Prélévement" category="Tax/Local" valueDate="2009/10/15"/>
-<TRANSACTION account="Current Account" description="Impôts locaux" date="2009/11/15" amount="-42.0" mode="Prélévement" category="Tax/Local" valueDate="2009/11/15"/>
-<TRANSACTION account="Current Account" description="Parking Roissy (solde)" date="2009/7/20" amount="-15.0" mode="Carte bleue" category="Holiday" valueDate="2009/8/31" statement="200909"/>
-<TRANSACTION account="Current Account" description="Pinceau + peinture" date="2009/8/15" amount="-17.61" mode="Carte bleue" category="Home/Upkeep" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Accompte voiture" date="2009/8/10" amount="-350.0" mode="Prélévement" category="Transport/Car" valueDate="2009/8/10" statement="200909"/>
-<TRANSACTION account="Current Account" description="Assurance" date="2009/9/9" amount="-269.39" mode="TIP" valueDate="2009/9/15" statement="200910">
-<SUBTRANSACTION description="Moto" amount="-125.69" category="Transportation/MotorBike"/>
-<SUBTRANSACTION description="Maison" amount="-93.63" category="Home/Service Charges"/>
-<SUBTRANSACTION description="Prévoyance" amount="-33.57"/>
-<SUBTRANSACTION description="Catastrophes naturelles" amount="-10.66"/>
+<TRANSACTION account="Current Account" description="Railway station car park" date="2009/5/17" amount="-2.8" mode="Credit card" category="Transport/Car" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Scala rider passenger" date="2009/5/19" amount="-120.0" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Ma Internet Subscription" date="2009/5/20" amount="-17.9" mode="Credit card" category="Leisure/Computing/Subscriptions" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/5/22" amount="-105.44" mode="Credit card" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/5/22" amount="-20.59" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/5/25" amount="-40.0" mode="Credit card" category="Cash" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/5/31" amount="-21.75" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Canteen" date="2009/6/4" amount="-30.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/6/5" amount="-33.84" mode="Credit card" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Internet subscription" date="2009/6/10" amount="-61.03" mode="Banker's order" category="Leisure/Computing/Subscriptions" valueDate="2009/6/10" statement="200907"/>
+<TRANSACTION account="Current Account" description="Service charges" date="2009/6/10" amount="-59.91" mode="Banker's order" category="Home/Service Charges" valueDate="2009/6/10" statement="200907"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/6/11" amount="-21.65" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Gas" date="2009/6/12" amount="-134.69" mode="Banker's order" category="Home/Service Charges" valueDate="2009/6/11" statement="200907"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/6/12" amount="-28.79" mode="Credit card" category="Everyday life/Food" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Electricity" date="2009/6/15" amount="-46.0" mode="Banker's order" category="Home/Service Charges" valueDate="2009/6/16" statement="200907"/>
+<TRANSACTION account="Current Account" description="Hairdresser" date="2009/6/17" amount="-22.0" mode="Credit card" category="Everyday life/Miscellaneous" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/6/19" amount="-33.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Canteen" date="2009/6/19" amount="-30.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/6/19" amount="-22.57" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Holiday outstanding" date="2009/6/23" amount="-1419.93" mode="Credit card" category="Holiday" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/6/23" amount="-86.18" mode="Credit card" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Water" date="2009/6/25" amount="-24.53" mode="Banker's order" category="Home/Service Charges" valueDate="2009/6/25" statement="200907"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/6/26" amount="6.6" mode="Transfer" category="Everyday life/Health" valueDate="2009/6/26" statement="200907"/>
+<TRANSACTION account="Current Account" description="Radio" date="2009/6/26" amount="-157.71" mode="Credit card" category="Everyday life/Health" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/6/27" amount="-35.7" mode="Credit card" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Car gas up" date="2009/6/27" amount="-34.0" mode="Credit card" category="Transport/Car" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="To savings A" date="2009/6/30" amount="-2000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/6/30" statement="200907"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/6/30" amount="-17.79" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/7/3" amount="10.37" mode="Transfer" category="Everyday life/Health" valueDate="2009/7/3" statement="200907"/>
+<TRANSACTION account="Current Account" description="24&quot; monitor" date="2009/7/3" amount="-249.0" mode="Credit card" category="Leisure/Computing/Hardware" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Tennis rackets" date="2009/7/3" amount="-149.5" mode="Credit card" category="Leisure/Sport" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Loud speaker repair" date="2009/7/3" amount="-39.1" mode="Credit card" category="Leisure/TV-Hifi-Video" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Airport car park" date="2009/7/5" amount="-120.0" mode="Credit card" category="Holiday" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Canteen" date="2009/7/6" amount="-30.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/7/7" amount="-18.71" mode="Credit card" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Service charges" date="2009/7/10" amount="-61.16" mode="Banker's order" category="Home/Service Charges" valueDate="2009/7/10" statement="200908"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/7/10" amount="-40.0" mode="Credit card" category="Cash" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Ma Internet Subscription" date="2009/7/10" amount="-35.78" mode="Credit card" category="Leisure/Computing/Subscriptions" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Celio" date="2009/7/10" amount="-24.99" mode="Credit card" category="Everyday life/Clothing" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/7/10" amount="-21.8" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Magazines" date="2009/7/11" amount="-18.05" mode="Credit card" category="Holiday" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Gas" date="2009/7/12" amount="-134.69" mode="Banker's order" category="Home/Service Charges" valueDate="2009/7/12" statement="200908"/>
+<TRANSACTION account="Current Account" description="Sandwiches" date="2009/7/12" amount="-52.0" mode="Credit card" category="Holiday" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Magazines" date="2009/7/12" amount="-27.65" mode="Credit card" category="Holiday" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="JM's mobile phone subscription" date="2009/7/12" amount="-32.66" mode="Credit card" category="Phone/Mobile/Subscriptions" valueDate="2009/7/31" statement="200908"/>
+<TRANSACTION account="Current Account" description="Cash 80 DT" date="2009/7/13" amount="-47.34" mode="Credit card" category="Holiday" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Electricity" date="2009/7/15" amount="-46.0" mode="Banker's order" category="Home/Service Charges" valueDate="2009/7/15" statement="200908"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/7/15" amount="6.9" mode="Transfer" category="Everyday life/Health" valueDate="2009/7/15" statement="200908"/>
+<TRANSACTION account="Current Account" description="Water" date="2009/7/27" amount="-24.53" mode="Banker's order" category="Home/Service Charges" valueDate="2009/7/27" statement="200908"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/7/28" amount="6.9" mode="Transfer" category="Everyday life/Health" valueDate="2009/7/28" statement="200908"/>
+<TRANSACTION account="Current Account" description="From savings A" date="2009/7/28" amount="2000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/7/28" statement="200908"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/8/4" amount="6.9" mode="Transfer" category="Everyday life/Health" valueDate="2009/8/4" statement="200908"/>
+<TRANSACTION account="Current Account" description="JM's mobile phone subscription (solde orange)" date="2009/8/7" amount="-11.16" mode="Banker's order" category="Phone/Mobile/Subscriptions" valueDate="2009/8/7" statement="200908"/>
+<TRANSACTION account="Current Account" description="Motorbike tire" date="2009/7/24" amount="-120.2" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="FlickR" date="2009/7/23" amount="-34.66" mode="Credit card" category="Leisure/Computing/Subscriptions" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/7/24" amount="-80.0" mode="Credit card" category="Cash" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/7/28" amount="-26.72" mode="Credit card" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Canteen" date="2009/7/28" amount="-30.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/7/31" amount="-12.76" mode="Credit card" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/7/31" amount="-21.36" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/8/4" amount="-87.15" mode="Credit card" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Kart" date="2009/8/5" amount="-26.0" mode="Credit card" category="Leisure/Miscellaneous" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Hospital car park" date="2009/8/6" amount="-2.0" mode="Credit card" category="Transport/Car" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/8/6" amount="-54.48" mode="Credit card" category="Everyday life/Food" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Hospital car park" date="2009/8/7" amount="-1.0" mode="Credit card" category="Transport/Car" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Audio cables" date="2009/8/7" amount="-19.99" mode="Credit card" category="Leisure/TV-Hifi-Video" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Hospital car park" date="2009/8/9" amount="-1.0" mode="Credit card" category="Transport/Car" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="125 gas up" date="2009/8/9" amount="-4.84" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/8/9" amount="-20.35" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/7/21" amount="-40.0" mode="Credit card" category="Cash" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Internet subscription" date="2009/8/10" amount="-12.7" mode="Banker's order" category="Leisure/Computing/Subscriptions" valueDate="2009/8/10" statement="200909"/>
+<TRANSACTION account="Current Account" description="Service charges" date="2009/8/10" amount="-61.16" mode="Banker's order" category="Home/Service Charges" valueDate="2009/8/10" statement="200909"/>
+<TRANSACTION account="Current Account" description="Gas" date="2009/8/11" amount="-134.69" mode="Banker's order" category="Home/Service Charges" valueDate="2009/8/11" statement="200909"/>
+<TRANSACTION account="Current Account" description="Electricity" date="2009/8/15" amount="-46.0" mode="Banker's order" category="Home/Service Charges" valueDate="2009/8/15" statement="200909"/>
+<TRANSACTION account="Current Account" description="From savings B" date="2009/8/18" amount="2450.0" mode="Transfer" category="Investment/Savings B" valueDate="2009/8/18" statement="200909"/>
+<TRANSACTION account="Current Account" description="Mobile phone subscription remainder" date="2009/9/7" amount="-6.55" mode="Banker's order" category="Phone/Mobile/Subscriptions" valueDate="2009/9/7" statement="200909"/>
+<TRANSACTION account="Current Account" description="Water" date="2009/9/8" amount="-24.53" mode="Banker's order" category="Home/Service Charges" valueDate="2009/9/8" statement="200909"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/9/15" amount="-29.64" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/30"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/9/17" amount="-40.0" mode="Credit card" category="Cash" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/9/18" amount="-20.5" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Canteen" date="2009/9/21" amount="-60.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/9/25" amount="-168.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/9/28" amount="-50.0" mode="Credit card" category="Cash" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/9/30" amount="-21.22" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/9/30" amount="-32.74" mode="Credit card" category="Everyday life/Food" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/10/7" amount="-40.0" mode="Credit card" category="Cash" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Internet subscription" date="2009/10/10" amount="-27.5" mode="Banker's order" category="Leisure/Computing/Subscriptions" valueDate="2009/10/10"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/10/9" amount="-44.42" mode="Credit card" category="Everyday life/Food" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Ski holiday" date="2009/9/28" amount="-880.0" mode="Check" number="0555379" category="Holiday" valueDate="2010/1/15"/>
+<TRANSACTION account="Current Account" description="JM's mobile phone subscription" date="2009/10/11" amount="-35.33" mode="Credit card" category="Phone/Mobile/Subscriptions" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Electricity refund" date="2009/10/9" amount="38.4" category="Home/Service Charges" valueDate="2009/10/9"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/10/13" amount="6.9" mode="Transfer" category="Everyday life/Health" valueDate="2009/10/13"/>
+<TRANSACTION account="Current Account" description="Health insurance refund" date="2009/6/24" amount="13.9" mode="Transfer" category="Everyday life/Health" valueDate="2009/6/24" statement="200907"/>
+<TRANSACTION account="Current Account" description="Health insurance refund" date="2009/7/1" amount="144.84" mode="Transfer" category="Everyday life/Health" valueDate="2009/7/1" statement="200907"/>
+<TRANSACTION account="Current Account" description="Health insurance refund" date="2009/7/10" amount="15.1" mode="Transfer" category="Everyday life/Health" valueDate="2009/7/10" statement="200908"/>
+<TRANSACTION account="Current Account" description="Health insurance refund" date="2009/7/24" amount="14.1" mode="Transfer" category="Everyday life/Health" valueDate="2009/7/24" statement="200908"/>
+<TRANSACTION account="Current Account" description="Health insurance refund" date="2009/7/31" amount="15.1" mode="Transfer" category="Everyday life/Health" valueDate="2009/7/31" statement="200908"/>
+<TRANSACTION account="Current Account" description="Ma Internet Subscription" date="2009/11/10" amount="-35.78" mode="Credit card" category="Leisure/Computing/Subscriptions" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Son's mobile phone subscription" date="2009/11/20" amount="-32.0" mode="Credit card" category="Phone/Mobile/Subscriptions" valueDate="2009/12/31"/>
+<TRANSACTION account="Current Account" description="JM's mobile phone subscription" date="2009/11/11" amount="-31.9" mode="Credit card" category="Phone/Mobile/Subscriptions" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Service charges" date="2009/11/5" amount="-61.16" mode="Banker's order" category="Home/Service Charges" valueDate="2009/11/5"/>
+<TRANSACTION account="Current Account" description="Water" date="2009/11/8" amount="-24.53" mode="Banker's order" category="Home/Service Charges" valueDate="2009/11/8"/>
+<TRANSACTION account="Current Account" description="Electricity" date="2009/11/15" amount="-46.0" mode="Banker's order" category="Home/Service Charges" valueDate="2009/11/15"/>
+<TRANSACTION account="Current Account" description="Internet subscription" date="2009/11/10" amount="-24.5" mode="Banker's order" category="Leisure/Computing/Subscriptions" valueDate="2009/11/10"/>
+<TRANSACTION account="Current Account" description="To savings A" date="2009/10/15" amount="-2000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/10/15"/>
+<TRANSACTION account="Current Account" description="MacDo" date="2009/8/16" amount="-17.3" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/8/17" amount="-43.16" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/8/19" amount="-51.35" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/8/20" amount="-22.12" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Canteen" date="2009/8/24" amount="-60.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Hairdresser" date="2009/8/26" amount="-22.0" mode="Credit card" category="Everyday life/Miscellaneous" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/8/28" amount="-44.83" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/8/29" amount="-20.13" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/8/29" amount="-60.0" mode="Credit card" category="Cash" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/9/2" amount="-36.92" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Football shoes ... and more" date="2009/9/3" amount="-60.8" mode="Credit card" category="Leisure/Sport" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/9/5" amount="-40.0" mode="Credit card" category="Cash" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/9/5" amount="-50.28" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/9/9" amount="-21.27" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Ma Internet Subscription" date="2009/9/10" amount="-35.78" mode="Credit card" category="Leisure/Computing/Subscriptions" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="yapbam.net purchase" date="2009/9/11" amount="-14.35" mode="Credit card" category="Leisure/Computing/Subscriptions" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/9/11" amount="-41.95" mode="Credit card" category="Everyday life/Food" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="JM's mobile phone subscription" date="2009/9/11" amount="-64.86" mode="Credit card" category="Phone/Mobile/Subscriptions" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Internet subscription" date="2009/9/10" amount="-27.55" mode="Banker's order" category="Leisure/Computing/Subscriptions" valueDate="2009/9/10" statement="200910"/>
+<TRANSACTION account="Current Account" description="Service charges" date="2009/9/10" amount="-61.15" mode="Banker's order" category="Home/Service Charges" valueDate="2009/9/10" statement="200910"/>
+<TRANSACTION account="Current Account" description="Gas" date="2009/9/11" amount="-134.69" mode="Banker's order" category="Home/Service Charges" valueDate="2009/9/11" statement="200910"/>
+<TRANSACTION account="Current Account" description="Electricity" date="2009/9/15" amount="-46.0" mode="Banker's order" category="Home/Service Charges" valueDate="2009/9/15" statement="200910"/>
+<TRANSACTION account="Current Account" description="Health insurance refund" date="2009/9/23" amount="14.4" mode="Transfer" category="Everyday life/Health" valueDate="2009/9/23" statement="200910"/>
+<TRANSACTION account="Current Account" description="Water" date="2009/9/25" amount="-24.53" mode="Banker's order" category="Home/Service Charges" valueDate="2009/10/8" statement="200910"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/9/25" amount="6.6" mode="Transfer" category="Everyday life/Health" valueDate="2009/9/25" statement="200910"/>
+<TRANSACTION account="Current Account" description="Health insurance refund" date="2009/9/28" amount="57.36" mode="Transfer" category="Everyday life/Health" valueDate="2009/9/28" statement="200910"/>
+<TRANSACTION account="Current Account" description="From savings A" date="2009/10/1" amount="500.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/10/1" statement="200910"/>
+<TRANSACTION account="Current Account" description="Football licence" date="2009/9/12" amount="-31.3" mode="Check" number="0555375" category="Leisure/Sport" valueDate="2009/9/30" statement="200910"/>
+<TRANSACTION account="Current Account" description="Mutual insurance refund" date="2009/10/1" amount="24.58" mode="Transfer" category="Everyday life/Health" valueDate="2009/10/1" statement="200910"/>
+<TRANSACTION account="Current Account" description="Service charges" date="2009/10/5" amount="-61.16" mode="Banker's order" category="Home/Service Charges" valueDate="2009/10/5" statement="200910"/>
+<TRANSACTION account="Current Account" description="Gas refund" date="2009/10/6" amount="44.35" category="Home/Service Charges" valueDate="2009/10/6" statement="200910"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/10/9" amount="-21.11" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/10/15" amount="-46.71" mode="Credit card" category="Everyday life/Food" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/10/17" amount="-20.72" mode="Credit card" category="Everyday life/Food" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Canteen" date="2009/10/20" amount="-60.0" mode="Credit card" category="Everyday life/Food" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Motorbike gas up" date="2009/10/22" amount="-19.09" mode="Credit card" category="Transportation/MotorBike" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Supermarket" date="2009/10/23" amount="-12.29" mode="Credit card" category="Everyday life/Food" valueDate="2009/11/30"/>
+<TRANSACTION account="Savings B" description="From main account" date="2009/6/30" amount="2000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/6/30" statement="x"/>
+<TRANSACTION account="Savings B" description="From main account" date="2009/10/15" amount="2000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/10/15" statement="x"/>
+<TRANSACTION account="Current Account" description="Son's mobile phone subscription" date="2009/10/20" amount="-40.57" mode="Banker's order" category="Phone/Mobile/Subscriptions" valueDate="2009/10/20"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/10/28" amount="-20.72" mode="Credit card" category="Everyday life/Food" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Hairdresser" date="2009/10/27" amount="-22.0" mode="Credit card" category="Everyday life/Miscellaneous" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Car gas up" date="2009/10/30" amount="-35.5" mode="Credit card" category="Transport/Car" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Boiler maintenance" date="2009/10/30" amount="-126.0" mode="Check" number="0555383" category="Home/Upkeep" valueDate="2009/11/1"/>
+<TRANSACTION account="Current Account" description="From savings A" date="2009/11/2" amount="3000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/11/2"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/10/30" amount="-19.73" mode="Credit card" category="Everyday life/Food" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Wall paper ... and more" date="2009/5/19" amount="-135.6" mode="Credit card" category="Home/Upkeep" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Mobile phone purchase" date="2009/5/18" amount="-188.22" mode="Credit card" category="Phone/Mobile/Hardware" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Perfume" date="2009/6/2" amount="-67.3" mode="Credit card" category="Gifts" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Income tax" date="2009/6/15" amount="-216.0" mode="Banker's order" category="Tax/Income" valueDate="2009/6/15" statement="200907"/>
+<TRANSACTION account="Current Account" description="Income tax" date="2009/7/15" amount="-216.0" mode="Banker's order" category="Tax/Income" valueDate="2009/7/15" statement="200908"/>
+<TRANSACTION account="Current Account" description="Income tax" date="2009/8/15" amount="-216.0" mode="Banker's order" category="Tax/Income" valueDate="2009/8/15" statement="200909"/>
+<TRANSACTION account="Current Account" description="Income tax" date="2009/9/15" amount="-216.0" mode="Banker's order" category="Tax/Income" valueDate="2009/9/15" statement="200910"/>
+<TRANSACTION account="Current Account" description="Income tax" date="2009/10/15" amount="-216.0" mode="Banker's order" category="Tax/Income" valueDate="2009/10/15"/>
+<TRANSACTION account="Current Account" description="Income tax" date="2009/11/15" amount="-216.0" mode="Banker's order" category="Tax/Income" valueDate="2009/11/15"/>
+<TRANSACTION account="Current Account" description="Do it yourself" date="2009/7/24" amount="-20.9" mode="Credit card" category="Home/Upkeep" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="22&quot; monitor" date="2009/6/29" amount="-164.0" mode="Credit card" category="Leisure/Computing/Hardware" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Flowers for friends" date="2009/9/19" amount="-25.0" mode="Credit card" category="Gifts" valueDate="2009/10/31"/>
+<TRANSACTION account="Current Account" description="Hospital consultation" date="2009/9/18" amount="-6.9" mode="Check" number="0555378" category="Everyday life/Health" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Property tax" date="2009/6/15" amount="-95.0" mode="Banker's order" category="Tax/Property" valueDate="2009/6/15" statement="200907"/>
+<TRANSACTION account="Current Account" description="Property tax" date="2009/7/15" amount="-95.0" mode="Banker's order" category="Tax/Property" valueDate="2009/6/15" statement="200908"/>
+<TRANSACTION account="Current Account" description="Property tax" date="2009/8/15" amount="-95.0" mode="Banker's order" category="Tax/Property" valueDate="2009/8/15" statement="200909"/>
+<TRANSACTION account="Current Account" description="Property tax" date="2009/9/15" amount="-95.0" mode="Banker's order" category="Tax/Property" valueDate="2009/9/15" statement="200910"/>
+<TRANSACTION account="Current Account" description="Property tax" date="2009/10/15" amount="-95.0" mode="Banker's order" category="Tax/Property" valueDate="2009/10/15"/>
+<TRANSACTION account="Current Account" description="Property tax" date="2009/11/15" amount="-95.0" mode="Banker's order" category="Tax/Property" valueDate="2009/11/15"/>
+<TRANSACTION account="Current Account" description="Local tax" date="2009/6/15" amount="-95.0" mode="Banker's order" category="Tax/Local" valueDate="2009/6/15" statement="200907"/>
+<TRANSACTION account="Current Account" description="Local tax" date="2009/7/15" amount="-95.0" mode="Banker's order" category="Tax/Local" valueDate="2009/6/15" statement="200908"/>
+<TRANSACTION account="Current Account" description="Local tax" date="2009/8/15" amount="-95.0" mode="Banker's order" category="Tax/Local" valueDate="2009/8/15" statement="200909"/>
+<TRANSACTION account="Current Account" description="Local tax" date="2009/9/15" amount="-95.0" mode="Banker's order" category="Tax/Local" valueDate="2009/9/15" statement="200910"/>
+<TRANSACTION account="Current Account" description="Local tax" date="2009/10/15" amount="-95.0" mode="Banker's order" category="Tax/Local" valueDate="2009/10/15"/>
+<TRANSACTION account="Current Account" description="Local tax" date="2009/11/15" amount="-42.0" mode="Banker's order" category="Tax/Local" valueDate="2009/11/15"/>
+<TRANSACTION account="Current Account" description="Airport car park (remainder)" date="2009/7/20" amount="-15.0" mode="Credit card" category="Holiday" valueDate="2009/8/31" statement="200909"/>
+<TRANSACTION account="Current Account" description="Brushes and paint" date="2009/8/15" amount="-17.61" mode="Credit card" category="Home/Upkeep" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Car advance fee" date="2009/8/10" amount="-350.0" mode="Banker's order" category="Transport/Car" valueDate="2009/8/10" statement="200909"/>
+<TRANSACTION account="Current Account" description="Insurance" date="2009/9/9" amount="-269.39" mode="Interbank payment order" valueDate="2009/9/15" statement="200910">
+<SUBTRANSACTION description="Motorbike" amount="-125.69" category="Transportation/MotorBike"/>
+<SUBTRANSACTION description="Home" amount="-93.63" category="Home/Service Charges"/>
+<SUBTRANSACTION description="Contingency" amount="-33.57"/>
+<SUBTRANSACTION description="Natural disasters" amount="-10.66"/>
 </TRANSACTION>
-<TRANSACTION account="Current Account" description="Assurance voiture" date="2009/8/10" amount="-185.28" mode="Prélévement" category="Transport/Car" valueDate="2009/8/10" statement="200909"/>
-<TRANSACTION account="Current Account" description="Carte grise voiture" date="2009/9/1" amount="-191.5" mode="Chèque" number="0555374" category="Transport/Car" valueDate="2009/11/3"/>
-<TRANSACTION account="Current Account" description="Carte SIM" date="2009/6/29" amount="-1.0" mode="Carte bleue" category="Phone/Mobile/Subscriptions" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Epicerie" date="2009/7/11" amount="-14.89" mode="Carte bleue" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
-<TRANSACTION account="Current Account" description="Cotisation football" date="2009/9/12" amount="-44.0" mode="Chèque" number="0555376" category="Leisure/Sport" valueDate="2009/9/14"/>
-<TRANSACTION account="Current Account" description="Consultation docteur" date="2009/9/18" amount="-22.0" mode="Chèque" number="0555377" category="Everyday life/Health" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Consultation docteur" date="2009/10/9" amount="-22.0" mode="Chèque" number="0555380" category="Everyday life/Health" valueDate="2009/10/11"/>
-<TRANSACTION account="Current Account" description="Consultation docteur" date="2009/10/28" amount="-22.0" mode="Chèque" number="0555382" category="Everyday life/Health" valueDate="2009/10/30"/>
-<TRANSACTION account="Current Account" description="Inscription école fiston" date="2009/7/9" amount="-800.0" mode="Chèque" number="0555372" category="School fee" valueDate="2009/8/10" statement="200909"/>
-<TRANSACTION account="Current Account" description="Inscription école fiston (solde)" date="2009/8/23" amount="-5200.0" mode="Chèque" number="0555373" category="School fee" valueDate="2009/8/28" statement="200909"/>
-<TRANSACTION account="Current Account" description="Paye" date="2009/9/29" amount="3245.0" mode="Virement" category="Salary" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Paye" date="2009/10/30" amount="3245.0" mode="Virement" category="Salary" valueDate="2009/10/30"/>
-<TRANSACTION account="Current Account" description="Paye 06/2009" date="2009/6/30" amount="3245.0" mode="Virement" category="Salary" valueDate="2009/6/29" statement="200907"/>
-<TRANSACTION account="Current Account" description="Paye 07/2009" date="2009/7/31" amount="3245.0" mode="Virement" category="Salary" valueDate="2009/7/30" statement="200908"/>
-<TRANSACTION account="Current Account" description="Paye 08/2009" date="2009/8/28" amount="3245.0" mode="Virement" category="Salary" valueDate="2009/8/28" statement="200909"/>
-<TRANSACTION account="Current Account" description="Portable fiston" date="2009/7/17" amount="-42.23" mode="Prélévement" category="Phone/Mobile/Subscriptions" valueDate="2009/7/17" statement="200908"/>
-<TRANSACTION account="Current Account" description="Portable fiston" date="2009/6/17" amount="-32.0" mode="Prélévement" category="Phone/Mobile/Subscriptions" valueDate="2009/6/17" statement="200907"/>
-<TRANSACTION account="Current Account" description="Portable fiston" date="2009/8/18" amount="-73.42" mode="Prélévement" category="Phone/Mobile/Subscriptions" valueDate="2009/8/18" statement="200909"/>
-<TRANSACTION account="Current Account" description="Portable JM" date="2009/6/15" amount="-33.13" mode="Prélévement" category="Phone/Mobile/Subscriptions" valueDate="2009/6/15" statement="200907"/>
-<TRANSACTION account="Current Account" description="Prime à la casse et écolo" date="2009/11/15" amount="2700.0" mode="Virement" category="Transport/Car" valueDate="2009/11/15"/>
-<TRANSACTION account="Current Account" description="Recommandé assurance voiture" date="2009/10/30" amount="-6.93" mode="Carte bleue" category="Transport/Car" valueDate="2009/11/30"/>
-<TRANSACTION account="Current Account" description="Remboursement inscription école fiston" date="2009/11/7" amount="1500.0" mode="Virement" category="School fee" valueDate="2009/11/7"/>
-<TRANSACTION account="Savings B" description="Vers compte courant" date="2009/7/28" amount="-2000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/7/15" statement="x"/>
-<TRANSACTION account="Savings A" description="Vers compte courant" date="2009/8/18" amount="-2450.0" category="Investment/Savings B" valueDate="2009/8/15" statement="x"/>
-<TRANSACTION account="Savings B" description="Vers compte courant" date="2009/9/29" amount="-500.0" mode="Virement" category="Investment/Savings A" valueDate="2009/9/29" statement="x"/>
-<TRANSACTION account="Savings B" description="Vers compte courant" date="2009/11/2" amount="-3000.0" mode="Virement" category="Investment/Savings A" valueDate="2009/11/2" statement="x"/>
-<TRANSACTION account="Current Account" description="Abonnement mobile fiston" date="2009/9/20" amount="-32.0" mode="Carte bleue" category="Phone/Mobile/Subscriptions" valueDate="2009/10/31" statement="200910"/>
-<TRANSACTION account="Current Account" description="Retrait" date="2009/8/14" amount="-20.0" mode="Carte bleue" category="Cash" valueDate="2009/9/29" statement="200910"/>
-<TRANSACTION account="Current Account" description="Solde voiture" date="2009/11/5" amount="-4615.4" mode="Prélévement" category="Transport/Car" valueDate="2009/11/5"/>
-<TRANSACTION account="Current Account" description="Virement fiston" date="2009/11/1" amount="-200.0" mode="Virement" valueDate="2009/11/1">
-<SUBTRANSACTION description="Argent de poche" amount="-60.0" category="Spending money/Son"/>
-<SUBTRANSACTION description="Repas midi" amount="-100.0" category="Everyday life/Food"/>
-<SUBTRANSACTION description="Abonnement mobile" amount="-40.0" category="Phone/Mobile/Subscriptions"/>
+<TRANSACTION account="Current Account" description="Car insurance" date="2009/8/10" amount="-185.28" mode="Banker's order" category="Transport/Car" valueDate="2009/8/10" statement="200909"/>
+<TRANSACTION account="Current Account" description="Car logbook" date="2009/9/1" amount="-191.5" mode="Check" number="0555374" category="Transport/Car" valueDate="2009/11/3"/>
+<TRANSACTION account="Current Account" description="SIM card" date="2009/6/29" amount="-1.0" mode="Credit card" category="Phone/Mobile/Subscriptions" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Grocery" date="2009/7/11" amount="-14.89" mode="Credit card" category="Everyday life/Food" valueDate="2009/7/29" statement="200908"/>
+<TRANSACTION account="Current Account" description="Football subscription" date="2009/9/12" amount="-44.0" mode="Check" number="0555376" category="Leisure/Sport" valueDate="2009/9/14"/>
+<TRANSACTION account="Current Account" description="Doctor" date="2009/9/18" amount="-22.0" mode="Check" number="0555377" category="Everyday life/Health" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Doctor" date="2009/10/9" amount="-22.0" mode="Check" number="0555380" category="Everyday life/Health" valueDate="2009/10/11"/>
+<TRANSACTION account="Current Account" description="Doctor" date="2009/10/28" amount="-22.0" mode="Check" number="0555382" category="Everyday life/Health" valueDate="2009/10/30"/>
+<TRANSACTION account="Current Account" description="Son's school fee" date="2009/7/9" amount="-800.0" mode="Check" number="0555372" category="School fee" valueDate="2009/8/10" statement="200909"/>
+<TRANSACTION account="Current Account" description="Son's school fee (remainder)" date="2009/8/23" amount="-5200.0" mode="Check" number="0555373" category="School fee" valueDate="2009/8/28" statement="200909"/>
+<TRANSACTION account="Current Account" description="Salary" date="2009/9/29" amount="3245.0" mode="Transfer" category="Salary" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Salary" date="2009/10/30" amount="3245.0" mode="Transfer" category="Salary" valueDate="2009/10/30"/>
+<TRANSACTION account="Current Account" description="Salary" date="2009/6/30" amount="3245.0" mode="Transfer" category="Salary" valueDate="2009/6/29" statement="200907"/>
+<TRANSACTION account="Current Account" description="Salary" date="2009/7/31" amount="3245.0" mode="Transfer" category="Salary" valueDate="2009/7/30" statement="200908"/>
+<TRANSACTION account="Current Account" description="Salary" date="2009/8/28" amount="3245.0" mode="Transfer" category="Salary" valueDate="2009/8/28" statement="200909"/>
+<TRANSACTION account="Current Account" description="Son's mobile phone subscription" date="2009/7/17" amount="-42.23" mode="Banker's order" category="Phone/Mobile/Subscriptions" valueDate="2009/7/17" statement="200908"/>
+<TRANSACTION account="Current Account" description="Son's mobile phone subscription" date="2009/6/17" amount="-32.0" mode="Banker's order" category="Phone/Mobile/Subscriptions" valueDate="2009/6/17" statement="200907"/>
+<TRANSACTION account="Current Account" description="Son's mobile phone subscription" date="2009/8/18" amount="-73.42" mode="Banker's order" category="Phone/Mobile/Subscriptions" valueDate="2009/8/18" statement="200909"/>
+<TRANSACTION account="Current Account" description="Mobile phone subscription" date="2009/6/15" amount="-33.13" mode="Banker's order" category="Phone/Mobile/Subscriptions" valueDate="2009/6/15" statement="200907"/>
+<TRANSACTION account="Current Account" description="Environmental bonus" date="2009/11/15" amount="2700.0" mode="Transfer" category="Transport/Car" valueDate="2009/11/15"/>
+<TRANSACTION account="Current Account" description="Car insurance registered mail" date="2009/10/30" amount="-6.93" mode="Credit card" category="Transport/Car" valueDate="2009/11/30"/>
+<TRANSACTION account="Current Account" description="Son's school fee refund" date="2009/11/7" amount="1500.0" mode="Transfer" category="School fee" valueDate="2009/11/7"/>
+<TRANSACTION account="Savings B" description="To main account" date="2009/7/28" amount="-2000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/7/15" statement="x"/>
+<TRANSACTION account="Savings A" description="To main account" date="2009/8/18" amount="-2450.0" category="Investment/Savings B" valueDate="2009/8/15" statement="x"/>
+<TRANSACTION account="Savings B" description="To main account" date="2009/9/29" amount="-500.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/9/29" statement="x"/>
+<TRANSACTION account="Savings B" description="To main account" date="2009/11/2" amount="-3000.0" mode="Transfer" category="Investment/Savings A" valueDate="2009/11/2" statement="x"/>
+<TRANSACTION account="Current Account" description="Son's mobile phone subscription" date="2009/9/20" amount="-32.0" mode="Credit card" category="Phone/Mobile/Subscriptions" valueDate="2009/10/31" statement="200910"/>
+<TRANSACTION account="Current Account" description="Cash" date="2009/8/14" amount="-20.0" mode="Credit card" category="Cash" valueDate="2009/9/29" statement="200910"/>
+<TRANSACTION account="Current Account" description="Car remainder" date="2009/11/5" amount="-4615.4" mode="Banker's order" category="Transport/Car" valueDate="2009/11/5"/>
+<TRANSACTION account="Current Account" description="Transfer to son's account" date="2009/11/1" amount="-200.0" mode="Transfer" valueDate="2009/11/1">
+<SUBTRANSACTION description="Spending money" amount="-60.0" category="Spending money/Son"/>
+<SUBTRANSACTION description="Lunch" amount="-100.0" category="Everyday life/Food"/>
+<SUBTRANSACTION description="Mobile phone subscription" amount="-40.0" category="Phone/Mobile/Subscriptions"/>
 </TRANSACTION>
 </DATA>
