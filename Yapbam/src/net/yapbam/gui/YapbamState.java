@@ -102,6 +102,8 @@ public class YapbamState {
 		Properties properties = INSTANCE.properties;
 		if (frame.getData().getPath()!=null) {
 			properties.put(FILE_PATH, frame.getData().getPath().toString());
+		} else {
+			properties.remove(FILE_PATH);
 		}
 		Point location = frame.getLocation();
 		properties.put(FRAME_LOCATION_X, Integer.toString(location.x));
