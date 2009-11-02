@@ -14,6 +14,7 @@ import net.yapbam.data.event.CategoryAddedEvent;
 import net.yapbam.data.event.CategoryRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
+import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
@@ -114,6 +115,8 @@ public class CategoryListPanel extends AbstractListAdministrationPanel implement
 			} else if (event instanceof CategoryRemovedEvent) {
 				int row = ((CategoryRemovedEvent)event).getIndex()-1; // -1 because undefined category is omitted
 				fireTableRowsDeleted(row, row);
+			} else if (event instanceof EverythingChangedEvent) {
+				fireTableDataChanged();
 			}
 		}
 	}
