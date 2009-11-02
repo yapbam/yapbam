@@ -16,7 +16,8 @@ public class SpreadableMouseAdapter extends MouseAdapter {
 		int row = table.convertRowIndexToModel(viewRow);
 		SpreadableTableModel model = (SpreadableTableModel) table.getModel();
 		if ((column == model.getSpreadColumnNumber()) && (row >= 0) && model.isSpreadable(row)) {
-			boolean spread = table.getRowHeight()!=table.getRowHeight(viewRow);
+			boolean spread = model.isSpread(row);
+			model.setSpread(row, !spread);
 			if (spread) {
 				table.setRowHeight(viewRow, table.getRowHeight());
 			} else {
@@ -25,5 +26,4 @@ public class SpreadableMouseAdapter extends MouseAdapter {
 			}
 		}
 	}
-
 }

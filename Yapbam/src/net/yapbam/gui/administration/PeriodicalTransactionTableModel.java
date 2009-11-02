@@ -3,9 +3,7 @@ package net.yapbam.gui.administration;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
@@ -23,10 +21,9 @@ import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 import net.yapbam.gui.transactiontable.SpreadState;
-import net.yapbam.gui.transactiontable.SpreadableTableModel;
 
 @SuppressWarnings("serial")
-final class PeriodicalTransactionTableModel extends AbstractTableModel implements GenericTransactionTableModel, SpreadableTableModel {
+final class PeriodicalTransactionTableModel extends GenericTransactionTableModel {
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
@@ -38,9 +35,11 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 					int index = ((PeriodicalTransactionAddedEvent)event).getPeriodicalTransactionIndex();
 					fireTableRowsInserted(index, index);
 				} else if (event instanceof PeriodicalTransactionRemovedEvent) {
+					setSpread(((PeriodicalTransactionRemovedEvent)event).getRemoved(), false);
 					int index = ((PeriodicalTransactionRemovedEvent)event).getIndex();
 					fireTableRowsDeleted(index, index);
 				} else if (event instanceof EverythingChangedEvent) {
+					clearSpreadData();
 					fireTableDataChanged();
 				}
 			}
@@ -73,9 +72,8 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 	//TODO à fusionner avec TransactionsTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		JTable table = this.periodicTransactionListPanel.getJTable();
-		boolean spread = table.getRowHeight()!=table.getRowHeight(table.convertRowIndexToView(rowIndex));
-		PeriodicalTransaction transaction = ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransaction(rowIndex);
+		boolean spread = this.isSpread(rowIndex);
+		PeriodicalTransaction transaction = (PeriodicalTransaction) this.getTransaction(rowIndex);
 		if (columnIndex==0) return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
 		else if (columnIndex==1) return transaction.getAccount().getName();
 		else if (columnIndex==2) {
@@ -172,30 +170,12 @@ final class PeriodicalTransactionTableModel extends AbstractTableModel implement
 		return false;
 	}
 
-	@Override
-	public boolean isExpense(int row) {
-		return ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransaction(row).getAmount()<0;
-	}
-
-	@Override
-	public boolean isSpreadable(int row) {
-		return ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransaction(row).getSubTransactionSize()>0;
-	}
-
-	@Override
-	public int getSpreadColumnNumber() {
-		return 0;
-	}
-
-	@Override
-	public int getSpreadLines(int row) {
-		AbstractTransaction transaction = ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransaction(row);
-		int lines = transaction.getSubTransactionSize()+1;
-		if (transaction.getComplement()!=0) lines++;
-		return lines;
-	}
-	
 	GlobalData getGlobalData() {
 		return (GlobalData)this.periodicTransactionListPanel.data;
+	}
+
+	@Override
+	protected AbstractTransaction getTransaction(int rowIndex) {
+		return ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransaction(rowIndex);
 	}
 }
