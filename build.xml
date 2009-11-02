@@ -38,7 +38,8 @@
 	    	<fileset dir="src/localization" includes="*.html"/>
 	    	<fileset dir="." includes="*Sample*.xml"/>
 			<resources>
-		          <file file="yapbam.jar"/>
+		        <file file="yapbam.jar"/>
+				<file file="yapbam.bat"/>
 			</resources>
 		</copy>
 		<zip basedir="${releaseDir}" destfile="yapbam-${yapbamVersion}.zip"/>
