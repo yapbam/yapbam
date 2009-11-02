@@ -17,7 +17,7 @@ public class BooleanRenderer extends JCheckBox implements TableCellRenderer {
     @Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
     		boolean hasFocus, int row, int column) {
-	    GenericTransactionTableModel model = (GenericTransactionTableModel)table.getModel();
+	    ColoredModel model = (ColoredModel)table.getModel();
 	    this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
 		if (isSelected) {
 	        setBackground(table.getSelectionBackground());

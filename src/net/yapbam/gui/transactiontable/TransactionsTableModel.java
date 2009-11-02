@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
@@ -22,16 +21,15 @@ import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.gui.LocalizationData;
 
-class TransactionsTableModel extends AbstractTableModel implements DataListener, GenericTransactionTableModel, SpreadableTableModel {
+class TransactionsTableModel extends GenericTransactionTableModel implements DataListener {
 	private static final long serialVersionUID = 1L;
 
 	private transient DateFormat dateFormater;
 	private FilteredData data;
-	private JTable table;
 	
 	TransactionsTableModel(JTable table, FilteredData data) {
+		super();
 		this.data = data;
-		this.table = table;
 		data.addListener(this);
 	}
 
@@ -65,13 +63,13 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 	public int getRowCount() {
 		return data.getTransactionsNumber();
 	}
-
+	
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		boolean spread = this.table.getRowHeight()!=this.table.getRowHeight(this.table.convertRowIndexToView(rowIndex));
+		boolean spread = isSpread(rowIndex);
 		if (dateFormater==null) {
 			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, LocalizationData.getLocale());
 		}
-		Transaction transaction = this.data.getTransaction(rowIndex);
+		Transaction transaction = (Transaction) this.getTransaction(rowIndex);
 		if (columnIndex==0) return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
 		else if (columnIndex==1) return transaction.getAccount().getName();
 		else if (columnIndex==2) return transaction.getDate();
@@ -138,11 +136,13 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 
 	public void processEvent(DataEvent event) {
 		if (event instanceof EverythingChangedEvent) {
+			this.clearSpreadData();
 			fireTableDataChanged();
 		} else if (event instanceof TransactionAddedEvent) {
 			int index = this.data.indexOf(((TransactionAddedEvent)event).getTransaction());;
 			fireTableRowsInserted(index, index);
 		} else if (event instanceof TransactionRemovedEvent) {
+			this.setSpread(((TransactionRemovedEvent)event).getRemoved(), false);
 			int index = ((TransactionRemovedEvent)event).getIndex();
 			fireTableRowsDeleted(index, index);
 		} else if (event instanceof AccountPropertyChangedEvent) {
@@ -152,11 +152,6 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 		} else if (event instanceof CategoryPropertyChangedEvent) {
 			fireTableDataChanged();			
 		}
-	}
-
-	@Override
-	public boolean isExpense(int row) {
-		return this.data.getTransaction(row).getAmount()<0;
 	}
 
 	@Override
@@ -173,22 +168,5 @@ class TransactionsTableModel extends AbstractTableModel implements DataListener,
 
 	public AbstractTransaction getTransaction (int row) {
 		return this.data.getTransaction(row);
-	}
-
-	@Override
-	public boolean isSpreadable(int row) {
-		return this.data.getTransaction(row).getSubTransactionSize()>0;
-	}
-
-	@Override
-	public int getSpreadColumnNumber() {
-		return 0;
-	}
-
-	@Override
-	public int getSpreadLines(int row) {
-		int lines = this.data.getTransaction(row).getSubTransactionSize()+1;
-		if (getTransaction(row).getComplement()!=0) lines++;
-		return lines;
 	}
 }

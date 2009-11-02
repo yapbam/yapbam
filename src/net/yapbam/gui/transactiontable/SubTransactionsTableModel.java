@@ -10,7 +10,7 @@ import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
 
-public class SubTransactionsTableModel extends AbstractTableModel implements GenericTransactionTableModel {
+public class SubTransactionsTableModel extends AbstractTableModel implements ColoredModel {
 	private static final long serialVersionUID = 1L;
 
 	private List<SubTransaction> subTransactions;

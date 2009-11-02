@@ -22,4 +22,16 @@ public interface SpreadableTableModel {
 	 * @return the column index
 	 */
 	public abstract int getSpreadColumnNumber();
+
+	/** Get the current spread state of a row
+	 * @param rowIndex The row index
+	 * @return true if the row is spread
+	 */
+	boolean isSpread(int rowIndex);
+
+	/** Set the spread state of a row
+	 * @param rowIndex the row index
+	 * @param spread true if the row is set to "spread"
+	 */
+	public abstract void setSpread(int rowIndex, boolean spread);
 }

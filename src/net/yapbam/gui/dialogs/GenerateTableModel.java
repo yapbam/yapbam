@@ -3,14 +3,14 @@ package net.yapbam.gui.dialogs;
 import java.util.Date;
 
 import javax.swing.SwingConstants;
-import javax.swing.table.AbstractTableModel;
 
+import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 
 @SuppressWarnings("serial")
-class GenerateTableModel extends AbstractTableModel implements GenericTransactionTableModel {
+class GenerateTableModel extends GenericTransactionTableModel {
 	private Transaction[] transactions;
 	private boolean[] enabled;
 	
@@ -70,11 +70,6 @@ class GenerateTableModel extends AbstractTableModel implements GenericTransactio
 		return false;
 	}
 
-	@Override
-	public boolean isExpense(int row) {
-		return transactions[row].getAmount()<0;
-	}
-
 	public void setTransactions(Transaction[] transactions) {
 		this.transactions = transactions;
 		boolean[] enabled = new boolean[transactions.length];
@@ -107,5 +102,10 @@ class GenerateTableModel extends AbstractTableModel implements GenericTransactio
 	public void setTransaction(int row, Transaction transaction) {
 		this.transactions[row] = transaction;
 		this.fireTableRowsUpdated(row, row);	
+	}
+
+	@Override
+	protected AbstractTransaction getTransaction(int rowIndex) {
+		return this.transactions[rowIndex];
 	}
 }
