@@ -1,6 +1,7 @@
 package net.yapbam.util;
 
 import java.io.File;
+import java.net.URLDecoder;
 
 /** That class provides utilities that help to implement a portable application (with no installation) */   
 public class Portable {
@@ -9,10 +10,15 @@ public class Portable {
 	/** Get the directory where the application was launched.
 	 * @return a directory where typically the portable application can store its preference data
 	 */
+	@SuppressWarnings("deprecation")
 	public static File getLaunchDirectory() {
-		File file = new File(Portable.class.getProtectionDomain().getCodeSource().getLocation().getFile());
-		if (!file.isDirectory()) file = file.getParentFile();
-		else file = new File("").getAbsoluteFile();
+		String fileName = Portable.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+		File file = new File(URLDecoder.decode(fileName));
+		if (file.isDirectory()) {
+			file = new File("").getAbsoluteFile();
+		} else {
+			file = file.getParentFile();
+		}
 		return file;
 	}
 }
