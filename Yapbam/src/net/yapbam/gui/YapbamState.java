@@ -119,6 +119,7 @@ public class YapbamState {
 		try {
 			properties.store(new FileOutputStream(getFile()), "Yapbam startup state"); //$NON-NLS-1$
 		} catch (IOException e) {
+			e.printStackTrace();
 			//TODO What could we do ?
 		}
 	}
