@@ -8,7 +8,7 @@
 	<property name="jcommonpath" value="C:/Users/Jean-Marc/workspace/jcommon-1.0.16/sourceJCommon"/>
 	<property name="jfreechartpath" value="C:/Users/Jean-Marc/workspace/jfreechart/source"/>
 	
-	<property name="yapbamVersion" value="0.3.3"/>
+	<property name="yapbamVersion" value="0.3.4"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
