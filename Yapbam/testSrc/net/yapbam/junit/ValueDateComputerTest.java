@@ -27,7 +27,7 @@ public class ValueDateComputerTest {
 		assertEquals(dvc.getNextStep(new Date(109,1,12)), new Date(109,1,28));
 		dvc = new DeferredValueDateComputer(1,1);
 		assertEquals(dvc.getNextStep(new Date(109,11,30)), new Date(110,0,1));
-		dvc = new DayDateStepper(3);
+		dvc = new DayDateStepper(3, null);
 		assertEquals(dvc.getNextStep(new Date(109,3,13)), new Date(109,3,16));
 		assertEquals(dvc.getNextStep(new Date(109,1,27)), new Date(109,2,2));
 		assertEquals(dvc.getNextStep(new Date(109,11,31)), new Date(110,0,3));

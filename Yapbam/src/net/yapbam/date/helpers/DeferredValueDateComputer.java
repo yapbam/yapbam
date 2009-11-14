@@ -65,4 +65,9 @@ public class DeferredValueDateComputer implements DateStepper {
 		if (DEBUG) System.out.println("----------------------");
 		return gc.getTime();
 	}
+
+	@Override
+	public Date getLastDate() {
+		return null;
+	}
 }

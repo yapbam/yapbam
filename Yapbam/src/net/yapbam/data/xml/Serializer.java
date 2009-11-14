@@ -246,15 +246,26 @@ public class Serializer {
 	}
 
 	private void serialize(DateStepper stepper) throws SAXException {
-		MonthDateStepper mds = (MonthDateStepper) stepper;
-		atts.clear();
-		atts.addAttribute("", "", DATE_STEPPER_KIND_ATTRIBUTE, "CDATA", MONTHLY_DATE_STEPPER_KIND);
-		atts.addAttribute("", "", PERIOD_ATTRIBUTE, "CDATA", Integer.toString(mds.getPeriod()));
-		atts.addAttribute("", "", DAY_ATTRIBUTE, "CDATA", Integer.toString(mds.getDay()));
-		Date last = mds.getLastDate();
-		if (last!=null) atts.addAttribute("", "", LAST_DATE_ATTRIBUTE, "CDATA", toString(last));
-		hd.startElement("","",DATE_STEPPER_TAG, atts);
-		hd.endElement("","",DATE_STEPPER_TAG);
+		if (stepper instanceof MonthDateStepper) {
+			MonthDateStepper mds = (MonthDateStepper) stepper;
+			atts.clear();
+			atts.addAttribute("", "", DATE_STEPPER_KIND_ATTRIBUTE, "CDATA", MONTHLY_DATE_STEPPER_KIND);
+			atts.addAttribute("", "", PERIOD_ATTRIBUTE, "CDATA", Integer.toString(mds.getPeriod()));
+			atts.addAttribute("", "", DAY_ATTRIBUTE, "CDATA", Integer.toString(mds.getDay()));
+			Date last = mds.getLastDate();
+			if (last!=null) atts.addAttribute("", "", LAST_DATE_ATTRIBUTE, "CDATA", toString(last));
+			hd.startElement("","",DATE_STEPPER_TAG, atts);
+			hd.endElement("","",DATE_STEPPER_TAG);
+		} else if (stepper instanceof DayDateStepper) {
+			DayDateStepper dds = (DayDateStepper) stepper;
+			atts.addAttribute("", "", DATE_STEPPER_KIND_ATTRIBUTE, "CDATA", RELATIVE_DATE_STEPPER_KIND);
+			atts.addAttribute("", "", PERIOD_ATTRIBUTE, "CDATA", Integer.toString(dds.getStep()));
+			Date last = dds.getLastDate();
+			if (last!=null) atts.addAttribute("", "", LAST_DATE_ATTRIBUTE, "CDATA", toString(last));
+			hd.startElement("","",DATE_STEPPER_TAG, atts);
+			hd.endElement("","",DATE_STEPPER_TAG);
+			atts.clear();
+		} else throw new IllegalArgumentException("This stepper class is not supported : "+stepper.getClass());
 	}
 
 	@SuppressWarnings("deprecation")

@@ -8,14 +8,16 @@ public class DayDateStepper implements DateStepper {
 	private static final boolean DEBUG = false;
 
 	private int nbDays;
+	private int lastDate;
 
 	/** Constructor.
 	 *  @param nbDays Number of days between the value date and the operation date.
 	 *  If this number is negative, the value dates will be before operation dates.
 	 */
-	public DayDateStepper(int nbDays) {
+	public DayDateStepper(int nbDays, Date lastDate) {
 		super();
 		this.nbDays = nbDays;
+		this.lastDate = DateHelper.dateToInteger(lastDate);
 	}
 	
 	public Date getNextStep(Date date) {
@@ -35,5 +37,10 @@ public class DayDateStepper implements DateStepper {
 
 	public int getStep() {
 		return this.nbDays;
+	}
+
+	@Override
+	public Date getLastDate() {
+		return DateHelper.integerToDate(lastDate);
 	}
 }

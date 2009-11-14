@@ -218,7 +218,7 @@ public class GenerationPanel extends JPanel {
 				newStepper = new MonthDateStepper(nb.getValue(), day.getValue());
 			}
 		} else {
-			newStepper = new DayDateStepper(nb.getValue());
+			newStepper = new DayDateStepper(nb.getValue(),null);
 		}
 		if (!areEquals(newStepper,currentDateStepper)) {
 			Object old = currentDateStepper;
