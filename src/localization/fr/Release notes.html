@@ -16,7 +16,7 @@ color: #ff9900;
 -->
 </style></head>
 <body>
-<h1>Version &nbsp;0.3.4 (11/11/2009)</h1>
+<h1>Version 0.3.5 (??/11/2009)</h1>
 <p>Cette version&nbsp;est&nbsp;une pre-version à laquelle
 manquent quelques fonctionnalités, et qui,
 probablement,&nbsp;comporte quelques bugs. Vous trouverez
@@ -39,17 +39,17 @@ informations (typiquement la catégorie).</li><li>Peut-être
 la prise en charge des fichiers au format OFX (issus de Money ou de
 votre banque) ... ça dépendra du nombre de demandes.</li></ul>
 <h2>Nouveautés de cette version</h2>
-<ul><li><span class="bugFix">Correction de bug </span> : Sur certains windows XP, les préférences et le dernier état n'étaient pas sauvés.</li>
+<ul><li><span class="bugFix"></span><span class="bugFix">Correction de bug </span> : La sauvegarde ne fonctionnait pas quand une opération périodique journalière était définie.</li>
 </ul>
 <hr>
 <h1>Versions précédentes</h1>
-<h2>Version &nbsp;0.3.3 (02/11/2009)</h2><ul><li><span class="bugFix">Correction de bug </span> : Quand un nouveau 
+<h2>Version&nbsp;0.3.4 (11/11/2009)</h2><ul><li><span class="bugFix">Correction de bug </span> : Sur certains windows XP, les préférences et le dernier état n'étaient pas sauvés</li></ul><h2>Version&nbsp;0.3.3 (02/11/2009)</h2><ul><li><span class="bugFix">Correction de bug </span> : Quand un nouveau 
     fichier était ouvert, la liste des catégories n'était 
     pas raffraichie dans le panneau d'administration.</li><li><span class="bugFix">Correction de bug</span>&nbsp;:
 Parfois, lorsque la table des opérations était triée, et qu'on éditait
 une opération, la table se retrouvait dans un état étrange : Les
 modifications n'étaient plus prises en compte et la table ne répondait
-plus aux événements.</li></ul><h2>Version &nbsp;0.3.2 (01/11/2009)</h2><ul>
+plus aux événements.</li></ul><h2>Version 0.3.2 (01/11/2009)</h2><ul>
   <li>Le titre de la fenêtre principale indique à présent que des modifications 
     ont étés apportées depuis la dernière sauvegarde (le titre se termine alors 
     par une étoile).</li>
@@ -62,7 +62,7 @@ plus aux événements.</li></ul><h2>Version &nbsp;0.3.2 (01/11/2009)</h2><ul>
     un fichier, on créait un nouveau fichier, puis qu'on redémarrait Yapbam, le 
     fichier était de nouveau&nbsp;ouvert</li>
 </ul>
-<h2>Version &nbsp;0.3.1 (31/10/2009)</h2>
+<h2>Version 0.3.1 (31/10/2009)</h2>
 <ul><li>L'outil de conversion des devises fonctionne à présent avec les
 connexions Internet par proxy et affiche à présent une table de
 conversion des devises.</li><li><span class="bugFix">Correction de bug </span>
@@ -71,37 +71,37 @@ fermer la fenêtre principale n'arrêtait pas la machine virtuelle
 java.&nbsp;</li><li><span class="bugFix">Correction de bug </span> : &nbsp;Les pourcentages affichés dans les bulles d'aide du camembert des dépenses nettes étaient faux.</li><li><span class="bugFix">Correction de bug</span>&nbsp;:
 Parfois, quand une opération était dupliquée ou transformée en
 opération périodique, l'opération créée avait un mode de paiement
-erroné.</li><li><span class="bugFix">Correction de bug</span>&nbsp;: L'historique du solde était décalé d'un jour quand il y avait un passage heure d'été à heure d'hiver dans son scope.</li></ul><h2>Version &nbsp;0.3.0 (25/10/2009)</h2><ul><li>Ajout d'un panneau de statistiques sur les catégories.</li><li>Ajout d'un outil de conversion de devises (en version expérimentale : ne fonctionne pas avec les connexions Internet par proxy).</li><li>Change l'apparence du panneau d'administration.</li><li><span class="bugFix">Correction de bug </span> : &nbsp;L'item de menu "convertir en opération périodique" restaient valide quand on quittait le panneau "opérations"</li></ul><h2>Version &nbsp;0.2.9 (24/10/2009)</h2><ul><li><span class="develop">Développeurs</span>
+erroné.</li><li><span class="bugFix">Correction de bug</span>&nbsp;: L'historique du solde était décalé d'un jour quand il y avait un passage heure d'été à heure d'hiver dans son scope.</li></ul><h2>Version 0.3.0 (25/10/2009)</h2><ul><li>Ajout d'un panneau de statistiques sur les catégories.</li><li>Ajout d'un outil de conversion de devises (en version expérimentale : ne fonctionne pas avec les connexions Internet par proxy).</li><li>Change l'apparence du panneau d'administration.</li><li><span class="bugFix">Correction de bug </span> : &nbsp;L'item de menu "convertir en opération périodique" restaient valide quand on quittait le panneau "opérations"</li></ul><h2>Version 0.2.9 (24/10/2009)</h2><ul><li><span class="develop">Développeurs</span>
 : Réécriture du filtrage des opérations pour préparer l'arrivée du plugin "statistiques".</li><li><span class="bugFix">Correction de bug </span> : &nbsp;Quand des&nbsp;opérations
 étaient supprimées, l'historique du solde pouvait contenir des segments
-surnuméraires (typiquement lorsqu'on supprimait toutes les opérations.</li></ul><h2>Version &nbsp;0.2.8 (18/10/2009)</h2><ul><li>Ajout d'un panneau d'administration des modes de paiement permettant l'ajout et la suppression de modes.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Lorsqu'une catégorie était supprimée, elle n'était parfois pas retirée de toutes les opérations.</li></ul><h2>Version &nbsp;0.2.7 (16/10/2009)</h2><ul><li>Au premier démarrage, Yapbam demande l'autorisation de se connecter pour&nbsp;rechercher automatiquement des mises à jour.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Un double-clic
+surnuméraires (typiquement lorsqu'on supprimait toutes les opérations.</li></ul><h2>Version 0.2.8 (18/10/2009)</h2><ul><li>Ajout d'un panneau d'administration des modes de paiement permettant l'ajout et la suppression de modes.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Lorsqu'une catégorie était supprimée, elle n'était parfois pas retirée de toutes les opérations.</li></ul><h2>Version 0.2.7 (16/10/2009)</h2><ul><li>Au premier démarrage, Yapbam demande l'autorisation de se connecter pour&nbsp;rechercher automatiquement des mises à jour.<span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Un double-clic
 sur la liste des opérations en mode "pointage" ouvrait le dialogue
-d'édition de l'opération au lieu de la marquer "pointée".</li></ul><h2>Version &nbsp;0.2.6 (13/10/2009)</h2><ul><li>Ajout d'un panneau d'administration pour gérer les catégories.<span class="bugFix"></span><span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Le popup menu&nbsp;dans l'écran d'administration des comptes comportait de nombreux séparateurs.</li><li><span class="bugFix">Correction de bug</span>&nbsp;: Dans l'écran d'administration, on contrôle à présent que le nouveau nom n'est ni vide, ni déjà utilisé.</li><li><span class="bugFix">Correction de bug </span> : Quand on pressait la touche "Entrée" lors de l'édition d'une date d'opération, la date de valeur n'était pas mise à jour.</li><li><span class="bugFix">Correction de bug</span><span class="bugFix">&nbsp;</span>: L'état des cases à cocher "ignorée" était inversé dans le dialogue "Générer les opérations périodiques".</li><li>Amélioration : Un champ date laissé à vide est à présent équivalent à "aujourd'hui". Lors de
+d'édition de l'opération au lieu de la marquer "pointée".</li></ul><h2>Version 0.2.6 (13/10/2009)</h2><ul><li>Ajout d'un panneau d'administration pour gérer les catégories.<span class="bugFix"></span><span class="bugFix"></span></li><li><span class="bugFix">Correction de bug </span> : Le popup menu&nbsp;dans l'écran d'administration des comptes comportait de nombreux séparateurs.</li><li><span class="bugFix">Correction de bug</span>&nbsp;: Dans l'écran d'administration, on contrôle à présent que le nouveau nom n'est ni vide, ni déjà utilisé.</li><li><span class="bugFix">Correction de bug </span> : Quand on pressait la touche "Entrée" lors de l'édition d'une date d'opération, la date de valeur n'était pas mise à jour.</li><li><span class="bugFix">Correction de bug</span><span class="bugFix">&nbsp;</span>: L'état des cases à cocher "ignorée" était inversé dans le dialogue "Générer les opérations périodiques".</li><li>Amélioration : Un champ date laissé à vide est à présent équivalent à "aujourd'hui". Lors de
 la duplication d'une opération, la date de l'opération crée est
-automatiquement mise à aujourd'hui dans le dialogue de création.</li></ul><h2>Version &nbsp;0.2.5 (10/10/2009)</h2><ul><li><span class="bugFix"></span>Ajout de la possibilité de gérer les comptes (changer leur nom et le solde initial).</li></ul><h2>Version &nbsp;0.2.4 (02/10/2009)</h2><ul><li><span class="bugFix">Correction de bug </span> : Sous
+automatiquement mise à aujourd'hui dans le dialogue de création.</li></ul><h2>Version 0.2.5 (10/10/2009)</h2><ul><li><span class="bugFix"></span>Ajout de la possibilité de gérer les comptes (changer leur nom et le solde initial).</li></ul><h2>Version 0.2.4 (02/10/2009)</h2><ul><li><span class="bugFix">Correction de bug </span> : Sous
 Linux, quand Yapbam était démarré avec un clic droit sur le fichier
 jar, les fichiers de préférences et d'état étaient sauvegardés dans le
 répertoire de l'utilisateur (home directory) et pas dans le répertoire
-de Yapbam. Du coup, Yabam n'était pas tout à fait portable.</li></ul><h2>Version &nbsp;0.2.3 (01/10/2009)</h2><ul><li>Ajout de la possibilité d'éditer ou d'ignorer les opérations 
+de Yapbam. Du coup, Yabam n'était pas tout à fait portable.</li></ul><h2>Version 0.2.3 (01/10/2009)</h2><ul><li>Ajout de la possibilité d'éditer ou d'ignorer les opérations 
     générées par "Générer les opérations 
     périodiques".</li><li>Ajout de la possibilité de trier la table des opérations et celle des opérations périodiques.</li></ul>
-<h2>Version &nbsp;0.2.2 (30/09/2009)</h2>
+<h2>Version 0.2.2 (30/09/2009)</h2>
 <ul>
   <li>Ajout de la recherche automatique des mises à jour de Yapbam.</li>
   <li>Le menu&nbsp;"Opérations" reste maintenant visible dans tous les onglet.</li>
 </ul>
-<h2>Version &nbsp;0.2.1 (28/09/2009)</h2>
+<h2>Version 0.2.1 (28/09/2009)</h2>
 <ul><li>Ajout d'un popup menu pour éditer/supprimer/dupliquer &nbsp;les opérations périodiques dans le panneau d'administration.</li><li><span class="bugFix">Correction de bug </span> :&nbsp;Dans
 le menu contextuel de la table des transactions, l'item pour pointer
 l'opération sélectionnée étaient présent même quand le champ "Relevé"
-était vide.</li></ul><h2>Version &nbsp;0.2.0 (27/09/2009)</h2><ul><li>Ajout de la génération des opérations périodiques. Cette
+était vide.</li></ul><h2>Version 0.2.0 (27/09/2009)</h2><ul><li>Ajout de la génération des opérations périodiques. Cette
 fonctionnalité sera bientôt améliorée par la possibilité d'éditer les
-opérations générées à l'intérieur même du dialogue de génération.</li><li>Ajout d'item de menu permettant de convertir une opération en opération périodique.</li></ul><h2>Version &nbsp;0.1.20 (24/09/2009)</h2><ul><li><span class="bugFix">Correction de bug </span> : Lorsque, dans le dialogue 
+opérations générées à l'intérieur même du dialogue de génération.</li><li>Ajout d'item de menu permettant de convertir une opération en opération périodique.</li></ul><h2>Version 0.1.20 (24/09/2009)</h2><ul><li><span class="bugFix">Correction de bug </span> : Lorsque, dans le dialogue 
     de création/édition d'opération on créait un mode, 
     compte ou une catégorie avec un nom plus long que la taille de la comboBox, 
     l'apparence de la fenêtre était ... détruite.</li><li><span class="bugFix">Correction de bug </span> : Le bouton "dupliquer" 
     du dialogue de création de compte n'avait pas de libellé et 
-    ne faisait rien.</li><li><span class="bugFix">Correction de bug </span> : Beaucoup de problème dans les boutons de la liste des modes de paiement du dialogue de création de compte.</li></ul><h2>Version &nbsp;0.1.19 (23/09/2009)</h2>
+    ne faisait rien.</li><li><span class="bugFix">Correction de bug </span> : Beaucoup de problème dans les boutons de la liste des modes de paiement du dialogue de création de compte.</li></ul><h2>Version 0.1.19 (23/09/2009)</h2>
 <ul>
   <li>Ajout d'un panneau d'administration permettant la définition et la gestion 
     d'opérations périodiques.</li>
@@ -109,15 +109,15 @@ opérations générées à l'intérieur même du dialogue de génération.</li><li>Ajout 
   <li>Changement du comportement du bouton "Dupliquer" du tableau des opérations. 
     A présent, le dialogue d'édition de l'opération est automatiquement ouvert.</li>
 </ul>
-<h2>Version &nbsp;0.1.18 (18/09/2009)</h2>
+<h2>Version 0.1.18 (18/09/2009)</h2>
 <ul><li><span class="bugFix">Correction de bug </span>
-: Correction de divers bugs mineurs dans le raffraichissement des menus. Certains menus étaient désactivés (ou activés) à tort.</li><li>Ajout de quelques bulles d'aide.</li><li>Ajout d'un dialogue d'alerte quand Yapbam est lancé avec une ancienne et incompatible version de java (avant 1.6).</li></ul><h2>Version &nbsp;0.1.17 (18/09/2009)</h2><ul><li><span class="bugFix">Correction de bug </span>
+: Correction de divers bugs mineurs dans le raffraichissement des menus. Certains menus étaient désactivés (ou activés) à tort.</li><li>Ajout de quelques bulles d'aide.</li><li>Ajout d'un dialogue d'alerte quand Yapbam est lancé avec une ancienne et incompatible version de java (avant 1.6).</li></ul><h2>Version 0.1.17 (18/09/2009)</h2><ul><li><span class="bugFix">Correction de bug </span>
 : L'authentification sur le serveur mandataire (proxy) ne fonctionnait
 pas.</li><li><span class="bugFix">Correction de bug </span>
 : Quand un compte était créé, le menu "filtre" devenait parfois
 incohérent.</li><li>Dans le menu contextuel de la table des transactions, ajout
 d'un item pour pointer l'opération sélectionnée.</li><li><span class="develop">Développeurs</span>
-: Passage à une architecture de plugins pour tous les panneaux de la fenêtre principale.</li></ul><h2>Version &nbsp;0.1.16 (17/09/2009)</h2>
+: Passage à une architecture de plugins pour tous les panneaux de la fenêtre principale.</li></ul><h2>Version 0.1.16 (17/09/2009)</h2>
 <ul>
 <li>Ajout du support des connexions Internet via un proxy.</li>
 <li>Ajout d'un menu contextuel sur la liste des transactions.</li>
@@ -126,7 +126,7 @@ d'un item pour pointer l'opération sélectionnée.</li><li><span class="develop">D
 éditait l'opération sélectionnée (et pas forcément celle ou avait lieu
 le clic). A présent, les double clics droit sont ignorés.</li>
 </ul>
-<h2>Version &nbsp;0.1.15 (14/09/2009)</h2>
+<h2>Version 0.1.15 (14/09/2009)</h2>
 <ul>
 <li><span class="bugFix">Correction du bug 2858596</span>
 <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2858596&amp;group_id=276272&amp;atid=1173518">
@@ -135,7 +135,7 @@ opérations ne sont plus répercutées dans la fenêtre des opérations"</a>.</li>
 <li>Ajout d'un hack pour supporter les connexions via un proxy
 (nécessite d'éditer le fichier des préférences à la main).</li>
 </ul>
-<h2>Version &nbsp;0.1.14 (13/09/2009)</h2>
+<h2>Version 0.1.14 (13/09/2009)</h2>
 <ul>
 <li><span class="bugFix">Correction de bug </span>
 : Lorsque la localisation était modifiée dans les préférences, les
@@ -144,7 +144,7 @@ le format de la localisation d'origine.</li>
 <li>Ajout d'un nouvel item de menu permettant de vérifier les
 mises à jour.</li>
 </ul>
-<h2>Version &nbsp;0.1.13 (11/09/2009)</h2>
+<h2>Version 0.1.13 (11/09/2009)</h2>
 <ul>
 <li>Beaucoup de travail souterrain pour préparer
 l'implémentation de la gestion des comptes, des catégories, etc ...</li>
@@ -183,12 +183,12 @@ présent sauvegardé.</li>
 </ul>
 </li>
 </ul>
-<h2>Version &nbsp;0.1.12 (07/09/2009)</h2>
+<h2>Version 0.1.12 (07/09/2009)</h2>
 <ul>
 <li>Ajout d'un item "Préférences" dans le menu "Fichiers",
 possibilité de choisir la langue et le look and feel de l'application.</li>
 </ul>
-<h2>Version &nbsp;0.1.11 (05/09/2009)</h2>
+<h2>Version 0.1.11 (05/09/2009)</h2>
 <ul>
 <li>Traduction anglaise complète.</li>
 <li><span class="bugFix">Correction du bug 2852451</span>
@@ -196,11 +196,11 @@ possibilité de choisir la langue et le look and feel de l'application.</li>
 de différence entre les titres des dialogues de création et de
 modification"</a>.</li>
 </ul>
-<h2>Version &nbsp;0.1.10 (04/09/2009) </h2>
+<h2>Version 0.1.10 (04/09/2009) </h2>
 <ul>
 <li>Amélioration du dialogue (A propos ...).</li>
 </ul>
-<h2>Version &nbsp;0.1.09 (01/09/2009)</h2>
+<h2>Version 0.1.09 (01/09/2009)</h2>
 <ul>
 <li>Première version publiée.</li>
 </ul>

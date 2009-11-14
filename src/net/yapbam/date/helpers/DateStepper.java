@@ -18,11 +18,20 @@ public interface DateStepper {
 		public int hashCode() {
 			return 0;
 		}
+		@Override
+		public Date getLastDate() {
+			return null;
+		}
 	};
 	
 	/** Compute the next date
 	 * @param date date for which we want a successor (which could be before date, for instance for a backward stepper)
-	 * @return the next date or null if the cycle has to stop (if the stepper manage this concept)
+	 * @return the next date or null if the cycle has to stop (if the stepper provide this concept)
 	 */
 	public abstract Date getNextStep (Date date);
+	
+	/** returns the end date of this stepper.
+	 * @return the last date, or null if the stepper has no time limit.
+	 */
+	public abstract Date getLastDate();
 }

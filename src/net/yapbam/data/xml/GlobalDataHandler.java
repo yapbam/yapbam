@@ -59,7 +59,7 @@ class GlobalDataHandler extends DefaultHandler {
 				vdc = DateStepper.IMMEDIATE;
 			} else if (kind.equals(Serializer.RELATIVE_DATE_STEPPER_KIND)) {
 				int delay = Integer.parseInt(attributes.getValue(Serializer.PERIOD_ATTRIBUTE));
-				vdc = new DayDateStepper(delay);
+				vdc = new DayDateStepper(delay, null);
 			} else if (kind.equals(Serializer.DEFERRED_DATE_STEPPER_KIND)) {
 				int stopDay = Integer.parseInt(attributes.getValue(Serializer.STOP_DAY_ATTRIBUTE));
 				int debtDay = Integer.parseInt(attributes.getValue(Serializer.DEBT_DAY_ATTRIBUTE));
@@ -91,6 +91,7 @@ class GlobalDataHandler extends DefaultHandler {
 		} else if (qName.equals(Serializer.DATE_STEPPER_TAG)) {
 			String kind = attributes.getValue(Serializer.DATE_STEPPER_KIND_ATTRIBUTE);
 			if (!kind.equals(Serializer.MONTHLY_DATE_STEPPER_KIND)) throw new IllegalArgumentException();
+			//FIXME Add support for day datestepper
 			int period = Integer.parseInt(attributes.getValue(Serializer.PERIOD_ATTRIBUTE));
 			if (period<=0) throw new IllegalArgumentException();
 			int day = Integer.parseInt(attributes.getValue(Serializer.DAY_ATTRIBUTE));

@@ -153,7 +153,7 @@ class ModePanel extends JPanel {
 			if (index==0) {
 				return DateStepper.IMMEDIATE;
 			} else if (index==1) {
-				return new DayDateStepper(relField.getValue());
+				return new DayDateStepper(relField.getValue(), null);
 			} else if (index==2) {
 				return new DeferredValueDateComputer(stopField.getValue(), debtField.getValue());
 			} else {
