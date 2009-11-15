@@ -90,20 +90,29 @@ class GlobalDataHandler extends DefaultHandler {
 			this.tempData.push(new ArrayList<SubTransaction>());
 		} else if (qName.equals(Serializer.DATE_STEPPER_TAG)) {
 			String kind = attributes.getValue(Serializer.DATE_STEPPER_KIND_ATTRIBUTE);
-			if (!kind.equals(Serializer.MONTHLY_DATE_STEPPER_KIND)) throw new IllegalArgumentException();
-			//FIXME Add support for day datestepper
-			int period = Integer.parseInt(attributes.getValue(Serializer.PERIOD_ATTRIBUTE));
-			if (period<=0) throw new IllegalArgumentException();
-			int day = Integer.parseInt(attributes.getValue(Serializer.DAY_ATTRIBUTE));
-			String dummy =  attributes.getValue(Serializer.LAST_DATE_ATTRIBUTE);
-			Date lastDate = dummy==null?null:Serializer.toDate(dummy);
+			DateStepper stepper;
+			if (kind.equals(Serializer.MONTHLY_DATE_STEPPER_KIND)) {
+				int period = Integer.parseInt(attributes.getValue(Serializer.PERIOD_ATTRIBUTE));
+				if (period<=0) throw new IllegalArgumentException();
+				int day = Integer.parseInt(attributes.getValue(Serializer.DAY_ATTRIBUTE));
+				String dummy =  attributes.getValue(Serializer.LAST_DATE_ATTRIBUTE);
+				Date lastDate = dummy==null?null:Serializer.toDate(dummy);
+				stepper = new MonthDateStepper(period, day, lastDate);
+			} else if (kind.equals(Serializer.RELATIVE_DATE_STEPPER_KIND)) {
+				int period = Integer.parseInt(attributes.getValue(Serializer.PERIOD_ATTRIBUTE));
+				String dummy =  attributes.getValue(Serializer.LAST_DATE_ATTRIBUTE);
+				Date lastDate = dummy==null?null:Serializer.toDate(dummy);
+				stepper = new DayDateStepper(period, lastDate);
+			} else {
+				throw new IllegalArgumentException("Unknown date stepper : "+kind);
+			}
 			Object obj = this.tempData.pop(); // The subtransaction list, will be returned in the stack in a few lines
 			Object old = this.tempData.pop();
-			this.tempData.push(new MonthDateStepper(period, day, lastDate));
+			this.tempData.push(stepper);
 			this.tempData.push(obj);
-			if (old!=null) throw new IllegalStateException(); // Hu ! there are two date steppers !!!
+			if (old!=null) throw new IllegalStateException("Two date steppers found"); // Hu ! there are two date steppers !!!
 		} else {
-			System.err.println ("Unknown tag "+qName);
+			throw new IllegalArgumentException ("Unknown tag "+qName);
 		}
 	}
 
