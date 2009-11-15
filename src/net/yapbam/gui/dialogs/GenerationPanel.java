@@ -20,6 +20,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.DateWidget;
 import net.yapbam.gui.widget.IntegerWidget;
+import net.yapbam.util.NullUtils;
 
 import java.lang.Integer;
 import java.util.Date;
@@ -28,7 +29,7 @@ public class GenerationPanel extends JPanel {
 	// Properties
 	public static final String ACTIVATED_PROPERTY = "activated";  //  @jve:decl-index=0: //$NON-NLS-1$
 	public static final String DATE_STEPPER_PROPERTY = "dateStepper"; //$NON-NLS-1$
-	public static final String NEXT_DATE_PROPERTY = "nextDate"; //$NON-NLS-1$
+	public static final String NEXT_DATE_PROPERTY = "nextDate"; //$NON-NLS-1$  //  @jve:decl-index=0:
 
 	private static final long serialVersionUID = 1L;
 	private JCheckBox activatedBox = null;
@@ -43,7 +44,9 @@ public class GenerationPanel extends JPanel {
 	private IntegerWidget day = null;
 
 	private DateStepper currentDateStepper;  //  @jve:decl-index=0:
-	private Date currentNextDate;
+	private Date currentNextDate;  //  @jve:decl-index=0:
+	private JLabel jLabel3 = null;
+	private DateWidget lastDate = null;
 
 	public GenerationPanel() {
 		super();
@@ -55,6 +58,8 @@ public class GenerationPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		jLabel3 = new JLabel();
+		jLabel3.setText(LocalizationData.get("PeriodicalTransactionDialog.until"));
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.gridwidth = 3;
@@ -215,10 +220,10 @@ public class GenerationPanel extends JPanel {
 			if (day.getValue()==null) {
 				newStepper = null;
 			} else {
-				newStepper = new MonthDateStepper(nb.getValue(), day.getValue());
+				newStepper = new MonthDateStepper(nb.getValue(), day.getValue(), getLastDate().getDate());
 			}
 		} else {
-			newStepper = new DayDateStepper(nb.getValue(),null);
+			newStepper = new DayDateStepper(nb.getValue(), getLastDate().getDate());
 		}
 		if (!areEquals(newStepper,currentDateStepper)) {
 			Object old = currentDateStepper;
@@ -231,6 +236,8 @@ public class GenerationPanel extends JPanel {
 		if (s1==null) {
 			return (s2==null);
 		} else if (s2 == null) {
+			return false;
+		} else if (!NullUtils.areEquals(s1.getLastDate(),s2.getLastDate())) {
 			return false;
 		} else if (s1 instanceof DayDateStepper) {
 			if (!(s2 instanceof DayDateStepper)) return false;
@@ -252,9 +259,11 @@ public class GenerationPanel extends JPanel {
 				kind.setSelectedIndex(0);
 				nb.setValue(((MonthDateStepper)nextDateBuilder).getPeriod());
 				day.setValue(((MonthDateStepper)nextDateBuilder).getDay());
+				getLastDate().setDate(nextDateBuilder.getLastDate());
 			} else if (nextDateBuilder instanceof DayDateStepper) {
 				kind.setSelectedIndex(1);
 				nb.setValue(((DayDateStepper)nextDateBuilder).getStep());
+				getLastDate().setDate(nextDateBuilder.getLastDate());
 			} else if (nextDateBuilder==null) {
 				kind.setSelectedIndex(-1);
 				nb.setText(""); //$NON-NLS-1$
@@ -275,6 +284,16 @@ public class GenerationPanel extends JPanel {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = GridBagConstraints.VERTICAL;
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.weightx = 1.0;
+			gridBagConstraints9.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints9.gridx = 6;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints8.gridy = 0;
+			gridBagConstraints8.gridx = 5;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints7.gridx = 4;
@@ -309,6 +328,8 @@ public class GenerationPanel extends JPanel {
 			jPanel.add(getKind(), gridBagConstraints5);
 			jPanel.add(jLabel2, gridBagConstraints6);
 			jPanel.add(getDay(), gridBagConstraints7);
+			jPanel.add(jLabel3, gridBagConstraints8);
+			jPanel.add(getLastDate(), gridBagConstraints9);
 		}
 		return jPanel;
 	}
@@ -335,6 +356,27 @@ public class GenerationPanel extends JPanel {
 
 	private boolean isMonthly() {
 		return (kind.getSelectedIndex()==0);
+	}
+
+	/**
+	 * This method initializes lastDate	
+	 * 	
+	 * @return net.yapbam.gui.widget.DateWidget	
+	 */
+	private DateWidget getLastDate() {
+		if (lastDate == null) {
+			lastDate = new DateWidget();
+			lastDate.setDate(null);
+			lastDate.setColumns(6);
+			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
+			lastDate.addFocusListener(new AutoSelectFocusListener());
+			lastDate.addKeyListener(new KeyAdapter() {
+				public void keyReleased(KeyEvent e) {
+					updateDateStepper();
+				}
+			});
+		}
+		return lastDate;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
