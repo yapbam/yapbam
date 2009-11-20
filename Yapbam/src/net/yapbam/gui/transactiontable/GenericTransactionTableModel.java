@@ -1,21 +1,34 @@
 package net.yapbam.gui.transactiontable;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.HashSet;
 
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
 
 @SuppressWarnings("serial")
 public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel, ColoredModel {
+	static Color CASHIN = new Color(240,255,240);
+	static Color CASHOUT = new Color(255,240,240);
 	private HashSet<Long> spreadTransactionId;
 
 	protected GenericTransactionTableModel() {
 		this.spreadTransactionId = new HashSet<Long>();
 	}
 	
-	public final boolean isExpense(int row) {
-		return this.getTransaction(row).getAmount()<0;
+	@Override
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
+		if (isSelected) {
+	        renderer.setBackground(table.getSelectionBackground());
+	        renderer.setForeground(table.getSelectionForeground());
+	    } else {
+	        boolean expense = this.getTransaction(row).getAmount()<0;  	
+	        renderer.setForeground(table.getForeground());
+	        renderer.setBackground(expense?CASHOUT:CASHIN);
+	    }
 	}
 
 	@Override

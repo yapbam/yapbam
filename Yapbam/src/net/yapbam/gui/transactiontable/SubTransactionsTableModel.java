@@ -1,8 +1,10 @@
 package net.yapbam.gui.transactiontable;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
@@ -66,13 +68,15 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 	}
 	
 	@Override
-	public boolean isExpense(int row) {
-		return this.subTransactions.get(row).getAmount()<0;
-	}
-
-	@Override
-	public boolean isChecked(int row) {
-		return false;
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
+		if (isSelected) {
+	        renderer.setBackground(table.getSelectionBackground());
+	        renderer.setForeground(table.getSelectionForeground());
+	    } else {
+	        boolean expense = this.subTransactions.get(row).getAmount()<0;  	
+	        renderer.setForeground(table.getForeground());
+	        renderer.setBackground(expense?GenericTransactionTableModel.CASHOUT:GenericTransactionTableModel.CASHIN);
+	    }
 	}
 
 	@Override
