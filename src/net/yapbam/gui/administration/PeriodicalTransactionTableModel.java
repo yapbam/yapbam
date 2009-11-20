@@ -1,8 +1,12 @@
 package net.yapbam.gui.administration;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.text.MessageFormat;
 import java.util.Date;
 
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import net.yapbam.data.AbstractTransaction;
@@ -168,11 +172,6 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
     	else return SwingConstants.CENTER;
 	}
 
-	@Override
-	public boolean isChecked(int row) {
-		return false;
-	}
-
 	GlobalData getGlobalData() {
 		return (GlobalData)this.periodicTransactionListPanel.data;
 	}
@@ -181,4 +180,18 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	protected AbstractTransaction getTransaction(int rowIndex) {
 		return ((GlobalData)this.periodicTransactionListPanel.data).getPeriodicalTransaction(rowIndex);
 	}
+
+	@Override
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
+		super.setRowLook(renderer, table, row, isSelected, hasFocus);
+	    Date last = ((PeriodicalTransaction)this.getTransaction(row)).getNextDateBuilder().getLastDate();
+	    boolean ended = (last!=null) && (last.compareTo(new Date())<0);
+    	Font font = renderer.getFont().deriveFont(ended ? Font.ITALIC : Font.PLAIN);
+    	if (ended) {
+	        renderer.setForeground(Color.GRAY);
+    	}
+    	renderer.setFont(font);
+	}
+	
+	
 }

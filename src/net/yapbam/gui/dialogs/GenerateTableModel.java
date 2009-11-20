@@ -65,11 +65,6 @@ class GenerateTableModel extends GenericTransactionTableModel {
 		throw new IllegalArgumentException();
 	}
 
-	@Override
-	public boolean isChecked(int row) {
-		return false;
-	}
-
 	public void setTransactions(Transaction[] transactions) {
 		this.transactions = transactions;
 		boolean[] enabled = new boolean[transactions.length];

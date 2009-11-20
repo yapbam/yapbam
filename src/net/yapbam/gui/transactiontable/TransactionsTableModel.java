@@ -1,5 +1,7 @@
 package net.yapbam.gui.transactiontable;
 
+import java.awt.Component;
+import java.awt.Font;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -155,8 +157,11 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	}
 
 	@Override
-	public boolean isChecked(int row) {
-		return this.data.getTransaction(row).isChecked();
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
+		super.setRowLook(renderer, table, row, isSelected, hasFocus);
+	    boolean isChecked = this.data.getTransaction(row).isChecked();
+    	Font font = renderer.getFont().deriveFont(isChecked ? Font.ITALIC : Font.PLAIN + Font.BOLD);
+    	renderer.setFont(font);
 	}
 	
 	@Override
