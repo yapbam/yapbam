@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.NullUtils;
 
 /** This class allows the user to just enter a day, or a day and a month, instead of a complete date (day, month, year)
  * It auto completes the typed date with the current month and year.
@@ -68,19 +69,30 @@ public class DateWidget extends JTextField {
 		}
 	}
 
+	/** Get the widget current date.
+	 * @return The date
+	 */
 	public Date getDate() {
 		return this.date;
 	}
 
+	/** Set the widget date.
+	 * The text field is updated.
+	 * @param date The date to set.
+	 */
 	public void setDate(Date date) {
 		if (internalSetDate(date)) this.setText(date==null?"":formatter.format(date));
 	}
 
+	/** Set the date without changing the content of the TextField.
+	 * This method does nothing if the date is equals to the current widget date.
+	 * @param date
+	 * @return true if the value was changed
+	 */
 	private boolean internalSetDate(Date date) {
-		// To nothing if the this date is equals to current widget date
-		if (date==null) { // Be aware of null values
-			if (this.date==null) return false;
-		} else if (date.equals(this.date)) return false;
+		// Does nothing if the this date is equals to current widget date
+		// Be aware of null values
+		if (NullUtils.areEquals(date, this.date)) return false;
 		Date old = this.date;
 		this.date = date;
 		firePropertyChange(DATE_PROPERTY, old, date);
