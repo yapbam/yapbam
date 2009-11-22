@@ -112,7 +112,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	 */
 	private DateWidget getDateField() {
 		if (dateField == null) {
-			dateField = new DateWidget();
+			dateField = new DateWidget(new Date());
 			dateField.setColumns(6);
 			dateField.setToolTipText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate.toolTip")); //$NON-NLS-1$
 			dateField.addKeyListener(new KeyAdapter() {

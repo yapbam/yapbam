@@ -16,22 +16,65 @@ import net.yapbam.util.NullUtils;
 
 /** This class allows the user to just enter a day, or a day and a month, instead of a complete date (day, month, year)
  * It auto completes the typed date with the current month and year.
+ * This field allows you to define what an empty field means. By default, an empty field means a null date, but, using the
+ * setEmptyDate method, you can change this behavior.
+ * This field has an inputVerifier in order to prevent entering something that is not a date in the field. By default, an empty
+ * field is allowed, you can change that calling setIsEmptyNullDateValid. Keep in mind that if you called the setEmptyDate method
+ * with a non null argument, the empty field will always be valid.
  */
 public class DateWidget extends JTextField {
 	private static final long serialVersionUID = 1L;
 	public static final String DATE_PROPERTY = "date";
-	
+		
 	private DateFormat formatter;
 	private Date date;
+	private boolean valid;
+	private Date emptyValue;
+	private boolean isEmptyNullDateValid;
+	
+	/** Set the meaning of an empty field.
+	 * @param date The date that a is equivalent to an empty field.
+	 * By default, this date is null.
+	 */
+	public void setEmptyDate(Date date) {
+		this.emptyValue = date;
+		if (this.getText().trim().length()==0) updateDate();
+	}
+	
+	/** Allow/Disallow this field to be empty (if it means a null date)
+	 * Keep in mind that a now null date for an empty field is always valid.
+	 * @param valid
+	 * @see #setEmptyDate(Date)
+	 */
+	public void setIsEmptyNullDateIsValid(boolean valid) {
+		this.isEmptyNullDateValid = valid;
+		if (this.getText().trim().length()==0) updateDate();
+	}
 
+	/** Constructor.
+	 * Creates a new Date widget. The date is set to today, the empty date is set to null.
+	 * @see #setEmptyDate(Date)
+	 */
 	public DateWidget() {
+		this(null);
+	}
+	
+	/** Constructor.
+	 * Creates a new Date widget. The date is set to today.
+	 * @param emptyDate The date to be set if the field becomes empty
+	 * @see #setEmptyDate(Date)
+	 */
+	public DateWidget(Date emptyDate) {
 		super();
+		this.isEmptyNullDateValid = true;
+		this.emptyValue = emptyDate;
 		formatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
-		this.setDate(new Date());
+		 // Set the field to today's date (we don't use setDate because new Date() returns a date with hours, minutes and seconds fields not always set to 0).
+		this.setText(formatter.format(new Date()));
 		this.setInputVerifier(new DefaultInputVerifier() {
 			protected boolean check(JComponent input, boolean change) {
 				if (change && (date!=null)) setText(formatter.format(date));
-				return date!=null;
+				return valid;
 			}
 		});
 		this.addKeyListener(new KeyAdapter() {
@@ -45,7 +88,8 @@ public class DateWidget extends JTextField {
 	private void updateDate() {
 		String text = this.getText().trim();
 		if (text.length()==0) {
-			internalSetDate(new GregorianCalendar().getTime());
+			internalSetDate(emptyValue);
+			this.valid = (emptyValue!=null) || isEmptyNullDateValid;
 		} else {
 			Date changed = null;
 			try {
@@ -65,12 +109,13 @@ public class DateWidget extends JTextField {
 					}
 				}
 			}
+			this.valid = changed!=null;
 			internalSetDate(changed);
 		}
 	}
 
 	/** Get the widget current date.
-	 * @return The date
+	 * @return The date. If the value contained by the field is not valid, returns null.
 	 */
 	public Date getDate() {
 		return this.date;
@@ -82,6 +127,12 @@ public class DateWidget extends JTextField {
 	 */
 	public void setDate(Date date) {
 		if (internalSetDate(date)) this.setText(date==null?"":formatter.format(date));
+	}
+
+	@Override
+	public void setText(String t) {
+		super.setText(t);
+		updateDate();
 	}
 
 	/** Set the date without changing the content of the TextField.
