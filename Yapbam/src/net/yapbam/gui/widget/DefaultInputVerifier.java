@@ -5,7 +5,7 @@ import java.awt.Toolkit;
 
 import javax.swing.*;
 
-/** A default InputVeriier that turns the component background to red when it is not valid */
+/** A default InputVerifier that turns the component background to red when it is not valid */
 abstract class DefaultInputVerifier extends InputVerifier {
 
 	@Override

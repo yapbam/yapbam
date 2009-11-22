@@ -134,7 +134,7 @@ public class GenerationPanel extends JPanel {
 	 */
 	private DateWidget getDate() {
 		if (date == null) {
-			date = new DateWidget();
+			date = new DateWidget(new Date());
 			date.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {
 					Date old = currentNextDate;

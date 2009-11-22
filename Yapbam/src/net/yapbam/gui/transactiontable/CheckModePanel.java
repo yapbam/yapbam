@@ -56,7 +56,7 @@ public class CheckModePanel extends JPanel {
         valueDateLabel = new JCheckBox(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
         valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
 		add(valueDateLabel);
-		valueDate = new DateWidget();
+		valueDate = new DateWidget(new Date());
 		valueDate.addKeyListener(listener);
         valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
         add(valueDate);

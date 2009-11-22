@@ -87,7 +87,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
-		defDate = new DateWidget();
+		defDate = new DateWidget(new Date());
 		defDate.addFocusListener(focusListener);
 		defDate.addKeyListener(listener);
         c.gridx=1; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
@@ -112,7 +112,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void buildDateField(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {
 		JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
 		centerPane.add(titleDate, c);
-		date = new DateWidget();
+		date = new DateWidget(new Date());
 		date.addFocusListener(focusListener);
 /*		date.addFocusListener(new FocusListener() {
 			@Override
