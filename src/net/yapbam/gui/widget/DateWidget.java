@@ -1,7 +1,12 @@
 package net.yapbam.gui.widget;
 
+import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import net.yapbam.gui.LocalizationData;
@@ -23,6 +29,11 @@ import net.yapbam.util.NullUtils;
  * with a non null argument, the empty field will always be valid.
  */
 public class DateWidget extends JTextField {
+	//FIXME The jFree DateChooser uses comboBox. It seems that it's impossible to use a comboBox in a JPopUpMenu (probably, because a combo displays a popup
+	// and there could be only one popup displayed at a time).
+	// A fix could be to replace these combo by up/down buttons (see microba panel).
+	//FIXME The today button's label is always in english
+	//FIXME The jFree DateChooser can't accept null date
 	private static final long serialVersionUID = 1L;
 	public static final String DATE_PROPERTY = "date";
 		
@@ -31,6 +42,72 @@ public class DateWidget extends JTextField {
 	private boolean valid;
 	private Date emptyValue;
 	private boolean isEmptyNullDateValid;
+	private CalendarDateChooser dateChooser;
+	
+	/** Constructor.
+	 * Creates a new Date widget. The date is set to today, the empty date is set to null.
+	 * @see #setEmptyDate(Date)
+	 */
+	public DateWidget() {
+		this(null);
+	}
+	
+	/** Constructor.
+	 * Creates a new Date widget. The date is set to today.
+	 * @param emptyDate The date to be set if the field becomes empty
+	 * @see #setEmptyDate(Date)
+	 */
+	public DateWidget(Date emptyDate) {
+		super();
+		final JPopupMenu popup = new JPopupMenu();
+		dateChooser = new CalendarDateChooser(new GregorianCalendar(), true);
+		dateChooser.setChosenDateButtonColor(Color.RED);
+		dateChooser.setChosenOtherButtonColor(Color.GRAY);
+		dateChooser.setChosenMonthButtonColor(Color.WHITE);
+		dateChooser.addPropertyChangeListener(CalendarDateChooser.DATE_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				DateWidget.this.setDate((Date)evt.getNewValue());
+			}
+		});
+		popup.add(dateChooser);
+		this.isEmptyNullDateValid = true;
+		this.emptyValue = emptyDate;
+		formatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
+		 // Set the field to today's date (we don't use setDate because new Date() returns a date with hours, minutes and seconds fields not always set to 0).
+		this.setText(formatter.format(new Date()));
+		this.setInputVerifier(new DefaultInputVerifier() {
+			protected boolean check(JComponent input, boolean change) {
+				if (change && (date!=null)) setText(formatter.format(date));
+				return valid;
+			}
+		});
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_DOWN) {
+					popup.show(DateWidget.this, 0, getHeight());
+//					requestFocus(false);
+				} else {
+					updateDate();
+				}
+			}
+		});
+		addFocusListener(new FocusListener() {		
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (popup.isVisible() && !e.isTemporary()) {
+					popup.setVisible(false);
+System.out.println (e.getOppositeComponent());
+					e.getOppositeComponent().requestFocus();
+				}
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
+	}
 	
 	/** Set the meaning of an empty field.
 	 * @param date The date that a is equivalent to an empty field.
@@ -51,40 +128,6 @@ public class DateWidget extends JTextField {
 		if (this.getText().trim().length()==0) updateDate();
 	}
 
-	/** Constructor.
-	 * Creates a new Date widget. The date is set to today, the empty date is set to null.
-	 * @see #setEmptyDate(Date)
-	 */
-	public DateWidget() {
-		this(null);
-	}
-	
-	/** Constructor.
-	 * Creates a new Date widget. The date is set to today.
-	 * @param emptyDate The date to be set if the field becomes empty
-	 * @see #setEmptyDate(Date)
-	 */
-	public DateWidget(Date emptyDate) {
-		super();
-		this.isEmptyNullDateValid = true;
-		this.emptyValue = emptyDate;
-		formatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
-		 // Set the field to today's date (we don't use setDate because new Date() returns a date with hours, minutes and seconds fields not always set to 0).
-		this.setText(formatter.format(new Date()));
-		this.setInputVerifier(new DefaultInputVerifier() {
-			protected boolean check(JComponent input, boolean change) {
-				if (change && (date!=null)) setText(formatter.format(date));
-				return valid;
-			}
-		});
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				updateDate();
-			}
-		});
-	}
-	
 	private void updateDate() {
 		String text = this.getText().trim();
 		if (text.length()==0) {
@@ -126,7 +169,9 @@ public class DateWidget extends JTextField {
 	 * @param date The date to set.
 	 */
 	public void setDate(Date date) {
-		if (internalSetDate(date)) this.setText(date==null?"":formatter.format(date));
+		if (internalSetDate(date)) {
+			this.setText(date==null?"":formatter.format(date));
+		}
 	}
 
 	@Override
@@ -144,6 +189,7 @@ public class DateWidget extends JTextField {
 		// Does nothing if the this date is equals to current widget date
 		// Be aware of null values
 		if (NullUtils.areEquals(date, this.date)) return false;
+		dateChooser.setDate(date);
 		Date old = this.date;
 		this.date = date;
 		firePropertyChange(DATE_PROPERTY, old, date);

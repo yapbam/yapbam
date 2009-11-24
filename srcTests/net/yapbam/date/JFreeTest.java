@@ -57,15 +57,9 @@ public class JFreeTest extends JPanel {
 				}
 				
 			};
-			dateChooserPanel.addPropertyChangeListener(new PropertyChangeListener() {
-				
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					System.out.println (evt);					
-				}
-			});
 			dateChooserPanel.setChosenDateButtonColor(Color.GRAY);
 			dateChooserPanel.setChosenOtherButtonColor(Color.WHITE);
+			dateChooserPanel.setChosenMonthButtonColor(Color.BLUE);
 		}
 		return dateChooserPanel;
 	}
