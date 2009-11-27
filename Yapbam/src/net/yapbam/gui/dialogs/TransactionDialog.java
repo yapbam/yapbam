@@ -109,22 +109,11 @@ public class TransactionDialog extends AbstractTransactionDialog {
         c.gridx++;
 	}
 
-	protected void buildDateField(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {
+	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
 		centerPane.add(titleDate, c);
 		date = new DateWidget(new Date());
 		date.addFocusListener(focusListener);
-/*		date.addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				Mode m = getCurrentMode();
-				DateStepper vdc = receipt.isSelected()?m.getReceiptVdc():m.getExpenseVdc();
-				defDate.setDate(vdc.getNextStep(date.getDate()));
-			}
-			@Override
-			public void focusGained(FocusEvent e) {}
-		});
-*/
 		date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -133,9 +122,9 @@ public class TransactionDialog extends AbstractTransactionDialog {
 					DateStepper vdc = receipt.isSelected()?m.getReceiptVdc():m.getExpenseVdc();
 					defDate.setDate(vdc.getNextStep(date.getDate()));
 				}
+				updateOkButtonEnabled();
 			}
 		});
-		date.addKeyListener(listener);
         c.gridx++; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(date,c);
         c.gridx++;

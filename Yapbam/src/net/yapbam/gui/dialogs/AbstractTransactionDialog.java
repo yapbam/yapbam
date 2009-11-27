@@ -111,7 +111,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
         c = new GridBagConstraints();
 
         c.insets = insets; c.gridx=0; c.gridy=2; c.anchor = GridBagConstraints.WEST;
-    	buildDateField(centerPane, focusListener, listener, c);
+    	buildDateField(centerPane, focusListener, c);
         
         c.fill=GridBagConstraints.NONE; c.anchor = GridBagConstraints.WEST; c.weightx = 0;
         centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.amount")),c); //$NON-NLS-1$
@@ -183,7 +183,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 
 	protected abstract void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);
 
-	protected abstract void buildDateField(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c);
+	protected abstract void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);
 
 	private void buildModes() {
 		modes.setActionEnabled(false);
