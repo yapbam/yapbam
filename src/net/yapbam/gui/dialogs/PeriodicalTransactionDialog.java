@@ -87,7 +87,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 
 	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
 
-	protected void buildDateField(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {}
+	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
 
 	public PeriodicalTransaction getTransaction() {
 		return (PeriodicalTransaction) super.getResult();
