@@ -6,6 +6,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Date;
 
 import javax.swing.JCheckBox;
@@ -57,8 +59,13 @@ public class CheckModePanel extends JPanel {
         valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
 		add(valueDateLabel);
 		valueDate = new DateWidget(new Date());
-		valueDate.addKeyListener(listener);
         valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
+        valueDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				refreshOk();
+			}
+		});
         add(valueDate);
         
         setSelected(false);

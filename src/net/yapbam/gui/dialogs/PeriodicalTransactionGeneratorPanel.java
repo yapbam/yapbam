@@ -20,8 +20,8 @@ import net.yapbam.gui.widget.DateWidget;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -115,8 +115,9 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			dateField = new DateWidget(new Date());
 			dateField.setColumns(6);
 			dateField.setToolTipText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate.toolTip")); //$NON-NLS-1$
-			dateField.addKeyListener(new KeyAdapter() {
-				public void keyReleased(KeyEvent e) {
+			dateField.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
 					updateTransactions();
 				}
 			});
