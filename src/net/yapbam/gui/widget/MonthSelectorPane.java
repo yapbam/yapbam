@@ -15,6 +15,8 @@ import java.util.Locale;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MonthSelectorPane extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +32,8 @@ public class MonthSelectorPane extends JPanel {
 	private Calendar currentDate;
 	private DateFormat formater;
 
+	private JButton now = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -37,9 +41,13 @@ public class MonthSelectorPane extends JPanel {
 		this(Locale.getDefault());
 	}
 	
+	/** A constructor that accepts a locale
+	 * @param locale The locale to be used in the widget.
+	 */
 	public MonthSelectorPane(Locale locale) {
 		super();
 		this.currentDate = Calendar.getInstance(locale);
+		this.currentDate.set(this.currentDate.get(Calendar.YEAR), this.currentDate.get(Calendar.MONTH), 1, 0, 0, 0);
 		this.formater = new SimpleDateFormat("MMMM yyyy", locale);
 		initialize();
 	}
@@ -54,6 +62,16 @@ public class MonthSelectorPane extends JPanel {
 		}
 	}
 	
+	/** Get the currently selected month.
+	 * @return The first day of the selected month at 0:0:0 AM.
+	 */
+	public Date getMonth() {
+		return this.currentDate.getTime();
+	}
+	
+	/** Move forward or backward the currently selected month.
+	 * @param months The number of months to increment the current month. This amount can be negative.
+	 */
 	public void add(int months) {
 		Date old = this.currentDate.getTime();
 		this.currentDate.add(Calendar.MONTH, months);
@@ -68,20 +86,26 @@ public class MonthSelectorPane extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 2;
+		gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints11.gridy = 1;
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 4;
 		gridBagConstraints4.insets = new Insets(5, 5, 5, 5);
-		gridBagConstraints4.gridy = 0;
+		gridBagConstraints4.gridy = 1;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.gridx = 3;
 		gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
-		gridBagConstraints3.gridy = 0;
+		gridBagConstraints3.gridy = 1;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.gridx = 2;
+		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints2.weightx = 1.0D;
 		gridBagConstraints2.anchor = GridBagConstraints.CENTER;
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints2.gridwidth = 0;
 		gridBagConstraints2.gridy = 0;
 		currentMonth = new JLabel();
 		currentMonth.setText(formater.format(this.currentDate.getTime()));
@@ -90,11 +114,11 @@ public class MonthSelectorPane extends JPanel {
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 1;
 		gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
-		gridBagConstraints1.gridy = 0;
+		gridBagConstraints1.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridy = 1;
 		this.setSize(400, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getPreviousYear(), gridBagConstraints);
@@ -102,6 +126,7 @@ public class MonthSelectorPane extends JPanel {
 		this.add(currentMonth, gridBagConstraints2);
 		this.add(getNextMonth(), gridBagConstraints3);
 		this.add(getNextYear(), gridBagConstraints4);
+		this.add(getNow(), gridBagConstraints11);
 	}
 
 	/**
@@ -177,4 +202,22 @@ public class MonthSelectorPane extends JPanel {
 		return nextYear;
 	}
 
+	/**
+	 * This method initializes now	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	public JButton getNow() {
+		if (now == null) {
+			now = new JButton();
+			now.setText("V");
+			now.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setMonth(new Date());
+				}
+			});
+		}
+		return now;
+	}
 }

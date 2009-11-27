@@ -4,8 +4,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import net.yapbam.gui.widget.DateWidget;
 import java.awt.GridBagConstraints;
-import java.util.Date;
-import javax.swing.JLabel;
+
 import javax.swing.JTextField;
 
 public class DateWidgetTestPane extends JPanel {

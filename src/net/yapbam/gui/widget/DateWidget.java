@@ -1,6 +1,7 @@
 package net.yapbam.gui.widget;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -29,11 +30,6 @@ import net.yapbam.util.NullUtils;
  * with a non null argument, the empty field will always be valid.
  */
 public class DateWidget extends JTextField {
-	//FIXME The jFree DateChooser uses comboBox. It seems that it's impossible to use a comboBox in a JPopUpMenu (probably, because a combo displays a popup
-	// and there could be only one popup displayed at a time).
-	// A fix could be to replace these combo by up/down buttons (see microba panel).
-	//FIXME The today button's label is always in english
-	//FIXME The jFree DateChooser can't accept null date
 	private static final long serialVersionUID = 1L;
 	public static final String DATE_PROPERTY = "date";
 		
@@ -42,7 +38,8 @@ public class DateWidget extends JTextField {
 	private boolean valid;
 	private Date emptyValue;
 	private boolean isEmptyNullDateValid;
-	private CalendarDateChooser dateChooser;
+	private DateChooserPanel dateChooser;
+	private boolean isUpdatingPopUp;
 	
 	/** Constructor.
 	 * Creates a new Date widget. The date is set to today, the empty date is set to null.
@@ -60,14 +57,17 @@ public class DateWidget extends JTextField {
 	public DateWidget(Date emptyDate) {
 		super();
 		final JPopupMenu popup = new JPopupMenu();
-		dateChooser = new CalendarDateChooser(new GregorianCalendar(), true);
+		dateChooser = new DateChooserPanel(LocalizationData.getLocale());
 		dateChooser.setChosenDateButtonColor(Color.RED);
 		dateChooser.setChosenOtherButtonColor(Color.GRAY);
 		dateChooser.setChosenMonthButtonColor(Color.WHITE);
-		dateChooser.addPropertyChangeListener(CalendarDateChooser.DATE_PROPERTY, new PropertyChangeListener() {
+		dateChooser.addPropertyChangeListener(DateChooserPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				DateWidget.this.setDate((Date)evt.getNewValue());
+				if (!isUpdatingPopUp) {
+					popup.setVisible(false);
+					DateWidget.this.setDate((Date)evt.getNewValue());
+				}
 			}
 		});
 		popup.add(dateChooser);
@@ -87,7 +87,7 @@ public class DateWidget extends JTextField {
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_DOWN) {
 					popup.show(DateWidget.this, 0, getHeight());
-//					requestFocus(false);
+					requestFocus(false);
 				} else {
 					updateDate();
 				}
@@ -97,9 +97,10 @@ public class DateWidget extends JTextField {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (popup.isVisible() && !e.isTemporary()) {
-					popup.setVisible(false);
-System.out.println (e.getOppositeComponent());
-					e.getOppositeComponent().requestFocus();
+					if (!isContainedBy(e.getOppositeComponent(), popup)) {
+						popup.setVisible(false);
+						e.getOppositeComponent().requestFocus();
+					}
 				}
 			}
 			
@@ -107,6 +108,14 @@ System.out.println (e.getOppositeComponent());
 			public void focusGained(FocusEvent e) {
 			}
 		});
+	}
+	
+	private static boolean isContainedBy (Component c, Component container) {
+		while (c!=null) {
+			if (c==container) return true;
+			c = c.getParent();
+		}
+		return false;
 	}
 	
 	/** Set the meaning of an empty field.
@@ -189,7 +198,9 @@ System.out.println (e.getOppositeComponent());
 		// Does nothing if the this date is equals to current widget date
 		// Be aware of null values
 		if (NullUtils.areEquals(date, this.date)) return false;
+		isUpdatingPopUp=true;
 		dateChooser.setDate(date);
+		isUpdatingPopUp=false;
 		Date old = this.date;
 		this.date = date;
 		firePropertyChange(DATE_PROPERTY, old, date);
