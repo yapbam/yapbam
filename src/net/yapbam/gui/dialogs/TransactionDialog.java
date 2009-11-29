@@ -3,7 +3,6 @@ package net.yapbam.gui.dialogs;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
@@ -85,11 +84,16 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				defDate.getDate(), statementId, subTransactions);
 	}
 	
-	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {
+	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
 		defDate = new DateWidget(new Date());
 		defDate.addFocusListener(focusListener);
-		defDate.addKeyListener(listener);
+		defDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		});
         c.gridx=1; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(defDate,c);
         c.gridx=2; c.fill=GridBagConstraints.NONE; c.weightx = 0;

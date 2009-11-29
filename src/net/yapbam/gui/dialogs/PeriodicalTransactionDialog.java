@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -83,7 +82,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 				generationPanel.isActivated(), generationPanel.getDateStepper());
 	}
 	
-	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c) {}
+	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
 
 	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
 
