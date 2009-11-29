@@ -151,7 +151,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
         
         c = new GridBagConstraints();
 		c.insets = insets; c.gridx=0; c.gridy=5; c.anchor = GridBagConstraints.WEST;
-		buildStatementFields(centerPane, focusListener, listener, c);
+		buildStatementFields(centerPane, focusListener, c);
 
 		c.gridx=0; c.gridy++; c.gridwidth = 6; c.fill=GridBagConstraints.HORIZONTAL;
 		centerPane.add(new JSeparator(JSeparator.HORIZONTAL),c);
@@ -179,7 +179,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		return centerPane;
 	}
 
-	protected abstract void buildStatementFields(JPanel centerPane, FocusListener focusListener, KeyListener listener, GridBagConstraints c);
+	protected abstract void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);
 
 	protected abstract void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);
 

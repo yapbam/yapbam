@@ -9,6 +9,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -135,8 +137,9 @@ public class GenerationPanel extends JPanel {
 	private DateWidget getDate() {
 		if (date == null) {
 			date = new DateWidget(new Date());
-			date.addKeyListener(new KeyAdapter() {
-				public void keyReleased(KeyEvent e) {
+			date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
 					Date old = currentNextDate;
 					currentNextDate = date.getDate();
 					if (!areEquals(old, currentNextDate)) {
@@ -370,8 +373,9 @@ public class GenerationPanel extends JPanel {
 			lastDate.setColumns(6);
 			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
 			lastDate.addFocusListener(new AutoSelectFocusListener());
-			lastDate.addKeyListener(new KeyAdapter() {
-				public void keyReleased(KeyEvent e) {
+			lastDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
 					updateDateStepper();
 				}
 			});
