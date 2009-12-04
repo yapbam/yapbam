@@ -14,9 +14,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.DateWidget;
+import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class CheckModePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -24,7 +26,7 @@ public class CheckModePanel extends JPanel {
 	private JLabel statementLabel;
 	private JTextField statement;
 	private JCheckBox valueDateLabel;
-	private DateWidget valueDate;
+	private DateWidgetPanel valueDate;
 	private JCheckBox checkModeBox;
 	private boolean ok;
 	
@@ -57,10 +59,17 @@ public class CheckModePanel extends JPanel {
         add(statement);
         valueDateLabel = new JCheckBox(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
         valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
+        valueDateLabel.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				refreshOk();
+			}
+		});
 		add(valueDateLabel);
-		valueDate = new DateWidget(new Date());
+		valueDate = new DateWidgetPanel();
+		valueDate.setLocale(LocalizationData.getLocale());
         valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
-        valueDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+        valueDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				refreshOk();
@@ -87,7 +96,7 @@ public class CheckModePanel extends JPanel {
 
 	private void refreshOk() {
 		boolean selected = checkModeBox.isSelected();
-		boolean dateOk = (valueDate.getDate()!=null);
+		boolean dateOk = (!valueDateLabel.isSelected()) || (valueDate.getDate()!=null);
 		boolean statementOk = !statement.getText().trim().isEmpty();
 		valueDateLabel.setForeground(!selected || dateOk ? Color.black : Color.red);
 		statementLabel.setForeground(!selected || statementOk ? Color.black : Color.red);

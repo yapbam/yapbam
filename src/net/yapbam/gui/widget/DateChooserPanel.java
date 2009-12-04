@@ -85,7 +85,7 @@ import net.yapbam.util.NullUtils;
 /**
  * A panel that allows the user to select a date.
  *
- * @author David Gilbert
+ * @author David Gilbert && JM Astesana
  */
 public class DateChooserPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -126,6 +126,11 @@ public class DateChooserPanel extends JPanel implements ActionListener {
      */
     private JButton[] buttons;
     
+    /**
+     * An array of labels used to display day of week names.
+     */
+    private JLabel[] days;
+    
     private MonthSelectorPane monthSelector;
 
     /**
@@ -139,32 +144,17 @@ public class DateChooserPanel extends JPanel implements ActionListener {
      * selection.
      */
     public DateChooserPanel() {
-        this(Locale.getDefault());
-    }
-
-    /**
-     * Constructs a new date chooser panel.
-     *
-     * @param calendar     the calendar controlling the date.
-     */
-    public DateChooserPanel(final Locale locale) {
-
         super(new BorderLayout());
-        setLocale(locale);
 
         this.chosenDateButtonColor = UIManager.getColor("textHighlight");
         this.chosenMonthButtonColor = UIManager.getColor("control");
         this.chosenOtherButtonColor = UIManager.getColor("controlShadow");
 
         // the default date is today...
-        this.chosenDate = Calendar.getInstance(locale);
-        this.firstDayOfWeek = this.chosenDate.getFirstDayOfWeek();
-        this.WEEK_DAYS = new int[7];
-        for (int i = 0; i < 7; i++) {
-            this.WEEK_DAYS[i] = ((this.firstDayOfWeek + i - 1) % 7) + 1;
-        }
+        this.chosenDate = Calendar.getInstance(getLocale());
+        initializeDays();
 
-        monthSelector = new MonthSelectorPane(locale);
+        monthSelector = new MonthSelectorPane();
         add(monthSelector, BorderLayout.NORTH);
         add(getCalendarPanel(), BorderLayout.CENTER);
         monthSelector.addPropertyChangeListener(MonthSelectorPane.DATE_PROPERTY, new PropertyChangeListener() {
@@ -181,6 +171,23 @@ public class DateChooserPanel extends JPanel implements ActionListener {
 		});
         refreshButtons();
     }
+
+    @Override
+	public void setLocale(Locale l) {
+		super.setLocale(l);
+		monthSelector.setLocale(l);
+		initializeDays();
+		updateDays();
+		refreshButtons();
+	}
+
+	private void initializeDays() {
+		this.firstDayOfWeek = Calendar.getInstance(getLocale()).getFirstDayOfWeek();
+        this.WEEK_DAYS = new int[7];
+        for (int i = 0; i < 7; i++) {
+            this.WEEK_DAYS[i] = ((this.firstDayOfWeek + i - 1) % 7) + 1;
+        }
+	}
 
     /**
      * Sets the date chosen in the panel.
@@ -234,10 +241,11 @@ public class DateChooserPanel extends JPanel implements ActionListener {
         final JPanel p = new JPanel(new GridLayout(7, 7));
         final DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(getLocale());
         final String[] weekDays = dateFormatSymbols.getShortWeekdays();
+        this.days = new JLabel[this.WEEK_DAYS.length];
         
         for (int i = 0; i < this.WEEK_DAYS.length; i++) {
-            p.add(new JLabel(weekDays[this.WEEK_DAYS[i]], 
-                    SwingConstants.CENTER));
+        	this.days[i] = new JLabel(weekDays[this.WEEK_DAYS[i]], SwingConstants.CENTER);
+            p.add(this.days[i]);
         }
 
         this.buttons = new JButton[42];
@@ -253,7 +261,14 @@ public class DateChooserPanel extends JPanel implements ActionListener {
             p.add(b);
         }
         return p;
-
+    }
+    
+    private void updateDays() {
+        final DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(getLocale());
+        final String[] weekDays = dateFormatSymbols.getShortWeekdays();
+    	for (int i = 0; i < days.length; i++) {
+			days[i].setText(weekDays[this.WEEK_DAYS[i]]);
+		}
     }
 
     /**
