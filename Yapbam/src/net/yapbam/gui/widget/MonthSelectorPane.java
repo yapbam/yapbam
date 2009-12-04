@@ -38,20 +38,20 @@ public class MonthSelectorPane extends JPanel {
 	 * This is the default constructor
 	 */
 	public MonthSelectorPane() {
-		this(Locale.getDefault());
-	}
-	
-	/** A constructor that accepts a locale
-	 * @param locale The locale to be used in the widget.
-	 */
-	public MonthSelectorPane(Locale locale) {
-		super();
-		this.currentDate = Calendar.getInstance(locale);
+		this.currentDate = Calendar.getInstance();
 		this.currentDate.set(this.currentDate.get(Calendar.YEAR), this.currentDate.get(Calendar.MONTH), 1, 0, 0, 0);
-		this.formater = new SimpleDateFormat("MMMM yyyy", locale);
+		this.currentDate.set(Calendar.MILLISECOND, 0);
+		this.formater = new SimpleDateFormat("MMMM yyyy");
 		initialize();
 	}
 	
+	@Override
+	public void setLocale(Locale l) {
+		super.setLocale(l);
+		this.formater = new SimpleDateFormat("MMMM yyyy", l);
+		this.currentMonth.setText(this.formater.format(currentDate.getTime()));
+	}
+
 	@SuppressWarnings("deprecation")
 	public void setMonth(Date date) {
 		if ((date.getYear()+1900!=this.currentDate.get(Calendar.YEAR)) || (date.getMonth()!=this.currentDate.get(Calendar.MONTH))) {

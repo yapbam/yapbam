@@ -2,16 +2,17 @@ package net.yapbam.date;
 
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
-import net.yapbam.gui.widget.DateWidget;
 import java.awt.GridBagConstraints;
+import java.util.Locale;
 
 import javax.swing.JTextField;
+import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class DateWidgetTestPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private DateWidget dateWidget = null;
 	private JTextField jTextField = null;
+	private DateWidgetPanel dateWidgetPanel = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -26,44 +27,43 @@ public class DateWidgetTestPane extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.gridy = 0;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints2.gridy = 1;
 		gridBagConstraints2.weightx = 1.0;
 		gridBagConstraints2.gridx = 0;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.weightx = 1.0;
-		gridBagConstraints.gridx = 0;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
-		this.add(getDateWidget(), gridBagConstraints);
 		this.add(getJTextField(), gridBagConstraints2);
+		this.add(getDateWidgetPanel(), gridBagConstraints1);
 	}
 
 	/**
-	 * This method initializes dateWidget	
+	 * This method initializes dateWidgetPanel	
 	 * 	
-	 * @return net.yapbam.gui.widget.DateWidget	
+	 * @return net.yapbam.gui.widget.DateWidgetPanel	
 	 */
-	private DateWidget getDateWidget() {
-		if (dateWidget == null) {
-			dateWidget = new DateWidget();
-			dateWidget.addPropertyChangeListener("date",
+	private DateWidgetPanel getDateWidgetPanel() {
+		if (dateWidgetPanel == null) {
+			dateWidgetPanel = new DateWidgetPanel();
+			dateWidgetPanel.setLocale(Locale.ENGLISH);
+			dateWidgetPanel.addPropertyChangeListener("date",
 					new java.beans.PropertyChangeListener() {
 						public void propertyChange(java.beans.PropertyChangeEvent e) {
-							System.out.println("propertyChange(date) : "+e.getNewValue()); 
+							System.out.println("> propertyChange(date) : "+e.getNewValue()); 
 						}
 					});
-			System.out.println ("Initial value = "+dateWidget.getDate());
-			dateWidget.setDate(null);
-//			dateWidget.setIsEmptyNullDateIsValid(false);
-			dateWidget.setColumns(6);
+			System.out.println ("Initial value = "+dateWidgetPanel.getDate());
+			dateWidgetPanel.setDate(null);
+			dateWidgetPanel.setIsEmptyNullDateIsValid(false);
+			dateWidgetPanel.setColumns(6);
 		}
-		return dateWidget;
+		return dateWidgetPanel;
 	}
-	
+
 	/**
 	 * This method initializes jTextField	
 	 * 	
@@ -76,5 +76,4 @@ public class DateWidgetTestPane extends JPanel {
 		}
 		return jTextField;
 	}
-
 }
