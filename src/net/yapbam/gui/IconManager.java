@@ -29,7 +29,7 @@ public abstract class IconManager {
 		
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon create(String path) {
-	    URL imgURL = MainMenuBar.class.getResource(path);
+	    URL imgURL = IconManager.class.getResource(path);
 	    if (imgURL != null) {
 	        return new ImageIcon(imgURL);
 	    } else {
