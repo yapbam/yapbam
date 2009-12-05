@@ -11,7 +11,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /** This panel contains a DateWidget and a button that shows a calendar popup.
  * @see DateWidget
@@ -25,9 +26,9 @@ public class DateWidgetPanel extends JPanel {
 	public static final String DATE_PROPERTY = DateWidget.DATE_PROPERTY;  //  @jve:decl-index=0:
 	
 	private DateWidget dateWidget = null;
-	private JButton jButton = null;
 	private DateChooserPanel dateChooser;
 	private JPopupMenu popup;
+	private JLabel jLabel = null;
 
 	/**
 	 * This is the default constructor
@@ -98,10 +99,22 @@ public class DateWidgetPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.gridx = 1;
-		gridBagConstraints1.fill = GridBagConstraints.BOTH;
-		gridBagConstraints1.gridy = 0;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 1;
+		gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints11.gridy = 0;
+		jLabel = new JLabel();
+		jLabel.setText("");
+		jLabel.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/calendar.png")));
+		jLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				if (!popup.isVisible()) {
+					DateWidget widget = getDateWidget();
+					dateChooser.setDate(widget.getDate());
+					popup.show(widget, 0, widget.getHeight());
+				}
+			}
+		});
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.gridy = 0;
@@ -110,7 +123,7 @@ public class DateWidgetPanel extends JPanel {
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getDateWidget(), gridBagConstraints);
-		this.add(getJButton(), gridBagConstraints1);
+		this.add(jLabel, gridBagConstraints11);
 	}
 
 	/**
@@ -129,28 +142,6 @@ public class DateWidgetPanel extends JPanel {
 			});
 		}
 		return dateWidget;
-	}
-
-	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getJButton() {
-		if (jButton == null) {
-			jButton = new JButton();
-			jButton.setFocusable(false);
-			jButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (!popup.isVisible()) {
-						DateWidget widget = getDateWidget();
-						dateChooser.setDate(widget.getDate());
-						popup.show(widget, 0, widget.getHeight());
-					}
-				}
-			});
-		}
-		return jButton;
 	}
 
 	/**

@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 
 public class MonthSelectorPane extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -137,7 +138,7 @@ public class MonthSelectorPane extends JPanel {
 	private JButton getPreviousYear() {
 		if (previousYear == null) {
 			previousYear = new JButton();
-			previousYear.setText("<<");
+			previousYear.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/fast-rewind.png")));
 			previousYear.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					add(-12);
@@ -155,7 +156,7 @@ public class MonthSelectorPane extends JPanel {
 	private JButton getPreviousMonth() {
 		if (previousMonth == null) {
 			previousMonth = new JButton();
-			previousMonth.setText("<");
+			previousMonth.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/rewind.png")));
 			previousMonth.setPreferredSize(new Dimension(41, 26));
 			previousMonth.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -174,7 +175,8 @@ public class MonthSelectorPane extends JPanel {
 	private JButton getNextMonth() {
 		if (nextMonth == null) {
 			nextMonth = new JButton();
-			nextMonth.setText(">");
+			nextMonth.setText("");
+			nextMonth.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/forward.png")));
 			nextMonth.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					add(1);
@@ -192,7 +194,8 @@ public class MonthSelectorPane extends JPanel {
 	private JButton getNextYear() {
 		if (nextYear == null) {
 			nextYear = new JButton();
-			nextYear.setText(">>");
+			nextYear.setText("");
+			nextYear.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/fast-forward.png")));
 			nextYear.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					add(12);
@@ -210,7 +213,8 @@ public class MonthSelectorPane extends JPanel {
 	public JButton getNow() {
 		if (now == null) {
 			now = new JButton();
-			now.setText("V");
+			now.setText("");
+			now.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/stop.png")));
 			now.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
