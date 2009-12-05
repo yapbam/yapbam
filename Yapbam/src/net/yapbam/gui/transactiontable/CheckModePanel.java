@@ -67,6 +67,7 @@ public class CheckModePanel extends JPanel {
 		});
 		add(valueDateLabel);
 		valueDate = new DateWidgetPanel();
+		valueDate.setDate(null);
 		valueDate.setLocale(LocalizationData.getLocale());
         valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
         valueDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {

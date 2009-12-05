@@ -13,15 +13,15 @@ import javax.swing.*;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.DateWidget;
+import net.yapbam.gui.widget.DateWidgetPanel;
 
 /** This dialog allows to create or edit a transaction */
 public class TransactionDialog extends AbstractTransactionDialog {
 	private static final long serialVersionUID = 1L;
 	
-	private DateWidget date;
+	private DateWidgetPanel date;
 	private JTextField transactionNumber;
-	private DateWidget defDate;
+	private DateWidgetPanel defDate;
 	private JTextField statement;
 	
 	/** Display the creation dialog, if the creation is confirmed, add the transaction to the global data 
@@ -86,9 +86,9 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
-		defDate = new DateWidget(new Date());
-		defDate.addFocusListener(focusListener);
-		defDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+		defDate = new DateWidgetPanel();
+		defDate.addFocusListener(focusListener); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
+		defDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateOkButtonEnabled();
@@ -116,9 +116,9 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
 		centerPane.add(titleDate, c);
-		date = new DateWidget(new Date());
-		date.addFocusListener(focusListener);
-		date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+		date = new DateWidgetPanel();
+		date.addFocusListener(focusListener); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
+		date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getNewValue()!=null) {

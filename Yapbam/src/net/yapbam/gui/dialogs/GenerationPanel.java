@@ -20,7 +20,7 @@ import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.DateWidget;
+import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.gui.widget.IntegerWidget;
 import net.yapbam.util.NullUtils;
 
@@ -36,7 +36,7 @@ public class GenerationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JCheckBox activatedBox = null;
 	private JLabel jLabel = null;
-	private DateWidget date = null;
+	private DateWidgetPanel date = null;
 	private JLabel jLabel1 = null;
 	private IntegerWidget nb = null;
 	private JComboBox kind = null;
@@ -48,7 +48,7 @@ public class GenerationPanel extends JPanel {
 	private DateStepper currentDateStepper;  //  @jve:decl-index=0:
 	private Date currentNextDate;  //  @jve:decl-index=0:
 	private JLabel jLabel3 = null;
-	private DateWidget lastDate = null;
+	private DateWidgetPanel lastDate = null;
 
 	public GenerationPanel() {
 		super();
@@ -134,10 +134,10 @@ public class GenerationPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private DateWidget getDate() {
+	private DateWidgetPanel getDate() {
 		if (date == null) {
-			date = new DateWidget(new Date());
-			date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+			date = new DateWidgetPanel();
+			date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					Date old = currentNextDate;
@@ -147,7 +147,7 @@ public class GenerationPanel extends JPanel {
 					}
 				}
 			});
-			date.addFocusListener(new AutoSelectFocusListener());
+			date.addFocusListener(new AutoSelectFocusListener()); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
 			date.setColumns(6);
 			date.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.nextDate.toolTip")); //$NON-NLS-1$
 		}
@@ -366,14 +366,14 @@ public class GenerationPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.DateWidget	
 	 */
-	private DateWidget getLastDate() {
+	private DateWidgetPanel getLastDate() {
 		if (lastDate == null) {
-			lastDate = new DateWidget();
+			lastDate = new DateWidgetPanel();
 			lastDate.setDate(null);
 			lastDate.setColumns(6);
 			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
-			lastDate.addFocusListener(new AutoSelectFocusListener());
-			lastDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+			lastDate.addFocusListener(new AutoSelectFocusListener()); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
+			lastDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					updateDateStepper();

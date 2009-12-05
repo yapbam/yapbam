@@ -16,7 +16,7 @@ import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.util.JTableListener;
-import net.yapbam.gui.widget.DateWidget;
+import net.yapbam.gui.widget.DateWidgetPanel;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -37,7 +37,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;
-	private DateWidget dateField = null;
+	private DateWidgetPanel dateField = null;
 	private Date lastDate;
 	private JLabel summary = null;
 	private JScrollPane jScrollPane = null;
@@ -110,12 +110,12 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.ihm.widget.DateWidget	
 	 */
-	private DateWidget getDateField() {
+	private DateWidgetPanel getDateField() {
 		if (dateField == null) {
-			dateField = new DateWidget(new Date());
+			dateField = new DateWidgetPanel();
 			dateField.setColumns(6);
 			dateField.setToolTipText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate.toolTip")); //$NON-NLS-1$
-			dateField.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+			dateField.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					updateTransactions();
