@@ -13,9 +13,16 @@ import java.util.Locale;
 
 import javax.swing.JButton;
 
+/** This panel contains a DateWidget and a button that shows a calendar popup.
+ * @see DateWidget
+ * @see DateChooserPanel
+ */
 public class DateWidgetPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final String DATE_PROPERTY = DateWidget.DATE_PROPERTY;
+	/** The panel is a bean. Every time the choosen date changed, it sends a PropertyChangedEvent.
+	 * This is the date change property name.
+	 */
+	public static final String DATE_PROPERTY = DateWidget.DATE_PROPERTY;  //  @jve:decl-index=0:
 	
 	private DateWidget dateWidget = null;
 	private JButton jButton = null;
@@ -24,6 +31,8 @@ public class DateWidgetPanel extends JPanel {
 
 	/**
 	 * This is the default constructor
+	 * Creates a new panel with the system default locale.
+	 * The date is set to today
 	 */
 	public DateWidgetPanel() {
 		super();
@@ -42,10 +51,17 @@ public class DateWidgetPanel extends JPanel {
 		initialize();
 	}
 	
+	/** Get the currently choosen date.
+	 * @return the currently choosen date. It is guaranteed that the hours, minutes, seconds,
+	 * milliseconds of the date are set to 0.
+	 */
 	public Date getDate() {
 		return getDateWidget().getDate();
 	}
 	
+	/** Set the currently choosen date.
+	 * @param date the date to be set.
+	 */
 	public void setDate(Date date) {
 		getDateWidget().setDate(date);
 		// No need to fire a property change.
@@ -53,13 +69,27 @@ public class DateWidgetPanel extends JPanel {
 		// that is waiting for change of the DateWidget
 	}
 	
+	/** Set the number of columns of the date text field.
+	 * @param nb number of columns of the text field
+	 */
 	public void setColumns(int nb) {
 		this.getDateWidget().setColumns(nb);
 	}
 	
+	/** Set the locale.
+	 * Changes the calendar popup appearence and the text field format.
+	 */
 	public void setLocale(Locale locale) {
 		getDateWidget().setLocale(locale);
 		dateChooser.setLocale(locale);
+	}
+
+	/** Set the DateWidget tooltip.
+	 * @param text the new tooltip text
+	 */
+	@Override
+	public void setToolTipText(String text) {
+		getDateWidget().setToolTipText(text);
 	}
 
 	/**
@@ -123,6 +153,9 @@ public class DateWidgetPanel extends JPanel {
 		return jButton;
 	}
 
+	/**
+	 * @see DateWidget#setIsEmptyNullDateIsValid(boolean)
+	 */
 	public void setIsEmptyNullDateIsValid(boolean valid) {
 		this.getDateWidget().setIsEmptyNullDateIsValid(valid);
 	}
