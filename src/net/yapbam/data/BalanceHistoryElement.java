@@ -5,8 +5,9 @@ import java.text.MessageFormat;
 import java.util.Date;
 
 /** This class represents a balance history element.
- * Such an element represents the value of the balance between to dates.
+ * Such an element represents the value of the balance between two dates.
  * The history itself is a list of these elements.
+ * @see BalanceHistory
  */
 public class BalanceHistoryElement implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,28 +21,31 @@ public class BalanceHistoryElement implements Serializable {
 	 * @param from start date
 	 * @param to end date
 	 */
-	public BalanceHistoryElement(double balance, Date from, Date to) {
+	BalanceHistoryElement(double balance, Date from, Date to) {
 		this.balance = balance;
 		this.from = from;
 		this.to = to;
 	}
 	
+	/** Returns the balance.
+	 * @return the balance.
+	 */
 	public double getBalance() {
 		return balance;
 	}
 
 	/**
-	 * Returns the beginning
-	 * @return the beginning or null if the beginning is "beginning of the universe"
+	 * Returns the beginning of this period of time
+	 * @return the beginning or null if the beginning is "beginning of the times"
 	 */
 	public Date getFrom() {
 		return from;
 	}
 
 	/**
-	 * Returns the end.
+	 * Returns the end of this period of time.
 	 * The end date is excluded from the time interval of this element.
-	 * @return the end or null if the end is "end of time"
+	 * @return the end or null if the end is "end of times"
 	 */
 	public Date getTo() {
 		return to;
@@ -73,7 +77,7 @@ public class BalanceHistoryElement implements Serializable {
 		return result;
 	}
 
-	public void add(double amount) {
+	void add(double amount) {
 		this.balance += amount;
 	}
 

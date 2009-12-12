@@ -8,7 +8,7 @@
 	<property name="jcommonpath" value="C:/Users/Jean-Marc/workspace/jcommon-1.0.16/sourceJCommon"/>
 	<property name="jfreechartpath" value="C:/Users/Jean-Marc/workspace/jfreechart/source"/>
 	
-	<property name="yapbamVersion" value="0.3.7"/>
+	<property name="yapbamVersion" value="0.3.8"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
@@ -47,6 +47,6 @@
 		<delete dir="${releaseDir}"/>
 	</target>
 	<target name="doc">
-		<javadoc header="${yapbamVersion}" sourcepath="src" packagenames="net.yapbam.data,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget" destdir="doc"/>
+		<javadoc header="${yapbamVersion}" sourcepath="src;${jcommonpath};${jfreechartpath}" packagenames="net.yapbam.data,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget" destdir="doc" doctitle="YapBam"/>
 	</target>
 </project>

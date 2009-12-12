@@ -10,6 +10,10 @@ import java.util.Iterator;
 import java.util.Locale;
 
 /** This class represents the balance history.
+ * The balance history is an ordered list of periods, during one of this period, the balance is constant.
+ * These periods are represented by BalanceHistoryElement class.
+ * @see BalanceHistoryElement
+ * @see BalanceData#getBalanceHistory()
  */
 public class BalanceHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,6 +35,9 @@ public class BalanceHistory implements Serializable {
 	private ArrayList<BalanceHistoryElement> elements;
 	private double precision;
 	
+	/** Constructor.
+	 * @param intialBalance The initial balance (at the beginning of times).
+	 */
 	public BalanceHistory(double intialBalance) {
 		super();
 		this.minMaxAccurate = false;
@@ -49,11 +56,17 @@ public class BalanceHistory implements Serializable {
 		this.precision = Math.pow(10, -currency.getDefaultFractionDigits())/2;		
 	}
 	
+	/** Returns the minimum balance of the history.
+	 * @return history's minimum balance 
+	 */
 	public double getMinBalance() {
 		refreshMinMax();
 		return this.minBalance;
 	}
 
+	/** Returns the maximum balance of the history.
+	 * @return history's maximum balance 
+	 */
 	public double getMaxBalance() {
 		refreshMinMax();
 		return this.maxBalance;
@@ -78,7 +91,11 @@ public class BalanceHistory implements Serializable {
 	public int size() {
 		return this.elements.size();
 	}
-	
+
+	/** Gets an element (period of time with constant balance) of this history. 
+	 * @param index of the element
+	 * @return the element
+	 */
 	public BalanceHistoryElement get(int index) {
 		return this.elements.get(index);
 	}
@@ -87,6 +104,10 @@ public class BalanceHistory implements Serializable {
 		return Collections.binarySearch(this.elements, date, COMPARATOR);
 	}
 
+	/** Gets a specified date's balance. 
+	 * @param date the date for which we want to get the balance
+	 * @return the balance
+	 */
 	public double getBalance(Date date) {
 		return get(find(date)).getBalance();
 	}
