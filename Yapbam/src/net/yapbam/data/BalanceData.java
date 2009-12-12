@@ -9,8 +9,9 @@ import net.yapbam.data.event.*;
  * Every time a changes occurs, the listener will receive an EveryThingChangedEvent.
  * @see EverythingChangedEvent
  * @see DefaultListenable#addListener(DataListener)
+ * @see FilteredData#getBalanceData()
  */
-public class BalanceData extends DefaultListenable { //TODO send event when balance is changed
+public class BalanceData extends DefaultListenable {
 	private static final long serialVersionUID = 1L;
 
 	private double finalBalance;
@@ -18,8 +19,14 @@ public class BalanceData extends DefaultListenable { //TODO send event when bala
 	private double currentBalance;
 	private BalanceHistory balanceHistory;
 	
-	BalanceData(FilteredData fdata) {}
+	BalanceData() {}
 	
+	/** Sets the currency to be used for this balanceData.
+	 * The balanceHistory is a list of periods during which the balance is the same. As amounts
+	 * are represented by double, and double are unable to represent exactly decimal numbers,
+	 * "Balance is the same" is related to the currency precision.
+	 * @param currency The currency to be used to determined if to balances are equals.
+	 */
 	public void setCurrency(Currency currency) {
 		balanceHistory.setCurrency(currency);
 	}
@@ -57,18 +64,34 @@ public class BalanceData extends DefaultListenable { //TODO send event when bala
 		this.fireEvent(new EverythingChangedEvent(this));
 	}
 
+	/** Returns the current balance.
+	 * Current means: today's balance.
+	 * @return the current balance.
+	 */
 	public double getCurrentBalance() {
 		return this.currentBalance;
 	}
 
+	/** Returns the final balance.
+	 * Final means: end of times balance.
+	 * @return the final balance.
+	 */
 	public double getFinalBalance() {
 		return this.finalBalance;
 	}
 
+	/** Returns the checked balance.
+	 * Checked means: all transactions without a statement id are ignored.
+	 * @return the checked balance.
+	 */
 	public double getCheckedBalance() {
 		return this.checkedBalance;
 	}
 	
+	/** Returns the balance history.
+	 * @return the balance history.
+	 * @see BalanceData#setCurrency(Currency)
+	 */
 	public BalanceHistory getBalanceHistory() {
 		return this.balanceHistory;
 	}

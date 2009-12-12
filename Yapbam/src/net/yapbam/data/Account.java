@@ -15,6 +15,12 @@ public class Account implements Serializable {
 	private List<Mode> modes;
 	private int transactionNumber;
 	
+	/** Constructor.
+	 * This constructor creates a new account with one payment mode: Mode.UNDEFINED.
+	 * @param name The name of the account
+	 * @param initialBalance The initial balance of the account
+	 * @see Mode#UNDEFINED
+	 */
 	public Account(String name, double initialBalance) {
 		this.name = name;
 		this.initialBalance = initialBalance;
@@ -24,6 +30,12 @@ public class Account implements Serializable {
 		this.add(Mode.UNDEFINED);
 	}
 
+	/**
+	 * Constructor.
+	 * @param name The account's name
+	 * @param initialBalance The account's inital balance
+	 * @param modes The list of the account's avalailable payment modes.
+	 */
 	public Account(String name, double initialBalance, List<Mode> modes) {
 		this(name, initialBalance);
 		for (int i = 0; i < modes.size(); i++) {
@@ -31,37 +43,65 @@ public class Account implements Serializable {
 		}
 	}
 
+	/** Returns the account's name
+	 * @return the account's name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/** Returns the account's initial balance.
+	 * @return the account's initial balance
+	 */
 	public double getInitialBalance() {
 		return this.initialBalance;
 	}
 
+	/** Returns the account's expense/receipt modes number.
+	 * @param expense true for expense modes, false for receipt modes.
+	 * @return the account's expense/receipt modes number
+	 */
 	public int getModesNumber(boolean expense) {
 		return expense?this.expenseModes.size():this.receiptModes.size();
 	}
 	
+	/** Returns one of the account's expense/receipt payment modes.
+	 * @param index the payment mode number.
+	 * @param expense true for expense modes, false for receipt modes.
+	 * @return the account's payment mode
+	 */
 	public Mode getMode(int index, boolean expense) {
 		return expense?this.expenseModes.get(index):this.receiptModes.get(index);
 	}
 	
+	/** Gets an account's payment mode by its name.
+	 * @param name the payment mode's name
+	 * @return The payment mode, or null, if no payment mode with that name exists
+	 */
 	public Mode getMode(String name) {
 		for (int i = 0; i < this.modes.size(); i++) {
 			if (this.modes.get(i).getName().equalsIgnoreCase(name)) return this.modes.get(i);
 		}
 		return null;
 	}
-	
+
+	/** Returns the number of transactions in this account.
+	 * @return the number of transactions in this account.
+	 */
 	public int getTransactionsNumber() {
 		return transactionNumber;
 	}
 
+	/** Adds a transaction to the account.
+	 * @param transaction the transaction to add
+	 */
 	public void add(AbstractTransaction transaction) {
 		transactionNumber++;
 	}
 	
+	/** Removes a transaction from this account.
+	 * @param transaction the transaction to be removed.
+	 */
 	public void removeTransaction(Transaction transaction) {
 		transactionNumber--;
 	}
@@ -86,18 +126,35 @@ public class Account implements Serializable {
 		return this.getName()+"["+this.initialBalance+"]";
 	}
 
+	/** Returns the index of a expense/receipt payment mode for this account.
+	 * @param mode The mode to find
+	 * @param expense true to get the index in the expense payment modes. False for receipt payment modes.
+	 * @return a negative number if the mode is unknown for this kind of transaction (expense/receipt),
+	 * or the index if it was found.
+	 */
 	public int findMode(Mode mode, boolean expense) {
 		return expense?this.expenseModes.indexOf(mode):this.receiptModes.indexOf(mode);
 	}
 	
+	/** Returns this account's total number of payment modes (expense and receipt modes).
+	 * @return this account's total number of payment modes
+	 */
 	public int getModesNumber() {
 		return this.modes.size();
 	}
 	
+	/** Gets a payment mode by its index.
+	 * @param index the payment mode index.
+	 * @return the payment mode.
+	 */
 	public Mode getMode(int index) {
 		return this.modes.get(index);
 	}
 
+	/** Returns the index of a payment mode for this account.
+	 * @param mode The mode to find
+	 * @return a negative number if the mode is unknown, or the index if it was found.
+	 */
 	public int indexOf(Mode mode) {
 		return this.modes.indexOf(mode);
 	}

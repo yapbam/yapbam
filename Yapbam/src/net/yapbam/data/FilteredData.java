@@ -88,10 +88,14 @@ public class FilteredData extends DefaultListenable {
 				}
 			}
 		});
-	    this.balanceData = new BalanceData(this);
+	    this.balanceData = new BalanceData();
 	    this.clear();
 	}
 	
+	/** Returns the balance data.
+	 * The balance data ignores all filters except the one on the accounts.
+	 * @return the balance data.
+	 */
 	public BalanceData getBalanceData() {
 		return this.balanceData;
 	}
