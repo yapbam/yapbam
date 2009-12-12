@@ -20,8 +20,8 @@ import javax.swing.JLabel;
  */
 public class DateWidgetPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	/** The panel is a bean. Every time the choosen date changed, it sends a PropertyChangedEvent.
-	 * This is the date change property name.
+	/** Date change property name.
+	 * The panel is a bean. Every time the choosen date changed, it sends a PropertyChangedEvent.
 	 */
 	public static final String DATE_PROPERTY = DateWidget.DATE_PROPERTY;  //  @jve:decl-index=0:
 	
@@ -31,7 +31,7 @@ public class DateWidgetPanel extends JPanel {
 	private JLabel jLabel = null;
 
 	/**
-	 * This is the default constructor
+	 * This is the default constructor.
 	 * Creates a new panel with the system default locale.
 	 * The date is set to today
 	 */
