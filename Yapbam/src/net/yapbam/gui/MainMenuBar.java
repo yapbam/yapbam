@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -272,9 +273,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.Expenses"), LocalizationData.get("MainMenuBar.Receipts")}, //$NON-NLS-1$ //$NON-NLS-2$
         			new int[]{FilteredData.EXPENSE, FilteredData.RECEIPT});
 			
-        	//TODO filterMenu.addSeparator();
-	        //JMenuItem perso = new JCheckBoxMenuItem(LocalizationData.get("MainMenuBar.customizedFilter")); //$NON-NLS-1$
-			//filterMenu.add(perso);
+        	filterMenu.addSeparator();
+			filterMenu.add(new JCheckBoxMenuItem(new CustomFilterAction(frame.getData())));
 		}
 	}
 	
