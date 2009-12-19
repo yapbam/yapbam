@@ -58,9 +58,11 @@ public class StatisticsPlugin extends AbstractPlugIn {
 			Transaction transaction = this.data.getTransaction(i);
 			if (this.data.isOk(transaction)) {
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
-					categoryToAmount.get(transaction.getSubTransaction(j).getCategory()).add(transaction.getSubTransaction(j).getAmount());
+					Category category = transaction.getSubTransaction(j).getCategory();
+					if (this.data.isOk(category)) categoryToAmount.get(category).add(transaction.getSubTransaction(j).getAmount());
 				}
-				categoryToAmount.get(transaction.getCategory()).add(transaction.getComplement());
+				Category category = transaction.getCategory();
+				if (this.data.isOk(category)) categoryToAmount.get(category).add(transaction.getComplement());
 			}
 		}
         pie.updateDataSet();
