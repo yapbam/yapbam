@@ -216,7 +216,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		}
 	}
 	
-	private void updateAccountMenu() {
+	public void updateAccountMenu() {
 		this.accountMenu.removeAll();
 		JMenuItem menuItemNewAccount = new JMenuItem(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT); //$NON-NLS-1$
 	    menuItemNewAccount.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.New.Mnemonic")); //$NON-NLS-1$
@@ -238,17 +238,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 					JMenuItem item = (JMenuItem) e.getSource();
 					Account account = frame.getData().getAccount(item.getText());
 					frame.getFilteredData().setAccounts(new Account[]{account});
+					updateAccountMenu();
 				}
 			};
 	        FilteredData filter = frame.getFilteredData();
-			ButtonGroup group = new ButtonGroup();
 			boolean hasAccountFilter = filter.hasFilterAccount();
 	        for (int i=0;i<data.getAccountsNumber();i++) {
 	        	Account account = data.getAccount(i);
 	        	JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
 	        	if (hasAccountFilter) item.setSelected(filter.isOk(account));
 	        	accountMenu.add(item);
-	        	group.add(item);
 	        	item.addActionListener(listener);
 	        }
         	JRadioButtonMenuItem item = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
@@ -256,15 +255,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					frame.getFilteredData().setAccounts(null);
+					updateAccountMenu();
 				}
 			});
         	item.setSelected(!hasAccountFilter);
         	accountMenu.add(item);
-        	group.add(item);
 	    }
 	}
 	
-	private void updateFilterMenu() {
+	public void updateFilterMenu() {
 		filterMenu.removeAll();
 		if (frame.getFilteredData()!=null) {
         	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
@@ -274,7 +273,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         			new int[]{FilteredData.EXPENSE, FilteredData.RECEIPT});
 			
         	filterMenu.addSeparator();
-			filterMenu.add(new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData())));
+			filterMenu.add(new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this)));
 		}
 	}
 	
