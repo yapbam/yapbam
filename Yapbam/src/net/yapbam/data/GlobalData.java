@@ -262,7 +262,7 @@ public class GlobalData extends DefaultListenable {
 			if (ds == null) {
 				nextDate = date;
 			} else {
-				while (nextDate.compareTo(date)<0) {
+				while (nextDate.compareTo(date)<=0) {
 					nextDate = ds.getNextStep(nextDate);
 				}
 			}
