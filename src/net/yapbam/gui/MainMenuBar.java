@@ -274,7 +274,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         			new int[]{FilteredData.EXPENSE, FilteredData.RECEIPT});
 			
         	filterMenu.addSeparator();
-			filterMenu.add(new JCheckBoxMenuItem(new CustomFilterAction(frame.getData())));
+			filterMenu.add(new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData())));
 		}
 	}
 	
