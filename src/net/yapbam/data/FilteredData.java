@@ -152,7 +152,7 @@ public class FilteredData extends DefaultListenable {
 		fireEvent(new FilterUpdatedEvent(this));
 	}
 	
-	/** Returns the valid accounts for this filter.
+	/** Gets the valid accounts for this filter.
 	 * There's no side effect between this instance and the returned array.
 	 * @return the valid accounts (null means, all accounts are ok).
 	 */
@@ -174,6 +174,11 @@ public class FilteredData extends DefaultListenable {
 		return (this.validAccounts==null) || (this.validAccounts.contains(account));
 	}
 
+	/** Gets a transaction's validity.
+	 * Note about categories : A transaction is valid if it or one of its subtransactions has a valid category. 
+	 * @param transaction The transaction to test.
+	 * @return true if the transaction is valid.
+	 */
 	public boolean isOk(Transaction transaction) {
 		boolean accountOk = isOk(transaction.getAccount());
 		boolean categoryOk = isOk(transaction.getCategory());
@@ -247,7 +252,7 @@ public class FilteredData extends DefaultListenable {
 		filter();
 	}
 
-	protected void filter() {
+	private void filter() {
 		double initialBalance = 0;
 		for (int i = 0; i < this.getGlobalData().getAccountsNumber(); i++) {
 			Account account = this.getGlobalData().getAccount(i);
