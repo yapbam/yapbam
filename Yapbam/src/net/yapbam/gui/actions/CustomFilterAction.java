@@ -6,16 +6,16 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.yapbam.data.GlobalData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.CustomFilterDialog;
 
 @SuppressWarnings("serial")
 public class CustomFilterAction extends AbstractAction {
-	private GlobalData data;
+	private FilteredData data;
 
-	public CustomFilterAction(GlobalData data) {
+	public CustomFilterAction(FilteredData data) {
 		super(LocalizationData.get("MainMenuBar.customizedFilter")); //$NON-NLS-1$
 		this.data = data;
 	}

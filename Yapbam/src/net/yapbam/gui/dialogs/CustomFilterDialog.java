@@ -4,12 +4,12 @@ import java.awt.Window;
 
 import javax.swing.JPanel;
 
-import net.yapbam.data.GlobalData;
+import net.yapbam.data.FilteredData;
 
 @SuppressWarnings("serial")
 public class CustomFilterDialog extends AbstractDialog {
 
-	public CustomFilterDialog(Window owner, GlobalData data) {
+	public CustomFilterDialog(Window owner, FilteredData data) {
 		super(owner, "Filtre", data); //LOCAL
 	}
 
@@ -21,9 +21,7 @@ public class CustomFilterDialog extends AbstractDialog {
 
 	@Override
 	protected JPanel createCenterPane(Object data) {
-		JPanel result = new JPanel();
-		result.add(new CustomFilterPanel((GlobalData) data));
-		return result;
+		return new CustomFilterPanel((FilteredData) data);
 	}
 
 	@Override

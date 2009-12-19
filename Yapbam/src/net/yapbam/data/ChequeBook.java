@@ -2,8 +2,10 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 
-/** This class represents a cheque book */
-public class ChequeBook implements Serializable {
+/** This class represents a cheque book.
+ * Planned for future use (when Yapbam will manage checkBooks, maybe).
+ */
+class ChequeBook implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String prefix;
