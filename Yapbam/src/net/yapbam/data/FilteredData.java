@@ -24,6 +24,7 @@ public class FilteredData extends DefaultListenable {
 	private ArrayList<Transaction> transactions;
 	private int filter;
 	private HashSet<Account> validAccounts;
+	private HashSet<Category> validCategories;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
 	
@@ -43,6 +44,11 @@ public class FilteredData extends DefaultListenable {
 						balanceData.updateBalance(initialBalance, false);
 						fireEvent(new AccountRemovedEvent(FilteredData.this, -1, account)); //TODO index is not the right one
 					}
+				} else if (event instanceof CategoryRemovedEvent) {
+					Category category = ((CategoryRemovedEvent)event).getRemoved();
+					if ((validCategories==null) || validCategories.remove(category)) {
+						fireEvent(new CategoryRemovedEvent(FilteredData.this, -1, category)); //TODO index is not the right one
+	    			}
 				} else if (event instanceof TransactionAddedEvent) {
 					Transaction transaction = ((TransactionAddedEvent)event).getTransaction();
 					if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
@@ -70,6 +76,11 @@ public class FilteredData extends DefaultListenable {
 						if (isOk(CHECKED)) {
 							fireEvent(new AccountAddedEvent(FilteredData.this, account));
 						}
+					}
+				} else if (event instanceof CategoryAddedEvent) {
+					Category category = ((CategoryAddedEvent)event).getCategory();
+					if (isOk(category)) {
+						fireEvent(new CategoryAddedEvent(FilteredData.this, category));
 					}
 				} else if (event instanceof AccountPropertyChangedEvent) {
 					AccountPropertyChangedEvent evt = (AccountPropertyChangedEvent) event;
@@ -110,19 +121,23 @@ public class FilteredData extends DefaultListenable {
 		return result;
 	}
 	
+	/** Erases all filters.
+	 */
 	public void clear() {
 		this.filter = ALL;
+		this.validCategories = null;
 		clearAccounts();
 	}
 
-
+	/** Erases account filter.
+	 */
 	public void clearAccounts() {
 		setAccounts(null);
 	}	
 
-	/** Set the valid accounts for this filter.
+	/** Sets the valid accounts for this filter.
 	 * There's no side effect between this instance and the argument array.
-	 * @param accounts the accounts that are allowed (null to allow every accounts).
+	 * @param accounts the accounts that are allowed (null or the complete list of accounts to allow all accounts).
 	 */
 	public void setAccounts(Account[] accounts) {
 		if ((accounts==null) || (accounts.length==data.getAccountsNumber())) {
@@ -161,13 +176,54 @@ public class FilteredData extends DefaultListenable {
 
 	public boolean isOk(Transaction transaction) {
 		boolean accountOk = isOk(transaction.getAccount());
+		boolean categoryOk = isOk(transaction.getCategory());
+		// The transaction may also be valid if one of its subtransactions has a valid category 
+		if (!categoryOk) {
+			for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
+				if (isOk(transaction.getSubTransaction(i).getCategory())) {
+					categoryOk = true;
+					break;
+				}
+			}
+		}
 		boolean checkedOk = isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED);
 		boolean amountOk = isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE);
-		return accountOk && checkedOk && amountOk;
+		return accountOk && categoryOk && checkedOk && amountOk;
+	}
+	
+	/** Set the valid categories for this filter.
+	 * There's no side effect between this instance and the argument array.
+	 * @param categories the categories that are allowed (null or the complete list of categories to allow all categories).
+	 */
+	public void setCategories(Category[] categories) {
+		if ((categories==null) || (categories.length==data.getCategoriesNumber())) {
+			this.validCategories=null;
+		} else {
+			this.validCategories = new HashSet<Category>(categories.length);
+			for (int i = 0; i < categories.length; i++) {
+				this.validCategories.add(categories[i]);
+			}
+		}
+		this.filter();
+		fireEvent(new FilterUpdatedEvent(this));
+	}
+
+	/** Returns the valid categories for this filter.
+	 * There's no side effect between this instance and the returned array.
+	 * @return the valid categories (null means, all categories are ok).
+	 */
+	public Category[] getCategories() {
+		if (this.validCategories==null) return null;
+		Category[] result = new Category[validCategories.size()];
+		Iterator<Category> iterator = validCategories.iterator();
+		for (int i = 0; i < result.length; i++) {
+			result[i] = iterator.next();
+		}
+		return result;
 	}
 	
 	public boolean isOk(Category category) {
-		return true; // For now, no filter no categories
+		return (this.validCategories==null) || (this.validCategories.contains(category));
 	}
 
 	public boolean isOk(int property) {

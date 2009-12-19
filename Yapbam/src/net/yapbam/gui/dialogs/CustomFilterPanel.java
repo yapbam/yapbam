@@ -12,16 +12,20 @@ import javax.swing.JCheckBox;
 import java.awt.Insets;
 
 import javax.swing.AbstractListModel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 
+import net.yapbam.data.Account;
+import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
-public class CustomFilterPanel extends JPanel {
+public class CustomFilterPanel extends JPanel { //LOCAL
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
@@ -40,7 +44,8 @@ public class CustomFilterPanel extends JPanel {
 	private JRadioButton amountAll = null;
 	
 	private FilteredData data;
-	
+	private JScrollPane jScrollPane = null;
+	private JScrollPane jScrollPane1 = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -94,16 +99,16 @@ public class CustomFilterPanel extends JPanel {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = GridBagConstraints.BOTH;
-			gridBagConstraints1.weighty = 1.0;
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.weightx = 1.0;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.fill = GridBagConstraints.BOTH;
+			gridBagConstraints14.weighty = 1.0;
+			gridBagConstraints14.gridx = 0;
+			gridBagConstraints14.gridy = 0;
+			gridBagConstraints14.weightx = 1.0;
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Comptes", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
-			jPanel.add(getAccountList(), gridBagConstraints1);
+			jPanel.add(getJScrollPane(), gridBagConstraints14);
 		}
 		return jPanel;
 	}
@@ -125,6 +130,15 @@ public class CustomFilterPanel extends JPanel {
 					return data.getGlobalData().getAccountsNumber();
 				}
 			});
+			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getAccountsNumber()); 
+			for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
+				if (data.isOk(data.getGlobalData().getAccount(i))) indices.add(i);
+			}
+			int[] selection = new int[indices.size()];
+			for (int i = 0; i < indices.size(); i++) {
+				selection[i] = indices.get(i);
+			}
+			accountList.setSelectedIndices(selection);
 		}
 		return accountList;
 	}
@@ -169,16 +183,16 @@ public class CustomFilterPanel extends JPanel {
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.fill = GridBagConstraints.BOTH;
-			gridBagConstraints4.gridy = 0;
-			gridBagConstraints4.weightx = 1.0;
-			gridBagConstraints4.weighty = 1.0;
-			gridBagConstraints4.gridx = 0;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.fill = GridBagConstraints.BOTH;
+			gridBagConstraints1.weighty = 1.0;
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.weightx = 1.0;
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Catégories", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
-			jPanel2.add(getCategoryList(), gridBagConstraints4);
+			jPanel2.add(getJScrollPane1(), gridBagConstraints1);
 		}
 		return jPanel2;
 	}
@@ -188,9 +202,27 @@ public class CustomFilterPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JList	
 	 */
+	@SuppressWarnings("serial")
 	private JList getCategoryList() {
 		if (categoryList == null) {
 			categoryList = new JList();
+			categoryList.setModel(new AbstractListModel(){
+				public Object getElementAt(int index) {
+					return data.getGlobalData().getCategory(index).getName();
+				}
+				public int getSize() {
+					return data.getGlobalData().getCategoriesNumber();
+				}
+			});
+			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getCategoriesNumber()); 
+			for (int i=0;i<data.getGlobalData().getCategoriesNumber();i++) {
+				if (data.isOk(data.getGlobalData().getCategory(i))) indices.add(i);
+			}
+			int[] selection = new int[indices.size()];
+			for (int i = 0; i < indices.size(); i++) {
+				selection[i] = indices.get(i);
+			}
+			categoryList.setSelectedIndices(selection);
 		}
 		return categoryList;
 	}
@@ -335,6 +367,50 @@ public class CustomFilterPanel extends JPanel {
 			amountAll.setText("Tous");
 		}
 		return amountAll;
+	}
+
+	/** Apply the filter currently defined in this panel to the FilteredData.
+	 */
+	public void apply() {
+		int[] accountIndices = this.accountList.getSelectedIndices();
+		Account[] accounts = new Account[accountIndices.length];
+		for (int i = 0; i < accounts.length; i++) {
+			accounts[i] = data.getGlobalData().getAccount(accountIndices[i]);
+		}
+		this.data.setAccounts(accounts);
+		int[] categoryIndices = this.categoryList.getSelectedIndices();
+		Category[] categories = new Category[categoryIndices.length];
+		for (int i = 0; i < categories.length; i++) {
+			categories[i] = data.getGlobalData().getCategory(categoryIndices[i]);
+		}
+		this.data.setCategories(categories);
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getAccountList());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes jScrollPane1	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getCategoryList());
+		}
+		return jScrollPane1;
 	}
 
 }
