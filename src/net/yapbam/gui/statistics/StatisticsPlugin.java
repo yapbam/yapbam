@@ -10,6 +10,7 @@ import javax.swing.JTabbedPane;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
+import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -58,8 +59,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 			Transaction transaction = this.data.getTransaction(i);
 			if (this.data.isOk(transaction)) {
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
-					Category category = transaction.getSubTransaction(j).getCategory();
-					if (this.data.isOk(category)) categoryToAmount.get(category).add(transaction.getSubTransaction(j).getAmount());
+					SubTransaction subTransaction = transaction.getSubTransaction(j);
+					if (this.data.isOk(subTransaction)) categoryToAmount.get(subTransaction.getCategory()).add(subTransaction.getAmount());
 				}
 				Category category = transaction.getCategory();
 				if (this.data.isOk(category)) categoryToAmount.get(category).add(transaction.getComplement());

@@ -12,8 +12,8 @@ import javax.swing.JCheckBox;
 import java.awt.Insets;
 
 import javax.swing.AbstractListModel;
+import javax.swing.ButtonGroup;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 
@@ -21,6 +21,8 @@ import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.AmountWidget;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -38,9 +40,9 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JPanel jPanel3 = null;
 	private JRadioButton amountEquals = null;
 	private JRadioButton amountBetween = null;
-	private JTextField jTextField = null;
+	private AmountWidget minAmount = null;
 	private JLabel jLabel = null;
-	private JTextField maxAmount = null;
+	private AmountWidget maxAmount = null;
 	private JRadioButton amountAll = null;
 	
 	private FilteredData data;
@@ -236,6 +238,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (receipt == null) {
 			receipt = new JCheckBox();
 			receipt.setText("Recettes");
+			receipt.setSelected(data.isOk(FilteredData.RECEIPT));
 		}
 		return receipt;
 	}
@@ -249,6 +252,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (expense == null) {
 			expense = new JCheckBox();
 			expense.setText("Dépenses");
+			expense.setSelected(data.isOk(FilteredData.EXPENSE));
 		}
 		return expense;
 	}
@@ -296,10 +300,14 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			jPanel3.setBorder(BorderFactory.createTitledBorder(null, "Montant", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jPanel3.add(getAmountEquals(), gridBagConstraints9);
 			jPanel3.add(getAmountBetween(), gridBagConstraints10);
-			jPanel3.add(getJTextField(), gridBagConstraints8);
+			jPanel3.add(getMinAmount(), gridBagConstraints8);
 			jPanel3.add(jLabel, gridBagConstraints11);
 			jPanel3.add(getMaxAmount(), gridBagConstraints12);
 			jPanel3.add(getAmountAll(), gridBagConstraints13);
+			ButtonGroup group = new ButtonGroup();
+			group.add(getAmountAll());
+			group.add(getAmountEquals());
+			group.add(getAmountBetween());
 		}
 		return jPanel3;
 	}
@@ -313,6 +321,14 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (amountEquals == null) {
 			amountEquals = new JRadioButton();
 			amountEquals.setText("Egal à");
+			amountEquals.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (amountEquals.isSelected()) {
+						getMinAmount().setEnabled(true);
+						getMaxAmount().setEnabled(false);
+					}
+				}
+			});
 		}
 		return amountEquals;
 	}
@@ -326,21 +342,29 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (amountBetween == null) {
 			amountBetween = new JRadioButton();
 			amountBetween.setText("Compris entre");
+			amountBetween.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (amountBetween.isSelected()) {
+						getMinAmount().setEnabled(true);
+						getMaxAmount().setEnabled(true);
+					}
+				}
+			});
 		}
 		return amountBetween;
 	}
 
 	/**
-	 * This method initializes jTextField	
+	 * This method initializes minAmount	
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getJTextField() {
-		if (jTextField == null) {
-			jTextField = new JTextField();
-			jTextField.setColumns(6);
+	private AmountWidget getMinAmount() {
+		if (minAmount == null) {
+			minAmount = new AmountWidget(LocalizationData.getLocale());
+			minAmount.setColumns(6);
 		}
-		return jTextField;
+		return minAmount;
 	}
 
 	/**
@@ -348,9 +372,9 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getMaxAmount() {
+	private AmountWidget getMaxAmount() {
 		if (maxAmount == null) {
-			maxAmount = new JTextField();
+			maxAmount = new AmountWidget(LocalizationData.getLocale());
 			maxAmount.setColumns(6);
 		}
 		return maxAmount;
@@ -365,6 +389,14 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (amountAll == null) {
 			amountAll = new JRadioButton();
 			amountAll.setText("Tous");
+			amountAll.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (amountAll.isSelected()) {
+						getMinAmount().setEnabled(false);
+						getMaxAmount().setEnabled(false);
+					}
+				}
+			});
 		}
 		return amountAll;
 	}
@@ -384,6 +416,10 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			categories[i] = data.getGlobalData().getCategory(categoryIndices[i]);
 		}
 		this.data.setCategories(categories);
+		int filter = 0;
+		if (getExpense().isSelected()) filter += FilteredData.EXPENSE;
+		if (getReceipt().isSelected()) filter += FilteredData.RECEIPT;
+		this.data.setFilter(filter);
 		// TODO Auto-generated method stub
 	}
 
