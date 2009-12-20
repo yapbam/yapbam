@@ -180,20 +180,22 @@ public class FilteredData extends DefaultListenable {
 	 * @return true if the transaction is valid.
 	 */
 	public boolean isOk(Transaction transaction) {
-		boolean accountOk = isOk(transaction.getAccount());
-		boolean categoryOk = isOk(transaction.getCategory());
-		// The transaction may also be valid if one of its subtransactions has a valid category 
-		if (!categoryOk) {
-			for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-				if (isOk(transaction.getSubTransaction(i).getCategory())) {
-					categoryOk = true;
-					break;
-				}
+		if (!isOk(transaction.getAccount())) return false;
+		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
+		if (isOk(transaction.getCategory()) && isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE)) return true;
+		// The transaction may also be valid if one of its subtransactions is valid 
+		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
+			if (isOk(transaction.getSubTransaction(i))) {
+				return true;
 			}
 		}
-		boolean checkedOk = isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED);
-		boolean amountOk = isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE);
-		return accountOk && categoryOk && checkedOk && amountOk;
+		return false;
+	}
+	
+	public boolean isOk(SubTransaction subtransaction) {
+		boolean categoryOk = isOk(subtransaction.getCategory());
+		boolean amountOk = isOk((subtransaction.getAmount()>0?RECEIPT:EXPENSE));
+		return categoryOk && amountOk;
 	}
 	
 	/** Set the valid categories for this filter.
