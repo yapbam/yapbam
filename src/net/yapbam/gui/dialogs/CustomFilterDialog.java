@@ -1,6 +1,8 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
@@ -27,11 +29,17 @@ public class CustomFilterDialog extends AbstractDialog {
 	@Override
 	protected JPanel createCenterPane(Object data) {
 		filterPanel = new CustomFilterPanel((FilteredData) data);
+		filterPanel.addPropertyChangeListener(CustomFilterPanel.CONSISTENCY_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		});
 		return filterPanel;
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
-		return null;
+		return filterPanel.getInconsistencyCause();
 	}
 }

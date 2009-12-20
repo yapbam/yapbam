@@ -30,6 +30,7 @@ import java.util.ArrayList;
 public class CustomFilterPanel extends JPanel { //LOCAL
 
 	private static final long serialVersionUID = 1L;
+	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY";
 	private JPanel jPanel = null;
 	private JList accountList = null;
 	private JPanel jPanel1 = null;
@@ -239,6 +240,11 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			receipt = new JCheckBox();
 			receipt.setText("Recettes");
 			receipt.setSelected(data.isOk(FilteredData.RECEIPT));
+			receipt.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					checkConsistency();
+				}
+			});
 		}
 		return receipt;
 	}
@@ -253,6 +259,11 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			expense = new JCheckBox();
 			expense.setText("Dépenses");
 			expense.setSelected(data.isOk(FilteredData.EXPENSE));
+			expense.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					checkConsistency();
+				}
+			});
 		}
 		return expense;
 	}
@@ -449,4 +460,25 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		return jScrollPane1;
 	}
 
+	/** Gets the reason why the filter defined by this panel current state is inconsitent.
+	 * @return A string that explains the problem, or null if the state is consistent.
+	 */
+	public String getInconsistencyCause() {
+		if (!getExpense().isSelected() && !getReceipt().isSelected()) return "Interdire à la fois toutes les recettes et toutes les dépenses n'est pas autorisé";
+		return null;
+	}
+
+	public boolean isConsistent() {
+		return (getExpense().isSelected() || getReceipt().isSelected());
+	}
+	
+	private boolean oldConsistency;
+	
+	private void checkConsistency() {
+		boolean ok = isConsistent();
+		if (ok!=oldConsistency) {
+			oldConsistency = ok;
+			firePropertyChange(CONSISTENCY_PROPERTY, !ok, ok);
+		}
+	}
 }
