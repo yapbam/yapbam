@@ -26,15 +26,17 @@ import net.yapbam.gui.widget.AmountWidget;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import javax.swing.JTextField;
+import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
 
 	private static final long serialVersionUID = 1L;
 	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY";
-	private JPanel jPanel = null;
+	private JPanel accountPanel = null;
 	private JList accountList = null;
-	private JPanel jPanel1 = null;
-	private JPanel jPanel2 = null;
+	private JPanel amountPanel = null;
+	private JPanel categoryPanel = null;
 	private JList categoryList = null;
 	private JCheckBox receipt = null;
 	private JCheckBox expense = null;
@@ -68,19 +70,27 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+		gridBagConstraints21.gridx = 0;
+		gridBagConstraints21.fill = GridBagConstraints.BOTH;
+		gridBagConstraints21.gridy = 2;
+		GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+		gridBagConstraints15.gridx = 0;
+		gridBagConstraints15.fill = GridBagConstraints.BOTH;
+		gridBagConstraints15.gridy = 1;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.gridx = 0;
 		gridBagConstraints3.fill = GridBagConstraints.BOTH;
 		gridBagConstraints3.weightx = 1.0D;
 		gridBagConstraints3.weighty = 2.0D;
-		gridBagConstraints3.gridy = 2;
+		gridBagConstraints3.gridy = 4;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.fill = GridBagConstraints.BOTH;
 		gridBagConstraints2.weightx = 1.0D;
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.insets = new Insets(0, 0, 0, 0);
-		gridBagConstraints2.gridy = 1;
+		gridBagConstraints2.gridy = 3;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -90,30 +100,32 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		this.setSize(300, 400);
 		this.setLayout(new GridBagLayout());
 		this.setPreferredSize(new Dimension(300, 400));
-		this.add(getJPanel(), gridBagConstraints);
-		this.add(getJPanel1(), gridBagConstraints2);
-		this.add(getJPanel2(), gridBagConstraints3);
+		this.add(getAccountPanel(), gridBagConstraints);
+		this.add(getAmountPanel(), gridBagConstraints2);
+		this.add(getCategoryPanel(), gridBagConstraints3);
+		this.add(getDescriptionPanel(), gridBagConstraints15);
+		this.add(getDatePanel(), gridBagConstraints21);
 	}
 
 	/**
-	 * This method initializes jPanel	
+	 * This method initializes accountPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
+	private JPanel getAccountPanel() {
+		if (accountPanel == null) {
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.fill = GridBagConstraints.BOTH;
 			gridBagConstraints14.weighty = 1.0;
-			gridBagConstraints14.gridx = 0;
+			gridBagConstraints14.gridx = 2;
 			gridBagConstraints14.gridy = 0;
 			gridBagConstraints14.weightx = 1.0;
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Comptes", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
-			jPanel.add(getJScrollPane(), gridBagConstraints14);
+			accountPanel = new JPanel();
+			accountPanel.setLayout(new GridBagLayout());
+			accountPanel.setBorder(BorderFactory.createTitledBorder(null, "Comptes", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			accountPanel.add(getJScrollPane(), gridBagConstraints14);
 		}
-		return jPanel;
+		return accountPanel;
 	}
 
 	/**
@@ -147,12 +159,15 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	}
 
 	/**
-	 * This method initializes jPanel1	
+	 * This method initializes amountPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
+	private JPanel getAmountPanel() {
+		if (amountPanel == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 5;
+			gridBagConstraints4.gridy = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.anchor = GridBagConstraints.WEST;
 			gridBagConstraints5.gridy = 0;
@@ -169,35 +184,35 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints7.weighty = 1.0D;
 			gridBagConstraints7.gridwidth = GridBagConstraints.REMAINDER;
 			gridBagConstraints7.gridy = 1;
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.setBorder(BorderFactory.createTitledBorder(null, "Opération", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
-			jPanel1.add(getJPanel3(), gridBagConstraints7);
-			jPanel1.add(getExpense(), gridBagConstraints6);
-			jPanel1.add(getReceipt(), gridBagConstraints5);
+			amountPanel = new JPanel();
+			amountPanel.setLayout(new GridBagLayout());
+			amountPanel.setBorder(BorderFactory.createTitledBorder(null, "Montant", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			amountPanel.add(getJPanel3(), gridBagConstraints7);
+			amountPanel.add(getExpense(), gridBagConstraints6);
+			amountPanel.add(getReceipt(), gridBagConstraints5);
 		}
-		return jPanel1;
+		return amountPanel;
 	}
 
 	/**
-	 * This method initializes jPanel2	
+	 * This method initializes categoryPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel2() {
-		if (jPanel2 == null) {
+	private JPanel getCategoryPanel() {
+		if (categoryPanel == null) {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0;
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.weightx = 1.0;
-			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Catégories", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
-			jPanel2.add(getJScrollPane1(), gridBagConstraints1);
+			categoryPanel = new JPanel();
+			categoryPanel.setLayout(new GridBagLayout());
+			categoryPanel.setBorder(BorderFactory.createTitledBorder(null, "Catégories", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			categoryPanel.add(getJScrollPane1(), gridBagConstraints1);
 		}
-		return jPanel2;
+		return categoryPanel;
 	}
 
 	/**
@@ -308,7 +323,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints9.gridy = 1;
 			jPanel3 = new JPanel();
 			jPanel3.setLayout(new GridBagLayout());
-			jPanel3.setBorder(BorderFactory.createTitledBorder(null, "Montant", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jPanel3.add(getAmountEquals(), gridBagConstraints9);
 			jPanel3.add(getAmountBetween(), gridBagConstraints10);
 			jPanel3.add(getMinAmount(), gridBagConstraints8);
@@ -473,12 +487,233 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	}
 	
 	private boolean oldConsistency;
-	
+	private JPanel descriptionPanel = null;
+	private JCheckBox ignoreCase = null;
+	private JCheckBox regularExpression = null;
+	private JTextField description = null;
+	private JPanel datePanel = null;
+	private JRadioButton dateAll = null;
+	private JRadioButton dateEquals = null;
+	private JRadioButton dateBetween = null;
+	private DateWidgetPanel dateFrom = null;
+	private JLabel jLabel1 = null;
+	private DateWidgetPanel dateTo = null;
 	private void checkConsistency() {
 		boolean ok = isConsistent();
 		if (ok!=oldConsistency) {
 			oldConsistency = ok;
 			firePropertyChange(CONSISTENCY_PROPERTY, !ok, ok);
 		}
+	}
+
+	/**
+	 * This method initializes descriptionPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getDescriptionPanel() {
+		if (descriptionPanel == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints18.gridy = 1;
+			gridBagConstraints18.weightx = 1.0;
+			gridBagConstraints18.gridwidth = 0;
+			gridBagConstraints18.gridx = 0;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.gridx = 1;
+			gridBagConstraints17.gridy = 0;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.gridy = 0;
+			descriptionPanel = new JPanel();
+			descriptionPanel.setLayout(new GridBagLayout());
+			descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, "Libellé", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			descriptionPanel.add(getIgnoreCase(), gridBagConstraints16);
+			descriptionPanel.add(getRegularExpression(), gridBagConstraints17);
+			descriptionPanel.add(getDescription(), gridBagConstraints18);
+		}
+		return descriptionPanel;
+	}
+
+	/**
+	 * This method initializes ignoreCase	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getIgnoreCase() {
+		if (ignoreCase == null) {
+			ignoreCase = new JCheckBox();
+			ignoreCase.setText("Ignorer la casse");
+		}
+		return ignoreCase;
+	}
+
+	/**
+	 * This method initializes regularExpression	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getRegularExpression() {
+		if (regularExpression == null) {
+			regularExpression = new JCheckBox();
+			regularExpression.setText("Expression régulière");
+		}
+		return regularExpression;
+	}
+
+	/**
+	 * This method initializes description	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getDescription() {
+		if (description == null) {
+			description = new JTextField();
+		}
+		return description;
+	}
+
+	/**
+	 * This method initializes datePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getDatePanel() {
+		if (datePanel == null) {
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.gridx = 3;
+			gridBagConstraints25.gridheight = 3;
+			gridBagConstraints25.weightx = 1.0D;
+			gridBagConstraints25.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints25.gridy = 0;
+			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+			gridBagConstraints24.gridx = 2;
+			gridBagConstraints24.gridheight = 3;
+			gridBagConstraints24.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints24.gridy = 0;
+			jLabel1 = new JLabel();
+			jLabel1.setText("et");
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.gridx = 1;
+			gridBagConstraints23.gridheight = 3;
+			gridBagConstraints23.weightx = 1.0D;
+			gridBagConstraints23.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints23.gridy = 0;
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.anchor = GridBagConstraints.WEST;
+			gridBagConstraints22.gridy = 2;
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.anchor = GridBagConstraints.WEST;
+			gridBagConstraints20.gridy = 1;
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.gridx = 0;
+			gridBagConstraints19.anchor = GridBagConstraints.WEST;
+			gridBagConstraints19.gridy = 0;
+			datePanel = new JPanel();
+			datePanel.setLayout(new GridBagLayout());
+			datePanel.setBorder(BorderFactory.createTitledBorder(null, "Date", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			datePanel.setVisible(true);
+			datePanel.add(getDateAll(), gridBagConstraints19);
+			datePanel.add(getDateEquals(), gridBagConstraints20);
+			datePanel.add(getDateBetween(), gridBagConstraints22);
+			datePanel.add(getDateFrom(), gridBagConstraints23);
+			datePanel.add(jLabel1, gridBagConstraints24);
+			datePanel.add(getDateTo(), gridBagConstraints25);
+			ButtonGroup group = new ButtonGroup();
+			group.add(getDateAll());
+			group.add(getDateEquals());
+			group.add(getDateBetween());
+		}
+		return datePanel;
+	}
+
+	/**
+	 * This method initializes dateAll	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getDateAll() {
+		if (dateAll == null) {
+			dateAll = new JRadioButton();
+			dateAll.setText("Toutes");
+			dateAll.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (dateAll.isSelected()) {
+						getDateFrom().setEnabled(false);
+						getDateTo().setEnabled(false);
+					}
+				}
+			});
+			dateAll.setSelected(true);
+		}
+		return dateAll;
+	}
+
+	/**
+	 * This method initializes dateEquals	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getDateEquals() {
+		if (dateEquals == null) {
+			dateEquals = new JRadioButton();
+			dateEquals.setText("Egale à");
+			dateEquals.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (dateEquals.isSelected()) {
+						getDateFrom().setEnabled(true);
+						getDateTo().setEnabled(false);
+					}
+				}
+			});
+		}
+		return dateEquals;
+	}
+
+	/**
+	 * This method initializes dateBetween	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getDateBetween() {
+		if (dateBetween == null) {
+			dateBetween = new JRadioButton();
+			dateBetween.setText("Comprise entre");
+			dateBetween.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (dateBetween.isSelected()) {
+						getDateFrom().setEnabled(true);
+						getDateTo().setEnabled(true);
+					}
+				}
+			});
+		}
+		return dateBetween;
+	}
+
+	/**
+	 * This method initializes dateFrom	
+	 * 	
+	 * @return net.yapbam.gui.widget.DateWidgetPanel	
+	 */
+	private DateWidgetPanel getDateFrom() {
+		if (dateFrom == null) {
+			dateFrom = new DateWidgetPanel();
+		}
+		return dateFrom;
+	}
+
+	/**
+	 * This method initializes dateTo	
+	 * 	
+	 * @return net.yapbam.gui.widget.DateWidgetPanel	
+	 */
+	private DateWidgetPanel getDateTo() {
+		if (dateTo == null) {
+			dateTo = new DateWidgetPanel();
+		}
+		return dateTo;
 	}
 }

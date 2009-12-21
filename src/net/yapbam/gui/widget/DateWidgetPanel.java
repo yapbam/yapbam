@@ -108,7 +108,7 @@ public class DateWidgetPanel extends JPanel {
 		jLabel.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/calendar.png")));
 		jLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				if (!popup.isVisible()) {
+				if (jLabel.isEnabled() && !popup.isVisible()) {
 					DateWidget widget = getDateWidget();
 					dateChooser.setDate(widget.getDate());
 					popup.show(widget, 0, widget.getHeight());
@@ -149,5 +149,12 @@ public class DateWidgetPanel extends JPanel {
 	 */
 	public void setIsEmptyNullDateIsValid(boolean valid) {
 		this.getDateWidget().setIsEmptyNullDateIsValid(valid);
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		dateWidget.setEnabled(enabled);
+		jLabel.setEnabled(enabled);
 	}
 }
