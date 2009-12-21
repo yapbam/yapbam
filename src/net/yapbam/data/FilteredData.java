@@ -27,6 +27,8 @@ public class FilteredData extends DefaultListenable {
 	private HashSet<Category> validCategories;
 	private Date dateFrom;
 	private Date dateTo;
+	private Date valueDateFrom;
+	private Date valueDateTo;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
 	
@@ -127,6 +129,10 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public void clear() {
 		this.filter = ALL;
+		this.dateFrom = null;
+		this.dateTo = null;
+		this.valueDateFrom = null;
+		this.valueDateTo = null;
 		this.validCategories = null;
 		clearAccounts();
 	}
@@ -186,6 +192,8 @@ public class FilteredData extends DefaultListenable {
 		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
 		if ((getDateFrom()!=null) && (transaction.getDate().compareTo(getDateFrom())<0)) return false;
 		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
+		if ((getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(getValueDateFrom())<0)) return false;
+		if ((getValueDateTo()!=null) && (transaction.getValueDate().compareTo(getValueDateTo())>0)) return false;
 		if (isOk(transaction.getCategory()) && isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE)) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
@@ -280,6 +288,30 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public Date getDateTo() {
 		return this.dateTo;
+	}
+
+	/** Sets the filter on transaction value date.
+	 * @param from transactions with value date strictly before <i>from</i> are rejected. A null date means "beginning of times".
+	 * @param to transactions with value date strictly after <i>to</i> are rejected. A null date means "end of times". 
+	 */
+	public void setValueDateFilter(Date from, Date to) {
+		this.valueDateFrom = from;
+		this.valueDateTo = to;
+		filter();
+	}
+	
+	/** Gets the transaction value date before which all transactions are rejected.
+	 * @return a transaction value date or null if there's no time limit. 
+	 */
+	public Date getValueDateFrom() {
+		return this.valueDateFrom;
+	}
+	
+	/** Gets the transaction value date after which all transactions are rejected.
+	 * @return a transaction value date or null if there's no time limit. 
+	 */
+	public Date getValueDateTo() {
+		return this.valueDateTo;
 	}
 
 	private void filter() {
