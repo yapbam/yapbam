@@ -25,6 +25,8 @@ public class FilteredData extends DefaultListenable {
 	private int filter;
 	private HashSet<Account> validAccounts;
 	private HashSet<Category> validCategories;
+	private Date dateFrom;
+	private Date dateTo;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
 	
@@ -182,6 +184,8 @@ public class FilteredData extends DefaultListenable {
 	public boolean isOk(Transaction transaction) {
 		if (!isOk(transaction.getAccount())) return false;
 		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
+		if ((getDateFrom()!=null) && (transaction.getDate().compareTo(getDateFrom())<0)) return false;
+		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
 		if (isOk(transaction.getCategory()) && isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE)) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
@@ -252,6 +256,30 @@ public class FilteredData extends DefaultListenable {
 		this.filter = (this.filter & mask) | property;
 		if (DEBUG) System.out.println("filter : "+this.filter);
 		filter();
+	}
+	
+	/** Sets the filter on transaction date.
+	 * @param from transactions strictly before <i>from</i> are rejected. A null date means "beginning of times".
+	 * @param to transactions strictly after <i>to</i> are rejected. A null date means "end of times". 
+	 */
+	public void setDateFilter(Date from, Date to) {
+		this.dateFrom = from;
+		this.dateTo = to;
+		filter();
+	}
+	
+	/** Gets the transaction date before which all transactions are rejected.
+	 * @return a transaction date or null if there's no time limit. 
+	 */
+	public Date getDateFrom() {
+		return this.dateFrom;
+	}
+	
+	/** Gets the transaction date after which all transactions are rejected.
+	 * @return a transaction date or null if there's no time limit. 
+	 */
+	public Date getDateTo() {
+		return this.dateTo;
 	}
 
 	private void filter() {

@@ -642,7 +642,9 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateAll.isSelected()) {
 						getDateFrom().setEnabled(false);
+						getDateFrom().setDate(null);
 						getDateTo().setEnabled(false);
+						getDateTo().setDate(null);
 					}
 				}
 			});
@@ -665,6 +667,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					if (dateEquals.isSelected()) {
 						getDateFrom().setEnabled(true);
 						getDateTo().setEnabled(false);
+						getDateTo().setDate(null);
 					}
 				}
 			});
