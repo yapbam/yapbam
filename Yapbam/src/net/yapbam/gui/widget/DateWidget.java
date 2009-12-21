@@ -102,8 +102,8 @@ public class DateWidget extends JTextField {
 		if (this.getText().trim().length()==0) updateDate();
 	}
 	
-	/** Allow/Disallow this field to be empty (if it means a null date)
-	 * Keep in mind that a now null date for an empty field is always valid.
+	/** Allow/Disallow this field to be empty (if it means a null date).
+	 * Keep in mind that a non null date for an empty field is always valid.
 	 * @param valid
 	 * @see #setEmptyDate(Date)
 	 */
