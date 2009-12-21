@@ -15,6 +15,7 @@ public class CustomFilterDialog extends AbstractDialog {
 
 	public CustomFilterDialog(Window owner, FilteredData data) {
 		super(owner, "Filtre", data); //LOCAL
+		this.pack();
 	}
 
 	@Override

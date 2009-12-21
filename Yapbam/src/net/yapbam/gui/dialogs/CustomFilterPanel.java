@@ -24,7 +24,6 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -50,10 +49,33 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JLabel jLabel = null;
 	private AmountWidget maxAmount = null;
 	private JRadioButton amountAll = null;
-	
-	private FilteredData data;
+	private boolean oldConsistency;
+	private JPanel descriptionPanel = null;
+	private JCheckBox ignoreCase = null;
+	private JCheckBox regularExpression = null;
+	private JTextField description = null;
+	private JPanel datePanel = null;
+	private JRadioButton dateAll = null;
+	private JRadioButton dateEquals = null;
+	private JRadioButton dateBetween = null;
+	private DateWidgetPanel dateFrom = null;
+	private JLabel jLabel1 = null;
+	private DateWidgetPanel dateTo = null;
+	private JPanel statementPanel = null;
+	private JCheckBox checked = null;
+	private JCheckBox notChecked = null;
+	private JPanel valueDatePanel = null;
+	private JRadioButton valueDateAll = null;
+	private JRadioButton valueDateEquals = null;
+	private JRadioButton valueDateBetween = null;
+	private DateWidgetPanel valueDateFrom = null;
+	private JLabel jLabel11 = null;
+	private DateWidgetPanel valueDateTo = null;
 	private JScrollPane jScrollPane = null;
 	private JScrollPane jScrollPane1 = null;
+	
+	private FilteredData data;
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -73,41 +95,58 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+		gridBagConstraints41.gridx = 0;
+		gridBagConstraints41.fill = GridBagConstraints.BOTH;
+		gridBagConstraints41.weightx = 1.0D;
+		gridBagConstraints41.gridy = 4;
+		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+		gridBagConstraints31.gridx = 1;
+		gridBagConstraints31.fill = GridBagConstraints.BOTH;
+		gridBagConstraints31.gridwidth = 1;
+		gridBagConstraints31.weightx = 1.0D;
+		gridBagConstraints31.gridy = 4;
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.gridx = 0;
 		gridBagConstraints21.fill = GridBagConstraints.BOTH;
+		gridBagConstraints21.weightx = 1.0D;
 		gridBagConstraints21.gridy = 2;
 		GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 		gridBagConstraints15.gridx = 0;
 		gridBagConstraints15.fill = GridBagConstraints.BOTH;
+		gridBagConstraints15.gridwidth = 2;
 		gridBagConstraints15.gridy = 1;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.gridx = 0;
+		gridBagConstraints3.gridx = 2;
 		gridBagConstraints3.fill = GridBagConstraints.BOTH;
-		gridBagConstraints3.weightx = 1.0D;
+		gridBagConstraints3.weightx = 4.0D;
 		gridBagConstraints3.weighty = 2.0D;
-		gridBagConstraints3.gridy = 4;
+		gridBagConstraints3.gridwidth = 1;
+		gridBagConstraints3.gridheight = 0;
+		gridBagConstraints3.gridy = 0;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.gridx = 0;
+		gridBagConstraints2.gridx = 1;
 		gridBagConstraints2.fill = GridBagConstraints.BOTH;
 		gridBagConstraints2.weightx = 1.0D;
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.insets = new Insets(0, 0, 0, 0);
-		gridBagConstraints2.gridy = 3;
+		gridBagConstraints2.gridy = 2;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.weighty = 1.0D;
+		gridBagConstraints.gridwidth = 2;
 		gridBagConstraints.gridy = 0;
-		this.setSize(300, 400);
+		this.setSize(800, 400);
 		this.setLayout(new GridBagLayout());
-		this.setPreferredSize(new Dimension(300, 400));
 		this.add(getAccountPanel(), gridBagConstraints);
 		this.add(getAmountPanel(), gridBagConstraints2);
 		this.add(getCategoryPanel(), gridBagConstraints3);
 		this.add(getDescriptionPanel(), gridBagConstraints15);
 		this.add(getDatePanel(), gridBagConstraints21);
+		this.add(getStatementPanel(), gridBagConstraints31);
+		this.add(getValueDatePanel(), gridBagConstraints41);
 	}
 
 	/**
@@ -450,6 +489,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		int filter = 0;
 		if (getExpense().isSelected()) filter += FilteredData.EXPENSE;
 		if (getReceipt().isSelected()) filter += FilteredData.RECEIPT;
+		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
+		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
 		this.data.setFilter(filter);
 		// build the date filter
 		Date from = getDateFrom().getDate();
@@ -459,6 +500,15 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		} else {
 			if (getDateEquals().isSelected()) to = from;
 			this.data.setDateFilter(from, to);
+		}
+		// build the value date filter
+		Date vfrom = getValueDateFrom().getDate();
+		Date vto = getValueDateTo().getDate();
+		if (getValueDateAll().isSelected()) {
+			this.data.setValueDateFilter(null, null);
+		} else {
+			if (getValueDateEquals().isSelected()) vto = vfrom;
+			this.data.setValueDateFilter(vfrom, vto);
 		}
 		// TODO Auto-generated method stub
 	}
@@ -494,25 +544,15 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 */
 	public String getInconsistencyCause() {
 		if (!getExpense().isSelected() && !getReceipt().isSelected()) return "Interdire à la fois toutes les recettes et toutes les dépenses n'est pas autorisé";
+		if (!getChecked().isSelected() && !getNotChecked().isSelected()) return "Interdire à la fois les opérations pointées et non pointées n'est pas autorisé";
 		return null;
 	}
 
 	public boolean isConsistent() {
-		return (getExpense().isSelected() || getReceipt().isSelected());
+		return (getExpense().isSelected() || getReceipt().isSelected()) &&
+			(getChecked().isSelected() || getNotChecked().isSelected());
 	}
-	
-	private boolean oldConsistency;
-	private JPanel descriptionPanel = null;
-	private JCheckBox ignoreCase = null;
-	private JCheckBox regularExpression = null;
-	private JTextField description = null;
-	private JPanel datePanel = null;
-	private JRadioButton dateAll = null;
-	private JRadioButton dateEquals = null;
-	private JRadioButton dateBetween = null;
-	private DateWidgetPanel dateFrom = null;
-	private JLabel jLabel1 = null;
-	private DateWidgetPanel dateTo = null;
+		
 	private void checkConsistency() {
 		boolean ok = isConsistent();
 		if (ok!=oldConsistency) {
@@ -536,6 +576,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints18.gridx = 0;
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
 			gridBagConstraints17.gridx = 1;
+			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints17.gridy = 0;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.gridx = 0;
@@ -738,5 +779,225 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			dateTo.setDate(data.getDateTo());
 		}
 		return dateTo;
+	}
+
+	/**
+	 * This method initializes statementPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getStatementPanel() {
+		if (statementPanel == null) {
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.gridx = 1;
+			gridBagConstraints27.anchor = GridBagConstraints.WEST;
+			gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints27.weightx = 1.0D;
+			gridBagConstraints27.gridy = 0;
+			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+			gridBagConstraints26.gridx = 0;
+			gridBagConstraints26.anchor = GridBagConstraints.WEST;
+			gridBagConstraints26.gridy = 0;
+			statementPanel = new JPanel();
+			statementPanel.setLayout(new GridBagLayout());
+			statementPanel.setBorder(BorderFactory.createTitledBorder(null, "Pointage", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			statementPanel.add(getChecked(), gridBagConstraints26);
+			statementPanel.add(getNotChecked(), gridBagConstraints27);
+		}
+		return statementPanel;
+	}
+
+	/**
+	 * This method initializes checked	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getChecked() {
+		if (checked == null) {
+			checked = new JCheckBox();
+			checked.setText("Pointées");
+			checked.setToolTipText("Cochez cette case pour autoriser les opérations pointées");
+			checked.setSelected(data.isOk(FilteredData.CHECKED));
+			checked.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					checkConsistency();
+				}
+			});
+		}
+		return checked;
+	}
+
+	/**
+	 * This method initializes notChecked	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getNotChecked() {
+		if (notChecked == null) {
+			notChecked = new JCheckBox();
+			notChecked.setText("non pointées");
+			notChecked.setToolTipText("Cochez cette case pour autoriser les opérations non pointées");
+			notChecked.setSelected(data.isOk(FilteredData.NOT_CHECKED));
+			notChecked.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					checkConsistency();
+				}
+			});
+		}
+		return notChecked;
+	}
+
+	/**
+	 * This method initializes valueDatePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getValueDatePanel() {
+		if (valueDatePanel == null) {
+			TitledBorder titledBorder = BorderFactory.createTitledBorder(null, "Date", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51));
+			titledBorder.setTitle("Date de valeur");
+			GridBagConstraints gridBagConstraints251 = new GridBagConstraints();
+			gridBagConstraints251.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints251.gridx = 3;
+			gridBagConstraints251.gridy = 0;
+			gridBagConstraints251.weightx = 1.0D;
+			gridBagConstraints251.gridheight = 3;
+			GridBagConstraints gridBagConstraints241 = new GridBagConstraints();
+			gridBagConstraints241.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints241.gridx = 2;
+			gridBagConstraints241.gridy = 0;
+			gridBagConstraints241.gridheight = 3;
+			jLabel11 = new JLabel();
+			jLabel11.setText("et");
+			GridBagConstraints gridBagConstraints231 = new GridBagConstraints();
+			gridBagConstraints231.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints231.gridx = 1;
+			gridBagConstraints231.gridy = 0;
+			gridBagConstraints231.weightx = 1.0D;
+			gridBagConstraints231.gridheight = 3;
+			GridBagConstraints gridBagConstraints221 = new GridBagConstraints();
+			gridBagConstraints221.anchor = GridBagConstraints.WEST;
+			gridBagConstraints221.gridy = 2;
+			gridBagConstraints221.gridx = 0;
+			GridBagConstraints gridBagConstraints201 = new GridBagConstraints();
+			gridBagConstraints201.anchor = GridBagConstraints.WEST;
+			gridBagConstraints201.gridy = 1;
+			gridBagConstraints201.gridx = 0;
+			GridBagConstraints gridBagConstraints191 = new GridBagConstraints();
+			gridBagConstraints191.anchor = GridBagConstraints.WEST;
+			gridBagConstraints191.gridy = 0;
+			gridBagConstraints191.gridx = 0;
+			valueDatePanel = new JPanel();
+			valueDatePanel.setLayout(new GridBagLayout());
+			valueDatePanel.setBorder(titledBorder);
+			valueDatePanel.add(getValueDateAll(), gridBagConstraints191);
+			valueDatePanel.add(getValueDateEquals(), gridBagConstraints201);
+			valueDatePanel.add(getValueDateBetween(), gridBagConstraints221);
+			valueDatePanel.add(getValueDateFrom(), gridBagConstraints231);
+			valueDatePanel.add(jLabel11, gridBagConstraints241);
+			valueDatePanel.add(getValueDateTo(), gridBagConstraints251);
+			valueDatePanel.setVisible(true);
+			ButtonGroup group = new ButtonGroup();
+			group.add(getValueDateAll());
+			group.add(getValueDateEquals());
+			group.add(getValueDateBetween());
+		}
+		return valueDatePanel;
+	}
+
+	/**
+	 * This method initializes valueDateAll	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getValueDateAll() {
+		if (valueDateAll == null) {
+			valueDateAll = new JRadioButton();
+			valueDateAll.setText("Toutes");
+			valueDateAll.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (valueDateAll.isSelected()) {
+						getValueDateFrom().setEnabled(false);
+						getValueDateFrom().setDate(null);
+						getValueDateTo().setEnabled(false);
+						getValueDateTo().setDate(null);
+					}
+				}
+			});
+			valueDateAll.setSelected(data.getValueDateFrom()==null && data.getValueDateTo()==null);
+		}
+		return valueDateAll;
+	}
+
+	/**
+	 * This method initializes valueDateEquals	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getValueDateEquals() {
+		if (valueDateEquals == null) {
+			valueDateEquals = new JRadioButton();
+			valueDateEquals.setText("Egale à");
+			valueDateEquals.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (valueDateEquals.isSelected()) {
+						getValueDateFrom().setEnabled(true);
+						getValueDateTo().setEnabled(false);
+						getValueDateTo().setDate(getValueDateFrom().getDate());
+					}
+				}
+			});
+			boolean areEquals = (data.getValueDateFrom()!=null) && NullUtils.areEquals(data.getValueDateFrom(), data.getValueDateTo());
+			valueDateEquals.setSelected(areEquals);
+		}
+		return valueDateEquals;
+	}
+
+	/**
+	 * This method initializes valueDateBetween	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getValueDateBetween() {
+		if (valueDateBetween == null) {
+			valueDateBetween = new JRadioButton();
+			valueDateBetween.setText("Comprise entre");
+			valueDateBetween.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (valueDateBetween.isSelected()) {
+						getValueDateFrom().setEnabled(true);
+						getValueDateTo().setEnabled(true);
+					}
+				}
+			});
+			valueDateBetween.setSelected(!NullUtils.areEquals(data.getValueDateFrom(), data.getValueDateTo()));
+		}
+		return valueDateBetween;
+	}
+
+	/**
+	 * This method initializes valueDateFrom	
+	 * 	
+	 * @return net.yapbam.gui.widget.DateWidgetPanel	
+	 */
+	private DateWidgetPanel getValueDateFrom() {
+		if (valueDateFrom == null) {
+			valueDateFrom = new DateWidgetPanel();
+			valueDateFrom.setDate(data.getValueDateFrom());
+		}
+		return valueDateFrom;
+	}
+
+	/**
+	 * This method initializes valueDateTo	
+	 * 	
+	 * @return net.yapbam.gui.widget.DateWidgetPanel	
+	 */
+	private DateWidgetPanel getValueDateTo() {
+		if (valueDateTo == null) {
+			valueDateTo = new DateWidgetPanel();
+			valueDateTo.setDate(data.getValueDateTo());
+		}
+		return valueDateTo;
 	}
 }
