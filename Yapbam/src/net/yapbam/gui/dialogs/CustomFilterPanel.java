@@ -26,8 +26,11 @@ import net.yapbam.gui.widget.AmountWidget;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.JTextField;
 import net.yapbam.gui.widget.DateWidgetPanel;
+import net.yapbam.util.NullUtils;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
 
@@ -429,22 +432,34 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
 	public void apply() {
+		// build the account filter 
 		int[] accountIndices = this.accountList.getSelectedIndices();
 		Account[] accounts = new Account[accountIndices.length];
 		for (int i = 0; i < accounts.length; i++) {
 			accounts[i] = data.getGlobalData().getAccount(accountIndices[i]);
 		}
 		this.data.setAccounts(accounts);
+		// build the category filter
 		int[] categoryIndices = this.categoryList.getSelectedIndices();
 		Category[] categories = new Category[categoryIndices.length];
 		for (int i = 0; i < categories.length; i++) {
 			categories[i] = data.getGlobalData().getCategory(categoryIndices[i]);
 		}
 		this.data.setCategories(categories);
+		// build the expense/receipt filter
 		int filter = 0;
 		if (getExpense().isSelected()) filter += FilteredData.EXPENSE;
 		if (getReceipt().isSelected()) filter += FilteredData.RECEIPT;
 		this.data.setFilter(filter);
+		// build the date filter
+		Date from = getDateFrom().getDate();
+		Date to = getDateTo().getDate();
+		if (getDateAll().isSelected()) {
+			this.data.setDateFilter(null, null);
+		} else {
+			if (getDateEquals().isSelected()) to = from;
+			this.data.setDateFilter(from, to);
+		}
 		// TODO Auto-generated method stub
 	}
 
@@ -648,7 +663,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					}
 				}
 			});
-			dateAll.setSelected(true);
+			dateAll.setSelected(data.getDateFrom()==null && data.getDateTo()==null);
 		}
 		return dateAll;
 	}
@@ -667,10 +682,12 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					if (dateEquals.isSelected()) {
 						getDateFrom().setEnabled(true);
 						getDateTo().setEnabled(false);
-						getDateTo().setDate(null);
+						getDateTo().setDate(getDateFrom().getDate());
 					}
 				}
 			});
+			boolean areEquals = (data.getDateFrom()!=null) && NullUtils.areEquals(data.getDateFrom(), data.getDateTo());
+			dateEquals.setSelected(areEquals);
 		}
 		return dateEquals;
 	}
@@ -693,6 +710,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 				}
 			});
 		}
+		dateBetween.setSelected(!NullUtils.areEquals(data.getDateFrom(), data.getDateTo()));
 		return dateBetween;
 	}
 
@@ -704,6 +722,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getDateFrom() {
 		if (dateFrom == null) {
 			dateFrom = new DateWidgetPanel();
+			dateFrom.setDate(data.getDateFrom());
 		}
 		return dateFrom;
 	}
@@ -716,6 +735,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getDateTo() {
 		if (dateTo == null) {
 			dateTo = new DateWidgetPanel();
+			dateTo.setDate(data.getDateTo());
 		}
 		return dateTo;
 	}
