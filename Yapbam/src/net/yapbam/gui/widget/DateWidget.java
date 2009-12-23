@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import net.yapbam.util.NullUtils;
 
-/** This class allows the user to just enter a day, or a day and a month, instead of a complete date (day, month, year)
+/** This class allows the user to just enter a day, or a day and a month, instead of a complete date (day, month, year).
  * It auto completes the typed date with the current month and year.
  * This field allows you to define what an empty field means. By default, an empty field means a null date, but, using the
  * setEmptyDate method, you can change this behavior.

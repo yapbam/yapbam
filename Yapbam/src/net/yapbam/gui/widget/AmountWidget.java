@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import net.yapbam.util.NullUtils;
 
+/** A widget to enter amount. */
 public class AmountWidget extends JTextField {
 	private static final long serialVersionUID = 1L;
 	private final static boolean DEBUG = true;
@@ -26,10 +27,20 @@ public class AmountWidget extends JTextField {
 	private Number maxValue;
 	private boolean valid;
 	
+	/** Constructor.
+	 *  The local is set to default locale.
+	 *  @see #AmountWidget(Locale)
+	 */
 	public AmountWidget() {
 		this(Locale.getDefault());
 	}
 	
+	/** Constructor.
+	 * Empty field is not allowed.
+	 * minValue is equals to Double.MIN_VALUE, maxValue to Double.MAX_VALUE.
+	 * The value is set to null.
+	 * @param locale The locale to apply to the widget (use to format the amount typed).
+	 */
 	public AmountWidget(Locale locale) {
 		super();
 		this.isEmptyAllowed = false;
