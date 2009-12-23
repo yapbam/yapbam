@@ -170,7 +170,7 @@ public class DateWidget extends JTextField {
 	 * @return true if the value was changed
 	 */
 	private boolean internalSetDate(Date date) {
-		// Does nothing if the this date is equals to current widget date
+		// Does nothing if date is equals to current widget date
 		// Be aware of null values
 		if (NullUtils.areEquals(date, this.date)) return false;
 		Date old = this.date;
