@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JCheckBox;
 import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ButtonGroup;
@@ -75,6 +77,12 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JScrollPane jScrollPane1 = null;
 	
 	private FilteredData data;
+	private PropertyChangeListener CONSISTENCY_CHECKER = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			checkConsistency();  //  @jve:decl-index=0:
+		}
+	};
 	
 	/**
 	 * This is the default constructor
@@ -543,14 +551,21 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 * @return A string that explains the problem, or null if the state is consistent.
 	 */
 	public String getInconsistencyCause() {
+		if ((getDateFrom().getDate()!=null) && (getDateTo().getDate()!=null)
+				&& (getDateFrom().getDate().compareTo(getDateTo().getDate())>0)) {
+			return "La date de début doit être antérieure à la date de fin";
+		}
+		if ((getValueDateFrom().getDate()!=null) && (getValueDateTo().getDate()!=null)
+				&& (getValueDateFrom().getDate().compareTo(getValueDateTo().getDate())>0)) {
+			return "La date de valeur de début doit être antérieure à la date de valeur de fin";
+		}
 		if (!getExpense().isSelected() && !getReceipt().isSelected()) return "Interdire à la fois toutes les recettes et toutes les dépenses n'est pas autorisé";
 		if (!getChecked().isSelected() && !getNotChecked().isSelected()) return "Interdire à la fois les opérations pointées et non pointées n'est pas autorisé";
 		return null;
 	}
 
 	public boolean isConsistent() {
-		return (getExpense().isSelected() || getReceipt().isSelected()) &&
-			(getChecked().isSelected() || getNotChecked().isSelected());
+		return getInconsistencyCause()!=null;
 	}
 		
 	private void checkConsistency() {
@@ -764,6 +779,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (dateFrom == null) {
 			dateFrom = new DateWidgetPanel();
 			dateFrom.setDate(data.getDateFrom());
+			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return dateFrom;
 	}
@@ -777,6 +793,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (dateTo == null) {
 			dateTo = new DateWidgetPanel();
 			dateTo.setDate(data.getDateTo());
+			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return dateTo;
 	}
@@ -984,6 +1001,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (valueDateFrom == null) {
 			valueDateFrom = new DateWidgetPanel();
 			valueDateFrom.setDate(data.getValueDateFrom());
+			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return valueDateFrom;
 	}
@@ -997,6 +1015,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (valueDateTo == null) {
 			valueDateTo = new DateWidgetPanel();
 			valueDateTo.setDate(data.getValueDateTo());
+			valueDateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return valueDateTo;
 	}
