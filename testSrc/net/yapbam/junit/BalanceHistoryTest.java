@@ -10,6 +10,7 @@ import org.junit.Test;
 
 public class BalanceHistoryTest {
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetNormalizedStep() {		
 		Date date1 = new Date(109,5,1);
