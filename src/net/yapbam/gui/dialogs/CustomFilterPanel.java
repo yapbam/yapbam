@@ -304,7 +304,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (receipt == null) {
 			receipt = new JCheckBox();
 			receipt.setText("Recettes");
-			receipt.setSelected(data.isOk(FilteredData.RECEIPT));
+			receipt.setSelected(data.getMaximumAmount()>=0);
 			receipt.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					checkConsistency();
@@ -323,7 +323,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (expense == null) {
 			expense = new JCheckBox();
 			expense.setText("Dépenses");
-			expense.setSelected(data.isOk(FilteredData.EXPENSE));
+			expense.setSelected(data.getMinimumAmount()<=0);
 			expense.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					checkConsistency();
@@ -438,6 +438,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (minAmount == null) {
 			minAmount = new AmountWidget(LocalizationData.getLocale());
 			minAmount.setColumns(6);
+			minAmount.setEmptyAllowed(true);
 		}
 		return minAmount;
 	}
@@ -451,6 +452,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (maxAmount == null) {
 			maxAmount = new AmountWidget(LocalizationData.getLocale());
 			maxAmount.setColumns(6);
+			maxAmount.setEmptyAllowed(true);
 		}
 		return maxAmount;
 	}
@@ -495,8 +497,9 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		this.data.setCategories(categories);
 		// build the expense/receipt filter
 		int filter = 0;
-		if (getExpense().isSelected()) filter += FilteredData.EXPENSE;
-		if (getReceipt().isSelected()) filter += FilteredData.RECEIPT;
+		//TODO
+//		if (getExpense().isSelected()) filter += FilteredData.EXPENSE;
+//		if (getReceipt().isSelected()) filter += FilteredData.RECEIPT;
 		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
 		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
 		this.data.setFilter(filter);
