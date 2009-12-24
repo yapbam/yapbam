@@ -14,11 +14,8 @@ public class FilteredData extends DefaultListenable {
 	
 	public static final int CHECKED=1;
 	public static final int NOT_CHECKED=2;
-	public static final int RECEIPT=4;
-	public static final int EXPENSE=8;
 	private static final int ALL = -1;
 	private static final int CHECKED_MASK = (ALL ^ CHECKED) ^ NOT_CHECKED;
-	private static final int EXPENSE_RECEIPT_MASK = (ALL ^ RECEIPT) ^ EXPENSE;
 
 	private GlobalData data;
 	private ArrayList<Transaction> transactions;
@@ -29,6 +26,9 @@ public class FilteredData extends DefaultListenable {
 	private Date dateTo;
 	private Date valueDateFrom;
 	private Date valueDateTo;
+	private double minAmount;
+	private double maxAmount;
+	
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
 	
@@ -134,6 +134,8 @@ public class FilteredData extends DefaultListenable {
 		this.valueDateFrom = null;
 		this.valueDateTo = null;
 		this.validCategories = null;
+		this.minAmount = Double.NEGATIVE_INFINITY;
+		this.maxAmount = Double.POSITIVE_INFINITY;
 		clearAccounts();
 	}
 
@@ -183,7 +185,8 @@ public class FilteredData extends DefaultListenable {
 	}
 
 	/** Gets a transaction's validity.
-	 * Note about categories : A transaction is valid if it or one of its subtransactions has a valid category. 
+	 * Note about subtransactions : A transaction is also valid if one of its subtransactions,
+	 *  considered as transaction (completed with transactions's date, statement, etc ...), is valid. 
 	 * @param transaction The transaction to test.
 	 * @return true if the transaction is valid.
 	 */
@@ -194,7 +197,8 @@ public class FilteredData extends DefaultListenable {
 		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
 		if ((getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(getValueDateFrom())<0)) return false;
 		if ((getValueDateTo()!=null) && (transaction.getValueDate().compareTo(getValueDateTo())>0)) return false;
-		if (isOk(transaction.getCategory()) && isOk((transaction.getAmount()>0)?RECEIPT:EXPENSE)) return true;
+		if (isOk(transaction.getCategory()) && (transaction.getAmount()>=getMinimumAmount()) &&
+				(transaction.getAmount()<=getMaximumAmount())) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			if (isOk(transaction.getSubTransaction(i))) {
@@ -206,7 +210,7 @@ public class FilteredData extends DefaultListenable {
 	
 	public boolean isOk(SubTransaction subtransaction) {
 		boolean categoryOk = isOk(subtransaction.getCategory());
-		boolean amountOk = isOk((subtransaction.getAmount()>0?RECEIPT:EXPENSE));
+		boolean amountOk = (subtransaction.getAmount()>=getMinimumAmount()) && (subtransaction.getAmount()<=getMaximumAmount());
 		return categoryOk && amountOk;
 	}
 	
@@ -258,7 +262,6 @@ public class FilteredData extends DefaultListenable {
 		if (DEBUG) System.out.println("---------- setFilter("+Integer.toBinaryString(property)+") ----------");
 		int mask = ALL;
 		if (((property & CHECKED) != 0) || ((property & NOT_CHECKED) != 0)) mask = mask & CHECKED_MASK;
-		if (((property & RECEIPT) != 0) || ((property & EXPENSE) != 0)) mask = mask & EXPENSE_RECEIPT_MASK;
 		if (mask == ALL) throw new IllegalArgumentException();
 		if (DEBUG) System.out.println(Integer.toBinaryString(mask));//CU
 		this.filter = (this.filter & mask) | property;
@@ -312,6 +315,34 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public Date getValueDateTo() {
 		return this.valueDateTo;
+	}
+	
+	/** Sets the transaction minimum and maximum amounts.
+	 * Note that setting this filter may change the expense/receipt filter.
+	 * @param minAmount The minimum amount.
+	 * @param maxAmount The maximum amount.
+	 * @throws IllegalArgumentException if minAmount > maxAmount
+	 * @see #setFilter(int)
+	 */
+	public void setAmountFilter(double minAmount, double maxAmount) {
+		if (minAmount>maxAmount) throw new IllegalArgumentException();
+		this.minAmount = minAmount;
+		this.maxAmount = maxAmount;
+		filter();
+	}
+	
+	/** Gets the transaction minimum amount.
+	 * @return the minimum amount (Double.NEGATIVE_INFINITY if there's no low limit).
+	 */
+	public double getMinimumAmount() {
+		return this.minAmount;
+	}
+	
+	/** Gets the transaction maximum amount.
+	 * @return the maximum amount (Double.POSITIVE_INFINITY if there's no high ow limit).
+	 */
+	public double getMaximumAmount() {
+		return this.maxAmount;
 	}
 
 	private void filter() {

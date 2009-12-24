@@ -269,9 +269,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
         			LocalizationData.get("MainMenuBar.notChecked")}, new int[]{FilteredData.CHECKED, FilteredData.NOT_CHECKED}); //$NON-NLS-1$
         	filterMenu.addSeparator();
-        	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.Expenses"), LocalizationData.get("MainMenuBar.Receipts")}, //$NON-NLS-1$ //$NON-NLS-2$
-        			new int[]{FilteredData.EXPENSE, FilteredData.RECEIPT});
-			
+        	buildExpenseReceiptFilterChoiceMenu();			
         	filterMenu.addSeparator();
 			filterMenu.add(new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this)));
 		}
@@ -305,6 +303,41 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			frame.getFilteredData().setFilter(property);
+		}
+	}
+
+	private void buildExpenseReceiptFilterChoiceMenu() {
+		FilteredData filter = frame.getFilteredData();
+        ButtonGroup group = new ButtonGroup();
+        JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Expenses")); //$NON-NLS-1$
+        menuItem.setSelected(filter.getMaximumAmount()<=0);
+		filterMenu.add(menuItem);
+		group.add(menuItem);
+		menuItem.addActionListener(new AmountActionItem(Double.NEGATIVE_INFINITY, 0));
+		
+		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-2$
+        menuItem.setSelected(filter.getMinimumAmount()>=0);
+        filterMenu.add(menuItem);
+		group.add(menuItem);
+		menuItem.addActionListener(new AmountActionItem(0, Double.POSITIVE_INFINITY));
+		
+		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
+        menuItem.setSelected((filter.getMaximumAmount()>0) && (filter.getMinimumAmount()<0));
+        filterMenu.add(menuItem);
+		group.add(menuItem);
+		menuItem.addActionListener(new AmountActionItem(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
+	}
+
+	final class AmountActionItem implements ActionListener {
+		private double min;
+		private double max;
+		AmountActionItem (double min, double max) {
+			this.min = min;
+			this.max = max;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			frame.getFilteredData().setAmountFilter(min, max);
 		}
 	}
 

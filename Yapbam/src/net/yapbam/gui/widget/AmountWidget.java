@@ -37,15 +37,15 @@ public class AmountWidget extends JTextField {
 	
 	/** Constructor.
 	 * Empty field is not allowed.
-	 * minValue is equals to Double.MIN_VALUE, maxValue to Double.MAX_VALUE.
+	 * minValue is equals to Double.NEGATIVE_INFINITY, maxValue to Double.POSITIVE_INFINITY.
 	 * The value is set to null.
 	 * @param locale The locale to apply to the widget (use to format the amount typed).
 	 */
 	public AmountWidget(Locale locale) {
 		super();
 		this.isEmptyAllowed = false;
-		this.minValue = Double.MIN_VALUE;
-		this.maxValue = Double.MAX_VALUE;
+		this.minValue = Double.NEGATIVE_INFINITY;
+		this.maxValue = Double.POSITIVE_INFINITY;
 		format = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
 		this.setInputVerifier(new DefaultInputVerifier() {
 			protected boolean check(JComponent input, boolean change) {
