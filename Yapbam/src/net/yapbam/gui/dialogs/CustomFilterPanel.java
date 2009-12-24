@@ -42,8 +42,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JPanel amountPanel = null;
 	private JPanel categoryPanel = null;
 	private JList categoryList = null;
-	private JCheckBox receipt = null;
-	private JCheckBox expense = null;
 	private JPanel jPanel3 = null;
 	private JRadioButton amountEquals = null;
 	private JRadioButton amountBetween = null;
@@ -218,15 +216,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 5;
 			gridBagConstraints4.gridy = 0;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.anchor = GridBagConstraints.WEST;
-			gridBagConstraints5.gridy = 0;
-			gridBagConstraints5.weightx = 0.0D;
-			gridBagConstraints5.gridx = 1;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.anchor = GridBagConstraints.WEST;
-			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.gridx = 0;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.fill = GridBagConstraints.BOTH;
@@ -238,8 +227,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			amountPanel.setLayout(new GridBagLayout());
 			amountPanel.setBorder(BorderFactory.createTitledBorder(null, "Montant", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			amountPanel.add(getJPanel3(), gridBagConstraints7);
-			amountPanel.add(getExpense(), gridBagConstraints6);
-			amountPanel.add(getReceipt(), gridBagConstraints5);
 		}
 		return amountPanel;
 	}
@@ -293,44 +280,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			categoryList.setSelectedIndices(selection);
 		}
 		return categoryList;
-	}
-
-	/**
-	 * This method initializes receipt	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getReceipt() {
-		if (receipt == null) {
-			receipt = new JCheckBox();
-			receipt.setText("Recettes");
-			receipt.setSelected(data.getMaximumAmount()>=0);
-			receipt.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					checkConsistency();
-				}
-			});
-		}
-		return receipt;
-	}
-
-	/**
-	 * This method initializes expense	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getExpense() {
-		if (expense == null) {
-			expense = new JCheckBox();
-			expense.setText("Dépenses");
-			expense.setSelected(data.getMinimumAmount()<=0);
-			expense.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					checkConsistency();
-				}
-			});
-		}
-		return expense;
 	}
 
 	/**
@@ -401,9 +350,11 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					if (amountEquals.isSelected()) {
 						getMinAmount().setEnabled(true);
 						getMaxAmount().setEnabled(false);
+						getMaxAmount().setValue(getMinAmount().getValue());
 					}
 				}
 			});
+			amountEquals.setSelected(data.getMinimumAmount()==data.getMaximumAmount());
 		}
 		return amountEquals;
 	}
@@ -425,6 +376,9 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					}
 				}
 			});
+			amountBetween.setSelected(((data.getMinimumAmount()!=Double.NEGATIVE_INFINITY) ||
+					(data.getMaximumAmount()!=Double.POSITIVE_INFINITY)) &&
+					(data.getMaximumAmount()!=data.getMinimumAmount()));
 		}
 		return amountBetween;
 	}
@@ -439,6 +393,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			minAmount = new AmountWidget(LocalizationData.getLocale());
 			minAmount.setColumns(6);
 			minAmount.setEmptyAllowed(true);
+			minAmount.setValue(data.getMinimumAmount()==Double.NEGATIVE_INFINITY?null:data.getMinimumAmount());
+			minAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return minAmount;
 	}
@@ -453,6 +409,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			maxAmount = new AmountWidget(LocalizationData.getLocale());
 			maxAmount.setColumns(6);
 			maxAmount.setEmptyAllowed(true);
+			maxAmount.setValue(data.getMaximumAmount()==Double.POSITIVE_INFINITY?null:data.getMaximumAmount());
+			maxAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return maxAmount;
 	}
@@ -474,6 +432,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					}
 				}
 			});
+			amountAll.setSelected((data.getMinimumAmount()==Double.NEGATIVE_INFINITY) && (data.getMaximumAmount()==Double.POSITIVE_INFINITY));
 		}
 		return amountAll;
 	}
@@ -496,10 +455,11 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		}
 		this.data.setCategories(categories);
 		// build the expense/receipt filter
+		double min = getMinAmount().getValue()==null?Double.NEGATIVE_INFINITY:getMinAmount().getValue();
+		double max = getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue();
+		this.data.setAmountFilter(min, max);
+		// Build the statement filter
 		int filter = 0;
-		//TODO
-//		if (getExpense().isSelected()) filter += FilteredData.EXPENSE;
-//		if (getReceipt().isSelected()) filter += FilteredData.RECEIPT;
 		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
 		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
 		this.data.setFilter(filter);
@@ -562,8 +522,10 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 				&& (getValueDateFrom().getDate().compareTo(getValueDateTo().getDate())>0)) {
 			return "La date de valeur de début doit être antérieure à la date de valeur de fin";
 		}
-		if (!getExpense().isSelected() && !getReceipt().isSelected()) return "Interdire à la fois toutes les recettes et toutes les dépenses n'est pas autorisé";
-		if (!getChecked().isSelected() && !getNotChecked().isSelected()) return "Interdire à la fois les opérations pointées et non pointées n'est pas autorisé";
+		if ((getMinAmount().getValue()!=null) && (getMaxAmount().getValue()!=null)
+				&& (getMinAmount().getValue()>getMaxAmount().getValue())) {
+			return "Le montant minimum doit être inférieur au montant maxi";
+		}
 		return null;
 	}
 

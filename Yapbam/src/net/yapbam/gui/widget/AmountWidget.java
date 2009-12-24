@@ -16,7 +16,7 @@ import net.yapbam.util.NullUtils;
 /** A widget to enter amount. */
 public class AmountWidget extends JTextField {
 	private static final long serialVersionUID = 1L;
-	private final static boolean DEBUG = true;
+	private final static boolean DEBUG = false;
 	
 	public static final String VALUE_PROPERTY = "value";
 	
