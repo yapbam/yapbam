@@ -36,6 +36,8 @@ import java.util.Date;
 import javax.swing.JTextField;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
+import net.yapbam.util.TextMatcher;
+import net.yapbam.util.TextMatcher.Kind;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
 
@@ -494,6 +496,21 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			if (getValueDateEquals().isSelected()) vto = vfrom;
 			this.data.setValueDateFilter(vfrom, vto);
 		}
+		// build the description filter
+		String text = getDescription().getText().trim();
+		if (text.length()==0) {
+			this.data.setDescriptionFilter(null);
+		} else {
+			TextMatcher.Kind kind = null;
+			if (getDescriptionEqualsTo().isSelected()) {
+				kind = TextMatcher.EQUALS;
+			} else if (getDescriptionContains().isSelected()) {
+				kind = TextMatcher.CONTAINS;
+			} else if (getDescriptionRegular().isSelected()) {
+				kind = TextMatcher.REGULAR;
+			}
+			this.data.setDescriptionFilter(new TextMatcher(kind, text, !getIgnoreCase().isSelected(), !getIgnoreDiacritics().isSelected()));
+		}
 		// TODO Auto-generated method stub
 	}
 
@@ -615,6 +632,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (ignoreCase == null) {
 			ignoreCase = new JCheckBox();
 			ignoreCase.setText("Ignorer la casse");
+			ignoreCase.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isCaseSensitive());
 		}
 		return ignoreCase;
 	}
@@ -627,6 +645,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JTextField getDescription() {
 		if (description == null) {
 			description = new JTextField();
+			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter());
 		}
 		return description;
 	}
@@ -1077,6 +1096,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (ignoreDiacritics == null) {
 			ignoreDiacritics = new JCheckBox();
 			ignoreDiacritics.setText("Ignorer les accents");
+			ignoreDiacritics.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isDiacriticalSensitive());
 		}
 		return ignoreDiacritics;
 	}
@@ -1117,6 +1137,13 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			group.add(getDescriptionEqualsTo());
 			group.add(getDescriptionContains());
 			group.add(getDescriptionRegular());
+			if ((data.getDescriptionFilter()==null) || (data.getDescriptionFilter().getKind()==TextMatcher.CONTAINS)) {
+				getDescriptionContains().setSelected(true);
+			} else if (data.getDescriptionFilter().getKind()==TextMatcher.EQUALS) {
+				getDescriptionEqualsTo().setSelected(true);
+			} else {
+				getDescriptionRegular().setSelected(true);
+			}
 		}
 		return jPanel1;
 	}

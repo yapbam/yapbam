@@ -3,6 +3,7 @@ package net.yapbam.data;
 import java.util.*;
 
 import net.yapbam.data.event.*;
+import net.yapbam.util.TextMatcher;
 
 /** The global data class represents the whole data of a Yapbam running instance.
  * This class represents a filter on that data retaining only the account(s) and transaction(s) the user choose to view.
@@ -31,6 +32,7 @@ public class FilteredData extends DefaultListenable {
 	
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
+	private TextMatcher descriptionMatcher;
 	
 	public FilteredData(GlobalData data) {
 	    this.data = data;
@@ -184,20 +186,29 @@ public class FilteredData extends DefaultListenable {
 		return (this.validAccounts==null) || (this.validAccounts.contains(account));
 	}
 	
-
-	
-	
-	
-	public void setDescriptionFilter(String filter, boolean ignoreCase, boolean ignoreDiacriticals, boolean regexp) {
-		//TODO
+	/** Sets the description filter.
+	 * @param matcher a TextMatcher instance or null to apply no filter on description
+	 */
+	public void setDescriptionFilter(TextMatcher matcher) {
+		this.descriptionMatcher = matcher;
+		this.filter();
+		fireEvent(new FilterUpdatedEvent(this));
 	}
 	
+	/** Gets the validity of a string according to the current description filter. 
+	 * @param description The string to test
+	 * @return true if the description is ok with the filter.
+	 */
 	private boolean isDescriptionOk(String description) {
-		//TODO
-		return true;
+		return this.descriptionMatcher==null?true:this.descriptionMatcher.matches(description);
 	}
-
 	
+	/** Gets the description filter.
+	 * @return a TextMatcher or null if there is no description filter
+	 */
+	public TextMatcher getDescriptionFilter() {
+		return this.descriptionMatcher;
+	}
 	
 	/** Gets a transaction's validity.
 	 * Note about subtransactions : A transaction is also valid if one of its subtransactions,
