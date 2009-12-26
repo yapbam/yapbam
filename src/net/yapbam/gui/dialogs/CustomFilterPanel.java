@@ -6,10 +6,13 @@ import java.awt.GridBagConstraints;
 import javax.swing.JList;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JCheckBox;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -23,6 +26,7 @@ import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 
@@ -52,7 +56,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private boolean oldConsistency;
 	private JPanel descriptionPanel = null;
 	private JCheckBox ignoreCase = null;
-	private JCheckBox regularExpression = null;
 	private JTextField description = null;
 	private JPanel datePanel = null;
 	private JRadioButton dateAll = null;
@@ -85,7 +88,13 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JTextField statement = null;
 	private JCheckBox regularStatement = null;
 	private JPanel jPanel = null;
-	
+	private JCheckBox ignoreDiacritics = null;
+	private JLabel regexpHelp = null;
+	private JPanel jPanel1 = null;
+	private JRadioButton descriptionEqualsTo = null;
+	private JRadioButton descriptionContains = null;
+	private JRadioButton descriptionRegular = null;
+	private JPanel jPanel2 = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -552,25 +561,47 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 */
 	private JPanel getDescriptionPanel() {
 		if (descriptionPanel == null) {
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints18.gridy = 1;
-			gridBagConstraints18.weightx = 1.0;
-			gridBagConstraints18.gridwidth = 0;
-			gridBagConstraints18.gridx = 0;
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.gridx = 1;
-			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints17.gridy = 0;
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
-			gridBagConstraints16.gridy = 0;
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.gridx = 1;
+			gridBagConstraints30.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints30.weightx = 1.0D;
+			gridBagConstraints30.gridy = 0;
+			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
+			gridBagConstraints33.gridx = 0;
+			gridBagConstraints33.gridheight = 0;
+			gridBagConstraints33.insets = new Insets(0, 0, 0, 5);
+			gridBagConstraints33.gridy = 0;
+			regexpHelp = new JLabel();
+			regexpHelp.setText("");
+			regexpHelp.setToolTipText("Cliquez ici pour obtenir de l'aide sur les expressions régulières");
+			regexpHelp.setIcon(IconManager.HELP);
+			regexpHelp.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					//TODO
+//					try {
+//						new DefaultHTMLDialog(AbstractDialog.getOwnerWindow(regexpHelp), "Aide", new URL("file://help/regexp.html")).setVisible(true);
+//					} catch (MalformedURLException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//					try {
+//						Desktop.getDesktop().browse(new URI("file://help/regexp.html"));
+//					} catch (IOException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					} catch (URISyntaxException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+					
+				}
+			});
 			descriptionPanel = new JPanel();
 			descriptionPanel.setLayout(new GridBagLayout());
 			descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, "Libellé", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
-			descriptionPanel.add(getIgnoreCase(), gridBagConstraints16);
-			descriptionPanel.add(getRegularExpression(), gridBagConstraints17);
-			descriptionPanel.add(getDescription(), gridBagConstraints18);
+			descriptionPanel.add(getJPanel1(), gridBagConstraints33);
+			descriptionPanel.add(getJPanel2(), gridBagConstraints30);
 		}
 		return descriptionPanel;
 	}
@@ -586,19 +617,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			ignoreCase.setText("Ignorer la casse");
 		}
 		return ignoreCase;
-	}
-
-	/**
-	 * This method initializes regularExpression	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getRegularExpression() {
-		if (regularExpression == null) {
-			regularExpression = new JCheckBox();
-			regularExpression.setText("Expression régulière");
-		}
-		return regularExpression;
 	}
 
 	/**
@@ -1048,5 +1066,128 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			jPanel.add(getRegularStatement(), gridBagConstraints28);
 		}
 		return jPanel;
+	}
+
+	/**
+	 * This method initializes ignoreDiacritics	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getIgnoreDiacritics() {
+		if (ignoreDiacritics == null) {
+			ignoreDiacritics = new JCheckBox();
+			ignoreDiacritics.setText("Ignorer les accents");
+		}
+		return ignoreDiacritics;
+	}
+
+	/**
+	 * This method initializes jPanel1	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel1() {
+		if (jPanel1 == null) {
+			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
+			gridBagConstraints36.gridx = 0;
+			gridBagConstraints36.gridy = 2;
+			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
+			gridBagConstraints35.gridx = 0;
+			gridBagConstraints35.anchor = GridBagConstraints.WEST;
+			gridBagConstraints35.gridheight = 1;
+			gridBagConstraints35.gridwidth = 1;
+			gridBagConstraints35.weightx = 0.0D;
+			gridBagConstraints35.gridy = 1;
+			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
+			gridBagConstraints34.gridx = 0;
+			gridBagConstraints34.anchor = GridBagConstraints.WEST;
+			gridBagConstraints34.gridy = 0;
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.anchor = GridBagConstraints.WEST;
+			gridBagConstraints32.gridy = 2;
+			gridBagConstraints32.weightx = 1.0D;
+			gridBagConstraints32.gridx = 1;
+			jPanel1 = new JPanel();
+			jPanel1.setLayout(new GridBagLayout());
+			jPanel1.add(regexpHelp, gridBagConstraints32);
+			jPanel1.add(getDescriptionEqualsTo(), gridBagConstraints34);
+			jPanel1.add(getDescriptionContains(), gridBagConstraints35);
+			jPanel1.add(getDescriptionRegular(), gridBagConstraints36);
+			ButtonGroup group = new ButtonGroup();
+			group.add(getDescriptionEqualsTo());
+			group.add(getDescriptionContains());
+			group.add(getDescriptionRegular());
+		}
+		return jPanel1;
+	}
+
+	/**
+	 * This method initializes descriptionEqualsTo	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getDescriptionEqualsTo() {
+		if (descriptionEqualsTo == null) {
+			descriptionEqualsTo = new JRadioButton();
+			descriptionEqualsTo.setText("Egal à");
+		}
+		return descriptionEqualsTo;
+	}
+
+	/**
+	 * This method initializes descriptionContains	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getDescriptionContains() {
+		if (descriptionContains == null) {
+			descriptionContains = new JRadioButton();
+			descriptionContains.setText("Contient");
+		}
+		return descriptionContains;
+	}
+
+	/**
+	 * This method initializes descriptionRegular	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getDescriptionRegular() {
+		if (descriptionRegular == null) {
+			descriptionRegular = new JRadioButton();
+			descriptionRegular.setText("Expression régulière");
+		}
+		return descriptionRegular;
+	}
+
+	/**
+	 * This method initializes jPanel2	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel2() {
+		if (jPanel2 == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.anchor = GridBagConstraints.NORTH;
+			gridBagConstraints18.gridwidth = 0;
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.gridy = 1;
+			gridBagConstraints18.weightx = 1.0;
+			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.anchor = GridBagConstraints.WEST;
+			gridBagConstraints17.gridy = 0;
+			gridBagConstraints17.gridx = 1;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.anchor = GridBagConstraints.WEST;
+			gridBagConstraints16.gridy = -1;
+			jPanel2 = new JPanel();
+			jPanel2.setLayout(new GridBagLayout());
+			jPanel2.add(getIgnoreCase(), gridBagConstraints16);
+			jPanel2.add(getIgnoreDiacritics(), gridBagConstraints17);
+			jPanel2.add(getDescription(), gridBagConstraints18);
+		}
+		return jPanel2;
 	}
 }
