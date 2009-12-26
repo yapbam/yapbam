@@ -4,7 +4,7 @@ import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 public class TextMatcher {
-	private static interface Kind {}
+	public static interface Kind {}
 	
 	public static final Kind REGULAR = new Kind() {};
 	public static final Kind EQUALS = new Kind() {};
