@@ -183,7 +183,22 @@ public class FilteredData extends DefaultListenable {
 	public boolean isOk(Account account) {
 		return (this.validAccounts==null) || (this.validAccounts.contains(account));
 	}
+	
 
+	
+	
+	
+	public void setDescriptionFilter(String filter, boolean ignoreCase, boolean ignoreDiacriticals, boolean regexp) {
+		//TODO
+	}
+	
+	private boolean isDescriptionOk(String description) {
+		//TODO
+		return true;
+	}
+
+	
+	
 	/** Gets a transaction's validity.
 	 * Note about subtransactions : A transaction is also valid if one of its subtransactions,
 	 *  considered as transaction (completed with transactions's date, statement, etc ...), is valid. 
@@ -198,7 +213,7 @@ public class FilteredData extends DefaultListenable {
 		if ((getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(getValueDateFrom())<0)) return false;
 		if ((getValueDateTo()!=null) && (transaction.getValueDate().compareTo(getValueDateTo())>0)) return false;
 		if (isOk(transaction.getCategory()) && (transaction.getAmount()>=getMinimumAmount()) &&
-				(transaction.getAmount()<=getMaximumAmount())) return true;
+				(transaction.getAmount()<=getMaximumAmount()) && isDescriptionOk(transaction.getDescription())) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			if (isOk(transaction.getSubTransaction(i))) {
@@ -209,9 +224,8 @@ public class FilteredData extends DefaultListenable {
 	}
 	
 	public boolean isOk(SubTransaction subtransaction) {
-		boolean categoryOk = isOk(subtransaction.getCategory());
 		boolean amountOk = (subtransaction.getAmount()>=getMinimumAmount()) && (subtransaction.getAmount()<=getMaximumAmount());
-		return categoryOk && amountOk;
+		return isOk(subtransaction.getCategory()) && amountOk && isDescriptionOk(subtransaction.getDescription());
 	}
 	
 	/** Set the valid categories for this filter.
