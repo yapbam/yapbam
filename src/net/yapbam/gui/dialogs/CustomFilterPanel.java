@@ -19,6 +19,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
@@ -31,9 +32,8 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,6 +44,19 @@ import net.yapbam.util.TextMatcher;
 import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
+
+	private final class RegexprListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			try {
+				Desktop.getDesktop().browse(new URI("http://www.yapbam.net/"));
+			} catch (Exception exception) {
+				String message = MessageFormat.format("Erreur {0} lors de l'ouverture de l'aide", exception.toString());
+				JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(regexpHelp), message, "Impossible d'ouvrir l'aide", JOptionPane.ERROR_MESSAGE);
+			}
+			
+		}
+	}
 
 	private static final long serialVersionUID = 1L;
 	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY";
@@ -636,28 +649,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			regexpHelp.setText("");
 			regexpHelp.setToolTipText("Cliquez ici pour obtenir de l'aide sur les expressions régulières");
 			regexpHelp.setIcon(IconManager.HELP);
-			regexpHelp.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					//TODO
-//					try {
-//						new DefaultHTMLDialog(AbstractDialog.getOwnerWindow(regexpHelp), "Aide", new URL("file://help/regexp.html")).setVisible(true);
-//					} catch (MalformedURLException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-					try {
-						Desktop.getDesktop().browse(new URI("http://www.yapbam.net"));
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (URISyntaxException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-				}
-			});
+			regexpHelp.addMouseListener(new RegexprListener());
 			descriptionPanel = new JPanel();
 			descriptionPanel.setLayout(new GridBagLayout());
 			descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, "Libellé", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
@@ -1304,6 +1296,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			regexpStatement.setToolTipText("Cliquez ici pour obtenir de l\'aide sur les expressions régulières");
 			regexpStatement.setText("");
 			regexpStatement.setIcon(IconManager.HELP);
+			regexpStatement.addMouseListener(new RegexprListener());
+
 			jPanel11 = new JPanel();
 			jPanel11.setLayout(new GridBagLayout());
 			jPanel11.setBorder(BorderFactory.createTitledBorder(null, "Relevé", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
