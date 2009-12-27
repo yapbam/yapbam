@@ -29,10 +29,11 @@ public class FilteredData extends DefaultListenable {
 	private Date valueDateTo;
 	private double minAmount;
 	private double maxAmount;
+	private TextMatcher descriptionMatcher;
+	private TextMatcher statementMatcher;
 	
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
-	private TextMatcher descriptionMatcher;
 	
 	public FilteredData(GlobalData data) {
 	    this.data = data;
@@ -138,6 +139,8 @@ public class FilteredData extends DefaultListenable {
 		this.validCategories = null;
 		this.minAmount = Double.NEGATIVE_INFINITY;
 		this.maxAmount = Double.POSITIVE_INFINITY;
+		this.descriptionMatcher = null;
+		this.statementMatcher = null;
 		clearAccounts();
 	}
 
@@ -218,6 +221,7 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public boolean isOk(Transaction transaction) {
 		if (!isOk(transaction.getAccount())) return false;
+		if (!isStatementOk(transaction)) return false;
 		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
 		if ((getDateFrom()!=null) && (transaction.getDate().compareTo(getDateFrom())<0)) return false;
 		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
@@ -283,7 +287,7 @@ public class FilteredData extends DefaultListenable {
 		return ((property & this.filter) != 0);
 	}
 	
-	public void setFilter(int property) {
+	private void setFilter(int property) {
 		if (DEBUG) System.out.println("---------- setFilter("+Integer.toBinaryString(property)+") ----------");
 		int mask = ALL;
 		if (((property & CHECKED) != 0) || ((property & NOT_CHECKED) != 0)) mask = mask & CHECKED_MASK;
@@ -292,6 +296,29 @@ public class FilteredData extends DefaultListenable {
 		this.filter = (this.filter & mask) | property;
 		if (DEBUG) System.out.println("filter : "+this.filter);
 		filter();
+	}
+	
+	public void setStatementFilter (int property, TextMatcher statementFilter) {
+		if (((property & CHECKED) == 0) && (statementFilter!=null)) {
+			throw new IllegalArgumentException();
+		}
+		this.statementMatcher = statementFilter;
+		setFilter(property);
+	}
+	
+	public TextMatcher getStatementFilter () {
+		return this.statementMatcher;
+	}
+	
+	public boolean isStatementOk(Transaction transaction) {
+		String statement = transaction.getStatement();
+		if (statement==null) { // Not checked transaction
+			return isOk(NOT_CHECKED);
+		} else { // Checked transaction
+			if (!isOk(CHECKED)) return false;
+			if (statementMatcher==null) return true;
+			return statementMatcher.matches(statement);
+		}
 	}
 	
 	/** Sets the filter on transaction date.

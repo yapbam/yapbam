@@ -302,7 +302,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			frame.getFilteredData().setFilter(property);
+			frame.getFilteredData().setStatementFilter(property,null);
 		}
 	}
 
