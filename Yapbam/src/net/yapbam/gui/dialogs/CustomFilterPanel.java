@@ -7,6 +7,7 @@ import javax.swing.JList;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JCheckBox;
@@ -30,6 +31,9 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,6 +41,7 @@ import javax.swing.JTextField;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
+import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
 
@@ -99,6 +104,10 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton statementEqualsTo = null;
 	private JRadioButton statementContains = null;
 	private JRadioButton statementRegular = null;
+	private JButton clear = null;
+	private JPanel modePanel = null;
+	private JScrollPane jScrollPane2 = null;
+	private JList modes = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -118,17 +127,25 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+		gridBagConstraints28.gridx = 1;
+		gridBagConstraints28.fill = GridBagConstraints.BOTH;
+		gridBagConstraints28.gridy = 0;
+		GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
+		gridBagConstraints110.gridx = 0;
+		gridBagConstraints110.gridy = 4;
 		GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
 		gridBagConstraints41.gridx = 0;
 		gridBagConstraints41.fill = GridBagConstraints.BOTH;
 		gridBagConstraints41.weightx = 1.0D;
-		gridBagConstraints41.gridy = 4;
+		gridBagConstraints41.gridy = 3;
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 1;
 		gridBagConstraints31.fill = GridBagConstraints.BOTH;
 		gridBagConstraints31.gridwidth = 1;
 		gridBagConstraints31.weightx = 1.0D;
-		gridBagConstraints31.gridy = 4;
+		gridBagConstraints31.gridheight = 0;
+		gridBagConstraints31.gridy = 3;
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.gridx = 0;
 		gridBagConstraints21.fill = GridBagConstraints.BOTH;
@@ -159,7 +176,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.weighty = 1.0D;
-		gridBagConstraints.gridwidth = 2;
+		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.gridy = 0;
 		this.setSize(800, 400);
 		this.setLayout(new GridBagLayout());
@@ -170,6 +187,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		this.add(getDatePanel(), gridBagConstraints21);
 		this.add(getStatementPanel(), gridBagConstraints31);
 		this.add(getValueDatePanel(), gridBagConstraints41);
+		this.add(getClear(), gridBagConstraints110);
+		this.add(getModePanel(), gridBagConstraints28);
 	}
 
 	/**
@@ -210,6 +229,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					return data.getGlobalData().getAccountsNumber();
 				}
 			});
+			accountList.setToolTipText("Sélectionner ici les comptes autorisés");
 			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getAccountsNumber()); 
 			for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
 				if (data.isOk(data.getGlobalData().getAccount(i))) indices.add(i);
@@ -286,6 +306,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					return data.getGlobalData().getCategoriesNumber();
 				}
 			});
+			categoryList.setToolTipText("Sélectionnez ici les catégories autorisées");
 			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getCategoriesNumber()); 
 			for (int i=0;i<data.getGlobalData().getCategoriesNumber();i++) {
 				if (data.isOk(data.getGlobalData().getCategory(i))) indices.add(i);
@@ -362,6 +383,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (amountEquals == null) {
 			amountEquals = new JRadioButton();
 			amountEquals.setText("Egal à");
+			amountEquals.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont le montant est saisi ci-contre");
 			amountEquals.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amountEquals.isSelected()) {
@@ -385,6 +407,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (amountBetween == null) {
 			amountBetween = new JRadioButton();
 			amountBetween.setText("Compris entre");
+			amountBetween.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont le montant est compris entre les montants ci-contre");
 			amountBetween.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amountBetween.isSelected()) {
@@ -410,6 +433,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			minAmount = new AmountWidget(LocalizationData.getLocale());
 			minAmount.setColumns(6);
 			minAmount.setEmptyAllowed(true);
+			minAmount.setToolTipText("Montant minimum");
 			minAmount.setValue(data.getMinimumAmount()==Double.NEGATIVE_INFINITY?null:data.getMinimumAmount());
 			minAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -426,6 +450,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			maxAmount = new AmountWidget(LocalizationData.getLocale());
 			maxAmount.setColumns(6);
 			maxAmount.setEmptyAllowed(true);
+			maxAmount.setToolTipText("Montant maximum");
 			maxAmount.setValue(data.getMaximumAmount()==Double.POSITIVE_INFINITY?null:data.getMaximumAmount());
 			maxAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -441,6 +466,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (amountAll == null) {
 			amountAll = new JRadioButton();
 			amountAll.setText("Tous");
+			amountAll.setToolTipText("Sélectionnez ce bouton pour ne pas filtrer sur le montant de l'opération");
 			amountAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amountAll.isSelected()) {
@@ -457,6 +483,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
 	public void apply() {
+		long time = System.currentTimeMillis(); //TODO
 		// build the account filter 
 		int[] accountIndices = this.accountList.getSelectedIndices();
 		Account[] accounts = new Account[accountIndices.length];
@@ -475,11 +502,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		double min = getMinAmount().getValue()==null?Double.NEGATIVE_INFINITY:getMinAmount().getValue();
 		double max = getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue();
 		this.data.setAmountFilter(min, max);
-		// Build the statement filter
-		int filter = 0;
-		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
-		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
-		this.data.setFilter(filter);
 		// build the date filter
 		Date from = getDateFrom().getDate();
 		Date to = getDateTo().getDate();
@@ -513,7 +535,27 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			}
 			this.data.setDescriptionFilter(new TextMatcher(kind, text, !getIgnoreCase().isSelected(), !getIgnoreDiacritics().isSelected()));
 		}
+		// Build the statement filter
+		int filter = 0;
+		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
+		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
+		text = getStatement().getText().trim();
+		if (text.length()==0) {
+			this.data.setStatementFilter(filter, null);
+		} else {
+			TextMatcher.Kind kind = null;
+			if (getStatementEqualsTo().isSelected()) {
+				kind = TextMatcher.EQUALS;
+			} else if (getStatementContains().isSelected()) {
+				kind = TextMatcher.CONTAINS;
+			} else if (getStatementRegular().isSelected()) {
+				kind = TextMatcher.REGULAR;
+			}
+			this.data.setStatementFilter(filter, new TextMatcher(kind, text, true, true));
+		}
 		// TODO Auto-generated method stub
+		time = System.currentTimeMillis()-time;
+		System.out.println ("filtering done in "+time+"ms"); //TODO
 	}
 
 	/**
@@ -604,15 +646,15 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 //						// TODO Auto-generated catch block
 //						e1.printStackTrace();
 //					}
-//					try {
-//						Desktop.getDesktop().browse(new URI("file://help/regexp.html"));
-//					} catch (IOException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					} catch (URISyntaxException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
+					try {
+						Desktop.getDesktop().browse(new URI("http://www.yapbam.net"));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 				}
 			});
@@ -634,6 +676,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (ignoreCase == null) {
 			ignoreCase = new JCheckBox();
 			ignoreCase.setText("Ignorer la casse");
+			ignoreCase.setToolTipText("Cochez cette case si la comparaison ne doit pas faire la distinction majuscule/minuscules");
 			ignoreCase.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isCaseSensitive());
 		}
 		return ignoreCase;
@@ -648,6 +691,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (description == null) {
 			description = new JTextField();
 			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter());
+			description.setToolTipText("Texte à comparer au libellé des opérations");
 		}
 		return description;
 	}
@@ -717,6 +761,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (dateAll == null) {
 			dateAll = new JRadioButton();
 			dateAll.setText("Toutes");
+			dateAll.setToolTipText("Sélectionnez ce bouton pour ne pas filtrer sur la date d'opération");
 			dateAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateAll.isSelected()) {
@@ -741,6 +786,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (dateEquals == null) {
 			dateEquals = new JRadioButton();
 			dateEquals.setText("Egale à");
+			dateEquals.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date est saisie ci-contre");
 			dateEquals.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateEquals.isSelected()) {
@@ -765,6 +811,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (dateBetween == null) {
 			dateBetween = new JRadioButton();
 			dateBetween.setText("Comprise entre");
+			dateBetween.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date est comprise entre les dates ci-contre");
 			dateBetween.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateBetween.isSelected()) {
@@ -786,6 +833,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getDateFrom() {
 		if (dateFrom == null) {
 			dateFrom = new DateWidgetPanel();
+			dateFrom.setToolTipText("Plus ancienne date d'opération autorisée");
 			dateFrom.setDate(data.getDateFrom());
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -800,6 +848,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getDateTo() {
 		if (dateTo == null) {
 			dateTo = new DateWidgetPanel();
+			dateTo.setToolTipText("Plus récente date d'opération autorisée");
 			dateTo.setDate(data.getDateTo());
 			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -862,18 +911,23 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			checked.setText("Pointées");
 			checked.setToolTipText("Cochez cette case pour autoriser les opérations pointées");
 			checked.setSelected(data.isOk(FilteredData.CHECKED));
+			setStatementFilterEnabled();
 			checked.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					checkConsistency();
-					boolean ok = checked.isSelected();
-					getStatementContains().setEnabled(ok);
-					getStatementEqualsTo().setEnabled(ok);
-					getStatementRegular().setEnabled(ok);
-					getStatement().setEnabled(ok);
+					setStatementFilterEnabled();
 				}
 			});
 		}
 		return checked;
+	}
+	
+	private void setStatementFilterEnabled() {
+		boolean ok = checked.isSelected();
+		getStatementContains().setEnabled(ok);
+		getStatementEqualsTo().setEnabled(ok);
+		getStatementRegular().setEnabled(ok);
+		getStatement().setEnabled(ok);		
 	}
 
 	/**
@@ -963,6 +1017,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (valueDateAll == null) {
 			valueDateAll = new JRadioButton();
 			valueDateAll.setText("Toutes");
+			valueDateAll.setToolTipText("Sélectionnez ce bouton pour ne pas filtrer sur la date de valeur");
 			valueDateAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (valueDateAll.isSelected()) {
@@ -987,6 +1042,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (valueDateEquals == null) {
 			valueDateEquals = new JRadioButton();
 			valueDateEquals.setText("Egale à");
+			valueDateEquals.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date de valeur est saisie ci-contre");
 			valueDateEquals.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (valueDateEquals.isSelected()) {
@@ -1011,6 +1067,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (valueDateBetween == null) {
 			valueDateBetween = new JRadioButton();
 			valueDateBetween.setText("Comprise entre");
+			valueDateBetween.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date de valeur est comprise entre les dates ci-contre");
 			valueDateBetween.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (valueDateBetween.isSelected()) {
@@ -1032,6 +1089,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getValueDateFrom() {
 		if (valueDateFrom == null) {
 			valueDateFrom = new DateWidgetPanel();
+			valueDateFrom.setToolTipText("Plus ancienne date de valeur autorisée");
 			valueDateFrom.setDate(data.getValueDateFrom());
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1046,6 +1104,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getValueDateTo() {
 		if (valueDateTo == null) {
 			valueDateTo = new DateWidgetPanel();
+			valueDateTo.setToolTipText("Plus récente date de valeur autorisée");
 			valueDateTo.setDate(data.getValueDateTo());
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1060,6 +1119,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JTextField getStatement() {
 		if (statement == null) {
 			statement = new JTextField();
+			statement.setText(data.getStatementFilter()==null?"":data.getStatementFilter().getFilter());
+			statement.setToolTipText("Texte à comparer au relevé des opérations");
 		}
 		return statement;
 	}
@@ -1086,6 +1147,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (ignoreDiacritics == null) {
 			ignoreDiacritics = new JCheckBox();
 			ignoreDiacritics.setText("Ignorer les accents");
+			ignoreDiacritics.setToolTipText("Cochez cette case si la comparaison ne doit pas tenir compte des accents");
 			ignoreDiacritics.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isDiacriticalSensitive());
 		}
 		return ignoreDiacritics;
@@ -1119,6 +1181,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints32.gridx = 1;
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(new GridBagLayout());
+			jPanel1.setToolTipText("Cliquez ici pour obtenir de l'aide sur les expressions régulières");
 			jPanel1.add(regexpHelp, gridBagConstraints32);
 			jPanel1.add(getDescriptionEqualsTo(), gridBagConstraints34);
 			jPanel1.add(getDescriptionContains(), gridBagConstraints35);
@@ -1147,6 +1210,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (descriptionEqualsTo == null) {
 			descriptionEqualsTo = new JRadioButton();
 			descriptionEqualsTo.setText("Egal à");
+			descriptionEqualsTo.setToolTipText("Sélectionner ce bouton si le libellé doit être égal au champ ci-contre");
 		}
 		return descriptionEqualsTo;
 	}
@@ -1160,6 +1224,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (descriptionContains == null) {
 			descriptionContains = new JRadioButton();
 			descriptionContains.setText("Contient");
+			descriptionContains.setToolTipText("Sélectionner ce bouton si le libellé doit contenir champ ci-contre");
 		}
 		return descriptionContains;
 	}
@@ -1173,6 +1238,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (descriptionRegular == null) {
 			descriptionRegular = new JRadioButton();
 			descriptionRegular.setText("Expression régulière");
+			descriptionRegular.setToolTipText("Sélectionner ce bouton si le libellé doit satisfaire l'expression régulière contenue dans champ ci-contre");
 		}
 		return descriptionRegular;
 	}
@@ -1256,6 +1322,13 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			group.add(getStatementContains());
 			group.add(getStatementEqualsTo());
 			group.add(getStatementRegular());
+			if (getChecked().isSelected()) {
+				if ((data.getStatementFilter()==null) || (data.getStatementFilter().getKind()==TextMatcher.CONTAINS)) {
+					getStatementContains().setSelected(true);
+				} else if (data.getStatementFilter().getKind()==TextMatcher.EQUALS) {
+					getStatementEqualsTo().setSelected(true);
+				} else getStatementRegular().setSelected(true);
+			}
 		}
 		return jPanel11;
 	}
@@ -1269,6 +1342,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (statementEqualsTo == null) {
 			statementEqualsTo = new JRadioButton();
 			statementEqualsTo.setText("Egal à");
+			statementEqualsTo.setToolTipText("Sélectionner ce bouton si le relevé doit être égal au champ ci-contre");
 		}
 		return statementEqualsTo;
 	}
@@ -1282,6 +1356,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (statementContains == null) {
 			statementContains = new JRadioButton();
 			statementContains.setText("Contient");
+			statementContains.setToolTipText("Sélectionner ce bouton si le relevé doit contenir champ de droite");
 		}
 		return statementContains;
 	}
@@ -1295,7 +1370,71 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (statementRegular == null) {
 			statementRegular = new JRadioButton();
 			statementRegular.setText("Expression régulière");
+			statementRegular.setToolTipText("Sélectionner ce bouton si le relevé doit satisfaire l'expression régulière contenue dans champ de droite");
 		}
 		return statementRegular;
+	}
+
+	/**
+	 * This method initializes clear	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getClear() {
+		if (clear == null) {
+			clear = new JButton();
+			clear.setText("Effacer tous les filtres");
+			clear.setToolTipText("Cliquez ici pour effacer tous les filtres");
+			clear.setEnabled(false);
+		}
+		return clear;
+	}
+
+	/**
+	 * This method initializes modePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getModePanel() {
+		if (modePanel == null) {
+			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
+			gridBagConstraints37.fill = GridBagConstraints.BOTH;
+			gridBagConstraints37.gridy = 0;
+			gridBagConstraints37.weightx = 1.0;
+			gridBagConstraints37.weighty = 1.0;
+			gridBagConstraints37.gridx = 0;
+			modePanel = new JPanel();
+			modePanel.setLayout(new GridBagLayout());
+			modePanel.setBorder(BorderFactory.createTitledBorder(null, "Mode de paiement", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			modePanel.add(getJScrollPane2(), gridBagConstraints37);
+		}
+		return modePanel;
+	}
+
+	/**
+	 * This method initializes jScrollPane2	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane2() {
+		if (jScrollPane2 == null) {
+			jScrollPane2 = new JScrollPane();
+			jScrollPane2.setToolTipText("");
+			jScrollPane2.setViewportView(getModes());
+		}
+		return jScrollPane2;
+	}
+
+	/**
+	 * This method initializes modes	
+	 * 	
+	 * @return javax.swing.JList	
+	 */
+	private JList getModes() {
+		if (modes == null) {
+			modes = new JList();
+			modes.setToolTipText("Sélectionnez ici les modes de paiement autorisés");
+		}
+		return modes;
 	}
 }
