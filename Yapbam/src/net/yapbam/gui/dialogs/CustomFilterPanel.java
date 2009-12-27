@@ -37,7 +37,6 @@ import javax.swing.JTextField;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
-import net.yapbam.util.TextMatcher.Kind;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
 
@@ -86,9 +85,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			checkConsistency();  //  @jve:decl-index=0:
 		}
 	};
-	private JLabel jLabel2 = null;
 	private JTextField statement = null;
-	private JCheckBox regularStatement = null;
 	private JPanel jPanel = null;
 	private JCheckBox ignoreDiacritics = null;
 	private JLabel regexpHelp = null;
@@ -97,6 +94,11 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton descriptionContains = null;
 	private JRadioButton descriptionRegular = null;
 	private JPanel jPanel2 = null;
+	private JPanel jPanel11 = null;
+	private JLabel regexpStatement = null;
+	private JRadioButton statementEqualsTo = null;
+	private JRadioButton statementContains = null;
+	private JRadioButton statementRegular = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -811,15 +813,25 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 */
 	private JPanel getStatementPanel() {
 		if (statementPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.gridwidth = 0;
+			gridBagConstraints6.gridy = 1;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.weightx = 1.0;
+			gridBagConstraints5.weighty = 1.0D;
+			gridBagConstraints5.gridheight = 0;
+			gridBagConstraints5.gridx = 2;
 			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
 			gridBagConstraints29.gridx = 0;
 			gridBagConstraints29.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints29.gridwidth = 0;
 			gridBagConstraints29.gridy = 1;
-			jLabel2 = new JLabel();
-			jLabel2.setText("Relevé :");
 			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
-			gridBagConstraints27.gridx = 1;
+			gridBagConstraints27.gridx = 2;
 			gridBagConstraints27.anchor = GridBagConstraints.WEST;
 			gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints27.weightx = 1.0D;
@@ -834,6 +846,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			statementPanel.add(getChecked(), gridBagConstraints26);
 			statementPanel.add(getNotChecked(), gridBagConstraints27);
 			statementPanel.add(getJPanel(), gridBagConstraints29);
+			statementPanel.add(getJPanel11(), gridBagConstraints6);
 		}
 		return statementPanel;
 	}
@@ -852,6 +865,11 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			checked.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					checkConsistency();
+					boolean ok = checked.isSelected();
+					getStatementContains().setEnabled(ok);
+					getStatementEqualsTo().setEnabled(ok);
+					getStatementRegular().setEnabled(ok);
+					getStatement().setEnabled(ok);
 				}
 			});
 		}
@@ -866,7 +884,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JCheckBox getNotChecked() {
 		if (notChecked == null) {
 			notChecked = new JCheckBox();
-			notChecked.setText("non pointées");
+			notChecked.setText("Non pointées");
 			notChecked.setToolTipText("Cochez cette case pour autoriser les opérations non pointées");
 			notChecked.setSelected(data.isOk(FilteredData.NOT_CHECKED));
 			notChecked.addItemListener(new java.awt.event.ItemListener() {
@@ -1047,42 +1065,14 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	}
 
 	/**
-	 * This method initializes regularStatement	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getRegularStatement() {
-		if (regularStatement == null) {
-			regularStatement = new JCheckBox();
-			regularStatement.setText("Expression régulière");
-		}
-		return regularStatement;
-	}
-
-	/**
 	 * This method initializes jPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.gridx = 2;
-			gridBagConstraints28.gridy = 0;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.weightx = 1.0;
-			gridBagConstraints6.gridx = 1;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 0;
-			gridBagConstraints5.insets = new Insets(0, 5, 0, 5);
-			gridBagConstraints5.gridy = 0;
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(jLabel2, gridBagConstraints5);
-			jPanel.add(getStatement(), gridBagConstraints6);
-			jPanel.add(getRegularStatement(), gridBagConstraints28);
 		}
 		return jPanel;
 	}
@@ -1216,5 +1206,96 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			jPanel2.add(getDescription(), gridBagConstraints18);
 		}
 		return jPanel2;
+	}
+
+	/**
+	 * This method initializes jPanel11	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel11() {
+		if (jPanel11 == null) {
+			GridBagConstraints gridBagConstraints361 = new GridBagConstraints();
+			gridBagConstraints361.gridx = 0;
+			gridBagConstraints361.gridy = 2;
+			GridBagConstraints gridBagConstraints351 = new GridBagConstraints();
+			gridBagConstraints351.anchor = GridBagConstraints.WEST;
+			gridBagConstraints351.gridwidth = 1;
+			gridBagConstraints351.gridx = 0;
+			gridBagConstraints351.gridy = 1;
+			gridBagConstraints351.weightx = 0.0D;
+			gridBagConstraints351.gridheight = 1;
+			GridBagConstraints gridBagConstraints341 = new GridBagConstraints();
+			gridBagConstraints341.anchor = GridBagConstraints.WEST;
+			gridBagConstraints341.gridy = 0;
+			gridBagConstraints341.gridx = 0;
+			GridBagConstraints gridBagConstraints321 = new GridBagConstraints();
+			gridBagConstraints321.anchor = GridBagConstraints.WEST;
+			gridBagConstraints321.gridy = 2;
+			gridBagConstraints321.weightx = 0.0D;
+			gridBagConstraints321.gridx = 1;
+			regexpStatement = new JLabel();
+			regexpStatement.setToolTipText("Cliquez ici pour obtenir de l\'aide sur les expressions régulières");
+			regexpStatement.setText("");
+			regexpStatement.setIcon(IconManager.HELP);
+			jPanel11 = new JPanel();
+			jPanel11.setLayout(new GridBagLayout());
+			jPanel11.setBorder(BorderFactory.createTitledBorder(null, "Relevé", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanel11.add(regexpStatement, gridBagConstraints321);
+			jPanel11.add(getStatementEqualsTo(), gridBagConstraints341);
+			jPanel11.add(getStatementContains(), gridBagConstraints351);
+			jPanel11.add(getStatementRegular(), gridBagConstraints361);
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 2;
+			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.weightx = 1.0D;
+			gridBagConstraints5.gridheight = 0;
+			gridBagConstraints5.gridy = 0;
+			jPanel11.add(getStatement(), gridBagConstraints5);
+			ButtonGroup group = new ButtonGroup();
+			group.add(getStatementContains());
+			group.add(getStatementEqualsTo());
+			group.add(getStatementRegular());
+		}
+		return jPanel11;
+	}
+
+	/**
+	 * This method initializes statementEqualsTo	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getStatementEqualsTo() {
+		if (statementEqualsTo == null) {
+			statementEqualsTo = new JRadioButton();
+			statementEqualsTo.setText("Egal à");
+		}
+		return statementEqualsTo;
+	}
+
+	/**
+	 * This method initializes statementContains	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getStatementContains() {
+		if (statementContains == null) {
+			statementContains = new JRadioButton();
+			statementContains.setText("Contient");
+		}
+		return statementContains;
+	}
+
+	/**
+	 * This method initializes statementRegular	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getStatementRegular() {
+		if (statementRegular == null) {
+			statementRegular = new JRadioButton();
+			statementRegular.setText("Expression régulière");
+		}
+		return statementRegular;
 	}
 }
