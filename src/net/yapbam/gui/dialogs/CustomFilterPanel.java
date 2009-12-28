@@ -581,15 +581,25 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 */
 	public void apply() {
 		long time = System.currentTimeMillis(); //TODO
-		// build the account and mode filter 
+		// build the account and mode filter
+		Object[] selectedModes = getModes().getSelectedValues();
+		ArrayList<Mode> modes = new ArrayList<Mode>();
+		boolean all = true;
 		int[] accountIndices = this.accountList.getSelectedIndices();
 		Account[] accounts = new Account[accountIndices.length];
 		for (int i = 0; i < accounts.length; i++) {
 			accounts[i] = data.getGlobalData().getAccount(accountIndices[i]);
+			for (int j=0; j<accounts[i].getModesNumber(); j++) {
+				if (Arrays.binarySearch(selectedModes,accounts[i].getMode(j).getName())<0) {
+					all = false;
+				} else {
+					modes.add(accounts[i].getMode(j));
+				}
+			}
 		}
 		this.data.setAccounts(accounts);
 		// set the mode filter
-		//TODO
+		this.data.setModes(all?null:modes.toArray(new Mode[modes.size()]));
 		// build the category filter
 		int[] categoryIndices = this.categoryList.getSelectedIndices();
 		Category[] categories = new Category[categoryIndices.length];
