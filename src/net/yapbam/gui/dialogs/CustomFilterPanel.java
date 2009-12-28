@@ -696,6 +696,10 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 * @return A string that explains the problem, or null if the state is consistent.
 	 */
 	public String getInconsistencyCause() {
+		if (!getDateFrom().isContentValid()) return "La date \"à partir de\" est incorrecte";
+		if (!getDateTo().isContentValid()) return "La date \"jusqu'à\" est incorrecte";
+		if (!getValueDateFrom().isContentValid()) return "La date de valeur \"à partir de\" est incorrecte";
+		if (!getValueDateTo().isContentValid()) return "La date de valeur \"jusqu'à\" est incorrecte";
 		if ((getDateFrom().getDate()!=null) && (getDateTo().getDate()!=null)
 				&& (getDateFrom().getDate().compareTo(getDateTo().getDate())>0)) {
 			return "La date de début doit être antérieure à la date de fin";
@@ -932,6 +936,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			dateFrom.setToolTipText("Plus ancienne date d'opération autorisée");
 			dateFrom.setDate(data.getDateFrom());
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
+			dateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return dateFrom;
 	}
@@ -947,6 +952,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			dateTo.setToolTipText("Plus récente date d'opération autorisée");
 			dateTo.setDate(data.getDateTo());
 			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
+			dateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return dateTo;
 	}
@@ -1188,6 +1194,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			valueDateFrom.setToolTipText("Plus ancienne date de valeur autorisée");
 			valueDateFrom.setDate(data.getValueDateFrom());
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
+			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return valueDateFrom;
 	}
@@ -1203,6 +1210,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			valueDateTo.setToolTipText("Plus récente date de valeur autorisée");
 			valueDateTo.setDate(data.getValueDateTo());
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
+			valueDateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return valueDateTo;
 	}

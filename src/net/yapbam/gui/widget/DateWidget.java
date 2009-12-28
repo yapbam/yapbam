@@ -27,6 +27,7 @@ import net.yapbam.util.NullUtils;
 public class DateWidget extends JTextField {
 	private static final long serialVersionUID = 1L;
 	public static final String DATE_PROPERTY = "date";
+	public static final String CONTENT_VALID_PROPERTY = "contentValid";
 		
 	private DateFormat formatter;
 	private Date date;
@@ -113,6 +114,7 @@ public class DateWidget extends JTextField {
 	}
 
 	private void updateDate() {
+		boolean oldValid = this.valid;
 		String text = this.getText().trim();
 		if (text.length()==0) {
 			internalSetDate(emptyValue);
@@ -139,6 +141,7 @@ public class DateWidget extends JTextField {
 			this.valid = changed!=null;
 			internalSetDate(changed);
 		}
+		if (oldValid!=this.valid) firePropertyChange(CONTENT_VALID_PROPERTY, oldValid, this.valid);
 	}
 
 	/** Get the widget current date.
@@ -177,5 +180,12 @@ public class DateWidget extends JTextField {
 		this.date = date;
 		firePropertyChange(DATE_PROPERTY, old, date);
 		return true;
+	}
+	
+	/** Gets the content validity.
+	 * @return true if the content is valid, false if it is not.
+	 */
+	public boolean isContentValid() {
+		return this.valid;
 	}
 }
