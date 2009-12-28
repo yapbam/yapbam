@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import javax.swing.JList;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -26,7 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
-import javax.swing.ListModel;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
@@ -125,6 +123,13 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private PropertyChangeListener CONSISTENCY_CHECKER = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
+			checkConsistency();  //  @jve:decl-index=0:
+		}
+	};
+	
+	private ListSelectionListener CONSISTENCY_CHECKER_LIST = new ListSelectionListener() {
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
 			checkConsistency();  //  @jve:decl-index=0:
 		}
 	};
@@ -259,13 +264,15 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			for (int i = 0; i < indices.size(); i++) {
 				selection[i] = indices.get(i);
 			}
+			accountList.setSelectedIndices(selection);
+			updateModesList(true);
 			accountList.addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					updateModesList();
+					checkConsistency();
+					updateModesList(false);
 				}
 			});
-			accountList.setSelectedIndices(selection);
 		}
 		return accountList;
 	}
@@ -343,6 +350,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 				selection[i] = indices.get(i);
 			}
 			categoryList.setSelectedIndices(selection);
+			categoryList.addListSelectionListener(CONSISTENCY_CHECKER_LIST);
 		}
 		return categoryList;
 	}
@@ -508,13 +516,16 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	}
 
 	@SuppressWarnings("serial")
-	private void updateModesList() {
+	private void updateModesList(boolean first) {
 		// Remember what modes are currently selected.
 		// This will allow us to re-select them after updating the list.
-		int[] selectedIndices = getModes().getSelectedIndices();
-		String[] currentSelectedModes = new String[selectedIndices.length];
-		for (int i = 0; i < currentSelectedModes.length; i++) {
-			currentSelectedModes[i] = (String) getModes().getModel().getElementAt(selectedIndices[i]);
+		String[] currentSelectedModes = null;
+		if (!first) {
+			int[] selectedIndices = getModes().getSelectedIndices();
+			currentSelectedModes = new String[selectedIndices.length];
+			for (int i = 0; i < currentSelectedModes.length; i++) {
+				currentSelectedModes[i] = (String) getModes().getModel().getElementAt(selectedIndices[i]);
+			}
 		}
 		// Update the list content
 		// We have to merge all the names of the modes of the currently selected accounts.
@@ -538,11 +549,26 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 				return arrayModes[index];
 			}
 		});
-		// Restore the selection of items that have been deleted
 		ArrayList<Integer> newSelection = new ArrayList<Integer>();
-		for (int i = 0; i < currentSelectedModes.length; i++) {
-			int index = Arrays.binarySearch(arrayModes, currentSelectedModes[i]);
-			if (index>=0) newSelection.add(index);
+		if (first) {
+			// set the selection to the content of the filter
+			Mode[] validModes = data.getModes();
+			if (validModes!=null) {
+				for (int i = 0; i < validModes.length; i++) {
+					int index = Arrays.binarySearch(arrayModes, validModes[i].getName());
+					if (index>=0) newSelection.add(index);
+				}
+			} else {
+				for (int i = 0; i < arrayModes.length; i++) {
+					newSelection.add(i);
+				}
+			}
+		} else {
+			// Restore the selection of items that have been deleted
+			for (int i = 0; i < currentSelectedModes.length; i++) {
+				int index = Arrays.binarySearch(arrayModes, currentSelectedModes[i]);
+				if (index>=0) newSelection.add(index);
+			}
 		}
 		int[] indices = new int[newSelection.size()];
 		for (int i = 0; i < indices.length; i++) {
@@ -555,13 +581,15 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 */
 	public void apply() {
 		long time = System.currentTimeMillis(); //TODO
-		// build the account filter 
+		// build the account and mode filter 
 		int[] accountIndices = this.accountList.getSelectedIndices();
 		Account[] accounts = new Account[accountIndices.length];
 		for (int i = 0; i < accounts.length; i++) {
 			accounts[i] = data.getGlobalData().getAccount(accountIndices[i]);
 		}
 		this.data.setAccounts(accounts);
+		// set the mode filter
+		//TODO
 		// build the category filter
 		int[] categoryIndices = this.categoryList.getSelectedIndices();
 		Category[] categories = new Category[categoryIndices.length];
@@ -624,7 +652,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			}
 			this.data.setStatementFilter(filter, new TextMatcher(kind, text, true, true));
 		}
-		// TODO Auto-generated method stub
 		time = System.currentTimeMillis()-time;
 		System.out.println ("filtering done in "+time+"ms"); //TODO
 	}
@@ -670,6 +697,15 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if ((getMinAmount().getValue()!=null) && (getMaxAmount().getValue()!=null)
 				&& (getMinAmount().getValue()>getMaxAmount().getValue())) {
 			return "Le montant minimum doit être inférieur au montant maxi";
+		}
+		if (getAccountList().getSelectedIndices().length==0) {
+			return "Au moins un compte doit être sélectionné";
+		}
+		if (getModes().getSelectedIndices().length==0) {
+			return "Au moins un mode de paiement doit être sélectionné";
+		}
+		if (getCategoryList().getSelectedIndices().length==0) {
+			return "Au moins une catégorie doit être sélectionnée";
 		}
 		return null;
 	}
@@ -1486,6 +1522,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (modes == null) {
 			modes = new JList();
 			modes.setToolTipText("Sélectionnez ici les modes de paiement autorisés");
+			modes.addListSelectionListener(CONSISTENCY_CHECKER_LIST);
 		}
 		return modes;
 	}
