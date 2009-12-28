@@ -6,6 +6,9 @@ import java.awt.GridBagConstraints;
 import javax.swing.JList;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import java.awt.Desktop;
 import java.awt.Font;
@@ -23,11 +26,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
+import javax.swing.ListModel;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Mode;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
@@ -35,7 +40,9 @@ import net.yapbam.gui.widget.AmountWidget;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.TreeSet;
 
 import javax.swing.JTextField;
 import net.yapbam.gui.widget.DateWidgetPanel;
@@ -44,20 +51,6 @@ import net.yapbam.util.TextMatcher;
 import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
-
-	private final class RegexprListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			try {
-				Desktop.getDesktop().browse(new URI("http://www.yapbam.net/"));
-			} catch (Exception exception) {
-				String message = MessageFormat.format("Erreur {0} lors de l'ouverture de l'aide", exception.toString());
-				JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(regexpHelp), message, "Impossible d'ouvrir l'aide", JOptionPane.ERROR_MESSAGE);
-			}
-			
-		}
-	}
-
 	private static final long serialVersionUID = 1L;
 	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY";
 	private JPanel accountPanel = null;
@@ -95,14 +88,6 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel valueDateTo = null;
 	private JScrollPane jScrollPane = null;
 	private JScrollPane jScrollPane1 = null;
-	
-	private FilteredData data;
-	private PropertyChangeListener CONSISTENCY_CHECKER = new PropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			checkConsistency();  //  @jve:decl-index=0:
-		}
-	};
 	private JTextField statement = null;
 	private JPanel jPanel = null;
 	private JCheckBox ignoreDiacritics = null;
@@ -121,6 +106,29 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JPanel modePanel = null;
 	private JScrollPane jScrollPane2 = null;
 	private JList modes = null;
+		
+	private FilteredData data;
+	
+	private final class RegexprListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			try {
+				Desktop.getDesktop().browse(new URI("http://www.yapbam.net/"));
+			} catch (Exception exception) {
+				String message = MessageFormat.format("Erreur {0} lors de l'ouverture de l'aide", exception.toString());
+				JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(regexpHelp), message, "Impossible d'ouvrir l'aide", JOptionPane.ERROR_MESSAGE);
+			}
+			
+		}
+	}
+	
+	private PropertyChangeListener CONSISTENCY_CHECKER = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			checkConsistency();  //  @jve:decl-index=0:
+		}
+	};
+
 	/**
 	 * This is the default constructor
 	 */
@@ -251,6 +259,12 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			for (int i = 0; i < indices.size(); i++) {
 				selection[i] = indices.get(i);
 			}
+			accountList.addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					updateModesList();
+				}
+			});
 			accountList.setSelectedIndices(selection);
 		}
 		return accountList;
@@ -493,6 +507,50 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		return amountAll;
 	}
 
+	@SuppressWarnings("serial")
+	private void updateModesList() {
+		// Remember what modes are currently selected.
+		// This will allow us to re-select them after updating the list.
+		int[] selectedIndices = getModes().getSelectedIndices();
+		String[] currentSelectedModes = new String[selectedIndices.length];
+		for (int i = 0; i < currentSelectedModes.length; i++) {
+			currentSelectedModes[i] = (String) getModes().getModel().getElementAt(selectedIndices[i]);
+		}
+		// Update the list content
+		// We have to merge all the names of the modes of the currently selected accounts.
+		int[] accountIndices =	this.accountList.getSelectedIndices();
+		TreeSet<String> modes = new TreeSet<String>();
+		for (int i = 0; i < accountIndices.length; i++) {
+			Account account = data.getGlobalData().getAccount(accountIndices[i]);
+			int nb = account.getModesNumber();
+			for (int j = 0; j < nb; j++) {
+				modes.add(account.getMode(j).getName());
+			}
+		}
+		final String[] arrayModes = modes.toArray(new String[modes.size()]);
+		getModes().setModel(new AbstractListModel() {
+			@Override
+			public int getSize() {
+				return arrayModes.length;
+			}
+			@Override
+			public Object getElementAt(int index) {
+				return arrayModes[index];
+			}
+		});
+		// Restore the selection of items that have been deleted
+		ArrayList<Integer> newSelection = new ArrayList<Integer>();
+		for (int i = 0; i < currentSelectedModes.length; i++) {
+			int index = Arrays.binarySearch(arrayModes, currentSelectedModes[i]);
+			if (index>=0) newSelection.add(index);
+		}
+		int[] indices = new int[newSelection.size()];
+		for (int i = 0; i < indices.length; i++) {
+			indices[i] = newSelection.get(i);
+		}
+		getModes().setSelectedIndices(indices);
+	}
+	
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
 	public void apply() {
