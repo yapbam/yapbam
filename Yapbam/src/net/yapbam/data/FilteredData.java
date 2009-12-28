@@ -22,6 +22,7 @@ public class FilteredData extends DefaultListenable {
 	private ArrayList<Transaction> transactions;
 	private int filter;
 	private HashSet<Account> validAccounts;
+	private HashSet<Mode> validModes;
 	private HashSet<Category> validCategories;
 	private Date dateFrom;
 	private Date dateTo;
@@ -40,6 +41,7 @@ public class FilteredData extends DefaultListenable {
 	    this.data.addListener(new DataListener() {		
 			@Override
 			public void processEvent(DataEvent event) {
+				//FIXME be aware of mode removal
 				if (eventImplySorting(event)) Collections.sort(transactions, comparator);
 				if (event instanceof EverythingChangedEvent) {
 					clear(); // If everything changed, reset the filter
@@ -137,6 +139,7 @@ public class FilteredData extends DefaultListenable {
 		this.valueDateFrom = null;
 		this.valueDateTo = null;
 		this.validCategories = null;
+		this.validModes = null;
 		this.minAmount = Double.NEGATIVE_INFINITY;
 		this.maxAmount = Double.POSITIVE_INFINITY;
 		this.descriptionMatcher = null;
@@ -148,7 +151,7 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public void clearAccounts() {
 		setAccounts(null);
-	}	
+	}
 
 	/** Sets the valid accounts for this filter.
 	 * There's no side effect between this instance and the argument array.
@@ -189,6 +192,41 @@ public class FilteredData extends DefaultListenable {
 		return (this.validAccounts==null) || (this.validAccounts.contains(account));
 	}
 	
+	public boolean isOk(Mode mode) {
+		return (this.validModes==null) || (this.validModes.contains(mode));
+	}
+	
+	/** Sets the valid modes for this filter.
+	 * There's no side effect between this instance and the argument array.
+	 * @param modes the modes that are allowed (null to allow all modes).
+	 */
+	public void setModes(Mode[] modes) {
+		if (modes==null) {
+			this.validModes=null;
+		} else {
+			this.validModes = new HashSet<Mode>(modes.length);
+			for (int i = 0; i < modes.length; i++) {
+				this.validModes.add(modes[i]);
+			}
+		}
+		this.filter();
+		fireEvent(new FilterUpdatedEvent(this));
+	}
+	
+	/** Gets the valid modes for this filter.
+	 * There's no side effect between this instance and the returned array.
+	 * @return the valid modes (null means, all modes are ok).
+	 */
+	public Mode[] getModes() {
+		if (this.validModes==null) return null;
+		Mode[] result = new Mode[validModes.size()];
+		Iterator<Mode> iterator = validModes.iterator();
+		for (int i = 0; i < result.length; i++) {
+			result[i] = iterator.next();
+		}
+		return result;
+	}
+
 	/** Sets the description filter.
 	 * @param matcher a TextMatcher instance or null to apply no filter on description
 	 */
@@ -221,6 +259,7 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public boolean isOk(Transaction transaction) {
 		if (!isOk(transaction.getAccount())) return false;
+		if (!isOk(transaction.getMode())) return false;
 		if (!isStatementOk(transaction)) return false;
 		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
 		if ((getDateFrom()!=null) && (transaction.getDate().compareTo(getDateFrom())<0)) return false;
