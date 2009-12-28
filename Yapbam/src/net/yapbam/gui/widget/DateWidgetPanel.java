@@ -24,6 +24,10 @@ public class DateWidgetPanel extends JPanel {
 	 * The panel is a bean. Every time the choosen date changed, it sends a PropertyChangedEvent.
 	 */
 	public static final String DATE_PROPERTY = DateWidget.DATE_PROPERTY;  //  @jve:decl-index=0:
+	/** Content validity property name.
+	 * The panel is a bean. Every time the content validity changed, it sends a PropertyChangedEvent.
+	 */
+	public static final String CONTENT_VALID_PROPERTY = DateWidget.CONTENT_VALID_PROPERTY;
 	
 	private DateWidget dateWidget = null;
 	private DateChooserPanel dateChooser;
@@ -134,12 +138,14 @@ public class DateWidgetPanel extends JPanel {
 	private DateWidget getDateWidget() {
 		if (dateWidget == null) {
 			dateWidget = new DateWidget();
-			dateWidget.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+			PropertyChangeListener listener = new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					firePropertyChange(DATE_PROPERTY, evt.getOldValue(), evt.getNewValue());
+					firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 				}
-			});
+			};
+			dateWidget.addPropertyChangeListener(DateWidget.DATE_PROPERTY, listener);
+			dateWidget.addPropertyChangeListener(DateWidget.CONTENT_VALID_PROPERTY, listener);
 		}
 		return dateWidget;
 	}
@@ -156,5 +162,12 @@ public class DateWidgetPanel extends JPanel {
 		super.setEnabled(enabled);
 		dateWidget.setEnabled(enabled);
 		jLabel.setEnabled(enabled);
+	}
+	
+	/** Gets the content validity.
+	 * @return true if the content is valid, false if it is not.
+	 */
+	public boolean isContentValid() {
+		return this.dateWidget.isContentValid();
 	}
 }
