@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 public class CustomFilterDialog extends AbstractDialog {
@@ -14,7 +15,7 @@ public class CustomFilterDialog extends AbstractDialog {
 	private CustomFilterPanel filterPanel;
 
 	public CustomFilterDialog(Window owner, FilteredData data) {
-		super(owner, "Filtre", data); //LOCAL
+		super(owner, LocalizationData.get("MainMenuBar.customizedFilter"), data); //$NON-NLS-1$
 		this.pack();
 	}
 
