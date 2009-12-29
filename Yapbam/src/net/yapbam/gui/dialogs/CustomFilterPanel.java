@@ -9,7 +9,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JCheckBox;
@@ -21,7 +20,6 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ButtonGroup;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
@@ -31,12 +29,11 @@ import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
+import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 
-import java.net.URI;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -50,7 +47,7 @@ import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
-	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY";
+	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY"; //$NON-NLS-1$
 	private JPanel accountPanel = null;
 	private JList accountList = null;
 	private JPanel amountPanel = null;
@@ -110,13 +107,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private final class RegexprListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			try {
-				Desktop.getDesktop().browse(new URI("http://www.yapbam.net/"));
-			} catch (Exception exception) {
-				String message = MessageFormat.format("Erreur {0} lors de l'ouverture de l'aide", exception.toString());
-				JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(regexpHelp), message, "Impossible d'ouvrir l'aide", JOptionPane.ERROR_MESSAGE);
-			}
-			
+			HelpManager.show(e.getComponent(), HelpManager.REGULAR_EXPRESSIONS);
 		}
 	}
 	
@@ -232,7 +223,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints14.weightx = 1.0;
 			accountPanel = new JPanel();
 			accountPanel.setLayout(new GridBagLayout());
-			accountPanel.setBorder(BorderFactory.createTitledBorder(null, "Comptes", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			accountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.account"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			accountPanel.add(getJScrollPane(), gridBagConstraints14);
 		}
 		return accountPanel;
@@ -255,7 +246,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					return data.getGlobalData().getAccountsNumber();
 				}
 			});
-			accountList.setToolTipText("Sélectionner ici les comptes autorisés");
+			accountList.setToolTipText(LocalizationData.get("CustomFilterPanel.account.toolTip")); //$NON-NLS-1$
 			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getAccountsNumber()); 
 			for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
 				if (data.isOk(data.getGlobalData().getAccount(i))) indices.add(i);
@@ -296,7 +287,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints7.gridy = 1;
 			amountPanel = new JPanel();
 			amountPanel.setLayout(new GridBagLayout());
-			amountPanel.setBorder(BorderFactory.createTitledBorder(null, "Montant", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			amountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			amountPanel.add(getJPanel3(), gridBagConstraints7);
 		}
 		return amountPanel;
@@ -317,7 +308,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints1.weightx = 1.0;
 			categoryPanel = new JPanel();
 			categoryPanel.setLayout(new GridBagLayout());
-			categoryPanel.setBorder(BorderFactory.createTitledBorder(null, "Catégories", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			categoryPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.category"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			categoryPanel.add(getJScrollPane1(), gridBagConstraints1);
 		}
 		return categoryPanel;
@@ -340,7 +331,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 					return data.getGlobalData().getCategoriesNumber();
 				}
 			});
-			categoryList.setToolTipText("Sélectionnez ici les catégories autorisées");
+			categoryList.setToolTipText(LocalizationData.get("CustomFilterPanel.category.toolTip")); //$NON-NLS-1$
 			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getCategoriesNumber()); 
 			for (int i=0;i<data.getGlobalData().getCategoriesNumber();i++) {
 				if (data.isOk(data.getGlobalData().getCategory(i))) indices.add(i);
@@ -378,7 +369,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints11.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints11.gridy = 0;
 			jLabel = new JLabel();
-			jLabel.setText("et");
+			jLabel.setText(LocalizationData.get("CustomFilterPanel.amount.to")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridy = 0;
@@ -417,8 +408,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getAmountEquals() {
 		if (amountEquals == null) {
 			amountEquals = new JRadioButton();
-			amountEquals.setText("Egal à");
-			amountEquals.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont le montant est saisi ci-contre");
+			amountEquals.setText(LocalizationData.get("CustomFilterPanel.amount.equals")); //$NON-NLS-1$
+			amountEquals.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.equals.toolTip")); //$NON-NLS-1$
 			amountEquals.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amountEquals.isSelected()) {
@@ -441,8 +432,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getAmountBetween() {
 		if (amountBetween == null) {
 			amountBetween = new JRadioButton();
-			amountBetween.setText("Compris entre");
-			amountBetween.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont le montant est compris entre les montants ci-contre");
+			amountBetween.setText(LocalizationData.get("CustomFilterPanel.amout.between")); //$NON-NLS-1$
+			amountBetween.setToolTipText(LocalizationData.get("CustomFilterPanel.amout.between.toolTip")); //$NON-NLS-1$
 			amountBetween.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amountBetween.isSelected()) {
@@ -468,7 +459,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			minAmount = new AmountWidget(LocalizationData.getLocale());
 			minAmount.setColumns(6);
 			minAmount.setEmptyAllowed(true);
-			minAmount.setToolTipText("Montant minimum");
+			minAmount.setToolTipText(LocalizationData.get("CustomFilterPanel.amout.minimum")); //$NON-NLS-1$
 			minAmount.setValue(data.getMinimumAmount()==Double.NEGATIVE_INFINITY?null:data.getMinimumAmount());
 			minAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 			minAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
@@ -486,7 +477,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			maxAmount = new AmountWidget(LocalizationData.getLocale());
 			maxAmount.setColumns(6);
 			maxAmount.setEmptyAllowed(true);
-			maxAmount.setToolTipText("Montant maximum");
+			maxAmount.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.maximum")); //$NON-NLS-1$
 			maxAmount.setValue(data.getMaximumAmount()==Double.POSITIVE_INFINITY?null:data.getMaximumAmount());
 			maxAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 			maxAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
@@ -502,8 +493,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getAmountAll() {
 		if (amountAll == null) {
 			amountAll = new JRadioButton();
-			amountAll.setText("Tous");
-			amountAll.setToolTipText("Sélectionnez ce bouton pour ne pas filtrer sur le montant de l'opération");
+			amountAll.setText(LocalizationData.get("CustomFilterPanel.amount.all")); //$NON-NLS-1$
+			amountAll.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.all.toolTip")); //$NON-NLS-1$
 			amountAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amountAll.isSelected()) {
@@ -665,7 +656,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			this.data.setStatementFilter(filter, new TextMatcher(kind, text, true, true));
 		}
 		time = System.currentTimeMillis()-time;
-		System.out.println ("filtering done in "+time+"ms"); //TODO
+		System.out.println ("filtering done in "+time+"ms"); //TODO //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -698,32 +689,32 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 * @return A string that explains the problem, or null if the state is consistent.
 	 */
 	public String getInconsistencyCause() {
-		if (!getDateFrom().isContentValid()) return "La date \"à partir de\" est incorrecte";
-		if (!getDateTo().isContentValid()) return "La date \"jusqu'à\" est incorrecte";
-		if (!getValueDateFrom().isContentValid()) return "La date de valeur \"à partir de\" est incorrecte";
-		if (!getValueDateTo().isContentValid()) return "La date de valeur \"jusqu'à\" est incorrecte";
-		if (!getMinAmount().isContentValid()) return "Le montant minimum est incorrect";
-		if (!getMaxAmount().isContentValid()) return "Le montant maximum est incorrect";
+		if (!getDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.dateFrom"); //$NON-NLS-1$
+		if (!getDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.date.to"); //$NON-NLS-1$
+		if (!getValueDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.valueDateFrom"); //$NON-NLS-1$
+		if (!getValueDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.valueDateTo"); //$NON-NLS-1$
+		if (!getMinAmount().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.amountMimimum"); //$NON-NLS-1$
+		if (!getMaxAmount().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.amountMaximum"); //$NON-NLS-1$
 		if ((getDateFrom().getDate()!=null) && (getDateTo().getDate()!=null)
 				&& (getDateFrom().getDate().compareTo(getDateTo().getDate())>0)) {
-			return "La date de début doit être antérieure à la date de fin";
+			return LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"); //$NON-NLS-1$
 		}
 		if ((getValueDateFrom().getDate()!=null) && (getValueDateTo().getDate()!=null)
 				&& (getValueDateFrom().getDate().compareTo(getValueDateTo().getDate())>0)) {
-			return "La date de valeur de début doit être antérieure à la date de valeur de fin";
+			return LocalizationData.get("CustomFilterPanel.error.valueDateFromHigherThanTo"); //$NON-NLS-1$
 		}
 		if ((getMinAmount().getValue()!=null) && (getMaxAmount().getValue()!=null)
 				&& (getMinAmount().getValue()>getMaxAmount().getValue())) {
-			return "Le montant minimum doit être inférieur au montant maxi";
+			return LocalizationData.get("CustomFilterPanel.error.amountFromHigherThanTo"); //$NON-NLS-1$
 		}
 		if (getAccountList().getSelectedIndices().length==0) {
-			return "Au moins un compte doit être sélectionné";
+			return LocalizationData.get("CustomFilterPanel.error.noAccount"); //$NON-NLS-1$
 		}
 		if (getModes().getSelectedIndices().length==0) {
-			return "Au moins un mode de paiement doit être sélectionné";
+			return LocalizationData.get("CustomFilterPanel.error.noMode"); //$NON-NLS-1$
 		}
 		if (getCategoryList().getSelectedIndices().length==0) {
-			return "Au moins une catégorie doit être sélectionnée";
+			return LocalizationData.get("CustomFilterPanel.error.noCategory"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -758,13 +749,13 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints33.insets = new Insets(0, 0, 0, 5);
 			gridBagConstraints33.gridy = 0;
 			regexpHelp = new JLabel();
-			regexpHelp.setText("");
-			regexpHelp.setToolTipText("Cliquez ici pour obtenir de l'aide sur les expressions régulières");
+			regexpHelp.setText(""); //$NON-NLS-1$
+			regexpHelp.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
 			regexpHelp.setIcon(IconManager.HELP);
 			regexpHelp.addMouseListener(new RegexprListener());
 			descriptionPanel = new JPanel();
 			descriptionPanel.setLayout(new GridBagLayout());
-			descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, "Libellé", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.description"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			descriptionPanel.add(getJPanel1(), gridBagConstraints33);
 			descriptionPanel.add(getJPanel2(), gridBagConstraints30);
 		}
@@ -794,7 +785,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JTextField getDescription() {
 		if (description == null) {
 			description = new JTextField();
-			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter());
+			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter()); //$NON-NLS-1$
 			description.setToolTipText("Texte à comparer au libellé des opérations");
 		}
 		return description;
@@ -840,7 +831,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints19.gridy = 0;
 			datePanel = new JPanel();
 			datePanel.setLayout(new GridBagLayout());
-			datePanel.setBorder(BorderFactory.createTitledBorder(null, "Date", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			datePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.date"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			datePanel.setVisible(true);
 			datePanel.add(getDateAll(), gridBagConstraints19);
 			datePanel.add(getDateEquals(), gridBagConstraints20);
@@ -997,7 +988,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints26.gridy = 0;
 			statementPanel = new JPanel();
 			statementPanel.setLayout(new GridBagLayout());
-			statementPanel.setBorder(BorderFactory.createTitledBorder(null, "Pointage", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			statementPanel.setBorder(BorderFactory.createTitledBorder(null, "Pointage", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-2$
 			statementPanel.add(getChecked(), gridBagConstraints26);
 			statementPanel.add(getNotChecked(), gridBagConstraints27);
 			statementPanel.add(getJPanel(), gridBagConstraints29);
@@ -1063,8 +1054,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 */
 	private JPanel getValueDatePanel() {
 		if (valueDatePanel == null) {
-			TitledBorder titledBorder = BorderFactory.createTitledBorder(null, "Date", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51));
-			titledBorder.setTitle("Date de valeur");
+			TitledBorder titledBorder = BorderFactory.createTitledBorder(null, "Date", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)); //$NON-NLS-2$
+			titledBorder.setTitle(LocalizationData.get("Transaction.valueDate")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints251 = new GridBagConstraints();
 			gridBagConstraints251.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints251.gridx = 3;
@@ -1227,7 +1218,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JTextField getStatement() {
 		if (statement == null) {
 			statement = new JTextField();
-			statement.setText(data.getStatementFilter()==null?"":data.getStatementFilter().getFilter());
+			statement.setText(data.getStatementFilter()==null?"":data.getStatementFilter().getFilter()); //$NON-NLS-1$
 			statement.setToolTipText("Texte à comparer au relevé des opérations");
 		}
 		return statement;
@@ -1410,13 +1401,13 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints321.gridx = 1;
 			regexpStatement = new JLabel();
 			regexpStatement.setToolTipText("Cliquez ici pour obtenir de l\'aide sur les expressions régulières");
-			regexpStatement.setText("");
+			regexpStatement.setText(""); //$NON-NLS-1$
 			regexpStatement.setIcon(IconManager.HELP);
 			regexpStatement.addMouseListener(new RegexprListener());
 
 			jPanel11 = new JPanel();
 			jPanel11.setLayout(new GridBagLayout());
-			jPanel11.setBorder(BorderFactory.createTitledBorder(null, "Relevé", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanel11.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.statement"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			jPanel11.add(regexpStatement, gridBagConstraints321);
 			jPanel11.add(getStatementEqualsTo(), gridBagConstraints341);
 			jPanel11.add(getStatementContains(), gridBagConstraints351);
@@ -1515,7 +1506,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints37.gridx = 0;
 			modePanel = new JPanel();
 			modePanel.setLayout(new GridBagLayout());
-			modePanel.setBorder(BorderFactory.createTitledBorder(null, "Mode de paiement", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			modePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.mode"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			modePanel.add(getJScrollPane2(), gridBagConstraints37);
 		}
 		return modePanel;
@@ -1529,7 +1520,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JScrollPane getJScrollPane2() {
 		if (jScrollPane2 == null) {
 			jScrollPane2 = new JScrollPane();
-			jScrollPane2.setToolTipText("");
+			jScrollPane2.setToolTipText(""); //$NON-NLS-1$
 			jScrollPane2.setViewportView(getModes());
 		}
 		return jScrollPane2;
