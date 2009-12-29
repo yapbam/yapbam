@@ -810,7 +810,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints24.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints24.gridy = 0;
 			jLabel1 = new JLabel();
-			jLabel1.setText("et");
+			jLabel1.setText(LocalizationData.get("CustomFilterPanel.date.to")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 			gridBagConstraints23.gridx = 1;
 			gridBagConstraints23.gridheight = 3;
@@ -988,7 +988,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints26.gridy = 0;
 			statementPanel = new JPanel();
 			statementPanel.setLayout(new GridBagLayout());
-			statementPanel.setBorder(BorderFactory.createTitledBorder(null, "Pointage", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-2$
+			statementPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("CustomFilterPanel.check"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));  //$NON-NLS-1$//$NON-NLS-2$
 			statementPanel.add(getChecked(), gridBagConstraints26);
 			statementPanel.add(getNotChecked(), gridBagConstraints27);
 			statementPanel.add(getJPanel(), gridBagConstraints29);
@@ -1005,8 +1005,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JCheckBox getChecked() {
 		if (checked == null) {
 			checked = new JCheckBox();
-			checked.setText("Pointées");
-			checked.setToolTipText("Cochez cette case pour autoriser les opérations pointées");
+			checked.setText(LocalizationData.get("MainMenuBar.checked")); //$NON-NLS-1$
+			checked.setToolTipText(LocalizationData.get("CustomFilterPanel.checked.toolTip")); //$NON-NLS-1$
 			checked.setSelected(data.isOk(FilteredData.CHECKED));
 			setStatementFilterEnabled();
 			checked.addItemListener(new java.awt.event.ItemListener() {
@@ -1035,8 +1035,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JCheckBox getNotChecked() {
 		if (notChecked == null) {
 			notChecked = new JCheckBox();
-			notChecked.setText("Non pointées");
-			notChecked.setToolTipText("Cochez cette case pour autoriser les opérations non pointées");
+			notChecked.setText(LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$
+			notChecked.setToolTipText(LocalizationData.get("CustomFilterPanel.unchecked.toolTip")); //$NON-NLS-1$
 			notChecked.setSelected(data.isOk(FilteredData.NOT_CHECKED));
 			notChecked.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -1054,8 +1054,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	 */
 	private JPanel getValueDatePanel() {
 		if (valueDatePanel == null) {
-			TitledBorder titledBorder = BorderFactory.createTitledBorder(null, "Date", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)); //$NON-NLS-2$
-			titledBorder.setTitle(LocalizationData.get("Transaction.valueDate")); //$NON-NLS-1$
+			TitledBorder titledBorder = BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.valueDate"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)); //$NON-NLS-1$ //$NON-NLS-2$
 			GridBagConstraints gridBagConstraints251 = new GridBagConstraints();
 			gridBagConstraints251.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints251.gridx = 3;
@@ -1068,7 +1067,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints241.gridy = 0;
 			gridBagConstraints241.gridheight = 3;
 			jLabel11 = new JLabel();
-			jLabel11.setText("et");
+			jLabel11.setText(LocalizationData.get("CustomFilterPanel.valueDate.to")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints231 = new GridBagConstraints();
 			gridBagConstraints231.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints231.gridx = 1;
@@ -1219,7 +1218,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (statement == null) {
 			statement = new JTextField();
 			statement.setText(data.getStatementFilter()==null?"":data.getStatementFilter().getFilter()); //$NON-NLS-1$
-			statement.setToolTipText("Texte à comparer au relevé des opérations");
+			statement.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.toolTip")); //$NON-NLS-1$
 		}
 		return statement;
 	}
@@ -1442,8 +1441,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getStatementEqualsTo() {
 		if (statementEqualsTo == null) {
 			statementEqualsTo = new JRadioButton();
-			statementEqualsTo.setText("Egal à");
-			statementEqualsTo.setToolTipText("Sélectionner ce bouton si le relevé doit être égal au champ ci-contre");
+			statementEqualsTo.setText(LocalizationData.get("CustomFilterPanel.statement.equals")); //$NON-NLS-1$
+			statementEqualsTo.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.equals.toolTip")); //$NON-NLS-1$
 		}
 		return statementEqualsTo;
 	}
@@ -1456,8 +1455,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getStatementContains() {
 		if (statementContains == null) {
 			statementContains = new JRadioButton();
-			statementContains.setText("Contient");
-			statementContains.setToolTipText("Sélectionner ce bouton si le relevé doit contenir champ de droite");
+			statementContains.setText(LocalizationData.get("CustomFilterPanel.statement.contains")); //$NON-NLS-1$
+			statementContains.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.contains.toolTip")); //$NON-NLS-1$
 		}
 		return statementContains;
 	}
@@ -1470,8 +1469,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getStatementRegular() {
 		if (statementRegular == null) {
 			statementRegular = new JRadioButton();
-			statementRegular.setText("Expression régulière");
-			statementRegular.setToolTipText("Sélectionner ce bouton si le relevé doit satisfaire l'expression régulière contenue dans champ de droite");
+			statementRegular.setText(LocalizationData.get("CustomFilterPanel.statement.regularExpression")); //$NON-NLS-1$
+			statementRegular.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.regularExpression.toolTip")); //$NON-NLS-1$
 		}
 		return statementRegular;
 	}
@@ -1484,8 +1483,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JButton getClear() {
 		if (clear == null) {
 			clear = new JButton();
-			clear.setText("Effacer tous les filtres");
-			clear.setToolTipText("Cliquez ici pour effacer tous les filtres");
+			clear.setText(LocalizationData.get("CustomFilterPanel.clearAll")); //$NON-NLS-1$
+			clear.setToolTipText(LocalizationData.get("CustomFilterPanel.clearAll.toolTip")); //$NON-NLS-1$
 			clear.setEnabled(false);
 		}
 		return clear;
