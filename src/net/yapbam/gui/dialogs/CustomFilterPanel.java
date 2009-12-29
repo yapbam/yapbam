@@ -770,8 +770,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JCheckBox getIgnoreCase() {
 		if (ignoreCase == null) {
 			ignoreCase = new JCheckBox();
-			ignoreCase.setText("Ignorer la casse");
-			ignoreCase.setToolTipText("Cochez cette case si la comparaison ne doit pas faire la distinction majuscule/minuscules");
+			ignoreCase.setText(LocalizationData.get("CustomFilterPanel.description.ignoreCase")); //$NON-NLS-1$
+			ignoreCase.setToolTipText(LocalizationData.get("CustomFilterPanel.description.ignoreCase.toolTip")); //$NON-NLS-1$
 			ignoreCase.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isCaseSensitive());
 		}
 		return ignoreCase;
@@ -786,7 +786,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (description == null) {
 			description = new JTextField();
 			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter()); //$NON-NLS-1$
-			description.setToolTipText("Texte à comparer au libellé des opérations");
+			description.setToolTipText(LocalizationData.get("CustomFilterPanel.description.toolTip")); //$NON-NLS-1$
 		}
 		return description;
 	}
@@ -855,8 +855,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getDateAll() {
 		if (dateAll == null) {
 			dateAll = new JRadioButton();
-			dateAll.setText("Toutes");
-			dateAll.setToolTipText("Sélectionnez ce bouton pour ne pas filtrer sur la date d'opération");
+			dateAll.setText(LocalizationData.get("CustomFilterPanel.date.all")); //$NON-NLS-1$
+			dateAll.setToolTipText(LocalizationData.get("CustomFilterPanel.date.all.toolTip")); //$NON-NLS-1$
 			dateAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateAll.isSelected()) {
@@ -880,8 +880,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getDateEquals() {
 		if (dateEquals == null) {
 			dateEquals = new JRadioButton();
-			dateEquals.setText("Egale à");
-			dateEquals.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date est saisie ci-contre");
+			dateEquals.setText(LocalizationData.get("CustomFilterPanel.date.equals")); //$NON-NLS-1$
+			dateEquals.setToolTipText(LocalizationData.get("CustomFilterPanel.date.equals.toolTip")); //$NON-NLS-1$
 			dateEquals.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateEquals.isSelected()) {
@@ -905,8 +905,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getDateBetween() {
 		if (dateBetween == null) {
 			dateBetween = new JRadioButton();
-			dateBetween.setText("Comprise entre");
-			dateBetween.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date est comprise entre les dates ci-contre");
+			dateBetween.setText(LocalizationData.get("CustomFilterPanel.date.between")); //$NON-NLS-1$
+			dateBetween.setToolTipText(LocalizationData.get("CustomFilterPanel.date.between.toolTip")); //$NON-NLS-1$
 			dateBetween.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateBetween.isSelected()) {
@@ -928,7 +928,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getDateFrom() {
 		if (dateFrom == null) {
 			dateFrom = new DateWidgetPanel();
-			dateFrom.setToolTipText("Plus ancienne date d'opération autorisée");
+			dateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.date.from.toolTip")); //$NON-NLS-1$
 			dateFrom.setDate(data.getDateFrom());
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
@@ -944,7 +944,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getDateTo() {
 		if (dateTo == null) {
 			dateTo = new DateWidgetPanel();
-			dateTo.setToolTipText("Plus récente date d'opération autorisée");
+			dateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.date.to.toolTip")); //$NON-NLS-1$
 			dateTo.setDate(data.getDateTo());
 			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			dateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
@@ -1113,8 +1113,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getValueDateAll() {
 		if (valueDateAll == null) {
 			valueDateAll = new JRadioButton();
-			valueDateAll.setText("Toutes");
-			valueDateAll.setToolTipText("Sélectionnez ce bouton pour ne pas filtrer sur la date de valeur");
+			valueDateAll.setText(LocalizationData.get("CustomFilterPanel.valueDate.all")); //$NON-NLS-1$
+			valueDateAll.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.all.toolTip")); //$NON-NLS-1$
 			valueDateAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (valueDateAll.isSelected()) {
@@ -1138,8 +1138,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getValueDateEquals() {
 		if (valueDateEquals == null) {
 			valueDateEquals = new JRadioButton();
-			valueDateEquals.setText("Egale à");
-			valueDateEquals.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date de valeur est saisie ci-contre");
+			valueDateEquals.setText(LocalizationData.get("CustomFilterPanel.valueDate.equals")); //$NON-NLS-1$
+			valueDateEquals.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.equals.toolTip")); //$NON-NLS-1$
 			valueDateEquals.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (valueDateEquals.isSelected()) {
@@ -1163,8 +1163,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getValueDateBetween() {
 		if (valueDateBetween == null) {
 			valueDateBetween = new JRadioButton();
-			valueDateBetween.setText("Comprise entre");
-			valueDateBetween.setToolTipText("Sélectionnez ce bouton pour ne retenir que les opérations dont la date de valeur est comprise entre les dates ci-contre");
+			valueDateBetween.setText(LocalizationData.get("CustomFilterPanel.valueDate.between")); //$NON-NLS-1$
+			valueDateBetween.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.between.toolTip")); //$NON-NLS-1$
 			valueDateBetween.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (valueDateBetween.isSelected()) {
@@ -1186,7 +1186,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getValueDateFrom() {
 		if (valueDateFrom == null) {
 			valueDateFrom = new DateWidgetPanel();
-			valueDateFrom.setToolTipText("Plus ancienne date de valeur autorisée");
+			valueDateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.from.toolTip")); //$NON-NLS-1$
 			valueDateFrom.setDate(data.getValueDateFrom());
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
@@ -1202,7 +1202,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private DateWidgetPanel getValueDateTo() {
 		if (valueDateTo == null) {
 			valueDateTo = new DateWidgetPanel();
-			valueDateTo.setToolTipText("Plus récente date de valeur autorisée");
+			valueDateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.to.toolTip")); //$NON-NLS-1$
 			valueDateTo.setDate(data.getValueDateTo());
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
@@ -1245,8 +1245,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JCheckBox getIgnoreDiacritics() {
 		if (ignoreDiacritics == null) {
 			ignoreDiacritics = new JCheckBox();
-			ignoreDiacritics.setText("Ignorer les accents");
-			ignoreDiacritics.setToolTipText("Cochez cette case si la comparaison ne doit pas tenir compte des accents");
+			ignoreDiacritics.setText(LocalizationData.get("CustomFilterPanel.description.ignoreDiacriticals")); //$NON-NLS-1$
+			ignoreDiacritics.setToolTipText(LocalizationData.get("CustomFilterPanel.description.ignoreDiacriticals.toolTip")); //$NON-NLS-1$
 			ignoreDiacritics.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isDiacriticalSensitive());
 		}
 		return ignoreDiacritics;
@@ -1280,7 +1280,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints32.gridx = 1;
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.setToolTipText("Cliquez ici pour obtenir de l'aide sur les expressions régulières");
+			jPanel1.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
 			jPanel1.add(regexpHelp, gridBagConstraints32);
 			jPanel1.add(getDescriptionEqualsTo(), gridBagConstraints34);
 			jPanel1.add(getDescriptionContains(), gridBagConstraints35);
@@ -1308,8 +1308,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getDescriptionEqualsTo() {
 		if (descriptionEqualsTo == null) {
 			descriptionEqualsTo = new JRadioButton();
-			descriptionEqualsTo.setText("Egal à");
-			descriptionEqualsTo.setToolTipText("Sélectionner ce bouton si le libellé doit être égal au champ ci-contre");
+			descriptionEqualsTo.setText(LocalizationData.get("CustomFilterPanel.description.equals")); //$NON-NLS-1$
+			descriptionEqualsTo.setToolTipText(LocalizationData.get("CustomFilterPanel.description.equals.toolTip")); //$NON-NLS-1$
 		}
 		return descriptionEqualsTo;
 	}
@@ -1322,8 +1322,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getDescriptionContains() {
 		if (descriptionContains == null) {
 			descriptionContains = new JRadioButton();
-			descriptionContains.setText("Contient");
-			descriptionContains.setToolTipText("Sélectionner ce bouton si le libellé doit contenir champ ci-contre");
+			descriptionContains.setText(LocalizationData.get("CustomFilterPanel.description.contains")); //$NON-NLS-1$
+			descriptionContains.setToolTipText(LocalizationData.get("CustomFilterPanel.description.contains.toolTip")); //$NON-NLS-1$
 		}
 		return descriptionContains;
 	}
@@ -1336,8 +1336,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getDescriptionRegular() {
 		if (descriptionRegular == null) {
 			descriptionRegular = new JRadioButton();
-			descriptionRegular.setText("Expression régulière");
-			descriptionRegular.setToolTipText("Sélectionner ce bouton si le libellé doit satisfaire l'expression régulière contenue dans champ ci-contre");
+			descriptionRegular.setText(LocalizationData.get("CustomFilterPanel.description.regularExpression")); //$NON-NLS-1$
+			descriptionRegular.setToolTipText(LocalizationData.get("CustomFilterPanel.description.regularExpression.toolTip")); //$NON-NLS-1$
 		}
 		return descriptionRegular;
 	}
@@ -1400,7 +1400,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints321.weightx = 0.0D;
 			gridBagConstraints321.gridx = 1;
 			regexpStatement = new JLabel();
-			regexpStatement.setToolTipText("Cliquez ici pour obtenir de l\'aide sur les expressions régulières");
+			regexpStatement.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
 			regexpStatement.setText(""); //$NON-NLS-1$
 			regexpStatement.setIcon(IconManager.HELP);
 			regexpStatement.addMouseListener(new RegexprListener());
@@ -1534,7 +1534,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JList getModes() {
 		if (modes == null) {
 			modes = new JList();
-			modes.setToolTipText("Sélectionnez ici les modes de paiement autorisés");
+			modes.setToolTipText(LocalizationData.get("CustomFilterPanel.mode.toolTip")); //$NON-NLS-1$
 			modes.addListSelectionListener(CONSISTENCY_CHECKER_LIST);
 		}
 		return modes;
