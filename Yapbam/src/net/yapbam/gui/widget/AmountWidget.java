@@ -13,12 +13,22 @@ import javax.swing.JTextField;
 
 import net.yapbam.util.NullUtils;
 
-/** A widget to enter amount. */
+/** A widget to enter amount.
+ * This widget automatically format the value it contains according to its local's currency.
+ * You can restrict the valid values by setting minimum and maximum values.
+ * This bean defines two properties :
+ * VALUE_PROPERTY : a double, the value currently entered in the field.
+ * CONTENT_VALID_PROPERTY : a boolean, true if the text currently entered in the field is a valid value, false if it is not.
+ * The CONTENT_VALID_PROPERTY is a read only property.
+ */
 public class AmountWidget extends JTextField {
 	private static final long serialVersionUID = 1L;
 	private final static boolean DEBUG = false;
 	
+	/** Value property identifier. */ 
 	public static final String VALUE_PROPERTY = "value";
+	/** Content validity property identifier. */
+	public static final String CONTENT_VALID_PROPERTY = "contentValid";
 	
 	private Number value;
 	private DecimalFormat format;
@@ -61,10 +71,17 @@ public class AmountWidget extends JTextField {
 		});
 	}
 	
+	/** Gets the widget's currency.
+	 * @return the windget's currency
+	 */
 	public Currency getCurrency() {
 		return format.getCurrency();
 	}
 	
+	/** Sets the currency.
+	 * By default, the currency is the one of the widget's locale.
+	 * @param currency
+	 */
 	public void setCurrency (Currency currency) {
 		format.setCurrency(currency);
 		int digits = currency.getDefaultFractionDigits();
@@ -78,6 +95,7 @@ public class AmountWidget extends JTextField {
 	}
 	
 	private void updateValue() {
+		boolean oldValid = this.valid;
 		String text = this.getText().trim();
 		Number changed = null;
 		if (text.length()==0) {
@@ -95,28 +113,49 @@ public class AmountWidget extends JTextField {
 			this.valid = (changed!=null) && (changed.doubleValue()>=minValue.doubleValue()) && (changed.doubleValue()<=maxValue.doubleValue());
 		}
 		internalSetValue(changed==null?null:changed.doubleValue());
+		if (this.valid!=oldValid) firePropertyChange(CONTENT_VALID_PROPERTY, oldValid, this.valid);
 	}
 
+	/** Determines whether empty text (or blank) are considered as valid or not. 
+	 * @return true if blank field is valid.
+	 */
 	public boolean isEmptyAllowed() {
 		return isEmptyAllowed;
 	}
 
+	/** Sets the validity of blank text.
+	 * @param isEmptyAllowed true if blank text are allowed, false if not.
+	 * The value associated with a blank field is always null.
+	 */
 	public void setEmptyAllowed(boolean isEmptyAllowed) {
 		this.isEmptyAllowed = isEmptyAllowed;
+		if (this.getText().trim().length()==0) updateValue();
 	}
 
+	/** Gets the minimum value allowed in the field.
+	 * @return a double (Double.NEGATIVE_INFINITY if there is no limit)
+	 */
 	public Double getMinValue() {
 		return minValue.doubleValue();
 	}
 
+	/** Sets the minimum value allowed in the field.
+	 * @param minValue a double (Double.NEGATIVE_INFINITY if there is no limit)
+	 */
 	public void setMinValue(Double minValue) {
 		this.minValue = minValue;
 	}
 
+	/** Gets the maximum value allowed in the field.
+	 * @return a double (Double.POSITIVE_INFINITY if there is no limit)
+	 */
 	public Double getMaxValue() {
 		return maxValue.doubleValue();
 	}
 
+	/** Sets the maximum value allowed in the field.
+	 * @param minValue a double (Double.POSITIVE_INFINITY if there is no limit)
+	 */
 	public void setMaxValue(Double maxValue) {
 		this.maxValue = maxValue;
 	}
@@ -158,5 +197,12 @@ public class AmountWidget extends JTextField {
 		this.value = value;
 		firePropertyChange(VALUE_PROPERTY, old, value);
 		return true;
+	}
+	
+	/** Gets the content validity.
+	 * @return true if the content is valid, false if it is not.
+	 */
+	public boolean isContentValid() {
+		return this.valid;
 	}
 }
