@@ -471,6 +471,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			minAmount.setToolTipText("Montant minimum");
 			minAmount.setValue(data.getMinimumAmount()==Double.NEGATIVE_INFINITY?null:data.getMinimumAmount());
 			minAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
+			minAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return minAmount;
 	}
@@ -488,6 +489,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			maxAmount.setToolTipText("Montant maximum");
 			maxAmount.setValue(data.getMaximumAmount()==Double.POSITIVE_INFINITY?null:data.getMaximumAmount());
 			maxAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
+			maxAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
 		return maxAmount;
 	}
@@ -700,6 +702,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 		if (!getDateTo().isContentValid()) return "La date \"jusqu'à\" est incorrecte";
 		if (!getValueDateFrom().isContentValid()) return "La date de valeur \"à partir de\" est incorrecte";
 		if (!getValueDateTo().isContentValid()) return "La date de valeur \"jusqu'à\" est incorrecte";
+		if (!getMinAmount().isContentValid()) return "Le montant minimum est incorrect";
+		if (!getMaxAmount().isContentValid()) return "Le montant maximum est incorrect";
 		if ((getDateFrom().getDate()!=null) && (getDateTo().getDate()!=null)
 				&& (getDateFrom().getDate().compareTo(getDateTo().getDate())>0)) {
 			return "La date de début doit être antérieure à la date de fin";
