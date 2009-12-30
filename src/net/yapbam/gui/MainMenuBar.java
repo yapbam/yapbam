@@ -271,10 +271,42 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         	filterMenu.addSeparator();
         	buildExpenseReceiptFilterChoiceMenu();			
         	filterMenu.addSeparator();
-			filterMenu.add(new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this)));
+			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this));
+			filterMenu.add(complexFilterMenuItem);
+			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData()));
 		}
 	}
 	
+	/** Gets a filter complexity.
+	 * @param filter The filter to test
+	 * @return true if the filtered could not be obtained by the filter menu (other than customized one).
+	 */
+	private boolean isComplex(FilteredData filter) {
+		double min = filter.getMinimumAmount();
+		double max = filter.getMaximumAmount();
+		boolean amountSimple = ((min==Double.NEGATIVE_INFINITY) || (min==0)) &&
+		((max==Double.POSITIVE_INFINITY) || (max==0)) && (min!=max);
+		return (isComplex(filter.getAccounts(), new int[]{1,filter.getGlobalData().getAccountsNumber()}) ||
+				(filter.getCategories()!=null) || (filter.getModes()!=null) ||
+				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
+				(filter.getValueDateFrom()!=null) || (filter.getValueDateTo()!=null) ||
+				(filter.getDescriptionFilter()!=null) || (filter.getNumberFilter()!=null) ||
+				(filter.getStatementFilter()!=null) || !amountSimple);
+	}
+	
+	/**
+	 * @param array
+	 * @return
+	 *  @see #isComplex(FilteredData)
+	 */
+	private boolean isComplex(Object[] array, int[] simpleLengths) {
+		if (array==null) return false;
+		for (int i = 0; i < simpleLengths.length; i++) {
+			if (array.length==simpleLengths[i]) return false;
+		}
+		return true;
+	}
+
 	private void buildBooleanFilterChoiceMenu(String[] texts, int[] properties) {
         FilteredData filter = frame.getFilteredData();
         ButtonGroup group = new ButtonGroup();
