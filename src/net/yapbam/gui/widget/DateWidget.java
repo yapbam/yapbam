@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 import net.yapbam.util.NullUtils;
@@ -63,12 +62,6 @@ public class DateWidget extends JTextField {
 		formatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
 		 // Set the field to today's date (we don't use setDate because new Date() returns a date with hours, minutes and seconds fields not always set to 0).
 		this.setText(formatter.format(new Date()));
-		this.setInputVerifier(new DefaultInputVerifier() {
-			protected boolean check(JComponent input, boolean change) {
-				if (change && (date!=null)) setText(formatter.format(date));
-				return valid;
-			}
-		});
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -156,9 +149,7 @@ public class DateWidget extends JTextField {
 	 * @param date The date to set.
 	 */
 	public void setDate(Date date) {
-		if (internalSetDate(date)) {
-			this.setText(date==null?"":formatter.format(date));
-		}
+		this.setText(date==null?"":formatter.format(date));
 	}
 
 	@Override

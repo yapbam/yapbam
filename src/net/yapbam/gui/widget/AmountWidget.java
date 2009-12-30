@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.util.Currency;
 import java.util.Locale;
 
-import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 import net.yapbam.util.NullUtils;
@@ -57,12 +56,6 @@ public class AmountWidget extends JTextField {
 		this.minValue = Double.NEGATIVE_INFINITY;
 		this.maxValue = Double.POSITIVE_INFINITY;
 		format = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
-		this.setInputVerifier(new DefaultInputVerifier() {
-			protected boolean check(JComponent input, boolean change) {
-				if (change) refreshText(value);
-				return valid;
-			}
-		});
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -173,9 +166,7 @@ public class AmountWidget extends JTextField {
 	 * @param value a value, or null.
 	 */
 	public void setValue(Double value) {
-		if (internalSetValue(value)) {
-			refreshText(value);
-		}
+		refreshText(value);
 	}
 	
 	@Override
@@ -190,7 +181,7 @@ public class AmountWidget extends JTextField {
 	 * @return true if the value was changed
 	 */
 	private boolean internalSetValue(Double value) {
-		// Does nothing if date is equals to current widget date
+		// Does nothing if amount is equals to current widget amount
 		// Be aware of null values
 		if (NullUtils.areEquals(value, this.value)) return false;
 		Number old = this.value;
