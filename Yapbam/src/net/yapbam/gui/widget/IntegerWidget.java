@@ -1,6 +1,5 @@
 package net.yapbam.gui.widget;
 
-import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 /** This widget is an interger input field.
@@ -34,16 +33,6 @@ public class IntegerWidget extends JTextField {
 		if (minValue>maxValue) throw new IllegalArgumentException();
 		this.minValue = minValue;
 		this.maxValue = maxValue;
-		this.setInputVerifier(new DefaultInputVerifier() {
-			protected boolean check(JComponent input, boolean change) {
-				if (DEBUG) System.out.println ("IntegerWidget input verifier is called");
-				IntegerWidget widget = (IntegerWidget)input;
-				updateValue();
-				if (change && (value!=null)) widget.setText(Integer.toString(value));
-				if (DEBUG) System.out.println ("IntegerWidget input verifier returns "+(value!=null));
-				return value!=null;
-			}
-		});
 	}
 	
 	private void updateValue() {
