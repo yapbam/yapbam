@@ -103,7 +103,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         updateAccountMenu();
         this.add(accountMenu);
         
-        transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions"));
+        transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
         transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
         transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
         JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getData()));
@@ -246,11 +246,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	        for (int i=0;i<data.getAccountsNumber();i++) {
 	        	Account account = data.getAccount(i);
 	        	JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
+	        	item.setToolTipText(MessageFormat.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
 	        	if (hasAccountFilter) item.setSelected(filter.isOk(account));
 	        	accountMenu.add(item);
 	        	item.addActionListener(listener);
 	        }
         	JRadioButtonMenuItem item = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
+        	item.setToolTipText(LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
         	item.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -267,11 +269,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		filterMenu.removeAll();
 		if (frame.getFilteredData()!=null) {
         	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
-        			LocalizationData.get("MainMenuBar.notChecked")}, new int[]{FilteredData.CHECKED, FilteredData.NOT_CHECKED}); //$NON-NLS-1$
+        		LocalizationData.get("MainMenuBar.notChecked")}, new int[]{FilteredData.CHECKED, FilteredData.NOT_CHECKED}, //$NON-NLS-1$
+        		new String[]{LocalizationData.get("MainMenuBar.checked.toolTip"),LocalizationData.get("MainMenuBar.notChecked.toolTip")}, //$NON-NLS-1$ //$NON-NLS-2$
+        		LocalizationData.get("MainMenuBar.NoCheckedFilter.toolTip")); //$NON-NLS-1$
         	filterMenu.addSeparator();
         	buildExpenseReceiptFilterChoiceMenu();			
         	filterMenu.addSeparator();
 			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this));
+			complexFilterMenuItem.setToolTipText(LocalizationData.get("MainMenuBar.customizedFilter.toolTip")); //$NON-NLS-1$
 			filterMenu.add(complexFilterMenuItem);
 			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData()));
 		}
@@ -307,20 +312,23 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		return true;
 	}
 
-	private void buildBooleanFilterChoiceMenu(String[] texts, int[] properties) {
+	private void buildBooleanFilterChoiceMenu(String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {
         FilteredData filter = frame.getFilteredData();
         ButtonGroup group = new ButtonGroup();
         JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(texts[0]);
+        menuItem.setToolTipText(tooltips[0]);
         menuItem.setSelected(filter.isOk(properties[0]) && !filter.isOk(properties[1]));
 		filterMenu.add(menuItem);
 		group.add(menuItem);
 		menuItem.addActionListener(new FilterActionItem(properties[0]));
 		menuItem = new JRadioButtonMenuItem(texts[1]);
+        menuItem.setToolTipText(tooltips[1]);
         menuItem.setSelected(!filter.isOk(properties[0]) && filter.isOk(properties[1]));
         filterMenu.add(menuItem);
 		group.add(menuItem);
 		menuItem.addActionListener(new FilterActionItem(properties[1]));
 		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
+        menuItem.setToolTipText(eraseTooltip);
         menuItem.setSelected(filter.isOk(properties[0]) && filter.isOk(properties[1]));
         filterMenu.add(menuItem);
 		group.add(menuItem);
@@ -342,18 +350,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		FilteredData filter = frame.getFilteredData();
         ButtonGroup group = new ButtonGroup();
         JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Expenses")); //$NON-NLS-1$
+        menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Expenses.toolTip")); //$NON-NLS-1$
         menuItem.setSelected(filter.getMaximumAmount()<=0);
 		filterMenu.add(menuItem);
 		group.add(menuItem);
 		menuItem.addActionListener(new AmountActionItem(Double.NEGATIVE_INFINITY, 0));
 		
-		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-2$
+		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-1$
+        menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Receipts.toolTip")); //$NON-NLS-1$
         menuItem.setSelected(filter.getMinimumAmount()>=0);
         filterMenu.add(menuItem);
 		group.add(menuItem);
 		menuItem.addActionListener(new AmountActionItem(0, Double.POSITIVE_INFINITY));
 		
 		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
+		menuItem.setToolTipText(LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
         menuItem.setSelected((filter.getMaximumAmount()>0) && (filter.getMinimumAmount()<0));
         filterMenu.add(menuItem);
 		group.add(menuItem);
