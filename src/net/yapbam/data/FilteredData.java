@@ -31,6 +31,7 @@ public class FilteredData extends DefaultListenable {
 	private double minAmount;
 	private double maxAmount;
 	private TextMatcher descriptionMatcher;
+	private TextMatcher numberMatcher;
 	private TextMatcher statementMatcher;
 	
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
@@ -143,6 +144,7 @@ public class FilteredData extends DefaultListenable {
 		this.minAmount = Double.NEGATIVE_INFINITY;
 		this.maxAmount = Double.POSITIVE_INFINITY;
 		this.descriptionMatcher = null;
+		this.numberMatcher = null;
 		this.statementMatcher = null;
 		clearAccounts();
 	}
@@ -262,6 +264,7 @@ public class FilteredData extends DefaultListenable {
 		if (!isOk(transaction.getMode())) return false;
 		if (!isStatementOk(transaction)) return false;
 		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
+		if (!isNumberOk(transaction.getNumber())) return false;
 		if ((getDateFrom()!=null) && (transaction.getDate().compareTo(getDateFrom())<0)) return false;
 		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
 		if ((getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(getValueDateFrom())<0)) return false;
@@ -360,6 +363,23 @@ public class FilteredData extends DefaultListenable {
 		}
 	}
 	
+	public void setNumberFilter (TextMatcher numberFilter) {
+		this.numberMatcher = numberFilter;
+		filter();
+	}
+	
+	public TextMatcher getNumberFilter () {
+		return this.numberMatcher;
+	}
+	
+	/** Gets the validity of a string according to the current number filter. 
+	 * @param number The string to test
+	 * @return true if the number is ok with the filter.
+	 */
+	private boolean isNumberOk(String number) {
+		return this.numberMatcher==null?true:this.numberMatcher.matches(number);
+	}
+		
 	/** Sets the filter on transaction date.
 	 * @param from transactions strictly before <i>from</i> are rejected. A null date means "beginning of times".
 	 * @param to transactions strictly after <i>to</i> are rejected. A null date means "end of times". 
