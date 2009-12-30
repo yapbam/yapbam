@@ -36,6 +36,8 @@ public class FilteredData extends DefaultListenable {
 	
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
+	private boolean suspended;
+	private boolean filteringHasToBeDone;
 	
 	public FilteredData(GlobalData data) {
 	    this.data = data;
@@ -110,6 +112,8 @@ public class FilteredData extends DefaultListenable {
 			}
 		});
 	    this.balanceData = new BalanceData();
+	    this.filteringHasToBeDone = false;
+	    this.suspended = false;
 	    this.clear();
 	}
 	
@@ -457,42 +461,81 @@ public class FilteredData extends DefaultListenable {
 	}
 
 	private void filter() {
-		double initialBalance = 0;
-		for (int i = 0; i < this.getGlobalData().getAccountsNumber(); i++) {
-			Account account = this.getGlobalData().getAccount(i);
-			if (isOk(account)) initialBalance += account.getInitialBalance();
-		}
-		balanceData.enableEvents(false);
-		balanceData.clear(initialBalance);
-	    Date today = new Date();
-	    this.transactions = new ArrayList<Transaction>();
-	    for (int i = 0; i < data.getTransactionsNumber(); i++) {
-			Transaction transaction = data.getTransaction(i);
-			if (isOk(transaction.getAccount())) {
-				balanceData.updateBalance(today, transaction, true);
-				if (isOk(transaction)) {
-					int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
-					transactions.add(index, transaction);
+		if (this.suspended) {
+			this.filteringHasToBeDone = true;
+		} else {
+			double initialBalance = 0;
+			for (int i = 0; i < this.getGlobalData().getAccountsNumber(); i++) {
+				Account account = this.getGlobalData().getAccount(i);
+				if (isOk(account)) initialBalance += account.getInitialBalance();
+			}
+			balanceData.enableEvents(false);
+			balanceData.clear(initialBalance);
+		    Date today = new Date();
+		    this.transactions = new ArrayList<Transaction>();
+		    for (int i = 0; i < data.getTransactionsNumber(); i++) {
+				Transaction transaction = data.getTransaction(i);
+				if (isOk(transaction.getAccount())) {
+					balanceData.updateBalance(today, transaction, true);
+					if (isOk(transaction)) {
+						int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
+						transactions.add(index, transaction);
+					}
 				}
 			}
+			balanceData.enableEvents(true);
+			fireEvent(new EverythingChangedEvent(this));
 		}
-		balanceData.enableEvents(true);
-		fireEvent(new EverythingChangedEvent(this));
 	}
 
+	/** Gets the number of transactions that match the filter. 
+	 * @return number of transactions that match the filter
+	 */
 	public int getTransactionsNumber() {
 		return this.transactions.size();
 	}
 
+	/** Gets a transactions that match the filter.
+	 * @param index the index of the transaction (between 0 and getTransactionsNumber())
+	 * @return the transaction.
+	 */
 	public Transaction getTransaction(int index) {
 		return this.transactions.get(index);
 	}
 	
+	/** Find the index of a transaction that matches the filter.
+	 * @param transaction the transaction to find
+	 * @return a negative integer if the transaction doesn't match ths filter,
+	 * the index of the transaction if the transaction matches. 
+	 */
 	public int indexOf(Transaction transaction) {
 		return Collections.binarySearch(transactions, transaction, comparator);
 	}
 
+	/** Gets the unfiltered data on which is based this FilteredData.
+	 * @return the GlobalData instance
+	 */
 	public GlobalData getGlobalData() {
 		return this.data;
+	}
+	
+	/** Sets the suspended state of the filter.
+	 * When the filter is suspended, the filter changes don't automatically refresh the transaction list,
+	 * and no event is fire.
+	 * This refresh (and the event) is delayed until this method is called with false argument.
+	 * Note that if this method is called with false argument, but no filter change occurs, nothing happens.
+	 * @param suspended true to suspend auto-filtering, true to restore it.
+	 */
+	public void setSuspended(boolean suspended) {
+		this.suspended = suspended;
+		if (!suspended && this.filteringHasToBeDone) filter();
+	}
+	
+	/** Gets the suspended state of this filter.
+	 * @return true if the filtering is suspended.
+	 * @see #setSuspended(boolean)
+	 */
+	public boolean isSuspended() {
+		return this.suspended;
 	}
 }
