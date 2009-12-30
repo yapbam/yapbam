@@ -45,7 +45,7 @@ import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
 import javax.swing.JButton;
 
-public class CustomFilterPanel extends JPanel { //LOCAL
+public class CustomFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY"; //$NON-NLS-1$
 	private JPanel accountPanel = null;
@@ -588,7 +588,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
 	public void apply() {
-		long time = System.currentTimeMillis(); //TODO
+		data.setSuspended(true);
 		// build the account and mode filter
 		Object[] selectedModes = getModes().getSelectedValues();
 		ArrayList<Mode> modes = new ArrayList<Mode>();
@@ -685,9 +685,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			}
 			this.data.setNumberFilter(new TextMatcher(kind, text, true, true));
 		}
-		
-		time = System.currentTimeMillis()-time;
-		System.out.println ("filtering done in "+time+"ms"); //TODO //$NON-NLS-1$ //$NON-NLS-2$
+		data.setSuspended(false);
 	}
 
 	/**
@@ -1604,12 +1602,12 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 			gridBagConstraints3211.weightx = 0.0D;
 			gridBagConstraints3211.gridx = 1;
 			regexpNumber = new JLabel();
-			regexpNumber.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip"));
-			regexpNumber.setText("");
+			regexpNumber.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
+			regexpNumber.setText(""); //$NON-NLS-1$
 			regexpNumber.setIcon(IconManager.HELP);
 			jPanel111 = new JPanel();
 			jPanel111.setLayout(new GridBagLayout());
-			jPanel111.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.number"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanel111.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.number"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			jPanel111.add(regexpNumber, gridBagConstraints3211);
 			jPanel111.add(getNumberEqualsTo(), gridBagConstraints3411);
 			jPanel111.add(getNumberContains(), gridBagConstraints3511);
@@ -1636,8 +1634,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getNumberEqualsTo() {
 		if (numberEqualsTo == null) {
 			numberEqualsTo = new JRadioButton();
-			numberEqualsTo.setToolTipText(LocalizationData.get("CustomFilterPanel.number.equals.toolTip"));
-			numberEqualsTo.setText(LocalizationData.get("CustomFilterPanel.number.equals"));
+			numberEqualsTo.setToolTipText(LocalizationData.get("CustomFilterPanel.number.equals.toolTip")); //$NON-NLS-1$
+			numberEqualsTo.setText(LocalizationData.get("CustomFilterPanel.number.equals")); //$NON-NLS-1$
 		}
 		return numberEqualsTo;
 	}
@@ -1650,8 +1648,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getNumberContains() {
 		if (numberContains == null) {
 			numberContains = new JRadioButton();
-			numberContains.setToolTipText(LocalizationData.get("CustomFilterPanel.number.contains.toolTip"));
-			numberContains.setText(LocalizationData.get("CustomFilterPanel.number.contains"));
+			numberContains.setToolTipText(LocalizationData.get("CustomFilterPanel.number.contains.toolTip")); //$NON-NLS-1$
+			numberContains.setText(LocalizationData.get("CustomFilterPanel.number.contains")); //$NON-NLS-1$
 		}
 		return numberContains;
 	}
@@ -1664,8 +1662,8 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JRadioButton getNumberRegular() {
 		if (numberRegular == null) {
 			numberRegular = new JRadioButton();
-			numberRegular.setToolTipText(LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip"));
-			numberRegular.setText(LocalizationData.get("CustomFilterPanel.number.regularExpression"));
+			numberRegular.setToolTipText(LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip")); //$NON-NLS-1$
+			numberRegular.setText(LocalizationData.get("CustomFilterPanel.number.regularExpression")); //$NON-NLS-1$
 		}
 		return numberRegular;
 	}
@@ -1678,7 +1676,7 @@ public class CustomFilterPanel extends JPanel { //LOCAL
 	private JTextField getNumber() {
 		if (number == null) {
 			number = new JTextField();
-			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip"));
+			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
 		}
 		return number;
 	}
