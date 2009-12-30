@@ -43,16 +43,11 @@ public class CurrencyConverterPanel extends JPanel {
 	 */
 	public CurrencyConverterPanel() {
 		super();
-		initialize();
 		try {
 			CurrencyConverter.getInstance().setProxy(Preferences.INSTANCE.getHttpProxy());
 			this.codes = CurrencyConverter.getInstance().getCurrencies();
 			Arrays.sort(this.codes);
-			for (int i = 0; i < codes.length; i++) {
-				String symbol = CurrencyNames.getString(this.codes[i]);
-				currency1.addItem(symbol);
-				currency2.addItem(symbol);
-			}
+			initialize();
 			Currency currency = Currency.getInstance(LocalizationData.getLocale());
 			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
 			currency1.setSelectedIndex(index);
@@ -160,6 +155,10 @@ public class CurrencyConverterPanel extends JPanel {
 		if (currency1 == null) {
 			currency1 = new JComboBox();
 			currency1.setToolTipText(Messages.getString("CurrencyConverterPanel.origin.toolTip")); //$NON-NLS-1$
+			for (int i = 0; i < codes.length; i++) {
+				String symbol = CurrencyNames.getString(this.codes[i]);
+				currency1.addItem(symbol);
+			}
 			currency1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount1.setCurrency(Currency.getInstance(codes[currency1.getSelectedIndex()]));
@@ -180,6 +179,10 @@ public class CurrencyConverterPanel extends JPanel {
 		if (currency2 == null) {
 			currency2 = new JComboBox();
 			currency2.setToolTipText(Messages.getString("CurrencyConverterPanel.destination.toolTip")); //$NON-NLS-1$
+			for (int i = 0; i < codes.length; i++) {
+				String symbol = CurrencyNames.getString(this.codes[i]);
+				currency2.addItem(symbol);
+			}
 			currency2.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount2.setCurrency(Currency.getInstance(codes[currency2.getSelectedIndex()]));
