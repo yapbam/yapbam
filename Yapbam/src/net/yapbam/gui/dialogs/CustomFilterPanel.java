@@ -1514,7 +1514,29 @@ public class CustomFilterPanel extends JPanel {
 			clear = new JButton();
 			clear.setText(LocalizationData.get("CustomFilterPanel.clearAll")); //$NON-NLS-1$
 			clear.setToolTipText(LocalizationData.get("CustomFilterPanel.clearAll.toolTip")); //$NON-NLS-1$
-			clear.setEnabled(false);
+			clear.setEnabled(true);
+			clear.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					selectAll(getAccountList());
+					selectAll(getModes());
+					selectAll(getCategoryList());
+					getDescriptionContains().setSelected(true);
+					getDescription().setText("");
+					getDateAll().setSelected(true);
+					getAmountAll().setSelected(true);
+					getNumberContains().setSelected(true);
+					getNumber().setText("");
+					getValueDateAll().setSelected(true);
+					getChecked().setSelected(true);
+					getNotChecked().setSelected(true);
+					getStatementContains().setSelected(true);
+					getStatement().setText("");
+				}
+
+				private void selectAll(JList list) {
+					list.getSelectionModel().addSelectionInterval(0, list.getModel().getSize()-1);
+				}
+			});
 		}
 		return clear;
 	}
