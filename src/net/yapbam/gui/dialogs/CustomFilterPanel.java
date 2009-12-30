@@ -1677,6 +1677,7 @@ public class CustomFilterPanel extends JPanel {
 		if (number == null) {
 			number = new JTextField();
 			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
+			number.setText(data.getNumberFilter()==null?"":data.getNumberFilter().getFilter()); //$NON-NLS-1$
 		}
 		return number;
 	}

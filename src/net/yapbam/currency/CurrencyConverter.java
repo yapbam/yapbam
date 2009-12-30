@@ -188,10 +188,8 @@ public final class CurrencyConverter {
      *                 If an error occurs while parsing the XML cache file.
      */
     public String[] getCurrencies() throws IOException, ParseException {
-        if (fxRates.isEmpty())
-            update();
-        String[] currencies = fxRates.keySet().toArray(
-                new String[fxRates.size()]);
+        if (fxRates.isEmpty()) update();
+        String[] currencies = fxRates.keySet().toArray(new String[fxRates.size()]);
         return currencies;
     }
 
