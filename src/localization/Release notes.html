@@ -13,90 +13,260 @@ color: #aa0000;
 color: #ff9900;
 }
 -->
- </style></head>
+</style>
+</head>
 <body>
-<h1>Version 0.4.0 (12/??/2009)</h1>
-<p>This version is a prerelease with some missing functionnalities.<br>
+<h1>Version 0.4.0 (12/31/2009)</h1>
+<p>This version is a prerelease with some missing
+functionnalities.<br>
 You will also find some GUI items without any
 tooltip.<br>
 <br>
-Nevertheless it's already useful to manage your bank accounts (I&nbsp;use
+Nevertheless it's already useful to manage your bank accounts
+(I&nbsp;use
 it for my own). Feel free to report any bug.<br>
 </p>
 <p>Some functionnalities I plan to add :
 </p>
-<ul><li>Something
-to edit payment modes ... (currently, you can add or remove them, but not
+<ul>
+<li>Something
+to edit payment modes ... (currently, you can add or remove them, but
+not
 edit). For now, you have to manually edit
-the XML file ... at your own risks.</li><li>The ability to compress and encrypt data files and store them over the Internet.</li><li>An auto-complete wizard in the "new transaction"
+the XML file ... at your own risks.</li>
+<li>The ability to compress and encrypt data files and store
+them over the Internet.</li>
+<li>An auto-complete wizard in the "new transaction"
 dialog that would be able to complete the description as you type and
-to deduce other informations (especially categories).</li><li>Maybe the ability to deal with OFX data files ... If a lot of users ask for it.</li></ul>
+to deduce other informations (especially categories).</li>
+<li>Maybe the ability to deal with OFX data files ... If a lot
+of users ask for it.</li>
+</ul>
 <h2>New in this version</h2>
-<ul><li><span class="bugFix"></span><span class="bugFix"></span>Introduce better filtering capabilities (on category, modes, etc ...).</li><li>Corrects a lot of mistakes in english wording.</li><li><span class="bugFix">Bug fixed</span> : Sometimes, the next date of a periodical transaction was not updated after generating an occurence of this transaction.</li>
+<ul>
+<li><span class="bugFix"></span><span class="bugFix"></span>Introduce extended filtering
+capabilities (on category, modes, etc ...).</li>
+<li><span class="bugFix">Corrects</span>
+a lot of mistakes in english wording.</li>
+<li><span class="bugFix">Bug fixed</span> :
+Sometimes, the next date of a periodical transaction was not updated
+after generating an occurence of this transaction.</li>
+<li><span class="bugFix">Bug fixed</span> :
+The currency converter tool didn't work under Ubuntu (and probably
+other Linux systems).</li>
 </ul>
 <hr>
 <h1>Older releases</h1>
-<h2>Version 0.3.7 (12/05/2009)</h2><ul><li><span class="bugFix"></span><span class="bugFix"></span>Dates can now be selected in a calendar.</li></ul><h2>Version 0.3.6 (11/22/2009)</h2><ul><li><span class="bugFix"></span><span class="bugFix">Bug fixed</span> : In the periodical transaction edit dialog, it was impossible to leave the end date blank if this field gained the focus.</li></ul><h2>Version 0.3.5 (11/20/2009)</h2><ul><li><span class="bugFix"></span><span class="bugFix">Bug fixed</span> : Saving data containing a periodicalTransaction with a daily period didn't work.</li><li>The periodical transactions can now have a end date.</li></ul><h2>Version 0.3.4 (11/11/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> : Under some Windows XP, the preferences and the last state were not saved.</li></ul><h2>Version 0.3.3 (11/02/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> : When a new file was opened, the 
-    category list in the administration tab was not refreshed.</li><li><span class="bugFix">Bug fixed</span>
+<h2>Version 0.3.7 (12/05/2009)</h2>
+<ul>
+<li><span class="bugFix"></span><span class="bugFix"></span>Dates can now be selected in a
+calendar.</li>
+</ul>
+<h2>Version 0.3.6 (11/22/2009)</h2>
+<ul>
+<li><span class="bugFix"></span><span class="bugFix">Bug fixed</span> : In the periodical
+transaction edit dialog, it was impossible to leave the end date blank
+if this field gained the focus.</li>
+</ul>
+<h2>Version 0.3.5 (11/20/2009)</h2>
+<ul>
+<li><span class="bugFix"></span><span class="bugFix">Bug fixed</span> : Saving data
+containing a periodicalTransaction with a daily period didn't work.</li>
+<li>The periodical transactions can now have a end date.</li>
+</ul>
+<h2>Version 0.3.4 (11/11/2009)</h2>
+<ul>
+<li><span class="bugFix">Bug fixed</span> :
+Under some Windows XP, the preferences and the last state were not
+saved.</li>
+</ul>
+<h2>Version 0.3.3 (11/02/2009)</h2>
+<ul>
+<li><span class="bugFix">Bug fixed</span> :
+When a new file was opened, the category list in the administration tab
+was not refreshed.</li>
+<li><span class="bugFix">Bug fixed</span>
 : Sometimes, when the transactions table was sorted, editing a
 transaction resulted in a strange Ypabam state : The transaction looked
 like it wasn't modified and the transactions table doesn't respond
-anymore.</li></ul><h2>Version 0.3.2 (11/01/2009)</h2>
+anymore.</li>
+</ul>
+<h2>Version 0.3.2 (11/01/2009)</h2>
 <ul>
-  <li>The main frame title now indicates if the data needs to be saved (its title 
-    ends with a *).</li>
-  <li><span class="bugFix">Bug fixed</span> : Deleting a category used in a transaction 
-    corrupted the data.</li>
-  <li><span class="bugFix">Bug fixed</span> : When reading the last opened file 
-    failed, this file was still considered as "last opened file".&nbsp;</li>
-  <li><span class="bugFix">Bug fixed</span> : If, after reading a file you create 
-    a new file, then quit and restart Yapbam, the file was&nbsp;opened again</li>
+<li>The main frame title now indicates if the data needs to be
+saved (its title ends with a *).</li>
+<li><span class="bugFix">Bug fixed</span> :
+Deleting a category used in a transaction corrupted the data.</li>
+<li><span class="bugFix">Bug fixed</span> :
+When reading the last opened file failed, this file was still
+considered as "last opened file".&nbsp;</li>
+<li><span class="bugFix">Bug fixed</span> :
+If, after reading a file you create a new file, then quit and restart
+Yapbam, the file was&nbsp;opened again</li>
 </ul>
 <h2>Version 0.3.1 (10/31/2009)</h2>
-<ul><li>The currency converter tool now work through proxied Internet connections and a now displays a conversion rates table.</li><li><span class="bugFix">Bug fixed</span>
-: When the currency converter was called, closing the main window didn't shutdown the java virtual machine.</li><li><span class="bugFix">Bug fixed</span>
-: The percentage in the pie statistic's chart's tooltips were&nbsp;wrong.</li><li><span class="bugFix">Bug fixed</span>
-: Sometimes, when a transaction was duplicated or convert to periodical, the payment mode of the created transaction were wrong.</li><li><span class="bugFix">Bug fixed</span>
-: The balance history was wrong when there was a switch from summer to winter time in it.</li></ul><h2>Version 0.3.0 (10/25/2009)</h2><ul><li>Add a category statistic panel.</li><li>Add a currency converter tool (a preview release which don't work with proxied Internet connections).</li><li>Change the administration panel layout.</li><li><span class="bugFix">Bug fixed</span>
-: The "converts to periodical transaction" menu item stayed enabled when we leaved the "transactions" panel.</li></ul><h2>Version 0.2.9 (10/24/2009)</h2><ul><li><span class="develop">Developpers</span>
-: Rewrite of transactions filtering in order to prepare statistics plugin.</li><li><span class="bugFix">Bug fixed</span>
+<ul>
+<li>The currency converter tool now work through proxied
+Internet connections and a now displays a conversion rates table.</li>
+<li><span class="bugFix">Bug fixed</span>
+: When the currency converter was called, closing the main window
+didn't shutdown the java virtual machine.</li>
+<li><span class="bugFix">Bug fixed</span>
+: The percentage in the pie statistic's chart's tooltips
+were&nbsp;wrong.</li>
+<li><span class="bugFix">Bug fixed</span>
+: Sometimes, when a transaction was duplicated or convert to
+periodical, the payment mode of the created transaction were wrong.</li>
+<li><span class="bugFix">Bug fixed</span>
+: The balance history was wrong when there was a switch from summer to
+winter time in it.</li>
+</ul>
+<h2>Version 0.3.0 (10/25/2009)</h2>
+<ul>
+<li>Add a category statistic panel.</li>
+<li>Add a currency converter tool (a preview release which
+don't work with proxied Internet connections).</li>
+<li>Change the administration panel layout.</li>
+<li><span class="bugFix">Bug fixed</span>
+: The "converts to periodical transaction" menu item stayed enabled
+when we leaved the "transactions" panel.</li>
+</ul>
+<h2>Version 0.2.9 (10/24/2009)</h2>
+<ul>
+<li><span class="develop">Developpers</span>
+: Rewrite of transactions filtering in order to prepare statistics
+plugin.</li>
+<li><span class="bugFix">Bug fixed</span>
 : When transactions where removed, the balance history could contains
-extra segments (especially when you removed all the transactions).</li></ul><h2>Version 0.2.8 (10/18/2009)</h2><ul><li>Add a payment mode administration panel with the ability to remove payment modes.<span class="bugFix"></span></li><li><span class="bugFix">Bug fixed</span> : When an used category was deleted, sometimes, it remained some transactions with that category.</li></ul><h2>Version 0.2.7 (10/16/2009)</h2><ul><li>During the first startup, Yapbam now ask if you want to connect to the Internet and check for update.<span class="bugFix"></span></li><li><span class="bugFix">Bug fixed</span> : A double-click on the
-transaction list in the check mode opened the "edit" dialog instead of mark the transaction as checked.</li></ul><h2>Version 0.2.6 (10/13/2009)</h2><ul><li>Add a administration panel to manage categories.</li><li><span class="bugFix"></span><span class="bugFix">Bug fixed</span> : The popup menu in the accounts administration panel had many separators.</li><li><span class="bugFix">Bug fixed</span> : The account manager now verified that new account name is not empty, and not already used.</li><li><span class="bugFix">Bug fixed </span>: When you pressed return during editing a transaction date, the value date was not refreshed.</li><li><span class="bugFix">Bug fixed </span>: The state of "ignored" check boxes in the "generate periodical transactions" dialog was inverted.</li><li>Improvement
+extra segments (especially when you removed all the transactions).</li>
+</ul>
+<h2>Version 0.2.8 (10/18/2009)</h2>
+<ul>
+<li>Add a payment mode administration panel with the ability to
+remove payment modes.<span class="bugFix"></span></li>
+<li><span class="bugFix">Bug fixed</span> :
+When an used category was deleted, sometimes, it remained some
+transactions with that category.</li>
+</ul>
+<h2>Version 0.2.7 (10/16/2009)</h2>
+<ul>
+<li>During the first startup, Yapbam now ask if you want to
+connect to the Internet and check for update.<span class="bugFix"></span></li>
+<li><span class="bugFix">Bug fixed</span> :
+A double-click on the
+transaction list in the check mode opened the "edit" dialog instead of
+mark the transaction as checked.</li>
+</ul>
+<h2>Version 0.2.6 (10/13/2009)</h2>
+<ul>
+<li>Add a administration panel to manage categories.</li>
+<li><span class="bugFix"></span><span class="bugFix">Bug fixed</span> : The popup menu in
+the accounts administration panel had many separators.</li>
+<li><span class="bugFix">Bug fixed</span> :
+The account manager now verified that new account name is not empty,
+and not already used.</li>
+<li><span class="bugFix">Bug fixed </span>:
+When you pressed return during editing a transaction date, the value
+date was not refreshed.</li>
+<li><span class="bugFix">Bug fixed </span>:
+The state of "ignored" check boxes in the "generate periodical
+transactions" dialog was inverted.</li>
+<li>Improvement
 : A empty date field is now equivalent to "today". When you duplicate a
-transaction, in the dialog, the date is automatically setted to today</li></ul><h2>Version 0.2.5 (10/10/2009)</h2><ul><li><span class="bugFix"></span>Add account management.</li></ul><h2>Version 0.2.4 (10/02/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> :&nbsp;Under Linux, if
+transaction, in the dialog, the date is automatically setted to today</li>
+</ul>
+<h2>Version 0.2.5 (10/10/2009)</h2>
+<ul>
+<li><span class="bugFix"></span>Add account
+management.</li>
+</ul>
+<h2>Version 0.2.4 (10/02/2009)</h2>
+<ul>
+<li><span class="bugFix">Bug fixed</span>
+:&nbsp;Under Linux, if
 Yapbam was launch with a right click on the jar file, the preference
 and state files were saved in the user home directory, not in Yapbam
-directory.<br>As Yabam is portable, it was a mistake.</li></ul><h2>Version 0.2.3 (10/01/2009)</h2><ul><li>Add the ability to edit or ignore transactions during the periodical transactions 
-    generation process.</li><li>Add the ability to sort the transactions table and the periodic transactions table.</li></ul>
+directory.<br>
+As Yabam is portable, it was a mistake.</li>
+</ul>
+<h2>Version 0.2.3 (10/01/2009)</h2>
+<ul>
+<li>Add the ability to edit or ignore transactions during the
+periodical transactions generation process.</li>
+<li>Add the ability to sort the transactions table and the
+periodic transactions table.</li>
+</ul>
 <h2>Version 0.2.2 (09/30/2009)</h2>
 <ul>
-  <li>Add auto check for Yapbam updates.</li>
-  <li>The "Transactions" menu now remains visible in all the panel.</li>
+<li>Add auto check for Yapbam updates.</li>
+<li>The "Transactions" menu now remains visible in all the
+panel.</li>
 </ul>
 <h2>Version 0.2.1 (09/28/2009)</h2>
-<ul><li>Add popup menu to edit/delete/duplicate periodical transactions in the administration panel.</li><li><span class="bugFix">Bug fixed</span> :&nbsp;menuItem to check the selected transaction in the
-transactions table contextual menu was shown even if the statement field was not documented.</li></ul><h2>Version 0.2.0 (09/27/2009)</h2><ul><li>Introduce full periodic transactions support (now, they can be
-generated). I plan to improve this fucntionnality which the ability to
-edit generated transactions in the generation dialog.</li><li>Add menu items to convert a transaction into a periodical transaction.</li></ul><h2>Version 0.1.20 (09/24/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> : In the new/edit transaction dialog, 
-    when you created a new mode, account or category with a very long name, the 
-    window appearence was broken.</li><li>Oups ! Some wording were not translated in the new Account dialog.</li><li><span class="bugFix">Bug fixed</span> : The duplicate button in the new 
-    account dialog had no wording ... and did nothing.</li><li><span class="bugFix">Bug fixed</span> : A lot of problems in the new account dialog with the mode list buttons.</li></ul><h2>Version 0.1.19 (09/23/2009)</h2>
 <ul>
-  <li>Add an administration panel, with the ability to define and manage periodical 
-    transactions.</li>
-  <li>Add tooltips on main window tabs.</li>
-  <li>Change the "duplicate" button behaviour (in the transactions panel). Now, 
-    the edition dialog is automatically opened when you duplicate a transaction.</li>
+<li>Add popup menu to edit/delete/duplicate periodical
+transactions in the administration panel.</li>
+<li><span class="bugFix">Bug fixed</span>
+:&nbsp;menuItem to check the selected transaction in the
+transactions table contextual menu was shown even if the statement
+field was not documented.</li>
+</ul>
+<h2>Version 0.2.0 (09/27/2009)</h2>
+<ul>
+<li>Introduce full periodic transactions support (now, they can
+be
+generated). I plan to improve this fucntionnality which the ability to
+edit generated transactions in the generation dialog.</li>
+<li>Add menu items to convert a transaction into a periodical
+transaction.</li>
+</ul>
+<h2>Version 0.1.20 (09/24/2009)</h2>
+<ul>
+<li><span class="bugFix">Bug fixed</span> :
+In the new/edit transaction dialog, when you created a new mode,
+account or category with a very long name, the window appearence was
+broken.</li>
+<li>Oups ! Some wording were not translated in the new Account
+dialog.</li>
+<li><span class="bugFix">Bug fixed</span> :
+The duplicate button in the new account dialog had no wording ... and
+did nothing.</li>
+<li><span class="bugFix">Bug fixed</span> :
+A lot of problems in the new account dialog with the mode list buttons.</li>
+</ul>
+<h2>Version 0.1.19 (09/23/2009)</h2>
+<ul>
+<li>Add an administration panel, with the ability to define and
+manage periodical transactions.</li>
+<li>Add tooltips on main window tabs.</li>
+<li>Change the "duplicate" button behaviour (in the
+transactions panel). Now, the edition dialog is automatically opened
+when you duplicate a transaction.</li>
 </ul>
 <h2>Version 0.1.18 (09/19/2009)</h2>
-<ul><li><span class="bugFix">Bug fixed</span> : Some problems in menu items refresh. Some of them were enabled or disabled ... but they'd rather not.</li><li>Add some toolTips.</li><li>Add an alert dialog when Yapbam is launched with an incompatible old java version (prior to 1.6).</li></ul><h2>Version 0.1.17 (09/18/2009)</h2><ul><li><span class="bugFix">Bug fixed</span> :
-The proxy authentication was broken.</li><li><span class="bugFix">Bug fixed</span> :
-When an account was added, sometimes, the filter menu was broken.</li><li>Add a menuItem to check the selected transaction in the
-transactions table contextual menu.</li><li>Oups ! Some wording were not translated in the new Account
-dialog.</li><li><span class="develop">Developpers</span>
+<ul>
+<li><span class="bugFix">Bug fixed</span> :
+Some problems in menu items refresh. Some of them were enabled or
+disabled ... but they'd rather not.</li>
+<li>Add some toolTips.</li>
+<li>Add an alert dialog when Yapbam is launched with an
+incompatible old java version (prior to 1.6).</li>
+</ul>
+<h2>Version 0.1.17 (09/18/2009)</h2>
+<ul>
+<li><span class="bugFix">Bug fixed</span> :
+The proxy authentication was broken.</li>
+<li><span class="bugFix">Bug fixed</span> :
+When an account was added, sometimes, the filter menu was broken.</li>
+<li>Add a menuItem to check the selected transaction in the
+transactions table contextual menu.</li>
+<li>Oups ! Some wording were not translated in the new Account
+dialog.</li>
+<li><span class="develop">Developpers</span>
 : Switch to a plug-in architecture for all the
-panels in the main window.</li></ul><h2>Version 0.1.16 (09/17/2009)</h2>
+panels in the main window.</li>
+</ul>
+<h2>Version 0.1.16 (09/17/2009)</h2>
 <ul>
 <li>Add support to proxid Internet connections.</li>
 <li>Add a contextual menu on the transactions table.</li>
