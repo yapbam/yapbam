@@ -268,10 +268,10 @@ public final class CurrencyConverter {
      */
     private void initCacheFile() {
         if (cacheFile == null) {
-            if (cacheFileName == null || cacheFileName.equals(""))
-                cacheFileName = System.getProperty("java.io.tmpdir")
-                        + "ExchangeRates.xml";
-            cacheFile = new File(cacheFileName);
+            if (cacheFileName == null || cacheFileName.equals("")) {
+            	cacheFile = new File(new File(System.getProperty("java.io.tmpdir")), "ExchangeRates.xml");
+            	cacheFileName = cacheFile.getAbsolutePath();
+            }
         }
     }
 
@@ -335,6 +335,7 @@ public final class CurrencyConverter {
     			throw new IOException ("Http Error "+errorCode);
     		}
         } catch (IOException e) {
+        	e.printStackTrace();
             lastError = "Connection/Open Error: " + e.getMessage();
         }
         if (lastError != null) {
