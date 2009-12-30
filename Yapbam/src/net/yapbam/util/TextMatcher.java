@@ -59,7 +59,12 @@ public class TextMatcher {
 		return diacriticalSensitive;
 	}
 	
+	/** Tests whether a text matches this matcher.
+	 * @param text the text to test
+	 * @return true if the text matches. If the text is null, this method always returns false
+	 */
 	public boolean matches(String text) {
+		if (text==null) return false;
 		if (!diacriticalSensitive) text = removeDiacriticals(text);
 		if (kind==REGULAR) {
 			return ((Pattern)internalFilter).matcher(text).matches();
