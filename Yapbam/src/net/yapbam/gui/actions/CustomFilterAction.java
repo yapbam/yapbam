@@ -5,6 +5,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JCheckBoxMenuItem;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
@@ -31,6 +32,8 @@ public class CustomFilterAction extends AbstractAction {
 		if (dialog.getResult()!=null) {
 			bar.updateAccountMenu();
 			bar.updateFilterMenu();
+		} else {
+			((JCheckBoxMenuItem)e.getSource()).setSelected(!((JCheckBoxMenuItem)e.getSource()).isSelected());
 		}
 	}
 }

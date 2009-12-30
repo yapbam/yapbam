@@ -513,6 +513,8 @@ public class CustomFilterPanel extends JPanel {
 			amountAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (amountAll.isSelected()) {
+						getMinAmount().setValue(null);
+						getMaxAmount().setValue(null);
 						getMinAmount().setEnabled(false);
 						getMaxAmount().setEnabled(false);
 					}
