@@ -64,6 +64,7 @@ public class CategoryPanel extends JPanel {
 	private JComboBox getComboBox() {
 		if (comboBox == null) {
 			comboBox = new CoolJComboBox();
+			comboBox.setToolTipText(LocalizationData.get("TransactionDialog.category.tooltip")); //$NON-NLS-1$
 			//FIXME Need to fire a property change event when the selection changes
 		}
 		return comboBox;

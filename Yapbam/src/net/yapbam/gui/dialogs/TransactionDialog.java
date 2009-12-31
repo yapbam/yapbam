@@ -51,7 +51,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	}
 	
 	public TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
-		super(owner, (edit?LocalizationData.get("TransactionDialog.title.edit"):LocalizationData.get("TransactionDialog.title.new")), data, transaction);
+		super(owner, (edit?LocalizationData.get("TransactionDialog.title.edit"):LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void setTransactionDate (Date date) {
@@ -87,6 +87,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
 		defDate = new DateWidgetPanel();
+		defDate.setToolTipText(LocalizationData.get("TransactionDialog.valueDate.tooltip")); //$NON-NLS-1$
 		defDate.addFocusListener(focusListener); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
 		defDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -99,6 +100,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
         c.gridx=2; c.fill=GridBagConstraints.NONE; c.weightx = 0;
         centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.statement")), c); //$NON-NLS-1$
         statement = new JTextField(15);
+        statement.setToolTipText(LocalizationData.get("TransactionDialog.statement.tooltip")); //$NON-NLS-1$
         statement.addFocusListener(focusListener);
         c.gridx=3;
         centerPane.add(statement, c);
@@ -107,6 +109,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.number")), c); //$NON-NLS-1$
         transactionNumber = new JTextField(15);
+        transactionNumber.setToolTipText(LocalizationData.get("TransactionDialog.number.tooltip")); //$NON-NLS-1$
         transactionNumber.addFocusListener(focusListener);
         c.gridx++;
         centerPane.add(transactionNumber, c);
@@ -117,6 +120,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
 		centerPane.add(titleDate, c);
 		date = new DateWidgetPanel();
+		date.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
 		date.addFocusListener(focusListener); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
 		date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
