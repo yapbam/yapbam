@@ -104,6 +104,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
         c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(titleLibelle, c);
         description = new JTextField(40);
+        description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
         description.addFocusListener(focusListener);
         c.gridx=1; c.gridwidth=5; c.fill = GridBagConstraints.HORIZONTAL;
     	centerPane.add(description,c);
@@ -123,6 +124,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
         c.gridx++; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
         centerPane.add(amount,c);
         receipt = new JCheckBox(LocalizationData.get("TransactionDialog.receipt")); //$NON-NLS-1$
+        receipt.setToolTipText(LocalizationData.get("TransactionDialog.receipt.tooltip")); //$NON-NLS-1$
         receipt.addItemListener(new ReceiptListener());
         c.gridx++; c.weightx=0; c.anchor = GridBagConstraints.WEST;
         centerPane.add(receipt, c);
