@@ -133,7 +133,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
         c.insets = insets; c.gridx=0; c.gridy=3; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.mode")), c); //$NON-NLS-1$
         modes = new CoolJComboBox();
-        buildModes();
+        buildModes(!receipt.isSelected());
         selectedMode = 0;
         ModesListener modeListener = new ModesListener();
 		modes.addActionListener(modeListener);
@@ -187,16 +187,33 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 
 	protected abstract void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);
 
-	private void buildModes() {
+	/** Refresh the mode list according to the current account and receipt/expense kind of transaction.
+	 * If a mode with the same name that the currently selected mode is available, it will be selected.
+	 * else, the first mode of the list will be selected.
+	*/
+	private void buildModes(boolean expense) {
+		// Prevents selection events to be sent
 		modes.setActionEnabled(false);
+		String current = (String) modes.getSelectedItem();
 		modes.removeAllItems();
 		Account currentAccount = data.getAccount(selectedAccount);
-		boolean expense = !receipt.isSelected();
 		int nb = currentAccount.getModesNumber(expense);
 		for (int i = 0; i < nb; i++) {
 			modes.addItem(currentAccount.getMode(i, expense).getName());
 		}
+		// Clears the selection in order future selection to fire a selection change event ... even
+		// if the same value is selected (as selectedMode and value date may be changed)
+		modes.setSelectedIndex(-1);
 		modes.setActionEnabled(true);
+		// Restore the previously selected mode, if it is available
+		if (current!=null) {
+			int index = 0;
+			Mode mode = currentAccount.getMode(current);
+			if (mode!=null) { // If the last selected mode exists in the account for this transaction kind
+				index = currentAccount.findMode(mode, expense);
+			}
+			modes.setSelectedIndex(index>=0?index:0);
+		}
 	}
 
 	private String[] getAccounts() {
@@ -232,8 +249,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 				if (index!=selectedAccount) {
 					selectedAccount = index;
 					if (DEBUG) System.out.println ("Account "+selectedAccount+" is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-					buildModes();
-					modes.setSelectedItem(0);
+					buildModes(!receipt.isSelected());
 				}
 			} else {
 				Account ac = AccountDialog.open(data, AbstractTransactionDialog.this, null);
@@ -248,23 +264,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 
 	class ReceiptListener implements ItemListener{
 		public void itemStateChanged(ItemEvent e) {
-			boolean receipt = (e.getStateChange()==ItemEvent.SELECTED);
-			// We invert the receipt/expense value in order to have the mode currently selected and not the same mode
-			// index with another expense/receipt value ... ro an exception
-			Mode current = data.getAccount(selectedAccount).getMode(selectedMode, receipt);
-			// needClearMode = the currentMode does'nt support the new expense/receipt state
-			boolean needClearMode = (current!=null);
-			DateStepper vdc = null;
-			if (needClearMode) {
-				vdc = receipt?current.getReceiptVdc():current.getExpenseVdc();
-				needClearMode = (vdc==null);
-			}
-			buildModes();
-			int modeIndex = 0;
-			if (!needClearMode) {
-				modeIndex = data.getAccount(selectedAccount).findMode(current, !receipt);
-			}
-			modes.setSelectedIndex(modeIndex);
+			buildModes(e.getStateChange()==ItemEvent.DESELECTED);
 		}
 	}
 
