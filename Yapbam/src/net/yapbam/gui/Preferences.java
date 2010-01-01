@@ -37,6 +37,7 @@ public class Preferences {
 	private static final String PROXY_AUTHENTICATION = "proxy_pass"; //$NON-NLS-1$
 	private static final String AUTO_UPDATE_PERIOD = "auto_update_period"; //$NON-NLS-1$
 	private static final String AUTO_UPDATE_SILENT_FAIL	= "auto_update_silent_fail"; //$NON-NLS-1$
+	private static final String EXPERT_MODE = "expert_mode"; //$NON-NLS-1$
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
 
 	/** Current instance */
@@ -44,6 +45,7 @@ public class Preferences {
 	
 	private Properties properties;
 	private boolean firstRun;
+	private boolean translatorMode;
 
 	private Preferences() {
 		this.properties = new Properties();
@@ -234,5 +236,27 @@ public class Preferences {
 
 	public static Class<AbstractPlugIn>[] getPlugins() {
 		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, AdministrationPlugIn.class, ToolsPlugIn.class};
+	}
+
+	public boolean isExpertMode() {
+		try {
+			return Boolean.parseBoolean(this.properties.getProperty(EXPERT_MODE));
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public boolean isTranslatorMode() {
+		return translatorMode;
+	}
+	
+	/** Sets the translator mode.
+	 * In translator mode, all the wording should (plugins are responsible for this to be achieved) be replaced
+	 * in the GUI by their key in the translation files.
+	 * Please note that this mode is not saved and is reset to false when the application quits.
+	 * @param translatorMode true to set the translation mode on
+	 */
+	public void setTranslatorMode(boolean translatorMode) {
+		this.translatorMode = translatorMode;
 	}
 }

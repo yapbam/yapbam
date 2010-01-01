@@ -7,10 +7,13 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/** This class is the main entry point for localization concerns.
+ */
 public abstract class LocalizationData {
 	private static ResourceBundle bundle;
 	private static Locale locale;
 	private static double currencyPrecision;
+	private static boolean translatorMode;
 	
 	static {
 		reset();
@@ -18,6 +21,7 @@ public abstract class LocalizationData {
 	
 	public static void reset() {
 		locale = Preferences.INSTANCE.getLocale();
+		translatorMode = Preferences.INSTANCE.isTranslatorMode();
 		currencyPrecision = Math.pow(10, -Currency.getInstance(locale).getDefaultFractionDigits())/2;		
 		Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
 		Locale.setDefault(locale);
@@ -31,7 +35,7 @@ public abstract class LocalizationData {
 	}
 	
 	public static String get(String key) {
-		return bundle.getString(key);
+		return translatorMode?key:bundle.getString(key);
 	}
 	
 	public static char getChar(String key) {

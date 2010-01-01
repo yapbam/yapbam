@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionListener;
 
 import java.awt.Font;
 import java.awt.Color;
+
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import java.text.MessageFormat;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
@@ -52,6 +54,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private JPanel southPanel = null;
 	private ItemListener basicItemListener;
 	private HashMap<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
+	private JCheckBox translatorButton = null;
 	
 	/**
 	 * This is the default constructor
@@ -98,6 +101,10 @@ public class LocalizationPanel extends PreferencePanel {
 			frenchButton.setSelected(true);
 		} else {
 			englishButton.setSelected(true);
+		}
+		
+		if (Preferences.INSTANCE.isExpertMode()) {
+			getTranslatorButton().setSelected(Preferences.INSTANCE.isTranslatorMode());
 		}
 	}
 
@@ -147,29 +154,34 @@ public class LocalizationPanel extends PreferencePanel {
 	 */
 	private JPanel getLanguagePanel() {
 		if (languagePanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.anchor = GridBagConstraints.WEST;
+			gridBagConstraints6.gridy = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.anchor = GridBagConstraints.WEST;
-			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.gridy = 2;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.weighty = 1.0D;
 			gridBagConstraints4.weightx = 1.0D;
 			gridBagConstraints4.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints4.fill = GridBagConstraints.NONE;
-			gridBagConstraints4.gridy = 2;
+			gridBagConstraints4.gridy = 3;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints3.weightx = 1.0D;
 			gridBagConstraints3.weighty = 0.0D;
-			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.gridy = 1;
 			languagePanel = new JPanel();
 			languagePanel.setLayout(new GridBagLayout());
 			languagePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.language"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			languagePanel.add(getDefaultLButton(), gridBagConstraints3);
 			languagePanel.add(getFrenchButton(), gridBagConstraints4);
 			languagePanel.add(getEnglishButton(), gridBagConstraints5);
+			languagePanel.add(getTranslatorButton(), gridBagConstraints6);
 		}
 		return languagePanel;
 	}
@@ -227,7 +239,7 @@ public class LocalizationPanel extends PreferencePanel {
 	/**
 	 * This method initializes jScrollPane	
 	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
@@ -253,6 +265,7 @@ public class LocalizationPanel extends PreferencePanel {
 			}
 			Arrays.sort(countries);
 			jList = new JList(countries);
+			jList.setToolTipText(LocalizationData.get("PreferencesDialog.Localization.countryList.tooltip")); //$NON-NLS-1$
 			jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jList.addListSelectionListener(new ListSelectionListener() {
 				@Override
@@ -280,7 +293,8 @@ public class LocalizationPanel extends PreferencePanel {
 		Locale loc = Preferences.INSTANCE.getLocale();
 		boolean change = !(loc.equals(getBuiltLocale()) &&
 				(Preferences.INSTANCE.isDefaultCountry()==isDefaultCountry()) &&
-				(Preferences.INSTANCE.isDefaultLanguage()==isDefaultLanguage()));
+				(Preferences.INSTANCE.isDefaultLanguage()==isDefaultLanguage()) &&
+				(Preferences.INSTANCE.isTranslatorMode()==isTranslatorMode()));
 		return change;
 	}
 
@@ -302,6 +316,10 @@ public class LocalizationPanel extends PreferencePanel {
 
 	public boolean isDefaultLanguage() {
 		return getDefaultLButton().isSelected();
+	}
+	
+	public boolean isTranslatorMode() {
+		return getTranslatorButton().isSelected();
 	}
 
 	/**
@@ -405,25 +423,48 @@ public class LocalizationPanel extends PreferencePanel {
 
 	@Override
 	public String getTitle() {
-		return LocalizationData.get("PreferencesDialog.Localization.title");
+		return LocalizationData.get("PreferencesDialog.Localization.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		return LocalizationData.get("PreferencesDialog.Localization.toolTip");
+		return LocalizationData.get("PreferencesDialog.Localization.toolTip"); //$NON-NLS-1$
 	}
 
 	@Override
 	public boolean updatePreferences() {
 		boolean needIHMRefresh = false;
 		if (isChanged()) {
-			needIHMRefresh = !getBuiltLocale().equals(Preferences.INSTANCE.getLocale());
+			needIHMRefresh = !(getBuiltLocale().equals(Preferences.INSTANCE.getLocale()) && (isTranslatorMode()==Preferences.INSTANCE.isTranslatorMode()));
 			Preferences.INSTANCE.setLocale(getBuiltLocale(), isDefaultCountry(), isDefaultLanguage());
+			Preferences.INSTANCE.setTranslatorMode(isTranslatorMode());
 			if (needIHMRefresh) {
 				LocalizationData.reset();
 			}
 		}
 		return needIHMRefresh;
+	}
+
+	/**
+	 * This method initializes translatorButton	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getTranslatorButton() {
+		if (translatorButton == null) {
+			translatorButton = new JCheckBox();
+			if (Preferences.INSTANCE.isExpertMode()) {
+				translatorButton.setText(LocalizationData.get("PreferencesDialog.translatorMode")); //$NON-NLS-1$
+				translatorButton.setToolTipText(LocalizationData.get("PreferencesDialog.translatorMode.tooltip")); //$NON-NLS-1$
+				translatorButton.addItemListener(new ItemListener() {
+					@Override
+					public void itemStateChanged(ItemEvent e) {	checkSomethingChanged();}
+				});
+			} else {
+				translatorButton.setVisible(false);
+			}
+		}
+		return translatorButton;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

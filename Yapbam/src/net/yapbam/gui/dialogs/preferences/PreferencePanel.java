@@ -7,4 +7,5 @@ public abstract class PreferencePanel extends JPanel {
 	public abstract String getTitle();
 	public abstract String getToolTip();
 	public abstract boolean updatePreferences();
+	public void setDisplayed(boolean displayed) {}
 }
