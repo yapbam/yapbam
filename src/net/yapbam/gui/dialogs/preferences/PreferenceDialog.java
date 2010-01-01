@@ -5,6 +5,8 @@ import java.awt.Window;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
@@ -35,8 +37,18 @@ public class PreferenceDialog extends AbstractDialog {
 	@Override
 	protected JPanel createCenterPane(Object data) {
 		JPanel panel = new JPanel(new BorderLayout());
-		JTabbedPane tabbedPane = new JTabbedPane();
+		final JTabbedPane tabbedPane = new JTabbedPane();
 		this.panels = new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(), new NetworkPanel(), new AutoUpdatePanel()};
+		tabbedPane.addChangeListener(new ChangeListener() {
+			private int lastSelected = -1;
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if (lastSelected>=0) panels[lastSelected].setDisplayed(false);
+				lastSelected = tabbedPane.getSelectedIndex();
+				panels[lastSelected].setDisplayed(true);
+			}
+		});
 		for (int i = 0; i < panels.length; i++) {
 			tabbedPane.addTab(panels[i].getTitle(), null, panels[i], panels[i].getToolTip());
 		}

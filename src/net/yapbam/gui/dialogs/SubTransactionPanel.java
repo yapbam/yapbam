@@ -149,6 +149,7 @@ public class SubTransactionPanel extends JPanel {
 	private JTextField getAmountField() {
 		if (amountField == null) {
 			amountField = new AmountWidget(LocalizationData.getLocale());
+			amountField.setToolTipText(LocalizationData.get("SubTransactionDialog.amount.tooltip")); //$NON-NLS-1$
 			amountField.setColumns(10);
 	        amountField.setValue(new Double(0));
 		}
