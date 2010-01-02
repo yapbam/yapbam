@@ -328,7 +328,8 @@ public class NetworkPanel extends PreferencePanel {
 	private JCheckBox getShowPassCheckBox() {
 		if (showPassCheckBox == null) {
 			showPassCheckBox = new JCheckBox();
-			showPassCheckBox.setText("Afficher le mot de passe");
+			showPassCheckBox.setText(LocalizationData.get("PreferencesDialog.Network.showPassword")); //$NON-NLS-1$
+			showPassCheckBox.setToolTipText(LocalizationData.get("PreferencesDialog.Network.showPassword.toolTip")); //$NON-NLS-1$
 			showPassCheckBox.addItemListener(new java.awt.event.ItemListener() {
 				char oldEcho;
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -346,12 +347,12 @@ public class NetworkPanel extends PreferencePanel {
 
 	@Override
 	public String getTitle() {
-		return LocalizationData.get("PreferencesDialog.Network.title");
+		return LocalizationData.get("PreferencesDialog.Network.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		return LocalizationData.get("PreferencesDialog.Network.toolTip");
+		return LocalizationData.get("PreferencesDialog.Network.toolTip"); //$NON-NLS-1$
 	}
 
 	@Override
