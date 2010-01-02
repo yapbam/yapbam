@@ -117,6 +117,7 @@ class SubtransactionListPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 		JPanel buttonsPanel = new JPanel();
 		JButton newSubTransactionButton = new JButton(LocalizationData.get("TransactionDialog.SubPanel.new")); //$NON-NLS-1$
+		newSubTransactionButton.setToolTipText(LocalizationData.get("TransactionDialog.SubPanel.new.tooltip")); //$NON-NLS-1$
 		newSubTransactionButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -124,6 +125,7 @@ class SubtransactionListPanel extends JPanel {
 			}
 		});
 		delete = new JButton(LocalizationData.get("TransactionDialog.SubPanel.delete")); //$NON-NLS-1$
+		delete.setToolTipText(LocalizationData.get("TransactionDialog.SubPanel.delete.tooltip")); //$NON-NLS-1$
 		delete.setEnabled(false);
 		delete.addActionListener(new ActionListener() {
 			@Override
@@ -132,6 +134,7 @@ class SubtransactionListPanel extends JPanel {
 			}
 		});
 		edit = new JButton(LocalizationData.get("TransactionDialog.SubPanel.modify")); //$NON-NLS-1$
+		edit.setToolTipText(LocalizationData.get("TransactionDialog.SubPanel.modify.tooltip")); //$NON-NLS-1$
 		edit.setEnabled(false);
 		edit.addActionListener(new ActionListener() {
 			@Override
