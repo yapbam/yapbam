@@ -37,12 +37,10 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	/** The second part of the "?" menu. Menu items inserted there will be placed after the "check for updates" item */
 	public static final int UPDATES_PART = 7;
 	
-	/** The account menu id */
-	public static final int ACCOUNT_MENU = 1;
 	/** The filter menu id */
-	public static final int FILTER_MENU = 3;
+	public static final int FILTER_MENU = 2;
 	/** The transactions menu id */
-	public static final int TRANSACTIONS_MENU = 2;
+	public static final int TRANSACTIONS_MENU = 1;
 	
 	/** Constructor.
 	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>

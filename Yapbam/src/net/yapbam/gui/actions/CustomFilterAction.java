@@ -30,7 +30,6 @@ public class CustomFilterAction extends AbstractAction {
 		CustomFilterDialog dialog = new CustomFilterDialog(owner, data);
 		dialog.setVisible(true);
 		if (dialog.getResult()!=null) {
-			bar.updateAccountMenu();
 			bar.updateFilterMenu();
 		} else {
 			((JCheckBoxMenuItem)e.getSource()).setSelected(!((JCheckBoxMenuItem)e.getSource()).isSelected());
