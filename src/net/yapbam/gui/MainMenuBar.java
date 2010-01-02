@@ -44,7 +44,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
     
 	private JMenuItem menuItemAbout;
 	
-	private JMenu accountMenu;
 	private JMenu filterMenu;
 	private JMenu transactionMenu;
 
@@ -97,16 +96,31 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemQuit.addActionListener(this);
         menu.add(this.menuItemQuit);
 
+//TODO Remove
+/*
         accountMenu = new JMenu(LocalizationData.get("MainMenu.Accounts")); //$NON-NLS-1$
         accountMenu.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.Mnemonic")); //$NON-NLS-1$
         accountMenu.setToolTipText(LocalizationData.get("MainMenu.Accounts.ToolTip")); //$NON-NLS-1$
         updateAccountMenu();
         this.add(accountMenu);
-        
+*/
+      
         transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
         transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
         transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
-        JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getData()));
+		JMenuItem menuItemNewAccount = new JMenuItem(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT); //$NON-NLS-1$
+	    menuItemNewAccount.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.New.Mnemonic")); //$NON-NLS-1$
+	    menuItemNewAccount.setToolTipText(LocalizationData.get("MainMenu.Accounts.New.ToolTip")); //$NON-NLS-1$
+	    menuItemNewAccount.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AccountDialog.open(MainMenuBar.this.frame.getData(), MainMenuBar.this.frame, null);
+			}
+		});
+	    this.transactionMenu.add(menuItemNewAccount);
+        insertPluginMenuItems(this.transactionMenu, AbstractPlugIn.ACCOUNTS_PART);
+	    this.transactionMenu.addSeparator();
+	    JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getData()));
         item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         transactionMenu.add(item);
         insertPluginMenuItems(transactionMenu, AbstractPlugIn.TRANSACTIONS_PART);
@@ -207,38 +221,30 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent)) {
 			this.refreshState(data);
 			if (event instanceof EverythingChangedEvent) {
-				this.updateAccountMenu();
 				this.updateFilterMenu();
 			}
 		} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
 				((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
-			this.updateAccountMenu();
+			this.updateFilterMenu();
 		}
 	}
-	
-	public void updateAccountMenu() {
-		this.accountMenu.removeAll();
-		JMenuItem menuItemNewAccount = new JMenuItem(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT); //$NON-NLS-1$
-	    menuItemNewAccount.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.New.Mnemonic")); //$NON-NLS-1$
-	    menuItemNewAccount.setToolTipText(LocalizationData.get("MainMenu.Accounts.New.ToolTip")); //$NON-NLS-1$
-	    menuItemNewAccount.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AccountDialog.open(frame.getData(), frame, null);
-			}
-		});
-	    this.accountMenu.add(menuItemNewAccount);
-        insertPluginMenuItems(this.accountMenu, AbstractPlugIn.ACCOUNTS_PART);
-	    this.accountMenu.addSeparator();
-	    GlobalData data = this.frame.getData();
-	    if (data!=null) {
+		
+	public void updateFilterMenu() {
+		filterMenu.removeAll();
+		if (frame.getFilteredData()!=null) {
+			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this));
+			complexFilterMenuItem.setToolTipText(LocalizationData.get("MainMenuBar.customizedFilter.toolTip")); //$NON-NLS-1$
+			filterMenu.add(complexFilterMenuItem);
+			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData()));
+        	filterMenu.addSeparator();
+	    	GlobalData data = this.frame.getData();
 			ActionListener listener = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JMenuItem item = (JMenuItem) e.getSource();
 					Account account = frame.getData().getAccount(item.getText());
 					frame.getFilteredData().setAccounts(new Account[]{account});
-					updateAccountMenu();
+					updateFilterMenu();
 				}
 			};
 	        FilteredData filter = frame.getFilteredData();
@@ -248,37 +254,27 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	        	JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
 	        	item.setToolTipText(MessageFormat.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
 	        	if (hasAccountFilter) item.setSelected(filter.isOk(account));
-	        	accountMenu.add(item);
+	        	filterMenu.add(item);
 	        	item.addActionListener(listener);
 	        }
         	JRadioButtonMenuItem item = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
-        	item.setToolTipText(LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
+        	item.setToolTipText(LocalizationData.get("MainMenuBar.NoAccountFilter.toolTip")); //$NON-NLS-1$
         	item.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					frame.getFilteredData().setAccounts(null);
-					updateAccountMenu();
+					updateFilterMenu();
 				}
 			});
         	item.setSelected(!hasAccountFilter);
-        	accountMenu.add(item);
-	    }
-	}
-	
-	public void updateFilterMenu() {
-		filterMenu.removeAll();
-		if (frame.getFilteredData()!=null) {
+        	filterMenu.add(item);
+        	filterMenu.addSeparator();
         	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
         		LocalizationData.get("MainMenuBar.notChecked")}, new int[]{FilteredData.CHECKED, FilteredData.NOT_CHECKED}, //$NON-NLS-1$
         		new String[]{LocalizationData.get("MainMenuBar.checked.toolTip"),LocalizationData.get("MainMenuBar.notChecked.toolTip")}, //$NON-NLS-1$ //$NON-NLS-2$
         		LocalizationData.get("MainMenuBar.NoCheckedFilter.toolTip")); //$NON-NLS-1$
         	filterMenu.addSeparator();
         	buildExpenseReceiptFilterChoiceMenu();			
-        	filterMenu.addSeparator();
-			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this));
-			complexFilterMenuItem.setToolTipText(LocalizationData.get("MainMenuBar.customizedFilter.toolTip")); //$NON-NLS-1$
-			filterMenu.add(complexFilterMenuItem);
-			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData()));
 		}
 	}
 	
@@ -385,7 +381,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	}
 
 	public void updateMenu(AbstractPlugIn plugIn) {
-		accountMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.ACCOUNT_MENU));
 		transactionMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.TRANSACTIONS_MENU));
 		filterMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.FILTER_MENU));
 	}
