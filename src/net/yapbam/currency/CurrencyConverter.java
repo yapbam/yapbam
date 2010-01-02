@@ -54,6 +54,7 @@ public final class CurrencyConverter {
     private String cacheFileName = null;
     private HashMap<String, Long> fxRates = new HashMap<String, Long>(40);    
     private Date referenceDate = null;
+	private long lastTryCacheRefresh;
     private String lastError = null;
     private Proxy proxy = Proxy.NO_PROXY;
     
@@ -285,8 +286,7 @@ public final class CurrencyConverter {
      */
     private boolean cacheIsExpired() {
         final int tolerance = 12;
-        if (referenceDate == null)
-            return true;
+        if (referenceDate == null) return true;
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         long hoursOld = (cal.getTimeInMillis() - referenceDate.getTime())
                 / (1000 * 60 * 60);
@@ -297,8 +297,7 @@ public final class CurrencyConverter {
         else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
             hoursValid = 48; // hypothetical... rates are never published on
         // Saturdays
-        if (hoursOld > hoursValid)
-            return true;
+        if (hoursOld > hoursValid) return true;
         return false;
     }
 
@@ -311,6 +310,10 @@ public final class CurrencyConverter {
      */
     private void refreshCacheFile() throws IOException {
         lastError = null;
+        // If we connect to ECB since less than one minute ... do nothing
+        // This could happened if ECB don't refresh its rates since the last time we updated the cache file (and more than the cache expiration time)
+        if (System.currentTimeMillis() - lastTryCacheRefresh < 60000) return;
+        lastTryCacheRefresh = System.currentTimeMillis();
         initCacheFile();
         try {
     		HttpURLConnection ct = (HttpURLConnection) new URL(ECB_RATES_URL).openConnection(proxy);
