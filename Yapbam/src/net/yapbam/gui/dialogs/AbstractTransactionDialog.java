@@ -206,14 +206,14 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		modes.setSelectedIndex(-1);
 		modes.setActionEnabled(true);
 		// Restore the previously selected mode, if it is available
+		int index = 0;
 		if (current!=null) {
-			int index = 0;
 			Mode mode = currentAccount.getMode(current);
 			if (mode!=null) { // If the last selected mode exists in the account for this transaction kind
 				index = currentAccount.findMode(mode, expense);
 			}
-			modes.setSelectedIndex(index>=0?index:0);
 		}
+		modes.setSelectedIndex(index>=0?index:0);
 	}
 
 	private String[] getAccounts() {
