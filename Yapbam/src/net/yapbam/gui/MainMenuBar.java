@@ -236,6 +236,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 			complexFilterMenuItem.setToolTipText(LocalizationData.get("MainMenuBar.customizedFilter.toolTip")); //$NON-NLS-1$
 			filterMenu.add(complexFilterMenuItem);
 			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData()));
+			JMenuItem eraseItem = new JMenuItem(LocalizationData.get("MainMenuBar.eraseFilters")); //$NON-NLS-1$
+			eraseItem.setToolTipText(LocalizationData.get("MainMenuBar.eraseFilters.toolTip")); //$NON-NLS-1$
+			eraseItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					frame.getFilteredData().clear();
+					updateFilterMenu();
+				}
+			});
+			filterMenu.add(eraseItem);
         	filterMenu.addSeparator();
 	    	GlobalData data = this.frame.getData();
 			ActionListener listener = new ActionListener() {
