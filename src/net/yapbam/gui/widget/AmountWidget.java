@@ -147,7 +147,7 @@ public class AmountWidget extends JTextField {
 	}
 
 	/** Sets the maximum value allowed in the field.
-	 * @param minValue a double (Double.POSITIVE_INFINITY if there is no limit)
+	 * @param maxValue a double (Double.POSITIVE_INFINITY if there is no limit)
 	 */
 	public void setMaxValue(Double maxValue) {
 		this.maxValue = maxValue;
