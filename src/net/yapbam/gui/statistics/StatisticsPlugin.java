@@ -17,12 +17,13 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 
-public class StatisticsPlugin extends AbstractPlugIn {
+public class StatisticsPlugin extends AbstractPlugIn { //LOCAL
 	private FilteredData data;
 	private boolean displayed;
 	private TreeMap<Category, Summary> categoryToAmount;
 	private PieChartPanel pie;
 	private BarChartPanel bar;
+	private BudgetViewPanel budget;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
@@ -43,6 +44,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.pie = new PieChartPanel(categoryToAmount);
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.pie.tabname"), null, this.pie, LocalizationData.get("StatisticsPlugin.pie.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		buildSummaries();
+		this.budget = new BudgetViewPanel(this.data);
+		tabbedPane.addTab("Budget", null, budget, "Tableau des dépenses et recettes par catégorie");
 		JPanel result = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
 				new Insets(5, 0, 0, 0), 0, 0);
@@ -58,6 +61,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		for (int i = 0; i < this.data.getTransactionsNumber(); i++) {
 			Transaction transaction = this.data.getTransaction(i);
 			if (this.data.isOk(transaction)) {
+				//FIXME On prend en compte les dépenses, même quand le filtre dit qu'on ne doit prendre que les recettes (exemple : filtre = Recettes & cadeaux)
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 					SubTransaction subTransaction = transaction.getSubTransaction(j);
 					if (this.data.isOk(subTransaction)) categoryToAmount.get(subTransaction.getCategory()).add(subTransaction.getAmount());
