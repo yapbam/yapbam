@@ -61,13 +61,12 @@ public class StatisticsPlugin extends AbstractPlugIn { //LOCAL
 		for (int i = 0; i < this.data.getTransactionsNumber(); i++) {
 			Transaction transaction = this.data.getTransaction(i);
 			if (this.data.isOk(transaction)) {
-				//FIXME On prend en compte les dépenses, même quand le filtre dit qu'on ne doit prendre que les recettes (exemple : filtre = Recettes & cadeaux)
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 					SubTransaction subTransaction = transaction.getSubTransaction(j);
 					if (this.data.isOk(subTransaction)) categoryToAmount.get(subTransaction.getCategory()).add(subTransaction.getAmount());
 				}
 				Category category = transaction.getCategory();
-				if (this.data.isOk(category)) categoryToAmount.get(category).add(transaction.getComplement());
+				if (this.data.isComplementOk(transaction)) categoryToAmount.get(category).add(transaction.getComplement());
 			}
 		}
         pie.updateDataSet();

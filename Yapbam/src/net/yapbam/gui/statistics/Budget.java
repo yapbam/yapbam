@@ -15,6 +15,8 @@ import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 
 public class Budget {
@@ -52,7 +54,21 @@ public class Budget {
 	Budget(FilteredData data, boolean year) {
 		//FIXME Listening to events is not done
 		this.data = data;
+		this.data.addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				buildData();
+				tableModel.fireTableDataChanged();
+				rowHeaderModel.fireTableDataChanged();
+			}
+		});
+		buildData();
 		this.year = year;
+		this.tableModel = new MyTableModel();
+		this.rowHeaderModel = new MyRowHeaderModel();
+	}
+
+	private void buildData() {
 		this.values = new HashMap<Key, Double>();
 		this.dates = new LinkedList<Date>();
 		this.categories = new LinkedList<Category>();
@@ -66,14 +82,10 @@ public class Budget {
 					add (new Key(date, subTransaction.getCategory()), subTransaction.getAmount());
 				}
 			}
-			Category category = transaction.getCategory();
-			if (this.data.isOk(category)) {
-				//FIXME Must test if amount is ok with the filter
+			if (this.data.isComplementOk(transaction)) {
 				add (new Key(date, transaction.getCategory()), transaction.getComplement());
 			}
 		}
-		this.tableModel = new MyTableModel();
-		this.rowHeaderModel = new MyRowHeaderModel();
 	}
 
 	private void add(Key key, double amount) {
