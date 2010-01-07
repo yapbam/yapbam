@@ -280,13 +280,38 @@ public class FilteredData extends DefaultListenable {
 			if (isOk(transaction.getSubTransaction(i))) {
 				return true;
 			}
+			if (isComplementOk(transaction)) return true;
 		}
 		return false;
 	}
 	
+	/** Gets a subtransaction validity.
+	 * @param subtransaction the subtransaction to test
+	 * @return true if the subtransaction is valid according to this filter.
+	 * Be aware that no specific fields of the transaction are tested, so the subtransaction may be valid
+	 * even if its transaction is not (for instance if its payment mode is not ok). So, usually, you'll have
+	 * to also test the transaction.
+	 * @see #isOk(Transaction)
+	 */
 	public boolean isOk(SubTransaction subtransaction) {
 		boolean amountOk = (subtransaction.getAmount()>=getMinimumAmount()) && (subtransaction.getAmount()<=getMaximumAmount());
 		return isOk(subtransaction.getCategory()) && amountOk && isDescriptionOk(subtransaction.getDescription());
+	}
+	
+	/** Gets a transaction complement validity.
+	 * @param transaction the transaction to test
+	 * @return true if the transaction complement is valid according to this filter.
+	 * Be aware that the complement is considered as a subtransaction. So the behaviour is the same
+	 * than in isOk(Subtransaction) method. No specific fields of the transaction are tested, so the complement
+	 * may be valid even if the whole transaction is not (for instance if its payment mode is not ok).
+	 * So, usually, you'll have to also test the transaction.
+	 * @see #isOk(Transaction)
+	 */
+	public boolean isComplementOk(Transaction transaction) {
+		double amount = transaction.getComplement();
+		if ((transaction.getSubTransactionSize()!=0) && (amount==0)) return false;
+		boolean amountOk = (amount>=getMinimumAmount()) && (amount<=getMaximumAmount());
+		return isOk(transaction.getCategory()) && amountOk && isDescriptionOk(transaction.getDescription());
 	}
 	
 	/** Set the valid categories for this filter.
