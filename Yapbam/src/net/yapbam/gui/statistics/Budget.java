@@ -58,7 +58,7 @@ public class Budget {
 			@Override
 			public void processEvent(DataEvent event) {
 				buildData();
-				tableModel.fireTableDataChanged();
+				tableModel.fireTableStructureChanged();
 				rowHeaderModel.fireTableDataChanged();
 			}
 		});
@@ -86,6 +86,7 @@ public class Budget {
 				add (new Key(date, transaction.getCategory()), transaction.getComplement());
 			}
 		}
+		
 	}
 
 	private void add(Key key, double amount) {
