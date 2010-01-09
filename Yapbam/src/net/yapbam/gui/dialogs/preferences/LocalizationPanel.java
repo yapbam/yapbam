@@ -25,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import java.awt.BorderLayout;

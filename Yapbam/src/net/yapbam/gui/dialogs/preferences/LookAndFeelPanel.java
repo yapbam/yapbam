@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 public class LookAndFeelPanel extends PreferencePanel {

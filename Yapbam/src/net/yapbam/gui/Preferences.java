@@ -235,10 +235,13 @@ public class Preferences {
 		this.properties.setProperty(AUTO_UPDATE_SILENT_FAIL, Boolean.toString(silentFail));
 	}
 
-	public static Class<AbstractPlugIn>[] getPlugins() {
+	static Class<AbstractPlugIn>[] getPlugins() {
 		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, ToolsPlugIn.class, BudgetPlugin.class, AdministrationPlugIn.class};
 	}
 
+	/** Gets the expert mode.
+	 * @return true if the expert mode is on.
+	 */
 	public boolean isExpertMode() {
 		try {
 			return Boolean.parseBoolean(this.properties.getProperty(EXPERT_MODE));

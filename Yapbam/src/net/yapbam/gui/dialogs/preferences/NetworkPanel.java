@@ -18,6 +18,7 @@ import java.awt.event.ItemEvent;
 import javax.swing.JPasswordField;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import javax.swing.JCheckBox;
