@@ -1,5 +1,12 @@
 package net.yapbam.budget;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -7,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -84,6 +92,39 @@ public class Budget {
 		if (year!=this.year) {
 			this.year = year;
 			update();
+		}
+	}
+
+	/** Exports this budget to a text file.
+	 * @param file that will receive the content.
+	 * @param columnSeparator the character to use to separate columns
+	 * @param The locale to use to export the dates and numbers
+	 * @throws IOException
+	 */
+	public void export(File file, char columnSeparator, Locale locale) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		try {
+			// Output header line
+			DateFormat DateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
+			for (int i = 0; i < dates.size(); i++) {
+				out.append(columnSeparator);
+				out.append(DateFormater.format(dates.get(i)));
+			}
+			// Output category lines
+			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+			for (int i = 0; i < categories.size(); i++) {
+				out.newLine();
+				out.append(categories.get(i).getName());
+				for (int j = 0; j < dates.size(); j++) {
+					out.append(columnSeparator);
+					Double value = values.get(new Key(dates.get(j), categories.get(i)));
+					if (value!=null) {
+						out.append(currencyFormatter.format(value));
+					}
+				}
+			}
+		} finally {
+			out.close();
 		}
 	}
 

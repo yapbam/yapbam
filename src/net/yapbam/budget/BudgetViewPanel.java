@@ -15,14 +15,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
 
 public class BudgetViewPanel extends JPanel {
 
@@ -156,7 +157,11 @@ public class BudgetViewPanel extends JPanel {
 					JFileChooser chooser = new JFileChooser((String)null);
 					File result = chooser.showDialog(export, LocalizationData.get("BudgetPanel.export"))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 					if (result!=null) {
-						//TODO
+						try {
+							budget.export(result, '\t', LocalizationData.getLocale());
+						} catch (IOException e1) {
+							ErrorManager.INSTANCE.display(BudgetViewPanel.this, e1);
+						}
 					}
 				}
 			});
@@ -194,5 +199,4 @@ public class BudgetViewPanel extends JPanel {
 		}
 		return jTable;
 	}
-
 }

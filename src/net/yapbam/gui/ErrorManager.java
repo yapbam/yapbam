@@ -4,15 +4,15 @@ import java.awt.Component;
 
 import javax.swing.JOptionPane;
 
-class ErrorManager {
-	static final ErrorManager INSTANCE = new ErrorManager();
+public class ErrorManager {
+	public static final ErrorManager INSTANCE = new ErrorManager();
 
-	void display(Component parent, Throwable e) {
-		display (parent, e, "An error occured !\n Current operation is aborted."); //LOCAL
+	public void display(Component parent, Throwable e) {
+		display (parent, e, LocalizationData.get("ErrorManager.message")); //$NON-NLS-1$
 	}
 
-	void display(Component parent, Throwable e, String message) {
+	public void display(Component parent, Throwable e, String message) {
 		e.printStackTrace(); //TODO Maybe better to log the exception ?
-		JOptionPane.showMessageDialog(parent, message, "ALERT !!", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(parent, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 	}
 }
