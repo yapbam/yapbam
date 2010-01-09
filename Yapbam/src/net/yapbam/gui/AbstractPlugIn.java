@@ -10,7 +10,9 @@ import net.yapbam.gui.transactiontable.TransactionsPlugIn;
  * Such a plugin can define (or not) some GUI elements that will be added to the Yapbam interface :<UL>
  * <LI>A panel to add to the main TabbedPanel</LI> 
  * <LI>Some specific menus</LI>
- * <LI>Some specific menu items to insert in standard menus</LI></UL>
+ * <LI>Some specific menu items to insert in standard menus</LI>
+ * <LI>A preference panel to add to the preferences dialog</LI>
+ * </UL>
  * This implementation is a totally empty plugin which does ... nothing.
  * You may override its methods in order to implement a fully functional plugin.
  * A plugin has to had a public constructor with two arguments :<OL>
@@ -21,7 +23,7 @@ import net.yapbam.gui.transactiontable.TransactionsPlugIn;
  * @see #AbstractPlugIn()
  * @see TransactionsPlugIn
  */
-public abstract class AbstractPlugIn { //TODO Define interactions with Preferences dialog
+public abstract class AbstractPlugIn { //TODO Define how to check for updates and how to download plugins
 	/** The open, save ... part of the file menu */
 	public static final int FILE_MANIPULATION_PART = 1;
 	/** The preference part of the file menu */
@@ -141,6 +143,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	
 	/** Returns the preference panel of this plugin.
 	 * @return the preferencePanel, null if no preference panel is defined.
+	 * @see PreferencePanel
 	 */
 	public PreferencePanel getPreferencePanel() {
 		return null;

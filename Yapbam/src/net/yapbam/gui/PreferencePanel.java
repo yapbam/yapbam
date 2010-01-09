@@ -21,6 +21,7 @@ public abstract class PreferencePanel extends JPanel {
 	/** Updates the preferences attached to this panel.
 	 * This method is called when the preferences dialog's ok button is pressed.
 	 * @return true if the preferences changes implies a Yapbam restart.
+	 * @see Preferences#setProperty(String, String)
 	 */
 	public abstract boolean updatePreferences();
 	
