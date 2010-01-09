@@ -51,7 +51,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 		super();
 	}
 	
-	/** Get the plugin specific menus.
+	/** Gets the plugin specific menus.
 	 *  These menus are inserted in the menu bar just before the "?" menu.
 	 *  <br>A plugin may (probably) hide its specific menus when its panel is not shown. This could be done with the
 	 *  setDisplayed method.
@@ -62,7 +62,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
         return null;
 	}
 	
-	/** Get the plugin specific menu items for a part of a standard menu.
+	/** Gets the plugin specific menu items for a part of a standard menu.
 	 * @param part an integer that specific the part of the menu.
 	 * The possible values are the ones of this class constants.
 	 * @return Menus items or null if nothing has to be added to that part of the menu.
@@ -72,7 +72,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 		return null;
 	}
 
-	/** Get the main panel of the plugin.
+	/** Gets the main panel of the plugin.
 	 *  <br>This panel will be added to the main tabbed pane.
 	 * @return the panel or null if the plugin has no panel (for instance for a import/export plugin that's just define menu items)
 	 */
@@ -80,7 +80,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 		return null;
 	}
 
-	/** Get the tab title of this plugin.
+	/** Gets the tab title of this plugin.
 	 * @return the title or null if there's no panel
 	 * @see #getPanel()
 	 */
@@ -88,7 +88,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 		return null;
 	}
 	
-	/** Get the tab tooltip of this plugin.
+	/** Gets the tab tooltip of this plugin.
 	 * @return the tooltip or null if there's no panel
 	 * @see #getPanel()
 	 */
@@ -112,7 +112,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 		return true;
 	}
 
-	/** Save the state of this panel.
+	/** Saves the state of this panel.
 	 * This method is called when needed (usually just before Yapbam quits) in order to let the plugin save its state
 	 * (for instance, the column sizes of a JTable in the plugin panel).
 	 * <br>The plugin may use YabamState class to perform these backups.
@@ -120,7 +120,7 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	 */
 	public void saveState() {}
 
-	/** Restore the state of this panel.
+	/** Restores the state of this panel.
 	 * This method is called when needed (usually at Yapbam startup) in order to let the plugin restore its previous state
 	 * (for instance, the column sizes of a JTable in the plugin panel).
 	 * <br>The plugin may use YabamState class to perform its restore.
@@ -138,4 +138,13 @@ public abstract class AbstractPlugIn { //TODO Define interactions with Preferenc
 	public Object getRestartData() {
 		return null;
 	}
+	
+	/** Returns the preference panel of this plugin.
+	 * @return the preferencePanel, null if no preference panel is defined.
+	 */
+	public PreferencePanel getPreferencePanel() {
+		return null;
+	}
+	
+	
 }
