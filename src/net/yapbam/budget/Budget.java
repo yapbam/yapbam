@@ -236,5 +236,10 @@ public class Budget {
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			return categories.get(rowIndex);
 		}
+
+		@Override
+		public String getColumnName(int column) {
+			return "";
+		}
 	}
 }
