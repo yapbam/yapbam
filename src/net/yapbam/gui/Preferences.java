@@ -41,7 +41,9 @@ public class Preferences {
 	private static final String EXPERT_MODE = "expert_mode"; //$NON-NLS-1$
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
 
-	/** Current instance */
+	/** The Preference instance.
+	 * This class is a singleton. All preferences can be accessed through this constant.
+	 */
 	public static final Preferences INSTANCE = new Preferences();
 	
 	private Properties properties;
@@ -77,11 +79,14 @@ public class Preferences {
 		this.properties.put(LOOK_AND_FEEL, LOOK_AND_FEEL_CUSTOM_VALUE);
 	}
 	
+	/** Gets whether it is the first time Yapbam is launched on this machine or not.
+	 * @return true if Yapbam is launched for the first time.
+	 */
 	public boolean isFirstRun() {
 		return this.firstRun;
 	}
 
-	public void save() {
+	void save() {
 		try {
 			properties.store(new FileOutputStream(getFile()), "Yapbam preferences"); //$NON-NLS-1$
 		} catch (IOException e) {
@@ -262,5 +267,25 @@ public class Preferences {
 	 */
 	public void setTranslatorMode(boolean translatorMode) {
 		this.translatorMode = translatorMode;
+	}
+	
+	/** Sets a property value.
+	 * This method may be used by plugin in order to save their preferences.
+	 * As we have to prevent one plugin to overide the key used by other plugins, it is recommended
+	 * that the key is prefixed with the package name of the plugin.
+	 * @param key the key that will be used by getProperty method to retrieve the property
+	 * @param value the property's value.
+	 * @see #getProperty(String)
+	 */
+	public void setProperty (String key, String value) {
+		this.properties.setProperty(key, value);
+	}
+	
+	/** Gets a property's value.
+	 * @param key the key of the property.
+	 * @return the property's value or null if the key doesn't exists.
+	 */
+	public String getProperty (String key) {
+		return this.properties.getProperty(key);
 	}
 }
