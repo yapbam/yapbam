@@ -16,10 +16,11 @@ import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 import java.awt.Font;
 import java.awt.Color;
+import java.util.Locale;
+
 import javax.swing.JButton;
 
 public class TransactionsPreferencePanel extends PreferencePanel {
-
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
 	private BalanceReportField positiveBalanceReport = null;
@@ -31,8 +32,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JLabel jLabel = null;
 	private JLabel jLabel1 = null;
 	
-	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative";
-	static String POSITIVE_KEY = "net.yapbam.balanceReport.positive";
+	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
+	static String POSITIVE_KEY = "net.yapbam.balanceReport.positive"; //$NON-NLS-1$
 	static Color DEFAULT_POSITIVE = new Color(0,200,0);
 	static Color DEFAULT_NEGATIVE = Color.RED;
 		
@@ -70,12 +71,12 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 	@Override
 	public String getTitle() {
-		return LocalizationData.get("MainFrame.Transactions.Preferences.title");
+		return LocalizationData.get("MainFrame.Transactions.Preferences.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		return LocalizationData.get("MainFrame.Transactions.Preferences.tooltip");
+		return LocalizationData.get("MainFrame.Transactions.Preferences.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -106,7 +107,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gridBagConstraints61.weightx = 1.0D;
 			gridBagConstraints61.gridy = 0;
 			jLabel1 = new JLabel();
-			jLabel1.setText("");
+			jLabel1.setText(""); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 1;
 			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
@@ -127,13 +128,13 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
 			gridBagConstraints.gridy = 0;
-			negativeBalanceReport = new BalanceReportField("Negative balance: {0}");
+			negativeBalanceReport = new BalanceReportField(LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.negativeSample")); //$NON-NLS-1$
 			negativeBalanceReport.setValue(-100);
-			positiveBalanceReport = new BalanceReportField("Positive balance: {0}");
+			positiveBalanceReport = new BalanceReportField(LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.positiveSample")); //$NON-NLS-1$
 			positiveBalanceReport.setValue(100);
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Récapitulatif des soldes", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			jPanel.add(positiveBalanceReport, gridBagConstraints);
 			jPanel.add(negativeBalanceReport, gridBagConstraints1);
 			jPanel.add(getJButton(), gridBagConstraints2);
@@ -151,11 +152,11 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setText("Changer la couleur");
-			jButton.setToolTipText("Cliquez ici pour changer la couleur");
+			jButton.setText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor")); //$NON-NLS-1$
+			jButton.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor.tooltip")); //$NON-NLS-1$
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Color c = JColorChooser.showDialog(jButton, "Choose color", BalanceReportField.POSITIVE_COLOR);
+					Color c = localizedColorChooser();
 					if (c!=null) {
 						positiveBalanceReport.setForeground(c);
 					}
@@ -173,11 +174,11 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setToolTipText("Cliquez ici pour changer la couleur");
-			jButton1.setText("Changer la couleur");
+			jButton1.setText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor")); //$NON-NLS-1$
+			jButton1.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor.tooltip")); //$NON-NLS-1$
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Color c = JColorChooser.showDialog(jButton, "Choose color", BalanceReportField.POSITIVE_COLOR);
+					Color c = localizedColorChooser();
 					if (c!=null) {
 						negativeBalanceReport.setForeground(c);
 					}
@@ -195,8 +196,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JButton getSetTodefault() {
 		if (setTodefault == null) {
 			setTodefault = new JButton();
-			setTodefault.setText("Valeurs par défaut");
-			setTodefault.setToolTipText("Cliquez ici pour restaurer les valeurs par défaut");
+			setTodefault.setText(LocalizationData.get("MainFrame.Transactions.Preferences.setDefault")); //$NON-NLS-1$
+			setTodefault.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.setDefault.tooltip")); //$NON-NLS-1$
 			setTodefault.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					negativeBalanceReport.setForeground(DEFAULT_NEGATIVE);
@@ -221,7 +222,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gridBagConstraints7.weighty = 1.0D;
 			gridBagConstraints7.gridy = 0;
 			jLabel = new JLabel();
-			jLabel.setText("");
+			jLabel.setText(""); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.anchor = GridBagConstraints.NORTH;
@@ -234,5 +235,17 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jPanel1.add(jLabel, gridBagConstraints7);
 		}
 		return jPanel1;
+	}
+
+	private Color localizedColorChooser() {
+		//FIXME The JColorChooser locale is wrong, it's always the system default locale
+		//This is a JRE known bug fixed in java 7 (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6524757)
+		//TODO test with JRE 7
+		Locale old = Locale.getDefault();
+		Locale.setDefault(LocalizationData.getLocale());
+		//TODO probably better to have a customized panel with a BalanceReport field
+		Color c = JColorChooser.showDialog(jButton, LocalizationData.get("MainFrame.Transactions.Preferences.ChooseColorDialog.title"), BalanceReportField.POSITIVE_COLOR); //$NON-NLS-1$
+		Locale.setDefault(old);
+		return c;
 	}
 }  //  @jve:decl-index=0:visual-constraint="64,14"
