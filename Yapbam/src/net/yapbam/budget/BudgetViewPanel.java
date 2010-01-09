@@ -1,19 +1,30 @@
-package net.yapbam.gui.statistics;
+package net.yapbam.budget;
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.dialogs.AbstractDialog;
 
-public class BudgetViewPanel extends JPanel { //LOCAL
+public class BudgetViewPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
@@ -23,7 +34,6 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 	private JScrollPane jScrollPane = null;
 	private JTable jTable = null;
 	
-	private FilteredData data;
 	private Budget budget;
 	
 	/**
@@ -34,7 +44,6 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 	}
 
 	public BudgetViewPanel(FilteredData data) {
-		this.data = data;
 		this.budget = new Budget(data, false);
 		initialize();
 	}
@@ -81,7 +90,7 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 			gridBagConstraints2.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints1.fill = GridBagConstraints.NONE;
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			jPanel = new JPanel();
@@ -89,6 +98,9 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 			jPanel.add(getMonth(), gridBagConstraints1);
 			jPanel.add(getYear(), gridBagConstraints2);
 			jPanel.add(getExport(), gridBagConstraints3);
+			ButtonGroup group = new ButtonGroup();
+			group.add(getMonth());
+			group.add(getYear());
 		}
 		return jPanel;
 	}
@@ -101,8 +113,9 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 	private JRadioButton getMonth() {
 		if (month == null) {
 			month = new JRadioButton();
-			month.setText("Vue par mois");
-			month.setToolTipText("Cliquez ici pour obtenir la ventilation par mois");
+			month.setText(LocalizationData.get("BudgetPanel.perMonth")); //$NON-NLS-1$
+			month.setSelected(true);
+			month.setToolTipText(LocalizationData.get("BudgetPanel.perMonth.tooltip")); //$NON-NLS-1$
 		}
 		return month;
 	}
@@ -115,8 +128,14 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 	private JRadioButton getYear() {
 		if (year == null) {
 			year = new JRadioButton();
-			year.setToolTipText("Cliquez ici pour obtenir la ventilation par année");
-			year.setText("Vue par an");
+			year.setToolTipText(LocalizationData.get("BudgetPanel.perYear.tooltip")); //$NON-NLS-1$
+			year.setText(LocalizationData.get("BudgetPanel.perYear")); //$NON-NLS-1$
+			year.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					budget.setYear(year.isSelected());
+				}
+			});
 		}
 		return year;
 	}
@@ -129,8 +148,18 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 	private JButton getExport() {
 		if (export == null) {
 			export = new JButton();
-			export.setText("Exporter");
-			export.setToolTipText("Exporte le tableau au format texte");
+			export.setText(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
+			export.setToolTipText(LocalizationData.get("BudgetPanel.export.toolTip")); //$NON-NLS-1$
+			export.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser chooser = new JFileChooser((String)null);
+					File result = chooser.showDialog(export, LocalizationData.get("BudgetPanel.export"))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+					if (result!=null) {
+						//TODO
+					}
+				}
+			});
 		}
 		return export;
 	}
@@ -147,7 +176,7 @@ public class BudgetViewPanel extends JPanel { //LOCAL
 			jScrollPane.setRowHeaderView(rowView);
 			jScrollPane.setViewportView(getJTable());
 			Dimension d = rowView.getPreferredScrollableViewportSize();
-			d.width = rowView.getPreferredSize().width;
+			d.width = rowView.getColumnModel().getColumn(0).getPreferredWidth();
 			rowView.setPreferredScrollableViewportSize(d);
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		}

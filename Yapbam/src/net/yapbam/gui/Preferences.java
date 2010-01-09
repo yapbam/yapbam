@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.UIManager;
 
+import net.yapbam.budget.BudgetPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.gui.statistics.StatisticsPlugin;
@@ -235,7 +236,7 @@ public class Preferences {
 	}
 
 	public static Class<AbstractPlugIn>[] getPlugins() {
-		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, AdministrationPlugIn.class, ToolsPlugIn.class};
+		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, ToolsPlugIn.class, BudgetPlugin.class, AdministrationPlugIn.class};
 	}
 
 	public boolean isExpertMode() {
