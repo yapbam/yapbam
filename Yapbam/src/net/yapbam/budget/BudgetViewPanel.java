@@ -7,6 +7,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.LookAndFeel;
+
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import java.awt.Insets;
@@ -19,6 +21,9 @@ import java.io.IOException;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
@@ -177,13 +182,22 @@ public class BudgetViewPanel extends JPanel {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			JTable rowView = new JTable(budget.getRowHeaderModel());
+			TableModel rowHeaderModel = budget.getRowHeaderModel();
+			final JTable rowView = new JTable(rowHeaderModel);
+			rowHeaderModel.addTableModelListener(new TableModelListener() {
+				@Override
+				public void tableChanged(TableModelEvent e) {
+					setRowViewSize(rowView);
+				}
+			});
 			jScrollPane.setRowHeaderView(rowView);
 			jScrollPane.setViewportView(getJTable());
-			Dimension d = rowView.getPreferredScrollableViewportSize();
-			d.width = rowView.getColumnModel().getColumn(0).getPreferredWidth();
-			rowView.setPreferredScrollableViewportSize(d);
+			setRowViewSize(rowView);
+			rowView.setDefaultRenderer(Object.class, new RowHeaderRenderer());
+	        LookAndFeel.installColorsAndFont (rowView, "TableHeader.background", "TableHeader.foreground", "TableHeader.font");
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			jTable.getTableHeader().setReorderingAllowed(false);
+			jTable.getTableHeader().setResizingAllowed(false);
 		}
 		return jScrollPane;
 	}
@@ -198,5 +212,13 @@ public class BudgetViewPanel extends JPanel {
 			jTable = new JTable(budget.getTableModel());
 		}
 		return jTable;
+	}
+
+	private void setRowViewSize(final JTable rowView) {
+		int width = TableColumnUtils.packColumn(rowView, 0, 2);
+		Dimension d = rowView.getPreferredScrollableViewportSize();
+		d.width = width;
+		rowView.getColumnModel().getColumn(0).setPreferredWidth(width);
+		rowView.setPreferredScrollableViewportSize(d);
 	}
 }
