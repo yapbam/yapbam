@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.YapbamState;
 
 public class TransactionsPlugIn extends AbstractPlugIn {
@@ -68,5 +69,10 @@ public class TransactionsPlugIn extends AbstractPlugIn {
         panel.duplicateTransactionAction.setEnabled(displayed && rowIsSelected);
         panel.deleteTransactionAction.setEnabled(displayed && rowIsSelected);
         panel.convertToPericalTransactionAction.setEnabled(displayed && rowIsSelected);
+	}
+
+	@Override
+	public PreferencePanel getPreferencePanel() {
+		return new TransactionsPreferencePanel();
 	}
 }
