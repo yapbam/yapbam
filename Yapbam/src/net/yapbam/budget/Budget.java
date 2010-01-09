@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -111,7 +112,12 @@ public class Budget {
 				out.append(DateFormater.format(dates.get(i)));
 			}
 			// Output category lines
-			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+			NumberFormat currencyFormatter = NumberFormat.getInstance(locale);
+			if (currencyFormatter instanceof DecimalFormat) {
+				// We don't use the currency instance, because it would have outputed some currency prefix or suffix, not very easy
+				// to manipulate with an excel like application
+				currencyFormatter.setMaximumFractionDigits(NumberFormat.getCurrencyInstance(locale).getMaximumFractionDigits());
+			}
 			for (int i = 0; i < categories.size(); i++) {
 				out.newLine();
 				out.append(categories.get(i).getName());
