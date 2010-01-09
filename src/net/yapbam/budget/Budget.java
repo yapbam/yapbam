@@ -1,4 +1,4 @@
-package net.yapbam.gui.statistics;
+package net.yapbam.budget;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -19,6 +19,9 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 
+/** This class represents a budget based on the filtered transactions.
+ *  This budget can be built on a "per month" or a "par year" basis.
+ */
 public class Budget {
 	private FilteredData data;
 	private boolean year;
@@ -52,23 +55,47 @@ public class Budget {
 	 * @param year true to construct a budget per year, false to have it per month
 	 */
 	Budget(FilteredData data, boolean year) {
-		//FIXME Listening to events is not done
 		this.data = data;
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				buildData();
-				tableModel.fireTableStructureChanged();
-				rowHeaderModel.fireTableDataChanged();
+				update();
 			}
 		});
-		buildData();
 		this.year = year;
+		build();
 		this.tableModel = new MyTableModel();
 		this.rowHeaderModel = new MyRowHeaderModel();
 	}
+	
+	/**
+	 * Returns whether the budget is per year
+	 * @return true if the budget is per year
+	 */
+	public boolean isYear() {
+		return year;
+	}
 
-	private void buildData() {
+	/** Sets the "per year" or "per month" state of this budget.
+	 * Budget is automatically computed when this attribute change.
+	 * @param year true to set this budget on a per year basis.
+	 */
+	public void setYear(boolean year) {
+		if (year!=this.year) {
+			this.year = year;
+			update();
+		}
+	}
+
+	/** Updates the budget and send related events. */
+	private void update() {
+		build();
+		tableModel.fireTableStructureChanged();
+		rowHeaderModel.fireTableDataChanged();
+	}
+
+	/** Computes the budget. */
+	private void build() {
 		this.values = new HashMap<Key, Double>();
 		this.dates = new LinkedList<Date>();
 		this.categories = new LinkedList<Category>();
@@ -86,7 +113,6 @@ public class Budget {
 				add (new Key(date, transaction.getCategory()), transaction.getComplement());
 			}
 		}
-		
 	}
 
 	private void add(Key key, double amount) {

@@ -17,13 +17,12 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 
-public class StatisticsPlugin extends AbstractPlugIn { //LOCAL
+public class StatisticsPlugin extends AbstractPlugIn {
 	private FilteredData data;
 	private boolean displayed;
 	private TreeMap<Category, Summary> categoryToAmount;
 	private PieChartPanel pie;
 	private BarChartPanel bar;
-	private BudgetViewPanel budget;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
@@ -44,8 +43,6 @@ public class StatisticsPlugin extends AbstractPlugIn { //LOCAL
 		this.pie = new PieChartPanel(categoryToAmount);
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.pie.tabname"), null, this.pie, LocalizationData.get("StatisticsPlugin.pie.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		buildSummaries();
-		this.budget = new BudgetViewPanel(this.data);
-		tabbedPane.addTab("Budget", null, budget, "Tableau des dépenses et recettes par catégorie");
 		JPanel result = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
 				new Insets(5, 0, 0, 0), 0, 0);
