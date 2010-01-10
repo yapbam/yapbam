@@ -1,13 +1,16 @@
 package net.yapbam.budget;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
 
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
@@ -26,8 +29,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
+import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
@@ -45,7 +50,7 @@ public class BudgetViewPanel extends JPanel {
 	private JTable jTable = null;
 	private JButton filter = null;
 	
-	private Budget budget;
+	private BudgetView budget;
 	private FilteredData data;
 	
 	/**
@@ -56,7 +61,7 @@ public class BudgetViewPanel extends JPanel {
 	}
 
 	public BudgetViewPanel(FilteredData data) {
-		this.budget = new Budget(data, false);
+		this.budget = new BudgetView(data, false);
 		this.data = data;
 		initialize();
 	}
@@ -173,7 +178,7 @@ public class BudgetViewPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JFileChooser chooser = new JFileChooser((String)null);
-					File result = chooser.showDialog(export, LocalizationData.get("BudgetPanel.export"))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+					File result = chooser.showDialog(export, LocalizationData.get("BudgetPanel.export"))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {
 						try {
 							budget.export(result, '\t', LocalizationData.getLocale());
@@ -195,7 +200,7 @@ public class BudgetViewPanel extends JPanel {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			TableModel rowHeaderModel = budget.getRowHeaderModel();
+			TableModel rowHeaderModel = new BudgetTableRowHeaderModel(budget);
 			final JTable rowView = new JTable(rowHeaderModel);
 			rowHeaderModel.addTableModelListener(new TableModelListener() {
 				@Override
@@ -203,11 +208,11 @@ public class BudgetViewPanel extends JPanel {
 					setRowViewSize(rowView);
 				}
 			});
+			rowView.setDefaultRenderer(Object.class, new RowHeaderRenderer(true));
+	        LookAndFeel.installColorsAndFont (rowView, "TableHeader.background", "TableHeader.foreground", "TableHeader.font"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			jScrollPane.setRowHeaderView(rowView);
 			jScrollPane.setViewportView(getJTable());
 			setRowViewSize(rowView);
-			rowView.setDefaultRenderer(Object.class, new RowHeaderRenderer());
-	        LookAndFeel.installColorsAndFont (rowView, "TableHeader.background", "TableHeader.foreground", "TableHeader.font");
 		}
 		return jScrollPane;
 	}
@@ -217,18 +222,28 @@ public class BudgetViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
+	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
-			jTable = new JTable(budget.getTableModel());
+			jTable = new JTable(new BudgetTableModel(budget));
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			jTable.getTableHeader().setReorderingAllowed(false);
-			jTable.getTableHeader().setResizingAllowed(false);
 			jTable.setCellSelectionEnabled(true);
+			jTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value,
+						boolean isSelected, boolean hasFocus, int row, int column) {
+					JLabel result = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+							row, column);
+					this.setHorizontalAlignment(SwingConstants.RIGHT);
+					return result;
+				}
+				
+			});
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					getFilter().setEnabled(getJTable().getSelectedRowCount()>0);
-					//TODO have a look on row selection;
 				}
 			});
 		}
@@ -251,9 +266,9 @@ public class BudgetViewPanel extends JPanel {
 	private JButton getFilter() {
 		if (filter == null) {
 			filter = new JButton();
-			filter.setText("Filtre");
+			filter.setText(LocalizationData.get("BudgetPanel.filter")); //$NON-NLS-1$
 			filter.setEnabled(false);
-			filter.setToolTipText("Restreint le filtre à la sélection actuelle");
+			filter.setToolTipText(LocalizationData.get("BudgetPanel.tooltip")); //$NON-NLS-1$
 			filter.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int[] selectedRows = getJTable().getSelectedRows();
@@ -265,7 +280,6 @@ public class BudgetViewPanel extends JPanel {
 						for (int i = 0; i < categories.length; i++) {
 							categories[i] = budget.getCategory(selectedRows[i]);
 						}
-						System.out.println ("setting categories");
 						data.setCategories(categories);
 					}
 					//FIXME Unable to select discontinuous time interval in the filter
