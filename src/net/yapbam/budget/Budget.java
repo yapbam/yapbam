@@ -27,6 +27,7 @@ import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.DateUtils;
 
 /** This class represents a budget based on the filtered transactions.
  *  This budget can be built on a "per month" or a "par year" basis.
@@ -35,7 +36,8 @@ public class Budget {
 	private FilteredData data;
 	private boolean year;
 	private HashMap<Key, Double> values;
-	private List<Date> dates;
+	private Calendar firstDate;
+	private Calendar lastDate;
 	private List<Category> categories;
 	private MyTableModel tableModel;
 	private MyRowHeaderModel rowHeaderModel;
@@ -95,6 +97,30 @@ public class Budget {
 			update();
 		}
 	}
+	
+	/** Returns the number of dates in the budget.
+	 * @return an integer. 0 if the budget is empty.
+	 */
+	public int getDatesSize() {
+		if (this.firstDate==null) return 0;
+		return 1+(this.year?this.lastDate.get(Calendar.YEAR)-this.firstDate.get(Calendar.YEAR):DateUtils.getMonthlyDistance(this.firstDate, this.lastDate));
+	}
+	
+	/** Returns a date in the budget.
+	 * The dates are sorted in the ascending order.
+	 * @param index the index of the date we are looking for
+	 * @return a date
+	 */
+	@SuppressWarnings("deprecation")
+	public Date getDate(int index) {
+		if (year) {
+			return new Date(firstDate.get(Calendar.YEAR)+index, 0, 1);
+		} else {
+			Calendar c = (Calendar) this.firstDate.clone();
+			c.add(Calendar.MONTH, index);
+			return c.getTime();
+		}
+	}
 
 	/** Exports this budget to a text file.
 	 * @param file that will receive the content.
@@ -107,9 +133,9 @@ public class Budget {
 		try {
 			// Output header line
 			DateFormat DateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
-			for (int i = 0; i < dates.size(); i++) {
+			for (int i = 0; i < getDatesSize(); i++) {
 				out.append(columnSeparator);
-				out.append(DateFormater.format(dates.get(i)));
+				out.append(DateFormater.format(getDate(i)));
 			}
 			// Output category lines
 			NumberFormat currencyFormatter = NumberFormat.getInstance(locale);
@@ -121,9 +147,9 @@ public class Budget {
 			for (int i = 0; i < categories.size(); i++) {
 				out.newLine();
 				out.append(categories.get(i).getName());
-				for (int j = 0; j < dates.size(); j++) {
+				for (int j = 0; j < getDatesSize(); j++) {
 					out.append(columnSeparator);
-					Double value = values.get(new Key(dates.get(j), categories.get(i)));
+					Double value = values.get(new Key(getDate(j), categories.get(i)));
 					if (value!=null) {
 						out.append(currencyFormatter.format(value));
 					}
@@ -144,7 +170,8 @@ public class Budget {
 	/** Computes the budget. */
 	private void build() {
 		this.values = new HashMap<Key, Double>();
-		this.dates = new LinkedList<Date>();
+		this.firstDate = null;
+		this.lastDate = null;
 		this.categories = new LinkedList<Category>();
 		
 		for (int i = 0; i < data.getTransactionsNumber(); i++) {
@@ -164,8 +191,19 @@ public class Budget {
 
 	private void add(Key key, double amount) {
 		if (amount!=0) {
-			addToSortedList (dates, key.date); //FIXME Need to also add missing date between last date and this one (or this and first one). Maybe easier to remember only first and last date.
+			// Insert the date in the budget (refresh first and last date)
+			Calendar c = new GregorianCalendar();
+			c.setTime(key.date);
+			if (firstDate==null) { // There's currently no date in the budget
+				this.firstDate = c;
+				this.lastDate = this.firstDate;
+			} else {
+				if (DateUtils.getMonthlyDistance(firstDate, c)<0) this.firstDate = c;
+				else if (DateUtils.getMonthlyDistance(lastDate, c)>0) this.lastDate = c;
+			}
+			// Insert the category in the budget
 			addToSortedList(categories, key.category);
+			// Add the amount to that category/date item
 			Double value = this.values.get(key);
 			if (value==null) value = 0.0;
 			value += amount;
@@ -199,7 +237,7 @@ public class Budget {
 	private class MyTableModel extends AbstractTableModel {
 		@Override
 		public int getColumnCount() {
-			return dates.size();
+			return getDatesSize();
 		}
 
 		@Override
@@ -209,14 +247,18 @@ public class Budget {
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			Double value = values.get(new Key(dates.get(columnIndex), categories.get(rowIndex)));
+			Double value = values.get(new Key(getDate(columnIndex), categories.get(rowIndex)));
 			return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value);
 		}
 
+		@SuppressWarnings("deprecation")
 		@Override
 		public String getColumnName(int column) {
-			//TODO Format the date
-			return dates.get(column).toString();
+			Date date = getDate(column);
+			if (year) return ""+(date.getYear()+1900);
+			//TODO It would be better to have a localized version for this formatter ...
+			// but I can't find how to do that (simple with the day, but not documented without)
+			return new SimpleDateFormat("yyyy/MM").format(date);
 		}
 	}
 	

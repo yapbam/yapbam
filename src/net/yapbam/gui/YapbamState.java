@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
-import net.yapbam.date.helpers.DateHelper;
+import net.yapbam.util.DateUtils;
 import net.yapbam.util.Portable;
 
 public class YapbamState {
@@ -176,10 +176,10 @@ public class YapbamState {
 	public static Date getDate(String key) {
 		String dummy = INSTANCE.properties.getProperty(key);
 		if (dummy==null) return new Date(0);
-		return DateHelper.integerToDate(Integer.parseInt(dummy));
+		return DateUtils.integerToDate(Integer.parseInt(dummy));
 	}
 	
 	public static void put (String key, Date date) {
-		INSTANCE.properties.put(key, Integer.toString(DateHelper.dateToInteger(date)));
+		INSTANCE.properties.put(key, Integer.toString(DateUtils.dateToInteger(date)));
 	}
 }

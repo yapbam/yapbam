@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.yapbam.date.helpers.DateHelper;
 import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.util.DateUtils;
 
 public class PeriodicalTransaction extends AbstractTransaction {
 
@@ -18,7 +18,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 			List<SubTransaction> subTransactions, Date nextDate,
 			boolean enabled, DateStepper nextDateBuilder) {
 		super(description, amount, account, mode, category, subTransactions);
-		this.nextDate = DateHelper.dateToInteger(nextDate);
+		this.nextDate = DateUtils.dateToInteger(nextDate);
 		this.enabled = enabled;
 		this.nextDateBuilder = nextDateBuilder;
 	}
@@ -28,7 +28,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	}
 	
 	public Date getNextDate() {
-		return DateHelper.integerToDate(nextDate);
+		return DateUtils.integerToDate(nextDate);
 	}
 
 	public DateStepper getNextDateBuilder() {

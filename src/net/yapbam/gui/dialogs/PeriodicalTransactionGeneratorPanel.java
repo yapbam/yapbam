@@ -8,7 +8,6 @@ import java.awt.GridBagConstraints;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
-import net.yapbam.date.helpers.DateHelper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
@@ -17,6 +16,7 @@ import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
+import net.yapbam.util.DateUtils;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -176,7 +176,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 
 	private void updateTransactions() {
 		Date endDate = dateField.getDate();
-		boolean change = DateHelper.dateToInteger(endDate)!=DateHelper.dateToInteger(lastDate);
+		boolean change = DateUtils.dateToInteger(endDate)!=DateUtils.dateToInteger(lastDate);
 		Transaction[] transactions;
 		if (change) {
 			if (endDate==null) {

@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import net.yapbam.util.DateUtils;
+
 public class DayDateStepper implements DateStepper {
 	private static final boolean DEBUG = false;
 
@@ -17,7 +19,7 @@ public class DayDateStepper implements DateStepper {
 	public DayDateStepper(int nbDays, Date lastDate) {
 		super();
 		this.nbDays = nbDays;
-		this.lastDate = DateHelper.dateToInteger(lastDate);
+		this.lastDate = DateUtils.dateToInteger(lastDate);
 	}
 	
 	public Date getNextStep(Date date) {
@@ -41,6 +43,6 @@ public class DayDateStepper implements DateStepper {
 
 	@Override
 	public Date getLastDate() {
-		return DateHelper.integerToDate(lastDate);
+		return DateUtils.integerToDate(lastDate);
 	}
 }

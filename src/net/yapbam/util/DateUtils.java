@@ -1,14 +1,27 @@
-package net.yapbam.date.helpers;
+package net.yapbam.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/** This utiliy class allows to convert Date into integer in order to reduce the memory footprint of such data.
- * Be careful, other fields than the day, month and year are ignored 
+/** This utiliy class provided some utility methods about dates. 
  * @author fathzer
  * license GPL v3
  */
-public abstract class DateHelper {
+public final class DateUtils {
+	// Be sur nobody will instantiate this class
+	private DateUtils(){};
+	
+	/** Computes the number of months between two dates.
+	 * @param first The first date
+	 * @param last The last date
+	 * @return the number of months between the dates. The day of month is ignored
+	 * (2010/01/01 is one month after 2009/12/31). If last is before first, the integer returned
+	 * is negative.
+	 */
+	public static int getMonthlyDistance (Calendar first, Calendar last) {
+		return  last.get(Calendar.YEAR)*12+last.get(Calendar.MONTH) - (first.get(Calendar.YEAR)*12+first.get(Calendar.MONTH));
+	}
 
 	/** Converts an integer into a date
 	 * @param date the integer representation of a date as it is returned by dateToInteger
@@ -34,5 +47,4 @@ public abstract class DateHelper {
 		if (date==null) return -1;
 		return date.getYear()*10000+(date.getMonth()+1)*100+date.getDate();
 	}
-
 }
