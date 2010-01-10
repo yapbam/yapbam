@@ -98,7 +98,23 @@ public class Budget {
 		}
 	}
 	
-	/** Returns the number of dates in the budget.
+	/** Returns the number of categories in the budget.
+	 * @return an integer. 0 if the budget is empty.
+	 */
+	public int getCategoriesSize() {
+		return this.categories.size();
+	}
+	
+	/** Returns a category in the budget.
+	 * The categories are sorted in their names ascending order.
+	 * @param index the index of the category we are looking for
+	 * @return a category
+	 */
+	public Category getCategory(int index) {
+		return this.categories.get(index);
+	}
+
+	/** Returns the number of time periods in the budget.
 	 * @return an integer. 0 if the budget is empty.
 	 */
 	public int getDatesSize() {
@@ -106,15 +122,18 @@ public class Budget {
 		return 1+(this.year?this.lastDate.get(Calendar.YEAR)-this.firstDate.get(Calendar.YEAR):DateUtils.getMonthlyDistance(this.firstDate, this.lastDate));
 	}
 	
-	/** Returns a date in the budget.
-	 * The dates are sorted in the ascending order.
+	/** Returns the beginning date of a time period in the budget.
+	 * The time periods are sorted in the ascending order.
 	 * @param index the index of the date we are looking for
-	 * @return a date
+	 * @return a date. The date is guaranteed to be the start of the time interval
+	 * (example: January the first for a year)
+	 * @see #getLastDate(int)
 	 */
 	@SuppressWarnings("deprecation")
 	public Date getDate(int index) {
+		if (index>=getDatesSize()) throw new ArrayIndexOutOfBoundsException(index);
 		if (year) {
-			return new Date(firstDate.get(Calendar.YEAR)+index, 0, 1);
+			return new Date(firstDate.get(Calendar.YEAR)-1900+index, 0, 1);
 		} else {
 			Calendar c = (Calendar) this.firstDate.clone();
 			c.add(Calendar.MONTH, index);
@@ -122,6 +141,27 @@ public class Budget {
 		}
 	}
 
+
+	/** Returns the end date of a time period in the budget.
+	 * The time periods are sorted in the ascending order.
+	 * @param index the index of the date we are looking for
+	 * @return a date. The date is guaranteed to be the end of the time interval
+	 * (example: December 31 for a year)
+	 * @see #getDate(int)
+	 */
+	@SuppressWarnings("deprecation")
+	public Date getLastDate(int index) {
+		if (index>=getDatesSize()) throw new ArrayIndexOutOfBoundsException(index);
+		if (year) {
+			return new Date(firstDate.get(Calendar.YEAR)+index, 11, 31);
+		} else {
+			Calendar c = (Calendar) this.firstDate.clone();
+			c.add(Calendar.MONTH, index);
+			c.set(Calendar.DATE, c.getActualMaximum(Calendar.DATE));
+			return c.getTime();
+		}
+	}
+	
 	/** Exports this budget to a text file.
 	 * @param file that will receive the content.
 	 * @param columnSeparator the character to use to separate columns

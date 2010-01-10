@@ -18,13 +18,17 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
@@ -39,8 +43,10 @@ public class BudgetViewPanel extends JPanel {
 	private JButton export = null;
 	private JScrollPane jScrollPane = null;
 	private JTable jTable = null;
+	private JButton filter = null;
 	
 	private Budget budget;
+	private FilteredData data;
 	
 	/**
 	 * This is the default constructor
@@ -51,6 +57,7 @@ public class BudgetViewPanel extends JPanel {
 
 	public BudgetViewPanel(FilteredData data) {
 		this.budget = new Budget(data, false);
+		this.data = data;
 		initialize();
 	}
 
@@ -84,11 +91,16 @@ public class BudgetViewPanel extends JPanel {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.gridheight = 2;
+			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.gridx = 2;
 			gridBagConstraints3.gridheight = 0;
 			gridBagConstraints3.fill = GridBagConstraints.NONE;
-			gridBagConstraints3.insets = new Insets(0, 0, 0, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints3.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
@@ -104,6 +116,7 @@ public class BudgetViewPanel extends JPanel {
 			jPanel.add(getMonth(), gridBagConstraints1);
 			jPanel.add(getYear(), gridBagConstraints2);
 			jPanel.add(getExport(), gridBagConstraints3);
+			jPanel.add(getFilter(), gridBagConstraints5);
 			ButtonGroup group = new ButtonGroup();
 			group.add(getMonth());
 			group.add(getYear());
@@ -195,9 +208,6 @@ public class BudgetViewPanel extends JPanel {
 			setRowViewSize(rowView);
 			rowView.setDefaultRenderer(Object.class, new RowHeaderRenderer());
 	        LookAndFeel.installColorsAndFont (rowView, "TableHeader.background", "TableHeader.foreground", "TableHeader.font");
-			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			jTable.getTableHeader().setReorderingAllowed(false);
-			jTable.getTableHeader().setResizingAllowed(false);
 		}
 		return jScrollPane;
 	}
@@ -210,15 +220,67 @@ public class BudgetViewPanel extends JPanel {
 	private JTable getJTable() {
 		if (jTable == null) {
 			jTable = new JTable(budget.getTableModel());
+			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			jTable.getTableHeader().setReorderingAllowed(false);
+			jTable.getTableHeader().setResizingAllowed(false);
+			jTable.setCellSelectionEnabled(true);
+			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					getFilter().setEnabled(getJTable().getSelectedRowCount()>0);
+					//TODO have a look on row selection;
+				}
+			});
 		}
 		return jTable;
 	}
-
+	
 	private void setRowViewSize(final JTable rowView) {
 		int width = TableColumnUtils.packColumn(rowView, 0, 2);
 		Dimension d = rowView.getPreferredScrollableViewportSize();
 		d.width = width;
 		rowView.getColumnModel().getColumn(0).setPreferredWidth(width);
 		rowView.setPreferredScrollableViewportSize(d);
+	}
+
+	/**
+	 * This method initializes filter	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getFilter() {
+		if (filter == null) {
+			filter = new JButton();
+			filter.setText("Filtre");
+			filter.setEnabled(false);
+			filter.setToolTipText("Restreint le filtre à la sélection actuelle");
+			filter.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					int[] selectedRows = getJTable().getSelectedRows();
+					boolean changed = false;
+					if (selectedRows.length!=getJTable().getRowCount()) {
+						changed = true;
+						data.setSuspended(true);
+						Category[] categories = new Category[selectedRows.length];
+						for (int i = 0; i < categories.length; i++) {
+							categories[i] = budget.getCategory(selectedRows[i]);
+						}
+						System.out.println ("setting categories");
+						data.setCategories(categories);
+					}
+					//FIXME Unable to select discontinuous time interval in the filter
+					int[] selectedColumns = jTable.getSelectedColumns();
+					if (selectedRows.length!=budget.getDatesSize()) {
+						changed = true;
+						data.setSuspended(true);
+						Date from = budget.getDate(selectedColumns[0]);
+						Date to = budget.getLastDate(selectedColumns[selectedColumns.length-1]);
+						data.setDateFilter(from, to);
+					}
+					if (changed) data.setSuspended(false);
+				}
+			});
+		}
+		return filter;
 	}
 }
