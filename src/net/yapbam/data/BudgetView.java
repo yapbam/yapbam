@@ -1,4 +1,4 @@
-package net.yapbam.budget;
+package net.yapbam.data;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,30 +17,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
-
-import net.yapbam.data.Category;
-import net.yapbam.data.FilteredData;
-import net.yapbam.data.SubTransaction;
-import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
-import net.yapbam.gui.LocalizationData;
+import net.yapbam.data.event.DefaultListenable;
+import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.util.DateUtils;
 
 /** This class represents a budget based on the filtered transactions.
  *  This budget can be built on a "per month" or a "par year" basis.
  */
-public class Budget {
+public class BudgetView extends DefaultListenable {
 	private FilteredData data;
 	private boolean year;
 	private HashMap<Key, Double> values;
 	private Calendar firstDate;
 	private Calendar lastDate;
 	private List<Category> categories;
-	private MyTableModel tableModel;
-	private MyRowHeaderModel rowHeaderModel;
 	
 	private static final class Key {
 		Date date;
@@ -65,7 +57,7 @@ public class Budget {
 	 * @param data The filtered data on which to build the budget
 	 * @param year true to construct a budget per year, false to have it per month
 	 */
-	Budget(FilteredData data, boolean year) {
+	public BudgetView(FilteredData data, boolean year) {
 		this.data = data;
 		this.data.addListener(new DataListener() {
 			@Override
@@ -75,8 +67,6 @@ public class Budget {
 		});
 		this.year = year;
 		build();
-		this.tableModel = new MyTableModel();
-		this.rowHeaderModel = new MyRowHeaderModel();
 	}
 	
 	/**
@@ -162,6 +152,18 @@ public class Budget {
 		}
 	}
 	
+	/** Gets the amount for a date and a category.
+	 * @param date a date returned by getDate(int) method
+	 * @param category a category
+	 * @return a double, 0 if there's no amount for this date and category.
+	 * @see #getDate(int)
+	 * @see #getCategory(int)
+	 */
+	public double getAmount(Date date, Category category) {
+		Double result = values.get(new Key(date, category));
+		return result==null?0:result;
+	}
+	
 	/** Exports this budget to a text file.
 	 * @param file that will receive the content.
 	 * @param columnSeparator the character to use to separate columns
@@ -203,8 +205,7 @@ public class Budget {
 	/** Updates the budget and send related events. */
 	private void update() {
 		build();
-		tableModel.fireTableStructureChanged();
-		rowHeaderModel.fireTableDataChanged();
+		this.fireEvent(new EverythingChangedEvent(this));
 	}
 
 	/** Computes the budget. */
@@ -263,65 +264,5 @@ public class Budget {
 		c.set(Calendar.DAY_OF_MONTH, 1);
 		if (year) c.set(Calendar.MONTH, 0);
 		return c.getTime();
-	}
-	
-	TableModel getTableModel() {
-		return tableModel;
-	}
-	
-	TableModel getRowHeaderModel() {
-		return rowHeaderModel;
-	}
-	
-	@SuppressWarnings("serial")
-	private class MyTableModel extends AbstractTableModel {
-		@Override
-		public int getColumnCount() {
-			return getDatesSize();
-		}
-
-		@Override
-		public int getRowCount() {
-			return categories.size();
-		}
-
-		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			Double value = values.get(new Key(getDate(columnIndex), categories.get(rowIndex)));
-			return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value);
-		}
-
-		@SuppressWarnings("deprecation")
-		@Override
-		public String getColumnName(int column) {
-			Date date = getDate(column);
-			if (year) return ""+(date.getYear()+1900);
-			//TODO It would be better to have a localized version for this formatter ...
-			// but I can't find how to do that (simple with the day, but not documented without)
-			return new SimpleDateFormat("yyyy/MM").format(date);
-		}
-	}
-	
-	@SuppressWarnings("serial")
-	private class MyRowHeaderModel extends AbstractTableModel {
-		@Override
-		public int getColumnCount() {
-			return 1;
-		}
-
-		@Override
-		public int getRowCount() {
-			return categories.size();
-		}
-
-		@Override
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			return categories.get(rowIndex);
-		}
-
-		@Override
-		public String getColumnName(int column) {
-			return "";
-		}
 	}
 }
