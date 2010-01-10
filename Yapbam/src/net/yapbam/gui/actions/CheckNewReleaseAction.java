@@ -9,13 +9,13 @@ import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
-import net.yapbam.date.helpers.DateHelper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
+import net.yapbam.util.DateUtils;
 
 /** This class is in charge of checking for Yapbam updates over the Internet */
 @SuppressWarnings("serial")
@@ -81,7 +81,7 @@ public class CheckNewReleaseAction extends AbstractAction {
     	int days = Preferences.INSTANCE.getAutoUpdatePeriod();
 		if (days>=0) {
 			Date last = YapbamState.getDate(LAST_UPDATE_CHECK_KEY);
-			if (DateHelper.dateToInteger(new Date())-DateHelper.dateToInteger(last)>=days) {
+			if (DateUtils.dateToInteger(new Date())-DateUtils.dateToInteger(last)>=days) {
 				//TODO It could be cool to display an information window (maybe the check is very, very, long and the user is waiting) 
 				check (null, true);
 			}

@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import net.yapbam.util.DateUtils;
+
 public class MonthDateStepper implements DateStepper {
 	private static final boolean DEBUG = false;
 
@@ -32,7 +34,7 @@ public class MonthDateStepper implements DateStepper {
 		super();
 		this.period = nb;
 		this.day = day;
-		this.lastDate = timeLimit==null?Integer.MAX_VALUE:DateHelper.dateToInteger(timeLimit);
+		this.lastDate = timeLimit==null?Integer.MAX_VALUE:DateUtils.dateToInteger(timeLimit);
 	}
 	
 	/* (non-Javadoc)
@@ -54,7 +56,7 @@ public class MonthDateStepper implements DateStepper {
 			System.out.println("----------------------");
 		}
 		Date result = gc.getTime();
-		if (DateHelper.dateToInteger(result)>this.lastDate) result = null;
+		if (DateUtils.dateToInteger(result)>this.lastDate) result = null;
 		return result;
 	}
 
@@ -67,6 +69,6 @@ public class MonthDateStepper implements DateStepper {
 	}
 
 	public Date getLastDate() {
-		return this.lastDate==Integer.MAX_VALUE?null:DateHelper.integerToDate(this.lastDate);
+		return this.lastDate==Integer.MAX_VALUE?null:DateUtils.integerToDate(this.lastDate);
 	}
 }

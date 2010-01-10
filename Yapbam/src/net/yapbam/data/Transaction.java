@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.yapbam.date.helpers.DateHelper;
+import net.yapbam.util.DateUtils;
 
 /** This class represents a transaction */
 public class Transaction extends AbstractTransaction implements Serializable, Cloneable {
@@ -20,9 +20,9 @@ public class Transaction extends AbstractTransaction implements Serializable, Cl
 			Account account, Mode mode, Category category, Date valueDate,
 			String statementId, List<SubTransaction> subTransactions) {
 		super(description, amount, account, mode, category, subTransactions);
-		this.date = DateHelper.dateToInteger(date);
+		this.date = DateUtils.dateToInteger(date);
 		this.number = number;
-		this.valueDate = DateHelper.dateToInteger(valueDate);
+		this.valueDate = DateUtils.dateToInteger(valueDate);
 		this.statementId = statementId;
 	}
 
@@ -31,11 +31,11 @@ public class Transaction extends AbstractTransaction implements Serializable, Cl
 	}
 
 	public Date getDate() {
-		return DateHelper.integerToDate(this.date);
+		return DateUtils.integerToDate(this.date);
 	}
 
 	public Date getValueDate() {
-		return DateHelper.integerToDate(valueDate);
+		return DateUtils.integerToDate(valueDate);
 	}
 
 	public String getStatement() {
