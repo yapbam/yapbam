@@ -173,7 +173,6 @@ public class FilteredData extends DefaultListenable {
 			}
 		}
 		this.filter();
-		fireEvent(new FilterUpdatedEvent(this));
 	}
 	
 	/** Gets the valid accounts for this filter.
@@ -216,7 +215,6 @@ public class FilteredData extends DefaultListenable {
 			}
 		}
 		this.filter();
-		fireEvent(new FilterUpdatedEvent(this));
 	}
 	
 	/** Gets the valid modes for this filter.
@@ -239,7 +237,6 @@ public class FilteredData extends DefaultListenable {
 	public void setDescriptionFilter(TextMatcher matcher) {
 		this.descriptionMatcher = matcher;
 		this.filter();
-		fireEvent(new FilterUpdatedEvent(this));
 	}
 	
 	/** Gets the validity of a string according to the current description filter. 
@@ -328,7 +325,6 @@ public class FilteredData extends DefaultListenable {
 			}
 		}
 		this.filter();
-		fireEvent(new FilterUpdatedEvent(this));
 	}
 
 	/** Returns the valid categories for this filter.
@@ -549,7 +545,7 @@ public class FilteredData extends DefaultListenable {
 	 * and no event is fire.
 	 * This refresh (and the event) is delayed until this method is called with false argument.
 	 * Note that if this method is called with false argument, but no filter change occurs, nothing happens.
-	 * @param suspended true to suspend auto-filtering, true to restore it.
+	 * @param suspended true to suspend auto-filtering, false to restore it.
 	 */
 	public void setSuspended(boolean suspended) {
 		this.suspended = suspended;
