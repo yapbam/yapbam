@@ -79,7 +79,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 			Preferences.INSTANCE.setAutoUpdate(-option, false);
 		}
     	int days = Preferences.INSTANCE.getAutoUpdatePeriod();
-		if (days>=0) {
+		if (days>=0) { // If autocheck is on
 			Date last = YapbamState.getDate(LAST_UPDATE_CHECK_KEY);
 			if (DateUtils.dateToInteger(new Date())-DateUtils.dateToInteger(last)>=days) {
 				//TODO It could be cool to display an information window (maybe the check is very, very, long and the user is waiting) 
