@@ -25,7 +25,7 @@ import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
 
-/** This class represents the Yabpam application preferences */
+/** This class represents the Yapbam application preferences */
 public class Preferences {
 	private static final String LANGUAGE = "lang"; //$NON-NLS-1$
 	private static final String COUNTRY = "country"; //$NON-NLS-1$
@@ -215,6 +215,9 @@ public class Preferences {
 		}
 	}
 
+	/** Gets the automatic check for updates period.
+	 * @return the number of days between two checks, a negative number if there's no automatic check.
+	 */
 	public int getAutoUpdatePeriod() {
 		try {
 			return Integer.parseInt(this.properties.getProperty(AUTO_UPDATE_PERIOD));
