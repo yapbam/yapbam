@@ -38,6 +38,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
     private JMenuItem menuItemOpen;
     private JMenuItem menuItemSave;
     private JMenuItem menuItemSaveAs;
+	private JMenuItem menuItemPrint;
     private JMenuItem menuItemQuit;
 
 	private Action editPreferences;
@@ -46,6 +47,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	
 	private JMenu filterMenu;
 	private JMenu transactionMenu;
+
 
     MainMenuBar (MainFrame frame) {
         super();
@@ -83,6 +85,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         menu.add(this.menuItemSaveAs);
         insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
 
+        menu.addSeparator();
+        this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.PRINT); //$NON-NLS-1$
+        this.menuItemPrint.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenuBar.Print.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+        this.menuItemPrint.setToolTipText(LocalizationData.get("MainMenuBar.Print.ToolTip")); //$NON-NLS-1$
+        this.menuItemPrint.addActionListener(this);
+        this.menuItemPrint.setEnabled(false);
+        menu.add(this.menuItemPrint);
+        
         menu.addSeparator();
         editPreferences = new EditPreferenceAction(frame);
         menu.add(editPreferences);
@@ -211,6 +221,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 			SaveManager.MANAGER.save(this.frame);
 		} else if (source.equals(this.menuItemSaveAs)) {
 			SaveManager.MANAGER.saveAs(this.frame);
+		} else if (source.equals(this.menuItemPrint)) {
+			this.frame.getCurrentPlugIn().print();
 		} else if (source.equals(this.menuItemAbout)) {
 			new AboutDialog(MainMenuBar.this.frame).setVisible(true);
 		}
@@ -393,5 +405,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	public void updateMenu(AbstractPlugIn plugIn) {
 		transactionMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.TRANSACTIONS_MENU));
 		filterMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.FILTER_MENU));
+		menuItemPrint.setEnabled(plugIn.isPrintingSupported());
 	}
 }

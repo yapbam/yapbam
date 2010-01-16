@@ -27,6 +27,7 @@ public abstract class IconManager {
 	public static final Icon SPREADABLE = create("images/spreadable.png");
 	public static final Icon CHECK_TRANSACTION = create("images/check.png");
 	public static final Icon HELP = create("images/help.png");
+	public static final Icon PRINT = create("images/print.png");
 		
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon create(String path) {
