@@ -1,5 +1,7 @@
 package net.yapbam.gui;
 
+import java.awt.print.PrinterException;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -166,7 +168,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * By default, this method throws an UnsupportedOperationException
 	 * @see #isPrintingSupported()
 	 */
-	public void print() {
+	public void print() throws PrinterException {
 		throw new UnsupportedOperationException();
 	}
 }

@@ -5,10 +5,13 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -94,16 +97,43 @@ public class TransactionsPlugInPanel extends JPanel {
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane, BorderLayout.CENTER);
 
-		JPanel bottomPane = new JPanel(new GridLayout(1, 3));
+		JPanel bottomPane = new JPanel(new BorderLayout());
+		JButton deploy = new JButton("Afficher les sous-opérations");
+		deploy.setToolTipText("Cliquez sur ce bouton pour afficher/masquer les sous-opérations"); //LOCAL
+		deploy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int option = JOptionPane.showOptionDialog(TransactionsPlugInPanel.this, "Souhaitez vous imprimer les sous-opérations", "Déployer les sous-opérations", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Toutes", "Aucune", LocalizationData.get("GenericButton.cancel")}, LocalizationData.get("GenericButton.cancel")); //LOCAL
+				TransactionTable table = transactionTable;
+				if (option!=2) {
+					SpreadableTableModel model = (SpreadableTableModel)table.getModel();
+					boolean spread = option==0;
+					for (int i = 0; i < table.getRowCount(); i++) {
+						if (model.isSpreadable(i)) {
+							model.setSpread(i, spread);
+							int viewRow = table.convertRowIndexToView(i);
+							if (spread) {
+								table.setRowHeight(viewRow, table.getRowHeight() * model.getSpreadLines(i));
+							} else {
+								table.setRowHeight(viewRow, table.getRowHeight());
+							}
+						}
+					}
+				}
+			}
+		});
+		bottomPane.add(deploy, BorderLayout.WEST);
+		JPanel balancePane = new JPanel(new GridLayout(1, 3));
 		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance"));
 		currentBalance.setToolTipText(LocalizationData.get("MainFrame.CurrentBalance.ToolTip"));
 		finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance"));
 		finalBalance.setToolTipText(LocalizationData.get("MainFrame.FinalBalance.ToolTip"));
 		checkedBalance = new BalanceReportField(LocalizationData.get("MainFrame.CheckedBalance"));
 		checkedBalance.setToolTipText(LocalizationData.get("MainFrame.CheckedBalance.ToolTip"));
-		bottomPane.add(currentBalance);
-		bottomPane.add(finalBalance);
-		bottomPane.add(checkedBalance);
+		balancePane.add(currentBalance);
+		balancePane.add(finalBalance);
+		balancePane.add(checkedBalance);
+		bottomPane.add(balancePane, BorderLayout.CENTER);
 		add(bottomPane, BorderLayout.SOUTH);
 		
 		acFilter.addListener(new DataListener() {
