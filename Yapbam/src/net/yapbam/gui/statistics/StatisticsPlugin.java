@@ -1,12 +1,19 @@
 package net.yapbam.gui.statistics;
 
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import org.jfree.chart.ChartPanel;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
@@ -23,6 +30,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	private TreeMap<Category, Summary> categoryToAmount;
 	private PieChartPanel pie;
 	private BarChartPanel bar;
+	private JTabbedPane tabbedPane;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
@@ -37,7 +45,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 
 	@Override
 	public JPanel getPanel() {
-		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane = new JTabbedPane();
 		this.bar = new BarChartPanel(categoryToAmount);
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.bar.tabname"), null, this.bar, LocalizationData.get("StatisticsPlugin.bar.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.pie = new PieChartPanel(categoryToAmount);
@@ -48,6 +56,25 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				new Insets(5, 0, 0, 0), 0, 0);
 		result.add(tabbedPane, c);
 		return result;
+	}
+
+	@Override
+	public boolean isPrintingSupported() {
+		return true;
+	}
+
+	@Override
+	public void print() throws PrinterException {
+		PrinterJob job = PrinterJob.getPrinterJob();
+		job.setPrintable(new Printable() {
+			@Override
+			public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
+					throws PrinterException {
+				ChartPanel pane = (ChartPanel) tabbedPane.getSelectedComponent();
+				return pane.print(graphics, pageFormat, pageIndex);
+			}
+		});
+		if (job.printDialog()) job.print();
 	}
 
 	private void buildSummaries() {
