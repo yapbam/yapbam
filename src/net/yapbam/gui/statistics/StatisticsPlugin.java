@@ -10,6 +10,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.TreeMap;
 
+import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -74,7 +75,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				return pane.print(graphics, pageFormat, pageIndex);
 			}
 		});
-		if (job.printDialog()) job.print();
+		HashPrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+		if (job.printDialog(attributes)) job.print(attributes);
 	}
 
 	private void buildSummaries() {
