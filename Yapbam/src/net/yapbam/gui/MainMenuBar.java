@@ -1,6 +1,7 @@
 package net.yapbam.gui;
 
 import java.awt.event.*;
+import java.awt.print.PrinterException;
 import java.io.File;
 import java.text.MessageFormat;
 
@@ -11,6 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
@@ -222,7 +224,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		} else if (source.equals(this.menuItemSaveAs)) {
 			SaveManager.MANAGER.saveAs(this.frame);
 		} else if (source.equals(this.menuItemPrint)) {
-			this.frame.getCurrentPlugIn().print();
+			try {
+				this.frame.getCurrentPlugIn().print();
+			} catch (PrinterException e1) {
+				String okButton = LocalizationData.get("GenericButton.ok"); //$NON-NLS-1$
+				String message = MessageFormat.format(LocalizationData.get("MainMenuBar.Print.Error.Message"),e1.getMessage()); //$NON-NLS-1$
+				JOptionPane.showOptionDialog(frame,
+					    message, LocalizationData.get("MainMenuBar.Print.Error.Title"), //$NON-NLS-1$
+					    JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE, null,
+					    new String[]{okButton}, okButton);
+			}
 		} else if (source.equals(this.menuItemAbout)) {
 			new AboutDialog(MainMenuBar.this.frame).setVisible(true);
 		}

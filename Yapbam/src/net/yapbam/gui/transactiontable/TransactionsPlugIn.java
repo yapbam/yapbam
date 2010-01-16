@@ -2,14 +2,12 @@ package net.yapbam.gui.transactiontable;
 
 import java.awt.event.ActionEvent;
 import java.awt.print.PrinterException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.JTable.PrintMode;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
@@ -85,12 +83,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	}
 
 	@Override
-	public void print() {
-		try {
-			panel.transactionTable.print(PrintMode.FIT_WIDTH, new MessageFormat("page : {0}"), null);
-		} catch (PrinterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} //TODO
+	public void print() throws PrinterException {
+		panel.transactionTable.print();
 	}
 }
