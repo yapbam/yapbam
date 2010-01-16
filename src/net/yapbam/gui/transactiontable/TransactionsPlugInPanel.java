@@ -98,12 +98,17 @@ public class TransactionsPlugInPanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 
 		JPanel bottomPane = new JPanel(new BorderLayout());
-		JButton deploy = new JButton("Afficher les sous-opérations");
-		deploy.setToolTipText("Cliquez sur ce bouton pour afficher/masquer les sous-opérations"); //LOCAL
+		JButton deploy = new JButton(LocalizationData.get("MainFrame.ShowSubtransactions")); //$NON-NLS-1$
+		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //LOCAL //$NON-NLS-1$
 		deploy.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int option = JOptionPane.showOptionDialog(TransactionsPlugInPanel.this, "Souhaitez vous imprimer les sous-opérations", "Déployer les sous-opérations", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Toutes", "Aucune", LocalizationData.get("GenericButton.cancel")}, LocalizationData.get("GenericButton.cancel")); //LOCAL
+				String cancel = LocalizationData.get("GenericButton.cancel"); //$NON-NLS-1$
+				int option = JOptionPane.showOptionDialog(TransactionsPlugInPanel.this,
+						LocalizationData.get("MainFrame.ShowSubtransactions.message"), //$NON-NLS-1$
+						LocalizationData.get("MainFrame.ShowSubtransactions"), JOptionPane.YES_NO_CANCEL_OPTION, //$NON-NLS-1$
+						JOptionPane.QUESTION_MESSAGE, null,
+						new String[]{LocalizationData.get("MainFrame.ShowSubtransactions.All"), LocalizationData.get("MainFrame.ShowSubtransactions.Non"), cancel}, cancel); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$
 				TransactionTable table = transactionTable;
 				if (option!=2) {
 					SpreadableTableModel model = (SpreadableTableModel)table.getModel();
@@ -124,12 +129,12 @@ public class TransactionsPlugInPanel extends JPanel {
 		});
 		bottomPane.add(deploy, BorderLayout.WEST);
 		JPanel balancePane = new JPanel(new GridLayout(1, 3));
-		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance"));
-		currentBalance.setToolTipText(LocalizationData.get("MainFrame.CurrentBalance.ToolTip"));
-		finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance"));
-		finalBalance.setToolTipText(LocalizationData.get("MainFrame.FinalBalance.ToolTip"));
-		checkedBalance = new BalanceReportField(LocalizationData.get("MainFrame.CheckedBalance"));
-		checkedBalance.setToolTipText(LocalizationData.get("MainFrame.CheckedBalance.ToolTip"));
+		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance")); //$NON-NLS-1$
+		currentBalance.setToolTipText(LocalizationData.get("MainFrame.CurrentBalance.ToolTip")); //$NON-NLS-1$
+		finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance")); //$NON-NLS-1$
+		finalBalance.setToolTipText(LocalizationData.get("MainFrame.FinalBalance.ToolTip")); //$NON-NLS-1$
+		checkedBalance = new BalanceReportField(LocalizationData.get("MainFrame.CheckedBalance")); //$NON-NLS-1$
+		checkedBalance.setToolTipText(LocalizationData.get("MainFrame.CheckedBalance.ToolTip")); //$NON-NLS-1$
 		balancePane.add(currentBalance);
 		balancePane.add(finalBalance);
 		balancePane.add(checkedBalance);
