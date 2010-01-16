@@ -28,7 +28,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private JTabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
 	private ArrayList<AbstractPlugIn> paneledPlugins;
-	private int lastSelected = 0;
+	private int lastSelected = -1;
 	private boolean isRestarting = false;
 
 	public static void main(String[] args) {
@@ -152,7 +152,7 @@ public class MainFrame extends JFrame implements DataListener {
 	 * @return the currently displayed plugin
 	 */
 	public AbstractPlugIn getCurrentPlugIn() {
-		return this.paneledPlugins.get(lastSelected);
+		return lastSelected<0?null:this.paneledPlugins.get(lastSelected);
 	}
 
 	public void processEvent(DataEvent event) {
@@ -195,8 +195,8 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private void updateSelectedPlugin() {
 		if (lastSelected>=0) paneledPlugins.get(lastSelected).setDisplayed(false);
-		int selectedIndex = mainPane.getSelectedIndex();
-		if (selectedIndex<paneledPlugins.size()) paneledPlugins.get(selectedIndex).setDisplayed(true);
-		mainMenu.updateMenu(paneledPlugins.get(selectedIndex));
+		lastSelected = mainPane.getSelectedIndex();
+		if (lastSelected<paneledPlugins.size()) paneledPlugins.get(lastSelected).setDisplayed(true);
+		mainMenu.updateMenu(paneledPlugins.get(lastSelected));
 	}
 }
