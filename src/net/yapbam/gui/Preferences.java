@@ -16,8 +16,8 @@ import java.util.StringTokenizer;
 
 import javax.swing.UIManager;
 
-import net.yapbam.budget.BudgetPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
+import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
