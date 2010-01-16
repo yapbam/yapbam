@@ -9,7 +9,7 @@ class SaveManager {
 	static SaveManager MANAGER = new SaveManager();
 	private SaveManager() {}
 
-	/** This method give a last chance to save unsaved data.
+	/** This method gives a last chance to save unsaved data.
 	 * @param data The data currently edited
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */

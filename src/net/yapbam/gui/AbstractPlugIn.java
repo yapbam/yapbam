@@ -148,6 +148,25 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public PreferencePanel getPreferencePanel() {
 		return null;
 	}
+
+	/** Returns wether this plugin supports printing.
+	 * Only plugins with a non null panel can support printing (other are supposed to have nothing to print).
+	 * The default return value is false. The returned value is used to enable/disable the "print" menu item
+	 * in the "File" menu.
+	 * @return true if the panel supports printing.
+	 * @see #print()
+	 */
+	public boolean isPrintingSupported() {
+		return false;
+	}
 	
-	
+	/** Prints the content of this plugin.
+	 * This method is called is response to the selection of the "print" menu item when this plugin
+	 * is displayed.
+	 * By default, this method throws an UnsupportedOperationException
+	 * @see #isPrintingSupported()
+	 */
+	public void print() {
+		throw new UnsupportedOperationException();
+	}
 }

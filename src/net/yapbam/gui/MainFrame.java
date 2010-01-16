@@ -24,11 +24,13 @@ public class MainFrame extends JFrame implements DataListener {
     private GlobalData data;
 	private FilteredData filteredData;
 
+	private MainMenuBar mainMenu;
 	private JTabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
 	private ArrayList<AbstractPlugIn> paneledPlugins;
+	private int lastSelected = 0;
 	private boolean isRestarting = false;
-	
+
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
@@ -92,17 +94,12 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 
 	    setContentPane(this.createContentPane());
-	    final MainMenuBar mainMenu = new MainMenuBar(this);
+	    mainMenu = new MainMenuBar(this);
 		setJMenuBar(mainMenu);
 		mainPane.addChangeListener(new ChangeListener() {
-			private int lastSelected = 0;
-
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				paneledPlugins.get(lastSelected).setDisplayed(false);
-				int selectedIndex = mainPane.getSelectedIndex();
-				if (selectedIndex<paneledPlugins.size()) paneledPlugins.get(selectedIndex).setDisplayed(true);
-				mainMenu.updateMenu(paneledPlugins.get(selectedIndex));
+				updateSelectedPlugin();
 			}
 		});
 		
@@ -117,6 +114,8 @@ public class MainFrame extends JFrame implements DataListener {
 			plugins[i].restoreState();
 		}
 	
+	    updateSelectedPlugin();
+	    
 	    //Display the window.
 	    setVisible(true);
 	}
@@ -147,6 +146,13 @@ public class MainFrame extends JFrame implements DataListener {
 
 	public AbstractPlugIn getPlugIn(int index) {
 		return plugins[index];
+	}
+	
+	/** Gets the plugin currently displayed in the tabbed pane.
+	 * @return the currently displayed plugin
+	 */
+	public AbstractPlugIn getCurrentPlugIn() {
+		return this.paneledPlugins.get(lastSelected);
 	}
 
 	public void processEvent(DataEvent event) {
@@ -185,5 +191,12 @@ public class MainFrame extends JFrame implements DataListener {
 	            new MainFrame(filteredData, restartData);
 	        }
 	    });
+	}
+
+	private void updateSelectedPlugin() {
+		if (lastSelected>=0) paneledPlugins.get(lastSelected).setDisplayed(false);
+		int selectedIndex = mainPane.getSelectedIndex();
+		if (selectedIndex<paneledPlugins.size()) paneledPlugins.get(selectedIndex).setDisplayed(true);
+		mainMenu.updateMenu(paneledPlugins.get(selectedIndex));
 	}
 }
