@@ -167,7 +167,7 @@ public class BudgetView extends DefaultListenable {
 	/** Exports this budget to a text file.
 	 * @param file that will receive the content.
 	 * @param columnSeparator the character to use to separate columns
-	 * @param The locale to use to export the dates and numbers
+	 * @param locale The locale to use to export the dates and numbers
 	 * @throws IOException
 	 */
 	public void export(File file, char columnSeparator, Locale locale) throws IOException {
