@@ -45,4 +45,6 @@ public class DayDateStepper implements DateStepper {
 	public Date getLastDate() {
 		return DateUtils.integerToDate(lastDate);
 	}
+	
+	//FIXME Override equals method 
 }

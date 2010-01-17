@@ -120,6 +120,11 @@ public class Account implements Serializable {
 		this.receiptModes.remove(mode);
 		this.modes.remove(mode);
 	}
+	
+	void replace(Mode oldMode, Mode newMode) {
+		//TODO
+		System.out.println ("Mode "+oldMode+" was replaced by "+newMode+" in account "+this);
+	}
 
 	@Override
 	public String toString() {

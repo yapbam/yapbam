@@ -442,4 +442,13 @@ public class GlobalData extends DefaultListenable {
 			this.setChanged();
 		}
 	}
+
+	public void setMode(Account account, Mode oldMode, Mode newMode) {
+		ModePropertyChangedEvent event = new ModePropertyChangedEvent(this, account, oldMode, newMode);
+		if (event.getChanges()!=0) {
+			account.replace(oldMode, newMode);
+			this.fireEvent(event);
+			this.setChanged();
+		}
+	}
 }
