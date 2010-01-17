@@ -71,4 +71,7 @@ public class MonthDateStepper implements DateStepper {
 	public Date getLastDate() {
 		return this.lastDate==Integer.MAX_VALUE?null:DateUtils.integerToDate(this.lastDate);
 	}
+	
+	//FIXME Override equals method 
+
 }

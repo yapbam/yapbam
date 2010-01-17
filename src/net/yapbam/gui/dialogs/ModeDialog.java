@@ -26,9 +26,11 @@ public class ModeDialog extends AbstractDialog {
 	private JCheckBox chequeBook;
 	private ModePanel leftPane;
 	private ModePanel rightPane;
+	private Mode original;
 		
 	public ModeDialog(Window owner, Account account) {
 		super(owner, LocalizationData.get("ModeDialog.title.new"), account); //$NON-NLS-1$
+		original = null;
 	}
 	
 	protected JPanel createCenterPane(Object data) {
@@ -100,7 +102,7 @@ public class ModeDialog extends AbstractDialog {
 		Account account = (Account) this.data;
 		if (name.length()==0) {
 			return LocalizationData.get("ModeDialog.bad.emptyName"); //$NON-NLS-1$
-		} else if (account.getMode(name)!=null) {
+		} else if ((account.getMode(name)!=null) && (! ((original!=null) && name.equals(original.getName())))) {
 			return MessageFormat.format(LocalizationData.get("ModeDialog.bad.duplicateMode"),name, account.getName()); //$NON-NLS-1$
 		} else if (!(leftPane.isSelected()||rightPane.isSelected())) {
 			return LocalizationData.get("ModeDialog.bad.neverAvalaible"); //$NON-NLS-1$
@@ -120,6 +122,7 @@ public class ModeDialog extends AbstractDialog {
 
 	public void setContent(Mode mode) {
 		setTitle(LocalizationData.get("ModeDialog.title.edit")); //$NON-NLS-1$
+		original = mode;
 		chequeBook.setSelected(mode.isUseChequeBook());
 		name.setText(mode.getName());
 		leftPane.setContent(mode.getExpenseVdc());

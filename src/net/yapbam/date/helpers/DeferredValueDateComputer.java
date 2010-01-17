@@ -70,4 +70,7 @@ public class DeferredValueDateComputer implements DateStepper {
 	public Date getLastDate() {
 		return null;
 	}
+	
+	//FIXME Override equals method 
+
 }

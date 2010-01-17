@@ -40,8 +40,7 @@ class AdministrationModeListPanel extends ModeListPanel {
 
 	@Override
 	protected Action getEditButtonAction() {
-		return null;
-		//TODO return new EditModeAction();
+		return new EditModeAction();
 	}
 
 	@Override
@@ -134,19 +133,16 @@ class AdministrationModeListPanel extends ModeListPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-/*			int row = getJTable().getSelectedRow();
-			Mode old = ((List<Mode>)data).remove(row);
-			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
+			int row = getJTable().getSelectedRow();
+			Mode old = account.getMode(row+1);
+			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
 			dialog.setContent(old);
 			dialog.setVisible(true);
 			Mode mode = dialog.getMode();
-			if (mode==null) {
-				((List<Mode>)data).add(row,old);
-			} else {
-				((List<Mode>)data).add(row,mode);
+			if (mode!=null) {
+				((GlobalData)data).setMode(account, old, mode);
+				((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);
 			}
-			((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);*/
-		System.out.println ("Not implemented");
 		}
 	}
 	class DeleteModeAction extends AbstractAction {			

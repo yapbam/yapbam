@@ -62,4 +62,8 @@ public class Mode implements Serializable {
 		return this.getName().hashCode();
 	}
 	
+	@Override
+	public String toString() {
+		return this.getName() + "[" + this.getExpenseVdc()+"/"+this.getReceiptVdc()+"-"+(this.isUseChequeBook()?"check":"no check")+"]";
+	}
 }
