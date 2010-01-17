@@ -10,9 +10,9 @@ public class CategoryPropertyChangedEvent extends DataEvent {
 	private Object oldValue;
 	private Object newValue;
 
-	public CategoryPropertyChangedEvent(Object source, String propertyName, Category account, Object oldValue, Object newValue) {
+	public CategoryPropertyChangedEvent(Object source, String propertyName, Category category, Object oldValue, Object newValue) {
 		super (source);
-		this.category = account;
+		this.category = category;
 		this.property = propertyName;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
