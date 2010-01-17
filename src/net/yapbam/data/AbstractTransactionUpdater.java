@@ -1,10 +1,10 @@
-/**
- * 
- */
 package net.yapbam.data;
 
 import java.util.ArrayList;
 
+/**
+ * This utility class is use to make mass modification of transactions.
+ */
 abstract class AbstractTransactionUpdater {
 	GlobalData data;
 	
@@ -27,7 +27,7 @@ abstract class AbstractTransactionUpdater {
 		for (int i = 0; i < newTransactions.size(); i++) {
 			data.add(newTransactions.get(i));
 		}
-		// It's exactlly the same problem for periodical transactions
+		// It's exactly the same problem for periodical transactions
 		ArrayList<PeriodicalTransaction> newPTransactions = new ArrayList<PeriodicalTransaction>();
 		for (int i = data.getPeriodicalTransactionsNumber()-1; i >= 0 ; i--) {
 			PeriodicalTransaction pt = change(data.getPeriodicalTransaction(i));
