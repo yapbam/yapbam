@@ -122,8 +122,16 @@ public class Account implements Serializable {
 	}
 	
 	void replace(Mode oldMode, Mode newMode) {
-		//TODO
-		System.out.println ("Mode "+oldMode+" was replaced by "+newMode+" in account "+this);
+		// Be aware not to really replace the mode, but update it (transactions have a pointer to their mode).
+		oldMode.updateTo(newMode);
+		// Rebuild the expensesModes and receiptModes if needed (these lists contain only modes usable for expenses/receipts).
+		this.expenseModes.clear();
+		this.receiptModes.clear();
+		for (int i = 0; i < modes.size(); i++) {
+			Mode mode = this.modes.get(i);
+			if (mode.getExpenseVdc()!=null) this.expenseModes.add(mode);
+			if (mode.getReceiptVdc()!=null) this.receiptModes.add(mode);
+		}
 	}
 
 	@Override

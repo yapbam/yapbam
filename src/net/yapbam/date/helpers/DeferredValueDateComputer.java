@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /** This class allows to compute value date for a deferred operation */ 
-public class DeferredValueDateComputer implements DateStepper {
+public class DeferredValueDateComputer extends DateStepper {
 	private static final boolean DEBUG = false;
 
 	private int stopDay;
@@ -27,9 +27,9 @@ public class DeferredValueDateComputer implements DateStepper {
 
 	public Date getNextStep(Date date) {
 		if (DEBUG) {
-			System.out.println("date de l'opération : "+DateFormat.getDateInstance().format(date));
-			System.out.println("  date d'arrêt de compte : "+this.stopDay);
-			System.out.println("  date de débit : "+this.debtDay);
+			System.out.println("date de l'opï¿½ration : "+DateFormat.getDateInstance().format(date));
+			System.out.println("  date d'arrï¿½t de compte : "+this.stopDay);
+			System.out.println("  date de dï¿½bit : "+this.debtDay);
 		}
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
@@ -51,17 +51,17 @@ public class DeferredValueDateComputer implements DateStepper {
 			}
 		}
 		gc.set(year, month, 1);
-		if (DEBUG) System.out.println("  1 du mois du débit : "+DateFormat.getDateInstance().format(gc.getTime()));
+		if (DEBUG) System.out.println("  1 du mois du dï¿½bit : "+DateFormat.getDateInstance().format(gc.getTime()));
 		gc.add(GregorianCalendar.MONTH, 1);
 		if (DEBUG) System.out.println("  1 du mois suivant  : "+DateFormat.getDateInstance().format(gc.getTime()));
 		gc.add(GregorianCalendar.DAY_OF_MONTH, -1);
-		if (DEBUG) System.out.println("  Dernier jour du mois du débit : "+DateFormat.getDateInstance().format(gc.getTime()));
+		if (DEBUG) System.out.println("  Dernier jour du mois du dï¿½bit : "+DateFormat.getDateInstance().format(gc.getTime()));
 		if (debtDay<gc.get(GregorianCalendar.DAY_OF_MONTH)) {
 			gc.set(GregorianCalendar.DATE, debtDay);
 		} else if (DEBUG) {
 			 System.out.println ("  Le mois a moins de "+debtDay+" jours, on prend le dernier jour du mois");
 		}
-		if (DEBUG) System.out.println("Jour du débit : "+DateFormat.getDateInstance().format(gc.getTime()));
+		if (DEBUG) System.out.println("Jour du dï¿½bit : "+DateFormat.getDateInstance().format(gc.getTime()));
 		if (DEBUG) System.out.println("----------------------");
 		return gc.getTime();
 	}
@@ -70,7 +70,14 @@ public class DeferredValueDateComputer implements DateStepper {
 	public Date getLastDate() {
 		return null;
 	}
-	
-	//FIXME Override equals method 
 
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = super.equals(obj);
+		if (result) {
+			result = (getStopDay()==((DeferredValueDateComputer)obj).getStopDay()) &&
+				(getDebtDay()==((DeferredValueDateComputer)obj).getDebtDay());
+		}
+		return result;
+	}
 }

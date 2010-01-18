@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 
 import net.yapbam.util.DateUtils;
 
-public class DayDateStepper implements DateStepper {
+public class DayDateStepper extends DateStepper {
 	private static final boolean DEBUG = false;
 
 	private int nbDays;
@@ -24,14 +24,14 @@ public class DayDateStepper implements DateStepper {
 	
 	public Date getNextStep(Date date) {
 		if (DEBUG) {
-			System.out.println("date de l'opération : "+DateFormat.getDateInstance().format(date));
+			System.out.println("date de l'opï¿½ration : "+DateFormat.getDateInstance().format(date));
 			System.out.println("  nombre de jours : "+this.nbDays);
 		}
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
 		gc.add(GregorianCalendar.DAY_OF_MONTH, this.nbDays);
 		if (DEBUG) {
-			System.out.println("Jour du débit : "+DateFormat.getDateInstance().format(gc.getTime()));
+			System.out.println("Jour du dï¿½bit : "+DateFormat.getDateInstance().format(gc.getTime()));
 			System.out.println("----------------------");
 		}
 		return gc.getTime();
@@ -45,6 +45,11 @@ public class DayDateStepper implements DateStepper {
 	public Date getLastDate() {
 		return DateUtils.integerToDate(lastDate);
 	}
-	
-	//FIXME Override equals method 
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = super.equals(obj);
+		if (result) result = (getStep()==((DayDateStepper)obj).getStep()) && (lastDate==((DayDateStepper)obj).lastDate);
+		return result;
+	}
 }
