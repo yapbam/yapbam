@@ -19,6 +19,7 @@ import net.yapbam.data.event.CategoryPropertyChangedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.ModePropertyChangedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.gui.LocalizationData;
@@ -151,7 +152,8 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 			if (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)) {
 				fireTableDataChanged();			
 			}
-		} else if (event instanceof CategoryPropertyChangedEvent) {
+		} else if ((event instanceof CategoryPropertyChangedEvent) ||
+				((event instanceof ModePropertyChangedEvent) && ((((ModePropertyChangedEvent)event).getChanges()&ModePropertyChangedEvent.NAME)!=0))) {
 			fireTableDataChanged();			
 		}
 	}
