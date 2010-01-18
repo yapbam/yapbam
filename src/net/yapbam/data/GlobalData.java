@@ -446,7 +446,11 @@ public class GlobalData extends DefaultListenable {
 	public void setMode(Account account, Mode oldMode, Mode newMode) {
 		ModePropertyChangedEvent event = new ModePropertyChangedEvent(this, account, oldMode, newMode);
 		if (event.getChanges()!=0) {
+			// oldMode object will be updated. In order to send the right event data, we have to remember it
+			// So, we'll store it in a new fresh mode object : oldVanished.
+			Mode oldVanished = new Mode(oldMode.getName(), oldMode.getReceiptVdc(), oldMode.getExpenseVdc(), oldMode.isUseChequeBook());
 			account.replace(oldMode, newMode);
+			event = new ModePropertyChangedEvent(this, account, oldVanished, oldMode);
 			this.fireEvent(event);
 			this.setChanged();
 		}
