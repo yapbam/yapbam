@@ -1,6 +1,8 @@
-package net.yapbam.data;
+package net.yapbam.data.event;
 
-import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.Account;
+import net.yapbam.data.GlobalData;
+import net.yapbam.data.Mode;
 import net.yapbam.util.NullUtils;
 
 /** This event is sent when a mode is updated. */
