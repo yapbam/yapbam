@@ -66,4 +66,11 @@ public class Mode implements Serializable {
 	public String toString() {
 		return this.getName() + "[" + this.getExpenseVdc()+"/"+this.getReceiptVdc()+"-"+(this.isUseChequeBook()?"check":"no check")+"]";
 	}
+
+	void updateTo(Mode newMode) {
+		this.name = newMode.name;
+		this.expenseVDC = newMode.expenseVDC;
+		this.receiptVDC = newMode.receiptVDC;
+		this.useChequeBook = newMode.useChequeBook;
+	}
 }

@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 
 import net.yapbam.util.DateUtils;
 
-public class MonthDateStepper implements DateStepper {
+public class MonthDateStepper extends  DateStepper {
 	private static final boolean DEBUG = false;
 
 	private int period;
@@ -72,6 +72,15 @@ public class MonthDateStepper implements DateStepper {
 		return this.lastDate==Integer.MAX_VALUE?null:DateUtils.integerToDate(this.lastDate);
 	}
 	
-	//FIXME Override equals method 
 
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = super.equals(obj);
+		if (result) {
+			result = (period==((MonthDateStepper)obj).period) &&
+				(day==((MonthDateStepper)obj).day) &&
+				(lastDate==((MonthDateStepper)obj).lastDate);
+		}
+		return result;
+	}
 }

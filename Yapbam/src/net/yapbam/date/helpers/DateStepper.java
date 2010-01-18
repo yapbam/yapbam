@@ -2,9 +2,11 @@ package net.yapbam.date.helpers;
 
 import java.util.Date;
 
-/** This interface describe a class able perform a time increment over a date.
- * It could be used, for instance, to convert a transaction date in a value date */
-public interface DateStepper {
+/** This class is able perform a time increment over a date.
+ * It could be used, for instance, to convert a transaction date in a value date, or to compute
+ * the next date of a periodical transaction
+ */
+public abstract class DateStepper {
 	/** A trivial value date computer, that returns the transaction date as value date.*/
 	public static final DateStepper IMMEDIATE = new DateStepper() {
 		public Date getNextStep(Date date) {
@@ -34,4 +36,15 @@ public interface DateStepper {
 	 * @return the last date, or null if the stepper has no time limit.
 	 */
 	public abstract Date getLastDate();
+
+	@Override
+	/** Tests whether this instance is equals to another instance.
+	 * This method only test if instance classes are equals. Subclasses may need to override this method in order to test the attributes equivalence.
+	 * @param obj The object with which to compare 
+	 * @returns true if this is from the same class than obj.
+	 */
+	public boolean equals(Object obj) {
+		if (obj==null) return false;
+		return this.getClass().equals(obj.getClass());
+	}
 }
