@@ -108,6 +108,11 @@ public class FilteredData extends DefaultListenable {
 					if (isOk(evt.getCategory())) {
 						fireEvent(event);
 					}
+				} else if (event instanceof ModePropertyChangedEvent) {
+					ModePropertyChangedEvent evt = (ModePropertyChangedEvent) event;
+					if (isOk(evt.getNewMode())) {
+						fireEvent(event);
+					}
 				}
 			}
 		});
@@ -130,8 +135,12 @@ public class FilteredData extends DefaultListenable {
 				((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME) &&
 				isOk(((AccountPropertyChangedEvent)event).getAccount());
 		boolean categoryRenamed = (event instanceof CategoryPropertyChangedEvent) &&
-		isOk(((CategoryPropertyChangedEvent)event).getCategory());
-		boolean result = (accountRenamed || categoryRenamed); //TODO other change events
+			isOk(((CategoryPropertyChangedEvent)event).getCategory());
+		boolean modeRenamed = (event instanceof ModePropertyChangedEvent) &&
+		((((ModePropertyChangedEvent)event).getChanges() & ModePropertyChangedEvent.NAME)!=0) &&
+		isOk(((ModePropertyChangedEvent)event).getNewMode());
+		//FIXME Strange if filtering on mode is on, isOk returns false ... but it would not 
+		boolean result = (accountRenamed || categoryRenamed || modeRenamed);
 		return result;
 	}
 	
