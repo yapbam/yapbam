@@ -139,7 +139,6 @@ public class FilteredData extends DefaultListenable {
 		boolean modeRenamed = (event instanceof ModePropertyChangedEvent) &&
 		((((ModePropertyChangedEvent)event).getChanges() & ModePropertyChangedEvent.NAME)!=0) &&
 		isOk(((ModePropertyChangedEvent)event).getNewMode());
-		//FIXME Strange if filtering on mode is on, isOk returns false ... but it would not 
 		boolean result = (accountRenamed || categoryRenamed || modeRenamed);
 		return result;
 	}
