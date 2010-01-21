@@ -22,7 +22,7 @@ public class FilteredData extends DefaultListenable {
 	private ArrayList<Transaction> transactions;
 	private int filter;
 	private HashSet<Account> validAccounts;
-	private HashSet<Mode> validModes;
+	private List<Mode> validModes;
 	private HashSet<Category> validCategories;
 	private Date dateFrom;
 	private Date dateTo;
@@ -218,7 +218,7 @@ public class FilteredData extends DefaultListenable {
 		if (modes==null) {
 			this.validModes=null;
 		} else {
-			this.validModes = new HashSet<Mode>(modes.length);
+			this.validModes = new ArrayList<Mode>(modes.length);
 			for (int i = 0; i < modes.length; i++) {
 				this.validModes.add(modes[i]);
 			}
