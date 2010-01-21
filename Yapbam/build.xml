@@ -17,11 +17,11 @@
 		<mkdir dir="releaseCompile"/>
 		<copy todir="releaseCompile">
 	    	<fileset dir="src" excludes="**/*.java"/>
-	    	<fileset dir="${jfreechartpath}" includes="/org/jfree/chart/plot/LocalizationBundl*.properties"/>
-	    	<fileset dir="${jfreechartpath}" includes="/org/jfree/chart/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/plot/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/LocalizationBundl*.properties"/>
 		</copy>
-		<javac srcdir="${jfreechartpath}" includes="/org/jfree/chart/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
-		<javac srcdir="${jcommonpath}" includes="/org/jfree/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
+		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
+		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
 		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}" debug="true"/>
 		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" />
 		<jar destfile="yapbam.jar">
