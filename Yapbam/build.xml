@@ -5,8 +5,8 @@
 	| properties below. They have to reference the jfreeChart sources and the JCommon sources.         |
 	| These sources are available at http://www.jfree.org                                              |
 	<================================================================================================-->
-	<property name="jcommonpath" value="C:/Users/Jean-Marc/workspace/jcommon-1.0.16/sourceJCommon"/>
-	<property name="jfreechartpath" value="C:/Users/Jean-Marc/workspace/jfreechart/source"/>
+	<property name="jcommonpath" value="C:/Documents and Settings/Jean-Marc/workspace/JFreeSrc/jcommon"/>
+	<property name="jfreechartpath" value="C:/Documents and Settings/Jean-Marc/workspace/JFreeSrc/jfreechart"/>
 	
 	<property name="yapbamVersion" value="0.5.2"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
