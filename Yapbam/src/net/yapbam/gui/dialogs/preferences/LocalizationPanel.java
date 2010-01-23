@@ -56,6 +56,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private ItemListener basicItemListener;
 	private HashMap<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
 	private JCheckBox translatorButton = null;
+	private JRadioButton portugueseButton = null;
 	
 	/**
 	 * This is the default constructor
@@ -100,6 +101,8 @@ public class LocalizationPanel extends PreferencePanel {
 			defaultLButton.setSelected(true);
 		} else if (locale.getLanguage().equals(Locale.FRENCH.getLanguage())) {
 			frenchButton.setSelected(true);
+		} else if (locale.getLanguage().equals(new Locale("pt").getLanguage())) {
+			portugueseButton.setSelected(true);
 		} else {
 			englishButton.setSelected(true);
 		}
@@ -144,6 +147,7 @@ public class LocalizationPanel extends PreferencePanel {
 			group.add(getDefaultLButton());
 			group.add(getEnglishButton());
 			group.add(getFrenchButton());
+			group.add(getPortugueseButton());
 		}
 		return countryPanel;
 	}
@@ -155,6 +159,11 @@ public class LocalizationPanel extends PreferencePanel {
 	 */
 	private JPanel getLanguagePanel() {
 		if (languagePanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.anchor = GridBagConstraints.NORTHWEST;
+			gridBagConstraints7.weighty = 1.0D;
+			gridBagConstraints7.gridy = 4;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.anchor = GridBagConstraints.WEST;
@@ -165,7 +174,7 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints5.gridy = 2;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.weighty = 1.0D;
+			gridBagConstraints4.weighty = 0.0D;
 			gridBagConstraints4.weightx = 1.0D;
 			gridBagConstraints4.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints4.fill = GridBagConstraints.NONE;
@@ -183,6 +192,7 @@ public class LocalizationPanel extends PreferencePanel {
 			languagePanel.add(getFrenchButton(), gridBagConstraints4);
 			languagePanel.add(getEnglishButton(), gridBagConstraints5);
 			languagePanel.add(getTranslatorButton(), gridBagConstraints6);
+			languagePanel.add(getPortugueseButton(), gridBagConstraints7);
 		}
 		return languagePanel;
 	}
@@ -307,6 +317,8 @@ public class LocalizationPanel extends PreferencePanel {
 			lang = Locale.FRENCH.getLanguage();
 		} else if (getEnglishButton().isSelected()) {
 			lang = Locale.ENGLISH.getLanguage();
+		} else if (getPortugueseButton().isSelected()) {
+			lang = "pt";
 		}
 		return new Locale(lang, country);
 	}
@@ -466,6 +478,20 @@ public class LocalizationPanel extends PreferencePanel {
 			}
 		}
 		return translatorButton;
+	}
+
+	/**
+	 * This method initializes portugueseButton	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getPortugueseButton() {
+		if (portugueseButton == null) {
+			portugueseButton = new JRadioButton();
+			portugueseButton.setText(new Locale("pt").getDisplayLanguage(Preferences.INSTANCE.getLocale()));
+			portugueseButton.addItemListener(basicItemListener);
+		}
+		return portugueseButton;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
