@@ -1,6 +1,7 @@
 package net.yapbam.gui.widget;
 
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -19,7 +20,7 @@ import net.yapbam.gui.IconManager;
 public abstract class JLabelMenu extends JLabel{
 
 	public JLabelMenu(String text) {
-		super(text, IconManager.SPREAD, SwingConstants.RIGHT);
+		super(text, IconManager.SPREAD, SwingConstants.LEFT);
 		this.setHorizontalTextPosition(SwingConstants.LEADING);
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -32,6 +33,25 @@ public abstract class JLabelMenu extends JLabel{
 			}
 		});
 	}
-	
+		
+	@Override
+	public void setSize(Dimension d) {
+		this.setSize(d.width, d.height);
+	}
+
+	@Override
+	public void setSize(int width, int height) {
+		int textWidth = this.getFontMetrics(getFont()).stringWidth(getText());
+		Insets insets = getBorder().getBorderInsets(this);
+		int remaining = width - textWidth - getIcon().getIconWidth() - insets.left - insets.right;
+		setIconTextGap(Math.max(0, remaining));
+		super.setSize(width, height);
+	}
+
+	/** Fills the popup.
+	 * Subclasses have to implements this method to populate the popup.
+	 * This method is called each time the popup have to be displayed.
+	 * @param popup
+	 */
 	protected abstract void fillPopUp(JPopupMenu popup);
 }
