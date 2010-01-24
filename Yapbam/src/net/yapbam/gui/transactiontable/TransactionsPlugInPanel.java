@@ -1,17 +1,18 @@
 package net.yapbam.gui.transactiontable;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -19,16 +20,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 
 import net.yapbam.data.BalanceData;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
-import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewTransactionAction;
 import net.yapbam.gui.util.JTableListener;
+import net.yapbam.gui.widget.JLabelMenu;
 
 public class TransactionsPlugInPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -47,6 +47,7 @@ public class TransactionsPlugInPanel extends JPanel {
 	private BalanceReportField finalBalance;
 	private BalanceReportField checkedBalance;
 
+	@SuppressWarnings("serial")
 	public TransactionsPlugInPanel(FilteredData data) {
 		super(new BorderLayout());
 		setOpaque(true);
@@ -102,23 +103,31 @@ public class TransactionsPlugInPanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 
 		JPanel bottomPane = new JPanel(new BorderLayout());
-		JLabel deploy = new JLabel (LocalizationData.get("MainFrame.ShowSubtransactions"), IconManager.SPREAD, SwingConstants.LEFT);
-		deploy.setHorizontalTextPosition(SwingConstants.LEADING); 
-		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //$NON-NLS-1$
-		deploy.addMouseListener(new MouseAdapter() {
+		JPanel menus = new JPanel(new BorderLayout());
+		JLabel deploy = new JLabelMenu(LocalizationData.get("MainFrame.ShowSubtransactions")) { //$NON-NLS-1$
 			@Override
-			public void mousePressed(MouseEvent e) {
-				JPopupMenu popup = new JPopupMenu();
-				fillPopUp(popup);
-			    JLabel source = (JLabel)e.getSource();
-				popup.show(e.getComponent(), source.getLocation().x, source.getLocation().y+source.getSize().height);
+			protected void fillPopUp(JPopupMenu popup) {
+				popup.add(new DeploySubTransactionsAction(LocalizationData.get("MainFrame.ShowSubtransactions.All"), true)); //$NON-NLS-1$
+				popup.add(new DeploySubTransactionsAction(LocalizationData.get("MainFrame.ShowSubtransactions.None"), false)); //$NON-NLS-1$
 			}
-			private void fillPopUp(JPopupMenu popup) {
-				popup.add(new DeploySubTransactionsAction(LocalizationData.get("MainFrame.ShowSubtransactions.All"), true));
-				popup.add(new DeploySubTransactionsAction(LocalizationData.get("MainFrame.ShowSubtransactions.Non"), false));
+		};
+		deploy.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //$NON-NLS-1$
+		menus.add(deploy, BorderLayout.NORTH);
+		JLabel columns = new JLabelMenu(LocalizationData.get("MainFrame.showColumns")) { //$NON-NLS-1$
+			@Override
+			protected void fillPopUp(JPopupMenu popup) {
+				for (int i = 0; i < transactionTable.getColumnCount(false); i++) {
+					JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ShowHideColumnAction(i));
+					menuItem.setSelected(transactionTable.isColumnVisible(i));
+					popup.add(menuItem);
+				}
 			}
-		});
-		bottomPane.add(deploy, BorderLayout.WEST);
+		};
+		columns.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
+		menus.add(columns, BorderLayout.SOUTH);
+		bottomPane.add(menus, BorderLayout.WEST);
 		JPanel balancePane = new JPanel(new GridLayout(1, 3));
 		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance")); //$NON-NLS-1$
 		currentBalance.setToolTipText(LocalizationData.get("MainFrame.CurrentBalance.ToolTip")); //$NON-NLS-1$
@@ -141,6 +150,23 @@ public class TransactionsPlugInPanel extends JPanel {
 		updateBalances();
 	}
 	
+	@SuppressWarnings("serial")
+	private final class ShowHideColumnAction extends AbstractAction {
+		private int index;
+		
+		public ShowHideColumnAction(int i) {
+			super(transactionTable.getModel().getColumnName(i));
+			this.index = i;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+//			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+			boolean visible = !transactionTable.isColumnVisible(index);
+			transactionTable.setColumnVisible(index, visible);
+		}
+	}
+
 	@SuppressWarnings("serial")
 	private final class DeploySubTransactionsAction extends AbstractAction {
 		private boolean spread;

@@ -15,6 +15,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.MainMenuBar;
+import net.yapbam.gui.util.XTableColumnModel;
 
 public class TransactionTable extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -48,6 +49,8 @@ public class TransactionTable extends JTable {
 			}
 		});
 		this.setRowSorter(sorter);
+		this.setColumnModel(new XTableColumnModel());
+		this.createDefaultColumnsFromModel();
 	}
 
 	public Transaction getSelectedTransaction() {
@@ -66,5 +69,29 @@ public class TransactionTable extends JTable {
 	
 	FilteredData getFilteredData() {
 		return data;
+	}
+	
+	boolean isColumnVisible(int index) {
+		XTableColumnModel model = (XTableColumnModel)getColumnModel();
+		return model.isColumnVisible(model.getColumnByModelIndex(index));
+	}
+	
+	void setColumnVisible(int index, boolean visible) {
+		XTableColumnModel model = (XTableColumnModel)getColumnModel();
+		model.setColumnVisible(model.getColumnByModelIndex(index), visible);		
+	}
+
+	public int getColumnCount(boolean onlyVisible) {
+		XTableColumnModel model = (XTableColumnModel)getColumnModel();
+		return model.getColumnCount(onlyVisible);
+	}
+	
+	public String getColumnName (int index, boolean onlyVisible) {
+		XTableColumnModel model = (XTableColumnModel)getColumnModel();
+		if (onlyVisible) {
+			return getColumnName(index);
+		} else {
+			return this.getModel().getColumnName(model.getColumn(index, onlyVisible).getModelIndex());
+		}
 	}
 }
