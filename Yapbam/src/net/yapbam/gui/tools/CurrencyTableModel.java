@@ -1,6 +1,7 @@
 package net.yapbam.gui.tools;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 
@@ -43,17 +44,18 @@ public class CurrencyTableModel extends AbstractTableModel {
 			if (columnIndex==2) return CurrencyConverter.getInstance().convert(1.0, currencyCode, this.codes[currentCurrency]);
 			throw new IllegalArgumentException();
 		} catch (IOException e) {
-			return "?";
+			return "?"; //$NON-NLS-1$
 		} catch (ParseException e) {
-			return "!";
+			return "!"; //$NON-NLS-1$
 		}
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		if (column==0) return "Devise"; //LOCAL
-		if (column==1) return "1 "+CurrencyNames.getString(this.codes[currentCurrency])+" = ? "+"devise"; //LOCAL
-		if (column==2) return "1 devise = ? "+CurrencyNames.getString(this.codes[currentCurrency]); //LOCAL
+		if (column==0) return Messages.getString("CurrencyConverterPanel.CurrencyColumnName"); //$NON-NLS-1$
+		String currencyName = CurrencyNames.getString(this.codes[currentCurrency]);
+		if (column==1) return MessageFormat.format(Messages.getString("CurrencyConverterPanel.ToCurrencyColumnName"), currencyName); //$NON-NLS-1$
+		if (column==2) return MessageFormat.format(Messages.getString("CurrencyConverterPanel.CurrencyToColumnName"),currencyName); //$NON-NLS-1$
 		return super.getColumnName(column);
 	}
 }
