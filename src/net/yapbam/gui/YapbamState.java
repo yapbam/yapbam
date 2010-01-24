@@ -125,6 +125,7 @@ public class YapbamState {
 	}
 	
 	public static void restoreState(JTable table, String prefix) {
+		//TODO Restore which columns are hidden
 		TableColumnModel model = table.getColumnModel();
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_WIDTH+i);
@@ -153,6 +154,7 @@ public class YapbamState {
 	}
 
 	public static void saveState(JTable table, String prefix) {
+		//TODO Save which columns are hidden
 		TableColumnModel model = table.getColumnModel();
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			INSTANCE.properties.put(prefix+COLUMN_WIDTH+table.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
