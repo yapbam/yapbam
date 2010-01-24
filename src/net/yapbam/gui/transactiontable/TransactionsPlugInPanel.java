@@ -6,22 +6,26 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 import net.yapbam.data.BalanceData;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewTransactionAction;
 import net.yapbam.gui.util.JTableListener;
@@ -98,33 +102,20 @@ public class TransactionsPlugInPanel extends JPanel {
 		add(scrollPane, BorderLayout.CENTER);
 
 		JPanel bottomPane = new JPanel(new BorderLayout());
-		JButton deploy = new JButton(LocalizationData.get("MainFrame.ShowSubtransactions")); //$NON-NLS-1$
-		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //LOCAL //$NON-NLS-1$
-		deploy.addActionListener(new ActionListener() {
+		JLabel deploy = new JLabel (LocalizationData.get("MainFrame.ShowSubtransactions"), IconManager.SPREAD, SwingConstants.LEFT);
+		deploy.setHorizontalTextPosition(SwingConstants.LEADING); 
+		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //$NON-NLS-1$
+		deploy.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				String cancel = LocalizationData.get("GenericButton.cancel"); //$NON-NLS-1$
-				int option = JOptionPane.showOptionDialog(TransactionsPlugInPanel.this,
-						LocalizationData.get("MainFrame.ShowSubtransactions.message"), //$NON-NLS-1$
-						LocalizationData.get("MainFrame.ShowSubtransactions"), JOptionPane.YES_NO_CANCEL_OPTION, //$NON-NLS-1$
-						JOptionPane.QUESTION_MESSAGE, null,
-						new String[]{LocalizationData.get("MainFrame.ShowSubtransactions.All"), LocalizationData.get("MainFrame.ShowSubtransactions.Non"), cancel}, cancel); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$
-				TransactionTable table = transactionTable;
-				if (option!=2) {
-					SpreadableTableModel model = (SpreadableTableModel)table.getModel();
-					boolean spread = option==0;
-					for (int i = 0; i < table.getRowCount(); i++) {
-						if (model.isSpreadable(i)) {
-							model.setSpread(i, spread);
-							int viewRow = table.convertRowIndexToView(i);
-							if (spread) {
-								table.setRowHeight(viewRow, table.getRowHeight() * model.getSpreadLines(i));
-							} else {
-								table.setRowHeight(viewRow, table.getRowHeight());
-							}
-						}
-					}
-				}
+			public void mousePressed(MouseEvent e) {
+				JPopupMenu popup = new JPopupMenu();
+				fillPopUp(popup);
+			    JLabel source = (JLabel)e.getSource();
+				popup.show(e.getComponent(), source.getLocation().x, source.getLocation().y+source.getSize().height);
+			}
+			private void fillPopUp(JPopupMenu popup) {
+				popup.add(new DeploySubTransactionsAction(LocalizationData.get("MainFrame.ShowSubtransactions.All"), true));
+				popup.add(new DeploySubTransactionsAction(LocalizationData.get("MainFrame.ShowSubtransactions.Non"), false));
 			}
 		});
 		bottomPane.add(deploy, BorderLayout.WEST);
@@ -150,6 +141,30 @@ public class TransactionsPlugInPanel extends JPanel {
 		updateBalances();
 	}
 	
+	@SuppressWarnings("serial")
+	private final class DeploySubTransactionsAction extends AbstractAction {
+		private boolean spread;
+		private DeploySubTransactionsAction(String name, boolean spread) {
+			super(name);
+			this.spread = spread;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			SpreadableTableModel model = (SpreadableTableModel)transactionTable.getModel();
+			for (int i = 0; i < transactionTable.getRowCount(); i++) {
+				if (model.isSpreadable(i)) {
+					model.setSpread(i, spread);
+					int viewRow = transactionTable.convertRowIndexToView(i);
+					if (spread) {
+						transactionTable.setRowHeight(viewRow, transactionTable.getRowHeight() * model.getSpreadLines(i));
+					} else {
+						transactionTable.setRowHeight(viewRow, transactionTable.getRowHeight());
+					}
+				}
+			}
+		}
+	}
+
 	class MyListener extends JTableListener {
 
 		public MyListener(JTable jTable, Action[] actions, Action defaultAction) {
