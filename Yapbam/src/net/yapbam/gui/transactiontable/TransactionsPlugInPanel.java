@@ -20,6 +20,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import net.yapbam.data.BalanceData;
 import net.yapbam.data.FilteredData;
@@ -111,7 +113,8 @@ public class TransactionsPlugInPanel extends JPanel {
 				popup.add(new DeploySubTransactionsAction(LocalizationData.get("MainFrame.ShowSubtransactions.None"), false)); //$NON-NLS-1$
 			}
 		};
-		deploy.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+		Border border = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.gray, 1), new EmptyBorder(0, 5, 0, 0));
+		deploy.setBorder(border);
 		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //$NON-NLS-1$
 		menus.add(deploy, BorderLayout.NORTH);
 		JLabel columns = new JLabelMenu(LocalizationData.get("MainFrame.showColumns")) { //$NON-NLS-1$
@@ -124,7 +127,7 @@ public class TransactionsPlugInPanel extends JPanel {
 				}
 			}
 		};
-		columns.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+		columns.setBorder(border);
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		menus.add(columns, BorderLayout.SOUTH);
 		bottomPane.add(menus, BorderLayout.WEST);
@@ -161,7 +164,6 @@ public class TransactionsPlugInPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 			boolean visible = !transactionTable.isColumnVisible(index);
 			transactionTable.setColumnVisible(index, visible);
 		}
