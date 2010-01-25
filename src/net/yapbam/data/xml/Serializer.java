@@ -1,6 +1,7 @@
 package net.yapbam.data.xml;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -10,6 +11,7 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.date.helpers.MonthDateStepper;
+import net.yapbam.gui.Preferences;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -60,23 +62,33 @@ public class Serializer {
 	static final String TRANSACTION_TAG = "TRANSACTION";
 	static final String SUBTRANSACTION_TAG = "SUBTRANSACTION";
 
-	
 	private AttributesImpl atts;
 	private TransformerHandler hd;
 	
 	public static void write(GlobalData data, File file) throws IOException {
+		FileOutputStream fos = new FileOutputStream(file);
 		try {
-			new Serializer().serialize(data, file);
-		} catch (TransformerConfigurationException e) {
-			throw new IOException(e);
-		} catch (SAXException e) {
-			throw new IOException(e);
+			new Serializer().serialize(data, fos);
+		} finally {
+			fos.close();
+		}
+	}
+	
+	public static void write(GlobalData data, URL url) throws IOException {
+		// FTP URL has to be like this one : ftp://jeanmarc.astesana:de7owm0p@ftpperso.free.fr/testYapbam.xml;type=i
+		// Currently this functionality isn't implemented in the gui
+		// Probably, it means implementing an ftp client to create directories and save sae copy
+		OutputStream os = url.openConnection(Preferences.INSTANCE.getHttpProxy()).getOutputStream();
+		try {
+			new Serializer().serialize(data, os);
+		} finally {
+			os.close();
 		}
 	}
 
-	public static void read(GlobalData data, File file) throws IOException {
+	public static void read(GlobalData data, InputStream is) throws IOException {
 		try {
-			SAXParserFactory.newInstance().newSAXParser().parse(file, new GlobalDataHandler(data));
+			SAXParserFactory.newInstance().newSAXParser().parse(is, new GlobalDataHandler(data));
 		} catch (Exception e) {
 			throw new IOException(e);
 		}
@@ -85,43 +97,47 @@ public class Serializer {
 	private Serializer () {
 	}
 
-	private void serialize (GlobalData data, File file) throws IOException, SAXException, TransformerConfigurationException {
-		FileOutputStream fos = new FileOutputStream(file);
-		StreamResult streamResult = new StreamResult(fos);
-		SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-		hd = tf.newTransformerHandler();
-		Transformer serializer = hd.getTransformer();
-		serializer.setOutputProperty(OutputKeys.ENCODING,ENCODING);
-		serializer.setOutputProperty(OutputKeys.INDENT,"yes");
-		hd.setResult(streamResult);
-		hd.startDocument();
-		
-		this.atts = new AttributesImpl();
-		hd.startElement("","",GLOBAL_DATA_TAG,atts);
-		
-		// Accounts.
-		for (int i=0;i<data.getAccountsNumber();i++)
-		{
-			serialize(data.getAccount(i));
+	private void serialize (GlobalData data, OutputStream os) throws IOException {
+		try {
+			StreamResult streamResult = new StreamResult(os);
+			SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+			hd = tf.newTransformerHandler();
+			Transformer serializer = hd.getTransformer();
+			serializer.setOutputProperty(OutputKeys.ENCODING,ENCODING);
+			serializer.setOutputProperty(OutputKeys.INDENT,"yes");
+			hd.setResult(streamResult);
+			hd.startDocument();
+			
+			this.atts = new AttributesImpl();
+			hd.startElement("","",GLOBAL_DATA_TAG,atts);
+			
+			// Accounts.
+			for (int i=0;i<data.getAccountsNumber();i++)
+			{
+				serialize(data.getAccount(i));
+			}
+			// Categories
+			for (int i=0;i<data.getCategoriesNumber();i++)
+			{
+				serialize(data.getCategory(i));
+			}
+			// Periodical transactions
+			for (int i = 0; i < data.getPeriodicalTransactionsNumber(); i++) {
+				serialize(data.getPeriodicalTransaction(i));
+			}
+			//Transactions
+			for (int i=0;i<data.getTransactionsNumber();i++)
+			{
+				serialize(data.getTransaction(i));
+			}		
+			hd.endElement("","",GLOBAL_DATA_TAG);
+			
+			hd.endDocument();
+		} catch (TransformerConfigurationException e) {
+			throw new IOException(e);
+		} catch (SAXException e) {
+			throw new IOException(e);
 		}
-		// Categories
-		for (int i=0;i<data.getCategoriesNumber();i++)
-		{
-			serialize(data.getCategory(i));
-		}
-		// Periodical transactions
-		for (int i = 0; i < data.getPeriodicalTransactionsNumber(); i++) {
-			serialize(data.getPeriodicalTransaction(i));
-		}
-		//Transactions
-		for (int i=0;i<data.getTransactionsNumber();i++)
-		{
-			serialize(data.getTransaction(i));
-		}		
-		hd.endElement("","",GLOBAL_DATA_TAG);
-		
-		hd.endDocument();
-		fos.close();
 	}
 
 	private void serialize(Account account) throws SAXException {
