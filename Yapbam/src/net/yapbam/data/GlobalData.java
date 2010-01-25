@@ -106,7 +106,12 @@ public class GlobalData extends DefaultListenable {
 	 */	
 	public void read(File file) throws IOException {
 		this.setEventsEnabled(false);
-		Serializer.read(this, file);
+		InputStream is = new FileInputStream(file);
+		try {
+			Serializer.read(this, is);
+		} finally {
+			is.close();
+		}
 		this.path = file;
 		this.somethingChanged = false;
 		this.setEventsEnabled(true);
