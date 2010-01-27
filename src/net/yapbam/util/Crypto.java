@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 /** This class provides utilities to encrypt data.
  * <BR>It uses a symetric AES algorithm. */
 public class Crypto {
+	// An interesting article to implement file encryption : http://java.sun.com/j2se/1.4.2/docs/guide/security/jce/JCERefGuide.html
 	private Crypto(){}
 	
 	/** Decrypt a text
