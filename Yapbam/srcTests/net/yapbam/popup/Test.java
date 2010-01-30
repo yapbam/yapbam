@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.widget.PopupTextFieldList;
 
 public class Test {
 

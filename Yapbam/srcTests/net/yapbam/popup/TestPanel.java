@@ -4,11 +4,14 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 
 import javax.swing.JTextField;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.widget.PopupTextFieldList;
 
 public class TestPanel extends JPanel {
 
@@ -58,6 +61,12 @@ public class TestPanel extends JPanel {
 		this.add(getField1(), gridBagConstraints1);
 		this.add(jLabel1, gridBagConstraints2);
 		this.add(getJTextField(), gridBagConstraints3);
+		getField1().addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				System.out.println (evt.getPropertyName()+" : "+evt.getOldValue()+" -> "+evt.getNewValue());
+			}
+		});
 	}
 
 	/**
