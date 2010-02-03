@@ -1,6 +1,8 @@
 package net.yapbam.popup;
 
 import java.awt.GridBagLayout;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -20,6 +22,8 @@ public class TestPanel extends JPanel {
 	private PopupTextFieldList field1 = null;
 	private JLabel jLabel1 = null;
 	private JTextField jTextField = null;
+	private JLabel jLabel2 = null;
+	private MagicComboBox magicComboBox = null;
 
 	/**
 	 * This is the default constructor
@@ -35,6 +39,16 @@ public class TestPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+		gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints21.gridy = 2;
+		gridBagConstraints21.weightx = 1.0;
+		gridBagConstraints21.gridx = 1;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.gridy = 2;
+		jLabel2 = new JLabel();
+		jLabel2.setText("Libellé bis");
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.gridy = 1;
@@ -61,6 +75,8 @@ public class TestPanel extends JPanel {
 		this.add(getField1(), gridBagConstraints1);
 		this.add(jLabel1, gridBagConstraints2);
 		this.add(getJTextField(), gridBagConstraints3);
+		this.add(jLabel2, gridBagConstraints11);
+		this.add(getMagicComboBox(), gridBagConstraints21);
 		getField1().addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -100,6 +116,20 @@ public class TestPanel extends JPanel {
 		}
 		String[] array = set.toArray(new String[set.size()]);
 		field1.setPredefined(array);
+		magicComboBox.setModel(new DefaultComboBoxModel(array));
+	}
+
+	/**
+	 * This method initializes magicComboBox	
+	 * 	
+	 * @return net.yapbam.popup.MagicComboBox	
+	 */
+	private MagicComboBox getMagicComboBox() {
+		if (magicComboBox == null) {
+			magicComboBox = new MagicComboBox();
+			magicComboBox.setEditable(true);
+		}
+		return magicComboBox;
 	}
 
 }
