@@ -13,6 +13,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashSet;
 
 import javax.swing.*;
 
@@ -23,6 +24,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CoolJComboBox;
+import net.yapbam.gui.widget.PopupTextFieldList;
 
 /** This dialog allows to create or edit a transaction */
 public abstract class AbstractTransactionDialog extends AbstractDialog {
@@ -31,7 +33,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	
 	protected int selectedAccount;
 	private JComboBox accounts;
-	protected JTextField description;
+	protected PopupTextFieldList description;
 	protected AmountWidget amount;
 	protected JCheckBox receipt;
 	private int selectedMode;
@@ -103,8 +105,15 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
         c = new GridBagConstraints();
         c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(titleLibelle, c);
-        description = new JTextField(40);
+        description = new PopupTextFieldList();
         description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
+		setPredefinedDescriptions();
+		description.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				predefinedDescriptionSelected((String) evt.getNewValue());
+			}
+		});
         description.addFocusListener(focusListener);
         c.gridx=1; c.gridwidth=5; c.fill = GridBagConstraints.HORIZONTAL;
     	centerPane.add(description,c);
@@ -179,6 +188,20 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		centerPane.add(subtransactionsPanel,c);
 
 		return centerPane;
+	}
+	
+	protected void setPredefinedDescriptions() {
+		HashSet<String> set = new HashSet<String>();
+		for (int i=0;i<this.data.getTransactionsNumber();i++) {
+			set.add(this.data.getTransaction(i).getDescription());
+		}
+		String[] array = set.toArray(new String[set.size()]);
+		description.setPredefined(array);
+	}
+	
+	protected void predefinedDescriptionSelected(String description) {
+		//TODO
+		System.out.println ("description set to "+description);
 	}
 
 	protected abstract void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);

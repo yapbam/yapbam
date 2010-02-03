@@ -57,6 +57,7 @@ public class PopupTextFieldList extends JTextField {
 		list.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				System.out.println("mouse clicked");
 				if (e.getButton()==MouseEvent.BUTTON1) {
 					setPredefined((String) list.getSelectedValue());
 					popup.setVisible(false);
@@ -64,6 +65,7 @@ public class PopupTextFieldList extends JTextField {
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				System.out.println("mouse released");
 				requestFocus();
 			}
 		});
@@ -139,6 +141,11 @@ public class PopupTextFieldList extends JTextField {
 		});
 	}
 	
+	public PopupTextFieldList(int columns) {
+		this();
+		this.setColumns(columns);
+	}
+
 	private void setPredefined(String value) {
 		if (value!=null) {
 			lastText = value;
