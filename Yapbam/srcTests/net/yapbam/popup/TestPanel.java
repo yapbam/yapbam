@@ -23,7 +23,6 @@ public class TestPanel extends JPanel {
 	private JLabel jLabel1 = null;
 	private JTextField jTextField = null;
 	private JLabel jLabel2 = null;
-	private MagicComboBox magicComboBox = null;
 
 	/**
 	 * This is the default constructor
@@ -48,7 +47,7 @@ public class TestPanel extends JPanel {
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.gridy = 2;
 		jLabel2 = new JLabel();
-		jLabel2.setText("Libellé bis");
+		jLabel2.setText("Libellï¿½ bis");
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.gridy = 1;
@@ -68,7 +67,7 @@ public class TestPanel extends JPanel {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		jLabel = new JLabel();
-		jLabel.setText("Libellé :");
+		jLabel.setText("Libellï¿½ :");
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(jLabel, gridBagConstraints);
@@ -76,7 +75,6 @@ public class TestPanel extends JPanel {
 		this.add(jLabel1, gridBagConstraints2);
 		this.add(getJTextField(), gridBagConstraints3);
 		this.add(jLabel2, gridBagConstraints11);
-		this.add(getMagicComboBox(), gridBagConstraints21);
 		getField1().addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -116,20 +114,5 @@ public class TestPanel extends JPanel {
 		}
 		String[] array = set.toArray(new String[set.size()]);
 		field1.setPredefined(array);
-		magicComboBox.setModel(new DefaultComboBoxModel(array));
 	}
-
-	/**
-	 * This method initializes magicComboBox	
-	 * 	
-	 * @return net.yapbam.popup.MagicComboBox	
-	 */
-	private MagicComboBox getMagicComboBox() {
-		if (magicComboBox == null) {
-			magicComboBox = new MagicComboBox();
-			magicComboBox.setEditable(true);
-		}
-		return magicComboBox;
-	}
-
 }
