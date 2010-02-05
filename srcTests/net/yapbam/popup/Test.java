@@ -12,6 +12,9 @@ import net.yapbam.gui.widget.PopupTextFieldList;
 
 public class Test {
 
+//	private static final String DATA_FILE = "C:/Users/Jean-Marc/Documents/Comptes.xml";
+	private static final String DATA_FILE = "//home/jma/Comptes.xml";
+
 	/**
 	 * @param args
 	 */
@@ -21,8 +24,8 @@ public class Test {
         JPanel pane = new JPanel();
         f.add(pane);
         pane.add(new JLabel("Question : "));
-        String[] array = new String[] {"Carrefour", "Plein voiture", "Plein moto", "Carrefour Market", "Magazines", "Réparation", "Charges", "Impôts locaux",
-        		"Impots fonciers", "Impôt sur le revenu", "Cadeau Isa", "Inscription vacances CE", "Cinéma", "Barrete mémoire Maman"/**/};
+        String[] array = new String[] {"Carrefour", "Plein voiture", "Plein moto", "Carrefour Market", "Magazines", "Rï¿½paration", "Charges", "Impï¿½ts locaux",
+        		"Impots fonciers", "Impï¿½t sur le revenu", "Cadeau Isa", "Inscription vacances CE", "Cinï¿½ma", "Barrete mï¿½moire Maman"/**/};
         final PopupTextFieldList field = new PopupTextFieldList();
         field.setPredefined(array);
         field.setColumns(10);
@@ -30,16 +33,17 @@ public class Test {
         f.setSize(400,200);
         f.setLocation(200,200);
         f.setVisible(true);
+/*        
         GlobalData data = new GlobalData();
         try {
         	long start = System.currentTimeMillis();
-			data.read(new File("C:/Users/Jean-Marc/Documents/Comptes.xml"));
-			System.out.println ("Lecture des "+data.getTransactionsNumber()+" opérations en "+(System.currentTimeMillis()-start)+"ms");
+			data.read(new File(DATA_FILE));
+			System.out.println ("Lecture des "+data.getTransactionsNumber()+" opï¿½rations en "+(System.currentTimeMillis()-start)+"ms");
 	        TestDialog dialog = new TestDialog(f, "Dialogue", data);
 			dialog.setVisible(true);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 }

@@ -44,7 +44,7 @@ public class PopupTextFieldList extends JTextField {
 		addFocusListener(new FocusListener() { 
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (popup.isVisible() && !e.isTemporary()) {
+				if (popup.isVisible() && !e.isTemporary() && (!e.getOppositeComponent().equals(list))) {
 					popup.setVisible(false);
 					e.getOppositeComponent().requestFocus();
 				}
@@ -57,7 +57,6 @@ public class PopupTextFieldList extends JTextField {
 		list.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("mouse clicked");
 				if (e.getButton()==MouseEvent.BUTTON1) {
 					setPredefined((String) list.getSelectedValue());
 					popup.setVisible(false);
@@ -65,7 +64,6 @@ public class PopupTextFieldList extends JTextField {
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				System.out.println("mouse released");
 				requestFocus();
 			}
 		});
@@ -99,7 +97,6 @@ public class PopupTextFieldList extends JTextField {
 				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) { // Enter key pressed
 					if (popup.isVisible()) {
 						if (list.getSelectedIndex()>=0) {
-							System.out.println ("called after VK_ENTER");
 							setPredefined((String) list.getSelectedValue());
 						}
 						popup.setVisible(false);
@@ -134,7 +131,6 @@ public class PopupTextFieldList extends JTextField {
 						list.setSelectedIndex(index);
 					}
 					lastText = text;
-					System.out.println ("called after keyReleased");
 					setPredefined((String)null);
 				}
 			}
