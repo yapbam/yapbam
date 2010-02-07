@@ -98,7 +98,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	private ModeListPanel getModeListPanel() {
 		if (modeListPanel == null) {
 			modeListPanel = new AdministrationModeListPanel(data);
-			modeListPanel.setBorder(BorderFactory.createTitledBorder(null, "Modes de paiement", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			modeListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("AccountDialog.modes.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 		}
 		return modeListPanel;
 	}
