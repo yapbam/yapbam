@@ -7,6 +7,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import javax.swing.*;
 
@@ -159,5 +162,60 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		if (this.date.getDate()==null) return LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
 		if (this.defDate.getDate()==null) return LocalizationData.get("TransactionDialog.bad.valueDate"); //$NON-NLS-1$
 		return null;
+	}
+	
+	protected void setPredefinedDescriptions() {
+		HashSet<String> set = new HashSet<String>();
+		for (int i=0;i<this.data.getTransactionsNumber();i++) {
+			set.add(this.data.getTransaction(i).getDescription());
+		}
+		String[] array = set.toArray(new String[set.size()]);
+		description.setPredefined(array);
+	}
+	
+	protected void predefinedDescriptionSelected(String description) {
+		int millisParDay = 60000*24;
+		long now = new Date().getTime();
+		HashMap<Mode, Double> modes = new HashMap<Mode, Double>();
+		HashMap<Category, Double> categories = new HashMap<Category, Double>();
+		for (int i = 0; i < data.getTransactionsNumber(); i++) {
+			Transaction transaction = data.getTransaction(i);
+			if (transaction.getDescription().equalsIgnoreCase(description)) {
+				Category category = transaction.getCategory();
+				// In order to minimize the impact of very old transactions, we will use a weight function between 0 (for very, very old ones) and 1 for recent one.
+				// Probably this function could be improved ...
+				long time = Math.abs(transaction.getDate().getTime() - now) / millisParDay;
+				double transactionWeight = 2/Math.sqrt(time+4);
+				Double weight = categories.get(category); 
+				categories.put(category, transactionWeight+(weight==null?0:weight));
+				if (transaction.getAccount()==data.getAccount(selectedAccount)) {
+					// As mode are attached to accounts, it would be unsafe to try to deduce modes on accounts different from the current one.
+					Mode mode = transaction.getMode();
+					weight = modes.get(mode); 
+					modes.put(mode, transactionWeight+(weight==null?0:weight));
+				}
+			}
+		}
+		// Search for the mode and category with the highest weight.
+		Category category = null;
+		double max = 0;
+		for (Iterator<Category> iterator = categories.keySet().iterator(); iterator.hasNext();) {
+			Category next = iterator.next();
+			if (categories.get(next)>max) {
+				category = next;
+				max = categories.get(next);
+			}
+		}
+		this.categories.setCategory(category);
+		Mode mode = null;
+		max = 0;
+		for (Iterator<Mode> iterator = modes.keySet().iterator(); iterator.hasNext();) {
+			Mode next = iterator.next();
+			if (modes.get(next)>max) {
+				mode = next;
+				max = modes.get(next);
+			}
+		}
+		if (mode!=null) this.setMode(mode);
 	}
 }

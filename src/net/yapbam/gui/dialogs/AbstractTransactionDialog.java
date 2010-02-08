@@ -13,7 +13,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashSet;
 
 import javax.swing.*;
 
@@ -55,12 +54,16 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		description.setText(transaction.getDescription());
 		subtransactionsPanel.fill(transaction);
 		// Danger, subtransaction.fill throws Property Change events that may alter the amount field content.
-		// So, set up the amountField after the subtransactions list.
+		// So, always set up the amountField after the subtransactions list.
 		amount.setValue(Math.abs(transaction.getAmount()));
 		receipt.setSelected(transaction.getAmount()>0);
 		// Be aware, as its listener change the selectedMode, receipt must always be set before mode.
 		modes.setSelectedIndex(account.findMode(transaction.getMode(), transaction.getAmount()<=0));
 		categories.setCategory(transaction.getCategory());
+	}
+	
+	protected void setMode(Mode mode) {
+		modes.setSelectedIndex(data.getAccount(selectedAccount).findMode(mode, amount.getValue()<=0));
 	}
 
 /**/	private JPanel combine (JComboBox box, JButton button) {
@@ -111,7 +114,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		description.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				predefinedDescriptionSelected((String) evt.getNewValue());
+				if (evt.getNewValue()!=null) predefinedDescriptionSelected((String) evt.getNewValue());
 			}
 		});
         description.addFocusListener(focusListener);
@@ -190,19 +193,9 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		return centerPane;
 	}
 	
-	protected void setPredefinedDescriptions() {
-		HashSet<String> set = new HashSet<String>();
-		for (int i=0;i<this.data.getTransactionsNumber();i++) {
-			set.add(this.data.getTransaction(i).getDescription());
-		}
-		String[] array = set.toArray(new String[set.size()]);
-		description.setPredefined(array);
-	}
+	protected void setPredefinedDescriptions() {}
 	
-	protected void predefinedDescriptionSelected(String description) {
-		//TODO
-		System.out.println ("description set to "+description);
-	}
+	protected void predefinedDescriptionSelected(String description) {}
 
 	protected abstract void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);
 
