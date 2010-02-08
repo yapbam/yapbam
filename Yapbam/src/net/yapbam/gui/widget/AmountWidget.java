@@ -1,5 +1,7 @@
 package net.yapbam.gui.widget;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
@@ -61,6 +63,14 @@ public class AmountWidget extends JTextField {
 			public void keyReleased(KeyEvent e) {
 				updateValue();
 			}
+		});
+		this.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (!e.isTemporary()) refreshText(value);
+			}
+			@Override
+			public void focusGained(FocusEvent e) {}
 		});
 	}
 	
