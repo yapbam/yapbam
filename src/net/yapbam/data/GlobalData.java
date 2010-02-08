@@ -76,6 +76,8 @@ public class GlobalData extends DefaultListenable {
 	public void save(File file) throws IOException {
 		if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed");
 		// Proceed safely, it means not to erase the old version until the new version is written
+		// Everything here is pretty ugly.
+		//TODO Implement this stuff using the transactional File access in JCommon
 		File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file;
 		output(writed);
 		if (!file.equals(writed)) {
@@ -85,7 +87,18 @@ public class GlobalData extends DefaultListenable {
 				writed.delete();
 				throw new IOException("Unable to delete old copy of "+file);
 			}
-			writed.renameTo(file);
+			boolean result = writed.renameTo(file);
+			if (result==false) {
+				// renameTo may fail if tmpFile and file are not on the same file system.
+				// We then copy the tmp file, it's really ugly ... but I don't know how to do that
+				FileReader in = new FileReader(writed);
+				FileWriter out = new FileWriter(file);
+				int c;
+				while ((c = in.read()) != -1) out.write(c);
+				in.close();
+				out.close();
+				writed.delete(); // Deletes the tmp file
+			}
 		}
 		this.somethingChanged = false;
 		File old = this.path;
