@@ -38,6 +38,7 @@ public class PopupTextFieldList extends JTextField {
 		popup = new JPopupMenu();
 		list = new AutoScrollJList(new PopupListModel());
 		popup.add(new JScrollPane(list));
+		popup.setFocusable(false);
 
 		// If the component looses the focus and the popup is shown, we have to hide the popup
 		// The following FocusListener will do that
@@ -74,11 +75,8 @@ public class PopupTextFieldList extends JTextField {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_DOWN) { // down arrow key was pressed
-					if (!popup.isVisible() && (list.getModel().getSize()!=0)) {
-						Dimension size = popup.getPreferredSize();
-						if (getWidth()>size.width) popup.setPreferredSize(new Dimension(getWidth(), size.height));
-						popup.show(PopupTextFieldList.this, 0, getHeight());
-						requestFocus(false);
+					if (!popup.isVisible()) {
+						showPopup();
 					} else {
 						int index = list.getSelectedIndex();
 						if (index < list.getModel().getSize()) {
@@ -132,6 +130,7 @@ public class PopupTextFieldList extends JTextField {
 					}
 					lastText = text;
 					setPredefined((String)null);
+					showPopup();
 				}
 			}
 		});
@@ -159,6 +158,15 @@ public class PopupTextFieldList extends JTextField {
 	 */
 	public void setPredefined(String[] array) {
 		((PopupListModel)this.list.getModel()).setValues(array);
+	}
+
+	private void showPopup() {
+		if (list.getModel().getSize()!=0) {
+			Dimension size = popup.getPreferredSize();
+			if (getWidth()>size.width) popup.setPreferredSize(new Dimension(getWidth(), size.height));
+			popup.show(PopupTextFieldList.this, 0, getHeight());
+			requestFocus(false);
+		}
 	}
 
 	private final class PopupListModel extends AbstractListModel {
