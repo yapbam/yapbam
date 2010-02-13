@@ -34,7 +34,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	private JComboBox accounts;
 	protected PopupTextFieldList description;
 	protected AmountWidget amount;
-	protected JCheckBox receipt;
+	private JCheckBox receipt;
 	private int selectedMode;
 	private CoolJComboBox modes;
 	protected CategoryPanel categories;
@@ -63,7 +63,25 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	}
 	
 	protected void setMode(Mode mode) {
-		modes.setSelectedIndex(data.getAccount(selectedAccount).findMode(mode, amount.getValue()<=0));
+		Account account = data.getAccount(selectedAccount);
+		int index = account.findMode(mode, getAmount()<=0);
+		if (index>=0) modes.setSelectedIndex(index); // If the mode isn't available for this kind of transaction, do nothing.
+	}
+	
+	/** Gets the currently selected amount.
+	 * @return a double, positive if the transaction is a receipt, negative if not.
+	 */
+	protected double getAmount() {
+		double amount = Math.abs(((Number)this.amount.getValue()).doubleValue());
+		if (isExpense()) amount = -amount;
+		return amount;
+	}
+	
+	/** Returns whether the currently edited transaction is an expense. 
+	 * @return true for an expense, false for a receipt
+	 */
+	protected boolean isExpense() {
+		return !this.receipt.isSelected();
 	}
 
 /**/	private JPanel combine (JComboBox box, JButton button) {
@@ -178,7 +196,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if ((amount.getValue()!=null) && subtransactionsPanel.isAddToTransactionSelected()) {
 					double diff = (Double)evt.getNewValue()-(Double)evt.getOldValue();
-					if (!receipt.isSelected()) diff = -diff;
+					if (isExpense()) diff = -diff;
 					double newValue = amount.getValue()+diff;
 					if (newValue<0) {
 						newValue = -newValue;
@@ -248,14 +266,13 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		Account ac = data.getAccount(selectedAccount);
 		Mode mode = ModeDialog.open(data, ac, this);
 		if (mode==null) return null;
-		boolean expense = !receipt.isSelected();
-		DateStepper vdc = expense ? mode.getExpenseVdc() : mode.getReceiptVdc();
+		DateStepper vdc = isExpense() ? mode.getExpenseVdc() : mode.getReceiptVdc();
 		return (vdc != null)? mode : null;
 	}
 	
 	protected Mode getCurrentMode() {
 		Account account = AbstractTransactionDialog.this.data.getAccount(selectedAccount);
-		return account.getMode(selectedMode, !receipt.isSelected());
+		return account.getMode(selectedMode, isExpense());
 	}
 	
 	class AccountsListener implements ActionListener {
@@ -265,7 +282,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 				if (index!=selectedAccount) {
 					selectedAccount = index;
 					if (DEBUG) System.out.println ("Account "+selectedAccount+" is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-					buildModes(!receipt.isSelected());
+					buildModes(isExpense());
 				}
 			} else {
 				Account ac = AccountDialog.open(data, AbstractTransactionDialog.this, null);
