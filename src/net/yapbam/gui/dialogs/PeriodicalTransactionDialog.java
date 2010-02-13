@@ -71,8 +71,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 
 	@Override
 	protected Object buildResult() {
-		double amount = Math.abs(((Number)this.amount.getValue()).doubleValue());
-		if (!this.receipt.isSelected()) amount = -amount;
+		double amount = getAmount();
 		ArrayList<SubTransaction> subTransactions = new ArrayList<SubTransaction>();
 		for (int i = 0; i < subtransactionsPanel.getSubtransactionsCount(); i++) {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));

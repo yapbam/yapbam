@@ -72,8 +72,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 
 	@Override
 	protected Object buildResult() {
-		double amount = Math.abs(((Number)this.amount.getValue()).doubleValue());
-		if (!this.receipt.isSelected()) amount = -amount;
+		double amount = getAmount();
 		String statementId = statement.getText().trim();
 		if (statementId.length()==0) statementId = null;
 		String number = transactionNumber.getText().trim();
@@ -86,7 +85,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				this.data.getAccount(selectedAccount), getCurrentMode(), categories.getCategory(),
 				defDate.getDate(), statementId, subTransactions);
 	}
-	
+
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
 		defDate = new DateWidgetPanel();
@@ -130,7 +129,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getNewValue()!=null) {
 					Mode m = getCurrentMode();
-					DateStepper vdc = receipt.isSelected()?m.getReceiptVdc():m.getExpenseVdc();
+					DateStepper vdc = isExpense()?m.getExpenseVdc():m.getReceiptVdc();
 					defDate.setDate(vdc.getNextStep(date.getDate()));
 				}
 				updateOkButtonEnabled();
@@ -146,11 +145,10 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	}
 
 	protected void optionnalUpdatesOnModeChange() {
-		boolean expense = !receipt.isSelected();
 		Mode mode = getCurrentMode();
 		//TODO transaction number may depend on the new selected mode
 		transactionNumber.setText(""); //$NON-NLS-1$
-		DateStepper vdc = expense?mode.getExpenseVdc():mode.getReceiptVdc();
+		DateStepper vdc = isExpense()?mode.getExpenseVdc():mode.getReceiptVdc();
 		defDate.setDate(vdc.getNextStep(date.getDate()));
 	}
 
