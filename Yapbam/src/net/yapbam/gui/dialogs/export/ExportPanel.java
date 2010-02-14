@@ -4,6 +4,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JCheckBox;
 import java.awt.GridBagConstraints;
+
+import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -85,6 +87,9 @@ public class ExportPanel extends JPanel { //LOCAL
 		this.add(getIncludeInitialBalance(), gridBagConstraints3);
 		this.add(getAll(), gridBagConstraints1);
 		this.add(getFiltered(), gridBagConstraints2);
+		ButtonGroup group = new ButtonGroup();
+		group.add(getAll());
+		group.add(getFiltered());
 	}
 
 	/**
@@ -96,6 +101,7 @@ public class ExportPanel extends JPanel { //LOCAL
 		if (title == null) {
 			title = new JCheckBox();
 			title.setText("Include row headers");
+			title.setSelected(true);
 			title.setToolTipText("Check this box to start the file with a title line");
 		}
 		return title;
@@ -109,6 +115,7 @@ public class ExportPanel extends JPanel { //LOCAL
 	private JRadioButton getAll() {
 		if (all == null) {
 			all = new JRadioButton();
+			all.setSelected(true);
 			all.setText("Export all transactions");
 			all.setToolTipText("Select this option to export all the transactions");
 		}
@@ -120,7 +127,7 @@ public class ExportPanel extends JPanel { //LOCAL
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getFiltered() {
+	JRadioButton getFiltered() {
 		if (filtered == null) {
 			filtered = new JRadioButton();
 			filtered.setText("Export filtered transactions");
@@ -137,6 +144,8 @@ public class ExportPanel extends JPanel { //LOCAL
 	private JTable getJTable() {
 		if (jTable == null) {
 			jTable = new JTable(new ExportTableModel());
+			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			jTable.getTableHeader().setResizingAllowed(false);
 		}
 		return jTable;
 	}
@@ -163,6 +172,7 @@ public class ExportPanel extends JPanel { //LOCAL
 		if (includeInitialBalance == null) {
 			includeInitialBalance = new JCheckBox();
 			includeInitialBalance.setText("Include initial balance");
+			includeInitialBalance.setSelected(true);
 			includeInitialBalance.setToolTipText("Check this box to include fake transactions that will reflect the account initial balance");
 		}
 		return includeInitialBalance;
