@@ -6,6 +6,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public abstract class IconManager {
+	public static final Icon OPEN = null;
 	public static final Icon SAVE = create("images/save.png");
 	public static final Icon SAVE_AS = create("images/saveAs.png");
 	public static final Icon NEW = create("images/new.png");
@@ -28,6 +29,8 @@ public abstract class IconManager {
 	public static final Icon CHECK_TRANSACTION = create("images/check.png");
 	public static final Icon HELP = create("images/help.png");
 	public static final Icon PRINT = create("images/print.png");
+	public static final Icon IMPORT = null;
+	public static final Icon EXPORT = null;
 		
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon create(String path) {

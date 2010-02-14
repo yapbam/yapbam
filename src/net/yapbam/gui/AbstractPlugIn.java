@@ -40,6 +40,8 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public static final int ABOUT_PART = 6;
 	/** The second part of the "?" menu. Menu items inserted there will be placed after the "check for updates" item */
 	public static final int UPDATES_PART = 7;
+	/** The import/export part of the file menu */
+	public static final int IMPORT_EXPORT_PART = 8;
 	
 	/** The filter menu id */
 	public static final int FILTER_MENU = 2;

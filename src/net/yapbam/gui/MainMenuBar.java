@@ -29,6 +29,7 @@ import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
+import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 
 public class MainMenuBar extends JMenuBar implements ActionListener, DataListener {
@@ -38,8 +39,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 
 	private JMenuItem menuItemNew;
     private JMenuItem menuItemOpen;
+	private JMenuItem menuItemImport;
     private JMenuItem menuItemSave;
     private JMenuItem menuItemSaveAs;
+	private JMenuItem menuItemExport;
 	private JMenuItem menuItemPrint;
     private JMenuItem menuItemQuit;
 
@@ -49,6 +52,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 	
 	private JMenu filterMenu;
 	private JMenu transactionMenu;
+
 
 
     MainMenuBar (MainFrame frame) {
@@ -86,6 +90,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
         menu.add(this.menuItemSaveAs);
         insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
+        menu.addSeparator();
+        
+        this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.EXPORT); //$NON-NLS-1$
+        this.menuItemImport.setMnemonic(LocalizationData.getChar("MainMenu.Import.Mnemonic")); //$NON-NLS-1$
+        this.menuItemImport.setToolTipText(LocalizationData.get("MainMenu.Import.ToolTip")); //$NON-NLS-1$
+        this.menuItemImport.addActionListener(this);
+        this.menuItemImport.setEnabled(!frame.getData().isEmpty());
+        menu.add(this.menuItemImport);
+        this.menuItemExport = new JMenuItem(LocalizationData.get("MainMenu.Export"), IconManager.EXPORT); //$NON-NLS-1$
+        this.menuItemExport.setMnemonic(LocalizationData.getChar("MainMenu.Export.Mnemonic")); //$NON-NLS-1$
+        this.menuItemExport.setToolTipText(LocalizationData.get("MainMenu.Export.ToolTip")); //$NON-NLS-1$
+        this.menuItemExport.addActionListener(this);
+        this.menuItemExport.setEnabled(!frame.getData().isEmpty());
+        menu.add(this.menuItemExport);
+        insertPluginMenuItems(menu, AbstractPlugIn.IMPORT_EXPORT_PART);
 
         menu.addSeparator();
         this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.PRINT); //$NON-NLS-1$
@@ -223,6 +242,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 			SaveManager.MANAGER.save(this.frame);
 		} else if (source.equals(this.menuItemSaveAs)) {
 			SaveManager.MANAGER.saveAs(this.frame);
+		} else if (source.equals(this.menuItemImport)) {
+			//TODO
+		} else if (source.equals(this.menuItemExport)) {
+			new ExportDialog(this.frame, "Export ...", this.frame.getFilteredData()).setVisible(true); //LOCAL
 		} else if (source.equals(this.menuItemPrint)) {
 			try {
 				this.frame.getCurrentPlugIn().print();
@@ -241,6 +264,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 
 	public void processEvent(DataEvent event) {
 		GlobalData data = (GlobalData) event.getSource();
+		this.menuItemExport.setEnabled(!data.isEmpty());
 		if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent)) {
 			this.refreshState(data);
 			if (event instanceof EverythingChangedEvent) {
