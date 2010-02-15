@@ -245,7 +245,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		} else if (source.equals(this.menuItemImport)) {
 			//TODO
 		} else if (source.equals(this.menuItemExport)) {
-			new ExportDialog(this.frame, "Export ...", this.frame.getFilteredData()).setVisible(true); //LOCAL
+			new ExportDialog(this.frame, this.frame.getFilteredData()).setVisible(true);
 		} else if (source.equals(this.menuItemPrint)) {
 			try {
 				this.frame.getCurrentPlugIn().print();

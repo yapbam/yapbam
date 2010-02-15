@@ -5,13 +5,14 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class ExportDialog extends AbstractDialog {
 
-	public ExportDialog(Window owner, String title, Object data) {
-		super(owner, title, data);
+	public ExportDialog(Window owner, Object data) {
+		super(owner, LocalizationData.get("ExportDialog.title"), data); //$NON-NLS-1$
 	}
 
 	@Override
