@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs.export;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JCheckBox;
@@ -10,8 +11,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
-public class ExportPanel extends JPanel { //LOCAL
+import net.yapbam.gui.LocalizationData;
+
+public class ExportPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JCheckBox title = null;
@@ -21,6 +27,7 @@ public class ExportPanel extends JPanel { //LOCAL
 	private JScrollPane jScrollPane = null;
 	private JLabel jLabel = null;
 	private JCheckBox includeInitialBalance = null;
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -48,13 +55,14 @@ public class ExportPanel extends JPanel { //LOCAL
 		gridBagConstraints21.gridwidth = 0;
 		gridBagConstraints21.gridy = 0;
 		jLabel = new JLabel();
-		jLabel.setText("Check the columns to output to file. Move the columns to change their order. ");
+		jLabel.setText(LocalizationData.get("ExportDialog.message")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.gridy = 1;
 		gridBagConstraints11.gridwidth = 0;
-		gridBagConstraints11.fill = GridBagConstraints.BOTH;
-		gridBagConstraints11.weighty = 1.0;
+		gridBagConstraints11.anchor = GridBagConstraints.WEST;
+		gridBagConstraints11.fill = GridBagConstraints.NONE;
+		gridBagConstraints11.weighty = 0.0;
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.gridy = 1;
 		gridBagConstraints11.gridwidth = 0;
@@ -100,9 +108,9 @@ public class ExportPanel extends JPanel { //LOCAL
 	private JCheckBox getTitle() {
 		if (title == null) {
 			title = new JCheckBox();
-			title.setText("Include row headers");
+			title.setText(LocalizationData.get("ExportDialog.headerCheckbox")); //$NON-NLS-1$
 			title.setSelected(true);
-			title.setToolTipText("Check this box to start the file with a title line");
+			title.setToolTipText(LocalizationData.get("ExportDialog.headerCheckbox.toolTip")); //$NON-NLS-1$
 		}
 		return title;
 	}
@@ -116,8 +124,8 @@ public class ExportPanel extends JPanel { //LOCAL
 		if (all == null) {
 			all = new JRadioButton();
 			all.setSelected(true);
-			all.setText("Export all transactions");
-			all.setToolTipText("Select this option to export all the transactions");
+			all.setText(LocalizationData.get("ExportDialog.allRadioButton")); //$NON-NLS-1$
+			all.setToolTipText(LocalizationData.get("ExportDialog.allRadioButton.toolTip")); //$NON-NLS-1$
 		}
 		return all;
 	}
@@ -130,8 +138,8 @@ public class ExportPanel extends JPanel { //LOCAL
 	JRadioButton getFiltered() {
 		if (filtered == null) {
 			filtered = new JRadioButton();
-			filtered.setText("Export filtered transactions");
-			filtered.setToolTipText("Select this option to only export filtered transactions");
+			filtered.setText(LocalizationData.get("ExportDialog.filteredRadioButton")); //$NON-NLS-1$
+			filtered.setToolTipText(LocalizationData.get("ExportDialog.filteredRadioButton.toolTip")); //$NON-NLS-1$
 		}
 		return filtered;
 	}
@@ -144,8 +152,19 @@ public class ExportPanel extends JPanel { //LOCAL
 	private JTable getJTable() {
 		if (jTable == null) {
 			jTable = new JTable(new ExportTableModel());
+			// Fit the column width to the size of the column name
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			jTable.getTableHeader().setResizingAllowed(false);
+			TableCellRenderer renderer = jTable.getDefaultRenderer(String.class);
+			TableColumnModel columnModel = jTable.getColumnModel();
+			int margin = 10;
+			for (int i = 0; i < columnModel.getColumnCount(); i++) {
+				TableColumn column = columnModel.getColumn(i);
+				String columnName = jTable.getModel().getColumnName(i);
+				Component component = renderer.getTableCellRendererComponent(jTable, columnName, false, false, -1, i);
+				column.setPreferredWidth(component.getPreferredSize().width+margin);
+			}
+			jTable.getTableHeader().setResizingAllowed(false); // Disallow resizing of columns
+			jTable.setCellSelectionEnabled(false); // Prevents the user to select cells (would have a strange look) 
 		}
 		return jTable;
 	}
@@ -159,6 +178,7 @@ public class ExportPanel extends JPanel { //LOCAL
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
 			jScrollPane.setViewportView(getJTable());
+			jTable.setPreferredScrollableViewportSize(getJTable().getPreferredSize());
 		}
 		return jScrollPane;
 	}
@@ -171,9 +191,9 @@ public class ExportPanel extends JPanel { //LOCAL
 	private JCheckBox getIncludeInitialBalance() {
 		if (includeInitialBalance == null) {
 			includeInitialBalance = new JCheckBox();
-			includeInitialBalance.setText("Include initial balance");
+			includeInitialBalance.setText(LocalizationData.get("ExportDialog.includeInitialBalanceCheckBox")); //$NON-NLS-1$
 			includeInitialBalance.setSelected(true);
-			includeInitialBalance.setToolTipText("Check this box to include fake transactions that will reflect the account initial balance");
+			includeInitialBalance.setToolTipText(LocalizationData.get("ExportDialog.includeInitialBalanceCheckBox.toolTip")); //$NON-NLS-1$
 		}
 		return includeInitialBalance;
 	}
