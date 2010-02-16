@@ -16,6 +16,11 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import net.yapbam.gui.LocalizationData;
+import javax.swing.JFileChooser;
+import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Locale;
 
 public class ExportPanel extends JPanel {
 
@@ -27,7 +32,7 @@ public class ExportPanel extends JPanel {
 	private JScrollPane jScrollPane = null;
 	private JLabel jLabel = null;
 	private JCheckBox includeInitialBalance = null;
-	
+	private JFileChooser jFileChooser = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -42,6 +47,11 @@ public class ExportPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+		gridBagConstraints31.gridx = 0;
+		gridBagConstraints31.gridwidth = 0;
+		gridBagConstraints31.fill = GridBagConstraints.BOTH;
+		gridBagConstraints31.gridy = 5;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.anchor = GridBagConstraints.WEST;
 		gridBagConstraints3.gridy = 3;
@@ -87,7 +97,7 @@ public class ExportPanel extends JPanel {
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.gridy = 2;
-		this.setSize(300, 200);
+		this.setSize(538, 444);
 		this.setLayout(new GridBagLayout());
 		this.add(jLabel, gridBagConstraints21);
 		this.add(getJScrollPane(), gridBagConstraints11);
@@ -95,6 +105,7 @@ public class ExportPanel extends JPanel {
 		this.add(getIncludeInitialBalance(), gridBagConstraints3);
 		this.add(getAll(), gridBagConstraints1);
 		this.add(getFiltered(), gridBagConstraints2);
+		this.add(getJFileChooser(), gridBagConstraints31);
 		ButtonGroup group = new ButtonGroup();
 		group.add(getAll());
 		group.add(getFiltered());
@@ -198,4 +209,27 @@ public class ExportPanel extends JPanel {
 		return includeInitialBalance;
 	}
 
-}
+	/**
+	 * This method initializes jFileChooser	
+	 * 	
+	 * @return javax.swing.JFileChooser	
+	 */
+	private JFileChooser getJFileChooser() {
+		if (jFileChooser == null) {
+			jFileChooser = new JFileChooser();
+			jFileChooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
+			jFileChooser.updateUI();
+//			jFileChooser.setControlButtonsAreShown(false);
+			jFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+			jFileChooser.addPropertyChangeListener(new PropertyChangeListener() {
+				
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					System.out.println (evt); //TODO
+				}
+			});
+		}
+		return jFileChooser;
+	}
+
+}  //  @jve:decl-index=0:visual-constraint="10,10"
