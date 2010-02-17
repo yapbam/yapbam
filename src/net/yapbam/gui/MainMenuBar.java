@@ -30,6 +30,7 @@ import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
+import net.yapbam.gui.dialogs.export.ImportDialog;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 
 public class MainMenuBar extends JMenuBar implements ActionListener, DataListener {
@@ -243,7 +244,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		} else if (source.equals(this.menuItemSaveAs)) {
 			SaveManager.MANAGER.saveAs(this.frame);
 		} else if (source.equals(this.menuItemImport)) {
-			//TODO
+			new ImportDialog(this.frame).setVisible(true);
 		} else if (source.equals(this.menuItemExport)) {
 			new ExportDialog(this.frame, this.frame.getFilteredData()).setVisible(true);
 		} else if (source.equals(this.menuItemPrint)) {

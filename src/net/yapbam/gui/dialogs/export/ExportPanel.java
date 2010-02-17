@@ -17,7 +17,6 @@ import javax.swing.table.TableColumnModel;
 
 import net.yapbam.gui.LocalizationData;
 import javax.swing.JFileChooser;
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
