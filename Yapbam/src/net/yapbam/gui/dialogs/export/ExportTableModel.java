@@ -6,7 +6,7 @@ import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 class ExportTableModel extends AbstractTableModel {
-	private static String[] columns = new String[] {LocalizationData.get("Transaction.account"), LocalizationData.get("Transaction.date"),
+	static String[] columns = new String[] {LocalizationData.get("Transaction.account"), LocalizationData.get("Transaction.date"),
 		LocalizationData.get("Transaction.description"), LocalizationData.get("Transaction.amount"), LocalizationData.get("Transaction.category"),
 		LocalizationData.get("Transaction.mode"), LocalizationData.get("Transaction.number"), LocalizationData.get("Transaction.valueDate"),
 		LocalizationData.get("Transaction.statement")};
