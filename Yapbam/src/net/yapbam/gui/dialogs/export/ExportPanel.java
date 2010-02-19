@@ -24,6 +24,12 @@ import javax.swing.JFileChooser;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.JTextField;
 
 public class ExportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -39,6 +45,10 @@ public class ExportPanel extends JPanel {
 	private JFileChooser jFileChooser = null;
 	
 	private String invalidityCause = null;  //  @jve:decl-index=0:
+	private JRadioButton tabSeparated = null;
+	private JPanel jPanel = null;
+	private JRadioButton custom = null;
+	private JTextField customSeparator = null;
 	
 	public String getInvalidityCause() {
 		return invalidityCause;
@@ -58,6 +68,12 @@ public class ExportPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+		gridBagConstraints22.gridx = 0;
+		gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints22.gridwidth = 0;
+		gridBagConstraints22.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints22.gridy = 4;
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 0;
 		gridBagConstraints31.gridwidth = 0;
@@ -117,6 +133,7 @@ public class ExportPanel extends JPanel {
 		this.add(getAll(), gridBagConstraints1);
 		this.add(getFiltered(), gridBagConstraints2);
 		this.add(getJFileChooser(), gridBagConstraints31);
+		this.add(getJPanel(), gridBagConstraints22);
 		ButtonGroup group = new ButtonGroup();
 		group.add(getAll());
 		group.add(getFiltered());
@@ -264,6 +281,82 @@ public class ExportPanel extends JPanel {
 			});
 		}
 		return jFileChooser;
+	}
+
+	/**
+	 * This method initializes tabSeparated	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getTabSeparated() {
+		if (tabSeparated == null) {
+			tabSeparated = new JRadioButton();
+			tabSeparated.setText(LocalizationData.get("ExportDialog.columnSeparator.defaultSeparator")); //$NON-NLS-1$
+			tabSeparated.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.defaultSeparator.toolTip")); //$NON-NLS-1$
+		}
+		return tabSeparated;
+	}
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel() {
+		if (jPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.fill = GridBagConstraints.VERTICAL;
+			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.weightx = 1.0;
+			gridBagConstraints6.anchor = GridBagConstraints.WEST;
+			gridBagConstraints6.gridx = 1;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 0;
+			gridBagConstraints5.anchor = GridBagConstraints.WEST;
+			gridBagConstraints5.gridy = 1;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.anchor = GridBagConstraints.WEST;
+			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.weightx = 1.0D;
+			gridBagConstraints4.gridwidth = 0;
+			gridBagConstraints4.gridy = 0;
+			jPanel = new JPanel();
+			jPanel.setLayout(new GridBagLayout());
+			jPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("ExportDialog.columnSeparator"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+			jPanel.add(getTabSeparated(), gridBagConstraints4);
+			jPanel.add(getCustom(), gridBagConstraints5);
+			jPanel.add(getCustomSeparator(), gridBagConstraints6);
+		}
+		return jPanel;
+	}
+
+	/**
+	 * This method initializes custom	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getCustom() {
+		if (custom == null) {
+			custom = new JRadioButton();
+			custom.setText(LocalizationData.get("ExportDialog.columnSeparator.customized")); //$NON-NLS-1$
+			custom.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customized.toolTip")); //$NON-NLS-1$
+		}
+		return custom;
+	}
+
+	/**
+	 * This method initializes customSeparator	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCustomSeparator() {
+		if (customSeparator == null) {
+			customSeparator = new JTextField();
+			customSeparator.setColumns(1);
+			customSeparator.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customizedChar.toolTip")); //$NON-NLS-1$
+		}
+		return customSeparator;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
