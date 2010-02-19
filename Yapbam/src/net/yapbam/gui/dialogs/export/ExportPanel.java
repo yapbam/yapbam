@@ -220,6 +220,7 @@ public class ExportPanel extends JPanel {
 			jFileChooser.updateUI();
 //			jFileChooser.setControlButtonsAreShown(false);
 			jFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+			jFileChooser.setVisible(false);
 			jFileChooser.addPropertyChangeListener(new PropertyChangeListener() {
 				
 				@Override
