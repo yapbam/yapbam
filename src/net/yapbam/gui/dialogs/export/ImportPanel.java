@@ -7,10 +7,12 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
@@ -112,25 +114,43 @@ public class ImportPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
+	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
-			jTable = new JTable(new ImportTableModel());
-			//TODO
+	        jTable = new JTable(new ImportTableModel()) {
+	            //Implement table header tool tips.
+	            protected JTableHeader createDefaultTableHeader() {
+	            	System.out.println ("kjklj");
+	                return new JTableHeader(columnModel) {
+	                    public String getToolTipText(MouseEvent e) {
+	                        String tip = null;
+	                        java.awt.Point p = e.getPoint();
+	                        int index = columnModel.getColumnIndexAtX(p.x);
+	                        int realIndex = columnModel.getColumn(index).getModelIndex();
+	                        if (realIndex==1) {
+	                        	tip = LocalizationData.get("ImportDialog.linkedTo.toolTip"); //$NON-NLS-1$
+	                        } else if (realIndex==2) {
+	                        	tip = LocalizationData.get("ImportDialog.importedFields.toolTip"); //$NON-NLS-1$
+	                        }
+	                        return tip;
+	                    }
+	                };
+	            }
+	        };
+
+			//TODO Display file lines instead of these funny titles ;-)
 	        JComboBox comboBox = new JComboBox();
-	        comboBox.addItem("Snowboarding"); //$NON-NLS-1$
-	        comboBox.addItem("Rowing"); //$NON-NLS-1$
-	        comboBox.addItem("Knitting"); //$NON-NLS-1$
-	        comboBox.addItem("Speed reading"); //$NON-NLS-1$
-	        comboBox.addItem("Pool"); //$NON-NLS-1$
+	        comboBox.addItem("Bed"); //$NON-NLS-1$
+	        comboBox.addItem("Snowboard"); //$NON-NLS-1$
+	        comboBox.addItem("Ski"); //$NON-NLS-1$
+	        comboBox.addItem("Bar"); //$NON-NLS-1$
+	        comboBox.addItem("NightClub"); //$NON-NLS-1$
 	        comboBox.addItem("None of the above"); //$NON-NLS-1$
 	        
 	        TableColumn importedColumns = jTable.getColumnModel().getColumn(2);
 			importedColumns.setCellEditor(new DefaultCellEditor(comboBox));
 
-	        //Set up tool tips for the sport cells.
-	        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-	        renderer.setToolTipText(LocalizationData.get("ImportDialog.importedFields.toolTip")); //$NON-NLS-1$
-	        importedColumns.setCellRenderer(renderer);
+	        jTable.setFillsViewportHeight(true);
 		}
 		return jTable;
 	}

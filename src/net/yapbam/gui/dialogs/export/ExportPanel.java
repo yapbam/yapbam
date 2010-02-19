@@ -11,19 +11,24 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.NullUtils;
+
 import javax.swing.JFileChooser;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
 
 public class ExportPanel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
+	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
+	
 	private JCheckBox title = null;
 	private JRadioButton all = null;
 	private JRadioButton filtered = null;
@@ -32,6 +37,13 @@ public class ExportPanel extends JPanel {
 	private JLabel jLabel = null;
 	private JCheckBox includeInitialBalance = null;
 	private JFileChooser jFileChooser = null;
+	
+	private String invalidityCause = null;  //  @jve:decl-index=0:
+	
+	public String getInvalidityCause() {
+		return invalidityCause;
+	}
+
 	/**
 	 * This is the default constructor
 	 */
@@ -161,7 +173,8 @@ public class ExportPanel extends JPanel {
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
-			jTable = new JTable(new ExportTableModel());
+			ExportTableModel tableModel = new ExportTableModel();
+			jTable = new JTable(tableModel);
 			// Fit the column width to the size of the column name
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			TableCellRenderer renderer = jTable.getDefaultRenderer(String.class);
@@ -174,9 +187,30 @@ public class ExportPanel extends JPanel {
 				column.setPreferredWidth(component.getPreferredSize().width+margin);
 			}
 			jTable.getTableHeader().setResizingAllowed(false); // Disallow resizing of columns
-			jTable.setCellSelectionEnabled(false); // Prevents the user to select cells (would have a strange look) 
+			jTable.setCellSelectionEnabled(false); // Prevents the user to select cells (would have a strange look)
+			tableModel.addTableModelListener(new TableModelListener() {
+				@Override
+				public void tableChanged(TableModelEvent e) {
+					updateIsValid();
+				}
+			});
 		}
 		return jTable;
+	}
+
+	private void updateIsValid() {
+		String old = invalidityCause;
+		boolean oneSelected = false;
+		for (int i = 0; i < jTable.getColumnCount(); i++) {
+			if ((Boolean) jTable.getModel().getValueAt(0, i)) {
+				oneSelected = true;
+				break;
+			}
+		}
+		invalidityCause = oneSelected?null:LocalizationData.get("ExportDialog.nothingToExport"); //$NON-NLS-1$
+		if (!NullUtils.areEquals(invalidityCause, old)) {
+			this.firePropertyChange(INVALIDITY_CAUSE, old, invalidityCause);
+		}
 	}
 
 	/**
