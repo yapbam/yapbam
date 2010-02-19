@@ -54,5 +54,6 @@ class ExportTableModel extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		allowed[columnIndex] = (Boolean)aValue;
+		this.fireTableCellUpdated(rowIndex, columnIndex);
 	}
 }
