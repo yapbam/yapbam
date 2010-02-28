@@ -358,7 +358,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private JRadioButton getFrenchButton() {
 		if (frenchButton == null) {
 			frenchButton = new JRadioButton();
-			frenchButton.setText(Locale.FRENCH.getDisplayLanguage(Preferences.INSTANCE.getLocale()));
+			frenchButton.setText(Locale.FRENCH.getDisplayLanguage(Locale.FRENCH));
 			frenchButton.addItemListener(basicItemListener);
 		}
 		return frenchButton;
@@ -372,7 +372,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private JRadioButton getEnglishButton() {
 		if (englishButton == null) {
 			englishButton = new JRadioButton();
-			englishButton.setText(Locale.ENGLISH.getDisplayLanguage(Preferences.INSTANCE.getLocale()));
+			englishButton.setText(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH));
 			englishButton.addItemListener(basicItemListener);
 		}
 		return englishButton;
@@ -488,7 +488,8 @@ public class LocalizationPanel extends PreferencePanel {
 	private JRadioButton getPortugueseButton() {
 		if (portugueseButton == null) {
 			portugueseButton = new JRadioButton();
-			portugueseButton.setText(new Locale("pt").getDisplayLanguage(Preferences.INSTANCE.getLocale()));
+			Locale portuguese = new Locale("pt");
+			portugueseButton.setText(portuguese.getDisplayLanguage(portuguese));
 			portugueseButton.addItemListener(basicItemListener);
 		}
 		return portugueseButton;

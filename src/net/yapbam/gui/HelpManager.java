@@ -26,6 +26,7 @@ public class HelpManager {
 	};
 	/** Help about regular expressions. */
 	public static final Content REGULAR_EXPRESSIONS = new Content("regular_expressions"); //$NON-NLS-1$
+	public static final Content IMPORT = new Content("import"); //$NON-NLS-1$
 	
 	private static final String BUNDLE_NAME = "net.yapbam.gui.helpUrls"; //$NON-NLS-1$
 	private static ResourceBundle RESOURCE_BUNDLE;

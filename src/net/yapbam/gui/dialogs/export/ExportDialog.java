@@ -21,8 +21,7 @@ public class ExportDialog extends AbstractDialog {
 
 	@Override
 	protected Object buildResult() {
-		// TODO Auto-generated method stub
-		return null;
+		return exportPanel.getExporter();
 	}
 
 	@Override
@@ -45,8 +44,11 @@ public class ExportDialog extends AbstractDialog {
 	}
 	
 	public void setVisible(boolean visible) {
-		this.pack(); //TODO Sure it's useful ?
+		this.pack();
 		super.setVisible(visible);
 	}
 
+	public Exporter getExporter() {
+		return (Exporter) this.getResult();
+	}
 }

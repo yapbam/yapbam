@@ -1,40 +1,70 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.awt.Window;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
 
 import javax.swing.JPanel;
 
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class ImportDialog extends AbstractDialog {
+	private ImportPanel importPanel;
 
-	public ImportDialog(Window owner) {
-		super(owner, LocalizationData.get("ImportDialog.title"), null); //$NON-NLS-1$
+	private static final class Container {
+		File file;
+		GlobalData data;
+		
+		public Container(File file, GlobalData data) {
+			super();
+			this.file = file;
+			this.data = data;
+		}
+	}
+	
+	public ImportDialog(Window owner, GlobalData data, File file) {
+		super(owner, LocalizationData.get("ImportDialog.title"), new Container(file, data)); //$NON-NLS-1$
 	}
 
 	@Override
 	protected Object buildResult() {
-		// TODO Auto-generated method stub
-		return null;
+		return importPanel.getImporter();
 	}
 
 	@Override
 	protected JPanel createCenterPane(Object data) {
-		ImportPanel importPanel = new ImportPanel();
+		importPanel = new ImportPanel();
+		importPanel.setData(((Container)data).data);
+		importPanel.setFile(((Container)data).file);
+		importPanel.addPropertyChangeListener(ImportPanel.INVALIDITY_CAUSE, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		});
 		return importPanel;
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
-		// TODO Auto-generated method stub
-		return null;
+		return importPanel.getInvalidityCause();
 	}
 	
+	
 	public void setVisible(boolean visible) {
-		this.pack(); //TODO Sure it's useful ?
+		this.pack();
 		super.setVisible(visible);
 	}
 
+	public Importer getImporter() {
+		return (Importer) getResult();
+	}
+
+	public boolean getAddToCurrentData() {
+		return importPanel.getAddToCurrentData();
+	}
 }

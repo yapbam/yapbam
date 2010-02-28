@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs.export;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 
 import javax.swing.DefaultCellEditor;
@@ -7,21 +8,40 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
+import net.yapbam.data.Account;
+import net.yapbam.data.GlobalData;
+import net.yapbam.gui.HelpManager;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.NullUtils;
+
 import javax.swing.JLabel;
+import java.awt.Insets;
 
 public class ImportPanel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
+	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
+
 	private JScrollPane jScrollPane = null;
 	private JTable jTable = null;
 	private JCheckBox ignoreFirstLine = null;
@@ -31,9 +51,18 @@ public class ImportPanel extends JPanel {
 	private JButton last = null;
 	private JCheckBox addToCurrentFile = null;
 	private JComboBox accounts = null;
-	private JPanel jPanel1 = null;
+	private JPanel addToAccountPanel = null;
 	private JLabel jLabel1 = null;
-
+	private SeparatorPanel separatorPanel = null;
+	private JPanel jPanel2 = null;
+	GlobalData data = null;  //  @jve:decl-index=0:
+	private File file;  //  @jve:decl-index=0:
+	private int numberOfLines;
+	private int currentLine;
+	private JComboBox fieldsCombo;
+	private String invalidityCause;  //  @jve:decl-index=0:
+	private JLabel jLabel = null;
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -41,59 +70,59 @@ public class ImportPanel extends JPanel {
 		super();
 		initialize();
 	}
-
+	
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void initialize() {
+		jLabel = new JLabel();
+		jLabel.setText("Aide");
+		jLabel.setIcon(IconManager.HELP);
+		jLabel.setToolTipText("Cliquez ici pour obtenir de l'aide sur l'importation");
+		jLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				HelpManager.show(ImportPanel.this, HelpManager.IMPORT);
+				super.mouseClicked(e);
+			}
+		});
+		GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+		gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints22.gridx = 0;
+		gridBagConstraints22.gridy = 0;
+		gridBagConstraints22.weightx = 1.0D;
+		gridBagConstraints22.gridwidth = 0;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 4;
+		gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints11.gridy = 2;
 		GridBagConstraints gridBagConstraints91 = new GridBagConstraints();
 		gridBagConstraints91.anchor = GridBagConstraints.WEST;
-		gridBagConstraints91.gridy = 4;
+		gridBagConstraints91.gridy = 7;
 		gridBagConstraints91.gridwidth = 0;
 		gridBagConstraints91.gridx = 0;
 		GridBagConstraints gridBagConstraints81 = new GridBagConstraints();
 		gridBagConstraints81.gridx = 0;
 		gridBagConstraints81.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints81.gridwidth = 0;
-		gridBagConstraints81.gridy = 5;
-		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-		gridBagConstraints5.gridx = 4;
-		gridBagConstraints5.fill = GridBagConstraints.NONE;
-		gridBagConstraints5.anchor = GridBagConstraints.WEST;
-		gridBagConstraints5.gridy = 1;
-		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-		gridBagConstraints4.gridx = 3;
-		gridBagConstraints4.gridy = 1;
-		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.gridx = 1;
-		gridBagConstraints3.gridy = 1;
-		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.gridx = 0;
-		gridBagConstraints2.gridy = 1;
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.anchor = GridBagConstraints.WEST;
-		gridBagConstraints1.gridwidth = 0;
-		gridBagConstraints1.gridy = 2;
+		gridBagConstraints81.gridy = 8;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridy = 1;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.gridwidth = 0;
 		gridBagConstraints.gridx = 0;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
+		this.add(getSeparatorPanel(), gridBagConstraints22);
 		this.add(getJScrollPane(), gridBagConstraints);
-		this.add(getIgnoreFirstLine(), gridBagConstraints1);
-		this.add(getFirst(), gridBagConstraints2);
-		this.add(getPrevious(), gridBagConstraints3);
-		this.add(getNext(), gridBagConstraints4);
-		this.add(getLast(), gridBagConstraints5);
 		this.add(getAddToCurrentFile(), gridBagConstraints91);
-		this.add(getJPanel1(), gridBagConstraints81);
+		this.add(getAddToAccountPanel(), gridBagConstraints81);
+		this.add(getJPanel2(), gridBagConstraints11);
+		updateAddToAccountPanel();
 	}
 
 	/**
@@ -117,10 +146,10 @@ public class ImportPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
-	        jTable = new JTable(new ImportTableModel()) {
+	        ImportTableModel model = new ImportTableModel();
+			jTable = new JTable(model) {
 	            //Implement table header tool tips.
 	            protected JTableHeader createDefaultTableHeader() {
-	            	System.out.println ("kjklj");
 	                return new JTableHeader(columnModel) {
 	                    public String getToolTipText(MouseEvent e) {
 	                        String tip = null;
@@ -137,20 +166,23 @@ public class ImportPanel extends JPanel {
 	                };
 	            }
 	        };
-
-			//TODO Display file lines instead of these funny titles ;-)
-	        JComboBox comboBox = new JComboBox();
-	        comboBox.addItem("Bed"); //$NON-NLS-1$
-	        comboBox.addItem("Snowboard"); //$NON-NLS-1$
-	        comboBox.addItem("Ski"); //$NON-NLS-1$
-	        comboBox.addItem("Bar"); //$NON-NLS-1$
-	        comboBox.addItem("NightClub"); //$NON-NLS-1$
-	        comboBox.addItem("None of the above"); //$NON-NLS-1$
 	        
+			jTable.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
+			initColumnSizes(jTable);
+			jTable.setPreferredScrollableViewportSize(getJTable().getPreferredSize());
+			
+	        fieldsCombo = new JComboBox();	        
 	        TableColumn importedColumns = jTable.getColumnModel().getColumn(2);
-			importedColumns.setCellEditor(new DefaultCellEditor(comboBox));
+			importedColumns.setCellEditor(new DefaultCellEditor(fieldsCombo));
 
 	        jTable.setFillsViewportHeight(true);
+	        model.addTableModelListener(new TableModelListener() {
+				@Override
+				public void tableChanged(TableModelEvent e) {
+					updateAddToAccountPanel();
+					updateIsValid();
+				}
+			});
 		}
 		return jTable;
 	}
@@ -164,6 +196,7 @@ public class ImportPanel extends JPanel {
 		if (ignoreFirstLine == null) {
 			ignoreFirstLine = new JCheckBox();
 			ignoreFirstLine.setText(LocalizationData.get("ImportDialog.ignoreFirstLine")); //$NON-NLS-1$
+			ignoreFirstLine.setSelected(true);
 			ignoreFirstLine.setToolTipText(LocalizationData.get("ImportDialog.ignoreFirstLine.toolTip")); //$NON-NLS-1$
 		}
 		return ignoreFirstLine;
@@ -176,9 +209,14 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getFirst() {
 		if (first == null) {
-			first = new JButton();
+			first = new JButton(IconManager.TOP);
 			first.setToolTipText(LocalizationData.get("ImportDialog.first.toolTip")); //$NON-NLS-1$
-			first.setText("<<"); //$NON-NLS-1$
+			first.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					setLine(0);
+				}
+			});
+			first.setFocusable(false);
 		}
 		return first;
 	}
@@ -190,9 +228,14 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getPrevious() {
 		if (previous == null) {
-			previous = new JButton();
+			previous = new JButton(IconManager.UP);
 			previous.setToolTipText(LocalizationData.get("ImportDialog.previous.toolTip")); //$NON-NLS-1$
-			previous.setText("<"); //$NON-NLS-1$
+			previous.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					setLine(currentLine-1);
+				}
+			});
+			previous.setFocusable(false);
 		}
 		return previous;
 	}
@@ -204,9 +247,14 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getNext() {
 		if (next == null) {
-			next = new JButton();
+			next = new JButton(IconManager.DOWN);
 			next.setToolTipText(LocalizationData.get("ImportDialog.next.toolTip")); //$NON-NLS-1$
-			next.setText(">"); //$NON-NLS-1$
+			next.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					setLine(currentLine+1);
+				}
+			});
+			next.setFocusable(false);
 		}
 		return next;
 	}
@@ -218,9 +266,14 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getLast() {
 		if (last == null) {
-			last = new JButton();
+			last = new JButton(IconManager.BOTTOM);
 			last.setToolTipText(LocalizationData.get("ImportDialog.last.toolTip")); //$NON-NLS-1$
-			last.setText(">>"); //$NON-NLS-1$
+			last.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					setLine(numberOfLines-1);
+				}
+			});
+			last.setFocusable(false);
 		}
 		return last;
 	}
@@ -235,8 +288,24 @@ public class ImportPanel extends JPanel {
 			addToCurrentFile = new JCheckBox();
 			addToCurrentFile.setText(LocalizationData.get("ImportDialog.addToCurrentFile")); //$NON-NLS-1$
 			addToCurrentFile.setToolTipText(LocalizationData.get("ImportDialog.addToCurrentFile.toolTip")); //$NON-NLS-1$
+			addToCurrentFile.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					updateAddToAccountPanel();
+				}
+			});
 		}
 		return addToCurrentFile;
+	}
+
+	private void updateAddToAccountPanel() {
+		boolean ok = (addToCurrentFile.isSelected() && !(Boolean)getJTable().getValueAt(0, 1)) && !data.isEmpty();
+		jLabel1.setEnabled(ok);
+		accounts.setEnabled(ok);
+		if (!ok) {
+			accounts.setSelectedIndex(-1);
+		} else {
+			if (accounts.getSelectedIndex()<1) accounts.setSelectedIndex(0);
+		}
 	}
 
 	/**
@@ -253,12 +322,12 @@ public class ImportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jPanel1	
+	 * This method initializes addToAccountPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
+	private JPanel getAddToAccountPanel() {
+		if (addToAccountPanel == null) {
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.gridy = 0;
@@ -272,12 +341,221 @@ public class ImportPanel extends JPanel {
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.gridy = 0;
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.add(getAccounts(), gridBagConstraints9);
-			jPanel1.add(jLabel1, gridBagConstraints6);
+			addToAccountPanel = new JPanel();
+			addToAccountPanel.setLayout(new GridBagLayout());
+			addToAccountPanel.add(getAccounts(), gridBagConstraints9);
+			addToAccountPanel.add(jLabel1, gridBagConstraints6);
 		}
-		return jPanel1;
+		return addToAccountPanel;
 	}
 
+    /*
+     * This method picks good column sizes.
+     * If all column heads are wider than the column's cells'
+     * contents, then you can just use column.sizeWidthToFit().
+     */
+    private static void initColumnSizes(JTable table) {
+        TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
+
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            TableColumn column = table.getColumnModel().getColumn(i);
+
+            Component comp = headerRenderer.getTableCellRendererComponent(
+                                 null, column.getHeaderValue(),
+                                 false, false, 0, 0);
+            int headerWidth = comp.getPreferredSize().width;
+
+            comp = table.getDefaultRenderer(table.getModel().getColumnClass(i)).
+                             getTableCellRendererComponent(
+                                 table, table.getModel().getValueAt(0, i),
+                                 false, false, 0, i);
+            int cellWidth = comp.getPreferredSize().width;
+
+            column.setPreferredWidth(Math.max(headerWidth, cellWidth));
+        }
+    }
+
+	/**
+	 * This method initializes separatorPanel	
+	 * 	
+	 * @return net.yapbam.gui.dialogs.export.SeparatorPanel	
+	 */
+	private SeparatorPanel getSeparatorPanel() {
+		if (separatorPanel == null) {
+			separatorPanel = new SeparatorPanel();
+			separatorPanel.addPropertyChangeListener(SeparatorPanel.SEPARATOR_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					setLine(currentLine);
+				}
+			});
+		}
+		return separatorPanel;
+	}
+
+	/**
+	 * This method initializes jPanel2	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel2() {
+		if (jPanel2 == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.anchor = GridBagConstraints.WEST;
+			gridBagConstraints7.insets = new Insets(0, 5, 0, 0);
+			gridBagConstraints7.gridy = 0;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.anchor = GridBagConstraints.WEST;
+			gridBagConstraints1.gridwidth = 1;
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 1;
+			gridBagConstraints1.weightx = 0.0D;
+			gridBagConstraints1.fill = GridBagConstraints.NONE;
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.fill = GridBagConstraints.NONE;
+			gridBagConstraints2.weightx = 1.0D;
+			gridBagConstraints2.anchor = GridBagConstraints.EAST;
+			gridBagConstraints2.gridy = 0;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 2;
+			gridBagConstraints3.gridy = 0;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 3;
+			gridBagConstraints4.gridy = 0;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.anchor = GridBagConstraints.EAST;
+			gridBagConstraints5.gridx = 4;
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.fill = GridBagConstraints.NONE;
+			jPanel2 = new JPanel();
+			jPanel2.setLayout(new GridBagLayout());
+			jPanel2.add(getLast(), gridBagConstraints5);
+			jPanel2.add(getNext(), gridBagConstraints4);
+			jPanel2.add(getPrevious(), gridBagConstraints3);
+			jPanel2.add(getFirst(), gridBagConstraints2);
+			jPanel2.add(getIgnoreFirstLine(), gridBagConstraints1);
+			jPanel2.add(jLabel, gridBagConstraints7);
+		}
+		return jPanel2;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+		this.numberOfLines = 0;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			try {
+				for (String line = reader.readLine(); line!=null; line=reader.readLine()) {
+					numberOfLines++;
+				}
+				setLine(0);
+			} catch (IOException e) {
+				doError(e);
+			} finally {
+				try {
+					reader.close();
+				} catch (IOException e) {}
+			}
+		} catch (FileNotFoundException e) {
+			doError(e);
+		}
+	}
+	
+	public void setLine (int i) {
+		if (i>=this.numberOfLines) throw new IllegalArgumentException();
+		this.currentLine = i;
+		boolean first = this.currentLine==0;
+		getFirst().setSelected(first);
+		getFirst().setEnabled(!first);
+		getPrevious().setEnabled(!first);
+		boolean last = this.currentLine==this.numberOfLines-1;
+		getLast().setSelected(last);
+		getLast().setEnabled(!last);
+		getNext().setEnabled(!last);
+		String[] fields = getFields();
+		setFieldsCombo(fields);
+		ImportTableModel model = (ImportTableModel) getJTable().getModel();
+		model.setFields(fields);
+	}
+	
+	private void setFieldsCombo(String[] fields) {
+		fieldsCombo.removeAllItems();
+		for (int i = 0; i < fields.length; i++) {
+			fieldsCombo.addItem(fields[i]);
+		}
+	}
+	
+	private String[] getFields() {
+		String[] result = new String[0];
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			try {
+				for (int i = 0; i < this.currentLine; i++) {
+					reader.readLine();
+				}
+				String line = reader.readLine();
+				result = line.split(new String(new char[]{separatorPanel.getSeparator()}));
+			} catch (IOException e) {
+				doError (e);
+			} finally {
+				try {
+					reader.close();
+				} catch (IOException e) {}
+			}
+		} catch (FileNotFoundException e) {
+			doError(e);
+		}
+		return result;
+	}
+		
+	private void doError(Throwable e) {
+		//TODO show error error dialog and close the dialog (or diable ok if closing is not easy to do)
+	}
+
+	public void setData(GlobalData data) {
+		this.data = data;
+		accounts.removeAllItems();
+		for (int i = 0; i < data.getAccountsNumber(); i++) {
+			accounts.addItem(data.getAccount(i).getName());
+		}
+		addToCurrentFile.setSelected(data.isEmpty());
+		addToCurrentFile.setEnabled(!data.isEmpty());
+		updateAddToAccountPanel();
+	}
+	
+	public Importer getImporter() {
+		boolean addToCurrentData = addToCurrentFile.isSelected();
+		int index = accounts.getSelectedIndex();
+		Account defaultAccount = index>=0?data.getAccount(index):null;
+		return new Importer(file, separatorPanel.getSeparator(), ignoreFirstLine.isSelected(),
+				((ImportTableModel)getJTable().getModel()).getRelations(),
+				addToCurrentData?data:null, defaultAccount);
+	}
+
+	public boolean getAddToCurrentData() {
+		return addToCurrentFile.isSelected();
+	}
+	
+	public String getInvalidityCause() {
+		return invalidityCause;
+	}
+	
+	private void updateIsValid() {
+		String old = invalidityCause;
+		invalidityCause = null;
+		// Date, amout are mandatory
+		int[] relations = ((ImportTableModel)getJTable().getModel()).getRelations();
+		if (relations[ExportTableModel.AMOUNT_INDEX]<0) {
+			invalidityCause = "Ce bouton est désactivé car vous n'avez pas sélectionné de champ contenant le montant des opérations";//LOCAL
+		} else if (relations[ExportTableModel.DATE_INDEX]<0) {
+			invalidityCause = "Ce bouton est désactivé car vous n'avez pas sélectionné de champ contenant la date des opérations";
+		}
+		//TODO What to do if there's no account field and no default account is selected
+		if (!NullUtils.areEquals(invalidityCause, old)) {
+			this.firePropertyChange(INVALIDITY_CAUSE, old, invalidityCause);
+		}
+	}
 }

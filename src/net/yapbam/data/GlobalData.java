@@ -25,6 +25,8 @@ public class GlobalData extends DefaultListenable {
 	private File path;
 	private boolean somethingChanged;
 	private List<Category> categories;
+
+	private boolean eventsPending;
 	private static final Comparator<Transaction> COMPARATOR = new Comparator<Transaction>() {
 		@Override
 		public int compare(Transaction o1, Transaction o2) {
@@ -119,18 +121,47 @@ public class GlobalData extends DefaultListenable {
 	 */	
 	public void read(File file) throws IOException {
 		this.setEventsEnabled(false);
-		InputStream is = new FileInputStream(file);
 		try {
-			Serializer.read(this, is);
+			InputStream is = new FileInputStream(file);
+			try {
+				Serializer.read(this, is);
+			} finally {
+				is.close();
+			}
+			this.path = file;
+			// We do not want the file reading results in a "modified" state for the file,
+			// even if, of course, a lot of things changed on the screen. But, the file
+			// is unmodified.
+			this.somethingChanged = false;
 		} finally {
-			is.close();
+			this.setEventsEnabled(true);
 		}
-		this.path = file;
-		this.somethingChanged = false;
-		this.setEventsEnabled(true);
-		fireEvent(new EverythingChangedEvent(this));
+	}
+
+	@Override
+	/** Sets the events enabled.
+	 * When events are enabled, every modification on the data results in a fired event.
+	 * If you want to perform a lot of modifications on the data, this will results in a large
+	 * amount of events, and a poor performance. Then, you can disable events, do the modifications,
+	 * then enable events. When events are turn on, a EverythingChangedEvent is sent if some modification
+	 * occurs since events were disabled.
+	 * @param enabled true to enable events, false to disable events.
+	 */
+	public void setEventsEnabled(boolean enabled) {
+		if (super.IsEventsEnabled()) eventsPending = false;
+		super.setEventsEnabled(enabled);
+		if ((enabled==true) && (eventsPending)) fireEvent(new EverythingChangedEvent(this));
 	}
 	
+	@Override
+	protected void fireEvent(DataEvent event) {
+		if (IsEventsEnabled()) {
+			super.fireEvent(event);
+		} else {
+			eventsPending = true;
+		}
+	}
+
 	public Account getAccount(String name) {
 		for (int i = 0; i < this.accounts.size(); i++) {
 			Account account = this.accounts.get(i);

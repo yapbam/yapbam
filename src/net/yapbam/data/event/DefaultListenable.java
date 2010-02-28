@@ -30,6 +30,13 @@ public abstract class DefaultListenable {
 	protected void setEventsEnabled(boolean enabled) {
 		this.eventsDisabled = !enabled;
 	}
+	
+	/** Returns whether events are enabled or not.
+	 * @return true if events are enabled.
+	 */
+	protected boolean IsEventsEnabled() {
+		return !this.eventsDisabled;
+	}
     
 	/** Send an event to every listeners.
 	 * @param event The event to send.
