@@ -285,7 +285,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 					if (file!=null) {
 						try {
 							exporter.exportFile(file, frame.getFilteredData());
-							JOptionPane.showMessageDialog(frame, "Export done", LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //LOCAL
+							JOptionPane.showMessageDialog(frame, LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 						} catch (IOException e1) {
 							ErrorManager.INSTANCE.display(frame, e1);
 						}

@@ -78,9 +78,9 @@ public class ImportPanel extends JPanel {
 	 */
 	private void initialize() {
 		jLabel = new JLabel();
-		jLabel.setText("Aide");
+		jLabel.setText(LocalizationData.get("ImportDialog.help")); //$NON-NLS-1$
 		jLabel.setIcon(IconManager.HELP);
-		jLabel.setToolTipText("Cliquez ici pour obtenir de l'aide sur l'importation");
+		jLabel.setToolTipText(LocalizationData.get("ImportDialog.help.toolTip")); //$NON-NLS-1$
 		jLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -549,11 +549,10 @@ public class ImportPanel extends JPanel {
 		// Date, amout are mandatory
 		int[] relations = ((ImportTableModel)getJTable().getModel()).getRelations();
 		if (relations[ExportTableModel.AMOUNT_INDEX]<0) {
-			invalidityCause = "Ce bouton est désactivé car vous n'avez pas sélectionné de champ contenant le montant des opérations";//LOCAL
+			invalidityCause = LocalizationData.get("ImportDialog.noAmountSelected"); //$NON-NLS-1$
 		} else if (relations[ExportTableModel.DATE_INDEX]<0) {
-			invalidityCause = "Ce bouton est désactivé car vous n'avez pas sélectionné de champ contenant la date des opérations";
+			invalidityCause = LocalizationData.get("ImportDialog.noDateSelected"); //$NON-NLS-1$
 		}
-		//TODO What to do if there's no account field and no default account is selected
 		if (!NullUtils.areEquals(invalidityCause, old)) {
 			this.firePropertyChange(INVALIDITY_CAUSE, old, invalidityCause);
 		}

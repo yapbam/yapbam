@@ -90,11 +90,11 @@ public class Importer {
 		
 		// Decoding amount
 		int index = importedFilecolumns[ExportTableModel.AMOUNT_INDEX];
-		double amount = parseAmount(getField(fields, index, "0"));
+		double amount = parseAmount(getField(fields, index, "0")); //$NON-NLS-1$
 		
 		// Decoding date & valueDate
 		index = importedFilecolumns[ExportTableModel.DATE_INDEX];
-		Date date = parseDate(getField(fields, index, ""));
+		Date date = parseDate(getField(fields, index, "")); //$NON-NLS-1$
 		
 		boolean isTransaction = date != null;
 		
@@ -102,9 +102,9 @@ public class Importer {
 		Account account = null;
 		if (isTransaction || accountPart) {
 			index = importedFilecolumns[ExportTableModel.ACCOUNT_INDEX];
-			String accountStr = getField(fields, index, "");
+			String accountStr = getField(fields, index, ""); //$NON-NLS-1$
 			if (accountStr.length()==0) { // No account specified
-				accountStr = defaultAccount==null?"Default account":defaultAccount.getName(); //LOCAL
+				accountStr = defaultAccount==null?LocalizationData.get("ImportDialog.defaultAccount"):defaultAccount.getName(); //$NON-NLS-1$
 			}
 			account =  data.getAccount(accountStr);
 			if (account==null) { // New account
@@ -120,14 +120,14 @@ public class Importer {
 		} else {
 			// Description
 			index = importedFilecolumns[ExportTableModel.DESCRIPTION_INDEX];
-			String description = getField(fields, index, "");
+			String description = getField(fields, index, ""); //$NON-NLS-1$
 					
 			index = importedFilecolumns[ExportTableModel.VALUE_DATE_INDEX];
-			Date valueDate = parseDate(getField(fields, index, ""));
+			Date valueDate = parseDate(getField(fields, index, "")); //$NON-NLS-1$
 
 			// Category
 			index = importedFilecolumns[ExportTableModel.CATEGORY_INDEX];
-			String categoryName = getField(fields, index, "");
+			String categoryName = getField(fields, index, ""); //$NON-NLS-1$
 			Category category = categoryName.length()==0?Category.UNDEFINED:data.getCategory(categoryName);
 			if (category==null) {
 				category = new Category(categoryName);
@@ -141,12 +141,12 @@ public class Importer {
 		
 				// Statement
 				index = importedFilecolumns[ExportTableModel.STATEMENT_INDEX];
-				String statement = getField(fields, index, "");
+				String statement = getField(fields, index, ""); //$NON-NLS-1$
 				if (statement.length()==0) statement = null;
 					
 				// Mode
 				index = importedFilecolumns[ExportTableModel.MODE_INDEX];
-				String modeName = getField(fields, index, "");
+				String modeName = getField(fields, index, ""); //$NON-NLS-1$
 				Mode mode = modeName.length()==0?Mode.UNDEFINED:account.getMode(modeName);
 				if (mode==null) {
 					mode = new Mode(modeName, DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
