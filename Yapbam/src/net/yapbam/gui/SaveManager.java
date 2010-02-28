@@ -1,6 +1,7 @@
 package net.yapbam.gui;
 
 import java.io.File;
+import java.util.Locale;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -59,6 +60,8 @@ class SaveManager {
 		File path = frame.getData().getPath();
 		String parent = path==null?null:path.getParent();
 		JFileChooser chooser = new JFileChooser(parent);
+		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
+		chooser.updateUI();
 		File result = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 		return result;
 	}
