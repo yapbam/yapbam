@@ -34,6 +34,8 @@ import net.yapbam.gui.dialogs.AccountDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.dialogs.export.Exporter;
 import net.yapbam.gui.dialogs.export.ImportDialog;
+import net.yapbam.gui.dialogs.export.ImportError;
+import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 
@@ -265,7 +267,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 								data.clear();
 							}
 							try {
-								importer.importFile(data);
+								ImportError[] errors = importer.importFile(data);
+								if (errors.length!=0) {
+									new ImportErrorDialog(frame, errors).setVisible(true);
+								}
 							} catch (IOException e1) {
 								//TODO Be more precise ?
 								ErrorManager.INSTANCE.display(frame, e1);
