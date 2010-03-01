@@ -4,15 +4,14 @@ import java.awt.Window;
 
 import javax.swing.JPanel;
 
-import net.yapbam.gui.ImportErrorPanel;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class ImportErrorDialog extends AbstractDialog {
 
-	public ImportErrorDialog(Window owner, ImportError[] errors) {
-		super(owner, LocalizationData.get("ImportDialog.errorMessage.title"), errors); //$NON-NLS-1$
+	public ImportErrorDialog(Window owner, int[] importedFields, ImportError[] errors) {
+		super(owner, LocalizationData.get("ImportDialog.errorMessage.title"), new Object[]{importedFields, errors}); //$NON-NLS-1$
 		super.cancelButton.setVisible(false);
 	}
 
@@ -23,7 +22,9 @@ public class ImportErrorDialog extends AbstractDialog {
 
 	@Override
 	protected JPanel createCenterPane(Object data) {
-		return new ImportErrorPanel((ImportError[]) data);
+		int[] importedFields = (int[]) ((Object[])data)[0];
+		ImportError[] errors = (ImportError[]) ((Object[])data)[1];
+		return new ImportErrorPanel(importedFields, errors);
 	}
 
 	@Override

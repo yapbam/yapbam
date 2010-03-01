@@ -1,4 +1,4 @@
-package net.yapbam.gui;
+package net.yapbam.gui.dialogs.export;
 
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
@@ -8,7 +8,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
-import net.yapbam.gui.dialogs.export.ImportError;
+import net.yapbam.gui.LocalizationData;
 
 public class ImportErrorPanel extends JPanel {
 
@@ -23,10 +23,10 @@ public class ImportErrorPanel extends JPanel {
 	 * just for Eclipse Visual Editor
 	 */
 	public ImportErrorPanel() {
-		this(new ImportError[0]);
+		this(new int[0], new ImportError[0]);
 	}
 	
-	public ImportErrorPanel(ImportError[] errors) {
+	public ImportErrorPanel(int[] importedFileColumns, ImportError[] errors) {
 		super();
 		this.errors = errors;
 		initialize();
@@ -82,7 +82,10 @@ public class ImportErrorPanel extends JPanel {
 					if (columnIndex==0) {
 						return errors[rowIndex].getLineNumber();
 					} else {
-						return errors[rowIndex].getLine();
+						String[] fields = errors[rowIndex].getFields();
+						if (columnIndex+1>=fields.length) return "";
+//						return fields[columnIndex+1];
+						return "TODO"; //TODO
 					}
 				}
 				
@@ -93,7 +96,7 @@ public class ImportErrorPanel extends JPanel {
 				
 				@Override
 				public int getColumnCount() {
-					return 2;
+					return ExportTableModel.columns.length+1;
 				}
 
 				@Override
@@ -105,8 +108,7 @@ public class ImportErrorPanel extends JPanel {
 				@Override
 				public String getColumnName(int column) {
 					if (column==0) return LocalizationData.get("ImportDialog.errorMessagelienNumberColumnHeader"); //$NON-NLS-1$
-					else if (column==1) return LocalizationData.get("ImportDialog.errorMessagelineColumnHeader"); //$NON-NLS-1$
-					return super.getColumnName(column);
+					else return ExportTableModel.columns[column-1];
 				}
 				
 			});
