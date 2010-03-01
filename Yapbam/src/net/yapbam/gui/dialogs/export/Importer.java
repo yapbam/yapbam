@@ -41,7 +41,10 @@ public class Importer {
 		this.current = null;
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
 	}
-	
+
+	public int[] getImportedColumns() {
+		return importedFilecolumns;
+	}
 	public ImportError[] importFile(GlobalData data) throws IOException {
 		data.setEventsEnabled(false);
 		boolean accountPart = true;
@@ -56,10 +59,11 @@ public class Importer {
 				}
 				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 					lineNumber++;
+					String[] fields = line.split(separator);
 					try {
-						accountPart = !importLine(data, line.split(separator), accountPart) && accountPart;
+						accountPart = !importLine(data, fields, accountPart) && accountPart;
 					} catch (ParseException e) {
-						errors.add(new ImportError(lineNumber, line));
+						errors.add(new ImportError(lineNumber, fields));
 					}
 				}
 			} finally {

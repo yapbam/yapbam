@@ -2,19 +2,19 @@ package net.yapbam.gui.dialogs.export;
 
 public class ImportError {
 	private int lineNumber;
-	private String line;
+	private String[] fields;
 	
-	public ImportError(int lineNumber, String line) {
+	public ImportError(int lineNumber, String[] fields) {
 		super();
 		this.lineNumber = lineNumber;
-		this.line = line;
+		this.fields = fields;
 	}
 	
 	public int getLineNumber() {
 		return lineNumber;
 	}
 	
-	public String getLine() {
-		return line;
+	public String[] getFields() {
+		return fields;
 	}
 }
