@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,19 +42,24 @@ public class Importer {
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
 	}
 	
-	public void importFile(GlobalData data) throws IOException {
+	public ImportError[] importFile(GlobalData data) throws IOException {
 		data.setEventsEnabled(false);
 		boolean accountPart = true;
+		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			try {
-				if (ignoreFirstLine) reader.readLine();
+				int lineNumber = 0;
+				if (ignoreFirstLine) {
+					reader.readLine();
+					lineNumber++;
+				}
 				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+					lineNumber++;
 					try {
 						accountPart = !importLine(data, line.split(separator), accountPart) && accountPart;
 					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						errors.add(new ImportError(lineNumber, line));
 					}
 				}
 			} finally {
@@ -67,6 +71,7 @@ public class Importer {
 		} finally {
 			data.setEventsEnabled(true);
 		}
+		return errors.toArray(new ImportError[errors.size()]);
 	}
 
 	private void recordCurrentTransaction(GlobalData data) {
@@ -167,13 +172,12 @@ public class Importer {
 	}
 	
 	private double parseAmount(String text) throws ParseException {
-		DecimalFormat format = (DecimalFormat) NumberFormat.getCurrencyInstance(LocalizationData.getLocale());
+		NumberFormat format = NumberFormat.getCurrencyInstance(LocalizationData.getLocale());
 		try {
 			return format.parse(text).doubleValue();
 		} catch (ParseException e) {
-			char decimalSep = format.getDecimalFormatSymbols().getDecimalSeparator();
-			text = text.replace(decimalSep, '.');
-			return Double.valueOf(text);
+			format = NumberFormat.getInstance(LocalizationData.getLocale());
+			return format.parse(text).doubleValue();
 		}
 	}
 	
