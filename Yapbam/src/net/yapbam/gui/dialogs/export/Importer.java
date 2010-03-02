@@ -101,7 +101,7 @@ public class Importer {
 		int index = importedFilecolumns[ExportTableModel.AMOUNT_INDEX];
 		double amount = parseAmount(getField(fields, index, "")); //$NON-NLS-1$
 		
-		// Decoding date & valueDate
+		// Decoding date
 		index = importedFilecolumns[ExportTableModel.DATE_INDEX];
 		Date date = parseDate(getField(fields, index, "")); //$NON-NLS-1$
 		
@@ -131,8 +131,10 @@ public class Importer {
 			index = importedFilecolumns[ExportTableModel.DESCRIPTION_INDEX];
 			String description = getField(fields, index, ""); //$NON-NLS-1$
 					
+			// Value date
 			index = importedFilecolumns[ExportTableModel.VALUE_DATE_INDEX];
 			Date valueDate = parseDate(getField(fields, index, "")); //$NON-NLS-1$
+			if (valueDate==null) valueDate = date;
 
 			// Category
 			index = importedFilecolumns[ExportTableModel.CATEGORY_INDEX];
