@@ -27,14 +27,12 @@ public class ImportErrorPanel extends JPanel {
 		public ImportErrorTableModel() {
 			// Compute the column count (max of imported column indexes and number of columns in the error lines)
 			// We will add one column for the line number
-			System.out.println (Arrays.asList(importedFileColumns));//TODO
 			columnsCount = 1;
 			for (int i = 0; i < importedFileColumns.length; i++) {
 				if (importedFileColumns[i]>=0) columnsCount = Math.max(columnsCount, importedFileColumns[i]+1);
 			}
 			for (int i = 0; i < errors.length; i++) {
 				columnsCount = Math.max(columnsCount, errors[i].getFields().length+1);
-				System.out.println(Arrays.asList(errors[i].getFields()));//TODO
 			}
 			columnsHeaders = new String[columnsCount];
 			// Compute the column headers (blank or the Yapbam corresponding field)
@@ -157,6 +155,7 @@ public class ImportErrorPanel extends JPanel {
 			JTableUtils.initColumnSizes(jTable, 200);
 			Dimension preferredSize = getJTable().getPreferredSize();
 			preferredSize.width = Math.min(preferredSize.width, 1024);
+			preferredSize.height = Math.min(preferredSize.height, 600);
 			jTable.setPreferredScrollableViewportSize(preferredSize);
 	        jTable.setFillsViewportHeight(true);
 		}
