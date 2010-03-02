@@ -99,7 +99,7 @@ public class Importer {
 		
 		// Decoding amount
 		int index = importedFilecolumns[ExportTableModel.AMOUNT_INDEX];
-		double amount = parseAmount(getField(fields, index, "0")); //$NON-NLS-1$
+		double amount = parseAmount(getField(fields, index, "")); //$NON-NLS-1$
 		
 		// Decoding date & valueDate
 		index = importedFilecolumns[ExportTableModel.DATE_INDEX];
