@@ -16,7 +16,7 @@ public abstract class JTableUtils {
      */
     public static void initColumnSizes(JTable table, int maxColumnSize) {
         TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-
+        int intercellspacing = table.getIntercellSpacing().width;
         for (int i = 0; i < table.getColumnCount(); i++) {
             TableColumn column = table.getColumnModel().getColumn(i);
 
@@ -30,9 +30,7 @@ public abstract class JTableUtils {
 	                             getTableCellRendererComponent(
 	                                 table, table.getModel().getValueAt(j, i),
 	                                 false, false, 0, i);
-	            //FIXME I don't know what is the needed size for a cell. Sometimes, comp.getPreferredSize().width isn't large enough
-	            // Let's say will will add a 4 pixels margin
-	            columnWidth = Math.max(Math.min(comp.getPreferredSize().width + 4, maxColumnSize), columnWidth);
+	            columnWidth = Math.max(Math.min(comp.getPreferredSize().width + intercellspacing, maxColumnSize), columnWidth);
 			}
             column.setPreferredWidth(columnWidth);
         }
