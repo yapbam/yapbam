@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.awt.Component;
 import java.awt.GridBagLayout;
 
 import javax.swing.DefaultCellEditor;
@@ -11,7 +10,6 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import java.awt.GridBagConstraints;
@@ -33,6 +31,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.JTableUtils;
 import net.yapbam.util.NullUtils;
 
 import javax.swing.JLabel;
@@ -168,7 +167,7 @@ public class ImportPanel extends JPanel {
 	        };
 	        
 			jTable.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
-			initColumnSizes(jTable);
+			JTableUtils.initColumnSizes(jTable, Integer.MAX_VALUE);
 			jTable.setPreferredScrollableViewportSize(getJTable().getPreferredSize());
 			
 	        fieldsCombo = new JComboBox();	        
@@ -348,32 +347,6 @@ public class ImportPanel extends JPanel {
 		}
 		return addToAccountPanel;
 	}
-
-    /*
-     * This method picks good column sizes.
-     * If all column heads are wider than the column's cells'
-     * contents, then you can just use column.sizeWidthToFit().
-     */
-    private static void initColumnSizes(JTable table) {
-        TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            TableColumn column = table.getColumnModel().getColumn(i);
-
-            Component comp = headerRenderer.getTableCellRendererComponent(
-                                 null, column.getHeaderValue(),
-                                 false, false, 0, 0);
-            int headerWidth = comp.getPreferredSize().width;
-
-            comp = table.getDefaultRenderer(table.getModel().getColumnClass(i)).
-                             getTableCellRendererComponent(
-                                 table, table.getModel().getValueAt(0, i),
-                                 false, false, 0, i);
-            int cellWidth = comp.getPreferredSize().width;
-
-            column.setPreferredWidth(Math.max(headerWidth, cellWidth));
-        }
-    }
 
 	/**
 	 * This method initializes separatorPanel	
