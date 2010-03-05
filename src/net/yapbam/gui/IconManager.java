@@ -33,8 +33,8 @@ public abstract class IconManager {
 	public static final Icon DOWN = create("images/down.png");
 	public static final Icon TOP = create("images/top.png");
 	public static final Icon BOTTOM = create("images/bottom.png");
-	public static final Icon IMPORT = null;
-	public static final Icon EXPORT = null;
+	public static final Icon IMPORT = create("images/import.png");
+	public static final Icon EXPORT = create("images/export.png");
 		
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon create(String path) {
