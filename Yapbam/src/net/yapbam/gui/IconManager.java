@@ -6,7 +6,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public abstract class IconManager {
-	public static final Icon OPEN = null;
+	public static final Icon OPEN = create("images/open.png");
 	public static final Icon SAVE = create("images/save.png");
 	public static final Icon SAVE_AS = create("images/saveAs.png");
 	public static final Icon NEW = create("images/new.png");

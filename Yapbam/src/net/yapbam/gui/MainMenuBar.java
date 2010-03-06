@@ -79,6 +79,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemNew.addActionListener(this);
         menu.add(this.menuItemNew);
 		this.menuItemOpen = new JMenuItem(LocalizationData.get("MainMenu.Open"), LocalizationData.getChar("MainMenu.Open.Mnemonic")); //$NON-NLS-1$ //$NON-NLS-2$
+		this.menuItemOpen.setIcon(IconManager.OPEN);
         this.menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
         this.menuItemOpen.setToolTipText(LocalizationData.get("MainMenu.Open.ToolTip")); //$NON-NLS-1$
         this.menuItemOpen.addActionListener(this);
