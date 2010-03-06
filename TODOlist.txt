@@ -3,8 +3,6 @@ TODO list
 * Ajouter des icônes pour les menus "ouvrir" et quitter
 * Champ date :
 	L'arrivée dans le champ ne sélectionne pas son contenu
-	La sortie du champ ne formatte pas celui-ci
-	La sélection d'une date dans le calendrier ne referme pas celui-ci
 	
 * Ajouter une alerte quand le solde est négatif à un moment ou un autre dans le futur.
 
