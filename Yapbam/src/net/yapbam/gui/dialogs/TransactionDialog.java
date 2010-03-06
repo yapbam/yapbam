@@ -90,7 +90,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
 		defDate = new DateWidgetPanel();
 		defDate.setToolTipText(LocalizationData.get("TransactionDialog.valueDate.tooltip")); //$NON-NLS-1$
-		defDate.addFocusListener(focusListener); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
+		defDate.getDateWidget().addFocusListener(focusListener);
 		defDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -123,7 +123,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		centerPane.add(titleDate, c);
 		date = new DateWidgetPanel();
 		date.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
-		date.addFocusListener(focusListener); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
+		date.getDateWidget().addFocusListener(focusListener);
 		date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

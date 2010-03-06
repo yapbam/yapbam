@@ -147,7 +147,7 @@ public class GenerationPanel extends JPanel {
 					}
 				}
 			});
-			date.addFocusListener(new AutoSelectFocusListener()); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
+			date.getDateWidget().addFocusListener(new AutoSelectFocusListener());
 			date.setColumns(6);
 			date.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.nextDate.toolTip")); //$NON-NLS-1$
 		}
@@ -372,7 +372,7 @@ public class GenerationPanel extends JPanel {
 			lastDate.setDate(null);
 			lastDate.setColumns(6);
 			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
-			lastDate.addFocusListener(new AutoSelectFocusListener()); //TODO didn't work anymore (till it's the DateWidget that obtains the focus)
+			lastDate.getDateWidget().addFocusListener(new AutoSelectFocusListener());
 			lastDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {

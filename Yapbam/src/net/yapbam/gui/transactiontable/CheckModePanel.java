@@ -18,6 +18,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class CheckModePanel extends JPanel {
@@ -55,6 +56,7 @@ public class CheckModePanel extends JPanel {
 		add(statementLabel);
         statement = new JTextField(5);
         statement.addKeyListener(listener);
+        statement.addFocusListener(new AutoSelectFocusListener());
         statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
         add(statement);
         valueDateLabel = new JCheckBox(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
@@ -76,6 +78,7 @@ public class CheckModePanel extends JPanel {
 				refreshOk();
 			}
 		});
+        valueDate.getDateWidget().addFocusListener(new AutoSelectFocusListener());
         add(valueDate);
         
         setSelected(false);
