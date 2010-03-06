@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
@@ -27,6 +29,13 @@ public class GlobalData extends DefaultListenable {
 	private List<Category> categories;
 
 	private boolean eventsPending;
+
+	private static Currency defaultCurrency;
+	private static double defaultPrecision;
+	static {
+		setDefaultCurrency(Currency.getInstance(Locale.getDefault()));
+	}
+
 	private static final Comparator<Transaction> COMPARATOR = new Comparator<Transaction>() {
 		@Override
 		public int compare(Transaction o1, Transaction o2) {
@@ -43,12 +52,42 @@ public class GlobalData extends DefaultListenable {
 		}
 	};
 	
+	/** As amount are represented by doubles, and doubles are unable to represent exactly decimal numbers,
+	 * we have to take care when we compare two amounts, especially, if we intend to know if two amounts are equals.
+	 * This comparator returns that the doubles are equals if their difference is less than the current currency precision.
+	 */
+	public static final Comparator<Double> AMOUNT_COMPARATOR = new Comparator<Double>() {
+		@Override
+		public int compare(Double o1, Double o2) {
+			if (Math.abs(o1-o2)<defaultPrecision) return 0;
+			return o1<o2?-1:1;
+		}
+	};
+	
 	/** Constructor
 	 * Builds a new empty instance.
 	 */
 	public GlobalData() {
 		super();
 	    this.clear();
+	}
+	
+	/** Sets the currency to be used in Yapbam.
+	 * As amounts are represented by doubles, and doubles are unable to represent exactly decimal numbers,
+	 * "amount is the same" is related to the currency precision.
+	 * @param currency The currency to be used.
+	 * @see #AMOUNT_COMPARATOR
+	 */
+	public static void setDefaultCurrency(Currency currency) {
+		defaultCurrency = currency;
+		defaultPrecision = Math.pow(10, -currency.getDefaultFractionDigits())/2;
+	}
+	
+	/** Gets the default currency.
+	 * @return a currency.
+	 */
+	public static Currency getDefaultCurrency() {
+		return defaultCurrency;
 	}
 
 	/** Tests if the data is empty (no accounts, no transactions, no category, etc... , really nothing !)

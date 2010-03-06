@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.yapbam.data.Category;
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 
 import org.jfree.chart.ChartFactory;
@@ -56,8 +57,8 @@ class BarChartPanel extends ChartPanel {
 			Category category = (Category) it.next();
             Summary summary = categoryToAmount.get(category);
 			String title = category.getName();
-			if (!LocalizationData.areEqualsCurrenciesAmounts(summary.getReceipts(),0) ||
-					!LocalizationData.areEqualsCurrenciesAmounts(summary.getDebts(),0)) {
+			if ((GlobalData.AMOUNT_COMPARATOR.compare(summary.getReceipts(),0.0)!=0) ||
+					(GlobalData.AMOUNT_COMPARATOR.compare(summary.getDebts(),0.0)!=0)) {
 				dataset.addValue(summary.getReceipts(), LocalizationData.get("StatisticsPlugin.bar.receipt"), title); //$NON-NLS-1$
 				dataset.addValue(summary.getDebts(), LocalizationData.get("StatisticsPlugin.bar.debts"), title); //$NON-NLS-1$
 			}

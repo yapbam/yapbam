@@ -1,7 +1,5 @@
 package net.yapbam.gui.graphics.balancehistory;
 
-import java.util.Currency;
-
 import javax.swing.JPanel;
 
 import net.yapbam.data.BalanceData;
@@ -17,7 +15,6 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 
 	public BalanceHistoryPlugIn(FilteredData filteredData, Object restartData) {
 		this.data = filteredData.getBalanceData();
-		this.data.setCurrency(Currency.getInstance(LocalizationData.getLocale()));
 		this.panel = new BalanceHistoryPane(data.getBalanceHistory());
 		data.addListener(new DataListener() {
 			@Override

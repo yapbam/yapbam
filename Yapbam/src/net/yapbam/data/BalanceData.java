@@ -21,16 +21,6 @@ public class BalanceData extends DefaultListenable {
 	
 	BalanceData() {}
 	
-	/** Sets the currency to be used for this balanceData.
-	 * The balanceHistory is a list of periods during which the balance is the same. As amounts
-	 * are represented by double, and double are unable to represent exactly decimal numbers,
-	 * "Balance is the same" is related to the currency precision.
-	 * @param currency The currency to be used to determined if to balances are equals.
-	 */
-	public void setCurrency(Currency currency) {
-		balanceHistory.setCurrency(currency);
-	}
-	
 	void clear(double initialBalance) {
 		this.balanceHistory = new BalanceHistory(initialBalance);
 		this.finalBalance = initialBalance;
