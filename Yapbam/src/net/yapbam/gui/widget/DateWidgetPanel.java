@@ -46,14 +46,15 @@ public class DateWidgetPanel extends JPanel {
 		dateChooser.setChosenDateButtonColor(Color.RED);
 		dateChooser.setChosenOtherButtonColor(Color.GRAY);
 		dateChooser.setChosenMonthButtonColor(Color.WHITE);
+		popup.add(dateChooser);
+		initialize();
 		dateChooser.addPropertyChangeListener(DateChooserPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				getDateWidget().setDate((Date)evt.getNewValue());
+				popup.setVisible(false);
 			}
 		});
-		popup.add(dateChooser);
-		initialize();
 	}
 	
 	/** Get the currently choosen date.
