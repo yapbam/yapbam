@@ -1,5 +1,7 @@
 package net.yapbam.gui.widget;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
@@ -84,6 +86,14 @@ public class DateWidget extends JTextField {
 					updateDate();
 				}
 			}
+		});
+		this.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (!e.isTemporary()) DateWidget.super.setText(formatter.format(getDate()));
+			}
+			@Override
+			public void focusGained(FocusEvent e) {}
 		});
 	}
 	
