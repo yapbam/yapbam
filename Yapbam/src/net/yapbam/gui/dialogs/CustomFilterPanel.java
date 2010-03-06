@@ -33,6 +33,7 @@ import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
+import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +48,9 @@ import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private static final AutoSelectFocusListener AUTO_FOCUS_SELECTOR = new AutoSelectFocusListener();
 	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY"; //$NON-NLS-1$
+	
 	private JPanel accountPanel = null;
 	private JList accountList = null;
 	private JPanel amountPanel = null;
@@ -478,6 +481,7 @@ public class CustomFilterPanel extends JPanel {
 			minAmount.setValue(data.getMinimumAmount()==Double.NEGATIVE_INFINITY?null:data.getMinimumAmount());
 			minAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 			minAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
+			minAmount.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
 		return minAmount;
 	}
@@ -496,6 +500,7 @@ public class CustomFilterPanel extends JPanel {
 			maxAmount.setValue(data.getMaximumAmount()==Double.POSITIVE_INFINITY?null:data.getMaximumAmount());
 			maxAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 			maxAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
+			maxAmount.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
 		return maxAmount;
 	}
@@ -818,6 +823,7 @@ public class CustomFilterPanel extends JPanel {
 			description = new JTextField();
 			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter()); //$NON-NLS-1$
 			description.setToolTipText(LocalizationData.get("CustomFilterPanel.description.toolTip")); //$NON-NLS-1$
+			description.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
 		return description;
 	}
@@ -961,6 +967,7 @@ public class CustomFilterPanel extends JPanel {
 			dateFrom = new DateWidgetPanel();
 			dateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.date.from.toolTip")); //$NON-NLS-1$
 			dateFrom.setDate(data.getDateFrom());
+			dateFrom.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -977,6 +984,7 @@ public class CustomFilterPanel extends JPanel {
 			dateTo = new DateWidgetPanel();
 			dateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.date.to.toolTip")); //$NON-NLS-1$
 			dateTo.setDate(data.getDateTo());
+			dateTo.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
 			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			dateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1218,6 +1226,7 @@ public class CustomFilterPanel extends JPanel {
 			valueDateFrom = new DateWidgetPanel();
 			valueDateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.from.toolTip")); //$NON-NLS-1$
 			valueDateFrom.setDate(data.getValueDateFrom());
+			valueDateFrom.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1234,6 +1243,7 @@ public class CustomFilterPanel extends JPanel {
 			valueDateTo = new DateWidgetPanel();
 			valueDateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.to.toolTip")); //$NON-NLS-1$
 			valueDateTo.setDate(data.getValueDateTo());
+			valueDateTo.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1250,6 +1260,7 @@ public class CustomFilterPanel extends JPanel {
 			statement = new JTextField();
 			statement.setText(data.getStatementFilter()==null?"":data.getStatementFilter().getFilter()); //$NON-NLS-1$
 			statement.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.toolTip")); //$NON-NLS-1$
+			statement.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
 		return statement;
 	}
@@ -1702,6 +1713,7 @@ public class CustomFilterPanel extends JPanel {
 			number = new JTextField();
 			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
 			number.setText(data.getNumberFilter()==null?"":data.getNumberFilter().getFilter()); //$NON-NLS-1$
+			number.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
 		return number;
 	}
