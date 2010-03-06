@@ -3,11 +3,9 @@ package net.yapbam.data;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Currency;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Locale;
 
 /** This class represents the balance history.
  * The balance history is an ordered list of periods, during one of this period, the balance is constant.
@@ -33,7 +31,6 @@ public class BalanceHistory implements Serializable {
 	private double minBalance;
 	private double maxBalance;
 	private ArrayList<BalanceHistoryElement> elements;
-	private double precision;
 	
 	/** Constructor.
 	 * @param intialBalance The initial balance (at the beginning of times).
@@ -43,17 +40,6 @@ public class BalanceHistory implements Serializable {
 		this.minMaxAccurate = false;
 		this.elements = new ArrayList<BalanceHistoryElement>();
 		this.elements.add(new BalanceHistoryElement(intialBalance, null, null));
-		this.setCurrency(Currency.getInstance(Locale.getDefault()));
-	}
-	
-	/** Set the currency.
-	 * As the balances are represented with doubles (which are not able to represents the exact value of a decimal number),
-	 * and as we try to merge  contiguous history elements with the same amount, it's necessary to know what we mean by "same amount".
-	 * Same amount means equivalent for a specific currency (as currencies don't have the same number of fraction digits). 
-	 * @param currency The currency
-	 */
-	public void setCurrency(Currency currency) {
-		this.precision = Math.pow(10, -currency.getDefaultFractionDigits())/2;		
 	}
 	
 	/** Returns the minimum balance of the history.
@@ -140,9 +126,9 @@ public class BalanceHistory implements Serializable {
 				// In such a case, we have to merge these elements
 				BalanceHistoryElement previous = this.elements.get(index-1);
 				double future = element.getBalance()+amount;
-				// WARNING : a simple test like "previous.getBalance()==future" is wrong because of the loss of precision
+				// WARNING : a simple test like "previous.getBalance()==future" is wrong because of the lack of precision
 				// of double representation. We have to test that the difference is less than the currency precision
-				if (Math.abs(previous.getBalance()-future)<precision) {
+				if (GlobalData.AMOUNT_COMPARATOR.compare(previous.getBalance(),future)==0) {
 					this.elements.remove(index);
 					previous.setTo(element.getTo());
 				}

@@ -129,6 +129,10 @@ public abstract class AbstractTransaction implements Cloneable {
 		for (int i = 0; i < getSubTransactionSize(); i++) {
 			result -= getSubTransaction(i).getAmount();
 		}
+		if (GlobalData.AMOUNT_COMPARATOR.compare(result, 0.0)==0) {
+			// See AMOUNT_COMPARATOR comment.
+			result = 0.0;
+		}
 		return result;
 	}
 
