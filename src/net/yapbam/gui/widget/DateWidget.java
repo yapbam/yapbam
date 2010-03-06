@@ -90,7 +90,7 @@ public class DateWidget extends JTextField {
 		this.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (!e.isTemporary()) DateWidget.super.setText(formatter.format(getDate()));
+				if (!e.isTemporary()) DateWidget.super.setText(date==null?"":formatter.format(date));
 			}
 			@Override
 			public void focusGained(FocusEvent e) {}

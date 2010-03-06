@@ -8,7 +8,6 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 
 import java.awt.GridBagConstraints;
-import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;

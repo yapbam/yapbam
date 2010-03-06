@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
@@ -132,11 +133,10 @@ public class DateWidgetPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes dateWidget
-	 * 	
-	 * @return net.yapbam.gui.widget.DateWidget	
+	 * Gets the DateWidget used by this component.
+	 * @return a DateWidget instance
 	 */
-	private DateWidget getDateWidget() {
+	public DateWidget getDateWidget() {
 		if (dateWidget == null) {
 			dateWidget = new DateWidget();
 			PropertyChangeListener listener = new PropertyChangeListener() {
@@ -170,5 +170,11 @@ public class DateWidgetPanel extends JPanel {
 	 */
 	public boolean isContentValid() {
 		return this.dateWidget.isContentValid();
+	}
+
+	@Override
+	public synchronized void addFocusListener(FocusListener l) {
+		System.out.println ("Focus listener was added");//TODO
+		super.addFocusListener(l);
 	}
 }
