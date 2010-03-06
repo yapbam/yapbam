@@ -1,10 +1,16 @@
 TODO list
 
-Ajouter des icônes pour les menus import et export ... pourquoi pas pour "ouvrir"
-Champ date :
+* Ajouter des icônes pour les menus "ouvrir" et quitter
+* Champ date :
 	L'arrivée dans le champ ne sélectionne pas son contenu
 	La sortie du champ ne formatte pas celui-ci
 	La sélection d'une date dans le calendrier ne referme pas celui-ci
 	
-Ajouter une alerte quand le solde est négatif à un moment ou un autre dans le futur.
-	
+* Ajouter une alerte quand le solde est négatif à un moment ou un autre dans le futur.
+
+* La possibilité d'éditer plusieurs opérations à la fois.
+* Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).
+* La possibilité de créer des raccourcis vers les filtres préférés.
+* La possibilité de définir un budget cible et de le comparer à la dure réalité ;-)
+* La possibilité de compresser le fichier de données, de le protéger par mot de passe, et de le stocker/lire sur Internet.
+* Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
