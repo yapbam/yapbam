@@ -3,6 +3,8 @@ package net.yapbam.gui;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -126,8 +128,19 @@ public class MainFrame extends JFrame implements DataListener {
             JPanel pane = plugins[i].getPanel();
     		if (pane!=null) {
     			paneledPlugins.add(plugins[i]);
-    			mainPane.addTab(plugins[i].getPanelTitle(), null, plugins[i].getPanel(), plugins[i].getPanelToolIp());
+    			mainPane.addTab(plugins[i].getPanelTitle(), null, plugins[i].getPanel(), plugins[i].getPanelToolTip());
+    			if (plugins[i].getPanelIcon()!=null) {
+    				mainPane.setIconAt(mainPane.getTabCount()-1, plugins[i].getPanelIcon());
+    			}
     		}
+    		// Listening for panel icon changes
+    		plugins[i].getPropertyChangeSupport().addPropertyChangeListener(AbstractPlugIn.PANEL_ICON_PROPERTY_NAME, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					int tabIndex = paneledPlugins.indexOf(evt.getSource());
+					if (tabIndex>=0) mainPane.setIconAt(tabIndex, (Icon) evt.getNewValue());
+				}
+			});
 		}
         return mainPane;
     }

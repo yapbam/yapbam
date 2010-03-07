@@ -55,7 +55,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	}
 
 	@Override
-	public String getPanelToolIp() {
+	public String getPanelToolTip() {
 		return LocalizationData.get("MainFrame.Transactions.toolTip");
 	}
 

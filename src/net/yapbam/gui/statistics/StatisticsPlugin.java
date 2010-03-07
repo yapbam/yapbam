@@ -105,7 +105,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	}
 
 	@Override
-	public String getPanelToolIp() {
+	public String getPanelToolTip() {
 		return LocalizationData.get("StatisticsPlugin.tooltip"); //$NON-NLS-1$
 	}
 

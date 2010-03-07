@@ -25,7 +25,7 @@ public class BudgetPlugin extends AbstractPlugIn {
 	}
 
 	@Override
-	public String getPanelToolIp() {
+	public String getPanelToolTip() {
 		return LocalizationData.get("BudgetPanel.tooltip"); //$NON-NLS-1$
 	}
 }

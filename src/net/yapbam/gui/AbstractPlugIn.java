@@ -1,7 +1,9 @@
 package net.yapbam.gui;
 
 import java.awt.print.PrinterException;
+import java.beans.PropertyChangeSupport;
 
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -48,6 +50,15 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	/** The transactions menu id */
 	public static final int TRANSACTIONS_MENU = 1;
 	
+	
+	/** Panel icon property name.
+	 *  
+	 */
+	public static final String PANEL_ICON_PROPERTY_NAME = "panelIcon";
+	
+	private PropertyChangeSupport propertyChangeSupport;
+	private Icon panelIcon;
+	
 	/** Constructor.
 	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>
 	 * <LI>FilteredData : The root object of Yapbam's data</LI>
@@ -55,6 +66,8 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 */
 	protected AbstractPlugIn() {
 		super();
+		propertyChangeSupport = new PropertyChangeSupport(this);
+		this.panelIcon = null;
 	}
 	
 	/** Gets the plugin specific menus.
@@ -85,6 +98,26 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public JPanel getPanel() {
 		return null;
 	}
+	
+	/** Gets the main panel icon of the plugin.
+	 *  This icon is displayed near the panel title in the main tabbed pane.
+	 *  @return An icon or null if no icon is set (which is the default).
+	 */
+	public Icon getPanelIcon() {
+		return panelIcon;
+	}
+	
+	/** Sets the main panel icon of the plugin.
+	 * @param panelIcon the new panel icon. Note that if the plugin has no panel, this Icon is never displayed
+	 * @see #getPanelIcon().
+	 */
+	public void setPanelIcon(Icon panelIcon) {
+		if (this.panelIcon!=panelIcon) {
+			Icon old = this.panelIcon;
+			this.panelIcon = panelIcon;
+			this.getPropertyChangeSupport().firePropertyChange(PANEL_ICON_PROPERTY_NAME, old, panelIcon);
+		}
+	}
 
 	/** Gets the tab title of this plugin.
 	 * @return the title or null if there's no panel
@@ -98,7 +131,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @return the tooltip or null if there's no panel
 	 * @see #getPanel()
 	 */
-	public String getPanelToolIp() {
+	public String getPanelToolTip() {
 		return null;
 	}
 
@@ -172,5 +205,13 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 */
 	public void print() throws PrinterException {
 		throw new UnsupportedOperationException();
+	}
+	
+	/** Plugins support events sending (see constants that define the supported events by default ealier in this page)
+	 * @return a PropertyChangeSupport that can be listened to by other plugins (or by YapBam itself). Plugins may use
+	 * this instance to fire their properties change.
+	 */
+	public final PropertyChangeSupport getPropertyChangeSupport() {
+		return this.propertyChangeSupport;
 	}
 }
