@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
  * license GPL v3
  */
 public final class DateUtils {
-	// Be sur nobody will instantiate this class
+	// Be sure nobody will instantiate this class
 	private DateUtils(){};
 	
 	/** Computes the number of months between two dates.

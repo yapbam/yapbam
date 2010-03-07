@@ -18,7 +18,7 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 	}
 
 	@Override
-	public String getPanelToolIp() {
+	public String getPanelToolTip() {
 		return 	LocalizationData.get("AdministrationPlugIn.toolTip"); //$NON-NLS-1$
 	}
 

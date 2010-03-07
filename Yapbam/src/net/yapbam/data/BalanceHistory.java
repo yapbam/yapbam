@@ -49,6 +49,26 @@ public class BalanceHistory implements Serializable {
 		refreshMinMax();
 		return this.minBalance;
 	}
+	
+	/** Returns the first date between two dates, when the balance is under an amount.
+	 * @param from first date or null if the time interval starts at the beginning of times
+	 * @param to first date or null if the time interval ends at the end of times
+	 * @param amount the amount
+	 * @return a long representing the first date under amount. A negative long if the balance is never under the amount between from and to,
+	 * the date.getTime() of the searched date in other cases. 0 represents the beginning of times.
+	 */
+	public long getFirstDateUnder(Date from, Date to, double amount) {
+		int firstIndex = from==null?0:find(from);
+		int lastIndex = to==null?elements.size()-1:find(to);
+		for (int i=firstIndex; i<=lastIndex; i++) {
+			BalanceHistoryElement element = elements.get(i);
+			if (GlobalData.AMOUNT_COMPARATOR.compare(amount-element.getBalance(), 0.0)>0) {
+				Date result = element.getFrom();
+				return result==null?0:result.getTime();
+			}
+		}
+		return -1;
+	}
 
 	/** Returns the maximum balance of the history.
 	 * @return history's maximum balance 
