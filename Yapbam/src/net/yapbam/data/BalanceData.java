@@ -80,7 +80,6 @@ public class BalanceData extends DefaultListenable {
 	
 	/** Returns the balance history.
 	 * @return the balance history.
-	 * @see BalanceData#setCurrency(Currency)
 	 */
 	public BalanceHistory getBalanceHistory() {
 		return this.balanceHistory;
