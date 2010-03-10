@@ -42,6 +42,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				if (displayed) buildSummaries();
 			}
 		});
+		this.setPanelTitle(LocalizationData.get("StatisticsPlugin.title"));
+		this.setPanelToolTip(LocalizationData.get("StatisticsPlugin.tooltip"));
 	}
 
 	@Override
@@ -97,16 +99,6 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		}
         pie.updateDataSet();
         bar.updateDataSet();
-	}
-
-	@Override
-	public String getPanelTitle() {
-		return LocalizationData.get("StatisticsPlugin.title"); //$NON-NLS-1$
-	}
-
-	@Override
-	public String getPanelToolTip() {
-		return LocalizationData.get("StatisticsPlugin.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override

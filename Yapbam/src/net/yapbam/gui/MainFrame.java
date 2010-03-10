@@ -133,12 +133,20 @@ public class MainFrame extends JFrame implements DataListener {
     				mainPane.setIconAt(mainPane.getTabCount()-1, plugins[i].getPanelIcon());
     			}
     		}
-    		// Listening for panel icon changes
-    		plugins[i].getPropertyChangeSupport().addPropertyChangeListener(AbstractPlugIn.PANEL_ICON_PROPERTY_NAME, new PropertyChangeListener() {
+    		// Listening for panel title, tooltip and icon changes
+    		plugins[i].getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					int tabIndex = paneledPlugins.indexOf(evt.getSource());
-					if (tabIndex>=0) mainPane.setIconAt(tabIndex, (Icon) evt.getNewValue());
+					if (tabIndex > 0) {
+						if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_ICON_PROPERTY_NAME)) {
+							mainPane.setIconAt(tabIndex, (Icon) evt.getNewValue());
+						} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TITLE_PROPERTY_NAME)) {
+							mainPane.setTitleAt(tabIndex, (String) evt.getNewValue());
+						} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TOOLTIP_PROPERTY_NAME)) {
+							mainPane.setToolTipTextAt(tabIndex, (String) evt.getNewValue());
+						}
+					}
 				}
 			});
 		}

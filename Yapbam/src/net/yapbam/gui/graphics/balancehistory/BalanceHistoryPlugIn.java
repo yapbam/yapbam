@@ -1,5 +1,7 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.util.Date;
 
 import javax.swing.JPanel;
@@ -19,6 +21,8 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	public BalanceHistoryPlugIn(FilteredData filteredData, Object restartData) {
 		this.data = filteredData.getBalanceData();
 		this.panel = new BalanceHistoryPane(data.getBalanceHistory());
+		this.setPanelTitle(LocalizationData.get("BalanceHistory.title"));
+		this.setPanelToolTip(LocalizationData.get("BalanceHistory.toolTip"));
 		testAlert();
 		data.addListener(new DataListener() {
 			@Override
@@ -30,28 +34,21 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	}
 	
 	private void testAlert() {
-		long firstDateUnder = data.getBalanceHistory().getFirstDateUnder(new Date(), null, 0.0);
-//		String result;
-//		if (firstDateUnder<0) result = "never";
-//		else if (firstDateUnder==0) result = "always";
-//		else {
-//			Date d = new Date();
-//			d.setTime(firstDateUnder);
-//			result = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(d);
-//		}
-		setPanelIcon((firstDateUnder>=0?IconManager.ALERT:null));
-	}
-	
-	public String getPanelTitle() {
-		return LocalizationData.get("BalanceHistory.title");
+		long firstAlertDate = data.getBalanceHistory().getFirstDateUnder(new Date(), null, 0.0);
+		String tooltip;
+		tooltip = LocalizationData.get("BalanceHistory.toolTip");
+		if (firstAlertDate>=0) {
+			Date date = new Date();
+			if (firstAlertDate>0) date.setTime(firstAlertDate);
+			String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
+			String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>";
+			tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>");
+		}
+		setPanelIcon((firstAlertDate>=0?IconManager.ALERT:null));
+		setPanelToolTip(tooltip);
 	}
 
 	public JPanel getPanel() {
 		return panel;
-	}
-
-	@Override
-	public String getPanelToolTip() {
-		return LocalizationData.get("BalanceHistory.toolTip");
 	}
 }
