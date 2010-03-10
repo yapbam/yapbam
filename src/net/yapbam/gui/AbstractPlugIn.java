@@ -50,14 +50,17 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	/** The transactions menu id */
 	public static final int TRANSACTIONS_MENU = 1;
 	
-	
-	/** Panel icon property name.
-	 *  
-	 */
+	/** Panel icon property name. */
 	public static final String PANEL_ICON_PROPERTY_NAME = "panelIcon";
+	/** Panel tooltip property name. */
+	public static final String PANEL_TOOLTIP_PROPERTY_NAME = "panelTooltip";
+	/** Panel title property name. */
+	public static final String PANEL_TITLE_PROPERTY_NAME = "panelTitle";
 	
 	private PropertyChangeSupport propertyChangeSupport;
 	private Icon panelIcon;
+	private String panelToolTip;
+	private String panelTitle;
 	
 	/** Constructor.
 	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>
@@ -68,6 +71,8 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 		super();
 		propertyChangeSupport = new PropertyChangeSupport(this);
 		this.panelIcon = null;
+		this.panelTitle = null;
+		this.panelToolTip = null;
 	}
 	
 	/** Gets the plugin specific menus.
@@ -103,7 +108,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 *  This icon is displayed near the panel title in the main tabbed pane.
 	 *  @return An icon or null if no icon is set (which is the default).
 	 */
-	public Icon getPanelIcon() {
+	public final Icon getPanelIcon() {
 		return panelIcon;
 	}
 	
@@ -111,7 +116,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @param panelIcon the new panel icon. Note that if the plugin has no panel, this Icon is never displayed
 	 * @see #getPanelIcon().
 	 */
-	public void setPanelIcon(Icon panelIcon) {
+	public final void setPanelIcon(Icon panelIcon) {
 		if (this.panelIcon!=panelIcon) {
 			Icon old = this.panelIcon;
 			this.panelIcon = panelIcon;
@@ -123,16 +128,40 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @return the title or null if there's no panel
 	 * @see #getPanel()
 	 */
-	public String getPanelTitle() {
-		return null;
+	public final String getPanelTitle() {
+		return this.panelTitle;
 	}
 	
+	/** Sets the tab title of the plugin.
+	 * @param title the new panel title. Note that if the plugin has no panel, this title is never displayed
+	 * @see #getPanelTitle().
+	 */
+	public final void setPanelTitle(String title) {
+		if (this.panelTitle!=title) {
+			String old = this.panelTitle;
+			this.panelTitle = title;
+			this.getPropertyChangeSupport().firePropertyChange(PANEL_TITLE_PROPERTY_NAME, old, title);
+		}
+	}
+
 	/** Gets the tab tooltip of this plugin.
 	 * @return the tooltip or null if there's no panel
 	 * @see #getPanel()
 	 */
-	public String getPanelToolTip() {
-		return null;
+	public final String getPanelToolTip() {
+		return panelToolTip;
+	}
+
+	/** Sets the tab tooltip of the plugin.
+	 * @param tooltip the new panel tooltip. Note that if the plugin has no panel, this tooltip is never displayed
+	 * @see #getPanelToolTip().
+	 */
+	public final void setPanelToolTip(String tooltip) {
+		if (this.panelToolTip!=tooltip) {
+			String old = this.panelToolTip;
+			this.panelToolTip = tooltip;
+			this.getPropertyChangeSupport().firePropertyChange(PANEL_TOOLTIP_PROPERTY_NAME, old, tooltip);
+		}
 	}
 
 	/** This method is called when the plugin panel gain or loose the focus.

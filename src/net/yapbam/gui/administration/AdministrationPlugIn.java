@@ -11,15 +11,8 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 
 	public AdministrationPlugIn(FilteredData filteredData, Object restartData) {
 		this.panel = new AdministrationPanel(filteredData.getGlobalData());
-	}
-	
-	public String getPanelTitle() {
-		return LocalizationData.get("AdministrationPlugIn.title"); //$NON-NLS-1$
-	}
-
-	@Override
-	public String getPanelToolTip() {
-		return 	LocalizationData.get("AdministrationPlugIn.toolTip"); //$NON-NLS-1$
+		this.setPanelTitle(LocalizationData.get("AdministrationPlugIn.title"));
+		this.setPanelToolTip(LocalizationData.get("AdministrationPlugIn.toolTip"));
 	}
 
 	public JPanel getPanel() {

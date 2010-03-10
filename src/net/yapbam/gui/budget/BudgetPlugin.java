@@ -12,20 +12,12 @@ public class BudgetPlugin extends AbstractPlugIn {
 	
 	public BudgetPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
+		this.setPanelTitle(LocalizationData.get("BudgetPanel.title"));
+		this.setPanelToolTip(LocalizationData.get("BudgetPanel.tooltip"));
 	}
 
 	@Override
 	public JPanel getPanel() {
 		return new BudgetViewPanel(data);
-	}
-
-	@Override
-	public String getPanelTitle() {
-		return LocalizationData.get("BudgetPanel.title"); //$NON-NLS-1$
-	}
-
-	@Override
-	public String getPanelToolTip() {
-		return LocalizationData.get("BudgetPanel.tooltip"); //$NON-NLS-1$
 	}
 }

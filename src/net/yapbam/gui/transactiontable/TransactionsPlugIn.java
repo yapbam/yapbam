@@ -23,6 +23,8 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	public TransactionsPlugIn(FilteredData filteredData, Object restoreData) {
 		FilteredData data = filteredData;
 		this.panel = new TransactionsPlugInPanel(data);
+		setPanelTitle(LocalizationData.get("MainFrame.Transactions"));
+		setPanelToolTip(LocalizationData.get("MainFrame.Transactions.toolTip"));
 	}
 	
 	@Override
@@ -48,15 +50,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	public void saveState() {
 		YapbamState.saveState(panel.getTransactionTable(), STATE_PREFIX);
-	}
-
-	public String getPanelTitle() {
-		return LocalizationData.get("MainFrame.Transactions");
-	}
-
-	@Override
-	public String getPanelToolTip() {
-		return LocalizationData.get("MainFrame.Transactions.toolTip");
 	}
 
 	public JPanel getPanel() {
