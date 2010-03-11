@@ -41,7 +41,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 			Date date = new Date();
 			if (firstAlertDate>0) date.setTime(firstAlertDate);
 			String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
-			tooltip = tooltip.replace("'", "''");
+			tooltip = tooltip.replace("'", "''"); // single quotes in message pattern are escape characters. So, we have to replace them with "double simple quote"
 			String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>";
 			tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>");
 		}
