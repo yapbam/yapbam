@@ -41,6 +41,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 			Date date = new Date();
 			if (firstAlertDate>0) date.setTime(firstAlertDate);
 			String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
+			tooltip = tooltip.replace("'", "''");
 			String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>";
 			tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>");
 		}
