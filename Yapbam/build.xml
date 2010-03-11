@@ -53,6 +53,6 @@
 		<delete dir="${releaseDir}"/>
 	</target>
 	<target name="doc">
-		<javadoc header="${yapbamVersion}" sourcepath="src;${jcommonpath};${jfreechartpath}" packagenames="net.yapbam.data,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget" destdir="doc" doctitle="YapBam"/>
+		<javadoc header="${yapbamVersion}" sourcepath="src;${jcommonpath};${jfreechartpath}" packagenames="net.yapbam.data,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget" destdir="doc" doctitle="YapBam" windowtitle="Yapbam"/>
 	</target>
 </project>
