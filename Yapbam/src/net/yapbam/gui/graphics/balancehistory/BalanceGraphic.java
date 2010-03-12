@@ -269,7 +269,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		return result;
 	}
 
-	private class MouseListener extends MouseAdapter {
+	private static class MouseListener extends MouseAdapter {
 	    @Override
 		public void mouseDragged(MouseEvent e) {
             int x = e.getX();

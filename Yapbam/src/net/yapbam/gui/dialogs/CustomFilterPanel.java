@@ -107,7 +107,7 @@ public class CustomFilterPanel extends JPanel {
 		
 	private FilteredData data;
 	
-	private final class RegexprListener extends MouseAdapter {
+	private final static class RegexprListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			HelpManager.show(e.getComponent(), HelpManager.REGULAR_EXPRESSIONS);

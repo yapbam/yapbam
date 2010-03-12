@@ -10,6 +10,9 @@ public class ModeRemovedEvent extends DataEvent {
 	
 	public ModeRemovedEvent(Object source, int index, Account account, Mode mode) {
 		super(source);
+		this.index = index;
+		this.account = account;
+		this.mode = mode;
 	}
 
 	public int getIndex() {

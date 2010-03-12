@@ -137,7 +137,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @see #getPanelTitle().
 	 */
 	public final void setPanelTitle(String title) {
-		if (this.panelTitle!=title) {
+		if (!this.panelTitle.equals(title)) {
 			String old = this.panelTitle;
 			this.panelTitle = title;
 			this.getPropertyChangeSupport().firePropertyChange(PANEL_TITLE_PROPERTY_NAME, old, title);
@@ -157,7 +157,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @see #getPanelToolTip().
 	 */
 	public final void setPanelToolTip(String tooltip) {
-		if (this.panelToolTip!=tooltip) {
+		if (!this.panelToolTip.equals(tooltip)) {
 			String old = this.panelToolTip;
 			this.panelToolTip = tooltip;
 			this.getPropertyChangeSupport().firePropertyChange(PANEL_TOOLTIP_PROPERTY_NAME, old, tooltip);

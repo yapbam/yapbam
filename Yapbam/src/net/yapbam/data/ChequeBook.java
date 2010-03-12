@@ -15,6 +15,7 @@ public class ChequeBook implements Serializable {
 	
 	public ChequeBook(String prefix, int firstNumber, int size) {
 		this.firstNumber = firstNumber;
+		this.prefix = prefix;
 		this.size = size;
 		this.used = 0;
 	}
