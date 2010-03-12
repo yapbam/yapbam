@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
+import net.yapbam.util.NullUtils;
 
 /** This abstract class represents a Yapbam plugin.
  * Such a plugin can define (or not) some GUI elements that will be added to the Yapbam interface :<UL>
@@ -137,7 +138,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @see #getPanelTitle().
 	 */
 	public final void setPanelTitle(String title) {
-		if (!this.panelTitle.equals(title)) {
+		if (!NullUtils.areEquals(this.panelTitle,title)) {
 			String old = this.panelTitle;
 			this.panelTitle = title;
 			this.getPropertyChangeSupport().firePropertyChange(PANEL_TITLE_PROPERTY_NAME, old, title);
@@ -157,7 +158,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @see #getPanelToolTip().
 	 */
 	public final void setPanelToolTip(String tooltip) {
-		if (!this.panelToolTip.equals(tooltip)) {
+		if (!NullUtils.areEquals(this.panelToolTip,tooltip)) {
 			String old = this.panelToolTip;
 			this.panelToolTip = tooltip;
 			this.getPropertyChangeSupport().firePropertyChange(PANEL_TOOLTIP_PROPERTY_NAME, old, tooltip);
