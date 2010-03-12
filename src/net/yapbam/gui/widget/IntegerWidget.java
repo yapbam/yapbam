@@ -44,7 +44,7 @@ public class IntegerWidget extends JTextField {
 		} catch (NumberFormatException e) {
 			value = null;
 		}
-		if (value!=old) {
+		if (!value.equals(old)) {
 			this.firePropertyChange(VALUE_PROPERTY, old, value);
 		}
 	}
@@ -62,6 +62,6 @@ public class IntegerWidget extends JTextField {
 	 * @param value an integer or null to set the field empty.
 	 */
 	public void setValue(Integer value) {
-		if (value!=this.value) this.setText(value==null?"":Integer.toString(value));
+		if (!value.equals(this.value)) this.setText(value==null?"":Integer.toString(value));
 	}
 }

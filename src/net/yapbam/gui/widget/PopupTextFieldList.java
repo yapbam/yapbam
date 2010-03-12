@@ -169,7 +169,7 @@ public class PopupTextFieldList extends JTextField {
 		}
 	}
 
-	private final class PopupListModel extends AbstractListModel {
+	private final static class PopupListModel extends AbstractListModel {
 		String[] values;
 		
 		PopupListModel() {
