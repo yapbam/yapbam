@@ -18,11 +18,13 @@ import javax.swing.event.ListSelectionListener;
 
 import java.awt.Font;
 import java.awt.Color;
+import net.yapbam.gui.dialogs.ChequeBookListPanel;
 
 public class AccountAdministrationPanel extends JPanel implements AbstractAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 	private AccountListPanel accountListPanel = null;
 	private ModeListPanel modeListPanel = null;
+	private ChequeBookListPanel chequeBookListPanel = null;
 	private GlobalData data;
 	
 	public AccountAdministrationPanel(GlobalData data) {
@@ -72,10 +74,18 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints2.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
+		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+		gridBagConstraints3.gridx = 0;
+		gridBagConstraints3.fill = GridBagConstraints.BOTH;
+		gridBagConstraints3.weighty = 1.0D;
+		gridBagConstraints3.weightx = 1.0D;
+		gridBagConstraints3.weightx = 1.0D;
+		gridBagConstraints3.gridy = 2;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getAccountListPanel(), gridBagConstraints);
 		this.add(getModeListPanel(), gridBagConstraints1);
+		this.add(getChequeBookListPanel(), gridBagConstraints3);
 	}
 
 	/**
@@ -123,5 +133,18 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 
 	public String getPanelToolTip() {
 		return LocalizationData.get("AccountManager.toolTip"); //$NON-NLS-1$
+	}
+
+	/**
+	 * This method initializes chequeBookListPanel	
+	 * 	
+	 * @return net.yapbam.gui.dialogs.ChequeBookListPanel	
+	 */
+	private ChequeBookListPanel getChequeBookListPanel() {
+		if (chequeBookListPanel == null) {
+			chequeBookListPanel = new ChequeBookListPanel();
+			chequeBookListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("ChequeBookDialog.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+		}
+		return chequeBookListPanel;
 	}
 }
