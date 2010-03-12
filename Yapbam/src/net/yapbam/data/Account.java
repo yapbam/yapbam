@@ -13,6 +13,7 @@ public class Account implements Serializable {
 	private List<Mode> receiptModes;
 	private List<Mode> expenseModes;
 	private List<Mode> modes;
+	private List<ChequeBook> chequeBooks;
 	private int transactionNumber;
 	
 	/** Constructor.
@@ -27,6 +28,7 @@ public class Account implements Serializable {
 		this.receiptModes = new ArrayList<Mode>();
 		this.expenseModes = new ArrayList<Mode>();
 		this.modes = new ArrayList<Mode>();
+		this.chequeBooks = new ArrayList<ChequeBook>();
 		this.add(Mode.UNDEFINED);
 	}
 
@@ -84,7 +86,31 @@ public class Account implements Serializable {
 		}
 		return null;
 	}
+	
+	/** Returns the account's cheque books number.
+	 * @return an integer
+	 */
+	public int getChequeBooksNumber() {
+		return this.chequeBooks.size();
+	}
+	
+	/** Get's an account cheque book
+	 * @param index cheque index
+	 * @return a cheque book
+	 * @see #getChequeBooksNumber()
+	 */
+	public ChequeBook getChequeBook(int index) {
+		return this.chequeBooks.get(index);
+	}
+	
+	void add(ChequeBook book) {
+		this.chequeBooks.add(book);
+	}
 
+	void remove(ChequeBook book) {
+		this.chequeBooks.remove(book);
+	}
+	
 	/** Returns the number of transactions in this account.
 	 * @return the number of transactions in this account.
 	 */

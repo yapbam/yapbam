@@ -543,4 +543,14 @@ public class GlobalData extends DefaultListenable {
 			this.setChanged();
 		}
 	}
+
+	/** Adds a cheque book to an account.
+	 * @param account the account
+	 * @param chequeBook the cheque book to add to the account
+	 */
+	public void addChequeBook(Account account, ChequeBook book) {
+		account.add(book);
+		this.fireEvent(new ChequeBookAddedEvent(this, account, book));
+		this.setChanged();
+	}
 }

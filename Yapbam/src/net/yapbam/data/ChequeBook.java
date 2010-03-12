@@ -5,7 +5,7 @@ import java.io.Serializable;
 /** This class represents a cheque book.
  * Planned for future use (when Yapbam will manage checkBooks, maybe).
  */
-class ChequeBook implements Serializable {
+public class ChequeBook implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String prefix;
@@ -31,7 +31,7 @@ class ChequeBook implements Serializable {
 	 * All cheques before this one are supposed to be detached too.
 	 * @param chequeNumber
 	 */
-	public void detach (int chequeNumber) {
+	void detach (int chequeNumber) {
 		int newUsed = chequeNumber - this.firstNumber;
 		if (newUsed>this.used) this.used = newUsed;
 	}
@@ -41,5 +41,20 @@ class ChequeBook implements Serializable {
 	 */
 	public boolean isEmpty() {
 		return used >= size;
+	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public int getFirstNumber() {
+		return firstNumber;
+	}
+	
+	/** Gets the total number of cheques.
+	 * @return an integer, the total number of cheques in this book. It includes the already used cheques.
+	 */
+	public int getChequesNumber() {
+		return this.size;
 	}
 }
