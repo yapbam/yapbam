@@ -5,7 +5,7 @@ import java.io.Serializable;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 
-/** This class represents a paiement mode (Blue card, cheque ...) */
+/** This class represents a paiement mode (Blue card, check ...) */
 public class Mode implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -15,7 +15,7 @@ public class Mode implements Serializable {
 	private String name;
 	private DateStepper receiptVDC;
 	private DateStepper expenseVDC;
-	private boolean useChequeBook;
+	private boolean useCheckBook;
 
 	/** Construtor
 	 * @param name The name
@@ -23,17 +23,17 @@ public class Mode implements Serializable {
 	 *  can't be used for receipts
 	 * @param expenseVDC A ValueDateComputer used to compute value date for expenditures, or null this mode
 	 *  can't be used for receipts
-	 * @param useChequeBook true if this mode use a cheque book
-	 * @throws IllegalArgumentException if useChequeBook is true and vdcForExpenditure is false;
+	 * @param useCheckbook true if this mode use a checkbook
+	 * @throws IllegalArgumentException if useCheckbook is true and vdcForExpenditure is false;
 	 */
 	public Mode(String name, DateStepper receiptVDC,
-			DateStepper expenseVDC, boolean useChequeBook) {
+			DateStepper expenseVDC, boolean useCheckbook) {
 		super();
-		if (useChequeBook && (expenseVDC==null)) throw new IllegalArgumentException();
+		if (useCheckbook && (expenseVDC==null)) throw new IllegalArgumentException();
 		this.name = name;
 		this.receiptVDC = receiptVDC;
 		this.expenseVDC = expenseVDC;
-		this.useChequeBook = useChequeBook;
+		this.useCheckBook = useCheckbook;
 	}
 
 	public String getName() {
@@ -48,8 +48,8 @@ public class Mode implements Serializable {
 		return expenseVDC;
 	}
 
-	public boolean isUseChequeBook() {
-		return useChequeBook;
+	public boolean isUseCheckBook() {
+		return useCheckBook;
 	}
 
 	@Override
@@ -64,13 +64,13 @@ public class Mode implements Serializable {
 	
 	@Override
 	public String toString() {
-		return this.getName() + "[" + this.getExpenseVdc()+"/"+this.getReceiptVdc()+"-"+(this.isUseChequeBook()?"check":"no check")+"]";
+		return this.getName() + "[" + this.getExpenseVdc()+"/"+this.getReceiptVdc()+"-"+(this.isUseCheckBook()?"check":"no check")+"]";
 	}
 
 	void updateTo(Mode newMode) {
 		this.name = newMode.name;
 		this.expenseVDC = newMode.expenseVDC;
 		this.receiptVDC = newMode.receiptVDC;
-		this.useChequeBook = newMode.useChequeBook;
+		this.useCheckBook = newMode.useCheckBook;
 	}
 }

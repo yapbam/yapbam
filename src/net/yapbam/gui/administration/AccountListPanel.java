@@ -4,7 +4,9 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import net.yapbam.data.Account;
@@ -21,6 +23,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.lang.Object;
@@ -62,7 +65,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		return new JTable(getTableModel()) {
+		JTable jTable = new JTable(getTableModel()) {
 		    //Implement table cell tool tips.
 		    public String getToolTipText(MouseEvent e) {
 		        String tip;
@@ -73,12 +76,26 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		            tip = LocalizationData.get("AccountManager.balanceColumn.toolTip"); //$NON-NLS-1$
 		        } else if (column == 2) {
 		            tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
+		        } else if (column == 3) {
+		            tip = LocalizationData.get("AccountManager.modesNumber.toolTip"); //$NON-NLS-1$
+		        } else if (column == 4) {
+		            tip = LocalizationData.get("AccountManager.checkbooksNumber.toolTip"); //$NON-NLS-1$
 		        } else { //another column
 		            tip = super.getToolTipText(e);
 		        }
 		        return tip;
 		    }
 		};
+		jTable.setDefaultRenderer(double.class, new DefaultTableCellRenderer(){
+		    @Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+		    		boolean hasFocus, int row, int column) {
+			    setText(LocalizationData.getCurrencyInstance().format(value));
+			    this.setHorizontalAlignment(SwingConstants.RIGHT);
+		    	return this;
+		    }
+		});
+		return jTable;
 	}
 	
 	@SuppressWarnings("serial")
@@ -88,8 +105,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		}
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			if (columnIndex==1) return Double.class;
-			else if (columnIndex==2) return Integer.class;
+			if (columnIndex==1) return double.class;
+			else if ((columnIndex>=2) && (columnIndex<=4)) return Integer.class;
 			return String.class;
 		}
 		@Override
@@ -97,6 +114,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 			if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
 			if (columnIndex==1) return LocalizationData.get("AccountManager.balanceColumn.title"); //$NON-NLS-1$
 			if (columnIndex==2) return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
+			if (columnIndex==3) return LocalizationData.get("AccountManager.modesNumber.title"); //$NON-NLS-1$
+			if (columnIndex==4) return LocalizationData.get("AccountManager.checkbooksNumber.title"); //$NON-NLS-1$
 			return "?"; //$NON-NLS-1$
 		}
 
@@ -106,6 +125,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 			if (columnIndex==0) return account.getName();
 			else if (columnIndex==1) return account.getInitialBalance();
 			else if (columnIndex==2) return account.getTransactionsNumber();
+			else if (columnIndex==3) return account.getModesNumber()-1; // The undefined mode is returned in getModesNumber
+			else if (columnIndex==4) return account.getCheckbooksNumber();
 			return "?"; //$NON-NLS-1$
 		}
 		public void setValueAt(Object value, int row, int col) {
@@ -145,12 +166,12 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 
 		@Override
 		public int getColumnCount() {
-			return 3;
+			return 5;
 		}
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return columnIndex!=2;
+			return columnIndex<2;
 		}
 		@Override
 		public void processEvent(DataEvent event) {

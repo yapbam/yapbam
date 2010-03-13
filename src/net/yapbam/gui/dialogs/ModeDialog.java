@@ -23,7 +23,7 @@ public class ModeDialog extends AbstractDialog {
 	private static final boolean DEBUG = false;
 	
 	private JTextField name;
-	private JCheckBox chequeBook;
+	private JCheckBox checkbook;
 	private ModePanel leftPane;
 	private ModePanel rightPane;
 	private Mode original;
@@ -53,8 +53,8 @@ public class ModeDialog extends AbstractDialog {
         name.addFocusListener(new AutoSelectFocusListener());
 		idPanel.add(name,c);       
         
-        chequeBook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
-		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), chequeBook, this);     //$NON-NLS-1$
+        checkbook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
+		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), checkbook, this);     //$NON-NLS-1$
         rightPane = new ModePanel(LocalizationData.get("ModeDialog.forReceipts"), null, this); //$NON-NLS-1$
         Listener listener = new Listener();
 		leftPane.addPropertyChangeListener(listener);
@@ -78,7 +78,7 @@ public class ModeDialog extends AbstractDialog {
 
 	@Override
 	protected Object buildResult() {
-		return new Mode(name.getText(),rightPane.getValueDateComputer(),leftPane.getValueDateComputer(),chequeBook.isSelected());
+		return new Mode(name.getText(),rightPane.getValueDateComputer(),leftPane.getValueDateComputer(),checkbook.isSelected());
 	}
 	
 	/** Opens the dialog, and add the newly created mode to the data
@@ -123,7 +123,7 @@ public class ModeDialog extends AbstractDialog {
 	public void setContent(Mode mode) {
 		setTitle(LocalizationData.get("ModeDialog.title.edit")); //$NON-NLS-1$
 		original = mode;
-		chequeBook.setSelected(mode.isUseChequeBook());
+		checkbook.setSelected(mode.isUseCheckBook());
 		name.setText(mode.getName());
 		leftPane.setContent(mode.getExpenseVdc());
 		rightPane.setContent(mode.getReceiptVdc());

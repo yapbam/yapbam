@@ -2,6 +2,8 @@ package net.yapbam.gui.widget;
 
 import javax.swing.JTextField;
 
+import net.yapbam.util.NullUtils;
+
 /** This widget is an interger input field.
  *  You can set minimum and maximum values accepted by this field.
  *  It is a java beans, so you can listen to its VALUE_PROPERTY change.
@@ -44,7 +46,7 @@ public class IntegerWidget extends JTextField {
 		} catch (NumberFormatException e) {
 			value = null;
 		}
-		if (!value.equals(old)) {
+		if (!NullUtils.areEquals(value,old)) {
 			this.firePropertyChange(VALUE_PROPERTY, old, value);
 		}
 	}
