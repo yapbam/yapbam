@@ -19,10 +19,10 @@ public class ModePropertyChangedEvent extends DataEvent {
 	 * @see #getChanges()
 	 */
 	public static final int RECEIPT_VDC = 4;
-	/** Constant that signifies "the use cheque book was changed"
+	/** Constant that signifies "the use checkbook was changed"
 	 * @see #getChanges()
 	 */
-	public static final int CHEQUE_BOOK = 8;
+	public static final int CHECKBOOK = 8;
 
 	private int changes;
 	private Account account;
@@ -44,12 +44,12 @@ public class ModePropertyChangedEvent extends DataEvent {
 		if (!oldMode.getName().equals(newMode.getName())) changes += NAME;
 		if (!NullUtils.areEquals(oldMode.getExpenseVdc(),newMode.getExpenseVdc())) changes += EXPENSE_VDC;
 		if (!NullUtils.areEquals(oldMode.getReceiptVdc(),newMode.getReceiptVdc())) changes += RECEIPT_VDC;
-		if (oldMode.isUseChequeBook()!=newMode.isUseChequeBook()) changes += CHEQUE_BOOK;
+		if (oldMode.isUseCheckBook()!=newMode.isUseCheckBook()) changes += CHECKBOOK;
 	}
 
 	/** Returns the changes on the updated mode.
 	 * @return an integer, sum of the constant defined in this class. 0, if no changes were made.
-	 * @see #CHEQUE_BOOK
+	 * @see #CHECKBOOK
 	 * @see #NAME
 	 * @see #EXPENSE_VDC
 	 * @see #RECEIPT_VDC

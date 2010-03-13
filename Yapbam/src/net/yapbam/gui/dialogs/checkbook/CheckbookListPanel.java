@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.checkbook;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,32 +13,34 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.yapbam.data.Account;
-import net.yapbam.data.ChequeBook;
+import net.yapbam.data.Checkbook;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
+import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.dialogs.ModeDialog;
 
 @SuppressWarnings("serial")
-public class ChequeBookListPanel extends AbstractListAdministrationPanel {
+public class CheckbookListPanel extends AbstractListAdministrationPanel {
 	protected String accountName;
 	
-	protected ChequeBookListPanel (Object data) {
+	protected CheckbookListPanel (Object data) {
 		super(data);
         this.accountName = ""; //$NON-NLS-1$
         getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
 	}
 	
-	public ChequeBookListPanel() {
-		this(new ArrayList<ChequeBook>());
+	public CheckbookListPanel() {
+		this(new ArrayList<Checkbook>());
 	}
 	
 	public void setContent(Account account) {
 		this.accountName = account.getName();
-		getChequeBooks().clear();
-		for (int i = 0; i < account.getChequeBooksNumber(); i++) {
-			ChequeBook book = account.getChequeBook(i);
-			getChequeBooks().add(book);
+		getCheckbooks().clear();
+		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
+			Checkbook book = account.getCheckbook(i);
+			getCheckbooks().add(book);
 		}
 		((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
 	}
@@ -50,32 +52,32 @@ public class ChequeBookListPanel extends AbstractListAdministrationPanel {
 
 	@Override
 	protected Action getEditButtonAction() {
-		return new EditModeAction();
+		return new EditBookAction();
 	}
 
 	@Override
 	protected Action getNewButtonAction() {
-		return new NewModeAction();
+		return new NewCheckbookAction();
 	}
 
-	class NewModeAction extends AbstractAction {
-		public NewModeAction() {
+	class NewCheckbookAction extends AbstractAction {
+		public NewCheckbookAction() {
 			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.New.tooltip")); //$NON-NLS-1$
+	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.New.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
+			CheckbookDialog dialog = new CheckbookDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()));
 			dialog.setVisible(true);
-			Mode mode = dialog.getMode();
-			if (mode!=null) {
-				((List<Mode>)data).add(mode);
+			Checkbook book = dialog.getCheckbook();
+			if (book!=null) {
+				getCheckbooks().add(book);
 				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
 			}
 		}
 	}
-	class EditModeAction extends AbstractAction {
-		public EditModeAction() {
+	class EditBookAction extends AbstractAction {
+		public EditBookAction() {
 			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
@@ -98,13 +100,13 @@ public class ChequeBookListPanel extends AbstractListAdministrationPanel {
 	class DeleteBookAction extends AbstractAction {			
 		public DeleteBookAction() {
 			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE);
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ChequeBookDialog.Delete.tooltip"));
+	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Delete.tooltip"));
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int row = getJTable().getSelectedRow();
-			getChequeBooks().remove(row);
+			getCheckbooks().remove(row);
 			((AbstractTableModel)getJTable().getModel()).fireTableRowsDeleted(row,row);
 		}
 	}
@@ -132,21 +134,20 @@ public class ChequeBookListPanel extends AbstractListAdministrationPanel {
 	}
 	
 	protected TableModel getTableModel() {
-		return new AbstractChequeBookListModel() {		
+		return new AbstractCheckbookListModel() {		
 			@Override
 			public int getRowCount() {
-				return getChequeBooks().size();
+				return getCheckbooks().size();
 			}
 			
-			protected ChequeBook getChequeBook(int rowIndex) {
-				return getChequeBooks().get(rowIndex);
+			protected Checkbook getCheckBook(int rowIndex) {
+				return getCheckbooks().get(rowIndex);
 			}
 		};
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<ChequeBook> getChequeBooks() {
-		return (List<ChequeBook>) this.data;
+	public List<Checkbook> getCheckbooks() {
+		return (List<Checkbook>) this.data;
 	}
 
 	@Override

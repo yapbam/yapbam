@@ -53,7 +53,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private MainFrame(FilteredData filteredData, Object[] restartData) {
 	    //Create and set up the window.
 		super();
-		this.setMinimumSize(new Dimension(800,300));
+		this.setMinimumSize(new Dimension(800,400));
 		
 	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	    this.addWindowListener(new WindowAdapter() {

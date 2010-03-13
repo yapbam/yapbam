@@ -536,7 +536,7 @@ public class GlobalData extends DefaultListenable {
 		if (event.getChanges()!=0) {
 			// oldMode object will be updated. In order to send the right event data, we have to remember it
 			// So, we'll store it in a new fresh mode object : oldVanished.
-			Mode oldVanished = new Mode(oldMode.getName(), oldMode.getReceiptVdc(), oldMode.getExpenseVdc(), oldMode.isUseChequeBook());
+			Mode oldVanished = new Mode(oldMode.getName(), oldMode.getReceiptVdc(), oldMode.getExpenseVdc(), oldMode.isUseCheckBook());
 			account.replace(oldMode, newMode);
 			event = new ModePropertyChangedEvent(this, account, oldVanished, oldMode);
 			this.fireEvent(event);
@@ -544,13 +544,13 @@ public class GlobalData extends DefaultListenable {
 		}
 	}
 
-	/** Adds a cheque book to an account.
+	/** Adds a checkbook to an account.
 	 * @param account the account
-	 * @param chequeBook the cheque book to add to the account
+	 * @param book the checkbook to add to the account
 	 */
-	public void addChequeBook(Account account, ChequeBook book) {
+	public void add(Account account, Checkbook book) {
 		account.add(book);
-		this.fireEvent(new ChequeBookAddedEvent(this, account, book));
+		this.fireEvent(new CheckbookAddedEvent(this, account, book));
 		this.setChanged();
 	}
 }

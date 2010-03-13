@@ -18,13 +18,16 @@ import javax.swing.event.ListSelectionListener;
 
 import java.awt.Font;
 import java.awt.Color;
-import net.yapbam.gui.dialogs.ChequeBookListPanel;
+
+import net.yapbam.gui.dialogs.checkbook.CheckbookListPanel;
+
+import java.awt.Insets;
 
 public class AccountAdministrationPanel extends JPanel implements AbstractAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 	private AccountListPanel accountListPanel = null;
 	private ModeListPanel modeListPanel = null;
-	private ChequeBookListPanel chequeBookListPanel = null;
+	private CheckbookListPanel checkbookListPanel = null;
 	private GlobalData data;
 	
 	public AccountAdministrationPanel(GlobalData data) {
@@ -59,8 +62,8 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.fill = GridBagConstraints.BOTH;
-		gridBagConstraints1.weightx = 0.0D;
-		gridBagConstraints1.weighty = 0.75D;
+		gridBagConstraints1.weightx = 1.0D;
+		gridBagConstraints1.weighty = 1.0D;
 		gridBagConstraints1.gridy = 1;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
@@ -71,20 +74,22 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.weighty = 1.0D;
+		gridBagConstraints.gridwidth = 0;
+		gridBagConstraints.insets = new Insets(0, 0, 10, 0);
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints2.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.gridx = 0;
+		gridBagConstraints3.gridx = 1;
 		gridBagConstraints3.fill = GridBagConstraints.BOTH;
 		gridBagConstraints3.weighty = 1.0D;
 		gridBagConstraints3.weightx = 1.0D;
-		gridBagConstraints3.gridy = 2;
+		gridBagConstraints3.gridy = 1;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getAccountListPanel(), gridBagConstraints);
 		this.add(getModeListPanel(), gridBagConstraints1);
-		this.add(getChequeBookListPanel(), gridBagConstraints3);
+		this.add(getCheckbookListPanel(), gridBagConstraints3);
 	}
 
 	/**
@@ -135,15 +140,15 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	}
 
 	/**
-	 * This method initializes chequeBookListPanel	
+	 * This method initializes checkookListPanel	
 	 * 	
-	 * @return net.yapbam.gui.dialogs.ChequeBookListPanel	
+	 * @return net.yapbam.gui.dialogs.CheckbookListPanel	
 	 */
-	private ChequeBookListPanel getChequeBookListPanel() {
-		if (chequeBookListPanel == null) {
-			chequeBookListPanel = new ChequeBookListPanel();
-			chequeBookListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("ChequeBookDialog.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+	private CheckbookListPanel getCheckbookListPanel() {
+		if (checkbookListPanel == null) {
+			checkbookListPanel = new CheckbookListPanel();
+			checkbookListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("checkbookDialog.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 		}
-		return chequeBookListPanel;
+		return checkbookListPanel;
 	}
 }
