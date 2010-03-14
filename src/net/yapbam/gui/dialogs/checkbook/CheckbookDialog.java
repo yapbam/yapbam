@@ -49,11 +49,11 @@ public class CheckbookDialog extends AbstractDialog {
 	public static Checkbook open(GlobalData data, Account account, Window owner) {
 		CheckbookDialog dialog = new CheckbookDialog(owner);
 		dialog.setVisible(true);
-		Checkbook newMode = dialog.getCheckbook();
-		if (newMode!=null) {
-//TODO			data.add(account, newMode);
+		Checkbook book = dialog.getCheckbook();
+		if (book!=null) {
+			data.add(account, book);
 		}
-		return newMode;
+		return book;
 	}
 
 	@Override

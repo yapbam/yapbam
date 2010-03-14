@@ -9,15 +9,14 @@ import net.yapbam.gui.LocalizationData;
 public abstract class AbstractCheckbookListModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return LocalizationData.get("checkbookDialog.prefix.short"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("checkbookDialog.next.short"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("checkbookDialog.remaining.short"); //$NON-NLS-1$
+		if (columnIndex==0) return LocalizationData.get("checkbookDialog.next.short"); //$NON-NLS-1$
+		if (columnIndex==1) return LocalizationData.get("checkbookDialog.remaining.short"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return 2;
 	}
 
 	@Override
@@ -26,9 +25,8 @@ public abstract class AbstractCheckbookListModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Checkbook book = getCheckBook(rowIndex);
-		if (columnIndex==0) return book.getPrefix();
-		if (columnIndex==1) return book.getNextCheckNumber();
-		if (columnIndex==2) return book.getRemainingCheckNumber();
+		if (columnIndex==0) return book.getNextCheckNumber();
+		if (columnIndex==1) return book.getRemainingCheckNumber();
 		return "?"; //$NON-NLS-1$
 	}
 
