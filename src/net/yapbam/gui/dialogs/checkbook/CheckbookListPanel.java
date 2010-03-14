@@ -51,7 +51,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 
 	@Override
 	protected Action getEditButtonAction() {
-		return new EditBookAction();
+		return null; //TODO
 	}
 
 	@Override
@@ -105,8 +105,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int row = getJTable().getSelectedRow();
-//TODO			getCheckbooks().remove(row);
-			((AbstractTableModel)getJTable().getModel()).fireTableRowsDeleted(row,row);
+			data.remove(account, account.getCheckbook(row));
 		}
 	}
 	

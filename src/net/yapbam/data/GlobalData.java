@@ -553,4 +553,15 @@ public class GlobalData extends DefaultListenable {
 		this.fireEvent(new CheckbookAddedEvent(this, account, book));
 		this.setChanged();
 	}
+	
+	public void remove(Account account, Checkbook book) {
+		int index = account.indexOf(book);
+		if (index>=0){
+			account.remove(book);
+			this.fireEvent(new CheckbookRemovedEvent(this, index, account, book));
+			this.setChanged();
+		}
+	}
+
+
 }

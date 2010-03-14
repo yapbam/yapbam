@@ -103,6 +103,10 @@ public class Account implements Serializable {
 		return this.checkbooks.get(index);
 	}
 	
+	public int indexOf(Checkbook book) {
+		return this.checkbooks.indexOf(book);
+	}
+	
 	void add(Checkbook book) {
 		this.checkbooks.add(book);
 	}

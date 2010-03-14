@@ -13,9 +13,13 @@ import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
+import net.yapbam.data.event.CheckbookAddedEvent;
+import net.yapbam.data.event.CheckbookRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.ModeAddedEvent;
+import net.yapbam.data.event.ModeRemovedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.gui.IconManager;
@@ -176,6 +180,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		}
 		@Override
 		public void processEvent(DataEvent event) {
+			Account account = null;
 			if (event instanceof EverythingChangedEvent) {
 				this.fireTableDataChanged();
 			} else if (event instanceof AccountAddedEvent) {
@@ -185,13 +190,21 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 				int index = ((AccountRemovedEvent)event).getIndex();
 				this.fireTableRowsDeleted(index, index);
 			} else if (event instanceof TransactionAddedEvent) {
-				Account account = ((TransactionAddedEvent)event).getTransaction().getAccount();
+				account = ((TransactionAddedEvent)event).getTransaction().getAccount();
+			} else if (event instanceof TransactionRemovedEvent) {
+				account = ((TransactionRemovedEvent)event).getRemoved().getAccount();
+			} else if (event instanceof ModeAddedEvent) {
+				account = ((ModeAddedEvent)event).getAccount();
+			} else if (event instanceof ModeRemovedEvent) {
+				account = ((ModeRemovedEvent)event).getAccount();
+			} else if (event instanceof CheckbookAddedEvent) {
+				account = ((CheckbookAddedEvent)event).getAccount();
+			} else if (event instanceof CheckbookRemovedEvent) {
+				account = ((CheckbookRemovedEvent)event).getAccount();
+			}
+			if (account!=null) {
 				int row = ((GlobalData)data).indexOf(account);
 				this.fireTableRowsUpdated(row, row);
-			} else if (event instanceof TransactionRemovedEvent) {
-				Account account = ((TransactionRemovedEvent)event).getRemoved().getAccount();
-				int row = ((GlobalData)data).indexOf(account);
-				this.fireTableRowsUpdated(row, row);				
 			}
 		}
 	}
