@@ -14,7 +14,13 @@ public class Checkbook implements Serializable {
 	private int used;
 	private int numberLength;
 	
-	public Checkbook(String prefix, BigInteger start, int size, int numberLength) {
+	/** Constructor.
+	 * @param prefix The check number prefix; the non numerical part preceding the number itself
+	 * @param start The first available check number, not including the prefix
+	 * @param numberLength The number of characters used to represent the number (this is mandatory to have the right number of leading zeros in the number)
+	 * @param size The number of checks still available
+	 */
+	public Checkbook(String prefix, BigInteger start, int numberLength, int size) {
 		this.firstNumber = start;
 		this.prefix = prefix;
 		this.size = size;
@@ -27,12 +33,17 @@ public class Checkbook implements Serializable {
 	 */
 	public String getNextCheckNumber() {
 		if (isEmpty()) return null;
-		String number = this.firstNumber.add(BigInteger.valueOf(used)).toString();
+		return this.prefix + getFormatedNumber(used);
+	}
+
+	private String getFormatedNumber(int index) {
+		String number = this.firstNumber.add(BigInteger.valueOf(index)).toString();
 		StringBuffer leadingZeros = new StringBuffer();
 		for (int i = number.length(); i < this.numberLength; i++) {
 			leadingZeros.append('0');
 		}
-		return this.prefix + leadingZeros + number;
+		number = leadingZeros + number;
+		return number;
 	}
 	
 	/** Detach a check from this checkbook.
@@ -83,6 +94,6 @@ public class Checkbook implements Serializable {
 
 	@Override
 	public String toString() {
-		return prefix+"["+firstNumber+"-"+firstNumber.add(BigInteger.valueOf(size))+"]->"+getNextCheckNumber();
+		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size)+"]->"+getNextCheckNumber();
 	}
 }

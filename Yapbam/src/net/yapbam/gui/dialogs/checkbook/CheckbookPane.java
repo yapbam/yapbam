@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
 import net.yapbam.data.Checkbook;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.IntegerWidget;
 import net.yapbam.util.NullUtils;
 
@@ -15,7 +16,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigInteger;
 
-public class CheckbookPane extends JPanel { //LOCAL
+public class CheckbookPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$  //  @jve:decl-index=0:
 
@@ -54,8 +55,7 @@ public class CheckbookPane extends JPanel { //LOCAL
 		gridBagConstraints1.anchor = GridBagConstraints.WEST;
 		gridBagConstraints1.gridy = 1;
 		jLabel1 = new JLabel();
-		jLabel1.setText("Number of checks:");
-		jLabel1.setToolTipText("Enter here the number of the first check (without the prefix)");
+		jLabel1.setText(LocalizationData.get("checkbookDialog.number")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints2.gridy = 0;
@@ -68,8 +68,7 @@ public class CheckbookPane extends JPanel { //LOCAL
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.gridy = 0;
 		jLabel = new JLabel();
-		jLabel.setText("First check's number:");
-		jLabel.setToolTipText("");
+		jLabel.setText(LocalizationData.get("checkbookDialog.first")); //$NON-NLS-1$
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(jLabel, gridBagConstraints);
@@ -95,7 +94,7 @@ public class CheckbookPane extends JPanel { //LOCAL
 		if (first == null) {
 			first = new JTextField();
 			first.setColumns(10);
-			first.setToolTipText("Enter here the checks number prefix");
+			first.setToolTipText(LocalizationData.get("checkbookDialog.first.tooltip")); //$NON-NLS-1$
 			first.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -115,7 +114,7 @@ public class CheckbookPane extends JPanel { //LOCAL
 		if (number == null) {
 			number = new IntegerWidget();
 			number.setColumns(2);
-			number.setToolTipText("Enter here the number of checks in the checkbook");
+			number.setToolTipText(LocalizationData.get("checkbookDialog.number.tooltip")); //$NON-NLS-1$
 			number.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -131,10 +130,10 @@ public class CheckbookPane extends JPanel { //LOCAL
 		this.invalidityCause = null;
 		this.currentBook = null;
 		if (first.getText().isEmpty()) {
-			invalidityCause = "Disabled because the first check is blank";
+			invalidityCause = LocalizationData.get("checkbookDialog.error.firstIsBlank"); //$NON-NLS-1$
 		} else if ((number.getValue()==null) || (number.getValue()<=0)) {
-			if (number.getText().length()==0) invalidityCause = "Disabled because the number of checks in the checkbook is empty";
-			else invalidityCause = "Disabled because the number of checks you entered is not a positive integer";
+			if (number.getText().length()==0) invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsBlank"); //$NON-NLS-1$
+			else invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsNegative"); //$NON-NLS-1$
 		} else {
 			// All fields are filled.
 			// We will try to separate the prefix of the check number (the part that will remain constant over all the check book)
@@ -148,16 +147,15 @@ public class CheckbookPane extends JPanel { //LOCAL
 				suffixLength++;
 			}
 			if (suffixLength==0) {
-				this.invalidityCause = "Disabled because the first check number has not a numerical suffix";
+				this.invalidityCause = LocalizationData.get("checkbookDialog.error.noNumericalSuffix"); //$NON-NLS-1$
 			} else {
 				BigInteger start = new BigInteger(firstNumber.substring(l-suffixLength));
 				BigInteger last = start.add(BigInteger.valueOf(number.getValue()));
 				if ((last.toString().length()>suffixLength) && (suffixLength!=l)) {
-					this.invalidityCause = "Disabled because the check number numerical suffix is too small to contain last check number";
+					this.invalidityCause = LocalizationData.get("checkbookDialog.error.numericalSuffixToSmall"); //$NON-NLS-1$
 				} else {
-					String prefix = suffixLength==l?"":firstNumber.substring(0, l-suffixLength);
-					currentBook = new Checkbook(prefix, start, number.getValue(), l-prefix.length());
-					System.out.println (currentBook);
+					String prefix = suffixLength==l?"":firstNumber.substring(0, l-suffixLength); //$NON-NLS-1$
+					currentBook = new Checkbook(prefix, start, l-prefix.length(), number.getValue());
 				}
 			}
 		}

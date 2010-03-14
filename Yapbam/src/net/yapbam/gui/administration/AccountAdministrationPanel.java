@@ -149,7 +149,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	 */
 	private CheckbookListPanel getCheckbookListPanel() {
 		if (checkbookListPanel == null) {
-			checkbookListPanel = new CheckbookListPanel();
+			checkbookListPanel = new CheckbookListPanel(data);
 			checkbookListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("checkbookDialog.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 		}
 		return checkbookListPanel;
