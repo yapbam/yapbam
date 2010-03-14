@@ -112,28 +112,28 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		if (southPanel == null) {
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 2;
-			gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints11.insets = new Insets(5, 0, 5, 5);
 			gridBagConstraints11.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints2.insets = new Insets(5, 0, 5, 5);
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridx = 3;
 			gridBagConstraints2.gridy = 0;
 			gridBagConstraints2.weightx = 1.0D;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints1.insets = new Insets(5, 0, 5, 5);
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.gridx = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
-			gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints.insets = new Insets(5, 0, 5, 5);
 			gridBagConstraints.gridy = 0;
 			southPanel = new JPanel();
 			southPanel.setLayout(new GridBagLayout());
 			southPanel.add(getNewButton(), gridBagConstraints1);
-			JButton dummy = getEditButton();
-			if (dummy!=null) southPanel.add(dummy, gridBagConstraints);
+			if (getEditButton()!=null) southPanel.add(getEditButton(), gridBagConstraints);
 			southPanel.add(getDeleteButton(), gridBagConstraints2);
-			dummy = getDuplicateButton();
-			if (dummy!=null) southPanel.add(dummy, gridBagConstraints11);
+			if (getDuplicateButton()!=null) southPanel.add(getDuplicateButton(), gridBagConstraints11);
 		}
 		return southPanel;
 	}
