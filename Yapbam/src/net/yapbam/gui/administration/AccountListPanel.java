@@ -90,6 +90,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		    @Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 		    		boolean hasFocus, int row, int column) {
+		    	super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			    setText(LocalizationData.getCurrencyInstance().format(value));
 			    this.setHorizontalAlignment(SwingConstants.RIGHT);
 		    	return this;

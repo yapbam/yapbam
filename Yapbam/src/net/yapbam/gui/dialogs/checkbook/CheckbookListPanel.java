@@ -37,6 +37,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 	
 	public void setContent(Account account) {
 		this.accountName = account.getName();
+		this.getNewButton().getAction().setEnabled(account!=null);
 		getCheckbooks().clear();
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
 			Checkbook book = account.getCheckbook(i);
@@ -64,6 +65,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 		public NewCheckbookAction() {
 			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.New.tooltip")); //$NON-NLS-1$
+	        setEnabled(false);
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -152,6 +154,6 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 
 	@Override
 	protected Action getDuplicateButtonAction() {
-		return new DuplicateModeAction();
+		return null;
 	}
 }
