@@ -70,19 +70,27 @@ public class Checkbook implements Serializable {
 	}
 
 	/** Gets the first check number of this book (not the first still available).
-	 * @return an int, the check number, not including any prefix
+	 * @return an BigInteger, the check number, not including any prefix
 	 * @see #getNextCheckNumber()
-	 *
-	public int getFirstNumber() {
+	 */
+	public BigInteger getFirstNumber() {
 		return firstNumber;
-	}*/
-	
+	}
+
 	/** Gets the total number of checks.
 	 * @return an integer, the total number of checks in this book including the already used checks.
 	 * @see #getRemainingChecksNumber()
 	 */
 	public int getChecksNumber() {
 		return this.size;
+	}
+	
+	public int getNumberLength() {
+		return this.numberLength;
+	}
+	
+	public int getUsed() {
+		return this.used;
 	}
 
 	/** Gets the number of remaining checks.

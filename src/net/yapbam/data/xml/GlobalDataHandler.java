@@ -1,5 +1,6 @@
 package net.yapbam.data.xml;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +53,12 @@ class GlobalDataHandler extends DefaultHandler {
 			this.tempData.push(attributes.getValue(Serializer.ID_ATTRIBUTE));
 			this.tempData.push(attributes.getValue(Serializer.CHECKBOOK_ATTRIBUTE)!=null?true:false);
 			this.tempData.push(new DateStepper[2]);
+		} else if (qName.equals(Serializer.CHECKBOOK_TAG)) {
+			String prefix = attributes.getValue(Serializer.PREFIX_ATTRIBUTE);
+			BigInteger first = new BigInteger(attributes.getValue(Serializer.FIRST_NUMBER_ATTRIBUTE));
+			int length = Integer.parseInt(attributes.getValue(Serializer.NUMBER_LENGTH_ATTRIBUTE));
+			int size = Integer.parseInt(attributes.getValue(Serializer.SIZE_ATTRIBUTE));
+			this.tempData.push (new Checkbook(prefix, first, length, size));
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG) || qName.equals(Serializer.RECEIPT_VDC_TAG)) {
 			DateStepper vdc;
 			String kind = attributes.getValue(Serializer.DATE_STEPPER_KIND_ATTRIBUTE);
@@ -129,6 +136,10 @@ class GlobalDataHandler extends DefaultHandler {
 			Mode mode = new Mode(id, vdcs[1], vdcs[0], useCheckbook);
 			Account account = (Account) this.tempData.peek();
 			this.data.add(account, mode);
+		} else if (qName.equals(Serializer.CHECKBOOK_TAG)) {
+			Checkbook book = (Checkbook) this.tempData.pop();
+			Account account = (Account) this.tempData.peek();
+			this.data.add(account, book);
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG)) {
 		} else if (qName.equals(Serializer.RECEIPT_VDC_TAG)) {
 		} else if (qName.equals(Serializer.TRANSACTION_TAG)) {

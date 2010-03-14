@@ -43,7 +43,13 @@ public class Serializer {
 	static final String MONTHLY_DATE_STEPPER_KIND = "monthly";
 	static final String DEFERRED_DATE_STEPPER_KIND = "deferred";
 	static final String RELATIVE_DATE_STEPPER_KIND = "daily";
-	static final String CHECKBOOK_ATTRIBUTE = "chequeBook";
+	static final String CHECKBOOK_ATTRIBUTE = "checkbook";
+	
+	static final String PREFIX_ATTRIBUTE = "prefix";
+	static final String FIRST_NUMBER_ATTRIBUTE = "first";
+	static final String NUMBER_LENGTH_ATTRIBUTE = "numberOfDigits";
+	static final String SIZE_ATTRIBUTE = "size";
+	static final String USED_ATTRIBUTE = "used";
 
 	static final String INITIAL_BALANCE_ATTRIBUTE = "initialBalance";
 	static final String ID_ATTRIBUTE = "id";
@@ -55,6 +61,7 @@ public class Serializer {
 	static final String CATEGORY_TAG = "CATEGORY";
 	static final String ACCOUNT_TAG = "ACCOUNT";
 	static final String MODE_TAG = "MODE";
+	static final String CHECKBOOK_TAG = "CHECKBOOK";
 	static final String EXPENSE_VDC_TAG = "EXPENSE";
 	static final String RECEIPT_VDC_TAG = "RECEIPT";
 	static final String PERIODICAL_TAG = "PERIODICAL";
@@ -156,6 +163,9 @@ public class Serializer {
 			Mode mode = account.getMode(i, false);
 			if (!mode.equals(Mode.UNDEFINED) && !saved.contains(mode.getName())) serialize(mode);
 		}
+		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
+			serialize(account.getCheckbook(i));
+		}
 		hd.endElement("","",ACCOUNT_TAG);
 	}
 	
@@ -177,6 +187,16 @@ public class Serializer {
 			hd.endElement("", "", RECEIPT_VDC_TAG);
 		}
 		hd.endElement("","",MODE_TAG);
+	}
+
+	private void serialize(Checkbook book) throws SAXException {
+		atts.clear();
+		atts.addAttribute("","",PREFIX_ATTRIBUTE,"CDATA",book.getPrefix());
+		atts.addAttribute("","",FIRST_NUMBER_ATTRIBUTE,"CDATA",book.getFirstNumber().toString());
+		atts.addAttribute("","",NUMBER_LENGTH_ATTRIBUTE,"CDATA",Integer.toString(book.getNumberLength()));
+		atts.addAttribute("","",SIZE_ATTRIBUTE,"CDATA",Integer.toString(book.getChecksNumber()));
+		hd.startElement("","",CHECKBOOK_TAG,atts);
+		hd.endElement("","",CHECKBOOK_TAG);
 	}
 
 	private void setAttributes(DateStepper dateStepper) {
