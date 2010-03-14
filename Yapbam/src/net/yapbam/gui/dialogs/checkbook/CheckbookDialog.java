@@ -23,6 +23,12 @@ public class CheckbookDialog extends AbstractDialog {
 	
 	protected JPanel createCenterPane(Object data) {
 		this.pane = new CheckbookPane();
+		this.pane.addPropertyChangeListener(CheckbookPane.INVALIDITY_CAUSE, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		});
         return this.pane;
     }
 	
@@ -52,7 +58,7 @@ public class CheckbookDialog extends AbstractDialog {
 
 	@Override
 	protected String getOkDisabledCause() {
-		return this.pane.getOkDisableCause();
+		return this.pane.getInvalidityCause();
 	}
 
 	class Listener implements PropertyChangeListener {
