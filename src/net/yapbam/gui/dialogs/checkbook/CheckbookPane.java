@@ -4,6 +4,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
+
+import net.yapbam.data.Checkbook;
 import net.yapbam.gui.widget.IntegerWidget;
 import net.yapbam.util.NullUtils;
 
@@ -11,8 +13,9 @@ import javax.swing.JTextField;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigInteger;
 
-public class CheckbookPane extends JPanel {
+public class CheckbookPane extends JPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$  //  @jve:decl-index=0:
 
@@ -20,7 +23,10 @@ public class CheckbookPane extends JPanel {
 	private JTextField first = null;
 	private JLabel jLabel1 = null;
 	private IntegerWidget number = null;
-	private String invalidityCause;
+	
+	private String invalidityCause;  //  @jve:decl-index=0:
+	private Checkbook currentBook;
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -77,8 +83,7 @@ public class CheckbookPane extends JPanel {
 	}
 
 	public Object getCheckbook() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.currentBook;
 	}
 
 	/**
@@ -93,7 +98,7 @@ public class CheckbookPane extends JPanel {
 			first.setToolTipText("Enter here the checks number prefix");
 			first.addKeyListener(new KeyAdapter() {
 				@Override
-				public void keyTyped(KeyEvent e) {
+				public void keyReleased(KeyEvent e) {
 					parse();
 				}
 			});
@@ -113,7 +118,7 @@ public class CheckbookPane extends JPanel {
 			number.setToolTipText("Enter here the number of checks in the checkbook");
 			number.addKeyListener(new KeyAdapter() {
 				@Override
-				public void keyTyped(KeyEvent e) {
+				public void keyReleased(KeyEvent e) {
 					parse();
 				}
 			});
@@ -122,18 +127,41 @@ public class CheckbookPane extends JPanel {
 	}
 
 	private void parse() {
-		System.out.println("First:"+first.getText());//TODO
-		System.out.println("Number:"+number.getText()+"->"+number.getValue()); //TODO
 		String old = this.invalidityCause;
 		this.invalidityCause = null;
-		if ((number.getValue()==null) || (number.getValue()<=0)) {
+		this.currentBook = null;
+		if (first.getText().isEmpty()) {
+			invalidityCause = "Disabled because the first check is blank";
+		} else if ((number.getValue()==null) || (number.getValue()<=0)) {
 			if (number.getText().length()==0) invalidityCause = "Disabled because the number of checks in the checkbook is empty";
-			invalidityCause = "Disabled because the number of checks you entered is not a positive integer";
+			else invalidityCause = "Disabled because the number of checks you entered is not a positive integer";
 		} else {
-			
+			// All fields are filled.
+			// We will try to separate the prefix of the check number (the part that will remain constant over all the check book)
+			// and the number itself
+			String firstNumber = first.getText();
+			int l = firstNumber.length();
+			// First, we will compute how long is the integer at the end of the first check number
+			int suffixLength = 0;
+			for (int i = l-1; i >=0; i--) {
+				if (!Character.isDigit(firstNumber.charAt(i))) break;
+				suffixLength++;
+			}
+			if (suffixLength==0) {
+				this.invalidityCause = "Disabled because the first check number has not a numerical suffix";
+			} else {
+				BigInteger start = new BigInteger(firstNumber.substring(l-suffixLength));
+				BigInteger last = start.add(BigInteger.valueOf(number.getValue()));
+				if ((last.toString().length()>suffixLength) && (suffixLength!=l)) {
+					this.invalidityCause = "Disabled because the check number numerical suffix is too small to contain last check number";
+				} else {
+					String prefix = suffixLength==l?"":firstNumber.substring(0, l-suffixLength);
+					currentBook = new Checkbook(prefix, start, number.getValue(), l-prefix.length());
+					System.out.println (currentBook);
+				}
+			}
 		}
 		if (!NullUtils.areEquals(old, this.invalidityCause)) {
-			System.out.println ("change fired -> "+this.invalidityCause);
 			this.firePropertyChange(INVALIDITY_CAUSE, old, this.invalidityCause);
 		}
 	}
