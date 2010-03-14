@@ -8,6 +8,7 @@ import javax.swing.JTable;
 
 import java.awt.GridBagConstraints;
 
+import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.ModeListPanel;
@@ -40,7 +41,9 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					int row = jTable.getSelectedRow();
-					getModeListPanel().setContent(row>=0?AccountAdministrationPanel.this.data.getAccount(row):null);
+					Account account = row>=0?AccountAdministrationPanel.this.data.getAccount(row):null;
+					getModeListPanel().setContent(account);
+					getCheckbookListPanel().setContent(account);
 				}
 			}
 		});
