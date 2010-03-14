@@ -1,6 +1,7 @@
 package net.yapbam.data;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 /** This class represents a checkbook.
  */
@@ -8,15 +9,17 @@ public class Checkbook implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String prefix;
-	private int firstNumber;
+	private BigInteger firstNumber;
 	private int size;
 	private int used;
+	private int numberLength;
 	
-	public Checkbook(String prefix, int firstNumber, int size) {
-		this.firstNumber = firstNumber;
+	public Checkbook(String prefix, BigInteger start, int size, int numberLength) {
+		this.firstNumber = start;
 		this.prefix = prefix;
 		this.size = size;
 		this.used = 0;
+		this.numberLength = numberLength;
 	}
 	
 	/** Returns the number of the next available check in the checkbook
@@ -24,14 +27,19 @@ public class Checkbook implements Serializable {
 	 */
 	public String getNextCheckNumber() {
 		if (isEmpty()) return null;
-		return this.prefix + this.firstNumber + used;
+		String number = this.firstNumber.add(BigInteger.valueOf(used)).toString();
+		StringBuffer leadingZeros = new StringBuffer();
+		for (int i = number.length(); i < this.numberLength; i++) {
+			leadingZeros.append('0');
+		}
+		return this.prefix + leadingZeros + number;
 	}
 	
 	/** Detach a check from this checkbook.
 	 * All checks before this one are supposed to be detached too.
 	 * @param checkNumber
 	 */
-	void detach (int checkNumber) {
+/*	void detach (int checkNumber) {
 		int newUsed = checkNumber - this.firstNumber;
 		if (newUsed>this.used) this.used = newUsed;
 	}
@@ -71,5 +79,10 @@ public class Checkbook implements Serializable {
 	 */
 	public int getRemainingCheckNumber() {
 		return Math.max(0, size-used);
+	}
+
+	@Override
+	public String toString() {
+		return prefix+"["+firstNumber+"-"+firstNumber.add(BigInteger.valueOf(size))+"]->"+getNextCheckNumber();
 	}
 }
