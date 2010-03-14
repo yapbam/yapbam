@@ -8,6 +8,7 @@ import java.util.Iterator;
  *	Please note that if the traceEvents java system property is set to true, all data events are trace on stderr. 
  */
 public abstract class DefaultListenable {
+	private static final boolean TRACE_LISTENERS = Boolean.getBoolean("traceEventListeners");
 	private static final boolean TRACE_EVENTS = Boolean.getBoolean("traceEvents");
 	private static int indent = 0;
 	
@@ -66,13 +67,14 @@ public abstract class DefaultListenable {
 	 */
 	public void addListener(DataListener listener) {
 		if (listeners==null) this.listeners = new ArrayList<DataListener>();
-		if (TRACE_EVENTS) System.err.println ("Add listener "+listener+" on "+this);
+		if (TRACE_EVENTS || TRACE_LISTENERS) System.err.println ("Add listener "+listener+" on "+this);
 		listeners.add(listener);
 	}
 	
 	/** Remove all the previously registered listeners.
 	 */
 	public void clearListeners() {
+		if (TRACE_EVENTS || TRACE_LISTENERS) System.err.println ("All listeners are cleared on "+this);
 		this.listeners.clear();
 	}
 }

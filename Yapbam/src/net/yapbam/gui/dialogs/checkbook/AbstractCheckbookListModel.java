@@ -26,7 +26,7 @@ public abstract class AbstractCheckbookListModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Checkbook book = getCheckBook(rowIndex);
 		if (columnIndex==0) return book.getNextCheckNumber();
-		if (columnIndex==1) return book.getRemainingCheckNumber();
+		if (columnIndex==1) return book.getRemainingChecksNumber();
 		return "?"; //$NON-NLS-1$
 	}
 

@@ -53,7 +53,7 @@ public class Checkbook implements Serializable {
 /*	void detach (int checkNumber) {
 		int newUsed = checkNumber - this.firstNumber;
 		if (newUsed>this.used) this.used = newUsed;
-	}
+	}*/
 	
 	/** Tests if the checkbook is empty
 	 * @return true if it is empty
@@ -88,7 +88,7 @@ public class Checkbook implements Serializable {
 	/** Gets the number of remaining checks.
 	 * @return a povitive or null integer
 	 */
-	public int getRemainingCheckNumber() {
+	public int getRemainingChecksNumber() {
 		return Math.max(0, size-used);
 	}
 
