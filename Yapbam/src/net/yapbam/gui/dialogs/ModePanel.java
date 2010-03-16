@@ -11,6 +11,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
+import java.math.BigInteger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -114,7 +115,7 @@ class ModePanel extends JPanel {
         stopLabel = new JLabel(LocalizationData.get("ModeDialog.stop")); //$NON-NLS-1$
 		deferedPanel.add(stopLabel, c2);
         c2.gridx=1;
-        stopField = new IntegerWidget(1, 31);
+        stopField = new IntegerWidget(new BigInteger("1"), new BigInteger("31"));
         stopField.addFocusListener(focusListener);
         stopField.addKeyListener(keyListener);
         stopField.setColumns(2);
@@ -122,7 +123,7 @@ class ModePanel extends JPanel {
         c2.gridx=2;
         debtLabel = new JLabel(LocalizationData.get("ModeDialog.debt")); //$NON-NLS-1$
 		deferedPanel.add(debtLabel, c2);
-		debtField = new IntegerWidget(1, 31);
+		debtField = new IntegerWidget(new BigInteger("1"), new BigInteger("31"));
 		debtField.addFocusListener(focusListener);
 		debtField.addKeyListener(keyListener);
         debtField.setColumns(2);
@@ -153,9 +154,9 @@ class ModePanel extends JPanel {
 			if (index==0) {
 				return DateStepper.IMMEDIATE;
 			} else if (index==1) {
-				return new DayDateStepper(relField.getValue(), null);
+				return new DayDateStepper(relField.getValue().intValue(), null);
 			} else if (index==2) {
-				return new DeferredValueDateComputer(stopField.getValue(), debtField.getValue());
+				return new DeferredValueDateComputer(stopField.getValue().intValue(), debtField.getValue().intValue());
 			} else {
 				throw new RuntimeException();
 			}

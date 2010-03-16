@@ -51,7 +51,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 
 	@Override
 	protected Action getEditButtonAction() {
-		return null; //TODO
+		return new EditBookAction();
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 		return new NewCheckbookAction();
 	}
 
-	class NewCheckbookAction extends AbstractAction {
+	private final class NewCheckbookAction extends AbstractAction {
 		public NewCheckbookAction() {
 			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.New.tooltip")); //$NON-NLS-1$
@@ -75,28 +75,26 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 			}
 		}
 	}
-	class EditBookAction extends AbstractAction {
+	private final class EditBookAction extends AbstractAction {
 		public EditBookAction() {
 			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			int row = getJTable().getSelectedRow();
-//			Mode old = ((List<Mode>)data).remove(row);
-//			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
-//			dialog.setContent(old);
-//			dialog.setVisible(true);
-//			Mode mode = dialog.getMode();
-//			if (mode==null) {
-//				((List<Mode>)data).add(row,old);
-//			} else {
-//				((List<Mode>)data).add(row,mode);
-//			}
-//			((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);
+			int row = getJTable().getSelectedRow();
+			Checkbook old = account.getCheckbook(row);
+			CheckbookDialog dialog = new CheckbookDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()));
+			dialog.setContent(old);
+			dialog.setVisible(true);
+			Checkbook checkbook = dialog.getCheckbook();
+			if (checkbook!=null) {
+				((GlobalData)data).setCheckbook(account, old, checkbook);
+//				((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);
+			}
 		}
 	}
-	class DeleteBookAction extends AbstractAction {			
+	private final class DeleteBookAction extends AbstractAction {			
 		public DeleteBookAction() {
 			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE);
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Delete.tooltip"));

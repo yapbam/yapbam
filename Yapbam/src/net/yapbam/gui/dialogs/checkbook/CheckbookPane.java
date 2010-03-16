@@ -27,6 +27,10 @@ public class CheckbookPane extends JPanel {
 	
 	private String invalidityCause;  //  @jve:decl-index=0:
 	private Checkbook currentBook;
+	private JLabel jLabel2 = null;
+	private JTextField prefix = null;
+	private JLabel jLabel3 = null;
+	private JTextField next = null;
 	
 	/**
 	 * This is the default constructor
@@ -43,30 +47,54 @@ public class CheckbookPane extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+		gridBagConstraints4.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints4.gridy = 3;
+		gridBagConstraints4.weightx = 1.0;
+		gridBagConstraints4.anchor = GridBagConstraints.EAST;
+		gridBagConstraints4.insets = new Insets(5, 0, 0, 0);
+		gridBagConstraints4.gridx = 1;
+		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+		gridBagConstraints31.gridx = 0;
+		gridBagConstraints31.gridy = 3;
+		jLabel3 = new JLabel();
+		jLabel3.setText("Next check's number:");
+		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+		gridBagConstraints21.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints21.gridy = 0;
+		gridBagConstraints21.weightx = 1.0;
+		gridBagConstraints21.anchor = GridBagConstraints.EAST;
+		gridBagConstraints21.gridx = 1;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.anchor = GridBagConstraints.WEST;
+		gridBagConstraints11.gridy = 0;
+		jLabel2 = new JLabel();
+		jLabel2.setText("Prefix");
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
-		gridBagConstraints3.gridy = 1;
+		gridBagConstraints3.gridy = 2;
 		gridBagConstraints3.weightx = 1.0;
 		gridBagConstraints3.anchor = GridBagConstraints.EAST;
-		gridBagConstraints3.insets = new Insets(0, 0, 0, 0);
+		gridBagConstraints3.insets = new Insets(5, 0, 0, 0);
 		gridBagConstraints3.gridx = 1;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.anchor = GridBagConstraints.WEST;
-		gridBagConstraints1.gridy = 1;
+		gridBagConstraints1.gridy = 2;
 		jLabel1 = new JLabel();
 		jLabel1.setText(LocalizationData.get("checkbookDialog.number")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
-		gridBagConstraints2.gridy = 0;
+		gridBagConstraints2.gridy = 1;
 		gridBagConstraints2.weightx = 1.0;
 		gridBagConstraints2.anchor = GridBagConstraints.EAST;
-		gridBagConstraints2.insets = new Insets(0, 0, 5, 0);
+		gridBagConstraints2.insets = new Insets(5, 0, 0, 0);
 		gridBagConstraints2.gridx = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
-		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridy = 1;
 		jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("checkbookDialog.first")); //$NON-NLS-1$
 		this.setSize(300, 200);
@@ -75,6 +103,10 @@ public class CheckbookPane extends JPanel {
 		this.add(getFirst(), gridBagConstraints2);
 		this.add(jLabel1, gridBagConstraints1);
 		this.add(getNumber(), gridBagConstraints3);
+		this.add(jLabel2, gridBagConstraints11);
+		this.add(getPrefix(), gridBagConstraints21);
+		this.add(jLabel3, gridBagConstraints31);
+		this.add(getNext(), gridBagConstraints4);
 	}
 
 	public String getInvalidityCause() {
@@ -112,7 +144,7 @@ public class CheckbookPane extends JPanel {
 	 */
 	private IntegerWidget getNumber() {
 		if (number == null) {
-			number = new IntegerWidget();
+			number = new IntegerWidget(new BigInteger("0"),new BigInteger(Integer.toString(Integer.MAX_VALUE)));
 			number.setColumns(2);
 			number.setToolTipText(LocalizationData.get("checkbookDialog.number.tooltip")); //$NON-NLS-1$
 			number.addKeyListener(new KeyAdapter() {
@@ -131,9 +163,9 @@ public class CheckbookPane extends JPanel {
 		this.currentBook = null;
 		if (first.getText().isEmpty()) {
 			invalidityCause = LocalizationData.get("checkbookDialog.error.firstIsBlank"); //$NON-NLS-1$
-		} else if ((number.getValue()==null) || (number.getValue()<=0)) {
+		} else if (number.getValue()==null) {
 			if (number.getText().length()==0) invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsBlank"); //$NON-NLS-1$
-			else invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsNegative"); //$NON-NLS-1$
+			else invalidityCause = LocalizationData.get("checkbookDialog.error.numberOutOfRange"); //$NON-NLS-1$
 		} else {
 			// All fields are filled.
 			// We will try to separate the prefix of the check number (the part that will remain constant over all the check book)
@@ -150,17 +182,51 @@ public class CheckbookPane extends JPanel {
 				this.invalidityCause = LocalizationData.get("checkbookDialog.error.noNumericalSuffix"); //$NON-NLS-1$
 			} else {
 				BigInteger start = new BigInteger(firstNumber.substring(l-suffixLength));
-				BigInteger last = start.add(BigInteger.valueOf(number.getValue()));
+				BigInteger last = start.add(number.getValue());
 				if ((last.toString().length()>suffixLength) && (suffixLength!=l)) {
 					this.invalidityCause = LocalizationData.get("checkbookDialog.error.numericalSuffixToSmall"); //$NON-NLS-1$
 				} else {
 					String prefix = suffixLength==l?"":firstNumber.substring(0, l-suffixLength); //$NON-NLS-1$
-					currentBook = new Checkbook(prefix, start, l-prefix.length(), number.getValue());
+					currentBook = new Checkbook(prefix, start, l-prefix.length(), number.getValue().intValue(), 0);
 				}
 			}
 		}
 		if (!NullUtils.areEquals(old, this.invalidityCause)) {
 			this.firePropertyChange(INVALIDITY_CAUSE, old, this.invalidityCause);
 		}
+	}
+
+	public void setContent(Checkbook book) {
+		this.first.setText(book.getNextCheckNumber());
+		this.number.setValue(book.getRemainingChecksNumber());
+		parse();
+	}
+
+	/**
+	 * This method initializes prefix	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getPrefix() {
+		if (prefix == null) {
+			prefix = new JTextField();
+			prefix.setColumns(10);
+			prefix.setToolTipText("Enter the prefix common to all checks in the check book");
+		}
+		return prefix;
+	}
+
+	/**
+	 * This method initializes next	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getNext() {
+		if (next == null) {
+			next = new JTextField();
+			next.setToolTipText(LocalizationData.get("checkbookDialog.first.tooltip"));
+			next.setColumns(10);
+		}
+		return next;
 	}
 }

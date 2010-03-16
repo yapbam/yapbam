@@ -66,9 +66,9 @@ public class CheckbookDialog extends AbstractDialog {
 			updateOkButtonEnabled();
 		}
 	}
-/*
+
 	public void setContent(Checkbook book) {
 		setTitle(LocalizationData.get("checkbookDialog.title.edit")); //$NON-NLS-1$
 		this.pane.setContent (book);
-	}*/
+	}
 }

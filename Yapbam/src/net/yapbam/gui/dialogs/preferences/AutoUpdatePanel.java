@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigInteger;
 
 import javax.swing.JLabel;
 
@@ -163,7 +164,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 	 */
 	private IntegerWidget getDays() {
 		if (days == null) {
-			days = new IntegerWidget(0,Integer.MAX_VALUE);
+			days = new IntegerWidget(new BigInteger("0"),new BigInteger(Integer.toString(Integer.MAX_VALUE)));
 			days.setColumns(2);
 			days.setToolTipText(LocalizationData.get("PreferencesDialog.AutoUpdate.days.toolTip")); //$NON-NLS-1$
 		}
@@ -187,7 +188,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 			if (days.getValue()==null) {
 				days.setValue(0);
 			}
-			step = days.getValue();
+			step = days.getValue().intValue();
 		}
 		Preferences.INSTANCE.setAutoUpdate(step, false);
 		return false;

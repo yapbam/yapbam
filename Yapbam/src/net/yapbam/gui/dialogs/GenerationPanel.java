@@ -25,6 +25,7 @@ import net.yapbam.gui.widget.IntegerWidget;
 import net.yapbam.util.NullUtils;
 
 import java.lang.Integer;
+import java.math.BigInteger;
 import java.util.Date;
 
 public class GenerationPanel extends JPanel {
@@ -182,7 +183,7 @@ public class GenerationPanel extends JPanel {
 	 */
 	private IntegerWidget getNb() {
 		if (nb == null) {
-	        nb = new IntegerWidget(1, Integer.MAX_VALUE);
+	        nb = new IntegerWidget(new BigInteger("1"), new BigInteger(Integer.toString(Integer.MAX_VALUE)));
 	        nb.addFocusListener(new AutoSelectFocusListener());
 	        nb.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {
@@ -223,10 +224,10 @@ public class GenerationPanel extends JPanel {
 			if (day.getValue()==null) {
 				newStepper = null;
 			} else {
-				newStepper = new MonthDateStepper(nb.getValue(), day.getValue(), getLastDate().getDate());
+				newStepper = new MonthDateStepper(nb.getValue().intValue(), day.getValue().intValue(), getLastDate().getDate());
 			}
 		} else {
-			newStepper = new DayDateStepper(nb.getValue(), getLastDate().getDate());
+			newStepper = new DayDateStepper(nb.getValue().intValue(), getLastDate().getDate());
 		}
 		if (!areEquals(newStepper,currentDateStepper)) {
 			Object old = currentDateStepper;
@@ -344,7 +345,7 @@ public class GenerationPanel extends JPanel {
 	 */
 	private IntegerWidget getDay() {
 		if (day == null) {
-			day = new IntegerWidget(1, 31);
+			day = new IntegerWidget(new BigInteger("1"), new BigInteger("31"));
 			day.addFocusListener(new AutoSelectFocusListener());
 	        day.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {

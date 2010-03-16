@@ -195,6 +195,7 @@ public class Serializer {
 		atts.addAttribute("","",FIRST_NUMBER_ATTRIBUTE,"CDATA",book.getFirstNumber().toString());
 		atts.addAttribute("","",NUMBER_LENGTH_ATTRIBUTE,"CDATA",Integer.toString(book.getNumberLength()));
 		atts.addAttribute("","",SIZE_ATTRIBUTE,"CDATA",Integer.toString(book.getChecksNumber()));
+		atts.addAttribute("", "", USED_ATTRIBUTE, "CDATA", Integer.toString(book.getUsed()));
 		hd.startElement("","",CHECKBOOK_TAG,atts);
 		hd.endElement("","",CHECKBOOK_TAG);
 	}
