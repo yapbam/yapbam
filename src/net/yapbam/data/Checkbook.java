@@ -20,11 +20,11 @@ public class Checkbook implements Serializable {
 	 * @param numberLength The number of characters used to represent the number (this is mandatory to have the right number of leading zeros in the number)
 	 * @param size The number of checks still available
 	 */
-	public Checkbook(String prefix, BigInteger start, int numberLength, int size) {
+	public Checkbook(String prefix, BigInteger start, int numberLength, int size, int nextIndex) {
 		this.firstNumber = start;
 		this.prefix = prefix;
 		this.size = size;
-		this.used = 0;
+		this.used = nextIndex;
 		this.numberLength = numberLength;
 	}
 	

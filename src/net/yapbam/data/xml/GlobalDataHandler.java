@@ -58,7 +58,8 @@ class GlobalDataHandler extends DefaultHandler {
 			BigInteger first = new BigInteger(attributes.getValue(Serializer.FIRST_NUMBER_ATTRIBUTE));
 			int length = Integer.parseInt(attributes.getValue(Serializer.NUMBER_LENGTH_ATTRIBUTE));
 			int size = Integer.parseInt(attributes.getValue(Serializer.SIZE_ATTRIBUTE));
-			this.tempData.push (new Checkbook(prefix, first, length, size));
+int used=0;//TODO			int used = Integer.parseInt(attributes.getValue(Serializer.USED_ATTRIBUTE));
+			this.tempData.push (new Checkbook(prefix, first, length, size, used));
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG) || qName.equals(Serializer.RECEIPT_VDC_TAG)) {
 			DateStepper vdc;
 			String kind = attributes.getValue(Serializer.DATE_STEPPER_KIND_ATTRIBUTE);
