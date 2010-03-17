@@ -115,7 +115,7 @@ class ModePanel extends JPanel {
         stopLabel = new JLabel(LocalizationData.get("ModeDialog.stop")); //$NON-NLS-1$
 		deferedPanel.add(stopLabel, c2);
         c2.gridx=1;
-        stopField = new IntegerWidget(new BigInteger("1"), new BigInteger("31"));
+        stopField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
         stopField.addFocusListener(focusListener);
         stopField.addKeyListener(keyListener);
         stopField.setColumns(2);
@@ -123,7 +123,7 @@ class ModePanel extends JPanel {
         c2.gridx=2;
         debtLabel = new JLabel(LocalizationData.get("ModeDialog.debt")); //$NON-NLS-1$
 		deferedPanel.add(debtLabel, c2);
-		debtField = new IntegerWidget(new BigInteger("1"), new BigInteger("31"));
+		debtField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		debtField.addFocusListener(focusListener);
 		debtField.addKeyListener(keyListener);
         debtField.setColumns(2);

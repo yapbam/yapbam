@@ -164,7 +164,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 	 */
 	private IntegerWidget getDays() {
 		if (days == null) {
-			days = new IntegerWidget(new BigInteger("0"),new BigInteger(Integer.toString(Integer.MAX_VALUE)));
+			days = new IntegerWidget(BigInteger.ZERO, IntegerWidget.INTEGER_MAX_VALUE);
 			days.setColumns(2);
 			days.setToolTipText(LocalizationData.get("PreferencesDialog.AutoUpdate.days.toolTip")); //$NON-NLS-1$
 		}

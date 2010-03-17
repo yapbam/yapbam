@@ -183,7 +183,7 @@ public class GenerationPanel extends JPanel {
 	 */
 	private IntegerWidget getNb() {
 		if (nb == null) {
-	        nb = new IntegerWidget(new BigInteger("1"), new BigInteger(Integer.toString(Integer.MAX_VALUE)));
+	        nb = new IntegerWidget(BigInteger.ONE, IntegerWidget.INTEGER_MAX_VALUE);
 	        nb.addFocusListener(new AutoSelectFocusListener());
 	        nb.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {
@@ -345,7 +345,7 @@ public class GenerationPanel extends JPanel {
 	 */
 	private IntegerWidget getDay() {
 		if (day == null) {
-			day = new IntegerWidget(new BigInteger("1"), new BigInteger("31"));
+			day = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 			day.addFocusListener(new AutoSelectFocusListener());
 	        day.addKeyListener(new KeyAdapter() {
 				public void keyReleased(KeyEvent e) {

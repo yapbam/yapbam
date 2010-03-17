@@ -17,15 +17,15 @@ public class Checkbook implements Serializable {
 	/** Constructor.
 	 * @param prefix The check number prefix; the non numerical part preceding the number itself
 	 * @param start The first available check number, not including the prefix
-	 * @param numberLength The number of characters used to represent the number (this is mandatory to have the right number of leading zeros in the number)
 	 * @param size The number of checks still available
+	 * @param next The next check number
 	 */
-	public Checkbook(String prefix, BigInteger start, int numberLength, int size, int nextIndex) {
+	public Checkbook(String prefix, BigInteger start, int size, BigInteger next) {
 		this.firstNumber = start;
 		this.prefix = prefix;
 		this.size = size;
-		this.used = nextIndex;
-		this.numberLength = numberLength;
+		this.used = next.subtract(start).intValue();
+		this.numberLength = start.add(BigInteger.valueOf(size)).toString().length();
 	}
 	
 	/** Returns the number of the next available check in the checkbook
@@ -102,6 +102,6 @@ public class Checkbook implements Serializable {
 
 	@Override
 	public String toString() {
-		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size)+"]->"+getNextCheckNumber();
+		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size-1)+"]->"+getNextCheckNumber();
 	}
 }

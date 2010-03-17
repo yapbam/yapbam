@@ -1,6 +1,7 @@
 package net.yapbam.data.xml;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashSet;
@@ -47,9 +48,8 @@ public class Serializer {
 	
 	static final String PREFIX_ATTRIBUTE = "prefix";
 	static final String FIRST_NUMBER_ATTRIBUTE = "first";
-	static final String NUMBER_LENGTH_ATTRIBUTE = "numberOfDigits";
 	static final String SIZE_ATTRIBUTE = "size";
-	static final String USED_ATTRIBUTE = "used";
+	static final String NEXT_NUMBER_ATTRIBUTE = "next";
 
 	static final String INITIAL_BALANCE_ATTRIBUTE = "initialBalance";
 	static final String ID_ATTRIBUTE = "id";
@@ -193,9 +193,8 @@ public class Serializer {
 		atts.clear();
 		atts.addAttribute("","",PREFIX_ATTRIBUTE,"CDATA",book.getPrefix());
 		atts.addAttribute("","",FIRST_NUMBER_ATTRIBUTE,"CDATA",book.getFirstNumber().toString());
-		atts.addAttribute("","",NUMBER_LENGTH_ATTRIBUTE,"CDATA",Integer.toString(book.getNumberLength()));
 		atts.addAttribute("","",SIZE_ATTRIBUTE,"CDATA",Integer.toString(book.getChecksNumber()));
-		atts.addAttribute("", "", USED_ATTRIBUTE, "CDATA", Integer.toString(book.getUsed()));
+		atts.addAttribute("", "", NEXT_NUMBER_ATTRIBUTE, "CDATA", book.getFirstNumber().add(BigInteger.valueOf(book.getUsed())).toString());
 		hd.startElement("","",CHECKBOOK_TAG,atts);
 		hd.endElement("","",CHECKBOOK_TAG);
 	}
