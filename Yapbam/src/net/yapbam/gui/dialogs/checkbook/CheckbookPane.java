@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
 
 public class CheckbookPane extends JPanel {
@@ -21,7 +23,7 @@ public class CheckbookPane extends JPanel {
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$  //  @jve:decl-index=0:
 
 	private JLabel jLabel = null;
-	private JTextField first = null;
+	private IntegerWidget first = null;
 	private JLabel jLabel1 = null;
 	private IntegerWidget number = null;
 	
@@ -30,7 +32,8 @@ public class CheckbookPane extends JPanel {
 	private JLabel jLabel2 = null;
 	private JTextField prefix = null;
 	private JLabel jLabel3 = null;
-	private JTextField next = null;
+	private IntegerWidget next = null;
+	private PropertyChangeListener changeListener;
 	
 	/**
 	 * This is the default constructor
@@ -38,6 +41,12 @@ public class CheckbookPane extends JPanel {
 	public CheckbookPane() {
 		super();
 		initialize();
+		this.changeListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				parse();
+			}
+		};
 		parse();
 	}
 
@@ -122,17 +131,12 @@ public class CheckbookPane extends JPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getFirst() {
+	private IntegerWidget getFirst() {
 		if (first == null) {
-			first = new JTextField();
+			first = new IntegerWidget();
 			first.setColumns(10);
 			first.setToolTipText(LocalizationData.get("checkbookDialog.first.tooltip")); //$NON-NLS-1$
-			first.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyReleased(KeyEvent e) {
-					parse();
-				}
-			});
+			first.addPropertyChangeListener(changeListener);
 		}
 		return first;
 	}
@@ -147,12 +151,7 @@ public class CheckbookPane extends JPanel {
 			number = new IntegerWidget(new BigInteger("0"),new BigInteger(Integer.toString(Integer.MAX_VALUE)));
 			number.setColumns(2);
 			number.setToolTipText(LocalizationData.get("checkbookDialog.number.tooltip")); //$NON-NLS-1$
-			number.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyReleased(KeyEvent e) {
-					parse();
-				}
-			});
+			number.addPropertyChangeListener(changeListener);
 		}
 		return number;
 	}
@@ -221,11 +220,12 @@ public class CheckbookPane extends JPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getNext() {
+	private IntegerWidget getNext() {
 		if (next == null) {
-			next = new JTextField();
+			next = new IntegerWidget();
 			next.setToolTipText(LocalizationData.get("checkbookDialog.first.tooltip"));
 			next.setColumns(10);
+			next.addPropertyChangeListener(changeListener);
 		}
 		return next;
 	}
