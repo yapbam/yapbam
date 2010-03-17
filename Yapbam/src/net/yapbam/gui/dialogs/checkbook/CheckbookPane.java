@@ -12,8 +12,6 @@ import net.yapbam.util.NullUtils;
 
 import javax.swing.JTextField;
 import java.awt.Insets;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
@@ -28,7 +26,7 @@ public class CheckbookPane extends JPanel {
 	private IntegerWidget number = null;
 	
 	private String invalidityCause;  //  @jve:decl-index=0:
-	private Checkbook currentBook;
+	private Checkbook currentBook;  //  @jve:decl-index=0:
 	private JLabel jLabel2 = null;
 	private JTextField prefix = null;
 	private JLabel jLabel3 = null;
@@ -40,13 +38,13 @@ public class CheckbookPane extends JPanel {
 	 */
 	public CheckbookPane() {
 		super();
-		initialize();
 		this.changeListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				parse();
 			}
 		};
+		initialize();
 		parse();
 	}
 
@@ -67,7 +65,7 @@ public class CheckbookPane extends JPanel {
 		gridBagConstraints31.gridx = 0;
 		gridBagConstraints31.gridy = 3;
 		jLabel3 = new JLabel();
-		jLabel3.setText("Next check's number:");
+		jLabel3.setText(LocalizationData.get("checkbookDialog.next")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints21.gridy = 0;
@@ -79,7 +77,7 @@ public class CheckbookPane extends JPanel {
 		gridBagConstraints11.anchor = GridBagConstraints.WEST;
 		gridBagConstraints11.gridy = 0;
 		jLabel2 = new JLabel();
-		jLabel2.setText("Prefix");
+		jLabel2.setText(LocalizationData.get("checkbookDialog.prefix")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints3.gridy = 2;
@@ -133,10 +131,10 @@ public class CheckbookPane extends JPanel {
 	 */
 	private IntegerWidget getFirst() {
 		if (first == null) {
-			first = new IntegerWidget();
+			first = new IntegerWidget(BigInteger.ZERO, null);
 			first.setColumns(10);
 			first.setToolTipText(LocalizationData.get("checkbookDialog.first.tooltip")); //$NON-NLS-1$
-			first.addPropertyChangeListener(changeListener);
+			first.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, changeListener);
 		}
 		return first;
 	}
@@ -148,10 +146,10 @@ public class CheckbookPane extends JPanel {
 	 */
 	private IntegerWidget getNumber() {
 		if (number == null) {
-			number = new IntegerWidget(new BigInteger("0"),new BigInteger(Integer.toString(Integer.MAX_VALUE)));
+			number = new IntegerWidget(BigInteger.ZERO, IntegerWidget.INTEGER_MAX_VALUE);
 			number.setColumns(2);
 			number.setToolTipText(LocalizationData.get("checkbookDialog.number.tooltip")); //$NON-NLS-1$
-			number.addPropertyChangeListener(changeListener);
+			number.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, changeListener);
 		}
 		return number;
 	}
@@ -160,35 +158,49 @@ public class CheckbookPane extends JPanel {
 		String old = this.invalidityCause;
 		this.invalidityCause = null;
 		this.currentBook = null;
-		if (first.getText().isEmpty()) {
-			invalidityCause = LocalizationData.get("checkbookDialog.error.firstIsBlank"); //$NON-NLS-1$
+				
+		if (first.getValue()==null) {
+			if (first.getText().isEmpty()) invalidityCause = LocalizationData.get("checkbookDialog.error.firstIsBlank");  //$NON-NLS-1$
+			else invalidityCause = LocalizationData.get("checkbookDialog.error.firstOutOfRange"); //$NON-NLS-1$
 		} else if (number.getValue()==null) {
-			if (number.getText().length()==0) invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsBlank"); //$NON-NLS-1$
+			if (number.getText().isEmpty()) invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsBlank"); //$NON-NLS-1$
 			else invalidityCause = LocalizationData.get("checkbookDialog.error.numberOutOfRange"); //$NON-NLS-1$
+		} else if (next.getValue()==null) {
+			if (next.getText().isEmpty()) invalidityCause = LocalizationData.get("checkbookDialog.error.nextIsBlank");  //$NON-NLS-1$
+			else invalidityCause = LocalizationData.get("checkbookDialog.error.nextOutOfRange"); //$NON-NLS-1$
 		} else {
 			// All fields are filled.
+			// Let's verify that next check is inside the checkbook
+			BigInteger diff = next.getValue().subtract(first.getValue());
+			if ((diff.signum()<0) || (diff.compareTo(number.getValue())>=0)) {
+				invalidityCause = LocalizationData.get("checkbookDialog.error.nextOutsideOfCheckbook"); //$NON-NLS-1$
+			} else {
+				currentBook = new Checkbook(prefix.getText(), first.getValue(), number.getValue().intValue(), next.getValue());
+			}
+			
+			// Old code able to separate prefix from numerical suffix in a single full check number
 			// We will try to separate the prefix of the check number (the part that will remain constant over all the check book)
 			// and the number itself
-			String firstNumber = first.getText();
-			int l = firstNumber.length();
-			// First, we will compute how long is the integer at the end of the first check number
-			int suffixLength = 0;
-			for (int i = l-1; i >=0; i--) {
-				if (!Character.isDigit(firstNumber.charAt(i))) break;
-				suffixLength++;
-			}
-			if (suffixLength==0) {
-				this.invalidityCause = LocalizationData.get("checkbookDialog.error.noNumericalSuffix"); //$NON-NLS-1$
-			} else {
-				BigInteger start = new BigInteger(firstNumber.substring(l-suffixLength));
-				BigInteger last = start.add(number.getValue());
-				if ((last.toString().length()>suffixLength) && (suffixLength!=l)) {
-					this.invalidityCause = LocalizationData.get("checkbookDialog.error.numericalSuffixToSmall"); //$NON-NLS-1$
-				} else {
-					String prefix = suffixLength==l?"":firstNumber.substring(0, l-suffixLength); //$NON-NLS-1$
-					currentBook = new Checkbook(prefix, start, l-prefix.length(), number.getValue().intValue(), 0);
-				}
-			}
+//			String firstNumber = first.getText();
+//			int l = firstNumber.length();
+//			// First, we will compute how long is the integer at the end of the first check number
+//			int suffixLength = 0;
+//			for (int i = l-1; i >=0; i--) {
+//				if (!Character.isDigit(firstNumber.charAt(i))) break;
+//				suffixLength++;
+//			}
+//			if (suffixLength==0) {
+//				this.invalidityCause = LocalizationData.get("checkbookDialog.error.noNumericalSuffix"); //$NON-NLS-1$
+//			} else {
+//				BigInteger start = new BigInteger(firstNumber.substring(l-suffixLength));
+//				BigInteger last = start.add(number.getValue());
+//				if ((last.toString().length()>suffixLength) && (suffixLength!=l)) {
+//					this.invalidityCause = LocalizationData.get("checkbookDialog.error.numericalSuffixToSmall"); //$NON-NLS-1$
+//				} else {
+//					String prefix = suffixLength==l?"":firstNumber.substring(0, l-suffixLength); //$NON-NLS-1$
+//					currentBook = new Checkbook(prefix, start, l-prefix.length(), number.getValue().intValue(), 0);
+//				}
+//			}
 		}
 		if (!NullUtils.areEquals(old, this.invalidityCause)) {
 			this.firePropertyChange(INVALIDITY_CAUSE, old, this.invalidityCause);
@@ -196,8 +208,10 @@ public class CheckbookPane extends JPanel {
 	}
 
 	public void setContent(Checkbook book) {
-		this.first.setText(book.getNextCheckNumber());
-		this.number.setValue(book.getRemainingChecksNumber());
+		this.prefix.setText(book.getPrefix());
+		this.first.setValue(book.getFirstNumber());
+		this.number.setValue(book.getChecksNumber());
+		this.next.setValue(book.getFirstNumber().add(BigInteger.valueOf(book.getUsed())));
 		parse();
 	}
 
@@ -210,7 +224,7 @@ public class CheckbookPane extends JPanel {
 		if (prefix == null) {
 			prefix = new JTextField();
 			prefix.setColumns(10);
-			prefix.setToolTipText("Enter the prefix common to all checks in the check book");
+			prefix.setToolTipText(LocalizationData.get("checkbookDialog.prefix.tooltip")); //$NON-NLS-1$
 		}
 		return prefix;
 	}
@@ -222,10 +236,10 @@ public class CheckbookPane extends JPanel {
 	 */
 	private IntegerWidget getNext() {
 		if (next == null) {
-			next = new IntegerWidget();
-			next.setToolTipText(LocalizationData.get("checkbookDialog.first.tooltip"));
+			next = new IntegerWidget(BigInteger.ZERO, null);
+			next.setToolTipText(LocalizationData.get("checkbookDialog.next.tooltip")); //$NON-NLS-1$
 			next.setColumns(10);
-			next.addPropertyChangeListener(changeListener);
+			next.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, changeListener);
 		}
 		return next;
 	}
