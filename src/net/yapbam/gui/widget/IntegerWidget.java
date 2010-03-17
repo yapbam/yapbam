@@ -1,5 +1,7 @@
 package net.yapbam.gui.widget;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.math.BigInteger;
 
 import javax.swing.JTextField;
@@ -37,6 +39,16 @@ public class IntegerWidget extends JTextField {
 		if ((minValue!=null)&&(maxValue!=null)&&(minValue.compareTo(maxValue)>0)) throw new IllegalArgumentException();
 		this.minValue = minValue;
 		this.maxValue = maxValue;
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (!Character.isDigit(e.getKeyChar())) e.consume();
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				updateValue();
+			}
+		});
 	}
 	
 	private void updateValue() {
@@ -44,7 +56,10 @@ public class IntegerWidget extends JTextField {
 		String text = this.getText().trim();
 		try {
 			value = new BigInteger(text);
-			if (((this.maxValue!=null)&&(value.compareTo(this.maxValue)>0)) || ((this.minValue!=null)&&(value.compareTo(this.minValue)<0))) value = null;
+			if (((this.maxValue!=null)&&(value.compareTo(this.maxValue)>0)) || ((this.minValue!=null)&&(value.compareTo(this.minValue)<0))) {
+				// Value is out of bounds
+				value = null;
+			}
 		} catch (NumberFormatException e) {
 			value = null;
 		}
@@ -53,11 +68,16 @@ public class IntegerWidget extends JTextField {
 		}
 	}
 
+	@Override
+	public void setText(String t) {
+		super.setText(t);
+		updateValue();
+	}
+
 	/** Gets the current value.
 	 * @return an integer or null if the value is not valid.
 	 */
 	public BigInteger getValue() {
-		updateValue();
 		if (DEBUG) System.out.println ("IntegerWidget.getValue() returns "+value);
 		return this.value==null?null:this.value;
 	}
@@ -66,6 +86,6 @@ public class IntegerWidget extends JTextField {
 	 * @param value an integer or null to set the field empty.
 	 */
 	public void setValue(Integer value) {
-		if (!value.equals(this.value)) this.setText(value==null?"":Integer.toString(value));
+		if (!NullUtils.areEquals(value,this.value)) this.setText(value==null?"":Integer.toString(value));
 	}
 }
