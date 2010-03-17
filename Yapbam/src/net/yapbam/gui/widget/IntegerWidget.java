@@ -17,7 +17,10 @@ public class IntegerWidget extends JTextField {
 	private final static boolean DEBUG = false;
 	/** The field value property name. */
 	public static final String VALUE_PROPERTY = "VALUE_PROPERTY";
-	/** An utility constant for Integer.MAX_VALUE */
+	/** An utility constant for Integer.MAX_VALUE.
+	 * @see BigInteger#ZERO
+	 * @see BigInteger#valueOf(long)
+	 */
 	public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
 	
 	private BigInteger value;
