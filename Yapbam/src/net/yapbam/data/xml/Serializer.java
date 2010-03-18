@@ -192,9 +192,9 @@ public class Serializer {
 	private void serialize(Checkbook book) throws SAXException {
 		atts.clear();
 		atts.addAttribute("","",PREFIX_ATTRIBUTE,"CDATA",book.getPrefix());
-		atts.addAttribute("","",FIRST_NUMBER_ATTRIBUTE,"CDATA",book.getFirstNumber().toString());
-		atts.addAttribute("","",SIZE_ATTRIBUTE,"CDATA",Integer.toString(book.getChecksNumber()));
-		atts.addAttribute("", "", NEXT_NUMBER_ATTRIBUTE, "CDATA", book.getFirstNumber().add(BigInteger.valueOf(book.getUsed())).toString());
+		atts.addAttribute("","",FIRST_NUMBER_ATTRIBUTE,"CDATA",book.getFirst().toString());
+		atts.addAttribute("","",SIZE_ATTRIBUTE,"CDATA",Integer.toString(book.size()));
+		atts.addAttribute("", "", NEXT_NUMBER_ATTRIBUTE, "CDATA", book.getFirst().add(BigInteger.valueOf(book.getUsed())).toString());
 		hd.startElement("","",CHECKBOOK_TAG,atts);
 		hd.endElement("","",CHECKBOOK_TAG);
 	}

@@ -209,9 +209,9 @@ public class CheckbookPane extends JPanel {
 
 	public void setContent(Checkbook book) {
 		this.prefix.setText(book.getPrefix());
-		this.first.setValue(book.getFirstNumber());
-		this.number.setValue(book.getChecksNumber());
-		this.next.setValue(book.getFirstNumber().add(BigInteger.valueOf(book.getUsed())));
+		this.first.setValue(book.getFirst());
+		this.number.setValue(book.size());
+		this.next.setValue(book.getFirst().add(BigInteger.valueOf(book.getUsed())));
 		parse();
 	}
 
