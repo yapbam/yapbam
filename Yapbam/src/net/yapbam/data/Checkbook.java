@@ -103,4 +103,12 @@ public class Checkbook implements Serializable {
 	public String toString() {
 		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size-1)+"]->"+getNext();
 	}
+
+	void copy(Checkbook checkbook) {
+		this.firstNumber = checkbook.firstNumber;
+		this.numberLength = checkbook.numberLength;
+		this.prefix = checkbook.prefix;
+		this.size = checkbook.size;
+		this.used = checkbook.used;
+	}
 }

@@ -24,7 +24,6 @@ import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.gui.widget.IntegerWidget;
 import net.yapbam.util.NullUtils;
 
-import java.lang.Integer;
 import java.math.BigInteger;
 import java.util.Date;
 

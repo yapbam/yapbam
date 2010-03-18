@@ -6,7 +6,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.util.NullUtils;
 
 /** This event is sent when a checkbook is updated. */
-public class CheckBookPropertyChangedEvent extends DataEvent {
+public class CheckbookPropertyChangedEvent extends DataEvent {
 	/** Constant that signifies "the prefix was changed"
 	 * @see #getChanges()
 	 */
@@ -39,7 +39,7 @@ public class CheckBookPropertyChangedEvent extends DataEvent {
 	 * @param oldBook The checkbook before the update
 	 * @param newBook The updated checkbook
 	 */
-	public CheckBookPropertyChangedEvent(GlobalData globalData, Account account, Checkbook oldBook, Checkbook newBook) {
+	public CheckbookPropertyChangedEvent(GlobalData globalData, Account account, Checkbook oldBook, Checkbook newBook) {
 		super(globalData);
 		this.account = account;
 		this.oldBook = oldBook;
