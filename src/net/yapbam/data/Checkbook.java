@@ -31,9 +31,9 @@ public class Checkbook implements Serializable {
 	/** Returns the number of the next available check in the checkbook
 	 * @return the check number, or null if there is no more check in this checkbook
 	 */
-	public String getNextCheckNumber() {
+	public BigInteger getNext() {
 		if (isEmpty()) return null;
-		return this.prefix + getFormatedNumber(used);
+		return getFirst().add(BigInteger.valueOf(used));
 	}
 
 	private String getFormatedNumber(int index) {
@@ -71,37 +71,36 @@ public class Checkbook implements Serializable {
 
 	/** Gets the first check number of this book (not the first still available).
 	 * @return an BigInteger, the check number, not including any prefix
-	 * @see #getNextCheckNumber()
+	 * @see #getNext()
 	 */
-	public BigInteger getFirstNumber() {
+	public BigInteger getFirst() {
 		return firstNumber;
 	}
 
 	/** Gets the total number of checks.
 	 * @return an integer, the total number of checks in this book including the already used checks.
-	 * @see #getRemainingChecksNumber()
+	 * @see #getRemaining()
 	 */
-	public int getChecksNumber() {
+	public int size() {
 		return this.size;
 	}
 	
-	public int getNumberLength() {
-		return this.numberLength;
-	}
-	
+	/** Gets the number of checks already used in this checkbook.
+	 * @return a positive or null integer
+	 */
 	public int getUsed() {
 		return this.used;
 	}
 
 	/** Gets the number of remaining checks.
-	 * @return a povitive or null integer
+	 * @return a positive or null integer
 	 */
-	public int getRemainingChecksNumber() {
+	public int getRemaining() {
 		return Math.max(0, size-used);
 	}
 
 	@Override
 	public String toString() {
-		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size-1)+"]->"+getNextCheckNumber();
+		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size-1)+"]->"+getNext();
 	}
 }

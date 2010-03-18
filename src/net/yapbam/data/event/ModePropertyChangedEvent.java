@@ -66,14 +66,14 @@ public class ModePropertyChangedEvent extends DataEvent {
 	}
 
 	/** Returns the mode as it was before the update.
-	 * @return a mode. Please not that the instance is not the same as getNewMode()
+	 * @return a mode. Please note that the instance is not the same as getNewMode()
 	 */
 	public Mode getOldMode() {
 		return oldMode;
 	}
 
 	/** Returns the mode as it is after the update.
-	 * @return a mode. Please not that the instance is not the same as getOldMode()
+	 * @return a mode. Please note that the instance is not the same as getOldMode()
 	 */
 	public Mode getNewMode() {
 		return newMode;
