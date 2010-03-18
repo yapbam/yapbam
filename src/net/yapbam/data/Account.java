@@ -151,6 +151,7 @@ public class Account implements Serializable {
 		this.modes.remove(mode);
 	}
 	
+
 	void replace(Mode oldMode, Mode newMode) {
 		// Be aware not to really replace the mode, but update it (transactions have a pointer to their mode).
 		oldMode.updateTo(newMode);

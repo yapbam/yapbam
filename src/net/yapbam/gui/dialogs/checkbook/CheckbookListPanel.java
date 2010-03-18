@@ -90,7 +90,6 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 			Checkbook checkbook = dialog.getCheckbook();
 			if (checkbook!=null) {
 				((GlobalData)data).setCheckbook(account, old, checkbook);
-//				((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);
 			}
 		}
 	}

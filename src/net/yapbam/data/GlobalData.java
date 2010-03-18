@@ -563,19 +563,22 @@ public class GlobalData extends DefaultListenable {
 		}
 	}
 
+	/** Updates a checkbook with the data of another checkbook.
+	 * @param account The account that contains the checkbook.
+	 * @param old The checkbook we want to update
+	 * @param checkbook The checkbook that contains new data 
+	 */
 	public void setCheckbook(Account account, Checkbook old, Checkbook checkbook) {
-		//TODO
-		System.out.println ("replace "+old+" by "+checkbook);
-//		CheckbookPropertyChangedEvent event = new CheckbookPropertyChangedEvent(this, account, old, checkbook);
-//		if (event.getChanges()!=0) {
-//			// old object will be updated. In order to send the right event data, we have to remember it
-//			// So, we'll store it in a new fresh mode object : oldVanished.
-//			Checkbook oldVanished = new Checkbook(old.getPrefix(), old.getFirstNumber(), oldMode.getExpenseVdc(), oldMode.isUseCheckBook());
-//			account.replace(oldMode, newMode);
-//			event = new ModePropertyChangedEvent(this, account, oldVanished, oldMode);
-//			this.fireEvent(event);
-//			this.setChanged();
-//		}
+		CheckbookPropertyChangedEvent event = new CheckbookPropertyChangedEvent(this, account, old, checkbook);
+		if (event.getChanges()!=0) {
+			// old object will be updated. In order to send the right event data, we have to remember it
+			// So, we'll store it in a new fresh mode object : oldVanished.
+			Checkbook oldVanished = new Checkbook(old.getPrefix(), old.getFirst(), old.size(), old.getNext());
+			old.copy (checkbook);
+			event = new CheckbookPropertyChangedEvent(this, account, oldVanished, old);
+			this.fireEvent(event);
+			this.setChanged();
+		}
 	}
 
 
