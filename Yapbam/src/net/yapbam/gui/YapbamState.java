@@ -69,7 +69,7 @@ public class YapbamState {
 			height = screenSize.height/2;
 		}*/
         frame.setLocation(x,y);
-		frame.setSize(width,height); //FIXME if window is maximized, demaximized it results in a 0x0 window
+		frame.setSize(width,height);
 		int extendedState = Frame.NORMAL;
 		if (height<0) extendedState = extendedState | Frame.MAXIMIZED_VERT;
 		if (width<0) extendedState = extendedState | Frame.MAXIMIZED_HORIZ;

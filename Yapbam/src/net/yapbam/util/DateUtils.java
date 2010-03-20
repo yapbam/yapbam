@@ -44,7 +44,6 @@ public final class DateUtils {
 	 * It is guaranteed that if two dates are separated by x days the difference between their integer representation is x 
 	 */
 	public static int dateToInteger(Date date) {
-System.out.println (date);
 		if (date==null) return -1;
 		return (date.getYear()+1900)*10000+(date.getMonth()+1)*100+date.getDate();
 	}
