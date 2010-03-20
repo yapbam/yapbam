@@ -34,7 +34,7 @@ public final class DateUtils {
 		int day = date - 10000*year;
 		int month = day/100;
 		day = day - 100*month;
-		return new GregorianCalendar(1900+year, month-1, day).getTime();
+		return new GregorianCalendar(year, month-1, day).getTime();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -44,7 +44,8 @@ public final class DateUtils {
 	 * It is guaranteed that if two dates are separated by x days the difference between their integer representation is x 
 	 */
 	public static int dateToInteger(Date date) {
+System.out.println (date);
 		if (date==null) return -1;
-		return date.getYear()*10000+(date.getMonth()+1)*100+date.getDate();
+		return (date.getYear()+1900)*10000+(date.getMonth()+1)*100+date.getDate();
 	}
 }
