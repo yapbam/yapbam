@@ -45,6 +45,8 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public static final int UPDATES_PART = 7;
 	/** The import/export part of the file menu */
 	public static final int IMPORT_EXPORT_PART = 8;
+	/** The web sites direct acces part of the file menu */
+	public static final int WEB_SITES_PART = 9;
 	
 	/** The filter menu id */
 	public static final int FILTER_MENU = 2;
