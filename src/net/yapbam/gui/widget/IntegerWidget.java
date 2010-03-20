@@ -44,15 +44,31 @@ public class IntegerWidget extends JTextField {
 		if ((minValue!=null)&&(maxValue!=null)&&(minValue.compareTo(maxValue)>0)) throw new IllegalArgumentException();
 		this.minValue = minValue;
 		this.maxValue = maxValue;
+		// Adds a key listener to ignored any invalid characters and to increase/decrease value when up/down arrow key are pressed
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (!Character.isDigit(e.getKeyChar())) e.consume();
-				//FIXME - is a valid character if minValue < 0
+				// No car are allowed before a - sign
+				if ((getSelectionEnd()<getText().length()) && (getText().substring(getSelectionEnd()).indexOf('-')>=0)) e.consume();
+				char car = e.getKeyChar();
+				if (car=='-') { // - char is a valid character only if the field accepts value less than zero and in the first place (if there's no other - after the current selection)
+					if ((IntegerWidget.this.minValue==null) || (IntegerWidget.this.minValue.compareTo(BigInteger.ZERO)<0)) {
+						System.out.println (IntegerWidget.this.getSelectionStart()+" - "+IntegerWidget.this.getSelectionEnd()); //TODO
+						if (IntegerWidget.this.getSelectionStart()!=0) e.consume(); // No - after first position
+					} else {
+						e.consume();
+					}
+				} else if (!Character.isDigit(car)) e.consume();
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
-				updateValue();
+				if (e.getKeyCode()==KeyEvent.VK_UP) {
+					if (value!=null) setValue(value.add(BigInteger.ONE));
+				} else if (e.getKeyCode()==KeyEvent.VK_DOWN) {
+					if (value!=null) setValue(value.subtract(BigInteger.ONE));
+				} else {
+					updateValue();
+				}
 			}
 		});
 	}
