@@ -4,9 +4,12 @@ import java.awt.event.*;
 import java.awt.print.PrinterException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Locale;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -190,16 +193,40 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         menu.setToolTipText(LocalizationData.get("MainMenu.QuestionMark.ToolTip")); //$NON-NLS-1$
         this.add(menu);
 
+        menu.add(new CheckNewReleaseAction(this.frame));
+        insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
+        menu.addSeparator();
+		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "http://sourceforge.net/projects/yapbam/support");
+		item.setToolTipText(LocalizationData.get("MainMenu.web.support.tooltip"));
+		menu.add(item);
+		item = getURLMenuItem(LocalizationData.get("MainMenu.web.yapbam"), "http://www.yapbam.net");
+		item.setToolTipText(LocalizationData.get("MainMenu.web.yapbam.tooltip"));
+		menu.add(item);
+        insertPluginMenuItems(menu, AbstractPlugIn.WEB_SITES_PART);
+        menu.addSeparator();
         this.menuItemAbout = new JMenuItem(LocalizationData.get("MainMenu.About")); //$NON-NLS-1$
         this.menuItemAbout.setMnemonic(LocalizationData.getChar("MainMenu.About.Mnemonic")); //$NON-NLS-1$
         this.menuItemAbout.setToolTipText(LocalizationData.get("MainMenu.About.ToolTip")); //$NON-NLS-1$
         this.menuItemAbout.addActionListener(this);
         menu.add(this.menuItemAbout);
         insertPluginMenuItems(menu, AbstractPlugIn.ABOUT_PART);
-        menu.addSeparator();
-        menu.add(new CheckNewReleaseAction(this.frame));
-        insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
     }
+
+	private JMenuItem getURLMenuItem(String title, final String url) {
+		JMenuItem item;
+		item = new JMenuItem(new AbstractAction(title) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					HelpManager.show(MainMenuBar.this.frame, new URI(url));
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace(); //TODO
+				}
+			}
+		});
+		return item;
+	}
 
 	private void insertPluginMenuItems(JMenu menu, int part) {
 		for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
