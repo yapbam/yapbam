@@ -4,7 +4,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,7 +29,7 @@ public class DateWidget extends JTextField {
 	public static final String DATE_PROPERTY = "date";
 	public static final String CONTENT_VALID_PROPERTY = "contentValid";
 		
-	private DateFormat formatter;
+	private SimpleDateFormat formatter;
 	private Date date;
 	private boolean valid;
 	private Date emptyValue;
@@ -45,9 +44,9 @@ public class DateWidget extends JTextField {
 	}
 	
 	@Override
-	public void setLocale(Locale l) {
-		super.setLocale(l);
-		this.formatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, l);
+	public void setLocale(Locale locale) {
+		super.setLocale(locale);
+		this.formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
 		if (date!=null) this.setText(formatter.format(date));
 	}
 
@@ -61,7 +60,7 @@ public class DateWidget extends JTextField {
 		this.setColumns(6);
 		this.isEmptyNullDateValid = true;
 		this.emptyValue = emptyDate;
-		formatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
+		formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
 		 // Set the field to today's date (we don't use setDate because new Date() returns a date with hours, minutes and seconds fields not always set to 0).
 		this.setText(formatter.format(new Date()));
 		this.addKeyListener(new KeyAdapter() {
@@ -116,6 +115,7 @@ public class DateWidget extends JTextField {
 		if (this.getText().trim().length()==0) updateDate();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void updateDate() {
 		boolean oldValid = this.valid;
 		String text = this.getText().trim();
@@ -126,6 +126,17 @@ public class DateWidget extends JTextField {
 			Date changed = null;
 			try {
 				changed = formatter.parse(text);
+				int year = changed.getYear()+1900;
+				if (year<10) {
+					// When the user enters a date with only one char for the year, it is interpreted as the full year (ie 9 -> year 9)
+					// So, we have to add the right century to this year
+					Date formatterStartYear = formatter.get2DigitYearStart();
+					year += ((formatterStartYear.getYear()+1900)/100)*100;
+					changed.setYear(year-1900);
+					// If that date is not in the 100 year period of the formatter, add one century
+					// Note : I compare the getTime() results, because, sometime, an exception is throw that tells that instances are not of the same class
+					if (changed.getTime()-formatterStartYear.getTime()<0) changed.setYear(year-1800);
+				}
 			} catch (ParseException e) {
 				try {
 					int day = Integer.parseInt(text);
