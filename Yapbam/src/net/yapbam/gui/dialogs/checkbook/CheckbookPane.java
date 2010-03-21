@@ -160,14 +160,12 @@ public class CheckbookPane extends JPanel {
 		this.currentBook = null;
 				
 		if (first.getValue()==null) {
-			if (first.getText().isEmpty()) invalidityCause = LocalizationData.get("checkbookDialog.error.firstIsBlank");  //$NON-NLS-1$
-			else invalidityCause = LocalizationData.get("checkbookDialog.error.firstOutOfRange"); //$NON-NLS-1$
+			invalidityCause = LocalizationData.get("checkbookDialog.error.firstIsBlank");  //$NON-NLS-1$
 		} else if (number.getValue()==null) {
 			if (number.getText().isEmpty()) invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsBlank"); //$NON-NLS-1$
 			else invalidityCause = LocalizationData.get("checkbookDialog.error.numberOutOfRange"); //$NON-NLS-1$
 		} else if (next.getValue()==null) {
-			if (next.getText().isEmpty()) invalidityCause = LocalizationData.get("checkbookDialog.error.nextIsBlank");  //$NON-NLS-1$
-			else invalidityCause = LocalizationData.get("checkbookDialog.error.nextOutOfRange"); //$NON-NLS-1$
+			invalidityCause = LocalizationData.get("checkbookDialog.error.nextIsBlank");  //$NON-NLS-1$
 		} else {
 			// All fields are filled.
 			// Let's verify that next check is inside the checkbook
