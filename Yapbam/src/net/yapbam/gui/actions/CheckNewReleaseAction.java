@@ -20,6 +20,11 @@ import net.yapbam.util.DateUtils;
 /** This class is in charge of checking for Yapbam updates over the Internet */
 @SuppressWarnings("serial")
 public class CheckNewReleaseAction extends AbstractAction {
+	//FIXME Need a rewrite because this action may take a long time and is invoked by the swing dispatch event thread.
+	// For instance, trying to display a dialog to tell that the operation takes too much time will fail
+	// because the repaint swiing events will not be handled properly.
+	//See http://java.sun.com/docs/books/tutorial/uiswing/concurrency/index.html
+	
 	private static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck"; //$NON-NLS-1$
 	private Window owner;
 
@@ -36,12 +41,44 @@ public class CheckNewReleaseAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		check(owner, false);
 	}
+	
+//	static class Toto implements Runnable {
+//		private boolean disabled;
+//		private JDialog dialog;
+//
+//		public Toto(Window owner) {
+//			JOptionPane jOptionPane = new JOptionPane("Checking for updates, please wait", JOptionPane.INFORMATION_MESSAGE);
+//			dialog = jOptionPane.createDialog(owner, "Please wait");
+//			dialog.setModal(true);
+//		}
+//		
+//		@Override
+//		public void run() {
+//			try {
+//				Thread.sleep(500);
+//				synchronized (this) {
+//					if (!disabled) {
+//						dialog.setVisible(true);
+//					}					
+//				}
+//			} catch (InterruptedException e) {
+//				// Ok, not a problem, the thread was interrupted, so, let's do nothing
+//			}
+//		}
+//		
+//		public synchronized void stop() {
+//			this.disabled = true;
+//			dialog.setVisible(false);
+//		}
+//	}
 
 	/** Checks for updates over the Internet.
 	 * @param owner The parent window of all dialogs that may be opened by this method
 	 * @param auto true if the check is an automatic one (it changes the behavior in case of fail or if no update is available)
 	 */
 	private static void check(Window owner, boolean auto) {
+		//TODO It could be cool to display an information window (maybe the check is very, very, long and the user is waiting)
+		//See the FIXME comment at the beginning of this file
 		boolean silentFail = (auto && Preferences.INSTANCE.getAutoUpdateSilentFail());
 		try {
 			UpdateInformation update = VersionManager.getUpdateInformation();
@@ -82,7 +119,6 @@ public class CheckNewReleaseAction extends AbstractAction {
 		if (days>=0) { // If autocheck is on
 			Date last = YapbamState.getDate(LAST_UPDATE_CHECK_KEY);
 			if (DateUtils.dateToInteger(new Date())-DateUtils.dateToInteger(last)>=days) {
-				//TODO It could be cool to display an information window (maybe the check is very, very, long and the user is waiting) 
 				check (null, true);
 			}
 		}
