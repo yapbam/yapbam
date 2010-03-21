@@ -12,13 +12,16 @@ public class ReleaseInfo implements Comparable<ReleaseInfo> {
 	private int minorRevision;
 	private int buildId;
 	private Date releaseDate;
+	private String preRealeaseComment;
 	
 	ReleaseInfo(String rel) {
-		StringTokenizer tokens = new StringTokenizer(rel, ".");
+		StringTokenizer parts = new StringTokenizer(rel, " ");
+		StringTokenizer tokens = new StringTokenizer(parts.nextToken(), ".");
 		majorRevision = Integer.parseInt(tokens.nextToken());
 		minorRevision = Integer.parseInt(tokens.nextToken());
-		tokens = new StringTokenizer(tokens.nextToken()," ()/");
 		buildId = Integer.parseInt(tokens.nextToken());
+		preRealeaseComment = tokens.hasMoreElements()?tokens.nextToken():null;
+		tokens = new StringTokenizer(parts.nextToken(),"()/");
 		try {
 			int dayOfMonth = Integer.parseInt(tokens.nextToken());
 			int month = Integer.parseInt(tokens.nextToken());
@@ -41,6 +44,10 @@ public class ReleaseInfo implements Comparable<ReleaseInfo> {
 		return buildId;
 	}
 	
+	public String getPreReleaseComment() {
+		return this.preRealeaseComment;
+	}
+	
 	public Date getReleaseDate() {
 		return releaseDate;
 	}
@@ -50,6 +57,7 @@ public class ReleaseInfo implements Comparable<ReleaseInfo> {
 		int result = majorRevision - o.majorRevision;
 		if (result == 0) result = minorRevision - o.minorRevision; 
 		if (result == 0) result = buildId - o.buildId;
+		if (result == 0) result = getReleaseDate().compareTo(o.getReleaseDate());
 		return result;
 	}
 
@@ -65,7 +73,7 @@ public class ReleaseInfo implements Comparable<ReleaseInfo> {
 
 	@Override
 	public String toString() {
-		return majorRevision+"."+minorRevision+"."+buildId+" ("+
+		return majorRevision+"."+minorRevision+"."+buildId+(preRealeaseComment==null?"":"."+preRealeaseComment)+" ("+
 			SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, LocalizationData.getLocale()).format(releaseDate)+")";
 	}
 }
