@@ -70,6 +70,7 @@ public class AccountDialog extends AbstractDialog {
         modesPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("AccountDialog.modes.border.title"))); //$NON-NLS-1$
         centerPane.add(northPanel,BorderLayout.NORTH);
         centerPane.add(modesPanel,BorderLayout.CENTER);
+        modesPanel.setVisible(false); //TODO If we decide to keep it invisible, we could remove all stuff related to this panel
         
         return centerPane;
     }
