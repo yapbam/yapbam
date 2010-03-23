@@ -46,7 +46,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 	private static void check(Window owner, boolean auto) {
 		//TODO It could be cool to display an information window (maybe the check is very, very, long and the user is waiting)
 		// The best could be to open the window only if we wait more than xxx seconds. But it's not so obvious to implement
-		// When we will have time, we could implement a modal dialog with a progress bar and a cancel button and add the result in this dialog
+		// When we will have time, and when Sun will add a indetermined state to its ProgressMonitor class, we could implement it
 		try {
 			UpdateInformation update = VersionManager.getUpdateInformation();
 			if (update.getHttpErrorCode()!=HttpURLConnection.HTTP_OK) {

@@ -64,10 +64,19 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	
 	protected void setMode(Mode mode) {
 		Account account = data.getAccount(selectedAccount);
-		int index = account.findMode(mode, getAmount()<=0);
-		if (index>=0) modes.setSelectedIndex(index); // If the mode isn't available for this kind of transaction, do nothing.
+		int index = account.findMode(mode, getAmount()<0);
+		if (index>=0) {
+			modes.setSelectedIndex(index); // If the mode isn't available for this kind of transaction, do nothing.
+		}
 	}
 	
+	/** Gets the currently selected account.
+	 * @return an account.
+	 */
+	protected Account getAccount() {
+		return this.data.getAccount(selectedAccount);
+	}
+
 	/** Gets the currently selected amount.
 	 * @return a double, positive if the transaction is a receipt, negative if not.
 	 */
@@ -238,6 +247,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 		// Clears the selection in order future selection to fire a selection change event ... even
 		// if the same value is selected (as selectedMode and value date may be changed)
 		modes.setSelectedIndex(-1);
+		selectedMode = -1;
 		modes.setActionEnabled(true);
 		// Restore the previously selected mode, if it is available
 		int index = 0;
