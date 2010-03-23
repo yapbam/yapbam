@@ -41,8 +41,8 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	        	CheckNewReleaseAction.doAutoCheck();
-	            new MainFrame(null, null);
+	            MainFrame frame = new MainFrame(null, null);
+	        	CheckNewReleaseAction.doAutoCheck(frame);
 	        }
 	    });
 	}
