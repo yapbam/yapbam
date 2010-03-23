@@ -16,7 +16,9 @@ import javax.swing.*;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.DateWidgetPanel;
+import net.yapbam.util.NullUtils;
 
 /** This dialog allows to create or edit a transaction */
 public class TransactionDialog extends AbstractTransactionDialog {
@@ -24,6 +26,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	
 	private DateWidgetPanel date;
 	private JTextField transactionNumber;
+	private CheckNumberPanel checkNumber;
 	private DateWidgetPanel defDate;
 	private JTextField statement;
 	
@@ -55,6 +58,12 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	
 	public TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
 		super(owner, (edit?LocalizationData.get("TransactionDialog.title.edit"):LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
+		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setTransactionNumberWidget();
+			}
+		});
 	}
 
 	public void setTransactionDate (Date date) {
@@ -82,7 +91,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
 		return new Transaction(date.getDate(), number, description.getText().trim(), amount,
-				this.data.getAccount(selectedAccount), getCurrentMode(), categories.getCategory(),
+				getAccount(), getCurrentMode(), categories.getCategory(),
 				defDate.getDate(), statementId, subTransactions);
 	}
 
@@ -115,6 +124,9 @@ public class TransactionDialog extends AbstractTransactionDialog {
         transactionNumber.addFocusListener(focusListener);
         c.gridx++;
         centerPane.add(transactionNumber, c);
+        checkNumber = new CheckNumberPanel();
+        checkNumber.setVisible(false);
+        centerPane.add(checkNumber, c);
         c.gridx++;
 	}
 
@@ -147,7 +159,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void optionnalUpdatesOnModeChange() {
 		Mode mode = getCurrentMode();
 		//TODO transaction number may depend on the new selected mode
-		transactionNumber.setText(""); //$NON-NLS-1$
+		setTransactionNumberWidget();
 		DateStepper vdc = isExpense()?mode.getExpenseVdc():mode.getReceiptVdc();
 		defDate.setDate(vdc.getNextStep(date.getDate()));
 	}
@@ -216,4 +228,19 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		}
 		if (mode!=null) this.setMode(mode);
 	}
+
+	private void setTransactionNumberWidget() {
+		boolean checkNumberRequired = (getAmount()<0) && (getCurrentMode().isUseCheckBook());
+		if (checkNumberRequired != checkNumber.isVisible()) {
+			// If we need to switch from text field to check numbers popup
+			checkNumber.setVisible(checkNumberRequired);
+			transactionNumber.setVisible(!checkNumberRequired);
+			if (!checkNumberRequired) transactionNumber.setText(""); //$NON-NLS-1$
+			else checkNumber.setAccount(getAccount());
+			pack();
+		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(),getAccount())) {
+			checkNumber.setAccount(getAccount());
+		}
+	}
+	
 }

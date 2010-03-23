@@ -37,7 +37,7 @@ public class Checkbook implements Serializable {
 	}
 
 	private String getFormatedNumber(int index) {
-		String number = this.firstNumber.add(BigInteger.valueOf(index)).toString();
+		String number = prefix + this.firstNumber.add(BigInteger.valueOf(index)).toString();
 		StringBuffer leadingZeros = new StringBuffer();
 		for (int i = number.length(); i < this.numberLength; i++) {
 			leadingZeros.append('0');
@@ -101,7 +101,7 @@ public class Checkbook implements Serializable {
 
 	@Override
 	public String toString() {
-		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size-1)+"]->"+getNext();
+		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size-1)+"]->"+getNextCheckNumber();
 	}
 
 	void copy(Checkbook checkbook) {
@@ -110,5 +110,9 @@ public class Checkbook implements Serializable {
 		this.prefix = checkbook.prefix;
 		this.size = checkbook.size;
 		this.used = checkbook.used;
+	}
+
+	public String getNextCheckNumber() {
+		return getFormatedNumber(used);
 	}
 }
