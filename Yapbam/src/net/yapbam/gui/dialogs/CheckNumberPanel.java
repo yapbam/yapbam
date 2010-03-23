@@ -6,8 +6,11 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 
 import net.yapbam.data.Account;
+import net.yapbam.data.Checkbook;
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.dialogs.checkbook.CheckbookDialog;
 
 import javax.swing.JComboBox;
 import java.awt.GridBagConstraints;
@@ -22,6 +25,7 @@ public class CheckNumberPanel extends JPanel {
 	private JComboBox numbers = null;
 	private JButton newButton = null;
 	private Account account;  //  @jve:decl-index=0:
+	private GlobalData data;
 	
 	/**
 	 * This is the default constructor
@@ -75,14 +79,18 @@ public class CheckNumberPanel extends JPanel {
 			newButton = new JButton();
 	        Dimension dimension = getNumbers().getPreferredSize();
 	        newButton.setPreferredSize(new Dimension(dimension.height, dimension.height));
+	        newButton.setEnabled(false);
 			newButton.setIcon(IconManager.NEW_CATEGORY);
 	        newButton.setFocusable(false);
 			newButton.setToolTipText(LocalizationData.get("TransactionDialog.checkbook.new.tooltip")); //$NON-NLS-1$
 			newButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					System.out.println ("To be implemented"); //TODO
+					Checkbook book = CheckbookDialog.open(data, account, AbstractDialog.getOwnerWindow(newButton));
+					if (book!=null) {
+						numbers.addItem(book.getNextCheckNumber());
+						numbers.setSelectedIndex(numbers.getItemCount()-1);
+					}
 				}
 			});
 		}
@@ -93,8 +101,10 @@ public class CheckNumberPanel extends JPanel {
 		return this.account;
 	}
 
-	public void setAccount(Account account) {
+	public void setAccount(GlobalData data, Account account) {
+		this.data = data;
 		this.account = account;
+		this.getNewButton().setEnabled((data!=null)&&(account!=null));
 		numbers.removeAllItems();
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
 			numbers.addItem(account.getCheckbook(i).getNextCheckNumber());
