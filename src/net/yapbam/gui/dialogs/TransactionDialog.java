@@ -236,10 +236,10 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			checkNumber.setVisible(checkNumberRequired);
 			transactionNumber.setVisible(!checkNumberRequired);
 			if (!checkNumberRequired) transactionNumber.setText(""); //$NON-NLS-1$
-			else checkNumber.setAccount(getAccount());
+			else checkNumber.setAccount(data, getAccount());
 			pack();
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(),getAccount())) {
-			checkNumber.setAccount(getAccount());
+			checkNumber.setAccount(data, getAccount());
 		}
 	}
 	
