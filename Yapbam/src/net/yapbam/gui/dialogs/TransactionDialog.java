@@ -74,7 +74,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		super.setContent(transaction);
 		Transaction t = (Transaction) transaction;
 		date.setDate(t.getDate());
-		transactionNumber.setText(t.getNumber());
+		checkNumber.setText(t.getNumber());
 		defDate.setDate(t.getValueDate());
 		statement.setText(t.getStatement());
 	}
@@ -125,6 +125,12 @@ public class TransactionDialog extends AbstractTransactionDialog {
         c.gridx++;
         centerPane.add(transactionNumber, c);
         checkNumber = new CheckNumberPanel();
+        checkNumber.addPropertyChangeListener(CheckNumberPanel.NUMBER_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				transactionNumber.setText(checkNumber.getNumber());
+			}
+		});
         checkNumber.setVisible(false);
         centerPane.add(checkNumber, c);
         c.gridx++;

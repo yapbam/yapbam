@@ -64,7 +64,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	
 	protected void setMode(Mode mode) {
 		Account account = data.getAccount(selectedAccount);
-		int index = account.findMode(mode, getAmount()<0);
+		int index = account.findMode(mode, getAmount()<=0);
 		if (index>=0) {
 			modes.setSelectedIndex(index); // If the mode isn't available for this kind of transaction, do nothing.
 		}
