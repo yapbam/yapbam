@@ -11,21 +11,27 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.checkbook.CheckbookDialog;
+import net.yapbam.util.NullUtils;
 
 import javax.swing.JComboBox;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 
 public class CheckNumberPanel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
+	public static final String NUMBER_PROPERTY = "Number";  //  @jve:decl-index=0:
+	
 	private JComboBox numbers = null;
 	private JButton newButton = null;
 	private Account account;  //  @jve:decl-index=0:
 	private GlobalData data;
+	
+	private String number = null;
 	
 	/**
 	 * This is the default constructor
@@ -65,6 +71,18 @@ public class CheckNumberPanel extends JPanel {
 		if (numbers == null) {
 			numbers = new JComboBox();
 			numbers.setEditable(true);
+			numbers.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange()==ItemEvent.SELECTED) {
+						String old = number;
+						number = (String) numbers.getSelectedItem();
+						if (!NullUtils.areEquals(old, number)) {
+							firePropertyChange(NUMBER_PROPERTY, old, number);
+						}
+					}
+				}
+			});
 		}
 		return numbers;
 	}
@@ -109,5 +127,13 @@ public class CheckNumberPanel extends JPanel {
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
 			numbers.addItem(account.getCheckbook(i).getNextCheckNumber());
 		}
+	}
+	
+	public void setText(String text) {
+		numbers.setSelectedItem(text);
+	}
+	
+	public String getNumber() {
+		return this.number;
 	}
 }
