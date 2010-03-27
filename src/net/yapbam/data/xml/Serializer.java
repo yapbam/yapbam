@@ -194,7 +194,7 @@ public class Serializer {
 		atts.addAttribute("","",PREFIX_ATTRIBUTE,"CDATA",book.getPrefix());
 		atts.addAttribute("","",FIRST_NUMBER_ATTRIBUTE,"CDATA",book.getFirst().toString());
 		atts.addAttribute("","",SIZE_ATTRIBUTE,"CDATA",Integer.toString(book.size()));
-		atts.addAttribute("", "", NEXT_NUMBER_ATTRIBUTE, "CDATA", book.getFirst().add(BigInteger.valueOf(book.getUsed())).toString());
+		if (!book.isEmpty()) atts.addAttribute("", "", NEXT_NUMBER_ATTRIBUTE, "CDATA", book.getFirst().add(BigInteger.valueOf(book.getUsed())).toString());
 		hd.startElement("","",CHECKBOOK_TAG,atts);
 		hd.endElement("","",CHECKBOOK_TAG);
 	}

@@ -56,7 +56,8 @@ class GlobalDataHandler extends DefaultHandler {
 		} else if (qName.equals(Serializer.CHECKBOOK_TAG)) {
 			String prefix = attributes.getValue(Serializer.PREFIX_ATTRIBUTE);
 			BigInteger first = new BigInteger(attributes.getValue(Serializer.FIRST_NUMBER_ATTRIBUTE));
-			BigInteger next = new BigInteger(attributes.getValue(Serializer.NEXT_NUMBER_ATTRIBUTE));
+			String value = attributes.getValue(Serializer.NEXT_NUMBER_ATTRIBUTE);
+			BigInteger next = value==null?null:new BigInteger(value);
 			int size = Integer.parseInt(attributes.getValue(Serializer.SIZE_ATTRIBUTE));
 			this.tempData.push (new Checkbook(prefix, first, size, next));
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG) || qName.equals(Serializer.RECEIPT_VDC_TAG)) {

@@ -125,7 +125,8 @@ public class CheckNumberPanel extends JPanel {
 		this.getNewButton().setEnabled((data!=null)&&(account!=null));
 		numbers.removeAllItems();
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
-			numbers.addItem(account.getCheckbook(i).getNextCheckNumber());
+			Checkbook checkbook = account.getCheckbook(i);
+			if (!checkbook.isEmpty()) numbers.addItem(checkbook.getNextCheckNumber());
 		}
 	}
 	
