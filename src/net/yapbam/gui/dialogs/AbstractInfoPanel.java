@@ -38,7 +38,7 @@ public abstract class AbstractInfoPanel extends JPanel {
 		this.setSize(309, 281);
 		this.setLayout(new BorderLayout());
 		this.add(getNorthPanel(), BorderLayout.NORTH);
-		this.add(getCenterComponent(), BorderLayout.EAST);
+		this.add(getCenterComponent(), BorderLayout.CENTER);
 	}
 
 	/**
