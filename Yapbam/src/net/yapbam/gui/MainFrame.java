@@ -19,7 +19,6 @@ import net.yapbam.gui.actions.CheckNewReleaseAction;
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
-	//TODO CheckBook support
 	
 	private static final long serialVersionUID = 1L;
     
