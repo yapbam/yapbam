@@ -115,4 +115,20 @@ public class Checkbook implements Serializable {
 	public String getNextCheckNumber() {
 		return getFormatedNumber(used);
 	}
+
+	/** Returns the number of a full check number (including its prefix).
+	 * @param number The full number of the check.
+	 * @return a BigInteger or null if the check number is not is this checkbook.
+	 */
+	public BigInteger getNumber(String number) {
+		if (!number.startsWith(this.prefix)) return null;
+		String numberString = number.substring(this.prefix.length());
+		try {
+			BigInteger result = new BigInteger(numberString);
+			if ((result.compareTo(this.firstNumber)<0) || (result.compareTo(this.getFirst().add(BigInteger.valueOf(this.size)))>=0)) return null;
+			return result;
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
 }

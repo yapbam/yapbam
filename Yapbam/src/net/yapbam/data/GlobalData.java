@@ -1,6 +1,7 @@
 package net.yapbam.data;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -239,9 +240,25 @@ public class GlobalData extends DefaultListenable {
 	public void add(Transaction transaction) {
 		int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
 		this.transactions.add(index, transaction);
-		transaction.getAccount().add(transaction);
+		Account account = transaction.getAccount();
+		account.add(transaction);
 		fireEvent(new TransactionAddedEvent(this, transaction));
 		this.setChanged();
+		if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
+			// Detach check
+			String number = transaction.getNumber();
+			for (int i = 0; i < account.getCheckbooksNumber(); i++) {
+				Checkbook checkbook = account.getCheckbook(i);
+				BigInteger shortNumber = checkbook.getNumber(number);
+				if (!checkbook.isEmpty() && (shortNumber!=null)) {
+					if (shortNumber.compareTo(checkbook.getNext())>=0) {
+						Checkbook newOne = new Checkbook(checkbook.getPrefix(), checkbook.getFirst(), checkbook.size(), shortNumber.add(BigInteger.ONE));
+						setCheckbook(account, checkbook, newOne);
+					}
+					break;
+				}
+			}
+		}
 	}
 	
 	public boolean remove(Transaction transaction) {
@@ -340,7 +357,6 @@ public class GlobalData extends DefaultListenable {
 		this.fireEvent(new PeriodicalTransactionRemovedEvent(this, index, removed));
 		setChanged();
 	}
-	
 
 	public void setPeriodicalTransactionNextDate(int index, Date date) {
 		PeriodicalTransaction pt = getPeriodicalTransaction(index);
