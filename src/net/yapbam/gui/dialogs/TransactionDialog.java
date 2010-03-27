@@ -56,14 +56,24 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return newTransaction;
 	}
 	
+	/** Creates a new dialog. 
+	 * @param owner the dialog's parent frame
+	 * @param data the global data
+	 * @param transaction the transaction that will initialize the dialog or null ?
+	 * @param edit True if we edit an existing transaction, false if we edit a new transaction
+	 * @see #open(GlobalData, Window, Transaction, boolean, boolean)
+	 */
 	public TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
 		super(owner, (edit?LocalizationData.get("TransactionDialog.title.edit"):LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				setTransactionNumberWidget();
+				if (Math.signum((Double) evt.getNewValue())*Math.signum((Double) evt.getNewValue())<0) setTransactionNumberWidget();
 			}
 		});
+		if (useCheckbook() && !edit) { // If the transaction is a new one and use a check, change to next check number
+			checkNumber.setAccount(data, getAccount());
+		}
 	}
 
 	public void setTransactionDate (Date date) {
@@ -164,7 +174,6 @@ public class TransactionDialog extends AbstractTransactionDialog {
 
 	protected void optionnalUpdatesOnModeChange() {
 		Mode mode = getCurrentMode();
-		//TODO transaction number may depend on the new selected mode
 		setTransactionNumberWidget();
 		DateStepper vdc = isExpense()?mode.getExpenseVdc():mode.getReceiptVdc();
 		defDate.setDate(vdc.getNextStep(date.getDate()));
@@ -236,7 +245,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	}
 
 	private void setTransactionNumberWidget() {
-		boolean checkNumberRequired = (getAmount()<0) && (getCurrentMode().isUseCheckBook());
+		boolean checkNumberRequired = useCheckbook();
 		if (checkNumberRequired != checkNumber.isVisible()) {
 			// If we need to switch from text field to check numbers popup
 			checkNumber.setVisible(checkNumberRequired);
@@ -247,6 +256,13 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(),getAccount())) {
 			checkNumber.setAccount(data, getAccount());
 		}
+	}
+
+	/** Tests whether the currently documented transaction use a checkbook or not. 
+	 * @return a boolean - true if a checkbook is used.
+	 */
+	private boolean useCheckbook() {
+		return (getAmount()<0) && (getCurrentMode().isUseCheckBook());
 	}
 	
 }
