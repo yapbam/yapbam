@@ -41,7 +41,8 @@ public class Checkbook implements Serializable {
 		return getFirst().add(BigInteger.valueOf(used));
 	}
 
-	private String getFormatedNumber(int index) {
+	public String getCheckNumber(int index) {
+		if (index>=this.size) return null;
 		String number = prefix + this.firstNumber.add(BigInteger.valueOf(index)).toString();
 		StringBuffer leadingZeros = new StringBuffer();
 		for (int i = number.length(); i < this.numberLength; i++) {
@@ -50,16 +51,7 @@ public class Checkbook implements Serializable {
 		number = leadingZeros + number;
 		return number;
 	}
-	
-	/** Detach a check from this checkbook.
-	 * All checks before this one are supposed to be detached too.
-	 * @param checkNumber
-	 */
-/*	void detach (int checkNumber) {
-		int newUsed = checkNumber - this.firstNumber;
-		if (newUsed>this.used) this.used = newUsed;
-	}*/
-	
+		
 	/** Tests if the checkbook is empty
 	 * @return true if it is empty
 	 */
@@ -114,7 +106,7 @@ public class Checkbook implements Serializable {
 
 	@Override
 	public String toString() {
-		return prefix+"["+getFormatedNumber(0)+"-"+getFormatedNumber(size-1)+"]->"+getNextCheckNumber();
+		return prefix+"["+getCheckNumber(0)+"-"+getCheckNumber(size-1)+"]->"+getNextCheckNumber();
 	}
 
 	void copy(Checkbook checkbook) {
@@ -126,7 +118,7 @@ public class Checkbook implements Serializable {
 	}
 
 	public String getNextCheckNumber() {
-		return getFormatedNumber(used);
+		return getCheckNumber(used);
 	}
 
 	/** Returns the short number (without prefix) of a full check number (including its prefix).

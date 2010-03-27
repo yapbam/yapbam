@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class CheckUpdateDialog extends AbstractDialog {
 	private static final int DELAY = 500;
-	private static final int MINIMUM_TIME_VISIBLE = 500;
+	private static final int MINIMUM_TIME_VISIBLE = 1000;
 	
 	private Window owner;
 	private boolean auto;
