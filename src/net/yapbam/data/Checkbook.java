@@ -24,8 +24,13 @@ public class Checkbook implements Serializable {
 		this.firstNumber = start;
 		this.prefix = prefix;
 		this.size = size;
-		this.used = next.subtract(start).intValue();
 		this.numberLength = start.add(BigInteger.valueOf(size)).toString().length();
+		if (next!=null) {
+			this.used = next.subtract(start).intValue();
+			if (used>=size) throw new IllegalArgumentException();
+		} else {
+			used = size;
+		}
 	}
 	
 	/** Returns the number of the next available check in the checkbook
@@ -76,6 +81,14 @@ public class Checkbook implements Serializable {
 	public BigInteger getFirst() {
 		return firstNumber;
 	}
+	
+	/** Gets the last check number of this book.
+	 * @return an BigInteger, the check number, not including any prefix
+	 * @see #getFirst()
+	 */
+	public BigInteger getLast() {
+		return this.firstNumber.add(BigInteger.valueOf(size-1));
+	}
 
 	/** Gets the total number of checks.
 	 * @return an integer, the total number of checks in this book including the already used checks.
@@ -116,11 +129,11 @@ public class Checkbook implements Serializable {
 		return getFormatedNumber(used);
 	}
 
-	/** Returns the number of a full check number (including its prefix).
+	/** Returns the short number (without prefix) of a full check number (including its prefix).
 	 * @param number The full number of the check.
 	 * @return a BigInteger or null if the check number is not is this checkbook.
 	 */
-	public BigInteger getNumber(String number) {
+	public BigInteger getShortNumber(String number) {
 		if (!number.startsWith(this.prefix)) return null;
 		String numberString = number.substring(this.prefix.length());
 		try {
