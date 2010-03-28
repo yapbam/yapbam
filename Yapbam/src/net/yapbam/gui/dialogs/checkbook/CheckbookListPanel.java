@@ -2,10 +2,13 @@ package net.yapbam.gui.dialogs.checkbook;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.text.MessageFormat;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -13,6 +16,7 @@ import javax.swing.table.TableModel;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.event.CheckbookPropertyChangedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.IconManager;
@@ -32,6 +36,22 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+				if (event instanceof CheckbookPropertyChangedEvent) { // Test if a checkbook is finished
+					CheckbookPropertyChangedEvent checkbookChangedEvt = (CheckbookPropertyChangedEvent)event;
+					Checkbook old = checkbookChangedEvt.getOldCheckbook();
+					if (!old.isEmpty() && (checkbookChangedEvt.getNewCheckbook().isEmpty())) {
+						// A checkbook just finished, ask what to do
+						String message = MessageFormat.format(LocalizationData.get("checkbookDialog.finishedmessage"),old.getCheckNumber(0),old.getCheckNumber(old.size()-1)); //$NON-NLS-1$
+						String[] options = new String[]{LocalizationData.get("GenericButton.ignore"),LocalizationData.get("checkbookDialog.finisheddelete"),LocalizationData.get("checkbookDialog.finishedcreateNew"),LocalizationData.get("checkbookDialog.finishedDeleteAndCreateNew")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						int choice = JOptionPane.showOptionDialog(AbstractDialog.getOwnerWindow(CheckbookListPanel.this), message, LocalizationData.get("checkbookDialog.finishedtitle"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[3]);  //$NON-NLS-1$
+						if ((choice==1) || (choice==3)) {
+							CheckbookListPanel.this.data.remove(checkbookChangedEvt.getAccount(), checkbookChangedEvt.getNewCheckbook());
+						}
+						if (choice > 1) {
+							createBook(AbstractDialog.getOwnerWindow(CheckbookListPanel.this), checkbookChangedEvt.getAccount());
+						}
+					}
+				}
 			}
 		});
         this.account = null;
@@ -67,12 +87,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			CheckbookDialog dialog = new CheckbookDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()));
-			dialog.setVisible(true);
-			Checkbook book = dialog.getCheckbook();
-			if (book!=null) {
-				data.add(account, book);
-			}
+			createBook(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
 		}
 	}
 	private final class EditBookAction extends AbstractAction {
@@ -95,8 +110,8 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 	}
 	private final class DeleteBookAction extends AbstractAction {			
 		public DeleteBookAction() {
-			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE);
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Delete.tooltip"));
+			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE); //$NON-NLS-1$
+	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Delete.tooltip")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -128,5 +143,14 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 	@Override
 	protected Action getDuplicateButtonAction() {
 		return null;
+	}
+
+	private void createBook(Window owner, Account account) {
+		CheckbookDialog dialog = new CheckbookDialog(owner);
+		dialog.setVisible(true);
+		Checkbook book = dialog.getCheckbook();
+		if (book!=null) {
+			data.add(account, book);
+		}
 	}
 }
