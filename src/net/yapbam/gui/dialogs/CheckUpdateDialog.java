@@ -117,6 +117,7 @@ public class CheckUpdateDialog extends AbstractDialog {
 		
 		@Override
 		protected UpdateInformation doInBackground() throws Exception {
+//			Thread.sleep(5000); //TODO
 			return VersionManager.getUpdateInformation();
 		}
 		public void done() {
