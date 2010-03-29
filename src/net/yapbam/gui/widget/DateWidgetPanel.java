@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 public class DateWidgetPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	/** Date change property name.
-	 * The panel is a bean. Every time the choosen date changed, it sends a PropertyChangedEvent.
+	 * The panel is a bean. Every time the chosen date changed, it sends a PropertyChangedEvent.
 	 */
 	public static final String DATE_PROPERTY = DateWidget.DATE_PROPERTY;  //  @jve:decl-index=0:
 	/** Content validity property name.
