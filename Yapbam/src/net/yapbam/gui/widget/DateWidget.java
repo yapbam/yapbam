@@ -62,6 +62,7 @@ public class DateWidget extends JTextField {
 		this.isEmptyNullDateValid = true;
 		this.emptyValue = emptyDate;
 		formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
+		this.formatter.setLenient(false);
 		 // Set the field to today's date (we don't use setDate because new Date() returns a date with hours, minutes and seconds fields not always set to 0).
 		this.setText(formatter.format(new Date()));
 		this.addKeyListener(new KeyAdapter() {
