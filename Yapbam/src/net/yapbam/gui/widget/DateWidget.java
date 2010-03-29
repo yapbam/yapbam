@@ -47,6 +47,7 @@ public class DateWidget extends JTextField {
 	public void setLocale(Locale locale) {
 		super.setLocale(locale);
 		this.formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
+		this.formatter.setLenient(false);
 		if (date!=null) this.setText(formatter.format(date));
 	}
 
@@ -134,7 +135,7 @@ public class DateWidget extends JTextField {
 					year += ((formatterStartYear.getYear()+1900)/100)*100;
 					changed.setYear(year-1900);
 					// If that date is not in the 100 year period of the formatter, add one century
-					// Note : I compare the getTime() results, because, sometime, an exception is throw that tells that instances are not of the same class
+					// Note : I compare the getTime() results, because, sometime, an exception is thrown that tells that instances are not of the same class
 					if (changed.getTime()-formatterStartYear.getTime()<0) changed.setYear(year-1800);
 				}
 			} catch (ParseException e) {
