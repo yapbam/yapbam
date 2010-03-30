@@ -240,7 +240,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 	}
 
-	private int getX(Date date) {
+	int getX(Date date) {
 		return X_OFFSET + (int) ((date.getTime()-getStartDate().getTime())/(3600000*24)*PIXEL_PER_DAY);
 	}
 	

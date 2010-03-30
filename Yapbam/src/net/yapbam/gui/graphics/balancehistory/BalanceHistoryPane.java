@@ -1,6 +1,7 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -13,6 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
@@ -83,5 +85,21 @@ public class BalanceHistoryPane extends JPanel {
 		scrollPane = new JScrollPane(graph, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.add(scrollPane, BorderLayout.CENTER);
 		scrollPane.setRowHeaderView(rule);
+	}
+
+	/** Scrolls the graphic in order to have the currently selected date visible.
+	 */
+	void scrollToSelectedDate() {
+		JViewport viewport = scrollPane.getViewport();
+		int viewWidth = viewport.getWidth();
+		int selected = graph.getX(graph.getSelectedDate());
+		int graphWidth = graph.getPreferredSize().width;
+		if ((viewport.getViewPosition().x > selected) || (viewport.getViewPosition().x+viewWidth<selected)) {
+			//Do nothing if selected date is already visible.
+			int position = selected-viewWidth/2;
+			if (position < 0) position = 0;
+			else if (position + viewWidth > graphWidth) position = graphWidth-viewWidth;
+			viewport.setViewPosition(new Point(position, 0));
+		}
 	}
 }
