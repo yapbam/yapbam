@@ -33,6 +33,12 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 		});
 	}
 	
+	@Override
+	public void setDisplayed(boolean displayed) {
+		super.setDisplayed(displayed);
+		panel.scrollToSelectedDate(); //TODO
+	}
+
 	private void testAlert() {
 		long firstAlertDate = data.getBalanceHistory().getFirstDateUnder(new Date(), null, 0.0);
 		String tooltip;
