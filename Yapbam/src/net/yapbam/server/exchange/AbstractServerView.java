@@ -4,16 +4,22 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.ResourceBundle;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
 public abstract class AbstractServerView {
 	/** The server URL */
-	protected static final URL SERVER_URL;
+	private static final URL SERVER_URL;
+	private static final Key KEY;
 	
 	private Proxy proxy;
 	private String eMail;
@@ -28,6 +34,17 @@ public abstract class AbstractServerView {
 			tmp = null;
 		}
 		SERVER_URL = tmp;
+		
+		
+		try {
+			ResourceBundle bundle = ResourceBundle.getBundle("net.yapbam.server.exchange.key"); //$NON-NLS-1$
+			BigInteger modulus = new BigInteger(bundle.getString("modulus"),16);
+			BigInteger exponent = new BigInteger(bundle.getString("exponent"),16);
+			KeyFactory fact = KeyFactory.getInstance("RSA");
+		    KEY = fact.generatePublic(new RSAPublicKeySpec(modulus, exponent));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public AbstractServerView(Proxy proxy, String eMail, String password) {
