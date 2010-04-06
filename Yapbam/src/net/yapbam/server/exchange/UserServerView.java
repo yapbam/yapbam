@@ -46,17 +46,18 @@ public class UserServerView extends AbstractServerView {
 	
 	public static void main (String[] args) {
 		try {
+			UserServerView server = new UserServerView(Proxy.NO_PROXY, "jeanmarc@astesana.net", "gti9220");
 			StringBuffer buf = new StringBuffer();
 			BufferedReader in = new BufferedReader(new FileReader("C:/Users/Jean-Marc/Documents/Comptes.xml")); //TODO Euh ... what about encoding ?
 			try {
 				for (String line=in.readLine(); line!=null; line=in.readLine()) {
 					buf.append(line);
 				}
-				UserServerView server = new UserServerView(Proxy.NO_PROXY, "jeanmarc@astesana.net", "gti9220");
 				server.postData("main", buf.toString());
 			} finally {
 				in.close();
 			}
+			System.out.println(server.getData("main").length()+" bytes read");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

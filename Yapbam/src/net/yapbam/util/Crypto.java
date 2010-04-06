@@ -3,6 +3,7 @@ import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 /** This class provides utilities to encrypt data.
@@ -36,7 +37,7 @@ public class Crypto {
 	 * @return the encrypted message
 	 */
 	public static String encrypt(String key, String message) {
-		SecretKeySpec skeySpec = new SecretKeySpec(asByteArray(key), "AES");
+		SecretKey skeySpec = new SecretKeySpec(asByteArray(key), "AES");
 		try {
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
