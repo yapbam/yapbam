@@ -1,10 +1,11 @@
 package net.yapbam.server.exchange;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -21,6 +22,8 @@ import java.util.zip.InflaterInputStream;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
@@ -39,7 +42,7 @@ public abstract class AbstractServerView {
 	private String eMail;
 	private String password;
 	private SecretKey sessionKey;
-	private BigInteger encryptedSessionKey;
+	private byte[] encryptedSessionKey;
 
 	static {
 		URL tmp;
@@ -74,7 +77,8 @@ public abstract class AbstractServerView {
 			this.sessionKey = keyGen.generateKey();
 			Cipher cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.ENCRYPT_MODE, YAPBAM_PUBLIC_KEY);
-			this.encryptedSessionKey = new BigInteger(cipher.doFinal(this.sessionKey.getEncoded()));
+			this.encryptedSessionKey = cipher.doFinal(this.sessionKey.getEncoded());
+//			System.out.println ("Encoded key : "+new BigInteger(this.encryptedSessionKey).toString(16)+" length "+this.encryptedSessionKey.length);//TODO
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		} catch (NoSuchPaddingException e) {
@@ -87,27 +91,7 @@ public abstract class AbstractServerView {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	private BigInteger encrypt(String message) {
-		try {
-			Cipher cipher = Cipher.getInstance("AES");
-			cipher.init(Cipher.ENCRYPT_MODE, this.sessionKey);
-			return new BigInteger(cipher.doFinal(message.getBytes("UTF-8")));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchPaddingException e) {
-			throw new RuntimeException(e);
-		} catch (InvalidKeyException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalBlockSizeException e) {
-			throw new RuntimeException(e);
-		} catch (BadPaddingException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
+		
 	protected Serializable toServer(String command, Serializable[] data) throws IOException {
 		//TODO Use a encrypter to encode all the stuff that goes on the Internet
 		HttpURLConnection connection = (HttpURLConnection) SERVER_URL.openConnection(proxy);
@@ -116,14 +100,15 @@ public abstract class AbstractServerView {
 		connection.setDoInput(true);
 		connection.setUseCaches(false);
 		connection.setRequestProperty("Content-Type", "application/x-java-serialized-object");  
-		ObjectOutputStream out = new ObjectOutputStream(new DeflaterOutputStream(connection.getOutputStream()));
+		OutputStream outputStream = connection.getOutputStream();
+		outputStream.write(this.encryptedSessionKey);
+		ObjectOutputStream out = new ObjectOutputStream(getEncryptedStream(outputStream));
 		try {
-			out.writeObject(this.encryptedSessionKey);
-			out.writeObject(encrypt(this.eMail));
-			out.writeObject(encrypt(this.password));
-			out.writeObject(encrypt(command));
+			out.writeObject(this.eMail);
+			out.writeObject(this.password);
+			out.writeObject(command);
 			for (int i = 0; i < data.length; i++) {
-				out.writeObject(data[i]); //TODO How to encrypt that ? Probably need to use a encrypted ObjectOutputStream, then send the byte array ?
+				out.writeObject(data[i]);
 			}
 			out.flush();
 		} finally {
@@ -131,7 +116,7 @@ public abstract class AbstractServerView {
 		}
 		int errorCode = connection.getResponseCode();
 		if (errorCode==HttpURLConnection.HTTP_OK) {
-			ObjectInputStream in = new ObjectInputStream(new InflaterInputStream(connection.getInputStream()));
+			ObjectInputStream in = new ObjectInputStream(getDecryptedStream(connection.getInputStream()));
 			try {
 				Integer errCode = (Integer) in.readObject();
 				codeToException (errCode);
@@ -146,4 +131,33 @@ public abstract class AbstractServerView {
 	}
 	
 	protected abstract void codeToException(int errCode);
+	
+	private OutputStream getEncryptedStream(OutputStream stream) throws IOException {
+		try {
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, this.sessionKey);
+			return new CipherOutputStream(new DeflaterOutputStream(stream),cipher);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private InputStream getDecryptedStream(InputStream stream) throws IOException {
+		try {
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.DECRYPT_MODE, this.sessionKey);
+			return new CipherInputStream(new InflaterInputStream(stream),cipher);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }
