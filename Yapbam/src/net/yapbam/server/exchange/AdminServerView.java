@@ -39,12 +39,32 @@ public class AdminServerView extends UserServerView {
 	public static void main (String[] args) {
 		try {
 			AdminServerView server = new AdminServerView(Proxy.NO_PROXY, "jeanmarc@astesana.net", "gti9220");
-//			server.createUser("jeanmarc@astesana.net", "gti9220", true);
-//			server.createUser("laurence.bot@numericable.fr", "bot", false);
+			try {
+				server.createUser("jeanmarc@astesana.net", "gti9220", true);
+			} catch (UserExistsException e) {
+				System.out.println ("The user already exists");
+			}
+			try {
+				server.createUser("laurence.bot@numericable.fr", "bot", false);
+			} catch (UserExistsException e) {
+				System.out.println ("The user already exists");
+			}
 			String account = "main";
-//			server.createAccount("jeanmarc@astesana.net", account);
-//			server.postData(account, "sqfhjhlzuehsjkljqsmkll !!!");
-			System.out.println (server.getData(account));
+			try {
+				server.createAccount("jeanmarc@astesana.net", account);
+			} catch (AccountExistsException e) {
+				System.out.println ("The account already exists");
+			}
+/*			StringBuffer data = new StringBuffer();
+			String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprqrstuvwxyz&#{([|_@)]}=+-*!/:;.?,<>";
+			while (data.length()<100000) {
+				data.append(characters.charAt((int) Math.round(Math.random()*(characters.length()-1))));
+			}
+			server.postData(account, data.toString());*/
+			long start = System.currentTimeMillis();
+			String data = server.getData(account);
+			long end = System.currentTimeMillis();
+			System.out.println (data.length()+" chars read in "+(end-start)+" ms");
 
 //			server = new AdminServerView(Proxy.NO_PROXY, "laurence.bot@numericable.fr", "bot");
 //			server.createUser("toto@astesana.net", "xxxx", true);
