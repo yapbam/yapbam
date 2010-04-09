@@ -36,7 +36,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	@Override
 	public void setDisplayed(boolean displayed) {
 		super.setDisplayed(displayed);
-		panel.scrollToSelectedDate(); //TODO
+		if (displayed) panel.scrollToSelectedDate();
 	}
 
 	private void testAlert() {

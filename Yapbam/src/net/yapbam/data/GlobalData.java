@@ -342,6 +342,10 @@ public class GlobalData extends DefaultListenable {
 		return this.periodicals.get(index);
 	}
 	
+	/** Removes a periodical transaction identified by its index.
+	 * @param periodical The periodical transaction to remove
+	 * @return true if the transaction was found in tis data, false if it was not in this data
+	 */
 	public boolean remove (PeriodicalTransaction periodical) {
 		int index = Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR);
 		if (index>=0) {
@@ -352,12 +356,20 @@ public class GlobalData extends DefaultListenable {
 		}
 	}
 
+	/** Removes a periodical transaction indentified by its index.
+	 * @param index the periodical transaction index
+	 */
 	public void removePeriodicalTransaction(int index) {
 		PeriodicalTransaction removed = this.periodicals.remove(index);
 		this.fireEvent(new PeriodicalTransactionRemovedEvent(this, index, removed));
 		setChanged();
 	}
 
+	/** Increments a periodical transaction next date until it becomes greater than a date.
+	 * If the periodical transaction have no next date, this method does nthing. 
+	 * @param index the periodical transaction index
+	 * @param date the limit date the periodical transaction have to pass
+	 */
 	public void setPeriodicalTransactionNextDate(int index, Date date) {
 		PeriodicalTransaction pt = getPeriodicalTransaction(index);
 		Date nextDate = pt.getNextDate();
