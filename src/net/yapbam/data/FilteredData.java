@@ -113,6 +113,10 @@ public class FilteredData extends DefaultListenable {
 					if (isOk(evt.getNewMode())) {
 						fireEvent(event);
 					}
+				} else if (event instanceof NeedToBeSavedChangedEvent) {
+					fireEvent(event);
+				} else {
+					System.out.println ("Be aware "+event+" is not propagated by the fileredData"); //TODO
 				}
 			}
 		});
