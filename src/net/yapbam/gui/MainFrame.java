@@ -32,7 +32,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private int lastSelected = -1;
 	private boolean isRestarting = false;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
 		} catch (Exception e) {}
@@ -40,7 +40,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	            MainFrame frame = new MainFrame(null, null);
+	            MainFrame frame = new MainFrame(null, null, args.length>0?args[0]:null);
 	        	CheckNewReleaseAction.doAutoCheck(frame);
 	        }
 	    });
@@ -49,7 +49,7 @@ public class MainFrame extends JFrame implements DataListener {
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
 	 * event-dispatching thread.
 	 */
-	private MainFrame(FilteredData filteredData, Object[] restartData) {
+	private MainFrame(FilteredData filteredData, Object[] restartData, String path) {
 	    //Create and set up the window.
 		super();
 		this.setMinimumSize(new Dimension(800,400));
@@ -79,7 +79,18 @@ public class MainFrame extends JFrame implements DataListener {
 	    	this.data = filteredData.getGlobalData();
 	    	this.filteredData = filteredData;
 	    }
-	    if (filteredData==null) YapbamState.INSTANCE.restoreGlobalData(this);
+	    if (filteredData==null) {
+	    	if (path!=null) {
+				File file = new File(path);
+				try {
+					this.data.read(file);
+				} catch (IOException e) {
+					ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$
+				}
+	    	} else {
+	    		YapbamState.INSTANCE.restoreGlobalData(this);
+	    	}
+	    }
 	    
 	    Class<AbstractPlugIn>[] pluginClasses = Preferences.getPlugins();
 	    if (restartData==null) restartData = new Object[pluginClasses.length];
@@ -185,7 +196,7 @@ public class MainFrame extends JFrame implements DataListener {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
 		File file = data.getPath();
 		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
-		if (data.somethingHasChanged()) title = title+" *";
+		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
 		this.setTitle(title);
 	}
 	
@@ -208,7 +219,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //creating and showing this application's GUI.
 	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
-	            new MainFrame(filteredData, restartData);
+	            new MainFrame(filteredData, restartData, null);
 	        }
 	    });
 	}

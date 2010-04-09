@@ -115,8 +115,8 @@ public class FilteredData extends DefaultListenable {
 					}
 				} else if (event instanceof NeedToBeSavedChangedEvent) {
 					fireEvent(event);
-				} else {
-					System.out.println ("Be aware "+event+" is not propagated by the fileredData"); //TODO
+//				} else {
+//					System.out.println ("Be aware "+event+" is not propagated by the fileredData"); //FIXME
 				}
 			}
 		});

@@ -11,7 +11,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.6.1"/>
+	<property name="yapbamVersion" value="0.6.2"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">
@@ -42,14 +42,21 @@
 	    	<fileset dir="." includes="*Sample*.xml"/>
 			<resources>
 		        <file file="yapbam.jar"/>
-				<file file="yapbam.bat"/>
+				<file file="Yapbam.exe"/>
 			</resources>
 		</copy>
 		<copy todir="${releaseDir}/help" flatten="false">
 	    	<fileset dir="help" includes="**/*.html" />
 		</copy>
-		<zip basedir="${releaseDir}" destfile="yapbam-${yapbamVersion}.zip"/>
 		<delete dir="releaseCompile"/>
+		<zip basedir="${releaseDir}" destfile="yapbam-${yapbamVersion}.zip"/>
+		<delete file="${releaseDir}/Yapbam.exe"/>
+<!--
+Specific non windows version
+		<tar basedir="${releaseDir}" destfile="yapbam-${yapbamVersion}.tar"/>
+		<gzip src="yapbam-${yapbamVersion}.tar" destfile="yapbam-${yapbamVersion}.tar.gz"/>
+		<delete file="yapbam-${yapbamVersion}.tar"/>
+-->
 		<delete dir="${releaseDir}"/>
 	</target>
 	<target name="doc">
