@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -22,6 +24,7 @@ import net.yapbam.util.Portable;
 
 public class YapbamState {
 	private static final String FILE_PATH = "file.path"; //$NON-NLS-1$
+	private static final String LAST_URI = "data.uri"; //$NON-NLS-1$
 	
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
 	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
@@ -77,12 +80,24 @@ public class YapbamState {
 	}
 	
 	void restoreGlobalData(MainFrame frame) {
+		URI uri = null;
 		if (properties.containsKey(FILE_PATH)) {
-			File file = new File((String) properties.get(FILE_PATH));
+			// Old format (before the data can be saved to an URI)
+			uri = new File((String) properties.get(FILE_PATH)).toURI();
+			properties.remove(FILE_PATH);
+		} else if (properties.containsKey(LAST_URI)) {
 			try {
-				frame.getData().read(file);
+				uri = new URI((String) properties.get(LAST_URI));
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (uri!=null) {
+			try {
+				frame.getData().read(uri);
 			} catch (IOException e) {
-				ErrorManager.INSTANCE.display(frame, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),file)); //$NON-NLS-1$
+				ErrorManager.INSTANCE.display(frame, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
 			}
 		}
 	}
@@ -101,9 +116,9 @@ public class YapbamState {
 	static void save(MainFrame frame) {
 		Properties properties = INSTANCE.properties;
 		if (frame.getData().getPath()!=null) {
-			properties.put(FILE_PATH, frame.getData().getPath().toString());
+			properties.put(LAST_URI, frame.getData().getPath().toString());
 		} else {
-			properties.remove(FILE_PATH);
+			properties.remove(LAST_URI);
 		}
 		Point location = frame.getLocation();
 		properties.put(FRAME_LOCATION_X, Integer.toString(location.x));

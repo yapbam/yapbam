@@ -262,15 +262,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 				}
 			} else if (source.equals(this.menuItemOpen)) {
 				if (SaveManager.MANAGER.verify(this.frame)) {
-					File path = data.getPath();
-					String parent = path==null?null:path.getParent();
+					URI path = data.getPath();
+					String parent = path==null?null:new File(path).getParent();
 					JFileChooser chooser = new JFileChooser(parent);
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 					chooser.updateUI();
 					File file = chooser.showOpenDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 					if (file!=null) {
 						try {
-							data.read(file);
+							data.read(file.toURI());
 						} catch (Exception exception) {
 							ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent"),file)); //$NON-NLS-1$
 						}

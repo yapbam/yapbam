@@ -2,7 +2,7 @@ package net.yapbam.data.xml;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.net.URL;
+import java.net.URI;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -22,6 +22,11 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import javax.xml.transform.sax.*;
 
+/** The class implements xml yapbam data serialization and deserialization to (or from) an URL.
+ * Currently supported URL type are :<UL>
+ * <LI> file.
+ * </UL>
+ */
 public class Serializer {
 	static final String ENCODING = "UTF-8";
 
@@ -72,7 +77,7 @@ public class Serializer {
 	private AttributesImpl atts;
 	private TransformerHandler hd;
 	
-	public static void write(GlobalData data, File file) throws IOException {
+	private static void write(GlobalData data, File file) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
 		try {
 			new Serializer().serialize(data, fos);
@@ -81,19 +86,65 @@ public class Serializer {
 		}
 	}
 	
-	public static void write(GlobalData data, URL url) throws IOException {
-		// FTP URL has to be like this one : ftp://jeanmarc.astesana:de7owm0p@ftpperso.free.fr/testYapbam.xml;type=i
-		// Currently this functionality isn't implemented in the gui
-		// Probably, it means implementing an ftp client to create directories and save sae copy
-		OutputStream os = url.openConnection(Preferences.INSTANCE.getHttpProxy()).getOutputStream();
-		try {
-			new Serializer().serialize(data, os);
-		} finally {
-			os.close();
+	public static void write(GlobalData data, URI uri) throws IOException {
+		if (uri.getScheme().equals("file")) {
+			File file = new File(uri);
+			if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed");
+			// Proceed safely, it means not to erase the old version until the new version is written
+			// Everything here is pretty ugly.
+			//TODO Implement this stuff using the transactional File access in JCommon
+			File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file;
+			write(data, writed);
+			if (!file.equals(writed)) {
+				// Ok, not so safe as I want since we could lost the file between deleting and renaming
+				// but I can't find a better way
+				if (!file.delete()) {
+					writed.delete();
+					throw new IOException("Unable to delete old copy of "+file);
+				}
+				boolean result = writed.renameTo(file);
+				if (result==false) {
+					// renameTo may fail if tmpFile and file are not on the same file system.
+					// We then copy the tmp file, it's really ugly ... but I don't know how to do that
+					FileReader in = new FileReader(writed);
+					FileWriter out = new FileWriter(file);
+					int c;
+					while ((c = in.read()) != -1) out.write(c);
+					in.close();
+					out.close();
+					writed.delete(); // Deletes the tmp file
+				}
+			}
+			
+		} else if (uri.getScheme().equals("ftp")) {
+			// FTP URL has to be like this one : ftp://jeanmarc.astesana:de7owm0p@ftpperso.free.fr/testYapbam.xml;type=i
+			// Currently this functionality isn't implemented in the gui
+			// Probably, it means implementing an ftp client to create directories and save sae copy
+			OutputStream os = uri.toURL().openConnection(Preferences.INSTANCE.getHttpProxy()).getOutputStream();
+			try {
+				new Serializer().serialize(data, os);
+			} finally {
+				os.close();
+			}
+		} else {
+			throw new IOException("Unsupported protocol: "+uri.getScheme());
 		}
 	}
 
-	public static void read(GlobalData data, InputStream is) throws IOException {
+	public static void read(GlobalData data, URI uri) throws IOException {
+		if (uri.getScheme().equals("file")) {
+			InputStream is = new FileInputStream(new File(uri));
+			try {
+				read(data, is);
+			} finally {
+				is.close();
+			}
+		} else {
+			throw new IOException("Unsupported protocol: "+uri.getScheme());
+		}
+	}
+
+	private static void read(GlobalData data, InputStream is) throws IOException {
 		try {
 			SAXParserFactory.newInstance().newSAXParser().parse(is, new GlobalDataHandler(data));
 		} catch (Exception e) {

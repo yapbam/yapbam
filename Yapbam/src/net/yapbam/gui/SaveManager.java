@@ -1,6 +1,7 @@
 package net.yapbam.gui;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Locale;
 
 import javax.swing.JFileChooser;
@@ -38,7 +39,7 @@ class SaveManager {
 	 * @return true if the data was saved
 	 */
 	boolean save(MainFrame frame) {
-		File file = frame.getData().getPath();
+		URI file = frame.getData().getPath();
 		if (file==null) {
 			file = getFile(frame);
 		}
@@ -51,24 +52,24 @@ class SaveManager {
 	 * @return true if the data was saved
 	 */
 	boolean saveAs(MainFrame frame) {
-		File file = getFile(frame);
+		URI file = getFile(frame);
 		if (file==null) return false;
 		return saveTo(frame, file);
 	}
 
-	private File getFile(MainFrame frame) {
-		File path = frame.getData().getPath();
-		String parent = path==null?null:path.getParent();
+	private URI getFile(MainFrame frame) {
+		URI path = frame.getData().getPath();
+		String parent = path==null?null:new File(path).getParent();
 		JFileChooser chooser = new JFileChooser(parent);
 		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 		chooser.updateUI();
 		File result = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-		return result;
+		return result.toURI();
 	}
 
-	private boolean saveTo(MainFrame frame, File file) {
+	private boolean saveTo(MainFrame frame, URI uri) {
 		try {
-			frame.getData().save(file);
+			frame.getData().save(uri);
 			return true;
 		} catch (Throwable e) {
 			ErrorManager.INSTANCE.display(frame, e);

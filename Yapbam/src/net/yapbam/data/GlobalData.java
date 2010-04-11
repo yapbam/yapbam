@@ -2,6 +2,7 @@ package net.yapbam.data;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +26,7 @@ public class GlobalData extends DefaultListenable {
 	private List<Account> accounts;
 	private List<PeriodicalTransaction> periodicals;
 	private List<Transaction> transactions;
-	private File path;
+	private URI path;
 	private boolean somethingChanged;
 	private List<Category> categories;
 
@@ -106,69 +107,35 @@ public class GlobalData extends DefaultListenable {
 		return this.somethingChanged;
 	}
 	
-	public File getPath() {
+	public URI getPath() {
 		return path;
 	}
 
 	/** Saves the data into a file.
-	 * @param file The file where to save the data.
+	 * @param uri The URI where to save the data.
 	 * @throws IOException if a problem occurs while saving the data.
 	 * @see #read(File)
 	 */
-	public void save(File file) throws IOException {
-		if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed");
-		// Proceed safely, it means not to erase the old version until the new version is written
-		// Everything here is pretty ugly.
-		//TODO Implement this stuff using the transactional File access in JCommon
-		File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file;
-		output(writed);
-		if (!file.equals(writed)) {
-			// Ok, not so safe as I want since we could lost the file between deleting and renaming
-			// but I can't find a better way
-			if (!file.delete()) {
-				writed.delete();
-				throw new IOException("Unable to delete old copy of "+file);
-			}
-			boolean result = writed.renameTo(file);
-			if (result==false) {
-				// renameTo may fail if tmpFile and file are not on the same file system.
-				// We then copy the tmp file, it's really ugly ... but I don't know how to do that
-				FileReader in = new FileReader(writed);
-				FileWriter out = new FileWriter(file);
-				int c;
-				while ((c = in.read()) != -1) out.write(c);
-				in.close();
-				out.close();
-				writed.delete(); // Deletes the tmp file
-			}
-		}
+	public void save(URI uri) throws IOException {
+		Serializer.write(this, uri);
 		this.somethingChanged = false;
-		File old = this.path;
-		this.path = file;
+		URI old = this.path;
+		this.path = uri;
 		fireEvent(new NeedToBeSavedChangedEvent(this));
 		if (!this.path.equals(old)) fireEvent(new FileChangedEvent(this));
 	}
 
-	private void output(File writed) throws IOException {
-		Serializer.write(this,writed);
-	}
-	
-	/** Reads the data from a file.
+	/** Reads the data from an URI.
 	 * The only DataEvent sent during the read is EverythingChangedEvent, where the read is successfully finished.
-	 * @param file The file we want to read the data from.
+	 * @param uri The URI we want to read the data from.
 	 * @throws IOException if a problem occurs while reading the data.
 	 * @see EverythingChangedEvent
 	 */	
-	public void read(File file) throws IOException {
+	public void read(URI uri) throws IOException {
 		this.setEventsEnabled(false);
 		try {
-			InputStream is = new FileInputStream(file);
-			try {
-				Serializer.read(this, is);
-			} finally {
-				is.close();
-			}
-			this.path = file;
+			Serializer.read (this, uri);
+			this.path = uri;
 			// We do not want the file reading results in a "modified" state for the file,
 			// even if, of course, a lot of things changed on the screen. But, the file
 			// is unmodified.
