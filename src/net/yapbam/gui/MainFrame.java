@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
+import java.net.URI;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -81,7 +82,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    }
 	    if (filteredData==null) {
 	    	if (path!=null) {
-				File file = new File(path);
+				URI file = new File(path).toURI();
 				try {
 					this.data.read(file);
 				} catch (IOException e) {
@@ -194,7 +195,7 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private void newDataOccured() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
-		File file = data.getPath();
+		URI file = data.getPath();
 		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
 		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
 		this.setTitle(title);
