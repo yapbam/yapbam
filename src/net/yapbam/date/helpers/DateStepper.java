@@ -2,7 +2,7 @@ package net.yapbam.date.helpers;
 
 import java.util.Date;
 
-/** This class is able perform a time increment over a date.
+/** This abstract class is able to perform a time increment over a date.
  * It could be used, for instance, to convert a transaction date in a value date, or to compute
  * the next date of a periodical transaction
  */
