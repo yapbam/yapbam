@@ -1,6 +1,5 @@
 TODO list
 	
-* Ajouter une alerte quand le solde est négatif à un moment ou un autre dans le futur.
 * La possibilité d'éditer plusieurs opérations à la fois.
 * Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).
 * La possibilité de créer des raccourcis vers les filtres préférés.
