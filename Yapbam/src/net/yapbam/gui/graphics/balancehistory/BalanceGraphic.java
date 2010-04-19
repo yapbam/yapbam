@@ -87,8 +87,13 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		return endDate;
 	}
 	
-	Date getSelectedDate() {
+	public Date getSelectedDate() {
 		return selectedDate;
+	}
+	
+	public void setSelectedDate(Date date) {
+		this.selectedDate = date;
+		this.repaint();
 	}
 
 	public boolean isGridVisible() {
@@ -153,15 +158,17 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 
         // Draw the selected date line
-		Stroke oldStroke = g2.getStroke();
 		int stroke = 4;
-        g2.setStroke(new BasicStroke(stroke));
-        Color oldColor = g2.getColor();
-    	g2.setColor(Color.ORANGE);
     	int x = getX(this.selectedDate)+stroke/2;
-		g2.drawLine(x, 0, x, size.height); //Selected Date line
-    	g2.setColor(oldColor);
-    	g2.setStroke(oldStroke);
+    	if ((x>=0) && (x<=size.width)) {
+			Stroke oldStroke = g2.getStroke();
+	        g2.setStroke(new BasicStroke(stroke));
+	        Color oldColor = g2.getColor();
+	    	g2.setColor(Color.ORANGE);
+			g2.drawLine(x, 0, x, size.height); //Selected Date line
+	    	g2.setColor(oldColor);
+	    	g2.setStroke(oldStroke);
+    	}
 	}
 
 	@SuppressWarnings("deprecation")

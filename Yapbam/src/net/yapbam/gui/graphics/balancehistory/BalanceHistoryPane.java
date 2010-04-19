@@ -67,9 +67,12 @@ public class BalanceHistoryPane extends JPanel {
 		this.balanceHistory = history;
 		this.rule.setBalanceHistory(history);
 		this.remove(scrollPane);
+		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
+		graph.setSelectedDate(currentlySelected);
 		graph.setGridVisible(isGridVisible.isSelected());
 		this.report.setText(getBalanceReportText());
+		scrollToSelectedDate();
 		this.validate();
 	}
 	
