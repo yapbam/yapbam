@@ -64,7 +64,7 @@ public class FilteredData extends DefaultListenable {
 				} else if (event instanceof TransactionAddedEvent) {
 					Transaction transaction = ((TransactionAddedEvent)event).getTransaction();
 					if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
-						balanceData.updateBalance(new Date(), transaction, true);
+						balanceData.updateBalance(transaction, true);
 						if (isOk(transaction)) { // If the added transaction match with the whole filter
 							int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
 							transactions.add(index, transaction);
@@ -74,7 +74,7 @@ public class FilteredData extends DefaultListenable {
 				} else if (event instanceof TransactionRemovedEvent) {
 					Transaction transaction = ((TransactionRemovedEvent)event).getRemoved();
 					if (isOk(transaction.getAccount())) {
-						balanceData.updateBalance(new Date(), transaction, false);
+						balanceData.updateBalance(transaction, false);
 						int index = Collections.binarySearch(transactions, transaction, comparator);
 						if (index>=0) {
 							transactions.remove(index);
@@ -504,12 +504,11 @@ public class FilteredData extends DefaultListenable {
 			}
 			balanceData.enableEvents(false);
 			balanceData.clear(initialBalance);
-		    Date today = new Date();
 		    this.transactions = new ArrayList<Transaction>();
 		    for (int i = 0; i < data.getTransactionsNumber(); i++) {
 				Transaction transaction = data.getTransaction(i);
 				if (isOk(transaction.getAccount())) {
-					balanceData.updateBalance(today, transaction, true);
+					balanceData.updateBalance(transaction, true);
 					if (isOk(transaction)) {
 						int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
 						transactions.add(index, transaction);

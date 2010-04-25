@@ -15,6 +15,9 @@ public class Account implements Serializable {
 	private List<Mode> modes;
 	private List<Checkbook> checkbooks;
 	private int transactionNumber;
+	private BalanceData balanceData;
+	private double alertAmount;
+	private boolean alertIfLess;
 	
 	/** Constructor.
 	 * This constructor creates a new account with one payment mode: Mode.UNDEFINED.
@@ -25,10 +28,14 @@ public class Account implements Serializable {
 	public Account(String name, double initialBalance) {
 		this.name = name;
 		this.initialBalance = initialBalance;
+		this.alertAmount = 0;
+		this.alertIfLess = true;
 		this.receiptModes = new ArrayList<Mode>();
 		this.expenseModes = new ArrayList<Mode>();
 		this.modes = new ArrayList<Mode>();
 		this.checkbooks = new ArrayList<Checkbook>();
+		this.balanceData = new BalanceData();
+		this.balanceData.clear(initialBalance);
 		this.add(Mode.UNDEFINED);
 	}
 
@@ -125,8 +132,9 @@ public class Account implements Serializable {
 	/** Adds a transaction to the account.
 	 * @param transaction the transaction to add
 	 */
-	public void add(AbstractTransaction transaction) {
+	public void add(Transaction transaction) {
 		transactionNumber++;
+		this.balanceData.updateBalance(transaction, true);
 	}
 	
 	/** Removes a transaction from this account.
@@ -134,6 +142,7 @@ public class Account implements Serializable {
 	 */
 	public void removeTransaction(Transaction transaction) {
 		transactionNumber--;
+		this.balanceData.updateBalance(transaction, false);
 	}
 
 	void add(Mode newMode) {
@@ -208,6 +217,8 @@ public class Account implements Serializable {
 	}
 
 	void setInitialBalance(double value) {
+		this.balanceData.updateBalance(this.initialBalance, false);
+		this.balanceData.updateBalance(this.initialBalance, true);
 		this.initialBalance = value;
 	}
 }

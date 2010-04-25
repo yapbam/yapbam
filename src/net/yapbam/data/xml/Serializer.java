@@ -115,11 +115,10 @@ public class Serializer {
 					writed.delete(); // Deletes the tmp file
 				}
 			}
-			
 		} else if (uri.getScheme().equals("ftp")) {
-			// FTP URL has to be like this one : ftp://jeanmarc.astesana:de7owm0p@ftpperso.free.fr/testYapbam.xml;type=i
+			// FTP URL has to be like this one : ftp://user:password@server/file;type=i
 			// Currently this functionality isn't implemented in the gui
-			// Probably, it means implementing an ftp client to create directories and save sae copy
+			// Probably, it means implementing an ftp client to create directories and save copy
 			OutputStream os = uri.toURL().openConnection(Preferences.INSTANCE.getHttpProxy()).getOutputStream();
 			try {
 				new Serializer().serialize(data, os);
@@ -132,8 +131,8 @@ public class Serializer {
 	}
 
 	public static void read(GlobalData data, URI uri) throws IOException {
-		if (uri.getScheme().equals("file")) {
-			InputStream is = new FileInputStream(new File(uri));
+		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) {
+			InputStream is = uri.toURL().openStream();
 			try {
 				read(data, is);
 			} finally {
