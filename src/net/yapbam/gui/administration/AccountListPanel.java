@@ -2,16 +2,21 @@ package net.yapbam.gui.administration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import net.yapbam.data.Account;
+import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
+import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.CheckbookAddedEvent;
 import net.yapbam.data.event.CheckbookRemovedEvent;
@@ -35,6 +40,12 @@ import java.text.MessageFormat;
 
 public class AccountListPanel extends AbstractListAdministrationPanel {
 	private static final long serialVersionUID = 1L;
+	
+	private static String[] alertKinds = new String[] { //LOCAL
+		"Alerte désactivée",
+		"Si solde < à",
+		"Si solde > à"
+	};
 
 	@SuppressWarnings("serial")
 	class DeleteAccountAction extends AbstractAction {
@@ -79,10 +90,14 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		        } else if (column == 1) {
 		            tip = LocalizationData.get("AccountManager.balanceColumn.toolTip"); //$NON-NLS-1$
 		        } else if (column == 2) {
-		            tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
+		        	tip = "Sélectionnez le type d'alerte dans cette colonne"; //LOCAL
 		        } else if (column == 3) {
-		            tip = LocalizationData.get("AccountManager.modesNumber.toolTip"); //$NON-NLS-1$
+		        	tip = "Double cliquez sur cette cellule pour éditer le seuil de déclenchement de l'alerte du compte"; //LOCAL
 		        } else if (column == 4) {
+		            tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
+		        } else if (column == 5) {
+		            tip = LocalizationData.get("AccountManager.modesNumber.toolTip"); //$NON-NLS-1$
+		        } else if (column == 6) {
 		            tip = LocalizationData.get("AccountManager.checkbooksNumber.toolTip"); //$NON-NLS-1$
 		        } else { //another column
 		            tip = super.getToolTipText(e);
@@ -100,6 +115,12 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		    	return this;
 		    }
 		});
+		TableColumn sportColumn = jTable.getColumnModel().getColumn(2);
+		JComboBox comboBox = new JComboBox();
+		for (int i = 0; i < alertKinds.length; i++) {
+			comboBox.addItem(alertKinds[i]);
+		}
+		sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
 		return jTable;
 	}
 	
@@ -110,17 +131,19 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		}
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			if (columnIndex==1) return Double.class;
-			else if ((columnIndex>=2) && (columnIndex<=4)) return Integer.class;
+			if ((columnIndex==1) || (columnIndex==3)) return Double.class;
+			else if ((columnIndex>=4) && (columnIndex<=6)) return Integer.class;
 			return String.class;
 		}
 		@Override
 		public String getColumnName(int columnIndex) {
 			if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
 			if (columnIndex==1) return LocalizationData.get("AccountManager.balanceColumn.title"); //$NON-NLS-1$
-			if (columnIndex==2) return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
-			if (columnIndex==3) return LocalizationData.get("AccountManager.modesNumber.title"); //$NON-NLS-1$
-			if (columnIndex==4) return LocalizationData.get("AccountManager.checkbooksNumber.title"); //$NON-NLS-1$
+			if (columnIndex==2) return "Alerte si"; //LOCAL
+			if (columnIndex==3) return "A";
+			if (columnIndex==4) return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
+			if (columnIndex==5) return LocalizationData.get("AccountManager.modesNumber.title"); //$NON-NLS-1$
+			if (columnIndex==6) return LocalizationData.get("AccountManager.checkbooksNumber.title"); //$NON-NLS-1$
 			return "?"; //$NON-NLS-1$
 		}
 
@@ -129,10 +152,16 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 			Account account = ((GlobalData)data).getAccount(rowIndex);
 			if (columnIndex==0) return account.getName();
 			else if (columnIndex==1) return account.getInitialBalance();
-			else if (columnIndex==2) return account.getTransactionsNumber();
-			else if (columnIndex==3) return account.getModesNumber()-1; // The undefined mode is returned in getModesNumber
-			else if (columnIndex==4) return account.getCheckbooksNumber();
+			else if (columnIndex==2) return getWording(account.getAlertThreshold());
+			else if (columnIndex==3) return account.getAlertThreshold().getBalance(); //TODO
+			else if (columnIndex==4) return account.getTransactionsNumber();
+			else if (columnIndex==5) return account.getModesNumber()-1; // The undefined mode is returned in getModesNumber
+			else if (columnIndex==6) return account.getCheckbooksNumber();
 			return "?"; //$NON-NLS-1$
+		}
+		private String getWording(AlertThreshold alertThreshold) {
+			if (alertThreshold.isLifeless()) return alertKinds[0];
+			return alertThreshold.isLessThan()?alertKinds[1]:alertKinds[2];
 		}
 		public void setValueAt(Object value, int row, int col) {
 			Account account = ((GlobalData)data).getAccount(row);
@@ -158,10 +187,22 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 			} else if (col==1) { // Initial Balance
 				double val = (Double)value;
 				((GlobalData)data).setInitialBalance(account, val);
+			} else if (col==2) { // Alert kind
+				if (value.equals(alertKinds[0])) {
+					((GlobalData)data).setAlertThreshold(account, AlertThreshold.NO);
+				} else {
+					AlertThreshold old = account.getAlertThreshold();
+					double amount = old.isLifeless()?0.0:old.getBalance();
+					boolean less = alertKinds[1].equals(value);
+					((GlobalData)data).setAlertThreshold(account, new AlertThreshold(amount, less));
+				}
+			} else if (col==3) { // Alert amount
+				AlertThreshold old = account.getAlertThreshold();
+				boolean less = old.isLifeless()?true:old.isLessThan();
+				((GlobalData)data).setAlertThreshold(account, new AlertThreshold((Double) value, less));
 			} else { //Unexpected
 				throw new IllegalArgumentException();
 			}
-	        fireTableCellUpdated(row, col);
 	    }
 
 		@Override
@@ -176,7 +217,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return columnIndex<2;
+			return columnIndex<4;
 		}
 		@Override
 		public void processEvent(DataEvent event) {
@@ -189,6 +230,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 			} else if (event instanceof AccountRemovedEvent) {
 				int index = ((AccountRemovedEvent)event).getIndex();
 				this.fireTableRowsDeleted(index, index);
+			} else if (event instanceof AccountPropertyChangedEvent) {
+				account = ((AccountPropertyChangedEvent)event).getAccount();
 			} else if (event instanceof TransactionAddedEvent) {
 				account = ((TransactionAddedEvent)event).getTransaction().getAccount();
 			} else if (event instanceof TransactionRemovedEvent) {
