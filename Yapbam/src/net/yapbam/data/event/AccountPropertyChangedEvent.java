@@ -5,6 +5,7 @@ import net.yapbam.data.Account;
 public class AccountPropertyChangedEvent extends DataEvent {
 	public static final String NAME = "name";
 	public static final String INITIAL_BALANCE = "initialBalance";
+	public static final String ALERT_THRESHOLD = "alertThreshold";
 	
 	private Account account;
 	private String property;
