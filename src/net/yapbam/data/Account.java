@@ -16,9 +16,8 @@ public class Account implements Serializable {
 	private List<Checkbook> checkbooks;
 	private int transactionNumber;
 	private BalanceData balanceData;
-	private double alertAmount;
-	private boolean alertIfLess;
-	
+	private AlertThreshold alertThreshold;
+
 	/** Constructor.
 	 * This constructor creates a new account with one payment mode: Mode.UNDEFINED.
 	 * @param name The name of the account
@@ -28,8 +27,7 @@ public class Account implements Serializable {
 	public Account(String name, double initialBalance) {
 		this.name = name;
 		this.initialBalance = initialBalance;
-		this.alertAmount = 0;
-		this.alertIfLess = true;
+		this.alertThreshold = new AlertThreshold(0, true);
 		this.receiptModes = new ArrayList<Mode>();
 		this.expenseModes = new ArrayList<Mode>();
 		this.modes = new ArrayList<Mode>();
@@ -220,5 +218,16 @@ public class Account implements Serializable {
 		this.balanceData.updateBalance(this.initialBalance, false);
 		this.balanceData.updateBalance(this.initialBalance, true);
 		this.initialBalance = value;
+	}
+
+	/** Gets the alert threshold.
+	 * @return an {@link AlertThreshold}
+	 */
+	public AlertThreshold getAlertThreshold() {
+		return this.alertThreshold;
+	}
+
+	void setAlertThreshold(AlertThreshold alertThreshold) {
+		this.alertThreshold = alertThreshold;
 	}
 }

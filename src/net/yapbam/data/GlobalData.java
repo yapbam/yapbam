@@ -15,6 +15,7 @@ import java.util.Locale;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.util.NullUtils;
 
 /** This class represents the whole Yapbam data.
  *  You can also have a look at FilteredData which presents a filtered view of Yapbam data.
@@ -101,7 +102,7 @@ public class GlobalData extends DefaultListenable {
 	
 	/** Tests if the data needs to be saved.
 	 * @return true if the data needs to be saved, false, if there's nothing to change (no changes since last save).
-	 * @see #save(File)
+	 * @see #save(URI)
 	 */
 	public boolean somethingHasChanged() {
 		return this.somethingChanged;
@@ -114,7 +115,7 @@ public class GlobalData extends DefaultListenable {
 	/** Saves the data into a file.
 	 * @param uri The URI where to save the data.
 	 * @throws IOException if a problem occurs while saving the data.
-	 * @see #read(File)
+	 * @see #read(URI)
 	 */
 	public void save(URI uri) throws IOException {
 		Serializer.write(this, uri);
@@ -433,6 +434,19 @@ public class GlobalData extends DefaultListenable {
 		if (old != value) {
 			account.setInitialBalance(value);
 			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.INITIAL_BALANCE, account, old, value));
+			this.setChanged();
+		}
+	}
+	
+	/** Changes the alert threshold for this account.
+	 * @param account the account to be changed
+	 * @param threshold the alert threshold to apply to this account 
+	 */
+	public void setAlertThreshold (Account account, AlertThreshold threshold) {
+		AlertThreshold old = account.getAlertThreshold();
+		if (!NullUtils.areEquals(old, threshold)) {
+			account.setAlertThreshold(threshold);
+			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.ALERT_THRESHOLD, account, old, threshold));
 			this.setChanged();
 		}
 	}
