@@ -90,7 +90,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		        return tip;
 		    }
 		};
-		jTable.setDefaultRenderer(double.class, new DefaultTableCellRenderer(){
+		jTable.setDefaultRenderer(Double.class, new DefaultTableCellRenderer(){
 		    @Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 		    		boolean hasFocus, int row, int column) {
@@ -110,7 +110,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		}
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			if (columnIndex==1) return double.class;
+			if (columnIndex==1) return Double.class;
 			else if ((columnIndex>=2) && (columnIndex<=4)) return Integer.class;
 			return String.class;
 		}
