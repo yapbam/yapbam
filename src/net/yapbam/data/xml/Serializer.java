@@ -57,6 +57,9 @@ public class Serializer {
 	static final String NEXT_NUMBER_ATTRIBUTE = "next";
 
 	static final String INITIAL_BALANCE_ATTRIBUTE = "initialBalance";
+	static final String ALERT_THRESHOLD = "alertThreshold";
+	static final String ALERT_DIRECTION = "alertIfLessThan";
+	static final String ALERT_DISABLED = "alertDisabled";
 	static final String ID_ATTRIBUTE = "id";
 	static final String NEXT_DATE_ATTRIBUTE = "next";
 	static final String LAST_DATE_ATTRIBUTE = "last";
@@ -201,6 +204,16 @@ public class Serializer {
 		atts.clear();
 		atts.addAttribute("","",ID_ATTRIBUTE,"CDATA",account.getName());
 		atts.addAttribute("","",INITIAL_BALANCE_ATTRIBUTE,"CDATA",Double.toString(account.getInitialBalance()));
+		AlertThreshold alertThreshold = account.getAlertThreshold();
+		if (!alertThreshold.equals(new AlertThreshold(0, true))) {
+			if (alertThreshold.equals(AlertThreshold.NO)) {
+				atts.addAttribute("", "", ALERT_DISABLED, "CDATA", Boolean.toString(true));
+			} else {
+				atts.addAttribute("", "", ALERT_DIRECTION, "CDATA", Boolean.toString(alertThreshold.isLessThan()));
+				atts.addAttribute("", "", ALERT_THRESHOLD, "CDATA", Double.toString(alertThreshold.getBalance()));				
+			}
+		}
+		
 		hd.startElement("","",ACCOUNT_TAG,atts);
 		HashSet<String> saved = new HashSet<String>();
 		// for loops start with index 1 because the default mode doesn't need to be saved
