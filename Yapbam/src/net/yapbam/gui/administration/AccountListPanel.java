@@ -41,10 +41,10 @@ import java.text.MessageFormat;
 public class AccountListPanel extends AbstractListAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private static String[] alertKinds = new String[] { //LOCAL
-		"Alerte désactivée",
-		"Si solde < à",
-		"Si solde > à"
+	private static String[] alertKinds = new String[] {
+		LocalizationData.get("AccountManager.alert.no"), //$NON-NLS-1$
+		LocalizationData.get("AccountManager.alert.lessThan"), //$NON-NLS-1$
+		LocalizationData.get("AccountManager.alert.greaterThan") //$NON-NLS-1$
 	};
 
 	@SuppressWarnings("serial")
@@ -90,9 +90,9 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		        } else if (column == 1) {
 		            tip = LocalizationData.get("AccountManager.balanceColumn.toolTip"); //$NON-NLS-1$
 		        } else if (column == 2) {
-		        	tip = "Sélectionnez le type d'alerte dans cette colonne"; //LOCAL
+		        	tip = LocalizationData.get("AccountManager.alertKind.toolTip"); //$NON-NLS-1$
 		        } else if (column == 3) {
-		        	tip = "Double cliquez sur cette cellule pour éditer le seuil de déclenchement de l'alerte du compte"; //LOCAL
+		        	tip = LocalizationData.get("AccountManager.alertThreshold.toolTip"); //$NON-NLS-1$
 		        } else if (column == 4) {
 		            tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
 		        } else if (column == 5) {
@@ -139,8 +139,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 		public String getColumnName(int columnIndex) {
 			if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
 			if (columnIndex==1) return LocalizationData.get("AccountManager.balanceColumn.title"); //$NON-NLS-1$
-			if (columnIndex==2) return "Alerte si"; //LOCAL
-			if (columnIndex==3) return "A";
+			if (columnIndex==2) return LocalizationData.get("AccountManager.alertKind.title"); //$NON-NLS-1$
+			if (columnIndex==3) return LocalizationData.get("AccountManager.alertThreshold.title"); //$NON-NLS-1$
 			if (columnIndex==4) return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
 			if (columnIndex==5) return LocalizationData.get("AccountManager.modesNumber.title"); //$NON-NLS-1$
 			if (columnIndex==6) return LocalizationData.get("AccountManager.checkbooksNumber.title"); //$NON-NLS-1$
@@ -153,7 +153,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 			if (columnIndex==0) return account.getName();
 			else if (columnIndex==1) return account.getInitialBalance();
 			else if (columnIndex==2) return getWording(account.getAlertThreshold());
-			else if (columnIndex==3) return account.getAlertThreshold().getBalance(); //TODO
+			else if (columnIndex==3) return account.getAlertThreshold().getBalance();
 			else if (columnIndex==4) return account.getTransactionsNumber();
 			else if (columnIndex==5) return account.getModesNumber()-1; // The undefined mode is returned in getModesNumber
 			else if (columnIndex==6) return account.getCheckbooksNumber();
