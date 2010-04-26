@@ -50,7 +50,7 @@ class GlobalDataHandler extends DefaultHandler {
 			} else {
 				if (attributes.getValue(Serializer.ALERT_DIRECTION)==null) {
 					// No alert specified => alert if less than 0.
-					alertThreshold = new AlertThreshold(0, true);
+					alertThreshold = AlertThreshold.DEFAULT;
 				} else {
 					alertThreshold = new AlertThreshold(Double.parseDouble(attributes.getValue(Serializer.ALERT_THRESHOLD)),
 							Boolean.parseBoolean(attributes.getValue(Serializer.ALERT_DIRECTION)));

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.swing.JPanel;
 
+import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.BalanceData;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
@@ -40,7 +41,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	}
 
 	private void testAlert() {
-		long firstAlertDate = data.getBalanceHistory().getFirstDateUnder(new Date(), null, 0.0);
+		long firstAlertDate = data.getBalanceHistory().getFirstAlertDate(new Date(), null, AlertThreshold.DEFAULT);
 		String tooltip;
 		tooltip = LocalizationData.get("BalanceHistory.toolTip");
 		if (firstAlertDate>=0) {

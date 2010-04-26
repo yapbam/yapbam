@@ -205,7 +205,7 @@ public class Serializer {
 		atts.addAttribute("","",ID_ATTRIBUTE,"CDATA",account.getName());
 		atts.addAttribute("","",INITIAL_BALANCE_ATTRIBUTE,"CDATA",Double.toString(account.getInitialBalance()));
 		AlertThreshold alertThreshold = account.getAlertThreshold();
-		if (!alertThreshold.equals(new AlertThreshold(0, true))) {
+		if (!alertThreshold.equals(AlertThreshold.DEFAULT)) {
 			if (alertThreshold.equals(AlertThreshold.NO)) {
 				atts.addAttribute("", "", ALERT_DISABLED, "CDATA", Boolean.toString(true));
 			} else {
