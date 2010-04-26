@@ -230,4 +230,11 @@ public class Account implements Serializable {
 	void setAlertThreshold(AlertThreshold alertThreshold) {
 		this.alertThreshold = alertThreshold;
 	}
+
+	/** Gets this account's balance data.
+	 * @return a BalanceData
+	 */
+	public BalanceData getBalanceData() {
+		return this.balanceData;
+	}
 }
