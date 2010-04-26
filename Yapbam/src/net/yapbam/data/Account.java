@@ -27,7 +27,7 @@ public class Account implements Serializable {
 	public Account(String name, double initialBalance) {
 		this.name = name;
 		this.initialBalance = initialBalance;
-		this.alertThreshold = new AlertThreshold(0, true);
+		this.alertThreshold = AlertThreshold.DEFAULT;
 		this.receiptModes = new ArrayList<Mode>();
 		this.expenseModes = new ArrayList<Mode>();
 		this.modes = new ArrayList<Mode>();
