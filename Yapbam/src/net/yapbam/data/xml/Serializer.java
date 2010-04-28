@@ -57,9 +57,9 @@ public class Serializer {
 	static final String NEXT_NUMBER_ATTRIBUTE = "next";
 
 	static final String INITIAL_BALANCE_ATTRIBUTE = "initialBalance";
-	static final String ALERT_THRESHOLD = "alertThreshold";
-	static final String ALERT_DIRECTION = "alertIfLessThan";
-	static final String ALERT_DISABLED = "alertDisabled";
+	static final String ALERT_THRESHOLD_LESS = "alertThresholdLess";
+	static final String ALERT_THRESHOLD_MORE = "alertThresholdMore";
+	static final String ALERT_IGNORE = "no";
 	static final String ID_ATTRIBUTE = "id";
 	static final String NEXT_DATE_ATTRIBUTE = "next";
 	static final String LAST_DATE_ATTRIBUTE = "last";
@@ -206,12 +206,8 @@ public class Serializer {
 		atts.addAttribute("","",INITIAL_BALANCE_ATTRIBUTE,"CDATA",Double.toString(account.getInitialBalance()));
 		AlertThreshold alertThreshold = account.getAlertThreshold();
 		if (!alertThreshold.equals(AlertThreshold.DEFAULT)) {
-			if (alertThreshold.equals(AlertThreshold.NO)) {
-				atts.addAttribute("", "", ALERT_DISABLED, "CDATA", Boolean.toString(true));
-			} else {
-				atts.addAttribute("", "", ALERT_DIRECTION, "CDATA", Boolean.toString(alertThreshold.isLessThan()));
-				atts.addAttribute("", "", ALERT_THRESHOLD, "CDATA", Double.toString(alertThreshold.getBalance()));				
-			}
+			atts.addAttribute("", "", ALERT_THRESHOLD_LESS, "CDATA", Double.toString(alertThreshold.getLessThreshold()));
+			atts.addAttribute("", "", ALERT_THRESHOLD_MORE, "CDATA", Double.toString(alertThreshold.getMoreThreshold()));
 		}
 		
 		hd.startElement("","",ACCOUNT_TAG,atts);

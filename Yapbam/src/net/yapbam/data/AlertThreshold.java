@@ -1,57 +1,58 @@
 package net.yapbam.data;
 
-/** An alert threshold when balance reach an amount.
+/** An alert threshold when balance is less or more than specified amounts.
  */
 public class AlertThreshold {
-	/** The default threshold: Balance less than 0. */
-	public static final AlertThreshold DEFAULT = new AlertThreshold(0, true);
+	/** The default threshold: Alert if balance is less than 0. No high limit. */
+	public static final AlertThreshold DEFAULT = new AlertThreshold(0, Double.POSITIVE_INFINITY);
 	/** A threshold that never generates any alert.
 	 * Useful to ask for no alerts on an account.
 	 */
-	public static AlertThreshold NO = new AlertThreshold(Double.NEGATIVE_INFINITY, true);
+	public static AlertThreshold NO = new AlertThreshold(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 	
-	private double balance;
-	private boolean less;
+	private double lessThreshold;
+	private double moreThreshold;
 
 	/** Constructor.
-	 * @param amount the new threshold amount.
-	 * @param lower true if alert has to be set if balance is lower than threshold, false if balance is greater than threshold
+	 * @param lessThreshold if balance is lower than lessThreshold, an alert is generated. Double.NEGATIVE_INFINITY to have no "less than amount" alert
+	 * @param moreThreshold if balance is higher than moreThreshold, an alert is generated. Double.POSITIVE_INFINITY to have no "more then amount" alert
 	 */
-	public AlertThreshold(double amount, boolean lower) {
-		this.balance = amount;
-		this.less = lower;
+	public AlertThreshold(double lessThreshold, double moreThreshold) {
+		this.lessThreshold = lessThreshold;
+		this.moreThreshold = moreThreshold;
 	}
 
-	/** Gets the balance threshold.
-	 * @return a double.
+	/** Gets the threshold for "balance more than threshold" alert.
+	 * @return a double. Double.POSITIVE_INFINITY if no alert is set.
 	 */
-	public double getBalance() {
-		return balance;
+	public double getMoreThreshold() {
+		return moreThreshold;
 	}
 
-	/** Tests whether the alert is for balance lower than balance threshold or not.
-	 * @return true if alert is set for balance lower than the result of {@link #getBalance()}, false for balance greater than {@link #getBalance()}
+	/** Gets the threshold for "balance less than threshold" alert.
+	 * @return a double. Double.NEGATIVE_INFINITY is no alert is set.
 	 */
-	public boolean isLessThan() {
-		return less;
+	public double getLessThreshold() {
+		return lessThreshold;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof AlertThreshold) {
 			AlertThreshold al = (AlertThreshold) obj;
-			return (al.less==this.less) && (GlobalData.AMOUNT_COMPARATOR.compare(al.balance,this.balance)==0);
+			return (GlobalData.AMOUNT_COMPARATOR.compare(al.lessThreshold,this.lessThreshold)==0) && (GlobalData.AMOUNT_COMPARATOR.compare(al.moreThreshold,this.moreThreshold)==0);
 		} else {
 			return super.equals(obj);
 		}
 	}
 
-	/** Tests whether this threshlod is able to generate an alert.
-	 * @return true if it can generete alerts, false otherwise (example: alert is set for less than negative infinity)
+	/** Tests whether this threshold is able to generate an alert.
+	 * @return true if it can generate alerts, false otherwise (example: alert is set for less than negative infinity)
 	 * @see AlertThreshold#NO
 	 */
 	public boolean isLifeless() {
-		return ((balance==Double.NEGATIVE_INFINITY) && less) || ((balance==Double.POSITIVE_INFINITY) && !less);
+		return (lessThreshold==Double.NEGATIVE_INFINITY) && (moreThreshold==Double.POSITIVE_INFINITY);
 	}
 	
 	/** Tests whether an amount triggers the alert. 
@@ -59,13 +60,12 @@ public class AlertThreshold {
 	 * @return true if the alert is triggered.
 	 */
 	public boolean isTriggered(double amount) {
-		int comparison = GlobalData.AMOUNT_COMPARATOR.compare(balance-amount, 0.0);
-		return (less && (comparison>0)) || (!less && (comparison<0));
+		return (GlobalData.AMOUNT_COMPARATOR.compare(amount,this.lessThreshold)<0) || (GlobalData.AMOUNT_COMPARATOR.compare(amount,this.moreThreshold)>0);
 	}
 	
 	@Override
 	public int hashCode() {
 		if (isLifeless()) return 1;
-		return (int) this.balance;
+		return (int) Math.min(this.lessThreshold,this.moreThreshold);
 	}
 }

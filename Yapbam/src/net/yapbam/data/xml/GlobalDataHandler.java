@@ -45,16 +45,12 @@ class GlobalDataHandler extends DefaultHandler {
 			Account account = new Account(id, balance);
 			this.data.add(account);
 			AlertThreshold alertThreshold;
-			if (Boolean.parseBoolean(attributes.getValue(Serializer.ALERT_DISABLED))) {
-				alertThreshold = AlertThreshold.NO;
+			String lessAttribute = attributes.getValue(Serializer.ALERT_THRESHOLD_LESS);
+			if (lessAttribute==null) {
+				alertThreshold = AlertThreshold.DEFAULT;
 			} else {
-				if (attributes.getValue(Serializer.ALERT_DIRECTION)==null) {
-					// No alert specified => alert if less than 0.
-					alertThreshold = AlertThreshold.DEFAULT;
-				} else {
-					alertThreshold = new AlertThreshold(Double.parseDouble(attributes.getValue(Serializer.ALERT_THRESHOLD)),
-							Boolean.parseBoolean(attributes.getValue(Serializer.ALERT_DIRECTION)));
-				}
+				alertThreshold = new AlertThreshold(Double.parseDouble(lessAttribute),
+						Double.parseDouble(attributes.getValue(Serializer.ALERT_THRESHOLD_MORE)));
 			}
 			this.data.setAlertThreshold(account, alertThreshold);
 			this.tempData.push(account);
