@@ -15,7 +15,6 @@ import java.util.Locale;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
-import net.yapbam.util.NullUtils;
 
 /** This class represents the whole Yapbam data.
  *  You can also have a look at FilteredData which presents a filtered view of Yapbam data.
@@ -62,7 +61,8 @@ public class GlobalData extends DefaultListenable {
 	public static final Comparator<Double> AMOUNT_COMPARATOR = new Comparator<Double>() {
 		@Override
 		public int compare(Double o1, Double o2) {
-			if (Math.abs(o1-o2)<defaultPrecision) return 0;
+			// o1.equals(o2) is here because if the doubles are positive or negative infinity, their difference is not defined
+			if (o1.equals(o2) || (Math.abs(o1-o2)<defaultPrecision)) return 0;
 			return o1<o2?-1:1;
 		}
 	};
@@ -444,7 +444,7 @@ public class GlobalData extends DefaultListenable {
 	 */
 	public void setAlertThreshold (Account account, AlertThreshold threshold) {
 		AlertThreshold old = account.getAlertThreshold();
-		if (!NullUtils.areEquals(old, threshold)) {
+		if (!old.equals(threshold)) {
 			account.setAlertThreshold(threshold);
 			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.ALERT_THRESHOLD, account, old, threshold));
 			this.setChanged();
