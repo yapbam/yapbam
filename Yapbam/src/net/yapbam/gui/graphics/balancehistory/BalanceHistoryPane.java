@@ -2,6 +2,8 @@ package net.yapbam.gui.graphics.balancehistory;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -10,13 +12,10 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.gui.LocalizationData;
@@ -26,13 +25,11 @@ public class BalanceHistoryPane extends JPanel {
 	
 	private BalanceHistory balanceHistory;
 	
-	private BalanceGraphic graph;
-	private JLabel report;
-	private BalanceRule rule;
-	private JCheckBox isGridVisible;
-
 	private JScrollPane scrollPane;
-	
+	private BalanceGraphic graph;
+	private BalanceHistoryControlPane control;
+	private BalanceRule rule;
+
 	public BalanceHistoryPane(BalanceHistory history) {
 		super(new BorderLayout());
 		this.balanceHistory = history;
@@ -40,19 +37,20 @@ public class BalanceHistoryPane extends JPanel {
 		
 		createGraphic();
 		
-		JPanel southPane = new JPanel(new BorderLayout());
-		this.isGridVisible = new JCheckBox(LocalizationData.get("BalanceHistory.showGrid")); //$NON-NLS-1$
-		this.isGridVisible.setToolTipText(LocalizationData.get("BalanceHistory.showGrid.toolTip")); //$NON-NLS-1$
-		this.isGridVisible.addItemListener( new ItemListener() {
+		control = new BalanceHistoryControlPane();
+		control.getIsGridVisible().addItemListener( new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				graph.setGridVisible(e.getStateChange() == ItemEvent.SELECTED);
 			}});
-		southPane.add(this.isGridVisible,BorderLayout.EAST);
-		this.report = new JLabel(getBalanceReportText(),SwingConstants.CENTER);
-		this.report.setToolTipText(LocalizationData.get("BalanceHistory.report.toolTip")); //$NON-NLS-1$
-		southPane.add(this.report,BorderLayout.CENTER);
-		
-		this.add(southPane, BorderLayout.SOUTH);
+		control.getToday().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				graph.setSelectedDate(new Date());
+				scrollToSelectedDate();
+			}
+		});
+		control.setReportText(getBalanceReportText());
+		this.add(control, BorderLayout.SOUTH);
 	}
 
 	private String getBalanceReportText() {
@@ -70,8 +68,8 @@ public class BalanceHistoryPane extends JPanel {
 		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
 		graph.setSelectedDate(currentlySelected);
-		graph.setGridVisible(isGridVisible.isSelected());
-		this.report.setText(getBalanceReportText());
+		graph.setGridVisible(control.getIsGridVisible().isSelected());
+		control.setReportText(getBalanceReportText());
 		scrollToSelectedDate();
 		this.validate();
 	}
@@ -82,7 +80,7 @@ public class BalanceHistoryPane extends JPanel {
 		graph.addPropertyChangeListener(BalanceGraphic.SELECTED_DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				report.setText(getBalanceReportText());
+				control.setReportText(getBalanceReportText());
 			}
 		});
 		scrollPane = new JScrollPane(graph, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);

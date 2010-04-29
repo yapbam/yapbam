@@ -92,8 +92,12 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 	
 	public void setSelectedDate(Date date) {
-		this.selectedDate = date;
-		this.repaint();
+		if (!date.equals(selectedDate)) {
+			Date oldValue = this.selectedDate;
+			this.selectedDate = date;
+			this.firePropertyChange(SELECTED_DATE_PROPERTY, oldValue, this.selectedDate);
+	        this.repaint();
+		}
 	}
 
 	public boolean isGridVisible() {
