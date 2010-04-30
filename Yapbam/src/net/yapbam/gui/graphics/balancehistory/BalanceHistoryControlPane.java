@@ -14,6 +14,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.text.DateFormat;
 
 class BalanceHistoryControlPane extends JPanel {
 
@@ -208,5 +209,14 @@ class BalanceHistoryControlPane extends JPanel {
 			south.add(getAlerts(), gridBagConstraints6);
 		}
 		return south;
+	}
+
+	public void setAlerts(Alert[] alerts) {
+		this.alerts.removeAllItems();
+		for (int i = 0; i < alerts.length; i++) {
+			String message = "Account "+alerts[i].getAccount()+" : "+DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(alerts[i].getDate());
+			this.alerts.addItem(message);
+			System.out.println (message);
+		}
 	}
 }
