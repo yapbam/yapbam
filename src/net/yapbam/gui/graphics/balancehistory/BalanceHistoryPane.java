@@ -103,4 +103,8 @@ public class BalanceHistoryPane extends JPanel {
 			viewport.setViewPosition(new Point(position, 0));
 		}
 	}
+
+	public void setAlerts(Alert[] alerts) {
+		control.setAlerts(alerts);
+	}
 }

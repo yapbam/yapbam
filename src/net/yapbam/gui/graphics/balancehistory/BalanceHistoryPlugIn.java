@@ -2,7 +2,9 @@ package net.yapbam.gui.graphics.balancehistory;
 
 import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -42,27 +44,43 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 
 	private void testAlert() {
 		Date today = new Date();
-//		for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
-//			Account account = data.getGlobalData().getAccount(i);
-//			long firstAlertDate = account.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, account.getAlertThreshold());
-//			if (firstAlertDate>=0) {
-//				Date date = new Date();
-//				if (firstAlertDate>0) date.setTime(firstAlertDate);
-//				System.out.println ("Account "+account+" : "+DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date));
-//			}
-//		}
-		long firstAlertDate = data.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, AlertThreshold.DEFAULT);
+		List<Alert> alerts = new ArrayList<Alert>();
+		for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
+			Account account = data.getGlobalData().getAccount(i);
+			long firstAlertDate = account.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, account.getAlertThreshold());
+			if (firstAlertDate>=0) {
+				Date date = new Date();
+				if (firstAlertDate>0) date.setTime(firstAlertDate);
+				alerts.add(new Alert(date, account));
+			}
+		}
+		Account[] filteredAccounts = data.getAccounts();
+		boolean singleAccountInFilteredData = ((filteredAccounts!=null) && (filteredAccounts.length==1)) || ((filteredAccounts==null) && (data.getGlobalData().getAccountsNumber()==1));
+		if (!singleAccountInFilteredData) {
+			long firstAlertDate = data.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, AlertThreshold.DEFAULT);
+			if (firstAlertDate>=0) {
+				Date date = new Date();
+				if (firstAlertDate>0) date.setTime(firstAlertDate);
+				alerts.add(new Alert(date, null));
+			}
+		}
+		panel.setAlerts(alerts.toArray(new Alert[alerts.size()]));
+		// Compute when occurs the first alert.
+		Date first = null;
+		for (int i = 0; i < alerts.size(); i++) {
+			if ((first==null) || (alerts.get(i).getDate().compareTo(first)<0)) {
+				first = alerts.get(i).getDate();
+			}
+		}
 		String tooltip;
 		tooltip = LocalizationData.get("BalanceHistory.toolTip");
-		if (firstAlertDate>=0) {
-			Date date = new Date();
-			if (firstAlertDate>0) date.setTime(firstAlertDate);
-			String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
+		if (first!=null) {
+			String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(first);
 			tooltip = tooltip.replace("'", "''"); // single quotes in message pattern are escape characters. So, we have to replace them with "double simple quote"
 			String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>";
 			tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>");
 		}
-		setPanelIcon((firstAlertDate>=0?IconManager.ALERT:null));
+		setPanelIcon((first!=null?IconManager.ALERT:null));
 		setPanelToolTip(tooltip);
 	}
 
