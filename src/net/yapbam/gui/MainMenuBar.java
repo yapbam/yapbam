@@ -136,15 +136,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemQuit.setToolTipText(LocalizationData.get("MainMenu.Quit.ToolTip")); //$NON-NLS-1$
         this.menuItemQuit.addActionListener(this);
         menu.add(this.menuItemQuit);
-
-//TODO Remove
-/*
-        accountMenu = new JMenu(LocalizationData.get("MainMenu.Accounts")); //$NON-NLS-1$
-        accountMenu.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.Mnemonic")); //$NON-NLS-1$
-        accountMenu.setToolTipText(LocalizationData.get("MainMenu.Accounts.ToolTip")); //$NON-NLS-1$
-        updateAccountMenu();
-        this.add(accountMenu);
-*/
       
         transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
         transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$

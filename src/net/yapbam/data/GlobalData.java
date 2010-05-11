@@ -334,7 +334,7 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	/** Increments a periodical transaction next date until it becomes greater than a date.
-	 * If the periodical transaction have no next date, this method does nthing. 
+	 * If the periodical transaction have no next date, this method does nothing. 
 	 * @param index the periodical transaction index
 	 * @param date the limit date the periodical transaction have to pass
 	 */
@@ -346,7 +346,7 @@ public class GlobalData extends DefaultListenable {
 			if (ds == null) {
 				nextDate = date;
 			} else {
-				while (nextDate.compareTo(date)<=0) {
+				while ((nextDate!=null) && (nextDate.compareTo(date)<=0)) {
 					nextDate = ds.getNextStep(nextDate);
 				}
 			}
@@ -371,7 +371,8 @@ public class GlobalData extends DefaultListenable {
 				double amount = p.getAmount();
 				Mode mode = p.getMode();
 				DateStepper vdStepper = amount<0?mode.getExpenseVdc():mode.getReceiptVdc();
-				for (Date tDate = p.getNextDate();tDate.compareTo(date)<=0;tDate=p.getNextDateBuilder().getNextStep(tDate)) {
+				//Be aware, when the transaction has an "end date", and the date is after this "end date", tDate become null
+				for (Date tDate = p.getNextDate();((tDate!=null)&&(tDate.compareTo(date)<=0));tDate=p.getNextDateBuilder().getNextStep(tDate)) {
 					result.add(new Transaction(tDate, null, p.getDescription(), amount, p.getAccount(), mode, p.getCategory(),
 							vdStepper.getNextStep(tDate), null, Arrays.asList(p.getSubTransactions())));
 				}

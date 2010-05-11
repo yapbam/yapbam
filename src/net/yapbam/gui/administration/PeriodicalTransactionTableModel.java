@@ -185,7 +185,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
 		super.setRowLook(renderer, table, row, isSelected, hasFocus);
 	    Date last = ((PeriodicalTransaction)this.getTransaction(row)).getNextDateBuilder().getLastDate();
-	    boolean ended = (last!=null) && (last.compareTo(new Date())<0);
+	    boolean ended = (last!=null) && (last.compareTo(new Date())<0); //FIXME Compare with the next date, not with today
     	Font font = renderer.getFont().deriveFont(ended ? Font.ITALIC : Font.PLAIN);
     	if (ended) {
 	        renderer.setForeground(Color.GRAY);
