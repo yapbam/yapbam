@@ -57,10 +57,12 @@ public class AlertThreshold {
 	
 	/** Tests whether an amount triggers the alert. 
 	 * @param amount The amount to test
-	 * @return true if the alert is triggered.
+	 * @return an integer. <0 if the tested amount is less than the "less threshold", >0 if the tested amount is more than the "more threshold", 0 if no trigger is raised.
 	 */
-	public boolean isTriggered(double amount) {
-		return (GlobalData.AMOUNT_COMPARATOR.compare(amount,this.lessThreshold)<0) || (GlobalData.AMOUNT_COMPARATOR.compare(amount,this.moreThreshold)>0);
+	public int getTrigger(double amount) {
+		if (GlobalData.AMOUNT_COMPARATOR.compare(amount,this.lessThreshold)<0) return -1;
+		else if (GlobalData.AMOUNT_COMPARATOR.compare(amount,this.moreThreshold)>0) return 1;
+		return  0;
 	}
 	
 	@Override

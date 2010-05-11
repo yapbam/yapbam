@@ -9,10 +9,11 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import net.yapbam.data.Account;
-import net.yapbam.data.AlertThreshold;
+import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
+import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -23,15 +24,17 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 
 	public BalanceHistoryPlugIn(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
-		this.panel = new BalanceHistoryPane(data.getBalanceData().getBalanceHistory());
+		this.panel = new BalanceHistoryPane(data);
 		this.setPanelTitle(LocalizationData.get("BalanceHistory.title"));
 		this.setPanelToolTip(LocalizationData.get("BalanceHistory.toolTip"));
 		testAlert();
 		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				panel.setBalanceHistory(data.getBalanceData().getBalanceHistory());
-				testAlert();
+				if (!(event instanceof NeedToBeSavedChangedEvent)) {
+					panel.setBalanceHistory();
+					testAlert();
+				}
 			}
 		});
 	}
@@ -47,23 +50,25 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 		List<Alert> alerts = new ArrayList<Alert>();
 		for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
 			Account account = data.getGlobalData().getAccount(i);
-			long firstAlertDate = account.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, account.getAlertThreshold());
+			BalanceHistory balanceHistory = account.getBalanceData().getBalanceHistory();
+			long firstAlertDate = balanceHistory.getFirstAlertDate(today, null, account.getAlertThreshold());
 			if (firstAlertDate>=0) {
 				Date date = new Date();
 				if (firstAlertDate>0) date.setTime(firstAlertDate);
-				alerts.add(new Alert(date, account));
+				alerts.add(new Alert(date, account, balanceHistory.getBalance(date)));
 			}
 		}
-		Account[] filteredAccounts = data.getAccounts();
-		boolean singleAccountInFilteredData = ((filteredAccounts!=null) && (filteredAccounts.length==1)) || ((filteredAccounts==null) && (data.getGlobalData().getAccountsNumber()==1));
-		if (!singleAccountInFilteredData) {
-			long firstAlertDate = data.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, AlertThreshold.DEFAULT);
-			if (firstAlertDate>=0) {
-				Date date = new Date();
-				if (firstAlertDate>0) date.setTime(firstAlertDate);
-				alerts.add(new Alert(date, null));
-			}
-		}
+//		Account[] filteredAccounts = data.getAccounts();
+//		boolean singleAccountInFilteredData = ((filteredAccounts!=null) && (filteredAccounts.length==1)) || ((filteredAccounts==null) && (data.getGlobalData().getAccountsNumber()==1));
+//		if (!singleAccountInFilteredData) {
+//			Alert alert = data.getBalanceData().getBalanceHistory().getFirstAlert(today, null, AlertThreshold.DEFAULT);
+//			long firstAlertDate = data.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, AlertThreshold.DEFAULT);
+//			if (firstAlertDate>=0) {
+//				Date date = new Date();
+//				if (firstAlertDate>0) date.setTime(firstAlertDate);
+//				alerts.add(new Alert(date, null));
+//			}
+//		}
 		panel.setAlerts(alerts.toArray(new Alert[alerts.size()]));
 		// Compute when occurs the first alert.
 		Date first = null;

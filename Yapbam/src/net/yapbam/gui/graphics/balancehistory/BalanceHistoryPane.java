@@ -17,27 +17,34 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 
+import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
+import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 
 public class BalanceHistoryPane extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
-	private BalanceHistory balanceHistory;
-	
+		
 	private JScrollPane scrollPane;
 	private BalanceGraphic graph;
 	private BalanceHistoryControlPane control;
+	private AlertsPane alerts;
 	private BalanceRule rule;
+	private FilteredData data;
+	
+	private BalanceHistory getBalanceHistory() {
+		return this.data.getBalanceData().getBalanceHistory();
+	}
 
-	public BalanceHistoryPane(BalanceHistory history) {
+	public BalanceHistoryPane(FilteredData data) {
 		super(new BorderLayout());
-		this.balanceHistory = history;
-		rule = new BalanceRule(this.balanceHistory);
+		this.data = data;
+		rule = new BalanceRule(this.getBalanceHistory());
 		
 		createGraphic();
 		
 		control = new BalanceHistoryControlPane();
+		alerts = new AlertsPane();
 		control.getIsGridVisible().addItemListener( new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				graph.setGridVisible(e.getStateChange() == ItemEvent.SELECTED);
@@ -50,20 +57,28 @@ public class BalanceHistoryPane extends JPanel {
 			}
 		});
 		control.setReportText(getBalanceReportText());
+		alerts.getAlerts().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Alert alert = alerts.getSelectedAlert();
+				BalanceHistoryPane.this.data.setAccounts(new Account[]{alert.getAccount()});
+				graph.setSelectedDate(alert.getDate());
+			}
+		});
+		this.add(alerts, BorderLayout.NORTH);
 		this.add(control, BorderLayout.SOUTH);
 	}
 
 	private String getBalanceReportText() {
 		Date date = graph.getSelectedDate();
 		String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
-		String balance = LocalizationData.getCurrencyInstance().format(this.balanceHistory.getBalance(date));
+		String balance = LocalizationData.getCurrencyInstance().format(this.getBalanceHistory().getBalance(date));
 		String text = MessageFormat.format(LocalizationData.get("BalanceHistory.balance"), dateStr, balance); //$NON-NLS-1$
 		return text;
 	}
 
-	public void setBalanceHistory(BalanceHistory history) {
-		this.balanceHistory = history;
-		this.rule.setBalanceHistory(history);
+	void setBalanceHistory() {
+		this.rule.setBalanceHistory(this.getBalanceHistory());
 		this.remove(scrollPane);
 		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
@@ -75,7 +90,7 @@ public class BalanceHistoryPane extends JPanel {
 	}
 	
 	private void createGraphic() {
-		graph = new BalanceGraphic(this.balanceHistory, rule.getYAxis());
+		graph = new BalanceGraphic(this.getBalanceHistory(), rule.getYAxis());
 		graph.setToolTipText(LocalizationData.get("BalanceHistory.chart.toolTip")); //$NON-NLS-1$
 		graph.addPropertyChangeListener(BalanceGraphic.SELECTED_DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -105,6 +120,6 @@ public class BalanceHistoryPane extends JPanel {
 	}
 
 	public void setAlerts(Alert[] alerts) {
-		control.setAlerts(alerts);
+		this.alerts.setAlerts(alerts);
 	}
 }

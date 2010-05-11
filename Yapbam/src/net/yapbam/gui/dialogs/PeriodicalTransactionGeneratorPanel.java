@@ -161,7 +161,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 					int row = jTable.getSelectedRow();
 					Transaction transaction = tableModel.getTransactions()[row];
 					transaction = TransactionDialog.open(data, AbstractDialog.getOwnerWindow(jTable), transaction, true, false);
-					if (transaction==null) {
+					if (transaction!=null) {
 						tableModel.setTransaction(row, transaction);
 					}
 				}

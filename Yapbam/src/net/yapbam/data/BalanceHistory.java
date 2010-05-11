@@ -63,7 +63,7 @@ public class BalanceHistory implements Serializable {
 		int lastIndex = to==null?elements.size()-1:find(to);
 		for (int i=firstIndex; i<=lastIndex; i++) {
 			BalanceHistoryElement element = elements.get(i);
-			if (alert.isTriggered(element.getBalance())) {
+			if (alert.getTrigger(element.getBalance())!=0) {
 				Date result = element.getFrom();
 				return result==null?0:result.getTime();
 			}
