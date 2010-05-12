@@ -112,7 +112,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		String tooltip;
 		tooltip = LocalizationData.get("BalanceHistory.toolTip");
 		if (transactions.length!=0) {
-			tooltip = "<html>"+tooltip+"<br>"+LocalizationData.get("GeneratePeriodicalTransactionsDialog.title")+"</html>";
+			tooltip = "<html>"+tooltip+"<br>"+LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")+"</html>";
 		}
 		setPanelIcon((transactions.length>0?IconManager.ALERT:null));
 		setPanelToolTip(tooltip);
