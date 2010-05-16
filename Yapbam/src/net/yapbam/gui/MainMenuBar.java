@@ -42,7 +42,7 @@ import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 
-public class MainMenuBar extends JMenuBar implements ActionListener, DataListener {
+public class MainMenuBar extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private MainFrame frame;
@@ -201,6 +201,20 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
         this.menuItemAbout.addActionListener(this);
         menu.add(this.menuItemAbout);
         insertPluginMenuItems(menu, AbstractPlugIn.ABOUT_PART);
+        
+	    this.frame.getData().addListener(new GlobalDataListener());
+	    this.frame.getFilteredData().addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				if (event instanceof EverythingChangedEvent) {
+					// The filter has changed
+					// If an account is added, the filter menu refresh is perform by the global data listener
+					// It's because this listener will not receive new account events if not all accounts are
+					// valid for the filter.
+					updateFilterMenu();
+				}
+			}
+		});
     }
 
 	private JMenuItem getURLMenuItem(String title, final String url) {
@@ -233,12 +247,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
     		}
 		}
 	}
-
-	private void refreshState(GlobalData data) {
-    	boolean somethingToSave = !data.isEmpty();
-        this.menuItemSave.setEnabled(data.somethingHasChanged());
-        this.menuItemSaveAs.setEnabled(somethingToSave);
-    }
 
     public void actionPerformed(ActionEvent e) {
 //		output.setText("Menu selected"+e.getSource().toString());
@@ -332,24 +340,28 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 		}
 	}
 
-	public void processEvent(DataEvent event) {
-		GlobalData data = (GlobalData) event.getSource();
-		this.menuItemExport.setEnabled(!data.isEmpty());
-		if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent)) {
-			this.refreshState(data);
-			if (event instanceof EverythingChangedEvent) {
-				this.updateFilterMenu();
+	class GlobalDataListener implements DataListener {
+	    public void processEvent(DataEvent event) {
+			GlobalData data = (GlobalData) event.getSource();
+			menuItemExport.setEnabled(!data.isEmpty());
+			if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent)) {
+				refreshState(data);
+			} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
+					((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
+				updateFilterMenu();
 			}
-		} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
-				((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
-			this.updateFilterMenu();
 		}
-	}
-		
-	public void updateFilterMenu() {
+	}		
+	private void refreshState(GlobalData data) {
+    	boolean somethingToSave = !data.isEmpty();
+        this.menuItemSave.setEnabled(data.somethingHasChanged());
+        this.menuItemSaveAs.setEnabled(somethingToSave);
+    }
+
+	private void updateFilterMenu() {
 		filterMenu.removeAll();
 		if (frame.getFilteredData()!=null) {
-			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData(), this));
+			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData()));
 			complexFilterMenuItem.setToolTipText(LocalizationData.get("MainMenuBar.customizedFilter.toolTip")); //$NON-NLS-1$
 			filterMenu.add(complexFilterMenuItem);
 			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData()));
@@ -359,7 +371,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					frame.getFilteredData().clear();
-					updateFilterMenu();
 				}
 			});
 			filterMenu.add(eraseItem);
@@ -371,7 +382,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 					JMenuItem item = (JMenuItem) e.getSource();
 					Account account = frame.getData().getAccount(item.getText());
 					frame.getFilteredData().setAccounts(new Account[]{account});
-					updateFilterMenu();
 				}
 			};
 	        FilteredData filter = frame.getFilteredData();
@@ -390,7 +400,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, DataListene
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					frame.getFilteredData().setAccounts(null);
-					updateFilterMenu();
 				}
 			});
         	item.setSelected(!hasAccountFilter);

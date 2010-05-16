@@ -105,21 +105,19 @@ public class MainFrame extends JFrame implements DataListener {
 			}
 		}
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
-
 	    setContentPane(this.createContentPane());
-	    mainMenu = new MainMenuBar(this);
-		setJMenuBar(mainMenu);
 		mainPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				updateSelectedPlugin();
 			}
 		});
-		
 		newDataOccured();
 	    
 	    this.data.addListener(this);
-	    this.data.addListener(mainMenu);
+	    
+	    mainMenu = new MainMenuBar(this);
+		setJMenuBar(mainMenu);
 	    
 	    // Restore initial state (last opened file and window position)
 	    YapbamState.INSTANCE.restoreMainFramePosition(this);
