@@ -68,7 +68,13 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (Math.signum((Double) evt.getNewValue())*Math.signum((Double) evt.getNewValue())<0) setTransactionNumberWidget();
+				// I've implemented that with Math.signum ... but, I missed that the value may be null
+				// In such a case, Math.signum throws a NullPointerException
+				Double newValue = (Double) evt.getNewValue();
+				Double oldValue = (Double) evt.getOldValue();
+				boolean negativeNew = (newValue!=null)&&(newValue<0);
+				boolean negativeOld = (oldValue!=null)&&(oldValue<0);
+				if ((negativeNew&&!negativeOld) || (negativeOld&&!negativeNew)) setTransactionNumberWidget();
 			}
 		});
 		if (useCheckbook() && !edit) { // If the transaction is a new one and use a check, change to next check number
