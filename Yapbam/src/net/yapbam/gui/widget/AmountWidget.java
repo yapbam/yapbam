@@ -98,6 +98,7 @@ public class AmountWidget extends JTextField {
 	}
 	
 	private void updateValue() {
+		//FIXME with the French locale, 5 900 is not a valid input
 		boolean oldValid = this.valid;
 		String text = this.getText().trim();
 		Number changed = null;
