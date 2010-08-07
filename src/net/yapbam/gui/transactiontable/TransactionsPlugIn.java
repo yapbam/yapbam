@@ -110,7 +110,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		//TODO Preferences may say if we want alert on all data, or just on filtered data.
 		Transaction[] transactions = data.getGlobalData().generateTransactionsFromPeriodicals(new Date());
 		String tooltip;
-		tooltip = LocalizationData.get("BalanceHistory.toolTip");
+		tooltip = LocalizationData.get("MainFrame.Transactions.toolTip");
 		if (transactions.length!=0) {
 			tooltip = "<html>"+tooltip+"<br>"+LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")+"</html>";
 		}
