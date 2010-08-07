@@ -41,6 +41,7 @@ import net.yapbam.gui.dialogs.export.ImportError;
 import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
+import net.yapbam.gui.util.SafeJFileChooser;
 
 public class MainMenuBar extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -310,7 +311,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				exportDialog.setVisible(true);
 				Exporter exporter = exportDialog.getExporter();
 				if (exporter!=null) {
-					JFileChooser chooser = new JFileChooser();
+					JFileChooser chooser = new SafeJFileChooser(null);
 					chooser.setLocale(LocalizationData.getLocale());
 					chooser.updateUI();
 					File file = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
