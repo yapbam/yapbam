@@ -38,6 +38,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.SafeJFileChooser;
 
 public class BudgetViewPanel extends JPanel {
 
@@ -177,7 +178,7 @@ public class BudgetViewPanel extends JPanel {
 			export.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser chooser = new JFileChooser((String)null);
+					JFileChooser chooser = new SafeJFileChooser((String)null);
 					File result = chooser.showDialog(export, LocalizationData.get("BudgetPanel.export"))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {
 						try {
