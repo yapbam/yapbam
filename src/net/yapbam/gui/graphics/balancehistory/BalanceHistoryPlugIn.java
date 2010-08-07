@@ -11,9 +11,7 @@ import javax.swing.JPanel;
 import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.event.DataEvent;
-import net.yapbam.data.event.DataListener;
-import net.yapbam.data.event.NeedToBeSavedChangedEvent;
+import net.yapbam.data.event.*;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -31,7 +29,17 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if (!(event instanceof NeedToBeSavedChangedEvent)) {
+				if ((event instanceof EverythingChangedEvent)) {
+					panel.setBalanceHistory();
+				}
+			}
+		});
+		data.getGlobalData().addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				if ((event instanceof EverythingChangedEvent)
+					|| (event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) || (event instanceof AccountPropertyChangedEvent)
+					|| (event instanceof TransactionAddedEvent) || (event instanceof TransactionRemovedEvent)) {
 					panel.setBalanceHistory();
 					testAlert();
 				}
