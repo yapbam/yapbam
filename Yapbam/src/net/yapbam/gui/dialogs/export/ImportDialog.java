@@ -14,7 +14,7 @@ import net.yapbam.gui.dialogs.AbstractDialog;
 @SuppressWarnings("serial")
 public class ImportDialog extends AbstractDialog {
 	private ImportPanel importPanel;
-	private static Importer lastImporter;
+	public static Importer lastImporter;
 
 	private static final class Container {
 		File file;

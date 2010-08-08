@@ -282,7 +282,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemImport)) {
 				JFileChooser chooser = new JFileChooser();
-				chooser.setLocale(LocalizationData.getLocale());
+				if (ImportDialog.lastImporter != null) {
+					chooser.setLocale(LocalizationData.getLocale());
+					File lastFile = ImportDialog.lastImporter.getFile();
+					if (lastFile.exists() && lastFile.canRead()) chooser.setSelectedFile(lastFile);
+				}
 				chooser.updateUI();
 				File file = chooser.showOpenDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 				if (file!=null) {

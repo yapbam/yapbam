@@ -47,7 +47,7 @@ public class Importer {
 		return importedFilecolumns;
 	}
 	public ImportError[] importFile(GlobalData data) throws IOException {
-		data.setEventsEnabled(false);
+		if (data!=null) data.setEventsEnabled(false);
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
@@ -62,19 +62,19 @@ public class Importer {
 					lineNumber++;
 					String[] fields = line.split(separator);
 					try {
-						accountPart = !importLine(data, fields, accountPart) && accountPart;
-					} catch (ParseException e) {
-						errors.add(new ImportError(lineNumber, fields, new boolean[fields.length])); //TODO document the erros argument in order to have the errors displayed in red
+						accountPart = !importLine(data, lineNumber, fields, accountPart) && accountPart;
+					} catch (ImportException e) {
+						errors.add(e.getError());
 					}
 				}
 			} finally {
 				try {
-					recordCurrentTransaction(data);
+					if (data!=null) recordCurrentTransaction(data);
 					reader.close();
 				} catch (IOException e) {}
 			}
 		} finally {
-			data.setEventsEnabled(true);
+			if (data!=null) data.setEventsEnabled(true);
 		}
 		return errors.toArray(new ImportError[errors.size()]);
 	}
@@ -88,45 +88,65 @@ public class Importer {
 
 	/** Import a line.
 	 * @param data The data where line will be imported
+	 * @param lineNumber The line number
 	 * @param fields The line, converted to fields 
 	 * @param accountPart The file part; true if the line is located before the first transaction
 	 * @return true if the line is a transaction line (it contains a date)
 	 * @throws ParseException
 	 */
-	private boolean importLine(GlobalData data, String[] fields, boolean accountPart) throws ParseException {
+	private boolean importLine(GlobalData data, int lineNumber, String[] fields, boolean accountPart) throws ImportException {
 		// The challenge here is to detect subtransactions and account initial balance.
 		// RULES : Subtransactions and initial balance have no transaction date
-		//         Every initial balances are located before the first transaction 
+		//         Every initial balances are located before the first transaction
+		
+		boolean[] invalidFields = new boolean[ExportTableModel.columns.length];
+		boolean hasError = false;
 		
 		// Decoding amount
 		int index = importedFilecolumns[ExportTableModel.AMOUNT_INDEX];
-		double amount = parseAmount(getField(fields, index, "")); //$NON-NLS-1$
+		double amount = 0.0;
+		try {
+			amount = parseAmount(getField(fields, index, "")); //$NON-NLS-1$
+		} catch (ParseException e) {
+			invalidFields[index] = true;
+			hasError = true;
+		}
 		
 		// Decoding date
 		index = importedFilecolumns[ExportTableModel.DATE_INDEX];
-		Date date = parseDate(getField(fields, index, "")); //$NON-NLS-1$
+		Date date = null;
+		try {
+			date = parseDate(getField(fields, index, "")); //$NON-NLS-1$
+		} catch (ParseException e) {
+			invalidFields[index] = true;			
+			hasError = true;
+		}
 		
 		boolean isTransaction = date != null;
 		
 		// Decoding account
 		Account account = null;
-		if (isTransaction || accountPart) {
+		if ((isTransaction || accountPart) && !hasError) {
 			index = importedFilecolumns[ExportTableModel.ACCOUNT_INDEX];
 			String accountStr = getField(fields, index, ""); //$NON-NLS-1$
 			if (accountStr.length()==0) { // No account specified
 				accountStr = defaultAccount==null?LocalizationData.get("ImportDialog.defaultAccount"):defaultAccount.getName(); //$NON-NLS-1$
 			}
-			account =  data.getAccount(accountStr);
-			if (account==null) { // New account
-				account = new Account(accountStr, 0);
-				data.add(account);
+			if (data!=null) {
+				account =  data.getAccount(accountStr);
+				if (account==null) { // New account
+					account = new Account(accountStr, 0);
+					data.add(account);
+				}
 			}
 		}
 		
 		if (accountPart && !isTransaction) {
-			// Initial balance line => Add the amount to the account initial balance
-			double initialBalance = account.getInitialBalance() + amount;
-			data.setInitialBalance(account, initialBalance);
+			if ((data!=null) && !hasError) {
+				// Initial balance line => Add the amount to the account initial balance
+				double initialBalance = account.getInitialBalance() + amount;
+				data.setInitialBalance(account, initialBalance);
+			}
 		} else {
 			// Description
 			index = importedFilecolumns[ExportTableModel.DESCRIPTION_INDEX];
@@ -134,9 +154,18 @@ public class Importer {
 					
 			// Value date
 			index = importedFilecolumns[ExportTableModel.VALUE_DATE_INDEX];
-			Date valueDate = parseDate(getField(fields, index, "")); //$NON-NLS-1$
-			if (valueDate==null) valueDate = date;
+			Date valueDate = null;
+			try {
+				valueDate = parseDate(getField(fields, index, "")); //$NON-NLS-1$
+				if (valueDate==null) valueDate = date;
+			} catch (ParseException e) {
+				invalidFields[index] = true;
+				hasError = true;
+			}
 
+			if (hasError) {
+				throw new ImportException(new ImportError(lineNumber, fields, invalidFields));
+			}
 			// Category
 			index = importedFilecolumns[ExportTableModel.CATEGORY_INDEX];
 			String categoryName = getField(fields, index, ""); //$NON-NLS-1$
@@ -160,11 +189,11 @@ public class Importer {
 				index = importedFilecolumns[ExportTableModel.MODE_INDEX];
 				String modeName = getField(fields, index, ""); //$NON-NLS-1$
 				Mode mode = modeName.length()==0?Mode.UNDEFINED:account.getMode(modeName);
-				if (mode==null) {
+				if ((data!=null) && (mode==null)) {
 					mode = new Mode(modeName, DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
 					data.add(account, mode);
 				}
-				recordCurrentTransaction(data);
+				if (data!=null) recordCurrentTransaction(data);
 				current = new CurrentTransaction(account, description, date, amount, category, mode, number, valueDate, statement);
 			} else {
 				current.subtransactions.add(new SubTransaction(amount, description, category));
@@ -244,5 +273,23 @@ public class Importer {
 
 	public void setIgnoreFirstLine(boolean ignoreFirstLine) {
 		this.ignoreFirstLine = ignoreFirstLine;
+	}
+	
+	@SuppressWarnings("serial")
+	static private class ImportException extends Exception {
+		private ImportError error;
+
+		public ImportException(ImportError error) {
+			super();
+			this.error = error;
+		}
+
+		public ImportError getError() {
+			return error;
+		}
+	}
+
+	public File getFile() {
+		return file;
 	}
 }
