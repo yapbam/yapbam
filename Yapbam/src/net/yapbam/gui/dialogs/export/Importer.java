@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -177,13 +178,17 @@ public class Importer {
 		return fields[index].trim();
 	}
 	
+	private ParsePosition ppos = new ParsePosition(0);
 	private double parseAmount(String text) throws ParseException {
 		NumberFormat format = NumberFormat.getCurrencyInstance(LocalizationData.getLocale());
 		try {
 			return format.parse(text).doubleValue();
 		} catch (ParseException e) {
 			format = NumberFormat.getInstance(LocalizationData.getLocale());
-			return format.parse(text).doubleValue();
+			ppos.setIndex(0);
+			double value = format.parse(text, ppos).doubleValue();
+			if (ppos.getIndex()<text.length()) throw new ParseException(text, ppos.getIndex());
+			return value;
 		}
 	}
 	

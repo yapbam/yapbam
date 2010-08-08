@@ -12,18 +12,41 @@ color: #aa0000;
 .develop {
 color: #ff9900;
 }
-</style></head>
+</style>
+</head>
 <body>
 <h1>Version 0.6.5 (08/??/2010)</h1>
 <h2>New in this version</h2>
 <ul>
 <li><span class="bugFix">Fixes&nbsp;</span>the
 transactions list panel's tooltip.</li>
-<li><span class="bugFix">Fixes some bugs</span> in
-balance history pane:</li><ul><li>Sometimes, today was not visible in the window.</li><li>Sometimes, erroneous balance alerts poped up.</li></ul><li>Add a confirm dialog when the user save data in an existing file.</li><li><span class="bugFix">Fixes a bug</span> that prevents the import error dialog to be displayed sometimes.</li>
+<li><span class="bugFix">Fixes some bugs</span>
+in
+balance history pane:</li>
+<ul>
+<li>Sometimes, today was not visible in the window.</li>
+<li>Sometimes, erroneous balance alerts poped up.</li>
+</ul>
+<li>Add a confirm dialog when the user save data in an existing
+file.</li>
+<li>File import improvments:</li>
+<ul>
+<li>Import settings (imported columns, column separator,
+etc...) are now kept in memory, you retrieve them if you import again. </li>
+</ul>
+<ul>
+<li>The amount parser is now more strict (previously an
+amount string of "52g32" results in an transaction with an amount of
+52. Now the line is reported as an error).</li>
+</ul>
+<ul>
+<li><span class="bugFix">Fixes a bug</span>
+that prevents the import error dialog to be displayed sometimes.</li>
+</ul>
 </ul>
 <ul>
 </ul>
+<hr>
 <h1>Older releases</h1>
 <h2>Version 0.6.4 (05/16/2010)</h2>
 <ul>
