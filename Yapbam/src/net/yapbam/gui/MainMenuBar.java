@@ -299,9 +299,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 								data.clear();
 							}
 							try {
-								ImportError[] errors = importer.importFile(data);
+								ImportError[] errors = importer.importFile(null);
 								if (errors.length!=0) {
-									new ImportErrorDialog(frame, importer.getImportedColumns(), errors).setVisible(true);
+									ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame, importer.getImportedColumns(), errors);
+									importErrorDialog.setVisible(true);
+									if (importErrorDialog.getResult()!=null) errors = new ImportError[0];
+								}
+								if (errors.length==0) {
+									importer.importFile(data);
 								}
 							} catch (IOException e1) {
 								//TODO Be more precise ?
