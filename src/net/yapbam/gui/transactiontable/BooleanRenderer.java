@@ -18,7 +18,7 @@ public class BooleanRenderer extends JCheckBox implements TableCellRenderer {
     		boolean hasFocus, int row, int column) {
 	    ColoredModel model = (ColoredModel)table.getModel();
 	    this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
-		model.setRowLook(this, table, row, isSelected, hasFocus);
+		model.setRowLook(this, table, row, isSelected);
 	    setSelected((Boolean)value);
     	return this;
     }

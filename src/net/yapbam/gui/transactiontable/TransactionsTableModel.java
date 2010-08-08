@@ -159,8 +159,8 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	}
 
 	@Override
-	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
-		super.setRowLook(renderer, table, row, isSelected, hasFocus);
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
+		super.setRowLook(renderer, table, row, isSelected);
 	    boolean isChecked = this.data.getTransaction(row).isChecked();
     	Font font = renderer.getFont().deriveFont(isChecked ? Font.ITALIC : Font.PLAIN + Font.BOLD);
     	renderer.setFont(font);

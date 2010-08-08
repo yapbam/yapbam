@@ -182,8 +182,8 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	}
 
 	@Override
-	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
-		super.setRowLook(renderer, table, row, isSelected, hasFocus);
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
+		super.setRowLook(renderer, table, row, isSelected);
 	    boolean ended = ((PeriodicalTransaction)this.getTransaction(row)).getNextDate()==null;
 	    Font font = renderer.getFont().deriveFont(ended ? Font.ITALIC : Font.PLAIN);
     	if (ended) {

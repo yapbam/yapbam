@@ -20,7 +20,7 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 	}
 	
 	@Override
-	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
 		if (isSelected) {
 	        renderer.setBackground(table.getSelectionBackground());
 	        renderer.setForeground(table.getSelectionForeground());

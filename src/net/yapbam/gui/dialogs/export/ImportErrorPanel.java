@@ -1,5 +1,7 @@
 package net.yapbam.gui.dialogs.export;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
@@ -11,15 +13,56 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.transactiontable.ColoredModel;
 import net.yapbam.gui.util.JTableUtils;
 import java.awt.Insets;
 
+/** The panel that displays import errors.
+ */
 public class ImportErrorPanel extends JPanel {
+	
+	@SuppressWarnings("serial")
+	private final class ObjectRenderer extends DefaultTableCellRenderer {	
+		public ObjectRenderer () {
+			super();
+		}
+
+	    @Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	    	super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+/*
+	    	ColoredModel model = (ColoredModel)table.getModel();
+		    row = table.convertRowIndexToModel(row);
+		    column = table.convertColumnIndexToModel(column);
+			if (isSelected) {
+		        setBackground(table.getSelectionBackground());
+		        setForeground(table.getSelectionForeground());
+		    } else {
+		        boolean error = this.getTransaction(row).getAmount()<0;  	
+		        setForeground(table.getForeground());
+		        setBackground(error?Color.red:table.getBackground());
+		    }
+		    //		    this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
+		    setValue(value);
+		    */
+	    	if (!isSelected) { // No special rendering on the line number (displayed in the first row)
+			    column = table.convertColumnIndexToModel(column);
+			    if (column>0) {
+				    row = table.convertRowIndexToModel(row);
+			        boolean error = errors[row].hasError(column-1);
+			        setBackground(error?Color.red:table.getBackground());
+			        System.out.println(errors[row]);
+			    }
+	    	}
+	    	return this;
+	    }
+	}
 
 	@SuppressWarnings("serial")
-	private final class ImportErrorTableModel extends AbstractTableModel {
+	private final class ImportErrorTableModel extends AbstractTableModel  implements ColoredModel {
 		private int columnsCount;
 		private String[] columnsHeaders;
 		
@@ -31,8 +74,9 @@ public class ImportErrorPanel extends JPanel {
 				if (importedFileColumns[i]>=0) columnsCount = Math.max(columnsCount, importedFileColumns[i]+1);
 			}
 			for (int i = 0; i < errors.length; i++) {
-				columnsCount = Math.max(columnsCount, errors[i].getFields().length+1);
+				columnsCount = Math.max(columnsCount, errors[i].getFields().length);
 			}
+			columnsCount++; // Add one column to insert the line number
 			columnsHeaders = new String[columnsCount];
 			// Compute the column headers (blank or the Yapbam corresponding field)
 			// First column has a fixed header (line number)
@@ -43,7 +87,7 @@ public class ImportErrorPanel extends JPanel {
 			}
 			for (int i = 0; i < importedFileColumns.length; i++) {
 				if (importedFileColumns[i]>=0) {
-					// This Yapbam field is imported => Put in in the headers
+					// This Yapbam field is imported => Put it in the headers
 					columnsHeaders[importedFileColumns[i]+1] = ExportTableModel.columns[i];
 				}
 			}
@@ -79,6 +123,25 @@ public class ImportErrorPanel extends JPanel {
 		@Override
 		public String getColumnName(int column) {
 			return columnsHeaders[column];
+		}
+
+		@Override
+		public int getAlignment(int column) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
+			// TODO Auto-generated method stub
+			if (isSelected) {
+		        renderer.setBackground(table.getSelectionBackground());
+		        renderer.setForeground(table.getSelectionForeground());
+		    } else {
+		        boolean error = (row==0); //TODO  	
+		        renderer.setForeground(table.getForeground());
+		        renderer.setBackground(error?Color.RED:table.getBackground());
+		    }		
 		}
 	}
 
@@ -152,6 +215,7 @@ public class ImportErrorPanel extends JPanel {
 			jTable.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			jTable.setIntercellSpacing(new Dimension(4, jTable.getIntercellSpacing().height));
+			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			JTableUtils.initColumnSizes(jTable, 200);
 			Dimension preferredSize = getJTable().getPreferredSize();
 			preferredSize.width = Math.min(preferredSize.width, 1024);

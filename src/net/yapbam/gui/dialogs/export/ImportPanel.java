@@ -530,4 +530,10 @@ public class ImportPanel extends JPanel {
 			this.firePropertyChange(INVALIDITY_CAUSE, old, invalidityCause);
 		}
 	}
+
+	public void setImporter(Importer lastImporter) {
+		separatorPanel.setSeparator(lastImporter.getSeparator().charAt(0));
+		ignoreFirstLine.setSelected(lastImporter.isIgnoreFirstLine());
+		((ImportTableModel)getJTable().getModel()).setRelations(lastImporter.getImportedColumns());
+	}
 }

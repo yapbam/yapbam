@@ -31,6 +31,14 @@ public class ImportTableModel extends AbstractTableModel {
 		return result;
 	}
 
+	public void setRelations(int[] importedColumns) {
+		for (int i = 0; i < importedColumns.length; i++) {
+			linked[i] = importedColumns[i]>=0;
+			if (importedColumns[i]!=-1) to[i] = importedColumns[i];
+		}
+		fireTableDataChanged();
+	}
+	
 	@Override
 	public int getColumnCount() {
 		return 3;

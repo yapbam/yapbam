@@ -18,7 +18,7 @@ public class ObjectRenderer extends DefaultTableCellRenderer {
 	    ColoredModel model = (ColoredModel)table.getModel();
 	    row = table.convertRowIndexToModel(row);
 	    this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
-	    model.setRowLook(this, table, row, isSelected, hasFocus);
+	    model.setRowLook(this, table, row, isSelected);
 	    setValue(value);
     	return this;
     }
