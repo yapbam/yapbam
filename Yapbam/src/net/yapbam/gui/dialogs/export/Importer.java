@@ -63,7 +63,7 @@ public class Importer {
 					try {
 						accountPart = !importLine(data, fields, accountPart) && accountPart;
 					} catch (ParseException e) {
-						errors.add(new ImportError(lineNumber, fields));
+						errors.add(new ImportError(lineNumber, fields, new boolean[fields.length])); //TODO document the erros argument in order to have the errors displayed in red
 					}
 				}
 			} finally {
@@ -223,5 +223,21 @@ public class Importer {
 		public Transaction toTransaction() {
 			return new Transaction(date, number, description, amount, account, mode, category, valueDate, statement, subtransactions);
 		}
+	}
+
+	public String getSeparator() {
+		return separator;
+	}
+
+	public void setSeparator(String separator) {
+		this.separator = separator;
+	}
+
+	public boolean isIgnoreFirstLine() {
+		return ignoreFirstLine;
+	}
+
+	public void setIgnoreFirstLine(boolean ignoreFirstLine) {
+		this.ignoreFirstLine = ignoreFirstLine;
 	}
 }

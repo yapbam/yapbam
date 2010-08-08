@@ -68,7 +68,7 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 	}
 	
 	@Override
-	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected, boolean hasFocus) {
+	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
 		if (isSelected) {
 	        renderer.setBackground(table.getSelectionBackground());
 	        renderer.setForeground(table.getSelectionForeground());

@@ -169,7 +169,6 @@ public class SeparatorPanel extends JPanel {
 			customSeparatorButton.setSelected(true);
 			customSeparatorValue.setText(new String(new char[]{separator}));
 		}
-		System.out.println(old + " -> "+ separator); //TODO
 		if (old!=separator) this.firePropertyChange(SEPARATOR_PROPERTY, old, separator);
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"

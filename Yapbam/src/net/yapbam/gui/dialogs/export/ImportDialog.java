@@ -14,6 +14,7 @@ import net.yapbam.gui.dialogs.AbstractDialog;
 @SuppressWarnings("serial")
 public class ImportDialog extends AbstractDialog {
 	private ImportPanel importPanel;
+	private static Importer lastImporter;
 
 	private static final class Container {
 		File file;
@@ -32,7 +33,9 @@ public class ImportDialog extends AbstractDialog {
 
 	@Override
 	protected Object buildResult() {
-		return importPanel.getImporter();
+		Importer importer = importPanel.getImporter();
+		lastImporter = importer;
+		return importer;
 	}
 
 	@Override
@@ -46,6 +49,7 @@ public class ImportDialog extends AbstractDialog {
 				updateOkButtonEnabled();
 			}
 		});
+		if (lastImporter!=null) importPanel.setImporter(lastImporter);
 		return importPanel;
 	}
 
