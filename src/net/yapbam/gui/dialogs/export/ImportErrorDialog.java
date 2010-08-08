@@ -12,14 +12,14 @@ public class ImportErrorDialog extends AbstractDialog {
 
 	public ImportErrorDialog(Window owner, int[] importedFields, ImportError[] errors) {
 		super(owner, LocalizationData.get("ImportDialog.errorMessage.title"), new Object[]{importedFields, errors}); //$NON-NLS-1$
-		super.cancelButton.setVisible(false);
-		this.okButton.setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
-		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
+		super.cancelButton.setToolTipText(LocalizationData.get("ImportDialog.errorMessage.cancel.tooltip")); //$NON-NLS-1$
+		this.okButton.setText(LocalizationData.get("ImportDialog.errorMessage.continue")); //$NON-NLS-1$
+		this.okButton.setToolTipText(LocalizationData.get("ImportDialog.errorMessage.continue.tooltip")); //$NON-NLS-1$
 	}
 
 	@Override
 	protected Object buildResult() {
-		return null;
+		return Boolean.TRUE;
 	}
 
 	@Override

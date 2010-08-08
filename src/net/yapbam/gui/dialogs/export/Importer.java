@@ -39,7 +39,6 @@ public class Importer {
 		this.ignoreFirstLine = ignoreFirstLine;
 		this.importedFilecolumns = importedFilecolumns;
 		this.defaultAccount = defaultAccount;
-		this.current = null;
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
 	}
 
@@ -48,6 +47,7 @@ public class Importer {
 	}
 	public ImportError[] importFile(GlobalData data) throws IOException {
 		if (data!=null) data.setEventsEnabled(false);
+		this.current = null;
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
