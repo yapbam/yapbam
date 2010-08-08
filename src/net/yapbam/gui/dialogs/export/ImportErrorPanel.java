@@ -54,7 +54,6 @@ public class ImportErrorPanel extends JPanel {
 				    row = table.convertRowIndexToModel(row);
 			        boolean error = errors[row].hasError(column-1);
 			        setBackground(error?Color.red:table.getBackground());
-			        System.out.println(errors[row]);
 			    }
 	    	}
 	    	return this;
