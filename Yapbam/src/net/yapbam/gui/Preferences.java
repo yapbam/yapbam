@@ -1,6 +1,7 @@
 package net.yapbam.gui;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +11,8 @@ import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -243,8 +246,31 @@ public class Preferences {
 		this.properties.setProperty(AUTO_UPDATE_SILENT_FAIL, Boolean.toString(silentFail));
 	}
 
-	static Class<AbstractPlugIn>[] getPlugins() {
-		return new Class[]{TransactionsPlugIn.class, BalanceHistoryPlugIn.class, StatisticsPlugin.class, ToolsPlugIn.class, BudgetPlugin.class, AdministrationPlugIn.class};
+	static PlugInContainer[] getPlugins() {
+		File file = new File("./plugins");
+		if (!file.exists()) {
+			if (!file.mkdir()) {
+				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to create the plugins folder"));
+			}
+		} else if (!file.isDirectory()) {
+			ErrorManager.INSTANCE.display(null, new RuntimeException("./plugins is not a directory"));
+		}
+		final List<PlugInContainer> plugins = new ArrayList<PlugInContainer>();
+		plugins.add(new PlugInContainer(TransactionsPlugIn.class));
+		plugins.add(new PlugInContainer(BalanceHistoryPlugIn.class));
+		plugins.add(new PlugInContainer(StatisticsPlugin.class));
+		plugins.add(new PlugInContainer(ToolsPlugIn.class));
+		plugins.add(new PlugInContainer(BudgetPlugin.class));
+		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
+		file.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File file) {
+				if (!file.getName().endsWith(".jar")) return false;
+				plugins.add(new PlugInContainer(file));
+				return true;
+			}
+		});
+		return plugins.toArray(new PlugInContainer[plugins.size()]);
 	}
 
 	/** Gets the expert mode.

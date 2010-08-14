@@ -93,16 +93,11 @@ public class MainFrame extends JFrame implements DataListener {
 	    	}
 	    }
 	    
-	    Class<AbstractPlugIn>[] pluginClasses = Preferences.getPlugins();
-	    if (restartData==null) restartData = new Object[pluginClasses.length];
-	    this.plugins=new AbstractPlugIn[pluginClasses.length];
-	    for (int i = 0; i < pluginClasses.length; i++) {
-			try {
-				this.plugins[i] = (AbstractPlugIn) pluginClasses[i].getConstructor(FilteredData.class, Object.class).newInstance(this.filteredData, restartData[0]);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	    PlugInContainer[] pluginContainers = Preferences.getPlugins();
+	    if (restartData==null) restartData = new Object[pluginContainers.length];
+	    this.plugins=new AbstractPlugIn[pluginContainers.length];
+	    for (int i = 0; i < plugins.length; i++) {
+			if (pluginContainers[i].isActivated()) this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
 		}
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 	    setContentPane(this.createContentPane());
@@ -122,7 +117,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    // Restore initial state (last opened file and window position)
 	    YapbamState.INSTANCE.restoreMainFramePosition(this);
 	    for (int i = 0; i < plugins.length; i++) {
-			plugins[i].restoreState();
+			if (plugins[i]!=null) plugins[i].restoreState();
 		}
 	
 	    updateSelectedPlugin();
@@ -134,30 +129,32 @@ public class MainFrame extends JFrame implements DataListener {
 	private Container createContentPane() {
         mainPane = new JTabbedPane(JTabbedPane.TOP);
         for (int i = 0; i < plugins.length; i++) {
-            JPanel pane = plugins[i].getPanel();
-    		if (pane!=null) {
-    			paneledPlugins.add(plugins[i]);
-    			mainPane.addTab(plugins[i].getPanelTitle(), null, plugins[i].getPanel(), plugins[i].getPanelToolTip());
-    			if (plugins[i].getPanelIcon()!=null) {
-    				mainPane.setIconAt(mainPane.getTabCount()-1, plugins[i].getPanelIcon());
-    			}
-    		}
-    		// Listening for panel title, tooltip and icon changes
-    		plugins[i].getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					int tabIndex = paneledPlugins.indexOf(evt.getSource());
-					if (tabIndex >= 0) {
-						if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_ICON_PROPERTY_NAME)) {
-							mainPane.setIconAt(tabIndex, (Icon) evt.getNewValue());
-						} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TITLE_PROPERTY_NAME)) {
-							mainPane.setTitleAt(tabIndex, (String) evt.getNewValue());
-						} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TOOLTIP_PROPERTY_NAME)) {
-							mainPane.setToolTipTextAt(tabIndex, (String) evt.getNewValue());
+        	if (plugins[i]!=null) {
+	            JPanel pane = plugins[i].getPanel();
+	    		if (pane!=null) {
+	    			paneledPlugins.add(plugins[i]);
+	    			mainPane.addTab(plugins[i].getPanelTitle(), null, plugins[i].getPanel(), plugins[i].getPanelToolTip());
+	    			if (plugins[i].getPanelIcon()!=null) {
+	    				mainPane.setIconAt(mainPane.getTabCount()-1, plugins[i].getPanelIcon());
+	    			}
+	    		}
+	    		// Listening for panel title, tooltip and icon changes
+	    		plugins[i].getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						int tabIndex = paneledPlugins.indexOf(evt.getSource());
+						if (tabIndex >= 0) {
+							if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_ICON_PROPERTY_NAME)) {
+								mainPane.setIconAt(tabIndex, (Icon) evt.getNewValue());
+							} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TITLE_PROPERTY_NAME)) {
+								mainPane.setTitleAt(tabIndex, (String) evt.getNewValue());
+							} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TOOLTIP_PROPERTY_NAME)) {
+								mainPane.setToolTipTextAt(tabIndex, (String) evt.getNewValue());
+							}
 						}
 					}
-				}
-			});
+				});
+        	}
 		}
         return mainPane;
     }

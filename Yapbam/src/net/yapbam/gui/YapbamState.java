@@ -102,17 +102,6 @@ public class YapbamState {
 		}
 	}
 
-	public static String toString(Rectangle rect) {
-		return rect.x+","+rect.y+","+rect.width+","+rect.height;
-	}
-	
-	public static Rectangle getRectangle(String value) {
-		if (value==null) return null;
-		StringTokenizer tokens = new StringTokenizer(value, ",");
-		return new Rectangle(Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()),
-				Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()));
-	}
-
 	static void save(MainFrame frame) {
 		Properties properties = INSTANCE.properties;
 		if (frame.getData().getPath()!=null) {
@@ -129,7 +118,7 @@ public class YapbamState {
 		int w = ((frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
 		properties.put(FRAME_SIZE_WIDTH, Integer.toString(w));
 		for (int i = 0; i < frame.getPlugInsNumber(); i++) {
-			frame.getPlugIn(i).saveState();
+			if (frame.getPlugIn(i)!=null) frame.getPlugIn(i).saveState();
 		}
 		try {
 			properties.store(new FileOutputStream(getFile()), "Yapbam startup state"); //$NON-NLS-1$
@@ -164,7 +153,7 @@ public class YapbamState {
 //			if (index < table.getRowCount()) table.getSelectionModel().setSelectionInterval(index, index);
 //		}
 		// And the scroll position
-		Rectangle visibleRect = YapbamState.getRectangle(INSTANCE.properties.getProperty(prefix+SCROLL_POSITION));
+		Rectangle visibleRect = YapbamState.getRectangle(prefix+SCROLL_POSITION);
 		if (visibleRect!=null) table.scrollRectToVisible(visibleRect);
 	}
 
@@ -179,7 +168,7 @@ public class YapbamState {
 			INSTANCE.properties.put(prefix+COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
 		}
 //		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
-		INSTANCE.properties.put(prefix+SCROLL_POSITION, YapbamState.toString(table.getVisibleRect()));
+		YapbamState.put(prefix+SCROLL_POSITION, table.getVisibleRect());
 	}
 
 	public static String get(String key) {
@@ -198,5 +187,17 @@ public class YapbamState {
 	
 	public static void put (String key, Date date) {
 		INSTANCE.properties.put(key, Integer.toString(DateUtils.dateToInteger(date)));
+	}
+	
+	public static void put(String key, Rectangle value) {
+		INSTANCE.properties.put(key, value.x+","+value.y+","+value.width+","+value.height);
+	}
+	
+	public static Rectangle getRectangle(String key) {
+		String value = INSTANCE.properties.getProperty(key);
+		if (value==null) return null;
+		StringTokenizer tokens = new StringTokenizer(value, ",");
+		return new Rectangle(Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()),
+				Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()));
 	}
 }
