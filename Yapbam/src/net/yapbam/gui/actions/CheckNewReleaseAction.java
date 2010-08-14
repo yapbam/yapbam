@@ -24,7 +24,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 	 */
 	public CheckNewReleaseAction(Window owner) {
 		super(LocalizationData.get("MainMenu.CheckUpdate")); //$NON-NLS-1$
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.MainMenu.CheckUpdate.ToolTip")); //$NON-NLS-1$
+        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.CheckUpdate.ToolTip")); //$NON-NLS-1$
         this.owner = owner;
 	}
 	
