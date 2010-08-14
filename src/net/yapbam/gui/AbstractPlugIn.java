@@ -19,8 +19,8 @@ import net.yapbam.util.NullUtils;
  * <LI>A preference panel to add to the preferences dialog</LI>
  * </UL>
  * This implementation is a totally empty plugin which does ... nothing.
- * You may override its methods in order to implement a fully functional plugin.
- * A plugin has to had a public constructor with two arguments :<OL>
+ * You may override its methods in order to implement a fully functional plugin.<BR>
+ * <B>A plugin has to had a public constructor with two arguments :</B><OL>
  * <LI>FilteredData : The root object of Yapbam's data</LI>
  * <LI>Object an object representing the state of the plugin (returned by getRestartData()) or null if no previous state
  * was saved.</LI></OL>
