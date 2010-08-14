@@ -172,7 +172,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
         //Build plugins menus
         for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
         	if (this.frame.getPlugIn(i)!=null) {
-	            JMenu[] menus = this.frame.getPlugIn(i).getPlugInMenu(); //TODO What if a plugin just wants to add a menuItem to an existing Menu ?
+	            JMenu[] menus = this.frame.getPlugIn(i).getPlugInMenu();
 	    		if (menus!=null) {
 	    			for (int j = 0; j < menus.length; j++) {
 						this.add(menus[j]);
@@ -242,7 +242,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	            JMenuItem[] items = this.frame.getPlugIn(i).getMenuItem(part);
 	    		if (items!=null) {
 	    			for (int j = 0; j < items.length; j++) {
-	    				if (items[i]==null) {
+	    				if (items[j]==null) {
 	    					menu.addSeparator();
 	    				} else {
 	    					menu.add(items[j]);
