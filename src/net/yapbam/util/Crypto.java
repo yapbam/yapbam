@@ -1,9 +1,24 @@
 package net.yapbam.util;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.InflaterOutputStream;
 
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /** This class provides utilities to encrypt data.
@@ -79,4 +94,51 @@ public class Crypto {
 		String original = decrypt(key, encrypt);
 		System.out.println("Original string: "+original);
 	}*/
+	
+	private static final PBEParameterSpec pbeParamSpec = new PBEParameterSpec(new byte[]{ (byte)0xc7, (byte)0x23, (byte)0xa5, (byte)0xfc, (byte)0x7e, (byte)0x38, (byte)0xee, (byte)0x09}, 16);
+
+	public static OutputStream getPasswordProtectedOutputStream (String password, OutputStream stream) {
+		PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
+		try {
+			SecretKeyFactory keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+			SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
+			Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+			cipher.init(Cipher.ENCRYPT_MODE, pbeKey, pbeParamSpec);
+			return new CipherOutputStream(new DeflaterOutputStream(stream),cipher);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidKeySpecException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidAlgorithmParameterException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static InputStream getPasswordProtectedInputStream (String password, InputStream stream) {
+		PBEKeySpec pbeKeySpec;
+		SecretKeyFactory keyFac;
+
+		pbeKeySpec = new PBEKeySpec(password.toCharArray());
+		try {
+			keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+			SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
+			Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
+			cipher.init(Cipher.ENCRYPT_MODE, pbeKey, pbeParamSpec);
+			return new CipherInputStream(new InflaterInputStream(stream),cipher);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidKeySpecException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException(e);
+		} catch (InvalidAlgorithmParameterException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
