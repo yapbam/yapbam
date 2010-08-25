@@ -36,6 +36,7 @@ public abstract class IconManager {
 	public static final Icon IMPORT = create("images/import.png");
 	public static final Icon EXPORT = create("images/export.png");
 	public static final Icon ALERT = create("images/alert.png");
+	public static final Icon LOCK = create("images/alert.png"); //TODO
 		
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon create(String path) {

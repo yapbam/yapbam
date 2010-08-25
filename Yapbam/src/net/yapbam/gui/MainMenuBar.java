@@ -53,6 +53,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private JMenuItem menuItemImport;
     private JMenuItem menuItemSave;
     private JMenuItem menuItemSaveAs;
+    private JMenuItem menuItemProtect;
 	private JMenuItem menuItemExport;
 	private JMenuItem menuItemPrint;
     private JMenuItem menuItemQuit;
@@ -101,6 +102,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
         this.menuItemSaveAs.addActionListener(this);
         this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
         menu.add(this.menuItemSaveAs);
+        this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.LOCK); //$NON-NLS-1$;
+        this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
+        this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
+        this.menuItemProtect.addActionListener(this);
+        this.menuItemProtect.setEnabled(frame.getData().getPath()!=null);
+        menu.add(this.menuItemProtect);
         insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
         menu.addSeparator();
         
@@ -284,6 +291,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				SaveManager.MANAGER.save(this.frame);
 			} else if (source.equals(this.menuItemSaveAs)) {
 				SaveManager.MANAGER.saveAs(this.frame);
+			} else if (source.equals(this.menuItemProtect)) {
+				System.out.println ("Not yet implemented"); //TODO
 			} else if (source.equals(this.menuItemImport)) {
 				JFileChooser chooser = new JFileChooser();
 				if (ImportDialog.lastImporter != null) {
@@ -364,6 +373,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
 				updateFilterMenu();
 			}
+			//FIXME Set the protect menu appearance
 		}
 	}		
 	private void refreshState(GlobalData data) {

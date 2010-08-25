@@ -15,6 +15,7 @@ import java.util.Locale;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.util.NullUtils;
 
 /** This class represents the whole Yapbam data.
  *  You can also have a look at FilteredData which presents a filtered view of Yapbam data.
@@ -29,6 +30,7 @@ public class GlobalData extends DefaultListenable {
 	private URI path;
 	private boolean somethingChanged;
 	private List<Category> categories;
+	private String password;
 
 	private boolean eventsPending;
 
@@ -108,8 +110,18 @@ public class GlobalData extends DefaultListenable {
 		return this.somethingChanged;
 	}
 	
+	/** Gets the URI where the data is saved.
+	 * @return an URI or null the data isn't attach to any location.
+	 */
 	public URI getPath() {
 		return path;
+	}
+	
+	/** Gets the password that protects the data.
+	 * @return a string or null if data is not password protected.
+	 */
+	public String getPassword() {
+		return this.password;
 	}
 
 	/** Saves the data into a file.
@@ -143,6 +155,18 @@ public class GlobalData extends DefaultListenable {
 			this.somethingChanged = false;
 		} finally {
 			this.setEventsEnabled(true);
+		}
+	}
+	
+	/** Sets the password used to protect the data (to encrypt the file containing it).
+	 * @param password a string or null if the data is not protected.
+	 */
+	public void setPassword(String password) {
+		if (!NullUtils.areEquals(this.password, password)) {
+			String old = this.password;
+			this.password = password;
+			fireEvent(new PasswordChangedEvent(this, old, this.password));
+			this.setChanged();
 		}
 	}
 
@@ -283,7 +307,8 @@ public class GlobalData extends DefaultListenable {
 	    this.accounts = new ArrayList<Account>();
 	    this.periodicals = new ArrayList<PeriodicalTransaction>();
 	    this.transactions = new ArrayList<Transaction>();
-	    this.path=null;
+	    this.path = null;
+	    this.password = null;
 	    this.somethingChanged=false;
 		fireEvent(new EverythingChangedEvent(this));
 	}
