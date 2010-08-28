@@ -293,18 +293,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			} else if (source.equals(this.menuItemSaveAs)) {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemProtect)) {
-				String password = this.frame.getData().getPassword();
-				FilePasswordDialog dialog = new FilePasswordDialog(frame, password);
+				String password = this.frame.getData().getPassword(); //LOCAL
+				FilePasswordDialog dialog = new FilePasswordDialog(frame, "File password", "Tapez ci-dessous le mot de passe permettant de protéger l'accès au fichier", password);
+				dialog.setWarningMessage("<html><b>ATTENTION :</b><br>Si vous perdez ce mot de passe il sera impossible de récupérer vos données,<br> même avec l'aide du support de Yapbam.</html>");
+				dialog.setPasswordFieldToolTipText("qdskjkqsjdfk");//TODO
 				dialog.setVisible(true);
 				String newPassword = dialog.getPassword();
 				if (newPassword!=null) {
-					if ((password==null) && (newPassword.length()!=0) /*&& Preferences.INSTANCE.*/) {//FIXME Proposer de ne plus afficher ce message //LOCAL
-						String message = "<html><b>ATTENTION :</b> Si vous perdez ce mot de passe, il sera impossible, même avec l'aide du support de Yapbam, de récupérer vos données." +
-								"<br><br>Cliquez sur annuler, pour laisser le fichier libre d'accès</html>";
-						if (JOptionPane.showConfirmDialog(frame, message, "Attention", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)==JOptionPane.CANCEL_OPTION) {
-							newPassword=null;
-						}
-					}
 					this.frame.getData().setPassword(newPassword);
 				}
 			} else if (source.equals(this.menuItemImport)) {

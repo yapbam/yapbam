@@ -11,7 +11,7 @@ import javax.swing.*;
 
 import net.yapbam.gui.LocalizationData;
 
-public abstract class AbstractDialog extends JDialog implements ActionListener { //TODO Use a internal ActionListener
+public abstract class AbstractDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private Object result;
@@ -21,7 +21,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	protected Object data;
 
 	/**
-	 * Construtor
+	 * Constructor
 	 * @param owner Dialog's parent frame
 	 * @param title Dialog's title
 	 * @param data optional data (will be transfered to createContentPane)
@@ -37,42 +37,45 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	}
 	
 	private Container createContentPane() {
-        //Create the content pane.
-        JPanel contentPane = new JPanel(new BorderLayout(5,5));
-        contentPane.setOpaque(true);
-        contentPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        
-        JPanel southPane = new JPanel(new BorderLayout());
-        JPanel buttonsPane = new JPanel();
-        southPane.add(buttonsPane, BorderLayout.EAST);
-        okButton = new JButton(LocalizationData.get("GenericButton.ok"));
-        okButton.addActionListener(this);
-        buttonsPane.add(okButton);
-        cancelButton = new JButton(LocalizationData.get("GenericButton.cancel"));
-        cancelButton.setToolTipText(LocalizationData.get("GenericButton.cancel.toolTip"));
-        cancelButton.addActionListener(this);
-        buttonsPane.add(cancelButton);
+		//Create the content pane.
+		JPanel contentPane = new JPanel(new BorderLayout(5,5));
+		contentPane.setOpaque(true);
+		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        contentPane.add(southPane, BorderLayout.SOUTH);
+		JPanel southPane = new JPanel(new BorderLayout());
+		JPanel buttonsPane = new JPanel();
+		southPane.add(buttonsPane, BorderLayout.EAST);
+		okButton = new JButton(LocalizationData.get("GenericButton.ok"));
+		buttonsPane.add(okButton);
+		cancelButton = new JButton(LocalizationData.get("GenericButton.cancel"));
+		cancelButton.setToolTipText(LocalizationData.get("GenericButton.cancel.toolTip"));
+		buttonsPane.add(cancelButton);
 
-        JPanel centerPane = this.createCenterPane(data);
-		if (centerPane!=null) contentPane.add(centerPane, BorderLayout.CENTER);
+		contentPane.add(southPane, BorderLayout.SOUTH);
+
+		JPanel centerPane = this.createCenterPane(data);
+		if (centerPane != null) contentPane.add(centerPane, BorderLayout.CENTER);
 		
 		this.updateOkButtonEnabled();
 		getRootPane().setDefaultButton(okButton);
-        
-        return contentPane;
-    }
+		
+		ActionListener listener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource().equals(okButton)) {
+					result = buildResult();
+				}
+				setVisible(false);
+			}
+		};
+		okButton.addActionListener(listener);
+		cancelButton.addActionListener(listener);
+		return contentPane;
+	}
 	
 	protected abstract JPanel createCenterPane(Object data);
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(cancelButton)) {
-			this.setVisible(false);
-		} else if (e.getSource().equals(okButton)) {
-			this.result = this.buildResult();
-			this.setVisible(false);
-		}
 	}
 	
 	protected abstract Object buildResult();
