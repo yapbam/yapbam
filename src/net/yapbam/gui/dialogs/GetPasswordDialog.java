@@ -11,7 +11,7 @@ import java.lang.String;
 /** This class is a password ask dialog.
  * It can be customized to change the question, the alert message, etc ... 
  */
-public class FilePasswordDialog extends AbstractDialog {
+public class GetPasswordDialog extends AbstractDialog {
 	private GetPasswordPanel panel;
 
 	/** Constructor.
@@ -20,7 +20,7 @@ public class FilePasswordDialog extends AbstractDialog {
 	 * @param question The question to ask. Example: "Please type the password below"
 	 * @param password The password typed by default in the dialog
 	 */
-	public FilePasswordDialog(Window owner, String title, String question, String password) {
+	public GetPasswordDialog(Window owner, String title, String question, String password) {
 		super(owner, title, password);
 		this.panel.setQuestion(question);
 	}

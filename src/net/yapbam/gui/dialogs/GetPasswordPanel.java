@@ -157,6 +157,7 @@ public class GetPasswordPanel extends JPanel {
 			gridBagConstraints5.weightx = 0.0D;
 			gridBagConstraints5.weighty = 1.0D;
 			gridBagConstraints5.anchor = GridBagConstraints.NORTHWEST;
+			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints5.gridy = 0;
 			warningField = new JLabel();
 			warningField.setIcon(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
