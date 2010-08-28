@@ -34,7 +34,7 @@ import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
-import net.yapbam.gui.dialogs.FilePasswordDialog;
+import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.dialogs.export.Exporter;
 import net.yapbam.gui.dialogs.export.ImportDialog;
@@ -294,7 +294,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemProtect)) {
 				String password = this.frame.getData().getPassword(); //LOCAL
-				FilePasswordDialog dialog = new FilePasswordDialog(frame, "File password", "Tapez ci-dessous le mot de passe permettant de protéger l'accès au fichier", password);
+				GetPasswordDialog dialog = new GetPasswordDialog(frame, "File password", "Tapez ci-dessous le mot de passe permettant de protéger l'accès au fichier", password);
 				dialog.setWarningMessage("<html><b>ATTENTION :</b><br>Si vous perdez ce mot de passe il sera impossible de récupérer vos données,<br> même avec l'aide du support de Yapbam.</html>");
 				dialog.setPasswordFieldToolTipText("qdskjkqsjdfk");//TODO
 				dialog.setVisible(true);
