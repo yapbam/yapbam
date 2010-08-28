@@ -159,9 +159,10 @@ public class GlobalData extends DefaultListenable {
 	}
 	
 	/** Sets the password used to protect the data (to encrypt the file containing it).
-	 * @param password a string or null if the data is not protected.
+	 * @param password a string (null or an empty string if the data is not protected).
 	 */
 	public void setPassword(String password) {
+		if ((password!=null) && (password.length()==0)) password = null;
 		if (!NullUtils.areEquals(this.password, password)) {
 			String old = this.password;
 			this.password = password;

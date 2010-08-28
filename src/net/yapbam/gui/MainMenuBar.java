@@ -34,6 +34,7 @@ import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
+import net.yapbam.gui.dialogs.FilePasswordDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.dialogs.export.Exporter;
 import net.yapbam.gui.dialogs.export.ImportDialog;
@@ -292,7 +293,20 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			} else if (source.equals(this.menuItemSaveAs)) {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemProtect)) {
-				System.out.println ("Not yet implemented"); //TODO
+				String password = this.frame.getData().getPassword();
+				FilePasswordDialog dialog = new FilePasswordDialog(frame, password);
+				dialog.setVisible(true);
+				String newPassword = dialog.getPassword();
+				if (newPassword!=null) {
+					if ((password==null) && (newPassword.length()!=0) /*&& Preferences.INSTANCE.*/) {//FIXME Proposer de ne plus afficher ce message //LOCAL
+						String message = "<html><b>ATTENTION :</b> Si vous perdez ce mot de passe, il sera impossible, même avec l'aide du support de Yapbam, de récupérer vos données." +
+								"<br><br>Cliquez sur annuler, pour laisser le fichier libre d'accès</html>";
+						if (JOptionPane.showConfirmDialog(frame, message, "Attention", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)==JOptionPane.CANCEL_OPTION) {
+							newPassword=null;
+						}
+					}
+					this.frame.getData().setPassword(newPassword);
+				}
 			} else if (source.equals(this.menuItemImport)) {
 				JFileChooser chooser = new JFileChooser();
 				if (ImportDialog.lastImporter != null) {
