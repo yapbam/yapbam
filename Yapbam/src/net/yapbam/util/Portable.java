@@ -2,8 +2,14 @@ package net.yapbam.util;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
-/** That class provides utilities that help to implement a portable application (with no installation) */   
+/** That class provides utilities that help to implement a portable application (with no installation)
+ * in the portable apps format.
+ * @see http://portableapps.com/development/portableapps.com_format
+ */   
 public class Portable {
 	private Portable() {}
 	
@@ -21,4 +27,8 @@ public class Portable {
 		}
 		return file;
 	}
+	
+//	public static File getDataDirectory() {
+//		
+//	}
 }

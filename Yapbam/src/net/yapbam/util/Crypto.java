@@ -9,7 +9,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
-import java.util.zip.InflaterOutputStream;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
