@@ -20,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
@@ -198,11 +199,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
         menu.add(new CheckNewReleaseAction(this.frame));
         insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
         menu.addSeparator();
-		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "http://sourceforge.net/projects/yapbam/support");
-		item.setToolTipText(LocalizationData.get("MainMenu.web.support.tooltip"));
+		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "http://sourceforge.net/projects/yapbam/support"); //$NON-NLS-1$ //$NON-NLS-2$
+		item.setToolTipText(LocalizationData.get("MainMenu.web.support.tooltip")); //$NON-NLS-1$
 		menu.add(item);
-		item = getURLMenuItem(LocalizationData.get("MainMenu.web.yapbam"), "http://www.yapbam.net");
-		item.setToolTipText(LocalizationData.get("MainMenu.web.yapbam.tooltip"));
+		item = getURLMenuItem(LocalizationData.get("MainMenu.web.yapbam"), "http://www.yapbam.net"); //$NON-NLS-1$ //$NON-NLS-2$
+		item.setToolTipText(LocalizationData.get("MainMenu.web.yapbam.tooltip")); //$NON-NLS-1$
 		menu.add(item);
         insertPluginMenuItems(menu, AbstractPlugIn.WEB_SITES_PART);
         menu.addSeparator();
@@ -294,16 +295,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemProtect)) {
 				if (e.getModifiers()==17) {
-					GetPasswordDialog dialog = new GetPasswordDialog(frame, "File password", "<html>L'accès à ce fichier est protégé par mot de passe.<br>Tapez le mot de passe ci-dessous :</html>", null);
-					dialog.setPasswordFieldToolTipText("Entrez le mot de passe ici.");
+					GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.question"), //$NON-NLS-1$ //$NON-NLS-2$
+							UIManager.getIcon("OptionPane.questionIcon"), null); //$NON-NLS-1$
+					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
+					dialog.setVisible(true);
+					dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
+							UIManager.getIcon("OptionPane.warningIcon"), null); //$NON-NLS-1$
+					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
 					dialog.setVisible(true);
 					String password = dialog.getPassword();
 					System.out.println (password);
 				} else {
-					String password = this.frame.getData().getPassword(); //LOCAL
-					GetPasswordDialog dialog = new GetPasswordDialog(frame, "File password", "Tapez ci-dessous le mot de passe permettant de protéger l'accès au fichier", password);
-					dialog.setWarningMessage("<html><b>ATTENTION :</b><br>Si vous perdez ce mot de passe il sera impossible de récupérer vos données,<br> même avec l'aide du support de Yapbam.</html>");
-					dialog.setPasswordFieldToolTipText("Entrez le mot de passe ici ou laissez ce champ vide pour donner l'accès libre au fichier.");
+					String password = this.frame.getData().getPassword();
+					GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
+					dialog.setWarningMessage(LocalizationData.get("FilePasswordDialog.setPassword.warning")); //$NON-NLS-1$
+					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.setPassword.tooltip")); //$NON-NLS-1$
 					dialog.setVisible(true);
 					String newPassword = dialog.getPassword();
 					if (newPassword!=null) {

@@ -2,6 +2,7 @@ package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
 
+import javax.swing.Icon;
 import javax.swing.JPanel;
 
 import java.lang.Object;
@@ -16,10 +17,12 @@ public class GetPasswordDialog extends AbstractDialog {
 	
 	private static class InitData {
 		private String question;
+		private Icon icon;
 		private String password;
-		private InitData(String question, String password) {
+		private InitData(String question, Icon icon, String password) {
 			super();
 			this.question = question;
+			this.icon = icon;
 			this.password = password;
 		}
 	}
@@ -28,10 +31,11 @@ public class GetPasswordDialog extends AbstractDialog {
 	 * @param owner The frame in which to center the dialog
 	 * @param title The dialog's title
 	 * @param question The question to ask. Example: "Please type the password below"
+	 * @param icon The icon to display before the question (null to set no icon)
 	 * @param password The password typed by default in the dialog
 	 */
-	public GetPasswordDialog(Window owner, String title, String question, String password) {
-		super(owner, title, new InitData(question, password));
+	public GetPasswordDialog(Window owner, String title, String question, Icon icon, String password) {
+		super(owner, title, new InitData(question, icon, password));
 	}
 
 	@Override
@@ -44,6 +48,7 @@ public class GetPasswordDialog extends AbstractDialog {
 		panel = new GetPasswordPanel();
 		InitData initialData = (InitData) data;
 		if (initialData.password!=null) panel.setPassword(initialData.password);
+		this.panel.setIcon(initialData.icon);
 		this.panel.setQuestion(initialData.question);
 		return panel;
 	}
