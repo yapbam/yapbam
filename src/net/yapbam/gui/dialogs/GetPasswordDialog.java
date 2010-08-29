@@ -13,6 +13,16 @@ import java.lang.String;
  */
 public class GetPasswordDialog extends AbstractDialog {
 	private GetPasswordPanel panel;
+	
+	private static class InitData {
+		private String question;
+		private String password;
+		private InitData(String question, String password) {
+			super();
+			this.question = question;
+			this.password = password;
+		}
+	}
 
 	/** Constructor.
 	 * @param owner The frame in which to center the dialog
@@ -21,8 +31,7 @@ public class GetPasswordDialog extends AbstractDialog {
 	 * @param password The password typed by default in the dialog
 	 */
 	public GetPasswordDialog(Window owner, String title, String question, String password) {
-		super(owner, title, password);
-		this.panel.setQuestion(question);
+		super(owner, title, new InitData(question, password));
 	}
 
 	@Override
@@ -31,9 +40,11 @@ public class GetPasswordDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object password) {
+	protected JPanel createCenterPane(Object data) {
 		panel = new GetPasswordPanel();
-		if (password!=null) panel.setPassword((String) password);
+		InitData initialData = (InitData) data;
+		if (initialData.password!=null) panel.setPassword(initialData.password);
+		this.panel.setQuestion(initialData.question);
 		return panel;
 	}
 

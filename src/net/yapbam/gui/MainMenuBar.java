@@ -293,14 +293,22 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			} else if (source.equals(this.menuItemSaveAs)) {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemProtect)) {
-				String password = this.frame.getData().getPassword(); //LOCAL
-				GetPasswordDialog dialog = new GetPasswordDialog(frame, "File password", "Tapez ci-dessous le mot de passe permettant de protéger l'accès au fichier", password);
-				dialog.setWarningMessage("<html><b>ATTENTION :</b><br>Si vous perdez ce mot de passe il sera impossible de récupérer vos données,<br> même avec l'aide du support de Yapbam.</html>");
-				dialog.setPasswordFieldToolTipText("qdskjkqsjdfk");//TODO
-				dialog.setVisible(true);
-				String newPassword = dialog.getPassword();
-				if (newPassword!=null) {
-					this.frame.getData().setPassword(newPassword);
+				if (e.getModifiers()==17) {
+					GetPasswordDialog dialog = new GetPasswordDialog(frame, "File password", "<html>L'accès à ce fichier est protégé par mot de passe.<br>Tapez le mot de passe ci-dessous :</html>", null);
+					dialog.setPasswordFieldToolTipText("Entrez le mot de passe ici.");
+					dialog.setVisible(true);
+					String password = dialog.getPassword();
+					System.out.println (password);
+				} else {
+					String password = this.frame.getData().getPassword(); //LOCAL
+					GetPasswordDialog dialog = new GetPasswordDialog(frame, "File password", "Tapez ci-dessous le mot de passe permettant de protéger l'accès au fichier", password);
+					dialog.setWarningMessage("<html><b>ATTENTION :</b><br>Si vous perdez ce mot de passe il sera impossible de récupérer vos données,<br> même avec l'aide du support de Yapbam.</html>");
+					dialog.setPasswordFieldToolTipText("Entrez le mot de passe ici ou laissez ce champ vide pour donner l'accès libre au fichier.");
+					dialog.setVisible(true);
+					String newPassword = dialog.getPassword();
+					if (newPassword!=null) {
+						this.frame.getData().setPassword(newPassword);
+					}
 				}
 			} else if (source.equals(this.menuItemImport)) {
 				JFileChooser chooser = new JFileChooser();
