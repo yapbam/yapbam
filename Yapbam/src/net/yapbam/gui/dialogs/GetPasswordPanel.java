@@ -1,6 +1,8 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.GridBagLayout;
+
+import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
@@ -186,6 +188,13 @@ public class GetPasswordPanel extends JPanel {
 	 */
 	public void setQuestion(String question) {
 		this.jLabel.setText(question);
+	}
+	
+	/** Sets the icon before the question.
+	 * @param icon an icon or null to have no icon
+	 */
+	public void setIcon(Icon icon) {
+		this.jLabel.setIcon(icon);
 	}
 	
 	/** Sets the password field tooltip.
