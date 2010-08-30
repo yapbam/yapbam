@@ -66,7 +66,7 @@ class SaveManager {
 		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 		chooser.updateUI();
 		File result = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-		return result.toURI();
+		return result==null?null:result.toURI();
 	}
 
 	private boolean saveTo(MainFrame frame, URI uri) {
