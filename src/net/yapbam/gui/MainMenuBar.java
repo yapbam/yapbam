@@ -51,14 +51,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private MainFrame frame;
 
 	private JMenuItem menuItemNew;
-    private JMenuItem menuItemOpen;
+	private JMenuItem menuItemOpen;
 	private JMenuItem menuItemImport;
-    private JMenuItem menuItemSave;
-    private JMenuItem menuItemSaveAs;
-    private JMenuItem menuItemProtect;
+	private JMenuItem menuItemSave;
+	private JMenuItem menuItemSaveAs;
+	private JMenuItem menuItemProtect;
 	private JMenuItem menuItemExport;
 	private JMenuItem menuItemPrint;
-    private JMenuItem menuItemQuit;
+	private JMenuItem menuItemQuit;
 
 	private Action editPreferences;
     
@@ -67,167 +67,166 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private JMenu filterMenu;
 	private JMenu transactionMenu;
 
-
-
-    MainMenuBar (MainFrame frame) {
-        super();
-
-        this.frame = frame;
-        
-        //Build the file menu.
-        JMenu menu = new JMenu(LocalizationData.get("MainMenu.File")); //$NON-NLS-1$
-        menu.setMnemonic(LocalizationData.getChar("MainMenu.File.Mnemonic")); //$NON-NLS-1$
-        menu.setToolTipText(LocalizationData.get("MainMenu.File.ToolTip")); //$NON-NLS-1$
-        this.add(menu);
-
-        this.menuItemNew = new JMenuItem(LocalizationData.get("MainMenu.NewFile"), LocalizationData.getChar("MainMenu.NewFile.Mnemonic")); //$NON-NLS-1$ //$NON-NLS-2$
-        this.menuItemNew.setIcon(IconManager.NEW_FILE);
-        this.menuItemNew.setToolTipText(LocalizationData.get("MainMenu.NewFile.ToolTip")); //$NON-NLS-1$
-        this.menuItemNew.addActionListener(this);
-        menu.add(this.menuItemNew);
+	MainMenuBar (MainFrame frame) {
+		super();
+		this.frame = frame;
+	
+		//Build the file menu.
+		JMenu menu = new JMenu(LocalizationData.get("MainMenu.File")); //$NON-NLS-1$
+		menu.setMnemonic(LocalizationData.getChar("MainMenu.File.Mnemonic")); //$NON-NLS-1$
+		menu.setToolTipText(LocalizationData.get("MainMenu.File.ToolTip")); //$NON-NLS-1$
+		this.add(menu);
+	
+		this.menuItemNew = new JMenuItem(LocalizationData.get("MainMenu.NewFile"), LocalizationData.getChar("MainMenu.NewFile.Mnemonic")); //$NON-NLS-1$ //$NON-NLS-2$
+		this.menuItemNew.setIcon(IconManager.NEW_FILE);
+		this.menuItemNew.setToolTipText(LocalizationData.get("MainMenu.NewFile.ToolTip")); //$NON-NLS-1$
+		this.menuItemNew.addActionListener(this);
+		menu.add(this.menuItemNew);
 		this.menuItemOpen = new JMenuItem(LocalizationData.get("MainMenu.Open"), LocalizationData.getChar("MainMenu.Open.Mnemonic")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.menuItemOpen.setIcon(IconManager.OPEN);
-        this.menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        this.menuItemOpen.setToolTipText(LocalizationData.get("MainMenu.Open.ToolTip")); //$NON-NLS-1$
-        this.menuItemOpen.addActionListener(this);
-        menu.add(this.menuItemOpen);
-        this.menuItemSave = new JMenuItem(LocalizationData.get("MainMenu.Save"), IconManager.SAVE); //$NON-NLS-1$
-        this.menuItemSave.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Save.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        this.menuItemSave.setMnemonic(LocalizationData.getChar("MainMenu.Save.Mnemonic")); //$NON-NLS-1$
-        this.menuItemSave.setToolTipText(LocalizationData.get("MainMenu.Save.ToolTip")); //$NON-NLS-1$
-        this.menuItemSave.addActionListener(this);
-        this.menuItemSave.setEnabled(frame.getData().somethingHasChanged());
-        menu.add(this.menuItemSave);
-        this.menuItemSaveAs = new JMenuItem(LocalizationData.get("MainMenu.SaveAs"), IconManager.SAVE_AS); //$NON-NLS-1$
-        this.menuItemSaveAs.setMnemonic(LocalizationData.getChar("MainMenu.SaveAs.Mnemonic")); //$NON-NLS-1$
-        this.menuItemSaveAs.setToolTipText(LocalizationData.get("MainMenu.SaveAs.ToolTip")); //$NON-NLS-1$
-        this.menuItemSaveAs.addActionListener(this);
-        this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
-        menu.add(this.menuItemSaveAs);
-        this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.LOCK); //$NON-NLS-1$;
-        this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
-        this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
-        this.menuItemProtect.addActionListener(this);
-        this.menuItemProtect.setEnabled(frame.getData().getPath()!=null);
-        menu.add(this.menuItemProtect);
-        insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
-        menu.addSeparator();
-        
-        this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.EXPORT); //$NON-NLS-1$
-        this.menuItemImport.setMnemonic(LocalizationData.getChar("MainMenu.Import.Mnemonic")); //$NON-NLS-1$
-        this.menuItemImport.setToolTipText(LocalizationData.get("MainMenu.Import.ToolTip")); //$NON-NLS-1$
-        this.menuItemImport.addActionListener(this);
-        menu.add(this.menuItemImport);
-        this.menuItemExport = new JMenuItem(LocalizationData.get("MainMenu.Export"), IconManager.EXPORT); //$NON-NLS-1$
-        this.menuItemExport.setMnemonic(LocalizationData.getChar("MainMenu.Export.Mnemonic")); //$NON-NLS-1$
-        this.menuItemExport.setToolTipText(LocalizationData.get("MainMenu.Export.ToolTip")); //$NON-NLS-1$
-        this.menuItemExport.addActionListener(this);
-        this.menuItemExport.setEnabled(!frame.getData().isEmpty());
-        menu.add(this.menuItemExport);
-        insertPluginMenuItems(menu, AbstractPlugIn.IMPORT_EXPORT_PART);
+		this.menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemOpen.setToolTipText(LocalizationData.get("MainMenu.Open.ToolTip")); //$NON-NLS-1$
+		this.menuItemOpen.addActionListener(this);
+		menu.add(this.menuItemOpen);
+		this.menuItemSave = new JMenuItem(LocalizationData.get("MainMenu.Save"), IconManager.SAVE); //$NON-NLS-1$
+		this.menuItemSave.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Save.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemSave.setMnemonic(LocalizationData.getChar("MainMenu.Save.Mnemonic")); //$NON-NLS-1$
+		this.menuItemSave.setToolTipText(LocalizationData.get("MainMenu.Save.ToolTip")); //$NON-NLS-1$
+		this.menuItemSave.addActionListener(this);
+		this.menuItemSave.setEnabled(frame.getData().somethingHasChanged());
+		menu.add(this.menuItemSave);
+		this.menuItemSaveAs = new JMenuItem(LocalizationData.get("MainMenu.SaveAs"), IconManager.SAVE_AS); //$NON-NLS-1$
+		this.menuItemSaveAs.setMnemonic(LocalizationData.getChar("MainMenu.SaveAs.Mnemonic")); //$NON-NLS-1$
+		this.menuItemSaveAs.setToolTipText(LocalizationData.get("MainMenu.SaveAs.ToolTip")); //$NON-NLS-1$
+		this.menuItemSaveAs.addActionListener(this);
+		this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
+		menu.add(this.menuItemSaveAs);
+		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.LOCK); //$NON-NLS-1$;
+		this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
+		this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
+		this.menuItemProtect.addActionListener(this);
+		this.menuItemProtect.setEnabled(frame.getData().getPath() != null);
+		menu.add(this.menuItemProtect);
+		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
+		menu.addSeparator();
 
-        menu.addSeparator();
-        this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.PRINT); //$NON-NLS-1$
-        this.menuItemPrint.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenuBar.Print.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        this.menuItemPrint.setToolTipText(LocalizationData.get("MainMenuBar.Print.ToolTip")); //$NON-NLS-1$
-        this.menuItemPrint.addActionListener(this);
-        this.menuItemPrint.setEnabled(false);
-        menu.add(this.menuItemPrint);
-        
-        menu.addSeparator();
-        editPreferences = new EditPreferenceAction(frame);
-        menu.add(editPreferences);
-        insertPluginMenuItems(menu, AbstractPlugIn.PREFERENCES_PART);
+		this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.EXPORT); //$NON-NLS-1$
+		this.menuItemImport.setMnemonic(LocalizationData.getChar("MainMenu.Import.Mnemonic")); //$NON-NLS-1$
+		this.menuItemImport.setToolTipText(LocalizationData.get("MainMenu.Import.ToolTip")); //$NON-NLS-1$
+		this.menuItemImport.addActionListener(this);
+		menu.add(this.menuItemImport);
+		this.menuItemExport = new JMenuItem(LocalizationData.get("MainMenu.Export"), IconManager.EXPORT); //$NON-NLS-1$
+		this.menuItemExport.setMnemonic(LocalizationData.getChar("MainMenu.Export.Mnemonic")); //$NON-NLS-1$
+		this.menuItemExport.setToolTipText(LocalizationData.get("MainMenu.Export.ToolTip")); //$NON-NLS-1$
+		this.menuItemExport.addActionListener(this);
+		this.menuItemExport.setEnabled(!frame.getData().isEmpty());
+		menu.add(this.menuItemExport);
+		insertPluginMenuItems(menu, AbstractPlugIn.IMPORT_EXPORT_PART);
 
-        menu.addSeparator();
-        this.menuItemQuit = new JMenuItem(LocalizationData.get("MainMenu.Quit")); //$NON-NLS-1$
-        this.menuItemQuit.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Quit.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        this.menuItemQuit.setMnemonic(LocalizationData.getChar("MainMenu.Quit.Mnemonic")); //$NON-NLS-1$
-        this.menuItemQuit.setToolTipText(LocalizationData.get("MainMenu.Quit.ToolTip")); //$NON-NLS-1$
-        this.menuItemQuit.addActionListener(this);
-        menu.add(this.menuItemQuit);
-      
-        transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
-        transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
-        transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
+		menu.addSeparator();
+		this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.PRINT); //$NON-NLS-1$
+		this.menuItemPrint.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenuBar.Print.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemPrint.setToolTipText(LocalizationData.get("MainMenuBar.Print.ToolTip")); //$NON-NLS-1$
+		this.menuItemPrint.addActionListener(this);
+		this.menuItemPrint.setEnabled(false);
+		menu.add(this.menuItemPrint);
+
+		menu.addSeparator();
+		editPreferences = new EditPreferenceAction(frame);
+		menu.add(editPreferences);
+		insertPluginMenuItems(menu, AbstractPlugIn.PREFERENCES_PART);
+
+		menu.addSeparator();
+		this.menuItemQuit = new JMenuItem(LocalizationData.get("MainMenu.Quit")); //$NON-NLS-1$
+		this.menuItemQuit.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Quit.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemQuit.setMnemonic(LocalizationData.getChar("MainMenu.Quit.Mnemonic")); //$NON-NLS-1$
+		this.menuItemQuit.setToolTipText(LocalizationData.get("MainMenu.Quit.ToolTip")); //$NON-NLS-1$
+		this.menuItemQuit.addActionListener(this);
+		menu.add(this.menuItemQuit);
+
+		transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
+		transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
+		transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
 		JMenuItem menuItemNewAccount = new JMenuItem(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT); //$NON-NLS-1$
-	    menuItemNewAccount.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.New.Mnemonic")); //$NON-NLS-1$
-	    menuItemNewAccount.setToolTipText(LocalizationData.get("MainMenu.Accounts.New.ToolTip")); //$NON-NLS-1$
-	    menuItemNewAccount.addActionListener(new ActionListener() {
+		menuItemNewAccount.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.New.Mnemonic")); //$NON-NLS-1$
+		menuItemNewAccount.setToolTipText(LocalizationData.get("MainMenu.Accounts.New.ToolTip")); //$NON-NLS-1$
+		menuItemNewAccount.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				AccountDialog.open(MainMenuBar.this.frame.getData(), MainMenuBar.this.frame, null);
 			}
 		});
-	    this.transactionMenu.add(menuItemNewAccount);
-        insertPluginMenuItems(this.transactionMenu, AbstractPlugIn.ACCOUNTS_PART);
-	    this.transactionMenu.addSeparator();
-	    JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getData()));
-        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-        transactionMenu.add(item);
-        insertPluginMenuItems(transactionMenu, AbstractPlugIn.TRANSACTIONS_PART);
-        transactionMenu.addSeparator();
-        transactionMenu.add(new JMenuItem(new GeneratePeriodicalTransactionsAction(frame.getData())));
-        insertPluginMenuItems(transactionMenu, AbstractPlugIn.PERIODIC_TRANSACTIONS_PART);
-        this.add(transactionMenu);
-        
-        //Build the filter menu
-        filterMenu = new JMenu(LocalizationData.get("MainMenuBar.Filter")); //$NON-NLS-1$
-        filterMenu.setToolTipText(LocalizationData.get("MainMenuBar.Filter.Tooltip")); //$NON-NLS-1$
-        filterMenu.setMnemonic(LocalizationData.getChar("MainMenuBar.Filter.Mnemonic")); //$NON-NLS-1$
-        updateFilterMenu();
-        this.add(filterMenu);
+		this.transactionMenu.add(menuItemNewAccount);
+		insertPluginMenuItems(this.transactionMenu, AbstractPlugIn.ACCOUNTS_PART);
+		this.transactionMenu.addSeparator();
+		JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getData()));
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		transactionMenu.add(item);
+		insertPluginMenuItems(transactionMenu, AbstractPlugIn.TRANSACTIONS_PART);
+		transactionMenu.addSeparator();
+		transactionMenu.add(new JMenuItem(new GeneratePeriodicalTransactionsAction(frame.getData())));
+		insertPluginMenuItems(transactionMenu,AbstractPlugIn.PERIODIC_TRANSACTIONS_PART);
+		this.add(transactionMenu);
 
-        //Build plugins menus
-        for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
-        	if (this.frame.getPlugIn(i)!=null) {
-	            JMenu[] menus = this.frame.getPlugIn(i).getPlugInMenu();
-	    		if (menus!=null) {
-	    			for (int j = 0; j < menus.length; j++) {
+		// Build the filter menu
+		filterMenu = new JMenu(LocalizationData.get("MainMenuBar.Filter")); //$NON-NLS-1$
+		filterMenu.setToolTipText(LocalizationData.get("MainMenuBar.Filter.Tooltip")); //$NON-NLS-1$
+		filterMenu.setMnemonic(LocalizationData.getChar("MainMenuBar.Filter.Mnemonic")); //$NON-NLS-1$
+		updateFilterMenu();
+		this.add(filterMenu);
+
+		// Build plugins menus
+		for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
+			if (this.frame.getPlugIn(i) != null) {
+				JMenu[] menus = this.frame.getPlugIn(i).getPlugInMenu();
+				if (menus != null) {
+					for (int j = 0; j < menus.length; j++) {
 						this.add(menus[j]);
 					}
-	    		}
-    		}
+				}
+			}
 		}
-        
-        //Build Help menu.
-        menu = new JMenu(LocalizationData.get("MainMenu.QuestionMark")); //$NON-NLS-1$
-        menu.setMnemonic(LocalizationData.getChar("MainMenu.QuestionMark.Mnemonic")); //$NON-NLS-1$
-        menu.setToolTipText(LocalizationData.get("MainMenu.QuestionMark.ToolTip")); //$NON-NLS-1$
-        this.add(menu);
 
-        menu.add(new CheckNewReleaseAction(this.frame));
-        insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
-        menu.addSeparator();
+		// Build Help menu.
+		menu = new JMenu(LocalizationData.get("MainMenu.QuestionMark")); //$NON-NLS-1$
+		menu.setMnemonic(LocalizationData.getChar("MainMenu.QuestionMark.Mnemonic")); //$NON-NLS-1$
+		menu.setToolTipText(LocalizationData.get("MainMenu.QuestionMark.ToolTip")); //$NON-NLS-1$
+		this.add(menu);
+
+		menu.add(new CheckNewReleaseAction(this.frame));
+		insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
+		menu.addSeparator();
 		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "http://sourceforge.net/projects/yapbam/support"); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.web.support.tooltip")); //$NON-NLS-1$
 		menu.add(item);
 		item = getURLMenuItem(LocalizationData.get("MainMenu.web.yapbam"), "http://www.yapbam.net"); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.web.yapbam.tooltip")); //$NON-NLS-1$
 		menu.add(item);
-        insertPluginMenuItems(menu, AbstractPlugIn.WEB_SITES_PART);
-        menu.addSeparator();
-        this.menuItemAbout = new JMenuItem(LocalizationData.get("MainMenu.About")); //$NON-NLS-1$
-        this.menuItemAbout.setMnemonic(LocalizationData.getChar("MainMenu.About.Mnemonic")); //$NON-NLS-1$
-        this.menuItemAbout.setToolTipText(LocalizationData.get("MainMenu.About.ToolTip")); //$NON-NLS-1$
-        this.menuItemAbout.addActionListener(this);
-        menu.add(this.menuItemAbout);
-        insertPluginMenuItems(menu, AbstractPlugIn.ABOUT_PART);
-        
-	    this.frame.getData().addListener(new GlobalDataListener());
-	    this.frame.getFilteredData().addListener(new DataListener() {
+		insertPluginMenuItems(menu, AbstractPlugIn.WEB_SITES_PART);
+		menu.addSeparator();
+		this.menuItemAbout = new JMenuItem(LocalizationData.get("MainMenu.About")); //$NON-NLS-1$
+		this.menuItemAbout.setMnemonic(LocalizationData.getChar("MainMenu.About.Mnemonic")); //$NON-NLS-1$
+		this.menuItemAbout.setToolTipText(LocalizationData.get("MainMenu.About.ToolTip")); //$NON-NLS-1$
+		this.menuItemAbout.addActionListener(this);
+		menu.add(this.menuItemAbout);
+		insertPluginMenuItems(menu, AbstractPlugIn.ABOUT_PART);
+
+		this.frame.getData().addListener(new GlobalDataListener());
+		this.frame.getFilteredData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof EverythingChangedEvent) {
 					// The filter has changed
-					// If an account is added, the filter menu refresh is perform by the global data listener
-					// It's because this listener will not receive new account events if not all accounts are
+					// If an account is added, the filter menu refresh is perform by the
+					// global data listener
+					// It's because this listener will not receive new account events if
+					// not all accounts are
 					// valid for the filter.
 					updateFilterMenu();
 				}
 			}
 		});
-    }
+	}
 
 	private JMenuItem getURLMenuItem(String title, final String url) {
 		JMenuItem item;
@@ -247,23 +246,23 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 
 	private void insertPluginMenuItems(JMenu menu, int part) {
 		for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
-			if (this.frame.getPlugIn(i)!=null) {
-	            JMenuItem[] items = this.frame.getPlugIn(i).getMenuItem(part);
-	    		if (items!=null) {
-	    			for (int j = 0; j < items.length; j++) {
-	    				if (items[j]==null) {
-	    					menu.addSeparator();
-	    				} else {
-	    					menu.add(items[j]);
-	    				}
+			if (this.frame.getPlugIn(i) != null) {
+				JMenuItem[] items = this.frame.getPlugIn(i).getMenuItem(part);
+				if (items != null) {
+					for (int j = 0; j < items.length; j++) {
+						if (items[j] == null) {
+							menu.addSeparator();
+						} else {
+							menu.add(items[j]);
+						}
 					}
-	    		}
-    		}
+				}
+			}
 		}
 	}
 
-    public void actionPerformed(ActionEvent e) {
-//		output.setText("Menu selected"+e.getSource().toString());
+	public void actionPerformed(ActionEvent e) {
+		// output.setText("Menu selected"+e.getSource().toString());
 		Object source = e.getSource();
 		if (source.equals(this.menuItemQuit)) {
 			this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
@@ -276,16 +275,17 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			} else if (source.equals(this.menuItemOpen)) {
 				if (SaveManager.MANAGER.verify(this.frame)) {
 					URI path = data.getPath();
-					String parent = path==null?null:new File(path).getParent();
+					String parent = path == null ? null : new File(path).getParent();
 					JFileChooser chooser = new JFileChooser(parent);
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 					chooser.updateUI();
-					File file = chooser.showOpenDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-					if (file!=null) {
+					File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
+					if (file != null) {
 						try {
 							data.read(file.toURI());
 						} catch (Exception exception) {
-							ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent"),file)); //$NON-NLS-1$
+							ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData
+									.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
 						}
 					}
 				}
@@ -294,17 +294,19 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			} else if (source.equals(this.menuItemSaveAs)) {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemProtect)) {
-				if (e.getModifiers()==17) {
-					GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.question"), //$NON-NLS-1$ //$NON-NLS-2$
+				if (e.getModifiers() == 17) {
+					GetPasswordDialog dialog = new GetPasswordDialog(frame,
+							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.question"), //$NON-NLS-1$ //$NON-NLS-2$
 							UIManager.getIcon("OptionPane.questionIcon"), null); //$NON-NLS-1$
 					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
 					dialog.setVisible(true);
-					dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
+					dialog = new GetPasswordDialog(frame,
+							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
 							UIManager.getIcon("OptionPane.warningIcon"), null); //$NON-NLS-1$
 					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
 					dialog.setVisible(true);
 					String password = dialog.getPassword();
-					System.out.println (password);
+					System.out.println(password);
 				} else {
 					String password = this.frame.getData().getPassword();
 					GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$

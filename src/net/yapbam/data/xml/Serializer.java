@@ -13,6 +13,7 @@ import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.Preferences;
+import net.yapbam.util.Crypto;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -159,6 +160,14 @@ public class Serializer {
 
 	private void serialize (GlobalData data, OutputStream os) throws IOException {
 		try {
+			if (data.getPassword()!=null) {
+				// If the file has to be protected by a password
+				// outputs the magic bytes that will allow Yapbam to recognize the file is crypted.
+				os.write("<Yapbam password encoded file 1.0>".getBytes("UTF-8"));
+				// replace the output stream by a new encoded stream
+				os = Crypto.getPasswordProtectedOutputStream(data.getPassword(), os);
+				//FIXME : Nothing is output to the stream !!!!!!!!!
+			}
 			StreamResult streamResult = new StreamResult(os);
 			SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
 			hd = tf.newTransformerHandler();
