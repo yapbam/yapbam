@@ -103,8 +103,8 @@ public class Crypto {
 			SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
 			Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
 			cipher.init(Cipher.ENCRYPT_MODE, pbeKey, pbeParamSpec);
-//			stream = new DeflaterOutputStream(stream);
 			stream = new CipherOutputStream(stream, cipher);
+			stream = new DeflaterOutputStream(stream);
 			return stream;
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
@@ -129,8 +129,8 @@ public class Crypto {
 			SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
 			Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
 			cipher.init(Cipher.DECRYPT_MODE, pbeKey, pbeParamSpec);
-//			stream = new InflaterInputStream(stream);
 			stream = new CipherInputStream(stream, cipher);
+			stream = new InflaterInputStream(stream);
 			return stream;
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
