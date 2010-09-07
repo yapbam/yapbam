@@ -202,6 +202,7 @@ public class Serializer {
 			hd.endElement("","",GLOBAL_DATA_TAG);
 			
 			hd.endDocument();
+			os.close();
 		} catch (TransformerConfigurationException e) {
 			throw new IOException(e);
 		} catch (SAXException e) {
