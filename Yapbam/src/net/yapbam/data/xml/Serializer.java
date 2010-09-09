@@ -29,6 +29,21 @@ import javax.xml.transform.sax.*;
  * </UL>
  */
 public class Serializer {
+	private static final byte[] PASSWORD_ENCODED_FILE_HEADER;
+
+	static {
+		// An ugly implementation due to problem with the compiler and the final
+		// status and the fact the UnsupportedEncodingException may be thrown when
+		// an encoding is specified
+		String magicString = "<Yapbam password encoded file 1.0>";
+		byte[] bytes;
+		try {
+			bytes = magicString.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			bytes = magicString.getBytes();
+		}
+		PASSWORD_ENCODED_FILE_HEADER = bytes;
+	}
 	static final String ENCODING = "UTF-8";
 
 	static final String STATEMENT_ATTRIBUTE = "statement";
@@ -146,6 +161,29 @@ public class Serializer {
 			throw new IOException("Unsupported protocol: "+uri.getScheme());
 		}
 	}
+	
+	public static SerializationData getSerializationData(BufferedInputStream in) throws IOException {
+		in.mark(1024);
+		boolean isEncoded = true;
+		for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length-1; i++) {
+			if (in.read()!=PASSWORD_ENCODED_FILE_HEADER[0]) {
+				isEncoded = false;
+				break;
+			}
+		}
+		in.reset();
+		return new SerializationData(isEncoded);
+	}
+	
+	public static class SerializationData {
+		private boolean isPasswordRequired;
+		private SerializationData(boolean isEncoded) {
+			this.isPasswordRequired = isEncoded;
+		}
+		public boolean isPasswordRequired() {
+			return isPasswordRequired;
+		}
+	}
 
 	private static void read(GlobalData data, InputStream is) throws IOException {
 		try {
@@ -163,10 +201,9 @@ public class Serializer {
 			if (data.getPassword()!=null) {
 				// If the file has to be protected by a password
 				// outputs the magic bytes that will allow Yapbam to recognize the file is crypted.
-				os.write("<Yapbam password encoded file 1.0>".getBytes("UTF-8"));
+				os.write(PASSWORD_ENCODED_FILE_HEADER);
 				// replace the output stream by a new encoded stream
 				os = Crypto.getPasswordProtectedOutputStream(data.getPassword(), os);
-				//FIXME : Nothing is output to the stream !!!!!!!!!
 			}
 			StreamResult streamResult = new StreamResult(os);
 			SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
