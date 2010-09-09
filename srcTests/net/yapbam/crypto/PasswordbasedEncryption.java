@@ -44,8 +44,7 @@ public class PasswordbasedEncryption {
 			e.printStackTrace();
 		}
 	}
-	private static void read(File file) throws FileNotFoundException,
-			IOException {
+	private static void read(File file) throws IOException {
 		InputStream in = new BufferedInputStream(new FileInputStream(file));
 		in.mark(1024);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
