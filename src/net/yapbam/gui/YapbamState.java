@@ -95,7 +95,7 @@ public class YapbamState {
 		}
 		if (uri!=null) {
 			try {
-				frame.getData().read(uri);
+				frame.readData(uri);
 			} catch (IOException e) {
 				ErrorManager.INSTANCE.display(frame, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
 			}

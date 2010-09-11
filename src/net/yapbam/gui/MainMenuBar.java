@@ -20,7 +20,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
@@ -282,8 +281,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
 					if (file != null) {
 						try {
-							data.read(file.toURI());
-						} catch (Exception exception) {
+							frame.readData(file.toURI());
+						} catch (IOException exception) {
 							ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData
 									.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
 						}
@@ -294,29 +293,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			} else if (source.equals(this.menuItemSaveAs)) {
 				SaveManager.MANAGER.saveAs(this.frame);
 			} else if (source.equals(this.menuItemProtect)) {
-				if (e.getModifiers() == 17) {
-					GetPasswordDialog dialog = new GetPasswordDialog(frame,
-							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.question"), //$NON-NLS-1$ //$NON-NLS-2$
-							UIManager.getIcon("OptionPane.questionIcon"), null); //$NON-NLS-1$
-					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
-					dialog.setVisible(true);
-					dialog = new GetPasswordDialog(frame,
-							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
-							UIManager.getIcon("OptionPane.warningIcon"), null); //$NON-NLS-1$
-					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
-					dialog.setVisible(true);
-					String password = dialog.getPassword();
-					System.out.println(password);
-				} else {
-					String password = this.frame.getData().getPassword();
-					GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
-					dialog.setWarningMessage(LocalizationData.get("FilePasswordDialog.setPassword.warning")); //$NON-NLS-1$
-					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.setPassword.tooltip")); //$NON-NLS-1$
-					dialog.setVisible(true);
-					String newPassword = dialog.getPassword();
-					if (newPassword!=null) {
-						this.frame.getData().setPassword(newPassword);
-					}
+				String password = this.frame.getData().getPassword();
+				GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
+				dialog.setWarningMessage(LocalizationData.get("FilePasswordDialog.setPassword.warning")); //$NON-NLS-1$
+				dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.setPassword.tooltip")); //$NON-NLS-1$
+				dialog.setVisible(true);
+				String newPassword = dialog.getPassword();
+				if (newPassword!=null) {
+					this.frame.getData().setPassword(newPassword);
 				}
 			} else if (source.equals(this.menuItemImport)) {
 				JFileChooser chooser = new JFileChooser();

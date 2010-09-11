@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.yapbam.data.event.*;
+import net.yapbam.data.xml.BadPasswordException;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.util.NullUtils;
@@ -127,7 +128,7 @@ public class GlobalData extends DefaultListenable {
 	/** Saves the data into a file.
 	 * @param uri The URI where to save the data.
 	 * @throws IOException if a problem occurs while saving the data.
-	 * @see #read(URI)
+	 * @see #read(URI, String)
 	 */
 	public void save(URI uri) throws IOException {
 		Serializer.write(this, uri);
@@ -141,13 +142,15 @@ public class GlobalData extends DefaultListenable {
 	/** Reads the data from an URI.
 	 * The only DataEvent sent during the read is EverythingChangedEvent, where the read is successfully finished.
 	 * @param uri The URI we want to read the data from.
+	 * @param password the password that protects the data or null if there's no password.
 	 * @throws IOException if a problem occurs while reading the data.
+	 * @throws BadPasswordException if the password is wrong
 	 * @see EverythingChangedEvent
 	 */	
-	public void read(URI uri) throws IOException {
+	public void read(URI uri, String password) throws IOException {
 		this.setEventsEnabled(false);
 		try {
-			Serializer.read (this, uri);
+			Serializer.read (this, uri, password);
 			this.path = uri;
 			// We do not want the file reading results in a "modified" state for the file,
 			// even if, of course, a lot of things changed on the screen. But, the file
@@ -185,7 +188,14 @@ public class GlobalData extends DefaultListenable {
 		super.setEventsEnabled(enabled);
 		if ((enabled==true) && (eventsPending)) fireEvent(new EverythingChangedEvent(this));
 	}
-	
+
+	/** Tests whether the events are enabled or not.
+	 * @return true if the events are enabled.
+	 */
+	public boolean isEventsEnabled() {
+		return super.IsEventsEnabled();
+	}
+
 	@Override
 	protected void fireEvent(DataEvent event) {
 		if (IsEventsEnabled()) {

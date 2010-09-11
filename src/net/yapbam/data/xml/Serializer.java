@@ -149,12 +149,33 @@ public class Serializer {
 		}
 	}
 
-	public static void read(GlobalData data, URI uri) throws IOException {
+	/** Please do not use this method directly.
+	 * This may result in the data read to have its changed attribute set to true.
+	 * @param data
+	 * @param uri
+	 * @param password
+	 * @throws IOException
+	 * @see GlobalData#read(URI, String)
+	 */
+	public static void read(GlobalData data, URI uri, String password) throws IOException {
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) {
 			InputStream is = uri.toURL().openStream();
+			boolean wasEnabled = data.isEventsEnabled();
 			try {
+				if (password!=null) {
+					// Pass the header
+					for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
+						is.read();
+					}
+					// Create the decoder input stream
+					is = Crypto.getPasswordProtectedInputStream(password, is);
+				}
+				if (wasEnabled) {
+					data.setEventsEnabled(false);
+				}
 				read(data, is);
 			} finally {
+				if (wasEnabled) data.setEventsEnabled(true);
 				is.close();
 			}
 		} else {
@@ -162,17 +183,25 @@ public class Serializer {
 		}
 	}
 	
-	public static SerializationData getSerializationData(BufferedInputStream in) throws IOException {
-		in.mark(1024);
-		boolean isEncoded = true;
-		for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length-1; i++) {
-			if (in.read()!=PASSWORD_ENCODED_FILE_HEADER[0]) {
-				isEncoded = false;
-				break;
+	/** Gets the data about the uri (what is it version, is it encoded or etc, ...).
+	 * @param uri the uniform resource locator to test.
+	 * @return A SerializationData instance
+	 * @throws IOException
+	 */
+	public static SerializationData getSerializationData(URI uri) throws IOException {
+		InputStream in = uri.toURL().openStream();
+		try {
+			boolean isEncoded = true;
+			for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length-1; i++) {
+				if (in.read()!=PASSWORD_ENCODED_FILE_HEADER[i]) {
+					isEncoded = false;
+					break;
+				}
 			}
+			return new SerializationData(isEncoded);
+		} finally {
+			in.close();
 		}
-		in.reset();
-		return new SerializationData(isEncoded);
 	}
 	
 	public static class SerializationData {

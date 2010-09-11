@@ -15,7 +15,11 @@ import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
+import net.yapbam.data.xml.BadPasswordException;
+import net.yapbam.data.xml.Serializer;
+import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
+import net.yapbam.gui.dialogs.GetPasswordDialog;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
@@ -84,7 +88,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    	if (path!=null) {
 				URI file = new File(path).toURI();
 				try {
-					this.data.read(file);
+					this.readData(file);
 				} catch (IOException e) {
 					ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$
 				}
@@ -124,6 +128,34 @@ public class MainFrame extends JFrame implements DataListener {
 	    
 	    //Display the window.
 	    setVisible(true);
+	}
+	
+	void readData(URI uri) throws IOException {
+		SerializationData info = Serializer.getSerializationData(uri);
+		if (info.isPasswordRequired()) {
+			GetPasswordDialog dialog = new GetPasswordDialog(this,
+					LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.question"), //$NON-NLS-1$ //$NON-NLS-2$
+					UIManager.getIcon("OptionPane.questionIcon"), null); //$NON-NLS-1$
+			dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
+			dialog.setVisible(true);
+			String password = dialog.getPassword();
+			while (true) {
+				try {
+					this.data.read(uri, password);
+					break;
+				} catch (BadPasswordException e) {
+					dialog = new GetPasswordDialog(this,
+							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
+							UIManager.getIcon("OptionPane.warningIcon"), null); //$NON-NLS-1$
+					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
+					dialog.setVisible(true);
+					password = dialog.getPassword();
+					if (password==null) break;
+				}
+			}
+		} else {
+			this.data.read(uri, null);
+		}
 	}
 
 	private Container createContentPane() {
