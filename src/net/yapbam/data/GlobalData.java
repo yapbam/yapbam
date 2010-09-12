@@ -28,7 +28,7 @@ public class GlobalData extends DefaultListenable {
 	private List<Account> accounts;
 	private List<PeriodicalTransaction> periodicals;
 	private List<Transaction> transactions;
-	private URI path;
+	private URI uri;
 	private boolean somethingChanged;
 	private List<Category> categories;
 	private String password;
@@ -114,8 +114,8 @@ public class GlobalData extends DefaultListenable {
 	/** Gets the URI where the data is saved.
 	 * @return an URI or null the data isn't attach to any location.
 	 */
-	public URI getPath() {
-		return path;
+	public URI getURI() {
+		return uri;
 	}
 	
 	/** Gets the password that protects the data.
@@ -133,10 +133,10 @@ public class GlobalData extends DefaultListenable {
 	public void save(URI uri) throws IOException {
 		Serializer.write(this, uri);
 		this.somethingChanged = false;
-		URI old = this.path;
-		this.path = uri;
+		URI old = this.uri;
+		this.uri = uri;
 		fireEvent(new NeedToBeSavedChangedEvent(this));
-		if (!this.path.equals(old)) fireEvent(new FileChangedEvent(this));
+		if (!this.uri.equals(old)) fireEvent(new URIChangedEvent(this));
 	}
 
 	/** Reads the data from an URI.
@@ -151,7 +151,7 @@ public class GlobalData extends DefaultListenable {
 		this.setEventsEnabled(false);
 		try {
 			Serializer.read (this, uri, password);
-			this.path = uri;
+			this.uri = uri;
 			// We do not want the file reading results in a "modified" state for the file,
 			// even if, of course, a lot of things changed on the screen. But, the file
 			// is unmodified.
@@ -318,7 +318,7 @@ public class GlobalData extends DefaultListenable {
 	    this.accounts = new ArrayList<Account>();
 	    this.periodicals = new ArrayList<PeriodicalTransaction>();
 	    this.transactions = new ArrayList<Transaction>();
-	    this.path = null;
+	    this.uri = null;
 	    this.password = null;
 	    this.somethingChanged=false;
 		fireEvent(new EverythingChangedEvent(this));

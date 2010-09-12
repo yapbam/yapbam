@@ -104,8 +104,8 @@ public class YapbamState {
 
 	static void save(MainFrame frame) {
 		Properties properties = INSTANCE.properties;
-		if (frame.getData().getPath()!=null) {
-			properties.put(LAST_URI, frame.getData().getPath().toString());
+		if (frame.getData().getURI()!=null) {
+			properties.put(LAST_URI, frame.getData().getURI().toString());
 		} else {
 			properties.remove(LAST_URI);
 		}
