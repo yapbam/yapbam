@@ -1,4 +1,5 @@
 package net.yapbam.util;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
