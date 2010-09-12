@@ -30,6 +30,7 @@ import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.URIChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
@@ -104,7 +105,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
 		this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
 		this.menuItemProtect.addActionListener(this);
-		this.menuItemProtect.setEnabled(frame.getData().getPath() != null);
+		this.menuItemProtect.setEnabled(frame.getData().getURI() != null);
 		menu.add(this.menuItemProtect);
 		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
 		menu.addSeparator();
@@ -273,7 +274,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				}
 			} else if (source.equals(this.menuItemOpen)) {
 				if (SaveManager.MANAGER.verify(this.frame)) {
-					URI path = data.getPath();
+					URI path = data.getURI();
 					String parent = path == null ? null : new File(path).getParent();
 					JFileChooser chooser = new JFileChooser(parent);
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
@@ -376,19 +377,19 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	    public void processEvent(DataEvent event) {
 			GlobalData data = (GlobalData) event.getSource();
 			menuItemExport.setEnabled(!data.isEmpty());
-			if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent)) {
+			if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent) || (event instanceof URIChangedEvent)) {
 				refreshState(data);
 			} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
 					((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
 				updateFilterMenu();
 			}
-			//FIXME Set the protect menu appearance
 		}
 	}		
 	private void refreshState(GlobalData data) {
     	boolean somethingToSave = !data.isEmpty();
         this.menuItemSave.setEnabled(data.somethingHasChanged());
         this.menuItemSaveAs.setEnabled(somethingToSave);
+        this.menuItemProtect.setEnabled(somethingToSave || (data.getURI()!=null)); 
     }
 
 	private void updateFilterMenu() {

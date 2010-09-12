@@ -41,7 +41,7 @@ class SaveManager {
 	 * @return true if the data was saved
 	 */
 	boolean save(MainFrame frame) {
-		URI file = frame.getData().getPath();
+		URI file = frame.getData().getURI();
 		if (file==null) {
 			file = getFile(frame);
 		}
@@ -60,7 +60,7 @@ class SaveManager {
 	}
 
 	private URI getFile(MainFrame frame) {
-		URI path = frame.getData().getPath();
+		URI path = frame.getData().getURI();
 		String parent = path==null?null:new File(path).getParent();
 		JFileChooser chooser = new SafeJFileChooser(parent);
 		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));

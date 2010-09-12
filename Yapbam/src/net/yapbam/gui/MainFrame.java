@@ -215,14 +215,14 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	public void processEvent(DataEvent event) {
-		if ((event instanceof FileChangedEvent) || (event instanceof EverythingChangedEvent) || (event instanceof NeedToBeSavedChangedEvent)) {
+		if ((event instanceof URIChangedEvent) || (event instanceof EverythingChangedEvent) || (event instanceof NeedToBeSavedChangedEvent)) {
 			newDataOccured();
 		}
 	}
 
 	private void newDataOccured() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
-		URI file = data.getPath();
+		URI file = data.getURI();
 		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
 		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
 		this.setTitle(title);
