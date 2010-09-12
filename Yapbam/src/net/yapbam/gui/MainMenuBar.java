@@ -109,7 +109,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
 		menu.addSeparator();
 
-		this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.EXPORT); //$NON-NLS-1$
+		this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.IMPORT); //$NON-NLS-1$
 		this.menuItemImport.setMnemonic(LocalizationData.getChar("MainMenu.Import.Mnemonic")); //$NON-NLS-1$
 		this.menuItemImport.setToolTipText(LocalizationData.get("MainMenu.Import.ToolTip")); //$NON-NLS-1$
 		this.menuItemImport.addActionListener(this);

@@ -141,6 +141,7 @@ public class MainFrame extends JFrame implements DataListener {
 			String password = dialog.getPassword();
 			while (true) {
 				try {
+					if (password==null) break;
 					this.data.read(uri, password);
 					break;
 				} catch (BadPasswordException e) {
@@ -150,7 +151,6 @@ public class MainFrame extends JFrame implements DataListener {
 					dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
 					dialog.setVisible(true);
 					password = dialog.getPassword();
-					if (password==null) break;
 				}
 			}
 		} else {
