@@ -7,6 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.URI;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -15,7 +16,6 @@ import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
-import net.yapbam.data.xml.BadPasswordException;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
@@ -144,7 +144,7 @@ public class MainFrame extends JFrame implements DataListener {
 					if (password==null) break;
 					this.data.read(uri, password);
 					break;
-				} catch (BadPasswordException e) {
+				} catch (AccessControlException e) {
 					dialog = new GetPasswordDialog(this,
 							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
 							UIManager.getIcon("OptionPane.warningIcon"), null); //$NON-NLS-1$

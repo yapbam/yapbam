@@ -1,11 +1,15 @@
 package net.yapbam.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.security.AccessControlException;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.zip.DeflaterOutputStream;
@@ -88,16 +92,27 @@ public class Crypto {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String message = "Source forge is great";
-		String encrypt = encrypt(key, message);
-		System.out.println("encrypted string: " + encrypt);
-		String original = decrypt(key, encrypt);
-		System.out.println("Original string: "+original);
+//		String message = "Source forge is great";
+//		String encrypt = encrypt(key, message);
+//		System.out.println("encrypted string: " + encrypt);
+//		String original = decrypt(key, encrypt);
+//		System.out.println("Original string: "+original);
+		System.out.println(new String(Crypto.getDigest("Hello")));
+		System.out.println("--------------------");
+		System.out.println(new String(Crypto.getDigest("Hello")));
+		System.out.println("--------------------");
+		System.out.println(new String(Crypto.getDigest("This is a very long password")));
+		System.out.println("--------------------");
+		System.out.println(new String(Crypto.getDigest("azertyuiop")));
+		System.out.println("--------------------");
+		System.out.println(new String(Crypto.getDigest("blougiboulga")));
 	}*/
 	
-	private static final PBEParameterSpec pbeParamSpec = new PBEParameterSpec(new byte[]{ (byte)0xc7, (byte)0x23, (byte)0xa5, (byte)0xfc, (byte)0x7e, (byte)0x38, (byte)0xee, (byte)0x09}, 16);
+	private static final byte[] SALT = new byte[]{ (byte)0xc7, (byte)0x23, (byte)0xa5, (byte)0xfc, (byte)0x7e, (byte)0x38, (byte)0xee, (byte)0x09};
+	private static final PBEParameterSpec pbeParamSpec = new PBEParameterSpec(SALT, 16);
 
-	public static OutputStream getPasswordProtectedOutputStream (String password, OutputStream stream) {
+	public static OutputStream getPasswordProtectedOutputStream (String password, OutputStream stream) throws IOException {
+		stream.write(getDigest(password));
 		PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
 		try {
 			SecretKeyFactory keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
@@ -120,10 +135,11 @@ public class Crypto {
 		}
 	}
 
-	public static InputStream getPasswordProtectedInputStream (String password, InputStream stream) {
+	public static InputStream getPasswordProtectedInputStream (String password, InputStream stream) throws IOException, AccessControlException {
 		PBEKeySpec pbeKeySpec;
 		SecretKeyFactory keyFac;
 
+		verifyPassword(stream, password);
 		pbeKeySpec = new PBEKeySpec(password.toCharArray());
 		try {
 			keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
@@ -142,6 +158,27 @@ public class Crypto {
 		} catch (InvalidKeyException e) {
 			throw new RuntimeException(e);
 		} catch (InvalidAlgorithmParameterException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private static void verifyPassword(InputStream stream, String password) throws IOException, AccessControlException {
+		byte[] digest = getDigest(password);
+		byte[] fileDigest = new byte[digest.length];
+		for (int missing=fileDigest.length; missing>0; ) {
+			missing -= stream.read(fileDigest, fileDigest.length-missing, missing);
+		}
+		if (!MessageDigest.isEqual(digest, fileDigest)) throw new AccessControlException("invalid password");
+	}
+
+	public static byte[] getDigest(String password) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA");
+			digest.update(SALT);
+			return digest.digest(password.getBytes("UTF-8"));
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}

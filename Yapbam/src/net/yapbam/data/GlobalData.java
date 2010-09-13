@@ -3,6 +3,7 @@ package net.yapbam.data;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URI;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 
 import net.yapbam.data.event.*;
-import net.yapbam.data.xml.BadPasswordException;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.util.NullUtils;
@@ -144,7 +144,7 @@ public class GlobalData extends DefaultListenable {
 	 * @param uri The URI we want to read the data from.
 	 * @param password the password that protects the data or null if there's no password.
 	 * @throws IOException if a problem occurs while reading the data.
-	 * @throws BadPasswordException if the password is wrong
+	 * @throws AccessControlException if the password is wrong
 	 * @see EverythingChangedEvent
 	 */	
 	public void read(URI uri, String password) throws IOException {
