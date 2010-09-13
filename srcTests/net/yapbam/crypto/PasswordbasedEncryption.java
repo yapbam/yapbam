@@ -51,7 +51,7 @@ public class PasswordbasedEncryption {
 			System.err.println ("Not an encrypted file");
 		} else {
 			in.reset();
-			in.skip((HEADER+"\n").getBytes().length);
+			in.skip(HEADER.getBytes().length+1);
 			reader = new BufferedReader(new InputStreamReader(Crypto.getPasswordProtectedInputStream(PASSWORD, in)));
 			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 				System.out.println (line);
@@ -63,7 +63,7 @@ public class PasswordbasedEncryption {
 	private static void write(File file) throws IOException, TransformerConfigurationException, SAXException {
 		OutputStream out = new FileOutputStream(file);
 		out.write(HEADER.getBytes());
-		out.write("\n".getBytes());
+		out.write('\n');
 		out = Crypto.getPasswordProtectedOutputStream(PASSWORD, out);
 //		StringBuffer buf = new StringBuffer();
 //		for (int i = 0; i < 100; i++) {

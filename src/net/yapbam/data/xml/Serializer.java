@@ -3,6 +3,7 @@ package net.yapbam.data.xml;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URI;
+import java.security.AccessControlException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -155,9 +156,10 @@ public class Serializer {
 	 * @param uri
 	 * @param password
 	 * @throws IOException
+	 * @throws AccessControlException
 	 * @see GlobalData#read(URI, String)
 	 */
-	public static void read(GlobalData data, URI uri, String password) throws IOException {
+	public static void read(GlobalData data, URI uri, String password) throws IOException, AccessControlException {
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) {
 			InputStream is = uri.toURL().openStream();
 			boolean wasEnabled = data.isEventsEnabled();

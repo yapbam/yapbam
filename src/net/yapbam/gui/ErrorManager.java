@@ -12,7 +12,7 @@ public class ErrorManager {
 	}
 
 	public void display(Component parent, Throwable e, String message) {
-//		e.printStackTrace(); //TODO Maybe better to log the exception ?
+		e.printStackTrace(); //TODO Maybe better to log the exception ?
 		JOptionPane.showMessageDialog(parent, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 	}
 }
