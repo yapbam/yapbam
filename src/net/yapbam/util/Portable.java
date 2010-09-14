@@ -10,8 +10,8 @@ import java.net.URLDecoder;
 public class Portable {
 	private Portable() {}
 	
-	/** Get the directory where the application was launched.
-	 * @return a directory where typically the portable application can store its preference data
+	/** Gets the directory where the application was launched.
+	 * @return the directory from where the application is executed.
 	 */
 	@SuppressWarnings("deprecation")
 	public static File getLaunchDirectory() {
@@ -25,7 +25,21 @@ public class Portable {
 		return file;
 	}
 	
-//	public static File getDataDirectory() {
-//		
-//	}
+	/** Gets the applications's data directory.
+	 * @return a directory where typically the portable application can store its preference data.
+	 */
+	public static File getDataDirectory() {
+		File file = getLaunchDirectory();
+		file = new File(file,"Data");
+		return file;
+	}
+	
+	/** Gets the applications's help directory.
+	 * @return a directory where typically the portable application can store its help pages.
+	 */
+	public static File getHelpDirectory() {
+		File file = getLaunchDirectory();
+		file = new File(file,"Other/Help");
+		return file;
+	}
 }
