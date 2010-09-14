@@ -54,15 +54,20 @@ public class Preferences {
 	private boolean translatorMode;
 
 	private Preferences() {
+System.out.println (Portable.getLaunchDirectory());
+System.out.println (Portable.getDataDirectory());
+System.out.println (Portable.getHelpDirectory());
+
 		this.properties = new Properties();
 		this.firstRun = true;
 		if (getFile().exists()) {
 			try {
 				this.firstRun = false;
 				properties.load(new FileInputStream(getFile()));
-			    setAuthentication();
+				setAuthentication();
 			} catch (Throwable e) {
-				// If there's another error, maybe it would be better to do something else //TODO
+				// If there's another error, maybe it would be better to do something
+				// else //TODO
 			}
 		} else {
 			// On the first run, the file doesn't exist
@@ -71,7 +76,7 @@ public class Preferences {
 		}
 	}
 
-	private static File getFile() {
+	private static File getFile() {		
 		return new File (Portable.getLaunchDirectory(), ".yapbampref"); //$NON-NLS-1$
 	}
 	
