@@ -57,6 +57,8 @@ public class Preferences {
 System.out.println (Portable.getLaunchDirectory());
 System.out.println (Portable.getDataDirectory());
 System.out.println (Portable.getHelpDirectory());
+System.out.println ("user.dir : "+System.getProperty("user.dir"));
+System.out.println ("user.home : "+System.getProperty("user.home"));
 
 		this.properties = new Properties();
 		this.firstRun = true;
