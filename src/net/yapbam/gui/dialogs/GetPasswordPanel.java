@@ -28,6 +28,8 @@ public class GetPasswordPanel extends JPanel {
 	private JLabel jLabel1 = null;
 	private JPanel warningPanel = null;
 	private JLabel warningField = null;
+	private JLabel jLabel2 = null;
+	private JPasswordField confirmPasswordField = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -96,9 +98,11 @@ public class GetPasswordPanel extends JPanel {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (e.getStateChange()==ItemEvent.DESELECTED) {
 						passwordField.setEchoChar(oldEcho);
+						confirmPasswordField.setEchoChar(oldEcho);
 					} else {
 						oldEcho = passwordField.getEchoChar();
 						passwordField.setEchoChar((char) 0);
+						confirmPasswordField.setEchoChar((char) 0);
 					}
 				}
 			});
@@ -113,15 +117,31 @@ public class GetPasswordPanel extends JPanel {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridy = 1;
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.insets = new Insets(0, 5, 0, 0);
+			gridBagConstraints7.gridx = 1;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.insets = new Insets(0, 5, 0, 0);
+			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.gridy = 1;
+			jLabel2 = new JLabel();
+			jLabel2.setText("JLabel"); //TODO
+			jLabel2.setVisible(false);
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.insets = new Insets(0, 5, 0, 0);
+			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.gridy = 0;
 			jLabel1 = new JLabel();
 			jLabel1.setText(LocalizationData.get("PreferencesDialog.Network.password")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 2;
 			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
+			gridBagConstraints4.gridheight = 2;
 			gridBagConstraints4.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
@@ -134,6 +154,8 @@ public class GetPasswordPanel extends JPanel {
 			jPanel.add(getPasswordField(), gridBagConstraints3);
 			jPanel.add(getShowPassword(), gridBagConstraints4);
 			jPanel.add(jLabel1, gridBagConstraints1);
+			jPanel.add(jLabel2, gridBagConstraints6);
+			jPanel.add(getConfirmPasswordField(), gridBagConstraints7);
 		}
 		return jPanel;
 	}
@@ -142,10 +164,14 @@ public class GetPasswordPanel extends JPanel {
 		return new String(this.passwordField.getPassword());
 	}
 	
+	public String getConfirmPassword() {
+		return new String (this.confirmPasswordField.getPassword());
+	}
+	
 	public void setPassword(String password) {
 		this.passwordField.setText(password) ;
 	}
-
+	
 	/**
 	 * This method initializes warningPanel	
 	 * 	
@@ -171,6 +197,11 @@ public class GetPasswordPanel extends JPanel {
 			warningPanel.add(warningField, gridBagConstraints5);
 		}
 		return warningPanel;
+	}
+	
+	public void setConfirmIsVisible(boolean visible) {
+		jLabel2.setVisible(visible);
+		confirmPasswordField.setVisible(visible);
 	}
 	
 	/** Changes the warning message.
@@ -203,6 +234,20 @@ public class GetPasswordPanel extends JPanel {
 	 */
 	public void setPasswordFieldToolTipText (String tooltip) {
 		this.getPasswordField().setToolTipText(tooltip);
+	}
+
+	/**
+	 * This method initializes confirmPasswordField	
+	 * 	
+	 * @return javax.swing.JPasswordField	
+	 */
+	private JPasswordField getConfirmPasswordField() {
+		if (confirmPasswordField == null) {
+			confirmPasswordField = new JPasswordField();
+			confirmPasswordField.setToolTipText("TODO"); //TODO
+			confirmPasswordField.setVisible(false);
+		}
+		return confirmPasswordField;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
