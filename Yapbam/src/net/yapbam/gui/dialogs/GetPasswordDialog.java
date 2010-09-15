@@ -14,6 +14,7 @@ import java.lang.String;
  */
 public class GetPasswordDialog extends AbstractDialog {
 	private GetPasswordPanel panel;
+	private boolean confirmIsRequired;
 	
 	private static class InitData {
 		private String question;
@@ -36,6 +37,7 @@ public class GetPasswordDialog extends AbstractDialog {
 	 */
 	public GetPasswordDialog(Window owner, String title, String question, Icon icon, String password) {
 		super(owner, title, new InitData(question, icon, password));
+		this.confirmIsRequired = false;
 	}
 
 	@Override
@@ -55,6 +57,9 @@ public class GetPasswordDialog extends AbstractDialog {
 
 	@Override
 	protected String getOkDisabledCause() {
+		if (confirmIsRequired && !this.panel.getPassword().equals(this.panel.getConfirmPassword())) {
+			return "Confirm <> password"; //TODO
+		}
 		return null;
 	}
 	
@@ -81,5 +86,11 @@ public class GetPasswordDialog extends AbstractDialog {
 	 */
 	public void setPasswordFieldToolTipText (String tooltip) {
 		this.panel.setPasswordFieldToolTipText(tooltip);
+	}
+	
+	public void setConfirmIsRequired(boolean required) {
+		this.confirmIsRequired = required;
+		this.panel.setConfirmIsVisible(true);
+		this.pack();
 	}
 }

@@ -298,6 +298,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
 				dialog.setWarningMessage(LocalizationData.get("FilePasswordDialog.setPassword.warning")); //$NON-NLS-1$
 				dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.setPassword.tooltip")); //$NON-NLS-1$
+				dialog.setConfirmIsRequired(true);
 				dialog.setVisible(true);
 				String newPassword = dialog.getPassword();
 				if (newPassword!=null) {
