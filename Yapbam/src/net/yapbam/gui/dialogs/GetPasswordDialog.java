@@ -1,6 +1,8 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
@@ -52,12 +54,18 @@ public class GetPasswordDialog extends AbstractDialog {
 		if (initialData.password!=null) panel.setPassword(initialData.password);
 		this.panel.setIcon(initialData.icon);
 		this.panel.setQuestion(initialData.question);
+		this.panel.addPropertyChangeListener(GetPasswordPanel.CONFIRMED_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		});
 		return panel;
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
-		if (confirmIsRequired && !this.panel.getPassword().equals(this.panel.getConfirmPassword())) {
+		if (confirmIsRequired && !this.panel.isPasswordConfirmed()) {
 			return "Confirm <> password"; //TODO
 		}
 		return null;

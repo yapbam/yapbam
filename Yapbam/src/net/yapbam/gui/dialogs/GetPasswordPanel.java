@@ -15,12 +15,18 @@ import javax.swing.JCheckBox;
 import net.yapbam.gui.LocalizationData;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.BorderFactory;
 import java.awt.Color;
+
 import javax.swing.SwingConstants;
 
 public class GetPasswordPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	public static final String CONFIRMED_PROPERTY = "Confirmed";
+	
 	private JLabel jLabel = null;
 	private JPasswordField passwordField = null;
 	private JCheckBox showPassword = null;
@@ -30,6 +36,8 @@ public class GetPasswordPanel extends JPanel {
 	private JLabel warningField = null;
 	private JLabel jLabel2 = null;
 	private JPasswordField confirmPasswordField = null;
+	private boolean confirmed = false;
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -47,7 +55,7 @@ public class GetPasswordPanel extends JPanel {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.fill = GridBagConstraints.BOTH;
-		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints2.insets = new Insets(15, 5, 5, 5);
 		gridBagConstraints2.weightx = 0.0D;
 		gridBagConstraints2.weighty = 1.0D;
 		gridBagConstraints2.gridy = 4;
@@ -59,9 +67,10 @@ public class GetPasswordPanel extends JPanel {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.gridwidth = 1;
-		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints.insets = new Insets(5, 5, 10, 5);
 		gridBagConstraints.gridy = 0;
 		jLabel = new JLabel();
+		jLabel.setText("cvbxcbcx");
 		this.setSize(447, 198);
 		this.setLayout(new GridBagLayout());
 		this.add(jLabel, gridBagConstraints);
@@ -79,10 +88,16 @@ public class GetPasswordPanel extends JPanel {
 			passwordField = new JPasswordField();
 			passwordField.setColumns(10);
 			passwordField.setColumns(8);
+			passwordField.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					updateConfirmed();
+				}
+			});
 		}
 		return passwordField;
 	}
-
+	
 	/**
 	 * This method initializes showPassword	
 	 * 	
@@ -147,7 +162,7 @@ public class GetPasswordPanel extends JPanel {
 			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridx = 1;
 			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.insets = new Insets(0, 5, 0, 0);
+			gridBagConstraints3.insets = new Insets(0, 5, 5, 0);
 			gridBagConstraints3.weightx = 1.0;
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
@@ -164,12 +179,9 @@ public class GetPasswordPanel extends JPanel {
 		return new String(this.passwordField.getPassword());
 	}
 	
-	public String getConfirmPassword() {
-		return new String (this.confirmPasswordField.getPassword());
-	}
-	
 	public void setPassword(String password) {
 		this.passwordField.setText(password) ;
+		updateConfirmed();
 	}
 	
 	/**
@@ -202,6 +214,7 @@ public class GetPasswordPanel extends JPanel {
 	public void setConfirmIsVisible(boolean visible) {
 		jLabel2.setVisible(visible);
 		confirmPasswordField.setVisible(visible);
+		updateConfirmed();
 	}
 	
 	/** Changes the warning message.
@@ -246,8 +259,30 @@ public class GetPasswordPanel extends JPanel {
 			confirmPasswordField = new JPasswordField();
 			confirmPasswordField.setToolTipText("TODO"); //TODO
 			confirmPasswordField.setVisible(false);
+			confirmPasswordField.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					updateConfirmed();
+				}
+			});
 		}
 		return confirmPasswordField;
+	}
+
+	private void updateConfirmed() {
+		boolean old = this.confirmed;
+		if ((getConfirmPasswordField().isVisible()) && (passwordField.getPassword().length!=0)) {
+			this.confirmed = new String(passwordField.getPassword()).equals(new String(confirmPasswordField.getPassword()));
+		} else {
+			this.confirmed = true;
+		}
+		if (old != this.confirmed) {
+			this.firePropertyChange(CONFIRMED_PROPERTY, old, this.confirmed);
+		}
+	}
+
+	public boolean isPasswordConfirmed() {
+		return this.confirmed;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
