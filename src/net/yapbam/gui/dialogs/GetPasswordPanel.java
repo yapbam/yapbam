@@ -70,7 +70,6 @@ public class GetPasswordPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(5, 5, 10, 5);
 		gridBagConstraints.gridy = 0;
 		jLabel = new JLabel();
-		jLabel.setText("cvbxcbcx");
 		this.setSize(447, 198);
 		this.setLayout(new GridBagLayout());
 		this.add(jLabel, gridBagConstraints);

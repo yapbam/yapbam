@@ -14,28 +14,50 @@ color: #AA0000;
 color: #ff9900;
 }
 -->
-</style></head>
+</style>
+</head>
 <body>
 <h1>Version 0.7.0 (??/09/2010)</h1>
 <h2>Nouveautés de cette version</h2>
 <ul>
-  <li>Ajoute la possibilit&eacute; de prot&eacute;ger l'acc&egrave;s aux fichiers 
-    de donn&eacute;es par mot de passe.</li>
+<li>Ajoute la possibilité de protéger l'accès aux fichiers de
+données par mot de passe.</li>
 </ul>
 <hr>
 <h1>Versions précédentes</h1>
 <h2>Version 0.6.5 (10/08/2010)</h2>
 <ul>
-<li>Ajout d'un message de confirmation lorsque l'on sauve les données dans un fichier déjà existant.</li><li>Amélioration dans l'importation :</li><ul><li><span class="bugFix">Correction d'un bug</span> qui empéchait le dialogue de compte rendu des erreurs d'importation de s'afficher dans certains cas.</li><li>Ce
+<li>Ajout d'un message de confirmation lorsque l'on sauve les
+données dans un fichier déjà existant.</li>
+<li>Amélioration dans l'importation :
+<ul>
+<li><span class="bugFix">Correction d'un bug</span>
+qui empéchait le dialogue de compte rendu des erreurs d'importation de
+s'afficher dans certains cas.</li>
+<li>Ce
 dialogue permet à présent d'annuler l'importation ou de traiter
 uniquement les lignes sans erreur. Les champs comprenant des erreurs
-sont affichés en rouge pour faciliter leur identification.</li><li>Les
+sont affichés en rouge pour faciliter leur identification.</li>
+<li>Les
 réglages de l'importation (colonnes importées, séparateur, etc...) sont
 mémorisés. Vous les retrouvez lorsque vous réouvrez le dialogue
-d'importation.</li><li>Le décodage des montants est plus strict
+d'importation.</li>
+<li>Le décodage des montants est plus strict
 (Auparavant, "52g32" était décodé comme un montant de 52. A présent, la
-ligne est considérée comme une erreur).</li></ul><li><span class="bugFix">Corrections de
-bugs</span> dans l'onglet d'historique du solde :</li><ul><li>Parfois, la date courante n'était pas visible dans la fenêtre.</li><li>Parfois, en particulier lors du pointage, des alertes&nbsp;erronnées apparaissaient.</li></ul><li><span class="bugFix">Correction</span> de la bulle d'aide du panneau
+ligne est considérée comme une erreur).</li>
+</ul>
+</li>
+<li><span class="bugFix">Corrections de
+bugs</span> dans l'onglet d'historique du solde :
+<ul>
+<li>Parfois, la date courante n'était pas visible dans la
+fenêtre.</li>
+<li>Parfois, en particulier lors du pointage, des
+alertes&nbsp;erronnées apparaissaient.</li>
+</ul>
+</li>
+<li><span class="bugFix">Correction</span>
+de la bulle d'aide du panneau
 contenant la liste des opérations.</li>
 </ul>
 <h2>Version 0.6.4 (16/05/2010)</h2>
@@ -44,26 +66,29 @@ contenant la liste des opérations.</li>
 peut définir, pour chaque compte deux seuils. Une alerte est affichée
 dans l'historique du solde
 lorsque celui-ci n'est pas compris entre ces bornes.</li>
-<li>Amélioration de l'historique du solde :</li>
+<li>Amélioration de l'historique du solde :
 <ul>
 <li>Ajout d'un bouton pour régler la date sélectionnée à
 aujourd'hui.</li>
 <li>Ajout
 d'un menu listant les alertes sur le solde. La sélection d'une alerte
 règle le filtre de manière à visualiser l'historique du compte
-concerné. </li>
+concerné.
+</li>
 </ul>
+</li>
 <li><span class="bugFix">Correction d'un bug : </span>L'édition
 du solde initial dans l'onglet d'administration des comptes ne
 fonctionnait plus.</li>
 <li><span class="bugFix">Correction de plusieurs
-bugs</span> dans la génération des opérations périodiques :</li>
+bugs</span> dans la génération des opérations périodiques :
 <ul>
 <li>Quand les opérations étaient éditées durant la phase de
 génération, les changements faits étaient &nbsp;ignorés.</li>
 <li>Les opérations avec une date d'expiration ne
 fonctionnaient pas correctement.</li>
 </ul>
+</li>
 <li><span class="bugFix">Correction d'un bug</span>
 mineur dans la mise à jour de l'apparence du menu "Filtre".</li>
 </ul>
@@ -199,7 +224,8 @@ impossible de laisser la date de fin vide une fois ce champ sélectionné.</li>
 </ul>
 <h2>Version&nbsp;0.3.5 (20/11/2009)</h2>
 <ul>
-<li><span class="bugFix"></span><span class="bugFix">Correction de bug </span> : La
+<li><span class="bugFix">Correction de bug </span>
+: La
 sauvegarde ne fonctionnait pas quand une opération périodique
 journalière était définie.</li>
 <li>Les opérations périodiques peuvent maintenant avoir une
@@ -284,7 +310,7 @@ surnuméraires (typiquement lorsqu'on supprimait toutes les opérations.</li>
 <h2>Version 0.2.8 (18/10/2009)</h2>
 <ul>
 <li>Ajout d'un panneau d'administration des modes de paiement
-permettant l'ajout et la suppression de modes.<span class="bugFix"></span></li>
+permettant l'ajout et la suppression de modes.</li>
 <li><span class="bugFix">Correction de bug </span>
 : Lorsqu'une catégorie était supprimée, elle n'était parfois pas
 retirée de toutes les opérations.</li>
@@ -292,7 +318,7 @@ retirée de toutes les opérations.</li>
 <h2>Version 0.2.7 (16/10/2009)</h2>
 <ul>
 <li>Au premier démarrage, Yapbam demande l'autorisation de se
-connecter pour&nbsp;rechercher automatiquement des mises à jour.<span class="bugFix"></span></li>
+connecter pour&nbsp;rechercher automatiquement des mises à jour.</li>
 <li><span class="bugFix">Correction de bug </span>
 : Un double-clic
 sur la liste des opérations en mode "pointage" ouvrait le dialogue
@@ -301,7 +327,7 @@ d'édition de l'opération au lieu de la marquer "pointée".</li>
 <h2>Version 0.2.6 (13/10/2009)</h2>
 <ul>
 <li>Ajout d'un panneau d'administration pour gérer les
-catégories.<span class="bugFix"></span><span class="bugFix"></span></li>
+catégories.</li>
 <li><span class="bugFix">Correction de bug </span>
 : Le popup menu&nbsp;dans l'écran d'administration des comptes
 comportait de nombreux séparateurs.</li>
@@ -321,7 +347,7 @@ automatiquement mise à aujourd'hui dans le dialogue de création.</li>
 </ul>
 <h2>Version 0.2.5 (10/10/2009)</h2>
 <ul>
-<li><span class="bugFix"></span>Ajout de la
+<li>Ajout de la
 possibilité de gérer les comptes (changer leur nom et le solde initial).</li>
 </ul>
 <h2>Version 0.2.4 (02/10/2009)</h2>
