@@ -250,15 +250,17 @@ public class GlobalData extends DefaultListenable {
 		if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
 			// Detach check
 			String number = transaction.getNumber();
-			for (int i = 0; i < account.getCheckbooksNumber(); i++) {
-				Checkbook checkbook = account.getCheckbook(i);
-				BigInteger shortNumber = checkbook.getShortNumber(number);
-				if (!checkbook.isEmpty() && (shortNumber!=null)) {
-					if (shortNumber.compareTo(checkbook.getNext())>=0) {
-						Checkbook newOne = new Checkbook(checkbook.getPrefix(), checkbook.getFirst(), checkbook.size(), shortNumber.equals(checkbook.getLast())?null:shortNumber.add(BigInteger.ONE));
-						setCheckbook(account, checkbook, newOne);
+			if (number!=null) {
+				for (int i = 0; i < account.getCheckbooksNumber(); i++) {
+					Checkbook checkbook = account.getCheckbook(i);
+					BigInteger shortNumber = checkbook.getShortNumber(number);
+					if (!checkbook.isEmpty() && (shortNumber!=null)) {
+						if (shortNumber.compareTo(checkbook.getNext())>=0) {
+							Checkbook newOne = new Checkbook(checkbook.getPrefix(), checkbook.getFirst(), checkbook.size(), shortNumber.equals(checkbook.getLast())?null:shortNumber.add(BigInteger.ONE));
+							setCheckbook(account, checkbook, newOne);
+						}
+						break;
 					}
-					break;
 				}
 			}
 		}
