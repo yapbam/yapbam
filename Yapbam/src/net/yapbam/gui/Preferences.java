@@ -54,12 +54,6 @@ public class Preferences {
 	private boolean translatorMode;
 
 	private Preferences() {
-System.out.println (Portable.getLaunchDirectory());
-System.out.println (Portable.getDataDirectory());
-System.out.println (Portable.getHelpDirectory());
-System.out.println ("user.dir : "+System.getProperty("user.dir"));
-System.out.println ("user.home : "+System.getProperty("user.home"));
-
 		this.properties = new Properties();
 		this.firstRun = true;
 		if (getFile().exists()) {
@@ -78,7 +72,7 @@ System.out.println ("user.home : "+System.getProperty("user.home"));
 		}
 	}
 
-	private static File getFile() {		
+	private static File getFile() {
 		return new File (Portable.getLaunchDirectory(), ".yapbampref"); //$NON-NLS-1$
 	}
 	
@@ -254,9 +248,9 @@ System.out.println ("user.home : "+System.getProperty("user.home"));
 	}
 
 	static PlugInContainer[] getPlugins() {
-		File file = new File("./plugins");
+		File file = new File(Portable.getDataDirectory(),"plugins");
 		if (!file.exists()) {
-			if (!file.mkdir()) {
+			if (!file.mkdirs()) {
 				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to create the plugins folder"));
 			}
 		} else if (!file.isDirectory()) {
