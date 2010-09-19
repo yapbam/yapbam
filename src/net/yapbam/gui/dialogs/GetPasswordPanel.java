@@ -25,7 +25,7 @@ import javax.swing.SwingConstants;
 
 public class GetPasswordPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final String CONFIRMED_PROPERTY = "Confirmed";
+	public static final String CONFIRMED_PROPERTY = "Confirmed"; //$NON-NLS-1$
 	
 	private JLabel jLabel = null;
 	private JPasswordField passwordField = null;
@@ -143,7 +143,7 @@ public class GetPasswordPanel extends JPanel {
 			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridy = 1;
 			jLabel2 = new JLabel();
-			jLabel2.setText("JLabel"); //TODO
+			jLabel2.setText(LocalizationData.get("FilePasswordDialog.confirm")); //$NON-NLS-1$
 			jLabel2.setVisible(false);
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
@@ -256,7 +256,7 @@ public class GetPasswordPanel extends JPanel {
 	private JPasswordField getConfirmPasswordField() {
 		if (confirmPasswordField == null) {
 			confirmPasswordField = new JPasswordField();
-			confirmPasswordField.setToolTipText("TODO"); //TODO
+			confirmPasswordField.setToolTipText(LocalizationData.get("FilePasswordDialog.confirm.tooltip")); //$NON-NLS-1$
 			confirmPasswordField.setVisible(false);
 			confirmPasswordField.addKeyListener(new KeyAdapter() {
 				@Override

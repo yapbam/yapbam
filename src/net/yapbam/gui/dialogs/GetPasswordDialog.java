@@ -7,6 +7,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Icon;
 import javax.swing.JPanel;
 
+import net.yapbam.gui.LocalizationData;
+
 import java.lang.Object;
 import java.lang.String;
 
@@ -66,7 +68,7 @@ public class GetPasswordDialog extends AbstractDialog {
 	@Override
 	protected String getOkDisabledCause() {
 		if (confirmIsRequired && !this.panel.isPasswordConfirmed()) {
-			return "Confirm <> password"; //TODO
+			return LocalizationData.get("FilePasswordDialog.confirmIsNotOk"); //$NON-NLS-1$
 		}
 		return null;
 	}
