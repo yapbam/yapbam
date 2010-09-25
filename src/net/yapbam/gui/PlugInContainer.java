@@ -51,4 +51,9 @@ public class PlugInContainer {
 	public boolean isActivated() {
 		return this.isActivated;
 	}
+
+	@Override
+	public String toString() {
+		return this.plugin.getCanonicalName();
+	}
 }
