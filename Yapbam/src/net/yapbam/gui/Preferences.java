@@ -271,6 +271,14 @@ public class Preferences {
 				return true;
 			}
 		});
+		String testedPlugin = System.getProperty("testedPlugin.className");
+		if (testedPlugin!=null) {
+			try {
+				plugins.add(new PlugInContainer(Class.forName(testedPlugin)));
+			} catch (ClassNotFoundException e) {
+				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to load the plugin "+testedPlugin+" ("+e+")"));
+			}
+		}
 		return plugins.toArray(new PlugInContainer[plugins.size()]);
 	}
 
