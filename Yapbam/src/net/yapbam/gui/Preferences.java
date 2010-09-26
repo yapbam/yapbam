@@ -25,6 +25,7 @@ import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
+import net.yapbam.statementview.StatementViewPlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
 
@@ -262,6 +263,7 @@ public class Preferences {
 		plugins.add(new PlugInContainer(StatisticsPlugin.class));
 		plugins.add(new PlugInContainer(ToolsPlugIn.class));
 		plugins.add(new PlugInContainer(BudgetPlugin.class));
+		plugins.add(new PlugInContainer(StatementViewPlugin.class));
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
 		file.listFiles(new FileFilter() {
 			@Override
