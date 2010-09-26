@@ -56,4 +56,11 @@ public class PlugInContainer {
 	public String toString() {
 		return this.plugin.getCanonicalName();
 	}
+
+	/** Gets the exception that occured during the plugin instanciation.
+	 * @return a throwable or null if no error occured.
+	 */
+	public Throwable getInstanciationException() {
+		return e;
+	}
 }
