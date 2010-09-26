@@ -102,6 +102,9 @@ public class MainFrame extends JFrame implements DataListener {
 	    this.plugins=new AbstractPlugIn[pluginContainers.length];
 	    for (int i = 0; i < plugins.length; i++) {
 			if (pluginContainers[i].isActivated()) this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
+			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instanciation
+				ErrorManager.INSTANCE.display(null, pluginContainers[i].getInstanciationException(), "Une erreur est survenue durant l'instanciation du plugin "+"?"); //LOCAL //TODO
+			}
 		}
 	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
 	    setContentPane(this.createContentPane());
