@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 public class StatementViewPanel extends JPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
@@ -233,7 +234,6 @@ public class StatementViewPanel extends JPanel { //LOCAL
 	private JPanel getStatementPanel() {
 		if (statementPanel == null) {
 			startBalance = new JLabel();
-			startBalance.setText("Solde en début de période :");
 			statementPanel = new JPanel();
 			statementPanel.setLayout(new BorderLayout());
 			statementPanel.add(getTopPanel(), BorderLayout.NORTH);
@@ -274,9 +274,7 @@ public class StatementViewPanel extends JPanel { //LOCAL
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.gridy = 1;
 			detail = new JLabel();
-			detail.setText("Total des opérations :");
 			endBalance = new JLabel();
-			endBalance.setText("Solde en fin de période :");
 			bottomPanel = new JPanel();
 			bottomPanel.setLayout(new GridBagLayout());
 			bottomPanel.add(endBalance, gridBagConstraints6);
@@ -310,6 +308,9 @@ public class StatementViewPanel extends JPanel { //LOCAL
 			transactionsTable.setModel(this.model);
 			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
 			transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//			TableColumn column = transactionsTable.getColumnModel().getColumn(0);
+//			column.setWidth(20);
+//			column.setResizable(false);
 		}
 		return transactionsTable;
 	}
