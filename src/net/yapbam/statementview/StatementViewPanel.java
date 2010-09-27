@@ -1,5 +1,6 @@
 package net.yapbam.statementview;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
@@ -10,6 +11,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -28,6 +30,7 @@ import net.yapbam.util.NullUtils;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellRenderer;
 
 public class StatementViewPanel extends JPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
@@ -147,29 +150,29 @@ public class StatementViewPanel extends JPanel { //LOCAL
 	private JComboBox getAccountMenu() {
 		if (accountMenu == null) {
 			accountMenu = new CoolJComboBox();
-	        accountMenu.setToolTipText("Choisissez le compte dont vous souhaitez visualiser les relevés.");
-	        accountMenu.addActionListener(new java.awt.event.ActionListener() {
-	        	public void actionPerformed(java.awt.event.ActionEvent e) {
-	        		int accountIndex = accountMenu.getSelectedIndex();
-	        		statementMenu.setActionEnabled(false);
-	        		statementMenu.removeAllItems();
-	        		if (accountIndex<0) {
-	        			statements = null;
-		        		statementMenu.setActionEnabled(true);
-		        		statementMenu.setSelectedIndex(-1);
-		        		statementMenu.setEnabled(false);
-	        		} else {
+			accountMenu.setToolTipText("Choisissez le compte dont vous souhaitez visualiser les relevés.");
+			accountMenu.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					int accountIndex = accountMenu.getSelectedIndex();
+					statementMenu.setActionEnabled(false);
+					statementMenu.removeAllItems();
+					if (accountIndex < 0) {
+						statements = null;
+						statementMenu.setActionEnabled(true);
+						statementMenu.setSelectedIndex(-1);
+						statementMenu.setEnabled(false);
+					} else {
 						statements = new StatementBuilder(data, data.getAccount(accountIndex)).getStatements();
-		        		for (int i = 0; i < statements.length; i++) {
-		        			String id = statements[statements.length-1-i].getId();
-		        			statementMenu.addItem(id==null?"Non pointé":id);
-		        		}
-		        		statementMenu.setActionEnabled(true);
-		        		statementMenu.setEnabled(statements.length>0);
-		        		statementMenu.setSelectedIndex(statements.length>0?0:-1);
-	        		}
-	        	}
-	        });
+						for (int i = 0; i < statements.length; i++) {
+							String id = statements[statements.length - 1 - i].getId();
+							statementMenu.addItem(id == null ? "Non pointé" : id);
+						}
+						statementMenu.setActionEnabled(true);
+						statementMenu.setEnabled(statements.length > 0);
+						statementMenu.setSelectedIndex(statements.length > 0 ? 0 : -1);
+					}
+				}
+			});
 		}
 		return accountMenu;
 	}
@@ -182,6 +185,7 @@ public class StatementViewPanel extends JPanel { //LOCAL
 	private JComboBox getStatementMenu() {
 		if (statementMenu == null) {
 			statementMenu = new CoolJComboBox();
+			statementMenu.setToolTipText("Choisissez le relevé que vous souhaitez visualiser.");
 			statementMenu.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					boolean visible = (statements!=null) && (statementMenu.getSelectedIndex()>=0);
@@ -304,9 +308,7 @@ public class StatementViewPanel extends JPanel { //LOCAL
 			transactionsTable = new JTable();
 			this.model = new TransactionsTableModel(transactionsTable, new Transaction[0]);
 			transactionsTable.setModel(this.model);
-//			this.setDefaultRenderer(Date.class, new DateRenderer());
-//			this.setDefaultRenderer(double[].class, new AmountRenderer());
-//			this.setDefaultRenderer(Object.class, new ObjectRenderer());
+			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
 			transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
 		return transactionsTable;

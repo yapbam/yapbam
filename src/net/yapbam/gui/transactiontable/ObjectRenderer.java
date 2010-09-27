@@ -12,14 +12,13 @@ public class ObjectRenderer extends DefaultTableCellRenderer {
 		super();
 	}
 
-    @Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-    		boolean hasFocus, int row, int column) {
-	    ColoredModel model = (ColoredModel)table.getModel();
-	    row = table.convertRowIndexToModel(row);
-	    this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
-	    model.setRowLook(this, table, row, isSelected);
-	    setValue(value);
-    	return this;
-    }
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		ColoredModel model = (ColoredModel) table.getModel();
+		row = table.convertRowIndexToModel(row);
+		this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
+		model.setRowLook(this, table, row, isSelected);
+		setValue(value);
+		return this;
+	}
 }
