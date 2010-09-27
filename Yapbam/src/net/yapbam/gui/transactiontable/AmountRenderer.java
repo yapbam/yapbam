@@ -10,10 +10,10 @@ public class AmountRenderer extends ObjectRenderer {
 	}
 
 	@Override
-    public void setValue(Object value) {
+	public void setValue(Object value) {
 		double[] amount = (double[]) value;
 		String text;
-		if (amount.length==1) {
+		if (amount.length == 1) {
 			text = LocalizationData.getCurrencyInstance().format(amount[0]);
 		} else {
 			StringBuffer buf = new StringBuffer("<html><body>").append(LocalizationData.getCurrencyInstance().format(amount[0]));
@@ -24,5 +24,5 @@ public class AmountRenderer extends ObjectRenderer {
 			text = buf.toString();
 		}
 		setText(text);
-    }
+	}
 }
