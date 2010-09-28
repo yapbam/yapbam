@@ -1,6 +1,5 @@
 package net.yapbam.statementview;
 
-import java.awt.Component;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
@@ -11,7 +10,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -30,8 +28,8 @@ import net.yapbam.util.NullUtils;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import java.awt.Insets;
+import java.awt.Dimension;
 
 public class StatementViewPanel extends JPanel { //LOCAL
 	private static final long serialVersionUID = 1L;
@@ -52,6 +50,7 @@ public class StatementViewPanel extends JPanel { //LOCAL
 	private GlobalData data;
 	private Statement[] statements;
 	private TransactionsTableModel model;
+	private JLabel jLabel2 = null;
 	
 	/**
 	 * This is the default constructor
@@ -115,30 +114,44 @@ public class StatementViewPanel extends JPanel { //LOCAL
 	 */
 	private JPanel getSelectionPanel() {
 		if (selectionPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 4;
+			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.gridy = 0;
+			jLabel2 = new JLabel();
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 2;
+			gridBagConstraints3.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints3.gridy = 0;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Relevé :");
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints2.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText("Compte :");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints.gridx = 3;
-			gridBagConstraints.weightx = 1.0;
+			gridBagConstraints.gridy = 0;
+			gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints.weightx = 0.0D;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints1.gridx = 1;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.insets = new Insets(0, 0, 0, 5);
+			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			gridBagConstraints1.weightx = 1.0;
 			selectionPanel = new JPanel();
 			selectionPanel.setLayout(new GridBagLayout());
-			selectionPanel.add(getAccountMenu(), gridBagConstraints1);
-			selectionPanel.add(getStatementMenu(), gridBagConstraints);
 			selectionPanel.add(jLabel, gridBagConstraints2);
+			selectionPanel.add(getAccountMenu(), gridBagConstraints1);
 			selectionPanel.add(jLabel1, gridBagConstraints3);
+			selectionPanel.add(getStatementMenu(), gridBagConstraints);
+			selectionPanel.add(jLabel2, gridBagConstraints11);
 		}
 		return selectionPanel;
 	}
@@ -220,7 +233,9 @@ public class StatementViewPanel extends JPanel { //LOCAL
 		Collections.sort(transactions, new Comparator<Transaction>() {
 			@Override
 			public int compare(Transaction o1, Transaction o2) {
-				return DateUtils.dateToInteger(o1.getValueDate())-DateUtils.dateToInteger(o2.getValueDate());
+				int result = DateUtils.dateToInteger(o1.getValueDate())-DateUtils.dateToInteger(o2.getValueDate());
+				if (result == 0) result = DateUtils.dateToInteger(o1.getDate())-DateUtils.dateToInteger(o2.getDate());
+				return result;
 			}
 		});
 		return transactions.toArray(new Transaction[transactions.size()]);
