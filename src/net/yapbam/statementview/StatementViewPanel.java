@@ -29,9 +29,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.Insets;
-import java.awt.Dimension;
 
-public class StatementViewPanel extends JPanel { //LOCAL
+public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel selectionPanel = null;
 	private CoolJComboBox accountMenu = null;
@@ -125,13 +124,13 @@ public class StatementViewPanel extends JPanel { //LOCAL
 			gridBagConstraints3.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints3.gridy = 0;
 			jLabel1 = new JLabel();
-			jLabel1.setText("Relevé :");
+			jLabel1.setText(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints2.gridy = 0;
 			jLabel = new JLabel();
-			jLabel.setText("Compte :");
+			jLabel.setText(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints.gridx = 3;
@@ -164,7 +163,7 @@ public class StatementViewPanel extends JPanel { //LOCAL
 	private JComboBox getAccountMenu() {
 		if (accountMenu == null) {
 			accountMenu = new CoolJComboBox();
-			accountMenu.setToolTipText("Choisissez le compte dont vous souhaitez visualiser les relevés.");
+			accountMenu.setToolTipText(LocalizationData.get("StatementView.accountMenu.tooltip")); //$NON-NLS-1$
 			accountMenu.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int accountIndex = accountMenu.getSelectedIndex();
@@ -179,7 +178,7 @@ public class StatementViewPanel extends JPanel { //LOCAL
 						statements = new StatementBuilder(data, data.getAccount(accountIndex)).getStatements();
 						for (int i = 0; i < statements.length; i++) {
 							String id = statements[statements.length - 1 - i].getId();
-							statementMenu.addItem(id == null ? "Non pointé" : id);
+							statementMenu.addItem(id == null ? LocalizationData.get("StatementView.notChecked") : id); //$NON-NLS-1$
 						}
 						statementMenu.setActionEnabled(true);
 						statementMenu.setEnabled(statements.length > 0);
@@ -199,16 +198,16 @@ public class StatementViewPanel extends JPanel { //LOCAL
 	private JComboBox getStatementMenu() {
 		if (statementMenu == null) {
 			statementMenu = new CoolJComboBox();
-			statementMenu.setToolTipText("Choisissez le relevé que vous souhaitez visualiser.");
+			statementMenu.setToolTipText(LocalizationData.get("StatementView.statementMenu.statementMenu.tooltip")); //$NON-NLS-1$
 			statementMenu.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					boolean visible = (statements!=null) && (statementMenu.getSelectedIndex()>=0);
 					if (visible) {
 						Statement statement = statements[statements.length-1-statementMenu.getSelectedIndex()];
 						DecimalFormat ci = LocalizationData.getCurrencyInstance();
-						startBalance.setText(MessageFormat.format("Solde en début de période : {0}", ci.format(statement.getStartBalance())));
-						endBalance.setText(MessageFormat.format("Solde en fin de période : {0}", ci.format(statement.getEndBalance())));
-						detail.setText(MessageFormat.format("{0} opérations. Total des dépenses : {1}. Total des recettes : {2}", statement.getNbTransactions(),
+						startBalance.setText(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), ci.format(statement.getStartBalance()))); //$NON-NLS-1$
+						endBalance.setText(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()))); //$NON-NLS-1$
+						detail.setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
 								ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
 						model.setTransactions(getTransactions(data.getAccount(accountMenu.getSelectedIndex()), statement.getId()));
 					}

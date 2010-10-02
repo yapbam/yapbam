@@ -12,7 +12,6 @@ public class StatementBuilder {
 	private Statement[] statements;
 	
 	public StatementBuilder(GlobalData data, Account account) {
-long start = System.currentTimeMillis();
 		HashMap<String, Statement> map = new HashMap<String, Statement>();
 		for (int i = 0; i < data.getTransactionsNumber(); i++) {
 			Transaction transaction = data.getTransaction(i);
@@ -39,7 +38,6 @@ long start = System.currentTimeMillis();
 		for (int i = 1; i < statements.length; i++) {
 			statements[i].setStartBalance(statements[i-1].getEndBalance());
 		}
-System.out.println("statements were build in "+(System.currentTimeMillis()-start)+" ms");//TODO
 	}
 
 	public Statement[] getStatements() {
