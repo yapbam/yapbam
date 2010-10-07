@@ -29,6 +29,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.Insets;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import javax.swing.BorderFactory;
+import javax.swing.border.EtchedBorder;
+import javax.swing.table.TableColumnModel;
+
+import java.awt.Font;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -121,13 +128,13 @@ public class StatementViewPanel extends JPanel {
 			jLabel2 = new JLabel();
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 2;
-			gridBagConstraints3.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints3.gridy = 0;
 			jLabel1 = new JLabel();
 			jLabel1.setText(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints2.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
@@ -135,15 +142,15 @@ public class StatementViewPanel extends JPanel {
 			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints.gridx = 3;
 			gridBagConstraints.gridy = 0;
-			gridBagConstraints.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints.weightx = 0.0D;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new Insets(0, 0, 0, 5);
+			gridBagConstraints1.insets = new Insets(5, 0, 5, 5);
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
-			gridBagConstraints1.weightx = 1.0;
+			gridBagConstraints1.weightx = 0.0D;
 			selectionPanel = new JPanel();
 			selectionPanel.setLayout(new GridBagLayout());
 			selectionPanel.add(jLabel, gridBagConstraints2);
@@ -247,7 +254,6 @@ public class StatementViewPanel extends JPanel {
 	 */
 	private JPanel getStatementPanel() {
 		if (statementPanel == null) {
-			startBalance = new JLabel();
 			statementPanel = new JPanel();
 			statementPanel.setLayout(new BorderLayout());
 			statementPanel.add(getTopPanel(), BorderLayout.NORTH);
@@ -264,12 +270,32 @@ public class StatementViewPanel extends JPanel {
 	 */
 	private JPanel getTopPanel() {
 		if (topPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 1;
+			gridBagConstraints6.anchor = GridBagConstraints.EAST;
+			gridBagConstraints6.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.weightx = 1.0D;
+			gridBagConstraints6.gridy = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.gridy = 1;
+			gridBagConstraints4.anchor = GridBagConstraints.WEST;
+			gridBagConstraints4.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.weightx = 1.0D;
+			gridBagConstraints4.gridy = 0;
 			topPanel = new JPanel();
+			startBalance = new JLabel();
+			startBalance.setHorizontalTextPosition(SwingConstants.LEADING);
+			startBalance.setFont(new Font("Dialog", Font.PLAIN, 14));
+			endBalance = new JLabel();
+			endBalance.setHorizontalAlignment(SwingConstants.RIGHT);
+			endBalance.setFont(new Font("Dialog", Font.PLAIN, 14));
 			topPanel.setLayout(new GridBagLayout());
+			topPanel.setBackground(Color.white);
+			topPanel.setBorder(BorderFactory.createLineBorder(Color.gray, 3));
 			topPanel.add(startBalance, gridBagConstraints4);
+			topPanel.add(endBalance, gridBagConstraints6);
 		}
 		return topPanel;
 	}
@@ -281,17 +307,13 @@ public class StatementViewPanel extends JPanel {
 	 */
 	private JPanel getBottomPanel() {
 		if (bottomPanel == null) {
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.gridx = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
+			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints5.gridy = 1;
 			detail = new JLabel();
-			endBalance = new JLabel();
 			bottomPanel = new JPanel();
 			bottomPanel.setLayout(new GridBagLayout());
-			bottomPanel.add(endBalance, gridBagConstraints6);
 			bottomPanel.add(detail, gridBagConstraints5);
 		}
 		return bottomPanel;
@@ -315,16 +337,13 @@ public class StatementViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
-	private JTable getTransactionsTable() {
+	JTable getTransactionsTable() {
 		if (transactionsTable == null) {
 			transactionsTable = new JTable();
 			this.model = new TransactionsTableModel(transactionsTable, new Transaction[0]);
 			transactionsTable.setModel(this.model);
 			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
 			transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//			TableColumn column = transactionsTable.getColumnModel().getColumn(0);
-//			column.setWidth(20);
-//			column.setResizable(false);
 		}
 		return transactionsTable;
 	}
