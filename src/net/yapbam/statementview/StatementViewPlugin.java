@@ -5,9 +5,10 @@ import javax.swing.JPanel;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 
 public class StatementViewPlugin extends AbstractPlugIn {
-	
+	private static final String STATE_PREFIX = "net.yapbam.statementView."; //$NON-NLS-1$
 	private StatementViewPanel panel;
 
 	public StatementViewPlugin(FilteredData data, Object state) {
@@ -20,5 +21,14 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	public JPanel getPanel() {
 		return this.panel;
 	}
+
+	public void restoreState() {
+		YapbamState.restoreState(panel.getTransactionsTable(), STATE_PREFIX);
+	}
+
+	public void saveState() {
+		YapbamState.saveState(panel.getTransactionsTable(), STATE_PREFIX);
+	}
+
 
 }
