@@ -29,6 +29,4 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	public void saveState() {
 		YapbamState.saveState(panel.getTransactionsTable(), STATE_PREFIX);
 	}
-
-
 }

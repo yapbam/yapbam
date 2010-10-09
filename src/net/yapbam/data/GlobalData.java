@@ -23,8 +23,6 @@ import net.yapbam.util.NullUtils;
  *  @see FilteredData
  */
 public class GlobalData extends DefaultListenable {
-	private static final long serialVersionUID = 1L;
-
 	private List<Account> accounts;
 	private List<PeriodicalTransaction> periodicals;
 	private List<Transaction> transactions;
@@ -186,7 +184,7 @@ public class GlobalData extends DefaultListenable {
 	public void setEventsEnabled(boolean enabled) {
 		if (super.IsEventsEnabled()) eventsPending = false;
 		super.setEventsEnabled(enabled);
-		if ((enabled==true) && (eventsPending)) fireEvent(new EverythingChangedEvent(this));
+		if (enabled && (eventsPending)) fireEvent(new EverythingChangedEvent(this));
 	}
 
 	/** Tests whether the events are enabled or not.

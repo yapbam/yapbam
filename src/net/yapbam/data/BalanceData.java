@@ -13,8 +13,6 @@ import net.yapbam.util.DateUtils;
  * @see FilteredData#getBalanceData()
  */
 public class BalanceData extends DefaultListenable {
-	private static final long serialVersionUID = 1L;
-
 	private double finalBalance;
 	private double checkedBalance;
 	private double currentBalance;
@@ -38,7 +36,7 @@ public class BalanceData extends DefaultListenable {
 
 	void enableEvents(boolean enabled) {
 		super.setEventsEnabled(enabled);
-		if (enabled==true) fireEvent(new EverythingChangedEvent(this));
+		if (enabled) fireEvent(new EverythingChangedEvent(this));
 	}
 
 	void updateBalance(Transaction transaction, boolean add) {

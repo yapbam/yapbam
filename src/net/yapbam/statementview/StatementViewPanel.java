@@ -17,9 +17,14 @@ import javax.swing.JLabel;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
+import net.yapbam.data.event.AccountAddedEvent;
+import net.yapbam.data.event.AccountPropertyChangedEvent;
+import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.TransactionAddedEvent;
+import net.yapbam.data.event.TransactionRemovedEvent;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.CoolJComboBox;
 import net.yapbam.util.DateUtils;
@@ -32,8 +37,6 @@ import java.awt.Insets;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.BorderFactory;
-import javax.swing.border.EtchedBorder;
-import javax.swing.table.TableColumnModel;
 
 import java.awt.Font;
 
@@ -52,11 +55,13 @@ public class StatementViewPanel extends JPanel {
 	private JLabel detail = null;
 	private JScrollPane jScrollPane = null;
 	private JTable transactionsTable = null;
+	private TransactionsTableModel model;
+	private JLabel jLabel2 = null;
 	
 	private GlobalData data;
 	private Statement[] statements;
-	private TransactionsTableModel model;
-	private JLabel jLabel2 = null;
+	private String selectedAccount;
+	private String selectedStatement;
 	
 	/**
 	 * This is the default constructor
@@ -76,7 +81,23 @@ public class StatementViewPanel extends JPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof EverythingChangedEvent) {
+					selectedAccount = null;
+					selectedStatement = null;
 					init();
+				} else if (event instanceof AccountAddedEvent) {
+					if (StatementViewPanel.this.data.getAccountsNumber()==1) {
+						init();
+					} else {
+						accountMenu.addItem(((AccountAddedEvent)event).getAccount().getName());
+					}
+				} else if (event instanceof AccountRemovedEvent) {
+					// TODO
+				} else if (event instanceof AccountPropertyChangedEvent) {
+					//TODO
+				} else if (event instanceof TransactionAddedEvent) {
+					//TODO
+				} else if (event instanceof TransactionRemovedEvent) {
+					//TODO
 				}
 			}
 		});
@@ -85,6 +106,7 @@ public class StatementViewPanel extends JPanel {
 	
 	private void init() {
 		if (data.getAccountsNumber()==0) {
+			selectedAccount = null;
 			accountMenu.setSelectedIndex(-1);
 			accountMenu.removeAllItems();
 			accountMenu.setEnabled(false);
@@ -92,12 +114,14 @@ public class StatementViewPanel extends JPanel {
 			accountMenu.setEnabled(true);
 			this.accountMenu.setActionEnabled(false);
 			this.accountMenu.removeAllItems();
+			int index = 0;
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				accountMenu.addItem(data.getAccount(i).getName());
+				String accountName = data.getAccount(i).getName();
+				accountMenu.addItem(accountName);
+				if (accountName == selectedAccount) index = i;
 			}
-			accountMenu.setSelectedIndex(-1);
 			this.accountMenu.setActionEnabled(true);
-			accountMenu.setSelectedIndex(0);
+			accountMenu.setSelectedIndex(index);
 		}
 	}
 
