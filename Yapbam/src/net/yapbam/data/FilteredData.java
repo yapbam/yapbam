@@ -10,7 +10,6 @@ import net.yapbam.util.TextMatcher;
  * The only event sent is the FilterChanged event.
  */
 public class FilteredData extends DefaultListenable {
-	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 	
 	public static final int CHECKED=1;
