@@ -60,8 +60,6 @@ public class StatementViewPanel extends JPanel {
 	
 	private GlobalData data;
 	private Statement[] statements;
-	private String selectedAccount;
-	private String selectedStatement;
 	
 	/**
 	 * This is the default constructor
@@ -81,22 +79,50 @@ public class StatementViewPanel extends JPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof EverythingChangedEvent) {
-					selectedAccount = null;
-					selectedStatement = null;
 					init();
 				} else if (event instanceof AccountAddedEvent) {
 					if (StatementViewPanel.this.data.getAccountsNumber()==1) {
+						// If there was no account before this one
 						init();
 					} else {
-						accountMenu.addItem(((AccountAddedEvent)event).getAccount().getName());
+						getAccountMenu().addItem(((AccountAddedEvent)event).getAccount().getName());
 					}
 				} else if (event instanceof AccountRemovedEvent) {
-					// TODO
+					String accountName = ((AccountRemovedEvent)event).getRemoved().getName();
+					if (NullUtils.areEquals(getAccountMenu().getSelectedItem(), accountName)) {
+						// If the removed account is the current one, reset default settings
+						init();
+					} else {
+						// simply remove the account in the menu
+						getAccountMenu().removeItem(accountName);
+					}
+					System.out.println ("Account removed");
 				} else if (event instanceof AccountPropertyChangedEvent) {
-					//TODO
+					String property = ((AccountPropertyChangedEvent)event).getProperty();
+					if (property.equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) {
+						//TODO
+					} else if (property.equals(AccountPropertyChangedEvent.NAME)) {
+						// An account has changed its name
+						// Change it in the menu
+						getAccountMenu().setActionEnabled(false);
+						String old = (String) ((AccountPropertyChangedEvent)event).getOldValue();
+						int index = getAccountMenu().getSelectedIndex();
+						for (int i = 0; i < getAccountMenu().getItemCount(); i++) {
+							if (getAccountMenu().getItemAt(i).equals(old)) {
+								getAccountMenu().removeItemAt(i);
+								getAccountMenu().insertItemAt(((AccountPropertyChangedEvent)event).getNewValue(), i);
+								break;
+							}
+						}
+						// Restore the selected index
+						getAccountMenu().setSelectedIndex(index);
+						getAccountMenu().setActionEnabled(true);
+					}
 				} else if (event instanceof TransactionAddedEvent) {
 					//TODO
+					System.out.println ("Transaction added");
 				} else if (event instanceof TransactionRemovedEvent) {
+					System.out.println ("Transaction removed");
 					//TODO
 				}
 			}
@@ -106,7 +132,6 @@ public class StatementViewPanel extends JPanel {
 	
 	private void init() {
 		if (data.getAccountsNumber()==0) {
-			selectedAccount = null;
 			accountMenu.setSelectedIndex(-1);
 			accountMenu.removeAllItems();
 			accountMenu.setEnabled(false);
@@ -114,14 +139,12 @@ public class StatementViewPanel extends JPanel {
 			accountMenu.setEnabled(true);
 			this.accountMenu.setActionEnabled(false);
 			this.accountMenu.removeAllItems();
-			int index = 0;
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				String accountName = data.getAccount(i).getName();
 				accountMenu.addItem(accountName);
-				if (accountName == selectedAccount) index = i;
 			}
 			this.accountMenu.setActionEnabled(true);
-			accountMenu.setSelectedIndex(index);
+			accountMenu.setSelectedIndex(0);
 		}
 	}
 
@@ -191,7 +214,7 @@ public class StatementViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private JComboBox getAccountMenu() {
+	private CoolJComboBox getAccountMenu() {
 		if (accountMenu == null) {
 			accountMenu = new CoolJComboBox();
 			accountMenu.setToolTipText(LocalizationData.get("StatementView.accountMenu.tooltip")); //$NON-NLS-1$
