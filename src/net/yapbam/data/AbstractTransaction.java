@@ -53,49 +53,49 @@ public abstract class AbstractTransaction implements Cloneable {
 		return result;
 	}
 
-	/** Returns the transaction's account.
+	/** Gets the transaction's account.
 	 * @return the account
 	 */
 	public Account getAccount() {
 		return this.account;
 	}
 
-	/** Returns the transaction's description.
+	/** Gets the transaction's description.
 	 * @return the description
 	 */
 	public String getDescription() {
 		return this.description;
 	}
 
-	/** Returns the transaction's amount.
+	/** Gets the transaction's amount.
 	 * @return the amount, a negative number if the transaction is an expense
 	 */
 	public double getAmount() {
 		return this.amount;
 	}
 
-	/** Returns the transaction's payment mode.
+	/** Gets the transaction's payment mode.
 	 * @return the payment mode
 	 */
 	public Mode getMode() {
 		return mode;
 	}
 
-	/** Returns the transaction's category.
+	/** Gets the transaction's category.
 	 * @return the category
 	 */
 	public Category getCategory() {
 		return category;
 	}
 
-	/** Returns the number of transaction's subtransactions.
+	/** Gets the number of transaction's subtransactions.
 	 * @return a positive number specifying the number of subtransactions
 	 */
 	public int getSubTransactionSize() {
 		return this.subTransactions.size();
 	}
 
-	/** Returns one of the transaction's subtransactions.
+	/** Gets one of the transaction's subtransactions.
 	 * @param index the subtransaction's index
 	 * @return a subtransaction
 	 */
@@ -103,23 +103,23 @@ public abstract class AbstractTransaction implements Cloneable {
 		return this.subTransactions.get(index);
 	}
 	
-	/** Returns the transaction's subtransactions.
+	/** Gets the transaction's subtransactions.
 	 * @return the subtransactions
 	 */
 	public SubTransaction[] getSubTransactions() {
 		return this.subTransactions.toArray(new SubTransaction[this.subTransactions.size()]);
 	}
 
-	/** Returns the transaction's id.
-	 * Each transaction has an unique id created in the constructor. It is guaranted that two
+	/** Gets the transaction's id.
+	 * Each transaction has an unique id created in the constructor. It is guaranteed that two
 	 * transactions always have different id
-	 * @return a long that indentifying the transaction
+	 * @return a long that identifies the transaction
 	 */
 	public long getId() {
 		return id;
 	}
 
-	/** Returns the complement of the subtransactions of this transaction.
+	/** Gets the complement of the subtransactions of this transaction.
 	 * Transactions may have subtransactions. The complement is the transactions's amount minus the
 	 * sum of all of its subtransactions. 
 	 * @return the complement.

@@ -37,6 +37,12 @@ public class AlertThreshold {
 	}
 
 
+	/** Tests whether an alert is equal to this.
+	 * Two alerts are equals if and only if their thresholds are equals.
+	 * Note : As thresholds are coded with doubles, the equality is tested according to the currency precision.
+	 * @return a boolean
+	 * @see GlobalData#AMOUNT_COMPARATOR
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof AlertThreshold) {

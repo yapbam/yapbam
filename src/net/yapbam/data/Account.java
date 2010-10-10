@@ -50,21 +50,21 @@ public class Account implements Serializable {
 		}
 	}
 
-	/** Returns the account's name
+	/** Gets the account's name
 	 * @return the account's name
 	 */
 	public String getName() {
 		return name;
 	}
 
-	/** Returns the account's initial balance.
+	/** Gets the account's initial balance.
 	 * @return the account's initial balance
 	 */
 	public double getInitialBalance() {
 		return this.initialBalance;
 	}
 
-	/** Returns the account's expense/receipt modes number.
+	/** Gets the account's expense/receipt modes number.
 	 * @param expense true for expense modes, false for receipt modes.
 	 * @return the account's expense/receipt modes number
 	 */
@@ -72,7 +72,7 @@ public class Account implements Serializable {
 		return expense?this.expenseModes.size():this.receiptModes.size();
 	}
 	
-	/** Returns one of the account's expense/receipt payment modes.
+	/** Gets one of the account's expense/receipt payment modes.
 	 * @param index the payment mode number.
 	 * @param expense true for expense modes, false for receipt modes.
 	 * @return the account's payment mode
@@ -92,7 +92,7 @@ public class Account implements Serializable {
 		return null;
 	}
 	
-	/** Returns the account's number of checkbooks.
+	/** Gets the account's number of checkbooks.
 	 * @return an integer
 	 */
 	public int getCheckbooksNumber() {
@@ -108,6 +108,11 @@ public class Account implements Serializable {
 		return this.checkbooks.get(index);
 	}
 	
+	/** Gets the index of a checkbook in the account.
+	 * @param book The checkbook to test.
+	 * @return a negative integer if the checkbook is unknown in this account,
+	 * or, else, the index of the checkbook.  
+	 */
 	public int indexOf(Checkbook book) {
 		return this.checkbooks.indexOf(book);
 	}
@@ -120,7 +125,7 @@ public class Account implements Serializable {
 		this.checkbooks.remove(book);
 	}
 	
-	/** Returns the number of transactions in this account.
+	/** Gets the number of transactions in this account.
 	 * @return the number of transactions in this account.
 	 */
 	public int getTransactionsNumber() {
@@ -177,7 +182,7 @@ public class Account implements Serializable {
 		return this.getName()+"["+this.initialBalance+"]";
 	}
 
-	/** Returns the index of a expense/receipt payment mode for this account.
+	/** Gets the index of a expense/receipt payment mode for this account.
 	 * @param mode The mode to find
 	 * @param expense true to get the index in the expense payment modes. False for receipt payment modes.
 	 * @return a negative number if the mode is unknown for this kind of transaction (expense/receipt),
@@ -187,7 +192,7 @@ public class Account implements Serializable {
 		return expense?this.expenseModes.indexOf(mode):this.receiptModes.indexOf(mode);
 	}
 	
-	/** Returns this account's total number of payment modes (expense and receipt modes).
+	/** Gets this account's total number of payment modes (expense and receipt modes).
 	 * @return this account's total number of payment modes
 	 */
 	public int getModesNumber() {
@@ -202,7 +207,7 @@ public class Account implements Serializable {
 		return this.modes.get(index);
 	}
 
-	/** Returns the index of a payment mode for this account.
+	/** Gets the index of a payment mode for this account.
 	 * @param mode The mode to find
 	 * @return a negative number if the mode is unknown, or the index if it was found.
 	 */

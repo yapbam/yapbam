@@ -58,6 +58,7 @@ public class GlobalData extends DefaultListenable {
 	/** As amount are represented by doubles, and doubles are unable to represent exactly decimal numbers,
 	 * we have to take care when we compare two amounts, especially, if we intend to know if two amounts are equals.
 	 * This comparator returns that the doubles are equals if their difference is less than the current currency precision.
+	 * @see #setDefaultCurrency(Currency)
 	 */
 	public static final Comparator<Double> AMOUNT_COMPARATOR = new Comparator<Double>() {
 		@Override
