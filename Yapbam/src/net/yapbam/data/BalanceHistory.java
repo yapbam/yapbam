@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/** This class represents the balance history.
+/** A balance history.
  * The balance history is an ordered list of periods, during one of this period, the balance is constant.
  * These periods are represented by BalanceHistoryElement class.
  * @see BalanceHistoryElement

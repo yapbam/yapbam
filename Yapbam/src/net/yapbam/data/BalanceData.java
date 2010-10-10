@@ -5,7 +5,7 @@ import java.util.*;
 import net.yapbam.data.event.*;
 import net.yapbam.util.DateUtils;
 
-/** This class represents balance information.
+/** Balance information.
  * It extends the DefaultListenable class, so a client that want to be informed of balance changes can register a listener (calling addListener).
  * Every time a changes occurs, the listener will receive an EveryThingChangedEvent.
  * @see EverythingChangedEvent

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Date;
 
-/** This class represents a balance history element.
+/** A balance history element.
  * Such an element represents the value of the balance between two dates.
  * The history itself is a list of these elements.
  * @see BalanceHistory

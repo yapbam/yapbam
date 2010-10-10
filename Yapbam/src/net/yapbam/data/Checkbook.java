@@ -3,7 +3,7 @@ package net.yapbam.data;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-/** This class represents a checkbook.
+/** A checkbook.
  */
 public class Checkbook implements Serializable {
 	private static final long serialVersionUID = 1L;

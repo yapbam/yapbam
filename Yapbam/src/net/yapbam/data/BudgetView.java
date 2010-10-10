@@ -23,8 +23,9 @@ import net.yapbam.data.event.DefaultListenable;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.util.DateUtils;
 
-/** This class represents a budget based on the filtered transactions.
+/** A budget based on the filtered data.
  *  This budget can be built on a "per month" or a "par year" basis.
+ *  @see FilteredData
  */
 public class BudgetView extends DefaultListenable {
 	private FilteredData data;
