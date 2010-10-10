@@ -3,8 +3,8 @@ package net.yapbam.data;
 import java.util.ArrayList;
 import java.util.List;
 
-/** This abstract class represents a transaction.
- * A transaction has a description, an amount, an account, a mode, a category and a list of subtransactions.
+/** An abstract transaction.
+ * These transactions have a description, an amount, an account, a mode, a category and a list of subtransactions.
  */
 public abstract class AbstractTransaction implements Cloneable {
 	private static long currentId = 0;

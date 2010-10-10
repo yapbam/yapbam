@@ -18,7 +18,7 @@ import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.util.NullUtils;
 
-/** This class represents the whole Yapbam data.
+/** The whole Yapbam data.
  *  You can also have a look at FilteredData which presents a filtered view of Yapbam data.
  *  @see FilteredData
  */
@@ -425,7 +425,7 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	/** Removes an account from the data.
-	 * If there's some transactions were attached to the account, all these transactions will be also removed.
+	 * If some transactions were attached to the account, all these transactions will be also removed.
 	 * @param account the account to be removed
 	 */
 	public void remove(Account account) {

@@ -7,7 +7,7 @@ import java.util.List;
 
 import net.yapbam.util.DateUtils;
 
-/** This class represents a transaction */
+/** A bank transaction */
 public class Transaction extends AbstractTransaction implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	

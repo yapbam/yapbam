@@ -5,9 +5,8 @@ import java.util.*;
 import net.yapbam.data.event.*;
 import net.yapbam.util.TextMatcher;
 
-/** The global data class represents the whole data of a Yapbam running instance.
- * This class represents a filter on that data retaining only the account(s) and transaction(s) the user choose to view.
- * The only event sent is the FilterChanged event.
+/** Filtered Data (the global data viewed through a filter).
+ * @see GlobalData
  */
 public class FilteredData extends DefaultListenable {
 	private static final boolean DEBUG = false;

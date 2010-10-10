@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import net.yapbam.gui.LocalizationData;
 
-/** This class represents a category (Food, Sport, etc ...) */
+/** A category (Food, Sport, etc ...) */
 public class Category implements Serializable, Comparable<Category> {
 	private static final long serialVersionUID = 1L;
 	public static final Category UNDEFINED = new Category(""); //$NON-NLS-1$

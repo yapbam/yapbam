@@ -11,7 +11,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.6.7"/>
+	<property name="yapbamVersion" value="0.7.0"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<target name="build">

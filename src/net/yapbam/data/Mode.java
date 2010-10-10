@@ -5,7 +5,7 @@ import java.io.Serializable;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 
-/** This class represents a paiement mode (Blue card, check ...) */
+/** A payment mode (Blue card, check ...) */
 public class Mode implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
