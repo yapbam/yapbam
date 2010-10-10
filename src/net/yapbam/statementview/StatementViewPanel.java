@@ -100,7 +100,10 @@ public class StatementViewPanel extends JPanel {
 				} else if (event instanceof AccountPropertyChangedEvent) {
 					String property = ((AccountPropertyChangedEvent)event).getProperty();
 					if (property.equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) {
-						//TODO
+						Account account = ((AccountPropertyChangedEvent)event).getAccount();
+						if (account.getName().equals(getAccountMenu().getSelectedItem())) {
+							refresh();
+						}
 					} else if (property.equals(AccountPropertyChangedEvent.NAME)) {
 						// An account has changed its name
 						// Change it in the menu
@@ -119,11 +122,15 @@ public class StatementViewPanel extends JPanel {
 						getAccountMenu().setActionEnabled(true);
 					}
 				} else if (event instanceof TransactionAddedEvent) {
-					//TODO
-					System.out.println ("Transaction added");
+					Transaction t = ((TransactionAddedEvent)event).getTransaction();
+					if (t.getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
+						refresh();
+					}
 				} else if (event instanceof TransactionRemovedEvent) {
-					System.out.println ("Transaction removed");
-					//TODO
+					Transaction t = ((TransactionRemovedEvent)event).getRemoved();
+					if (t.getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
+						refresh();
+					}
 				}
 			}
 		});
@@ -220,28 +227,37 @@ public class StatementViewPanel extends JPanel {
 			accountMenu.setToolTipText(LocalizationData.get("StatementView.accountMenu.tooltip")); //$NON-NLS-1$
 			accountMenu.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					int accountIndex = accountMenu.getSelectedIndex();
-					statementMenu.setActionEnabled(false);
-					statementMenu.removeAllItems();
-					if (accountIndex < 0) {
-						statements = null;
-						statementMenu.setActionEnabled(true);
-						statementMenu.setSelectedIndex(-1);
-						statementMenu.setEnabled(false);
-					} else {
-						statements = new StatementBuilder(data, data.getAccount(accountIndex)).getStatements();
-						for (int i = 0; i < statements.length; i++) {
-							String id = statements[statements.length - 1 - i].getId();
-							statementMenu.addItem(id == null ? LocalizationData.get("StatementView.notChecked") : id); //$NON-NLS-1$
-						}
-						statementMenu.setActionEnabled(true);
-						statementMenu.setEnabled(statements.length > 0);
-						statementMenu.setSelectedIndex(statements.length > 0 ? 0 : -1);
-					}
+					refresh();
 				}
 			});
 		}
 		return accountMenu;
+	}
+	
+	private void refresh() {
+		int accountIndex = accountMenu.getSelectedIndex();
+		statementMenu.setActionEnabled(false);
+		String lastSelectedStatement = (String) (statementMenu.getSelectedIndex()==0?null:statementMenu.getSelectedItem());
+		statementMenu.removeAllItems();
+		if (accountIndex < 0) {
+			statements = null;
+			statementMenu.setActionEnabled(true);
+			statementMenu.setSelectedIndex(-1);
+			statementMenu.setEnabled(false);
+		} else {
+			statements = new StatementBuilder(data, data.getAccount(accountIndex)).getStatements();
+			for (int i = 0; i < statements.length; i++) {
+				String id = statements[statements.length - 1 - i].getId();
+				statementMenu.addItem(id == null ? LocalizationData.get("StatementView.notChecked") : id); //$NON-NLS-1$
+			}
+			statementMenu.setActionEnabled(true);
+			statementMenu.setEnabled(statements.length > 0);
+			if ((lastSelectedStatement!=null) && (statementMenu.contains(lastSelectedStatement))){
+				statementMenu.setSelectedItem(lastSelectedStatement);
+			} else {
+				statementMenu.setSelectedIndex(statements.length > 0 ? 0 : -1);
+			}
+		}
 	}
 	
 	/**
