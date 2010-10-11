@@ -56,15 +56,15 @@ public class TransactionsPlugInPanel extends JPanel {
 
 		transactionTable = new TransactionTable(data);
 		this.acFilter = data.getBalanceData();
-		
-        this.editTransactionAction = new EditTransactionAction(transactionTable);
-        this.duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
-        this.deleteTransactionAction = new DeleteTransactionAction(transactionTable);
-        this.checkTransactionAction = new CheckTransactionAction(this);
-        this.convertToPericalTransactionAction = new ConvertToPeriodicalTransactionAction(transactionTable);
-                
-        new MyListener(transactionTable, new Action[]{editTransactionAction, duplicateTransactionAction, deleteTransactionAction,
-        		null, convertToPericalTransactionAction}, editTransactionAction);
+
+		this.editTransactionAction = new EditTransactionAction(transactionTable);
+		this.duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
+		this.deleteTransactionAction = new DeleteTransactionAction(transactionTable);
+		this.checkTransactionAction = new CheckTransactionAction(this);
+		this.convertToPericalTransactionAction = new ConvertToPeriodicalTransactionAction(transactionTable);
+
+		new MyListener(transactionTable, new Action[] { editTransactionAction, duplicateTransactionAction,
+				deleteTransactionAction, null, convertToPericalTransactionAction }, editTransactionAction);
         
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		String noText = ""; //$NON-NLS-1$
@@ -201,20 +201,20 @@ public class TransactionsPlugInPanel extends JPanel {
 
 		@Override
 		protected void fillPopUp(JPopupMenu popup) {
-        	if (checkModePane.isOk()) {
-        		popup.add(new JMenuItem(checkTransactionAction));
-        		popup.addSeparator();
-        	}
+			if (checkModePane.isOk()) {
+				popup.add(new JMenuItem(checkTransactionAction));
+				popup.addSeparator();
+			}
 			super.fillPopUp(popup);
 		}
 
 		@Override
 		protected Action getDoubleClickAction() {
-      	  if (checkModePane.isOk()) {
-    		  return checkTransactionAction;
-    	  } else {
-    		  return super.getDoubleClickAction();
-    	  }
+			if (checkModePane.isOk()) {
+				return checkTransactionAction;
+			} else {
+				return super.getDoubleClickAction();
+			}
 		}
 		
 	}

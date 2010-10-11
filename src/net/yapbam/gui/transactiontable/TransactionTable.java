@@ -24,8 +24,8 @@ public class TransactionTable extends JTable {
 	private FilteredData data;
 
 	static {
-	    URL imgURL = MainMenuBar.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
-	    Toolkit toolkit = Toolkit.getDefaultToolkit();
+		URL imgURL = MainMenuBar.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		CHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(5, 13), "checked"); //$NON-NLS-1$
 	}
 
