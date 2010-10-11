@@ -25,6 +25,13 @@ public class CellRenderer extends DefaultTableCellRenderer {
 			value = LocalizationData.getCurrencyInstance().format(value);
 		}
 		this.setHorizontalAlignment(alignment);
+		if (isSelected) {
+      this.setBackground(table.getSelectionBackground());
+      this.setForeground(table.getSelectionForeground());
+    } else {
+      this.setBackground(table.getBackground());
+      this.setForeground(table.getForeground());
+		}
 		setValue(value);
 		return this;
 	}

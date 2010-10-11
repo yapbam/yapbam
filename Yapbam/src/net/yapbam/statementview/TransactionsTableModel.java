@@ -61,4 +61,8 @@ class TransactionsTableModel extends AbstractTableModel {
 		this.transactions = transactions;
 		this.fireTableDataChanged();
 	}
+
+	public Transaction[] getTransactions() {
+		return this.transactions;
+	}
 }
