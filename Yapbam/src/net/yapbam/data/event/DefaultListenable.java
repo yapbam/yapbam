@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-/** A listenable class allows some other classes to listen to the events occuring on the listenable class.
+/** A listenable class allows some other classes to listen to the events occurring on the listenable class.
  *	Please note that if the traceEvents java system property is set to true, all data events are trace on stderr. 
  */
 public abstract class DefaultListenable {
@@ -15,7 +15,7 @@ public abstract class DefaultListenable {
 	private transient Collection<DataListener> listeners;
 	private transient boolean eventsDisabled;
 	
-	/** Construtor.
+	/** Constructor.
 	 * Events throwing is enabled.
 	 * @see #setEventsEnabled(boolean)
 	 */
@@ -24,7 +24,7 @@ public abstract class DefaultListenable {
 		this.setEventsEnabled(true);
 	}
 	
-	/** Disable the event throwing (for instance if this instance performs a lot of changes on its data,
+	/** Enables/Disables the event throwing (for instance if this instance performs a lot of changes on its data,
 	 * it would be most efficient to disable events, perform the changes, enable events, and then send an EverythingChangedEvent).
 	 * @param enabled true to enable events throwing.
 	 */
@@ -32,14 +32,14 @@ public abstract class DefaultListenable {
 		this.eventsDisabled = !enabled;
 	}
 	
-	/** Returns whether events are enabled or not.
+	/** Tests whether events are enabled or not.
 	 * @return true if events are enabled.
 	 */
 	protected boolean IsEventsEnabled() {
 		return !this.eventsDisabled;
 	}
     
-	/** Send an event to every listeners.
+	/** Sends an event to every listeners.
 	 * @param event The event to send.
 	 */
 	protected void fireEvent(DataEvent event) {
@@ -51,18 +51,19 @@ public abstract class DefaultListenable {
 			if (TRACE_EVENTS) trace("Send event "+event+" on "+this+" to "+listener);
 			indent += 2;
 			listener.processEvent(event);
+			//FIXME catch exceptions thrown by the listeners (for other listeners to receive the event).
 			indent -= 2;
 		}
 	}
 	
 	private void trace (String message) {
 		for (int i = 0; i < indent; i++) {
-			System.err.print(" ");
+			System.err.print(' ');
 		}
 		System.err.println(message);
 	}
 
-	/** Add a new listener on this.
+	/** Adds a new listener on this.
 	 * @param listener The listener to add.
 	 */
 	public void addListener(DataListener listener) {
@@ -71,7 +72,7 @@ public abstract class DefaultListenable {
 		listeners.add(listener);
 	}
 	
-	/** Remove all the previously registered listeners.
+	/** Removes all the previously registered listeners.
 	 */
 	public void clearListeners() {
 		if (TRACE_EVENTS || TRACE_LISTENERS) System.err.println ("All listeners are cleared on "+this);
