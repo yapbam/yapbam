@@ -15,9 +15,10 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.MainMenuBar;
+import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.util.XTableColumnModel;
 
-public class TransactionTable extends JTable {
+public class TransactionTable extends JTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;
 	private static final Cursor CHECK_CURSOR;
 	
