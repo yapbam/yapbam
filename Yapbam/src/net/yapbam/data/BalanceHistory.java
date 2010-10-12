@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /** A balance history.
- * The balance history is an ordered list of periods, during one of this period, the balance is constant.
+ * The balance history is an ordered list of periods, during one of these periods, the balance is constant.
  * These periods are represented by BalanceHistoryElement class.
  * @see BalanceHistoryElement
  * @see BalanceData#getBalanceHistory()
