@@ -1,6 +1,5 @@
 package net.yapbam.statementview;
 
-import java.awt.Component;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
@@ -26,16 +25,16 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
 import net.yapbam.data.event.TransactionRemovedEvent;
-import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
-import net.yapbam.gui.dialogs.TransactionDialog;
+import net.yapbam.gui.actions.DeleteTransactionAction;
+import net.yapbam.gui.actions.DuplicateTransactionAction;
+import net.yapbam.gui.actions.EditTransactionAction;
+import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.CoolJComboBox;
 import net.yapbam.util.DateUtils;
 import net.yapbam.util.NullUtils;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -46,7 +45,6 @@ import java.awt.Color;
 import javax.swing.BorderFactory;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -415,46 +413,23 @@ public class StatementViewPanel extends JPanel {
 			transactionsTable.setModel(this.model);
 			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
 			transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			Action edit = new EditTransactionAction();
-			Action delete = new DeleteTransactionAction();
-			new JTableListener(transactionsTable, new Action[]{edit, delete}, edit);
+			TransactionSelector selector = new TransactionSelector() {
+				@Override
+				public Transaction getSelectedTransaction() {
+					int index = getTransactionsTable().getSelectedRow();
+					return (index>=0) ? model.getTransactions()[index]:null;
+				}
+				
+				@Override
+				public GlobalData getGlobalData() {
+					return data;
+				}
+			};
+			Action edit = new EditTransactionAction(selector);
+			Action delete = new DeleteTransactionAction(selector);
+			Action duplicate = new DuplicateTransactionAction(selector);
+			new JTableListener(transactionsTable, new Action[]{edit, duplicate, delete}, edit);
 		}
 		return transactionsTable;
-	}
-	
-	@SuppressWarnings("serial")
-	class EditTransactionAction extends AbstractAction {		
-		public EditTransactionAction() {
-			super(LocalizationData.get("MainMenu.Transactions.Edit"), IconManager.EDIT_TRANSACTION); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Edit.ToolTip")); //$NON-NLS-1$
-	        putValue(Action.MNEMONIC_KEY, (int)LocalizationData.getChar("MainMenu.Transactions.Edit.Mnemonic")); //$NON-NLS-1$
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			int index = getTransactionsTable().getSelectedRow();
-			if (index>=0) {
-				Transaction transaction = model.getTransactions()[index];
-				TransactionDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction, true, true);
-			}
-		}
-	}
-	
-	@SuppressWarnings("serial")
-	class DeleteTransactionAction extends AbstractAction {
-		public DeleteTransactionAction() {
-			super(LocalizationData.get("MainMenu.Transactions.Delete"), IconManager.DELETE_TRANSACTION);
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Delete.ToolTip"));
-	        putValue(Action.MNEMONIC_KEY,(int)LocalizationData.getChar("MainMenu.Transactions.Delete.Mnemonic")); //$NON-NLS-1$
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			int index = getTransactionsTable().getSelectedRow();
-			if (index>=0) {
-				Transaction transaction = model.getTransactions()[index];
-				data.remove(transaction);
-			}
-		}
 	}
 }
