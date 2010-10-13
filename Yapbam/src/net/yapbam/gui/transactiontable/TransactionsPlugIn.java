@@ -71,7 +71,10 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	}
 
 	public void restoreState() {
-		YapbamState.restoreState(panel.getTransactionTable(), STATE_PREFIX);
+		TransactionTable transactionTable = panel.getTransactionTable();
+		YapbamState.restoreState(transactionTable, STATE_PREFIX);
+		// Scroll to last line
+		transactionTable.scrollRectToVisible(transactionTable.getCellRect(transactionTable.getRowCount()-1, 0, true));
 	}
 
 	public void saveState() {

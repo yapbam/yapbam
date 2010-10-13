@@ -29,7 +29,7 @@ public class YapbamState {
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
 	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
 //	private static final String SELECTED_ROW = "selectedRow"; //$NON-NLS-1$
-	private static final String SCROLL_POSITION = "scrollPosition"; //$NON-NLS-1$
+//	private static final String SCROLL_POSITION = "scrollPosition"; //$NON-NLS-1$
 
 	private static final String FRAME_SIZE_WIDTH = "frame.size.width"; //$NON-NLS-1$
 	private static final String FRAME_SIZE_HEIGHT = "frame.size.height"; //$NON-NLS-1$
@@ -152,9 +152,9 @@ public class YapbamState {
 //			int index = Integer.parseInt(valueString);
 //			if (index < table.getRowCount()) table.getSelectionModel().setSelectionInterval(index, index);
 //		}
-		// And the scroll position
-		Rectangle visibleRect = YapbamState.getRectangle(prefix+SCROLL_POSITION);
-		if (visibleRect!=null) table.scrollRectToVisible(visibleRect);
+		// And the scroll position (not sure it's a good idea)
+//		Rectangle visibleRect = YapbamState.getRectangle(prefix+SCROLL_POSITION);
+//		if (visibleRect!=null) table.scrollRectToVisible(visibleRect);
 	}
 
 	public static void saveState(JTable table, String prefix) {
@@ -168,7 +168,7 @@ public class YapbamState {
 			INSTANCE.properties.put(prefix+COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
 		}
 //		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
-		YapbamState.put(prefix+SCROLL_POSITION, table.getVisibleRect());
+//		YapbamState.put(prefix+SCROLL_POSITION, table.getVisibleRect());
 	}
 
 	public static String get(String key) {
