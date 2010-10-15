@@ -21,7 +21,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.ModePropertyChangedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
-import net.yapbam.data.event.TransactionRemovedEvent;
+import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.LocalizationData;
 
 class TransactionsTableModel extends GenericTransactionTableModel implements DataListener {
@@ -144,10 +144,17 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		} else if (event instanceof TransactionAddedEvent) {
 			int index = this.data.indexOf(((TransactionAddedEvent)event).getTransaction());;
 			fireTableRowsInserted(index, index);
-		} else if (event instanceof TransactionRemovedEvent) {
-			this.setSpread(((TransactionRemovedEvent)event).getRemoved(), false);
-			int index = ((TransactionRemovedEvent)event).getIndex();
-			fireTableRowsDeleted(index, index);
+		} else if (event instanceof TransactionsRemovedEvent) {
+			Transaction[] removed = ((TransactionsRemovedEvent)event).getRemoved();
+			for (int i = 0; i < removed.length; i++) {
+				this.setSpread(removed[i], false);
+			}
+			if (removed.length==1) {
+				int index = ((TransactionsRemovedEvent)event).getIndexes()[0];
+				fireTableRowsDeleted(index, index);
+			} else {
+				fireTableDataChanged();
+			}
 		} else if (event instanceof AccountPropertyChangedEvent) {
 			if (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)) {
 				fireTableDataChanged();			
