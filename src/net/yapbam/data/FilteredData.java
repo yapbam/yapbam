@@ -69,15 +69,29 @@ public class FilteredData extends DefaultListenable {
 							fireEvent(new TransactionAddedEvent(FilteredData.this, transaction));
 						}
 					}
-				} else if (event instanceof TransactionRemovedEvent) {
-					Transaction transaction = ((TransactionRemovedEvent)event).getRemoved();
-					if (isOk(transaction.getAccount())) {
-						balanceData.updateBalance(transaction, false);
-						int index = Collections.binarySearch(transactions, transaction, comparator);
-						if (index>=0) {
-							transactions.remove(index);
-							fireEvent(new TransactionRemovedEvent(FilteredData.this, index, transaction));
+				} else if (event instanceof TransactionsRemovedEvent) {
+					Transaction[] removedTransactions = ((TransactionsRemovedEvent)event).getRemoved();
+					List<Integer> filteredRemovedIndexes = new ArrayList<Integer>(removedTransactions.length);
+					for (int i = 0; i < removedTransactions.length; i++) {
+						if (isOk(removedTransactions[i].getAccount())) {
+							balanceData.updateBalance(removedTransactions[i], false);
+							int index = Collections.binarySearch(transactions, removedTransactions[i], comparator);
+							if (index>=0) {
+								filteredRemovedIndexes.add(index);
+							} else {
+								System.out.println ("What's that fuck !"); //FIXME Just a simple test
+							}
 						}
+					}
+					if (filteredRemovedIndexes.size()!=0) {
+						Collections.sort(filteredRemovedIndexes);
+						int[] indexes = new int[filteredRemovedIndexes.size()];
+						removedTransactions = new Transaction[indexes.length];
+						for (int i = indexes.length-1; i >= 0; i--) {
+							indexes[i] = filteredRemovedIndexes.get(i);
+							removedTransactions[i] = transactions.remove(indexes[i]);
+						}
+						fireEvent(new TransactionsRemovedEvent(FilteredData.this, indexes, removedTransactions));
 					}
 				} else if (event instanceof AccountAddedEvent) {
 					Account account = ((AccountAddedEvent)event).getAccount();

@@ -23,7 +23,7 @@ import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.ModeAddedEvent;
 import net.yapbam.data.event.ModeRemovedEvent;
 import net.yapbam.data.event.TransactionAddedEvent;
-import net.yapbam.data.event.TransactionRemovedEvent;
+import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
@@ -215,8 +215,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel {
 				account = ((AccountPropertyChangedEvent)event).getAccount();
 			} else if (event instanceof TransactionAddedEvent) {
 				account = ((TransactionAddedEvent)event).getTransaction().getAccount();
-			} else if (event instanceof TransactionRemovedEvent) {
-				account = ((TransactionRemovedEvent)event).getRemoved().getAccount();
+			} else if (event instanceof TransactionsRemovedEvent) {
+				this.fireTableDataChanged(); //TODO Refresh only modified accounts ?
 			} else if (event instanceof ModeAddedEvent) {
 				account = ((ModeAddedEvent)event).getAccount();
 			} else if (event instanceof ModeRemovedEvent) {

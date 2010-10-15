@@ -316,19 +316,19 @@ public class GlobalData extends DefaultListenable {
 	public void clear() {
 		this.categories = new ArrayList<Category>();
 		this.categories.add(Category.UNDEFINED);
-	    this.accounts = new ArrayList<Account>();
-	    this.periodicals = new ArrayList<PeriodicalTransaction>();
-	    this.transactions = new ArrayList<Transaction>();
-	    this.uri = null;
-	    this.password = null;
-	    this.somethingChanged=false;
+		this.accounts = new ArrayList<Account>();
+		this.periodicals = new ArrayList<PeriodicalTransaction>();
+		this.transactions = new ArrayList<Transaction>();
+		this.uri = null;
+		this.password = null;
+		this.somethingChanged = false;
 		fireEvent(new EverythingChangedEvent(this));
 	}
 
 	public void removeTransaction(int index) {
 		Transaction removed = this.transactions.remove(index);
 		removed.getAccount().removeTransaction(removed);
-		this.fireEvent(new TransactionRemovedEvent(this, index, removed));
+		this.fireEvent(new TransactionsRemovedEvent(this, new int[]{index}, new Transaction[]{removed}));
 		setChanged();
 	}
 	
@@ -433,9 +433,22 @@ public class GlobalData extends DefaultListenable {
 		int index = this.accounts.indexOf(account);
 		if (index>=0){
 			if (account.getTransactionsNumber()!=0) {
+				boolean old = this.isEventsEnabled();
+				this.setEventsEnabled(false);
+				int[] removedIndexes = new int[account.getTransactionsNumber()];
+				Transaction[] removed = new Transaction[removedIndexes.length];
+				int removedIndex = removedIndexes.length-1;
 				for (int i = this.transactions.size()-1; i >= 0 ; i--) {
-					if (this.transactions.get(i).getAccount()==account) removeTransaction(i);
+					Transaction transaction = this.transactions.get(i);
+					if (transaction.getAccount()==account) {
+						removedIndexes[removedIndex] = i;
+						removed[removedIndex] = transaction;
+						removedIndex--;
+						removeTransaction(i);
+					}
 				}
+				this.setEventsEnabled(old);
+				this.fireEvent(new TransactionsRemovedEvent(this, removedIndexes, removed));
 			}
 			for (int i = this.periodicals.size()-1; i >= 0 ; i--) {
 				if (this.periodicals.get(i).getAccount()==account) removePeriodicalTransaction(i);
