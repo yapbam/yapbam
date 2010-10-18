@@ -10,8 +10,8 @@ public class TransactionsRemovedEvent extends DataEvent {
 	
 	/** Constructor.
 	 * @param source The object that thrown the event
-	 * @param indexes indexes were the removed elements were (be careful, the elements aren't in the source anymore)
-	 * @param removed the removed transactions
+	 * @param indexes The indexes where the removed elements were (be careful, the elements aren't in the source anymore)
+	 * @param removed The removed transactions
 	 */
 	public TransactionsRemovedEvent(Object source, int[] indexes, Transaction[] removed) {
 		super(source);
@@ -19,8 +19,8 @@ public class TransactionsRemovedEvent extends DataEvent {
 		this.removed = removed;
 	}
 
-	/** Gets index were the removed element was in the source. 
-	 * @return indexes were the removed elements were (be careful, the elements aren't in the source anymore).
+	/** Gets indexes where the removed element were in the source. 
+	 * @return an int array, the indexes where the removed elements were (be careful, the elements aren't in the source anymore).
 	 */
 	public int[] getIndexes() {
 		return indexes;
