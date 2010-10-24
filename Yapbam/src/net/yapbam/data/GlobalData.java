@@ -261,7 +261,7 @@ public class GlobalData extends DefaultListenable {
 						Account account = transaction.getAccount();
 						for (int j = 0; j < account.getCheckbooksNumber(); j++) {
 							Checkbook checkbook = account.getCheckbook(j);
-							BigInteger shortNumber = checkbook.getShortNumber(number);
+							BigInteger shortNumber = checkbook.getNumber(number);
 							if (!checkbook.isEmpty() && (shortNumber!=null)) {
 								if (shortNumber.compareTo(checkbook.getNext())>=0) {
 									Checkbook newOne = new Checkbook(checkbook.getPrefix(), checkbook.getFirst(), checkbook.size(), shortNumber.equals(checkbook.getLast())?null:shortNumber.add(BigInteger.ONE));

@@ -41,7 +41,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 					Checkbook old = checkbookChangedEvt.getOldCheckbook();
 					if (!old.isEmpty() && (checkbookChangedEvt.getNewCheckbook().isEmpty())) {
 						// A checkbook just finished, ask what to do
-						String message = MessageFormat.format(LocalizationData.get("checkbookDialog.finished.message"),old.getCheckNumber(0),old.getCheckNumber(old.size()-1)); //$NON-NLS-1$
+						String message = MessageFormat.format(LocalizationData.get("checkbookDialog.finished.message"),old.getFullNumber(old.getFirst()),old.getFullNumber(old.getLast())); //$NON-NLS-1$
 						String[] options = new String[]{LocalizationData.get("GenericButton.ignore"),LocalizationData.get("checkbookDialog.finished.delete"),LocalizationData.get("checkbookDialog.finished.createNew"),LocalizationData.get("checkbookDialog.finished.DeleteAndCreateNew")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						int choice = JOptionPane.showOptionDialog(AbstractDialog.getOwnerWindow(CheckbookListPanel.this), message, LocalizationData.get("checkbookDialog.finished.title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[3]);  //$NON-NLS-1$
 						if ((choice==1) || (choice==3)) {

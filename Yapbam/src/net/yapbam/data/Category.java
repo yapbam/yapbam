@@ -7,19 +7,32 @@ import net.yapbam.gui.LocalizationData;
 /** A category (Food, Sport, etc ...) */
 public class Category implements Serializable, Comparable<Category> {
 	private static final long serialVersionUID = 1L;
+	/** The undefined category. */
 	public static final Category UNDEFINED = new Category(""); //$NON-NLS-1$
 
 	private String name;
 
+	/** Constructor.
+	 * @param name The name of the category.
+	 * @throws IllegalArgumentException if the parameter is null.
+	 */
 	public Category(String name) {
 		if (name==null) throw new IllegalArgumentException();
 		this.name = name;
 	}
 
+	/** Gets the category name.
+	 * @return a String
+	 */
 	public String getName() {
 		return this.name.length()==0 ? LocalizationData.get("Category.undefined") : this.name; //$NON-NLS-1$
 	}
 
+	/** Tests whether an object is equal to this.
+	 * Two categories are equals if they have the same name.
+	 * @param obj The object to compare with the category.
+	 * @return true if the categories are equal.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		Category category = (Category)obj;
@@ -31,6 +44,11 @@ public class Category implements Serializable, Comparable<Category> {
 		return name.hashCode();
 	}
 
+	/** Compares this to another category.
+	 * The categories are compare accordingly to their names with String.compareTo.
+	 * @param obj The object to compare with the category.
+	 * @return an int.
+	 */
 	@Override
 	public int compareTo(Category o) {
 		return this.name.compareTo(o.name);
