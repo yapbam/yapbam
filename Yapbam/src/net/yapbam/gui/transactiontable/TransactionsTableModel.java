@@ -20,7 +20,7 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.ModePropertyChangedEvent;
-import net.yapbam.data.event.TransactionAddedEvent;
+import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.LocalizationData;
 
@@ -141,9 +141,14 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		if (event instanceof EverythingChangedEvent) {
 			this.clearSpreadData();
 			fireTableDataChanged();
-		} else if (event instanceof TransactionAddedEvent) {
-			int index = this.data.indexOf(((TransactionAddedEvent)event).getTransaction());;
-			fireTableRowsInserted(index, index);
+		} else if (event instanceof TransactionsAddedEvent) {
+			Transaction[] transactions = ((TransactionsAddedEvent)event).getTransactions();
+			if (transactions.length==1) {
+				int index = this.data.indexOf(transactions[0]);
+				fireTableRowsInserted(index, index);
+			} else {
+				fireTableDataChanged();
+			}
 		} else if (event instanceof TransactionsRemovedEvent) {
 			Transaction[] removed = ((TransactionsRemovedEvent)event).getRemoved();
 			for (int i = 0; i < removed.length; i++) {

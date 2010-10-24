@@ -39,7 +39,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent)
 					|| (event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) || (event instanceof AccountPropertyChangedEvent)
-					|| (event instanceof TransactionAddedEvent) || (event instanceof TransactionsRemovedEvent)) {
+					|| (event instanceof TransactionsAddedEvent) || (event instanceof TransactionsRemovedEvent)) {
 					panel.setBalanceHistory();
 					testAlert();
 				}
