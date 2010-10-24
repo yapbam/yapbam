@@ -59,16 +59,21 @@ public class FilteredData extends DefaultListenable {
 					if ((validCategories==null) || validCategories.remove(category)) {
 						fireEvent(new CategoryRemovedEvent(FilteredData.this, -1, category)); //TODO index is not the right one
 	    			}
-				} else if (event instanceof TransactionAddedEvent) {
-					Transaction transaction = ((TransactionAddedEvent)event).getTransaction();
-					if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
-						balanceData.updateBalance(transaction, true);
-						if (isOk(transaction)) { // If the added transaction match with the whole filter
-							int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
-							transactions.add(index, transaction);
-							fireEvent(new TransactionAddedEvent(FilteredData.this, transaction));
+				} else if (event instanceof TransactionsAddedEvent) {
+					Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
+					ArrayList<Transaction> okTransactions = new ArrayList<Transaction>(ts.length);
+					for (int i = 0; i < ts.length; i++) {
+						Transaction transaction = ts[i];
+						if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
+							balanceData.updateBalance(transaction, true);
+							if (isOk(transaction)) { // If the added transaction matches with the whole filter
+								okTransactions.add(transaction);
+								int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
+								transactions.add(index, transaction);
+							}
 						}
 					}
+					fireEvent(new TransactionsAddedEvent(FilteredData.this, okTransactions.toArray(new Transaction[okTransactions.size()])));
 				} else if (event instanceof TransactionsRemovedEvent) {
 					Transaction[] removedTransactions = ((TransactionsRemovedEvent)event).getRemoved();
 					List<Integer> filteredRemovedIndexes = new ArrayList<Integer>(removedTransactions.length);

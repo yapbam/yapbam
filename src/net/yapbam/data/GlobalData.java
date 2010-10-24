@@ -244,7 +244,7 @@ public class GlobalData extends DefaultListenable {
 		this.transactions.add(index, transaction);
 		Account account = transaction.getAccount();
 		account.add(transaction);
-		fireEvent(new TransactionAddedEvent(this, transaction));
+		fireEvent(new TransactionsAddedEvent(this, new Transaction[]{transaction}));
 		this.setChanged();
 		if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
 			// Detach check

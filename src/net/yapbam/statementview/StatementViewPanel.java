@@ -23,7 +23,7 @@ import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.data.event.TransactionAddedEvent;
+import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.DeleteTransactionAction;
@@ -127,10 +127,13 @@ public class StatementViewPanel extends JPanel {
 						getAccountMenu().setSelectedIndex(index);
 						getAccountMenu().setActionEnabled(true);
 					}
-				} else if (event instanceof TransactionAddedEvent) {
-					Transaction t = ((TransactionAddedEvent)event).getTransaction();
-					if (t.getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
-						refresh();
+				} else if (event instanceof TransactionsAddedEvent) {
+					Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
+					for (int i = 0; i < ts.length; i++) {
+						if (ts[i].getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
+							refresh();
+							break;
+						}
 					}
 				} else if (event instanceof TransactionsRemovedEvent) {
 					boolean refresh = false;
