@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /** A checkbook.
+ * A check number is composed of a prefix, which could be not numeric and a number.
+ * All the check in a checkbook share the same prefix and have consecutive numbers.
+ * The concatenation of prefix and number is the check "Full number".
  */
 public class Checkbook implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +36,7 @@ public class Checkbook implements Serializable {
 		}
 	}
 	
-	/** Returns the number of the next available check in the checkbook
+	/** Gets the number of the next available check in the checkbook
 	 * @return the check number, or null if there is no more check in this checkbook
 	 */
 	public BigInteger getNext() {
@@ -41,9 +44,23 @@ public class Checkbook implements Serializable {
 		return getFirst().add(BigInteger.valueOf(used));
 	}
 
-	public String getCheckNumber(int index) {
+	/** Gets the number of a check by its index (position) in the checkbook.
+	 * @param index the check's index (0 is the index of the first check).
+	 * @return the check number, or null if the checkbook has less than index-1 checks
+	 */
+	public BigInteger get(int index) {
 		if (index>=this.size) return null;
-		String number = prefix + this.firstNumber.add(BigInteger.valueOf(index)).toString();
+		return getFirst().add(BigInteger.valueOf(index));
+	}
+
+	/** Converts a short check number (without prefix) to a full check number (with the prefix).
+	 * @param shortNumber the short check number
+	 * @return the full check number or null if the argument is null.
+	 * @see #getNumber(String)
+	 */
+	public String getFullNumber(BigInteger shortNumber) {
+		if (shortNumber==null) return null;
+		String number = prefix + shortNumber.toString();
 		StringBuffer leadingZeros = new StringBuffer();
 		for (int i = number.length(); i < this.numberLength; i++) {
 			leadingZeros.append('0');
@@ -52,8 +69,8 @@ public class Checkbook implements Serializable {
 		return number;
 	}
 		
-	/** Tests if the checkbook is empty
-	 * @return true if it is empty
+	/** Tests whether the checkbook is empty or not
+	 * @return true if this is empty
 	 */
 	public boolean isEmpty() {
 		return used >= size;
@@ -66,7 +83,7 @@ public class Checkbook implements Serializable {
 		return prefix;
 	}
 
-	/** Gets the first check number of this book (not the first still available).
+	/** Gets the first check short number of this book (not the first still available).
 	 * @return an BigInteger, the check number, not including any prefix
 	 * @see #getNext()
 	 */
@@ -74,7 +91,7 @@ public class Checkbook implements Serializable {
 		return firstNumber;
 	}
 	
-	/** Gets the last check number of this book.
+	/** Gets the last check short number of this book.
 	 * @return an BigInteger, the check number, not including any prefix
 	 * @see #getFirst()
 	 */
@@ -106,7 +123,7 @@ public class Checkbook implements Serializable {
 
 	@Override
 	public String toString() {
-		return prefix+"["+getCheckNumber(0)+"-"+getCheckNumber(size-1)+"]->"+getNextCheckNumber();
+		return prefix+"["+getFullNumber(getNext())+"-"+getFullNumber(getLast())+"]->"+getFullNumber(getNext());
 	}
 
 	void copy(Checkbook checkbook) {
@@ -117,17 +134,14 @@ public class Checkbook implements Serializable {
 		this.used = checkbook.used;
 	}
 
-	public String getNextCheckNumber() {
-		return getCheckNumber(used);
-	}
-
 	/** Returns the short number (without prefix) of a full check number (including its prefix).
-	 * @param number The full number of the check.
+	 * @param fullNumber The full number of the check.
 	 * @return a BigInteger or null if the check number is not is this checkbook.
+	 * @see #getFullNumber(BigInteger)
 	 */
-	public BigInteger getShortNumber(String number) {
-		if (!number.startsWith(this.prefix)) return null;
-		String numberString = number.substring(this.prefix.length());
+	public BigInteger getNumber(String fullNumber) {
+		if (!fullNumber.startsWith(this.prefix)) return null;
+		String numberString = fullNumber.substring(this.prefix.length());
 		try {
 			BigInteger result = new BigInteger(numberString);
 			if ((result.compareTo(this.firstNumber)<0) || (result.compareTo(this.getFirst().add(BigInteger.valueOf(this.size)))>=0)) return null;

@@ -106,7 +106,7 @@ public class CheckNumberPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					Checkbook book = CheckbookDialog.open(data, account, AbstractDialog.getOwnerWindow(newButton));
 					if (book!=null) {
-						numbers.addItem(book.getNextCheckNumber());
+						numbers.addItem(book.getFullNumber(book.getNext()));
 						numbers.setSelectedIndex(numbers.getItemCount()-1);
 					}
 				}
@@ -126,7 +126,7 @@ public class CheckNumberPanel extends JPanel {
 		numbers.removeAllItems();
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
 			Checkbook checkbook = account.getCheckbook(i);
-			if (!checkbook.isEmpty()) numbers.addItem(checkbook.getNextCheckNumber());
+			if (!checkbook.isEmpty()) numbers.addItem(checkbook.getFullNumber(checkbook.getNext()));
 		}
 	}
 	
