@@ -239,6 +239,13 @@ public class GlobalData extends DefaultListenable {
 		return this.transactions.get(index);
 	}
 
+	public void add(Transaction[] transactions) {
+		//TODO rewrite to send only one TransactionsAddedEvent
+		for (int i = 0; i < transactions.length; i++) {
+			add(transactions[i]);
+		}
+	}
+
 	public void add(Transaction transaction) {
 		int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
 		this.transactions.add(index, transaction);
@@ -640,6 +647,4 @@ public class GlobalData extends DefaultListenable {
 			this.setChanged();
 		}
 	}
-
-
 }
