@@ -239,47 +239,82 @@ public class GlobalData extends DefaultListenable {
 		return this.transactions.get(index);
 	}
 
+	/** Adds transactions.
+	 * @param transactions The transactions to add
+	 */
 	public void add(Transaction[] transactions) {
-		//TODO rewrite to send only one TransactionsAddedEvent
 		for (int i = 0; i < transactions.length; i++) {
-			add(transactions[i]);
+			Transaction transaction = transactions[i];
+			int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
+			this.transactions.add(index, transaction);
+			Account account = transaction.getAccount();
+			account.add(transaction);
 		}
-	}
-
-	public void add(Transaction transaction) {
-		int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
-		this.transactions.add(index, transaction);
-		Account account = transaction.getAccount();
-		account.add(transaction);
-		fireEvent(new TransactionsAddedEvent(this, new Transaction[]{transaction}));
+		fireEvent(new TransactionsAddedEvent(this, transactions));
 		this.setChanged();
-		if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
-			// Detach check
-			String number = transaction.getNumber();
-			if (number!=null) {
-				for (int i = 0; i < account.getCheckbooksNumber(); i++) {
-					Checkbook checkbook = account.getCheckbook(i);
-					BigInteger shortNumber = checkbook.getShortNumber(number);
-					if (!checkbook.isEmpty() && (shortNumber!=null)) {
-						if (shortNumber.compareTo(checkbook.getNext())>=0) {
-							Checkbook newOne = new Checkbook(checkbook.getPrefix(), checkbook.getFirst(), checkbook.size(), shortNumber.equals(checkbook.getLast())?null:shortNumber.add(BigInteger.ONE));
-							setCheckbook(account, checkbook, newOne);
+		for (int i = 0; i < transactions.length; i++) {
+			Transaction transaction = transactions[i];
+			if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
+					// Detach check
+					String number = transaction.getNumber();
+					if (number!=null) {
+						Account account = transaction.getAccount();
+						for (int j = 0; j < account.getCheckbooksNumber(); j++) {
+							Checkbook checkbook = account.getCheckbook(j);
+							BigInteger shortNumber = checkbook.getShortNumber(number);
+							if (!checkbook.isEmpty() && (shortNumber!=null)) {
+								if (shortNumber.compareTo(checkbook.getNext())>=0) {
+									Checkbook newOne = new Checkbook(checkbook.getPrefix(), checkbook.getFirst(), checkbook.size(), shortNumber.equals(checkbook.getLast())?null:shortNumber.add(BigInteger.ONE));
+									setCheckbook(account, checkbook, newOne);
+								}
+								break;
+							}
 						}
-						break;
 					}
-				}
 			}
 		}
 	}
+
+	/** Adds a transaction.
+	 * @param transaction The transaction to add.
+	 */
+	public void add (Transaction transaction) {
+		add(new Transaction[]{transaction});
+	}
 	
-	public boolean remove(Transaction transaction) {
-		int index = indexOf(transaction);
-		if (index>=0) {
-			this.removeTransaction(index);
-			return true;
-		} else {
-			return false;
+	/** Removes some transactions from this.
+	 * Note : that if one or more transactions are not in this, they are ignored.
+	 * @param transactions The transactions to be removed.
+	 */
+	public void remove(Transaction[] transactions) {
+		int nb = 0; // The number of effectively removed transactions (the ones in found this).
+		int[] indexes = new int[transactions.length];
+		for (int i = 0; i < transactions.length; i++) {
+			indexes[i] = indexOf(transactions[i]);
+			if (indexes[i]>=0) nb++;
 		}
+		if (nb>0) {
+			Transaction[] removed = new Transaction[nb];
+			int[] removedIndexes = new int[nb];
+			int j = 0;
+			for (int i = 0; i < indexes.length; i++) {
+				if (indexes[i]>=0) {
+					removed[j] = this.transactions.remove(indexes[i]);
+					removed[j].getAccount().removeTransaction(removed[j]);
+					j++;
+				}
+			}
+			this.fireEvent(new TransactionsRemovedEvent(this, removedIndexes, removed));
+			setChanged();
+		}
+	}
+
+	/** Removes a transaction from this.
+	 * If the transaction is not in this, does nothing. 
+	 * @param transaction
+	 */
+	public void remove(Transaction transaction) {
+		remove(new Transaction[] {transaction});
 	}
 	
 	public int indexOf(Transaction transaction) {
@@ -332,13 +367,6 @@ public class GlobalData extends DefaultListenable {
 		fireEvent(new EverythingChangedEvent(this));
 	}
 
-	public void removeTransaction(int index) {
-		Transaction removed = this.transactions.remove(index);
-		removed.getAccount().removeTransaction(removed);
-		this.fireEvent(new TransactionsRemovedEvent(this, new int[]{index}, new Transaction[]{removed}));
-		setChanged();
-	}
-	
 	public void add(PeriodicalTransaction periodical) {
 		int index = -Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR)-1;
 		this.periodicals.add(index, periodical);
@@ -440,22 +468,16 @@ public class GlobalData extends DefaultListenable {
 		int index = this.accounts.indexOf(account);
 		if (index>=0){
 			if (account.getTransactionsNumber()!=0) {
-				boolean old = this.isEventsEnabled();
-				this.setEventsEnabled(false);
-				int[] removedIndexes = new int[account.getTransactionsNumber()];
-				Transaction[] removed = new Transaction[removedIndexes.length];
-				int removedIndex = removedIndexes.length-1;
+				Transaction[] removed = new Transaction[account.getTransactionsNumber()];
+				int removedIndex = 0;
 				for (int i = this.transactions.size()-1; i >= 0 ; i--) {
 					Transaction transaction = this.transactions.get(i);
 					if (transaction.getAccount()==account) {
-						removedIndexes[removedIndex] = i;
 						removed[removedIndex] = transaction;
-						removedIndex--;
-						removeTransaction(i);
+						removedIndex++;
 					}
 				}
-				this.setEventsEnabled(old);
-				this.fireEvent(new TransactionsRemovedEvent(this, removedIndexes, removed));
+				this.remove(removed);
 			}
 			for (int i = this.periodicals.size()-1; i >= 0 ; i--) {
 				if (this.periodicals.get(i).getAccount()==account) removePeriodicalTransaction(i);
@@ -530,8 +552,8 @@ public class GlobalData extends DefaultListenable {
 		}
 	}
 
-	/** Removes a category from the data
-	 * All the transactions and the subtransactions attached to the deleted category are moved to the "undifined" category.
+	/** Removes a category from the data.
+	 * All the transactions and the subtransactions attached to the deleted category are moved to the "undefined" category.
 	 * @param category
 	 */
 	public void remove(Category category) {

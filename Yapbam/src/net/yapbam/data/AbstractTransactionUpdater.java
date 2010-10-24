@@ -3,7 +3,7 @@ package net.yapbam.data;
 import java.util.ArrayList;
 
 /**
- * This utility class is use to make mass modification of transactions.
+ * This utility class is use to make mass modification on transactions.
  */
 abstract class AbstractTransactionUpdater {
 	GlobalData data;
@@ -13,7 +13,7 @@ abstract class AbstractTransactionUpdater {
 	}
 	
 	void doIt() {
-		// As the transactions list is sorted, we can't add the transactions in the same loop than we delete it
+		// As the transactions list is sorted, we can't add the transactions in the same loop we delete them
 		// (or we could miss some transactions). We will first remove the transaction we need to remove
 		ArrayList<Transaction> newTransactions = new ArrayList<Transaction>();
 		for (int i = data.getTransactionsNumber()-1; i >= 0 ; i--) {
@@ -23,10 +23,8 @@ abstract class AbstractTransactionUpdater {
 				newTransactions.add(t);
 			}
 		}
-		// Now, we can add the new transactions
-		for (int i = 0; i < newTransactions.size(); i++) {
-			data.add(newTransactions.get(i));
-		}
+		// Then, we can add the new transactions
+		data.add(newTransactions.toArray(new Transaction[newTransactions.size()]));
 		// It's exactly the same problem for periodical transactions
 		ArrayList<PeriodicalTransaction> newPTransactions = new ArrayList<PeriodicalTransaction>();
 		for (int i = data.getPeriodicalTransactionsNumber()-1; i >= 0 ; i--) {
