@@ -58,10 +58,11 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		if (part==TRANSACTIONS_PART) {
 			List<JMenuItem> result = new ArrayList<JMenuItem>();
 			result.add(new JMenuItem(panel.editTransactionAction)); 
-	        result.add(new JMenuItem(panel.duplicateTransactionAction));
-	        JMenuItem item = new JMenuItem(panel.deleteTransactionAction); //$NON-NLS-1$
-	        item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-	        result.add(item);
+			result.add(new JMenuItem(panel.duplicateTransactionAction));
+			JMenuItem item = new JMenuItem(panel.deleteTransactionAction); //$NON-NLS-1$
+			item.setAccelerator(KeyStroke.getKeyStroke(
+				LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+			result.add(item);
 			return result.toArray(new JMenuItem[result.size()]);
 		} else if (part==PERIODIC_TRANSACTIONS_PART) {
 			return new JMenuItem[]{new JMenuItem(panel.convertToPericalTransactionAction)};
@@ -89,9 +90,9 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	public void setDisplayed(boolean displayed) {
 		boolean rowIsSelected = panel.transactionTable.getSelectedRow()>0;
 		panel.editTransactionAction.setEnabled(displayed && rowIsSelected); 
-        panel.duplicateTransactionAction.setEnabled(displayed && rowIsSelected);
-        panel.deleteTransactionAction.setEnabled(displayed && rowIsSelected);
-        panel.convertToPericalTransactionAction.setEnabled(displayed && rowIsSelected);
+		panel.duplicateTransactionAction.setEnabled(displayed && rowIsSelected);
+		panel.deleteTransactionAction.setEnabled(displayed && rowIsSelected);
+		panel.convertToPericalTransactionAction.setEnabled(displayed && rowIsSelected);
 	}
 
 	@Override

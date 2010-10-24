@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
@@ -221,5 +222,13 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	
 	Date getDate() {
 		return getDateField().getDate();
+	}
+
+	public Transaction[] getValidTransactions() {
+		ArrayList<Transaction> result = new ArrayList<Transaction>(tableModel.getTransactions().length);
+		for (int i = 0; i < tableModel.getRowCount(); i++) {
+			if (isValid(i)) result.add((Transaction) tableModel.getTransaction(i));
+		}
+		return (Transaction[]) result.toArray(new Transaction[result.size()]);
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
