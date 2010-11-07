@@ -14,7 +14,7 @@ abstract class AbstractTransactionUpdater {
 	
 	void doIt() {
 		// As the transactions list is sorted, we can't add the transactions in the same loop we delete them
-		// (or we could miss some transactions). We will first remove the transaction we need to remove
+		// (or we could miss some transactions). We will first remove the transactions we need to remove
 		ArrayList<Transaction> newTransactions = new ArrayList<Transaction>();
 		for (int i = data.getTransactionsNumber()-1; i >= 0 ; i--) {
 			Transaction t = change(data.getTransaction(i));

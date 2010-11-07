@@ -17,8 +17,8 @@ import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.data.event.PeriodicalTransactionAddedEvent;
-import net.yapbam.data.event.PeriodicalTransactionRemovedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.MonthDateStepper;
@@ -35,11 +35,10 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		this.getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if (event instanceof PeriodicalTransactionAddedEvent) {
-					int index = ((PeriodicalTransactionAddedEvent)event).getPeriodicalTransactionIndex();
-					fireTableRowsInserted(index, index);
-				} else if (event instanceof PeriodicalTransactionRemovedEvent) {
-					for (PeriodicalTransaction transaction : ((PeriodicalTransactionRemovedEvent)event).getRemoved()) {
+				if (event instanceof PeriodicalTransactionsAddedEvent) {
+					fireTableDataChanged();
+				} else if (event instanceof PeriodicalTransactionsRemovedEvent) {
+					for (PeriodicalTransaction transaction : ((PeriodicalTransactionsRemovedEvent)event).getRemoved()) {
 						setSpread(transaction, false);
 					}
 					fireTableDataChanged();

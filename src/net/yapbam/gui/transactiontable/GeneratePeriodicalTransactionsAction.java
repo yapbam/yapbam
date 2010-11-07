@@ -10,8 +10,8 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.data.event.PeriodicalTransactionAddedEvent;
-import net.yapbam.data.event.PeriodicalTransactionRemovedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.GeneratePeriodicalTransactionsDialog;
@@ -28,8 +28,8 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
         data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if ((event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionRemovedEvent) ||
-						(event instanceof PeriodicalTransactionAddedEvent)) {
+				if ((event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionsRemovedEvent) ||
+						(event instanceof PeriodicalTransactionsAddedEvent)) {
 			        setEnabled(((GlobalData)event.getSource()).getPeriodicalTransactionsNumber()!=0);
 				}
 			}

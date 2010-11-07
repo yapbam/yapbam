@@ -15,8 +15,8 @@ import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.data.event.PeriodicalTransactionAddedEvent;
-import net.yapbam.data.event.PeriodicalTransactionRemovedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -50,7 +50,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	}
 	
 	private boolean eventMayChangePeridiocalTranscationToGenerate (DataEvent event) {
-		return (event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionAddedEvent) || (event instanceof PeriodicalTransactionRemovedEvent);
+		return (event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionsAddedEvent) || (event instanceof PeriodicalTransactionsRemovedEvent);
 	}
 	
 	@Override
