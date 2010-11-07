@@ -18,7 +18,7 @@ import net.yapbam.util.NullUtils;
 /** A widget to enter a monetary value.
  * <br>This widget automatically format the value it contains according to its local's currency.
  * <br>You can restrict the valid values by setting minimum and maximum values.
- * <ul>This bean defines two properties :
+ * <br>This bean defines two properties :<ul>
  * <li>VALUE_PROPERTY : a double, the value currently entered in the field.</li>
  * <li>CONTENT_VALID_PROPERTY : a boolean, true if the text currently entered in the field is a valid value, false if it is not.
  * <br>The CONTENT_VALID_PROPERTY is a read only property.</li>
