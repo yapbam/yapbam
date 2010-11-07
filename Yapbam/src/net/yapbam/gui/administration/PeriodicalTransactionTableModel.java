@@ -39,9 +39,10 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 					int index = ((PeriodicalTransactionAddedEvent)event).getPeriodicalTransactionIndex();
 					fireTableRowsInserted(index, index);
 				} else if (event instanceof PeriodicalTransactionRemovedEvent) {
-					setSpread(((PeriodicalTransactionRemovedEvent)event).getRemoved(), false);
-					int index = ((PeriodicalTransactionRemovedEvent)event).getIndex();
-					fireTableRowsDeleted(index, index);
+					for (PeriodicalTransaction transaction : ((PeriodicalTransactionRemovedEvent)event).getRemoved()) {
+						setSpread(transaction, false);
+					}
+					fireTableDataChanged();
 				} else if (event instanceof EverythingChangedEvent) {
 					clearSpreadData();
 					fireTableDataChanged();
