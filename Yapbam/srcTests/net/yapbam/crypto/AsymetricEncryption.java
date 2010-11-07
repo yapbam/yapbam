@@ -41,7 +41,7 @@ public class AsymetricEncryption {
 			System.out.println ("public : "+pubModulus.toString(16) + " / " +pubExponent.toString(16));
 			System.out.println ("private : "+privModulus.toString(16) + " / " +privExponent.toString(16));
 			
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			for (int i=0;i<200;i++) {
 				buf.append("Hello world repeated many times is a very long secret phrase.");
 			}

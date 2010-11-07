@@ -65,7 +65,7 @@ public class PasswordbasedEncryption {
 		out.write(HEADER.getBytes());
 		out.write('\n');
 		out = Crypto.getPasswordProtectedOutputStream(PASSWORD, out);
-//		StringBuffer buf = new StringBuffer();
+//		StringBuilder buf = new StringBuilder();
 //		for (int i = 0; i < 100; i++) {
 //			buf.append("This is just a very simple test. Let see if the end of the message is correct or not\n");
 //		}

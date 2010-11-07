@@ -205,8 +205,7 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	public Account getAccount(String name) {
-		for (int i = 0; i < this.accounts.size(); i++) {
-			Account account = this.accounts.get(i);
+		for (Account account : this.accounts) {
 			if (account.getName().equalsIgnoreCase(name)) return account;
 		}
 		return null;
@@ -243,8 +242,7 @@ public class GlobalData extends DefaultListenable {
 	 * @param transactions The transactions to add
 	 */
 	public void add(Transaction[] transactions) {
-		for (int i = 0; i < transactions.length; i++) {
-			Transaction transaction = transactions[i];
+		for (Transaction transaction : transactions) {
 			int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
 			this.transactions.add(index, transaction);
 			Account account = transaction.getAccount();
@@ -252,8 +250,7 @@ public class GlobalData extends DefaultListenable {
 		}
 		fireEvent(new TransactionsAddedEvent(this, transactions));
 		this.setChanged();
-		for (int i = 0; i < transactions.length; i++) {
-			Transaction transaction = transactions[i];
+		for (Transaction transaction : transactions) {
 			if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
 					// Detach check
 					String number = transaction.getNumber();
@@ -297,9 +294,9 @@ public class GlobalData extends DefaultListenable {
 			Transaction[] removed = new Transaction[nb];
 			int[] removedIndexes = new int[nb];
 			int j = 0;
-			for (int i = 0; i < indexes.length; i++) {
-				if (indexes[i]>=0) {
-					removed[j] = this.transactions.remove(indexes[i]);
+			for (int index : indexes) {
+				if (index>=0) {
+					removed[j] = this.transactions.remove(index);
 					removed[j].getAccount().removeTransaction(removed[j]);
 					j++;
 				}
