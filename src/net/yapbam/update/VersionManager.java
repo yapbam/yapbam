@@ -34,7 +34,7 @@ public class VersionManager {
 		return new ReleaseInfo(properties.getProperty("version")); //$NON-NLS-1$
 	}
 	
-	private static void addPropertyParameter(StringBuffer url, String paramName, String key) throws UnsupportedEncodingException {
+	private static void addPropertyParameter(StringBuilder url, String paramName, String key) throws UnsupportedEncodingException {
 		String property = System.getProperty(key);
 		if (property==null) property = "?";
 		url.append("&").append(paramName).append("=").append(URLEncoder.encode(property,"UTF-8"));
@@ -42,7 +42,7 @@ public class VersionManager {
 
 	public static URL getUpdateURL() {
 		try {
-			StringBuffer url = new StringBuffer("http://yapbam.sourceforge.net/updateInfo.php");
+			StringBuilder url = new StringBuilder("http://yapbam.sourceforge.net/updateInfo.php");
 			url.append("?version=").append(URLEncoder.encode(getVersion().toString(),"UTF-8"));
 			url.append("&country=").append(URLEncoder.encode(LocalizationData.getLocale().getCountry(),"UTF-8"));
 			url.append("&lang=").append(URLEncoder.encode(LocalizationData.getLocale().getLanguage(),"UTF-8"));
