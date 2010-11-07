@@ -81,7 +81,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	 * @return a double, positive if the transaction is a receipt, negative if not.
 	 */
 	protected double getAmount() {
-		double amount = Math.abs(((Number)this.amount.getValue()).doubleValue());
+		double amount = Math.abs(this.amount.getValue());
 		if (isExpense()) amount = -amount;
 		return amount;
 	}

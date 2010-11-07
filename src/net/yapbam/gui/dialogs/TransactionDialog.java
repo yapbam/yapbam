@@ -169,9 +169,9 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				updateOkButtonEnabled();
 			}
 		});
-        c.gridx++; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx++; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(date,c);
-        c.gridx++;
+		c.gridx++;
 	}
 
 	public Transaction getTransaction() {

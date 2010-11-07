@@ -5,6 +5,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Currency;
@@ -14,13 +15,14 @@ import javax.swing.JTextField;
 
 import net.yapbam.util.NullUtils;
 
-/** A widget to enter amount.
- * This widget automatically format the value it contains according to its local's currency.
- * You can restrict the valid values by setting minimum and maximum values.
- * This bean defines two properties :
- * VALUE_PROPERTY : a double, the value currently entered in the field.
- * CONTENT_VALID_PROPERTY : a boolean, true if the text currently entered in the field is a valid value, false if it is not.
- * The CONTENT_VALID_PROPERTY is a read only property.
+/** A widget to enter a monetary value.
+ * <br>This widget automatically format the value it contains according to its local's currency.
+ * <br>You can restrict the valid values by setting minimum and maximum values.
+ * <ul>This bean defines two properties :
+ * <li>VALUE_PROPERTY : a double, the value currently entered in the field.</li>
+ * <li>CONTENT_VALID_PROPERTY : a boolean, true if the text currently entered in the field is a valid value, false if it is not.
+ * <br>The CONTENT_VALID_PROPERTY is a read only property.</li>
+ * </ul>
  */
 public class AmountWidget extends JTextField {
 	private static final long serialVersionUID = 1L;
@@ -58,6 +60,16 @@ public class AmountWidget extends JTextField {
 		this.minValue = Double.NEGATIVE_INFINITY;
 		this.maxValue = Double.POSITIVE_INFINITY;
 		format = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+		{
+			// Workaround of a weird java implementation see http://bugs.sun.com/view_bug.do?bug_id=4510618
+			// In some locales, the grouping or decimal separators are a non breaking space ... not a single space.
+			// Users may be very surprised to see that in France, "1 000,00" is not a number.
+			DecimalFormatSymbols decimalFormatSymbols = format.getDecimalFormatSymbols();
+			char nonBreakingSpace = 160;
+			if ((decimalFormatSymbols.getGroupingSeparator()==nonBreakingSpace)) decimalFormatSymbols.setGroupingSeparator(' ');
+			if ((decimalFormatSymbols.getDecimalSeparator()==nonBreakingSpace)) decimalFormatSymbols.setDecimalSeparator(' ');
+			format.setDecimalFormatSymbols(decimalFormatSymbols);
+		}
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -98,7 +110,6 @@ public class AmountWidget extends JTextField {
 	}
 	
 	private void updateValue() {
-		//FIXME with the French locale, 5 900 is not a valid input
 		boolean oldValid = this.valid;
 		String text = this.getText().trim();
 		Number changed = null;
@@ -108,18 +119,25 @@ public class AmountWidget extends JTextField {
 			try {
 				changed = format.parse(text);
 			} catch (ParseException e) {
-				char decimalSep = format.getDecimalFormatSymbols().getDecimalSeparator();
-				text = text.replace(decimalSep, '.');
+				// Parsing with the "official" currency formatter failed.
+				// It seems that this formatter is quite sensitive. For instance, if you remove the currency sign ... it fails.
+				// We will try to convert what was typed in a "pure" english digital number (only digits and . as decimal separator),
+				// in order to use the standard decimal parser.
+				DecimalFormatSymbols decimalFormatSymbols = format.getDecimalFormatSymbols();
+				text = text.replace(decimalFormatSymbols.getDecimalSeparator(), '.');
+				text = text.replace(new String(new char[]{decimalFormatSymbols.getGroupingSeparator()}), "");
 				try {
 					changed = Double.valueOf(text);
-				} catch (NumberFormatException e2) {}
+				} catch (NumberFormatException e2) {
+					// Ok, now, it's clear, the number is wrong
+				}
 			}
 			this.valid = (changed!=null) && (changed.doubleValue()>=minValue.doubleValue()) && (changed.doubleValue()<=maxValue.doubleValue());
 		}
 		internalSetValue(changed==null?null:changed.doubleValue());
 		if (this.valid!=oldValid) firePropertyChange(CONTENT_VALID_PROPERTY, oldValid, this.valid);
 	}
-
+	
 	/** Determines whether empty text (or blank) are considered as valid or not. 
 	 * @return true if blank field is valid.
 	 */
