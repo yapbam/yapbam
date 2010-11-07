@@ -62,8 +62,7 @@ public class FilteredData extends DefaultListenable {
 				} else if (event instanceof TransactionsAddedEvent) {
 					Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
 					ArrayList<Transaction> okTransactions = new ArrayList<Transaction>(ts.length);
-					for (int i = 0; i < ts.length; i++) {
-						Transaction transaction = ts[i];
+					for (Transaction transaction : ts) {
 						if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
 							balanceData.updateBalance(transaction, true);
 							if (isOk(transaction)) { // If the added transaction matches with the whole filter
@@ -77,10 +76,10 @@ public class FilteredData extends DefaultListenable {
 				} else if (event instanceof TransactionsRemovedEvent) {
 					Transaction[] removedTransactions = ((TransactionsRemovedEvent)event).getRemoved();
 					List<Integer> filteredRemovedIndexes = new ArrayList<Integer>(removedTransactions.length);
-					for (int i = 0; i < removedTransactions.length; i++) {
-						if (isOk(removedTransactions[i].getAccount())) {
-							balanceData.updateBalance(removedTransactions[i], false);
-							int index = Collections.binarySearch(transactions, removedTransactions[i], comparator);
+					for (Transaction removed : removedTransactions) {
+						if (isOk(removed.getAccount())) {
+							balanceData.updateBalance(removed, false);
+							int index = Collections.binarySearch(transactions, removed, comparator);
 							if (index>=0) {
 								filteredRemovedIndexes.add(index);
 							} else {
@@ -197,8 +196,8 @@ public class FilteredData extends DefaultListenable {
 			this.validAccounts=null;
 		} else {
 			this.validAccounts = new HashSet<Account>(accounts.length);
-			for (int i = 0; i < accounts.length; i++) {
-				this.validAccounts.add(accounts[i]);
+			for (Account account : accounts) {
+				this.validAccounts.add(account);
 			}
 		}
 		this.filter();
@@ -239,8 +238,8 @@ public class FilteredData extends DefaultListenable {
 			this.validModes=null;
 		} else {
 			this.validModes = new ArrayList<Mode>(modes.length);
-			for (int i = 0; i < modes.length; i++) {
-				this.validModes.add(modes[i]);
+			for (Mode mode : modes) {
+				this.validModes.add(mode);
 			}
 		}
 		this.filter();
@@ -349,8 +348,8 @@ public class FilteredData extends DefaultListenable {
 			this.validCategories=null;
 		} else {
 			this.validCategories = new HashSet<Category>(categories.length);
-			for (int i = 0; i < categories.length; i++) {
-				this.validCategories.add(categories[i]);
+			for (Category category : categories) {
+				this.validCategories.add(category);
 			}
 		}
 		this.filter();

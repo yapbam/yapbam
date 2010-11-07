@@ -41,7 +41,7 @@ public class FillViewportHeightDemo extends JFrame implements ActionListener {
   private DefaultTableModel tableModel;
 
   private static String getNextString(int count) {
-    StringBuffer buf = new StringBuffer();
+  	StringBuilder buf = new StringBuilder();
     for (int i = 0; i < 5; i++) {
       buf.append(String.valueOf(count));
       buf.append(",");
