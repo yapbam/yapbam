@@ -187,12 +187,12 @@ public class BudgetView extends DefaultListenable {
 				// to manipulate with an excel like application
 				currencyFormatter.setMaximumFractionDigits(NumberFormat.getCurrencyInstance(locale).getMaximumFractionDigits());
 			}
-			for (int i = 0; i < categories.size(); i++) {
+			for (Category category : categories) {
 				out.newLine();
-				out.append(categories.get(i).getName());
+				out.append(category.getName());
 				for (int j = 0; j < getDatesSize(); j++) {
 					out.append(columnSeparator);
-					Double value = values.get(new Key(getDate(j), categories.get(i)));
+					Double value = values.get(new Key(getDate(j), category));
 					if (value!=null) {
 						out.append(currencyFormatter.format(value));
 					}
@@ -253,7 +253,7 @@ public class BudgetView extends DefaultListenable {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes" )
 	private static void addToSortedList(List list, Object element) {
 		int index = Collections.binarySearch(list, element);
 		if (index<0) list.add(-index-1, element);

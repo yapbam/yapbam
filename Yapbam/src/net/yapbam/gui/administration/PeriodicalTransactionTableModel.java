@@ -82,7 +82,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		else if (columnIndex==1) return transaction.getAccount().getName();
 		else if (columnIndex==2) {
 			if (spread) {
-				StringBuffer buf = new StringBuffer("<html><body>").append(transaction.getDescription()); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(transaction.getDescription()); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription()); //$NON-NLS-1$
 				}
@@ -111,7 +111,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 			}
 		} else if (columnIndex==4) {
 			if (spread) {
-				StringBuffer buf = new StringBuffer("<html><body>").append(getName(transaction.getCategory())); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(getName(transaction.getCategory())); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getSubTransaction(i).getCategory())); //$NON-NLS-1$
 				}

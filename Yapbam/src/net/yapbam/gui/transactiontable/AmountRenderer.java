@@ -16,7 +16,7 @@ public class AmountRenderer extends ObjectRenderer {
 		if (amount.length == 1) {
 			text = LocalizationData.getCurrencyInstance().format(amount[0]);
 		} else {
-			StringBuffer buf = new StringBuffer("<html><body>").append(LocalizationData.getCurrencyInstance().format(amount[0]));
+			StringBuilder buf = new StringBuilder("<html><body>").append(LocalizationData.getCurrencyInstance().format(amount[0]));
 			for (int i = 1; i < amount.length; i++) {
 				buf.append("<BR>[").append(LocalizationData.getCurrencyInstance().format(amount[i])).append("]");
 			}

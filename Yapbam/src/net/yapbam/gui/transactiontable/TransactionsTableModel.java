@@ -78,7 +78,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		else if (columnIndex==2) return transaction.getDate();
 		else if (columnIndex==3) {
 			if (spread) {
-				StringBuffer buf = new StringBuffer("<html><body>").append(transaction.getDescription()); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(transaction.getDescription()); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription()); //$NON-NLS-1$
 				}
@@ -107,7 +107,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 			}
 		} else if (columnIndex==5) {
 			if (spread) {
-				StringBuffer buf = new StringBuffer("<html><body>").append(getName(transaction.getCategory())); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(getName(transaction.getCategory())); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getSubTransaction(i).getCategory())); //$NON-NLS-1$
 				}

@@ -206,7 +206,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 					g2.setColor(color);
 				}
 				g2.drawLine(x, y0-3, x, y0+3); // y axis
-				StringBuffer buf = new StringBuffer();
+				StringBuilder buf = new StringBuilder();
 				buf.append(months[month]);
 				if (month==1) buf.append(" ").append(date.getYear()+1900);
 				String dateString = buf.toString();

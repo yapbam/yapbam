@@ -61,7 +61,7 @@ public class Checkbook implements Serializable {
 	public String getFullNumber(BigInteger shortNumber) {
 		if (shortNumber==null) return null;
 		String number = prefix + shortNumber.toString();
-		StringBuffer leadingZeros = new StringBuffer();
+		StringBuilder leadingZeros = new StringBuilder();
 		for (int i = number.length(); i < this.numberLength; i++) {
 			leadingZeros.append('0');
 		}
