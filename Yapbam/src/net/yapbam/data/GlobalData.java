@@ -364,7 +364,7 @@ public class GlobalData extends DefaultListenable {
 	public void add(PeriodicalTransaction periodical) {
 		int index = -Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR)-1;
 		this.periodicals.add(index, periodical);
-		fireEvent(new PeriodicalTransactionAddedEvent(this, index));
+		fireEvent(new PeriodicalTransactionsAddedEvent(this, new PeriodicalTransaction[]{periodical}));
 		setChanged();
 	}
 	
@@ -394,7 +394,7 @@ public class GlobalData extends DefaultListenable {
 			for (int i = removedIndexes.length-1; i >=0 ; i--) {
 				removed[i] = this.periodicals.remove(removedIndexes[i]);
 			}
-			this.fireEvent(new PeriodicalTransactionRemovedEvent(this, removedIndexes, removed));
+			this.fireEvent(new PeriodicalTransactionsRemovedEvent(this, removedIndexes, removed));
 			setChanged();
 		}
 	}
@@ -415,7 +415,7 @@ public class GlobalData extends DefaultListenable {
 	 */
 	private void removePeriodicalTransaction(int index) {
 		PeriodicalTransaction removed = this.periodicals.remove(index);
-		this.fireEvent(new PeriodicalTransactionRemovedEvent(this, new int[]{index}, new PeriodicalTransaction[]{removed}));
+		this.fireEvent(new PeriodicalTransactionsRemovedEvent(this, new int[]{index}, new PeriodicalTransaction[]{removed}));
 		setChanged();
 	}
 
