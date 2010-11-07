@@ -280,26 +280,23 @@ public class GlobalData extends DefaultListenable {
 	}
 	
 	/** Removes some transactions from this.
-	 * Note : that if one or more transactions are not in this, they are ignored.
+	 * <br>Note : that if one or more transactions are not in this, they are ignored.
 	 * @param transactions The transactions to be removed.
 	 */
 	public void remove(Transaction[] transactions) {
-		int nb = 0; // The number of effectively removed transactions (the ones in found this).
+		int nb = 0; // The number of effectively removed transactions (the ones found in this).
 		int[] indexes = new int[transactions.length];
-		for (int i = 0; i < transactions.length; i++) {
-			indexes[i] = indexOf(transactions[i]);
-			if (indexes[i]>=0) nb++;
+		for (Transaction transaction: transactions) {
+			indexes[nb] = indexOf(transaction);
+			if (indexes[nb]>=0) nb++;
 		}
-		if (nb>0) {
+		if (nb>0) { // If some where found
 			Transaction[] removed = new Transaction[nb];
-			int[] removedIndexes = new int[nb];
-			int j = 0;
-			for (int index : indexes) {
-				if (index>=0) {
-					removed[j] = this.transactions.remove(index);
-					removed[j].getAccount().removeTransaction(removed[j]);
-					j++;
-				}
+			int[] removedIndexes = (nb==transactions.length)?indexes:Arrays.copyOf(indexes, nb);
+			Arrays.sort(removedIndexes);
+			for (int i=removedIndexes.length-1; i>=0; i--) {
+				removed[i] = this.transactions.remove(removedIndexes[i]);
+				removed[i].getAccount().removeTransaction(removed[i]);
 			}
 			this.fireEvent(new TransactionsRemovedEvent(this, removedIndexes, removed));
 			setChanged();
@@ -379,26 +376,46 @@ public class GlobalData extends DefaultListenable {
 		return this.periodicals.get(index);
 	}
 	
-	/** Removes a periodical transaction identified by its index.
-	 * @param periodical The periodical transaction to remove
-	 * @return true if the transaction was found in tis data, false if it was not in this data
+	/** Removes some periodical transactions.
+	 * <br>Note : that if one or more transactions are not in this, they are ignored.
+	 * @param periodicals The periodical transactions to remove
 	 */
-	public boolean remove (PeriodicalTransaction periodical) {
-		int index = Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR);
-		if (index>=0) {
-			this.removePeriodicalTransaction(index);
-			return true;
-		} else {
-			return false;
+	public void remove (PeriodicalTransaction[] periodicals) {
+		int nb = 0; // The number of effectively removed transactions (the ones found in this).
+		int[] indexes = new int[periodicals.length];
+		for (PeriodicalTransaction transaction : periodicals) {
+			indexes[nb] = Collections.binarySearch(this.periodicals, transaction, PERIODICAL_COMPARATOR);
+			if (indexes[nb]>=0) nb++;
+		}
+		if (nb>0) { // If some were found
+			PeriodicalTransaction[] removed = new PeriodicalTransaction[nb];
+			int[] removedIndexes = (nb==periodicals.length)?indexes:Arrays.copyOf(indexes, nb);
+			Arrays.sort(removedIndexes);
+			for (int i = removedIndexes.length-1; i >=0 ; i--) {
+				removed[i] = this.periodicals.remove(removedIndexes[i]);
+			}
+			this.fireEvent(new PeriodicalTransactionRemovedEvent(this, removedIndexes, removed));
+			setChanged();
 		}
 	}
 
-	/** Removes a periodical transaction indentified by its index.
+	/** Removes a periodical transaction.
+	 * @param periodical The periodical transaction to remove
+	 * @return true if the transaction was found in this data, false if it was not in this data
+	 */
+	public void remove (PeriodicalTransaction periodical) {
+		int index = Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR);
+		if (index>=0) {
+			this.removePeriodicalTransaction(index);
+		}
+	}
+
+	/** Removes a periodical transaction identified by its index.
 	 * @param index the periodical transaction index
 	 */
-	public void removePeriodicalTransaction(int index) {
+	private void removePeriodicalTransaction(int index) {
 		PeriodicalTransaction removed = this.periodicals.remove(index);
-		this.fireEvent(new PeriodicalTransactionRemovedEvent(this, index, removed));
+		this.fireEvent(new PeriodicalTransactionRemovedEvent(this, new int[]{index}, new PeriodicalTransaction[]{removed}));
 		setChanged();
 	}
 
@@ -465,20 +482,17 @@ public class GlobalData extends DefaultListenable {
 		int index = this.accounts.indexOf(account);
 		if (index>=0){
 			if (account.getTransactionsNumber()!=0) {
-				Transaction[] removed = new Transaction[account.getTransactionsNumber()];
-				int removedIndex = 0;
-				for (int i = this.transactions.size()-1; i >= 0 ; i--) {
-					Transaction transaction = this.transactions.get(i);
-					if (transaction.getAccount()==account) {
-						removed[removedIndex] = transaction;
-						removedIndex++;
-					}
+				List<Transaction> removed = new ArrayList<Transaction>(account.getTransactionsNumber());
+				for (Transaction transaction : this.transactions) {
+					if (transaction.getAccount()==account) removed.add(transaction);
 				}
-				this.remove(removed);
+				this.remove(removed.toArray(new Transaction[removed.size()]));
 			}
-			for (int i = this.periodicals.size()-1; i >= 0 ; i--) {
-				if (this.periodicals.get(i).getAccount()==account) removePeriodicalTransaction(i);
+			List<PeriodicalTransaction> removed = new ArrayList<PeriodicalTransaction>();
+			for (PeriodicalTransaction transaction : this.periodicals) {
+				if (transaction.getAccount()==account) removed.add(transaction);
 			}
+			this.remove(removed.toArray(new PeriodicalTransaction[removed.size()]));
 			this.accounts.remove(index);
 			this.fireEvent(new AccountRemovedEvent(this, index, account));
 			this.setChanged();

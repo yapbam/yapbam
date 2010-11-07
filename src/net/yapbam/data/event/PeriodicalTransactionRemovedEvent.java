@@ -2,25 +2,30 @@ package net.yapbam.data.event;
 
 import net.yapbam.data.PeriodicalTransaction;
 
+/** This event is sent when one or more periodical transactions are deleted.
+ */
 public class PeriodicalTransactionRemovedEvent extends DataEvent {
-	private PeriodicalTransaction removed;
-	private int index;
+	private PeriodicalTransaction[] removed;
+	private int[] indexes;
 	
-	public PeriodicalTransactionRemovedEvent(Object source, int index, PeriodicalTransaction removed) {
+	public PeriodicalTransactionRemovedEvent(Object source, int[] indexes, PeriodicalTransaction[] removed) {
 		super(source);
-		this.index = index;
+		this.indexes = indexes;
 		this.removed = removed;
 	}
 
 	/**
-	 * Get index were the removed element was in the source. 
-	 * @return index were the removed element was (be careful, the element isn't in the source anymore).
+	 * Gets indexes where the removed elements were in the source. 
+	 * @return indexes where the removed element were (be careful, the element isn't in the source anymore).
 	 */
-	public int getIndex() {
-		return index;
+	public int[] getIndexes() {
+		return indexes;
 	}
 
-	public PeriodicalTransaction getRemoved() {
+	/** Gets the removed periodical transactions.
+	 * @return a PeriodicalTransaction array
+	 */
+	public PeriodicalTransaction[] getRemoved() {
 		return removed;
 	}
 }
