@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/** This utiliy class provided some utility methods about dates. 
- * @author fathzer
- * license GPL v3
+/** Utilities about dates. 
+ * @author Fathzer
+ * <BR>License : GPL v3
  */
 public final class DateUtils {
 	// Be sure nobody will instantiate this class
@@ -37,13 +37,13 @@ public final class DateUtils {
 		return new GregorianCalendar(year, month-1, day).getTime();
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Converts a date into an integer.
 	 * @param date the date to be converted or null
 	 * @return the date in its integer format (null is coded by a negative number).
 	 * It is guaranteed that if two dates are separated by x days the difference between their integer representation is x.
 	 * Please note that hour, minutes, second and milliseconds are ignored. 
 	 */
+	@SuppressWarnings("deprecation")
 	public static int dateToInteger(Date date) {
 		if (date==null) return -1;
 		return (date.getYear()+1900)*10000+(date.getMonth()+1)*100+date.getDate();

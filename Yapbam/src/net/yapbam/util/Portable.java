@@ -5,8 +5,10 @@ import java.io.File;
 /** That class provides utilities that help to implement a portable application (with no installation)
  * in the portable apps format.
  * @see <a href="http://portableapps.com/development/portableapps.com_format">Portable apps format</a>
+ * @author Fathzer
+ * <BR>License : GPL v3
  */   
-public class Portable {
+public final class Portable {
 	private Portable() {}
 	
 	/** Gets the directory where the application was launched.

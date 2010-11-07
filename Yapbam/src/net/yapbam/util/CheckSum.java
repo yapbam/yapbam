@@ -2,23 +2,34 @@ package net.yapbam.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-/** A utility class to compute a checksum for a file.
+/** Utility to compute the checksum of a file.
+ * @author Fathzer
+ * <BR>License : GPL v3
  */
-public class CheckSum {
+public final class CheckSum {
 	
-	/** Gets a file checksum.
-	 * @param file the file to san
-	 * @return its MD5 checksum
-	 * @throws Exception
+	private CheckSum() {}
+	
+	/** Gets a file's checksum.
+	 * @param file The file to scan.
+	 * @return The file's MD5 checksum
+	 * @throws IOException
 	 */
-  public static byte[] createChecksum(File file) throws Exception {
+  public static byte[] createChecksum(File file) throws IOException {
   	InputStream is =  new FileInputStream(file);
   	try {
 	  	byte[] buffer = new byte[1024];
-	  	MessageDigest digest = MessageDigest.getInstance("MD5");
+	  	MessageDigest digest;
+			try {
+				digest = MessageDigest.getInstance("MD5");
+			} catch (NoSuchAlgorithmException e) {
+				throw new RuntimeException(e);
+			}
 	  	int numRead;
 	  	do {
 	  		numRead = is.read(buffer);
@@ -31,5 +42,4 @@ public class CheckSum {
     	is.close();
   	}
   }
-
 }
