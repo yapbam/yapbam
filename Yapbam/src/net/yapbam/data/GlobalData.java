@@ -263,7 +263,8 @@ public class GlobalData extends DefaultListenable {
 		fireEvent(new TransactionsAddedEvent(this, transactions.toArray(new Transaction[transactions.size()])));
 		this.setChanged();
 		for (Transaction transaction : transactions) {
-			//FIXME There's a lot of situations where we simply modify transactions ... so, we surely don't want to update the checkbooks !
+			// Let's examine if this new transaction is a check and has a number behind next check available
+			// If so, detach the checks between current "next check" and this one (included).
 			if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
 					// Detach check
 					String number = transaction.getNumber();
@@ -435,14 +436,12 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	/** Removes a periodical transaction.
+	 * <br>If the transaction is not in this, makes nothing.
 	 * @param periodical The periodical transaction to remove
-	 * @return true if the transaction was found in this data, false if it was not in this data
 	 */
 	public void remove (PeriodicalTransaction periodical) {
 		int index = Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR);
-		if (index>=0) {
-			this.removePeriodicalTransaction(index);
-		}
+		if (index>=0) this.removePeriodicalTransaction(index);
 	}
 
 	/** Removes a periodical transaction identified by its index.
