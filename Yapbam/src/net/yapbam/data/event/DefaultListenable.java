@@ -5,18 +5,23 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /** A listenable class allows some other classes to listen to the events occurring on the listenable class.
- *	Please note that if the traceEvents java system property is set to true, all data events are trace on stderr. 
+ *	<br>Please note that the following java system properties may be used to track the events:<ul>
+ *		<li>if the traceAll system property is set to true, all data events are traced on stderr.<li> 
+ *		<li>if the traceEvents system property is set to true, every event sent is traced on stderr.<li> 
+ *		<li>if the traceEventListeners system property is set to true, the modifications in the listeners list are traced on stderr.<li>
+ *	</ul>
  */
 public abstract class DefaultListenable {
 	private static final boolean TRACE_LISTENERS = Boolean.getBoolean("traceEventListeners");
 	private static final boolean TRACE_EVENTS = Boolean.getBoolean("traceEvents");
+	private static final boolean TRACE_ALL = Boolean.getBoolean("traceAll");
 	private static int indent = 0;
 	
 	private transient Collection<DataListener> listeners;
 	private transient boolean eventsDisabled;
 	
 	/** Constructor.
-	 * Events throwing is enabled.
+	 * <br>Events throwing is enabled.
 	 * @see #setEventsEnabled(boolean)
 	 */
 	protected DefaultListenable() {
@@ -44,11 +49,12 @@ public abstract class DefaultListenable {
 	 */
 	protected void fireEvent(DataEvent event) {
 		if (eventsDisabled) return;
+		if (TRACE_EVENTS && !TRACE_ALL) trace("Event "+event+" occurs on "+this);
 		Iterator<DataListener> iterator = listeners.iterator();
-		if (TRACE_EVENTS && (listeners.size()==0)) trace("Event "+event+" occurs on "+this+" but nobody is listening");
+		if (TRACE_ALL && (listeners.size()==0)) trace("Event "+event+" occurs on "+this+" but nobody is listening");
 		while (iterator.hasNext()) {
 			DataListener listener = iterator.next();
-			if (TRACE_EVENTS) trace("Send event "+event+" on "+this+" to "+listener);
+			if (TRACE_ALL) trace("Send event "+event+" on "+this+" to "+listener);
 			indent += 2;
 			listener.processEvent(event);
 			//FIXME catch exceptions thrown by the listeners (for other listeners to receive the event).
@@ -68,14 +74,14 @@ public abstract class DefaultListenable {
 	 */
 	public void addListener(DataListener listener) {
 		if (listeners==null) this.listeners = new ArrayList<DataListener>();
-		if (TRACE_EVENTS || TRACE_LISTENERS) System.err.println ("Add listener "+listener+" on "+this);
+		if (TRACE_ALL || TRACE_LISTENERS) System.err.println ("Add listener "+listener+" on "+this);
 		listeners.add(listener);
 	}
 	
 	/** Removes all the previously registered listeners.
 	 */
 	public void clearListeners() {
-		if (TRACE_EVENTS || TRACE_LISTENERS) System.err.println ("All listeners are cleared on "+this);
+		if (TRACE_ALL || TRACE_LISTENERS) System.err.println ("All listeners are cleared on "+this);
 		this.listeners.clear();
 	}
 }

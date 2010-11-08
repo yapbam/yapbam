@@ -6,24 +6,14 @@ import net.yapbam.data.Transaction;
  */
 public class TransactionsRemovedEvent extends DataEvent {
 	private Transaction[] removed;
-	private int[] indexes;
 	
 	/** Constructor.
 	 * @param source The object that thrown the event
-	 * @param indexes The indexes where the removed elements were (be careful, the elements aren't in the source anymore)
 	 * @param removed The removed transactions
 	 */
-	public TransactionsRemovedEvent(Object source, int[] indexes, Transaction[] removed) {
+	public TransactionsRemovedEvent(Object source, Transaction[] removed) {
 		super(source);
-		this.indexes = indexes;
 		this.removed = removed;
-	}
-
-	/** Gets indexes where the removed element were in the source. 
-	 * @return an int array, the indexes where the removed elements were (be careful, the elements aren't in the source anymore).
-	 */
-	public int[] getIndexes() {
-		return indexes;
 	}
 
 	/** Gets the removed transactions.

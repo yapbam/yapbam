@@ -39,7 +39,6 @@ public class PasswordbasedEncryption {
 			
 			read(file);
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

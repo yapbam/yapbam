@@ -137,7 +137,7 @@ public class Account implements Serializable {
 	 */
 	void add(Transaction transaction) {
 		transactionNumber++;
-		this.balanceData.updateBalance(transaction, true);
+		this.balanceData.updateBalance(new Transaction[]{transaction}, true);
 	}
 	
 	/** Removes a transaction from this account.
@@ -145,7 +145,7 @@ public class Account implements Serializable {
 	 */
 	void removeTransaction(Transaction transaction) {
 		transactionNumber--;
-		this.balanceData.updateBalance(transaction, false);
+		this.balanceData.updateBalance(new Transaction[]{transaction}, false);
 	}
 
 	void add(Mode newMode) {
