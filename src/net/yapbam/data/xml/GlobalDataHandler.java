@@ -2,6 +2,7 @@ package net.yapbam.data.xml;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +22,13 @@ class GlobalDataHandler extends DefaultHandler {
 	private GlobalData data;
 	// used to save temporary object data
 	private Stack<Object> tempData;
+	private Collection<Transaction> transactions;
 
 	GlobalDataHandler(GlobalData data) {
 		super();
 		this.data = data;
 		this.tempData = new Stack<Object>();
+		this.transactions = new ArrayList<Transaction>();
 	}
 	
 	private Map<String, String> buildMap(Attributes attributes) {
@@ -136,6 +139,7 @@ class GlobalDataHandler extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
+			this.data.add(this.transactions);
 		} else if (qName.equals(Serializer.ACCOUNT_TAG)) {
 			this.tempData.pop(); // remove the tag we added in the stack
 		} else if (qName.equals(Serializer.CATEGORY_TAG)) {
@@ -160,7 +164,7 @@ class GlobalDataHandler extends DefaultHandler {
 			String number = attributes.get(Serializer.NUMBER_ATTRIBUTE);
 			Date valueDate = Serializer.toDate(attributes.get(Serializer.VALUE_DATE_ATTRIBUTE));
 			String statement = attributes.get(Serializer.STATEMENT_ATTRIBUTE);
-			this.data.add(new Transaction(date, number, p.description, p.amount, p.account, p.mode, p.category, valueDate, statement, lst));
+			this.transactions.add(new Transaction(date, number, p.description, p.amount, p.account, p.mode, p.category, valueDate, statement, lst));
 		} else if (qName.equals(Serializer.SUBTRANSACTION_TAG)) {
 		} else if (qName.equals(Serializer.PERIODICAL_TAG)) {
 			ArrayList<SubTransaction> lst = (ArrayList<SubTransaction>) this.tempData.pop();
