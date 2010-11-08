@@ -51,6 +51,12 @@ public class Transaction extends AbstractTransaction implements Serializable, Cl
 		return this.statementId!=null;
 	}
 	
+	/** Creates a new transaction that differs only by the category.
+	 * @param oldCategory The category to change.
+	 * <br>Note that the modifications operate even on the subtransactions, so, this
+	 * @param newCategory The replacement category.
+	 * @return a new updated transaction or null if the old category was not used in this transaction.
+	 */
 	Transaction change(Category oldCategory, Category newCategory) {
 		if (!hasCategory(oldCategory)) return null;
 		List<SubTransaction> subTransactions = changeSubTransactions(oldCategory, newCategory);
