@@ -154,12 +154,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 			for (int i = 0; i < removed.length; i++) {
 				this.setSpread(removed[i], false);
 			}
-			if (removed.length==1) {
-				int index = ((TransactionsRemovedEvent)event).getIndexes()[0];
-				fireTableRowsDeleted(index, index);
-			} else {
-				fireTableDataChanged();
-			}
+			fireTableDataChanged();
 		} else if (event instanceof AccountPropertyChangedEvent) {
 			if (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)) {
 				fireTableDataChanged();			

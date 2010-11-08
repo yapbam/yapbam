@@ -38,8 +38,8 @@ public class FilteredData extends DefaultListenable {
 	private boolean filteringHasToBeDone;
 	
 	public FilteredData(GlobalData data) {
-	    this.data = data;
-	    this.data.addListener(new DataListener() {		
+		this.data = data;
+		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				//FIXME be aware of mode removal
@@ -58,13 +58,14 @@ public class FilteredData extends DefaultListenable {
 					Category category = ((CategoryRemovedEvent)event).getRemoved();
 					if ((validCategories==null) || validCategories.remove(category)) {
 						fireEvent(new CategoryRemovedEvent(FilteredData.this, -1, category)); //TODO index is not the right one
-	    			}
+					}
 				} else if (event instanceof TransactionsAddedEvent) {
 					Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
-					ArrayList<Transaction> okTransactions = new ArrayList<Transaction>(ts.length);
+					Collection<Transaction> accountOkTransactions = new ArrayList<Transaction>(ts.length);
+					Collection<Transaction> okTransactions = new ArrayList<Transaction>(ts.length);
 					for (Transaction transaction : ts) {
 						if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
-							balanceData.updateBalance(transaction, true);
+							accountOkTransactions.add(transaction);
 							if (isOk(transaction)) { // If the added transaction matches with the whole filter
 								okTransactions.add(transaction);
 								int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
@@ -72,31 +73,28 @@ public class FilteredData extends DefaultListenable {
 							}
 						}
 					}
-					fireEvent(new TransactionsAddedEvent(FilteredData.this, okTransactions.toArray(new Transaction[okTransactions.size()])));
+					// If some transactions in a valid account were removed, update the balance data
+					if (accountOkTransactions.size()>0) balanceData.updateBalance(accountOkTransactions.toArray(new Transaction[accountOkTransactions.size()]), true);
+					// If some valid transactions were removed, fire an event.
+					if (okTransactions.size()>0) fireEvent(new TransactionsAddedEvent(FilteredData.this, okTransactions.toArray(new Transaction[okTransactions.size()])));
 				} else if (event instanceof TransactionsRemovedEvent) {
-					Transaction[] removedTransactions = ((TransactionsRemovedEvent)event).getRemoved();
-					List<Integer> filteredRemovedIndexes = new ArrayList<Integer>(removedTransactions.length);
-					for (Transaction removed : removedTransactions) {
-						if (isOk(removed.getAccount())) {
-							balanceData.updateBalance(removed, false);
-							int index = Collections.binarySearch(transactions, removed, comparator);
-							if (index>=0) {
-								filteredRemovedIndexes.add(index);
-							} else {
-								System.out.println ("What's that fuck !"); //FIXME Just a simple test
+					Transaction[] ts = ((TransactionsRemovedEvent)event).getRemoved();
+					Collection<Transaction> accountOkTransactions = new ArrayList<Transaction>(ts.length);
+					Collection<Transaction> okTransactions = new ArrayList<Transaction>(ts.length);
+					for (Transaction transaction : ts) {
+						if (isOk(transaction.getAccount())) {
+							accountOkTransactions.add(transaction);
+							if (isOk(transaction)) { // If the added transaction matches with the whole filter
+								okTransactions.add(transaction);
+								int index = Collections.binarySearch(transactions, transaction, comparator);
+								transactions.remove(index);
 							}
 						}
 					}
-					if (filteredRemovedIndexes.size()!=0) {
-						Collections.sort(filteredRemovedIndexes);
-						int[] indexes = new int[filteredRemovedIndexes.size()];
-						removedTransactions = new Transaction[indexes.length];
-						for (int i = indexes.length-1; i >= 0; i--) {
-							indexes[i] = filteredRemovedIndexes.get(i);
-							removedTransactions[i] = transactions.remove(indexes[i]);
-						}
-						fireEvent(new TransactionsRemovedEvent(FilteredData.this, indexes, removedTransactions));
-					}
+					// If some transactions in a valid account were removed, update the balance data
+					if (accountOkTransactions.size()>0) balanceData.updateBalance(accountOkTransactions.toArray(new Transaction[accountOkTransactions.size()]), false);
+					// If some valid transactions were removed, fire an event.
+					if (okTransactions.size()>0) fireEvent(new TransactionsRemovedEvent(FilteredData.this, okTransactions.toArray(new Transaction[okTransactions.size()])));
 				} else if (event instanceof AccountAddedEvent) {
 					Account account = ((AccountAddedEvent)event).getAccount();
 					if (isOk(account)) {
@@ -132,14 +130,14 @@ public class FilteredData extends DefaultListenable {
 				} else if (event instanceof NeedToBeSavedChangedEvent) {
 					fireEvent(event);
 				} else {
-					System.out.println ("Be aware "+event+" is not propagated by the fileredData"); //FIXME
+					System.out.println ("Be aware "+event+" is not propagated by the fileredData"); //FIXME Not sure it's really a bug
 				}
 			}
 		});
-	    this.balanceData = new BalanceData();
-	    this.filteringHasToBeDone = false;
-	    this.suspended = false;
-	    this.clear();
+		this.balanceData = new BalanceData();
+		this.filteringHasToBeDone = false;
+		this.suspended = false;
+		this.clear();
 	}
 	
 	/** Returns the balance data.
@@ -520,17 +518,19 @@ public class FilteredData extends DefaultListenable {
 			}
 			balanceData.enableEvents(false);
 			balanceData.clear(initialBalance);
-		    this.transactions = new ArrayList<Transaction>();
-		    for (int i = 0; i < data.getTransactionsNumber(); i++) {
+			this.transactions = new ArrayList<Transaction>();
+			Collection<Transaction> balanceTransactions = new ArrayList<Transaction>(data.getTransactionsNumber());
+			for (int i = 0; i < data.getTransactionsNumber(); i++) {
 				Transaction transaction = data.getTransaction(i);
 				if (isOk(transaction.getAccount())) {
-					balanceData.updateBalance(transaction, true);
+					balanceTransactions.add(transaction);
 					if (isOk(transaction)) {
 						int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
 						transactions.add(index, transaction);
 					}
 				}
 			}
+			balanceData.updateBalance(balanceTransactions.toArray(new Transaction[balanceTransactions.size()]), true);
 			balanceData.enableEvents(true);
 			fireEvent(new EverythingChangedEvent(this));
 		}

@@ -6,6 +6,7 @@ import java.net.URI;
 import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
@@ -285,21 +286,13 @@ public class GlobalData extends DefaultListenable {
 	 * @param transactions The transactions to be removed.
 	 */
 	public void remove(Transaction[] transactions) {
-		int nb = 0; // The number of effectively removed transactions (the ones found in this).
-		int[] indexes = new int[transactions.length];
+		Collection<Transaction> removed = new ArrayList<Transaction>(transactions.length);
 		for (Transaction transaction: transactions) {
-			indexes[nb] = indexOf(transaction);
-			if (indexes[nb]>=0) nb++;
+			int index = indexOf(transaction);
+			if (index>=0) removed.add(this.transactions.remove(index));
 		}
-		if (nb>0) { // If some where found
-			Transaction[] removed = new Transaction[nb];
-			int[] removedIndexes = (nb==transactions.length)?indexes:Arrays.copyOf(indexes, nb);
-			Arrays.sort(removedIndexes);
-			for (int i=removedIndexes.length-1; i>=0; i--) {
-				removed[i] = this.transactions.remove(removedIndexes[i]);
-				removed[i].getAccount().removeTransaction(removed[i]);
-			}
-			this.fireEvent(new TransactionsRemovedEvent(this, removedIndexes, removed));
+		if (removed.size()>0) {
+			this.fireEvent(new TransactionsRemovedEvent(this, removed.toArray(new Transaction[removed.size()])));
 			setChanged();
 		}
 	}
