@@ -242,6 +242,7 @@ public class GlobalData extends DefaultListenable {
 	 * @param transactions The transactions to add
 	 */
 	public void add(Transaction[] transactions) {
+		if (transactions.length==0) return;
 		for (Transaction transaction : transactions) {
 			int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
 			this.transactions.add(index, transaction);
@@ -365,6 +366,19 @@ public class GlobalData extends DefaultListenable {
 		int index = -Collections.binarySearch(this.periodicals, periodical, PERIODICAL_COMPARATOR)-1;
 		this.periodicals.add(index, periodical);
 		fireEvent(new PeriodicalTransactionsAddedEvent(this, new PeriodicalTransaction[]{periodical}));
+		setChanged();
+	}
+	
+	/** Adds periodical transactions.
+	 * @param transactions The transactions to add
+	 */
+	public void add(PeriodicalTransaction[] transactions) {
+		if (transactions.length==0) return;
+		for (PeriodicalTransaction transaction : transactions) {
+			int index = -Collections.binarySearch(this.periodicals, transaction, PERIODICAL_COMPARATOR)-1;
+			this.periodicals.add(index, transaction);
+		}
+		fireEvent(new PeriodicalTransactionsAddedEvent(this, transactions));
 		setChanged();
 	}
 	
