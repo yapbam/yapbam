@@ -239,20 +239,31 @@ public class GlobalData extends DefaultListenable {
 		return this.transactions.get(index);
 	}
 
-	/** Adds transactions.
+	/** Adds some transactions.
 	 * @param transactions The transactions to add
 	 */
 	public void add(Transaction[] transactions) {
 		if (transactions.length==0) return;
+		// In order to optimize the number of events fired, we will group transactions by account before
+		// removing them from their accounts (so, we will generate a maximum of one event per account).
+		// Initialize the lists of transactions per account.
+		List<Collection<Transaction>> accountTransactions = new ArrayList<Collection<Transaction>>(this.getAccountsNumber());
+		for (int i = 0; i < this.getAccountsNumber(); i++) accountTransactions.add(new ArrayList<Transaction>());
 		for (Transaction transaction : transactions) {
 			int index = -Collections.binarySearch(this.transactions, transaction, COMPARATOR)-1;
 			this.transactions.add(index, transaction);
-			Account account = transaction.getAccount();
-			account.add(transaction);
+			accountTransactions.get(indexOf(transaction.getAccount())).add(transaction);
+		}
+		for (Collection<Transaction> collection : accountTransactions) { // For each account (there's one collection per account)
+			if (collection.size()>0) { // If this account has some transactions removed
+				Transaction[] addedAccountTransactions = collection.toArray(new Transaction[collection.size()]);
+				addedAccountTransactions[0].getAccount().add(addedAccountTransactions);
+			}
 		}
 		fireEvent(new TransactionsAddedEvent(this, transactions));
 		this.setChanged();
 		for (Transaction transaction : transactions) {
+			//FIXME There's a lot of situations where we simply modify transactions ... so, we surely don't want to update the checkbooks !
 			if (transaction.getMode().isUseCheckBook() && (transaction.getAmount()<=0)) { // If transaction use checkbook
 					// Detach check
 					String number = transaction.getNumber();
@@ -283,15 +294,32 @@ public class GlobalData extends DefaultListenable {
 	
 	/** Removes some transactions from this.
 	 * <br>Note : that if one or more transactions are not in this, they are ignored.
+	 * <br>If one or more transactions are not ignored, a TransactionsRemovedEvent is fired.
 	 * @param transactions The transactions to be removed.
+	 * @see TransactionsRemovedEvent
 	 */
 	public void remove(Transaction[] transactions) {
 		Collection<Transaction> removed = new ArrayList<Transaction>(transactions.length);
+		// In order to optimize the number of events fired, we will group transactions by account before
+		// removing them from their accounts (so, we will generate a maximum of one event per account).
+		// Initialize the lists of transactions per account.
+		List<Collection<Transaction>> accountTransactions = new ArrayList<Collection<Transaction>>(this.getAccountsNumber());
+		for (int i = 0; i < this.getAccountsNumber(); i++) accountTransactions.add(new ArrayList<Transaction>());
 		for (Transaction transaction: transactions) {
 			int index = indexOf(transaction);
-			if (index>=0) removed.add(this.transactions.remove(index));
+			if (index>=0) {
+				Transaction removedTransaction = this.transactions.remove(index);
+				removed.add(removedTransaction);
+				accountTransactions.get(indexOf(transaction.getAccount())).add(removedTransaction);
+			}
 		}
 		if (removed.size()>0) {
+			for (Collection<Transaction> collection : accountTransactions) { // For each account (there's one collection per account)
+				if (collection.size()>0) { // If this account has some transactions removed
+					Transaction[] removedAccountTransactions = collection.toArray(new Transaction[collection.size()]);
+					removedAccountTransactions[0].getAccount().remove(removedAccountTransactions);
+				}
+			}
 			this.fireEvent(new TransactionsRemovedEvent(this, removed.toArray(new Transaction[removed.size()])));
 			setChanged();
 		}
