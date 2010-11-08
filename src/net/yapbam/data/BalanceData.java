@@ -19,7 +19,7 @@ public class BalanceData extends DefaultListenable {
 	private BalanceHistory balanceHistory;
 	// As Yapbam may be opened a day and stay opened until the day after, we add to be cautious with
 	// the "current date" concept. In order to never returns a outdated current balance, we will
-	// compare the BalanceData initialisation date and the current date in getCurrentBalance().
+	// compare the BalanceData initialization date and the current date in getCurrentBalance().
 	// The date is converted to simplify comparison.
 	private int currentBalanceDate;
 	
