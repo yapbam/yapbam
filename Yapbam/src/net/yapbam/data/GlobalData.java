@@ -242,8 +242,8 @@ public class GlobalData extends DefaultListenable {
 	/** Adds some transactions.
 	 * @param transactions The transactions to add
 	 */
-	public void add(Transaction[] transactions) {
-		if (transactions.length==0) return;
+	public void add(Collection<Transaction> transactions) {
+		if (transactions.size()==0) return;
 		// In order to optimize the number of events fired, we will group transactions by account before
 		// removing them from their accounts (so, we will generate a maximum of one event per account).
 		// Initialize the lists of transactions per account.
@@ -260,7 +260,7 @@ public class GlobalData extends DefaultListenable {
 				addedAccountTransactions[0].getAccount().add(addedAccountTransactions);
 			}
 		}
-		fireEvent(new TransactionsAddedEvent(this, transactions));
+		fireEvent(new TransactionsAddedEvent(this, transactions.toArray(new Transaction[transactions.size()])));
 		this.setChanged();
 		for (Transaction transaction : transactions) {
 			//FIXME There's a lot of situations where we simply modify transactions ... so, we surely don't want to update the checkbooks !
@@ -289,7 +289,7 @@ public class GlobalData extends DefaultListenable {
 	 * @param transaction The transaction to add.
 	 */
 	public void add (Transaction transaction) {
-		add(new Transaction[]{transaction});
+		add(Collections.singleton(transaction));
 	}
 	
 	/** Removes some transactions from this.
@@ -298,8 +298,8 @@ public class GlobalData extends DefaultListenable {
 	 * @param transactions The transactions to be removed.
 	 * @see TransactionsRemovedEvent
 	 */
-	public void remove(Transaction[] transactions) {
-		Collection<Transaction> removed = new ArrayList<Transaction>(transactions.length);
+	public void remove(Collection<Transaction> transactions) {
+		Collection<Transaction> removed = new ArrayList<Transaction>(transactions.size());
 		// In order to optimize the number of events fired, we will group transactions by account before
 		// removing them from their accounts (so, we will generate a maximum of one event per account).
 		// Initialize the lists of transactions per account.
@@ -330,7 +330,7 @@ public class GlobalData extends DefaultListenable {
 	 * @param transaction
 	 */
 	public void remove(Transaction transaction) {
-		remove(new Transaction[] {transaction});
+		remove(Collections.singleton(transaction));
 	}
 	
 	public int indexOf(Transaction transaction) {
@@ -521,7 +521,7 @@ public class GlobalData extends DefaultListenable {
 				for (Transaction transaction : this.transactions) {
 					if (transaction.getAccount()==account) removed.add(transaction);
 				}
-				this.remove(removed.toArray(new Transaction[removed.size()]));
+				this.remove(removed);
 			}
 			List<PeriodicalTransaction> removed = new ArrayList<PeriodicalTransaction>();
 			for (PeriodicalTransaction transaction : this.periodicals) {

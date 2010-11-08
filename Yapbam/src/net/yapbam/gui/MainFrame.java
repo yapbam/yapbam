@@ -162,19 +162,19 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	private Container createContentPane() {
-        mainPane = new JTabbedPane(JTabbedPane.TOP);
-        for (int i = 0; i < plugins.length; i++) {
-        	if (plugins[i]!=null) {
-	            JPanel pane = plugins[i].getPanel();
-	    		if (pane!=null) {
-	    			paneledPlugins.add(plugins[i]);
-	    			mainPane.addTab(plugins[i].getPanelTitle(), null, plugins[i].getPanel(), plugins[i].getPanelToolTip());
-	    			if (plugins[i].getPanelIcon()!=null) {
-	    				mainPane.setIconAt(mainPane.getTabCount()-1, plugins[i].getPanelIcon());
-	    			}
-	    		}
-	    		// Listening for panel title, tooltip and icon changes
-	    		plugins[i].getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+		mainPane = new JTabbedPane(JTabbedPane.TOP);
+		for (int i = 0; i < plugins.length; i++) {
+			if (plugins[i] != null) {
+				JPanel pane = plugins[i].getPanel();
+				if (pane != null) {
+					paneledPlugins.add(plugins[i]);
+					mainPane.addTab(plugins[i].getPanelTitle(), null, pane, plugins[i].getPanelToolTip());
+					if (plugins[i].getPanelIcon() != null) {
+						mainPane.setIconAt(mainPane.getTabCount() - 1, plugins[i].getPanelIcon());
+					}
+				}
+				// Listening for panel title, tooltip and icon changes
+				plugins[i].getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
 						int tabIndex = paneledPlugins.indexOf(evt.getSource());
@@ -189,10 +189,10 @@ public class MainFrame extends JFrame implements DataListener {
 						}
 					}
 				});
-        	}
+			}
 		}
-        return mainPane;
-    }
+		return mainPane;
+	}
 
 	public GlobalData getData() {
 		return data;

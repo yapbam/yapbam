@@ -31,8 +31,8 @@ abstract class AbstractTransactionUpdater {
 			}
 		}
 		// Then, we can remove the old transactions and add the new ones
-		data.remove(removedTransactions.toArray(new Transaction[removedTransactions.size()]));
-		data.add(newTransactions.toArray(new Transaction[newTransactions.size()]));
+		data.remove(removedTransactions);
+		data.add(newTransactions);
 		// It's exactly the same problem for periodical transactions
 		ArrayList<PeriodicalTransaction> newPTransactions = new ArrayList<PeriodicalTransaction>();
 		ArrayList<PeriodicalTransaction> removedPTransactions = new ArrayList<PeriodicalTransaction>();

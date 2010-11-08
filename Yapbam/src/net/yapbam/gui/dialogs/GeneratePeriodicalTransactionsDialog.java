@@ -12,6 +12,7 @@ import net.yapbam.gui.LocalizationData;
 
 import java.lang.Object;
 import java.lang.String;
+import java.util.Arrays;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
@@ -25,7 +26,8 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
 	protected Object buildResult() {
 		panel.saveState();
 		Transaction[] transactions = panel.getValidTransactions();
-		((GlobalData)data).add(transactions);
+		((GlobalData)data).add(Arrays.asList(transactions));
+		//FIXME Make a globalData method for that, with less events
 		for (int i=0; i < ((GlobalData)data).getPeriodicalTransactionsNumber(); i++) {
 			((GlobalData)data).setPeriodicalTransactionNextDate(i, panel.getDate());
 		}
