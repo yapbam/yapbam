@@ -27,7 +27,7 @@ public class MainFrame extends JFrame implements DataListener {
 	
 	private static final long serialVersionUID = 1L;
     
-    private GlobalData data;
+	private GlobalData data;
 	private FilteredData filteredData;
 
 	private MainMenuBar mainMenu;
@@ -38,17 +38,18 @@ public class MainFrame extends JFrame implements DataListener {
 	private boolean isRestarting = false;
 
 	public static void main(final String[] args) {
+		FolderCleaner.clean();
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
 		} catch (Exception e) {}
-	    //Schedule a job for the event-dispatching thread:
-	    //creating and showing this application's GUI.
-	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	        public void run() {
-	            MainFrame frame = new MainFrame(null, null, args.length>0?args[0]:null);
-	        	CheckNewReleaseAction.doAutoCheck(frame);
-	        }
-	    });
+		// Schedule a job for the event-dispatching thread:
+		// creating and showing this application's GUI.
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
+				CheckNewReleaseAction.doAutoCheck(frame);
+			}
+		});
 	}
 	
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
@@ -77,37 +78,37 @@ public class MainFrame extends JFrame implements DataListener {
 	    	}
 		});
 	
-	    if (filteredData==null) {
-	    	this.data = new GlobalData();
-	    	this.filteredData = new FilteredData(this.data);
-	    } else {
-	    	this.data = filteredData.getGlobalData();
-	    	this.filteredData = filteredData;
-	    }
-	    if (filteredData==null) {
-	    	if (path!=null) {
+		if (filteredData == null) {
+			this.data = new GlobalData();
+			this.filteredData = new FilteredData(this.data);
+		} else {
+			this.data = filteredData.getGlobalData();
+			this.filteredData = filteredData;
+		}
+		if (filteredData == null) {
+			if (path != null) {
 				URI file = new File(path).toURI();
 				try {
 					this.readData(file);
 				} catch (IOException e) {
 					ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$
 				}
-	    	} else {
-	    		YapbamState.INSTANCE.restoreGlobalData(this);
-	    	}
-	    }
+			} else {
+				YapbamState.INSTANCE.restoreGlobalData(this);
+			}
+		}
 	    
-	    PlugInContainer[] pluginContainers = Preferences.getPlugins();
-	    if (restartData==null) restartData = new Object[pluginContainers.length];
-	    this.plugins=new AbstractPlugIn[pluginContainers.length];
-	    for (int i = 0; i < plugins.length; i++) {
+		PlugInContainer[] pluginContainers = Preferences.getPlugins();
+		if (restartData == null) restartData = new Object[pluginContainers.length];
+		this.plugins = new AbstractPlugIn[pluginContainers.length];
+		for (int i = 0; i < plugins.length; i++) {
 			if (pluginContainers[i].isActivated()) this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
 			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instanciation
 				ErrorManager.INSTANCE.display(null, pluginContainers[i].getInstanciationException(), "Une erreur est survenue durant l'instanciation du plugin "+"?"); //LOCAL //TODO
 			}
 		}
-	    this.paneledPlugins=new ArrayList<AbstractPlugIn>();
-	    setContentPane(this.createContentPane());
+		this.paneledPlugins = new ArrayList<AbstractPlugIn>();
+		setContentPane(this.createContentPane());
 		mainPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -115,22 +116,22 @@ public class MainFrame extends JFrame implements DataListener {
 			}
 		});
 		newDataOccured();
-	    
-	    this.data.addListener(this);
-	    
-	    mainMenu = new MainMenuBar(this);
+
+		this.data.addListener(this);
+
+		mainMenu = new MainMenuBar(this);
 		setJMenuBar(mainMenu);
 	    
-	    // Restore initial state (last opened file and window position)
-	    YapbamState.INSTANCE.restoreMainFramePosition(this);
-	    for (int i = 0; i < plugins.length; i++) {
-			if (plugins[i]!=null) plugins[i].restoreState();
+		// Restore initial state (last opened file and window position)
+		YapbamState.INSTANCE.restoreMainFramePosition(this);
+		for (int i = 0; i < plugins.length; i++) {
+			if (plugins[i] != null) plugins[i].restoreState();
 		}
-	
-	    updateSelectedPlugin();
-	    
-	    //Display the window.
-	    setVisible(true);
+
+		updateSelectedPlugin();
+
+		// Display the window.
+		setVisible(true);
 	}
 	
 	void readData(URI uri) throws IOException {
@@ -246,13 +247,13 @@ public class MainFrame extends JFrame implements DataListener {
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
 		} catch (Exception e) {}
-	    //Schedule a job for the event-dispatching thread:
-	    //creating and showing this application's GUI.
-	    javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	        public void run() {
-	            new MainFrame(filteredData, restartData, null);
-	        }
-	    });
+		// Schedule a job for the event-dispatching thread:
+		// creating and showing this application's GUI.
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new MainFrame(filteredData, restartData, null);
+			}
+		});
 	}
 
 	private void updateSelectedPlugin() {

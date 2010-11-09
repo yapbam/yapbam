@@ -15,6 +15,7 @@ import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.Preferences;
 import net.yapbam.util.Crypto;
+import net.yapbam.util.FileUtils;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -112,7 +113,7 @@ public class Serializer {
 			if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed");
 			// Proceed safely, it means not to erase the old version until the new version is written
 			// Everything here is pretty ugly.
-			//TODO Implement this stuff using the transactional File access in JCommon
+			//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
 			File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file;
 			write(data, writed);
 			if (!file.equals(writed)) {
@@ -122,18 +123,7 @@ public class Serializer {
 					writed.delete();
 					throw new IOException("Unable to delete old copy of "+file);
 				}
-				boolean result = writed.renameTo(file);
-				if (result==false) {
-					// renameTo may fail if tmpFile and file are not on the same file system.
-					// We then copy the tmp file, it's really ugly ... but I don't know how to do that
-					FileReader in = new FileReader(writed);
-					FileWriter out = new FileWriter(file);
-					int c;
-					while ((c = in.read()) != -1) out.write(c);
-					in.close();
-					out.close();
-					writed.delete(); // Deletes the tmp file
-				}
+				FileUtils.move(writed, file);
 			}
 		} else if (uri.getScheme().equals("ftp")) {
 			// FTP URL has to be like this one : ftp://user:password@server/file;type=i
