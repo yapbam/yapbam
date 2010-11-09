@@ -17,14 +17,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import net.yapbam.data.event.DataEvent;
-import net.yapbam.data.event.DataListener;
-import net.yapbam.data.event.DefaultListenable;
-import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.*;
 import net.yapbam.util.DateUtils;
 
 /** A budget based on the filtered data.
- *  This budget can be built on a "per month" or a "par year" basis.
+ *  <br>This budget can be built on a "per month" or a "per year" basis.
  *  @see FilteredData
  */
 public class BudgetView extends DefaultListenable {
@@ -63,15 +60,28 @@ public class BudgetView extends DefaultListenable {
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				update();
+				if (! isNeutral(event)) update();
 			}
 		});
 		this.year = year;
 		build();
 	}
 	
+	/** Tests whether an event may have any impact on the budget view.
+	 * <br>For instance, NeedToBeSavedChangedEvent has no effect on the budgetView, but TransactionsAddedEvent has.
+	 * @param event The event to test
+	 * @return true if the event has no effect on this view
+	 */
+	private boolean isNeutral(DataEvent event) {
+		return (event instanceof NeedToBeSavedChangedEvent) || (event instanceof PasswordChangedEvent) || (event instanceof URIChangedEvent) 
+			|| (event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) || (event instanceof AccountPropertyChangedEvent)
+			|| (event instanceof ModeAddedEvent) || (event instanceof ModeRemovedEvent) || (event instanceof ModePropertyChangedEvent)
+			|| (event instanceof CheckbookPropertyChangedEvent) || (event instanceof CheckbookAddedEvent) || (event instanceof CheckbookRemovedEvent)
+			|| (event instanceof PeriodicalTransactionsAddedEvent) || (event instanceof PeriodicalTransactionsRemovedEvent);
+	}
+	
 	/**
-	 * Returns whether the budget is per year
+	 * Tests whether the budget is per year
 	 * @return true if the budget is per year
 	 */
 	public boolean isYear() {
@@ -89,14 +99,14 @@ public class BudgetView extends DefaultListenable {
 		}
 	}
 	
-	/** Returns the number of categories in the budget.
+	/** Gets the number of categories in the budget.
 	 * @return an integer. 0 if the budget is empty.
 	 */
 	public int getCategoriesSize() {
 		return this.categories.size();
 	}
 	
-	/** Returns a category in the budget.
+	/** Gets a category in the budget.
 	 * The categories are sorted in their names ascending order.
 	 * @param index the index of the category we are looking for
 	 * @return a category
@@ -105,7 +115,7 @@ public class BudgetView extends DefaultListenable {
 		return this.categories.get(index);
 	}
 
-	/** Returns the number of time periods in the budget.
+	/** Gets the number of time periods in the budget.
 	 * @return an integer. 0 if the budget is empty.
 	 */
 	public int getDatesSize() {
@@ -113,7 +123,7 @@ public class BudgetView extends DefaultListenable {
 		return 1+(this.year?this.lastDate.get(Calendar.YEAR)-this.firstDate.get(Calendar.YEAR):DateUtils.getMonthlyDistance(this.firstDate, this.lastDate));
 	}
 	
-	/** Returns the beginning date of a time period in the budget.
+	/** Gets the beginning date of a time period in the budget.
 	 * The time periods are sorted in the ascending order.
 	 * @param index the index of the date we are looking for
 	 * @return a date. The date is guaranteed to be the start of the time interval
@@ -133,7 +143,7 @@ public class BudgetView extends DefaultListenable {
 	}
 
 
-	/** Returns the end date of a time period in the budget.
+	/** Gets the end date of a time period in the budget.
 	 * The time periods are sorted in the ascending order.
 	 * @param index the index of the date we are looking for
 	 * @return a date. The date is guaranteed to be the end of the time interval
