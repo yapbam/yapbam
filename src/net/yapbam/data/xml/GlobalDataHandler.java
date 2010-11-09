@@ -22,6 +22,7 @@ class GlobalDataHandler extends DefaultHandler {
 	private GlobalData data;
 	// used to save temporary object data
 	private Stack<Object> tempData;
+	
 	private Collection<Transaction> transactions;
 
 	GlobalDataHandler(GlobalData data) {
@@ -139,7 +140,7 @@ class GlobalDataHandler extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
-			this.data.add(this.transactions);
+			this.data.add(this.transactions.toArray(new Transaction[this.transactions.size()]));
 		} else if (qName.equals(Serializer.ACCOUNT_TAG)) {
 			this.tempData.pop(); // remove the tag we added in the stack
 		} else if (qName.equals(Serializer.CATEGORY_TAG)) {
