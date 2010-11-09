@@ -458,7 +458,7 @@ public class GlobalData extends DefaultListenable {
 
 	/** Increments some periodical transactions next date until it becomes greater than a date.
 	 * If some periodical transactions have no next date, they are ignored. 
-	 * @param index the periodical transaction index
+	 * @param transactions the periodical transaction to update
 	 * @param date the limit date the periodical transaction have to pass
 	 */
 	public void setPeriodicalTransactionNextDate(PeriodicalTransaction[] transactions, Date date) {

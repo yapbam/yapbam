@@ -50,7 +50,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	
 	/** Gets the date of the next transaction to be generated.
 	 * @return a date or null if the periodical transaction expired.
-	 * @see GlobalData#setPeriodicalTransactionNextDate(int, Date)
+	 * @see GlobalData#setPeriodicalTransactionNextDate(PeriodicalTransaction[], Date)
 	 */
 	public Date getNextDate() {
 		return DateUtils.integerToDate(nextDate);
