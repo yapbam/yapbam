@@ -84,4 +84,11 @@ public abstract class DefaultListenable {
 		if (TRACE_ALL || TRACE_LISTENERS) System.err.println ("All listeners are cleared on "+this);
 		this.listeners.clear();
 	}
+	
+	/** Gets the number of listeners.
+	 * @return a positive or null integer
+	 */
+	public int getNumberOfListeners() {
+		return this.listeners.size();
+	}
 }

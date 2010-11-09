@@ -169,10 +169,13 @@ public class Importer {
 			// Category
 			index = importedFilecolumns[ExportTableModel.CATEGORY_INDEX];
 			String categoryName = getField(fields, index, ""); //$NON-NLS-1$
-			Category category = categoryName.length()==0?Category.UNDEFINED:data.getCategory(categoryName);
-			if (category==null) {
-				category = new Category(categoryName);
-				data.add(category);
+			Category category = Category.UNDEFINED;
+			if (data!=null) {
+				if (categoryName.length()>0) category = data.getCategory(categoryName);
+				if (category==null) {
+					category = new Category(categoryName);
+					data.add(category);
+				}
 			}
 			
 			if (isTransaction) {
@@ -188,10 +191,13 @@ public class Importer {
 				// Mode
 				index = importedFilecolumns[ExportTableModel.MODE_INDEX];
 				String modeName = getField(fields, index, ""); //$NON-NLS-1$
-				Mode mode = modeName.length()==0?Mode.UNDEFINED:account.getMode(modeName);
-				if ((data!=null) && (mode==null)) {
-					mode = new Mode(modeName, DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
-					data.add(account, mode);
+				Mode mode = Mode.UNDEFINED;
+				if (data!=null) {
+					if (modeName.length()>0) mode = account.getMode(modeName);
+					if (mode==null) {
+						mode = new Mode(modeName, DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
+						data.add(account, mode);
+					}
 				}
 				if (data!=null) recordCurrentTransaction(data);
 				current = new CurrentTransaction(account, description, date, amount, category, mode, number, valueDate, statement);
