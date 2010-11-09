@@ -20,7 +20,7 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.util.NullUtils;
 
 /** The whole Yapbam data.
- *  You can also have a look at FilteredData which presents a filtered view of Yapbam data.
+ *  <br>You can also have a look at FilteredData which presents a filtered view of Yapbam data.
  *  @see FilteredData
  */
 public class GlobalData extends DefaultListenable {
@@ -71,7 +71,7 @@ public class GlobalData extends DefaultListenable {
 	};
 	
 	/** Constructor
-	 * Builds a new empty instance.
+	 * <br>Builds a new empty instance.
 	 */
 	public GlobalData() {
 		super();
@@ -242,8 +242,8 @@ public class GlobalData extends DefaultListenable {
 	/** Adds some transactions.
 	 * @param transactions The transactions to add
 	 */
-	public void add(Collection<Transaction> transactions) {
-		if (transactions.size()==0) return;
+	public void add(Transaction[] transactions) {
+		if (transactions.length==0) return;
 		// In order to optimize the number of events fired, we will group transactions by account before
 		// removing them from their accounts (so, we will generate a maximum of one event per account).
 		// Initialize the lists of transactions per account.
@@ -260,7 +260,7 @@ public class GlobalData extends DefaultListenable {
 				addedAccountTransactions[0].getAccount().add(addedAccountTransactions);
 			}
 		}
-		fireEvent(new TransactionsAddedEvent(this, transactions.toArray(new Transaction[transactions.size()])));
+		fireEvent(new TransactionsAddedEvent(this, transactions));
 		this.setChanged();
 		for (Transaction transaction : transactions) {
 			// Let's examine if this new transaction is a check and has a number behind next check available
@@ -290,7 +290,7 @@ public class GlobalData extends DefaultListenable {
 	 * @param transaction The transaction to add.
 	 */
 	public void add (Transaction transaction) {
-		add(Collections.singleton(transaction));
+		add(new Transaction[]{transaction});
 	}
 	
 	/** Removes some transactions from this.
@@ -299,8 +299,8 @@ public class GlobalData extends DefaultListenable {
 	 * @param transactions The transactions to be removed.
 	 * @see TransactionsRemovedEvent
 	 */
-	public void remove(Collection<Transaction> transactions) {
-		Collection<Transaction> removed = new ArrayList<Transaction>(transactions.size());
+	public void remove(Transaction[] transactions) {
+		Collection<Transaction> removed = new ArrayList<Transaction>(transactions.length);
 		// In order to optimize the number of events fired, we will group transactions by account before
 		// removing them from their accounts (so, we will generate a maximum of one event per account).
 		// Initialize the lists of transactions per account.
@@ -331,7 +331,7 @@ public class GlobalData extends DefaultListenable {
 	 * @param transaction
 	 */
 	public void remove(Transaction transaction) {
-		remove(Collections.singleton(transaction));
+		remove(new Transaction[]{transaction});
 	}
 	
 	public int indexOf(Transaction transaction) {
@@ -404,6 +404,9 @@ public class GlobalData extends DefaultListenable {
 		setChanged();
 	}
 	
+	/** Gets the number of periodicals transactions.
+	 * @return an positive or null integer.
+	 */
 	public int getPeriodicalTransactionsNumber() {
 		return this.periodicals.size();
 	}
@@ -453,28 +456,32 @@ public class GlobalData extends DefaultListenable {
 		setChanged();
 	}
 
-	/** Increments a periodical transaction next date until it becomes greater than a date.
-	 * If the periodical transaction have no next date, this method does nothing. 
+	/** Increments some periodical transactions next date until it becomes greater than a date.
+	 * If some periodical transactions have no next date, they are ignored. 
 	 * @param index the periodical transaction index
 	 * @param date the limit date the periodical transaction have to pass
 	 */
-	public void setPeriodicalTransactionNextDate(int index, Date date) {
-		PeriodicalTransaction pt = getPeriodicalTransaction(index);
-		Date nextDate = pt.getNextDate();
-		if (nextDate!=null) {
-			DateStepper ds = pt.getNextDateBuilder();
-			if (ds == null) {
-				nextDate = date;
-			} else {
-				while ((nextDate!=null) && (nextDate.compareTo(date)<=0)) {
-					nextDate = ds.getNextStep(nextDate);
+	public void setPeriodicalTransactionNextDate(PeriodicalTransaction[] transactions, Date date) {
+		Collection<PeriodicalTransaction> removed = new ArrayList<PeriodicalTransaction>(transactions.length);
+		Collection<PeriodicalTransaction> updated = new ArrayList<PeriodicalTransaction>(transactions.length);
+		for (PeriodicalTransaction pt : transactions) {
+			Date nextDate = pt.getNextDate();
+			if (nextDate!=null) {
+				DateStepper ds = pt.getNextDateBuilder();
+				if (ds == null) {
+					nextDate = date;
+				} else {
+					while ((nextDate!=null) && (nextDate.compareTo(date)<=0)) {
+						nextDate = ds.getNextStep(nextDate);
+					}
 				}
+				removed.add(pt);
+				updated.add(new PeriodicalTransaction(pt.getDescription(), pt.getAmount(), pt.getAccount(), pt.getMode(),
+						pt.getCategory(), Arrays.asList(pt.getSubTransactions()), nextDate, pt.isEnabled(), ds));
 			}
-			pt = new PeriodicalTransaction(pt.getDescription(), pt.getAmount(), pt.getAccount(), pt.getMode(),
-					pt.getCategory(), Arrays.asList(pt.getSubTransactions()), nextDate, pt.isEnabled(), ds);
-			removePeriodicalTransaction(index);
-			add(pt);
 		}
+		this.remove(removed.toArray(new PeriodicalTransaction[removed.size()]));
+		this.add(updated.toArray(new PeriodicalTransaction[updated.size()]));
 	}
 	
 	/** Generate transactions from the periodical transactions until a date.
@@ -520,7 +527,7 @@ public class GlobalData extends DefaultListenable {
 				for (Transaction transaction : this.transactions) {
 					if (transaction.getAccount()==account) removed.add(transaction);
 				}
-				this.remove(removed);
+				this.remove(removed.toArray(new Transaction[removed.size()]));
 			}
 			List<PeriodicalTransaction> removed = new ArrayList<PeriodicalTransaction>();
 			for (PeriodicalTransaction transaction : this.periodicals) {

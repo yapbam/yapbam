@@ -7,12 +7,12 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 
 import java.lang.Object;
 import java.lang.String;
-import java.util.Arrays;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
@@ -26,11 +26,11 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
 	protected Object buildResult() {
 		panel.saveState();
 		Transaction[] transactions = panel.getValidTransactions();
-		((GlobalData)data).add(Arrays.asList(transactions));
-		//FIXME Make a globalData method for that, with less events
-		for (int i=0; i < ((GlobalData)data).getPeriodicalTransactionsNumber(); i++) {
-			((GlobalData)data).setPeriodicalTransactionNextDate(i, panel.getDate());
-		}
+		GlobalData globalData = (GlobalData)data;
+		globalData.add(transactions);
+		PeriodicalTransaction[] wholeTransactions = new PeriodicalTransaction[globalData.getPeriodicalTransactionsNumber()];
+		for (int i = 0; i < wholeTransactions.length; i++) wholeTransactions[i] = globalData.getPeriodicalTransaction(i);
+		globalData.setPeriodicalTransactionNextDate(wholeTransactions, panel.getDate());
 		return null;
 	}
 
