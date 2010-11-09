@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.security.AccessControlException;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
@@ -42,11 +41,11 @@ public final class Crypto {
 	public static String decrypt(String key, String message) {
 		SecretKeySpec skeySpec;
 		Cipher cipher;
-		skeySpec = new SecretKeySpec(asByteArray(key), "AES");
+		skeySpec = new SecretKeySpec(CheckSum.toBytes(key), "AES");
 		try {
 			cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.DECRYPT_MODE, skeySpec);
-			String original = new String(cipher.doFinal(asByteArray(message)));
+			String original = new String(cipher.doFinal(CheckSum.toBytes(message)));
 			return original;
 		} catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
@@ -61,28 +60,15 @@ public final class Crypto {
 	 * @see #decrypt(String, String)
 	 */
 	public static String encrypt(String key, String message) {
-		SecretKey skeySpec = new SecretKeySpec(asByteArray(key), "AES");
+		SecretKey skeySpec = new SecretKeySpec(CheckSum.toBytes(key), "AES");
 		try {
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
-			String encrypted = asHex(cipher.doFinal(message.getBytes()));
+			String encrypted = CheckSum.toString(cipher.doFinal(message.getBytes()));
 			return encrypted;
 		} catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Turns array of bytes into string
-	 * @param buf Array of bytes to convert to hex string
-	 * @return Generated hex string
-	 */
-	private static String asHex(byte[] buf) {
-		return new BigInteger(buf).toString(16);
-	}
-	
-	private static byte[] asByteArray (String str) {
-		return new BigInteger(str, 16).toByteArray();
 	}
 /*
 	private static String generateKey() throws NoSuchAlgorithmException {

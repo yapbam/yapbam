@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -12,7 +13,6 @@ import java.security.NoSuchAlgorithmException;
  * <BR>License : GPL v3
  */
 public final class CheckSum {
-	
 	private CheckSum() {}
 	
 	/** Gets a file's checksum.
@@ -42,4 +42,21 @@ public final class CheckSum {
     	is.close();
   	}
   }
+
+
+	/** Turns an array of bytes into a string
+	 * @param bytes Array of bytes to convert into a hexadecimal string
+	 * @return an hexadecimal string
+	 */
+	public static String toString(byte[] bytes) {
+		return new BigInteger(bytes).toString(16);
+	}
+	
+	/** Turns a hexadecimal String into an array of bytes
+	 * @param string an hexadecimal string
+	 * @return an hexadecimal string
+	 */
+	public static byte[] toBytes (String string) {
+		return new BigInteger(string, 16).toByteArray();
+	}
 }
