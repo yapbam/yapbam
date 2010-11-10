@@ -4,7 +4,7 @@
   <jar>.\App\program.jar</jar>
   <outfile>C:\Users\Jean-Marc\workspace\Yapbam\PortableYapbam.exe</outfile>
   <errTitle></errTitle>
-  <cmdLine>-DPortable=true</cmdLine>
+  <cmdLine></cmdLine>
   <chdir></chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
@@ -12,12 +12,13 @@
   <customProcName>true</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>C:\Users\Jean-Marc\workspace\Yapbam\launch4JDefinitionFiles\yapbam.ico</icon>
+  <icon>C:\Users\Jean-Marc\workspace\Yapbam\icons\yapbam.ico</icon>
   <jre>
     <path></path>
     <minVersion>1.6.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
+    <opt>-DPortable=true</opt>
   </jre>
   <messages>
     <startupErr>An error occurred while starting the application.</startupErr>

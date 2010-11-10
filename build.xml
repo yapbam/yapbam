@@ -8,10 +8,12 @@
 	| Here is a sample of what this file could contain :                                               |
 	| jcommonpath=C:/username/externalLibs/jCommon                                                     |
 	| jfreechartpath=C:/username/externalLibs/jFreeChart                                               |
+	| This file may also contains a pointer to PortableApps.comInstaller.exe (in the variable          |
+	| portableappsinstallerpath).                                                                      |
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.7.2"/>
+	<property name="yapbamVersion" value="0.7.1"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -19,8 +21,6 @@
 	<target name="build">
 		<antcall target="othersBuild"/>
 		<antcall target="windowsBuild"/>
-		<delete dir="${releaseDir}"/>
-		<echo message="Don't forget to create the installer of the windows version"/>
 	</target>
 	
 	<target name="commonBuild">
@@ -75,15 +75,59 @@
 		<tar basedir="${linuxRelease}" destfile="yapbam-${yapbamVersion}.tar"/>
 		<gzip src="yapbam-${yapbamVersion}.tar" destfile="yapbam-${yapbamVersion}.tar.gz"/>
 		<delete file="yapbam-${yapbamVersion}.tar"/>
+		<delete dir="${releaseDir}"/>
 		<delete dir="${linuxRelease}"/>
 	</target>
 	
 	<target name="windowsBuild" depends="commonBuild">
+		<!-- copy the common files -->
 		<property name="windowsRelease" value="windowsRelease"/>
 		<copy todir="${windowsRelease}">
 	    	<fileset dir="${releaseDir}" includes="**/*.*"/>
 		</copy>
+		<!-- copy the window portable executable -->
 		<copy file="PortableYapbam.exe" todir="${windowsRelease}"/>
+		<!-- create the installer parameter file -->
+		<property name="appInfoDir" value="${windowsRelease}/App/AppInfo"/>
+		<mkdir dir="${windowsRelease}/App/AppInfo"/>
+		<property name="appInfoPath" value="${appInfoDir}/appinfo.ini"/>
+		<echo file="${appInfoPath}">[Format]
+Type=PortableApps.comFormat
+Version=2.0
+
+[Details]
+Name=Yapbam Portable
+AppID=YapbamPortable
+Publisher=The Yapbam team
+Homepage=http://www.yapbam.net
+Category=Office
+Description=A simple but powerful account manager
+Language=Multilingual
+
+[License]
+Shareable=true
+OpenSource=true
+Freeware=true
+CommercialUse=true
+
+[Version]
+DisplayVersion=${yapbamVersion}
+PackageVersion=${yapbamVersion}.0
+
+[Control]
+Icons=1
+Start=PortableYapbam.exe</echo>
+		<!-- copy icons -->
+		<copy file="icons/yapbam.ico" tofile="${appInfoDir}/appicon.ico"/>
+		<copy file="icons/yapbam_16.png" tofile="${appInfoDir}/appicon_16.png"/>
+		<copy file="icons/yapbam_32.png" tofile="${appInfoDir}/appicon_32.png"/>
+		<!-- build the installer -->
+		<exec dir="${portableappsinstallerpath}" executable="${portableappsinstallerpath}/PortableApps.comInstaller.exe">
+		    <arg value="${basedir}\${windowsRelease}"/>
+		</exec>
+		<!-- Delete the working directories -->
+		<delete dir="${windowsRelease}"/>
+		<delete dir="${releaseDir}"/>
 	</target>
 	
 	<target name="doc">
