@@ -14,7 +14,16 @@
 	<property name="yapbamVersion" value="0.7.2"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
+	<property name="releaseDir" value="YapbamRelease"/>
+	
 	<target name="build">
+		<antcall target="othersBuild"/>
+		<antcall target="windowsBuild"/>
+		<delete dir="${releaseDir}"/>
+		<echo message="Don't forget to create the installer of the windows version"/>
+	</target>
+	
+	<target name="commonBuild">
 		<echo message="version=${yapbamVersion} (${TODAY})" file="src/version.txt"/>
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
@@ -26,39 +35,57 @@
 		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
 		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
 		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}" debug="true"/>
+		<property name="appDir" value="${releaseDir}/App"/>
+		<property name="othersDir" value="${releaseDir}/Other"/>
+		<property name="helpDir" value="${othersDir}/help"/>
+		<property name="samplesDir" value="${othersDir}/samples"/>
+		<delete dir="${releaseDir}"/>
+		<mkdir dir="${releaseDir}"/>
+		<mkdir dir="${appDir}"/>
+		<mkdir dir="${othersDir}"/>
+		<jar destfile="${appDir}/program.jar">
+			<manifest>
+				<attribute name="Main-Class" value="net.yapbam.gui.MainFrame"/>
+				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
+			</manifest>
+			<fileset dir="releaseCompile"/>
+		</jar>
+		<delete dir="releaseCompile"/>
+		<copy file="help.html" todir="${releaseDir}"/>
+		<copy todir="${othersDir}">
+	    	<fileset dir="Other" includes="**/*.*"/>
+		</copy>
+	</target>
+	
+	<target name="othersBuild" depends="commonBuild">
+		<property name="linuxRelease" value="linuxRelease"/>
+		<copy todir="${linuxRelease}">
+	    	<fileset dir="${releaseDir}" includes="**/*.*"/>
+		</copy>
+		<copy todir="releaseCompile/net/yapbam/gui/images/" file="src/net/yapbam/gui/images/splash.png"/>
 		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" />
-		<jar destfile="yapbam.jar">
+		<jar destfile="${linuxRelease}/yapbam.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.gui.Launcher"/>
 				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
 			</manifest>
 			<fileset dir="releaseCompile"/>
 		</jar>
-		<property name="releaseDir" value="Yapbam"/>
-		<delete dir="${releaseDir}"/>
-		<mkdir dir="${releaseDir}"/>
-		<copy todir="${releaseDir}" flatten="true">
-	    	<fileset dir="src/localization" includes="*.html"/>
-	    	<fileset dir="." includes="*Sample*.xml"/>
-			<resources>
-		        <file file="yapbam.jar"/>
-				<file file="Yapbam.exe"/>
-			</resources>
-		</copy>
-		<copy todir="${releaseDir}/help" flatten="false">
-	    	<fileset dir="help" includes="**/*.html" />
-		</copy>
 		<delete dir="releaseCompile"/>
-		<zip basedir="${releaseDir}" destfile="yapbam-${yapbamVersion}.zip"/>
-		<delete file="${releaseDir}/Yapbam.exe"/>
-<!--
-Specific non windows version
-		<tar basedir="${releaseDir}" destfile="yapbam-${yapbamVersion}.tar"/>
+		<tar basedir="${linuxRelease}" destfile="yapbam-${yapbamVersion}.tar"/>
 		<gzip src="yapbam-${yapbamVersion}.tar" destfile="yapbam-${yapbamVersion}.tar.gz"/>
 		<delete file="yapbam-${yapbamVersion}.tar"/>
--->
-		<delete dir="${releaseDir}"/>
+		<delete dir="${linuxRelease}"/>
 	</target>
+	
+	<target name="windowsBuild" depends="commonBuild">
+		<property name="windowsRelease" value="windowsRelease"/>
+		<copy todir="${windowsRelease}">
+	    	<fileset dir="${releaseDir}" includes="**/*.*"/>
+		</copy>
+		<copy file="PortableYapbam.exe" todir="${windowsRelease}"/>
+	</target>
+	
 	<target name="doc">
 		<javadoc header="${yapbamVersion}" sourcepath="src;${jcommonpath};${jfreechartpath}"
 			packagenames="net.yapbam.data,net.yapbam.data.xml,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget"
