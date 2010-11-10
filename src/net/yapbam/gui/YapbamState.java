@@ -51,7 +51,7 @@ public class YapbamState {
 	}
 
 	private static File getFile() {
-		return new File (Portable.getLaunchDirectory(), ".yapbam");
+		return new File (Portable.getDataDirectory(), ".yapbam");
 	}
 	
 	void restoreMainFramePosition(MainFrame frame) {
