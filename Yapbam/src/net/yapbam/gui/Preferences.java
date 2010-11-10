@@ -74,7 +74,7 @@ public class Preferences {
 	}
 
 	private static File getFile() {
-		return new File (Portable.getLaunchDirectory(), ".yapbampref"); //$NON-NLS-1$
+		return new File (Portable.getDataDirectory(), ".yapbampref"); //$NON-NLS-1$
 	}
 	
 	private void setToDefault() {

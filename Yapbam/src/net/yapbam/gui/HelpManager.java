@@ -50,7 +50,7 @@ public class HelpManager {
 	 */
 	public static final void show(Component parent, Content content) {
 			loadLanguagesLocations();
-			URI url = new File(Portable.getLaunchDirectory(),RESOURCE_BUNDLE.getString(content.key)).toURI();
+			URI url = new File(Portable.getHelpDirectory(),RESOURCE_BUNDLE.getString(content.key)).toURI();
 			show(parent, url); 
 	}
 
