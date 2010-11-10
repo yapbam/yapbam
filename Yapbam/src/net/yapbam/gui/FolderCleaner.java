@@ -72,14 +72,9 @@ class FolderCleaner {
 				if (source.exists() && source.canWrite()) {
 					if (isValidCheckSum()) {
 						if (this.destination==null) {
-							if (source.delete()) {
-								System.out.println (source+" was deleted");
-							} else {
-								System.out.println (source+" deletion fails");								
-							}
+							source.delete();
 						} else {
 							FileUtils.move(source, destination);
-							System.out.println (source+" was moved");
 						}
 					}
 				}
@@ -95,7 +90,7 @@ class FolderCleaner {
 			for (String validCheckSum : this.checkSums) {
 				if (validCheckSum.equals(checkSum)) return true;
 			}
-			System.out.println (source+" -> invalid check sum : "+checkSum);
+			System.out.println (source+" -> invalid check sum : "+checkSum); //TODO
 			return false;
 		}
 	}
