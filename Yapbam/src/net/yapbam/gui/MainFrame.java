@@ -59,23 +59,23 @@ public class MainFrame extends JFrame implements DataListener {
 	    //Create and set up the window.
 		super();
 		this.setMinimumSize(new Dimension(800,400));
-		
-	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-	    this.addWindowListener(new WindowAdapter() {
-	    	@Override
-	    	public void windowClosing(WindowEvent event) {
-	    		MainFrame frame = (MainFrame) event.getWindow();
-	    		if (frame.isRestarting) {
-	    			YapbamState.save(frame);
-	    			super.windowClosing(event);
-	    			frame.dispose();
-	    		} else if (SaveManager.MANAGER.verify(frame)) {
-	    			YapbamState.save(frame);
-	    			Preferences.INSTANCE.save();
-	    			super.windowClosing(event);
-	    			frame.dispose();
-	    		}
-	    	}
+
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				MainFrame frame = (MainFrame) event.getWindow();
+				if (frame.isRestarting) {
+					YapbamState.save(frame);
+					super.windowClosing(event);
+					frame.dispose();
+				} else if (SaveManager.MANAGER.verify(frame)) {
+					YapbamState.save(frame);
+					Preferences.INSTANCE.save();
+					super.windowClosing(event);
+					frame.dispose();
+				}
+			}
 		});
 	
 		if (filteredData == null) {
