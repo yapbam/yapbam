@@ -37,7 +37,7 @@
 		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
-		<property name="helpDir" value="${othersDir}/help"/>
+		<property name="helpDir" value="${othersDir}/Help"/>
 		<property name="samplesDir" value="${othersDir}/samples"/>
 		<delete dir="${releaseDir}"/>
 		<mkdir dir="${releaseDir}"/>
@@ -51,7 +51,6 @@
 			<fileset dir="releaseCompile"/>
 		</jar>
 		<delete dir="releaseCompile"/>
-		<copy file="help.html" todir="${releaseDir}"/>
 		<copy todir="${othersDir}">
 	    	<fileset dir="Other" includes="**/*.*"/>
 		</copy>
@@ -72,6 +71,7 @@
 			<fileset dir="releaseCompile"/>
 		</jar>
 		<delete dir="releaseCompile"/>
+		<copy file="help.html" todir="${releaseDir}"/>
 		<tar basedir="${linuxRelease}" destfile="yapbam-${yapbamVersion}.tar"/>
 		<gzip src="yapbam-${yapbamVersion}.tar" destfile="yapbam-${yapbamVersion}.tar.gz"/>
 		<delete file="yapbam-${yapbamVersion}.tar"/>
@@ -87,6 +87,8 @@
 		</copy>
 		<!-- copy the window portable executable -->
 		<copy file="PortableYapbam.exe" todir="${windowsRelease}"/>
+		<!-- copy the portableApps specific help page -->
+		<copy file="helpPortableApp.html" tofile="${windowsRelease}/help.html"/>
 		<!-- create the installer parameter file -->
 		<property name="appInfoDir" value="${windowsRelease}/App/AppInfo"/>
 		<mkdir dir="${windowsRelease}/App/AppInfo"/>
