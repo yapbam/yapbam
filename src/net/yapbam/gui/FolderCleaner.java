@@ -2,71 +2,129 @@ package net.yapbam.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ResourceBundle;
 
 import net.yapbam.util.CheckSum;
 import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
-/** This class is in charge of removing obsoletes files from previous Yapbam versions. 
+/** This class is in charge of removing obsolete files from previous Yapbam installations. 
  */
 class FolderCleaner {
-	private static CleaningJob[] JOBS;
-	
 	private FolderCleaner(){}
-	
-	static void clean() {
+/*	
+	public static void main (String[] args) {
+		File globalFolder = new File("C:/Users/Jean-Marc/Desktop/YapbamOldBis");
+		String[] foldersName = new String[]{"0.4.0","0.6.2","0.6.3","0.6.4","0.6.5","0.6.6","0.6.7","0.7.0","0.7.1"};
+
+		// This was used to build the obsolete file table.
 		try {
-			if (JOBS==null) {
-				File main = Portable.getLaunchDirectory();
-				JOBS = new CleaningJob[] {
-					new CleaningJob(new File(main,"YapbamDataSample_en.xml"), "305c894fe05c386405592e29d01ce0a7", null),
-					new CleaningJob(new File(main,"YapbamDataSample_fr.xml"), "7a3e76824e74672d4a3941c4ab219720", null),
-					new CleaningJob(new File(main,"Installation instructions.html"), "-48f4d394d5de7fab2d9199d56f54b83f", null),
-					new CleaningJob(new File(main,"contributors.html"), "511612421c8c0a2629d5b77a3dd1b4cc", null),
-					new CleaningJob(new File(main,"license.html"), "-4da76f5b973bd32b5a837cc958195fdf", null),
-					new CleaningJob(new File(main,"Release notes.html"), new String[]{"12301e87f607744428ccbdd3016f9a70"}, null), //TODO release notes of older versions
-					new CleaningJob(new File(main,"help/import.html"), "34f3e9d273c20de561050412983d0182", null),
-					new CleaningJob(new File(main,"help/regexp.html"), "4a5a2c4935fc07fb6861026240379292", null),
-					new CleaningJob(new File(main,"help/fr/import.html"), "-5cfb2231d119e70cb2ab3a48c6a43e92", null),
-					new CleaningJob(new File(main,"help/fr/regexp.html"), "69b6bc3e04fc55aa78b88d477c734ae8", null),
-					new CleaningJob(new File(main,"yapbam.jar"), new String[0], null),
-					new CleaningJob(new File(main,".yapbam"), new String[0], new File(Portable.getDataDirectory(),".yapbam")),
-					new CleaningJob(new File(main,".yapbampref"), new String[0], new File(Portable.getDataDirectory(),".yapbampref"))
-				};
+			String[] paths = new String[]{"YapbamDataSample_en.xml","YapbamDataSample_fr.xml","Installation instructions.html",
+					"contributors.html","license.html","Release notes.html","help/import.html","help/regexp.html","help/fr/import.html",
+					"help/fr/regexp.html","yapbam.jar","yapbam.bat"};
+			
+			File[] folders = new File[foldersName.length];
+			for (int i=0; i<folders.length;i++) {
+				folders[i] = new File(globalFolder, foldersName[i]);
 			}
-			if (needToClean()) { // If we need to perform cleaning ?
-				for (CleaningJob job : JOBS) {
-					job.clean();
+			buildProperties(paths, folders);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		// this was used to test cleaning on a lot of old versions.
+		for (String folder : foldersName) {
+			clean (new File(globalFolder, folder));
+		}
+	}
+*/
+	/** Outputs to standard output a property file in the format expected by the clean method.
+	 * @param paths The relative paths of the files to delete
+	 * @param folders the folders that contain different versions of these files.
+	 * @throws IOException
+	 */
+	@SuppressWarnings("deprecation")
+	static void buildProperties(String[] paths, File[] folders) throws IOException {
+		for (String filePath : paths) {
+			String[] checksums = CheckSum.getCheckSums(folders, filePath);
+			if (checksums.length>0) {
+				System.out.print (URLEncoder.encode(filePath)+"=");
+				for (int i = 0; i < checksums.length; i++) {
+					if (i!=0) System.out.print(',');
+					System.out.print(checksums[i]);
 				}
+				System.out.println();
 			}
+		}
+	}
+	
+	/** Cleans an installation folder.
+	 * <br>This method may be used to test the cleaner on an old installation without installing yapbam over it.
+	 * @param installationFolder The folder to clean.
+	 */
+	@SuppressWarnings("deprecation")
+	private static void clean(File installationFolder) {
+		try {
+			Collection<CleaningJob> jobs = new ArrayList<FolderCleaner.CleaningJob>();
+			// Files we need to remove are stored in a resource bundle file
+			ResourceBundle checksumsMap = ResourceBundle.getBundle(FolderCleaner.class.getPackage().getName()+".obsoleteFilesChecksums");
+			for (String path : checksumsMap.keySet()) { // For every obsolete files
+				jobs.add(new CleaningJob(new File(installationFolder, URLDecoder.decode(path)), checksumsMap.getString(path).split(","), null));
+			}
+			// Files we need to move ... are defined ... nowhere but below
+			jobs.add(new CleaningJob(new File(installationFolder,".yapbam"), new String[0], new File(Portable.getDataDirectory(),".yapbam")));
+			jobs.add(new CleaningJob(new File(installationFolder,".yapbampref"), new String[0], new File(Portable.getDataDirectory(),".yapbampref")));
+			for (CleaningJob job : jobs) {
+				job.clean();
+			}
+			// It remains that damned help directory
+			new File(installationFolder,"help/fr").delete();
+			new File(installationFolder,"help").delete();
 		} catch (Throwable e) {
 			// This method must never fail.
 			// If there's a problem, forget cleaning ... it's not so important.
 		}
 	}
 	
-	private static boolean needToClean() {
-		// Yes if we never ran the 0.7.2 => There's no preferences in the data directory ?
-		//TODO
-		return true;
+	/** Cleans yapbam installation folder.
+	 * @param folder
+	 */
+	static void clean() {
+		if (needToClean()) { // If we need to perform cleaning ?
+			clean (Portable.getLaunchDirectory());
+		}
 	}
 	
+	private static boolean needToClean() {
+		// Yes if we never ran the 0.7.2 for the first time => There's no preferences in the data directory ?
+		return !Preferences.getFile().exists();
+	}
+	
+	/** A cleaning job.
+	 */
 	static class CleaningJob {
 		File source;
 		String[] checkSums;
 		File destination;
 		
+		/** Constructor.
+		 * @param source The file to move or delete.
+		 * @param checkSums the possible checksum of the file. The file will be deleted only if its checksum is equal to one of these ones.
+		 * @param destination the destination of the file, null to delete the file.
+		 */
 		CleaningJob(File source, String[] checkSums, File destination) {
 			super();
 			this.source = source;
 			this.checkSums = checkSums;
 			this.destination = destination;
 		}
-
-		CleaningJob(File source, String checkSum, File destination) {
-			this(source, new String[]{checkSum}, destination);
-		}
 		
+		/** Performs the cleaning.
+		 */
 		void clean() {
 			try {
 				if (source.exists() && source.canWrite()) {
@@ -79,18 +137,21 @@ class FolderCleaner {
 					}
 				}
 			} catch (Throwable e) {
-				System.err.println ("Error on file "+source);
 				e.printStackTrace();
 			}
 		}
 
+		/** Tests whether the file has a valid checksum or not.
+		 * @return true if the file has a valid checksum.
+		 * @throws IOException
+		 */
 		private boolean isValidCheckSum() throws IOException {
 			if (this.checkSums.length==0) return true;
-			String checkSum = CheckSum.toString(CheckSum.createChecksum(source));
+			String checkSum = CheckSum.toString(CheckSum.getChecksum(source));
 			for (String validCheckSum : this.checkSums) {
 				if (validCheckSum.equals(checkSum)) return true;
 			}
-			System.out.println (source+" -> invalid check sum : "+checkSum); //TODO
+//			System.out.println (source + " invalid checksum");
 			return false;
 		}
 	}

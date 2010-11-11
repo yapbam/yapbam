@@ -73,7 +73,7 @@ public class Preferences {
 		}
 	}
 
-	private static File getFile() {
+	static File getFile() {
 		return new File (Portable.getDataDirectory(), ".yapbampref"); //$NON-NLS-1$
 	}
 	
