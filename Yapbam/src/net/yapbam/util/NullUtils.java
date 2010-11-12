@@ -1,7 +1,7 @@
 package net.yapbam.util;
 
 /** Utility to securely test whether two instances are equals ... even if one of them is null.
- * @author Fathzer
+ * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
 public final class NullUtils {

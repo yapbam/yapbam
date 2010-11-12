@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /** Utility to perform some operations on files.
- * @author Fathzer
+ * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
 public class FileUtils {

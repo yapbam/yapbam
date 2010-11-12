@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @see #REGULAR
  * @see #EQUALS
  * @see #CONTAINS
- * @author Fathzer
+ * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
 public class TextMatcher {
