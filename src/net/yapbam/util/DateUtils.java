@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /** Utilities about dates. 
- * @author Fathzer
+ * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
 public final class DateUtils {

@@ -25,7 +25,7 @@ import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /** Utilities to encrypt data.
- * @author Fathzer
+ * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
 public final class Crypto {
