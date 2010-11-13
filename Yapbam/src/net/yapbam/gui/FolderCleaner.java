@@ -68,6 +68,7 @@ class FolderCleaner {
 	 */
 	@SuppressWarnings("deprecation")
 	private static void clean(File installationFolder) {
+//		System.out.println ("start cleaning of "+installationFolder);
 		try {
 			Collection<CleaningJob> jobs = new ArrayList<FolderCleaner.CleaningJob>();
 			// Files we need to remove are stored in a resource bundle file
@@ -101,7 +102,12 @@ class FolderCleaner {
 	
 	private static boolean needToClean() {
 		// Yes if we never ran the 0.7.2 for the first time => There's no preferences in the data directory ?
-		return !Preferences.getFile().exists();
+		// Danger, if we call the Preferences.getFile() method here to identify where should be the preference
+		// file, it will initialize Preferences.INSTANCE and its firstRun attribute.
+		// It would leads to think that it's the first Yapbam run ... but it's not if the yapbam pref file is
+		// simply at the wrong place.
+		File prefFile = new File(Portable.getDataDirectory(), ".yapbampref");
+		return !prefFile.exists();
 	}
 	
 	/** A cleaning job.
@@ -126,6 +132,7 @@ class FolderCleaner {
 		/** Performs the cleaning.
 		 */
 		void clean() {
+//			System.out.println ("Start cleaning of "+source);
 			try {
 				if (source.exists() && source.canWrite()) {
 					if (isValidCheckSum()) {

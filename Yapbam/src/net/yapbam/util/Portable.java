@@ -16,14 +16,6 @@ public final class Portable {
 	 */
 	public static File getLaunchDirectory() {
 		return new File(System.getProperty("user.dir"));
-//		String fileName = Portable.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-//		File file = new File(URLDecoder.decode(fileName));
-//		if (file.isDirectory()) {
-//			file = new File("").getAbsoluteFile();
-//		} else {
-//			file = file.getParentFile();
-//		}
-//		return file;
 	}
 	
 	/** Gets the applications's data directory.
