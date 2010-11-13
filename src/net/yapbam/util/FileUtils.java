@@ -23,6 +23,13 @@ public class FileUtils {
 	 * @throws IOException If the move fails
 	 */
 	public static void move(File src, File dest) throws IOException {
+		// Check whether the destination directory exists or not.
+		// If not, create it.
+		File parent = dest.getParentFile();
+		if (!parent.exists()) {
+			parent.mkdirs();
+		}
+		// Try to simply rename the file
 		boolean result = src.renameTo(dest);
 		if (result==false) {
 			// renameTo may fail if src and dest files are not on the same file system.
