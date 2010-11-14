@@ -43,25 +43,25 @@ public class CheckModePanel extends JPanel {
 				refreshOk();
 			}
 		};
-        checkModeBox = new JCheckBox(LocalizationData.get("CheckModePanel.title")); //$NON-NLS-1$
-        checkModeBox.setToolTipText(LocalizationData.get("CheckModePanel.title.tooltip")); //$NON-NLS-1$
-        checkModeBox.addItemListener(new ItemListener() {
+		checkModeBox = new JCheckBox(LocalizationData.get("CheckModePanel.title")); //$NON-NLS-1$
+		checkModeBox.setToolTipText(LocalizationData.get("CheckModePanel.title.tooltip")); //$NON-NLS-1$
+		checkModeBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				refresh();
 			}
 		});
-        add(checkModeBox);
-        statementLabel = new JLabel(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
+		add(checkModeBox);
+		statementLabel = new JLabel(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 		add(statementLabel);
-        statement = new JTextField(5);
-        statement.addKeyListener(listener);
-        statement.addFocusListener(new AutoSelectFocusListener());
-        statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
-        add(statement);
-        valueDateLabel = new JCheckBox(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
-        valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
-        valueDateLabel.addChangeListener(new ChangeListener() {
+		statement = new JTextField(5);
+		statement.addKeyListener(listener);
+		statement.addFocusListener(new AutoSelectFocusListener());
+		statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
+		add(statement);
+		valueDateLabel = new JCheckBox(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
+		valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
+		valueDateLabel.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				refreshOk();
@@ -71,17 +71,18 @@ public class CheckModePanel extends JPanel {
 		valueDate = new DateWidgetPanel();
 		valueDate.setDate(null);
 		valueDate.setLocale(LocalizationData.getLocale());
-        valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
-        valueDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
+		valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
+		valueDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
+				valueDateLabel.setSelected(true);
 				refreshOk();
 			}
 		});
-        valueDate.getDateWidget().addFocusListener(new AutoSelectFocusListener());
-        add(valueDate);
-        
-        setSelected(false);
+		valueDate.getDateWidget().addFocusListener(new AutoSelectFocusListener());
+		add(valueDate);
+
+		setSelected(false);
 	}
 	
 	public void setSelected(boolean selected) {
@@ -92,10 +93,10 @@ public class CheckModePanel extends JPanel {
 	private void refresh() {
 		boolean selected = checkModeBox.isSelected();
 		statementLabel.setVisible(selected);
-        statement.setVisible(selected);
-        valueDateLabel.setVisible(selected);
-        valueDate.setVisible(selected);
-        refreshOk();
+		statement.setVisible(selected);
+		valueDateLabel.setVisible(selected);
+		valueDate.setVisible(selected);
+		refreshOk();
 	}
 
 	private void refreshOk() {
