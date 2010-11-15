@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 
 public class Launcher {
 	private final static String REQUIRED_JAVA_VERSION = "1.6";
-	private final static String NO_JAR_PROPERTY = "noJar";
 	private final static File JAR_FILE = new File("App/program.jar");
 	private static String CLASS_NAME = "net.yapbam.gui.MainFrame";
 	
@@ -25,7 +24,7 @@ public class Launcher {
 		} else {
 			try {
 				Class mainClass;
-				if (!Boolean.getBoolean(NO_JAR_PROPERTY)) {
+				if (!noJar()) {
 					if (!JAR_FILE.exists()) {
 						error("<html>A program file is missing ("+JAR_FILE.getAbsolutePath()+").<br><br>You should install Yapbam again in order to fix it.<br></html>");
 					}
@@ -50,6 +49,15 @@ public class Launcher {
 			} catch (InvocationTargetException e) {
 				error(e);
 			}
+		}
+	}
+	
+	private static boolean noJar() {
+		try {
+			Class.forName(CLASS_NAME);
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
 		}
 	}
 
