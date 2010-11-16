@@ -6,6 +6,9 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 
+/** This plugin implements the Administration panel.
+ * @author Jean-Marc Astesana
+ */
 public class AdministrationPlugIn extends AbstractPlugIn {
 	private AdministrationPanel panel;
 

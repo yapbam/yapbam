@@ -22,11 +22,19 @@ public class StatementViewPlugin extends AbstractPlugIn {
 		return this.panel;
 	}
 
+	@Override
 	public void restoreState() {
 		YapbamState.restoreState(panel.getTransactionsTable(), STATE_PREFIX);
 	}
 
+	@Override
 	public void saveState() {
 		YapbamState.saveState(panel.getTransactionsTable(), STATE_PREFIX);
+	}
+
+	@Override
+	public boolean allowMenu(int menuId) {
+		if (menuId==FILTER_MENU) return false;
+		return super.allowMenu(menuId);
 	}
 }
