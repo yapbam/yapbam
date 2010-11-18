@@ -19,8 +19,8 @@
 	<property name="releaseDir" value="YapbamRelease"/>
 	
 	<target name="build">
-		<antcall target="othersBuild"/>
-		<antcall target="windowsBuild"/>
+		<antcall target="others.build"/>
+		<antcall target="portableApps.com.build"/>
 	</target>
 	
 	<target name="commonBuild">
@@ -56,7 +56,7 @@
 		</copy>
 	</target>
 	
-	<target name="othersBuild" depends="commonBuild">
+	<target name="others.build" depends="commonBuild">
 		<property name="linuxRelease" value="linuxRelease"/>
 		<copy todir="${linuxRelease}">
 	    	<fileset dir="${releaseDir}" includes="**/*.*"/>
@@ -79,7 +79,7 @@
 		<delete dir="${linuxRelease}"/>
 	</target>
 	
-	<target name="windowsBuild" depends="commonBuild">
+	<target name="portableApps.com.build" depends="commonBuild">
 		<!-- copy the common files -->
 		<property name="windowsRelease" value="windowsRelease"/>
 		<copy todir="${windowsRelease}">
@@ -88,7 +88,10 @@
 		<!-- copy the window portable executable -->
 		<copy file="PortableYapbam.exe" todir="${windowsRelease}"/>
 		<!-- copy the portableApps specific help page -->
-		<copy file="helpPortableApp.html" tofile="${windowsRelease}/help.html"/>
+		<copy file="helpPages/portableApps.com/help.html" tofile="${windowsRelease}/help.html"/>
+		<copy todir="${windowsRelease}/Other/help">
+	    	<fileset dir="helpPages/portableApps.com/Other/help" includes="**/*.*"/>
+		</copy>
 		<!-- create the installer parameter file -->
 		<property name="appInfoDir" value="${windowsRelease}/App/AppInfo"/>
 		<mkdir dir="${windowsRelease}/App/AppInfo"/>
@@ -128,7 +131,7 @@ Start=PortableYapbam.exe</echo>
 		    <arg value="${basedir}\${windowsRelease}"/>
 		</exec>
 		<!-- Delete the working directories -->
-		<delete dir="${windowsRelease}"/>
+		<!--delete dir="${windowsRelease}"/-->
 		<delete dir="${releaseDir}"/>
 	</target>
 	
