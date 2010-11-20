@@ -45,6 +45,7 @@ import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
 import javax.swing.JButton;
+import java.awt.BorderLayout;
 
 public class CustomFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -56,7 +57,6 @@ public class CustomFilterPanel extends JPanel {
 	private JPanel amountPanel = null;
 	private JPanel categoryPanel = null;
 	private JList categoryList = null;
-	private JPanel jPanel3 = null;
 	private JRadioButton amountEquals = null;
 	private JRadioButton amountBetween = null;
 	private AmountWidget minAmount = null;
@@ -87,7 +87,6 @@ public class CustomFilterPanel extends JPanel {
 	private JScrollPane jScrollPane = null;
 	private JScrollPane jScrollPane1 = null;
 	private JTextField statement = null;
-	private JPanel jPanel = null;
 	private JCheckBox ignoreDiacritics = null;
 	private JLabel regexpHelp = null;
 	private JPanel jPanel1 = null;
@@ -133,6 +132,13 @@ public class CustomFilterPanel extends JPanel {
 	private JRadioButton numberContains = null;
 	private JRadioButton numberRegular = null;
 	private JTextField number = null;
+	private JCheckBox checkBox;
+	private JCheckBox checkBox_1;
+	private JPanel panel_1;
+	private JPanel Receipts_expensesPanel;
+	private JPanel panel_2;
+	private JPanel panel_3;
+	private JPanel panel;
 
 	/**
 	 * This is the default constructor
@@ -153,25 +159,78 @@ public class CustomFilterPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints111 = new GridBagConstraints();
-		gridBagConstraints111.gridx = 1;
-		gridBagConstraints111.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints111.gridy = 2;
 		GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+		gridBagConstraints28.insets = new Insets(0, 0, 5, 5);
 		gridBagConstraints28.gridx = 0;
 		gridBagConstraints28.fill = GridBagConstraints.BOTH;
-		gridBagConstraints28.gridy = 2;
+		gridBagConstraints28.gridy = 3;
 		GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
+		gridBagConstraints110.insets = new Insets(0, 0, 5, 5);
 		gridBagConstraints110.gridx = 0;
 		gridBagConstraints110.anchor = GridBagConstraints.CENTER;
 		gridBagConstraints110.weighty = 1.0D;
-		gridBagConstraints110.gridy = 5;
+		gridBagConstraints110.gridy = 6;
 		GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+		gridBagConstraints41.insets = new Insets(0, 0, 5, 5);
 		gridBagConstraints41.gridx = 0;
 		gridBagConstraints41.fill = GridBagConstraints.BOTH;
 		gridBagConstraints41.weightx = 1.0D;
 		gridBagConstraints41.gridy = 4;
+		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+		gridBagConstraints21.insets = new Insets(0, 0, 5, 5);
+		gridBagConstraints21.gridx = 0;
+		gridBagConstraints21.fill = GridBagConstraints.BOTH;
+		gridBagConstraints21.weightx = 1.0D;
+		gridBagConstraints21.gridy = 2;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.weightx = 1.0;
+		gridBagConstraints.insets = new Insets(0, 0, 5, 5);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.weighty = 0.0D;
+		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.gridy = 1;
+		this.setSize(800, 500);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0};
+		this.setLayout(gridBagLayout);
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.gridwidth = 2;
+		gbc_panel.weighty = 1.0;
+		gbc_panel.weightx = 1.0;
+		gbc_panel.insets = new Insets(0, 0, 5, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 1;
+		gbc_panel.gridy = 1;
+		add(getPanel(), gbc_panel);
+		this.add(getAccountPanel(), gridBagConstraints);
+		GridBagConstraints gbc_amountPanel = new GridBagConstraints();
+		gbc_amountPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_amountPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_amountPanel.gridx = 1;
+		gbc_amountPanel.gridy = 2;
+		add(getAmountPanel(), gbc_amountPanel);
+		this.add(getDatePanel(), gridBagConstraints21);
+		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+		gridBagConstraints3.insets = new Insets(0, 0, 0, 5);
+		gridBagConstraints3.gridx = 2;
+		gridBagConstraints3.fill = GridBagConstraints.BOTH;
+		gridBagConstraints3.weightx = 4.0D;
+		gridBagConstraints3.weighty = 1.0D;
+		gridBagConstraints3.gridwidth = 1;
+		gridBagConstraints3.gridheight = 0;
+		gridBagConstraints3.gridy = 2;
+		this.add(getCategoryPanel(), gridBagConstraints3);
+		GridBagConstraints gridBagConstraints111 = new GridBagConstraints();
+		gridBagConstraints111.insets = new Insets(0, 0, 5, 5);
+		gridBagConstraints111.gridx = 1;
+		gridBagConstraints111.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints111.gridy = 3;
+		this.add(getJPanel111(), gridBagConstraints111);
+		this.add(getValueDatePanel(), gridBagConstraints41);
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+		gridBagConstraints31.insets = new Insets(0, 0, 0, 5);
 		gridBagConstraints31.gridx = 1;
 		gridBagConstraints31.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints31.gridwidth = 1;
@@ -179,51 +238,16 @@ public class CustomFilterPanel extends JPanel {
 		gridBagConstraints31.gridheight = 0;
 		gridBagConstraints31.anchor = GridBagConstraints.NORTH;
 		gridBagConstraints31.weighty = 1.0D;
-		gridBagConstraints31.gridy = 3;
-		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-		gridBagConstraints21.gridx = 0;
-		gridBagConstraints21.fill = GridBagConstraints.BOTH;
-		gridBagConstraints21.weightx = 1.0D;
-		gridBagConstraints21.gridy = 1;
-		GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-		gridBagConstraints15.gridx = 1;
-		gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints15.gridwidth = 2;
-		gridBagConstraints15.gridy = 0;
-		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.gridx = 2;
-		gridBagConstraints3.fill = GridBagConstraints.BOTH;
-		gridBagConstraints3.weightx = 4.0D;
-		gridBagConstraints3.weighty = 1.0D;
-		gridBagConstraints3.gridwidth = 1;
-		gridBagConstraints3.gridheight = 0;
-		gridBagConstraints3.gridy = 1;
-		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.gridx = 1;
-		gridBagConstraints2.fill = GridBagConstraints.BOTH;
-		gridBagConstraints2.weightx = 1.0D;
-		gridBagConstraints2.anchor = GridBagConstraints.WEST;
-		gridBagConstraints2.insets = new Insets(0, 0, 0, 0);
-		gridBagConstraints2.gridy = 1;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.weightx = 1.0D;
-		gridBagConstraints.weighty = 0.0D;
-		gridBagConstraints.gridwidth = 1;
-		gridBagConstraints.gridy = 0;
-		this.setSize(800, 500);
-		this.setLayout(new GridBagLayout());
-		this.add(getAccountPanel(), gridBagConstraints);
-		this.add(getAmountPanel(), gridBagConstraints2);
-		this.add(getCategoryPanel(), gridBagConstraints3);
-		this.add(getDescriptionPanel(), gridBagConstraints15);
-		this.add(getDatePanel(), gridBagConstraints21);
+		gridBagConstraints31.gridy = 4;
 		this.add(getStatementPanel(), gridBagConstraints31);
-		this.add(getValueDatePanel(), gridBagConstraints41);
 		this.add(getClear(), gridBagConstraints110);
 		this.add(getModePanel(), gridBagConstraints28);
-		this.add(getJPanel111(), gridBagConstraints111);
+		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+		gbc_panel_3.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_3.fill = GridBagConstraints.BOTH;
+		gbc_panel_3.gridx = 0;
+		gbc_panel_3.gridy = 7;
+		add(getPanel_3(), gbc_panel_3);
 	}
 
 	/**
@@ -296,17 +320,27 @@ public class CustomFilterPanel extends JPanel {
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 5;
 			gridBagConstraints4.gridy = 0;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.fill = GridBagConstraints.BOTH;
-			gridBagConstraints7.weightx = 1.0D;
-			gridBagConstraints7.weighty = 1.0D;
-			gridBagConstraints7.gridwidth = GridBagConstraints.REMAINDER;
-			gridBagConstraints7.gridy = 1;
 			amountPanel = new JPanel();
-			amountPanel.setLayout(new GridBagLayout());
-			amountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
-			amountPanel.add(getJPanel3(), gridBagConstraints7);
+			GridBagLayout gbl_amountPanel = new GridBagLayout();
+			gbl_amountPanel.rowWeights = new double[]{0.0};
+			gbl_amountPanel.columnWeights = new double[]{1.0, 0.0, 0.0};
+			amountPanel.setLayout(gbl_amountPanel);
+			amountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+			gbc_panel_2.anchor = GridBagConstraints.WEST;
+			gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
+			gbc_panel_2.insets = new Insets(0, 0, 5, 5);
+			gbc_panel_2.gridx = 0;
+			gbc_panel_2.gridy = 0;
+			amountPanel.add(getPanel_2(), gbc_panel_2);
+			GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+			gbc_panel_1.weightx = 1.0;
+			gbc_panel_1.fill = GridBagConstraints.BOTH;
+			gbc_panel_1.anchor = GridBagConstraints.WEST;
+			gbc_panel_1.gridwidth = 3;
+			gbc_panel_1.gridx = 1;
+			gbc_panel_1.gridy = 0;
+			amountPanel.add(getPanel_1(), gbc_panel_1);
 		}
 		return amountPanel;
 	}
@@ -362,60 +396,6 @@ public class CustomFilterPanel extends JPanel {
 			categoryList.addListSelectionListener(CONSISTENCY_CHECKER_LIST);
 		}
 		return categoryList;
-	}
-
-	/**
-	 * This method initializes jPanel3	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel3() {
-		if (jPanel3 == null) {
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.anchor = GridBagConstraints.WEST;
-			gridBagConstraints13.gridy = 0;
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridy = 0;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.gridheight = 3;
-			gridBagConstraints12.gridx = 3;
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 2;
-			gridBagConstraints11.gridheight = 3;
-			gridBagConstraints11.insets = new Insets(0, 5, 0, 5);
-			gridBagConstraints11.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText(LocalizationData.get("CustomFilterPanel.amount.to")); //$NON-NLS-1$
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.gridy = 0;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.gridheight = 3;
-			gridBagConstraints8.weighty = 1.0D;
-			gridBagConstraints8.gridx = 1;
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.gridx = 0;
-			gridBagConstraints10.gridy = 2;
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.anchor = GridBagConstraints.WEST;
-			gridBagConstraints9.gridy = 1;
-			jPanel3 = new JPanel();
-			jPanel3.setLayout(new GridBagLayout());
-			jPanel3.add(getAmountEquals(), gridBagConstraints9);
-			jPanel3.add(getAmountBetween(), gridBagConstraints10);
-			jPanel3.add(getMinAmount(), gridBagConstraints8);
-			jPanel3.add(jLabel, gridBagConstraints11);
-			jPanel3.add(getMaxAmount(), gridBagConstraints12);
-			jPanel3.add(getAmountAll(), gridBagConstraints13);
-			ButtonGroup group = new ButtonGroup();
-			group.add(getAmountAll());
-			group.add(getAmountEquals());
-			group.add(getAmountBetween());
-		}
-		return jPanel3;
 	}
 
 	/**
@@ -1010,11 +990,6 @@ public class CustomFilterPanel extends JPanel {
 			gridBagConstraints5.weighty = 1.0D;
 			gridBagConstraints5.gridheight = 0;
 			gridBagConstraints5.gridx = 2;
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.gridx = 0;
-			gridBagConstraints29.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints29.gridwidth = 0;
-			gridBagConstraints29.gridy = 1;
 			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
 			gridBagConstraints27.gridx = 2;
 			gridBagConstraints27.anchor = GridBagConstraints.WEST;
@@ -1030,7 +1005,6 @@ public class CustomFilterPanel extends JPanel {
 			statementPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("CustomFilterPanel.check"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));  //$NON-NLS-1$//$NON-NLS-2$
 			statementPanel.add(getChecked(), gridBagConstraints26);
 			statementPanel.add(getNotChecked(), gridBagConstraints27);
-			statementPanel.add(getJPanel(), gridBagConstraints29);
 			statementPanel.add(getJPanel11(), gridBagConstraints6);
 		}
 		return statementPanel;
@@ -1263,19 +1237,6 @@ public class CustomFilterPanel extends JPanel {
 			statement.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
 		return statement;
-	}
-
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-		}
-		return jPanel;
 	}
 
 	/**
@@ -1711,10 +1672,122 @@ public class CustomFilterPanel extends JPanel {
 	private JTextField getNumber() {
 		if (number == null) {
 			number = new JTextField();
-			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
+			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip"));
 			number.setText(data.getNumberFilter()==null?"":data.getNumberFilter().getFilter()); //$NON-NLS-1$
 			number.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
 		return number;
+	}
+	private JCheckBox getCheckBox() {
+		if (checkBox == null) {
+			checkBox = new JCheckBox(LocalizationData.get("CustomFilterPanel.receipts")); //$NON-NLS-1$
+		}
+		return checkBox;
+	}
+	private JCheckBox getCheckBox_1() {
+		if (checkBox_1 == null) {
+			checkBox_1 = new JCheckBox(LocalizationData.get("CustomFilterPanel.expenses")); //$NON-NLS-1$
+		}
+		return checkBox_1;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			GridBagLayout gbl_panel_1 = new GridBagLayout();
+			gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_panel_1.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+			panel_1.setLayout(gbl_panel_1);
+			GridBagConstraints gbc_maxAmount = new GridBagConstraints();
+			gbc_maxAmount.insets = new Insets(0, 5, 0, 0);
+			gbc_maxAmount.weightx = 1.0;
+			gbc_maxAmount.fill = GridBagConstraints.HORIZONTAL;
+			gbc_maxAmount.gridx = 2;
+			gbc_maxAmount.gridy = 0;
+			panel_1.add(getMaxAmount(), gbc_maxAmount);
+			GridBagConstraints gbc_minAmount = new GridBagConstraints();
+			gbc_minAmount.fill = GridBagConstraints.HORIZONTAL;
+			gbc_minAmount.insets = new Insets(0, 0, 0, 5);
+			gbc_minAmount.weightx = 1.0;
+			gbc_minAmount.gridx = 0;
+			gbc_minAmount.gridy = 0;
+			panel_1.add(getMinAmount(), gbc_minAmount);
+			jLabel = new JLabel();
+			GridBagConstraints gbc_jLabel = new GridBagConstraints();
+			gbc_jLabel.gridx = 1;
+			gbc_jLabel.gridy = 0;
+			panel_1.add(jLabel, gbc_jLabel);
+			jLabel.setText(LocalizationData.get("CustomFilterPanel.amount.to"));
+		}
+		return panel_1;
+	}
+	private JPanel getReceipts_expensesPanel() {
+		if (Receipts_expensesPanel == null) {
+			Receipts_expensesPanel = new JPanel();
+			Receipts_expensesPanel.setBorder(new TitledBorder(null, "Nature", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			GridBagLayout gbl_Receipts_expensesPanel = new GridBagLayout();
+			gbl_Receipts_expensesPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
+			gbl_Receipts_expensesPanel.rowHeights = new int[]{0, 0};
+			gbl_Receipts_expensesPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_Receipts_expensesPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+			Receipts_expensesPanel.setLayout(gbl_Receipts_expensesPanel);
+			GridBagConstraints gbc_checkBox = new GridBagConstraints();
+			gbc_checkBox.insets = new Insets(0, 0, 0, 5);
+			gbc_checkBox.gridx = 0;
+			gbc_checkBox.gridy = 0;
+			Receipts_expensesPanel.add(getCheckBox(), gbc_checkBox);
+			GridBagConstraints gbc_checkBox_1 = new GridBagConstraints();
+			gbc_checkBox_1.gridx = 1;
+			gbc_checkBox_1.gridy = 0;
+			Receipts_expensesPanel.add(getCheckBox_1(), gbc_checkBox_1);
+		}
+		return Receipts_expensesPanel;
+	}
+	private JPanel getPanel_2() {
+		if (panel_2 == null) {
+			panel_2 = new JPanel();
+			GridBagLayout gbl_panel_2 = new GridBagLayout();
+			gbl_panel_2.columnWidths = new int[]{0, 0, 0, 0};
+			gbl_panel_2.rowHeights = new int[]{0, 0, 0, 0};
+			gbl_panel_2.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			panel_2.setLayout(gbl_panel_2);
+			GridBagConstraints gbc_amountAll = new GridBagConstraints();
+			gbc_amountAll.anchor = GridBagConstraints.WEST;
+			gbc_amountAll.insets = new Insets(0, 0, 0, 5);
+			gbc_amountAll.gridx = 0;
+			gbc_amountAll.gridy = 0;
+			panel_2.add(getAmountAll(), gbc_amountAll);
+			GridBagConstraints gbc_amountEquals = new GridBagConstraints();
+			gbc_amountEquals.anchor = GridBagConstraints.WEST;
+			gbc_amountEquals.insets = new Insets(0, 0, 0, 5);
+			gbc_amountEquals.gridx = 0;
+			gbc_amountEquals.gridy = 1;
+			panel_2.add(getAmountEquals(), gbc_amountEquals);
+			GridBagConstraints gbc_amountBetween = new GridBagConstraints();
+			gbc_amountBetween.anchor = GridBagConstraints.WEST;
+			gbc_amountBetween.gridx = 0;
+			gbc_amountBetween.gridy = 2;
+			panel_2.add(getAmountBetween(), gbc_amountBetween);
+			ButtonGroup group = new ButtonGroup();
+			group.add(getAmountAll());
+			group.add(getAmountEquals());
+			group.add(getAmountBetween());
+		}
+		return panel_2;
+	}
+	private JPanel getPanel_3() {
+		if (panel_3 == null) {
+			panel_3 = new JPanel();
+		}
+		return panel_3;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setLayout(new BorderLayout(0, 0));
+			panel.add(getReceipts_expensesPanel(), BorderLayout.NORTH);
+			panel.add(getDescriptionPanel(), BorderLayout.CENTER);
+		}
+		return panel;
 	}
 }
