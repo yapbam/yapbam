@@ -132,8 +132,8 @@ public class CustomFilterPanel extends JPanel {
 	private JRadioButton numberContains = null;
 	private JRadioButton numberRegular = null;
 	private JTextField number = null;
-	private JCheckBox checkBox;
-	private JCheckBox checkBox_1;
+	private JCheckBox receipts;
+	private JCheckBox expenses;
 	private JPanel panel_1;
 	private JPanel Receipts_expensesPanel;
 	private JPanel panel_2;
@@ -457,8 +457,9 @@ public class CustomFilterPanel extends JPanel {
 			minAmount = new AmountWidget(LocalizationData.getLocale());
 			minAmount.setColumns(6);
 			minAmount.setEmptyAllowed(true);
+			minAmount.setMinValue(0.0);
 			minAmount.setToolTipText(LocalizationData.get("CustomFilterPanel.amout.minimum")); //$NON-NLS-1$
-			minAmount.setValue(data.getMinimumAmount()==Double.NEGATIVE_INFINITY?null:data.getMinimumAmount());
+			minAmount.setValue(data.getMinimumAmount()==0.0?null:data.getMinimumAmount());
 			minAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
 			minAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 			minAmount.addFocusListener(AUTO_FOCUS_SELECTOR);
@@ -476,6 +477,7 @@ public class CustomFilterPanel extends JPanel {
 			maxAmount = new AmountWidget(LocalizationData.getLocale());
 			maxAmount.setColumns(6);
 			maxAmount.setEmptyAllowed(true);
+			maxAmount.setMinValue(0.0);
 			maxAmount.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.maximum")); //$NON-NLS-1$
 			maxAmount.setValue(data.getMaximumAmount()==Double.POSITIVE_INFINITY?null:data.getMaximumAmount());
 			maxAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
@@ -602,10 +604,11 @@ public class CustomFilterPanel extends JPanel {
 			categories[i] = data.getGlobalData().getCategory(categoryIndices[i]);
 		}
 		this.data.setCategories(categories);
-		// build the expense/receipt filter
-		double min = getMinAmount().getValue()==null?Double.NEGATIVE_INFINITY:getMinAmount().getValue();
+		// build the expense/receipt and amount filter
+		double min = getMinAmount().getValue()==null?0.0:getMinAmount().getValue();
 		double max = getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue();
 		this.data.setAmountFilter(min, max);
+		this.data.setReceiptsExpensesAllowed(this.getReceipts().isSelected(),this.getExpenses().isSelected());
 		// build the date filter
 		Date from = getDateFrom().getDate();
 		Date to = getDateTo().getDate();
@@ -1678,24 +1681,28 @@ public class CustomFilterPanel extends JPanel {
 		}
 		return number;
 	}
-	private JCheckBox getCheckBox() {
-		if (checkBox == null) {
-			checkBox = new JCheckBox(LocalizationData.get("CustomFilterPanel.receipts")); //$NON-NLS-1$
+	private JCheckBox getReceipts() {
+		if (receipts == null) {
+			receipts = new JCheckBox(LocalizationData.get("CustomFilterPanel.receipts")); //$NON-NLS-1$
+			receipts.setToolTipText(LocalizationData.get("CustomFilterPanel.receipts.toolTip")); //$NON-NLS-1$
+			receipts.setSelected(data.isReceiptsAllowed());
 		}
-		return checkBox;
+		return receipts;
 	}
-	private JCheckBox getCheckBox_1() {
-		if (checkBox_1 == null) {
-			checkBox_1 = new JCheckBox(LocalizationData.get("CustomFilterPanel.expenses")); //$NON-NLS-1$
+	private JCheckBox getExpenses() {
+		if (expenses == null) {
+			expenses = new JCheckBox(LocalizationData.get("CustomFilterPanel.expenses")); //$NON-NLS-1$
+			expenses.setToolTipText(LocalizationData.get("CustomFilterPanel.expenses.toolTip")); //$NON-NLS-1$
+			expenses.setSelected(data.isExpensesAllowed());
 		}
-		return checkBox_1;
+		return expenses;
 	}
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
 			GridBagLayout gbl_panel_1 = new GridBagLayout();
-			gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_panel_1.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+			gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0};
+			gbl_panel_1.rowWeights = new double[]{0.0};
 			panel_1.setLayout(gbl_panel_1);
 			GridBagConstraints gbc_maxAmount = new GridBagConstraints();
 			gbc_maxAmount.insets = new Insets(0, 5, 0, 0);
@@ -1730,15 +1737,15 @@ public class CustomFilterPanel extends JPanel {
 			gbl_Receipts_expensesPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			gbl_Receipts_expensesPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 			Receipts_expensesPanel.setLayout(gbl_Receipts_expensesPanel);
-			GridBagConstraints gbc_checkBox = new GridBagConstraints();
-			gbc_checkBox.insets = new Insets(0, 0, 0, 5);
-			gbc_checkBox.gridx = 0;
-			gbc_checkBox.gridy = 0;
-			Receipts_expensesPanel.add(getCheckBox(), gbc_checkBox);
-			GridBagConstraints gbc_checkBox_1 = new GridBagConstraints();
-			gbc_checkBox_1.gridx = 1;
-			gbc_checkBox_1.gridy = 0;
-			Receipts_expensesPanel.add(getCheckBox_1(), gbc_checkBox_1);
+			GridBagConstraints gbc_receipts = new GridBagConstraints();
+			gbc_receipts.insets = new Insets(0, 0, 0, 5);
+			gbc_receipts.gridx = 0;
+			gbc_receipts.gridy = 0;
+			Receipts_expensesPanel.add(getReceipts(), gbc_receipts);
+			GridBagConstraints gbc_expenses = new GridBagConstraints();
+			gbc_expenses.gridx = 1;
+			gbc_expenses.gridy = 0;
+			Receipts_expensesPanel.add(getExpenses(), gbc_expenses);
 		}
 		return Receipts_expensesPanel;
 	}

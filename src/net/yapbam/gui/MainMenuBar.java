@@ -386,12 +386,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			}
 		}
 	}		
+
 	private void refreshState(GlobalData data) {
-    	boolean somethingToSave = !data.isEmpty();
-        this.menuItemSave.setEnabled(data.somethingHasChanged());
-        this.menuItemSaveAs.setEnabled(somethingToSave);
-        this.menuItemProtect.setEnabled(somethingToSave || (data.getURI()!=null)); 
-    }
+		boolean somethingToSave = !data.isEmpty();
+		this.menuItemSave.setEnabled(data.somethingHasChanged());
+		this.menuItemSaveAs.setEnabled(somethingToSave);
+		this.menuItemProtect.setEnabled(somethingToSave || (data.getURI() != null));
+	}
 
 	private void updateFilterMenu() {
 		filterMenu.removeAll();
@@ -409,8 +410,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				}
 			});
 			filterMenu.add(eraseItem);
-        	filterMenu.addSeparator();
-	    	GlobalData data = this.frame.getData();
+			filterMenu.addSeparator();
+			GlobalData data = this.frame.getData();
 			ActionListener listener = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -419,33 +420,36 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					frame.getFilteredData().setAccounts(new Account[]{account});
 				}
 			};
-	        FilteredData filter = frame.getFilteredData();
+			FilteredData filter = frame.getFilteredData();
 			boolean hasAccountFilter = filter.hasFilterAccount();
-	        for (int i=0;i<data.getAccountsNumber();i++) {
-	        	Account account = data.getAccount(i);
-	        	JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
-	        	item.setToolTipText(MessageFormat.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
-	        	if (hasAccountFilter) item.setSelected(filter.isOk(account));
-	        	filterMenu.add(item);
-	        	item.addActionListener(listener);
-	        }
-        	JRadioButtonMenuItem item = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
-        	item.setToolTipText(LocalizationData.get("MainMenuBar.NoAccountFilter.toolTip")); //$NON-NLS-1$
-        	item.addActionListener(new ActionListener() {
+			for (int i = 0; i < data.getAccountsNumber(); i++) {
+				Account account = data.getAccount(i);
+				JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
+				item.setToolTipText(MessageFormat.format(
+						LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
+				if (hasAccountFilter) item.setSelected(filter.isOk(account));
+				filterMenu.add(item);
+				item.addActionListener(listener);
+			}
+			JRadioButtonMenuItem item = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
+			item.setToolTipText(LocalizationData.get("MainMenuBar.NoAccountFilter.toolTip")); //$NON-NLS-1$
+			item.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					frame.getFilteredData().setAccounts(null);
 				}
 			});
-        	item.setSelected(!hasAccountFilter);
-        	filterMenu.add(item);
-        	filterMenu.addSeparator();
-        	buildBooleanFilterChoiceMenu(new String[]{LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
-        		LocalizationData.get("MainMenuBar.notChecked")}, new int[]{FilteredData.CHECKED, FilteredData.NOT_CHECKED}, //$NON-NLS-1$
-        		new String[]{LocalizationData.get("MainMenuBar.checked.toolTip"),LocalizationData.get("MainMenuBar.notChecked.toolTip")}, //$NON-NLS-1$ //$NON-NLS-2$
-        		LocalizationData.get("MainMenuBar.NoCheckedFilter.toolTip")); //$NON-NLS-1$
-        	filterMenu.addSeparator();
-        	buildExpenseReceiptFilterChoiceMenu();			
+			item.setSelected(!hasAccountFilter);
+			filterMenu.add(item);
+			filterMenu.addSeparator();
+			buildBooleanFilterChoiceMenu(
+					new String[] { LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
+							LocalizationData.get("MainMenuBar.notChecked") }, new int[] { FilteredData.CHECKED, FilteredData.NOT_CHECKED }, //$NON-NLS-1$
+					new String[] {
+							LocalizationData.get("MainMenuBar.checked.toolTip"), LocalizationData.get("MainMenuBar.notChecked.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
+					LocalizationData.get("MainMenuBar.NoCheckedFilter.toolTip")); //$NON-NLS-1$
+			filterMenu.addSeparator();
+			buildExpenseReceiptFilterChoiceMenu();
 		}
 	}
 	
@@ -515,39 +519,39 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 
 	private void buildExpenseReceiptFilterChoiceMenu() {
 		FilteredData filter = frame.getFilteredData();
-        ButtonGroup group = new ButtonGroup();
-        JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Expenses")); //$NON-NLS-1$
-        menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Expenses.toolTip")); //$NON-NLS-1$
-        menuItem.setSelected(filter.getMaximumAmount()<=0);
+		ButtonGroup group = new ButtonGroup();
+		JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Expenses")); //$NON-NLS-1$
+		menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Expenses.toolTip")); //$NON-NLS-1$
+		menuItem.setSelected(filter.isExpensesAllowed()&&!filter.isReceiptsAllowed());
 		filterMenu.add(menuItem);
 		group.add(menuItem);
-		menuItem.addActionListener(new AmountActionItem(Double.NEGATIVE_INFINITY, 0));
+		menuItem.addActionListener(new AmountActionItem(false, true));
 		
 		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-1$
-        menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Receipts.toolTip")); //$NON-NLS-1$
-        menuItem.setSelected(filter.getMinimumAmount()>=0);
-        filterMenu.add(menuItem);
+		menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Receipts.toolTip")); //$NON-NLS-1$
+		menuItem.setSelected(filter.isReceiptsAllowed()&&!filter.isExpensesAllowed());
+		filterMenu.add(menuItem);
 		group.add(menuItem);
-		menuItem.addActionListener(new AmountActionItem(0, Double.POSITIVE_INFINITY));
+		menuItem.addActionListener(new AmountActionItem(true, false));
 		
 		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
 		menuItem.setToolTipText(LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
-        menuItem.setSelected((filter.getMaximumAmount()>0) && (filter.getMinimumAmount()<0));
-        filterMenu.add(menuItem);
+		menuItem.setSelected(filter.isExpensesAllowed() && filter.isReceiptsAllowed());
+		filterMenu.add(menuItem);
 		group.add(menuItem);
-		menuItem.addActionListener(new AmountActionItem(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
+		menuItem.addActionListener(new AmountActionItem(true, true));
 	}
 
 	final class AmountActionItem implements ActionListener {
-		private double min;
-		private double max;
-		AmountActionItem (double min, double max) {
-			this.min = min;
-			this.max = max;
+		private boolean receiptsAllowed;
+		private boolean expensesAllowed;
+		AmountActionItem (boolean receiptsAllowed, boolean expensesAllowed) {
+			this.receiptsAllowed = receiptsAllowed;
+			this.expensesAllowed = expensesAllowed;
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			frame.getFilteredData().setAmountFilter(min, max);
+			frame.getFilteredData().setReceiptsExpensesAllowed(receiptsAllowed, expensesAllowed);
 		}
 	}
 
