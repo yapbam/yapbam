@@ -26,6 +26,8 @@ public class FilteredData extends DefaultListenable {
 	private Date dateTo;
 	private Date valueDateFrom;
 	private Date valueDateTo;
+	private boolean expensesAllowed;
+	private boolean receiptsAllowed;
 	private double minAmount;
 	private double maxAmount;
 	private TextMatcher descriptionMatcher;
@@ -171,7 +173,9 @@ public class FilteredData extends DefaultListenable {
 		this.valueDateTo = null;
 		this.validCategories = null;
 		this.validModes = null;
-		this.minAmount = Double.NEGATIVE_INFINITY;
+		this.receiptsAllowed = true;
+		this.expensesAllowed = true;
+		this.minAmount = 0.0;
 		this.maxAmount = Double.POSITIVE_INFINITY;
 		this.descriptionMatcher = null;
 		this.numberMatcher = null;
@@ -296,9 +300,7 @@ public class FilteredData extends DefaultListenable {
 		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
 		if ((getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(getValueDateFrom())<0)) return false;
 		if ((getValueDateTo()!=null) && (transaction.getValueDate().compareTo(getValueDateTo())>0)) return false;
-		//FIXME Use cureency comparator to implement amount filtering
-		if (isOk(transaction.getCategory()) && (transaction.getAmount()>=getMinimumAmount()) &&
-				(transaction.getAmount()<=getMaximumAmount()) && isDescriptionOk(transaction.getDescription())) return true;
+		if (isOk(transaction.getCategory()) && isAmountOk(transaction.getAmount()) && isDescriptionOk(transaction.getDescription())) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			if (isOk(transaction.getSubTransaction(i))) {
@@ -307,6 +309,19 @@ public class FilteredData extends DefaultListenable {
 			if (isComplementOk(transaction)) return true;
 		}
 		return false;
+	}
+	
+	/** Tests whether an amount is ok or not.
+	 * @param amount The amount to test
+	 * @return true if the amount is ok.
+	 */
+	private boolean isAmountOk(double amount) {
+		// We use the currency comparator to implement amount filtering because double are very tricky to compare.
+		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<0) && (!isExpensesAllowed())) return false;
+		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)>0) && (!isReceiptsAllowed())) return false;
+		amount = Math.abs(amount);
+		if (GlobalData.AMOUNT_COMPARATOR.compare(amount, getMinimumAmount())<0) return false;
+		return GlobalData.AMOUNT_COMPARATOR.compare(amount, getMaximumAmount())<=0;
 	}
 	
 	/** Gets a subtransaction validity.
@@ -318,8 +333,7 @@ public class FilteredData extends DefaultListenable {
 	 * @see #isOk(Transaction)
 	 */
 	public boolean isOk(SubTransaction subtransaction) {
-		boolean amountOk = (subtransaction.getAmount()>=getMinimumAmount()) && (subtransaction.getAmount()<=getMaximumAmount());
-		return isOk(subtransaction.getCategory()) && amountOk && isDescriptionOk(subtransaction.getDescription());
+		return isOk(subtransaction.getCategory()) && isAmountOk(subtransaction.getAmount()) && isDescriptionOk(subtransaction.getDescription());
 	}
 	
 	/** Gets a transaction complement validity.
@@ -481,21 +495,32 @@ public class FilteredData extends DefaultListenable {
 	}
 	
 	/** Sets the transaction minimum and maximum amounts.
-	 * Note that setting this filter may change the expense/receipt filter.
+	 * <BR>Note that setting this filter never change the expense/receipt filter.
 	 * @param minAmount The minimum amount.
 	 * @param maxAmount The maximum amount.
-	 * @throws IllegalArgumentException if minAmount > maxAmount
+	 * @throws IllegalArgumentException if minAmount > maxAmount or if minimum amount is negative
 	 * @see #setFilter(int)
 	 */
 	public void setAmountFilter(double minAmount, double maxAmount) {
 		if (minAmount>maxAmount) throw new IllegalArgumentException();
+		if (minAmount<0) throw new IllegalArgumentException();
 		this.minAmount = minAmount;
 		this.maxAmount = maxAmount;
 		filter();
 	}
 	
+	/** Sets the "receipts allowed" and "expenses allowed" properties.
+	 * @param receiptsAllowed true to allow receipts.
+	 * @param expensesAllowed true to allow expenses
+	 */
+	public void setReceiptsExpensesAllowed(boolean receiptsAllowed, boolean expensesAllowed) {
+		this.receiptsAllowed = receiptsAllowed;
+		this.expensesAllowed = expensesAllowed;
+	}
+	
 	/** Gets the transaction minimum amount.
-	 * @return the minimum amount (Double.NEGATIVE_INFINITY if there's no low limit).
+	 * <br>Please note that the minimum amount is always a positive or null number. 
+	 * @return the minimum amount (0.0 if there's no low limit).
 	 */
 	public double getMinimumAmount() {
 		return this.minAmount;
@@ -506,6 +531,20 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public double getMaximumAmount() {
 		return this.maxAmount;
+	}
+	
+	/** Tests whether expenses are allowed by the filter or not.
+	 * @return a boolean, true if expenses are allowed.
+	 */
+	public boolean isExpensesAllowed() {
+		return this.expensesAllowed;
+	}
+
+	/** Tests whether receipts are allowed by the filter or not.
+	 * @return a boolean, true if receipts are allowed.
+	 */
+	public boolean isReceiptsAllowed() {
+		return this.receiptsAllowed;
 	}
 
 	private void filter() {
