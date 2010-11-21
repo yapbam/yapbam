@@ -1,4 +1,4 @@
-package net.yapbam.statementview;
+package net.yapbam.gui.statementview;
 
 import java.util.Arrays;
 import java.util.Comparator;

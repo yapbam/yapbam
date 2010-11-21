@@ -1,4 +1,4 @@
-package net.yapbam.statementview;
+package net.yapbam.gui.statementview;
 
 import net.yapbam.data.Transaction;
 import net.yapbam.util.DateUtils;

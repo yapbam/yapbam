@@ -1,4 +1,4 @@
-package net.yapbam.statementview;
+package net.yapbam.gui.statementview;
 
 import java.awt.Component;
 import java.text.SimpleDateFormat;

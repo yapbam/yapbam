@@ -22,10 +22,10 @@ import javax.swing.UIManager;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
+import net.yapbam.gui.statementview.StatementViewPlugin;
 import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
-import net.yapbam.statementview.StatementViewPlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
 
