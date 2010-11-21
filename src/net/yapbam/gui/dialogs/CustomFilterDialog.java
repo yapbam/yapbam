@@ -31,7 +31,7 @@ public class CustomFilterDialog extends AbstractDialog {
 	@Override
 	protected JPanel createCenterPane(Object data) {
 		filterPanel = new CustomFilterPanel((FilteredData) data);
-		filterPanel.addPropertyChangeListener(CustomFilterPanel.CONSISTENCY_PROPERTY, new PropertyChangeListener() {
+		filterPanel.addPropertyChangeListener(CustomFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateOkButtonEnabled();

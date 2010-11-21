@@ -52,7 +52,7 @@ import java.awt.BorderLayout;
 public class CustomFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final AutoSelectFocusListener AUTO_FOCUS_SELECTOR = new AutoSelectFocusListener();
-	public static final String CONSISTENCY_PROPERTY = "CONSISTENCY"; //$NON-NLS-1$
+	public static final String INCONSISTENCY_CAUSE_PROPERTY = "InconsistencyCause"; //$NON-NLS-1$
 	
 	private JPanel accountPanel = null;
 	private JList accountList = null;
@@ -65,7 +65,6 @@ public class CustomFilterPanel extends JPanel {
 	private JLabel jLabel = null;
 	private AmountWidget maxAmount = null;
 	private JRadioButton amountAll = null;
-	private boolean oldConsistency;
 	private JPanel descriptionPanel = null;
 	private JCheckBox ignoreCase = null;
 	private JTextField description = null;
@@ -106,6 +105,7 @@ public class CustomFilterPanel extends JPanel {
 	private JScrollPane jScrollPane2 = null;
 	private JList modes = null;
 		
+	private String oldInconsistencyCause;
 	private FilteredData data;
 	
 	private final static class RegexprListener extends MouseAdapter {
@@ -618,8 +618,8 @@ public class CustomFilterPanel extends JPanel {
 		double min = getMinAmount().getValue()==null?0.0:getMinAmount().getValue();
 		double max = getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue();
 		int filter = 0;
-		if (getReceipts().isSelected()) filter += FilteredData.CHECKED;
-		if (getExpenses().isSelected()) filter += FilteredData.NOT_CHECKED;
+		if (getReceipts().isSelected()) filter += FilteredData.RECEIPTS;
+		if (getExpenses().isSelected()) filter += FilteredData.EXPENSES;
 		this.data.setAmountFilter(filter, min, max);
 		// build the date filter
 		Date from = getDateFrom().getDate();
@@ -763,10 +763,10 @@ public class CustomFilterPanel extends JPanel {
 	}
 		
 	private void checkConsistency() {
-		boolean ok = isConsistent();
-		if (ok!=oldConsistency) {
-			oldConsistency = ok;
-			firePropertyChange(CONSISTENCY_PROPERTY, !ok, ok);
+		String cause = getInconsistencyCause();
+		if (!NullUtils.areEquals(cause,oldInconsistencyCause)) {
+			firePropertyChange(INCONSISTENCY_CAUSE_PROPERTY, oldInconsistencyCause, cause);
+			oldInconsistencyCause = cause;
 		}
 	}
 
