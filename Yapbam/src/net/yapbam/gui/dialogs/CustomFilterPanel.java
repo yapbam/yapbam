@@ -13,6 +13,7 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JCheckBox;
 import java.awt.Insets;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -35,6 +36,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -126,6 +128,14 @@ public class CustomFilterPanel extends JPanel {
 			checkConsistency();  //  @jve:decl-index=0:
 		}
 	};
+	
+	private ItemListener CONSISTENCY_CHECKER_ITEM_LISTENER = new ItemListener() {
+		@Override
+		public void itemStateChanged(java.awt.event.ItemEvent e) {
+			checkConsistency();  //  @jve:decl-index=0:
+		}
+	};
+
 	private JPanel jPanel111 = null;
 	private JLabel regexpNumber = null;
 	private JRadioButton numberEqualsTo = null;
@@ -440,7 +450,7 @@ public class CustomFilterPanel extends JPanel {
 					}
 				}
 			});
-			amountBetween.setSelected(((data.getMinimumAmount()!=Double.NEGATIVE_INFINITY) ||
+			amountBetween.setSelected(((data.getMinimumAmount()!=0.0) ||
 					(data.getMaximumAmount()!=Double.POSITIVE_INFINITY)) &&
 					(data.getMaximumAmount()!=data.getMinimumAmount()));
 		}
@@ -507,7 +517,7 @@ public class CustomFilterPanel extends JPanel {
 					}
 				}
 			});
-			amountAll.setSelected((data.getMinimumAmount()==Double.NEGATIVE_INFINITY) && (data.getMaximumAmount()==Double.POSITIVE_INFINITY));
+			amountAll.setSelected((data.getMinimumAmount()==0.0) && (data.getMaximumAmount()==Double.POSITIVE_INFINITY));
 		}
 		return amountAll;
 	}
@@ -710,6 +720,14 @@ public class CustomFilterPanel extends JPanel {
 	 * @return A string that explains the problem, or null if the state is consistent.
 	 */
 	public String getInconsistencyCause() {
+		if (!getExpenses().isSelected() && !getReceipts().isSelected()) {
+			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.natureStatus"), //$NON-NLS-1$
+					LocalizationData.get("MainMenuBar.Expenses"), LocalizationData.get("MainMenuBar.Receipts"));
+		}
+		if (!getChecked().isSelected() && !getNotChecked().isSelected()) {
+			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.checkStatus"), //$NON-NLS-1$
+					LocalizationData.get("MainMenuBar.checked"), LocalizationData.get("MainMenuBar.notChecked"));
+		}
 		if (!getDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.dateFrom"); //$NON-NLS-1$
 		if (!getDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.date.to"); //$NON-NLS-1$
 		if (!getValueDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.valueDateFrom"); //$NON-NLS-1$
@@ -1056,11 +1074,7 @@ public class CustomFilterPanel extends JPanel {
 			notChecked.setText(LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$
 			notChecked.setToolTipText(LocalizationData.get("CustomFilterPanel.unchecked.toolTip")); //$NON-NLS-1$
 			notChecked.setSelected(data.isOk(FilteredData.NOT_CHECKED));
-			notChecked.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					checkConsistency();
-				}
-			});
+			notChecked.addItemListener(CONSISTENCY_CHECKER_ITEM_LISTENER);
 		}
 		return notChecked;
 	}
@@ -1685,17 +1699,19 @@ public class CustomFilterPanel extends JPanel {
 	}
 	private JCheckBox getReceipts() {
 		if (receipts == null) {
-			receipts = new JCheckBox(LocalizationData.get("CustomFilterPanel.receipts")); //$NON-NLS-1$
+			receipts = new JCheckBox(LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-1$
 			receipts.setToolTipText(LocalizationData.get("CustomFilterPanel.receipts.toolTip")); //$NON-NLS-1$
 			receipts.setSelected(data.isOk(FilteredData.RECEIPTS));
+			receipts.addItemListener(CONSISTENCY_CHECKER_ITEM_LISTENER);
 		}
 		return receipts;
 	}
 	private JCheckBox getExpenses() {
 		if (expenses == null) {
-			expenses = new JCheckBox(LocalizationData.get("CustomFilterPanel.expenses")); //$NON-NLS-1$
+			expenses = new JCheckBox(LocalizationData.get("MainMenuBar.Expenses")); //$NON-NLS-1$
 			expenses.setToolTipText(LocalizationData.get("CustomFilterPanel.expenses.toolTip")); //$NON-NLS-1$
 			expenses.setSelected(data.isOk(FilteredData.EXPENSES));
+			expenses.addItemListener(CONSISTENCY_CHECKER_ITEM_LISTENER);
 		}
 		return expenses;
 	}
