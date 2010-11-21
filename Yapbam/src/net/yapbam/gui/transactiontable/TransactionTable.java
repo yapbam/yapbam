@@ -95,4 +95,10 @@ public class TransactionTable extends JTable implements TransactionSelector {
 			return this.getModel().getColumnName(model.getColumn(index, onlyVisible).getModelIndex());
 		}
 	}
+	
+	/** Scrolls this table to last line.
+	 */
+	public void scrollToLastLine() {
+		scrollRectToVisible(getCellRect(getRowCount()-1, 0, true));
+	}
 }

@@ -102,8 +102,7 @@ public class TransactionsPlugInPanel extends JPanel {
 
 		add(topPanel, BorderLayout.NORTH);
 
-		JScrollPane scrollPane = new JScrollPane(transactionTable,
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane scrollPane = new JScrollPane(transactionTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane, BorderLayout.CENTER);
 
