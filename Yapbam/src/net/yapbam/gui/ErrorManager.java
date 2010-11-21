@@ -6,13 +6,27 @@ import javax.swing.JOptionPane;
 
 public class ErrorManager {
 	public static final ErrorManager INSTANCE = new ErrorManager();
-
-	public void display(Component parent, Throwable e) {
-		display (parent, e, LocalizationData.get("ErrorManager.message")); //$NON-NLS-1$
+	
+	private ErrorManager() {}
+	
+	public void display(Component parent, Throwable t) {
+		display (parent, t, LocalizationData.get("ErrorManager.message")); //$NON-NLS-1$
 	}
 
-	public void display(Component parent, Throwable e, String message) {
-		e.printStackTrace(); //TODO Maybe better to log the exception ?
+	public void display(Component parent, Throwable t, String message) {
 		JOptionPane.showMessageDialog(parent, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+	}
+	
+	public void log(Throwable t) {
+		t.printStackTrace();
+		//TODO Not yet implemented
+		//May log the error and probably, try to send an error report to Yapbam.		
+//		String message = t.getMessage();
+//
+//		if (message == null || message.length() == 0) {
+//			message = "Fatal: " + t.getClass();
+//		}
+//
+//		JOptionPane.showMessageDialog(null, "General Error", message, JOptionPane.ERROR_MESSAGE);
 	}
 }

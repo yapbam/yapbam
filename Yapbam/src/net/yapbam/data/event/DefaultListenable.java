@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import net.yapbam.gui.ErrorManager;
+
 /** A listenable class allows some other classes to listen to the events occurring on the listenable class.
  *	<br>Please note that the following java system properties may be used to track the events:<ul>
  *		<li>if the traceAll system property is set to true, all data events are traced on stderr.<li> 
@@ -56,8 +58,11 @@ public abstract class DefaultListenable {
 			DataListener listener = iterator.next();
 			if (TRACE_ALL) trace("Send event "+event+" on "+this+" to "+listener);
 			indent += 2;
-			listener.processEvent(event);
-			//FIXME catch exceptions thrown by the listeners (for other listeners to receive the event).
+			try {
+				listener.processEvent(event);
+			} catch (Throwable t) {
+				ErrorManager.INSTANCE.log(t);
+			}
 			indent -= 2;
 		}
 	}
