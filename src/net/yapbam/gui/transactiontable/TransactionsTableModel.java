@@ -30,7 +30,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	private transient DateFormat dateFormater;
 	private FilteredData data;
 	
-	TransactionsTableModel(JTable table, FilteredData data) {
+	TransactionsTableModel(TransactionTable table, FilteredData data) {
 		super();
 		this.data = data;
 		data.addListener(this);
@@ -141,6 +141,10 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		if (event instanceof EverythingChangedEvent) {
 			this.clearSpreadData();
 			fireTableDataChanged();
+			//TODO It would be a good idea to scroll to the end of table.
+			//The problem is : The end of the table is not always the right place.
+			//For instance, if the table is sorted by date in the reverse order,
+			//the beginning of the table would be a better place.
 		} else if (event instanceof TransactionsAddedEvent) {
 			Transaction[] transactions = ((TransactionsAddedEvent)event).getTransactions();
 			if (transactions.length==1) {

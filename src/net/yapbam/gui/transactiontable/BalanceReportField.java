@@ -1,6 +1,7 @@
 package net.yapbam.gui.transactiontable;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.text.MessageFormat;
 
 import javax.swing.BorderFactory;
@@ -31,17 +32,15 @@ public class BalanceReportField extends JLabel {
 	public BalanceReportField(String contentPattern) {
 		super();
 		this.contentPattern = contentPattern;
-        this.setOpaque(true);
-        this.setHorizontalAlignment(SwingConstants.CENTER);
-        this.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-        this.setValue(0);
+		this.setOpaque(true);
+    this.setFont(new Font(getFont().getFontName(), getFont().getStyle() ^ Font.BOLD, 12));
+		this.setHorizontalAlignment(SwingConstants.CENTER);
+		this.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		this.setValue(0);
 	}
 	
 	public void setValue(double balance) {
 		this.setForeground(balance<0?NEGATIVE_COLOR:POSITIVE_COLOR);
-		setText(MessageFormat.format(this.contentPattern,
-				LocalizationData.getCurrencyInstance().format(balance)));
+		setText(MessageFormat.format(this.contentPattern, LocalizationData.getCurrencyInstance().format(balance)));
 	}
 }
-
-
