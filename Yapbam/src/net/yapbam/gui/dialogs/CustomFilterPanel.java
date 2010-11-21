@@ -607,8 +607,10 @@ public class CustomFilterPanel extends JPanel {
 		// build the expense/receipt and amount filter
 		double min = getMinAmount().getValue()==null?0.0:getMinAmount().getValue();
 		double max = getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue();
-		this.data.setAmountFilter(min, max);
-		this.data.setReceiptsExpensesAllowed(this.getReceipts().isSelected(),this.getExpenses().isSelected());
+		int filter = 0;
+		if (getReceipts().isSelected()) filter += FilteredData.CHECKED;
+		if (getExpenses().isSelected()) filter += FilteredData.NOT_CHECKED;
+		this.data.setAmountFilter(filter, min, max);
 		// build the date filter
 		Date from = getDateFrom().getDate();
 		Date to = getDateTo().getDate();
@@ -643,7 +645,7 @@ public class CustomFilterPanel extends JPanel {
 			this.data.setDescriptionFilter(new TextMatcher(kind, text, !getIgnoreCase().isSelected(), !getIgnoreDiacritics().isSelected()));
 		}
 		// Build the statement filter
-		int filter = 0;
+		filter = 0;
 		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
 		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
 		text = getStatement().getText().trim();
@@ -1685,7 +1687,7 @@ public class CustomFilterPanel extends JPanel {
 		if (receipts == null) {
 			receipts = new JCheckBox(LocalizationData.get("CustomFilterPanel.receipts")); //$NON-NLS-1$
 			receipts.setToolTipText(LocalizationData.get("CustomFilterPanel.receipts.toolTip")); //$NON-NLS-1$
-			receipts.setSelected(data.isReceiptsAllowed());
+			receipts.setSelected(data.isOk(FilteredData.RECEIPTS));
 		}
 		return receipts;
 	}
@@ -1693,7 +1695,7 @@ public class CustomFilterPanel extends JPanel {
 		if (expenses == null) {
 			expenses = new JCheckBox(LocalizationData.get("CustomFilterPanel.expenses")); //$NON-NLS-1$
 			expenses.setToolTipText(LocalizationData.get("CustomFilterPanel.expenses.toolTip")); //$NON-NLS-1$
-			expenses.setSelected(data.isExpensesAllowed());
+			expenses.setSelected(data.isOk(FilteredData.EXPENSES));
 		}
 		return expenses;
 	}

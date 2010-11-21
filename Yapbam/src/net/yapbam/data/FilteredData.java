@@ -6,15 +6,24 @@ import net.yapbam.data.event.*;
 import net.yapbam.util.TextMatcher;
 
 /** Filtered Data (the global data viewed through a filter).
+ * </BR>A filter is based on all the attributes of a transaction (amount, category, account, ...).
+ * </BR>Please note that a transaction is ok for a filter when, of course, the transaction itself is ok,
+ * but also when one of its subtransactions is ok.
+ * </BR>For instance if your filter is set to display only receipts of the category x, and you have
+ * an expense transaction and category y with an expense subtransaction of category x, the whole
+ * transaction would be considered as ok.
  * @see GlobalData
  */
 public class FilteredData extends DefaultListenable {
-	private static final boolean DEBUG = false;
+	private static boolean DEBUG = false;
 	
 	public static final int CHECKED=1;
 	public static final int NOT_CHECKED=2;
+	public static final int EXPENSES=4;
+	public static final int RECEIPTS=8;
 	private static final int ALL = -1;
 	private static final int CHECKED_MASK = (ALL ^ CHECKED) ^ NOT_CHECKED;
+	private static final int NATURE_MASK = (ALL ^ EXPENSES) ^ RECEIPTS;
 
 	private GlobalData data;
 	private ArrayList<Transaction> transactions;
@@ -26,8 +35,6 @@ public class FilteredData extends DefaultListenable {
 	private Date dateTo;
 	private Date valueDateFrom;
 	private Date valueDateTo;
-	private boolean expensesAllowed;
-	private boolean receiptsAllowed;
 	private double minAmount;
 	private double maxAmount;
 	private TextMatcher descriptionMatcher;
@@ -173,8 +180,6 @@ public class FilteredData extends DefaultListenable {
 		this.valueDateTo = null;
 		this.validCategories = null;
 		this.validModes = null;
-		this.receiptsAllowed = true;
-		this.expensesAllowed = true;
 		this.minAmount = 0.0;
 		this.maxAmount = Double.POSITIVE_INFINITY;
 		this.descriptionMatcher = null;
@@ -317,8 +322,8 @@ public class FilteredData extends DefaultListenable {
 	 */
 	private boolean isAmountOk(double amount) {
 		// We use the currency comparator to implement amount filtering because double are very tricky to compare.
-		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<0) && (!isExpensesAllowed())) return false;
-		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)>0) && (!isReceiptsAllowed())) return false;
+		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<0) && (!isOk(EXPENSES))) return false;
+		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)>0) && (!isOk(RECEIPTS))) return false;
 		amount = Math.abs(amount);
 		if (GlobalData.AMOUNT_COMPARATOR.compare(amount, getMinimumAmount())<0) return false;
 		return GlobalData.AMOUNT_COMPARATOR.compare(amount, getMaximumAmount())<=0;
@@ -395,10 +400,18 @@ public class FilteredData extends DefaultListenable {
 		return ((property & this.filter) != 0);
 	}
 	
+	/** Sets the integer filter
+	 * </BR>Boolean attributes like ("is the transaction a EXPENSE ?" or "Is the transaction checked ?"
+	 *  are managed with integer codes.
+	 *  @param the property
+	 *  @see #setStatementFilter(int, TextMatcher)
+	 *  @see #setNatureFilter(int)
+	 */
 	private void setFilter(int property) {
 		if (DEBUG) System.out.println("---------- setFilter("+Integer.toBinaryString(property)+") ----------");
 		int mask = ALL;
 		if (((property & CHECKED) != 0) || ((property & NOT_CHECKED) != 0)) mask = mask & CHECKED_MASK;
+		if (((property & EXPENSES) != 0) || ((property & RECEIPTS) != 0)) mask = mask & NATURE_MASK;
 		if (mask == ALL) throw new IllegalArgumentException();
 		if (DEBUG) System.out.println(Integer.toBinaryString(mask));//CU
 		this.filter = (this.filter & mask) | property;
@@ -411,9 +424,9 @@ public class FilteredData extends DefaultListenable {
 			throw new IllegalArgumentException();
 		}
 		this.statementMatcher = statementFilter;
-		setFilter(property);
+		setFilter(property & (CHECKED+NOT_CHECKED));
 	}
-	
+		
 	public TextMatcher getStatementFilter () {
 		return this.statementMatcher;
 	}
@@ -496,26 +509,21 @@ public class FilteredData extends DefaultListenable {
 	
 	/** Sets the transaction minimum and maximum amounts.
 	 * <BR>Note that setting this filter never change the expense/receipt filter.
-	 * @param minAmount The minimum amount.
-	 * @param maxAmount The maximum amount.
+	 * @param minAmount The minimum amount (a positive or null double).
+	 * @param maxAmount The maximum amount (Double.POSITIVE_INFINITY to set no high limit).
+	 * @param mask An integer that codes if expenses or receipts, or both are ok.
+	 * <br>Note that only EXPENSES, RECEIPTS and EXPENSES+RECEIPTS constants are valid arguments.
+	 * Any other integer codes (for instance CHECKED) are ignored.
 	 * @throws IllegalArgumentException if minAmount > maxAmount or if minimum amount is negative
 	 * @see #setFilter(int)
 	 */
-	public void setAmountFilter(double minAmount, double maxAmount) {
+	public void setAmountFilter(int mask, double minAmount, double maxAmount) {
 		if (minAmount>maxAmount) throw new IllegalArgumentException();
 		if (minAmount<0) throw new IllegalArgumentException();
 		this.minAmount = minAmount;
 		this.maxAmount = maxAmount;
+		this.setFilter(mask & (EXPENSES+RECEIPTS));
 		filter();
-	}
-	
-	/** Sets the "receipts allowed" and "expenses allowed" properties.
-	 * @param receiptsAllowed true to allow receipts.
-	 * @param expensesAllowed true to allow expenses
-	 */
-	public void setReceiptsExpensesAllowed(boolean receiptsAllowed, boolean expensesAllowed) {
-		this.receiptsAllowed = receiptsAllowed;
-		this.expensesAllowed = expensesAllowed;
 	}
 	
 	/** Gets the transaction minimum amount.
@@ -527,26 +535,12 @@ public class FilteredData extends DefaultListenable {
 	}
 	
 	/** Gets the transaction maximum amount.
-	 * @return the maximum amount (Double.POSITIVE_INFINITY if there's no high ow limit).
+	 * @return the maximum amount (Double.POSITIVE_INFINITY if there's no high limit).
 	 */
 	public double getMaximumAmount() {
 		return this.maxAmount;
 	}
 	
-	/** Tests whether expenses are allowed by the filter or not.
-	 * @return a boolean, true if expenses are allowed.
-	 */
-	public boolean isExpensesAllowed() {
-		return this.expensesAllowed;
-	}
-
-	/** Tests whether receipts are allowed by the filter or not.
-	 * @return a boolean, true if receipts are allowed.
-	 */
-	public boolean isReceiptsAllowed() {
-		return this.receiptsAllowed;
-	}
-
 	private void filter() {
 		if (this.suspended) {
 			this.filteringHasToBeDone = true;
