@@ -24,7 +24,6 @@ import net.yapbam.gui.dialogs.GetPasswordDialog;
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
-	
 	private static final long serialVersionUID = 1L;
     
 	private GlobalData data;
@@ -38,7 +37,20 @@ public class MainFrame extends JFrame implements DataListener {
 	private boolean isRestarting = false;
 
 	public static void main(final String[] args) {
+		// Remove obsolete files from previous installations
 		FolderCleaner.clean();
+		// Install the exceptions logger on the AWT event queue. 
+		EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
+		queue.push(new EventQueue() {
+			protected void dispatchEvent(AWTEvent newEvent) {
+				try {
+					super.dispatchEvent(newEvent);
+				} catch (Throwable t) {
+					ErrorManager.INSTANCE.log (t);
+				}
+			}
+		});
+		// Set the look and feel
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
 		} catch (Exception e) {}

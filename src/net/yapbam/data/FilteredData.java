@@ -5,7 +5,7 @@ import java.util.*;
 import net.yapbam.data.event.*;
 import net.yapbam.util.TextMatcher;
 
-/** Filtered Data (the global data viewed through a filter).
+/** The filtered Data (the global data viewed through a filter).
  * </BR>A filter is based on all the attributes of a transaction (amount, category, account, ...).
  * </BR>Please note that a transaction is ok for a filter when, of course, the transaction itself is ok,
  * but also when one of its subtransactions is ok.

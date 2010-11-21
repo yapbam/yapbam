@@ -335,7 +335,7 @@ public class CustomFilterPanel extends JPanel {
 			gbl_amountPanel.rowWeights = new double[]{0.0};
 			gbl_amountPanel.columnWeights = new double[]{1.0, 0.0, 0.0};
 			amountPanel.setLayout(gbl_amountPanel);
-			amountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			amountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 			gbc_panel_2.anchor = GridBagConstraints.WEST;
 			gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
@@ -722,11 +722,11 @@ public class CustomFilterPanel extends JPanel {
 	public String getInconsistencyCause() {
 		if (!getExpenses().isSelected() && !getReceipts().isSelected()) {
 			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.natureStatus"), //$NON-NLS-1$
-					LocalizationData.get("MainMenuBar.Expenses"), LocalizationData.get("MainMenuBar.Receipts"));
+					LocalizationData.get("MainMenuBar.Expenses"), LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (!getChecked().isSelected() && !getNotChecked().isSelected()) {
 			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.checkStatus"), //$NON-NLS-1$
-					LocalizationData.get("MainMenuBar.checked"), LocalizationData.get("MainMenuBar.notChecked"));
+					LocalizationData.get("MainMenuBar.checked"), LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (!getDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.dateFrom"); //$NON-NLS-1$
 		if (!getDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.date.to"); //$NON-NLS-1$
@@ -1514,16 +1514,16 @@ public class CustomFilterPanel extends JPanel {
 					selectAll(getModes());
 					selectAll(getCategoryList());
 					getDescriptionContains().setSelected(true);
-					getDescription().setText("");
+					getDescription().setText(""); //$NON-NLS-1$
 					getDateAll().setSelected(true);
 					getAmountAll().setSelected(true);
 					getNumberContains().setSelected(true);
-					getNumber().setText("");
+					getNumber().setText(""); //$NON-NLS-1$
 					getValueDateAll().setSelected(true);
 					getChecked().setSelected(true);
 					getNotChecked().setSelected(true);
 					getStatementContains().setSelected(true);
-					getStatement().setText("");
+					getStatement().setText(""); //$NON-NLS-1$
 				}
 
 				private void selectAll(JList list) {
@@ -1691,7 +1691,7 @@ public class CustomFilterPanel extends JPanel {
 	private JTextField getNumber() {
 		if (number == null) {
 			number = new JTextField();
-			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip"));
+			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
 			number.setText(data.getNumberFilter()==null?"":data.getNumberFilter().getFilter()); //$NON-NLS-1$
 			number.addFocusListener(AUTO_FOCUS_SELECTOR);
 		}
@@ -1741,14 +1741,15 @@ public class CustomFilterPanel extends JPanel {
 			gbc_jLabel.gridx = 1;
 			gbc_jLabel.gridy = 0;
 			panel_1.add(jLabel, gbc_jLabel);
-			jLabel.setText(LocalizationData.get("CustomFilterPanel.amount.to"));
+			jLabel.setText(LocalizationData.get("CustomFilterPanel.amount.to")); //$NON-NLS-1$
 		}
 		return panel_1;
 	}
 	private JPanel getReceipts_expensesPanel() {
 		if (Receipts_expensesPanel == null) {
 			Receipts_expensesPanel = new JPanel();
-			Receipts_expensesPanel.setBorder(new TitledBorder(null, "Nature", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			Receipts_expensesPanel.setBorder(new TitledBorder(null, LocalizationData.get("CustomFilterPanel.nature"), //$NON-NLS-1$
+					TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			GridBagLayout gbl_Receipts_expensesPanel = new GridBagLayout();
 			gbl_Receipts_expensesPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
 			gbl_Receipts_expensesPanel.rowHeights = new int[]{0, 0};
