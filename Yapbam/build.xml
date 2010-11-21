@@ -13,13 +13,13 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.7.1"/>
+	<property name="yapbamVersion" value="0.7.2"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
 	
 	<target name="build">
-		<antcall target="others.build"/>
+		<antcall target="classic.build"/>
 		<antcall target="portableApps.com.build"/>
 	</target>
 	
@@ -39,6 +39,7 @@
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>
 		<property name="samplesDir" value="${othersDir}/samples"/>
+		<!-- Ensure the releaseDir is a fresh new one. -->
 		<delete dir="${releaseDir}"/>
 		<mkdir dir="${releaseDir}"/>
 		<mkdir dir="${appDir}"/>
@@ -56,14 +57,16 @@
 		</copy>
 	</target>
 	
-	<target name="others.build" depends="commonBuild">
-		<property name="linuxRelease" value="linuxRelease"/>
-		<copy todir="${linuxRelease}">
+	<target name="classic.build" depends="commonBuild">
+		<property name="classicRelease" value="classicRelease"/>
+		<copy todir="${classicRelease}">
 	    	<fileset dir="${releaseDir}" includes="**/*.*"/>
 		</copy>
+		<delete dir="${releaseDir}"/>
+		<!-- Build the launcher jar (for non windows users) -->
 		<copy todir="releaseCompile/net/yapbam/gui/images/" file="src/net/yapbam/gui/images/splash.png"/>
 		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" />
-		<jar destfile="${linuxRelease}/yapbam.jar">
+		<jar destfile="${classicRelease}/yapbam.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.gui.Launcher"/>
 				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
@@ -71,12 +74,17 @@
 			<fileset dir="releaseCompile"/>
 		</jar>
 		<delete dir="releaseCompile"/>
-		<copy file="help.html" todir="${releaseDir}"/>
-		<tar basedir="${linuxRelease}" destfile="yapbam-${yapbamVersion}.tar"/>
-		<gzip src="yapbam-${yapbamVersion}.tar" destfile="yapbam-${yapbamVersion}.tar.gz"/>
-		<delete file="yapbam-${yapbamVersion}.tar"/>
-		<delete dir="${releaseDir}"/>
-		<delete dir="${linuxRelease}"/>
+		<!-- Copy the help files -->
+		<copy file="helpPages/portable/help.html" todir="${classicRelease}"/>
+		<copy todir="${classicRelease}/Other/help">
+	    	<fileset dir="helpPages/portable/Other/help" includes="**/*.*"/>
+		</copy>
+		<!-- Copy windows launcher -->
+		<copy file="yapbam.exe" todir="${classicRelease}"/>
+		<!-- Build the zip file -->		
+		<zip basedir="${classicRelease}" destfile="yapbam-${yapbamVersion}.zip"/>
+		<!-- Clean the disk (remove temporary working directory) -->
+		<delete dir="${classicRelease}"/>
 	</target>
 	
 	<target name="portableApps.com.build" depends="commonBuild">
@@ -131,7 +139,7 @@ Start=PortableYapbam.exe</echo>
 		    <arg value="${basedir}\${windowsRelease}"/>
 		</exec>
 		<!-- Delete the working directories -->
-		<!--delete dir="${windowsRelease}"/-->
+		<delete dir="${windowsRelease}"/>
 		<delete dir="${releaseDir}"/>
 	</target>
 	
