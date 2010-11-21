@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>.\App\yapbam.jar</jar>
-  <outfile>C:\Users\Jean-Marc\workspace\Yapbam\YapbamPortable.exe</outfile>
+  <jar>.\App\program.jar</jar>
+  <outfile>C:\Users\Jean-Marc\workspace\Yapbam\Yapbam.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -11,8 +11,8 @@
   <supportUrl></supportUrl>
   <customProcName>true</customProcName>
   <stayAlive>false</stayAlive>
-  <manifest></manifest>
-  <icon>C:\Users\Jean-Marc\workspace\Yapbam\ICO.ico</icon>
+  <manifest>C:\Users\Jean-Marc\workspace\Yapbam\launch4JDefinitionFiles\yapbam.manifest</manifest>
+  <icon>C:\Users\Jean-Marc\workspace\Yapbam\icons\yapbam.ico</icon>
   <jre>
     <path></path>
     <minVersion>1.6.0</minVersion>
