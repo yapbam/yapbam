@@ -442,14 +442,20 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			item.setSelected(!hasAccountFilter);
 			filterMenu.add(item);
 			filterMenu.addSeparator();
-			buildBooleanFilterChoiceMenu(
+			buildBooleanFilterChoiceMenu(FilterActionItem.CHECKED_STATUS,
 					new String[] { LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
 							LocalizationData.get("MainMenuBar.notChecked") }, new int[] { FilteredData.CHECKED, FilteredData.NOT_CHECKED }, //$NON-NLS-1$
 					new String[] {
 							LocalizationData.get("MainMenuBar.checked.toolTip"), LocalizationData.get("MainMenuBar.notChecked.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("MainMenuBar.NoCheckedFilter.toolTip")); //$NON-NLS-1$
 			filterMenu.addSeparator();
-			buildExpenseReceiptFilterChoiceMenu();
+			buildBooleanFilterChoiceMenu(FilterActionItem.NATURE,
+					new String[] { LocalizationData.get("MainMenuBar.Expenses"), //$NON-NLS-1$
+							LocalizationData.get("MainMenuBar.Receipts") }, new int[] { FilteredData.EXPENSES, FilteredData.RECEIPTS }, //$NON-NLS-1$
+					new String[] {
+							LocalizationData.get("MainMenuBar.Expenses.toolTip"), LocalizationData.get("MainMenuBar.Receipts.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
+					LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
+//			buildExpenseReceiptFilterChoiceMenu();
 		}
 	}
 	
@@ -460,8 +466,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private boolean isComplex(FilteredData filter) {
 		double min = filter.getMinimumAmount();
 		double max = filter.getMaximumAmount();
-		boolean amountSimple = ((min==Double.NEGATIVE_INFINITY) || (min==0)) &&
-		((max==Double.POSITIVE_INFINITY) || (max==0)) && (min!=max);
+		boolean amountSimple = (min==0) && (max==Double.POSITIVE_INFINITY);
 		return (isComplex(filter.getAccounts(), new int[]{1,filter.getGlobalData().getAccountsNumber()}) ||
 				(filter.getCategories()!=null) || (filter.getModes()!=null) ||
 				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
@@ -483,75 +488,43 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		return true;
 	}
 
-	private void buildBooleanFilterChoiceMenu(String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {
-        FilteredData filter = frame.getFilteredData();
-        ButtonGroup group = new ButtonGroup();
-        JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(texts[0]);
-        menuItem.setToolTipText(tooltips[0]);
-        menuItem.setSelected(filter.isOk(properties[0]) && !filter.isOk(properties[1]));
+	private void buildBooleanFilterChoiceMenu(int kind, String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {
+		FilteredData filter = frame.getFilteredData();
+		ButtonGroup group = new ButtonGroup();
+		JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(texts[0]);
+		menuItem.setToolTipText(tooltips[0]);
+		menuItem.setSelected(filter.isOk(properties[0]) && !filter.isOk(properties[1]));
 		filterMenu.add(menuItem);
 		group.add(menuItem);
-		menuItem.addActionListener(new FilterActionItem(properties[0]));
+		menuItem.addActionListener(new FilterActionItem(kind, properties[0]));
 		menuItem = new JRadioButtonMenuItem(texts[1]);
-        menuItem.setToolTipText(tooltips[1]);
-        menuItem.setSelected(!filter.isOk(properties[0]) && filter.isOk(properties[1]));
-        filterMenu.add(menuItem);
+		menuItem.setToolTipText(tooltips[1]);
+		menuItem.setSelected(!filter.isOk(properties[0]) && filter.isOk(properties[1]));
+		filterMenu.add(menuItem);
 		group.add(menuItem);
-		menuItem.addActionListener(new FilterActionItem(properties[1]));
+		menuItem.addActionListener(new FilterActionItem(kind, properties[1]));
 		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
-        menuItem.setToolTipText(eraseTooltip);
-        menuItem.setSelected(filter.isOk(properties[0]) && filter.isOk(properties[1]));
-        filterMenu.add(menuItem);
+		menuItem.setToolTipText(eraseTooltip);
+		menuItem.setSelected(filter.isOk(properties[0]) && filter.isOk(properties[1]));
+		filterMenu.add(menuItem);
 		group.add(menuItem);
-		menuItem.addActionListener(new FilterActionItem(properties[0] | properties[1]));
+		menuItem.addActionListener(new FilterActionItem(kind, properties[0] | properties[1]));
 	}
 
 	class FilterActionItem implements ActionListener {
+		static final int CHECKED_STATUS = 1;
+		static final int NATURE = 2;
 		private int property;
-		FilterActionItem (int property) {
+		private int kind;
+		FilterActionItem (int kind, int property) {
+			this.kind = kind;
 			this.property = property;
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			frame.getFilteredData().setStatementFilter(property,null);
-		}
-	}
-
-	private void buildExpenseReceiptFilterChoiceMenu() {
-		FilteredData filter = frame.getFilteredData();
-		ButtonGroup group = new ButtonGroup();
-		JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Expenses")); //$NON-NLS-1$
-		menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Expenses.toolTip")); //$NON-NLS-1$
-		menuItem.setSelected(filter.isExpensesAllowed()&&!filter.isReceiptsAllowed());
-		filterMenu.add(menuItem);
-		group.add(menuItem);
-		menuItem.addActionListener(new AmountActionItem(false, true));
-		
-		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-1$
-		menuItem.setToolTipText(LocalizationData.get("MainMenuBar.Receipts.toolTip")); //$NON-NLS-1$
-		menuItem.setSelected(filter.isReceiptsAllowed()&&!filter.isExpensesAllowed());
-		filterMenu.add(menuItem);
-		group.add(menuItem);
-		menuItem.addActionListener(new AmountActionItem(true, false));
-		
-		menuItem = new JRadioButtonMenuItem(LocalizationData.get("MainMenuBar.NoFilter")); //$NON-NLS-1$
-		menuItem.setToolTipText(LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
-		menuItem.setSelected(filter.isExpensesAllowed() && filter.isReceiptsAllowed());
-		filterMenu.add(menuItem);
-		group.add(menuItem);
-		menuItem.addActionListener(new AmountActionItem(true, true));
-	}
-
-	final class AmountActionItem implements ActionListener {
-		private boolean receiptsAllowed;
-		private boolean expensesAllowed;
-		AmountActionItem (boolean receiptsAllowed, boolean expensesAllowed) {
-			this.receiptsAllowed = receiptsAllowed;
-			this.expensesAllowed = expensesAllowed;
-		}
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			frame.getFilteredData().setReceiptsExpensesAllowed(receiptsAllowed, expensesAllowed);
+			FilteredData data = frame.getFilteredData();
+			if (this.kind==CHECKED_STATUS) data.setStatementFilter(property,data.getStatementFilter());
+			else data.setAmountFilter(property, data.getMinimumAmount(), data.getMaximumAmount());
 		}
 	}
 
