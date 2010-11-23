@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 
@@ -54,8 +55,7 @@ public class VersionManager {
 			if (serialNumber!=null) url.append("&id=").append(URLEncoder.encode(serialNumber,"UTF-8"));
 			return new URL(url.toString());
 		} catch (Exception e) {
-			// TODO What to do if there a problem here ?
-			e.printStackTrace();
+			ErrorManager.INSTANCE.log(e);
 			return null;
 		}
 	}
