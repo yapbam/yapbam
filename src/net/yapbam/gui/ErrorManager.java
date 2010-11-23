@@ -18,6 +18,7 @@ public class ErrorManager {
 	}
 	
 	public void log(Throwable t) {
+		System.err.println("An exception was catched by "+this.getClass().getName());
 		t.printStackTrace();
 		//TODO Not yet implemented
 		//May log the error and probably, try to send an error report to Yapbam.		
