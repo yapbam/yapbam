@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 import net.yapbam.gui.LocalizationData;
 
 public class ReleaseInfo implements Comparable<ReleaseInfo> {
+	private boolean unknown;
 	private int majorRevision;
 	private int minorRevision;
 	private int buildId;
@@ -15,20 +16,29 @@ public class ReleaseInfo implements Comparable<ReleaseInfo> {
 	private String preRealeaseComment;
 	
 	ReleaseInfo(String rel) {
-		StringTokenizer parts = new StringTokenizer(rel, " ");
-		StringTokenizer tokens = new StringTokenizer(parts.nextToken(), ".");
-		majorRevision = Integer.parseInt(tokens.nextToken());
-		minorRevision = Integer.parseInt(tokens.nextToken());
-		buildId = Integer.parseInt(tokens.nextToken());
-		preRealeaseComment = tokens.hasMoreElements()?tokens.nextToken():null;
-		tokens = new StringTokenizer(parts.nextToken(),"()/");
-		try {
-			int dayOfMonth = Integer.parseInt(tokens.nextToken());
-			int month = Integer.parseInt(tokens.nextToken());
-			int year = Integer.parseInt(tokens.nextToken());
-			releaseDate = new GregorianCalendar(year, month-1, dayOfMonth).getTime();
-		} catch (NumberFormatException e) {
-			releaseDate = new Date(Long.MAX_VALUE);
+		if (rel==null) {
+			this.unknown = true;
+			this.majorRevision = 0;
+			this.minorRevision = 0;
+			this.buildId = 0;
+			this.preRealeaseComment = null;
+			this.releaseDate = new Date(0);
+		} else {
+			StringTokenizer parts = new StringTokenizer(rel, " ");
+			StringTokenizer tokens = new StringTokenizer(parts.nextToken(), ".");
+			majorRevision = Integer.parseInt(tokens.nextToken());
+			minorRevision = Integer.parseInt(tokens.nextToken());
+			buildId = Integer.parseInt(tokens.nextToken());
+			preRealeaseComment = tokens.hasMoreElements()?tokens.nextToken():null;
+			tokens = new StringTokenizer(parts.nextToken(),"()/");
+			try {
+				int dayOfMonth = Integer.parseInt(tokens.nextToken());
+				int month = Integer.parseInt(tokens.nextToken());
+				int year = Integer.parseInt(tokens.nextToken());
+				releaseDate = new GregorianCalendar(year, month-1, dayOfMonth).getTime();
+			} catch (NumberFormatException e) {
+				releaseDate = new Date(Long.MAX_VALUE);
+			}
 		}
 	}
 	
@@ -73,6 +83,7 @@ public class ReleaseInfo implements Comparable<ReleaseInfo> {
 
 	@Override
 	public String toString() {
+		if (this.unknown) return "?";
 		return majorRevision+"."+minorRevision+"."+buildId+(preRealeaseComment==null?"":"."+preRealeaseComment)+" ("+
 			SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, LocalizationData.getLocale()).format(releaseDate)+")";
 	}

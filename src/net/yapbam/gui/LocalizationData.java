@@ -52,8 +52,18 @@ public abstract class LocalizationData {
 	}
 	
 	public static URL getURL(String document) {
-		URL url = Object.class.getResource("/localization/"+getLocale().getLanguage()+"/"+document);
-		if (url==null) url = Object.class.getResource("/localization/"+document);
+//		System.out.println(document);
+//		URL[] urls = ((URLClassLoader)LocalizationData.class.getClassLoader()).getURLs();
+//		System.out.println ("urls :"+Arrays.asList(urls));
+		
+		URL url = LocalizationData.class.getResource("/localization/"+getLocale().getLanguage()+"/"+document);
+//		if (url!=null) {System.out.println("ok 1"); return url;}
+		if (url==null) url = LocalizationData.class.getResource("/localization/"+document);
+//		if (url!=null) {System.out.println("ok 2"); return url;}
+//		url = LocalizationData.class.getResource("../../../localization/"+getLocale().getLanguage()+"/"+document);
+//		if (url!=null) {System.out.println("ok 3"); return url;}
+//		if (url==null) url = LocalizationData.class.getResource("../../../localization/"+document);
+//		if (url!=null) System.out.println("ok 4");
 		return url;
 	}
 }
