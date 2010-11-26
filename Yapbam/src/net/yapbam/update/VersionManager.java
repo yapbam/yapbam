@@ -19,18 +19,23 @@ public class VersionManager {
 	private static Properties properties;
 	
 	static {
-		InputStream inStream = ClassLoader.getSystemResourceAsStream("version.txt"); //$NON-NLS-1$
+		InputStream inStream = VersionManager.class.getResourceAsStream("version.txt"); //$NON-NLS-1$
 		properties = new Properties();
-		try {
-			properties.load(inStream);
-		} catch (IOException e) {
-		} finally {
+		if (inStream != null) {
 			try {
-				inStream.close();
-			} catch (IOException e) {}
+				properties.load(inStream);
+			} catch (IOException e) {
+			} finally {
+				try {
+					inStream.close();
+				} catch (IOException e) {}
+			}
 		}
 	}
 	
+	/** Gets the version of currently running Yapbam copy.
+	 * @return a string or null if this version is unknown
+	 */
 	public static ReleaseInfo getVersion() {
 		return new ReleaseInfo(properties.getProperty("version")); //$NON-NLS-1$
 	}

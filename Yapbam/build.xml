@@ -13,7 +13,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.7.2"/>
+	<property name="yapbamVersion" value="0.7.3"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -24,7 +24,7 @@
 	</target>
 	
 	<target name="commonBuild">
-		<echo message="version=${yapbamVersion} (${TODAY})" file="src/version.txt"/>
+		<echo message="version=${yapbamVersion} (${TODAY})" file="src/net/yapbam/update/version.txt"/>
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
 		<copy todir="releaseCompile">
@@ -66,7 +66,7 @@
 		<!-- Build the launcher jar (for non windows users) -->
 		<copy todir="releaseCompile/net/yapbam/gui/images/" file="src/net/yapbam/gui/images/splash.png"/>
 		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" />
-		<jar destfile="${classicRelease}/yapbam.jar">
+		<jar destfile="${classicRelease}/App/yapbam.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.gui.Launcher"/>
 				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
@@ -81,6 +81,8 @@
 		</copy>
 		<!-- Copy windows launcher -->
 		<copy file="yapbam.exe" todir="${classicRelease}"/>
+		<!-- Copy Linux launcher -->
+		<copy file="yapbam.sh" todir="${classicRelease}"/>
 		<!-- Build the zip file -->		
 		<zip basedir="${classicRelease}" destfile="yapbam-${yapbamVersion}.zip"/>
 		<!-- Clean the disk (remove temporary working directory) -->

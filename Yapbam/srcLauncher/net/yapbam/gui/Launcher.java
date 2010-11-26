@@ -16,6 +16,15 @@ public class Launcher {
 	private static String CLASS_NAME = "net.yapbam.gui.MainFrame";
 	
 	public static void main(String[] args) {
+//		message("Working dir : "+new File(".").getAbsolutePath());
+//		message("user.dir : "+System.getProperty("user.dir"));
+		
+//		Iterator it = System.getProperties().keySet().iterator();
+//		while (it.hasNext()) {
+//			String next = (String) it.next();
+//			System.out.println (next+" -> "+System.getProperty(next));
+//		}
+		
 		String current = System.getProperty("java.specification.version");
 		if (Float.parseFloat(current)<Float.parseFloat(REQUIRED_JAVA_VERSION)) {
 			String message = "Your current java version is "+current+
@@ -70,5 +79,9 @@ public class Launcher {
 	private static void error(String message) {
 		JOptionPane.showMessageDialog(null, message, "Sorry, unable to launch Yapbam", JOptionPane.ERROR_MESSAGE);
 		System.exit(-1);
+	}
+
+	private static void message(String message) {
+		JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

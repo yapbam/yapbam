@@ -352,9 +352,8 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public boolean isComplementOk(Transaction transaction) {
 		double amount = transaction.getComplement();
-		if ((transaction.getSubTransactionSize()!=0) && (amount==0)) return false;
-		boolean amountOk = (amount>=getMinimumAmount()) && (amount<=getMaximumAmount());
-		return isOk(transaction.getCategory()) && amountOk && isDescriptionOk(transaction.getDescription());
+		if ((transaction.getSubTransactionSize()!=0) && (GlobalData.AMOUNT_COMPARATOR.compare(amount,0.0)==0)) return false;
+		return isOk(transaction.getCategory()) && isAmountOk(amount) && isDescriptionOk(transaction.getDescription());
 	}
 	
 	/** Set the valid categories for this filter.

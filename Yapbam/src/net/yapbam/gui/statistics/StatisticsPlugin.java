@@ -97,8 +97,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				if (this.data.isComplementOk(transaction)) categoryToAmount.get(category).add(transaction.getComplement());
 			}
 		}
-        pie.updateDataSet();
-        bar.updateDataSet();
+		pie.updateDataSet();
+		bar.updateDataSet();
 	}
 
 	@Override
