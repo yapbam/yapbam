@@ -26,6 +26,7 @@ import net.yapbam.gui.statementview.StatementViewPlugin;
 import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
+import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
 
@@ -258,6 +259,7 @@ public class Preferences {
 			ErrorManager.INSTANCE.display(null, new RuntimeException("./plugins is not a directory"));
 		}
 		final List<PlugInContainer> plugins = new ArrayList<PlugInContainer>();
+		plugins.add(new PlugInContainer(WelcomePlugin.class));
 		plugins.add(new PlugInContainer(TransactionsPlugIn.class));
 		plugins.add(new PlugInContainer(BalanceHistoryPlugIn.class));
 		plugins.add(new PlugInContainer(StatisticsPlugin.class));
