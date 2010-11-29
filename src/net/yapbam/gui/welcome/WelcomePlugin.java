@@ -1,5 +1,7 @@
 package net.yapbam.gui.welcome;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -8,10 +10,11 @@ import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
+import net.yapbam.gui.widget.JImage;
 
 public class WelcomePlugin extends AbstractPlugIn {
 
-	public WelcomePlugin(FilteredData data, Object restoreData) {
+	public WelcomePlugin(FilteredData data, Object restoreData) {//LOCAL
 		this.setPanelTitle("Bienvenue !");
 		this.setPanelToolTip("Cet onglet regroupe les informations utiles à la découverte de Yapbam");
 	}
@@ -19,7 +22,7 @@ public class WelcomePlugin extends AbstractPlugIn {
 	@Override
 	public JMenuItem[] getMenuItem(int part) {
 		if (part==AbstractPlugIn.WEB_SITES_PART) {
-			return new JMenuItem[] {new JMenuItem(new WelcomeAction())};
+			return new JMenuItem[] {null, new JMenuItem(new WelcomeAction())};
 		} else {
 			return super.getMenuItem(part);
 		}
@@ -42,8 +45,8 @@ public class WelcomePlugin extends AbstractPlugIn {
 	@Override
 	public JPanel getPanel() {
 		WelcomePanel panel = new WelcomePanel();
-		panel.setVisible(false);
-		return panel;
+		Image image = Toolkit.getDefaultToolkit().getImage(WelcomePlugin.class.getResource("background.png"));
+		return JImage.wrapInBackgroundImage(panel, image);
 	}
 
 	@Override
