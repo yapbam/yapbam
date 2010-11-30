@@ -18,6 +18,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
@@ -125,27 +126,37 @@ public class Preferences {
 		return LANGUAGE_DEFAULT_VALUE.equalsIgnoreCase((String) this.properties.get(LANGUAGE));
 	}
 	
-	/** Get the preferred look and feel.
-	 * @return the name of the look and feel class
-	 */
-	public String getLookAndFeel() {
-		String value = this.properties.getProperty(LOOK_AND_FEEL);
-		if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) return UIManager.getCrossPlatformLookAndFeelClassName(); 
-		return UIManager.getSystemLookAndFeelClassName();
-	}
-
 	public void setLocale(Locale locale, boolean defaultCountry, boolean defaultLanguage) {
 		this.properties.put(LANGUAGE, defaultLanguage?LANGUAGE_DEFAULT_VALUE:locale.getLanguage());
 		this.properties.put(COUNTRY, defaultCountry?COUNTRY_DEFAULT_VALUE:locale.getCountry());
 	}
 	
-	public void setJavaLookAndFeel(boolean java) {
-		this.properties.put(LOOK_AND_FEEL, java?LOOK_AND_FEEL_JAVA_VALUE:LOOK_AND_FEEL_CUSTOM_VALUE);
+	/** Get the preferred look and feel.
+	 * <BR>This method guarantees that the returned l&f is installed in this JVM.
+	 * If the preferred l&f is not installed, it returns the system look and feel.
+	 * @return the name of the prefered look and feel class
+	 */
+	public String getLookAndFeel() {
+		String value = this.properties.getProperty(LOOK_AND_FEEL);
+		if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) {
+			return UIManager.getCrossPlatformLookAndFeelClassName();
+		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_CUSTOM_VALUE)) {
+			return UIManager.getSystemLookAndFeelClassName();
+		}
+		LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
+		for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
+			if (lookAndFeelInfo.getClassName().equals(value)) return value;
+		}
+		return UIManager.getSystemLookAndFeelClassName();
 	}
-	
+
+	public void setJavaLookAndFeel(String lookAndFeelClassName) {
+		this.properties.put(LOOK_AND_FEEL, lookAndFeelClassName);
+	}
+/*	
 	public boolean isJavaLookAndFeel() {
 		return this.properties.get(LOOK_AND_FEEL).equals(LOOK_AND_FEEL_JAVA_VALUE);
-	}
+	}*/
 	
 	public String getHttpProxyHost() {
 		String property = properties.getProperty(PROXY);
