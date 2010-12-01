@@ -86,8 +86,9 @@ public class RoundButton extends Component {
 		Graphics2D g2d = (Graphics2D) g;
 		Composite originalComposite = g2d.getComposite();
 		g2d.setComposite(makeComposite(this.transparency));
-		g2d.setPaint(Color.red);
-
+		Object renderingHint = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
 		int s = Math.min(getSize().width - 1, getSize().height - 1);
 
 		// paint the interior of the button
@@ -100,11 +101,8 @@ public class RoundButton extends Component {
 			g.fillArc(0, 0, s, s, 0, 360);
 		}
 
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, renderingHint);
 		g2d.setComposite(originalComposite);
-
-		// draw the perimeter of the button
-//		g.setColor(getBackground().darker().darker().darker());
-//		g.drawArc(0, 0, s, s, 0, 360);
 
 		// draw the label centered in the button
 		Font f = getFont();
@@ -119,17 +117,6 @@ public class RoundButton extends Component {
 		int type = AlphaComposite.SRC_OVER;
 		return (AlphaComposite.getInstance(type, alpha));
 	}
-/*
-	private void drawSquares(Graphics2D g2d, float alpha) {
-		Composite originalComposite = g2d.getComposite();
-		g2d.setPaint(Color.blue);
-		g2d.fill(blueSquare);
-		g2d.setComposite(makeComposite(alpha));
-		g2d.setPaint(Color.red);
-		g2d.fill(redSquare);
-		g2d.setComposite(originalComposite);
-	}
-*/
 
 	/**
 	 * The preferred size of the button.

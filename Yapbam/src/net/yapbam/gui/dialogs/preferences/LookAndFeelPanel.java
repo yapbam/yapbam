@@ -41,6 +41,18 @@ public class LookAndFeelPanel extends PreferencePanel {
 		public void itemStateChanged(ItemEvent e) {
 			if (e.getStateChange()==ItemEvent.SELECTED) {
 				selectedLookAndFeel = this.className;
+/*				try {
+					// Try to change the LAF dynamically.
+					// Two problems :
+					// 1°) How to change the Mainframe LAF from there ?
+					// 2°) Exceptions are thrown by the dispatch thread after the LAF was changed
+					UIManager.setLookAndFeel(selectedLookAndFeel);
+					Window ownerWindow = AbstractDialog.getOwnerWindow((Component)e.getItem());
+					SwingUtilities.updateComponentTreeUI(null);
+					ownerWindow.pack();
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+				}*/
 			}
 		}
 	}
