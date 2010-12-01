@@ -10,6 +10,8 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
+import net.yapbam.gui.widget.RoundButton;
+
 @SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
 	/**
@@ -45,6 +47,14 @@ public class WelcomePanel extends JPanel {
 		gbc_button.gridx = 2;
 		gbc_button.gridy = 3;
 		add(button, gbc_button);
+		
+		RoundButton label = new RoundButton("New label");
+		label.setTransparency(0.5f);
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.gridx = 4;
+		gbc_label.gridy = 3;
+		add(label, gbc_label);
 		
 		JLabel faq = new JLabel("Question courantes");
 		faq.setToolTipText("<html>Ouvre la page web regroupant les questions courantes sur Yapbam.</html>");
