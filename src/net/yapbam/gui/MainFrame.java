@@ -20,6 +20,7 @@ import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
+import net.yapbam.gui.welcome.WelcomeDialog;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
@@ -145,6 +146,8 @@ public class MainFrame extends JFrame implements DataListener {
 
 		// Display the window.
 		setVisible(true);
+		
+		new WelcomeDialog(this).setVisible(true);
 	}
 	
 	void readData(URI uri) throws IOException {
