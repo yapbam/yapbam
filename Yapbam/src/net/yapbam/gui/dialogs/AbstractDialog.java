@@ -43,12 +43,16 @@ public abstract class AbstractDialog extends JDialog {
 		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		JPanel southPane = new JPanel(new BorderLayout());
+		southPane.setOpaque(false);
 		JPanel buttonsPane = new JPanel();
+		buttonsPane.setOpaque(false);
 		southPane.add(buttonsPane, BorderLayout.EAST);
 		okButton = new JButton(LocalizationData.get("GenericButton.ok"));
+		okButton.setOpaque(false);
 		buttonsPane.add(okButton);
 		cancelButton = new JButton(LocalizationData.get("GenericButton.cancel"));
 		cancelButton.setToolTipText(LocalizationData.get("GenericButton.cancel.toolTip"));
+		cancelButton.setOpaque(false);
 		buttonsPane.add(cancelButton);
 
 		contentPane.add(southPane, BorderLayout.SOUTH);
