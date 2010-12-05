@@ -80,7 +80,6 @@ public abstract class AbstractInfoPanel extends JPanel {
 	private JLabel getIconLabel() {
 		if (iconLabel == null) {
 			iconLabel = new JLabel();
-			iconLabel.setText("");
 			iconLabel.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
 		}
 		return iconLabel;
