@@ -10,10 +10,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
-import javax.swing.JTextPane;
 import net.yapbam.gui.widget.HTMLPane;
 
+@SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
+
+	private JCheckBox showAtStartup;
 
 	/**
 	 * Create the panel.
@@ -49,16 +51,16 @@ public class WelcomePanel extends JPanel {
 		bottomPanel.setLayout(gbl_bottomPanel);
 		bottomPanel.setOpaque(false);
 		
-		JCheckBox chckbxShowAtStartup = new JCheckBox("Show at startup");
-		chckbxShowAtStartup.setOpaque(false);
-		chckbxShowAtStartup.setHorizontalAlignment(SwingConstants.RIGHT);
-		GridBagConstraints gbc_chckbxShowAtStartup = new GridBagConstraints();
-		gbc_chckbxShowAtStartup.anchor = GridBagConstraints.EAST;
-		gbc_chckbxShowAtStartup.weightx = 1.0;
-		gbc_chckbxShowAtStartup.fill = GridBagConstraints.HORIZONTAL;
-		gbc_chckbxShowAtStartup.gridx = 0;
-		gbc_chckbxShowAtStartup.gridy = 0;
-		bottomPanel.add(chckbxShowAtStartup, gbc_chckbxShowAtStartup);
+		showAtStartup = new JCheckBox("Show at startup");
+		showAtStartup.setOpaque(false);
+		showAtStartup.setHorizontalAlignment(SwingConstants.RIGHT);
+		GridBagConstraints gbc_showAtStartup = new GridBagConstraints();
+		gbc_showAtStartup.anchor = GridBagConstraints.EAST;
+		gbc_showAtStartup.weightx = 1.0;
+		gbc_showAtStartup.fill = GridBagConstraints.HORIZONTAL;
+		gbc_showAtStartup.gridx = 0;
+		gbc_showAtStartup.gridy = 0;
+		bottomPanel.add(showAtStartup, gbc_showAtStartup);
 		
 		JPanel shortcutsPanel = new JPanel();
 		shortcutsPanel.setOpaque(false);
@@ -172,5 +174,12 @@ public class WelcomePanel extends JPanel {
 
 		this.setOpaque(false);
 	}
-
+	
+	public boolean isShowAtStartup() {
+		return this.showAtStartup.isSelected();
+	}
+	
+	public void setShowAtStartup(boolean show) {
+		this.showAtStartup.setSelected(show);
+	}
 }

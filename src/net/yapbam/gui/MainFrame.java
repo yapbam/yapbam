@@ -71,6 +71,8 @@ public class MainFrame extends JFrame implements DataListener {
 	private MainFrame(FilteredData filteredData, Object[] restartData, String path) {
 	    //Create and set up the window.
 		super();
+		
+		boolean restart = restartData!=null;
 		this.setMinimumSize(new Dimension(800,400));
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -147,7 +149,7 @@ public class MainFrame extends JFrame implements DataListener {
 		// Display the window.
 		setVisible(true);
 		
-		new WelcomeDialog(this).setVisible(true);
+		if (Preferences.INSTANCE.isWelcomeAllowed() && !restart) new WelcomeDialog(this).setVisible(true);
 	}
 	
 	void readData(URI uri) throws IOException {
