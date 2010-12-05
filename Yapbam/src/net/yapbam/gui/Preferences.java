@@ -45,6 +45,7 @@ public class Preferences {
 	private static final String AUTO_UPDATE_PERIOD = "auto_update_period"; //$NON-NLS-1$
 	private static final String AUTO_UPDATE_SILENT_FAIL	= "auto_update_silent_fail"; //$NON-NLS-1$
 	private static final String EXPERT_MODE = "expert_mode"; //$NON-NLS-1$
+	private static final String WELCOME_DIALOG_ALLOWED = "welcome_dialog_enabled";
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
 
 	/** The Preference instance.
@@ -232,6 +233,23 @@ public class Preferences {
 		}
 	}
 
+	/** Tests whether the welcome screen is allowed or not.
+	 * @return true is the welcome screen may pop up every time yapbam is launched.
+	 */
+	public boolean isWelcomeAllowed() {
+		String property = this.properties.getProperty(WELCOME_DIALOG_ALLOWED);
+		if (property==null) return true;
+		try {
+			return Boolean.parseBoolean(property);
+		} catch (Exception e) {
+			return true;
+		}
+	}
+	
+	public void setWelcomeAllowed(boolean allowed) {
+		this.properties.setProperty(WELCOME_DIALOG_ALLOWED, Boolean.toString(allowed));
+	}
+	
 	/** Gets the automatic check for updates period.
 	 * @return the number of days between two checks, a negative number if there's no automatic check.
 	 */
@@ -251,7 +269,7 @@ public class Preferences {
 		}
 	}
 	
-	/** Set the autoupdate period
+	/** Sets the autoupdate period
 	 * @param days number of days between two new versions checks (a negative number means "no auto check")
 	 * @param silentFail true if a communication problem during auto check may be silent. false to have an error dialog displayed.
 	 */
