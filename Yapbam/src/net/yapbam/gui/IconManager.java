@@ -29,6 +29,10 @@ public abstract class IconManager {
 	public static final Icon CHECK_TRANSACTION = create("images/check.png");
 	public static final Icon HELP = create("images/help.png");
 	public static final Icon PRINT = create("images/print.png");
+	public static final Icon FIRST = create("images/first.png");
+	public static final Icon PREVIOUS = create("images/previous.png");
+	public static final Icon NEXT = create("images/next.png");
+	public static final Icon LAST = create("images/last.png");
 	public static final Icon UP = create("images/up.png");
 	public static final Icon DOWN = create("images/down.png");
 	public static final Icon TOP = create("images/top.png");
