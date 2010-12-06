@@ -84,7 +84,6 @@ public class Preferences {
 		this.properties.clear();
 		this.properties.put(LANGUAGE, LANGUAGE_DEFAULT_VALUE);
 		this.properties.put(COUNTRY, COUNTRY_DEFAULT_VALUE);
-		this.properties.put(LOOK_AND_FEEL, LOOK_AND_FEEL_CUSTOM_VALUE);
 	}
 	
 	/** Gets whether it is the first time Yapbam is launched on this machine or not.
@@ -135,11 +134,14 @@ public class Preferences {
 	/** Get the preferred look and feel.
 	 * <BR>This method guarantees that the returned l&f is installed in this JVM.
 	 * If the preferred l&f is not installed, it returns the system look and feel.
-	 * @return the name of the prefered look and feel class
+	 * @return the name of the preferred look and feel class
 	 */
 	public String getLookAndFeel() {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
-		if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) {
+		if (value==null) {
+			value = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // This is the default Yapbam L&F
+		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) {
+			// Versions before 0.7.4 used LOOK_AND_FEEL_JAVA_VALUE and LOOK_AND_FEEL_CUSTOM_VALUE to code the look and feel
 			return UIManager.getCrossPlatformLookAndFeelClassName();
 		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_CUSTOM_VALUE)) {
 			return UIManager.getSystemLookAndFeelClassName();
@@ -151,13 +153,9 @@ public class Preferences {
 		return UIManager.getSystemLookAndFeelClassName();
 	}
 
-	public void setJavaLookAndFeel(String lookAndFeelClassName) {
+	public void setLookAndFeel(String lookAndFeelClassName) {
 		this.properties.put(LOOK_AND_FEEL, lookAndFeelClassName);
 	}
-/*	
-	public boolean isJavaLookAndFeel() {
-		return this.properties.get(LOOK_AND_FEEL).equals(LOOK_AND_FEEL_JAVA_VALUE);
-	}*/
 	
 	public String getHttpProxyHost() {
 		String property = properties.getProperty(PROXY);

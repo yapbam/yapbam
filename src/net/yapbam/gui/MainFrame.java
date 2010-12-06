@@ -73,6 +73,7 @@ public class MainFrame extends JFrame implements DataListener {
 		super();
 		
 		boolean restart = restartData!=null;
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("yapbam_16.png")));
 		this.setMinimumSize(new Dimension(800,400));
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
