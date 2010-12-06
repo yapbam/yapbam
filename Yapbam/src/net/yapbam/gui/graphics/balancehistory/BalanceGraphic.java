@@ -1,7 +1,9 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.GradientPaint;
@@ -103,7 +105,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 			Date oldValue = this.selectedDate;
 			this.selectedDate = date;
 			this.firePropertyChange(SELECTED_DATE_PROPERTY, oldValue, this.selectedDate);
-	        this.repaint();
+			this.repaint();
 		}
 	}
 
@@ -122,8 +124,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		super.paintComponent(g);
 
 		setBackground(Color.white);
-    	Graphics2D g2 = (Graphics2D) g;
-        //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Graphics2D g2 = (Graphics2D) g;
+		// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		this.points = convert();
 
@@ -135,62 +137,65 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		GradientPaint negativeGradient = new GradientPaint(0,y0,Color.WHITE,0,yAxis.getY(this.balanceHistory.getMinBalance()),NEGATIVE);
 		GradientPaint positiveGradient = new GradientPaint(0,yAxis.getY(this.balanceHistory.getMaxBalance()),POSITIVE,0,y0,Color.WHITE);
 		Point p = this.points[0];
-        for (int i = 0; i < points.length; i++) {
-        	Point p2 = points[i];
-        	if ((p2.y == p.y) && (Math.abs(p.y-y0)>1)) {
-        		int y, h;
-        		Paint c;
-        		if (p.y>y0) { // balance is negative
-        			y = y0;
-        			h =  p.y - y0;
-        			c = negativeGradient;
-        		} else {
-        			y = p.y;
-        			h =  y0 - p.y;
-        			c = positiveGradient;
-        		}
-                Paint oldColor = g2.getPaint();
-                g2.setPaint(c);
-                g2.fillRect(p.x+1, y, p2.x-p.x, h);
-                g2.setPaint(oldColor);
-        	}
-        	p = p2;
+		for (int i = 0; i < points.length; i++) {
+			Point p2 = points[i];
+			if ((p2.y == p.y) && (Math.abs(p.y - y0) > 1)) {
+				int y, h;
+				Paint c;
+				if (p.y > y0) { // balance is negative
+					y = y0;
+					h = p.y - y0;
+					c = negativeGradient;
+				} else {
+					y = p.y;
+					h = y0 - p.y;
+					c = positiveGradient;
+				}
+				Paint oldColor = g2.getPaint();
+				g2.setPaint(c);
+				g2.fillRect(p.x + 1, y, p2.x - p.x, h);
+				g2.setPaint(oldColor);
+			}
+			p = p2;
 		}
-        
+
 		paintXAxis(g2);
 		paintYAxis(g2);
 
-        // Draw the balance curve
+		// Draw the balance curve
 		p = this.points[0];
-        for (int i = 0; i < points.length; i++) {
-        	Point p2 = points[i];
-        	g2.drawLine(p.x, p.y, p2.x, p2.y);
-        	p = p2;
+		for (int i = 0; i < points.length; i++) {
+			Point p2 = points[i];
+			g2.drawLine(p.x, p.y, p2.x, p2.y);
+			p = p2;
 		}
 
-        // Draw the selected date line
+		// Draw the selected date line
 		int stroke = 4;
-    	int x = getX(this.selectedDate)+stroke/2;
-    	if ((x>=0) && (x<=size.width)) {
+		int x = getX(this.selectedDate) + stroke / 2;
+		if ((x >= 0) && (x <= size.width)) {
 			Stroke oldStroke = g2.getStroke();
-	        g2.setStroke(new BasicStroke(stroke));
-	        Color oldColor = g2.getColor();
-	    	g2.setColor(Color.ORANGE);
-			g2.drawLine(x, 0, x, size.height); //Selected Date line
-	    	g2.setColor(oldColor);
-	    	g2.setStroke(oldStroke);
-    	}
+			g2.setStroke(new BasicStroke(stroke));
+			Color oldColor = g2.getColor();
+			g2.setColor(Color.ORANGE);
+			Composite originalComposite = g2.getComposite();
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
+			g2.drawLine(x, 0, x, size.height); // Selected Date line
+			g2.setComposite(originalComposite);
+			g2.setColor(oldColor);
+			g2.setStroke(oldStroke);
+		}
 	}
 
 	@SuppressWarnings("deprecation")
 	private void paintXAxis(Graphics2D g2) {
 		int x;
 		int y0 = yAxis.getY(0);
-        Stroke oldStroke = g2.getStroke();
-        g2.setStroke(new BasicStroke(3));
+		Stroke oldStroke = g2.getStroke();
+		g2.setStroke(new BasicStroke(3));
 		Dimension size = getSize();
 		g2.drawLine(0, y0, size.width, y0); // x axis
-    	g2.setStroke(oldStroke);
+		g2.setStroke(oldStroke);
 		String[] months = DateFormatSymbols.getInstance(LocalizationData.getLocale()).getMonths();
 		Date date = (Date) this.getStartDate().clone();
 		x = getX(date);
@@ -254,7 +259,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 			Date oldValue = (Date) this.selectedDate.clone();
 			this.selectedDate.setTime(time);
 			this.firePropertyChange(SELECTED_DATE_PROPERTY, oldValue, this.selectedDate);
-	        this.repaint();
+			this.repaint();
 		}
 	}
 
@@ -288,11 +293,11 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	private static class MouseListener extends MouseAdapter {
-	    @Override
+		@Override
 		public void mouseDragged(MouseEvent e) {
-            int x = e.getX();
+			int x = e.getX();
 			Rectangle r = new Rectangle(x, e.getY(), 1, 1);
-            ((JPanel)e.getSource()).scrollRectToVisible(r);
+			((JPanel) e.getSource()).scrollRectToVisible(r);
 			computeEvent(e);
 		}
 
@@ -307,22 +312,22 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 
 		private void computeEvent(MouseEvent e) {
-	    	BalanceGraphic bgp = (BalanceGraphic) e.getSource();
-	    	bgp.setLinePosition(e.getX());
-	    }
+			BalanceGraphic bgp = (BalanceGraphic) e.getSource();
+			bgp.setLinePosition(e.getX());
+		}
 	}
 
 	public Dimension getPreferredSize() {
-    	Dimension parentSize = this.getParent().getSize();
-    	long days = 1+(this.getEndDate().getTime() - this.getStartDate().getTime())/24/3600000;
-    	int pixels = (int) (days * PIXEL_PER_DAY);
-    	int width = Math.max(pixels, parentSize.width);
-    	return new Dimension(width, parentSize.height);
-    }
+		Dimension parentSize = this.getParent().getSize();
+		long days = 1 + (this.getEndDate().getTime() - this.getStartDate().getTime()) / 24 / 3600000;
+		int pixels = (int) (days * PIXEL_PER_DAY);
+		int width = Math.max(pixels, parentSize.width);
+		return new Dimension(width, parentSize.height);
+	}
 
-    public Dimension getPreferredScrollableViewportSize() {
-        return getPreferredSize();
-    }
+	public Dimension getPreferredScrollableViewportSize() {
+		return getPreferredSize();
+	}
 
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
 		return this.getParent().getSize().width;

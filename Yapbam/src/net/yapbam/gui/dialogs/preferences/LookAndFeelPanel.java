@@ -111,7 +111,7 @@ public class LookAndFeelPanel extends PreferencePanel {
 	@Override
 	public boolean updatePreferences() {
 		boolean result = !selectedLookAndFeel.equals(Preferences.INSTANCE.getLookAndFeel());
-		if (result) Preferences.INSTANCE.setJavaLookAndFeel(selectedLookAndFeel);
+		if (result) Preferences.INSTANCE.setLookAndFeel(selectedLookAndFeel);
 		return result;
 	}
 }
