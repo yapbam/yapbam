@@ -3,6 +3,8 @@ package net.yapbam.gui.welcome;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
+
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.border.TitledBorder;
@@ -15,17 +17,28 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.widget.HTMLPane;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
 
 	private JCheckBox showAtStartup;
-	private JTextField textField;
+	private JTextField tipNumber;
+	private HTMLPane tipPane;
+	private TipManager tips;
+	private JButton nextTip;
+	private JButton lastTip;
+	private JButton previousTip;
+	private JButton firstTip;
+	private int currentTip;
 
 	/**
 	 * Create the panel.
 	 */
 	public WelcomePanel() {
+		tips = new TipManager();
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
@@ -126,13 +139,14 @@ public class WelcomePanel extends JPanel {
 		tipsPanel.setLayout(gbl_tipsPanel);
 		tipsPanel.setOpaque(false);
 		
-		HTMLPane textPane = new HTMLPane();
-		GridBagConstraints gbc_textPane = new GridBagConstraints();
-		gbc_textPane.insets = new Insets(0, 0, 5, 0);
-		gbc_textPane.fill = GridBagConstraints.BOTH;
-		gbc_textPane.gridx = 0;
-		gbc_textPane.gridy = 0;
-		tipsPanel.add(textPane, gbc_textPane);
+		tipPane = new HTMLPane();
+		tipPane.setPreferredSize(new Dimension(200,200));
+		GridBagConstraints gbc_tipPane = new GridBagConstraints();
+		gbc_tipPane.insets = new Insets(0, 0, 5, 0);
+		gbc_tipPane.fill = GridBagConstraints.BOTH;
+		gbc_tipPane.gridx = 0;
+		gbc_tipPane.gridy = 0;
+		tipsPanel.add(tipPane, gbc_tipPane);
 		
 		JPanel tipSelectionPanel = new JPanel();
 		GridBagConstraints gbc_tipSelectionPanel = new GridBagConstraints();
@@ -148,7 +162,12 @@ public class WelcomePanel extends JPanel {
 		tipSelectionPanel.setLayout(gbl_tipSelectionPanel);
 		tipSelectionPanel.setOpaque(false);
 		
-		JButton firstTip = new JButton("");
+		firstTip = new JButton();
+		firstTip.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setTip(0);
+			}
+		});
 		firstTip.setToolTipText("Displays the first tip");
 		firstTip.setIcon(IconManager.FIRST);
 		GridBagConstraints gbc_firstTip = new GridBagConstraints();
@@ -159,13 +178,13 @@ public class WelcomePanel extends JPanel {
 		gbc_firstTip.gridy = 0;
 		tipSelectionPanel.add(firstTip, gbc_firstTip);
 		
-		textField = new JTextField();
-		textField.setToolTipText("Type a tip number here to display it");
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.gridx = 3;
-		gbc_textField.gridy = 0;
-		tipSelectionPanel.add(textField, gbc_textField);
-		textField.setColumns(2);
+		tipNumber = new JTextField();
+		tipNumber.setToolTipText("Type a tip number here to display it");
+		GridBagConstraints gbc_tipNumber = new GridBagConstraints();
+		gbc_tipNumber.gridx = 3;
+		gbc_tipNumber.gridy = 0;
+		tipSelectionPanel.add(tipNumber, gbc_tipNumber);
+		tipNumber.setColumns(2);
 		
 		JLabel label = new JLabel("/?");
 		GridBagConstraints gbc_label = new GridBagConstraints();
@@ -174,7 +193,12 @@ public class WelcomePanel extends JPanel {
 		gbc_label.gridy = 0;
 		tipSelectionPanel.add(label, gbc_label);
 		
-		JButton nextTip = new JButton("");
+		nextTip = new JButton();
+		nextTip.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setTip(currentTip+1);
+			}
+		});
 		nextTip.setToolTipText("Displays next tip");
 		nextTip.setIcon(IconManager.NEXT);
 		GridBagConstraints gbc_nextTip = new GridBagConstraints();
@@ -183,7 +207,12 @@ public class WelcomePanel extends JPanel {
 		gbc_nextTip.gridy = 0;
 		tipSelectionPanel.add(nextTip, gbc_nextTip);
 		
-		JButton lastTip = new JButton("");
+		lastTip = new JButton();
+		lastTip.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setTip(tips.size()-1);
+			}
+		});
 		lastTip.setToolTipText("Displays last tip");
 		lastTip.setIcon(IconManager.LAST);
 		GridBagConstraints gbc_lastTip = new GridBagConstraints();
@@ -191,7 +220,12 @@ public class WelcomePanel extends JPanel {
 		gbc_lastTip.gridy = 0;
 		tipSelectionPanel.add(lastTip, gbc_lastTip);
 		
-		JButton previousTip = new JButton("");
+		previousTip = new JButton();
+		previousTip.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setTip(currentTip-1);
+			}
+		});
 		previousTip.setToolTipText("Displays the previous tip");
 		previousTip.setIcon(IconManager.PREVIOUS);
 		GridBagConstraints gbc_previousTip = new GridBagConstraints();
@@ -212,6 +246,8 @@ public class WelcomePanel extends JPanel {
 		gbc_separator.gridx = 0;
 		gbc_separator.gridy = 1;
 		add(separator, gbc_separator);
+		
+		setTip(tips.getRandom());
 	}
 	
 	public boolean isShowAtStartup() {
@@ -220,5 +256,16 @@ public class WelcomePanel extends JPanel {
 	
 	public void setShowAtStartup(boolean show) {
 		this.showAtStartup.setSelected(show);
+	}
+	
+	private void setTip(int index) {
+		currentTip = index;
+		tipPane.setContent(tips.get(index));
+		firstTip.setEnabled(index!=0);
+		previousTip.setEnabled(index!=0);
+		nextTip.setEnabled(index!=tips.size()-1);
+		lastTip.setEnabled(index!=tips.size()-1);
+		tipNumber.setText(Integer.toString(index+1));
+//		AbstractDialog.getOwnerWindow(this).pack();
 	}
 }

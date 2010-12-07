@@ -2,12 +2,15 @@ package net.yapbam.gui.dialogs;
 
 import javax.swing.JComponent;
 
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.HTMLPane;
 
 import java.text.MessageFormat;
 
 import java.awt.Dimension;
+import java.io.IOException;
+
 import javax.swing.JTabbedPane;
 import net.yapbam.update.VersionManager;
 
@@ -34,9 +37,13 @@ public class AboutPanel extends AbstractInfoPanel {
 	protected JComponent getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.addTab(LocalizationData.get("AboutDialog.License.TabName"), null, getLicensePane(), null); //$NON-NLS-1$
-			jTabbedPane.addTab(LocalizationData.get("AboutDialog.RelNotes.TabName"), null, getRelnotesPane(), null); //$NON-NLS-1$
-			jTabbedPane.addTab(LocalizationData.get("AboutDialog.Contributors.TabName"), null, getAboutPane(), null); //$NON-NLS-1$
+			try {
+				jTabbedPane.addTab(LocalizationData.get("AboutDialog.License.TabName"), null, getLicensePane(), null); //$NON-NLS-1$
+				jTabbedPane.addTab(LocalizationData.get("AboutDialog.RelNotes.TabName"), null, getRelnotesPane(), null); //$NON-NLS-1$
+				jTabbedPane.addTab(LocalizationData.get("AboutDialog.Contributors.TabName"), null, getAboutPane(), null); //$NON-NLS-1$
+			} catch (IOException e) {
+				ErrorManager.INSTANCE.display(AbstractDialog.getOwnerWindow(this), e);
+			}
 		}
 		return jTabbedPane;
 	}
@@ -46,7 +53,7 @@ public class AboutPanel extends AbstractInfoPanel {
 	 * 	
 	 * @return net.yapbam.ihm.widget.relnotesPane	
 	 */
-	private HTMLPane getRelnotesPane() {
+	private HTMLPane getRelnotesPane() throws IOException {
 		if (relnotesPane == null) {
 			relnotesPane = new HTMLPane(LocalizationData.getURL("Release notes.html")); //$NON-NLS-1$
 			relnotesPane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
@@ -59,7 +66,7 @@ public class AboutPanel extends AbstractInfoPanel {
 	 * 	
 	 * @return net.yapbam.ihm.widget.HTMLPane	
 	 */
-	private HTMLPane getLicensePane() {
+	private HTMLPane getLicensePane() throws IOException {
 		if (licensePane == null) {
 			licensePane = new HTMLPane(LocalizationData.getURL("license.html")); //$NON-NLS-1$
 			licensePane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
@@ -77,7 +84,7 @@ public class AboutPanel extends AbstractInfoPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.HTMLPane	
 	 */
-	private HTMLPane getAboutPane() {
+	private HTMLPane getAboutPane() throws IOException {
 		if (aboutPane == null) {
 			aboutPane = new HTMLPane(LocalizationData.getURL("contributors.html")); //$NON-NLS-1$
 		}
