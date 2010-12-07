@@ -2,7 +2,6 @@ package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
-import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -27,6 +26,7 @@ import javax.swing.ListSelectionModel;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.dialogs.AbstractDialog;
 
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -34,6 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.Insets;
 
 public class LocalizationPanel extends PreferencePanel {
 
@@ -50,9 +51,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private JRadioButton defaultLButton = null;
 	private JRadioButton frenchButton = null;
 	private JRadioButton englishButton = null;
-	private JPanel jPanel = null;
 	private JButton revertButton = null;
-	private JPanel southPanel = null;
 	private ItemListener basicItemListener;
 	private HashMap<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
 	private JCheckBox translatorButton = null;
@@ -80,10 +79,34 @@ public class LocalizationPanel extends PreferencePanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setLayout(new BorderLayout());
 		this.setSize(548, 200);
-		this.add(getJPanel(), BorderLayout.CENTER);
-		this.add(getSouthPanel(), BorderLayout.SOUTH);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{348, 200, 0};
+		gridBagLayout.rowHeights = new int[]{100, 77, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
+		GridBagConstraints gbc_countryPanel = new GridBagConstraints();
+		gbc_countryPanel.gridheight = 2;
+		gbc_countryPanel.weighty = 1.0;
+		gbc_countryPanel.anchor = GridBagConstraints.NORTHWEST;
+		gbc_countryPanel.fill = GridBagConstraints.VERTICAL;
+		gbc_countryPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_countryPanel.gridx = 0;
+		gbc_countryPanel.gridy = 0;
+		add(getCountryPanel(), gbc_countryPanel);
+		GridBagConstraints gbc_languagePanel = new GridBagConstraints();
+		gbc_languagePanel.anchor = GridBagConstraints.NORTHWEST;
+		gbc_languagePanel.weightx = 1.0;
+		gbc_languagePanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_languagePanel.insets = new Insets(0, 0, 5, 0);
+		gbc_languagePanel.gridx = 1;
+		gbc_languagePanel.gridy = 0;
+		add(getLanguagePanel(), gbc_languagePanel);
+		GridBagConstraints gbc_revertButton = new GridBagConstraints();
+		gbc_revertButton.gridx = 1;
+		gbc_revertButton.gridy = 1;
+		add(getRevertButton(), gbc_revertButton);
 		reset();
 	}
 	
@@ -160,6 +183,8 @@ public class LocalizationPanel extends PreferencePanel {
 	private JPanel getLanguagePanel() {
 		if (languagePanel == null) {
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints7.weighty = 1.0D;
@@ -169,6 +194,8 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints6.anchor = GridBagConstraints.WEST;
 			gridBagConstraints6.gridy = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.weightx = 1.0;
+			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.anchor = GridBagConstraints.WEST;
 			gridBagConstraints5.gridy = 2;
@@ -177,9 +204,10 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints4.weighty = 0.0D;
 			gridBagConstraints4.weightx = 1.0D;
 			gridBagConstraints4.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints4.fill = GridBagConstraints.NONE;
+			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridy = 3;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints3.weightx = 1.0D;
@@ -296,7 +324,7 @@ public class LocalizationPanel extends PreferencePanel {
 	}
 
 	void checkSomethingChanged() {
-		southPanel.setVisible(isChanged());
+		revertButton.setVisible(isChanged());
 	}
 
 	/** Returns true if the panel reflects something different from Preferences.INSTANCE */
@@ -379,23 +407,6 @@ public class LocalizationPanel extends PreferencePanel {
 	}
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			GridLayout gridLayout1 = new GridLayout();
-			gridLayout1.setRows(1);
-			jPanel = new JPanel();
-			jPanel.setLayout(gridLayout1);
-			jPanel.add(getCountryPanel(), null);
-			jPanel.add(getLanguagePanel(), null);
-		}
-		return jPanel;
-	}
-
-	/**
 	 * This method initializes revertButton	
 	 * 	
 	 * @return javax.swing.JButton	
@@ -413,25 +424,6 @@ public class LocalizationPanel extends PreferencePanel {
 			});
 		}
 		return revertButton;
-	}
-
-	/**
-	 * This method initializes southPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getSouthPanel() {
-		if (southPanel == null) {
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.anchor = GridBagConstraints.WEST;
-			gridBagConstraints8.gridy = 0;
-			gridBagConstraints8.gridx = 0;
-			southPanel = new JPanel();
-			southPanel.setLayout(new GridBagLayout());
-			southPanel.setVisible(false);
-			southPanel.add(getRevertButton(), gridBagConstraints8);
-		}
-		return southPanel;
 	}
 
 	@Override
