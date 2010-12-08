@@ -21,6 +21,8 @@ package net.yapbam.currency;
 import java.net.*;
 import java.io.*;
 
+import net.yapbam.util.Portable;
+
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 import java.text.*;
@@ -47,7 +49,6 @@ import java.util.*;
  * 
  */
 public final class CurrencyConverter {
-	private static CurrencyConverter instance = null;
 	private static final String ECB_RATES_URL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 
 	transient private File cacheFile = null;
@@ -62,23 +63,16 @@ public final class CurrencyConverter {
 	}
 
 	/**
-	 * Sets the proxy used to connect with ECB. By default, the proxy is set to
-	 * Proxy.NoProxy Changing the proxy do not force a new connection to ECB.
-	 * 
-	 * @param proxy
-	 *          The new proxy to use
-	 */
-	public void setProxy(Proxy proxy) {
-		this.proxy = proxy;
-	}
-
-	/**
 	 * Returns a singleton instance of CurrencyConverter.
-	 * 
+	 * @param proxy The new proxy to use to get the data (Proxy.NoProxy to not use any proxy)
 	 * @return CurrencyConverter instance
+	 * @throws ParseException 
+	 * @throws IOException 
 	 */
-	public static CurrencyConverter getInstance() {
-		if (instance == null) instance = new CurrencyConverter();
+	public static CurrencyConverter getInstance(Proxy proxy) throws IOException, ParseException {
+		CurrencyConverter instance = new CurrencyConverter();
+		instance.proxy = proxy;
+		instance.update();
 		return instance;
 	}
 
@@ -94,14 +88,10 @@ public final class CurrencyConverter {
 	 * @param toCurrency
 	 *          Three letter ISO 4217 currency code of target currency.
 	 * @return Amount in target currency
-	 * @throws IOException
-	 *           If cache file cannot be read/written or if URL cannot be opened.
-	 * @throws ParseException
-	 *           If an error occurs while parsing the XML cache file.
 	 * @throws IllegalArgumentException
 	 *           If a wrong (non-existing) currency argument was supplied.
 	 */
-	public double convert(double amount, String fromCurrency, String toCurrency) throws IOException, ParseException, IllegalArgumentException {
+	public double convert(double amount, String fromCurrency, String toCurrency) throws IllegalArgumentException {
 		if (checkCurrencyArgs(fromCurrency, toCurrency)) {
 			amount *= fxRates.get(toCurrency);
 			amount /= fxRates.get(fromCurrency);
@@ -123,14 +113,10 @@ public final class CurrencyConverter {
 	 * @param toCurrency
 	 *          Three letter ISO 4217 currency code of target currency.
 	 * @return Amount in target currency
-	 * @throws IOException
-	 *           If cache file cannot be read/written or if URL cannot be opened.
-	 * @throws ParseException
-	 *           If an error occurs while parsing the XML cache file.
 	 * @throws IllegalArgumentException
 	 *           If a wrong (non-existing) currency argument was supplied.
 	 */
-	public long convert(long amount, String fromCurrency, String toCurrency) throws IOException, ParseException, IllegalArgumentException {
+	public long convert(long amount, String fromCurrency, String toCurrency) throws IllegalArgumentException {
 		if (checkCurrencyArgs(fromCurrency, toCurrency)) {
 			amount *= fxRates.get(toCurrency);
 			amount /= fxRates.get(fromCurrency);
@@ -146,15 +132,10 @@ public final class CurrencyConverter {
 	 * @param toCurrency
 	 *          ISO 4217 target currency code.
 	 * @return true if both currency arguments are not equal.
-	 * @throws IOException
-	 *           If cache file cannot be read/written or if URL cannot be opened.
-	 * @throws ParseException
-	 *           If an error occurs while parsing the XML cache file.
 	 * @throws IllegalArgumentException
 	 *           If a wrong (non-existing) currency argument was supplied.
 	 */
-	private boolean checkCurrencyArgs(String fromCurrency, String toCurrency) throws IOException, ParseException, IllegalArgumentException {
-		update();
+	private boolean checkCurrencyArgs(String fromCurrency, String toCurrency) throws IllegalArgumentException {
 		if (!fxRates.containsKey(fromCurrency)) throw new IllegalArgumentException(fromCurrency + " currency is not available.");
 		if (!fxRates.containsKey(toCurrency)) throw new IllegalArgumentException(toCurrency + " currency is not available.");
 		return (!fromCurrency.equals(toCurrency));
@@ -175,13 +156,8 @@ public final class CurrencyConverter {
 	 * Returns currencies for which exchange rates are available.
 	 * 
 	 * @return String array with ISO 4217 currency codes.
-	 * @throws IOException
-	 *           If cache file cannot be read/written or if URL cannot be opened.
-	 * @throws ParseException
-	 *           If an error occurs while parsing the XML cache file.
 	 */
-	public String[] getCurrencies() throws IOException, ParseException {
-		if (fxRates.isEmpty()) update();
+	public String[] getCurrencies() {
 		String[] currencies = fxRates.keySet().toArray(new String[fxRates.size()]);
 		return currencies;
 	}
@@ -233,7 +209,7 @@ public final class CurrencyConverter {
 	}
 
 	/**
-	 * Check whether cache is initialised and up-to-date. If not, re-download
+	 * Check whether cache is initialized and up-to-date. If not, re-download
 	 * cache file and parse data into internal data structure.
 	 * 
 	 * @throws IOException
@@ -241,7 +217,7 @@ public final class CurrencyConverter {
 	 * @throws ParseException
 	 *           If an error occurs while parsing the XML cache file.
 	 */
-	private void update() throws IOException, ParseException {
+	public void update() throws IOException, ParseException {
 		if (referenceDate == null) {
 			initCacheFile();
 			if (!cacheFile.exists()) {
@@ -261,7 +237,7 @@ public final class CurrencyConverter {
 	private void initCacheFile() {
 		if (cacheFile == null) {
 			if (cacheFileName == null || cacheFileName.equals("")) {
-				cacheFile = new File(new File(System.getProperty("java.io.tmpdir")), "ExchangeRates.xml");
+				cacheFile = new File(Portable.getDataDirectory(), "ExchangeRates.xml");
 				cacheFileName = cacheFile.getAbsolutePath();
 			}
 		}

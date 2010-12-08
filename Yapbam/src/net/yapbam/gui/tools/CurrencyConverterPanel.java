@@ -31,6 +31,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private AmountWidget amount2 = null;
 	private JLabel jLabel = null;
 	
+	private CurrencyConverter converter;
 	private String[] codes;
 	private JLabel title = null;
 	private JLabel errField = null;
@@ -44,21 +45,29 @@ public class CurrencyConverterPanel extends JPanel {
 	public CurrencyConverterPanel() {
 		super();
 		try {
-			CurrencyConverter.getInstance().setProxy(Preferences.INSTANCE.getHttpProxy());
-			this.codes = CurrencyConverter.getInstance().getCurrencies();
+			this.converter = CurrencyConverter.getInstance(Preferences.INSTANCE.getHttpProxy());
+			this.codes = this.converter.getCurrencies();
 			Arrays.sort(this.codes);
-			initialize();
-			Currency currency = Currency.getInstance(LocalizationData.getLocale());
-			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
-			getCurrency1().setSelectedIndex(index);
-			getCurrency2().setSelectedIndex(index);
-			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), CurrencyConverter.getInstance().getReferenceDate()); //$NON-NLS-1$
-			tableModel = new CurrencyTableModel(this.codes[index]);
-			getJTable().setModel(tableModel);
-			this.title.setText(title);
 		} catch (Exception e) {
 			doError(e);
 		}
+		initialize();
+		tableModel = new CurrencyTableModel(this.converter);
+		if (this.converter!=null) {
+			Currency currency = Currency.getInstance(LocalizationData.getLocale());
+			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
+			if (index>=0) {
+//				this.tableModel.setCurrency(this.codes[index]);
+				getCurrency1().setSelectedIndex(index);
+				getCurrency2().setSelectedIndex(index);
+				String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
+				this.title.setText(title);
+			} else {
+				//The locale is unknown
+				this.title.setText("?"); //TODO
+			}
+		}
+		getJTable().setModel(tableModel);
 	}
 
 	/**
@@ -161,9 +170,11 @@ public class CurrencyConverterPanel extends JPanel {
 		if (currency1 == null) {
 			currency1 = new JComboBox();
 			currency1.setToolTipText(Messages.getString("CurrencyConverterPanel.origin.toolTip")); //$NON-NLS-1$
-			for (int i = 0; i < codes.length; i++) {
-				String symbol = CurrencyNames.getString(this.codes[i]);
-				currency1.addItem(symbol);
+			if (codes!=null) {
+				for (int i = 0; i < codes.length; i++) {
+					String symbol = CurrencyNames.getString(this.codes[i]);
+					currency1.addItem(symbol);
+				}
 			}
 			currency1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -185,9 +196,11 @@ public class CurrencyConverterPanel extends JPanel {
 		if (currency2 == null) {
 			currency2 = new JComboBox();
 			currency2.setToolTipText(Messages.getString("CurrencyConverterPanel.destination.toolTip")); //$NON-NLS-1$
-			for (int i = 0; i < codes.length; i++) {
-				String symbol = CurrencyNames.getString(this.codes[i]);
-				currency2.addItem(symbol);
+			if (codes!=null) {
+				for (int i = 0; i < codes.length; i++) {
+					String symbol = CurrencyNames.getString(this.codes[i]);
+					currency2.addItem(symbol);
+				}
 			}
 			currency2.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -237,11 +250,11 @@ public class CurrencyConverterPanel extends JPanel {
 
 	private void doConvert() {
 		Double value = amount1.getValue();
-		if (value!=null) {
+		if ((value!=null) && (codes!=null)) {
 			String from = codes[currency1.getSelectedIndex()];
 			String to = codes[currency2.getSelectedIndex()];
 			try {
-				amount2.setValue(CurrencyConverter.getInstance().convert(value, from, to));
+				amount2.setValue(this.converter.convert(value, from, to));
 			} catch (Exception e) {
 				doError(e);
 			}
@@ -249,6 +262,7 @@ public class CurrencyConverterPanel extends JPanel {
 	}
 
 	private void doError(Exception e) {
+//		e.printStackTrace();
 		String format = Messages.getString("CurrencyConverterPanel.errorMessage");
 		getErrField().setText(MessageFormat.format(format, e.toString())); //$NON-NLS-1$
 	}
