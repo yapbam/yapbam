@@ -7,6 +7,7 @@ import java.util.HashMap;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
+import net.yapbam.util.NullUtils;
 
 public class StatementBuilder {
 	private Statement[] statements;
@@ -30,7 +31,7 @@ public class StatementBuilder {
 			@Override
 			public int compare(Statement o2, Statement o1) {
 				int result = o2.getMediumDate()-o1.getMediumDate();
-				if (result==0) result = o2.getId().compareTo(o1.getId());
+				if (result==0) result = NullUtils.compareTo(o2.getId(),o1.getId(),false);
 				return result;
 			}
 		});

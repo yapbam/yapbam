@@ -235,13 +235,14 @@ public class Preferences {
 	 * @return true is the welcome screen may pop up every time yapbam is launched.
 	 */
 	public boolean isWelcomeAllowed() {
-		String property = this.properties.getProperty(WELCOME_DIALOG_ALLOWED);
-		if (property==null) return true;
-		try {
-			return Boolean.parseBoolean(property);
-		} catch (Exception e) {
-			return true;
-		}
+		return false;
+//		String property = this.properties.getProperty(WELCOME_DIALOG_ALLOWED);
+//		if (property==null) return true;
+//		try {
+//			return Boolean.parseBoolean(property);
+//		} catch (Exception e) {
+//			return true;
+//		}
 	}
 	
 	public void setWelcomeAllowed(boolean allowed) {
@@ -286,7 +287,7 @@ public class Preferences {
 			ErrorManager.INSTANCE.display(null, new RuntimeException("./plugins is not a directory"));
 		}
 		final List<PlugInContainer> plugins = new ArrayList<PlugInContainer>();
-		plugins.add(new PlugInContainer(WelcomePlugin.class));
+//		plugins.add(new PlugInContainer(WelcomePlugin.class));
 		plugins.add(new PlugInContainer(TransactionsPlugIn.class));
 		plugins.add(new PlugInContainer(BalanceHistoryPlugIn.class));
 		plugins.add(new PlugInContainer(StatisticsPlugin.class));
