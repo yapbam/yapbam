@@ -1,5 +1,7 @@
 TODO list
 	
+* Amélioration du message d'erreur du convertisseur de devises, lorsqu'on n'arrive pas à initialiser les taux.
+
 * La possibilité d'éditer plusieurs opérations à la fois.
 * Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).
 * La possibilité de créer des raccourcis vers les filtres préférés.
