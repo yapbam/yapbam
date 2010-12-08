@@ -50,8 +50,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if ((newTransaction!=null) && autoAdd) {
-			if (transaction!=null) data.remove(transaction);
 			data.add(newTransaction);
+			if (transaction!=null) data.remove(transaction);
 		}
 		return newTransaction;
 	}

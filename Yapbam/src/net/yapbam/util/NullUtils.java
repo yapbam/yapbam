@@ -7,7 +7,7 @@ package net.yapbam.util;
 public final class NullUtils {
 	private NullUtils() {}
 	
-	/** Tests whetwer two objects are equals or not.
+	/** Tests whether two objects are equals or not.
 	 * <br>The arguments may be null.
 	 * @param o1 the first object
 	 * @param o2 the second object
@@ -20,6 +20,22 @@ public final class NullUtils {
 			return false;
 		} else {
 			return o1.equals(o2);
+		}
+	}
+
+	/** Compares two objects.
+	 * <br>The arguments may be null.
+	 * @param o1 the first object
+	 * @param o2 the second object
+	 * @param nullIsLowest true if null if lower than any other value, false if it is greater.
+	 * @return o1.compareTo(o2) assuming that null is the lowest possible instance.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static int compareTo(Comparable o1, Comparable o2, boolean nullIsLowest) {
+		if (o1!=null) {
+			return o2==null?(nullIsLowest?1:-1):o1.compareTo(o2);
+		} else {
+			return o2==null?0:(nullIsLowest?-1:1);
 		}
 	}
 }

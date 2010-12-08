@@ -253,7 +253,8 @@ public class StatementViewPanel extends JPanel {
 	private void refresh() {
 		int accountIndex = accountMenu.getSelectedIndex();
 		statementMenu.setActionEnabled(false);
-		String lastSelectedStatement = (String) (statementMenu.getSelectedIndex()==0?null:statementMenu.getSelectedItem());
+//		String lastSelectedStatement = (String) (statementMenu.getSelectedIndex()==0?null:statementMenu.getSelectedItem());
+		String lastSelectedStatement = (statements==null)||(statementMenu.getSelectedIndex()<0)?null:statements[statementMenu.getSelectedIndex()].getId();
 		statementMenu.removeAllItems();
 		if (accountIndex < 0) {
 			statements = null;
