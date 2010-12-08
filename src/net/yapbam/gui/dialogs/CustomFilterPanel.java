@@ -616,7 +616,7 @@ public class CustomFilterPanel extends JPanel {
 		this.data.setCategories(categories);
 		// build the expense/receipt and amount filter
 		double min = getMinAmount().getValue()==null?0.0:getMinAmount().getValue();
-		double max = getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue();
+		double max = getAmountEquals().isSelected()?min:(getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue());
 		int filter = 0;
 		if (getReceipts().isSelected()) filter += FilteredData.RECEIPTS;
 		if (getExpenses().isSelected()) filter += FilteredData.EXPENSES;
