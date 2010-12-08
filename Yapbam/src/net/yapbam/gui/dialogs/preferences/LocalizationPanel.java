@@ -26,9 +26,7 @@ import javax.swing.ListSelectionModel;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.dialogs.AbstractDialog;
 
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -81,10 +79,6 @@ public class LocalizationPanel extends PreferencePanel {
 	private void initialize() {
 		this.setSize(548, 200);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{348, 200, 0};
-		gridBagLayout.rowHeights = new int[]{100, 77, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_countryPanel = new GridBagConstraints();
 		gbc_countryPanel.gridheight = 2;

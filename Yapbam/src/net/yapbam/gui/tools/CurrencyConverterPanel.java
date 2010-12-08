@@ -50,8 +50,8 @@ public class CurrencyConverterPanel extends JPanel {
 			initialize();
 			Currency currency = Currency.getInstance(LocalizationData.getLocale());
 			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
-			currency1.setSelectedIndex(index);
-			currency2.setSelectedIndex(index);
+			getCurrency1().setSelectedIndex(index);
+			getCurrency2().setSelectedIndex(index);
 			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), CurrencyConverter.getInstance().getReferenceDate()); //$NON-NLS-1$
 			tableModel = new CurrencyTableModel(this.codes[index]);
 			getJTable().setModel(tableModel);
@@ -82,9 +82,7 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints6.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints6.gridwidth = 0;
 		gridBagConstraints6.gridy = 2;
-		errField = new JLabel();
-		errField.setText(""); //$NON-NLS-1$
-		errField.setForeground(new Color(255, 64, 64));
+		getErrField();
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
 		gridBagConstraints4.gridy = 0;
@@ -144,6 +142,14 @@ public class CurrencyConverterPanel extends JPanel {
 		this.add(title, gridBagConstraints4);
 		this.add(errField, gridBagConstraints6);
 		this.add(getJScrollPane(), gridBagConstraints12);
+	}
+
+	private JLabel getErrField() {
+		if (errField==null) {
+			errField = new JLabel();
+			errField.setForeground(new Color(255, 64, 64));
+		}
+		return this.errField;
 	}
 
 	/**
@@ -243,8 +249,8 @@ public class CurrencyConverterPanel extends JPanel {
 	}
 
 	private void doError(Exception e) {
-		e.printStackTrace();
-		errField.setText(MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.toString())); //$NON-NLS-1$
+		String format = Messages.getString("CurrencyConverterPanel.errorMessage");
+		getErrField().setText(MessageFormat.format(format, e.toString())); //$NON-NLS-1$
 	}
 
 	/**
