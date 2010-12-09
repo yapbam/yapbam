@@ -51,7 +51,7 @@ class SubtransactionListPanel extends JPanel {
 	public SubtransactionListPanel(final GlobalData data) {
 		super(new BorderLayout());
 		this.sum = 0;
-		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), LocalizationData.get("TransactionDialog.SubPanel.title"))); //$NON-NLS-1$
+		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), LocalizationData.get("TransactionDialog.SubPanel.title"))); //$NON-NLS-1$
 		
 		JPanel pane = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints(); c.weightx=1; c.anchor=GridBagConstraints.WEST;
@@ -59,9 +59,10 @@ class SubtransactionListPanel extends JPanel {
 		addToTransaction.setSelected(true);
 		addToTransaction.setToolTipText(LocalizationData.get("TransactionDialog.SubPanel.add.tooltip")); //$NON-NLS-1$
 		pane.add(addToTransaction, c);
-		sumLabel = new JLabel(""); //$NON-NLS-1$
-		c.anchor=GridBagConstraints.EAST; c.gridx = 1;
-		pane.add(sumLabel, c);
+		
+		GridBagConstraints c2 = new GridBagConstraints();  c2.gridx = 1; c2.weightx=1; c2.anchor=GridBagConstraints.EAST;
+		sumLabel = new JLabel();
+		pane.add(sumLabel, c2);
 		this.add(pane, BorderLayout.NORTH);
 		
 		tableModel = new SubTransactionsTableModel();
@@ -78,15 +79,15 @@ class SubtransactionListPanel extends JPanel {
 			}
 		});
 		table.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                  Point p = e.getPoint();
-                  int row = table.rowAtPoint(p);
-                  if (row >= 0) {
-               		  editSelected(data);
-                  }
-                }
-              }
+			public void mousePressed(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					Point p = e.getPoint();
+					int row = table.rowAtPoint(p);
+					if (row >= 0) {
+						editSelected(data);
+					}
+				}
+			}
 		});
 		//table.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), "none");//This should prevent the enter key to change the selected row ... but it doesn't
 		//The tutorial is there : http://java.sun.com/docs/books/tutorial/uiswing/misc/keybinding.html
@@ -112,9 +113,10 @@ class SubtransactionListPanel extends JPanel {
 		});*/
 		table.setDefaultRenderer(double[].class, new AmountRenderer());
 		table.setDefaultRenderer(Object.class, new ObjectRenderer());
-        table.setPreferredScrollableViewportSize(new Dimension(1,table.getRowHeight()*6));
-        JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        add(scrollPane, BorderLayout.CENTER);
+		table.setPreferredScrollableViewportSize(new Dimension(1, table.getRowHeight() * 6));
+		JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		add(scrollPane, BorderLayout.CENTER);
 		JPanel buttonsPanel = new JPanel();
 		JButton newSubTransactionButton = new JButton(LocalizationData.get("TransactionDialog.SubPanel.new")); //$NON-NLS-1$
 		newSubTransactionButton.setToolTipText(LocalizationData.get("TransactionDialog.SubPanel.new.tooltip")); //$NON-NLS-1$
