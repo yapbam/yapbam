@@ -8,11 +8,12 @@ import javax.swing.JMenuItem;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 public class WelcomePlugin extends AbstractPlugIn {
 
-	public WelcomePlugin(FilteredData data, Object restoreData) {//LOCAL
+	public WelcomePlugin(FilteredData data, Object restoreData) {
 	}
 
 	@Override
@@ -27,8 +28,8 @@ public class WelcomePlugin extends AbstractPlugIn {
 	@SuppressWarnings("serial")
 	private static final class WelcomeAction extends AbstractAction {
 		WelcomeAction () {
-			super("Ecran de bienvenue");
-	    putValue(SHORT_DESCRIPTION, "toolTip");
+			super(LocalizationData.get("Welcome.menuTitle")); //$NON-NLS-1$
+	    putValue(SHORT_DESCRIPTION, LocalizationData.get("Welcome.MenuToolTip")); //$NON-NLS-1$
 		}
 
     @Override

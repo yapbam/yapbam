@@ -63,9 +63,9 @@ public class IntegerWidget extends JTextField {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_UP) {
-					if (value!=null) setValue(value.add(BigInteger.ONE));
+					if ((value!=null) && (value.compareTo(IntegerWidget.this.maxValue)<0)) setValue(value.add(BigInteger.ONE));
 				} else if (e.getKeyCode()==KeyEvent.VK_DOWN) {
-					if (value!=null) setValue(value.subtract(BigInteger.ONE));
+					if ((value!=null) && (value.compareTo(IntegerWidget.this.minValue)>0)) setValue(value.subtract(BigInteger.ONE));
 				} else {
 					updateValue();
 				}
