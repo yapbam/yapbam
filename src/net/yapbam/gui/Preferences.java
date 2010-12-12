@@ -84,6 +84,7 @@ public class Preferences {
 		this.properties.clear();
 		this.properties.put(LANGUAGE, LANGUAGE_DEFAULT_VALUE);
 		this.properties.put(COUNTRY, COUNTRY_DEFAULT_VALUE);
+		this.properties.put(LOOK_AND_FEEL, LOOK_AND_FEEL_CUSTOM_VALUE);
 	}
 	
 	/** Gets whether it is the first time Yapbam is launched on this machine or not.
@@ -131,30 +132,21 @@ public class Preferences {
 		this.properties.put(COUNTRY, defaultCountry?COUNTRY_DEFAULT_VALUE:locale.getCountry());
 	}
 	
-	/** Get the preferred look and feel.
-	 * <BR>This method guarantees that the returned l&f is installed in this JVM.
-	 * If the preferred l&f is not installed, it returns the system look and feel.
-	 * @return the name of the preferred look and feel class
+	/** Gets the preferred look and feel.
+	 * @return the name of the look and feel class
 	 */
 	public String getLookAndFeel() {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
-		if (value==null) {
-			value = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // This is the default Yapbam L&F
-		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) {
-			// Versions before 0.7.4 used LOOK_AND_FEEL_JAVA_VALUE and LOOK_AND_FEEL_CUSTOM_VALUE to code the look and feel
-			return UIManager.getCrossPlatformLookAndFeelClassName();
-		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_CUSTOM_VALUE)) {
-			return UIManager.getSystemLookAndFeelClassName();
-		}
-		LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
-		for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
-			if (lookAndFeelInfo.getClassName().equals(value)) return value;
-		}
+		if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) return UIManager.getCrossPlatformLookAndFeelClassName(); 
 		return UIManager.getSystemLookAndFeelClassName();
 	}
 
-	public void setLookAndFeel(String lookAndFeelClassName) {
-		this.properties.put(LOOK_AND_FEEL, lookAndFeelClassName);
+	public void setJavaLookAndFeel(boolean java) {
+		this.properties.put(LOOK_AND_FEEL, java?LOOK_AND_FEEL_JAVA_VALUE:LOOK_AND_FEEL_CUSTOM_VALUE);
+	}
+	
+	public boolean isJavaLookAndFeel() {
+		return this.properties.get(LOOK_AND_FEEL).equals(LOOK_AND_FEEL_JAVA_VALUE);
 	}
 	
 	public String getHttpProxyHost() {
