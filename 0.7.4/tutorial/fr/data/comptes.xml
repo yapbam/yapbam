@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DATA>
+<ACCOUNT id="Compte courant" initialBalance="1230.0">
+<MODE id="Virement">
+<EXPENSE kind="immediate"/>
+<RECEIPT kind="immediate"/>
+</MODE>
+<MODE id="Carte bleue">
+<EXPENSE stopDay="15" debtDay="31" kind="deferred"/>
+</MODE>
+</ACCOUNT>
+<CATEGORY id="Alimentation"/>
+<CATEGORY id="Loisirs"/>
+<CATEGORY id="Salaire"/>
+<CATEGORY id="Voiture"/>
+<TRANSACTION account="Compte courant" description="Salaire" date="2009/9/24" amount="2000.0" mode="Virement" category="Salaire" valueDate="2009/9/24"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2009/9/26" amount="-85.32" mode="Carte bleue" category="Alimentation" valueDate="2009/10/31">
+<SUBTRANSACTION description="DVD" amount="-19.9" category="Loisirs"/>
+<SUBTRANSACTION description="Essuie-glace" amount="-17.35" category="Voiture"/>
+</TRANSACTION>
+</DATA>
