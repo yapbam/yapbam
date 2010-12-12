@@ -15,16 +15,20 @@ import javax.swing.UIManager;
 
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.widget.HTMLPane;
-import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.math.BigInteger;
+
+import net.yapbam.gui.widget.IntegerWidget;
 
 @SuppressWarnings("serial")
-public class WelcomePanel extends JPanel {
+public class WelcomePanel extends JPanel {//LOCAL
 
 	private JCheckBox showAtStartup;
-	private JTextField tipNumber;
+	private IntegerWidget tipNumber;
 	private HTMLPane tipPane;
 	private TipManager tips;
 	private JButton nextTip;
@@ -178,15 +182,21 @@ public class WelcomePanel extends JPanel {
 		gbc_firstTip.gridy = 0;
 		tipSelectionPanel.add(firstTip, gbc_firstTip);
 		
-		tipNumber = new JTextField();
+		tipNumber = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(tips.size()));
 		tipNumber.setToolTipText("Type a tip number here to display it");
 		GridBagConstraints gbc_tipNumber = new GridBagConstraints();
 		gbc_tipNumber.gridx = 3;
 		gbc_tipNumber.gridy = 0;
 		tipSelectionPanel.add(tipNumber, gbc_tipNumber);
 		tipNumber.setColumns(2);
+		tipNumber.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setTip(((BigInteger)evt.getNewValue()).intValue()-1);
+			}
+		});
 		
-		JLabel label = new JLabel("/?");
+		JLabel label = new JLabel("/"+tips.size());
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.insets = new Insets(0, 0, 0, 5);
 		gbc_label.gridx = 4;
@@ -247,6 +257,7 @@ public class WelcomePanel extends JPanel {
 		gbc_separator.gridy = 1;
 		add(separator, gbc_separator);
 		
+		currentTip = -1; // Just to ensure the tip will be displayed (if we omit this line and tip is the first, setTip would think the tip hasn't change)
 		setTip(tips.getRandom());
 	}
 	
@@ -259,13 +270,15 @@ public class WelcomePanel extends JPanel {
 	}
 	
 	private void setTip(int index) {
-		currentTip = index;
-		tipPane.setContent(tips.get(index));
-		firstTip.setEnabled(index!=0);
-		previousTip.setEnabled(index!=0);
-		nextTip.setEnabled(index!=tips.size()-1);
-		lastTip.setEnabled(index!=tips.size()-1);
-		tipNumber.setText(Integer.toString(index+1));
+		if (index!=currentTip) {
+			currentTip = index;
+			tipPane.setContent(tips.get(index));
+			firstTip.setEnabled(index!=0);
+			previousTip.setEnabled(index!=0);
+			nextTip.setEnabled(index!=tips.size()-1);
+			lastTip.setEnabled(index!=tips.size()-1);
+			tipNumber.setText(Integer.toString(index+1));
 //		AbstractDialog.getOwnerWindow(this).pack();
+		}
 	}
 }
