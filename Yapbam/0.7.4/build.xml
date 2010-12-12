@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="build" name="Create Runnable Jar for Yapbam project">
+	<!--======================================  README ================================================>
+	| if you want to run this build file, you have to set the following jcommonpath and jfreechartpath |
+	| properties in the customPaths.properties file used in the line below.                            |
+	| These properties have to reference the jfreeChart sources and the JCommon sources.               |
+	| These sources are available at http://www.jfree.org                                              |
+	| Here is a sample of what this file could contain :                                               |
+	| jcommonpath=C:/username/externalLibs/jCommon                                                     |
+	| jfreechartpath=C:/username/externalLibs/jFreeChart                                               |
+	| This file may also contains a pointer to PortableApps.comInstaller.exe (in the variable          |
+	| portableappsinstallerpath).                                                                      |
+	<================================================================================================-->
+	<property file="customPaths.properties"/>
+	
+	<property name="yapbamVersion" value="0.7.4"/>
+	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
+	
+	<property name="releaseDir" value="YapbamRelease"/>
+	
+	<target name="build">
+		<antcall target="classic.build"/>
+		<antcall target="portableApps.com.build"/>
+	</target>
+	
+	<target name="commonBuild">
+		<echo message="version=${yapbamVersion} (${TODAY})" file="src/net/yapbam/update/version.txt"/>
+		<delete dir="releaseCompile"/>
+		<mkdir dir="releaseCompile"/>
+		<copy todir="releaseCompile">
+	    	<fileset dir="src" excludes="**/*.java"/>
+	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/plot/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/LocalizationBundl*.properties"/>
+		</copy>
+		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
+		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
+		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}" debug="true"/>
+		<property name="appDir" value="${releaseDir}/App"/>
+		<property name="othersDir" value="${releaseDir}/Other"/>
+		<property name="helpDir" value="${othersDir}/Help"/>
+		<property name="samplesDir" value="${othersDir}/samples"/>
+		<!-- Ensure the releaseDir is a fresh new one. -->
+		<delete dir="${releaseDir}"/>
+		<mkdir dir="${releaseDir}"/>
+		<mkdir dir="${appDir}"/>
+		<mkdir dir="${othersDir}"/>
+		<jar destfile="${appDir}/program.jar">
+			<manifest>
+				<attribute name="Main-Class" value="net.yapbam.gui.MainFrame"/>
+				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
+			</manifest>
+			<fileset dir="releaseCompile"/>
+		</jar>
+		<delete dir="releaseCompile"/>
+		<copy todir="${othersDir}">
+	    	<fileset dir="Other" includes="**/*.*"/>
+		</copy>
+	</target>
+	
+	<target name="classic.build" depends="commonBuild">
+		<property name="classicRelease" value="classicRelease"/>
+		<copy todir="${classicRelease}">
+	    	<fileset dir="${releaseDir}" includes="**/*.*"/>
+		</copy>
+		<delete dir="${releaseDir}"/>
+		<!-- Build the launcher jar (for non windows users) -->
+		<copy todir="releaseCompile/net/yapbam/gui/images/" file="src/net/yapbam/gui/images/splash.png"/>
+		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" />
+		<jar destfile="${classicRelease}/App/yapbam.jar">
+			<manifest>
+				<attribute name="Main-Class" value="net.yapbam.gui.Launcher"/>
+				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
+			</manifest>
+			<fileset dir="releaseCompile"/>
+		</jar>
+		<delete dir="releaseCompile"/>
+		<!-- Copy the help files -->
+		<copy file="helpPages/portable/help.html" todir="${classicRelease}"/>
+		<copy todir="${classicRelease}/Other/help">
+	    	<fileset dir="helpPages/portable/Other/help" includes="**/*.*"/>
+		</copy>
+		<!-- Copy windows launcher -->
+		<copy file="yapbam.exe" todir="${classicRelease}"/>
+		<!-- Copy Linux launcher -->
+		<copy file="yapbam.sh" todir="${classicRelease}"/>
+		<!-- Build the zip file -->		
+		<zip basedir="${classicRelease}" destfile="yapbam-${yapbamVersion}.zip"/>
+		<!-- Clean the disk (remove temporary working directory) -->
+		<delete dir="${classicRelease}"/>
+	</target>
+	
+	<target name="portableApps.com.build" depends="commonBuild">
+		<!-- copy the common files -->
+		<property name="windowsRelease" value="windowsRelease"/>
+		<copy todir="${windowsRelease}">
+	    	<fileset dir="${releaseDir}" includes="**/*.*"/>
+		</copy>
+		<!-- copy the window portable executable -->
+		<copy file="PortableYapbam.exe" todir="${windowsRelease}"/>
+		<!-- copy the portableApps specific help page -->
+		<copy file="helpPages/portableApps.com/help.html" tofile="${windowsRelease}/help.html"/>
+		<copy todir="${windowsRelease}/Other/help">
+	    	<fileset dir="helpPages/portableApps.com/Other/help" includes="**/*.*"/>
+		</copy>
+		<!-- create the installer parameter file -->
+		<property name="appInfoDir" value="${windowsRelease}/App/AppInfo"/>
+		<mkdir dir="${windowsRelease}/App/AppInfo"/>
+		<property name="appInfoPath" value="${appInfoDir}/appinfo.ini"/>
+		<echo file="${appInfoPath}">[Format]
+Type=PortableApps.comFormat
+Version=2.0
+
+[Details]
+Name=Yapbam Portable
+AppID=YapbamPortable
+Publisher=The Yapbam team
+Homepage=http://www.yapbam.net
+Category=Office
+Description=A simple but powerful account manager
+Language=Multilingual
+
+[License]
+Shareable=true
+OpenSource=true
+Freeware=true
+CommercialUse=true
+
+[Version]
+DisplayVersion=${yapbamVersion}
+PackageVersion=${yapbamVersion}.0
+
+[Control]
+Icons=1
+Start=PortableYapbam.exe</echo>
+		<!-- copy icons -->
+		<copy file="icons/yapbam.ico" tofile="${appInfoDir}/appicon.ico"/>
+		<copy file="icons/yapbam_16.png" tofile="${appInfoDir}/appicon_16.png"/>
+		<copy file="icons/yapbam_32.png" tofile="${appInfoDir}/appicon_32.png"/>
+		<!-- build the installer -->
+		<exec dir="${portableappsinstallerpath}" executable="${portableappsinstallerpath}/PortableApps.comInstaller.exe">
+		    <arg value="${basedir}\${windowsRelease}"/>
+		</exec>
+		<!-- Delete the working directories -->
+		<delete dir="${windowsRelease}"/>
+		<delete dir="${releaseDir}"/>
+	</target>
+	
+	<target name="doc">
+		<javadoc header="${yapbamVersion}" sourcepath="src;${jcommonpath};${jfreechartpath}"
+			packagenames="net.yapbam.data,net.yapbam.data.xml,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget"
+			destdir="doc" doctitle="Yapbam" windowtitle="Yapbam"/>
+	</target>
+</project>
