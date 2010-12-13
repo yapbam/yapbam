@@ -21,7 +21,6 @@ public class TipManager extends ArrayList<String> {//LOCAL
 	
 	public int getRandom() {
 		int result = random.nextInt(size());
-		System.out.println ("tip returned : "+ result);
 		return result;
 	}
 }

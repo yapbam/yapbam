@@ -68,6 +68,15 @@ public class DateWidget extends JTextField {
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				updateDate();
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
 				int increment = 0;
 				if (e.getKeyCode()==KeyEvent.VK_DOWN) {
 					// Set the date to next day after the current date
@@ -83,10 +92,9 @@ public class DateWidget extends JTextField {
 						calendar.add(Calendar.DATE, increment);
 						setDate(calendar.getTime());
 					}
-				} else {
-					updateDate();
 				}
 			}
+			
 		});
 		this.addFocusListener(new FocusListener() {
 			@Override
@@ -121,6 +129,7 @@ public class DateWidget extends JTextField {
 	private void updateDate() {
 		boolean oldValid = this.valid;
 		String text = this.getText().trim();
+System.out.println (text);
 		if (text.length()==0) {
 			internalSetDate(emptyValue);
 			this.valid = (emptyValue!=null) || isEmptyNullDateValid;

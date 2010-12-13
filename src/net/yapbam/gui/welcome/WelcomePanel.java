@@ -192,7 +192,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		tipNumber.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				setTip(((BigInteger)evt.getNewValue()).intValue()-1);
+				if (evt.getNewValue()!=null) setTip(((BigInteger)evt.getNewValue()).intValue()-1);
 			}
 		});
 		
