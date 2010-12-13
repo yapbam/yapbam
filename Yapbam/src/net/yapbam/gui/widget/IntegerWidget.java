@@ -53,7 +53,7 @@ public class IntegerWidget extends JTextField {
 				char car = e.getKeyChar();
 				if (car=='-') { // - char is a valid character only if the field accepts value less than zero and in the first place (if there's no other - after the current selection)
 					if ((IntegerWidget.this.minValue==null) || (IntegerWidget.this.minValue.compareTo(BigInteger.ZERO)<0)) {
-						System.out.println (IntegerWidget.this.getSelectionStart()+" - "+IntegerWidget.this.getSelectionEnd()); //TODO
+//						System.out.println (IntegerWidget.this.getSelectionStart()+" - "+IntegerWidget.this.getSelectionEnd()); //TODO
 						if (IntegerWidget.this.getSelectionStart()!=0) e.consume(); // No - after first position
 					} else {
 						e.consume();
@@ -62,12 +62,14 @@ public class IntegerWidget extends JTextField {
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
+				updateValue();
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_UP) {
 					if ((value!=null) && (value.compareTo(IntegerWidget.this.maxValue)<0)) setValue(value.add(BigInteger.ONE));
 				} else if (e.getKeyCode()==KeyEvent.VK_DOWN) {
 					if ((value!=null) && (value.compareTo(IntegerWidget.this.minValue)>0)) setValue(value.subtract(BigInteger.ONE));
-				} else {
-					updateValue();
 				}
 			}
 		});
