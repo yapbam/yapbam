@@ -129,7 +129,6 @@ public class DateWidget extends JTextField {
 	private void updateDate() {
 		boolean oldValid = this.valid;
 		String text = this.getText().trim();
-System.out.println (text);
 		if (text.length()==0) {
 			internalSetDate(emptyValue);
 			this.valid = (emptyValue!=null) || isEmptyNullDateValid;
