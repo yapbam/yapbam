@@ -188,7 +188,7 @@ public class WelcomePanel extends JPanel {
 		gbc_tipNumber.gridx = 3;
 		gbc_tipNumber.gridy = 0;
 		tipSelectionPanel.add(tipNumber, gbc_tipNumber);
-		tipNumber.setColumns(2);
+		tipNumber.setColumns(1);
 		tipNumber.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
