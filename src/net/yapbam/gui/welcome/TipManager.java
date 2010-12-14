@@ -13,17 +13,15 @@ public class TipManager extends ArrayList<String> {//LOCAL
 	public TipManager() {
 		super();
 		random = new Random(System.currentTimeMillis());
-		String tip = MessageFormat.format("<html>L''apparence de Yapbam peut être paramétrée dans les préférences.<hr>" +
-				"Pour la modifier, sélectionnez {1} dans le menu <b>{0}</b>, puis rendez vous dans l''onglet <b>{2}</b></html>",
-				LocalizationData.get("MainMenu.File"),LocalizationData.get("MainMenu.Preferences"),LocalizationData.get("PreferencesDialog.LookAndFeel.title"));
+		String tip = MessageFormat.format(LocalizationData.get("Tip.1"), //$NON-NLS-1$
+				LocalizationData.get("MainMenu.File"),LocalizationData.get("MainMenu.Preferences"),LocalizationData.get("PreferencesDialog.LookAndFeel.title")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		this.add(tip);
-		this.add("<html>Seuil d'alerte sur le solde</html>");
-		this.add("<html>Opération périodique</html>");
-		this.add("<html>Pointage, clic droit, création d'opération périodique</html>");
-		tip = MessageFormat.format("<html>Modification solde initial, modes de paiement, etc ... dans l''écran <b>{0}</b></html>",
-				LocalizationData.get("AdministrationPlugIn.title"));
+		this.add(LocalizationData.get("Tip.2")); //$NON-NLS-1$
+		this.add(LocalizationData.get("Tip.3")); //$NON-NLS-1$
+		this.add(LocalizationData.get("Tip.4")); //$NON-NLS-1$
+		tip = MessageFormat.format(LocalizationData.get("Tip.5"), LocalizationData.get("AdministrationPlugIn.title")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.add(tip);
-		this.add("<html>Raccourcis clavier pour la saisie des dates et des entiers (exemple:)</html>");
+		this.add(LocalizationData.get("Tip.6")); //$NON-NLS-1$
 	}
 	
 	public int getRandom() {

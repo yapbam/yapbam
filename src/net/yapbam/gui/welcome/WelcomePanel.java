@@ -44,10 +44,6 @@ public class WelcomePanel extends JPanel {//LOCAL
 		tips = new TipManager();
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		JLabel lblWelcomeToYapbam = new JLabel("<html>Welcome to <b>Yapbam</b></html>");
@@ -77,6 +73,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		bottomPanel.setOpaque(false);
 		
 		showAtStartup = new JCheckBox("Show at startup");
+		showAtStartup.setToolTipText("Check this box to show this dialog at every yapbam startup");
 		showAtStartup.setOpaque(false);
 		showAtStartup.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_showAtStartup = new GridBagConstraints();
@@ -144,8 +141,9 @@ public class WelcomePanel extends JPanel {//LOCAL
 		tipsPanel.setOpaque(false);
 		
 		tipPane = new HTMLPane();
-		tipPane.setPreferredSize(new Dimension(200,200));
+		tipPane.setPreferredSize(new Dimension(300,200));
 		GridBagConstraints gbc_tipPane = new GridBagConstraints();
+		gbc_tipPane.weightx = 1.0;
 		gbc_tipPane.insets = new Insets(0, 0, 5, 0);
 		gbc_tipPane.fill = GridBagConstraints.BOTH;
 		gbc_tipPane.gridx = 0;
@@ -154,7 +152,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		
 		JPanel tipSelectionPanel = new JPanel();
 		GridBagConstraints gbc_tipSelectionPanel = new GridBagConstraints();
-		gbc_tipSelectionPanel.fill = GridBagConstraints.BOTH;
+		gbc_tipSelectionPanel.fill = GridBagConstraints.VERTICAL;
 		gbc_tipSelectionPanel.gridx = 0;
 		gbc_tipSelectionPanel.gridy = 1;
 		tipsPanel.add(tipSelectionPanel, gbc_tipSelectionPanel);
@@ -180,6 +178,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		gbc_firstTip.fill = GridBagConstraints.VERTICAL;
 		gbc_firstTip.gridx = 1;
 		gbc_firstTip.gridy = 0;
+		setTipSelectionButtonSize(firstTip);
 		tipSelectionPanel.add(firstTip, gbc_firstTip);
 		
 		tipNumber = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(tips.size()));
@@ -215,6 +214,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		gbc_nextTip.insets = new Insets(0, 0, 0, 5);
 		gbc_nextTip.gridx = 5;
 		gbc_nextTip.gridy = 0;
+		setTipSelectionButtonSize(nextTip);
 		tipSelectionPanel.add(nextTip, gbc_nextTip);
 		
 		lastTip = new JButton();
@@ -228,6 +228,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		GridBagConstraints gbc_lastTip = new GridBagConstraints();
 		gbc_lastTip.gridx = 6;
 		gbc_lastTip.gridy = 0;
+		setTipSelectionButtonSize(lastTip);
 		tipSelectionPanel.add(lastTip, gbc_lastTip);
 		
 		previousTip = new JButton();
@@ -242,6 +243,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		gbc_previousTip.insets = new Insets(0, 0, 0, 5);
 		gbc_previousTip.gridx = 2;
 		gbc_previousTip.gridy = 0;
+		setTipSelectionButtonSize(previousTip);
 		tipSelectionPanel.add(previousTip, gbc_previousTip);
 
 		this.setOpaque(false);
@@ -261,6 +263,12 @@ public class WelcomePanel extends JPanel {//LOCAL
 		setTip(tips.getRandom());
 	}
 	
+	private void setTipSelectionButtonSize(JButton button) {
+		Dimension preferredSize = button.getPreferredSize();
+		preferredSize.width = preferredSize.height;
+		button.setPreferredSize(preferredSize);
+	}
+
 	public boolean isShowAtStartup() {
 		return this.showAtStartup.isSelected();
 	}
