@@ -64,7 +64,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.gridx = 3;
 		gridBagConstraints3.insets = new Insets(5, 5, 0, 5);
-		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints3.fill = GridBagConstraints.BOTH;
 		gridBagConstraints3.anchor = GridBagConstraints.WEST;
 		gridBagConstraints3.weightx = 1.0D;
 		gridBagConstraints3.gridy = 1;
@@ -77,6 +77,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 		gridBagConstraints2.insets = new Insets(5, 5, 0, 5);
 		gridBagConstraints2.gridx = 2;
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints11.gridx = 1;
 		gridBagConstraints11.insets = new Insets(5, 5, 0, 5);
 		gridBagConstraints11.gridy = 1;
