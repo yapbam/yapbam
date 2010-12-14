@@ -7,7 +7,7 @@ import java.util.Random;
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
-public class TipManager extends ArrayList<String> {//LOCAL
+public class TipManager extends ArrayList<String> {
 	private Random random;
 
 	public TipManager() {

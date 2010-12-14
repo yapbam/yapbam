@@ -14,6 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.HTMLPane;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
@@ -25,7 +26,7 @@ import java.math.BigInteger;
 import net.yapbam.gui.widget.IntegerWidget;
 
 @SuppressWarnings("serial")
-public class WelcomePanel extends JPanel {//LOCAL
+public class WelcomePanel extends JPanel {
 
 	private JCheckBox showAtStartup;
 	private IntegerWidget tipNumber;
@@ -46,8 +47,8 @@ public class WelcomePanel extends JPanel {//LOCAL
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
-		JLabel lblWelcomeToYapbam = new JLabel("<html>Welcome to <b>Yapbam</b></html>");
-		lblWelcomeToYapbam.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
+		JLabel lblWelcomeToYapbam = new JLabel(LocalizationData.get("Welcome.introduction")); //$NON-NLS-1$
+		lblWelcomeToYapbam.setIcon(UIManager.getIcon("OptionPane.informationIcon")); //$NON-NLS-1$
 		GridBagConstraints gbc_lblWelcomeToYapbam = new GridBagConstraints();
 		gbc_lblWelcomeToYapbam.anchor = GridBagConstraints.WEST;
 		gbc_lblWelcomeToYapbam.gridwidth = 2;
@@ -72,8 +73,8 @@ public class WelcomePanel extends JPanel {//LOCAL
 		bottomPanel.setLayout(gbl_bottomPanel);
 		bottomPanel.setOpaque(false);
 		
-		showAtStartup = new JCheckBox("Show at startup");
-		showAtStartup.setToolTipText("Check this box to show this dialog at every yapbam startup");
+		showAtStartup = new JCheckBox(LocalizationData.get("Welcome.showAtStartup")); //$NON-NLS-1$
+		showAtStartup.setToolTipText(LocalizationData.get("Welcome.showAtStartup.tooltip")); //$NON-NLS-1$
 		showAtStartup.setOpaque(false);
 		showAtStartup.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_showAtStartup = new GridBagConstraints();
@@ -86,7 +87,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		
 		JPanel shortcutsPanel = new JPanel();
 		shortcutsPanel.setOpaque(false);
-		shortcutsPanel.setBorder(new TitledBorder(null, "Useful shortcuts", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		shortcutsPanel.setBorder(new TitledBorder(null, LocalizationData.get("Welcome.shorcuts.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 		GridBagConstraints gbc_shortcutsPanel = new GridBagConstraints();
 		gbc_shortcutsPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_shortcutsPanel.fill = GridBagConstraints.BOTH;
@@ -100,9 +101,9 @@ public class WelcomePanel extends JPanel {//LOCAL
 		gbl_shortcutsPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		shortcutsPanel.setLayout(gbl_shortcutsPanel);
 		
-		JButton btnOpenSampleData = new JButton("Open sample data file");
+		JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
 		btnOpenSampleData.setHorizontalAlignment(SwingConstants.LEFT);
-		btnOpenSampleData.setToolTipText("Click here to open a sample file");
+		btnOpenSampleData.setToolTipText(LocalizationData.get("Welcome.sampleData.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_btnOpenSampleData = new GridBagConstraints();
 		gbc_btnOpenSampleData.insets = new Insets(0, 0, 5, 0);
 		gbc_btnOpenSampleData.weightx = 1.0;
@@ -111,8 +112,8 @@ public class WelcomePanel extends JPanel {//LOCAL
 		gbc_btnOpenSampleData.gridy = 0;
 		shortcutsPanel.add(btnOpenSampleData, gbc_btnOpenSampleData);
 		
-		JButton btnViewTheTutorial = new JButton("<html>View the tutorial<BR>(Internet connection needed)</html>");
-		btnViewTheTutorial.setToolTipText("Click here to open the tutorial web page");
+		JButton btnViewTheTutorial = new JButton(LocalizationData.get("Welcome.tutorial")); //$NON-NLS-1$
+		btnViewTheTutorial.setToolTipText(LocalizationData.get("Welcome.tutorial.tooltip")); //$NON-NLS-1$
 		btnViewTheTutorial.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_btnViewTheTutorial = new GridBagConstraints();
 		gbc_btnViewTheTutorial.anchor = GridBagConstraints.WEST;
@@ -123,7 +124,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		shortcutsPanel.add(btnViewTheTutorial, gbc_btnViewTheTutorial);
 		
 		JPanel tipsPanel = new JPanel();
-		tipsPanel.setBorder(new TitledBorder(null, "Tip of the day ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		tipsPanel.setBorder(new TitledBorder(null, LocalizationData.get("Welcome.tip.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 		GridBagConstraints gbc_tipsPanel = new GridBagConstraints();
 		gbc_tipsPanel.weighty = 1.0;
 		gbc_tipsPanel.weightx = 1.0;
@@ -170,7 +171,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 				setTip(0);
 			}
 		});
-		firstTip.setToolTipText("Displays the first tip");
+		firstTip.setToolTipText(LocalizationData.get("Welcome.firstTip.tooltip")); //$NON-NLS-1$
 		firstTip.setIcon(IconManager.FIRST);
 		GridBagConstraints gbc_firstTip = new GridBagConstraints();
 		gbc_firstTip.insets = new Insets(0, 0, 0, 5);
@@ -182,7 +183,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 		tipSelectionPanel.add(firstTip, gbc_firstTip);
 		
 		tipNumber = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(tips.size()));
-		tipNumber.setToolTipText("Type a tip number here to display it");
+		tipNumber.setToolTipText(LocalizationData.get("Welcome.tipNumber.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_tipNumber = new GridBagConstraints();
 		gbc_tipNumber.gridx = 3;
 		gbc_tipNumber.gridy = 0;
@@ -195,7 +196,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 			}
 		});
 		
-		JLabel label = new JLabel("/"+tips.size());
+		JLabel label = new JLabel("/"+tips.size()); //$NON-NLS-1$
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.insets = new Insets(0, 0, 0, 5);
 		gbc_label.gridx = 4;
@@ -208,7 +209,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 				setTip(currentTip+1);
 			}
 		});
-		nextTip.setToolTipText("Displays next tip");
+		nextTip.setToolTipText(LocalizationData.get("Welcome.nextTip.tooltip")); //$NON-NLS-1$
 		nextTip.setIcon(IconManager.NEXT);
 		GridBagConstraints gbc_nextTip = new GridBagConstraints();
 		gbc_nextTip.insets = new Insets(0, 0, 0, 5);
@@ -223,7 +224,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 				setTip(tips.size()-1);
 			}
 		});
-		lastTip.setToolTipText("Displays last tip");
+		lastTip.setToolTipText(LocalizationData.get("Welcome.lastTip.tooltip")); //$NON-NLS-1$
 		lastTip.setIcon(IconManager.LAST);
 		GridBagConstraints gbc_lastTip = new GridBagConstraints();
 		gbc_lastTip.gridx = 6;
@@ -237,7 +238,7 @@ public class WelcomePanel extends JPanel {//LOCAL
 				setTip(currentTip-1);
 			}
 		});
-		previousTip.setToolTipText("Displays the previous tip");
+		previousTip.setToolTipText(LocalizationData.get("Welcome.previousTip.tooltip")); //$NON-NLS-1$
 		previousTip.setIcon(IconManager.PREVIOUS);
 		GridBagConstraints gbc_previousTip = new GridBagConstraints();
 		gbc_previousTip.insets = new Insets(0, 0, 0, 5);
