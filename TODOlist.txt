@@ -12,6 +12,5 @@ TODO list
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
 
 Bugs :
-- En cas d'erreur dans le l'ouverture du WelcomePanel (par exemple, une ressource manquante), la fermeture de la fénêtre ne quitte pas Yapbam !
-- Dans le sialogue de saisi d'une opération, la sélection d'un libellé d'opération de type recette, ne met pas à jour les modes de paiement, n° de chèque, etc ...
+- Dans le dialogue de saisi d'une opération, la sélection d'un libellé d'opération de type recette, ne met pas à jour les modes de paiement, n° de chèque, etc ...
  
