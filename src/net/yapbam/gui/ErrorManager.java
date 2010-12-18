@@ -4,30 +4,32 @@ import java.awt.Component;
 
 import javax.swing.JOptionPane;
 
+import net.yapbam.gui.dialogs.ErrorDialog;
+
 public class ErrorManager {
 	public static final ErrorManager INSTANCE = new ErrorManager();
 	
 	private ErrorManager() {}
-	
+
 	public void display(Component parent, Throwable t) {
+		//TODO Let see if this method remains useful
 		display (parent, t, LocalizationData.get("ErrorManager.message")); //$NON-NLS-1$
 	}
 
 	public void display(Component parent, Throwable t, String message) {
+		//TODO Let see if this method remains useful
 		JOptionPane.showMessageDialog(parent, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 	}
 	
 	public void log(Throwable t) {
-		System.err.println("An exception was catched by "+this.getClass().getName());
+		System.err.println("An exception was catched by "+this.getClass().getName());		
 		t.printStackTrace();
-		//TODO Not yet implemented
-		//May log the error and probably, try to send an error report to Yapbam.		
-//		String message = t.getMessage();
-//
-//		if (message == null || message.length() == 0) {
-//			message = "Fatal: " + t.getClass();
-//		}
-//
-//		JOptionPane.showMessageDialog(null, "General Error", message, JOptionPane.ERROR_MESSAGE);
+		ErrorDialog errorDialog = new ErrorDialog(null, t);
+		errorDialog.setVisible(true);
+		if (errorDialog.getResult()!=null) {
+			System.out.println ("TODO : The report is not sent");
+			//TODO send message to Yapbam
+		}
+		errorDialog.dispose(); //Don't remove it, it would prevent Yapbam from quit !!!
 	}
 }
