@@ -19,8 +19,6 @@ public class ErrorPanel extends JPanel {
 	 */
 	public ErrorPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0};
-		gridBagLayout.columnWeights = new double[]{1.0};
 		setLayout(gridBagLayout);
 		
 		JPanel panel = new JPanel();
