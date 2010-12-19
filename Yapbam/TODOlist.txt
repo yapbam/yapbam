@@ -3,6 +3,7 @@ TODO list
 * TODO :
 - Dans net.yapbam.gui.dialogs.ErrorPanel.
 - Dans ErrorManager
+- Dans BudgetViewPanel, BudgetTableModel, BudgetTableRowHeaderModel
 
 * La possibilité d'éditer plusieurs opérations à la fois.
 * Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).

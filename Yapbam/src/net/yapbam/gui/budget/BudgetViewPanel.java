@@ -39,6 +39,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.SafeJFileChooser;
+import javax.swing.JCheckBox;
 
 public class BudgetViewPanel extends JPanel {
 
@@ -53,6 +54,9 @@ public class BudgetViewPanel extends JPanel {
 	
 	private BudgetView budget;
 	private FilteredData data;
+	private JCheckBox chckbxAdd;
+	private JCheckBox chckbxAddSumColumn;
+	private JCheckBox chckbxAddSumLine;
 	
 	/**
 	 * This is the default constructor
@@ -98,34 +102,56 @@ public class BudgetViewPanel extends JPanel {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.gridx = 3;
 			gridBagConstraints5.gridheight = 2;
-			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints5.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 2;
+			gridBagConstraints3.gridx = 4;
 			gridBagConstraints3.gridheight = 0;
 			gridBagConstraints3.fill = GridBagConstraints.NONE;
-			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 0, 0);
 			gridBagConstraints3.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.insets = new Insets(0, 0, 0, 5);
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.insets = new Insets(0, 0, 0, 5);
+			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.fill = GridBagConstraints.NONE;
-			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(getMonth(), gridBagConstraints1);
+			GridBagConstraints gbc_chckbxAdd = new GridBagConstraints();
+			gbc_chckbxAdd.anchor = GridBagConstraints.WEST;
+			gbc_chckbxAdd.insets = new Insets(0, 0, 0, 5);
+			gbc_chckbxAdd.gridx = 1;
+			gbc_chckbxAdd.gridy = 0;
+			jPanel.add(getChckbxAdd(), gbc_chckbxAdd);
+			GridBagConstraints gbc_chckbxAddSumLine = new GridBagConstraints();
+			gbc_chckbxAddSumLine.gridheight = 2;
+			gbc_chckbxAddSumLine.anchor = GridBagConstraints.WEST;
+			gbc_chckbxAddSumLine.weightx = 1.0;
+			gbc_chckbxAddSumLine.insets = new Insets(0, 0, 0, 5);
+			gbc_chckbxAddSumLine.gridx = 2;
+			gbc_chckbxAddSumLine.gridy = 0;
+			jPanel.add(getChckbxAddSumLine(), gbc_chckbxAddSumLine);
 			jPanel.add(getYear(), gridBagConstraints2);
 			jPanel.add(getExport(), gridBagConstraints3);
 			jPanel.add(getFilter(), gridBagConstraints5);
 			ButtonGroup group = new ButtonGroup();
 			group.add(getMonth());
 			group.add(getYear());
+			GridBagConstraints gbc_chckbxAddSumColumn = new GridBagConstraints();
+			gbc_chckbxAddSumColumn.anchor = GridBagConstraints.WEST;
+			gbc_chckbxAddSumColumn.insets = new Insets(0, 0, 0, 5);
+			gbc_chckbxAddSumColumn.gridx = 1;
+			gbc_chckbxAddSumColumn.gridy = 1;
+			jPanel.add(getChckbxAddSumColumn(), gbc_chckbxAddSumColumn);
 		}
 		return jPanel;
 	}
@@ -297,5 +323,29 @@ public class BudgetViewPanel extends JPanel {
 			});
 		}
 		return filter;
+	}
+	private JCheckBox getChckbxAdd() {
+		if (chckbxAdd == null) {
+			chckbxAdd = new JCheckBox(LocalizationData.get("BudgetPanel.averageColumn.checkBox")); //$NON-NLS-1$
+			chckbxAdd.setSelected(true);
+			chckbxAdd.setToolTipText(LocalizationData.get("BudgetPanel.averageColumn.checkBox.tooltip")); //$NON-NLS-1$
+		}
+		return chckbxAdd;
+	}
+	private JCheckBox getChckbxAddSumColumn() {
+		if (chckbxAddSumColumn == null) {
+			chckbxAddSumColumn = new JCheckBox(LocalizationData.get("BudgetPanel.sumColumn.checkBox")); //$NON-NLS-1$
+			chckbxAddSumColumn.setSelected(true);
+			chckbxAddSumColumn.setToolTipText(LocalizationData.get("BudgetPanel.sumColumn.checkBox.tooltip")); //$NON-NLS-1$
+		}
+		return chckbxAddSumColumn;
+	}
+	private JCheckBox getChckbxAddSumLine() {
+		if (chckbxAddSumLine == null) {
+			chckbxAddSumLine = new JCheckBox(LocalizationData.get("BudgetPanel.sumLine.checkBox")); //$NON-NLS-1$
+			chckbxAddSumLine.setSelected(true);
+			chckbxAddSumLine.setToolTipText(LocalizationData.get("BudgetPanel.sumLine.checkBox.tooltip")); //$NON-NLS-1$
+		}
+		return chckbxAddSumLine;
 	}
 }

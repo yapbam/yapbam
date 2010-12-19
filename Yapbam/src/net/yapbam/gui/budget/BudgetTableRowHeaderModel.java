@@ -5,6 +5,7 @@ import javax.swing.table.AbstractTableModel;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
+import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 class BudgetTableRowHeaderModel extends AbstractTableModel {
@@ -28,12 +29,16 @@ class BudgetTableRowHeaderModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return budget.getCategoriesSize();
+		return budget.getCategoriesSize()+1; //TODO depends on checkbox state
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return budget.getCategory(rowIndex);
+		if (rowIndex==budget.getCategoriesSize()) {
+			return LocalizationData.get("BudgetPanel.sum");
+		} else {
+			return budget.getCategory(rowIndex);
+		}
 	}
 /*
 	@Override
