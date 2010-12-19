@@ -80,7 +80,7 @@ public class ReportErrorPanel extends PreferencePanel {
 		add(ask, gbc_ask);
 		group.add(ask);
 		
-				ask.setSelected(true); //TODO Use preferences
+		ask.setSelected(true); //TODO Use preferences
 	}
 
 	@Override
