@@ -12,5 +12,5 @@ TODO list
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
 
 Bugs :
-- Dans le dialogue de saisi d'une opération, la sélection d'un libellé d'opération de type recette, ne met pas à jour les modes de paiement, n° de chèque, etc ...
+- Dans le dialogue de saisie d'une opération, la sélection d'un libellé d'opération de type recette, ne met pas à jour les modes de paiement, n° de chèque, etc ...
  
