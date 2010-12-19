@@ -30,8 +30,8 @@ public class AutoUpdatePanel extends PreferencePanel {
 	private IntegerWidget days = null;
 	private JLabel jLabel1 = null;
 	private JPanel jPanel = null;
-	private JRadioButton silentFail = null;
-	private JRadioButton shoutingFail = null;
+	private JRadioButton askMe = null;
+	private JRadioButton autoInstall = null;
 	private JLabel jLabel2 = null;
 
 	/**
@@ -108,18 +108,18 @@ public class AutoUpdatePanel extends PreferencePanel {
 		group.add(getAuto());
 		group.add(getManual());
 		group = new ButtonGroup();
-		group.add(getShoutingFail());
-		group.add(getSilentFail());
+		group.add(getAutoInstall());
+		group.add(getAskMe());
 		int period = Preferences.INSTANCE.getAutoUpdatePeriod();
 		days.setValue(Math.max(0, period));
-		(Preferences.INSTANCE.getAutoUpdateSilentFail()?getSilentFail():getShoutingFail()).setSelected(true);
+		(Preferences.INSTANCE.getAutoUpdateSilentFail()?getAskMe():getAutoInstall()).setSelected(true);
 		if (period>=0) getAuto().setSelected(true);		
 	}
 	
 	private void refresh() {
 		boolean ok = !getManual().isSelected();
-		getShoutingFail().setEnabled(ok);
-		getSilentFail().setEnabled(ok);
+		getAutoInstall().setEnabled(ok);
+		getAskMe().setEnabled(ok);
 		getJPanel().setVisible(ok);
 	}
 
@@ -202,23 +202,23 @@ public class AutoUpdatePanel extends PreferencePanel {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints6.anchor = GridBagConstraints.WEST;
-			gridBagConstraints6.gridy = 1;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.anchor = GridBagConstraints.WEST;
-			gridBagConstraints5.gridy = 0;
-			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints5.gridx = 0;
+			GridBagConstraints gbc_autoInstall = new GridBagConstraints();
+			gbc_autoInstall.gridx = 0;
+			gbc_autoInstall.insets = new Insets(5, 5, 5, 5);
+			gbc_autoInstall.anchor = GridBagConstraints.WEST;
+			gbc_autoInstall.gridy = 1;
+			GridBagConstraints gbc_askMe = new GridBagConstraints();
+			gbc_askMe.anchor = GridBagConstraints.WEST;
+			gbc_askMe.gridy = 0;
+			gbc_askMe.insets = new Insets(5, 5, 5, 5);
+			gbc_askMe.gridx = 0;
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.AutoUpdate.ifError.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null)); //$NON-NLS-1$
+			jPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.AutoUpdate.ifAvailable.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null)); //$NON-NLS-1$
 			jPanel.setEnabled(true);
 			jPanel.setVisible(false);
-			jPanel.add(getSilentFail(), gridBagConstraints5);
-			jPanel.add(getShoutingFail(), gridBagConstraints6);
+			jPanel.add(getAskMe(), gbc_askMe);
+			jPanel.add(getAutoInstall(), gbc_autoInstall);
 		}
 		return jPanel;
 	}
@@ -228,14 +228,13 @@ public class AutoUpdatePanel extends PreferencePanel {
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getSilentFail() {
-		if (silentFail == null) {
-			silentFail = new JRadioButton();
-			silentFail.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.ifError.doNothing")); //$NON-NLS-1$
-			silentFail.setEnabled(false);
-			silentFail.setToolTipText(""); //$NON-NLS-1$
+	private JRadioButton getAskMe() {
+		if (askMe == null) {
+			askMe = new JRadioButton();
+			askMe.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.ifAvailable.askMe")); //$NON-NLS-1$
+			askMe.setEnabled(false);
 		}
-		return silentFail;
+		return askMe;
 	}
 
 	/**
@@ -243,13 +242,13 @@ public class AutoUpdatePanel extends PreferencePanel {
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getShoutingFail() {
-		if (shoutingFail == null) {
-			shoutingFail = new JRadioButton();
-			shoutingFail.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.ifError.dialog")); //$NON-NLS-1$
-			shoutingFail.setEnabled(false);
+	private JRadioButton getAutoInstall() {
+		if (autoInstall == null) {
+			autoInstall = new JRadioButton();
+			autoInstall.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.ifAvailable.autoInstall")); //$NON-NLS-1$
+			autoInstall.setEnabled(false);
 		}
-		return shoutingFail;
+		return autoInstall;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
