@@ -96,9 +96,9 @@ public class WelcomePanel extends JPanel {
 		add(shortcutsPanel, gbc_shortcutsPanel);
 		GridBagLayout gbl_shortcutsPanel = new GridBagLayout();
 		gbl_shortcutsPanel.columnWidths = new int[]{0, 0};
-		gbl_shortcutsPanel.rowHeights = new int[]{0, 0, 0};
+		gbl_shortcutsPanel.rowHeights = new int[]{0, 0, 0, 0};
 		gbl_shortcutsPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_shortcutsPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_shortcutsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		shortcutsPanel.setLayout(gbl_shortcutsPanel);
 		
 		JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
@@ -116,12 +116,22 @@ public class WelcomePanel extends JPanel {
 		btnViewTheTutorial.setToolTipText(LocalizationData.get("Welcome.tutorial.tooltip")); //$NON-NLS-1$
 		btnViewTheTutorial.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_btnViewTheTutorial = new GridBagConstraints();
+		gbc_btnViewTheTutorial.insets = new Insets(0, 0, 5, 0);
 		gbc_btnViewTheTutorial.anchor = GridBagConstraints.WEST;
 		gbc_btnViewTheTutorial.weightx = 1.0;
 		gbc_btnViewTheTutorial.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnViewTheTutorial.gridx = 0;
 		gbc_btnViewTheTutorial.gridy = 1;
 		shortcutsPanel.add(btnViewTheTutorial, gbc_btnViewTheTutorial);
+		
+		JButton faq = new JButton(LocalizationData.get("Welcome.faq")); //$NON-NLS-1$
+		faq.setHorizontalAlignment(SwingConstants.LEFT);
+		faq.setToolTipText(LocalizationData.get("Welcome.faq.tooltip")); //$NON-NLS-1$
+		GridBagConstraints gbc_faq = new GridBagConstraints();
+		gbc_faq.fill = GridBagConstraints.HORIZONTAL;
+		gbc_faq.gridx = 0;
+		gbc_faq.gridy = 2;
+		shortcutsPanel.add(faq, gbc_faq);
 		
 		JPanel tipsPanel = new JPanel();
 		tipsPanel.setBorder(new TitledBorder(null, LocalizationData.get("Welcome.tip.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
