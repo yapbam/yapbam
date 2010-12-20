@@ -31,6 +31,8 @@ public class BudgetView extends DefaultListenable {
 	private Calendar firstDate;
 	private Calendar lastDate;
 	private List<Category> categories;
+	private HashMap<Category, Double> categoryToSum;
+	private HashMap<Date, Double> dateToSum;	
 	
 	private static final class Key {
 		Date date;
@@ -212,6 +214,36 @@ public class BudgetView extends DefaultListenable {
 			out.close();
 		}
 	}
+	
+	/** Gets the sum of amounts of all categories for a date.
+	 * @param date a date returned by getDate(int) method
+	 * @return a double, 0 if there's no amount for this date (or if the sum is 0 !).
+	 * @see #getDate(int)
+	 */
+	public double getSum(Date date) {
+		Double result = this.dateToSum.get(date);
+		return result==null?0.0:result;
+	}
+	
+	/** Gets the sum of amounts of all dates for a category.
+	 * @param category a category
+	 * @return a double, 0 if there's no amount for this category (or if the sum is 0 !).
+	 * @see #getCategory(int)
+	 */
+	public double getSum(Category category) {
+		Double result = this.categoryToSum.get(category);
+		return result==null?0.0:result;
+	}
+	
+	/** Gets the amount average of all dates for a category.
+	 * @param category a category
+	 * @return a double, 0 if there's no amount for this category (or if the average is 0 !).
+	 * @see #getCategory(int)
+	 */
+	public double getAverage(Category category) {
+		if (getDatesSize()==0) return 0.0;
+		return getSum(category)/getDatesSize();
+	}
 
 	/** Updates the budget and send related events. */
 	private void update() {
@@ -222,6 +254,8 @@ public class BudgetView extends DefaultListenable {
 	/** Computes the budget. */
 	private void build() {
 		this.values = new HashMap<Key, Double>();
+		this.categoryToSum = new HashMap<Category, Double>();
+		this.dateToSum = new HashMap<Date, Double>();
 		this.firstDate = null;
 		this.lastDate = null;
 		this.categories = new LinkedList<Category>();
@@ -260,6 +294,16 @@ public class BudgetView extends DefaultListenable {
 			if (value==null) value = 0.0;
 			value += amount;
 			this.values.put (key, value);
+			// Add the amount to that category sum
+			value = this.categoryToSum.get(key.category);
+			if (value==null) value = 0.0;
+			value += amount;
+			this.categoryToSum.put (key.category, value);
+			// Add the amount to that date sum
+			value = this.dateToSum.get(key.date);
+			if (value==null) value = 0.0;
+			value += amount;
+			this.dateToSum.put (key.date, value);
 		}
 	}
 	

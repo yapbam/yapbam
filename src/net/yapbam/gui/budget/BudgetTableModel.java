@@ -37,14 +37,31 @@ class BudgetTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if ((columnIndex>=this.budget.getDatesSize()) || (rowIndex==this.budget.getCategoriesSize())) {
-			return 0; //TODO (average and sum)
+		if (rowIndex==this.budget.getCategoriesSize()) { // If this is the date sums line
+			if (columnIndex<this.budget.getDatesSize()) { // If this is a date column
+				return this.budget.getSum(this.budget.getDate(columnIndex));
+			} else { // If this is another column
+				return 0.0; //TODO
+			}
+		} else if (columnIndex>=this.budget.getDatesSize()) {
+			Category category = this.budget.getCategory(rowIndex);
+			return isSumColumn(columnIndex)?budget.getSum(category):budget.getAverage(category);
 		} else {
 			Date date = this.budget.getDate(columnIndex);
 			Category category = this.budget.getCategory(rowIndex);
 			Double value = this.budget.getAmount(date, category);
 			return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value);
 		}
+	}
+	
+	private boolean isSumColumn(int columnIndex) {
+		//TODO
+		return columnIndex==budget.getDatesSize();
+	}
+
+	private boolean isAverageColumn(int columnIndex) {
+		//TODO
+		return columnIndex==budget.getDatesSize()+1;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -57,10 +74,10 @@ class BudgetTableModel extends AbstractTableModel {
 			//TODO It would be better to have a localized version for this formatter ...
 			// but I can't find how to do that (simple with the day, but not documented without)
 			return new SimpleDateFormat("yyyy/MM").format(date);
-		} else if (column==datesSize) {
-			return LocalizationData.get("BudgetPanel.sum"); //TODO
+		} else if (isSumColumn(column)) {
+			return LocalizationData.get("BudgetPanel.sum");
 		} else {
-			return LocalizationData.get("BudgetPanel.average"); //TODO
+			return LocalizationData.get("BudgetPanel.average");
 		}
 	}
 }
