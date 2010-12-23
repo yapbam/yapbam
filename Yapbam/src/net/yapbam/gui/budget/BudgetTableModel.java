@@ -37,21 +37,22 @@ class BudgetTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		Double value;
 		if (rowIndex==this.budget.getCategoriesSize()) { // If this is the date sums line
 			if (columnIndex<this.budget.getDatesSize()) { // If this is a date column
-				return this.budget.getSum(this.budget.getDate(columnIndex));
+				value = this.budget.getSum(this.budget.getDate(columnIndex));
 			} else { // If this is another column
-				return 0.0; //TODO
+				value = 0.0; //TODO
 			}
 		} else if (columnIndex>=this.budget.getDatesSize()) {
 			Category category = this.budget.getCategory(rowIndex);
-			return isSumColumn(columnIndex)?budget.getSum(category):budget.getAverage(category);
+			value = isSumColumn(columnIndex)?budget.getSum(category):budget.getAverage(category);
 		} else {
 			Date date = this.budget.getDate(columnIndex);
 			Category category = this.budget.getCategory(rowIndex);
-			Double value = this.budget.getAmount(date, category);
-			return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value);
+			value = this.budget.getAmount(date, category);
 		}
+		return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value);
 	}
 	
 	private boolean isSumColumn(int columnIndex) {
