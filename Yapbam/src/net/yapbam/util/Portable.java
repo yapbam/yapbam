@@ -38,4 +38,8 @@ public final class Portable {
 		if (!file.exists()) file = new File(file,"Other/help");
 		return file;
 	}
+
+	public static File getUpdateFileDirectory() {
+		return new File(getDataDirectory(),"update");
+	}
 }

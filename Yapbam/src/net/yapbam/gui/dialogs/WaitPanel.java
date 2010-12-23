@@ -12,7 +12,7 @@ import net.yapbam.gui.LocalizationData;
 
 import java.awt.Insets;
 
-public class CheckUpdatePanel extends JPanel {
+public class WaitPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel waiting = null;
@@ -21,7 +21,7 @@ public class CheckUpdatePanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public CheckUpdatePanel() {
+	public WaitPanel() {
 		super();
 		initialize();
 	}
@@ -87,4 +87,19 @@ public class CheckUpdatePanel extends JPanel {
 		return progressBar;
 	}
 
+	public void setIndeterminate(boolean b) {
+		this.progressBar.setIndeterminate(false);
+	}
+	
+	public void setMaximum(int value) {
+		this.progressBar.setMaximum(value);
+	}
+
+	public void setValue(int value) {
+		this.progressBar.setValue(value);
+	}
+
+	public void setMessage(String message) {
+		icon.setText(message);
+	}
 }

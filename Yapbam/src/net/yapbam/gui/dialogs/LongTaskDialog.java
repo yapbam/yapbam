@@ -4,7 +4,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import net.yapbam.gui.LocalizationData;
@@ -17,7 +16,7 @@ import net.yapbam.gui.LocalizationData;
  * (of course, the done method of the swingWorker is invoked).
  * <br>Once it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay.
  */
-public abstract class LongTaskDialog extends AbstractDialog {
+public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 	private static final int DELAY = 500;
 	private static final int MINIMUM_TIME_VISIBLE = 1000;
 	
@@ -29,7 +28,7 @@ public abstract class LongTaskDialog extends AbstractDialog {
 	 * @param title The dialog title
 	 * @param data 
 	 */
-	public LongTaskDialog(Window owner, String title, Object data) {
+	public LongTaskDialog(Window owner, String title, V data) {
 		super(owner, title, data);
 		this.okButton.setVisible(false);
 		this.cancelButton.setText(LocalizationData.get("GenericButton.cancel")); //$NON-NLS-1$
@@ -41,21 +40,6 @@ public abstract class LongTaskDialog extends AbstractDialog {
 		});
 	}
 
-	@Override
-	protected Object buildResult() {
-		return null;
-	}
-
-	@Override
-	protected JPanel createCenterPane() {
-		return new CheckUpdatePanel();
-	}
-
-	@Override
-	protected String getOkDisabledCause() {
-		return null;
-	}
-	
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible) { // If the dialog is opened

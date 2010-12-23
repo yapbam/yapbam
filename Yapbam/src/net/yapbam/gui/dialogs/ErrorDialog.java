@@ -35,5 +35,4 @@ public class ErrorDialog extends AbstractDialog<Throwable> {
 	protected String getOkDisabledCause() {
 		return null;
 	}
-
 }
