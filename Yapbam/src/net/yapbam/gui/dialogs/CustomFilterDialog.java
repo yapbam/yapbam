@@ -10,7 +10,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
-public class CustomFilterDialog extends AbstractDialog {
+public class CustomFilterDialog extends AbstractDialog<FilteredData> {
 
 	private CustomFilterPanel filterPanel;
 
@@ -29,8 +29,8 @@ public class CustomFilterDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
-		filterPanel = new CustomFilterPanel((FilteredData) data);
+	protected JPanel createCenterPane() {
+		filterPanel = new CustomFilterPanel(data);
 		filterPanel.addPropertyChangeListener(CustomFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

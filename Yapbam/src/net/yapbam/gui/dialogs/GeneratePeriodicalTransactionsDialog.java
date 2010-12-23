@@ -15,7 +15,7 @@ import java.lang.Object;
 import java.lang.String;
 
 @SuppressWarnings("serial")
-public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
+public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<GlobalData> {
 	private PeriodicalTransactionGeneratorPanel panel;
 
 	public GeneratePeriodicalTransactionsDialog(Window owner, GlobalData data) {
@@ -35,8 +35,8 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
-		panel = new PeriodicalTransactionGeneratorPanel((GlobalData) data);
+	protected JPanel createCenterPane() {
+		panel = new PeriodicalTransactionGeneratorPanel(data);
 		panel.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

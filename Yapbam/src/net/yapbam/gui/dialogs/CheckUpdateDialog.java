@@ -1,22 +1,23 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
 
+import java.io.IOException;
 import java.lang.Object;
 import java.lang.String;
 import java.net.HttpURLConnection;
+import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -24,32 +25,17 @@ import java.util.concurrent.ExecutionException;
 @SuppressWarnings("serial")
 /** This dialog connects to the Yapbam update site, allow to cancel the search for updates and
  * displays the result.
- * It has some particularities :
+ * It has some specific features :
  * <UL><LI>It shows with a delay, if the search completes during this time, the dialog is not displayed, and the results is.</LI>
- * <LI>If it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay.</LI></UL>
+ * <LI>Once it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay.</LI></UL>
  */
-public class CheckUpdateDialog extends AbstractDialog {
-	private static final int DELAY = 500;
-	private static final int MINIMUM_TIME_VISIBLE = 1000;
-	
-	private Window owner;
+public class CheckUpdateDialog extends LongTaskDialog {
 	private boolean auto;
-	private long setVisibleTime;
-	private UpdateSwingWorker updateSwingWorker;
 
 	public CheckUpdateDialog(Window owner, boolean auto) {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
-		this.owner = owner;
 		this.auto = auto;
-		this.okButton.setVisible(false);
-		this.cancelButton.setText(LocalizationData.get("GenericButton.cancel")); //$NON-NLS-1$
 		this.cancelButton.setToolTipText(LocalizationData.get("MainMenu.CheckUpdate.Dialog.cancel.tooltip")); //$NON-NLS-1$
-		this.cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateSwingWorker.cancel(false);
-			}
-		});
 	}
 
 	@Override
@@ -58,7 +44,7 @@ public class CheckUpdateDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		return new CheckUpdatePanel();
 	}
 
@@ -67,46 +53,11 @@ public class CheckUpdateDialog extends AbstractDialog {
 		return null;
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) { // If the dialog is opened
-			// Start the "check for update" thread.
-			this.updateSwingWorker = new UpdateSwingWorker(this.owner);
-			updateSwingWorker.execute();
-			// Start a thread that will delay the dialog display 
-			new SwingWorker<Object, Void>() {
-				@Override
-				protected Object doInBackground() throws Exception {
-					Thread.sleep(DELAY);
-					return null;
-				}
-
-				@Override
-				protected void done() {
-					super.done();
-					if (!updateSwingWorker.isDone()) {
-						doShow();
-					}
-				}
-			}.execute();
-		} else { // If the dialog is closed
-			long delay = MINIMUM_TIME_VISIBLE-(System.currentTimeMillis()-this.setVisibleTime);
-			try {
-				if (delay>0) { // If the dialog is display for less than 500 ms, wait for the user to see what happens ;-)
-					Thread.sleep(delay);
-				}
-			} catch (InterruptedException e) {
-			}
-			super.setVisible(visible);
-		}
+	protected SwingWorker<?, ?> getWorker() {
+		return new UpdateSwingWorker(getOwner());
 	}
 	
-	private void doShow() {
-		CheckUpdateDialog.this.setVisibleTime = System.currentTimeMillis(); // Remember when the dialog was displayed
-		super.setVisible(true);
-	}
-	
-	// Post a SwingWorker to perform the check
+	// A SwingWorker that performs the update availability check
 	class UpdateSwingWorker extends SwingWorker<UpdateInformation, Void> {
 		private static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck"; //$NON-NLS-1$
 		private Window owner;
@@ -117,7 +68,7 @@ public class CheckUpdateDialog extends AbstractDialog {
 		
 		@Override
 		protected UpdateInformation doInBackground() throws Exception {
-//			Thread.sleep(5000); //TODO
+			Thread.sleep(1000); //TODO
 			return VersionManager.getUpdateInformation();
 		}
 		public void done() {
@@ -147,9 +98,15 @@ public class CheckUpdateDialog extends AbstractDialog {
 			} catch (InterruptedException e) {
 			} catch (ExecutionException e) {
 				if (!(isCancelled() || silentFail)) {
-					String pattern = LocalizationData.get("MainMenu.CheckUpdate.IOError"); //$NON-NLS-1$
-					String message = MessageFormat.format(pattern, e.toString(), VersionManager.YABAM_HOME_URL);
-					JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+					CheckUpdateDialog.this.setVisible(false);
+					Throwable cause = e.getCause();
+					if ((cause instanceof IOException) || (cause instanceof UnknownHostException)) {
+						String pattern = LocalizationData.get("MainMenu.CheckUpdate.IOError"); //$NON-NLS-1$
+						String message = MessageFormat.format(pattern, cause, VersionManager.YABAM_HOME_URL);
+						JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+					} else {
+						ErrorManager.INSTANCE.log(cause);
+					}
 				}
 			}
 		}

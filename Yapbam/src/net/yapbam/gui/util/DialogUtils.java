@@ -3,7 +3,10 @@ package net.yapbam.gui.util;
 import java.awt.Dialog;
 import java.awt.Window;
 
-/** Useful methods on Dialogs */
+/** Useful methods on Dialogs.
+ * @author Jean-Marc Astesana
+ * <BR>License : GPL v3
+ */
 public class DialogUtils {
 	
 	private DialogUtils() {}

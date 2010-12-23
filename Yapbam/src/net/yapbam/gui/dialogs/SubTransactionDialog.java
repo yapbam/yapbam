@@ -11,7 +11,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
 
-public class SubTransactionDialog extends AbstractDialog {
+public class SubTransactionDialog extends AbstractDialog<GlobalData> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
@@ -26,9 +26,9 @@ public class SubTransactionDialog extends AbstractDialog {
 		}
 	}
 	
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		this.panel = new SubTransactionPanel();
-		this.panel.setData((GlobalData) data);
+		this.panel.setData(data);
 		this.panel.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

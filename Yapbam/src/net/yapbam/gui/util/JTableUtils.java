@@ -6,7 +6,10 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-/** Useful methods on JTables */
+/** Useful methods on JTables.
+ * @author Jean-Marc Astesana
+ * <BR>License : GPL v3
+ */
 public abstract class JTableUtils {
 	/**
 	 * This method picks column sizes in order all headers and content are

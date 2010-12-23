@@ -17,7 +17,7 @@ import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
-public class ModeDialog extends AbstractDialog {
+public class ModeDialog extends AbstractDialog<Account> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
@@ -33,44 +33,51 @@ public class ModeDialog extends AbstractDialog {
 		original = null;
 	}
 	
-	protected JPanel createCenterPane(Object data) {
-		Account account = (Account) data;
-        //Create the content pane.
-        JPanel centerPane = new JPanel(new BorderLayout());
-        centerPane.add(new JLabel(MessageFormat.format(LocalizationData.get("ModeDialog.account"), account.getName())), BorderLayout.NORTH); //$NON-NLS-1$
-        JPanel main = new JPanel(new GridBagLayout());
-        if (DEBUG) main.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
-        centerPane.add(main, BorderLayout.CENTER);
-        
-        JPanel idPanel = new JPanel(new GridBagLayout());
-        if (DEBUG) idPanel.setBorder(BorderFactory.createTitledBorder("idPanel")); //$NON-NLS-1$
-        GridBagConstraints c = new GridBagConstraints(); c.insets = new Insets(10,5,5,5);
-        c.anchor=GridBagConstraints.WEST;
-        idPanel.add(new JLabel(LocalizationData.get("ModeDialog.name")),c); //$NON-NLS-1$
-        c.gridx=1; c.weightx=1.0; c.fill=GridBagConstraints.HORIZONTAL;
-        name = new JTextField(10);
-        name.addKeyListener(new AutoUpdateOkButtonKeyListener(this));
-        name.addFocusListener(new AutoSelectFocusListener());
-		idPanel.add(name,c);       
-        
-        checkbook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
-		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), checkbook, this);     //$NON-NLS-1$
-        rightPane = new ModePanel(LocalizationData.get("ModeDialog.forReceipts"), null, this); //$NON-NLS-1$
-        Listener listener = new Listener();
+	protected JPanel createCenterPane() {
+		// Create the content pane.
+		JPanel centerPane = new JPanel(new BorderLayout());
+		centerPane.add(
+						new JLabel(MessageFormat.format(LocalizationData.get("ModeDialog.account"), data.getName())), BorderLayout.NORTH); //$NON-NLS-1$
+		JPanel main = new JPanel(new GridBagLayout());
+		if (DEBUG) main.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
+		centerPane.add(main, BorderLayout.CENTER);
+
+		JPanel idPanel = new JPanel(new GridBagLayout());
+		if (DEBUG) idPanel.setBorder(BorderFactory.createTitledBorder("idPanel")); //$NON-NLS-1$
+		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(10, 5, 5, 5);
+		c.anchor = GridBagConstraints.WEST;
+		idPanel.add(new JLabel(LocalizationData.get("ModeDialog.name")), c); //$NON-NLS-1$
+		c.gridx = 1;
+		c.weightx = 1.0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		name = new JTextField(10);
+		name.addKeyListener(new AutoUpdateOkButtonKeyListener(this));
+		name.addFocusListener(new AutoSelectFocusListener());
+		idPanel.add(name, c);
+
+		checkbook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
+		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), checkbook, this); //$NON-NLS-1$
+		rightPane = new ModePanel(LocalizationData.get("ModeDialog.forReceipts"), null, this); //$NON-NLS-1$
+		Listener listener = new Listener();
 		leftPane.addPropertyChangeListener(listener);
 		rightPane.addPropertyChangeListener(listener);
 
 		c = new GridBagConstraints();
-		c.fill=GridBagConstraints.HORIZONTAL; c.gridwidth=GridBagConstraints.REMAINDER;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = GridBagConstraints.REMAINDER;
 		main.add(idPanel, c);
 		c = new GridBagConstraints();
-        c.gridy=1; c.anchor = GridBagConstraints.NORTH; c.insets=new Insets(0,0,0,5);
-        main.add(leftPane,c);
-        c.gridx=1; c.insets=new Insets(0,5,0,0);
-        main.add(rightPane,c);
+		c.gridy = 1;
+		c.anchor = GridBagConstraints.NORTH;
+		c.insets = new Insets(0, 0, 0, 5);
+		main.add(leftPane, c);
+		c.gridx = 1;
+		c.insets = new Insets(0, 5, 0, 0);
+		main.add(rightPane, c);
 
-        return centerPane;
-    }
+		return centerPane;
+	}
 	
 	public Mode getMode() {
 		return (Mode) getResult();

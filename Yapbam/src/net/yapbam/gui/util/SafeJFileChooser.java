@@ -7,8 +7,10 @@ import javax.swing.JOptionPane;
 
 import net.yapbam.gui.LocalizationData;
 
-/** A file chooser with a confirm dialog when the selected file aleready exists
+/** A file chooser with a confirm dialog when the selected file already exists
  * SaveAs mode.
+ * @author Jean-Marc Astesana
+ * <BR>License : GPL v3
  */
 public class SafeJFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 1L;

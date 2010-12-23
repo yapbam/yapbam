@@ -48,9 +48,9 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		JPanel center = new JPanel(new BorderLayout());
-		JPanel transactionPane = super.createCenterPane(data);
+		JPanel transactionPane = super.createCenterPane();
 		transactionPane.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PeriodicalTransactionDialog.transactionBorderTitle"))); //$NON-NLS-1$
 		center.add (transactionPane, BorderLayout.CENTER);
 		center.add(buildPeriodicalPanel(),BorderLayout.NORTH);

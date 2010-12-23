@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
 
-public class ErrorDialog extends AbstractDialog {
+public class ErrorDialog extends AbstractDialog<Throwable> {
 	private static final long serialVersionUID = 1L;
 	
 	ErrorPanel panel;
@@ -21,7 +21,7 @@ public class ErrorDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		panel = new ErrorPanel();
 		return panel;
 	}

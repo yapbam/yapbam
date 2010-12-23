@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class PreferenceDialog extends AbstractDialog {
+public class PreferenceDialog extends AbstractDialog<MainFrame> {
 	public static final long LOCALIZATION_CHANGED = 1;
 	public static final long LOOK_AND_FEEL_CHANGED = 2;
 
@@ -39,14 +39,14 @@ public class PreferenceDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		JPanel panel = new JPanel(new BorderLayout());
 		final JTabbedPane tabbedPane = new JTabbedPane();
 		this.panels = new ArrayList<PreferencePanel>();
 		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(), new NetworkPanel(),
 				new AutoUpdatePanel(), new ReportErrorPanel()}));
-		for (int i=0 ; i<((MainFrame)data).getPlugInsNumber(); i++) {
-			PreferencePanel preferencePanel = ((MainFrame)data).getPlugIn(i).getPreferencePanel();
+		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
+			PreferencePanel preferencePanel = data.getPlugIn(i).getPreferencePanel();
 			if (preferencePanel!=null) this.panels.add(preferencePanel) ;
 		}
 		tabbedPane.addChangeListener(new ChangeListener() {

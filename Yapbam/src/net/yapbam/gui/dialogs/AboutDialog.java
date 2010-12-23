@@ -25,7 +25,7 @@ public class AboutDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		return new AboutPanel();
 	}
 

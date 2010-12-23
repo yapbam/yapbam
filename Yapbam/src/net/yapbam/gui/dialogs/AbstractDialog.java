@@ -11,14 +11,14 @@ import javax.swing.*;
 
 import net.yapbam.gui.LocalizationData;
 
-public abstract class AbstractDialog extends JDialog {
+public abstract class AbstractDialog<V> extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private Object result;
 
 	protected JButton cancelButton;
 	protected JButton okButton;
-	protected Object data;
+	protected V data;
 
 	/**
 	 * Constructor
@@ -26,7 +26,7 @@ public abstract class AbstractDialog extends JDialog {
 	 * @param title Dialog's title
 	 * @param data optional data (will be transfered to createContentPane)
 	 */
-	public AbstractDialog(Window owner, String title, Object data) {
+	public AbstractDialog(Window owner, String title, V data) {
 		super(owner, title, ModalityType.APPLICATION_MODAL);
 		this.data = data;
 		this.result = null;
@@ -57,7 +57,7 @@ public abstract class AbstractDialog extends JDialog {
 
 		contentPane.add(southPane, BorderLayout.SOUTH);
 
-		JPanel centerPane = this.createCenterPane(data);
+		JPanel centerPane = this.createCenterPane();
 		if (centerPane != null) contentPane.add(centerPane, BorderLayout.CENTER);
 		
 		this.updateOkButtonEnabled();
@@ -77,7 +77,7 @@ public abstract class AbstractDialog extends JDialog {
 		return contentPane;
 	}
 	
-	protected abstract JPanel createCenterPane(Object data);
+	protected abstract JPanel createCenterPane();
 	
 	public void actionPerformed(ActionEvent e) {
 	}
