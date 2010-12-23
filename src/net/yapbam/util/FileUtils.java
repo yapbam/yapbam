@@ -55,4 +55,23 @@ public class FileUtils {
 			}
 		}
 	}
+	
+	/** Deletes recursively a directory.
+	 * <br>This means that the directory and all of its files or subfolders are deleted.
+	 * @param path the directory to be deleted.
+	 * @return true if the directory has been successfully deleted.
+	 */
+	public static boolean deleteDirectory(File path) {
+		if (path.exists()) {
+			File[] files = path.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					deleteDirectory(files[i]);
+				} else {
+					files[i].delete();
+				}
+			}
+		}
+		return path.delete();
+	}
 }

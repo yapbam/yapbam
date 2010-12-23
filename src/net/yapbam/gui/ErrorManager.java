@@ -24,12 +24,13 @@ public class ErrorManager {
 	public void log(Throwable t) {
 		System.err.println("An exception was catched by "+this.getClass().getName());		
 		t.printStackTrace();
+		//TODO Probably need to ensure that only one dialog could be opened at a time
 		ErrorDialog errorDialog = new ErrorDialog(null, t);
 		errorDialog.setVisible(true);
 		if (errorDialog.getResult()!=null) {
 			System.out.println ("TODO : The report is not sent");
 			//TODO send message to Yapbam
 		}
-		errorDialog.dispose(); //Don't remove it, it would prevent Yapbam from quit !!!
+		errorDialog.dispose(); //Don't remove this line, it would prevent Yapbam from quit !!!
 	}
 }

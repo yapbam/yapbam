@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
  * <UL><LI>It shows with a delay, if the search completes during this time, the dialog is not displayed, and the results is.</LI>
  * <LI>Once it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay.</LI></UL>
  */
-public class CheckUpdateDialog extends LongTaskDialog {
+public class CheckUpdateDialog extends LongTaskDialog<Void> {
 	private boolean auto;
 
 	public CheckUpdateDialog(Window owner, boolean auto) {
@@ -37,7 +37,7 @@ public class CheckUpdateDialog extends LongTaskDialog {
 		this.auto = auto;
 		this.cancelButton.setToolTipText(LocalizationData.get("MainMenu.CheckUpdate.Dialog.cancel.tooltip")); //$NON-NLS-1$
 	}
-
+	
 	@Override
 	protected Object buildResult() {
 		return null;
@@ -45,7 +45,7 @@ public class CheckUpdateDialog extends LongTaskDialog {
 
 	@Override
 	protected JPanel createCenterPane() {
-		return new CheckUpdatePanel();
+		return new WaitPanel();
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class CheckUpdateDialog extends LongTaskDialog {
 		
 		@Override
 		protected UpdateInformation doInBackground() throws Exception {
-			Thread.sleep(1000); //TODO
+//			Thread.sleep(1000); //TODO
 			return VersionManager.getUpdateInformation();
 		}
 		public void done() {
@@ -88,8 +88,16 @@ public class CheckUpdateDialog extends LongTaskDialog {
 						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // There's an update
 							String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
 							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(),update.getUpdateURL());
-							new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"), //$NON-NLS-1$ //$NON-NLS-2$
-									message).setVisible(true);
+							String download = LocalizationData.get("MainMenu.CheckUpdate.installNow");
+							int choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Success.title"),
+									JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+									new String[]{LocalizationData.get("MainMenu.CheckUpdate.cancel"), download}, download);
+							if (choice==1) {
+								CheckUpdateDialog.this.setVisible(false);
+								new InstallUpdateDialog(owner, update).setVisible(true);
+							}
+//TODO Remove (verify it's no more used) the localized wordings							new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"), //$NON-NLS-1$ //$NON-NLS-2$
+//									message).setVisible(true);
 						} else { // Version is up to date
 							if (!auto) JOptionPane.showMessageDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.NoUpdate"), LocalizationData.get("MainMenu.CheckUpdate.NoUpdate.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 						}
