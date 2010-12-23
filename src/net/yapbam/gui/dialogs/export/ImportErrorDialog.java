@@ -8,7 +8,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class ImportErrorDialog extends AbstractDialog {
+public class ImportErrorDialog extends AbstractDialog<Object[]> {
 
 	public ImportErrorDialog(Window owner, int[] importedFields, ImportError[] errors) {
 		super(owner, LocalizationData.get("ImportDialog.errorMessage.title"), new Object[]{importedFields, errors}); //$NON-NLS-1$
@@ -23,9 +23,9 @@ public class ImportErrorDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
-		int[] importedFields = (int[]) ((Object[])data)[0];
-		ImportError[] errors = (ImportError[]) ((Object[])data)[1];
+	protected JPanel createCenterPane() {
+		int[] importedFields = (int[])data[0];
+		ImportError[] errors = (ImportError[])data[1];
 		return new ImportErrorPanel(importedFields, errors);
 	}
 

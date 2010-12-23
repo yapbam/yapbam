@@ -13,7 +13,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.7.4"/>
+	<property name="yapbamVersion" value="0.7.5"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -85,6 +85,9 @@
 		<copy file="yapbam.sh" todir="${classicRelease}"/>
 		<!-- Build the zip file -->		
 		<zip basedir="${classicRelease}" destfile="yapbam-${yapbamVersion}.zip"/>
+		<!-- Computes the checksum of the file -->
+		<checksum file="yapbam-${yapbamVersion}.zip" property="zip.checksum"/>
+		<echo message="Zip checksum=${zip.checksum}"/>
 		<!-- Clean the disk (remove temporary working directory) -->
 		<delete dir="${classicRelease}"/>
 	</target>

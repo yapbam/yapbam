@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
-public class TestDialog extends AbstractDialog {
+public class TestDialog extends AbstractDialog<GlobalData> {
 
-	public TestDialog(Window owner, String title, Object data) {
+	public TestDialog(Window owner, String title, GlobalData data) {
 		super(owner, title, data);
 	}
 
@@ -20,9 +20,9 @@ public class TestDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		TestPanel testPanel = new TestPanel();
-		testPanel.setData((GlobalData)data);
+		testPanel.setData(data);
 		return testPanel;
 	}
 

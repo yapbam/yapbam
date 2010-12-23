@@ -12,7 +12,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
-public class CheckbookDialog extends AbstractDialog {
+public class CheckbookDialog extends AbstractDialog<Void> {
 	private static final long serialVersionUID = 1L;
 	
 	private CheckbookPane pane;
@@ -21,7 +21,7 @@ public class CheckbookDialog extends AbstractDialog {
 		super(owner, LocalizationData.get("checkbookDialog.title.new"), null); //$NON-NLS-1$
 	}
 	
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		this.pane = new CheckbookPane();
 		this.pane.addPropertyChangeListener(CheckbookPane.INVALIDITY_CAUSE, new PropertyChangeListener() {
 			@Override

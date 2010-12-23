@@ -10,7 +10,7 @@ import java.lang.Object;
 import java.lang.String;
 
 @SuppressWarnings("serial")
-public class DefaultHTMLInfoDialog extends AbstractDialog {
+public class DefaultHTMLInfoDialog extends AbstractDialog<String[]> {
 
 	public DefaultHTMLInfoDialog(Window owner, String title, String header, String message) {
 		super(owner, title, new String[]{header, message});
@@ -25,8 +25,8 @@ public class DefaultHTMLInfoDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
-		return new DefaultHTMLInfoPanel(((String[])data)[0], ((String[])data)[1]);
+	protected JPanel createCenterPane() {
+		return new DefaultHTMLInfoPanel(data[0], data[1]);
 	}
 
 	@Override

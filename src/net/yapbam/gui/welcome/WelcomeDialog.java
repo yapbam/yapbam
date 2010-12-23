@@ -9,7 +9,7 @@ import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class WelcomeDialog extends AbstractDialog {
+public class WelcomeDialog extends AbstractDialog<Void> {
 	private WelcomePanel welcomePanel;
 
 	public WelcomeDialog(Window owner) {
@@ -23,7 +23,7 @@ public class WelcomeDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		welcomePanel = new WelcomePanel();
 		welcomePanel.setShowAtStartup(Preferences.INSTANCE.isWelcomeAllowed());
 		return welcomePanel;

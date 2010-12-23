@@ -16,11 +16,11 @@ import java.lang.String;
 /** This class is a password ask dialog.
  * It can be customized to change the question, the alert message, etc ... 
  */
-public class GetPasswordDialog extends AbstractDialog {
+public class GetPasswordDialog extends AbstractDialog<GetPasswordDialog.InitData> {
 	private GetPasswordPanel panel;
 	private boolean confirmIsRequired;
 	
-	private static class InitData {
+	static class InitData {
 		private String question;
 		private Icon icon;
 		private String password;
@@ -50,12 +50,11 @@ public class GetPasswordDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		panel = new GetPasswordPanel();
-		InitData initialData = (InitData) data;
-		if (initialData.password!=null) panel.setPassword(initialData.password);
-		this.panel.setIcon(initialData.icon);
-		this.panel.setQuestion(initialData.question);
+		if (data.password!=null) panel.setPassword(data.password);
+		this.panel.setIcon(data.icon);
+		this.panel.setQuestion(data.question);
 		this.panel.addPropertyChangeListener(GetPasswordPanel.CONFIRMED_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

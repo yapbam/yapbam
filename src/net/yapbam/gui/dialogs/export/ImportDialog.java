@@ -12,11 +12,11 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class ImportDialog extends AbstractDialog {
+public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 	private ImportPanel importPanel;
 	public static Importer lastImporter;
 
-	private static final class Container {
+	static final class Container {
 		File file;
 		GlobalData data;
 		
@@ -39,10 +39,10 @@ public class ImportDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		importPanel = new ImportPanel();
-		importPanel.setData(((Container)data).data);
-		importPanel.setFile(((Container)data).file);
+		importPanel.setData(data.data);
+		importPanel.setFile(data.file);
 		importPanel.addPropertyChangeListener(ImportPanel.INVALIDITY_CAUSE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

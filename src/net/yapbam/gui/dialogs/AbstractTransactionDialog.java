@@ -26,7 +26,7 @@ import net.yapbam.gui.widget.CoolJComboBox;
 import net.yapbam.gui.widget.PopupTextFieldList;
 
 /** This dialog allows to create or edit a transaction */
-public abstract class AbstractTransactionDialog extends AbstractDialog {
+public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalData> {
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 	
@@ -39,13 +39,10 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	private CoolJComboBox modes;
 	protected CategoryPanel categories;
 	protected SubtransactionListPanel subtransactionsPanel;
-	
-	protected GlobalData data;
 
 	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
-		this.data = data;
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
@@ -105,7 +102,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog {
 	}/**/ //TODO remove
 	
 	@Override
-	protected JPanel createCenterPane(Object data) {
+	protected JPanel createCenterPane() {
 		this.data = (GlobalData) data;
 		
         //Create the content pane.

@@ -18,6 +18,6 @@ final public class CurrencyConverterAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new CurrencyConverterDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), Messages.getString("ToolsPlugIn.currencyConverter.title"), null).setVisible(true); //$NON-NLS-1$
+		new CurrencyConverterDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), Messages.getString("ToolsPlugIn.currencyConverter.title")).setVisible(true); //$NON-NLS-1$
 	}
 }

@@ -14,41 +14,49 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
-public class CategoryDialog extends AbstractDialog {
+public class CategoryDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField categoryField;
-	private GlobalData data;
+	private GlobalData globalData;
 
 	private CategoryDialog(Window owner, String message, GlobalData data) {
 		super(owner, LocalizationData.get("CategoryDialog.title"), message); //$NON-NLS-1$
-		this.data = data;
+		this.globalData = data;
 	}
 	
-	protected JPanel createCenterPane(Object message) {
-        //Create the content pane.
-        JPanel centerPane = new JPanel(new GridBagLayout());
-        KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
-        FocusListener focusListener = new AutoSelectFocusListener();
-        GridBagConstraints c = new GridBagConstraints(); c.gridx = 0; c.gridy = 0; c.insets=new Insets(5, 5, 5, 5); c.anchor=GridBagConstraints.WEST;
-        if (message!=null) {
-            c.fill=GridBagConstraints.HORIZONTAL; c.gridwidth=GridBagConstraints.REMAINDER;
-        	centerPane.add(new JLabel((String) message), c);
-            c.fill=GridBagConstraints.NONE; c.gridwidth=1;
-            c.gridy++;
-        }
-        
-        JLabel titleCompte = new JLabel(LocalizationData.get("CategoryDialog.category")); //$NON-NLS-1$
-        centerPane.add(titleCompte, c);
-        categoryField = new JTextField(20);
-        categoryField.addFocusListener(focusListener);
-        categoryField.addKeyListener(listener);
-        categoryField.setToolTipText(LocalizationData.get("CategoryDialog.category.tooltip")); //$NON-NLS-1$
-        c.weightx=1; c.fill=GridBagConstraints.HORIZONTAL; c.gridx=1;
-        centerPane.add(categoryField,c);
-                
-        return centerPane;
-    }
+	protected JPanel createCenterPane() {
+		// Create the content pane.
+		JPanel centerPane = new JPanel(new GridBagLayout());
+		KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
+		FocusListener focusListener = new AutoSelectFocusListener();
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.anchor = GridBagConstraints.WEST;
+		if (data != null) {
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridwidth = GridBagConstraints.REMAINDER;
+			centerPane.add(new JLabel(data), c);
+			c.fill = GridBagConstraints.NONE;
+			c.gridwidth = 1;
+			c.gridy++;
+		}
+
+		JLabel titleCompte = new JLabel(LocalizationData.get("CategoryDialog.category")); //$NON-NLS-1$
+		centerPane.add(titleCompte, c);
+		categoryField = new JTextField(20);
+		categoryField.addFocusListener(focusListener);
+		categoryField.addKeyListener(listener);
+		categoryField.setToolTipText(LocalizationData.get("CategoryDialog.category.tooltip")); //$NON-NLS-1$
+		c.weightx = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		centerPane.add(categoryField, c);
+
+		return centerPane;
+	}
 	
 	public Category getCategory() {
 		return (Category) getResult();
@@ -81,7 +89,7 @@ public class CategoryDialog extends AbstractDialog {
 		String name = this.categoryField.getText().trim();
 		if (name.length()==0) {
 			return LocalizationData.get("CategoryDialog.err1"); //$NON-NLS-1$
-		} else if (this.data.getCategory(name)!=null) {
+		} else if (this.globalData.getCategory(name)!=null) {
 			return LocalizationData.get("CategoryDialog.err2"); //$NON-NLS-1$
 		}
 		return null;
