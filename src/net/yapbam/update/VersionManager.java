@@ -48,7 +48,7 @@ public class VersionManager {
 
 	public static URL getUpdateURL() {
 		try {
-			StringBuilder url = new StringBuilder("http://yapbam.sourceforge.net/updateInfo.php");
+			StringBuilder url = new StringBuilder("http://yapbam.sourceforge.net/updateInfo2.php");
 			url.append("?version=").append(URLEncoder.encode(getVersion().toString(),"UTF-8"));
 			url.append("&country=").append(URLEncoder.encode(LocalizationData.getLocale().getCountry(),"UTF-8"));
 			url.append("&lang=").append(URLEncoder.encode(LocalizationData.getLocale().getLanguage(),"UTF-8"));
