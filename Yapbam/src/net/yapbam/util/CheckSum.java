@@ -70,10 +70,10 @@ public final class CheckSum {
 
 	/** Turns an array of bytes into a string
 	 * @param bytes Array of bytes to convert into a hexadecimal string
-	 * @return an hexadecimal string
+	 * @return a positive hexadecimal string
 	 */
 	public static String toString(byte[] bytes) {
-		return new BigInteger(bytes).toString(16);
+		return new BigInteger(1,bytes).toString(16);
 	}
 	
 	/** Turns a hexadecimal String into an array of bytes
