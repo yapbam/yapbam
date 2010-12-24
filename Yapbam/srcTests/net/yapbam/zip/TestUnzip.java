@@ -36,7 +36,7 @@ public class TestUnzip {
 				} else {
 					int size;
 					byte[] buffer = new byte[2048];
-	
+
 					FileOutputStream fos = new FileOutputStream(new File (where,entry.getName()));
 					BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
 	

@@ -96,7 +96,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void> {
 								CheckUpdateDialog.this.setVisible(false);
 								new InstallUpdateDialog(owner, update).setVisible(true);
 							}
-//TODO Remove (verify it's no more used) the localized wordings							new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"), //$NON-NLS-1$ //$NON-NLS-2$
+//TODO Remove the localized wordings (verify they are no more used)						new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"), //$NON-NLS-1$ //$NON-NLS-2$
 //									message).setVisible(true);
 						} else { // Version is up to date
 							if (!auto) JOptionPane.showMessageDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.NoUpdate"), LocalizationData.get("MainMenu.CheckUpdate.NoUpdate.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$

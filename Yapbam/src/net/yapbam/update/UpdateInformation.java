@@ -18,6 +18,9 @@ public class UpdateInformation {
 	private URL autoUpdateURL;
 	private String autoUpdateCheckSum;
 	private long autoUpdateSize;
+	private URL autoUpdaterURL;
+	private String autoUpdaterCheckSum;
+	private long autoUpdaterSize;
 	
 	UpdateInformation (URL url) throws UnknownHostException, IOException {
 		HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
@@ -34,6 +37,9 @@ public class UpdateInformation {
 			autoUpdateURL = new URL(p.getProperty("autoUpdateURL"));
 			autoUpdateCheckSum = p.getProperty("autoUpdateCHKSUM");
 			autoUpdateSize = Long.parseLong(p.getProperty("autoUpdateSize"));
+			autoUpdaterURL = new URL(p.getProperty("autoUpdateUpdaterURL"));
+			autoUpdaterCheckSum = p.getProperty("autoUpdateUpdaterCHKSUM");
+			autoUpdaterSize = Long.parseLong(p.getProperty("autoUpdateUpdaterSize"));
 		}
 	}
 
@@ -59,5 +65,17 @@ public class UpdateInformation {
 
 	public long getAutoUpdateSize() {
 		return autoUpdateSize;
+	}
+
+	public long getAutoUpdaterSize() {
+		return autoUpdaterSize;
+	}
+
+	public URL getAutoUpdaterURL() {
+		return autoUpdaterURL;
+	}
+
+	public String getAutoUpdaterCheckSum() {
+		return autoUpdaterCheckSum;
 	}
 }

@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.URI;
 import java.security.AccessControlException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -21,6 +22,8 @@ import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.welcome.WelcomeDialog;
+import net.yapbam.util.FileUtils;
+import net.yapbam.util.Portable;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
@@ -36,6 +39,14 @@ public class MainFrame extends JFrame implements DataListener {
 	private ArrayList<AbstractPlugIn> paneledPlugins;
 	private int lastSelected = -1;
 	private boolean isRestarting = false;
+	
+	/** The updater jar file. If this attribute is not null, the jar it contains will be executed when
+	 * the application quits.
+	 * <br>The jar file will be executed by the same JVM than the current Yapbam instance.
+	 * Be aware that the updater may absolutely output nothing to stderr and std out
+	 * see http://www.javaworld.com/jw-12-2000/jw-1229-traps.html 
+	 */
+	public static File updater = null;
 
 	public static void main(final String[] args) {
 		// Remove obsolete files from previous installations
@@ -88,6 +99,35 @@ public class MainFrame extends JFrame implements DataListener {
 				} else if (SaveManager.MANAGER.verify(frame)) {
 					YapbamState.save(frame);
 					Preferences.INSTANCE.save();
+					
+					if ((updater!=null) && updater.exists() && updater.isFile()) {
+						// If an update is available
+						// The update will be done by a external program, as changing a jar on the fly
+						// may lead to serious problems.
+//						Enumeration<Object> keys = System.getProperties().keys();
+//						while (keys.hasMoreElements()) {
+//							String key = (String) keys.nextElement();
+//							System.out.println (key+" = "+System.getProperty(key));
+//						}
+						
+						ArrayList<String> command = new ArrayList<String>();
+						command.add(System.getProperty("java.home")+"/bin/java");
+						command.add("-jar");
+						command.add(updater.getAbsolutePath());
+						System.out.println (command);
+						ProcessBuilder builder = new ProcessBuilder(command);
+						try {
+							Process process = builder.start();
+							BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+							for (String line = err.readLine(); line!=null; line = err.readLine()) {
+								System.err.println (line);
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
 					super.windowClosing(event);
 					frame.dispose();
 				}
