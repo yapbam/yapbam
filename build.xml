@@ -21,6 +21,23 @@
 	<target name="build">
 		<antcall target="classic.build"/>
 		<antcall target="portableApps.com.build"/>
+		<antcall target="updater.build"/>
+	</target>
+	
+	<target name="updater.build">
+		<delete dir="releaseCompile"/>
+		<mkdir dir="releaseCompile"/>
+		<javac srcdir="srcUpdater" sourcepath="src" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" />
+		<jar destfile="updater.jar">
+			<manifest>
+				<attribute name="Main-Class" value="net.yapbam.updater.Updater"/>
+			</manifest>
+			<fileset dir="releaseCompile"/>
+		</jar>
+		<delete dir="releaseCompile"/>
+		<!-- Computes the checksum of the file -->
+		<checksum file="updater.jar" property="zip.checksum"/>
+		<echo message="updater.jar checksum=${zip.checksum}"/>
 	</target>
 	
 	<target name="commonBuild">

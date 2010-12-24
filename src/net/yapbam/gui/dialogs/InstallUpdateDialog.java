@@ -6,21 +6,27 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.Preferences;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.util.CheckSum;
 import net.yapbam.util.FileUtils;
+import net.yapbam.util.NullUtils;
 import net.yapbam.util.Portable;
 
 public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
@@ -29,7 +35,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 	private WaitPanel waitPanel;
 
 	public InstallUpdateDialog(Window owner, UpdateInformation data) {
-		super(owner, LocalizationData.get("Update.Dowloading.title"), data);
+		super(owner, LocalizationData.get("Update.Downloading.title"), data);
 	}
 
 	@Override
@@ -59,28 +65,55 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 	}
 
 	// A SwingWorker that performs the update availability check
-	class DownloadSwingWorker extends SwingWorker<String, Integer> {
+	class DownloadSwingWorker extends SwingWorker<Boolean, Integer> {
 		private Window owner;
+		private long downloaded;
+		private int lastProgress;
 
 		DownloadSwingWorker(Window owner) {
 			this.owner = owner;
+			this.lastProgress = 0;
+			this.downloaded = 0;
 		}
 		
 		@Override
-		protected String doInBackground() throws Exception {
-			int last = 0;
+		protected Boolean doInBackground() throws Exception {
 			File destinationFolder = Portable.getUpdateFileDirectory();
 			// delete the destination directory
 			FileUtils.deleteDirectory(destinationFolder);
 			// create it again
 			destinationFolder.mkdirs();
 			// Store the checksum in a file in order to be able to verify the file checksum, when the application
-			// will restart
-			BufferedWriter out = new BufferedWriter(new FileWriter(new File(destinationFolder, "checksum.txt")));
-			out.write(data.getAutoUpdateCheckSum());
-			out.flush();
-			out.close();
+			// will restart ... not useful
+//			BufferedWriter out = new BufferedWriter(new FileWriter(new File(destinationFolder, "checksum.txt")));
+//			out.write(data.getAutoUpdateCheckSum());
+//			out.flush();
+//			out.close();
 			
+			// Download the files
+			boolean ok = false;
+			String zipChck = download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
+			if (NullUtils.areEquals(zipChck, data.getAutoUpdateCheckSum())) {
+				String updaterChck = download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
+				ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
+			}
+
+			if (this.isCancelled() || !ok) FileUtils.deleteDirectory(destinationFolder);
+			if (this.isCancelled()) return null;
+			if (!ok) throw new IOException("invalid checksum");
+			return Boolean.TRUE;
+		}
+				
+		private void progress(int size) {
+			downloaded += size;
+			int percent = (int) (downloaded*100/(data.getAutoUpdateSize()+data.getAutoUpdaterSize()));
+			if (percent>lastProgress) {
+				this.publish(percent);
+				lastProgress = percent;
+			}
+		}
+		
+		private String download(URL url, File file) throws UnknownHostException, IOException {
 			// First, create a digest to verify the checksum
 	  	MessageDigest digest;
 			try {
@@ -88,44 +121,59 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 			} catch (NoSuchAlgorithmException e) {
 				throw new RuntimeException(e);
 			}
-			// Download the file
-			InputStream in = data.getAutoUpdateURL().openConnection(Preferences.INSTANCE.getHttpProxy()).getInputStream();
+			InputStream in = url.openConnection(Preferences.INSTANCE.getHttpProxy()).getInputStream();
 			byte[] buffer = new byte[2048];
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(destinationFolder,"update.zip")), buffer.length);
-			long totalSize = 0;
-			last = 0;
-			int size;
-			while ((size = in.read(buffer, 0, buffer.length)) != -1) {
-				if (this.isCancelled()) break;
-				bos.write(buffer, 0, size);
-				totalSize += size;
-				if (size>0) digest.update(buffer, 0, size);
-				int percent = (int) (totalSize*100/data.getAutoUpdateSize());
-				if (percent>last) {
-					this.publish(percent);
-					last = percent;
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file), buffer.length);
+			try {
+				int size;
+				while ((size = in.read(buffer, 0, buffer.length)) != -1) {
+					if (this.isCancelled()) break;
+					bos.write(buffer, 0, size);
+					if (size>0) {
+						digest.update(buffer, 0, size);
+						progress(size);
+					}
 				}
+			} finally {
+				bos.flush();
+				bos.close();
 			}
-			bos.flush();
-			bos.close();
-			if (this.isCancelled()) {
-				FileUtils.deleteDirectory(destinationFolder);
-				return null;
-			} else {
-				return CheckSum.toString(digest.digest());
-			}
+			return CheckSum.toString(digest.digest());
 		}
 		
 		public void done() {
 			InstallUpdateDialog.this.setVisible(false);
 			try {
-				System.out.println("downloaded : "+this.get()+". expected : "+data.getAutoUpdateCheckSum());
+				if (this.get()!=null) { // If download wasn't cancelled
+					if (this.get()) { // download is ok
+						String message = MessageFormat.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
+						String ok = LocalizationData.get("GenericButton.ok");
+						JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION,
+								JOptionPane.INFORMATION_MESSAGE, null, new String[]{ok}, ok);
+						// I've thinked about adding here a shutdown hook to uncompress the downloaded zip file,
+						// but it seems it's not really safe, as it would occur in a very critical time
+						// for the JVM (see Shutdown hook documentation)
+						// I prefer to use the "standard" MainFrame close job.
+						MainFrame.updater = getUpdaterFile();
+					} else {
+						askRetry();
+					}
+				}
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				askRetry();
 			}
+		}
+
+		private File getUpdaterFile() {
+			return new File(Portable.getUpdateFileDirectory(),"updater.jar");
+		}
+
+		private void askRetry() {
+			String cancel = LocalizationData.get("GenericButton.cancel");
+			int choice = JOptionPane.showOptionDialog(owner, LocalizationData.get("Update.DownloadFailed.message"), LocalizationData.get("Update.DownloadFailed.title"),
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, new String[]{cancel, LocalizationData.get("Update.DownloadFailed.retry")}, cancel);
+			System.out.println (choice);
 		}
 
 		@Override
