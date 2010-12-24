@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -39,7 +40,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 	@Override
 	protected JPanel createCenterPane() {
 		waitPanel = new WaitPanel();
-		waitPanel.setMessage(LocalizationData.get("Update.Downloading.message"));
+		waitPanel.setMessage(MessageFormat.format(LocalizationData.get("Update.Downloading.message"),data.getLastestRelease().toString()));
 		waitPanel.setIndeterminate(false);
 		waitPanel.setMaximum(100);
 		return waitPanel;
@@ -130,11 +131,8 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 		@Override
 		protected void process(List<Integer> chunks) {
 			Integer value = chunks.get(chunks.size()-1);
-//			System.out.println ("PUBLISHED:"+value);
 			waitPanel.setValue(value);
 		}
-		
 	}
-
 
 }
