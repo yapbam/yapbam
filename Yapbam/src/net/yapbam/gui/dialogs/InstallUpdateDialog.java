@@ -2,10 +2,8 @@ package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
 import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -40,7 +38,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 
 	@Override
 	protected SwingWorker<?, ?> getWorker() {
-		return new DownloadSwingWorker(this);
+		return new DownloadSwingWorker(this.getOwner());
 	}
 
 	@Override
@@ -150,10 +148,10 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 						String ok = LocalizationData.get("GenericButton.ok");
 						JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION,
 								JOptionPane.INFORMATION_MESSAGE, null, new String[]{ok}, ok);
-						// I've thinked about adding here a shutdown hook to uncompress the downloaded zip file,
+						// I've thought about adding here a shutdown hook to uncompress the downloaded zip file,
 						// but it seems it's not really safe, as it would occur in a very critical time
 						// for the JVM (see Shutdown hook documentation)
-						// I prefer to use the "standard" MainFrame close job.
+						// I prefered to use the "standard" MainFrame close job.
 						MainFrame.updater = getUpdaterFile();
 					} else {
 						askRetry();
@@ -182,5 +180,4 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 			waitPanel.setValue(value);
 		}
 	}
-
 }
