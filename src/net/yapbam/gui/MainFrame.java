@@ -103,13 +103,7 @@ public class MainFrame extends JFrame implements DataListener {
 					if ((updater!=null) && updater.exists() && updater.isFile()) {
 						// If an update is available
 						// The update will be done by a external program, as changing a jar on the fly
-						// may lead to serious problems.
-//						Enumeration<Object> keys = System.getProperties().keys();
-//						while (keys.hasMoreElements()) {
-//							String key = (String) keys.nextElement();
-//							System.out.println (key+" = "+System.getProperty(key));
-//						}
-						
+						// may lead to serious problems.					
 						ArrayList<String> command = new ArrayList<String>();
 						command.add(System.getProperty("java.home")+"/bin/java");
 						command.add("-jar");
@@ -118,13 +112,13 @@ public class MainFrame extends JFrame implements DataListener {
 						ProcessBuilder builder = new ProcessBuilder(command);
 						try {
 							Process process = builder.start();
-							BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+/*							BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 							for (String line = err.readLine(); line!=null; line = err.readLine()) {
 								System.err.println (line);
-							}
+							}*/
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							e.printStackTrace(); //TODO
 						}
 					}
 					
