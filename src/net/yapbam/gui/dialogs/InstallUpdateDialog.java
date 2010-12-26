@@ -171,7 +171,9 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 			String cancel = LocalizationData.get("GenericButton.cancel");
 			int choice = JOptionPane.showOptionDialog(owner, LocalizationData.get("Update.DownloadFailed.message"), LocalizationData.get("Update.DownloadFailed.title"),
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, new String[]{cancel, LocalizationData.get("Update.DownloadFailed.retry")}, cancel);
-			System.out.println (choice);
+			if (choice==1) {
+				//TODO (retry)
+			}
 		}
 
 		@Override
