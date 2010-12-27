@@ -36,22 +36,22 @@ public class Updater {
 			//
 			while ((entry = zis.getNextEntry()) != null) {
 				File target = new File(installDirectory, entry.getName());
-//				if (entry.isDirectory()) {
-//					if (target.isFile()) target.delete();
-//					target.mkdirs();
-//				} else {
-//					int size;
-//					byte[] buffer = new byte[2048];
-//					if (target.isDirectory()) FileUtils.deleteDirectory(target);
-//					FileOutputStream fos = new FileOutputStream(target);
-//					BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
-//					while ((size = zis.read(buffer, 0, buffer.length)) != -1) {
-//						bos.write(buffer, 0, size);
-//					}
-//					bos.flush();
-//					bos.close();
-//				}
-//				if (entry.getName().endsWith(".sh")) target.setExecutable(true);
+				if (entry.isDirectory()) {
+					if (target.isFile()) target.delete();
+					target.mkdirs();
+				} else {
+					int size;
+					byte[] buffer = new byte[2048];
+					if (target.isDirectory()) FileUtils.deleteDirectory(target);
+					FileOutputStream fos = new FileOutputStream(target);
+					BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
+					while ((size = zis.read(buffer, 0, buffer.length)) != -1) {
+						bos.write(buffer, 0, size);
+					}
+					bos.flush();
+					bos.close();
+				}
+				if (entry.getName().endsWith(".sh")) target.setExecutable(true);
 				JOptionPane.showMessageDialog(null, "Unzipped: " + (entry.isDirectory()?"directory ":"file ")+entry.getName()+" to "+target); //TODO
 			}
 			zis.close();

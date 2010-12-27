@@ -12,12 +12,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.Preferences;
@@ -71,41 +74,49 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 		DownloadSwingWorker(Window owner) {
 			this.owner = owner;
 			this.lastProgress = 0;
-			this.downloaded = 0;
 		}
 		
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			File destinationFolder = Portable.getUpdateFileDirectory();
-			// delete the destination directory
-			FileUtils.deleteDirectory(destinationFolder);
-			// create it again
-			destinationFolder.mkdirs();
-			// Store the checksum in a file in order to be able to verify the file checksum, when the application
-			// will restart ... not useful
-//			BufferedWriter out = new BufferedWriter(new FileWriter(new File(destinationFolder, "checksum.txt")));
-//			out.write(data.getAutoUpdateCheckSum());
-//			out.flush();
-//			out.close();
-			
-			// Download the files
-			boolean ok = false;
-			String zipChck = download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
-			if (NullUtils.areEquals(zipChck, data.getAutoUpdateCheckSum())) {
-				String updaterChck = download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
-				ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
-			}
+			while (true) {
+				try {
+					this.downloaded = 0;
+					File destinationFolder = Portable.getUpdateFileDirectory();
+					// delete the destination directory
+					FileUtils.deleteDirectory(destinationFolder);
+					// create it again
+					destinationFolder.mkdirs();
+					// Store the checksum in a file in order to be able to verify the file checksum, when the application
+					// will restart ... not useful
+//					BufferedWriter out = new BufferedWriter(new FileWriter(new File(destinationFolder, "checksum.txt")));
+//					out.write(data.getAutoUpdateCheckSum());
+//					out.flush();
+//					out.close();
+					
+					// Download the files
+					boolean ok = false;
+					String zipChck = download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
+					if (NullUtils.areEquals(zipChck, data.getAutoUpdateCheckSum())) {
+						String updaterChck = download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
+						ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
+					}
 
-			if (this.isCancelled() || !ok) FileUtils.deleteDirectory(destinationFolder);
-			if (this.isCancelled()) return null;
-			if (!ok) throw new IOException("invalid checksum");
-			return Boolean.TRUE;
+					if (this.isCancelled() || !ok) FileUtils.deleteDirectory(destinationFolder);
+					if (this.isCancelled()) return null;
+					if (!ok) throw new IOException("invalid checksum");
+					return Boolean.TRUE;
+				} catch (Exception e) {
+					DoShowDialog doShowDialog = new DoShowDialog();
+					SwingUtilities.invokeAndWait(doShowDialog);
+					if (!doShowDialog.proceedConfirmed) return null;
+				}
+			}
 		}
 				
 		private void progress(int size) {
 			downloaded += size;
 			int percent = (int) (downloaded*100/(data.getAutoUpdateSize()+data.getAutoUpdaterSize()));
-			if (percent>lastProgress) {
+			if (percent!=lastProgress) {
 				this.publish(percent);
 				lastProgress = percent;
 			}
@@ -142,7 +153,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 		public void done() {
 			InstallUpdateDialog.this.setVisible(false);
 			try {
-				if (this.get()!=null) { // If download wasn't cancelled
+				if (this.get()!=null) { // If download wasn't canceled
 					if (this.get()) { // download is ok
 						String message = MessageFormat.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
 						String ok = LocalizationData.get("GenericButton.ok");
@@ -151,15 +162,15 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 						// I've thought about adding here a shutdown hook to uncompress the downloaded zip file,
 						// but it seems it's not really safe, as it would occur in a very critical time
 						// for the JVM (see Shutdown hook documentation)
-						// I prefered to use the "standard" MainFrame close job.
+						// I preferred to use the "standard" MainFrame close job.
 						MainFrame.updater = getUpdaterFile();
-					} else {
-						askRetry();
 					}
 				}
+			} catch (CancellationException e) {
+				// The task has been canceled, no problem here, we just have to do ... nothing
 			} catch (InterruptedException e) {
 			} catch (ExecutionException e) {
-				askRetry();
+				ErrorManager.INSTANCE.log(e);
 			}
 		}
 
@@ -167,12 +178,15 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 			return new File(Portable.getUpdateFileDirectory(),"updater.jar");
 		}
 
-		private void askRetry() {
-			String cancel = LocalizationData.get("GenericButton.cancel");
-			int choice = JOptionPane.showOptionDialog(owner, LocalizationData.get("Update.DownloadFailed.message"), LocalizationData.get("Update.DownloadFailed.title"),
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, new String[]{cancel, LocalizationData.get("Update.DownloadFailed.retry")}, cancel);
-			if (choice==1) {
-				//TODO (retry)
+		class DoShowDialog implements Runnable {
+			boolean proceedConfirmed;
+
+			public void run() {
+				Object[] options = { LocalizationData.get("GenericButton.cancel"), LocalizationData.get("Update.DownloadFailed.retry") };
+				int n = JOptionPane.showOptionDialog(owner, LocalizationData.get("Update.DownloadFailed.message"),
+						LocalizationData.get("Update.DownloadFailed.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE,
+						null, options, options[1]);
+				proceedConfirmed = (n == 1);
 			}
 		}
 
