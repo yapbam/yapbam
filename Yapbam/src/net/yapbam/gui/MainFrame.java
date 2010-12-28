@@ -9,7 +9,6 @@ import java.io.*;
 import java.net.URI;
 import java.security.AccessControlException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -22,8 +21,6 @@ import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.welcome.WelcomeDialog;
-import net.yapbam.util.FileUtils;
-import net.yapbam.util.Portable;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
@@ -111,14 +108,15 @@ public class MainFrame extends JFrame implements DataListener {
 						System.out.println (command);
 						ProcessBuilder builder = new ProcessBuilder(command);
 						try {
+							// I've tried to remove these lines that prevent Yapbam from quitting before the end of the update
+							// Unfortunately, under ubuntu 10.10 ... it led to the update crash :-(
+							// The most strange is that it ran perfectly under eclipse under ubuntu 10.10 ... what a strange behaviour !!!
 							Process process = builder.start();
-/*							BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+							BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 							for (String line = err.readLine(); line!=null; line = err.readLine()) {
-								System.err.println (line);
-							}*/
+							}
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace(); //TODO
+							ErrorManager.INSTANCE.log(e);
 						}
 					}
 					

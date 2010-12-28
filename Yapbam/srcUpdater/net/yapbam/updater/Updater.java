@@ -15,16 +15,13 @@ import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
 public class Updater {
-	private static final String ZIP_FILE = "update.zip";
+	private static final String ZIP_FILE = "update.zip"; //$NON-NLS-1$
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String message = "<html>Hi man, welcome to the install shutdown hook.<br>";
 		File installDirectory = Portable.getLaunchDirectory();
-		message = message + "The launch directory is "+installDirectory+"</html>";
-		JOptionPane.showMessageDialog(null, message);
 		// Uncompress the zip file
 		try {
 			// Creating input stream
@@ -33,7 +30,6 @@ public class Updater {
 
 			// Read each entry from the ZipInputStream until no more entry found
 			// indicated by a null return value of the getNextEntry() method.
-			//
 			while ((entry = zis.getNextEntry()) != null) {
 				File target = new File(installDirectory, entry.getName());
 				if (entry.isDirectory()) {
@@ -51,13 +47,12 @@ public class Updater {
 					bos.flush();
 					bos.close();
 				}
-				if (entry.getName().endsWith(".sh")) target.setExecutable(true);
-				JOptionPane.showMessageDialog(null, "Unzipped: " + (entry.isDirectory()?"directory ":"file ")+entry.getName()+" to "+target); //TODO
+				if (entry.getName().endsWith(".sh")) target.setExecutable(true); //$NON-NLS-1$
 			}
 			zis.close();
-			JOptionPane.showMessageDialog(null,"Yapbam has been successfully updated");
+			JOptionPane.showMessageDialog(null,Messages.getString("Updater.Install.success")); //$NON-NLS-1$
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,"<html>An unexpected error has occured.<br>Maybe, your Yapbam copy is corrupted.<br>We strongly recommend you to reinstall Yapbam from the official download site : http://www.yapbam.net</html>");
+			JOptionPane.showMessageDialog(null,Messages.getString("Updater.Install.failure")); //$NON-NLS-1$
 		}
 		FileUtils.deleteDirectory(Portable.getUpdateFileDirectory());
 	}
