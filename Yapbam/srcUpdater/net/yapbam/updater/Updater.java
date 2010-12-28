@@ -21,6 +21,7 @@ public class Updater {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+//		try {
 		File installDirectory = Portable.getLaunchDirectory();
 		// Uncompress the zip file
 		try {
@@ -50,10 +51,13 @@ public class Updater {
 				if (entry.getName().endsWith(".sh")) target.setExecutable(true); //$NON-NLS-1$
 			}
 			zis.close();
-			JOptionPane.showMessageDialog(null,Messages.getString("Updater.Install.success")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(null,Messages.getString("Update.Install.success")); //$NON-NLS-1$
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,Messages.getString("Updater.Install.failure")); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(null,Messages.getString("Update.Install.failure"),Messages.getString("Update.Install.title"),JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		FileUtils.deleteDirectory(Portable.getUpdateFileDirectory());
+//		} catch (Throwable e) {
+//			JOptionPane.showMessageDialog(null, "Exception "+e);
+//		}
 	}
 }
