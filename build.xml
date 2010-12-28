@@ -13,7 +13,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.7.5"/>
+	<property name="yapbamVersion" value="0.7.6.a1"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -28,6 +28,9 @@
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
 		<javac srcdir="srcUpdater" sourcepath="src" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" />
+		<copy todir="releaseCompile">
+	    	<fileset dir="srcUpdater" excludes="**/*.java"/>
+		</copy>
 		<jar destfile="updater.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.updater.Updater"/>
@@ -36,8 +39,8 @@
 		</jar>
 		<delete dir="releaseCompile"/>
 		<!-- Computes the checksum of the file -->
-		<checksum file="updater.jar" property="zip.checksum"/>
-		<echo message="updater.jar checksum=${zip.checksum}"/>
+		<checksum file="updater.jar" property="updater.checksum"/>
+		<echo message="updater.jar checksum=${updater.checksum}"/>
 	</target>
 	
 	<target name="commonBuild">
