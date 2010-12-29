@@ -112,7 +112,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 		group.add(getAskMe());
 		int period = Preferences.INSTANCE.getAutoUpdatePeriod();
 		days.setValue(Math.max(0, period));
-		(Preferences.INSTANCE.getAutoUpdateSilentFail()?getAskMe():getAutoInstall()).setSelected(true);
+		(Preferences.INSTANCE.getAutoUpdateInstall()?getAutoInstall():getAskMe()).setSelected(true);
 		if (period>=0) getAuto().setSelected(true);		
 	}
 	
@@ -191,7 +191,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 			}
 			step = days.getValue().intValue();
 		}
-		Preferences.INSTANCE.setAutoUpdate(step, false);
+		Preferences.INSTANCE.setAutoUpdate(step, getAutoInstall().isSelected());
 		return false;
 	}
 

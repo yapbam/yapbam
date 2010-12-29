@@ -35,9 +35,12 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 	private static final long serialVersionUID = 1L;
 
 	private WaitPanel waitPanel;
+	private boolean auto;
 
-	public InstallUpdateDialog(Window owner, UpdateInformation data) {
+	public InstallUpdateDialog(Window owner, boolean auto, UpdateInformation data) {
 		super(owner, LocalizationData.get("Update.Downloading.title"), data);
+		this.auto = auto;
+		if (auto) setDelay(Long.MAX_VALUE);
 	}
 
 	@Override
@@ -56,13 +59,11 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 
 	@Override
 	protected Object buildResult() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -107,9 +108,11 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 					if (!ok) throw new IOException("invalid checksum");
 					return Boolean.TRUE;
 				} catch (Exception e) {
-					DoShowDialog doShowDialog = new DoShowDialog();
-					SwingUtilities.invokeAndWait(doShowDialog);
-					if (!doShowDialog.proceedConfirmed) return null;
+					if (!auto) {
+						DoShowDialog doShowDialog = new DoShowDialog();
+						SwingUtilities.invokeAndWait(doShowDialog);
+						if (!doShowDialog.proceedConfirmed) return null;
+					}
 				}
 			}
 		}
@@ -163,7 +166,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 						MainFrame.updater = getUpdaterFile();
 						// Display message to inform the user that the download is completed
 						String message = MessageFormat.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
-						Object[] options = {LocalizationData.get("GenericButton.ok"), LocalizationData.get("Update.Downloaded.quitNow")};
+						Object[] options = {LocalizationData.get("GenericButton.close"), LocalizationData.get("Update.Downloaded.quitNow")};
 						int choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION,
 								JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 						if (choice==1) {

@@ -43,7 +43,7 @@ public class Preferences {
 	private static final String PROXY = "proxy"; //$NON-NLS-1$
 	private static final String PROXY_AUTHENTICATION = "proxy_pass"; //$NON-NLS-1$
 	private static final String AUTO_UPDATE_PERIOD = "auto_update_period"; //$NON-NLS-1$
-	private static final String AUTO_UPDATE_SILENT_FAIL	= "auto_update_silent_fail"; //$NON-NLS-1$
+	private static final String AUTO_UPDATE_INSTALL	= "auto_update_install"; //$NON-NLS-1$
 	private static final String EXPERT_MODE = "expert_mode"; //$NON-NLS-1$
 	private static final String WELCOME_DIALOG_ALLOWED = "welcome_dialog_enabled";
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
@@ -259,21 +259,21 @@ public class Preferences {
 		}
 	}
 	
-	public boolean getAutoUpdateSilentFail() {
+	public boolean getAutoUpdateInstall() {
 		try {
-			return Boolean.parseBoolean(this.properties.getProperty(AUTO_UPDATE_SILENT_FAIL));
+			return Boolean.parseBoolean(this.properties.getProperty(AUTO_UPDATE_INSTALL));
 		} catch (Exception e) {
 			return false;
 		}
 	}
 	
-	/** Sets the autoupdate period
+	/** Sets the autoupdate instructions
 	 * @param days number of days between two new versions checks (a negative number means "no auto check")
-	 * @param silentFail true if a communication problem during auto check may be silent. false to have an error dialog displayed.
+	 * @param autoInstall true if the update must be automatically installed.
 	 */
-	public void setAutoUpdate(int days, boolean silentFail) {
+	public void setAutoUpdate(int days, boolean autoInstall) {
 		this.properties.setProperty(AUTO_UPDATE_PERIOD, Integer.toString(days));
-		this.properties.setProperty(AUTO_UPDATE_SILENT_FAIL, Boolean.toString(silentFail));
+		this.properties.setProperty(AUTO_UPDATE_INSTALL, Boolean.toString(autoInstall));
 	}
 
 	static PlugInContainer[] getPlugins() {
