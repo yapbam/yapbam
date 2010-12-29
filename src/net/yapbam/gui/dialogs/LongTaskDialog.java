@@ -4,7 +4,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import net.yapbam.gui.LocalizationData;
@@ -25,6 +24,7 @@ public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 	private long setVisibleTime;
 	private long delay;
 	private SwingWorker<?, ?> worker;
+	private SwingWorker<Object, Void> showWorker;
 
 	/** Constructor.
 	 * @param owner The dialog owner
@@ -61,10 +61,9 @@ public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 			this.worker = getWorker();
 			worker.execute();
 			// Start a thread that will delay the dialog display 
-			new SwingWorker<Object, Void>() {
+			this.showWorker = new SwingWorker<Object, Void>() {
 				@Override
 				protected Object doInBackground() throws Exception {
-					//FIXME A big problem here : if you set the delay to MAX_LONG, the thread ... and the application never stops
 					Thread.sleep(delay);
 					return null;
 				}
@@ -76,8 +75,10 @@ public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 						doShow();
 					}
 				}
-			}.execute();
+			};
+			this.showWorker.execute();
 		} else { // If the dialog is closed
+			if (this.showWorker!=null) this.showWorker.cancel(true);
 			long delay = MINIMUM_TIME_VISIBLE-(System.currentTimeMillis()-this.setVisibleTime);
 			try {
 				if (delay>0) { // If the dialog is display for less than 500 ms, wait for the user to see what happens ;-)
@@ -94,30 +95,5 @@ public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 	private void doShow() {
 		LongTaskDialog.this.setVisibleTime = System.currentTimeMillis(); // Remember when the dialog was displayed
 		super.setVisible(true);
-	}
-
-	@Override
-	protected JPanel createCenterPane() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Object buildResult() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected String getOkDisabledCause() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void dispose() {
-		System.out.println ("dispose is called on "+this); //TODO
-		worker.cancel(true);
-		super.dispose();
 	}
 }
