@@ -1,6 +1,7 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
+import java.awt.event.WindowEvent;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -155,15 +156,24 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 			try {
 				if (this.get()!=null) { // If download wasn't canceled
 					if (this.get()) { // download is ok
-						String message = MessageFormat.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
-						String ok = LocalizationData.get("GenericButton.ok");
-						JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION,
-								JOptionPane.INFORMATION_MESSAGE, null, new String[]{ok}, ok);
 						// I've thought about adding here a shutdown hook to uncompress the downloaded zip file,
 						// but it seems it's not really safe, as it would occur in a very critical time
 						// for the JVM (see Shutdown hook documentation)
 						// I preferred to use the "standard" MainFrame close job.
 						MainFrame.updater = getUpdaterFile();
+						// Display message to inform the user that the download is completed
+						String message = MessageFormat.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
+						Object[] options = {LocalizationData.get("GenericButton.ok"), LocalizationData.get("Update.Downloaded.quitNow")};
+						int choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION,
+								JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+						if (choice==1) {
+							// There could be some dialogs showing at this time (for instance, at launch time, the welcome screen could be displayed)
+							// We should close them or the application will never quit
+							for (Window window : owner.getOwnedWindows()) {
+								window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+							}
+							owner.dispatchEvent(new WindowEvent(owner, WindowEvent.WINDOW_CLOSING));
+						}
 					}
 				}
 			} catch (CancellationException e) {

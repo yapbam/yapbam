@@ -14,6 +14,9 @@ import javax.swing.JOptionPane;
 import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
+/** This class install the Yapbam updates.
+ * <BR>Basically, it just extracts a zip file into the lauch directory.
+ */
 public class Updater {
 	private static final String ZIP_FILE = "update.zip"; //$NON-NLS-1$
 
