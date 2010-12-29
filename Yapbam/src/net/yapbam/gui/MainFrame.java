@@ -39,9 +39,7 @@ public class MainFrame extends JFrame implements DataListener {
 	
 	/** The updater jar file. If this attribute is not null, the jar it contains will be executed when
 	 * the application quits.
-	 * <br>The jar file will be executed by the same JVM than the current Yapbam instance.
-	 * Be aware that the updater may absolutely output nothing to stderr and std out
-	 * see http://www.javaworld.com/jw-12-2000/jw-1229-traps.html 
+	 * <br>The jar file will be executed by a new instance of the same JVM than the current Yapbam instance.
 	 */
 	public static File updater = null;
 
@@ -69,6 +67,7 @@ public class MainFrame extends JFrame implements DataListener {
 			public void run() {
 				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
 				CheckNewReleaseAction.doAutoCheck(frame);
+				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame).setVisible(true);
 			}
 		});
 	}
@@ -80,7 +79,6 @@ public class MainFrame extends JFrame implements DataListener {
 	    //Create and set up the window.
 		super();
 		
-		boolean restart = restartData!=null;
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("yapbam_16.png")));
 		this.setMinimumSize(new Dimension(800,400));
 
@@ -96,6 +94,8 @@ public class MainFrame extends JFrame implements DataListener {
 				} else if (SaveManager.MANAGER.verify(frame)) {
 					YapbamState.save(frame);
 					Preferences.INSTANCE.save();
+					super.windowClosing(event);
+					frame.dispose();
 					
 					if ((updater!=null) && updater.exists() && updater.isFile()) {
 						// If an update is available
@@ -111,6 +111,7 @@ public class MainFrame extends JFrame implements DataListener {
 							// I've tried to remove these lines that prevent Yapbam from quitting before the end of the update
 							// Unfortunately, under ubuntu 10.10 ... it led to the update crash :-(
 							// The most strange is that it ran perfectly under eclipse under ubuntu 10.10 ... what a strange behaviour !!!
+							// see also http://www.javaworld.com/jw-12-2000/jw-1229-traps.html 
 							Process process = builder.start();
 							BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 							for (String line = err.readLine(); line!=null; line = err.readLine()) {
@@ -119,9 +120,6 @@ public class MainFrame extends JFrame implements DataListener {
 							ErrorManager.INSTANCE.log(e);
 						}
 					}
-					
-					super.windowClosing(event);
-					frame.dispose();
 				}
 			}
 		});
@@ -181,8 +179,6 @@ public class MainFrame extends JFrame implements DataListener {
 
 		// Display the window.
 		setVisible(true);
-		
-		if (Preferences.INSTANCE.isWelcomeAllowed() && !restart) new WelcomeDialog(this).setVisible(true);
 	}
 	
 	void readData(URI uri) throws IOException {

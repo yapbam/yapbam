@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutionException;
  * It has some specific features :
  * <UL><LI>It shows with a delay, if the search completes during this time, the dialog is not displayed, and the results is.</LI>
  * <LI>Once it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay.</LI></UL>
+ * This url could be a useful reading to understand this class : http://java.sun.com/docs/books/tutorial/uiswing/concurrency/index.html
  */
 public class CheckUpdateDialog extends LongTaskDialog<Void> {
 	private boolean auto;
