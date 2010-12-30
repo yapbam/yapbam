@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -17,6 +18,7 @@ import javax.swing.UIManager;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.widget.HTMLPane;
 import javax.swing.JSeparator;
@@ -27,12 +29,17 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import net.yapbam.gui.widget.IntegerWidget;
 
 @SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
+	private static final String BUNDLE_NAME = "net.yapbam.gui.welcome.urls"; //$NON-NLS-1$
 
 	private JCheckBox showAtStartup;
 	private IntegerWidget tipNumber;
@@ -43,11 +50,27 @@ public class WelcomePanel extends JPanel {
 	private JButton previousTip;
 	private JButton firstTip;
 	private int currentTip;
-
+	private ResourceBundle urlsResourceBundle;
+		
+	private URI getURI(String key) {
+		try {
+			String uriString = urlsResourceBundle.getString(key);
+			if (uriString.startsWith("http:")) return new URI(uriString);
+			return new File(uriString).toURI();
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	/**
 	 * Create the panel.
 	 */
 	public WelcomePanel(final GlobalData data) {
+		Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
+		Locale.setDefault(Preferences.INSTANCE.getLocale());
+		urlsResourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
+		Locale.setDefault(oldDefault);
+		
 		tips = new TipManager();
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -107,7 +130,7 @@ public class WelcomePanel extends JPanel {
 		gbl_shortcutsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		shortcutsPanel.setLayout(gbl_shortcutsPanel);
 		
-		final File file = new File("Other/samples/YapbamDataSample_"+(LocalizationData.getLocale().getLanguage().equals("fr")?"fr":"en")+".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		final File file = new File(getURI("sampleFile")); //$NON-NLS-1$
 		final JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -134,6 +157,7 @@ public class WelcomePanel extends JPanel {
 		shortcutsPanel.add(btnOpenSampleData, gbc_btnOpenSampleData);
 		
 		JButton btnViewTheTutorial = new JButton(LocalizationData.get("Welcome.tutorial")); //$NON-NLS-1$
+		btnViewTheTutorial.addActionListener(new URIClienthandler(getURI("tutorial"))); //$NON-NLS-1$
 		btnViewTheTutorial.setToolTipText(LocalizationData.get("Welcome.tutorial.tooltip")); //$NON-NLS-1$
 		btnViewTheTutorial.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_btnViewTheTutorial = new GridBagConstraints();
@@ -146,6 +170,7 @@ public class WelcomePanel extends JPanel {
 		shortcutsPanel.add(btnViewTheTutorial, gbc_btnViewTheTutorial);
 		
 		JButton faq = new JButton(LocalizationData.get("Welcome.faq")); //$NON-NLS-1$
+		faq.addActionListener(new URIClienthandler(getURI("faq"))); //$NON-NLS-1$
 		faq.setHorizontalAlignment(SwingConstants.LEFT);
 		faq.setToolTipText(LocalizationData.get("Welcome.faq.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_faq = new GridBagConstraints();
@@ -293,6 +318,24 @@ public class WelcomePanel extends JPanel {
 		
 		currentTip = -1; // Just to ensure the tip will be displayed (if we omit this line and tip is the first, setTip would think the tip hasn't change)
 		setTip(tips.getRandom());
+	}
+	
+	private static final class URIClienthandler implements ActionListener {
+		private URI uri;
+
+		private URIClienthandler(URI uri) {
+			this.uri = uri;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			try {
+				Desktop.getDesktop().browse(uri);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void setTipSelectionButtonSize(JButton button) {
