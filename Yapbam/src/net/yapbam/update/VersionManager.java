@@ -60,7 +60,7 @@ public class VersionManager {
 			if (serialNumber!=null) url.append("&id=").append(URLEncoder.encode(serialNumber,"UTF-8"));
 			return new URL(url.toString());
 		} catch (Exception e) {
-			ErrorManager.INSTANCE.log(e);
+			ErrorManager.INSTANCE.log(null,e);
 			return null;
 		}
 	}

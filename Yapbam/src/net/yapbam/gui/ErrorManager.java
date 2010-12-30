@@ -1,36 +1,107 @@
 package net.yapbam.gui;
 
 import java.awt.Component;
+import java.awt.Window;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
 import javax.swing.JOptionPane;
 
 import net.yapbam.gui.dialogs.ErrorDialog;
 
+/** This class is responsible for handling errors.
+ */
 public class ErrorManager {
+	/** The instance of this class.*/
 	public static final ErrorManager INSTANCE = new ErrorManager();
 	
 	private ErrorManager() {}
 
+	/** Displays a standard dialog to signal an error.
+	 * <br>Note that the throwable instance is not logged (transmitted to yapbam team). 
+	 * @param parent The dialog's parent component
+	 * @param t the exception that occurred
+	 */
 	public void display(Component parent, Throwable t) {
-		//TODO Let see if this method remains useful
 		display (parent, t, LocalizationData.get("ErrorManager.message")); //$NON-NLS-1$
 	}
 
+	/** Displays a dialog to signal an error.
+	 * <br>Note that the throwable instance is not logged (transmitted to yapbam team). 
+	 * @param parent The dialog's parent component
+	 * @param t the exception that occurred
+	 * @param message The dialog message
+	 */
 	public void display(Component parent, Throwable t, String message) {
-		//TODO Let see if this method remains useful
 		JOptionPane.showMessageDialog(parent, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 	}
 	
-	public void log(Throwable t) {
-		System.err.println("An exception was catched by "+this.getClass().getName());		
-		t.printStackTrace();
-		//TODO Probably need to ensure that only one dialog could be opened at a time
-		ErrorDialog errorDialog = new ErrorDialog(null, t);
-		errorDialog.setVisible(true);
-		if (errorDialog.getResult()!=null) {
-			System.out.println ("TODO : The report is not sent");
-			//TODO send message to Yapbam
+	/** Logs a throwable (send it to Yapbam, if the user allowed it).
+	 * <br>This should be used to handle every unexpected errors.
+	 * @param parent The dialog's parent window (used to ask the user if he allows or now to send crash report to Yapbam team).
+	 * @param t the exception that occurred
+	 */
+	public void log(Window parent, Throwable t) {
+		try {
+			//TODO have a look in the preferences to see if we need to ask the user the permission to send a crash report
+			System.err.println("Exception "+t+" was catched by "+this.getClass().getName());		
+			ErrorDialog errorDialog = new ErrorDialog(parent, t);
+			errorDialog.setVisible(true);
+			Object result = errorDialog.getResult();
+			errorDialog.dispose(); //Don't remove this line, it would prevent Yapbam from quit !!!
+			if (result!=null) {
+				postToYapbam(t);
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+			// Ok ... the logging process failed.
+			// At this point, there's nothing to do.
 		}
-		errorDialog.dispose(); //Don't remove this line, it would prevent Yapbam from quit !!!
+	}
+	
+	private void postToYapbam(Throwable t) throws IOException {
+		// Construct data
+		StringWriter writer = new StringWriter();
+		t.printStackTrace(new PrintWriter(writer));
+		String trace = writer.getBuffer().toString();
+		System.out.println (trace);
+		String data = URLEncoder.encode("throwable", "UTF-8") + "=" + URLEncoder.encode(trace, "UTF-8");
+//		data += "&" + URLEncoder.encode("key2", "UTF-8") + "=" + URLEncoder.encode("value2", "UTF-8");
+		
+		// Send data
+		URL url = new URL("http://www.yapbam.net/crashReport.php");
+		URLConnection conn = url.openConnection();
+		conn.setDoOutput(true);
+		OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+		try {
+			wr.write(data);
+			wr.flush();
+			
+			// Get the response
+			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			try {
+				for (String line = rd.readLine(); line != null; line = rd.readLine()) {
+					// Process line...
+					System.out.println (line); //TODO
+				}
+			} finally {
+				rd.close();
+			}
+		} finally {
+			wr.close();
+		}
+	}
+	
+	public static void main (String[] args) {
+		INSTANCE.log(null, new RuntimeException("just a test")); //TODO
 	}
 }

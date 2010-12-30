@@ -120,7 +120,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void> {
 						String message = MessageFormat.format(pattern, cause, VersionManager.YABAM_HOME_URL);
 						JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 					} else {
-						ErrorManager.INSTANCE.log(cause);
+						ErrorManager.INSTANCE.log(owner,cause);
 					}
 				}
 			}

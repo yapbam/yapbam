@@ -186,7 +186,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 				// The task has been canceled, no problem here, we just have to do ... nothing
 			} catch (InterruptedException e) {
 			} catch (ExecutionException e) {
-				ErrorManager.INSTANCE.log(e);
+				ErrorManager.INSTANCE.log(owner,e);
 			}
 		}
 
