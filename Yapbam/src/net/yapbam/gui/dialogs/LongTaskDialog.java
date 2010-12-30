@@ -70,8 +70,10 @@ public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 
 				@Override
 				protected void done() {
-					super.done();
-					if (!worker.isDone()) {
+					// This method is called when the showWorker end.
+					// This means it is time to display the dialog.
+					if (!worker.isDone()) { // If the task is not finished (please note we task the main task of the dialog, not the "display timer" task)
+						// If main task not ended, show the dialog
 						doShow();
 					}
 				}
@@ -81,7 +83,7 @@ public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 			if (this.showWorker!=null) this.showWorker.cancel(true);
 			long delay = MINIMUM_TIME_VISIBLE-(System.currentTimeMillis()-this.setVisibleTime);
 			try {
-				if (delay>0) { // If the dialog is display for less than 500 ms, wait for the user to see what happens ;-)
+				if (delay>0) { // If the dialog is displayed for less than 500 ms, wait for the user to see what happens ;-)
 					Thread.sleep(delay);
 				}
 			} catch (InterruptedException e) {

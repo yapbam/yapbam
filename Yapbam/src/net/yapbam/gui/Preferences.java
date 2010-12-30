@@ -66,8 +66,9 @@ public class Preferences {
 				properties.load(new FileInputStream(getFile()));
 				setAuthentication();
 			} catch (Throwable e) {
-				// If there's another error, maybe it would be better to do something
-				// else //TODO
+				// If there's an error, maybe it would be better to do something
+				//TODO
+				e.printStackTrace();
 			}
 		} else {
 			// On the first run, the file doesn't exist
@@ -98,6 +99,7 @@ public class Preferences {
 			properties.store(new FileOutputStream(getFile()), "Yapbam preferences"); //$NON-NLS-1$
 		} catch (IOException e) {
 			//TODO What could we do ?
+			e.printStackTrace();
 		}
 	}
 
@@ -179,40 +181,32 @@ public class Preferences {
 	}
 
 	public String getHttpProxyUser() {
-		try {
-			String property = this.properties.getProperty(PROXY_AUTHENTICATION);
-			if (property==null) return null;
-			return new StringTokenizer(Crypto.decrypt(KEY,property),":").nextToken();
-		} catch (RuntimeException e) {
-			return null; //TODO log the exception
-		}
+		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+		if (property == null) return null;
+		return new StringTokenizer(Crypto.decrypt(KEY, property), ":").nextToken();
 	}
 	
 	public String getHttpProxyPassword() {
-		try {
-			String property = this.properties.getProperty(PROXY_AUTHENTICATION);
-			if (property==null) return null;
-			StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":");
-			tokens.nextToken();
-			return tokens.nextToken();
-		} catch (RuntimeException e) {
-			return null; //TODO log the exception
-		}
+		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
+		if (property == null) return null;
+		StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY, property), ":");
+		tokens.nextToken();
+		return tokens.nextToken();
 	}
 	
 	public void setHttpProxy(String proxyHost, int proxyPort, String user, String password) {
-		if (proxyHost==null) {
+		if (proxyHost == null) {
 			this.properties.remove(PROXY);
-	        user=null;
+			user = null;
 		} else {
-			this.properties.put(PROXY, proxyHost+":"+proxyPort);
+			this.properties.put(PROXY, proxyHost + ":" + proxyPort);
 		}
-		if (user==null) {
-	        Authenticator.setDefault(null);
-	        this.properties.remove(PROXY_AUTHENTICATION);
+		if (user == null) {
+			Authenticator.setDefault(null);
+			this.properties.remove(PROXY_AUTHENTICATION);
 		} else {
-		    this.properties.setProperty(PROXY_AUTHENTICATION, Crypto.encrypt(KEY,user+":"+password));
-		    setAuthentication();
+			this.properties.setProperty(PROXY_AUTHENTICATION, Crypto.encrypt(KEY, user + ":" + password));
+			setAuthentication();
 		}
 	}
 	
