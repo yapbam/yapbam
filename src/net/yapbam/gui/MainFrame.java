@@ -53,7 +53,7 @@ public class MainFrame extends JFrame implements DataListener {
 				try {
 					super.dispatchEvent(newEvent);
 				} catch (Throwable t) {
-					ErrorManager.INSTANCE.log (t);
+					ErrorManager.INSTANCE.log (null,t);
 				}
 			}
 		});
@@ -117,7 +117,7 @@ public class MainFrame extends JFrame implements DataListener {
 							for (String line = err.readLine(); line!=null; line = err.readLine()) {
 							}
 						} catch (IOException e) {
-							ErrorManager.INSTANCE.log(e);
+							ErrorManager.INSTANCE.log(frame, e);
 						}
 					}
 				}
@@ -151,7 +151,7 @@ public class MainFrame extends JFrame implements DataListener {
 			if (pluginContainers[i].isActivated()) this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
 			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instanciation
 				ErrorManager.INSTANCE.display(null, pluginContainers[i].getInstanciationException(), "Une erreur est survenue durant l'instanciation du plugin "+"?"); //LOCAL //TODO
-				ErrorManager.INSTANCE.log(pluginContainers[i].getInstanciationException());
+				ErrorManager.INSTANCE.log(this, pluginContainers[i].getInstanciationException());
 			}
 		}
 		this.paneledPlugins = new ArrayList<AbstractPlugIn>();

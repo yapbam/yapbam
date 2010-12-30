@@ -61,7 +61,7 @@ public abstract class DefaultListenable {
 			try {
 				listener.processEvent(event);
 			} catch (Throwable t) {
-				ErrorManager.INSTANCE.log(t);
+				ErrorManager.INSTANCE.log(null, t);
 			}
 			indent -= 2;
 		}

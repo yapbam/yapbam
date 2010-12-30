@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
@@ -320,7 +321,7 @@ public class WelcomePanel extends JPanel {
 		setTip(tips.getRandom());
 	}
 	
-	private static final class URIClienthandler implements ActionListener {
+	private final class URIClienthandler implements ActionListener {
 		private URI uri;
 
 		private URIClienthandler(URI uri) {
@@ -332,8 +333,7 @@ public class WelcomePanel extends JPanel {
 			try {
 				Desktop.getDesktop().browse(uri);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ErrorManager.INSTANCE.display(WelcomePanel.this, e);
 			}
 		}
 	}
