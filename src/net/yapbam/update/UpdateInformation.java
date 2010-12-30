@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.util.CheckSum;
 
 public class UpdateInformation {
 	private int errorCode;
@@ -35,10 +36,14 @@ public class UpdateInformation {
 			lastestRelease = new ReleaseInfo(p.getProperty("lastestRelease"));
 			updateURL = new URL(p.getProperty("updateURL"));
 			autoUpdateURL = new URL(p.getProperty("autoUpdateURL"));
-			autoUpdateCheckSum = p.getProperty("autoUpdateCHKSUM");
+			// We operate a string to byte to string conversion to prevent problems encountered
+			// with some ANT generated checksums that contained leading zeros.
+			autoUpdateCheckSum = CheckSum.toString(CheckSum.toBytes(p.getProperty("autoUpdateCHKSUM")));
 			autoUpdateSize = Long.parseLong(p.getProperty("autoUpdateSize"));
 			autoUpdaterURL = new URL(p.getProperty("autoUpdateUpdaterURL"));
-			autoUpdaterCheckSum = p.getProperty("autoUpdateUpdaterCHKSUM");
+			// We operate a string to byte to string conversion to prevent problems encountered
+			// with some ANT generated checksums that contained leading zeros.
+			autoUpdaterCheckSum = CheckSum.toString(CheckSum.toBytes(p.getProperty("autoUpdateUpdaterCHKSUM")));
 			autoUpdaterSize = Long.parseLong(p.getProperty("autoUpdateUpdaterSize"));
 		}
 	}

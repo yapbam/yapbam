@@ -70,7 +70,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void> {
 		
 		@Override
 		protected UpdateInformation doInBackground() throws Exception {
-			Thread.sleep(1000); //TODO
+//			Thread.sleep(1000); //TODO
 			return VersionManager.getUpdateInformation();
 		}
 		public void done() {

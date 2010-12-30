@@ -101,6 +101,9 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 					if (NullUtils.areEquals(zipChck, data.getAutoUpdateCheckSum())) {
 						String updaterChck = download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
 						ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
+						if (!ok) System.err.println ("ALERT checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)");
+					} else {
+						System.err.println ("ALERT checksum of "+data.getAutoUpdateURL()+" is "+zipChck+" ("+data.getAutoUpdateCheckSum()+" was expected)");
 					}
 
 					if (this.isCancelled() || !ok) FileUtils.deleteDirectory(destinationFolder);
