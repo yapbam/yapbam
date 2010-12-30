@@ -74,4 +74,17 @@ public class FileUtils {
 		}
 		return path.delete();
 	}
+
+	/** Tests whether a file is contained in a directory.
+	 * <BR>The directory and the file may not exists, the search is done on the absolute paths.
+	 * @param file The file to be tested
+	 * @param directory The tested directory
+	 * @return true if the file is contained in the directory.
+	 */
+	public static boolean isIncluded(File file, File directory) {
+		for (File parent = file.getParentFile(); parent!=null; parent = parent.getParentFile()) {
+			if (parent.equals(directory)) return true;
+		}
+		return false;
+	}
 }

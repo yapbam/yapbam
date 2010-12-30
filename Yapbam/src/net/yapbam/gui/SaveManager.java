@@ -8,6 +8,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import net.yapbam.gui.util.SafeJFileChooser;
+import net.yapbam.util.FileUtils;
+import net.yapbam.util.Portable;
 
 class SaveManager {
 	static SaveManager MANAGER = new SaveManager();
@@ -19,10 +21,10 @@ class SaveManager {
 	 */
 	boolean verify(MainFrame frame) {
 		if (frame.getData().somethingHasChanged()) { // Some modifications has not been saved
-			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")};
+			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			int n = JOptionPane.showOptionDialog(frame,
-				    LocalizationData.get("NotSavedDialog.message"),
-				    LocalizationData.get("NotSavedDialog.title"),
+				    LocalizationData.get("NotSavedDialog.message"), //$NON-NLS-1$
+				    LocalizationData.get("NotSavedDialog.title"), //$NON-NLS-1$
 				    JOptionPane.YES_NO_CANCEL_OPTION,
 				    JOptionPane.WARNING_MESSAGE,
 				    null,     //do not use a custom Icon
@@ -71,6 +73,13 @@ class SaveManager {
 
 	private boolean saveTo(MainFrame frame, URI uri) {
 		try {
+			if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
+				Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
+				String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
+				int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("saveDialog.FileExist.title"),
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
+				if (choice==0) return false;
+			}
 			frame.getData().save(uri);
 			return true;
 		} catch (Throwable e) {

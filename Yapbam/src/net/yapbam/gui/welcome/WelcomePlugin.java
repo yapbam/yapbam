@@ -7,13 +7,16 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 public class WelcomePlugin extends AbstractPlugIn {
+	private GlobalData data;
 
 	public WelcomePlugin(FilteredData data, Object restoreData) {
+		this.data = data.getGlobalData();
 	}
 
 	@Override
@@ -26,7 +29,7 @@ public class WelcomePlugin extends AbstractPlugIn {
 	}
 	
 	@SuppressWarnings("serial")
-	private static final class WelcomeAction extends AbstractAction {
+	private final class WelcomeAction extends AbstractAction {
 		WelcomeAction () {
 			super(LocalizationData.get("Welcome.menuTitle")); //$NON-NLS-1$
 	    putValue(SHORT_DESCRIPTION, LocalizationData.get("Welcome.MenuToolTip")); //$NON-NLS-1$
@@ -34,7 +37,7 @@ public class WelcomePlugin extends AbstractPlugIn {
 
     @Override
 		public void actionPerformed(ActionEvent e) {
-			new WelcomeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource())).setVisible(true);
+			new WelcomeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), data).setVisible(true);
 		}
 	}
 }

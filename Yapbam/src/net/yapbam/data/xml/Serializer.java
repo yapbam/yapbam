@@ -150,6 +150,7 @@ public class Serializer {
 	 * @see GlobalData#read(URI, String)
 	 */
 	public static void read(GlobalData data, URI uri, String password) throws IOException, AccessControlException {
+//		long start = System.currentTimeMillis();
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) {
 			InputStream is = uri.toURL().openStream();
 			boolean wasEnabled = data.isEventsEnabled();
@@ -173,6 +174,7 @@ public class Serializer {
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme());
 		}
+//		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");
 	}
 	
 	/** Gets the data about the uri (what is it version, is it encoded or etc, ...).
