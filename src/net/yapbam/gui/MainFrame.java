@@ -67,7 +67,7 @@ public class MainFrame extends JFrame implements DataListener {
 			public void run() {
 				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
 				CheckNewReleaseAction.doAutoCheck(frame);
-				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame).setVisible(true);
+				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
 			}
 		});
 	}

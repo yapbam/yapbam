@@ -9,19 +9,25 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.widget.HTMLPane;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.text.MessageFormat;
 
 import net.yapbam.gui.widget.IntegerWidget;
 
@@ -41,7 +47,7 @@ public class WelcomePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public WelcomePanel() {
+	public WelcomePanel(final GlobalData data) {
 		tips = new TipManager();
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -101,7 +107,22 @@ public class WelcomePanel extends JPanel {
 		gbl_shortcutsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		shortcutsPanel.setLayout(gbl_shortcutsPanel);
 		
-		JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
+		final File file = new File("Other/samples/YapbamDataSample_"+(LocalizationData.getLocale().getLanguage().equals("fr")?"fr":"en")+".xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		final JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
+		btnOpenSampleData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					data.read(file.toURI(), null);
+				} catch (IOException e) {
+					String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
+							file.getAbsolutePath());
+					JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(WelcomePanel.this), message,
+							LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+					btnOpenSampleData.setEnabled(false);
+				}
+			}
+		});
+		btnOpenSampleData.setEnabled((file.exists() && file.isFile() && file.canRead()));
 		btnOpenSampleData.setHorizontalAlignment(SwingConstants.LEFT);
 		btnOpenSampleData.setToolTipText(LocalizationData.get("Welcome.sampleData.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_btnOpenSampleData = new GridBagConstraints();
