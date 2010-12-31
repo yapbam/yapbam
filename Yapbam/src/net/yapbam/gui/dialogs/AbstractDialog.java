@@ -68,6 +68,8 @@ public abstract class AbstractDialog<V> extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource().equals(okButton)) {
 					result = buildResult();
+				} else {
+					cancel();
 				}
 				setVisible(false);
 			}
@@ -79,13 +81,16 @@ public abstract class AbstractDialog<V> extends JDialog {
 	
 	protected abstract JPanel createCenterPane();
 	
-	public void actionPerformed(ActionEvent e) {
-	}
-	
 	protected abstract Object buildResult();
 
-	/** Returns a message explaining why the ok button is disabled
-	 * @return the message or null if the ok button has to be enabled. This message will be displayed in the button toolTip.
+	/** This method is called when the user clicks the cancel button.
+	 * This default implementation does nothing.
+	 */
+	protected void cancel() {}
+
+	/** Checks if the user input is consistent and return a short explanation of why it is not 
+	 * @return a short message explaining why the ok button is disabled or null if the ok button has to be enabled.
+	 * This message will be displayed in the ok button toolTip.
 	 */
 	protected abstract String getOkDisabledCause();
 	
@@ -93,6 +98,9 @@ public abstract class AbstractDialog<V> extends JDialog {
 		return result;
 	}
 	
+	/** Forces the state of the users input to be evaluated and updates the state of the ok button.
+	 * @see #getOkDisabledCause()
+	 */
 	protected void updateOkButtonEnabled() {
 		String cause = getOkDisabledCause();
 		this.okButton.setEnabled(cause==null);

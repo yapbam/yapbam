@@ -46,6 +46,7 @@ public class Preferences {
 	private static final String AUTO_UPDATE_INSTALL	= "auto_update_install"; //$NON-NLS-1$
 	private static final String EXPERT_MODE = "expert_mode"; //$NON-NLS-1$
 	private static final String WELCOME_DIALOG_ALLOWED = "welcome_dialog_enabled";
+	private static final String CRASH_REPORT_ACTION = "crash_report_action";
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
 
 	/** The Preference instance.
@@ -350,5 +351,25 @@ public class Preferences {
 	 */
 	public String getProperty (String key) {
 		return this.properties.getProperty(key);
+	}
+
+	/** Gets the action to do when a crash is detected.
+	 * @return 0 if the user should be asked, -1 to ignore, 1 to send a crash report to Yapbam
+	 */
+	public int getCrashReportAction() {
+		try {
+			return Integer.parseInt(this.properties.getProperty(CRASH_REPORT_ACTION,"0"));
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+	}
+	
+	/** Sets the action to do when a crash is detected.
+	 * @param action 0 if the user should be asked, -1 to ignore, 1 to send a crash report to Yapbam
+	 * @throws IllegalArgumentException if the action is an invalid parameter (not one of the value listed above) 
+	 */
+	public void setCrashReportAction(int action) {
+		if (Math.abs(action)>1) throw new IllegalArgumentException();
+		this.properties.setProperty(CRASH_REPORT_ACTION,Integer.toString(action));
 	}
 }
