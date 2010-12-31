@@ -8,8 +8,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -52,14 +50,21 @@ public class ErrorManager {
 	 */
 	public void log(Window parent, Throwable t) {
 		try {
-			//TODO have a look in the preferences to see if we need to ask the user the permission to send a crash report
-			System.err.println("Exception "+t+" was catched by "+this.getClass().getName());		
-			ErrorDialog errorDialog = new ErrorDialog(parent, t);
-			errorDialog.setVisible(true);
-			Object result = errorDialog.getResult();
-			errorDialog.dispose(); //Don't remove this line, it would prevent Yapbam from quit !!!
-			if (result!=null) {
+			System.err.println("Exception "+t+" was catched by "+this.getClass().getName()); //TODO
+			int action =Preferences.INSTANCE.getCrashReportAction();
+			if (action==0) {
+				ErrorDialog errorDialog = new ErrorDialog(parent, t);
+				errorDialog.setVisible(true);
+				Object result = errorDialog.getResult();
+				errorDialog.dispose(); //Don't remove this line, it would prevent Yapbam from quit !!!
+				if (result!=null) {
+					action = 1;
+				}
+			}
+			if (action==1) {
 				postToYapbam(t);
+			} else {
+				t.printStackTrace();
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -103,5 +108,6 @@ public class ErrorManager {
 	
 	public static void main (String[] args) {
 		INSTANCE.log(null, new RuntimeException("just a test")); //TODO
+		INSTANCE.log(null, new RuntimeException("just a second test")); //TODO
 	}
 }

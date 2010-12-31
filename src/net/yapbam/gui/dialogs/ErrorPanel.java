@@ -13,6 +13,7 @@ import net.yapbam.gui.LocalizationData;
 
 public class ErrorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private JCheckBox chckbxDontAskMe;
 
 	/**
 	 * Create the panel.
@@ -55,10 +56,9 @@ public class ErrorPanel extends JPanel {
 		gbc_icon.gridy = 0;
 		panel.add(icon, gbc_icon);
 		
-		JCheckBox chckbxDontAskMe = new JCheckBox(LocalizationData.get("GenericCheckBox.rememberDecision")); //$NON-NLS-1$
+		chckbxDontAskMe = new JCheckBox(LocalizationData.get("GenericCheckBox.rememberDecision"));
 		chckbxDontAskMe.setHorizontalAlignment(SwingConstants.RIGHT);
 		chckbxDontAskMe.setToolTipText(LocalizationData.get("GenericCheckBox.rememberDecision.tooltip")); //$NON-NLS-1$
-		//TODO initialize the value. Set the preference when the button is clicked 
 		GridBagConstraints gbc_chckbxDontAskMe = new GridBagConstraints();
 		gbc_chckbxDontAskMe.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxDontAskMe.fill = GridBagConstraints.HORIZONTAL;
@@ -66,5 +66,9 @@ public class ErrorPanel extends JPanel {
 		gbc_chckbxDontAskMe.gridx = 0;
 		gbc_chckbxDontAskMe.gridy = 1;
 		add(chckbxDontAskMe, gbc_chckbxDontAskMe);
+	}
+	
+	public boolean isDontAskMeSelected() {
+		return chckbxDontAskMe.isSelected();
 	}
 }

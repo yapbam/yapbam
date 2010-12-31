@@ -2,6 +2,8 @@ package net.yapbam.gui.dialogs.preferences;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
+import net.yapbam.gui.Preferences;
+
 import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
@@ -15,6 +17,8 @@ import javax.swing.SwingConstants;
 
 public class ReportErrorPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
+	private JRadioButton yes;
+	private JRadioButton no;
 
 	/**
 	 * Create the panel.
@@ -41,7 +45,7 @@ public class ReportErrorPanel extends PreferencePanel {
 		
 		ButtonGroup group = new ButtonGroup();
 		
-		JRadioButton yes = new JRadioButton(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking"));
+		yes = new JRadioButton(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking"));
 		yes.setToolTipText(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking.tooltip"));
 		GridBagConstraints gbc_yes = new GridBagConstraints();
 		gbc_yes.weightx = 1.0;
@@ -54,7 +58,7 @@ public class ReportErrorPanel extends PreferencePanel {
 		add(yes, gbc_yes);
 		group.add(yes);
 		
-		JRadioButton no = new JRadioButton(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking"));
+		no = new JRadioButton(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking"));
 		no.setToolTipText(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking.tooltip"));
 		GridBagConstraints gbc_no = new GridBagConstraints();
 		gbc_no.fill = GridBagConstraints.HORIZONTAL;
@@ -80,7 +84,14 @@ public class ReportErrorPanel extends PreferencePanel {
 		add(ask, gbc_ask);
 		group.add(ask);
 		
-		ask.setSelected(true); //TODO Use preferences
+		int whatToDo = Preferences.INSTANCE.getCrashReportAction();
+		if (whatToDo==1) {
+			yes.setSelected(true);
+		} else if (whatToDo==-1) {
+			no.setSelected(true);
+		} else {
+			ask.setSelected(true);
+		}
 	}
 
 	@Override
@@ -95,7 +106,13 @@ public class ReportErrorPanel extends PreferencePanel {
 
 	@Override
 	public boolean updatePreferences() {
-		// TODO Auto-generated method stub
+		int action = 0;
+		if (yes.isSelected()) {
+			action = 1;
+		} else if (no.isSelected()) {
+			action = -1;
+		}
+		Preferences.INSTANCE.setCrashReportAction(action);
 		return false;
 	}
 }

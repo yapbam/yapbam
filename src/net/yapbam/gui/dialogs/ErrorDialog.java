@@ -5,6 +5,7 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 
 public class ErrorDialog extends AbstractDialog<Throwable> {
 	private static final long serialVersionUID = 1L;
@@ -28,11 +29,21 @@ public class ErrorDialog extends AbstractDialog<Throwable> {
 
 	@Override
 	protected Object buildResult() {
+		setPreferences(1);
 		return Boolean.TRUE;
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
 		return null;
+	}
+
+	@Override
+	protected void cancel() {
+		setPreferences(-1);
+	}
+	
+	private void setPreferences(int action) {
+		Preferences.INSTANCE.setCrashReportAction(panel.isDontAskMeSelected()?action:0);
 	}
 }
