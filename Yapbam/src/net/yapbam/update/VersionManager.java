@@ -41,8 +41,7 @@ public class VersionManager {
 	}
 	
 	private static void addPropertyParameter(StringBuilder url, String paramName, String key) throws UnsupportedEncodingException {
-		String property = System.getProperty(key);
-		if (property==null) property = "?";
+		String property = System.getProperty(key, "?");
 		url.append("&").append(paramName).append("=").append(URLEncoder.encode(property,"UTF-8"));
 	}
 

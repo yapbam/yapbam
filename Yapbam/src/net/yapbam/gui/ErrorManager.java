@@ -8,21 +8,39 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.swing.JOptionPane;
 
 import net.yapbam.gui.dialogs.ErrorDialog;
+import net.yapbam.update.VersionManager;
 
 /** This class is responsible for handling errors.
  */
 public class ErrorManager {
 	/** The instance of this class.*/
 	public static final ErrorManager INSTANCE = new ErrorManager();
+	private final static String ENC = "UTF-8";
+
+	private BlockingDeque<Message> errorsQueue;
 	
-	private ErrorManager() {}
+	private ErrorManager() {
+		this.errorsQueue = new LinkedBlockingDeque<Message>();
+		final Thread thread = new Thread(new LogSender(), "LogSender");
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				thread.interrupt();
+			}
+		}));
+		thread.setDaemon(true);
+		thread.start();
+	}
 
 	/** Displays a standard dialog to signal an error.
 	 * <br>Note that the throwable instance is not logged (transmitted to yapbam team). 
@@ -50,7 +68,6 @@ public class ErrorManager {
 	 */
 	public void log(Window parent, Throwable t) {
 		try {
-			System.err.println("Exception "+t+" was catched by "+this.getClass().getName()); //TODO
 			int action =Preferences.INSTANCE.getCrashReportAction();
 			if (action==0) {
 				ErrorDialog errorDialog = new ErrorDialog(parent, t);
@@ -62,8 +79,9 @@ public class ErrorManager {
 				}
 			}
 			if (action==1) {
-				postToYapbam(t);
+				errorsQueue.add(new Message(t));
 			} else {
+				System.err.println("Exception was catched by "+this.getClass().getName());
 				t.printStackTrace();
 			}
 		} catch (Throwable e) {
@@ -72,37 +90,85 @@ public class ErrorManager {
 			// At this point, there's nothing to do.
 		}
 	}
-	
-	private void postToYapbam(Throwable t) throws IOException {
-		// Construct data
-		StringWriter writer = new StringWriter();
-		t.printStackTrace(new PrintWriter(writer));
-		String trace = writer.getBuffer().toString();
-		System.out.println (trace);
-		String data = URLEncoder.encode("throwable", "UTF-8") + "=" + URLEncoder.encode(trace, "UTF-8");
-//		data += "&" + URLEncoder.encode("key2", "UTF-8") + "=" + URLEncoder.encode("value2", "UTF-8");
 		
-		// Send data
-		URL url = new URL("http://www.yapbam.net/crashReport.php");
-		URLConnection conn = url.openConnection();
-		conn.setDoOutput(true);
-		OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-		try {
-			wr.write(data);
-			wr.flush();
+	private class LogSender implements Runnable {
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					postToYapbam (errorsQueue.take());
+				} catch (InterruptedException e) {
+					// Ok, not a problem, the shutdown hook has interrupted this thread
+				} catch (Throwable e) {
+					// Well, at this point nothing could help us
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		private void addToBuffer(StringBuilder buffer, String variable, String value) throws UnsupportedEncodingException {
+			buffer.append("&").append(URLEncoder.encode(variable, ENC)).append("=").append(URLEncoder.encode(value, ENC));
+		}
+
+		private void postToYapbam(Message message) throws IOException {
+			// Construct data
+			StringWriter writer = new StringWriter();
+			message.error.printStackTrace(new PrintWriter(writer));
+			String trace = writer.getBuffer().toString();
+			StringBuilder data = new StringBuilder();
+			data.append(URLEncoder.encode("error", ENC)).append("=").append(URLEncoder.encode(trace, ENC));
+			addToBuffer(data, "country", message.country);
+			addToBuffer(data, "javaVendor", message.javaVendor);
+			addToBuffer(data, "javaVersion", message.javaVersion);
+			addToBuffer(data, "lang", message.lang);
+			addToBuffer(data, "osName", message.osName);
+			addToBuffer(data, "osVersion", message.osVersion);
+			addToBuffer(data, "version", message.version);
 			
-			// Get the response
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			// Send data
+			URL url = new URL("http://www.yapbam.net/crashReport.php");
+			URLConnection conn = url.openConnection();
+			conn.setDoOutput(true);
+			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), ENC);
 			try {
-				for (String line = rd.readLine(); line != null; line = rd.readLine()) {
-					// Process line...
-					System.out.println (line); //TODO
+				wr.write(data.toString());
+				wr.flush();
+				
+				// Get the response
+				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),ENC));
+				try {
+					for (String line = rd.readLine(); line != null; line = rd.readLine()) {
+						// Process line ... this means do nothing ;-)
+						System.out.println (line); //TODO
+					}
+				} finally {
+					rd.close();
 				}
 			} finally {
-				rd.close();
+				wr.close();
 			}
-		} finally {
-			wr.close();
+		}
+	}
+	
+	private static class Message {
+		private String version;
+		private String country;
+		private String lang;
+		private String osName;
+		private String osVersion;
+		private String javaVendor;
+		private String javaVersion;
+		private Throwable error;
+		
+		Message (Throwable t) {
+			this.error = t;
+			this.version = VersionManager.getVersion().toString();
+			this.country = LocalizationData.getLocale().getCountry();
+			this.lang = LocalizationData.getLocale().getLanguage();
+			this.osName = System.getProperty("os.name", "?");
+			this.osVersion = System.getProperty("os.version", "?");
+			this.javaVendor = System.getProperty("java.vendor", "?");
+			this.javaVersion = System.getProperty("java.version", "?");
 		}
 	}
 	
