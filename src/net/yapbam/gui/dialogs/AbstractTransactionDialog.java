@@ -43,6 +43,9 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
+		//TODO remove
+		this.pack();
+		setResizable(true);
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
@@ -157,12 +160,12 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
         amount.addKeyListener(listener);
         amount.setValue(new Double(0));
         amount.setToolTipText(LocalizationData.get("TransactionDialog.amount.tooltip")); //$NON-NLS-1$
-        c.gridx++; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx++; c.weightx=1.0; c.fill = GridBagConstraints.HORIZONTAL;
         centerPane.add(amount,c);
         receipt = new JCheckBox(LocalizationData.get("TransactionDialog.receipt")); //$NON-NLS-1$
         receipt.setToolTipText(LocalizationData.get("TransactionDialog.receipt.tooltip")); //$NON-NLS-1$
         receipt.addItemListener(new ReceiptListener());
-        c.gridx++; c.weightx=0; c.anchor = GridBagConstraints.WEST;
+        c.gridx++; c.anchor = GridBagConstraints.WEST;
         centerPane.add(receipt, c);
         
         c = new GridBagConstraints();
@@ -195,7 +198,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		centerPane.add(new JSeparator(JSeparator.HORIZONTAL),c);
 
 		c.insets = insets; c.gridx=0; c.gridy++; c.gridwidth = GridBagConstraints.REMAINDER;
-		c.gridheight = 3; c.fill=GridBagConstraints.HORIZONTAL;
+		c.gridheight = 1; c.fill=GridBagConstraints.BOTH; c.weightx = 1.0; c.weighty = 1.0;
 		subtransactionsPanel = new SubtransactionListPanel(this.data);
 		subtransactionsPanel.addPropertyChangeListener(SubtransactionListPanel.SUM_PROPERTY, new PropertyChangeListener() {
 			@Override
