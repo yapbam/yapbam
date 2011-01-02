@@ -73,7 +73,17 @@ public final class CheckSum {
 	 * @return a positive hexadecimal string
 	 */
 	public static String toString(byte[] bytes) {
-		return new BigInteger(1,bytes).toString(16);
+		String brute = new BigInteger(1,bytes).toString(16);
+		if (brute.length() != bytes.length*2) {
+			StringBuilder builder = new StringBuilder(bytes.length*2);
+			for (int i = brute.length(); i < bytes.length*2; i++) {
+				builder.append('0');
+			}
+			builder.append(brute);
+			return builder.toString();
+		} else {
+			return brute;
+		}
 	}
 	
 	/** Turns a hexadecimal String into an array of bytes
@@ -81,6 +91,20 @@ public final class CheckSum {
 	 * @return an hexadecimal string
 	 */
 	public static byte[] toBytes (String string) {
-		return new BigInteger(string, 16).toByteArray();
+		byte[] byteArray = new BigInteger(string, 16).toByteArray();
+		int nbDigits = string.length();
+		if (string.startsWith("-")) nbDigits--;
+		int resultSize = nbDigits/2;
+		if (nbDigits % 2 != 0) {
+			resultSize++;
+		}
+		if (byteArray.length==resultSize) return byteArray;
+		byte[] result = new byte[resultSize];
+		if (byteArray.length<resultSize) {
+			System.arraycopy(byteArray, 0, result, resultSize-byteArray.length, byteArray.length);
+		} else {
+			System.arraycopy(byteArray, byteArray.length-resultSize, result, 0, resultSize);
+		}
+		return result;
 	}
 }
