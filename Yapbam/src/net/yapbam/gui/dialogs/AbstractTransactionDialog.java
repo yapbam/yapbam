@@ -127,13 +127,13 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		newAccount.setFocusable(false);
 		newAccount.addActionListener(accountListener);
 		newAccount.setToolTipText(LocalizationData.get("TransactionDialog.account.new.tooltip")); //$NON-NLS-1$
-    c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
 		centerPane.add(combine(accounts, newAccount), c);
 
 		// Description
 		JLabel titleLibelle = new JLabel(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
 		c = new GridBagConstraints();
-    c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST;
+		c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(titleLibelle, c);
 		description = new PopupTextFieldList();
 		description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
@@ -156,7 +156,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		c.fill=GridBagConstraints.NONE; c.anchor = GridBagConstraints.WEST; c.weightx = 0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.amount")), c); //$NON-NLS-1$
 		amount = new AmountWidget(LocalizationData.getLocale());
-		amount.setColumns(28);
+		amount.setColumns(10);
 		amount.addFocusListener(focusListener);
 		amount.addKeyListener(listener);
 		amount.setValue(new Double(0));
