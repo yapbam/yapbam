@@ -35,8 +35,8 @@ class TransactionsTableModel extends AbstractTableModel {
 		if (columnIndex==1) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
 		if (columnIndex==2) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
 		if (columnIndex==3) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
-		if (columnIndex==4) return "Débit"; //LOCAL
-		if (columnIndex==5) return "Crédit";
+		if (columnIndex==4) return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
+		if (columnIndex==5) return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
 
