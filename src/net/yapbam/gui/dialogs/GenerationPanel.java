@@ -66,7 +66,7 @@ public class GenerationPanel extends JPanel {
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.gridwidth = 3;
 		gridBagConstraints11.anchor = GridBagConstraints.WEST;
-		gridBagConstraints11.gridy = 3;
+		gridBagConstraints11.gridy = 1;
 		jLabel1 = new JLabel();
 		jLabel1.setText(LocalizationData.get("PeriodicalTransactionDialog.period")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
@@ -74,7 +74,7 @@ public class GenerationPanel extends JPanel {
 		gridBagConstraints2.gridy = 0;
 		gridBagConstraints2.weightx = 1.0;
 		gridBagConstraints2.gridwidth = 1;
-		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints2.insets = new Insets(5, 5, 5, 0);
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.gridx = 2;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -89,7 +89,7 @@ public class GenerationPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.gridy = 0;
-		this.setSize(479, 200);
+		this.setSize(400, 165);
 		this.setLayout(new GridBagLayout());
 		this.setActivated(true);
 		this.add(getActivatedBox(), gridBagConstraints);
