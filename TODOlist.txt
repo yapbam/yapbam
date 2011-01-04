@@ -1,10 +1,12 @@
 TODO list
 	
 * TODO :
-- Dans net.yapbam.gui.dialogs.ErrorPanel.
-- Dans ErrorManager
 - Dans BudgetViewPanel, BudgetTableModel, BudgetTableRowHeaderModel
+- Vérifier les hashcodes des anciennes versions dans ObsoleteFilesChecksums.properties
 
+* Utiliser les prioritycombobox pour l'assistant de saisie (http://www.japura.org/prioritycombobox.html)
+* Ecran récapitulatif, recensant tous les comptes, leurs soldes (actuel, pointé et final), les alertes en cours, etc ...
+* La possibilité d'ignorer les alertes trop lointaines. 
 * La possibilité d'éditer plusieurs opérations à la fois.
 * Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).
 * La possibilité de créer des raccourcis vers les filtres préférés.
