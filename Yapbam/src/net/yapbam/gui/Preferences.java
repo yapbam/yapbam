@@ -97,7 +97,9 @@ public class Preferences {
 
 	void save() {
 		try {
-			properties.store(new FileOutputStream(getFile()), "Yapbam preferences"); //$NON-NLS-1$
+			File file = getFile();
+			file.getParentFile().mkdirs();
+			properties.store(new FileOutputStream(file), "Yapbam preferences"); //$NON-NLS-1$
 		} catch (IOException e) {
 			//TODO What could we do ?
 			e.printStackTrace();
