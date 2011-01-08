@@ -17,6 +17,7 @@ import net.yapbam.data.Mode;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
+import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 @SuppressWarnings("serial")
 public class ModeListPanel extends AbstractListAdministrationPanel {
@@ -127,7 +128,10 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	
 	@Override
 	protected JTable instantiateJTable() {
-		return new JTable(getTableModel());
+		JTable table = new JTable(getTableModel());
+		// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
+		table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
+		return table;
 	}
 	
 	protected TableModel getTableModel() {
