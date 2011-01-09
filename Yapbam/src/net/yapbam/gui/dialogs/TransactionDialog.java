@@ -5,6 +5,7 @@ import java.awt.Window;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,8 +71,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				// I've implemented that with Math.signum ... but, I missed that the
-				// value may be null
+				// I've implemented that with Math.signum ... but, I missed that the value may be null
 				// In such a case, Math.signum throws a NullPointerException
 				Double newValue = (Double) evt.getNewValue();
 				Double oldValue = (Double) evt.getOldValue();
@@ -203,18 +203,44 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	}
 
 	protected void setPredefinedDescriptions() {
+		//TODO It would be far better to divide the list in two parts :
+		//- The most probable in the first part (sorted by probability {introduce account here})
+		//- The others, sorted alphabetically
 		HashSet<String> set = new HashSet<String>();
 		for (int i = 0; i < this.data.getTransactionsNumber(); i++) {
 			set.add(this.data.getTransaction(i).getDescription());
 		}
 		String[] array = set.toArray(new String[set.size()]);
+		Arrays.sort(array, String.CASE_INSENSITIVE_ORDER);
 		description.setPredefined(array);
+	}
+	
+	private static class ModeAndType {
+		private boolean receipt;
+		private Mode mode;
+		
+		private ModeAndType(boolean receipt, Mode mode) {
+			super();
+			this.receipt = receipt;
+			this.mode = mode;
+		}
+
+		@Override
+		public int hashCode() {
+			return mode.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this.receipt != ((ModeAndType)obj).receipt) return false;
+			return this.mode.equals(((ModeAndType)obj).mode);
+		}
 	}
 
 	protected void predefinedDescriptionSelected(String description) {
 		int millisParDay = 60000 * 24;
 		long now = new Date().getTime();
-		HashMap<Mode, Double> modes = new HashMap<Mode, Double>();
+		HashMap<ModeAndType, Double> modes = new HashMap<ModeAndType, Double>();
 		HashMap<Category, Double> categories = new HashMap<Category, Double>();
 		for (int i = 0; i < data.getTransactionsNumber(); i++) {
 			Transaction transaction = data.getTransaction(i);
@@ -233,7 +259,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 					// deduce modes on accounts different from the current one.
 					Mode mode = transaction.getMode();
 					weight = modes.get(mode);
-					modes.put(mode, transactionWeight + (weight == null ? 0 : weight));
+					modes.put(new ModeAndType(transaction.getAmount()>0, mode), transactionWeight + (weight == null ? 0 : weight));
 				}
 			}
 		}
@@ -248,16 +274,19 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			}
 		}
 		this.categories.setCategory(category);
-		Mode mode = null;
+		ModeAndType modeAndType = null;
 		max = 0;
-		for (Iterator<Mode> iterator = modes.keySet().iterator(); iterator.hasNext();) {
-			Mode next = iterator.next();
+		for (Iterator<ModeAndType> iterator = modes.keySet().iterator(); iterator.hasNext();) {
+			ModeAndType next = iterator.next();
 			if (modes.get(next) > max) {
-				mode = next;
+				modeAndType = next;
 				max = modes.get(next);
 			}
 		}
-		if (mode != null) this.setMode(mode);
+		if (modeAndType != null) {
+			//TODO Be aware of amount sign in all that stuff (in order to not try to set an expense mode for a receipt transaction)
+			this.setMode(modeAndType.mode);
+		}
 	}
 
 	private void setTransactionNumberWidget() {

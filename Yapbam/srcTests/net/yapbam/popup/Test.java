@@ -1,19 +1,17 @@
 package net.yapbam.popup;
 
-import java.io.File;
-import java.io.IOException;
+import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.widget.PopupTextFieldList;
 
 public class Test {
 
 //	private static final String DATA_FILE = "C:/Users/Jean-Marc/Documents/Comptes.xml";
-	private static final String DATA_FILE = "//home/jma/Comptes.xml";
+//	private static final String DATA_FILE = "//home/jma/Comptes.xml";
 
 	/**
 	 * @param args
@@ -21,15 +19,17 @@ public class Test {
 	public static void main(String[] args) {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel pane = new JPanel();
+        JPanel pane = new JPanel(new BorderLayout());
         f.add(pane);
-        pane.add(new JLabel("Question : "));
-        String[] array = new String[] {"Carrefour", "Plein voiture", "Plein moto", "Carrefour Market", "Magazines", "Rï¿½paration", "Charges", "Impï¿½ts locaux",
-        		"Impots fonciers", "Impï¿½t sur le revenu", "Cadeau Isa", "Inscription vacances CE", "Cinï¿½ma", "Barrete mï¿½moire Maman"/**/};
+        JPanel p1 = new JPanel(new BorderLayout());
+        p1.add(new JLabel("Question : "),BorderLayout.WEST);
+        String[] array = new String[] {"Carrefour", "Plein voiture", "Plein moto", "Carrefour Market", "Magazines", "Réparation", "Charges", "Impôts locaux",
+        		"Impots fonciers", "Impôt sur le revenu", "Cadeau Isa", "Inscription vacances CE", "Cinéma", "Barrete mémoire Maman"/**/};
         final PopupTextFieldList field = new PopupTextFieldList();
-        field.setPredefined(array);
+        field.setPredefined(array, new int[]{3,2});
         field.setColumns(10);
-        pane.add(field);
+        p1.add(field,BorderLayout.CENTER);
+        pane.add(p1,BorderLayout.NORTH);
         f.setSize(400,200);
         f.setLocation(200,200);
         f.setVisible(true);
