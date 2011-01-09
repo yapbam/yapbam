@@ -284,7 +284,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			}
 		}
 		if (modeAndType != null) {
-			//TODO Be aware of amount sign in all that stuff (in order to not try to set an expense mode for a receipt transaction)
+			this.receipt.setSelected(modeAndType.receipt);
 			this.setMode(modeAndType.mode);
 		}
 	}
@@ -309,7 +309,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @return a boolean - true if a checkbook is used.
 	 */
 	private boolean useCheckbook() {
-		return (getAmount() < 0) && (getCurrentMode().isUseCheckBook());
+		return (isExpense()) && (getCurrentMode().isUseCheckBook());
 	}
 
 }

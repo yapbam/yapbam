@@ -34,7 +34,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	private JComboBox accounts;
 	protected PopupTextFieldList description;
 	protected AmountWidget amount;
-	private JCheckBox receipt;
+	protected JCheckBox receipt;
 	private int selectedMode;
 	private CoolJComboBox modes;
 	protected CategoryPanel categories;
