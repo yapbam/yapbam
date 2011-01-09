@@ -30,7 +30,7 @@ public abstract class AbstractTransaction implements Cloneable {
 		super();
 		if ((mode==null) || (category==null) || (description==null) || (subTransactions==null)) throw new IllegalArgumentException();
 		this.id = currentId++;
-		this.description = description;
+		this.description = getCachedDescription(description);
 		this.amount = amount;
 		this.account = account;
 		this.mode = mode;
@@ -38,6 +38,19 @@ public abstract class AbstractTransaction implements Cloneable {
 		this.subTransactions = subTransactions;
 	}
 	
+	// The following lines are a test to implement a description cache in order to prevent from duplicating same description into memory.
+	// In real life, it seems to not have a positive impact (HashMap size is greater than the saved String memory footprint).
+	//	private static final WeakHashMap<String, String> descriptionCache = new WeakHashMap<String, String>();
+	private String getCachedDescription(String description) {
+		return description;
+//		String result = descriptionCache.get(description);
+//		if (result == null) {
+//			result = description;
+//			descriptionCache.put(description, description);
+//		}
+//		return result;
+	}
+
 	@Override
 	public Object clone() {
 		AbstractTransaction result = null;
