@@ -18,8 +18,8 @@ class FolderCleaner {
 	private FolderCleaner(){}
 /*
 	public static void main (String[] args) {
-		File globalFolder = new File("C:/Users/Jean-Marc/Desktop/YapbamOldBis");
-		String[] foldersName = new String[]{"0.4.0","0.6.2","0.6.3","0.6.4","0.6.5","0.6.6","0.6.7","0.7.0","0.7.1","0.7.2"};
+		File globalFolder = new File("C:/Users/Jean-Marc/Desktop/YapbamOld");
+		String[] foldersName = new String[]{"0.4.0","0.6.2","0.6.3","0.6.4","0.6.5","0.6.6","0.6.7","0.7.0","0.7.1","0.7.2","0.7.3"};
 
 		// This was used to build the obsolete file table.
 		try {
