@@ -6,11 +6,16 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -23,6 +28,8 @@ import net.yapbam.util.NullUtils;
 
 /** This dialog allows to create or edit a transaction */
 public class TransactionDialog extends AbstractTransactionDialog {
+	private static final int MILLIS_PER_DAY = 60000 * 24;
+
 	private static final long serialVersionUID = 1L;
 
 	private DateWidgetPanel date;
@@ -201,17 +208,36 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		if (this.defDate.getDate() == null) return LocalizationData.get("TransactionDialog.bad.valueDate"); //$NON-NLS-1$
 		return null;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	protected void setPredefinedDescriptions() {
-		//TODO It would be far better to divide the list in two parts :
-		//- The most probable in the first part (sorted by probability {introduce account here})
-		//- The others, sorted alphabetically
-		HashSet<String> set = new HashSet<String>();
+		HashMap<String, Double> map = new HashMap<String, Double>();
+		long now = System.currentTimeMillis();
 		for (int i = 0; i < this.data.getTransactionsNumber(); i++) {
-			set.add(this.data.getTransaction(i).getDescription());
+			Transaction transaction = this.data.getTransaction(i);
+			String desc = transaction.getDescription();
+			double ranking = getRankingBasedOnDate(now, transaction);
+			if (!transaction.getAccount().equals(data.getAccount(selectedAccount))) ranking = ranking / 100;
+			Double current = map.get(desc);
+			if (current==null) {
+				map.put(desc, ranking);
+			} else {
+				map.put(desc, (ranking + current));
+			}
 		}
-		String[] array = set.toArray(new String[set.size()]);
-		Arrays.sort(array, String.CASE_INSENSITIVE_ORDER);
+		// Sort the map by ranking
+		LinkedList<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(map.entrySet());
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return -((Comparable) ((Map.Entry) (o1)).getValue()).compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+		String[] array = new String[list.size()];
+		Iterator<Map.Entry<String, Double>> iterator = list.iterator();
+		for (int i = 0; i < array.length; i++) {
+			array[i] = iterator.next().getKey();
+		}
+//		Arrays.sort(array, String.CASE_INSENSITIVE_ORDER);
 		description.setPredefined(array);
 	}
 	
@@ -236,10 +262,22 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			return this.mode.equals(((ModeAndType)obj).mode);
 		}
 	}
+	
+	/** Gets the ranking of a transaction, based on its date.
+	 * This method is used by the wizard to determine which descriptions are the most probable.
+	 * @param transaction The transaction
+	 * @return a double
+	 */
+	private double getRankingBasedOnDate(long now, Transaction transaction) {
+		// we will use a function between 0 (for very, very old ones) and 1 for
+		// recent one.
+		// Probably this function could be improved ...
+		long time = Math.abs(transaction.getDate().getTime() - now) / MILLIS_PER_DAY;
+		return 2 / Math.sqrt(time + 4);
+	}
 
 	protected void predefinedDescriptionSelected(String description) {
-		int millisParDay = 60000 * 24;
-		long now = new Date().getTime();
+		long now = System.currentTimeMillis();
 		HashMap<ModeAndType, Double> modes = new HashMap<ModeAndType, Double>();
 		HashMap<Category, Double> categories = new HashMap<Category, Double>();
 		for (int i = 0; i < data.getTransactionsNumber(); i++) {
@@ -247,11 +285,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			if (transaction.getDescription().equalsIgnoreCase(description)) {
 				Category category = transaction.getCategory();
 				// In order to minimize the impact of very old transactions, we will use
-				// a weight function between 0 (for very, very old ones) and 1 for
-				// recent one.
-				// Probably this function could be improved ...
-				long time = Math.abs(transaction.getDate().getTime() - now) / millisParDay;
-				double transactionWeight = 2 / Math.sqrt(time + 4);
+				// the date ranking
+				double transactionWeight = getRankingBasedOnDate(now, transaction);
 				Double weight = categories.get(category);
 				categories.put(category, transactionWeight + (weight == null ? 0 : weight));
 				if (transaction.getAccount() == data.getAccount(selectedAccount)) {
