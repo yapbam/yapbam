@@ -1,6 +1,9 @@
 package net.yapbam.gui.widget;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -10,10 +13,15 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 
 import net.yapbam.util.NullUtils;
 
@@ -31,12 +39,48 @@ public class PopupTextFieldList extends JTextField {
 	private JList list;
 	private String predefined=null;
 	private String lastText="";
+	private int[] groupLimitIndexes;
+	
+	private static class UpperLineBorder extends AbstractBorder {
+		protected Color lineColor;
+
+		public UpperLineBorder(Color color) {
+			lineColor = color;
+		}
+
+		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+			g.setColor(lineColor);
+			g.drawLine(x+1, y, x+width-2, y);
+		}
+	}
+	
+	private class MyRenderer extends DefaultListCellRenderer {
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			boolean isLimit = false;
+			for (int limit : groupLimitIndexes) {
+				if (index == limit) {
+					isLimit = true;
+					break;
+				} else if (limit > index) {
+					break;
+				}
+			}
+			JComponent label = (JComponent) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			if (isLimit) {
+				Border border = new UpperLineBorder(label.getForeground().brighter());
+				label.setBorder(new CompoundBorder(border, label.getBorder()));
+			}
+			return label;
+		}
+	}
 
 	/** Constructor.
 	 */
 	public PopupTextFieldList () {
 		popup = new JPopupMenu();
 		list = new AutoScrollJList(new PopupListModel());
+		list.setCellRenderer(new MyRenderer());
 		popup.add(new JScrollPane(list));
 		popup.setFocusable(false);
 
@@ -155,8 +199,31 @@ public class PopupTextFieldList extends JTextField {
 
 	/** Sets the predefined values allowed by the field.
 	 * @param array The predefined values.
+	 * @see #setPredefined(String[], int[])
 	 */
 	public void setPredefined(String[] array) {
+		setPredefined (array, new int[0]);
+	}
+
+	/** Sets the predefined values allowed by the field.
+	 * @param array The predefined values.
+	 * @param groupSizes The values groups size.
+	 * <br>The values can be grouped (each will be separated from other by a thin line).
+	 * <br>This argument contains the size of each group.
+	 * @throws IllegalArgumentException if the sum of the group sizes is greater than the array length.
+	 * <br>Note that if that sum is lower than the array length, a group is added containing the extra values.
+	 */
+	public void setPredefined(String[] array, int[] groupSizes) {
+		int[] indexes = new int[groupSizes.length];
+		int currentTotal = 0;
+		for (int i=0; i<groupSizes.length; i++) {
+			if (groupSizes[i]!=0) {
+				currentTotal += groupSizes[i];
+				if (currentTotal>array.length) throw new IllegalArgumentException();
+				indexes[i] = currentTotal;
+			}
+		}
+		this.groupLimitIndexes = indexes;
 		((PopupListModel)this.list.getModel()).setValues(array);
 	}
 
@@ -193,7 +260,6 @@ public class PopupTextFieldList extends JTextField {
 				fireIntervalRemoved(this, 0, n);
 			}
 			this.values = values.clone();
-			Arrays.sort(this.values, String.CASE_INSENSITIVE_ORDER);
 			fireIntervalAdded(this, 0, this.values.length);
 		}
 		
