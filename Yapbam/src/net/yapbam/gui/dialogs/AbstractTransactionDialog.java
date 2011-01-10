@@ -64,7 +64,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 
 	protected void setMode(Mode mode) {
 		Account account = data.getAccount(selectedAccount);
-		int index = account.findMode(mode, getAmount()<=0);
+		int index = account.findMode(mode, isExpense());
 		if (index>=0) {
 			modes.setSelectedIndex(index); // If the mode isn't available for this kind of transaction, do nothing.
 		}
@@ -82,6 +82,10 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	 */
 	protected double getAmount() {
 		double amount = Math.abs(this.amount.getValue());
+		// Beware of null value, a null expense may could be considered as a receipt,
+		// and expenses and receipt have not the same modes available.
+		// We will transform null value into very, very, very small non null values.
+		if (amount==0) amount=Double.MIN_VALUE;
 		if (isExpense()) amount = -amount;
 		return amount;
 	}
