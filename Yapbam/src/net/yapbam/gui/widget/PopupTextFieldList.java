@@ -10,7 +10,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.TreeSet;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
@@ -24,6 +27,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
 import net.yapbam.util.NullUtils;
+import net.yapbam.util.TextMatcher;
 
 @SuppressWarnings("serial")
 /** This class implements a kind of JComboBox that allows to select the field content into a list of predefined values
@@ -40,6 +44,7 @@ public class PopupTextFieldList extends JTextField {
 	private String predefined=null;
 	private String lastText="";
 	private int[] groupLimitIndexes;
+	private String[] proposals;
 	
 	private static class UpperLineBorder extends AbstractBorder {
 		protected Color lineColor;
@@ -80,9 +85,11 @@ public class PopupTextFieldList extends JTextField {
 	public PopupTextFieldList () {
 		popup = new JPopupMenu();
 		list = new AutoScrollJList(new PopupListModel());
+		groupLimitIndexes = new int[]{3};
 		list.setCellRenderer(new MyRenderer());
 		popup.add(new JScrollPane(list));
 		popup.setFocusable(false);
+		this.proposals = new String[0];
 
 		// If the component looses the focus and the popup is shown, we have to hide the popup
 		// The following FocusListener will do that
@@ -151,27 +158,7 @@ public class PopupTextFieldList extends JTextField {
 			public void keyReleased(KeyEvent e) {
 				String text = getText();
 				if (!text.equals(lastText)) {
-					int index;
-					if (text.length()==0) {
-						index = -1;
-					} else {
-						index = ((PopupListModel)list.getModel()).indexOf(text);
-						if (index<0) {
-							index = -index-1;
-							if (index >= list.getModel().getSize()) {
-								index = -1;
-							} else {
-								String listElement = (String)list.getModel().getElementAt(index);
-								int min = Math.min(text.length(), listElement.length());
-								if (!text.substring(0, min).equalsIgnoreCase(listElement.substring(0, min))) {
-									index = -1;
-								}
-							}
-						}
-					}
-					if (index != list.getSelectedIndex()) {
-						list.setSelectedIndex(index);
-					}
+					fillModel(text);
 					lastText = text;
 					setPredefined((String)null);
 					showPopup();
@@ -202,7 +189,7 @@ public class PopupTextFieldList extends JTextField {
 	 * @see #setPredefined(String[], int[])
 	 */
 	public void setPredefined(String[] array) {
-		setPredefined (array, new int[0]);
+		setPredefined (array, this.groupLimitIndexes);
 	}
 
 	/** Sets the predefined values allowed by the field.
@@ -233,6 +220,47 @@ public class PopupTextFieldList extends JTextField {
 			if (getWidth()>size.width) popup.setPreferredSize(new Dimension(getWidth(), size.height));
 			popup.show(PopupTextFieldList.this, 0, getHeight());
 			requestFocus(false);
+		}
+	}
+
+	private void fillModel(String text) {
+		int index;
+		if (text.length()==0) {
+			index = -1;
+		} else {
+			int maxProbaSorted = this.groupLimitIndexes[0];
+			TextMatcher matcher = new TextMatcher(TextMatcher.CONTAINS, text, false, false); //TODO Must match "starts with" ... to be implemented in TextMatcher
+			System.out.println("fillModel is called"); //TODO
+			ArrayList<String> okProbaSort = new ArrayList<String>();
+			TreeSet<String> okAlphabeticSort = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+			for (String value : this.proposals) {
+				if (matcher.matches(value)) {
+					if (okProbaSort.size()<maxProbaSorted) {
+						okProbaSort.add(value);
+					} else {
+						okAlphabeticSort.add(value);
+					}
+				}
+			}
+			okProbaSort.addAll(okAlphabeticSort);
+			((PopupListModel)list.getModel()).setValues(okProbaSort.toArray(new String[okProbaSort.size()]));
+			
+			index = 0;
+//			if (index<0) {
+//				index = -index-1;
+//				if (index >= list.getModel().getSize()) {
+//					index = -1;
+//				} else {
+//					String listElement = (String)list.getModel().getElementAt(index);
+//					int min = Math.min(text.length(), listElement.length());
+//					if (!text.substring(0, min).equalsIgnoreCase(listElement.substring(0, min))) {
+//						index = -1;
+//					}
+//				}
+//			}
+		}
+		if (index != list.getSelectedIndex()) {
+			list.setSelectedIndex(index);
 		}
 	}
 

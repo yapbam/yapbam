@@ -23,11 +23,11 @@ public class TextMatcher {
 	/** A kind of comparison a TextMatcher can perform. */
 	public static interface Kind {}
 	
-	/** Kind of comparison: Does a string matches the filter (filter is interpreted as a regular expression). */
+	/** Kind of comparison: Does a string matches the filter (filter is interpreted as a regular expression) ? */
 	public static final Kind REGULAR = new Kind() {};
-	/** Kind of comparison: Does a string equals to the filter. */
+	/** Kind of comparison: Does a string is equal to the filter ? */
 	public static final Kind EQUALS = new Kind() {};
-	/** Kind of comparison: Does a string contains the filter. */
+	/** Kind of comparison: Does a string contains the filter ? */
 	public static final Kind CONTAINS = new Kind() {};
 
 	private Kind kind;
