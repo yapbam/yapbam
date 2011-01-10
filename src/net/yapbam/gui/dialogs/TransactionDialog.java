@@ -205,7 +205,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return null;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	protected void setPredefinedDescriptions() {
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		long now = System.currentTimeMillis();
@@ -287,9 +287,9 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				if (transaction.getAccount() == data.getAccount(selectedAccount)) {
 					// As mode are attached to accounts, it would be unsafe to try to
 					// deduce modes on accounts different from the current one.
-					Mode mode = transaction.getMode();
-					weight = modes.get(mode);
-					modes.put(new ModeAndType(transaction.getAmount()>0, mode), transactionWeight + (weight == null ? 0 : weight));
+					ModeAndType mt = new ModeAndType(transaction.getAmount()>0, transaction.getMode());
+					weight = modes.get(mt);
+					modes.put(mt, transactionWeight + (weight == null ? 0 : weight));
 				}
 			}
 		}

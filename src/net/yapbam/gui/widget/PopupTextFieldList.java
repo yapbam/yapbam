@@ -11,8 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.TreeSet;
 
 import javax.swing.AbstractListModel;
@@ -206,12 +204,12 @@ public class PopupTextFieldList extends JTextField {
 		for (int i=0; i<groupSizes.length; i++) {
 			if (groupSizes[i]!=0) {
 				currentTotal += groupSizes[i];
-				if (currentTotal>array.length) throw new IllegalArgumentException();
 				indexes[i] = currentTotal;
 			}
 		}
 		this.groupLimitIndexes = indexes;
-		((PopupListModel)this.list.getModel()).setValues(array);
+		proposals = array;
+		fillModel(this.getText());
 	}
 
 	private void showPopup() {
@@ -224,43 +222,24 @@ public class PopupTextFieldList extends JTextField {
 	}
 
 	private void fillModel(String text) {
-		int index;
-		if (text.length()==0) {
-			index = -1;
-		} else {
-			int maxProbaSorted = this.groupLimitIndexes[0];
-			TextMatcher matcher = new TextMatcher(TextMatcher.CONTAINS, text, false, false); //TODO Must match "starts with" ... to be implemented in TextMatcher
-			System.out.println("fillModel is called"); //TODO
-			ArrayList<String> okProbaSort = new ArrayList<String>();
-			TreeSet<String> okAlphabeticSort = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-			for (String value : this.proposals) {
-				if (matcher.matches(value)) {
-					if (okProbaSort.size()<maxProbaSorted) {
-						okProbaSort.add(value);
-					} else {
-						okAlphabeticSort.add(value);
-					}
+		int maxProbaSorted = this.groupLimitIndexes[0];
+		TextMatcher matcher = new TextMatcher(TextMatcher.CONTAINS, text, false, false); //TODO Must match "starts with" ... to be implemented in TextMatcher
+		ArrayList<String> okProbaSort = new ArrayList<String>();
+		TreeSet<String> okAlphabeticSort = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+		for (String value : this.proposals) {
+			if (matcher.matches(value)) {
+				if (okProbaSort.size()<maxProbaSorted) {
+					okProbaSort.add(value);
+				} else {
+					okAlphabeticSort.add(value);
 				}
 			}
-			okProbaSort.addAll(okAlphabeticSort);
-			((PopupListModel)list.getModel()).setValues(okProbaSort.toArray(new String[okProbaSort.size()]));
-			
-			index = 0;
-//			if (index<0) {
-//				index = -index-1;
-//				if (index >= list.getModel().getSize()) {
-//					index = -1;
-//				} else {
-//					String listElement = (String)list.getModel().getElementAt(index);
-//					int min = Math.min(text.length(), listElement.length());
-//					if (!text.substring(0, min).equalsIgnoreCase(listElement.substring(0, min))) {
-//						index = -1;
-//					}
-//				}
-//			}
 		}
-		if (index != list.getSelectedIndex()) {
-			list.setSelectedIndex(index);
+		okProbaSort.addAll(okAlphabeticSort);
+		((PopupListModel)list.getModel()).setValues(okProbaSort.toArray(new String[okProbaSort.size()]));
+		
+		if (0 != list.getSelectedIndex()) {
+			list.setSelectedIndex(0);
 		}
 	}
 
@@ -289,12 +268,6 @@ public class PopupTextFieldList extends JTextField {
 			}
 			this.values = values.clone();
 			fireIntervalAdded(this, 0, this.values.length);
-		}
-		
-		/** Same result as Arrays.binarySearch */
-		public int indexOf(String value) {
-			int result = Arrays.binarySearch(values, value, String.CASE_INSENSITIVE_ORDER);
-			return result;
 		}
 	}
 }
