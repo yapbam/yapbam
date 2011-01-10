@@ -308,6 +308,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 					selectedAccount = index;
 					if (DEBUG) System.out.println("Account " + selectedAccount + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
 					buildModes(isExpense());
+					setPredefinedDescriptions();
 				}
 			} else {
 				Account ac = AccountDialog.open(data, AbstractTransactionDialog.this, null);

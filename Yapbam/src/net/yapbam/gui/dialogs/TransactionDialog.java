@@ -5,16 +5,13 @@ import java.awt.Window;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
@@ -72,8 +69,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @see #open(GlobalData, Window, Transaction, boolean, boolean)
 	 */
 	public TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
-		super(
-				owner,
+		super(owner,
 				(edit ? LocalizationData.get("TransactionDialog.title.edit") : LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -209,7 +205,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void setPredefinedDescriptions() {
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		long now = System.currentTimeMillis();
@@ -237,7 +233,6 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		for (int i = 0; i < array.length; i++) {
 			array[i] = iterator.next().getKey();
 		}
-//		Arrays.sort(array, String.CASE_INSENSITIVE_ORDER);
 		description.setPredefined(array);
 	}
 	
