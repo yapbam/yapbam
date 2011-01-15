@@ -120,7 +120,7 @@ public class PopupTextFieldList extends JTextField {
 		// When the user press the down arrow, show the popup, if it's hidden.
 		// Up, down and enter key respectivly selects next element, selects previous element, set the textField to the selected element
 		// When a key is type, and changed the content of the field, this adapter also refresh the list selected element
-        addKeyListener(new KeyAdapter() {
+		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_DOWN) { // down arrow key was pressed
@@ -218,6 +218,8 @@ public class PopupTextFieldList extends JTextField {
 			if (getWidth()>size.width) popup.setPreferredSize(new Dimension(getWidth(), size.height));
 			popup.show(PopupTextFieldList.this, 0, getHeight());
 			requestFocus(false);
+		} else {
+			popup.setVisible(false);
 		}
 	}
 
