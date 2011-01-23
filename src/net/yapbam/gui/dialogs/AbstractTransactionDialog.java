@@ -35,10 +35,11 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	protected PopupTextFieldList description;
 	protected AmountWidget amount;
 	protected JCheckBox receipt;
-	private int selectedMode;
 	private CoolJComboBox modes;
 	protected CategoryPanel categories;
 	protected SubtransactionListPanel subtransactionsPanel;
+	private String originalMode;
+	private boolean originalIsExpense;
 	
 	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
@@ -58,6 +59,19 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		amount.setValue(Math.abs(transaction.getAmount()));
 		receipt.setSelected(transaction.getAmount()>0);
 		// Be aware, as its listener change the selectedMode, receipt must always be set before mode.
+		originalMode = transaction.getMode().getName();
+		originalIsExpense = transaction.getAmount()<0;
+		if (!modes.contains(originalMode) && (account.getMode(originalMode)!=null)) {
+			// It is possible that the mode of the transaction is no more available for this kind of transaction.
+			// For instance, if you this account had a payment mode (for example check), that was usable for expenses ...
+			// but that is, now, no more usable.
+			// In order to allow the user to not change this original payment mode, will we add it to the available
+			// payment modes.
+			boolean old = modes.isActionEnabled();
+			modes.setActionEnabled(false);
+			modes.addItem(originalMode);
+			modes.setActionEnabled(old);
+		}
 		modes.setSelectedItem(transaction.getMode().getName());
 		categories.setCategory(transaction.getCategory());
 	}
@@ -180,7 +194,6 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.mode")), c); //$NON-NLS-1$
 		modes = new CoolJComboBox();
 		buildModes(!receipt.isSelected());
-		selectedMode = 0;
 		ModesListener modeListener = new ModesListener();
 		modes.addActionListener(modeListener);
 		modes.setToolTipText(LocalizationData.get("TransactionDialog.mode.tooltip")); //$NON-NLS-1$
@@ -259,29 +272,24 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		int nb = currentAccount.getModesNumber();
 		for (int i = 0; i < nb; i++) {
 			Mode mode = currentAccount.getMode(i);
-			if ((expense?mode.getExpenseVdc():mode.getReceiptVdc())==null) {
-				//modes.addItem("----- "+mode.getName()+" ----");
-			} else {
+			if ((expense?mode.getExpenseVdc():mode.getReceiptVdc())!=null) {
 				modes.addItem(mode.getName());
 			}
 		}
-		// Clears the selection in order future selection to fire a selection change
-		// event ... even
-		// if the same value is selected (as selectedMode and value date may be
-		// changed)
-		modes.setSelectedIndex(-1);
-		selectedMode = -1;
-		modes.setActionEnabled(true);
-		// Restore the previously selected mode, if it is available
-		int index = 0;
-		if (current != null) {
-			Mode mode = currentAccount.getMode(current);
-			if (mode != null) { // If the last selected mode exists in the account for
-													// this transaction kind
-				index = currentAccount.findMode(mode);
-			}
+		if ((originalMode!=null) && (originalIsExpense==expense) && !modes.contains(originalMode) && (currentAccount.getMode(originalMode)!=null)) {
+			modes.addItem(originalMode);
 		}
-		modes.setSelectedIndex(index >= 0 ? index : 0);
+		// Clears the selection in order future selection to fire a selection change
+		// event ... even if the same value is selected (as selectedMode and value date may be
+		// changed)
+		modes.setSelectedItem(null);
+		modes.setActionEnabled(true);
+		// Restore the previously selected mode, if it is still available
+		if ((current != null) && (modes.contains(current))) {
+			modes.setSelectedItem(current);
+		} else {
+			modes.setSelectedIndex(0);
+		}
 	}
 
 	private String[] getAccounts() {
@@ -306,7 +314,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 
 	protected Mode getCurrentMode() {
 		Account account = AbstractTransactionDialog.this.data.getAccount(selectedAccount);
-		return account.getMode(selectedMode);
+		return account.getMode((String)modes.getSelectedItem());
 	}
 
 	class AccountsListener implements ActionListener {
@@ -337,12 +345,13 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	}
 
 	class ModesListener implements ActionListener {
+		private int lastSelected = -1;
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == modes) {
 				int index = modes.getSelectedIndex();
-				if (index != selectedMode) {
-					selectedMode = index;
-					if (DEBUG) System.out.println("Mode " + selectedMode + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+				if (index != lastSelected) {
+					lastSelected = index;
+					if (DEBUG) System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
 					optionnalUpdatesOnModeChange();
 				}
 			} else {

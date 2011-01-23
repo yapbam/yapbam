@@ -21,6 +21,13 @@ public class CoolJComboBox extends JComboBox {
 		this.isActionEnabled = isActionEnabled;
 	}
 	
+	/** Tests whether the events are enabled or not.
+	 * @return true if events are enabled.
+	 */
+	public boolean isActionEnabled() {
+		return isActionEnabled;
+	}
+	
 	/** Tests whether the menu contains an item or not
 	 * @param item the item to test
 	 * @return true if the item is in the menu.
