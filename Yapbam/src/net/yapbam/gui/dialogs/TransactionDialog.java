@@ -173,6 +173,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				if (evt.getNewValue() != null) {
 					Mode m = getCurrentMode();
 					DateStepper vdc = isExpense() ? m.getExpenseVdc() : m.getReceiptVdc();
+					// If the date stepper is no more available (if the transaction payment mode is no more usable), use the default value date computer.
+					if (vdc==null) vdc = DateStepper.IMMEDIATE;
 					defDate.setDate(vdc.getNextStep(date.getDate()));
 				}
 				updateOkButtonEnabled();
