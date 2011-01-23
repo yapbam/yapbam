@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.security.AccessControlException;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.StringTokenizer;
 
 import net.yapbam.data.*;
@@ -281,16 +280,9 @@ public class Serializer {
 		}
 		
 		hd.startElement("","",ACCOUNT_TAG,atts);
-		HashSet<String> saved = new HashSet<String>();
-		// for loops start with index 1 because the default mode doesn't need to be saved
-		for (int i = 0; i < account.getModesNumber(true); i++) {
-			Mode mode = account.getMode(i, true);
+		for (int i = 0; i < account.getModesNumber(); i++) {
+			Mode mode = account.getMode(i);
 			if (!mode.equals(Mode.UNDEFINED)) serialize(mode);
-			saved.add(mode.getName());
-		}
-		for (int i = 0; i < account.getModesNumber(false); i++) {
-			Mode mode = account.getMode(i, false);
-			if (!mode.equals(Mode.UNDEFINED) && !saved.contains(mode.getName())) serialize(mode);
 		}
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
 			serialize(account.getCheckbook(i));

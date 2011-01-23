@@ -307,7 +307,6 @@ public class BudgetView extends DefaultListenable {
 		}
 	}
 	
-	@SuppressWarnings("rawtypes" )
 	private static void addToSortedList(List list, Object element) {
 		int index = Collections.binarySearch(list, element);
 		if (index<0) list.add(-index-1, element);
