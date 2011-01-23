@@ -16,7 +16,6 @@ import java.util.Iterator;
 public class BalanceHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unchecked")
 	private static final Comparator<Object> COMPARATOR = new Comparator<Object>() {
 		public int compare(Object o1, Object o2) {
 			if (o1 instanceof BalanceHistoryElement) {

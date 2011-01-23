@@ -193,7 +193,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		Mode mode = getCurrentMode();
 		setTransactionNumberWidget();
 		DateStepper vdc = isExpense() ? mode.getExpenseVdc() : mode.getReceiptVdc();
-		defDate.setDate(vdc.getNextStep(date.getDate()));
+		if (vdc!=null) defDate.setDate(vdc.getNextStep(date.getDate()));
 	}
 
 	@Override

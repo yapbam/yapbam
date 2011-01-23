@@ -10,8 +10,6 @@ public class Account implements Serializable {
 	
 	private String name;
 	private double initialBalance;
-	private List<Mode> receiptModes;
-	private List<Mode> expenseModes;
 	private List<Mode> modes;
 	private List<Checkbook> checkbooks;
 	private int transactionNumber;
@@ -28,8 +26,6 @@ public class Account implements Serializable {
 		this.name = name;
 		this.initialBalance = initialBalance;
 		this.alertThreshold = AlertThreshold.DEFAULT;
-		this.receiptModes = new ArrayList<Mode>();
-		this.expenseModes = new ArrayList<Mode>();
 		this.modes = new ArrayList<Mode>();
 		this.checkbooks = new ArrayList<Checkbook>();
 		this.balanceData = new BalanceData();
@@ -64,23 +60,6 @@ public class Account implements Serializable {
 		return this.initialBalance;
 	}
 
-	/** Gets the account's expense/receipt modes number.
-	 * @param expense true for expense modes, false for receipt modes.
-	 * @return the account's expense/receipt modes number
-	 */
-	public int getModesNumber(boolean expense) {
-		return expense?this.expenseModes.size():this.receiptModes.size();
-	}
-	
-	/** Gets one of the account's expense/receipt payment modes.
-	 * @param index the payment mode number.
-	 * @param expense true for expense modes, false for receipt modes.
-	 * @return the account's payment mode
-	 */
-	public Mode getMode(int index, boolean expense) {
-		return expense?this.expenseModes.get(index):this.receiptModes.get(index);
-	}
-	
 	/** Gets an account's payment mode by its name.
 	 * @param name the payment mode's name
 	 * @return The payment mode, or null, if no payment mode with that name exists
@@ -153,13 +132,9 @@ public class Account implements Serializable {
 			throw new IllegalArgumentException("This account already contains the mode "+newMode.getName());
 		}
 		this.modes.add(newMode);
-		if (newMode.getExpenseVdc()!=null) this.expenseModes.add(newMode);
-		if (newMode.getReceiptVdc()!=null) this.receiptModes.add(newMode);
 	}
 
 	void remove(Mode mode) {
-		this.expenseModes.remove(mode);
-		this.receiptModes.remove(mode);
 		this.modes.remove(mode);
 	}
 	
@@ -167,14 +142,6 @@ public class Account implements Serializable {
 	void replace(Mode oldMode, Mode newMode) {
 		// Be aware not to really replace the mode, but update it (transactions have a pointer to their mode).
 		oldMode.updateTo(newMode);
-		// Rebuild the expensesModes and receiptModes if needed (these lists contain only modes usable for expenses/receipts).
-		this.expenseModes.clear();
-		this.receiptModes.clear();
-		for (int i = 0; i < modes.size(); i++) {
-			Mode mode = this.modes.get(i);
-			if (mode.getExpenseVdc()!=null) this.expenseModes.add(mode);
-			if (mode.getReceiptVdc()!=null) this.receiptModes.add(mode);
-		}
 	}
 
 	@Override
@@ -182,14 +149,13 @@ public class Account implements Serializable {
 		return this.getName()+"["+this.initialBalance+"]";
 	}
 
-	/** Gets the index of a expense/receipt payment mode for this account.
+	/** Gets the index of a payment mode in this account.
 	 * @param mode The mode to find
-	 * @param expense true to get the index in the expense payment modes. False for receipt payment modes.
-	 * @return a negative number if the mode is unknown for this kind of transaction (expense/receipt),
+	 * @return a negative number if the mode is unknown in this kind of transaction (expense/receipt),
 	 * or the index if it was found.
 	 */
-	public int findMode(Mode mode, boolean expense) {
-		return expense?this.expenseModes.indexOf(mode):this.receiptModes.indexOf(mode);
+	public int findMode(Mode mode) {
+		return this.modes.indexOf(mode);
 	}
 	
 	/** Gets this account's total number of payment modes (expense and receipt modes).

@@ -17,7 +17,7 @@ public class Mode implements Serializable {
 	private DateStepper expenseVDC;
 	private boolean useCheckBook;
 
-	/** Construtor
+	/** Constructor
 	 * @param name The name
 	 * @param receiptVDC A ValueDateComputer used to compute value date for receipts, or null this mode
 	 *  can't be used for receipts

@@ -39,7 +39,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	private CoolJComboBox modes;
 	protected CategoryPanel categories;
 	protected SubtransactionListPanel subtransactionsPanel;
-
+	
 	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
@@ -58,15 +58,15 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		amount.setValue(Math.abs(transaction.getAmount()));
 		receipt.setSelected(transaction.getAmount()>0);
 		// Be aware, as its listener change the selectedMode, receipt must always be set before mode.
-		modes.setSelectedIndex(account.findMode(transaction.getMode(), transaction.getAmount()<=0));
+		modes.setSelectedItem(transaction.getMode().getName());
 		categories.setCategory(transaction.getCategory());
 	}
 
 	protected void setMode(Mode mode) {
 		Account account = data.getAccount(selectedAccount);
-		int index = account.findMode(mode, isExpense());
+		int index = account.findMode(mode);
 		if (index>=0) {
-			modes.setSelectedIndex(index); // If the mode isn't available for this kind of transaction, do nothing.
+			modes.setSelectedIndex(index); // If the mode isn't available for this account, do nothing.
 		}
 	}
 	
@@ -245,9 +245,9 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	protected abstract void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c);
 
 	/**
-	 * Refresh the mode list according to the current account and receipt/expense
-	 * kind of transaction. If a mode with the same name that the currently
-	 * selected mode is available, it will be selected. else, the first mode of
+	 * Refreshes the mode list according to the current account.
+	 * <BR>If a mode with the same name that the currently
+	 * selected mode is available, it will be selected. Else, the first mode of
 	 * the list will be selected.
 	 */
 	private void buildModes(boolean expense) {
@@ -256,9 +256,14 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		String current = (String) modes.getSelectedItem();
 		modes.removeAllItems();
 		Account currentAccount = data.getAccount(selectedAccount);
-		int nb = currentAccount.getModesNumber(expense);
+		int nb = currentAccount.getModesNumber();
 		for (int i = 0; i < nb; i++) {
-			modes.addItem(currentAccount.getMode(i, expense).getName());
+			Mode mode = currentAccount.getMode(i);
+			if ((expense?mode.getExpenseVdc():mode.getReceiptVdc())==null) {
+				//modes.addItem("----- "+mode.getName()+" ----");
+			} else {
+				modes.addItem(mode.getName());
+			}
 		}
 		// Clears the selection in order future selection to fire a selection change
 		// event ... even
@@ -273,7 +278,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 			Mode mode = currentAccount.getMode(current);
 			if (mode != null) { // If the last selected mode exists in the account for
 													// this transaction kind
-				index = currentAccount.findMode(mode, expense);
+				index = currentAccount.findMode(mode);
 			}
 		}
 		modes.setSelectedIndex(index >= 0 ? index : 0);
@@ -301,7 +306,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 
 	protected Mode getCurrentMode() {
 		Account account = AbstractTransactionDialog.this.data.getAccount(selectedAccount);
-		return account.getMode(selectedMode, isExpense());
+		return account.getMode(selectedMode);
 	}
 
 	class AccountsListener implements ActionListener {
