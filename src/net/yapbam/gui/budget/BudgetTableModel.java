@@ -27,12 +27,12 @@ class BudgetTableModel extends AbstractTableModel {
 	
 	@Override
 	public int getColumnCount() {
-		return this.budget.getDatesSize()+2; //TODO (depends on check boxes set up)
+		return this.budget.getDatesSize();
 	}
 
 	@Override
 	public int getRowCount() {
-		return this.budget.getCategoriesSize()+1; //TODO (depends on check boxes set up)
+		return this.budget.getCategoriesSize();
 	}
 
 	@Override

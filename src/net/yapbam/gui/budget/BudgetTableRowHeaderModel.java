@@ -29,7 +29,7 @@ class BudgetTableRowHeaderModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return budget.getCategoriesSize()+1; //TODO depends on checkbox state
+		return budget.getCategoriesSize();
 	}
 
 	@Override
