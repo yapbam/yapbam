@@ -1,5 +1,7 @@
 package net.yapbam.gui.dialogs;
 
+import java.awt.CardLayout;
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.FocusListener;
@@ -143,12 +145,12 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		c.fill=GridBagConstraints.NONE; c.weightx=0.0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.number")), c); //$NON-NLS-1$
+		JPanel alternateNumberFields = new JPanel(new CardLayout());
+
 		transactionNumber = new JTextField(15);
 		transactionNumber.setToolTipText(LocalizationData.get("TransactionDialog.number.tooltip")); //$NON-NLS-1$
 		transactionNumber.addFocusListener(focusListener);
-		c.gridx++;
-		c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
-		centerPane.add(transactionNumber, c);
+
 		checkNumber = new CheckNumberPanel();
 		checkNumber.addPropertyChangeListener(CheckNumberPanel.NUMBER_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -156,8 +158,13 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				transactionNumber.setText(checkNumber.getNumber());
 			}
 		});
-		checkNumber.setVisible(false);
-		centerPane.add(checkNumber, c);
+		
+		alternateNumberFields.add(checkNumber, checkNumber.getClass().getName());
+		alternateNumberFields.add(transactionNumber, transactionNumber.getClass().getName());
+
+		c.gridx++;
+		c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		centerPane.add(alternateNumberFields, c);
 		c.gridx++;
 	}
 
@@ -321,15 +328,21 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		}
 	}
 
+	private boolean checkNumberIsVisible = false;
 	private void setTransactionNumberWidget() {
 		boolean checkNumberRequired = useCheckbook();
-		if (checkNumberRequired != checkNumber.isVisible()) {
+		if (checkNumberRequired != checkNumberIsVisible) {
+			if (!checkNumberRequired) {
+				transactionNumber.setText(""); //$NON-NLS-1$
+			} else {
+				checkNumber.setAccount(data, getAccount());
+			}
 			// If we need to switch from text field to check numbers popup
-			checkNumber.setVisible(checkNumberRequired);
-			transactionNumber.setVisible(!checkNumberRequired);
-			if (!checkNumberRequired) transactionNumber.setText(""); //$NON-NLS-1$
-			else checkNumber.setAccount(data, getAccount());
+			Container parent = checkNumber.getParent();
+			CardLayout layout = (CardLayout) parent.getLayout();
+			if (checkNumberRequired) layout.first(parent); else layout.last(parent);
 			pack();
+			checkNumberIsVisible = !checkNumberIsVisible;
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(), getAccount())) {
 			checkNumber.setAccount(data, getAccount());
 		}
