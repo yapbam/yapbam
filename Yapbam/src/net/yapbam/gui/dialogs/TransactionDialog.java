@@ -36,7 +36,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	private CheckNumberPanel checkNumber;
 	private DateWidgetPanel defDate;
 	private JTextField statement;
-	
+	private boolean checkNumberIsVisible;
+
 	/** Display the creation dialog, if the creation is confirmed, add the transaction to the global data 
 	 * @param data the global data
 	 * @param owner the dialog's parent frame
@@ -201,8 +202,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	}
 
 	protected void optionnalUpdatesOnModeChange() {
-		Mode mode = getCurrentMode();
 		setTransactionNumberWidget();
+		Mode mode = getCurrentMode();
 		DateStepper vdc = isExpense() ? mode.getExpenseVdc() : mode.getReceiptVdc();
 		if (vdc!=null) defDate.setDate(vdc.getNextStep(date.getDate()));
 	}
@@ -234,9 +235,9 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		}
 		// Sort the map by ranking
 		LinkedList<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(map.entrySet());
-		Collections.sort(list, new Comparator() {
+		Collections.sort(list, new Comparator<Object>() {
 			public int compare(Object o1, Object o2) {
-				return -((Comparable) ((Map.Entry) (o1)).getValue()).compareTo(((Map.Entry) (o2)).getValue());
+				return -((Comparable<Double>) ((Map.Entry<String, Double>) (o1)).getValue()).compareTo(((Map.Entry<String, Double>) (o2)).getValue());
 			}
 		});
 		String[] array = new String[list.size()];
@@ -330,7 +331,6 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		}
 	}
 
-	private boolean checkNumberIsVisible = false;
 	private void setTransactionNumberWidget() {
 		boolean checkNumberRequired = useCheckbook();
 		if (checkNumberRequired != checkNumberIsVisible) {
@@ -343,7 +343,6 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			Container parent = checkNumber.getParent();
 			CardLayout layout = (CardLayout) parent.getLayout();
 			if (checkNumberRequired) layout.first(parent); else layout.last(parent);
-			pack();
 			checkNumberIsVisible = !checkNumberIsVisible;
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(), getAccount())) {
 			checkNumber.setAccount(data, getAccount());
