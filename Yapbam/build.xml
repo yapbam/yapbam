@@ -13,7 +13,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.7.6.a1"/>
+	<property name="yapbamVersion" value="0.8.0"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>

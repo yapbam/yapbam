@@ -96,11 +96,13 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	 */
 	protected double getAmount() {
 		double amount = Math.abs(this.amount.getValue());
-		// Beware of null value, a null expense may could be considered as a receipt,
-		// and expenses and receipt have not the same modes available.
+		// Beware of null value, a null expense should be considered as a receipt,
+		// because expenses and receipts have not the same modes available.
 		// We will transform null value into very, very, very small non null values.
-		if (amount==0) amount=Double.MIN_VALUE;
-		if (isExpense()) amount = -amount;
+		if (amount==0) {
+			amount=Double.MIN_VALUE;
+			if (!this.receipt.isSelected()) amount = -amount;
+		}
 		return amount;
 	}
 	
@@ -108,7 +110,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	 * @return true for an expense, false for a receipt
 	 */
 	protected boolean isExpense() {
-		return !this.receipt.isSelected();
+		return getAmount()<0;
 	}
 
 /**/	private JPanel combine (JComboBox box, JButton button) {
