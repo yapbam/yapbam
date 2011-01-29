@@ -161,6 +161,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		
 		alternateNumberFields.add(checkNumber, checkNumber.getClass().getName());
 		alternateNumberFields.add(transactionNumber, transactionNumber.getClass().getName());
+		CardLayout layout = (CardLayout) alternateNumberFields.getLayout();
+		layout.last(alternateNumberFields);
 
 		c.gridx++;
 		c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
