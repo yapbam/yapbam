@@ -24,6 +24,7 @@ import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CoolJComboBox;
 import net.yapbam.gui.widget.PopupTextFieldList;
+import net.yapbam.util.NullUtils;
 
 /** This dialog allows to create or edit a transaction */
 public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalData> {
@@ -101,8 +102,8 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		// We will transform null value into very, very, very small non null values.
 		if (amount==0) {
 			amount=Double.MIN_VALUE;
-			if (!this.receipt.isSelected()) amount = -amount;
 		}
+		if (!this.receipt.isSelected()) amount = -amount;
 		return amount;
 	}
 	
@@ -347,12 +348,14 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	}
 
 	class ModesListener implements ActionListener {
-		private int lastSelected = -1;
+		private Object lastSelected = null;
+		private boolean lastWasExpense = true;
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == modes) {
-				int index = modes.getSelectedIndex();
-				if (index != lastSelected) {
-					lastSelected = index;
+				Object selected = modes.getSelectedItem();
+				if (!NullUtils.areEquals(lastSelected, selected) || (isExpense()!=lastWasExpense)) {
+					lastSelected = selected;
+					lastWasExpense = isExpense();
 					if (DEBUG) System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
 					optionnalUpdatesOnModeChange();
 				}

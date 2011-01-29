@@ -24,15 +24,15 @@ import javax.swing.JButton;
 
 public class CheckNumberPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final String NUMBER_PROPERTY = "Number";  //  @jve:decl-index=0:
-	
+	public static final String NUMBER_PROPERTY = "Number"; // @jve:decl-index=0:
+
 	private JComboBox numbers = null;
 	private JButton newButton = null;
-	private Account account;  //  @jve:decl-index=0:
+	private Account account; // @jve:decl-index=0:
 	private GlobalData data;
-	
+
 	private String number = null;
-	
+
 	/**
 	 * This is the default constructor
 	 */
@@ -40,41 +40,39 @@ public class CheckNumberPanel extends JPanel {
 		super();
 		initialize();
 	}
-	
+
 	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void initialize() {
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.weightx = 1.0;
+		this.add(getNumbers(), gridBagConstraints);
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 1;
-		gridBagConstraints1.fill = GridBagConstraints.BOTH;
-		gridBagConstraints1.gridy = 0;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.weightx = 1.0;
-		gridBagConstraints.gridx = 0;
-		this.setSize(300, 200);
-		this.setLayout(new GridBagLayout());
-		this.add(getNumbers(), gridBagConstraints);
 		this.add(getNewButton(), gridBagConstraints1);
+    Dimension dimension = getNumbers().getPreferredSize();
+    getNewButton().setPreferredSize(new Dimension(dimension.height, dimension.height));
+    // Setting the editable property before would lead to wrong dimension (at most with Nimbus LAF)
+    getNumbers().setEditable(true);
 	}
 
 	/**
-	 * This method initializes numbers	
-	 * 	
-	 * @return javax.swing.JComboBox	
+	 * This method initializes numbers
+	 * 
+	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getNumbers() {
 		if (numbers == null) {
-			numbers = new JComboBox();
-			numbers.setEditable(true);
+			numbers = new JComboBox(new String[]{"toto"});
 			numbers.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange()==ItemEvent.SELECTED) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
 						String old = number;
 						number = (String) numbers.getSelectedItem();
 						if (!NullUtils.areEquals(old, number)) {
@@ -88,26 +86,24 @@ public class CheckNumberPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes newButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes newButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getNewButton() {
 		if (newButton == null) {
 			newButton = new JButton();
-	        Dimension dimension = getNumbers().getPreferredSize();
-	        newButton.setPreferredSize(new Dimension(dimension.height, dimension.height));
-	        newButton.setEnabled(false);
+			newButton.setEnabled(false);
 			newButton.setIcon(IconManager.NEW_CATEGORY);
-	        newButton.setFocusable(false);
+			newButton.setFocusable(false);
 			newButton.setToolTipText(LocalizationData.get("TransactionDialog.checkbook.new.tooltip")); //$NON-NLS-1$
 			newButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Checkbook book = CheckbookDialog.open(data, account, AbstractDialog.getOwnerWindow(newButton));
-					if (book!=null) {
+					if (book != null) {
 						numbers.addItem(book.getFullNumber(book.getNext()));
-						numbers.setSelectedIndex(numbers.getItemCount()-1);
+						numbers.setSelectedIndex(numbers.getItemCount() - 1);
 					}
 				}
 			});
@@ -122,18 +118,18 @@ public class CheckNumberPanel extends JPanel {
 	public void setAccount(GlobalData data, Account account) {
 		this.data = data;
 		this.account = account;
-		this.getNewButton().setEnabled((data!=null)&&(account!=null));
+		this.getNewButton().setEnabled((data != null) && (account != null));
 		numbers.removeAllItems();
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
 			Checkbook checkbook = account.getCheckbook(i);
 			if (!checkbook.isEmpty()) numbers.addItem(checkbook.getFullNumber(checkbook.getNext()));
 		}
 	}
-	
+
 	public void setText(String text) {
 		numbers.setSelectedItem(text);
 	}
-	
+
 	public String getNumber() {
 		return this.number;
 	}
