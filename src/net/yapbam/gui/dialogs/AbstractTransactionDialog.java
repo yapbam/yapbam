@@ -81,7 +81,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		Account account = data.getAccount(selectedAccount);
 		int index = account.findMode(mode);
 		if (index>=0) {
-			modes.setSelectedIndex(index); // If the mode isn't available for this account, do nothing.
+			modes.setSelectedItem(mode.getName()); // If the mode isn't available for this account, do nothing.
 		}
 	}
 	
