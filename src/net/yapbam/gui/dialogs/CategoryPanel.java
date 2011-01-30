@@ -78,9 +78,9 @@ public class CategoryPanel extends JPanel {
 	private JButton getNewButton() {
 		if (newButton == null) {
 			newButton = new JButton();
-	        Dimension dimension = getComboBox().getPreferredSize();
-	        newButton.setFocusable(false);
-	        newButton.setPreferredSize(new Dimension(dimension.height, dimension.height));
+			Dimension dimension = getComboBox().getPreferredSize();
+			newButton.setFocusable(false);
+			newButton.setPreferredSize(new Dimension(dimension.height, dimension.height));
 			newButton.setToolTipText(LocalizationData.get("TransactionDialog.category.new.tooltip")); //$NON-NLS-1$
 			newButton.setIcon(IconManager.NEW_CATEGORY);
 			newButton.addActionListener(new java.awt.event.ActionListener() {
@@ -90,8 +90,8 @@ public class CategoryPanel extends JPanel {
 					while (!(wd instanceof Window)) {
 						wd = wd.getParent();
 					}
-					Category c = CategoryDialog.open(data, (Window) wd, null);;
-					if (c!=null) {
+					Category c = CategoryDialog.open(data, (Window) wd, null);
+					if (c != null) {
 						buildCategories();
 						comboBox.setSelectedIndex(data.indexOf(c));
 						AbstractDialog.getOwnerWindow(newButton).pack();
@@ -104,7 +104,7 @@ public class CategoryPanel extends JPanel {
 
 	public Category getCategory() {
 		if (data==null) return null;
-		return this.data.getCategory(getComboBox().getSelectedIndex());
+		return this.data.getCategory((String)getComboBox().getSelectedItem());
 	}
 
 	public void setCategory(Category category) {
