@@ -120,7 +120,7 @@ public class SubTransactionPanel extends JPanel {
 			public void keyReleased(KeyEvent arg0) {
 				Double old = amount;
 				amount = amountField.getValue();
-				if (!jCheckBox.isSelected()) amount = -amount;
+				if (!jCheckBox.isSelected() && (amount!=null)) amount = -amount;
 				SubTransactionPanel.this.firePropertyChange(AMOUNT_PROPERTY, old, description);
 			}
 		});
