@@ -104,7 +104,8 @@ public class CategoryPanel extends JPanel {
 
 	public Category getCategory() {
 		if (data==null) return null;
-		return this.data.getCategory((String)getComboBox().getSelectedItem());
+		Category category = this.data.getCategory((String)getComboBox().getSelectedItem());
+		return category==null?Category.UNDEFINED:category;
 	}
 
 	public void setCategory(Category category) {

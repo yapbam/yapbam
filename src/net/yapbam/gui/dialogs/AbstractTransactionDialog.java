@@ -45,9 +45,6 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
-		//TODO remove
-//		this.pack();
-//		setResizable(true);
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
