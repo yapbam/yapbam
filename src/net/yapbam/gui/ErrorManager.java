@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.HashSet;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -28,8 +29,10 @@ public class ErrorManager {
 	private final static String ENC = "UTF-8";
 
 	private BlockingDeque<Message> errorsQueue;
+	private HashSet<String> encounteredErrors;
 	
 	private ErrorManager() {
+		this.encounteredErrors = new HashSet<String>();
 		this.errorsQueue = new LinkedBlockingDeque<Message>();
 		final Thread thread = new Thread(new LogSender(), "LogSender");
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -68,6 +71,14 @@ public class ErrorManager {
 	 */
 	public void log(Window parent, Throwable t) {
 		try {
+			// To prevent Yapbam from sending always the same errors (and/or showing always the error dialog)
+			// We will test if this error as not alreday been sent during this session
+			String trace = getTraceKey(t);
+			if (!encounteredErrors.add(trace)) {
+				System.out.println("Hey, I know you !!!");
+				return;
+			}
+			// Ok, if the program pointer is there, this is a new error.
 			int action =Preferences.INSTANCE.getCrashReportAction();
 			if (action==0) {
 				ErrorDialog errorDialog = new ErrorDialog(parent, t);
@@ -89,6 +100,28 @@ public class ErrorManager {
 			// Ok ... the logging process failed.
 			// At this point, there's nothing to do.
 		}
+	}
+
+	/** Gets the key of a throwable.
+	 * <BR>That key is used to prevent Yapbam from sending twice the same error.
+	 * <BR>The stack trace could have been used but it seemed to me that it is better to
+	 * return a key based only of the most recent calls in the trace (the same root error can occurred in
+	 * a lot of situations).
+	 * @param t a Throwable
+	 * @return the key.
+	 */
+	private String getTraceKey(Throwable t) {
+		StackTraceElement[] elements = t.getStackTrace();
+		StringBuilder buffer = new StringBuilder();
+		buffer.append(t.toString());
+		int i=0;
+		for (StackTraceElement element : elements) {
+			if (i==2) break;
+			buffer.append(element.toString());
+			i++;
+		}
+		System.out.println (buffer.toString());
+		return buffer.toString();
 	}
 		
 	private class LogSender implements Runnable {
