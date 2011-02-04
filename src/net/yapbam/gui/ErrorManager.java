@@ -75,7 +75,6 @@ public class ErrorManager {
 			// We will test if this error as not alreday been sent during this session
 			String trace = getTraceKey(t);
 			if (!encounteredErrors.add(trace)) {
-				System.out.println("Hey, I know you !!!");
 				return;
 			}
 			// Ok, if the program pointer is there, this is a new error.
@@ -120,7 +119,6 @@ public class ErrorManager {
 			buffer.append(element.toString());
 			i++;
 		}
-		System.out.println (buffer.toString());
 		return buffer.toString();
 	}
 		
