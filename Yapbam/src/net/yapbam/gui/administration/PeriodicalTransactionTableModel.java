@@ -138,7 +138,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 			} else {
 				result = ""; //$NON-NLS-1$
 			}
-			if (period.getLastDate()!=null) {
+			if ((period!=null) && (period.getLastDate()!=null)) {
 				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.until"), result, period.getLastDate()); //$NON-NLS-1$
 			}
 			return result;
