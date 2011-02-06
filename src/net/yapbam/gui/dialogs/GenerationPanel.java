@@ -137,6 +137,7 @@ public class GenerationPanel extends JPanel {
 	private DateWidgetPanel getDate() {
 		if (date == null) {
 			date = new DateWidgetPanel();
+			date.setLocale(LocalizationData.getLocale());
 			date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -369,6 +370,7 @@ public class GenerationPanel extends JPanel {
 	private DateWidgetPanel getLastDate() {
 		if (lastDate == null) {
 			lastDate = new DateWidgetPanel();
+			lastDate.setLocale(LocalizationData.getLocale());
 			lastDate.setDate(null);
 			lastDate.setColumns(6);
 			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
