@@ -122,6 +122,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
 		defDate = new DateWidgetPanel();
+		defDate.setLocale(LocalizationData.getLocale());
 		defDate.setToolTipText(LocalizationData.get("TransactionDialog.valueDate.tooltip")); //$NON-NLS-1$
 		defDate.getDateWidget().addFocusListener(focusListener);
 		defDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
@@ -175,6 +176,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
 		centerPane.add(titleDate, c);
 		date = new DateWidgetPanel();
+		date.setLocale(LocalizationData.getLocale());
 		date.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
 		date.getDateWidget().addFocusListener(focusListener);
 		date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
