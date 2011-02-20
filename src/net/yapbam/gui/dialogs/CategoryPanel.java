@@ -2,11 +2,9 @@ package net.yapbam.gui.dialogs;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.Window;
 
 import javax.swing.JPanel;
-import java.awt.GridBagConstraints;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
@@ -15,6 +13,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.CoolJComboBox;
+import java.awt.BorderLayout;
 
 public class CategoryPanel extends JPanel {
 	private static final String CATEGORY_PROPERTY = "category"; //$NON-NLS-1$
@@ -42,18 +41,9 @@ public class CategoryPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.gridx = 2;
-		gridBagConstraints2.gridy = 0;
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints1.gridy = 0;
-		gridBagConstraints1.weightx = 1.0;
-		gridBagConstraints1.gridx = 1;
-		this.setSize(300, 84);
-		this.setLayout(new GridBagLayout());
-		this.add(getComboBox(), gridBagConstraints1);
-		this.add(getNewButton(), gridBagConstraints2);
+		setLayout(new BorderLayout(0, 0));
+		this.add(getComboBox(), BorderLayout.CENTER);
+		this.add(getNewButton(), BorderLayout.EAST);
 	}
 
 	/**

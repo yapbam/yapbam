@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -112,13 +113,11 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	}
 
 /**/	private JPanel combine (JComboBox box, JButton button) {
-        JPanel pane = new JPanel(new GridBagLayout());
+        JPanel pane = new JPanel(new BorderLayout());
         Dimension dimension = box.getPreferredSize();
         button.setPreferredSize(new Dimension(dimension.height, dimension.height));
-        GridBagConstraints c = new GridBagConstraints(); c.gridx = 1;
-        pane.add(button, c);
-        c.gridx = 0; c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1;
-        pane.add(box, c);
+        pane.add(box, BorderLayout.CENTER);
+        pane.add(button, BorderLayout.EAST);
         return pane;
 	}/**/ //TODO remove
 	
