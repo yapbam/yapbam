@@ -30,6 +30,7 @@ public class StatementBuilder {
 		Arrays.sort(statements, new Comparator<Statement>() {
 			@Override
 			public int compare(Statement o2, Statement o1) {
+				if ((o2.getId()==null) || (o1.getId()==null)) return NullUtils.compareTo(o2.getId(),o1.getId(),false);
 				int result = o2.getMediumDate()-o1.getMediumDate();
 				if (result==0) result = NullUtils.compareTo(o2.getId(),o1.getId(),false);
 				return result;
