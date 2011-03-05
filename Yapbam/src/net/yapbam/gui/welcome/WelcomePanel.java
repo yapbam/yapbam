@@ -168,7 +168,7 @@ public class WelcomePanel extends JPanel {
 		gbc_btnViewTheTutorial.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnViewTheTutorial.gridx = 0;
 		gbc_btnViewTheTutorial.gridy = 1;
-		btnViewTheTutorial.setVisible(false);//TODO
+		btnViewTheTutorial.setVisible(true);
 		shortcutsPanel.add(btnViewTheTutorial, gbc_btnViewTheTutorial);
 		
 		JButton faq = new JButton(LocalizationData.get("Welcome.faq")); //$NON-NLS-1$
