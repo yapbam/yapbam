@@ -2,15 +2,9 @@ package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
 import java.awt.event.WindowEvent;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.net.Proxy;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -26,10 +20,10 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.Preferences;
 import net.yapbam.update.UpdateInformation;
-import net.yapbam.util.CheckSum;
 import net.yapbam.util.FileUtils;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.Portable;
+import net.yapbam.util.SecureDownloader;
 
 public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 	private static final long serialVersionUID = 1L;
@@ -97,9 +91,12 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 					
 					// Download the files
 					boolean ok = false;
-					String zipChck = download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
+					SecureDownloader sd = new MyDownloader(Preferences.INSTANCE.getHttpProxy());
+					sd.download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
+					String zipChck = sd.getCheckSum();
 					if (NullUtils.areEquals(zipChck, data.getAutoUpdateCheckSum())) {
-						String updaterChck = download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
+						sd.download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
+						String updaterChck = sd.getCheckSum();
 						ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
 						if (!ok) System.err.println ("ALERT checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)");
 					} else {
@@ -120,41 +117,24 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 			}
 		}
 				
-		private void progress(int size) {
-			downloaded += size;
-			int percent = (int) (downloaded*100/(data.getAutoUpdateSize()+data.getAutoUpdaterSize()));
-			if (percent!=lastProgress) {
-				this.publish(percent);
-				lastProgress = percent;
+		private class MyDownloader extends SecureDownloader {
+			MyDownloader(Proxy proxy) {
+				super(proxy);
 			}
-		}
-		
-		private String download(URL url, File file) throws UnknownHostException, IOException {
-			// First, create a digest to verify the checksum
-	  	MessageDigest digest;
-			try {
-				digest = MessageDigest.getInstance("MD5");
-			} catch (NoSuchAlgorithmException e) {
-				throw new RuntimeException(e);
-			}
-			InputStream in = url.openConnection(Preferences.INSTANCE.getHttpProxy()).getInputStream();
-			byte[] buffer = new byte[2048];
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file), buffer.length);
-			try {
-				int size;
-				while ((size = in.read(buffer, 0, buffer.length)) != -1) {
-					if (this.isCancelled()) break;
-					bos.write(buffer, 0, size);
-					if (size>0) {
-						digest.update(buffer, 0, size);
-						progress(size);
+
+			@Override
+			protected void progress() {
+				if (DownloadSwingWorker.this.isCancelled()) {
+					this.cancel();
+				} else {
+					downloaded = this.getDownloadedSize();
+					int percent = (int) (downloaded*100/(data.getAutoUpdateSize()+data.getAutoUpdaterSize()));
+					if (percent!=lastProgress) {
+						DownloadSwingWorker.this.publish(percent);
+						lastProgress = percent;
 					}
 				}
-			} finally {
-				bos.flush();
-				bos.close();
 			}
-			return CheckSum.toString(digest.digest());
 		}
 		
 		public void done() {
