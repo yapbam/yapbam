@@ -3,6 +3,8 @@ package net.yapbam.update;
 import java.net.Proxy;
 import java.net.URL;
 
+import net.yapbam.util.SecureDownloader;
+
 /** This class can be used to get the hash code of a file downloadable at an URL. */
 public class GetHashAndSize {
 	/**
@@ -13,19 +15,20 @@ public class GetHashAndSize {
 		System.out.println ("lastestRelease=0.8.1 (05/03/2011)");
 		System.out.println ("updateURL=http://sourceforge.net/project/platformdownload.php?group_id=276272");
 		System.out.println ();
+		SecureDownloader sd = new SecureDownloader(Proxy.NO_PROXY);
 		try {
 			String zipURL = "http://www.yapbam.net/update"+release+"/yapbam-"+release+".zip";
 			System.out.println ("autoUpdateURL="+zipURL);
-			SecureDownloader sd = new SecureDownloader(new URL(zipURL), null, Proxy.NO_PROXY);
+			sd.download(new URL(zipURL), null);
 			System.out.println ("autoUpdateCHKSUM="+sd.getCheckSum());
-			System.out.println ("autoUpdateSize="+sd.getLength());
+			System.out.println ("autoUpdateSize="+sd.getDownloadedSize());
 			System.out.println ();
 
 			String updaterURL = "http://www.yapbam.net/update"+release+"/updater.jar";
 			System.out.println ("autoUpdateUpdaterURL="+updaterURL);
-			sd = new SecureDownloader(new URL(updaterURL), null, Proxy.NO_PROXY);
+			sd.download(new URL(updaterURL), null);
 			System.out.println ("autoUpdateUpdaterCHKSUM="+sd.getCheckSum());
-			System.out.println ("autoUpdateUpdaterSize="+sd.getLength());
+			System.out.println ("autoUpdateUpdaterSize="+sd.getDownloadedSize());
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
