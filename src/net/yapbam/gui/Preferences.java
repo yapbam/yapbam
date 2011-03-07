@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import net.yapbam.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
@@ -290,6 +291,7 @@ public class Preferences {
 		plugins.add(new PlugInContainer(ToolsPlugIn.class));
 		plugins.add(new PlugInContainer(BudgetPlugin.class));
 		plugins.add(new PlugInContainer(StatementViewPlugin.class));
+		plugins.add(new PlugInContainer(AccountsSummaryPlugin.class));
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
 		file.listFiles(new FileFilter() {
 			@Override
