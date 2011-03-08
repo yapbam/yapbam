@@ -1,7 +1,4 @@
-package net.yapbam.accountsummary;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+package net.yapbam.gui.accountsummary;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -14,7 +11,6 @@ import net.yapbam.gui.LocalizationData;
 class AccountsSummaryTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private transient DateFormat dateFormater;
 	private GlobalData data;
 	
 	AccountsSummaryTableModel(JTable table, GlobalData data) {
@@ -34,13 +30,16 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		return 1;
+		return 4;
 	}
 
 	@Override
 	public String getColumnName(int columnIndex) {
 		//TODO
 		if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+		if (columnIndex==1) return "checked"; //LOCAL
+		if (columnIndex==2) return "current";
+		if (columnIndex==3) return "final";
 		return "?"; //$NON-NLS-1$
 	}
 
@@ -49,19 +48,10 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 	}
 	
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (dateFormater==null) {
-			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, LocalizationData.getLocale());
-		}
 		if (columnIndex==0) return data.getAccount(rowIndex).getName();
+		if (columnIndex==1) return data.getAccount(rowIndex).getBalanceData().getCheckedBalance();
+		if (columnIndex==2) return data.getAccount(rowIndex).getBalanceData().getCurrentBalance();
+		if (columnIndex==3) return data.getAccount(rowIndex).getBalanceData().getFinalBalance();
 		return null;
 	}
-/*
-	public void setTransactions(Transaction[] transactions) {
-		this.transactions = transactions;
-		this.fireTableDataChanged();
-	}
-
-	public Transaction[] getTransactions() {
-		return this.transactions;
-	}*/
 }
