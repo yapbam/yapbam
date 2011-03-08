@@ -1,4 +1,4 @@
-package net.yapbam.accountsummary;
+package net.yapbam.gui.accountsummary;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
