@@ -224,7 +224,7 @@ public class TransactionsPlugInPanel extends JPanel {
 	private void updateBalances() {
 		currentBalance.setValue(acFilter.getCurrentBalance());
 		finalBalance.setValue(acFilter.getFinalBalance());
-	    checkedBalance.setValue(acFilter.getCheckedBalance());
+		checkedBalance.setValue(acFilter.getCheckedBalance());
 	}
 	
 	CheckModePanel getCheckModePane() {
