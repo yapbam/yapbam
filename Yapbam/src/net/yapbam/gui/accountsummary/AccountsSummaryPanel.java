@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.statementview.CellRenderer;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -68,8 +69,22 @@ public class AccountsSummaryPanel extends JPanel {
 			table = new JTable();
 			this.model = new AccountsSummaryTableModel(table, data);
 			table.setModel(this.model);
-//TODO			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
+			table.setDefaultRenderer(Object.class, new CellRenderer());
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//			table.setDefaultRenderer(Double.class, new DefaultTableCellRenderer(){
+//		    @Override
+//			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+//		    		boolean hasFocus, int row, int column) {
+//		    	super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//		    	if (value.equals(Double.POSITIVE_INFINITY) || value.equals(Double.NEGATIVE_INFINITY)) {
+//		    		setText("");
+//		    	} else {
+//		    		setText(LocalizationData.getCurrencyInstance().format(value));
+//		    	}
+//			    this.setHorizontalAlignment(SwingConstants.RIGHT);
+//		    	return this;
+//		    }
+//		});
 		}
 		return table;
 	}

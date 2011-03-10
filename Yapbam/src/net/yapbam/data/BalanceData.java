@@ -23,6 +23,9 @@ public class BalanceData extends DefaultListenable {
 	// The date is converted to simplify comparison.
 	private int currentBalanceDate;
 	
+	/** Constructor.
+	 * All amounts are set to 0.
+	 */
 	BalanceData() {
 	}
 	
