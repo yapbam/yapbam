@@ -26,7 +26,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Periodical.ToolTip")); //$NON-NLS-1$
 		putValue(Action.MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Periodical.Mnemonic")); //$NON-NLS-1$
 		this.data = data;
-		data.addListener(new DataListener() {
+		data.getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionsRemovedEvent) ||
