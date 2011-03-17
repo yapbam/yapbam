@@ -19,8 +19,8 @@ class ConvertToPeriodicalTransactionAction extends AbstractAction {
 
 	public ConvertToPeriodicalTransactionAction(TransactionTable table) {
 		super(LocalizationData.get("MainMenu.Transactions.convertToPeriodical")); //$NON-NLS-1$
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.convertToPeriodical.ToolTip")); //$NON-NLS-1$
-        this.table = table;
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.convertToPeriodical.ToolTip")); //$NON-NLS-1$
+		this.table = table;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ class ConvertToPeriodicalTransactionAction extends AbstractAction {
 		}
 		PeriodicalTransaction model = new PeriodicalTransaction(transaction.getDescription(), transaction.getAmount(),
 				transaction.getAccount(), transaction.getMode(), transaction.getCategory(), list, null, false, null);
-		PeriodicalTransactionDialog.open(table.getGlobalData(), AbstractDialog.getOwnerWindow(table), model, false);
+		PeriodicalTransactionDialog.open(table.getFilteredData(), AbstractDialog.getOwnerWindow(table), model, false);
 	}
 
 }

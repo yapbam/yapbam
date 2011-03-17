@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.table.TableRowSorter;
 
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.gui.transactiontable.AmountRenderer;
@@ -43,6 +44,10 @@ class PeriodicalTransactionsTable extends JTable {
 	}
 
 	public GlobalData getGlobalData() {
-		return ((PeriodicalTransactionTableModel)this.getModel()).getGlobalData();
+		return this.getFilteredData().getGlobalData();
+	}
+
+	public FilteredData getFilteredData() {
+		return ((PeriodicalTransactionTableModel)this.getModel()).getFilteredData();
 	}
 }

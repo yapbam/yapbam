@@ -71,7 +71,7 @@ public class TransactionsPlugInPanel extends JPanel {
         
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		String noText = ""; //$NON-NLS-1$
-		JButton newTransactionButton = new JButton(new NewTransactionAction(transactionTable.getGlobalData()));
+		JButton newTransactionButton = new JButton(new NewTransactionAction(transactionTable.getFilteredData()));
 		newTransactionButton.setText(noText);
 		Dimension dimension = newTransactionButton.getPreferredSize();
 		dimension.width = dimension.height;

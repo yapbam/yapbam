@@ -51,17 +51,18 @@ class ModePanel extends JPanel {
 	 * @param option an optional component, displayed at the bottom of the panel (null if none)
 	 */
 	ModePanel(String title, Component option, final AbstractDialog dialog) {
-        super(new GridBagLayout());
-        
-        FocusListener focusListener = new AutoSelectFocusListener();
-        KeyListener keyListener = new AutoUpdateOkButtonKeyListener(dialog);
-        Insets insets = new Insets(5,5,5,5);
-        this.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
+		super(new GridBagLayout());
+		FocusListener focusListener = new AutoSelectFocusListener();
+		KeyListener keyListener = new AutoUpdateOkButtonKeyListener(dialog);
+		Insets insets = new Insets(5, 5, 5, 5);
+		this.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridwidth = GridBagConstraints.REMAINDER; c.insets=insets; c.anchor=GridBagConstraints.WEST;
-        isSelectedBox = new JCheckBox(title);
-        isSelectedBox.addItemListener(new ItemListener(){
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.insets = insets;
+		c.anchor = GridBagConstraints.WEST;
+		isSelectedBox = new JCheckBox(title);
+		isSelectedBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				boolean ok = (e.getStateChange() == ItemEvent.SELECTED);
 				combo.setEnabled(ok);
@@ -97,55 +98,64 @@ class ModePanel extends JPanel {
 		this.add(combo, c);
 		
 		relativePanel = new JPanel(new GridBagLayout());
-        if (DEBUG) relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
-        GridBagConstraints c2 = new GridBagConstraints(); c2.insets=insets; c2.anchor=GridBagConstraints.WEST;
-        relLabel = new JLabel(LocalizationData.get("ModeDialog.daysNumber")); //$NON-NLS-1$
+		if (DEBUG) relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
+		GridBagConstraints c2 = new GridBagConstraints();
+		c2.insets = insets;
+		c2.anchor = GridBagConstraints.WEST;
+		relLabel = new JLabel(LocalizationData.get("ModeDialog.daysNumber")); //$NON-NLS-1$
 		relativePanel.add(relLabel, c2);
-        c2.gridx=1; c2.weightx=1.0;
-        relField = new IntegerWidget();
-        relField.addFocusListener(focusListener);
-        relField.addKeyListener(keyListener);
-        relField.setColumns(2);
+		c2.gridx = 1;
+		c2.weightx = 1.0;
+		relField = new IntegerWidget();
+		relField.addFocusListener(focusListener);
+		relField.addKeyListener(keyListener);
+		relField.setColumns(2);
 		relativePanel.add(relField, c2);
-        relativePanel.setVisible(false);
-        
+		relativePanel.setVisible(false);
+
 		deferedPanel = new JPanel(new GridBagLayout());
-        if (DEBUG) deferedPanel.setBorder(BorderFactory.createTitledBorder("defferedPanel")); //$NON-NLS-1$
-        c2 = new GridBagConstraints(); c2.weightx=1.0; c2.insets=insets;
-        stopLabel = new JLabel(LocalizationData.get("ModeDialog.stop")); //$NON-NLS-1$
+		if (DEBUG) deferedPanel.setBorder(BorderFactory.createTitledBorder("defferedPanel")); //$NON-NLS-1$
+		c2 = new GridBagConstraints();
+		c2.weightx = 1.0;
+		c2.insets = insets;
+		stopLabel = new JLabel(LocalizationData.get("ModeDialog.stop")); //$NON-NLS-1$
 		deferedPanel.add(stopLabel, c2);
-        c2.gridx=1;
-        stopField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
-        stopField.addFocusListener(focusListener);
-        stopField.addKeyListener(keyListener);
-        stopField.setColumns(2);
+		c2.gridx = 1;
+		stopField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
+		stopField.addFocusListener(focusListener);
+		stopField.addKeyListener(keyListener);
+		stopField.setColumns(2);
 		deferedPanel.add(stopField, c2);
-        c2.gridx=2;
-        debtLabel = new JLabel(LocalizationData.get("ModeDialog.debt")); //$NON-NLS-1$
+		c2.gridx = 2;
+		debtLabel = new JLabel(LocalizationData.get("ModeDialog.debt")); //$NON-NLS-1$
 		deferedPanel.add(debtLabel, c2);
 		debtField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		debtField.addFocusListener(focusListener);
 		debtField.addKeyListener(keyListener);
-        debtField.setColumns(2);
-        c2.gridx=3;
-        deferedPanel.add(debtField, c2);
-        deferedPanel.setVisible(false);
-        
+		debtField.setColumns(2);
+		c2.gridx = 3;
+		deferedPanel.add(debtField, c2);
+		deferedPanel.setVisible(false);
+
 		emptyPanel = new JPanel();
-        if (DEBUG) emptyPanel.setBorder(BorderFactory.createTitledBorder("emptyPanel")); //$NON-NLS-1$
+		if (DEBUG) emptyPanel.setBorder(BorderFactory.createTitledBorder("emptyPanel")); //$NON-NLS-1$
 
 		homogeneizePreferedSize(new JPanel[]{emptyPanel,relativePanel,deferedPanel});
 		c.gridy = 2; c.gridx=0; c.gridwidth=GridBagConstraints.REMAINDER; c.fill=GridBagConstraints.HORIZONTAL;
 		this.add(relativePanel, c);
 		this.add(deferedPanel, c);
-        this.add(emptyPanel, c);
+		this.add(emptyPanel, c);
 
-        if (option!=null) {
-        	c=new GridBagConstraints(); c.insets = insets; c.gridy=3; c.gridwidth=GridBagConstraints.REMAINDER; c.anchor=GridBagConstraints.WEST;
-        	this.add(option,c);
-        	this.optionalComponent = option;
-        	option.setEnabled(false);
-        }	        
+		if (option != null) {
+			c = new GridBagConstraints();
+			c.insets = insets;
+			c.gridy = 3;
+			c.gridwidth = GridBagConstraints.REMAINDER;
+			c.anchor = GridBagConstraints.WEST;
+			this.add(option, c);
+			this.optionalComponent = option;
+			option.setEnabled(false);
+		}
 	}
 	
 	DateStepper getValueDateComputer() {

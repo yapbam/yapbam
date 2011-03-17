@@ -26,6 +26,6 @@ public class DeleteTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = selector.getSelectedTransaction();
-		selector.getGlobalData().remove(transaction);
+		selector.getFilteredData().getGlobalData().remove(transaction);
 	}
 }

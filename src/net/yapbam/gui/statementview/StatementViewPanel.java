@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import net.yapbam.data.Account;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.AccountAddedEvent;
@@ -64,7 +65,7 @@ public class StatementViewPanel extends JPanel {
 	private TransactionsTableModel model;
 	private JLabel jLabel2 = null;
 	
-	private GlobalData data;
+	private FilteredData data;
 	private Statement[] statements;
 	
 	/**
@@ -78,16 +79,17 @@ public class StatementViewPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public StatementViewPanel(GlobalData data) {
+	public StatementViewPanel(FilteredData data) {
 		this();
 		this.data = data;
-		this.data.addListener(new DataListener() {
+		this.data.getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
+				GlobalData global = StatementViewPanel.this.data.getGlobalData();
 				if (event instanceof EverythingChangedEvent) {
 					init();
 				} else if (event instanceof AccountAddedEvent) {
-					if (StatementViewPanel.this.data.getAccountsNumber()==1) {
+					if (global.getAccountsNumber()==1) {
 						// If there was no account before this one
 						init();
 					} else {
@@ -154,7 +156,8 @@ public class StatementViewPanel extends JPanel {
 	}
 	
 	private void init() {
-		if (data.getAccountsNumber()==0) {
+		GlobalData global = data.getGlobalData();
+		if (global.getAccountsNumber()==0) {
 			accountMenu.setSelectedIndex(-1);
 			accountMenu.removeAllItems();
 			accountMenu.setEnabled(false);
@@ -162,8 +165,8 @@ public class StatementViewPanel extends JPanel {
 			accountMenu.setEnabled(true);
 			this.accountMenu.setActionEnabled(false);
 			this.accountMenu.removeAllItems();
-			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				String accountName = data.getAccount(i).getName();
+			for (int i = 0; i < global.getAccountsNumber(); i++) {
+				String accountName = global.getAccount(i).getName();
 				accountMenu.addItem(accountName);
 			}
 			this.accountMenu.setActionEnabled(true);
@@ -262,7 +265,7 @@ public class StatementViewPanel extends JPanel {
 			statementMenu.setSelectedIndex(-1);
 			statementMenu.setEnabled(false);
 		} else {
-			statements = new StatementBuilder(data, data.getAccount(accountIndex)).getStatements();
+			statements = new StatementBuilder(data.getGlobalData(), data.getGlobalData().getAccount(accountIndex)).getStatements();
 			for (int i = 0; i < statements.length; i++) {
 				String id = statements[statements.length - 1 - i].getId();
 				statementMenu.addItem(id == null ? LocalizationData.get("StatementView.notChecked") : id); //$NON-NLS-1$
@@ -296,7 +299,7 @@ public class StatementViewPanel extends JPanel {
 						endBalance.setText(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()))); //$NON-NLS-1$
 						detail.setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
 								ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
-						model.setTransactions(getTransactions(data.getAccount(accountMenu.getSelectedIndex()), statement.getId()));
+						model.setTransactions(getTransactions(data.getGlobalData().getAccount(accountMenu.getSelectedIndex()), statement.getId()));
 					}
 					startBalance.setVisible(visible);
 					endBalance.setVisible(visible);
@@ -432,7 +435,7 @@ public class StatementViewPanel extends JPanel {
 				}
 				
 				@Override
-				public GlobalData getGlobalData() {
+				public FilteredData getFilteredData() {
 					return data;
 				}
 			};

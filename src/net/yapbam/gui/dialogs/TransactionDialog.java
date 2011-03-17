@@ -48,18 +48,19 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @param autoAdd if true, the created or edited transaction is automatically added to the global data instance.
 	 * @return the new transaction or the edited one
 	 */
-	public static Transaction open(GlobalData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd) {
-		if (data.getAccountsNumber() == 0) {
+	public static Transaction open(FilteredData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd) {
+		GlobalData globalData = data.getGlobalData();
+		if (globalData.getAccountsNumber() == 0) {
 			// Need to create an account first
-			AccountDialog.open(data, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
-			if (data.getAccountsNumber() == 0) return null;
+			AccountDialog.open(globalData, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			if (globalData.getAccountsNumber() == 0) return null;
 		}
 		TransactionDialog dialog = new TransactionDialog(owner, data, transaction, edit);
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if ((newTransaction != null) && autoAdd) {
-			data.add(newTransaction);
-			if (transaction != null) data.remove(transaction);
+			globalData.add(newTransaction);
+			if (transaction != null) globalData.remove(transaction);
 		}
 		return newTransaction;
 	}
@@ -71,7 +72,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @param edit True if we edit an existing transaction, false if we edit a new transaction
 	 * @see #open(GlobalData, Window, Transaction, boolean, boolean)
 	 */
-	public TransactionDialog(Window owner, GlobalData data, Transaction transaction, boolean edit) {
+	public TransactionDialog(Window owner, FilteredData data, Transaction transaction, boolean edit) {
 		super(owner,
 				(edit ? LocalizationData.get("TransactionDialog.title.edit") : LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
@@ -87,7 +88,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			}
 		});
 		if (useCheckbook() && !edit) { // If the transaction is a new one and use a check, change to next check number
-			checkNumber.setAccount(data, getAccount());
+			checkNumber.setAccount(data.getGlobalData(), getAccount());
 		}
 	}
 
@@ -227,7 +228,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			Transaction transaction = this.data.getTransaction(i);
 			String desc = transaction.getDescription();
 			double ranking = getRankingBasedOnDate(now, transaction);
-			if (!transaction.getAccount().equals(data.getAccount(selectedAccount))) ranking = ranking / 100;
+			if (!transaction.getAccount().equals(data.getGlobalData().getAccount(selectedAccount))) ranking = ranking / 100;
 			Double current = map.get(desc);
 			if (current==null) {
 				map.put(desc, ranking);
@@ -298,7 +299,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				double transactionWeight = getRankingBasedOnDate(now, transaction);
 				Double weight = categories.get(category);
 				categories.put(category, transactionWeight + (weight == null ? 0 : weight));
-				if (transaction.getAccount() == data.getAccount(selectedAccount)) {
+				if (transaction.getAccount() == data.getGlobalData().getAccount(selectedAccount)) {
 					// As mode are attached to accounts, it would be unsafe to try to
 					// deduce modes on accounts different from the current one.
 					ModeAndType mt = new ModeAndType(transaction.getAmount()>0, transaction.getMode());
@@ -339,7 +340,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			if (!checkNumberRequired) {
 				transactionNumber.setText(""); //$NON-NLS-1$
 			} else {
-				checkNumber.setAccount(data, getAccount());
+				checkNumber.setAccount(data.getGlobalData(), getAccount());
 			}
 			// If we need to switch from text field to check numbers popup
 			Container parent = checkNumber.getParent();
@@ -347,7 +348,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			if (checkNumberRequired) layout.first(parent); else layout.last(parent);
 			checkNumberIsVisible = !checkNumberIsVisible;
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(), getAccount())) {
-			checkNumber.setAccount(data, getAccount());
+			checkNumber.setAccount(data.getGlobalData(), getAccount());
 		}
 	}
 

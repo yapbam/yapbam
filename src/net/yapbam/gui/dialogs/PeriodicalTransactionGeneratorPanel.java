@@ -6,7 +6,7 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
-import net.yapbam.data.GlobalData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
@@ -45,12 +45,12 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JTable jTable = null;
 	private GenerateTableModel tableModel;
 
-	private GlobalData data;
+	private FilteredData data;
 
 	/**
 	 * This is the default constructor
 	 */
-	public PeriodicalTransactionGeneratorPanel(GlobalData data) {
+	public PeriodicalTransactionGeneratorPanel(FilteredData data) {
 		super();
 		this.data = data;
 		initialize();
@@ -183,7 +183,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			if (endDate==null) {
 				transactions = new Transaction[0];
 			} else {
-				transactions = data.generateTransactionsFromPeriodicals(endDate);
+				transactions = data.getGlobalData().generateTransactionsFromPeriodicals(endDate);
 			}
 			String message;
 			if (endDate==null) {

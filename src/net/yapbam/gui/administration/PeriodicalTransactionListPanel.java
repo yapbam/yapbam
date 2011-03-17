@@ -4,18 +4,16 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
-import net.yapbam.data.GlobalData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.NewPeriodicalTransactionAction;
 
-import java.lang.Object;
-
-public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel {
+public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<FilteredData> implements AbstractAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration.";
 	private static final long serialVersionUID = 1L;
 
-	public PeriodicalTransactionListPanel(Object data) {
+	public PeriodicalTransactionListPanel(FilteredData data) {
 		super(data);
 	}
 	@Override
@@ -28,7 +26,7 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	}
 
 	protected Action getNewButtonAction() {
-		return new NewPeriodicalTransactionAction((GlobalData) super.data);
+		return new NewPeriodicalTransactionAction(super.data);
 	}
 	protected Action getEditButtonAction() {
 		return new EditPeriodicalTransactionAction((PeriodicalTransactionsTable) getJTable());

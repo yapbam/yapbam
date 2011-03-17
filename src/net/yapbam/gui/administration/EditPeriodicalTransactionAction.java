@@ -24,6 +24,6 @@ public class EditPeriodicalTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		PeriodicalTransaction transaction = table.getSelectedTransaction();
-		PeriodicalTransactionDialog.open(table.getGlobalData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction, true);
+		PeriodicalTransactionDialog.open(table.getFilteredData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction, true);
 	}
 }

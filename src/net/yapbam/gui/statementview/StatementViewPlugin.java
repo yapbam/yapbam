@@ -12,7 +12,7 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	private StatementViewPanel panel;
 
 	public StatementViewPlugin(FilteredData data, Object state) {
-		this.panel = new StatementViewPanel(data.getGlobalData());
+		this.panel = new StatementViewPanel(data);
 		this.setPanelTitle(LocalizationData.get("StatementView.title")); //$NON-NLS-1$
 		this.setPanelToolTip(LocalizationData.get("StatementView.tooltip")); //$NON-NLS-1$
 	}
