@@ -15,14 +15,13 @@ import javax.swing.JScrollPane;
 import net.yapbam.gui.util.JTableListener;
 
 import java.awt.Insets;
-import java.lang.Object;
 import java.util.ArrayList;
 
 /** This panel is an abstract panel containing a table and "create", "delete", "duplicate", "edit" buttons.
  *  The "edit" and "duplicates" button can be ommited.
  *  If there's an edit button, its action is called when a double-clic occurs on the table.
  */
-public abstract class AbstractListAdministrationPanel extends JPanel {
+public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JTable jTable = null;
@@ -36,7 +35,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 	private Action duplicateButtonAction;  //  @jve:decl-index=0:
 	private Action deleteButtonAction;
 
-	protected Object data;
+	protected V data;
 
 	private JButton duplicateButton = null;
 	
@@ -47,7 +46,7 @@ public abstract class AbstractListAdministrationPanel extends JPanel {
 		this(null);
 	}
 	
-	public AbstractListAdministrationPanel(Object data) {
+	public AbstractListAdministrationPanel(V data) {
 		super();
 		this.data = data;
 		initialize();

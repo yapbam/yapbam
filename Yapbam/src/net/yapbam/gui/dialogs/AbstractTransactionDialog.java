@@ -28,7 +28,7 @@ import net.yapbam.gui.widget.PopupTextFieldList;
 import net.yapbam.util.NullUtils;
 
 /** This dialog allows to create or edit a transaction */
-public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalData> {
+public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredData> {
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 
@@ -43,14 +43,14 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	private String originalMode;
 	private boolean originalIsExpense;
 	
-	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
+	protected AbstractTransactionDialog(Window owner, String title, FilteredData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
 		if (transaction!=null) setContent(transaction);
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
 		Account account = transaction.getAccount();
-		accounts.setSelectedIndex(data.indexOf(account));
+		accounts.setSelectedIndex(data.getGlobalData().indexOf(account));
 		description.setText(transaction.getDescription());
 		subtransactionsPanel.fill(transaction);
 		// Danger, subtransaction.fill throws Property Change events that may alter the amount field content.
@@ -76,7 +76,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	}
 
 	protected void setMode(Mode mode) {
-		Account account = data.getAccount(selectedAccount);
+		Account account = data.getGlobalData().getAccount(selectedAccount);
 		int index = account.findMode(mode);
 		if (index>=0) {
 			modes.setSelectedItem(mode.getName()); // If the mode isn't available for this account, do nothing.
@@ -87,7 +87,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	 * @return an account.
 	 */
 	protected Account getAccount() {
-		return this.data.getAccount(selectedAccount);
+		return this.data.getGlobalData().getAccount(selectedAccount);
 	}
 
 	/** Gets the currently selected amount.
@@ -208,7 +208,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 
 		c.fill=GridBagConstraints.NONE; c.weightx=0.0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.category")), c); //$NON-NLS-1$
-		categories = new CategoryPanel(this.data);
+		categories = new CategoryPanel(this.data.getGlobalData());
 		c.gridx++; c.weightx = 1.0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(categories, c);
 
@@ -223,7 +223,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 
 		c.insets = insets; c.gridx=0; c.gridy++; c.gridwidth = GridBagConstraints.REMAINDER;
 		c.gridheight = 1; c.fill=GridBagConstraints.BOTH; c.weightx = 1.0; c.weighty = 1.0;
-		subtransactionsPanel = new SubtransactionListPanel(this.data);
+		subtransactionsPanel = new SubtransactionListPanel(this.data.getGlobalData());
 		subtransactionsPanel.addPropertyChangeListener(SubtransactionListPanel.SUM_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -267,7 +267,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 		modes.setActionEnabled(false);
 		String current = (String) modes.getSelectedItem();
 		modes.removeAllItems();
-		Account currentAccount = data.getAccount(selectedAccount);
+		Account currentAccount = data.getGlobalData().getAccount(selectedAccount);
 		int nb = currentAccount.getModesNumber();
 		for (int i = 0; i < nb; i++) {
 			Mode mode = currentAccount.getMode(i);
@@ -292,9 +292,10 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	}
 
 	private String[] getAccounts() {
-		String[] result = new String[data.getAccountsNumber()];
-		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			result[i] = data.getAccount(i).getName();
+		GlobalData globalData = data.getGlobalData();
+		String[] result = new String[globalData.getAccountsNumber()];
+		for (int i = 0; i < globalData.getAccountsNumber(); i++) {
+			result[i] = globalData.getAccount(i).getName();
 		}
 		return result;
 	}
@@ -304,15 +305,15 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 	}
 
 	private Mode displayNewModeDialog() {
-		Account ac = data.getAccount(selectedAccount);
-		Mode mode = ModeDialog.open(data, ac, this);
+		Account ac = data.getGlobalData().getAccount(selectedAccount);
+		Mode mode = ModeDialog.open(data.getGlobalData(), ac, this);
 		if (mode == null) return null;
 		DateStepper vdc = isExpense() ? mode.getExpenseVdc() : mode.getReceiptVdc();
 		return (vdc != null) ? mode : null;
 	}
 
 	protected Mode getCurrentMode() {
-		Account account = AbstractTransactionDialog.this.data.getAccount(selectedAccount);
+		Account account = AbstractTransactionDialog.this.data.getGlobalData().getAccount(selectedAccount);
 		return account.getMode((String)modes.getSelectedItem());
 	}
 
@@ -327,7 +328,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<GlobalDat
 					setPredefinedDescriptions();
 				}
 			} else {
-				Account ac = AccountDialog.open(data, AbstractTransactionDialog.this, null);
+				Account ac = AccountDialog.open(data.getGlobalData(), AbstractTransactionDialog.this, null);
 				if (ac != null) {
 					accounts.addItem(ac.getName());
 					accounts.setSelectedIndex(accounts.getItemCount() - 1);

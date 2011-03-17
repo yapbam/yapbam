@@ -35,7 +35,7 @@ import java.awt.event.MouseEvent;
 import java.lang.Object;
 import java.text.MessageFormat;
 
-public class AccountListPanel extends AbstractListAdministrationPanel {
+public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData> {
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("serial")

@@ -19,23 +19,24 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	
 	private GenerationPanel generationPanel;
 	
-	public static PeriodicalTransaction open(GlobalData data, Window frame, PeriodicalTransaction transaction, boolean edit) {
-		if (data.getAccountsNumber()==0) {
+	public static PeriodicalTransaction open(FilteredData data, Window frame, PeriodicalTransaction transaction, boolean edit) {
+		GlobalData globalData = data.getGlobalData();
+		if (globalData.getAccountsNumber()==0) {
 			//Need to create an account first
-			AccountDialog.open(data, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
-			if (data.getAccountsNumber()==0) return null;
+			AccountDialog.open(globalData, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			if (globalData.getAccountsNumber()==0) return null;
 		}
 		PeriodicalTransactionDialog dialog = new PeriodicalTransactionDialog(frame, data, transaction, edit);
 		dialog.setVisible(true);
 		PeriodicalTransaction newTransaction = dialog.getTransaction();
 		if (newTransaction!=null) {
-			if (transaction!=null) data.remove(transaction);
-			data.add(newTransaction);
+			if (transaction!=null) globalData.remove(transaction);
+			globalData.add(newTransaction);
 		}
 		return newTransaction;
 	}
 	
-	private PeriodicalTransactionDialog(Window owner, GlobalData data, PeriodicalTransaction transaction, boolean edit) {
+	private PeriodicalTransactionDialog(Window owner, FilteredData data, PeriodicalTransaction transaction, boolean edit) {
 		super(owner, (edit?LocalizationData.get("PeriodicalTransactionDialog.title.edit"):LocalizationData.get("PeriodicalTransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -76,7 +77,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		for (int i = 0; i < subtransactionsPanel.getSubtransactionsCount(); i++) {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
-		return new PeriodicalTransaction(description.getText().trim(), amount, this.data.getAccount(selectedAccount),
+		return new PeriodicalTransaction(description.getText().trim(), amount, this.data.getGlobalData().getAccount(selectedAccount),
 				getCurrentMode(), categories.getCategory(), subTransactions, generationPanel.getNextDate(),
 				generationPanel.isActivated(), generationPanel.getDateStepper());
 	}

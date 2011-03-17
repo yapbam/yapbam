@@ -10,7 +10,7 @@ import java.lang.Object;
 import java.lang.String;
 
 @SuppressWarnings("serial")
-public class AboutDialog extends AbstractDialog {
+public class AboutDialog extends AbstractDialog<Void> {
 
 	public AboutDialog(Window owner) {
 		super(owner, LocalizationData.get("ApplicationName"), null);

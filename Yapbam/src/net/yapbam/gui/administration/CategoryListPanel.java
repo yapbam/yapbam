@@ -25,10 +25,10 @@ import java.awt.event.MouseEvent;
 import java.lang.Object;
 import java.text.MessageFormat;
 
-public class CategoryListPanel extends AbstractListAdministrationPanel implements AbstractAdministrationPanel { //TODO Add split functions
+public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel { //TODO Add split functions
 	private static final long serialVersionUID = 1L;
 
-	public CategoryListPanel(Object data) {
+	public CategoryListPanel(GlobalData data) {
 		super(data);
 	}
 	

@@ -4,7 +4,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import net.yapbam.data.GlobalData;
+import net.yapbam.data.FilteredData;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -12,13 +12,13 @@ import java.awt.Insets;
 public class AdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private GlobalData data;
+	private FilteredData data;
 	private AbstractAdministrationPanel[] panels;
 	
 	/**
 	 * This is the constructor
 	 */
-	public AdministrationPanel(GlobalData data) {
+	public AdministrationPanel(FilteredData data) {
 		super();
 		this.data = data;
 		initialize();
@@ -44,8 +44,8 @@ public class AdministrationPanel extends JPanel {
 		this.add(jTabbedPane, gridBagConstraints);
 		panels = new AbstractAdministrationPanel[]{
 				new PeriodicalTransactionListPanel(data),
-				new AccountAdministrationPanel(data),
-				new CategoryListPanel(data)
+				new AccountAdministrationPanel(data.getGlobalData()),
+				new CategoryListPanel(data.getGlobalData())
 		};
 		for (int i = 0; i < panels.length; i++) {
 			jTabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());

@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
+import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.Transaction;
@@ -15,10 +16,10 @@ import java.lang.Object;
 import java.lang.String;
 
 @SuppressWarnings("serial")
-public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<GlobalData> {
+public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<FilteredData> {
 	private PeriodicalTransactionGeneratorPanel panel;
 
-	public GeneratePeriodicalTransactionsDialog(Window owner, GlobalData data) {
+	public GeneratePeriodicalTransactionsDialog(Window owner, FilteredData data) {
 		super(owner, LocalizationData.get("GeneratePeriodicalTransactionsDialog.title"), data); //$NON-NLS-1$
 	}
 
@@ -26,7 +27,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<GlobalD
 	protected Object buildResult() {
 		panel.saveState();
 		Transaction[] transactions = panel.getValidTransactions();
-		GlobalData globalData = (GlobalData)data;
+		GlobalData globalData = data.getGlobalData();
 		globalData.add(transactions);
 		PeriodicalTransaction[] wholeTransactions = new PeriodicalTransaction[globalData.getPeriodicalTransactionsNumber()];
 		for (int i = 0; i < wholeTransactions.length; i++) wholeTransactions[i] = globalData.getPeriodicalTransaction(i);

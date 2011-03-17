@@ -68,7 +68,7 @@ public class TransactionTable extends JTable implements TransactionSelector {
 		return data.getGlobalData();
 	}
 	
-	FilteredData getFilteredData() {
+	public FilteredData getFilteredData() {
 		return data;
 	}
 	

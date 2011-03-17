@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 
@@ -21,7 +20,6 @@ public class DeletePeriodicalTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		PeriodicalTransactionsTable table = (PeriodicalTransactionsTable) panel.getJTable();
-		GlobalData data = ((PeriodicalTransactionTableModel)table.getModel()).getGlobalData();
-		data.remove(table.getSelectedTransaction());
+		table.getGlobalData().remove(table.getSelectedTransaction());
 	}
 }

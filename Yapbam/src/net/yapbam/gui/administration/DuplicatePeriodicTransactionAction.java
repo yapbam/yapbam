@@ -16,15 +16,15 @@ public class DuplicatePeriodicTransactionAction extends AbstractAction {
 	
 	public DuplicatePeriodicTransactionAction(PeriodicalTransactionsTable table) {
 		super(LocalizationData.get("GenericButton.duplicate"), IconManager.DUPLICATE);
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("PeriodicalTransactionManager.duplicate.toolTip"));
-        this.table = table;
-        this.setEnabled(false);
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("PeriodicalTransactionManager.duplicate.toolTip"));
+		this.table = table;
+		this.setEnabled(false);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		PeriodicalTransactionDialog.open(table.getGlobalData(),
+		PeriodicalTransactionDialog.open(table.getFilteredData(),
 				AbstractTransactionDialog.getOwnerWindow(table),
-				(PeriodicalTransaction)table.getSelectedTransaction().clone(), false);
+				(PeriodicalTransaction) table.getSelectedTransaction().clone(), false);
 	}
 }

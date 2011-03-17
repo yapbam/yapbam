@@ -24,13 +24,13 @@ public class DuplicateTransactionAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		TransactionDialog dialog = new TransactionDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), selector.getGlobalData(),
+		TransactionDialog dialog = new TransactionDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), selector.getFilteredData(),
 				selector.getSelectedTransaction(), false);
 		dialog.setTransactionDate(new Date());
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if (newTransaction != null) {
-			selector.getGlobalData().add(newTransaction);
+			selector.getFilteredData().getGlobalData().add(newTransaction);
 		}
 	}
 }
