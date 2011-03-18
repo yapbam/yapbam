@@ -136,6 +136,9 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredD
 		centerPane.add(titleCompte, c);
 		accounts = new JComboBox(getAccounts());
 		selectedAccount = 0; // TODO let select the last selected account
+		if (data.hasFilterAccount() && (data.getAccounts().length==1)) { // If the filter defines only one account, select this account
+			selectedAccount = data.getGlobalData().indexOf(data.getAccounts()[0]);
+		}
 		accounts.setSelectedIndex(selectedAccount);
 		AccountsListener accountListener = new AccountsListener();
 		accounts.addActionListener(accountListener);
