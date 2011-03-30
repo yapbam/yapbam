@@ -17,8 +17,10 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.util.DateUtils;
 import net.yapbam.util.Portable;
 
@@ -28,6 +30,7 @@ public class YapbamState {
 	
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
 	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
+	private static final String COLUMN_HIDDEN = "column.hidden."; //$NON-NLS-1$
 //	private static final String SELECTED_ROW = "selectedRow"; //$NON-NLS-1$
 //	private static final String SCROLL_POSITION = "scrollPosition"; //$NON-NLS-1$
 
@@ -129,8 +132,18 @@ public class YapbamState {
 	}
 	
 	public static void restoreState(JTable table, String prefix) {
-		//TODO Restore which columns are hidden
+		//TODO Buggy when some columns are hidden 
 		TableColumnModel model = table.getColumnModel();
+		// Save the show/hide column
+		if (model instanceof XTableColumnModel) {
+			XTableColumnModel xModel = (XTableColumnModel)model;
+			for (int i = 0; i < xModel.getColumnCount(false); i++) {
+				TableColumn column = xModel.getColumnByModelIndex(i);
+				if (INSTANCE.properties.containsKey(prefix+COLUMN_HIDDEN+i)) {
+					xModel.setColumnVisible(column, false);
+				}
+			}
+		}
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_WIDTH+i);
 			if (valueString!=null) {
@@ -158,14 +171,24 @@ public class YapbamState {
 	}
 
 	public static void saveState(JTable table, String prefix) {
-		//TODO Save which columns are hidden
 		TableColumnModel model = table.getColumnModel();
+		System.out.println (table.getClass()+": "+model.getColumnCount());//TODO
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			INSTANCE.properties.put(prefix+COLUMN_WIDTH+table.convertColumnIndexToModel(i), Integer.toString(model.getColumn(i).getWidth()));
 		}
 		// Save the column order (if two or more columns were inverted)
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			INSTANCE.properties.put(prefix+COLUMN_INDEX+i, Integer.toString(table.convertColumnIndexToModel(i)));
+		}
+		// Save the show/hide column
+		if (model instanceof XTableColumnModel) {
+			XTableColumnModel xModel = (XTableColumnModel)model;
+			for (int i = 0; i < xModel.getColumnCount(false); i++) {
+				TableColumn column = xModel.getColumnByModelIndex(i);
+				if (!xModel.isColumnVisible(column)) {
+					INSTANCE.properties.put(prefix+COLUMN_HIDDEN+i, "true");
+				}
+			}
 		}
 //		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
 //		YapbamState.put(prefix+SCROLL_POSITION, table.getVisibleRect());

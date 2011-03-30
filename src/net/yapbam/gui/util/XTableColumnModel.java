@@ -47,8 +47,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
     public void setColumnVisible(TableColumn column, boolean visible) {
         if(!visible) {
             super.removeColumn(column);
-        }
-        else {
+        } else {
             // find the visible index of the column:
             // iterate through both collections of visible and all columns, counting
             // visible columns up to the one that's about to be shown again
@@ -109,7 +108,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
         return null;
     }
     
-/** Checks wether the specified column is currently visible.
+/** Checks whether the specified column is currently visible.
  * @param aColumn column to check
  * @return visibility of specified column (false if there is no such column at all. [It's not visible, right?])
  */    
