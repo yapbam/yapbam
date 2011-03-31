@@ -122,6 +122,7 @@ public class TransactionsPlugInPanel extends JPanel {
 		JLabel columns = new JLabelMenu(LocalizationData.get("MainFrame.showColumns")) { //$NON-NLS-1$
 			@Override
 			protected void fillPopUp(JPopupMenu popup) {
+				//TODO Fill the popup in the order of the column in the view ... not in the model
 				for (int i = 0; i < transactionTable.getColumnCount(false); i++) {
 					JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ShowHideColumnAction(i));
 					menuItem.setSelected(transactionTable.isColumnVisible(i));
