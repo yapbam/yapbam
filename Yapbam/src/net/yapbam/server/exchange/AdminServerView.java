@@ -16,6 +16,7 @@ public class AdminServerView extends UserServerView {
 		super(proxy, eMail, password);
 	}
 
+	@Override
 	protected void codeToException(int errCode) {
 		if (errCode==INVALID_ADMIN_ACCOUNT) {
 			throw new InvalidAdminAccountException();

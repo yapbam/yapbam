@@ -96,6 +96,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		this.date.setDate(date);
 	}
 
+	@Override
 	protected void setContent(AbstractTransaction transaction) {
 		super.setContent(transaction);
 		Transaction t = (Transaction) transaction;
@@ -120,6 +121,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				categories.getCategory(), defDate.getDate(), statementId, subTransactions);
 	}
 
+	@Override
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
 		defDate = new DateWidgetPanel();
@@ -145,6 +147,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		centerPane.add(statement, c);
 	}
 
+	@Override
 	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		c.fill=GridBagConstraints.NONE; c.weightx=0.0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.number")), c); //$NON-NLS-1$
@@ -173,6 +176,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		c.gridx++;
 	}
 
+	@Override
 	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
 		centerPane.add(titleDate, c);
@@ -200,10 +204,12 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		c.gridx++;
 	}
 
+	@Override
 	public Transaction getTransaction() {
 		return (Transaction) super.getResult();
 	}
 
+	@Override
 	protected void optionnalUpdatesOnModeChange() {
 		setTransactionNumberWidget();
 		Mode mode = getCurrentMode();
@@ -220,6 +226,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return null;
 	}
 	
+	@Override
 	@SuppressWarnings({ "unchecked" })
 	protected void setPredefinedDescriptions() {
 		HashMap<String, Double> map = new HashMap<String, Double>();
@@ -286,6 +293,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return 2 / Math.sqrt(time + 4);
 	}
 
+	@Override
 	protected void predefinedDescriptionSelected(String description) {
 		long now = System.currentTimeMillis();
 		HashMap<ModeAndType, Double> modes = new HashMap<ModeAndType, Double>();

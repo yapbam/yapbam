@@ -186,6 +186,7 @@ public class GenerationPanel extends JPanel {
 	        nb = new IntegerWidget(BigInteger.ONE, IntegerWidget.INTEGER_MAX_VALUE);
 	        nb.addFocusListener(new AutoSelectFocusListener());
 	        nb.addKeyListener(new KeyAdapter() {
+				@Override
 				public void keyReleased(KeyEvent e) {
 					updateDateStepper();
 				}
@@ -348,6 +349,7 @@ public class GenerationPanel extends JPanel {
 			day = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 			day.addFocusListener(new AutoSelectFocusListener());
 	        day.addKeyListener(new KeyAdapter() {
+				@Override
 				public void keyReleased(KeyEvent e) {
 					updateDateStepper();
 				}

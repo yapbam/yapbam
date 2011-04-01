@@ -14,6 +14,7 @@ class AutoUpdateOkButtonKeyListener extends KeyAdapter {
 	AutoUpdateOkButtonKeyListener (AbstractDialog<?> dialog) {
 		this.dialog = dialog;
 	}
+	@Override
 	public void keyReleased(KeyEvent e) {
 		dialog.updateOkButtonEnabled();
 	}

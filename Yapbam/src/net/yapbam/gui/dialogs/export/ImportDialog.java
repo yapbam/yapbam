@@ -58,7 +58,7 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 		return importPanel.getInvalidityCause();
 	}
 	
-	
+	@Override
 	public void setVisible(boolean visible) {
 		this.pack();
 		super.setVisible(visible);

@@ -22,6 +22,7 @@ public class DayDateStepper extends DateStepper {
 		this.lastDate = DateUtils.dateToInteger(lastDate);
 	}
 	
+	@Override
 	public Date getNextStep(Date date) {
 		if (DEBUG) {
 			System.out.println("date de l'op�ration : "+DateFormat.getDateInstance().format(date));

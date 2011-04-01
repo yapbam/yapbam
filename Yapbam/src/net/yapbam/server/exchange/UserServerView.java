@@ -20,6 +20,7 @@ public class UserServerView extends AbstractServerView {
 		super(proxy, eMail, password);
 	}
 	
+	@Override
 	protected void codeToException(int errCode) {
 		if ((errCode==UNEXPEXTED_ERROR) || (errCode==UNKNOWN_COMMAND)) {
 			throw new RuntimeException("server error "+errCode);

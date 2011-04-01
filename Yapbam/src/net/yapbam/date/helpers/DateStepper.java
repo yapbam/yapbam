@@ -9,6 +9,7 @@ import java.util.Date;
 public abstract class DateStepper {
 	/** A trivial value date computer, that returns the transaction date as value date.*/
 	public static final DateStepper IMMEDIATE = new DateStepper() {
+		@Override
 		public Date getNextStep(Date date) {
 			return date;
 		}

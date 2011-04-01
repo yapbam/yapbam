@@ -33,6 +33,7 @@ public class ModeDialog extends AbstractDialog<Account> {
 		original = null;
 	}
 	
+	@Override
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new BorderLayout());

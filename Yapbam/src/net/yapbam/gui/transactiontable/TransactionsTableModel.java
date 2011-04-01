@@ -184,6 +184,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
     	else return SwingConstants.CENTER;
 	}
 
+	@Override
 	public AbstractTransaction getTransaction (int row) {
 		return this.data.getTransaction(row);
 	}

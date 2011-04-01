@@ -127,10 +127,16 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 
 	@Override
 	public void restoreState() {
+		accountListPanel.restoreState();
+		modeListPanel.restoreState();
+		checkbookListPanel.restoreState();
 	}
 
 	@Override
 	public void saveState() {
+		accountListPanel.saveState();
+		modeListPanel.saveState();
+		checkbookListPanel.saveState();
 	}
 	
 	@Override

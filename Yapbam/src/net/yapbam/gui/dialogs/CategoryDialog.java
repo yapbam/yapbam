@@ -25,6 +25,7 @@ public class CategoryDialog extends AbstractDialog<String> {
 		this.globalData = data;
 	}
 	
+	@Override
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new GridBagLayout());

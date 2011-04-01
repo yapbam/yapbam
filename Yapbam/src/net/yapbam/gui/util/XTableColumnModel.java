@@ -129,6 +129,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	 * @see #removeColumn
 	 * @exception IllegalArgumentException if <code>column</code> is <code>null</code>
 	 */
+	@Override
 	public void addColumn(TableColumn column) {
 		allTableColumns.addElement(column);
 		super.addColumn(column);
@@ -141,6 +142,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	 * @param column the column to be added
 	 * @see #addColumn
 	 */
+	@Override
 	public void removeColumn(TableColumn column) {
 		int allColumnsIndex = allTableColumns.indexOf(column);
 		if (allColumnsIndex != -1) {
@@ -159,6 +161,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	 *              if either <code>oldIndex</code> or <code>newIndex</code> are
 	 *              not in [0, getColumnCount() - 1]
 	 */
+	@Override
 	public void moveColumn(int oldIndex, int newIndex) {
 		if ((oldIndex < 0) || (oldIndex >= getColumnCount()) || (newIndex < 0) || (newIndex >= getColumnCount())) {
 			throw new IllegalArgumentException("moveColumn() - Index out of range");

@@ -40,6 +40,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 		super(owner, (edit?LocalizationData.get("PeriodicalTransactionDialog.title.edit"):LocalizationData.get("PeriodicalTransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@Override
 	protected void setContent(AbstractTransaction transaction) {
 		super.setContent(transaction);
 		PeriodicalTransaction t = (PeriodicalTransaction) transaction;
@@ -82,12 +83,16 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 				generationPanel.isActivated(), generationPanel.getDateStepper());
 	}
 	
+	@Override
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
 
+	@Override
 	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
 
+	@Override
 	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
 
+	@Override
 	public PeriodicalTransaction getTransaction() {
 		return (PeriodicalTransaction) super.getResult();
 	}

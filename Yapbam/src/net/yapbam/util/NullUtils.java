@@ -30,7 +30,7 @@ public final class NullUtils {
 	 * @param nullIsLowest true if null if lower than any other value, false if it is greater.
 	 * @return o1.compareTo(o2) assuming that null is the lowest possible instance.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	public static int compareTo(Comparable o1, Comparable o2, boolean nullIsLowest) {
 		if (o1!=null) {
 			return o2==null?(nullIsLowest?1:-1):o1.compareTo(o2);

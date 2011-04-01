@@ -26,6 +26,7 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData> {
 		}
 	}
 	
+	@Override
 	protected JPanel createCenterPane() {
 		this.panel = new SubTransactionPanel();
 		this.panel.setData(data);

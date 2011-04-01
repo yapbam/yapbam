@@ -18,6 +18,7 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 		this.setPanelToolTip(LocalizationData.get("AdministrationPlugIn.toolTip"));
 	}
 
+	@Override
 	public JPanel getPanel() {
 		return panel;
 	}
