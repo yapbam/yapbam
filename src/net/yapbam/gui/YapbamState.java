@@ -133,6 +133,14 @@ public class YapbamState {
 	
 	public static void restoreState(JTable table, String prefix) {
 		TableColumnModel model = table.getColumnModel();
+		// Restore the width
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_WIDTH+i);
+			if (valueString!=null) {
+				int width = Integer.parseInt(valueString);
+				if (width>0) model.getColumn(i).setPreferredWidth(width);
+			}
+		}
 		// Restore column order
 		for (int i = model.getColumnCount()-1; i>=0 ; i--) {
 			String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_INDEX+i);
@@ -141,27 +149,13 @@ public class YapbamState {
 				if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
 			}
 		}
-		// Restore the width and the show/hide column
-		for (int i = 0; i < model.getColumnCount(); i++) {
-			String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_WIDTH+i);
-			if (valueString!=null) {
-				int width = Integer.parseInt(valueString);
-				if (width>0) model.getColumn(i).setPreferredWidth(width);
-			}
-		}
+		// Restore the show/hide column
 		if (model instanceof XTableColumnModel) {
 			XTableColumnModel xModel = (XTableColumnModel)model;
 			for (int i = 0; i < xModel.getColumnCount(false); i++) {
-				if (INSTANCE.properties.containsKey(prefix+COLUMN_HIDDEN+i)) {
+				if (Boolean.valueOf(INSTANCE.properties.getProperty(prefix+COLUMN_HIDDEN+i, "false"))) {
 					TableColumn column = xModel.getColumnByModelIndex(i);
 					xModel.setColumnVisible(column, false);
-					column.setIdentifier(i);
-					int viewIndex = xModel.getColumnIndex(i, false);
-					String valueString = (String) INSTANCE.properties.get(prefix+COLUMN_WIDTH+viewIndex);
-					if (valueString!=null) {
-						int width = Integer.parseInt(valueString);
-						if (width>0) column.setWidth(width);
-					}
 				}
 			}
 		}
@@ -180,27 +174,23 @@ public class YapbamState {
 		TableColumnModel model = table.getColumnModel();
 		if (model instanceof XTableColumnModel) {
 			XTableColumnModel xModel = (XTableColumnModel)model;
-			for (int modelIndex = 0; modelIndex < xModel.getColumnCount(false); modelIndex++) {
-				TableColumn column = xModel.getColumnByModelIndex(modelIndex);
-				column.setIdentifier(modelIndex);
-				int viewIndex = xModel.getColumnIndex(modelIndex, false);
+			for (int viewIndex = 0; viewIndex < xModel.getColumnCount(false); viewIndex++) {
+				TableColumn column = xModel.getColumn(viewIndex, false);
+				int modelIndex = column.getModelIndex();
 				// Save the column width
-				INSTANCE.properties.put(prefix+COLUMN_WIDTH+viewIndex, Integer.toString(column.getWidth()));
+				INSTANCE.properties.put(prefix+COLUMN_WIDTH+modelIndex, Integer.toString(column.getWidth()));
 				// Save the column order (if two or more columns were inverted)
 				INSTANCE.properties.put(prefix+COLUMN_INDEX+viewIndex, Integer.toString(modelIndex));
 				String key = prefix+COLUMN_HIDDEN+modelIndex;
-				if (!xModel.isColumnVisible(column)) {
-					INSTANCE.properties.put(key, "true");
-				} else {
-					INSTANCE.properties.remove(key);
-				}
+				INSTANCE.properties.put(key, Boolean.valueOf(!xModel.isColumnVisible(column)).toString());
 			}
 		} else {
 			for (int viewIndex = 0; viewIndex < model.getColumnCount(); viewIndex++) {
+				int modelIndex = table.convertColumnIndexToModel(viewIndex);
 				// Save the column width
-				INSTANCE.properties.put(prefix+COLUMN_WIDTH+viewIndex, Integer.toString(model.getColumn(viewIndex).getWidth()));
+				INSTANCE.properties.put(prefix+COLUMN_WIDTH+modelIndex, Integer.toString(model.getColumn(viewIndex).getWidth()));
 				// Save the column order (if two or more columns were inverted)
-				INSTANCE.properties.put(prefix+COLUMN_INDEX+viewIndex, Integer.toString(table.convertColumnIndexToModel(viewIndex)));
+				INSTANCE.properties.put(prefix+COLUMN_INDEX+viewIndex, Integer.toString(modelIndex));
 			}
 		}
 //		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
