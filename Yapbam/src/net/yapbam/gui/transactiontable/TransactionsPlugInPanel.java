@@ -161,7 +161,7 @@ public class TransactionsPlugInPanel extends JPanel {
 		private int index;
 		
 		public ShowHideColumnAction(int i) {
-			super(transactionTable.getModel().getColumnName(i));
+			super (transactionTable.getColumnName(i, false));
 			this.index = i;
 		}
 
