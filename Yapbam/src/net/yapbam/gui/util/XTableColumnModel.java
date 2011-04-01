@@ -241,6 +241,6 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	 *         <code>columnIndex</code>
 	 */
 	public TableColumn getColumn(int columnIndex, boolean onlyVisible) {
-		return tableColumns.elementAt(columnIndex);
+		return (onlyVisible?tableColumns:allTableColumns).elementAt(columnIndex);
 	}
 }
