@@ -8,6 +8,7 @@ import javax.swing.JTable;
 
 public class SpreadableMouseAdapter extends MouseAdapter {
 	// This listener waits for clicks on the "spread sub-transaction" zone
+	@Override
 	public void mousePressed(MouseEvent e) {
 		JTable table = (JTable) e.getSource(); 
 		Point p = e.getPoint();

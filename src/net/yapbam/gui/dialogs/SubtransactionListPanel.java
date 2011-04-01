@@ -79,6 +79,7 @@ class SubtransactionListPanel extends JPanel {
 			}
 		});
 		table.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					Point p = e.getPoint();

@@ -40,6 +40,7 @@ public class MonthDateStepper extends  DateStepper {
 	/* (non-Javadoc)
 	 * @see net.yapbam.data.helpers.DateIterator#getNextDate(java.util.Date)
 	 */
+	@Override
 	public Date getNextStep(Date date) {
 		if (DEBUG) {
 			System.out.println("date : "+DateFormat.getDateInstance().format(date));

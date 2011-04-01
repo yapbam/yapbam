@@ -31,6 +31,7 @@ public class AccountDialog extends AbstractDialog<String> {
 		this.initialName = null;
 	}
 	
+	@Override
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel northPanel = new JPanel(new GridBagLayout());

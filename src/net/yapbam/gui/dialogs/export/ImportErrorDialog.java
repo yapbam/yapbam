@@ -34,6 +34,7 @@ public class ImportErrorDialog extends AbstractDialog<Object[]> {
 		return null;
 	}
 
+	@Override
 	public void setVisible(boolean visible) {
 		this.pack();
 		super.setVisible(visible);

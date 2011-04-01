@@ -120,6 +120,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
@@ -317,6 +318,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 	}
 
+	@Override
 	public Dimension getPreferredSize() {
 		Dimension parentSize = this.getParent().getSize();
 		long days = 1 + (this.getEndDate().getTime() - this.getStartDate().getTime()) / 24 / 3600000;

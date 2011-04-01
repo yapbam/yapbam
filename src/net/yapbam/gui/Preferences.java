@@ -223,7 +223,8 @@ public class Preferences {
 			final String user = tokens.nextToken();
 			final String pwd = tokens.nextToken();
 		    Authenticator.setDefault(new Authenticator() {
-		        protected PasswordAuthentication getPasswordAuthentication() {
+		        @Override
+				protected PasswordAuthentication getPasswordAuthentication() {
 		          return new PasswordAuthentication(user,pwd.toCharArray());
 		      }});
 		}

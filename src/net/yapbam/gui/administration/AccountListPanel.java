@@ -73,7 +73,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	protected JTable instantiateJTable() {
 		JTable jTable = new JTable(getTableModel()) {
 		    //Implement table cell tool tips.
-		    public String getToolTipText(MouseEvent e) {
+		    @Override
+			public String getToolTipText(MouseEvent e) {
 		        String tip;
 		        int column = convertColumnIndexToModel(columnAtPoint(e.getPoint()));
 		        if (column == 0) {
@@ -149,6 +150,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			return "?"; //$NON-NLS-1$
 		}
 
+		@Override
 		public void setValueAt(Object value, int row, int col) {
 			Account account = ((GlobalData)data).getAccount(row);
 			if (col==0) { // Account name
@@ -244,15 +246,19 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	private TableModel getTableModel() {
 		return new AccountTableModel((GlobalData) data);
 	}
+	@Override
 	protected Action getNewButtonAction() {
 		return new NewAccountAction((GlobalData) data);
 	}
+	@Override
 	protected Action getEditButtonAction() {
 		return null;
 	}
+	@Override
 	protected Action getDeleteButtonAction() {
 		return new DeleteAccountAction((GlobalData) data);
 	}
+	@Override
 	protected Action getDuplicateButtonAction() {
 		return null;
 	}

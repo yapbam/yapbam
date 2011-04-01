@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 
+import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.util.JTableListener;
 
 import java.awt.Insets;
@@ -195,5 +196,15 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 			}
 		}
 		return duplicateButton;
+	}
+	
+	public void restoreState() {
+		YapbamState.restoreState(getJTable(), getStatePrefix());
+	}
+	protected String getStatePrefix() {
+		return this.getClass().getCanonicalName();
+	}
+	public void saveState() {
+		YapbamState.saveState(getJTable(), getStatePrefix());
 	}
 }

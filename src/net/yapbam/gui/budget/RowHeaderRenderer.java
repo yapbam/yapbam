@@ -25,7 +25,8 @@ class RowHeaderRenderer extends DefaultTableCellRenderer
         this.hideSelection = true;
     }
 
-    public void updateUI()
+    @Override
+	public void updateUI()
     {
         super.updateUI();
         Border cell = UIManager.getBorder("TableHeader.cellBorder");
@@ -45,7 +46,8 @@ class RowHeaderRenderer extends DefaultTableCellRenderer
         */
     }
 
-    public Component getTableCellRendererComponent(JTable table, Object value,
+    @Override
+	public Component getTableCellRendererComponent(JTable table, Object value,
                        boolean selected, boolean focused, int row, int column)
     {
         if (table != null)

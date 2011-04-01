@@ -49,6 +49,7 @@ public class MainFrame extends JFrame implements DataListener {
 		// Install the exceptions logger on the AWT event queue. 
 		EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
 		queue.push(new EventQueue() {
+			@Override
 			protected void dispatchEvent(AWTEvent newEvent) {
 				try {
 					super.dispatchEvent(newEvent);

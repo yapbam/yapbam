@@ -37,7 +37,8 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	protected JTable instantiateJTable() {
 		return new JTable(getTableModel()) {
 		    //Implement table cell tool tips.
-		    public String getToolTipText(MouseEvent e) {
+		    @Override
+			public String getToolTipText(MouseEvent e) {
 		        return LocalizationData.get("CategoryManager.nameColumn.toolTip"); //$NON-NLS-1$;
 		    }
 		};

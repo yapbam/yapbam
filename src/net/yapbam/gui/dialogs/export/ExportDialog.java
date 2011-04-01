@@ -42,6 +42,7 @@ public class ExportDialog extends AbstractDialog<FilteredData> {
 		return exportPanel.getInvalidityCause();
 	}
 	
+	@Override
 	public void setVisible(boolean visible) {
 		this.pack();
 		super.setVisible(visible);

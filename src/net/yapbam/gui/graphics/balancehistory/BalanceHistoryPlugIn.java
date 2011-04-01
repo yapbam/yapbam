@@ -97,6 +97,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 		setPanelToolTip(tooltip);
 	}
 
+	@Override
 	public JPanel getPanel() {
 		return panel;
 	}

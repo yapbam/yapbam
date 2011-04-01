@@ -19,6 +19,7 @@ public class SafeJFileChooser extends JFileChooser {
 		super(title);
 	}
 
+	@Override
 	public void approveSelection() {
 		File file = getSelectedFile();
 		if ((getDialogType()==SAVE_DIALOG) && (file != null) && file.exists()) {

@@ -137,6 +137,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 			}
 		}
 		
+		@Override
 		public void done() {
 			InstallUpdateDialog.this.setVisible(false);
 			try {

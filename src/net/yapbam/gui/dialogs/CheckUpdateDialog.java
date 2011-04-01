@@ -55,6 +55,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void> {
 		return null;
 	}
 	
+	@Override
 	protected SwingWorker<?, ?> getWorker() {
 		return new UpdateSwingWorker(getOwner());
 	}
@@ -73,6 +74,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void> {
 //			Thread.sleep(1000); //TODO
 			return VersionManager.getUpdateInformation();
 		}
+		@Override
 		public void done() {
 			try {
 				if (!isCancelled()) {

@@ -71,16 +71,19 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		}
 	}
 
+	@Override
 	public void restoreState() {
 		TransactionTable transactionTable = panel.getTransactionTable();
 		YapbamState.restoreState(transactionTable, STATE_PREFIX);
 		transactionTable.scrollToLastLine();
 	}
 
+	@Override
 	public void saveState() {
 		YapbamState.saveState(panel.getTransactionTable(), STATE_PREFIX);
 	}
 
+	@Override
 	public JPanel getPanel() {
 		return panel;
 	}

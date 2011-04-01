@@ -356,6 +356,7 @@ public final class CurrencyConverter {
 			FileReader input = new FileReader(cacheFile);
 			XMLReader saxReader = XMLReaderFactory.createXMLReader();
 			DefaultHandler handler = new DefaultHandler() {
+				@Override
 				public void startElement(String uri, String localName, String qName, Attributes attributes) {
 					if (localName.equals("Cube")) {
 						String date = attributes.getValue("time");

@@ -57,10 +57,12 @@ public class JTableListener extends MouseAdapter implements ListSelectionListene
 		if (defaultAction != null) defaultAction.setEnabled(ok);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		maybeShowPopup(e);
 	}
 	
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if ((e.getClickCount() == 2) && (e.getButton()==MouseEvent.BUTTON1)) {
 			Point p = e.getPoint();

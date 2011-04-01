@@ -148,9 +148,11 @@ public class ImportPanel extends JPanel {
 	        ImportTableModel model = new ImportTableModel();
 			jTable = new JTable(model) {
 	            //Implement table header tool tips.
-	            protected JTableHeader createDefaultTableHeader() {
+	            @Override
+				protected JTableHeader createDefaultTableHeader() {
 	                return new JTableHeader(columnModel) {
-	                    public String getToolTipText(MouseEvent e) {
+	                    @Override
+						public String getToolTipText(MouseEvent e) {
 	                        String tip = null;
 	                        java.awt.Point p = e.getPoint();
 	                        int index = columnModel.getColumnIndexAtX(p.x);

@@ -21,6 +21,7 @@ public class CheckbookDialog extends AbstractDialog<Void> {
 		super(owner, LocalizationData.get("checkbookDialog.title.new"), null); //$NON-NLS-1$
 	}
 	
+	@Override
 	protected JPanel createCenterPane() {
 		this.pane = new CheckbookPane();
 		this.pane.addPropertyChangeListener(CheckbookPane.INVALIDITY_CAUSE, new PropertyChangeListener() {
