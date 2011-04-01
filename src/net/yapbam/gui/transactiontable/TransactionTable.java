@@ -72,14 +72,23 @@ public class TransactionTable extends JTable implements TransactionSelector {
 		return data;
 	}
 	
-	boolean isColumnVisible(int index) {
+	/**
+	 * Tests whether a table column is visible or not.
+	 * @param index the view index of the column. This index takes into account the invisible columns.
+	 * @return true if the column is visible.
+	 */
+	public boolean isColumnVisible(int index) {
 		XTableColumnModel model = (XTableColumnModel)getColumnModel();
-		return model.isColumnVisible(model.getColumnByModelIndex(index));
+		return model.isColumnVisible(model.getColumn(index, false));
 	}
 	
-	void setColumnVisible(int index, boolean visible) {
+	/** Sets the visibility of a column.
+	 * @param index the view index of the column. This index takes into account the invisible columns.
+	 * @param visible true to make the column visible, false to hide it
+	 */
+	public void setColumnVisible(int index, boolean visible) {
 		XTableColumnModel model = (XTableColumnModel)getColumnModel();
-		model.setColumnVisible(model.getColumnByModelIndex(index), visible);		
+		model.setColumnVisible(model.getColumn(index, false), visible);		
 	}
 
 	public int getColumnCount(boolean onlyVisible) {
