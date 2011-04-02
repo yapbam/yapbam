@@ -174,6 +174,10 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	void saveState() {
 		YapbamState.INSTANCE.saveState(getJTable(), STATE_PROPERTIES_PREFIX);
 	}
+	
+	void restoreState() {
+		YapbamState.INSTANCE.restoreState(getJTable(), STATE_PROPERTIES_PREFIX);
+	}
 
 	private void updateTransactions() {
 		Date endDate = dateField.getDate();

@@ -25,7 +25,6 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 
 	@Override
 	protected Object buildResult() {
-		panel.saveState();
 		Transaction[] transactions = panel.getValidTransactions();
 		GlobalData globalData = data.getGlobalData();
 		globalData.add(transactions);
@@ -53,4 +52,16 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 		if (panel.getTransactions().length==0) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.noTransaction"); //$NON-NLS-1$
 		return null;
 	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		if (visible) {
+			panel.restoreState();
+		} else {
+			panel.saveState();
+		}
+		super.setVisible(visible);
+	}
+	
+	
 }
