@@ -25,13 +25,11 @@ import net.yapbam.gui.administration.AbstractListAdministrationPanel;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class CheckbookListPanel extends AbstractListAdministrationPanel {
-	private GlobalData data;
+public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalData> {
 	private Account account;
 	
-	public CheckbookListPanel (Object data) {
+	public CheckbookListPanel (GlobalData data) {
 		super(data);
-		this.data = (GlobalData) data;
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
@@ -134,6 +132,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel {
 				return account.getCheckbooksNumber();
 			}
 			
+			@Override
 			protected Checkbook getCheckBook(int rowIndex) {
 				return account.getCheckbook(rowIndex);
 			}
