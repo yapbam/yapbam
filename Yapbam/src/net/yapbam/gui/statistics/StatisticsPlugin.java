@@ -10,7 +10,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.TreeMap;
 
-import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -24,6 +24,7 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 
 public class StatisticsPlugin extends AbstractPlugIn {
 	private FilteredData data;
@@ -77,8 +78,17 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				return pane.print(graphics, pageFormat, pageIndex);
 			}
 		});
-		HashPrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-		if (job.printDialog(attributes)) job.print(attributes);
+		String statePrefix = this.getClass().getCanonicalName();
+		PrintRequestAttributeSet attributes = YapbamState.INSTANCE.restorePrinterSettings(statePrefix);
+		if (job.printDialog(attributes)) {
+			YapbamState.INSTANCE.savePrinterSettings(statePrefix, attributes);
+			try {
+				job.print(attributes);
+			} catch (PrinterException e) {
+				/* The job did not successfully complete */
+				//TODO
+			}
+		}
 	}
 
 	private void buildSummaries() {

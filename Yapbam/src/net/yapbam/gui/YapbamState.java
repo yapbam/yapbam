@@ -1,18 +1,28 @@
 package net.yapbam.gui;
 
 import java.awt.Rectangle;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.util.DateUtils;
@@ -22,8 +32,7 @@ public class YapbamState {
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
 	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
 	private static final String COLUMN_HIDDEN = "column.hidden."; //$NON-NLS-1$
-//	private static final String SELECTED_ROW = "selectedRow"; //$NON-NLS-1$
-//	private static final String SCROLL_POSITION = "scrollPosition"; //$NON-NLS-1$
+	private static final String PRINTING_ATTRIBUTES = ".printing.attributes"; //$NON-NLS-1$
 
 	public static final YapbamState INSTANCE = new YapbamState();
 	
@@ -153,5 +162,37 @@ public class YapbamState {
 
 	public void toDisk() throws FileNotFoundException, IOException {
 		properties.store(new FileOutputStream(getFile()), "Yapbam startup state"); //$NON-NLS-1$
+	}
+
+	public PrintRequestAttributeSet restorePrinterSettings(String prefix) {
+		String key = prefix+PRINTING_ATTRIBUTES;
+		if (contains(key)) {
+			try {
+				byte[] decoded = Base64.decode(get(key));
+				ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
+				ObjectInputStream ois = new ObjectInputStream(new GZIPInputStream(bais));
+				PrintRequestAttributeSet result = (PrintRequestAttributeSet) ois.readObject();
+				ois.close();
+				return result;
+			} catch (Exception e) {
+				// If something goes wrong, return the default attribute set
+				return new HashPrintRequestAttributeSet();
+			}
+		} else {
+			return new HashPrintRequestAttributeSet();
+		}
+	}
+
+	public void savePrinterSettings(String prefix, PrintRequestAttributeSet attributes) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(new GZIPOutputStream(baos));
+			oos.writeObject(attributes);
+			oos.close();
+			properties.put(prefix+PRINTING_ATTRIBUTES, Base64.encode(baos.toByteArray()));
+		} catch (IOException e) {
+			// Should not happen ... because the serialization is made into memory
+			throw new RuntimeException(e);
+		}
 	}
 }

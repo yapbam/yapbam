@@ -2,13 +2,16 @@ package net.yapbam.gui.transactiontable;
 
 import java.awt.event.ActionEvent;
 import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.JTable.PrintMode;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
@@ -109,7 +112,22 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	@Override
 	public void print() throws PrinterException {
-		panel.transactionTable.print();
+		// TODO probably should be tested with no printer (maybe it throws an
+		// exception).
+		// Have a look at the javadoc of PrinterJob.getPrinterJob()
+		PrinterJob job = PrinterJob.getPrinterJob();
+		PrintRequestAttributeSet attributes = YapbamState.INSTANCE.restorePrinterSettings(STATE_PREFIX);
+		boolean doPrint = job.printDialog(attributes);
+		if (doPrint) {
+			YapbamState.INSTANCE.savePrinterSettings(STATE_PREFIX, attributes);
+			job.setPrintable(panel.transactionTable.getPrintable(PrintMode.FIT_WIDTH, null, null));
+			try {
+				job.print(attributes);
+			} catch (PrinterException e) {
+				/* The job did not successfully complete */
+				//TODO
+			}
+		}
 	}
 	
 	private void testAlert() {
