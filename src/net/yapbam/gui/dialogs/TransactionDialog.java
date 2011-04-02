@@ -231,8 +231,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	protected void setPredefinedDescriptions() {
 		HashMap<String, Double> map = new HashMap<String, Double>();
 		long now = System.currentTimeMillis();
-		for (int i = 0; i < this.data.getTransactionsNumber(); i++) {
-			Transaction transaction = this.data.getTransaction(i);
+		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
+			Transaction transaction = data.getGlobalData().getTransaction(i);
 			String desc = transaction.getDescription();
 			double ranking = getRankingBasedOnDate(now, transaction);
 			if (!transaction.getAccount().equals(data.getGlobalData().getAccount(selectedAccount))) ranking = ranking / 100;
