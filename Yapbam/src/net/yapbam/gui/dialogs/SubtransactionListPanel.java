@@ -31,6 +31,7 @@ import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.transactiontable.SubTransactionsTableModel;
@@ -228,5 +229,13 @@ class SubtransactionListPanel extends JPanel {
 			this.sum = this.sum + sub.getAmount();
 			this.firePropertyChange(SUM_PROPERTY, oldSum, this.sum);
 		}
+	}
+
+	void saveState(String prefix) {
+		YapbamState.INSTANCE.saveState(table, prefix);
+	}
+	
+	void restoreState(String prefix) {
+		YapbamState.INSTANCE.restoreState(table, prefix);
 	}
 }

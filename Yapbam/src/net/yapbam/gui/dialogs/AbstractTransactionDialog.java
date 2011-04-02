@@ -379,4 +379,15 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredD
 		if (this.amount.getValue() == null) return LocalizationData.get("TransactionDialog.bad.amount"); //$NON-NLS-1$
 		return null;
 	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		String prefix = this.getClass().getCanonicalName();
+		if (visible) {
+			subtransactionsPanel.restoreState(prefix);
+		} else {
+			subtransactionsPanel.saveState(prefix);
+		}
+		super.setVisible(visible);
+	}
 }
