@@ -55,7 +55,7 @@ public class VersionManager {
 			addPropertyParameter (url, "osRelease", "os.version");
 			addPropertyParameter (url, "javaVendor", "java.vendor");
 			addPropertyParameter (url, "javaVersion", "java.version");
-			String serialNumber = YapbamState.get(SERIAL_NUMBER);
+			String serialNumber = YapbamState.INSTANCE.get(SERIAL_NUMBER);
 			if (serialNumber!=null) url.append("&id=").append(URLEncoder.encode(serialNumber,"UTF-8"));
 			return new URL(url.toString());
 		} catch (Exception e) {

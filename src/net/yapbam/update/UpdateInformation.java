@@ -32,7 +32,7 @@ public class UpdateInformation {
 			InputStream in = ct.getInputStream();
 			p.load(new InputStreamReader(in,encoding));
 			String serialNumber = p.getProperty("serialNumber");
-			YapbamState.put(VersionManager.SERIAL_NUMBER, serialNumber);
+			YapbamState.INSTANCE.put(VersionManager.SERIAL_NUMBER, serialNumber);
 			lastestRelease = new ReleaseInfo(p.getProperty("lastestRelease"));
 			updateURL = new URL(p.getProperty("updateURL"));
 			autoUpdateURL = new URL(p.getProperty("autoUpdateURL"));

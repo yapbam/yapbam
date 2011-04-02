@@ -199,12 +199,12 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	}
 	
 	public void restoreState() {
-		YapbamState.restoreState(getJTable(), getStatePrefix());
+		YapbamState.INSTANCE.restoreState(getJTable(), getStatePrefix());
 	}
 	protected String getStatePrefix() {
 		return this.getClass().getCanonicalName();
 	}
 	public void saveState() {
-		YapbamState.saveState(getJTable(), getStatePrefix());
+		YapbamState.INSTANCE.saveState(getJTable(), getStatePrefix());
 	}
 }

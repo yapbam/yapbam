@@ -53,7 +53,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 		}
 		int days = Preferences.INSTANCE.getAutoUpdatePeriod();
 		if (days >= 0) { // If auto-check is on
-			Date last = YapbamState.getDate(LAST_UPDATE_CHECK_KEY);
+			Date last = YapbamState.INSTANCE.getDate(LAST_UPDATE_CHECK_KEY);
 			if (DateUtils.dateToInteger(new Date()) - DateUtils.dateToInteger(last) >= days) {
 				new CheckUpdateDialog(owner, true).setVisible(true);
 			}

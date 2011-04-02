@@ -87,7 +87,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void> {
 							JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE);	//$NON-NLS-1$
 						}
 					} else {
-						YapbamState.put(LAST_UPDATE_CHECK_KEY, new Date());
+						YapbamState.INSTANCE.put(LAST_UPDATE_CHECK_KEY, new Date());
 						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // There's an update
 							String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
 							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(),update.getUpdateURL());

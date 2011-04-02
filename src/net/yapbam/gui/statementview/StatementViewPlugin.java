@@ -24,12 +24,12 @@ public class StatementViewPlugin extends AbstractPlugIn {
 
 	@Override
 	public void restoreState() {
-		YapbamState.restoreState(panel.getTransactionsTable(), STATE_PREFIX);
+		YapbamState.INSTANCE.restoreState(panel.getTransactionsTable(), STATE_PREFIX);
 	}
 
 	@Override
 	public void saveState() {
-		YapbamState.saveState(panel.getTransactionsTable(), STATE_PREFIX);
+		YapbamState.INSTANCE.saveState(panel.getTransactionsTable(), STATE_PREFIX);
 	}
 
 	@Override

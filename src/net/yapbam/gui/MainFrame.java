@@ -7,7 +7,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.AccessControlException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -26,7 +28,12 @@ public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
 	private static final long serialVersionUID = 1L;
-    
+	private static final String LAST_URI = "data.uri"; //$NON-NLS-1$
+	private static final String FRAME_SIZE_WIDTH = "frame.size.width"; //$NON-NLS-1$
+	private static final String FRAME_SIZE_HEIGHT = "frame.size.height"; //$NON-NLS-1$
+	private static final String FRAME_LOCATION_Y = "frame.location.y"; //$NON-NLS-1$
+	private static final String FRAME_LOCATION_X = "frame.location.x"; //$NON-NLS-1$
+
 	private GlobalData data;
 	private FilteredData filteredData;
 
@@ -89,11 +96,11 @@ public class MainFrame extends JFrame implements DataListener {
 			public void windowClosing(WindowEvent event) {
 				MainFrame frame = (MainFrame) event.getWindow();
 				if (frame.isRestarting) {
-					YapbamState.save(frame);
+					frame.saveState();
 					super.windowClosing(event);
 					frame.dispose();
 				} else if (SaveManager.MANAGER.verify(frame)) {
-					YapbamState.save(frame);
+					frame.saveState();
 					Preferences.INSTANCE.save();
 					super.windowClosing(event);
 					frame.dispose();
@@ -141,7 +148,7 @@ public class MainFrame extends JFrame implements DataListener {
 					ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$
 				}
 			} else {
-				YapbamState.INSTANCE.restoreGlobalData(this);
+				restoreGlobalData();
 			}
 		}
 	    
@@ -150,7 +157,7 @@ public class MainFrame extends JFrame implements DataListener {
 		this.plugins = new AbstractPlugIn[pluginContainers.length];
 		for (int i = 0; i < plugins.length; i++) {
 			if (pluginContainers[i].isActivated()) this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
-			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instanciation
+			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instantiation
 				ErrorManager.INSTANCE.display(null, pluginContainers[i].getInstanciationException(), "Une erreur est survenue durant l'instanciation du plugin "+"?"); //LOCAL //TODO
 				ErrorManager.INSTANCE.log(this, pluginContainers[i].getInstanciationException());
 			}
@@ -171,7 +178,7 @@ public class MainFrame extends JFrame implements DataListener {
 		setJMenuBar(mainMenu);
 	    
 		// Restore initial state (last opened file and window position)
-		YapbamState.INSTANCE.restoreMainFramePosition(this);
+		restoreMainFramePosition();
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i] != null) plugins[i].restoreState();
 		}
@@ -309,5 +316,78 @@ public class MainFrame extends JFrame implements DataListener {
 		lastSelected = mainPane.getSelectedIndex();
 		if (lastSelected<paneledPlugins.size()) paneledPlugins.get(lastSelected).setDisplayed(true);
 		mainMenu.updateMenu(paneledPlugins.get(lastSelected));
+	}
+	
+	private void saveState() {
+		if (getData().getURI()!=null) {
+			getStateSaver().put(LAST_URI, getData().getURI().toString());
+		} else {
+			getStateSaver().remove(LAST_URI);
+		}
+		Point location = getLocation();
+		getStateSaver().put(FRAME_LOCATION_X, Integer.toString(location.x));
+		getStateSaver().put(FRAME_LOCATION_Y, Integer.toString(location.y));
+		Dimension size = getSize();
+		int h = ((getExtendedState() & Frame.MAXIMIZED_VERT) == 0) ? size.height : -1;
+		getStateSaver().put(FRAME_SIZE_HEIGHT, Integer.toString(h));
+		int w = ((getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
+		getStateSaver().put(FRAME_SIZE_WIDTH, Integer.toString(w));
+		for (int i = 0; i < getPlugInsNumber(); i++) {
+			if (getPlugIn(i)!=null) getPlugIn(i).saveState();
+		}
+		try {
+			getStateSaver().toDisk();
+		} catch (IOException e) {
+			e.printStackTrace();
+			//TODO What could we do ?
+		}
+	}
+
+	private YapbamState getStateSaver() {
+		return YapbamState.INSTANCE;
+	}
+	
+	private void restoreMainFramePosition() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = Integer.parseInt((String) getStateSaver().get(FRAME_LOCATION_X,"0"));
+		int y = Integer.parseInt((String) getStateSaver().get(FRAME_LOCATION_Y,"0"));
+		int width = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_WIDTH,""+(screenSize.width/2)));
+		int height = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_HEIGHT,""+(screenSize.height/2)));
+		setExtendedState(Frame.MAXIMIZED_BOTH); //TODO Save the maximized state
+		//TODO Beware of a screen size change (especially of a reduction) ?
+  /*
+		if ((width==0) || (width+x>screenSize.width)) {
+			x=0;
+			width = screenSize.width/2;
+		}
+		if ((height==0) || (height+y>screenSize.height)) {
+			y=0;
+			height = screenSize.height/2;
+		}*/
+        setLocation(x,y);
+		setSize(width,height);
+		int extendedState = Frame.NORMAL;
+		if (height<0) extendedState = extendedState | Frame.MAXIMIZED_VERT;
+		if (width<0) extendedState = extendedState | Frame.MAXIMIZED_HORIZ;
+		setExtendedState(extendedState);
+	}
+	
+	private void restoreGlobalData() {
+		URI uri = null;
+		if (getStateSaver().contains(LAST_URI)) {
+			try {
+				uri = new URI((String) getStateSaver().get(LAST_URI));
+			} catch (URISyntaxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (uri!=null) {
+			try {
+				readData(uri);
+			} catch (IOException e) {
+				ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
+			}
+		}
 	}
 }

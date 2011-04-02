@@ -155,7 +155,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			jTable.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			YapbamState.restoreState(jTable, STATE_PROPERTIES_PREFIX);
+			YapbamState.INSTANCE.restoreState(jTable, STATE_PROPERTIES_PREFIX);
 			new JTableListener(jTable, null, new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -172,7 +172,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	}
 	
 	void saveState() {
-		YapbamState.saveState(getJTable(), STATE_PROPERTIES_PREFIX);
+		YapbamState.INSTANCE.saveState(getJTable(), STATE_PROPERTIES_PREFIX);
 	}
 
 	private void updateTransactions() {
