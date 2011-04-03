@@ -44,8 +44,10 @@ import java.awt.Insets;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.BorderFactory;
+import javax.swing.JTable.PrintMode;
 
 import java.awt.Font;
+import java.awt.print.Printable;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -445,5 +447,9 @@ public class StatementViewPanel extends JPanel {
 			new JTableListener(transactionsTable, new Action[]{edit, duplicate, delete}, edit);
 		}
 		return transactionsTable;
+	}
+
+	public Printable getPrintable() {
+		return transactionsTable.getPrintable(PrintMode.FIT_WIDTH, null, null);
 	}
 }

@@ -1,5 +1,7 @@
 package net.yapbam.gui.statementview;
 
+import java.awt.print.Printable;
+
 import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
@@ -36,5 +38,15 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	public boolean allowMenu(int menuId) {
 		if (menuId==FILTER_MENU) return false;
 		return super.allowMenu(menuId);
+	}
+	@Override
+	public boolean isPrintingSupported() {
+		return true;
+	}
+	
+
+	@Override
+	protected Printable getPrintable() {
+		return panel.getPrintable();
 	}
 }
