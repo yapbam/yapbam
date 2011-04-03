@@ -1,8 +1,11 @@
 package net.yapbam.gui;
 
+import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeSupport;
 
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -230,15 +233,42 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	}
 	
 	/** Prints the content of this plugin.
-	 * This method is called is response to the selection of the "print" menu item when this plugin
-	 * is displayed.
-	 * By default, this method throws an UnsupportedOperationException
+	 * This method is called in response to the selection of the "print" menu item when this plugin
+	 * is displayed. Note that this method is never called when isPrintingSupported returns false.
+	 * By default, this method display the standard print dialog and prints the Printable instance returned by getPrintable.
+	 * The printer setting are saved from one Yapbam execution to another. 
 	 * @see #isPrintingSupported()
+	 * @see #getPrintable()
 	 */
 	public void print() throws PrinterException {
-		throw new UnsupportedOperationException();
+		// TODO probably should be tested with no printer (maybe it throws an
+		// exception).
+		// Have a look at the javadoc of PrinterJob.getPrinterJob()
+		PrinterJob job = PrinterJob.getPrinterJob();
+		String prefix = this.getClass().getCanonicalName();
+		PrintRequestAttributeSet attributes = YapbamState.INSTANCE.restorePrinterSettings(prefix);
+		boolean doPrint = job.printDialog(attributes);
+		if (doPrint) {
+			YapbamState.INSTANCE.savePrinterSettings(prefix, attributes);
+			job.setPrintable(getPrintable());
+			try {
+				job.print(attributes);
+			} catch (PrinterException e) {
+				/* The job did not successfully complete */
+				//TODO
+			}
+		}
 	}
-	
+
+	/** Gets the printer view of the plugin.
+	 * This method is called by the print method. The default implementation returns null.
+	 * @return a Printable
+	 * @see #print()
+	 */
+	protected Printable getPrintable() {
+		return null;
+	}
+
 	/** Plugins support events sending (see constants that define the supported events by default ealier in this page)
 	 * @return a PropertyChangeSupport that can be listened to by other plugins (or by YapBam itself). Plugins may use
 	 * this instance to fire their properties change.
@@ -246,4 +276,5 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public final PropertyChangeSupport getPropertyChangeSupport() {
 		return this.propertyChangeSupport;
 	}
+
 }
