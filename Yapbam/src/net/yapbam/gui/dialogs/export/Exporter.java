@@ -16,23 +16,13 @@ import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 
 public class Exporter {
-	private int[] fields;
-	private boolean insertHeader;
-	private char separator;
-	private boolean exportInitialBalance;
-	private boolean exportFilteredData;
-	
+	private ExporterParameters parameters;
 	private DateFormat dateFormatter;
 	private NumberFormat amountFormatter;
 	
-	public Exporter(int[] fields, boolean insertHeader, char separator,
-			boolean exportInitialBalance, boolean exportFilteredData) {
+	public Exporter(ExporterParameters parameters) {
 		super();
-		this.fields = fields;
-		this.insertHeader = insertHeader;
-		this.separator = separator;
-		this.exportInitialBalance = exportInitialBalance;
-		this.exportFilteredData = exportFilteredData;
+		this.parameters = parameters;
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
 		amountFormatter = NumberFormat.getNumberInstance(LocalizationData.getLocale());
 		amountFormatter.setMaximumFractionDigits(LocalizationData.getCurrencyInstance().getMaximumFractionDigits());
@@ -42,39 +32,40 @@ public class Exporter {
 	public void exportFile(File file, FilteredData data) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		try {
-			if (insertHeader) {
+			int[] fields = parameters.getExportedIndexes();
+			if (parameters.isInsertHeader()) {
 				// insert the header line
 				for (int i = 0; i < fields.length; i++) {
-					if (i>0) writer.write(separator);
+					if (i>0) writer.write(parameters.getSeparator());
 					writer.write(ExportTableModel.columns[fields[i]]);
 				}
 				writer.newLine();
 			}
-			if (exportInitialBalance) {
+			if (parameters.isExportInitialBalance()) {
 				//Export accounts initial balance
 				for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
 					Account account = data.getGlobalData().getAccount(i);
-					if (data.isOk(account) || !exportFilteredData) {
+					if (data.isOk(account) || !parameters.isExportFilteredData()) {
 						for (int j = 0; j < fields.length; j++) {
-							if (j>0) writer.write(separator);
+							if (j>0) writer.write(parameters.getSeparator());
 							writer.write(getField(account, fields[j]));
 						}
 						writer.newLine();
 					}
 				}
 			}
-			Iterator<Transaction> transactions = exportFilteredData?new FilteredTransactions(data):new GlobalTransactions(data);
+			Iterator<Transaction> transactions = parameters.isExportFilteredData()?new FilteredTransactions(data):new GlobalTransactions(data);
 			while (transactions.hasNext()) {
 				Transaction transaction = transactions.next();
 				for (int i = 0; i < fields.length; i++) {
-					if (i>0) writer.write(separator);
+					if (i>0) writer.write(parameters.getSeparator());
 					writer.write(getField(transaction, fields[i]));
 				}
 				writer.newLine();
 				for (int j=0;j<transaction.getSubTransactionSize();j++) {
 					SubTransaction sub = transaction.getSubTransaction(j);
 					for (int i = 0; i < fields.length; i++) {
-						if (i>0) writer.write(separator);
+						if (i>0) writer.write(parameters.getSeparator());
 						writer.write(getField(sub, fields[i]));
 					}
 					writer.newLine();

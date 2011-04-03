@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
@@ -21,7 +22,13 @@ public class ExportDialog extends AbstractDialog<FilteredData> {
 
 	@Override
 	protected Object buildResult() {
-		return exportPanel.getExporter();
+		ExporterParameters parameters = exportPanel.getExporterParameters();
+		YapbamState.INSTANCE.save(getStateKey(), parameters);
+		return new Exporter(parameters);
+	}
+
+	private String getStateKey() {
+		return this.getClass().getCanonicalName()+"."+ExporterParameters.class.getName();
 	}
 
 	@Override
@@ -34,6 +41,11 @@ public class ExportDialog extends AbstractDialog<FilteredData> {
 				updateOkButtonEnabled();
 			}
 		});
+		ExporterParameters parameters = (ExporterParameters) YapbamState.INSTANCE.restore(getStateKey());
+		if (parameters!=null) {
+			if (!data.hasFilter()) parameters.setExportFilteredData(false);
+			exportPanel.setParameters(parameters);
+		}
 		return exportPanel;
 	}
 

@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -165,34 +166,43 @@ public class YapbamState {
 	}
 
 	public PrintRequestAttributeSet restorePrinterSettings(String prefix) {
-		String key = prefix+PRINTING_ATTRIBUTES;
+		PrintRequestAttributeSet result = (PrintRequestAttributeSet) restore(prefix+PRINTING_ATTRIBUTES);
+		return result!=null?result:new HashPrintRequestAttributeSet();
+	}
+
+	public void savePrinterSettings(String prefix, PrintRequestAttributeSet attributes) {
+		save (prefix+PRINTING_ATTRIBUTES, (Serializable) attributes);
+	}
+
+	public void save(String key, Serializable serializable) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(new GZIPOutputStream(baos));
+			oos.writeObject(serializable);
+			oos.close();
+			properties.put(key, Base64.encode(baos.toByteArray()));
+		} catch (IOException e) {
+			// Should not happen ... because the serialization is made into memory
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public Serializable restore(String prefix) {
+		String key = prefix;
 		if (contains(key)) {
 			try {
 				byte[] decoded = Base64.decode(get(key));
 				ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
 				ObjectInputStream ois = new ObjectInputStream(new GZIPInputStream(bais));
-				PrintRequestAttributeSet result = (PrintRequestAttributeSet) ois.readObject();
+				Serializable result = (Serializable) ois.readObject();
 				ois.close();
 				return result;
 			} catch (Exception e) {
-				// If something goes wrong, return the default attribute set
-				return new HashPrintRequestAttributeSet();
+				// If something goes wrong, return null
+				return null;
 			}
 		} else {
-			return new HashPrintRequestAttributeSet();
-		}
-	}
-
-	public void savePrinterSettings(String prefix, PrintRequestAttributeSet attributes) {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(new GZIPOutputStream(baos));
-			oos.writeObject(attributes);
-			oos.close();
-			properties.put(prefix+PRINTING_ATTRIBUTES, Base64.encode(baos.toByteArray()));
-		} catch (IOException e) {
-			// Should not happen ... because the serialization is made into memory
-			throw new RuntimeException(e);
+			return null;
 		}
 	}
 }

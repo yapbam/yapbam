@@ -4,7 +4,6 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JCheckBox;
 import java.awt.GridBagConstraints;
-import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
@@ -19,6 +18,7 @@ import javax.swing.table.TableColumnModel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.NullUtils;
+import java.awt.Insets;
 
 public class ExportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -33,6 +33,7 @@ public class ExportPanel extends JPanel {
 	private JCheckBox includeInitialBalance = null;
 	private String invalidityCause = null;  //  @jve:decl-index=0:
 	private SeparatorPanel separatorPanel = null;
+	private ButtonGroup group;
 	
 	public String getInvalidityCause() {
 		return invalidityCause;
@@ -53,6 +54,7 @@ public class ExportPanel extends JPanel {
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+		gridBagConstraints12.insets = new Insets(5, 0, 0, 0);
 		gridBagConstraints12.gridx = 0;
 		gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints12.gridwidth = 0;
@@ -72,6 +74,7 @@ public class ExportPanel extends JPanel {
 		jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("ExportDialog.message")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.insets = new Insets(10, 0, 15, 0);
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.gridy = 1;
 		gridBagConstraints11.gridwidth = 0;
@@ -89,12 +92,14 @@ public class ExportPanel extends JPanel {
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.gridy = 3;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.insets = new Insets(5, 0, 0, 0);
 		gridBagConstraints1.gridx = 1;
 		gridBagConstraints1.gridy = 2;
 		gridBagConstraints1.gridx = 1;
 		gridBagConstraints1.anchor = GridBagConstraints.WEST;
 		gridBagConstraints1.gridy = 2;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new Insets(5, 0, 0, 0);
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 2;
 		gridBagConstraints.gridx = 0;
@@ -111,7 +116,7 @@ public class ExportPanel extends JPanel {
 		this.add(getAll(), gridBagConstraints1);
 		this.add(getFiltered(), gridBagConstraints2);
 		this.add(getSeparatorPanel(), gridBagConstraints12);
-		ButtonGroup group = new ButtonGroup();
+		group = new ButtonGroup();
 		group.add(getAll());
 		group.add(getFiltered());
 	}
@@ -248,17 +253,31 @@ public class ExportPanel extends JPanel {
 		return separatorPanel;
 	}
 
-	public Exporter getExporter() {
-		ArrayList<Integer> resultList = new ArrayList<Integer>();
+	public ExporterParameters getExporterParameters() {
 		ExportTableModel model = ((ExportTableModel)getJTable().getModel());
-		for (int i = 0; i < getJTable().getColumnCount(); i++) {
+		int[] viewToModel = new int[getJTable().getColumnCount()];
+		boolean[] selected = new boolean[viewToModel.length];
+		for (int i = 0; i < viewToModel.length; i++) {
 			int modelColumn = getJTable().convertColumnIndexToModel(i);
-			if ((Boolean) model.getValueAt(0, modelColumn)) resultList.add(modelColumn);
+			viewToModel[i] = modelColumn;
+			selected[modelColumn] = (Boolean) model.getValueAt(0, modelColumn);
 		}
-		int[] fields = new int[resultList.size()];
-		for (int i = 0; i < fields.length; i++) {
-			fields[i] = resultList.get(i);
+		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(), includeInitialBalance.isSelected(), !all.isSelected());
+	}
+
+	public void setParameters(ExporterParameters parameters) {
+		title.setSelected(parameters.isInsertHeader());
+		separatorPanel.setSeparator(parameters.getSeparator());
+		includeInitialBalance.setSelected(parameters.isExportInitialBalance());
+		JRadioButton sel = parameters.isExportFilteredData()?filtered:all;
+		group.setSelected(sel.getModel(), true);
+		for (int i = jTable.getColumnCount()-1; i>=0 ; i--) {
+			int modelIndex = parameters.getViewIndexesToModel()[i];
+			jTable.moveColumn(jTable.convertColumnIndexToView(modelIndex), i);
 		}
-		return new Exporter(fields, title.isSelected(), separatorPanel.getSeparator(), includeInitialBalance.isSelected(), !all.isSelected());
+		ExportTableModel model = (ExportTableModel) jTable.getModel();
+		for (int i = 0; i < parameters.getSelectedModelColumns().length; i++) {
+			model.setValueAt(parameters.getSelectedModelColumns()[i], 0, i);
+		}
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"

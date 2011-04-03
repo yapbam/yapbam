@@ -166,8 +166,8 @@ public class SeparatorPanel extends JPanel {
 		if (this.separator==defaultSeparator) {
 			defaultSeparatorButton.setSelected(true);
 		} else {
-			customSeparatorButton.setSelected(true);
 			customSeparatorValue.setText(new String(new char[]{separator}));
+			customSeparatorButton.setSelected(true);
 		}
 		if (old!=separator) this.firePropertyChange(SEPARATOR_PROPERTY, old, separator);
 	}
