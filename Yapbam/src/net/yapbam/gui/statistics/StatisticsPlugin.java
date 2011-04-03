@@ -7,10 +7,8 @@ import java.awt.Insets;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.util.TreeMap;
 
-import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -24,7 +22,6 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.YapbamState;
 
 public class StatisticsPlugin extends AbstractPlugIn {
 	private FilteredData data;
@@ -68,27 +65,14 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	}
 
 	@Override
-	public void print() throws PrinterException {
-		PrinterJob job = PrinterJob.getPrinterJob();
-		job.setPrintable(new Printable() {
+	protected Printable getPrintable() {
+		return new Printable() {
 			@Override
-			public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-					throws PrinterException {
+			public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 				ChartPanel pane = (ChartPanel) tabbedPane.getSelectedComponent();
 				return pane.print(graphics, pageFormat, pageIndex);
 			}
-		});
-		String statePrefix = this.getClass().getCanonicalName();
-		PrintRequestAttributeSet attributes = YapbamState.INSTANCE.restorePrinterSettings(statePrefix);
-		if (job.printDialog(attributes)) {
-			YapbamState.INSTANCE.savePrinterSettings(statePrefix, attributes);
-			try {
-				job.print(attributes);
-			} catch (PrinterException e) {
-				/* The job did not successfully complete */
-				//TODO
-			}
-		}
+		};
 	}
 
 	private void buildSummaries() {
