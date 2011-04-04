@@ -505,8 +505,8 @@ public class ImportPanel extends JPanel {
 		boolean addToCurrentData = addToCurrentFile.isSelected();
 		int index = accounts.getSelectedIndex();
 		Account defaultAccount = index>=0?data.getAccount(index):null;
-		return new Importer(file, separatorPanel.getSeparator(), ignoreFirstLine.isSelected(),
-				((ImportTableModel)getJTable().getModel()).getRelations(),
+		return new Importer(file, new ImporterParameters(separatorPanel.getSeparator(), ignoreFirstLine.isSelected()?1:0,
+				((ImportTableModel)getJTable().getModel()).getRelations()),
 				addToCurrentData?data:null, defaultAccount);
 	}
 
@@ -521,7 +521,7 @@ public class ImportPanel extends JPanel {
 	private void updateIsValid() {
 		String old = invalidityCause;
 		invalidityCause = null;
-		// Date, amout are mandatory
+		// Date, amount are mandatory
 		int[] relations = ((ImportTableModel)getJTable().getModel()).getRelations();
 		if (relations[ExportTableModel.AMOUNT_INDEX]<0) {
 			invalidityCause = LocalizationData.get("ImportDialog.noAmountSelected"); //$NON-NLS-1$
@@ -533,9 +533,9 @@ public class ImportPanel extends JPanel {
 		}
 	}
 
-	public void setImporter(Importer lastImporter) {
-		separatorPanel.setSeparator(lastImporter.getSeparator().charAt(0));
-		ignoreFirstLine.setSelected(lastImporter.isIgnoreFirstLine());
-		((ImportTableModel)getJTable().getModel()).setRelations(lastImporter.getImportedColumns());
+	public void setParameters(ImporterParameters parameters) {
+		separatorPanel.setSeparator(parameters.getSeparator());
+		ignoreFirstLine.setSelected(parameters.getIgnoredLeadingLines()!=0);
+		((ImportTableModel)getJTable().getModel()).setRelations(parameters.getImportedFileColumns());
 	}
 }

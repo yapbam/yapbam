@@ -23,28 +23,20 @@ import net.yapbam.gui.LocalizationData;
 
 public class Importer {
 	private File file;
-	private String separator;
-	private boolean ignoreFirstLine;
-	private int[] importedFilecolumns;
+	private ImporterParameters parameters;
 	private Account defaultAccount;
 	
 	private CurrentTransaction current;
 	private DateFormat dateFormatter;
 	
-	public Importer(File file, char separator, boolean ignoreFirstLine,
-			int[] importedFilecolumns, GlobalData data, Account defaultAccount) {
+	public Importer(File file, ImporterParameters parameters, GlobalData data, Account defaultAccount) {
 		super();
 		this.file = file;
-		this.separator = new String(new char[]{separator});
-		this.ignoreFirstLine = ignoreFirstLine;
-		this.importedFilecolumns = importedFilecolumns;
+		this.parameters = parameters;
 		this.defaultAccount = defaultAccount;
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
 	}
 
-	public int[] getImportedColumns() {
-		return importedFilecolumns;
-	}
 	public ImportError[] importFile(GlobalData data) throws IOException {
 		if (data!=null) data.setEventsEnabled(false);
 		this.current = null;
@@ -54,13 +46,13 @@ public class Importer {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			try {
 				int lineNumber = 0;
-				if (ignoreFirstLine) {
+				for (int i=0;i<parameters.getIgnoredLeadingLines();i++) {
 					reader.readLine();
 					lineNumber++;
 				}
 				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 					lineNumber++;
-					String[] fields = line.split(separator);
+					String[] fields = line.split(parameters.getSeparatorString());
 					try {
 						accountPart = !importLine(data, lineNumber, fields, accountPart) && accountPart;
 					} catch (ImportException e) {
@@ -103,7 +95,7 @@ public class Importer {
 		boolean hasError = false;
 		
 		// Decoding amount
-		int index = importedFilecolumns[ExportTableModel.AMOUNT_INDEX];
+		int index = parameters.getImportedFileColumns()[ExportTableModel.AMOUNT_INDEX];
 		double amount = 0.0;
 		try {
 			amount = parseAmount(getField(fields, index, "")); //$NON-NLS-1$
@@ -113,7 +105,7 @@ public class Importer {
 		}
 		
 		// Decoding date
-		index = importedFilecolumns[ExportTableModel.DATE_INDEX];
+		index = parameters.getImportedFileColumns()[ExportTableModel.DATE_INDEX];
 		Date date = null;
 		try {
 			date = parseDate(getField(fields, index, "")); //$NON-NLS-1$
@@ -127,7 +119,7 @@ public class Importer {
 		// Decoding account
 		Account account = null;
 		if ((isTransaction || accountPart) && !hasError) {
-			index = importedFilecolumns[ExportTableModel.ACCOUNT_INDEX];
+			index = parameters.getImportedFileColumns()[ExportTableModel.ACCOUNT_INDEX];
 			String accountStr = getField(fields, index, ""); //$NON-NLS-1$
 			if (accountStr.length()==0) { // No account specified
 				accountStr = defaultAccount==null?LocalizationData.get("ImportDialog.defaultAccount"):defaultAccount.getName(); //$NON-NLS-1$
@@ -147,13 +139,14 @@ public class Importer {
 				double initialBalance = account.getInitialBalance() + amount;
 				data.setInitialBalance(account, initialBalance);
 			}
+			if (hasError) throw new ImportException(new ImportError(lineNumber, fields, invalidFields));
 		} else {
 			// Description
-			index = importedFilecolumns[ExportTableModel.DESCRIPTION_INDEX];
+			index = parameters.getImportedFileColumns()[ExportTableModel.DESCRIPTION_INDEX];
 			String description = getField(fields, index, ""); //$NON-NLS-1$
 					
 			// Value date
-			index = importedFilecolumns[ExportTableModel.VALUE_DATE_INDEX];
+			index = parameters.getImportedFileColumns()[ExportTableModel.VALUE_DATE_INDEX];
 			Date valueDate = null;
 			try {
 				valueDate = parseDate(getField(fields, index, "")); //$NON-NLS-1$
@@ -167,7 +160,7 @@ public class Importer {
 				throw new ImportException(new ImportError(lineNumber, fields, invalidFields));
 			}
 			// Category
-			index = importedFilecolumns[ExportTableModel.CATEGORY_INDEX];
+			index = parameters.getImportedFileColumns()[ExportTableModel.CATEGORY_INDEX];
 			String categoryName = getField(fields, index, ""); //$NON-NLS-1$
 			Category category = Category.UNDEFINED;
 			if (data!=null) {
@@ -180,16 +173,16 @@ public class Importer {
 			
 			if (isTransaction) {
 				// Number
-				index = importedFilecolumns[ExportTableModel.NUMBER_INDEX];
+				index = parameters.getImportedFileColumns()[ExportTableModel.NUMBER_INDEX];
 				String number = getField(fields, index, null);
 		
 				// Statement
-				index = importedFilecolumns[ExportTableModel.STATEMENT_INDEX];
+				index = parameters.getImportedFileColumns()[ExportTableModel.STATEMENT_INDEX];
 				String statement = getField(fields, index, ""); //$NON-NLS-1$
 				if (statement.length()==0) statement = null;
 					
 				// Mode
-				index = importedFilecolumns[ExportTableModel.MODE_INDEX];
+				index = parameters.getImportedFileColumns()[ExportTableModel.MODE_INDEX];
 				String modeName = getField(fields, index, ""); //$NON-NLS-1$
 				Mode mode = Mode.UNDEFINED;
 				if (data!=null) {
@@ -221,7 +214,9 @@ public class Importer {
 		} catch (ParseException e) {
 			format = NumberFormat.getInstance(LocalizationData.getLocale());
 			ppos.setIndex(0);
-			double value = format.parse(text, ppos).doubleValue();
+			Number parsed = format.parse(text, ppos);
+			if (parsed==null) throw new ParseException(text, ppos.getIndex());
+			double value = parsed.doubleValue();
 			if (ppos.getIndex()<text.length()) throw new ParseException(text, ppos.getIndex());
 			return value;
 		}
@@ -265,20 +260,12 @@ public class Importer {
 		}
 	}
 
-	public String getSeparator() {
-		return separator;
+	public void setSeparator(char separator) {
+		this.parameters.setSeparator(separator);
 	}
 
-	public void setSeparator(String separator) {
-		this.separator = separator;
-	}
-
-	public boolean isIgnoreFirstLine() {
-		return ignoreFirstLine;
-	}
-
-	public void setIgnoreFirstLine(boolean ignoreFirstLine) {
-		this.ignoreFirstLine = ignoreFirstLine;
+	public void setIgnoredLeadingLines(int ignoredLeadingLines) {
+		this.parameters.setIgnoredLeadingLines(ignoredLeadingLines);
 	}
 	
 	@SuppressWarnings("serial")
@@ -297,5 +284,9 @@ public class Importer {
 
 	public File getFile() {
 		return file;
+	}
+	
+	public ImporterParameters getParameters() {
+		return this.parameters;
 	}
 }

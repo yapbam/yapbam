@@ -309,9 +309,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				}
 			} else if (source.equals(this.menuItemImport)) {
 				JFileChooser chooser = new JFileChooser();
-				if (ImportDialog.lastImporter != null) {
-					chooser.setLocale(LocalizationData.getLocale());
-					File lastFile = ImportDialog.lastImporter.getFile();
+				chooser.setLocale(LocalizationData.getLocale());
+				if (ImportDialog.lastFile != null) {
+					File lastFile = ImportDialog.lastFile;
 					if (lastFile.exists() && lastFile.canRead()) chooser.setSelectedFile(lastFile);
 				}
 				chooser.updateUI();
@@ -328,7 +328,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 							try {
 								ImportError[] errors = importer.importFile(null);
 								if (errors.length!=0) {
-									ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame, importer.getImportedColumns(), errors);
+									ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame, importer.getParameters().getImportedFileColumns(), errors);
 									importErrorDialog.setVisible(true);
 									if (importErrorDialog.getResult()!=null) errors = new ImportError[0];
 								}

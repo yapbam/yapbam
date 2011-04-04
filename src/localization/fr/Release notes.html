@@ -14,62 +14,125 @@ color: #AA0000;
 color: #ff9900;
 }
 -->
-</style></head>
+</style>
+</head>
 <body>
 <h1>Version 0.8.2 (??/04/2011)</h1>
-<h2>Nouveautés de cette version</h2><ul><li>Lorsque vous créez une
+<h2>Nouveautés de cette version</h2>
+<ul>
+<li>Lorsque vous créez une
 nouvelle opération (ou opération périodique), et que le filtre
-n'autorise qu'un seul compte, celui-ci est maintenant automatiquement sélectionné dans le dialogue de création de l'opération.</li><li>D'une
+n'autorise qu'un seul compte, celui-ci est maintenant automatiquement
+sélectionné dans le dialogue de création de l'opération.</li>
+<li>D'une
 exécution à l'autre, les colonnes cachées de la table des opérations
 sont mémorisées. Les colonnes sont à présent listée dans le menu
 "Afficher les colonnes ..." dans le même ordre que dans la table des
-opérations.</li><li>D'une
+opérations.</li>
+<li>D'une
 exécution à l'autre, les tailles et positions des colonnes de l'onglet
 "gestion des comptes" sont sauvegardées. De même pour les tableaux
 intervenant dans les dialogues (dans le dialogue d'édition d'une
-opération, par exemple),&nbsp;les réglages des impressions (format de papier, marges, etc ...), et les réglages de l'export.</li><li>Amélioration de l'assistant de saisie.</li><li>Ajoute l'impression basique des relevés de compte.</li></ul>
+opération, par exemple),&nbsp;les réglages des impressions (format
+de papier, marges, etc ...), et les réglages de l'import/export.</li>
+<li>Amélioration de l'assistant de saisie.</li>
+<li>Ajoute l'impression basique des relevés de compte.</li>
+<li><span class="bugFix">Correction d'un bug </span>: Un champ de montant vide dans un
+fichier importé pouvait empêcher l'import de tout le fichier.</li>
+</ul>
 <hr>
 <h1>Versions précédentes</h1>
-<h2>Version 0.8.1 (05/03/2011)</h2><ul><li><span class="bugFix">Correction d'un bug </span>: Le changement de pays/langue ne changeait pas certains format de date.</li><li><span class="bugFix">Correction d'un bug </span>: Lorsque d'anciennes opérations n'étaient pas pointées, le relevé "Non pointé" pouvait ne&nbsp;pas être
-le plus récent dans l'onglet "Relevés de compte". Ceci rendait les soldes en début et fin de périodes
-faux pour les relevés situés avant le relevé "Non pointé".</li><li>Le camembert de dépenses par catégorie est maintenant trié par libellé croissant de catégorie.</li><li>Ajout d'un bouton "Tutoriel" dans l'écran d'accueil.</li></ul><h2>Version 0.8.0 (04/02/2011)</h2><ul><li>Ajout de nouveaux thèmes visuels (Voir le dialogue accessible par 
-    le menu "Fichier/Préférences", onglet "Apparence").<br>
-    Nous vous recommandons de tester l'apparence "Nimbus".</li><li>Ajout d'un écran de bienvenue, regroupant des raccourcis utiles et des astuces d'utilisation de Yapbam.</li><li>Introduction
+<h2>Version 0.8.1 (05/03/2011)</h2>
+<ul>
+<li><span class="bugFix">Correction d'un bug </span>:
+Le changement de pays/langue ne changeait pas certains format de date.</li>
+<li><span class="bugFix">Correction d'un bug </span>:
+Lorsque d'anciennes opérations n'étaient pas pointées, le relevé "Non
+pointé" pouvait ne&nbsp;pas être
+le plus récent dans l'onglet "Relevés de compte". Ceci rendait les
+soldes en début et fin de périodes
+faux pour les relevés situés avant le relevé "Non pointé".</li>
+<li>Le camembert de dépenses par catégorie est maintenant trié
+par libellé croissant de catégorie.</li>
+<li>Ajout d'un bouton "Tutoriel" dans l'écran d'accueil.</li>
+</ul>
+<h2>Version 0.8.0 (04/02/2011)</h2>
+<ul>
+<li>Ajout de nouveaux thèmes visuels (Voir le dialogue
+accessible par le menu "Fichier/Préférences", onglet "Apparence").<br>
+Nous vous recommandons de tester l'apparence "Nimbus".</li>
+<li>Ajout d'un écran de bienvenue, regroupant des raccourcis
+utiles et des astuces d'utilisation de Yapbam.</li>
+<li>Introduction
 d'un nouveau mécanisme de mise à jour. Plus besoin de télécharger
-manuellement les mises à jour, elles s'installeront automatiquement.</li><li>Amélioration
+manuellement les mises à jour, elles s'installeront automatiquement.</li>
+<li>Amélioration
 de l'assistant de saisie. Les choix les plus probables sont à présent
 présentés en premier (précédemment, les choix étaient classés par ordre
-alphabétique).</li><li>Ajout de la possibilité d'envoyer des rapports d'erreur à l'équipe Yapbam lorsqu'un problème survient.</li><li>Ajout
+alphabétique).</li>
+<li>Ajout de la possibilité d'envoyer des rapports d'erreur à
+l'équipe Yapbam lorsqu'un problème survient.</li>
+<li>Ajout
 d'un message d'alerte si vous tentez d'enregister un fichier de données
 dans le répertoire d'installation de Yapbam (ce qui pourrait provoquer
-la perte de vos données).</li><li><span class="bugFix">Correction d'un bug mineur </span>: L'utilisation des fléches hautes et basse permettait de saisir des valeurs hors des limites autorisées.</li><li><span class="bugFix">Correction d'un bug</span>
+la perte de vos données).</li>
+<li><span class="bugFix">Correction d'un bug
+mineur </span>: L'utilisation des fléches hautes et basse
+permettait de saisir des valeurs hors des limites autorisées.</li>
+<li><span class="bugFix">Correction d'un bug</span>
 : Dans l'édition d'une opération, lorsque vous choisissiez un libellé
 avec l'assistant de saisie, et que le mode déduit impliquait
 l'utilisation d'un carnet de chèque, le champ numéro n'était pas
-correctement initialisé.</li><li><span class="bugFix">Correction d'un bug </span>: Créer une recette d'un montant nul pouvait provoquer des erreurs.</li><li><span class="bugFix">Correction d'un bu</span><span class="bugFix">g </span>:
+correctement initialisé.</li>
+<li><span class="bugFix">Correction d'un bug </span>:
+Créer une recette d'un montant nul pouvait provoquer des erreurs.</li>
+<li><span class="bugFix">Correction d'un bu</span><span class="bugFix">g </span>:
 Ne plus autoriser un mode de paiment pour un type d'opération
 (recette/dépense) pour lequel il était précédemment utilisé pouvait
-provoquer des erreurs.</li><li><span class="bugFix">Correction d'un bug </span>: Créer une catégorie dans une sous-opération pouvait changer la catégorie de l'opération.</li><li><span class="bugFix">Correction d'un bu</span><span class="bugFix">g </span>: Créer une opération périodique inactive sans données de périodicité empéchait l'affichage de l'onglet d'administration.</li></ul><h2>Version 0.7.4 (12/12/2010)</h2><ul><li><span class="bugFix">Correction d'un bug</span> : Le filtrage des opérations 
-    de montant égal à une certaine valeur ne fonctionnait pas (toutes 
-    les opérations avec un montant supérieur ou égale à 
-    la valeur étaient retenues).</li><li><span class="bugFix">Correction d'un bug mineur</span> dans le convertisseur 
-    de devises. Lorsque la connexion à la BCE échouait, aucune fenêtre 
-    n'apparraissait.</li><li><span class="bugFix">Correction de bugs mineurs</span> dans la vue "rélevé 
-    de comptes'.</li></ul><h2>Version 0.7.3 (26/11/2010)</h2>
+provoquer des erreurs.</li>
+<li><span class="bugFix">Correction d'un bug </span>:
+Créer une catégorie dans une sous-opération pouvait changer la
+catégorie de l'opération.</li>
+<li><span class="bugFix">Correction d'un bu</span><span class="bugFix">g </span>: Créer une opération
+périodique inactive sans données de périodicité empéchait l'affichage
+de l'onglet d'administration.</li>
+</ul>
+<h2>Version 0.7.4 (12/12/2010)</h2>
 <ul>
-  <li><span class="bugFix">Correction d'un bug </span>: L'onglet statistique affichait 
-    des graphiques erronés depuis la 0.7.2.</li>
-  <li>Ajout d'un script de lancement pour Linux.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: Le filtrage des opérations de montant égal à une certaine valeur ne
+fonctionnait pas (toutes les opérations avec un montant supérieur ou
+égale à la valeur étaient retenues).</li>
+<li><span class="bugFix">Correction d'un bug mineur</span>
+dans le convertisseur de devises. Lorsque la connexion à la BCE
+échouait, aucune fenêtre n'apparraissait.</li>
+<li><span class="bugFix">Correction de bugs mineurs</span>
+dans la vue "rélevé de comptes'.</li>
+</ul>
+<h2>Version 0.7.3 (26/11/2010)</h2>
+<ul>
+<li><span class="bugFix">Correction d'un bug </span>:
+L'onglet statistique affichait des graphiques erronés depuis la 0.7.2.</li>
+<li>Ajout d'un script de lancement pour Linux.</li>
 </ul>
 <h2>Version 0.7.2 (23/11/2010)</h2>
-<ul><li>Amélioration mineure du mode pointage (la modification du
-champ date coche automatiquement "Remplacer la date de valeur par").</li><li>Le menu "filtre" est à présent caché dans la vue "Relevés
-de compte" (cette vue ne prend pas en compte le filtrage).</li><li>Ajout de cases à cocher "Dépenses" et "Recettes" dans le
-dialogue "Filtre personnalisé".</li><li>La structure du répertoire contenant l'application est
-modifiée pour correspondre à celle de PortableApps.com.</li><li><span class="bugFix">Correction de
+<ul>
+<li>Amélioration mineure du mode pointage (la modification du
+champ date coche automatiquement "Remplacer la date de valeur par").</li>
+<li>Le menu "filtre" est à présent caché dans la vue "Relevés
+de compte" (cette vue ne prend pas en compte le filtrage).</li>
+<li>Ajout de cases à cocher "Dépenses" et "Recettes" dans le
+dialogue "Filtre personnalisé".</li>
+<li>La structure du répertoire contenant l'application est
+modifiée pour correspondre à celle de PortableApps.com.</li>
+<li><span class="bugFix">Correction de
 bugs mineurs</span>&nbsp;dans le dialogue "Filtre
-personnalisé".</li><li><span class="bugFix">Correction d'un
-bug mineur</span> sous Vista. Une fois l'exécution de Yapbam.exe terminée, Vista demandait si le programme avait fonctionné correctement.</li></ul><h2>Version 0.7.1 (09/11/2010)</h2>
+personnalisé".</li>
+<li><span class="bugFix">Correction d'un
+bug mineur</span> sous Vista. Une fois l'exécution de Yapbam.exe
+terminée, Vista demandait si le programme avait fonctionné correctement.</li>
+</ul>
+<h2>Version 0.7.1 (09/11/2010)</h2>
 <ul>
 <li>Amélioration de performance : Les tâches d'administration
 sont beaucoup plus rapides que dans les versions précédentes (Par
