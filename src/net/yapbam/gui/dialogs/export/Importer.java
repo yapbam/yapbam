@@ -259,14 +259,6 @@ public class Importer {
 			return new Transaction(date, number, description, amount, account, mode, category, valueDate, statement, subtransactions);
 		}
 	}
-
-	public void setSeparator(char separator) {
-		this.parameters.setSeparator(separator);
-	}
-
-	public void setIgnoredLeadingLines(int ignoredLeadingLines) {
-		this.parameters.setIgnoredLeadingLines(ignoredLeadingLines);
-	}
 	
 	@SuppressWarnings("serial")
 	static private class ImportException extends Exception {
