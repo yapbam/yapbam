@@ -9,12 +9,13 @@ import javax.swing.JPanel;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.dialogs.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 	private ImportPanel importPanel;
-	public static Importer lastImporter;
+	public static File lastFile;
 
 	static final class Container {
 		File file;
@@ -34,8 +35,13 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 	@Override
 	protected Object buildResult() {
 		Importer importer = importPanel.getImporter();
-		lastImporter = importer;
+		YapbamState.INSTANCE.save(getStateKey(), importer.getParameters());
+		lastFile = importer.getFile();
 		return importer;
+	}
+
+	private String getStateKey() {
+		return this.getClass().getCanonicalName()+"."+ExporterParameters.class.getName();
 	}
 
 	@Override
@@ -49,7 +55,8 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 				updateOkButtonEnabled();
 			}
 		});
-		if (lastImporter!=null) importPanel.setImporter(lastImporter);
+		ImporterParameters parameters = (ImporterParameters) YapbamState.INSTANCE.restore(getStateKey());
+		if (parameters!=null) importPanel.setParameters(parameters);
 		return importPanel;
 	}
 
