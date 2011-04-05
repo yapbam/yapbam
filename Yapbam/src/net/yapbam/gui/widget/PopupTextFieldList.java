@@ -51,6 +51,7 @@ public class PopupTextFieldList extends JTextField {
 			lineColor = color;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
 			g.setColor(lineColor);
 			g.drawLine(x+1, y, x+width-2, y);
@@ -224,7 +225,7 @@ public class PopupTextFieldList extends JTextField {
 	}
 
 	private void fillModel(String text) {
-		int maxProbaSorted = this.groupLimitIndexes[0];
+		int maxProbaSorted = groupLimitIndexes.length==0?0:this.groupLimitIndexes[0];
 		TextMatcher matcher = new TextMatcher(TextMatcher.CONTAINS, text, false, false); //TODO Must match "starts with" ... to be implemented in TextMatcher
 		ArrayList<String> okProbaSort = new ArrayList<String>();
 		TreeSet<String> okAlphabeticSort = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);

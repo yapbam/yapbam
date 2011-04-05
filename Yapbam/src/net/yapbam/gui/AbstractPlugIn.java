@@ -248,6 +248,8 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 		String prefix = this.getClass().getCanonicalName();
 		PrintRequestAttributeSet attributes = YapbamState.INSTANCE.restorePrinterSettings(prefix);
 		boolean doPrint = job.printDialog(attributes);
+		// Ouch there's a known bug in job.printDialog, it's impossible to set the top margin with A4 format !
+		// Sun bug id 6691639 ... no workaround after 2 years.
 		if (doPrint) {
 			YapbamState.INSTANCE.savePrinterSettings(prefix, attributes);
 			job.setPrintable(getPrintable());

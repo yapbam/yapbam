@@ -11,6 +11,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.PopupTextFieldList;
 
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
@@ -25,7 +26,7 @@ public class SubTransactionPanel extends JPanel {
 	private static final String CATEGORY_PROPERTY = "category"; //$NON-NLS-1$
 	
 	private JLabel jLabel = null;
-	private JTextField descriptionField = null;
+	private PopupTextFieldList descriptionField = null;
 	private JLabel jLabel1 = null;
 	private AmountWidget amountField = null;
 	private CategoryPanel categoryPanel = null;
@@ -131,9 +132,9 @@ public class SubTransactionPanel extends JPanel {
 	 * This method initializes descriptionField	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getDescriptionField() {
+	private PopupTextFieldList getDescriptionField() {
 		if (descriptionField == null) {
-			descriptionField = new JTextField();
+			descriptionField = new PopupTextFieldList();
 			descriptionField.setToolTipText(LocalizationData.get("SubTransactionDialog.description.tooltip")); //$NON-NLS-1$
 			descriptionField.setText(""); //$NON-NLS-1$
 			descriptionField.setColumns(50);
@@ -224,5 +225,9 @@ public class SubTransactionPanel extends JPanel {
 		Object old = this.getCategory();
 		this.categoryPanel.setCategory(category);
 		this.firePropertyChange(CATEGORY_PROPERTY, old, category);
+	}
+	
+	public void setPredefined(String[] predefined, int[] groupSizes) {
+		this.getDescriptionField().setPredefined(predefined, groupSizes);
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,53"

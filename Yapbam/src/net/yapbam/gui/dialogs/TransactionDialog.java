@@ -90,6 +90,19 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		if (useCheckbook() && !edit) { // If the transaction is a new one and use a check, change to next check number
 			checkNumber.setAccount(data.getGlobalData(), getAccount());
 		}
+		this.subtransactionsPanel.setPredefinedDescriptionComputer(new SubtransactionListPanel.PredefinedDescriptionComputer() {
+			@Override
+			public String[] getPredefined() {
+				// TODO Auto-generated method stub
+				return new String[]{"a","c","b","aa","abacab","kdfjae"};
+			}
+			
+			@Override
+			public int[] getGroupSizes() {
+				// TODO Auto-generated method stub
+				return new int[]{2};
+			}
+		});
 	}
 
 	public void setTransactionDate(Date date) {
