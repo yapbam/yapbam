@@ -15,7 +15,7 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
-	SubTransactionPanel panel;
+	private SubTransactionPanel panel;
 	
 	public SubTransactionDialog(Window owner, GlobalData data, SubTransaction subtransaction) {
 		super(owner, subtransaction==null?LocalizationData.get("SubTransactionDialog.title.new"):LocalizationData.get("SubTransactionDialog.title.edit"), data); //$NON-NLS-1$
@@ -62,5 +62,9 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData> {
 			return LocalizationData.get("SubTransactionDialog.null.amount"); //$NON-NLS-1$
 		}
 		return null;
+	}
+
+	public void setPredefined(String[] predefined, int[] groupSizes) {
+		this.panel.setPredefined(predefined, groupSizes);
 	}
 }

@@ -35,6 +35,7 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.transactiontable.SubTransactionsTableModel;
+import net.yapbam.gui.widget.PopupTextFieldList;
 
 class SubtransactionListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -193,13 +194,14 @@ class SubtransactionListPanel extends JPanel {
 	}
 	
 	private Window getWindow() {
-		return AbstractDialog.getOwnerWindow(SubtransactionListPanel.this);
+		return AbstractDialog.getOwnerWindow(this);
 	}
 
 	private void editSelected(final GlobalData data) {
 		int index = table.getSelectedRow();
 		SubTransaction old = tableModel.get(index);
 		SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, old);
+		setPredefinedDescriptions(dialog);
 		dialog.setVisible(true);
 		SubTransaction sub = dialog.getSubTransaction();
 		if (sub!=null) {
@@ -221,6 +223,7 @@ class SubtransactionListPanel extends JPanel {
 
 	private void create(final GlobalData data) {
 		SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, null);
+		setPredefinedDescriptions(dialog);
 		dialog.setVisible(true);
 		SubTransaction sub = dialog.getSubTransaction();
 		if (sub!=null) {
@@ -230,6 +233,15 @@ class SubtransactionListPanel extends JPanel {
 			this.firePropertyChange(SUM_PROPERTY, oldSum, this.sum);
 		}
 	}
+	
+	private PredefinedDescriptionComputer predefinedDescriptionComputer;
+	private void setPredefinedDescriptions(SubTransactionDialog dialog) {
+		if (predefinedDescriptionComputer!=null) dialog.setPredefined(predefinedDescriptionComputer.getPredefined(),
+				predefinedDescriptionComputer.getGroupSizes());
+	}
+	public void setPredefinedDescriptionComputer(PredefinedDescriptionComputer predefinedDescriptionComputer) {
+		this.predefinedDescriptionComputer = predefinedDescriptionComputer;
+	}
 
 	void saveState(String prefix) {
 		YapbamState.INSTANCE.saveState(table, prefix);
@@ -237,5 +249,13 @@ class SubtransactionListPanel extends JPanel {
 	
 	void restoreState(String prefix) {
 		YapbamState.INSTANCE.restoreState(table, prefix);
+	}
+	
+	/**
+	 * @see PopupTextFieldList#setPredefined(String[], int[])
+	 */
+	public interface PredefinedDescriptionComputer {
+		public String[] getPredefined();
+		public int[] getGroupSizes();
 	}
 }
