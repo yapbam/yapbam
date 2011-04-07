@@ -35,7 +35,6 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.transactiontable.SubTransactionsTableModel;
-import net.yapbam.gui.widget.PopupTextFieldList;
 
 class SubtransactionListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -249,13 +248,5 @@ class SubtransactionListPanel extends JPanel {
 	
 	void restoreState(String prefix) {
 		YapbamState.INSTANCE.restoreState(table, prefix);
-	}
-	
-	/**
-	 * @see PopupTextFieldList#setPredefined(String[], int[])
-	 */
-	public interface PredefinedDescriptionComputer {
-		public String[] getPredefined();
-		public int[] getGroupSizes();
 	}
 }

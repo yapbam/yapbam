@@ -7,14 +7,10 @@ import java.awt.Window;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
 
 import javax.swing.*;
 
@@ -90,7 +86,8 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		if (useCheckbook() && !edit) { // If the transaction is a new one and use a check, change to next check number
 			checkNumber.setAccount(data.getGlobalData(), getAccount());
 		}
-		this.subtransactionsPanel.setPredefinedDescriptionComputer(new SubtransactionListPanel.PredefinedDescriptionComputer() {
+		this.setPredefinedDescriptionComputer(new MainPDC(data.getGlobalData()));
+		this.subtransactionsPanel.setPredefinedDescriptionComputer(new PredefinedDescriptionComputer() {
 			@Override
 			public String[] getPredefined() {
 				// TODO Auto-generated method stub
@@ -239,36 +236,21 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return null;
 	}
 	
-	@Override
-	@SuppressWarnings({ "unchecked" })
-	protected void setPredefinedDescriptions() {
-		HashMap<String, Double> map = new HashMap<String, Double>();
-		long now = System.currentTimeMillis();
-		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
-			Transaction transaction = data.getGlobalData().getTransaction(i);
-			String desc = transaction.getDescription();
+	private class MainPDC extends AbstractPredefinedComputer {
+		private long now;
+		
+		protected MainPDC(GlobalData data) {
+			super(data);
+			this.now = System.currentTimeMillis();
+		}
+
+		@Override
+		protected void process(Transaction transaction) {
 			double ranking = getRankingBasedOnDate(now, transaction);
 			if (!transaction.getAccount().equals(data.getGlobalData().getAccount(selectedAccount))) ranking = ranking / 100;
-			Double current = map.get(desc);
-			if (current==null) {
-				map.put(desc, ranking);
-			} else {
-				map.put(desc, (ranking + current));
-			}
+			super.add(transaction.getDescription(), ranking);
 		}
-		// Sort the map by ranking
-		LinkedList<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(map.entrySet());
-		Collections.sort(list, new Comparator<Object>() {
-			public int compare(Object o1, Object o2) {
-				return -((Comparable<Double>) ((Map.Entry<String, Double>) (o1)).getValue()).compareTo(((Map.Entry<String, Double>) (o2)).getValue());
-			}
-		});
-		String[] array = new String[list.size()];
-		Iterator<Map.Entry<String, Double>> iterator = list.iterator();
-		for (int i = 0; i < array.length; i++) {
-			array[i] = iterator.next().getKey();
-		}
-		description.setPredefined(array);
+		
 	}
 	
 	private static class ModeAndType {
