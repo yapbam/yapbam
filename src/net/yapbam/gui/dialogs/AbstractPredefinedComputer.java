@@ -1,0 +1,64 @@
+package net.yapbam.gui.dialogs;
+
+import java.util.Comparator;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+import net.yapbam.data.GlobalData;
+import net.yapbam.data.Transaction;
+
+abstract class AbstractPredefinedComputer implements PredefinedDescriptionComputer {
+	private GlobalData data;
+	
+	private HashMap<String, Double> map;
+
+	protected AbstractPredefinedComputer (GlobalData data) {
+		this.data = data;
+	}
+
+	@Override
+	/** Gets the groups sizes.
+	 * @return null by default.
+	 */
+	public int[] getGroupSizes() {
+		return null;
+	}
+
+	@Override
+	public String[] getPredefined() {
+		this.map = new HashMap<String, Double>();
+		for (int i = 0; i < data.getTransactionsNumber(); i++) {
+			Transaction transaction = data.getTransaction(i);
+			process (transaction);
+		}
+		// Sort the map by ranking
+		LinkedList<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(map.entrySet());
+		Collections.sort(list, new Comparator<Object>() {
+			@SuppressWarnings("unchecked")
+			public int compare(Object o1, Object o2) {
+				return -((Comparable<Double>) ((Map.Entry<String, Double>) (o1)).getValue()).compareTo(((Map.Entry<String, Double>) (o2)).getValue());
+			}
+		});
+		String[] array = new String[list.size()];
+		Iterator<Map.Entry<String, Double>> iterator = list.iterator();
+		for (int i = 0; i < array.length; i++) {
+			array[i] = iterator.next().getKey();
+		}
+		return array;
+	}
+	
+	protected abstract void process(Transaction transaction);
+
+	protected final void add (String value, double ranking) {
+		Double current = map.get(value);
+		if (current==null) {
+			map.put(value, ranking);
+		} else {
+			map.put(value, (ranking + current));
+		}
+		
+	}
+}

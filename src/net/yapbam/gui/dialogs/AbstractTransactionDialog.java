@@ -42,10 +42,17 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredD
 	protected SubtransactionListPanel subtransactionsPanel;
 	private String originalMode;
 	private boolean originalIsExpense;
+	private PredefinedDescriptionComputer pdc;
 	
 	protected AbstractTransactionDialog(Window owner, String title, FilteredData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
+		pdc = null;
 		if (transaction!=null) setContent(transaction);
+	}
+	
+	protected void setPredefinedDescriptionComputer(PredefinedDescriptionComputer pdc) {
+		this.pdc = pdc;
+		if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getGroupSizes());
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
@@ -157,7 +164,6 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredD
 		centerPane.add(titleLibelle, c);
 		description = new PopupTextFieldList();
 		description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
-		setPredefinedDescriptions();
 		description.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -247,9 +253,6 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredD
 		return centerPane;
 	}
 
-	protected void setPredefinedDescriptions() {
-	}
-
 	protected void predefinedDescriptionSelected(String description) {
 	}
 
@@ -328,7 +331,7 @@ public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredD
 					selectedAccount = index;
 					if (DEBUG) System.out.println("Account " + selectedAccount + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
 					buildModes(isExpense());
-					setPredefinedDescriptions();
+					if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getGroupSizes());
 				}
 			} else {
 				Account ac = AccountDialog.open(data.getGlobalData(), AbstractTransactionDialog.this, null);

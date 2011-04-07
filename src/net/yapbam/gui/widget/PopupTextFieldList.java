@@ -188,27 +188,29 @@ public class PopupTextFieldList extends JTextField {
 	 * @see #setPredefined(String[], int[])
 	 */
 	public void setPredefined(String[] array) {
-		setPredefined (array, this.groupLimitIndexes);
+		setPredefined (array, null);
 	}
 
 	/** Sets the predefined values allowed by the field.
 	 * @param array The predefined values.
-	 * @param groupSizes The values groups size.
+	 * @param groupSizes The values groups sizes.
 	 * <br>The values can be grouped (each will be separated from other by a thin line).
 	 * <br>This argument contains the size of each group.
 	 * @throws IllegalArgumentException if the sum of the group sizes is greater than the array length.
 	 * <br>Note that if that sum is lower than the array length, a group is added containing the extra values.
 	 */
 	public void setPredefined(String[] array, int[] groupSizes) {
-		int[] indexes = new int[groupSizes.length];
-		int currentTotal = 0;
-		for (int i=0; i<groupSizes.length; i++) {
-			if (groupSizes[i]!=0) {
-				currentTotal += groupSizes[i];
-				indexes[i] = currentTotal;
+		if (groupSizes!=null){
+			int[] indexes = new int[groupSizes.length];
+			int currentTotal = 0;
+			for (int i=0; i<groupSizes.length; i++) {
+				if (groupSizes[i]!=0) {
+					currentTotal += groupSizes[i];
+					indexes[i] = currentTotal;
+				}
 			}
+			this.groupLimitIndexes = indexes;
 		}
-		this.groupLimitIndexes = indexes;
 		proposals = array;
 		fillModel(this.getText());
 	}
