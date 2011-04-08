@@ -102,7 +102,8 @@ public abstract class AbstractTransaction implements Cloneable {
 	}
 
 	/** Gets the number of transaction's subtransactions.
-	 * @return a positive number specifying the number of subtransactions
+	 * @return a positive number specifying the number of subtransactions.
+	 * This number never includes the complement. 
 	 */
 	public int getSubTransactionSize() {
 		return this.subTransactions.size();
