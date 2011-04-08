@@ -11,12 +11,16 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 
 abstract class AbstractPredefinedComputer implements PredefinedDescriptionComputer {
-	private GlobalData data;
+	protected GlobalData data;
+	/** The instance creation time in the same scale than System.currentTimeMillis. */
+	protected long now;
 	
+
 	private HashMap<String, Double> map;
 
 	protected AbstractPredefinedComputer (GlobalData data) {
 		this.data = data;
+		this.now = System.currentTimeMillis();
 	}
 
 	@Override

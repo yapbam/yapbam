@@ -86,18 +86,23 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		if (useCheckbook() && !edit) { // If the transaction is a new one and use a check, change to next check number
 			checkNumber.setAccount(data.getGlobalData(), getAccount());
 		}
-		this.setPredefinedDescriptionComputer(new MainPDC(data.getGlobalData()));
-		this.subtransactionsPanel.setPredefinedDescriptionComputer(new PredefinedDescriptionComputer() {
+		this.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data.getGlobalData()) {
 			@Override
-			public String[] getPredefined() {
-				// TODO Auto-generated method stub
-				return new String[]{"a","c","b","aa","abacab","kdfjae"};
+			protected void process(Transaction transaction) {
+				double ranking = getRankingBasedOnDate(now, transaction);
+				if (!transaction.getAccount().equals(data.getAccount(selectedAccount))) ranking = ranking / 100;
+				super.add(transaction.getDescription(), ranking);
 			}
-			
+		});
+		this.subtransactionsPanel.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data.getGlobalData()) {
 			@Override
-			public int[] getGroupSizes() {
-				// TODO Auto-generated method stub
-				return new int[]{2};
+			protected void process(Transaction transaction) {
+				double ranking = getRankingBasedOnDate(now, transaction);
+				if (!transaction.getAccount().equals(data.getAccount(selectedAccount))) ranking = ranking / 100;
+				super.add(transaction.getDescription(), ranking/10);
+				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
+					super.add(transaction.getSubTransaction(i).getDescription(),ranking);
+				}
 			}
 		});
 	}
@@ -234,23 +239,6 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		if (this.date.getDate() == null) return LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
 		if (this.defDate.getDate() == null) return LocalizationData.get("TransactionDialog.bad.valueDate"); //$NON-NLS-1$
 		return null;
-	}
-	
-	private class MainPDC extends AbstractPredefinedComputer {
-		private long now;
-		
-		protected MainPDC(GlobalData data) {
-			super(data);
-			this.now = System.currentTimeMillis();
-		}
-
-		@Override
-		protected void process(Transaction transaction) {
-			double ranking = getRankingBasedOnDate(now, transaction);
-			if (!transaction.getAccount().equals(data.getGlobalData().getAccount(selectedAccount))) ranking = ranking / 100;
-			super.add(transaction.getDescription(), ranking);
-		}
-		
 	}
 	
 	private static class ModeAndType {
