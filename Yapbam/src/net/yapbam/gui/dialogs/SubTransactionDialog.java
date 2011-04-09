@@ -67,4 +67,8 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData> {
 	public void setPredefined(String[] predefined, int[] groupSizes) {
 		this.panel.setPredefined(predefined, groupSizes);
 	}
+	
+	public void setPredefinedUpdater (SubTransactionPanel.PredefinedDescriptionUpdater updater) {
+		this.panel.setUpdater(updater);
+	}
 }

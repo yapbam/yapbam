@@ -201,6 +201,7 @@ class SubtransactionListPanel extends JPanel {
 		SubTransaction old = tableModel.get(index);
 		SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, old);
 		setPredefinedDescriptions(dialog);
+		if (this.updater!=null) dialog.setPredefinedUpdater(updater);
 		dialog.setVisible(true);
 		SubTransaction sub = dialog.getSubTransaction();
 		if (sub!=null) {
@@ -223,6 +224,7 @@ class SubtransactionListPanel extends JPanel {
 	private void create(final GlobalData data) {
 		SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, null);
 		setPredefinedDescriptions(dialog);
+		if (this.updater!=null) dialog.setPredefinedUpdater(updater);
 		dialog.setVisible(true);
 		SubTransaction sub = dialog.getSubTransaction();
 		if (sub!=null) {
@@ -240,6 +242,10 @@ class SubtransactionListPanel extends JPanel {
 	}
 	public void setPredefinedDescriptionComputer(PredefinedDescriptionComputer predefinedDescriptionComputer) {
 		this.predefinedDescriptionComputer = predefinedDescriptionComputer;
+	}
+	private SubTransactionPanel.PredefinedDescriptionUpdater updater;	
+	public void setPredefinedDescriptionUpdater (SubTransactionPanel.PredefinedDescriptionUpdater updater) {
+		this.updater = updater;
 	}
 
 	void saveState(String prefix) {

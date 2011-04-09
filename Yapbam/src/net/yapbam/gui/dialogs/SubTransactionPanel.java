@@ -16,6 +16,9 @@ import net.yapbam.gui.widget.PopupTextFieldList;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JCheckBox;
 
 public class SubTransactionPanel extends JPanel {
@@ -35,6 +38,13 @@ public class SubTransactionPanel extends JPanel {
 	private String description;  //  @jve:decl-index=0:
 	private Double amount;
 	private JCheckBox jCheckBox = null;
+	
+	private PredefinedDescriptionUpdater updater;
+
+	public interface PredefinedDescriptionUpdater {
+		public double getAmount(String description);
+		public Category getCategory(String description);
+	}
 
 	/**
 	 * This is the default constructor
@@ -138,8 +148,22 @@ public class SubTransactionPanel extends JPanel {
 			descriptionField.setToolTipText(LocalizationData.get("SubTransactionDialog.description.tooltip")); //$NON-NLS-1$
 			descriptionField.setText(""); //$NON-NLS-1$
 			descriptionField.setColumns(50);
+			descriptionField.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					if (updater!=null) {
+						setAmount(updater.getAmount((String) evt.getNewValue()));
+						setCategory(updater.getCategory((String) evt.getNewValue()));
+					}
+					
+				}
+			});
 		}
 		return descriptionField;
+	}
+	
+	public void setUpdater(PredefinedDescriptionUpdater updater) {
+		this.updater = updater;
 	}
 
 	/**
