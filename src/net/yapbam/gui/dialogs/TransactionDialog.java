@@ -68,7 +68,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	 * @param edit True if we edit an existing transaction, false if we edit a new transaction
 	 * @see #open(GlobalData, Window, Transaction, boolean, boolean)
 	 */
-	public TransactionDialog(Window owner, FilteredData data, Transaction transaction, boolean edit) {
+	public TransactionDialog(Window owner, final FilteredData data, Transaction transaction, boolean edit) {
 		super(owner,
 				(edit ? LocalizationData.get("TransactionDialog.title.edit") : LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
 		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
@@ -102,6 +102,33 @@ public class TransactionDialog extends AbstractTransactionDialog {
 				super.add(transaction.getDescription(), ranking/10);
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					super.add(transaction.getSubTransaction(i).getDescription(),ranking);
+				}
+			}
+		});
+		this.subtransactionsPanel.setPredefinedDescriptionUpdater(new SubTransactionPanel.PredefinedDescriptionUpdater() {
+			private String lastDescription;
+			private Category category;
+			private double amount;
+			
+			@Override
+			public Category getCategory(String description) {
+				update(description);
+				return category;
+			}
+			
+			@Override
+			public double getAmount(String description) {
+				update(description);
+				return amount;
+			}
+
+			private void update(String description) {
+				if (!NullUtils.areEquals(this.lastDescription, description)) {
+					this.lastDescription = description;
+					//TODO
+					System.out.println (description+" was selected");
+					amount = -10.0;
+					category = data.getGlobalData().getCategory(0);
 				}
 			}
 		});
