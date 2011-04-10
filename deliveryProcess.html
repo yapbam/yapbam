@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>Yapbam delivery process</title>
+
+<style type="text/css">
+.variable {
+font-style: italic;
+text-decoration: underline;
+}
+</style></head>
+<body>
+<h1>Yapbam delivery process</h1>
+<ol>
+<li>Set the version number in the build.xml file =&gt; <span class="variable">version</span></li>
+<li>Build the classic distribution with build.xml.<br>
+<span class="variable"></span></li>
+<li>Upload the generated .zip file to a linux platform and
+change the "execute attribute" of "yapbam.sh" file.<br>
+To do that :<br>
+<ol>
+<li>Extract yapbam.sh from the ubuntu&nbsp;archive
+manager.</li>
+<li>Change the attribute.</li>
+<li>Drag and drop the file to the archive in the archive
+manager window.</li>
+</ol>
+</li>
+<li>Test the the archive is ok (extract its content to a new
+folder, and try yapbam from it).</li>
+<li>Upload the zip file to sourceforge.</li>
+<li>Test that the archive on sourceforge is ok ... sometimes,
+upload results in a partial file.</li>
+<li>In the sourceforge file browser, give the linux, BSD,
+etc... attributes (all except windows) to the new file.</li>
+<li>Create the windows installer with NSIS.<br>
+select the "Installer based on a zip file" option.</li>
+<li>Upload the windows installer on sourceforge, test it and
+give it the "windows" attribute.</li>
+<li>Copy the modified archive and the updater to a folder
+"update<span class="variable">version</span>" in the
+web site.</li>
+<li>Change the version information in the class
+srcTests/net.yapbam.update.GetHashAndSize.<br>
+Launch this class, then copy the output at the end of the file
+updateInfo.php on the web site.<br>
+Test that the autoupdate is ok with a copy of the previous version of
+yapbam.</li><li>Commit pending changes to svn repository.</li>
+<li>Post a comment on twitter.</li>
+<li>Posts replies on opened bug report or feature requests.</li>
+</ol>
+<br>
+<h2>A way to test carrefully test the auto update</h2>
+<ol>
+<li>In net.yapbam.update.VersionManager#getUpdateURL, change
+the updateinfo URL to a local file and put a fake version number in
+net.yapbam.update.version.txt</li>
+<li>In this local file, copy the following lines ouputed by
+srcTests/net.yapbam.update.GetHashAndSize</li>
+<li>Launch this modified version of yapbam.</li>
+<li>Try to update.</li>
+</ol>
+</body></html>
