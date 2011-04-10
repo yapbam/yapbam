@@ -1,5 +1,6 @@
 package net.yapbam.update;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -7,7 +8,8 @@ import java.util.StringTokenizer;
 
 import net.yapbam.gui.LocalizationData;
 
-public class ReleaseInfo implements Comparable<ReleaseInfo> {
+@SuppressWarnings("serial")
+public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	private boolean unknown;
 	private int majorRevision;
 	private int minorRevision;

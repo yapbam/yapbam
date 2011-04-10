@@ -123,13 +123,49 @@ public class TransactionDialog extends AbstractTransactionDialog {
 			}
 
 			private void update(String description) {
+				if (description==null) {
+					this.category = null;
+					this.amount = 0.0;
+					return;
+				}
 				if (!NullUtils.areEquals(this.lastDescription, description)) {
 					this.lastDescription = description;
-					//TODO
-					System.out.println (description+" was selected");
-					amount = -10.0;
-					category = data.getGlobalData().getCategory(0);
+					long now = System.currentTimeMillis();
+					HashMap<CategoryAndType, Double> map = new HashMap<CategoryAndType, Double>();
+					for (int i = 0; i < data.getTransactionsNumber(); i++) {
+					Transaction transaction = data.getTransaction(i);
+						// In order to minimize the impact of very old transactions, we will use the date ranking
+						double ranking = getRankingBasedOnDate(now, transaction);
+						if (!transaction.getAccount().equals(data.getGlobalData().getAccount(selectedAccount))) ranking = ranking / 100;
+						if (transaction.getDescription().equalsIgnoreCase(description)) {
+							add(map, transaction.getCategory(), transaction.getAmount()>0, ranking/10);
+						}
+						for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
+							SubTransaction sub = transaction.getSubTransaction(j);
+							if (sub.getDescription().equalsIgnoreCase(description)) {
+								add(map, sub.getCategory(), sub.getAmount()>0,ranking);
+							}
+						}
+					}
+					// Search for the category with the highest weight.
+					CategoryAndType ct = null;
+					double max = 0.0;
+					for (Iterator<CategoryAndType> iterator = map.keySet().iterator(); iterator.hasNext();) {
+						CategoryAndType next = iterator.next();
+						if (map.get(next) > max) {
+							ct = next;
+							max = map.get(next);
+						}
+					}
+					this.category = ct.getCategory();
+					this.amount = ct.receipt?Double.MIN_VALUE:-Double.MIN_VALUE;
 				}
+			}
+
+			private void add(HashMap<CategoryAndType, Double> map, Category category, boolean receipt, double ranking) {
+				CategoryAndType ct = new CategoryAndType(receipt, category);
+				ranking = map.containsKey(ct)?map.get(ct)+ranking:ranking;
+				map.put(ct, ranking);
 			}
 		});
 	}
@@ -268,25 +304,40 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		return null;
 	}
 	
-	private static class ModeAndType {
-		private boolean receipt;
-		private Mode mode;
-		
+	private static class CategoryAndType extends XAndType<Category>{
+		private CategoryAndType(boolean receipt, Category mode) {
+			super(receipt, mode);
+		}
+		public Category getCategory() { return x; }
+	}
+	
+	private static class ModeAndType extends XAndType<Mode>{
 		private ModeAndType(boolean receipt, Mode mode) {
+			super(receipt, mode);
+		}
+		public Mode getMode() { return x; }
+	}
+	
+	private static class XAndType<T> {
+		public boolean receipt;
+		protected T x;
+		
+		private XAndType(boolean receipt, T x) {
 			super();
 			this.receipt = receipt;
-			this.mode = mode;
+			this.x = x;
 		}
 
 		@Override
 		public int hashCode() {
-			return mode.hashCode();
+			return x.hashCode();
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public boolean equals(Object obj) {
-			if (this.receipt != ((ModeAndType)obj).receipt) return false;
-			return this.mode.equals(((ModeAndType)obj).mode);
+			if (this.receipt != ((XAndType)obj).receipt) return false;
+			return this.x.equals(((XAndType)obj).x);
 		}
 	}
 	
@@ -348,7 +399,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 		}
 		if (modeAndType != null) {
 			this.receipt.setSelected(modeAndType.receipt);
-			this.setMode(modeAndType.mode);
+			this.setMode(modeAndType.getMode());
 		}
 	}
 

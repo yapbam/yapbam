@@ -23,6 +23,7 @@ import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.welcome.WelcomeDialog;
+import net.yapbam.update.VersionManager;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)
@@ -335,6 +336,7 @@ public class MainFrame extends JFrame implements DataListener {
 		for (int i = 0; i < getPlugInsNumber(); i++) {
 			if (getPlugIn(i)!=null) getPlugIn(i).saveState();
 		}
+		getStateSaver().save("lastVersionUsed", VersionManager.getVersion());
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
