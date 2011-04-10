@@ -37,23 +37,21 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int columnIndex) {
 		if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		if (columnIndex==3) return LocalizationData.get("MainFrame.CheckedBalance"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("MainFrame.CurrentBalance"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("MainFrame.FinalBalance"); //$NON-NLS-1$
+		if (columnIndex==3) return LocalizationData.get("AccountsSummary.CheckedBalance"); //$NON-NLS-1$
+		if (columnIndex==1) return LocalizationData.get("AccountsSummary.CurrentBalance"); //$NON-NLS-1$
+		if (columnIndex==2) return LocalizationData.get("AccountsSummary.FinalBalance"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
 
 	public int getRowCount() {
 		if (data==null) return 0;
 		int nb = data.getAccountsNumber();
-		if (nb>1) nb = nb + 2;
+		if (nb>1) nb = nb + 1;
 		return nb;
 	}
 	
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (rowIndex==data.getAccountsNumber()) {
-			return null;
-		}	else if (rowIndex>data.getAccountsNumber()) {
 			if (columnIndex==0) return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 			double result = 0.0;
 			for (int i = 0; i < data.getAccountsNumber(); i++) {

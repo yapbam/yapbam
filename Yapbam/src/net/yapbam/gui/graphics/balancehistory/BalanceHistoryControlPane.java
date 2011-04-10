@@ -108,8 +108,9 @@ class BalanceHistoryControlPane extends JPanel {
 	private JPanel getEast() {
 		if (east == null) {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = -1;
-			gridBagConstraints3.gridy = -1;
+			gridBagConstraints3.insets = new Insets(0, 0, 0, 5);
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.gridy = 0;
 			east = new JPanel();
 			east.setLayout(new GridBagLayout());
 			east.add(getIsGridVisible(), gridBagConstraints3);
