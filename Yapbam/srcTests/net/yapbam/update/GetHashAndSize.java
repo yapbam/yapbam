@@ -11,8 +11,9 @@ public class GetHashAndSize {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String release = "0.8.1";
-		System.out.println ("lastestRelease=0.8.1 (05/03/2011)");
+		String release = "0.8.2";
+		String date = "10/04/2011";
+		System.out.println ("lastestRelease="+release+" ("+date+")");
 		System.out.println ("updateURL=http://sourceforge.net/project/platformdownload.php?group_id=276272");
 		System.out.println ();
 		SecureDownloader sd = new SecureDownloader(Proxy.NO_PROXY);
