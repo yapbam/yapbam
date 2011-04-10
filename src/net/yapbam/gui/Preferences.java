@@ -292,7 +292,7 @@ public class Preferences {
 		plugins.add(new PlugInContainer(ToolsPlugIn.class));
 		plugins.add(new PlugInContainer(BudgetPlugin.class));
 		plugins.add(new PlugInContainer(StatementViewPlugin.class));
-//TODO		plugins.add(new PlugInContainer(AccountsSummaryPlugin.class));
+		plugins.add(new PlugInContainer(AccountsSummaryPlugin.class));
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
 		file.listFiles(new FileFilter() {
 			@Override
