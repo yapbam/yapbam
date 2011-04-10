@@ -35,13 +35,14 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 	@Override
 	protected Object buildResult() {
 		Importer importer = importPanel.getImporter();
-		YapbamState.INSTANCE.save(getStateKey(), importer.getParameters());
+		ImporterParameters parameters = importer.getParameters();
+		YapbamState.INSTANCE.save(getStateKey(parameters.getClass()), parameters);
 		lastFile = importer.getFile();
 		return importer;
 	}
 
-	private String getStateKey() {
-		return this.getClass().getCanonicalName()+"."+ExporterParameters.class.getName();
+	private String getStateKey(Class<?> saved) {
+		return this.getClass().getCanonicalName()+"."+saved.getName();
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 				updateOkButtonEnabled();
 			}
 		});
-		ImporterParameters parameters = (ImporterParameters) YapbamState.INSTANCE.restore(getStateKey());
+		ImporterParameters parameters = (ImporterParameters) YapbamState.INSTANCE.restore(getStateKey(ImporterParameters.class));
 		if (parameters!=null) importPanel.setParameters(parameters);
 		return importPanel;
 	}
