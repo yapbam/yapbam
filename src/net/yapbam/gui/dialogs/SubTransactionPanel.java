@@ -151,7 +151,7 @@ public class SubTransactionPanel extends JPanel {
 			descriptionField.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					if (updater!=null) {
+					if ((updater!=null) && (evt.getNewValue()!=null)) {
 						setAmount(updater.getAmount((String) evt.getNewValue()));
 						setCategory(updater.getCategory((String) evt.getNewValue()));
 					}
