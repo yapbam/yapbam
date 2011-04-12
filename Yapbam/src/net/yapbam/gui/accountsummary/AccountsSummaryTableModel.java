@@ -1,17 +1,52 @@
 package net.yapbam.gui.accountsummary;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.event.CategoryAddedEvent;
+import net.yapbam.data.event.CategoryPropertyChangedEvent;
+import net.yapbam.data.event.CategoryRemovedEvent;
+import net.yapbam.data.event.CheckbookAddedEvent;
+import net.yapbam.data.event.CheckbookPropertyChangedEvent;
+import net.yapbam.data.event.CheckbookRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
+import net.yapbam.data.event.ModeAddedEvent;
+import net.yapbam.data.event.ModePropertyChangedEvent;
+import net.yapbam.data.event.ModeRemovedEvent;
+import net.yapbam.data.event.NeedToBeSavedChangedEvent;
+import net.yapbam.data.event.PasswordChangedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
+import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
+import net.yapbam.data.event.URIChangedEvent;
 import net.yapbam.gui.LocalizationData;
 
 class AccountsSummaryTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
-
+	private static final Set<Class<? extends DataEvent>> ignoredEvents;
 	private GlobalData data;
+	
+	static {
+		ignoredEvents = new HashSet<Class<? extends DataEvent>>();
+		ignoredEvents.add(CategoryAddedEvent.class);
+		ignoredEvents.add(CategoryRemovedEvent.class);
+		ignoredEvents.add(CategoryPropertyChangedEvent.class);
+		ignoredEvents.add(CheckbookAddedEvent.class);
+		ignoredEvents.add(CheckbookRemovedEvent.class);
+		ignoredEvents.add(CheckbookPropertyChangedEvent.class);
+		ignoredEvents.add(ModeAddedEvent.class);
+		ignoredEvents.add(ModeRemovedEvent.class);
+		ignoredEvents.add(ModePropertyChangedEvent.class);
+		ignoredEvents.add(NeedToBeSavedChangedEvent.class);
+		ignoredEvents.add(PasswordChangedEvent.class);
+		ignoredEvents.add(PeriodicalTransactionsAddedEvent.class);
+		ignoredEvents.add(PeriodicalTransactionsRemovedEvent.class);
+		ignoredEvents.add(URIChangedEvent.class);
+	}
 	
 	AccountsSummaryTableModel(JTable table, GlobalData data) {
 		super();
@@ -19,7 +54,10 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				fireTableDataChanged(); //TODO
+				if (!ignoredEvents.contains(event.getClass())) {
+					System.out.println ("refreshing tab on "+event.getClass()); //TODO
+					fireTableDataChanged();
+				}
 			}
 		});
 	}
