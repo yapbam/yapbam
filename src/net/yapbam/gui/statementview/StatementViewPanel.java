@@ -106,7 +106,6 @@ public class StatementViewPanel extends JPanel {
 						// simply remove the account in the menu
 						getAccountMenu().removeItem(accountName);
 					}
-					System.out.println ("Account removed");
 				} else if (event instanceof AccountPropertyChangedEvent) {
 					String property = ((AccountPropertyChangedEvent)event).getProperty();
 					if (property.equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) {
