@@ -1,125 +1,139 @@
 package net.yapbam.gui.graphics.balancehistory;
 
-import java.awt.BorderLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.DateFormat;
-import java.text.MessageFormat;
-import java.util.Date;
-
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JViewport;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
+import net.yapbam.data.event.AccountAddedEvent;
+import net.yapbam.data.event.AccountPropertyChangedEvent;
+import net.yapbam.data.event.AccountRemovedEvent;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
+import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.TransactionsAddedEvent;
+import net.yapbam.data.event.TransactionsRemovedEvent;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.NullUtils;
+
+import java.awt.BorderLayout;
+import java.text.DateFormat;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class BalanceHistoryPane extends JPanel {
 	private static final long serialVersionUID = 1L;
-		
-	private JScrollPane scrollPane;
-	private BalanceGraphic graph;
-	private BalanceHistoryControlPane control;
-	private AlertsPane alerts;
-	private BalanceRule rule;
+	static final String FIRST_ALERT = "FIRST_ALERT";
+	private BalanceHistoryGraphPane graph;
+	private Date firstAlert;
+	private JTabbedPane tabbedPane;
 	private FilteredData data;
-	
-	private BalanceHistory getBalanceHistory() {
-		return this.data.getBalanceData().getBalanceHistory();
-	}
 
-	public BalanceHistoryPane(FilteredData data) {
-		super(new BorderLayout());
-		this.data = data;
-		rule = new BalanceRule(this.getBalanceHistory());
-		
-		createGraphic();
-		
-		control = new BalanceHistoryControlPane();
-		alerts = new AlertsPane();
-		control.getIsGridVisible().addItemListener( new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				graph.setGridVisible(e.getStateChange() == ItemEvent.SELECTED);
-			}});
-		control.getToday().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				graph.setSelectedDate(new Date());
-				scrollToSelectedDate();
-			}
-		});
-		control.setReportText(getBalanceReportText());
-		alerts.getAlerts().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Alert alert = alerts.getSelectedAlert();
-				BalanceHistoryPane.this.data.setAccounts(new Account[]{alert.getAccount()});
-				graph.setSelectedDate(alert.getDate());
-			}
-		});
-		this.add(alerts, BorderLayout.NORTH);
-		this.add(control, BorderLayout.SOUTH);
-	}
-
-	private String getBalanceReportText() {
-		Date date = graph.getSelectedDate();
-		String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
-		String balance = LocalizationData.getCurrencyInstance().format(this.getBalanceHistory().getBalance(date));
-		String text = MessageFormat.format(LocalizationData.get("BalanceHistory.balance"), dateStr, balance); //$NON-NLS-1$
-		return text;
-	}
-
-	void setBalanceHistory() {
-		this.rule.setBalanceHistory(this.getBalanceHistory());
-		this.remove(scrollPane);
-		Date currentlySelected = graph.getSelectedDate();
-		createGraphic();
-		graph.setSelectedDate(currentlySelected);
-		graph.setGridVisible(control.getIsGridVisible().isSelected());
-		control.setReportText(getBalanceReportText());
-		scrollToSelectedDate();
-		this.validate();
-	}
-	
-	private void createGraphic() {
-		graph = new BalanceGraphic(this.getBalanceHistory(), rule.getYAxis());
-		graph.setToolTipText(LocalizationData.get("BalanceHistory.chart.toolTip")); //$NON-NLS-1$
-		graph.addPropertyChangeListener(BalanceGraphic.SELECTED_DATE_PROPERTY, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				control.setReportText(getBalanceReportText());
-			}
-		});
-		scrollPane = new JScrollPane(graph, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		this.add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setRowHeaderView(rule);
-	}
-
-	/** Scrolls the graphic in order to have the currently selected date visible.
+	/**
+	 * Create the panel.
 	 */
-	void scrollToSelectedDate() {
-		JViewport viewport = scrollPane.getViewport();
-		int viewWidth = viewport.getWidth();
-		int selected = graph.getX(graph.getSelectedDate());
-		int graphWidth = graph.getPreferredSize().width;
-		if ((viewport.getViewPosition().x > selected) || (viewport.getViewPosition().x+viewWidth<selected)) {
-			//Do nothing if selected date is already visible.
-			int position = selected-viewWidth/2;
-			if (position < 0) position = 0;
-			else if (position + viewWidth > graphWidth) position = graphWidth-viewWidth;
-			viewport.setViewPosition(new Point(position, 0));
+	public BalanceHistoryPane(FilteredData data) {
+		this.data = data;
+		this.graph = new BalanceHistoryGraphPane(data);
+		setLayout(new BorderLayout(0, 0));
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		add(tabbedPane);
+		tabbedPane.addTab(LocalizationData.get("BalanceHistory.title"), null, this.graph, LocalizationData.get("BalanceHistory.toolTip"));
+		data.addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				if ((event instanceof EverythingChangedEvent)) {
+					graph.setBalanceHistory();
+				}
+			}
+		});
+		data.getGlobalData().addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				if ((event instanceof EverythingChangedEvent)
+					|| (event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) || (event instanceof AccountPropertyChangedEvent)
+					|| (event instanceof TransactionsAddedEvent) || (event instanceof TransactionsRemovedEvent)) {
+					graph.setBalanceHistory();
+					testAlert();
+				}
+			}
+		});
+		testAlert();
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				setDisplayed(true);
+			}
+		});
+		tabbedPane.addTab("Opérations", null, new BalanceHistoryTablePane(), "Comment expliquer ça ?"); //LOCAL
+	}
+	
+	void setDisplayed (boolean displayed) {
+		if (tabbedPane.getSelectedIndex()==0) {
+			graph.scrollToSelectedDate();
 		}
 	}
 
-	public void setAlerts(Alert[] alerts) {
-		this.alerts.setAlerts(alerts);
+	private void testAlert() {
+		Date today = new Date();
+		List<Alert> alerts = new ArrayList<Alert>();
+		for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
+			Account account = data.getGlobalData().getAccount(i);
+			BalanceHistory balanceHistory = account.getBalanceData().getBalanceHistory();
+			long firstAlertDate = balanceHistory.getFirstAlertDate(today, null, account.getAlertThreshold());
+			if (firstAlertDate>=0) {
+				Date date = new Date();
+				if (firstAlertDate>0) date.setTime(firstAlertDate);
+				alerts.add(new Alert(date, account, balanceHistory.getBalance(date)));
+			}
+		}
+//		Account[] filteredAccounts = data.getAccounts();
+//		boolean singleAccountInFilteredData = ((filteredAccounts!=null) && (filteredAccounts.length==1)) || ((filteredAccounts==null) && (data.getGlobalData().getAccountsNumber()==1));
+//		if (!singleAccountInFilteredData) {
+//			Alert alert = data.getBalanceData().getBalanceHistory().getFirstAlert(today, null, AlertThreshold.DEFAULT);
+//			long firstAlertDate = data.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, AlertThreshold.DEFAULT);
+//			if (firstAlertDate>=0) {
+//				Date date = new Date();
+//				if (firstAlertDate>0) date.setTime(firstAlertDate);
+//				alerts.add(new Alert(date, null));
+//			}
+//		}
+		graph.setAlerts(alerts.toArray(new Alert[alerts.size()]));
+		// Compute when occurs the first alert.
+		Date first = null;
+		for (int i = 0; i < alerts.size(); i++) {
+			if ((first==null) || (alerts.get(i).getDate().compareTo(first)<0)) {
+				first = alerts.get(i).getDate();
+			}
+		}
+		setFirstAlert(first);
+	}
+	
+	private void setFirstAlert (Date first) {
+		if (NullUtils.areEquals(first, firstAlert)) {
+			Date old = firstAlert;
+			firstAlert = first;
+			tabbedPane.setIconAt(0, first!=null?IconManager.ALERT:null);
+			String tooltip;
+			tooltip = LocalizationData.get("BalanceHistory.toolTip");
+			if (first!=null) {
+				String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(first);
+				tooltip = tooltip.replace("'", "''"); // single quotes in message pattern are escape characters. So, we have to replace them with "double simple quote"
+				String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>";
+				tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>");
+			}
+			tabbedPane.setToolTipTextAt(0, tooltip);
+			this.firePropertyChange(FIRST_ALERT, old, firstAlert);
+		}
+	}
+
+	public Date getFirstAlert() {
+		return this.firstAlert;
 	}
 }
