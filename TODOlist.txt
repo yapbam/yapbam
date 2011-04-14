@@ -1,11 +1,8 @@
 TODO list
 	
-* TODO :
-- Dans BudgetViewPanel, BudgetTableModel, BudgetTableRowHeaderModel
-- Vérifier les hashcodes des anciennes versions dans ObsoleteFilesChecksums.properties
-
-* Utiliser les prioritycombobox pour l'assistant de saisie (http://www.japura.org/prioritycombobox.html)
-* Ecran récapitulatif, recensant tous les comptes, leurs soldes (actuel, pointé et final), les alertes en cours, etc ...
+Features :
+* Déplacement du mode pointage dans l'onglet "relevé de compte".
+* Ajout de totaux et de moyennes dans la vue budgetaire (voir TODOs Dans BudgetViewPanel, BudgetTableModel, BudgetTableRowHeaderModel)
 * La possibilité d'ignorer les alertes trop lointaines. 
 * La possibilité d'éditer plusieurs opérations à la fois.
 * Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).
@@ -15,5 +12,4 @@ TODO list
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
 
 Bugs :
-- Dans le dialogue de saisie d'une opération, la sélection d'un libellé d'opération de type recette, ne met pas à jour les modes de paiement, n° de chèque, etc ...
  

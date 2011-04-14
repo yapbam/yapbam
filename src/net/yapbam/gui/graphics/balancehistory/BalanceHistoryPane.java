@@ -29,7 +29,7 @@ import java.util.List;
 
 public class BalanceHistoryPane extends JPanel {
 	private static final long serialVersionUID = 1L;
-	static final String FIRST_ALERT = "FIRST_ALERT";
+	static final String FIRST_ALERT = "FIRST_ALERT"; //$NON-NLS-1$
 	private BalanceHistoryGraphPane graph;
 	private Date firstAlert;
 	private JTabbedPane tabbedPane;
@@ -44,7 +44,7 @@ public class BalanceHistoryPane extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		add(tabbedPane);
-		tabbedPane.addTab(LocalizationData.get("BalanceHistory.title"), null, this.graph, LocalizationData.get("BalanceHistory.toolTip"));
+		tabbedPane.addTab(LocalizationData.get("BalanceHistory.graph.title"), null, this.graph, LocalizationData.get("BalanceHistory.graph.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
@@ -71,7 +71,7 @@ public class BalanceHistoryPane extends JPanel {
 				setDisplayed(true);
 			}
 		});
-		tabbedPane.addTab("Opérations", null, new BalanceHistoryTablePane(), "Comment expliquer ça ?"); //LOCAL
+		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, new BalanceHistoryTablePane(), LocalizationData.get("BalanceHistory.transaction.tooltip")); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	void setDisplayed (boolean displayed) {
@@ -121,12 +121,12 @@ public class BalanceHistoryPane extends JPanel {
 			firstAlert = first;
 			tabbedPane.setIconAt(0, first!=null?IconManager.ALERT:null);
 			String tooltip;
-			tooltip = LocalizationData.get("BalanceHistory.toolTip");
+			tooltip = LocalizationData.get("BalanceHistory.toolTip"); //$NON-NLS-1$
 			if (first!=null) {
 				String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(first);
-				tooltip = tooltip.replace("'", "''"); // single quotes in message pattern are escape characters. So, we have to replace them with "double simple quote"
-				String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>";
-				tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>");
+				tooltip = tooltip.replace("'", "''"); // single quotes in message pattern are escape characters. So, we have to replace them with "double simple quote" //$NON-NLS-1$ //$NON-NLS-2$
+				String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			tabbedPane.setToolTipTextAt(0, tooltip);
 			this.firePropertyChange(FIRST_ALERT, old, firstAlert);
