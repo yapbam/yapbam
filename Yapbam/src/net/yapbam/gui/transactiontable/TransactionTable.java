@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.Date;
 
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableRowSorter;
 
@@ -16,9 +15,9 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.MainMenuBar;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.util.XTableColumnModel;
+import net.yapbam.gui.util.FriendlyTable;
 
-public class TransactionTable extends JTable implements TransactionSelector {
+public class TransactionTable extends FriendlyTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;
 	private static final Cursor CHECK_CURSOR;
 	
@@ -32,8 +31,8 @@ public class TransactionTable extends JTable implements TransactionSelector {
 
 	public TransactionTable(FilteredData data) {
 		super();
+
 		this.data = data;
-		
 		TransactionsTableModel model = new TransactionsTableModel(this, data);
 		this.setModel(model);
 		this.setDefaultRenderer(Date.class, new DateRenderer());
@@ -50,8 +49,6 @@ public class TransactionTable extends JTable implements TransactionSelector {
 			}
 		});
 		this.setRowSorter(sorter);
-		this.setColumnModel(new XTableColumnModel());
-		this.createDefaultColumnsFromModel();
 	}
 
 	public Transaction getSelectedTransaction() {
@@ -71,40 +68,7 @@ public class TransactionTable extends JTable implements TransactionSelector {
 	public FilteredData getFilteredData() {
 		return data;
 	}
-	
-	/**
-	 * Tests whether a table column is visible or not.
-	 * @param index the view index of the column. This index takes into account the invisible columns.
-	 * @return true if the column is visible.
-	 */
-	public boolean isColumnVisible(int index) {
-		XTableColumnModel model = (XTableColumnModel)getColumnModel();
-		return model.isColumnVisible(model.getColumn(index, false));
-	}
-	
-	/** Sets the visibility of a column.
-	 * @param index the view index of the column. This index takes into account the invisible columns.
-	 * @param visible true to make the column visible, false to hide it
-	 */
-	public void setColumnVisible(int index, boolean visible) {
-		XTableColumnModel model = (XTableColumnModel)getColumnModel();
-		model.setColumnVisible(model.getColumn(index, false), visible);		
-	}
-
-	public int getColumnCount(boolean onlyVisible) {
-		XTableColumnModel model = (XTableColumnModel)getColumnModel();
-		return model.getColumnCount(onlyVisible);
-	}
-	
-	public String getColumnName (int index, boolean onlyVisible) {
-		XTableColumnModel model = (XTableColumnModel)getColumnModel();
-		if (onlyVisible) {
-			return getColumnName(index);
-		} else {
-			return this.getModel().getColumnName(model.getColumn(index, onlyVisible).getModelIndex());
-		}
-	}
-	
+		
 	/** Scrolls this table to last line.
 	 */
 	public void scrollToLastLine() {
