@@ -12,7 +12,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -119,16 +118,7 @@ public class TransactionsPlugInPanel extends JPanel {
 		deploy.setBorder(border);
 		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //$NON-NLS-1$
 		menus.add(deploy, BorderLayout.NORTH);
-		JLabel columns = new JLabelMenu(LocalizationData.get("MainFrame.showColumns")) { //$NON-NLS-1$
-			@Override
-			protected void fillPopUp(JPopupMenu popup) {
-				for (int i = 0; i < transactionTable.getColumnCount(false); i++) {
-					JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ShowHideColumnAction(i));
-					menuItem.setSelected(transactionTable.isColumnVisible(i));
-					popup.add(menuItem);
-				}
-			}
-		};
+		JLabel columns = transactionTable.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		columns.setBorder(border);
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		menus.add(columns, BorderLayout.SOUTH);
@@ -155,22 +145,6 @@ public class TransactionsPlugInPanel extends JPanel {
 		updateBalances();
 	}
 	
-	@SuppressWarnings("serial")
-	private final class ShowHideColumnAction extends AbstractAction {
-		private int index;
-		
-		public ShowHideColumnAction(int i) {
-			super (transactionTable.getColumnName(i, false));
-			this.index = i;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			boolean visible = !transactionTable.isColumnVisible(index);
-			transactionTable.setColumnVisible(index, visible);
-		}
-	}
-
 	@SuppressWarnings("serial")
 	private final class DeploySubTransactionsAction extends AbstractAction {
 		private boolean spread;
