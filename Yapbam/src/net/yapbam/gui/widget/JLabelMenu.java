@@ -13,7 +13,7 @@ import net.yapbam.gui.IconManager;
 
 /** This abstract class implements a popupmenu that pops up when the user clicks
  * on a label.
- * In order to use this widget, you have to overide the fillpopup method.
+ * In order to use this widget, you have to override the fillpopup method.
  * @see #fillPopUp(JPopupMenu)
  */
 @SuppressWarnings("serial")
