@@ -48,4 +48,12 @@ public final class DateUtils {
 		if (date==null) return -1;
 		return (date.getYear()+1900)*10000+(date.getMonth()+1)*100+date.getDate();
 	}
+	
+	/** Gets the date with the hour, minutes and seconds fields set to zero.
+	 * @param date a Date
+	 * @return a new Date
+	 */
+	public static Date getMidnight(Date date) {
+		return integerToDate(dateToInteger(date));
+	}
 }

@@ -111,16 +111,16 @@ public class Account implements Serializable {
 		return transactionNumber;
 	}
 
-	/** Adds a transaction to the account.
-	 * @param transaction the transaction to add
+	/** Adds transactions to the account.
+	 * @param transactions the transaction to add
 	 */
 	void add(Transaction[] transactions) {
 		transactionNumber += transactions.length;
 		this.balanceData.updateBalance(transactions, true);
 	}
 	
-	/** Removes a transaction from this account.
-	 * @param transaction the transaction to be removed.
+	/** Removes transactions from this account.
+	 * @param transactions the transactions to be removed.
 	 */
 	void remove(Transaction[] transactions) {
 		transactionNumber = transactionNumber - transactions.length;

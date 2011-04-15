@@ -2,6 +2,9 @@ package net.yapbam.gui.graphics.balancehistory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
+import java.text.MessageFormat;
+import java.util.Date;
 
 import javax.swing.JPanel;
 
@@ -20,11 +23,19 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 		this.setPanelTitle(LocalizationData.get("BalanceHistory.title"));
 		this.setPanelToolTip(LocalizationData.get("BalanceHistory.toolTip"));
 		this.panel.addPropertyChangeListener(BalanceHistoryPane.FIRST_ALERT, new PropertyChangeListener() {
-			
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				setPanelIcon((evt.getNewValue()!=null?IconManager.ALERT:null));
-				setPanelToolTip("TODO"); //TODO
+				Date first = (Date) evt.getNewValue();
+				setPanelIcon((first!=null?IconManager.ALERT:null));
+				String tooltip;
+				tooltip = LocalizationData.get("BalanceHistory.toolTip"); //$NON-NLS-1$
+				if (first!=null) {
+					String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(first);
+					tooltip = tooltip.replace("'", "''"); // single quotes in message pattern are escape characters. So, we have to replace them with "double simple quote" //$NON-NLS-1$ //$NON-NLS-2$
+					String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+				setPanelToolTip(tooltip);
 			}
 		});
 	}
@@ -40,4 +51,16 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	public JPanel getPanel() {
 		return panel;
 	}
+
+	@Override
+	public void saveState() {
+		this.panel.saveState();
+	}
+
+	@Override
+	public void restoreState() {
+		this.panel.restoreState();
+	}
+	
+	
 }
