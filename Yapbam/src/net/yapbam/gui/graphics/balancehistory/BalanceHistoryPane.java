@@ -34,6 +34,7 @@ public class BalanceHistoryPane extends JPanel {
 	private Date firstAlert;
 	private JTabbedPane tabbedPane;
 	private FilteredData data;
+	private BalanceHistoryTablePane tablePane;
 
 	/**
 	 * Create the panel.
@@ -71,7 +72,8 @@ public class BalanceHistoryPane extends JPanel {
 				setDisplayed(true);
 			}
 		});
-		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, new BalanceHistoryTablePane(), LocalizationData.get("BalanceHistory.transaction.tooltip")); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$
+		tablePane = new BalanceHistoryTablePane();
+		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	void setDisplayed (boolean displayed) {
@@ -116,12 +118,12 @@ public class BalanceHistoryPane extends JPanel {
 	}
 	
 	private void setFirstAlert (Date first) {
-		if (NullUtils.areEquals(first, firstAlert)) {
+		if (!NullUtils.areEquals(first, firstAlert)) {
 			Date old = firstAlert;
 			firstAlert = first;
 			tabbedPane.setIconAt(0, first!=null?IconManager.ALERT:null);
 			String tooltip;
-			tooltip = LocalizationData.get("BalanceHistory.toolTip"); //$NON-NLS-1$
+			tooltip = LocalizationData.get("BalanceHistory.graph.toolTip"); //$NON-NLS-1$
 			if (first!=null) {
 				String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(first);
 				tooltip = tooltip.replace("'", "''"); // single quotes in message pattern are escape characters. So, we have to replace them with "double simple quote" //$NON-NLS-1$ //$NON-NLS-2$
@@ -135,5 +137,13 @@ public class BalanceHistoryPane extends JPanel {
 
 	public Date getFirstAlert() {
 		return this.firstAlert;
+	}
+
+	public void saveState() {
+		this.tablePane.saveState();
+	}
+
+	public void restoreState() {
+		this.tablePane.restoreState();
 	}
 }

@@ -55,7 +55,6 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (!ignoredEvents.contains(event.getClass())) {
-					System.out.println ("refreshing tab on "+event.getClass()); //TODO
 					fireTableDataChanged();
 				}
 			}

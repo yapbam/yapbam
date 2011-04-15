@@ -21,6 +21,8 @@ import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.DateUtils;
+import net.yapbam.util.NullUtils;
 
 public class BalanceHistoryGraphPane extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -52,8 +54,8 @@ public class BalanceHistoryGraphPane extends JPanel {
 		control.getToday().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				graph.setSelectedDate(new Date());
-				scrollToSelectedDate();
+				Date today = DateUtils.getMidnight(new Date());
+				setSelectedDate(today);
 			}
 		});
 		control.setReportText(getBalanceReportText());
@@ -62,7 +64,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Alert alert = alerts.getSelectedAlert();
 				BalanceHistoryGraphPane.this.data.setAccounts(new Account[]{alert.getAccount()});
-				graph.setSelectedDate(alert.getDate());
+				setSelectedDate(alert.getDate());
 			}
 		});
 		this.add(alerts, BorderLayout.NORTH);
@@ -101,6 +103,14 @@ public class BalanceHistoryGraphPane extends JPanel {
 		scrollPane = new JScrollPane(graph, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.add(scrollPane, BorderLayout.CENTER);
 		scrollPane.setRowHeaderView(rule);
+	}
+
+	private void setSelectedDate(Date date) {
+		if (NullUtils.compareTo(date, BalanceHistoryGraphPane.this.data.getValueDateFrom(), true)<0) {
+			BalanceHistoryGraphPane.this.data.setValueDateFilter(date, BalanceHistoryGraphPane.this.data.getValueDateTo());
+		}
+		graph.setSelectedDate(date);
+		scrollToSelectedDate();
 	}
 
 	/** Scrolls the graphic in order to have the currently selected date visible.

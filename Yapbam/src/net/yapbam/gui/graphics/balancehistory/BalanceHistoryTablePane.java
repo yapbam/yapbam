@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.widget.JLabelMenu;
 
@@ -117,5 +118,13 @@ public class BalanceHistoryTablePane extends JPanel {
 		gbc_btnExport.gridx = 2;
 		gbc_btnExport.gridy = 1;
 		add(btnExport, gbc_btnExport);
+	}
+
+	public void saveState() {
+		YapbamState.INSTANCE.saveState(table, this.getClass().getCanonicalName());
+	}
+
+	public void restoreState() {
+		YapbamState.INSTANCE.restoreState(table, this.getClass().getCanonicalName());
 	}
 }
