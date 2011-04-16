@@ -31,6 +31,7 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.CoolJComboBox;
 import net.yapbam.util.DateUtils;
@@ -38,7 +39,6 @@ import net.yapbam.util.NullUtils;
 
 import javax.swing.Action;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
@@ -48,6 +48,8 @@ import javax.swing.JTable.PrintMode;
 
 import java.awt.Font;
 import java.awt.print.Printable;
+import net.yapbam.gui.transactiontable.CheckModePanel;
+import net.yapbam.gui.transactiontable.TransactionTable;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -63,12 +65,14 @@ public class StatementViewPanel extends JPanel {
 	private JLabel endBalance = null;
 	private JLabel detail = null;
 	private JScrollPane jScrollPane = null;
-	private JTable transactionsTable = null;
+	private FriendlyTable transactionsTable = null;
 	private TransactionsTableModel model;
-	private JLabel jLabel2 = null;
+	private CheckModePanel checkModePanel;
 	
 	private FilteredData data;
 	private Statement[] statements;
+	private JLabel label;
+	private JLabel columnsMenu;
 	
 	/**
 	 * This is the default constructor
@@ -194,21 +198,21 @@ public class StatementViewPanel extends JPanel {
 	 */
 	private JPanel getSelectionPanel() {
 		if (selectionPanel == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 4;
-			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints11.weightx = 1.0D;
-			gridBagConstraints11.gridy = 0;
-			jLabel2 = new JLabel();
+			GridBagConstraints gbc_checkModePanel = new GridBagConstraints();
+			gbc_checkModePanel.anchor = GridBagConstraints.EAST;
+			gbc_checkModePanel.gridx = 5;
+			gbc_checkModePanel.fill = GridBagConstraints.HORIZONTAL;
+			gbc_checkModePanel.gridy = 0;
+			checkModePanel = new CheckModePanel((TransactionTable) null);
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 2;
-			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints3.gridy = 0;
 			jLabel1 = new JLabel();
 			jLabel1.setText(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints2.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints2.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
@@ -216,13 +220,13 @@ public class StatementViewPanel extends JPanel {
 			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints.gridx = 3;
 			gridBagConstraints.gridy = 0;
-			gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints.weightx = 0.0D;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new Insets(5, 0, 5, 5);
+			gridBagConstraints1.insets = new Insets(5, 0, 0, 5);
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			gridBagConstraints1.weightx = 0.0D;
 			selectionPanel = new JPanel();
@@ -231,7 +235,13 @@ public class StatementViewPanel extends JPanel {
 			selectionPanel.add(getAccountMenu(), gridBagConstraints1);
 			selectionPanel.add(jLabel1, gridBagConstraints3);
 			selectionPanel.add(getStatementMenu(), gridBagConstraints);
-			selectionPanel.add(jLabel2, gridBagConstraints11);
+			GridBagConstraints gbc_label = new GridBagConstraints();
+			gbc_label.weightx = 1.0;
+			gbc_label.insets = new Insets(0, 0, 0, 5);
+			gbc_label.gridx = 4;
+			gbc_label.gridy = 0;
+			selectionPanel.add(getLabel(), gbc_label);
+			selectionPanel.add(checkModePanel, gbc_checkModePanel);
 		}
 		return selectionPanel;
 	}
@@ -371,10 +381,10 @@ public class StatementViewPanel extends JPanel {
 			topPanel = new JPanel();
 			startBalance = new JLabel();
 			startBalance.setHorizontalTextPosition(SwingConstants.LEADING);
-			startBalance.setFont(new Font("Dialog", Font.PLAIN, 14));
+			startBalance.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
 			endBalance = new JLabel();
 			endBalance.setHorizontalAlignment(SwingConstants.RIGHT);
-			endBalance.setFont(new Font("Dialog", Font.PLAIN, 14));
+			endBalance.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.setBackground(Color.white);
 			topPanel.setBorder(BorderFactory.createLineBorder(Color.gray, 3));
@@ -392,12 +402,18 @@ public class StatementViewPanel extends JPanel {
 	private JPanel getBottomPanel() {
 		if (bottomPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 0;
-			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.weightx = 1.0;
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.insets = new Insets(5, 0, 0, 0);
+			gridBagConstraints5.gridy = 0;
 			detail = new JLabel();
 			bottomPanel = new JPanel();
 			bottomPanel.setLayout(new GridBagLayout());
+			GridBagConstraints gbc_columnsMenu = new GridBagConstraints();
+			gbc_columnsMenu.anchor = GridBagConstraints.WEST;
+			gbc_columnsMenu.gridx = 0;
+			gbc_columnsMenu.gridy = 0;
+			bottomPanel.add(getColumnsMenu(), gbc_columnsMenu);
 			bottomPanel.add(detail, gridBagConstraints5);
 		}
 		return bottomPanel;
@@ -421,9 +437,9 @@ public class StatementViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
-	JTable getTransactionsTable() {
+	FriendlyTable getTransactionsTable() {
 		if (transactionsTable == null) {
-			transactionsTable = new JTable();
+			transactionsTable = new FriendlyTable();
 			this.model = new TransactionsTableModel(transactionsTable, new Transaction[0]);
 			transactionsTable.setModel(this.model);
 			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
@@ -450,5 +466,17 @@ public class StatementViewPanel extends JPanel {
 
 	public Printable getPrintable() {
 		return transactionsTable.getPrintable(PrintMode.FIT_WIDTH, null, null);
+	}
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel(" "); //$NON-NLS-1$
+		}
+		return label;
+	}
+	private JLabel getColumnsMenu() {
+		if (columnsMenu == null) {
+			columnsMenu = getTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+		}
+		return columnsMenu;
 	}
 }
