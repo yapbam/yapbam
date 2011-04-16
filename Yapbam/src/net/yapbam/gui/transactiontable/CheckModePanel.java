@@ -106,7 +106,7 @@ public class CheckModePanel extends JPanel {
 		valueDateLabel.setForeground(!selected || dateOk ? Color.black : Color.red);
 		statementLabel.setForeground(!selected || statementOk ? Color.black : Color.red);
 		this.ok = selected && dateOk && statementOk;
-		table.setCheckMode (ok);
+		if (table!=null) table.setCheckMode (ok);
 	}
 
 	public boolean isSelected() {
