@@ -1,6 +1,9 @@
 package net.yapbam.gui.transactiontable;
 
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -8,11 +11,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 import java.util.Date;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -24,6 +29,8 @@ import net.yapbam.gui.widget.DateWidgetPanel;
 public class CheckModePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	private static final Cursor CHECK_CURSOR;
+
 	private JLabel statementLabel;
 	private JTextField statement;
 	private JCheckBox valueDateLabel;
@@ -31,9 +38,15 @@ public class CheckModePanel extends JPanel {
 	private JCheckBox checkModeBox;
 	private boolean ok;
 	
-	private TransactionTable table;
+	private JTable table;
 
-	public CheckModePanel(TransactionTable table) {
+	static {
+		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		CHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(5, 13), "checked"); //$NON-NLS-1$
+	}
+
+	public CheckModePanel(JTable table) {
 		super();
 		this.table = table;
 		
@@ -100,13 +113,20 @@ public class CheckModePanel extends JPanel {
 	}
 
 	private void refreshOk() {
-		boolean selected = checkModeBox.isSelected();
-		boolean dateOk = (!valueDateLabel.isSelected()) || (valueDate.getDate()!=null);
-		boolean statementOk = !statement.getText().trim().isEmpty();
-		valueDateLabel.setForeground(!selected || dateOk ? Color.black : Color.red);
-		statementLabel.setForeground(!selected || statementOk ? Color.black : Color.red);
-		this.ok = selected && dateOk && statementOk;
-		if (table!=null) table.setCheckMode (ok);
+		if (isVisible()) {
+			boolean selected = checkModeBox.isSelected();
+			boolean dateOk = (!valueDateLabel.isSelected()) || (valueDate.getDate()!=null);
+			boolean statementOk = !statement.getText().trim().isEmpty();
+			valueDateLabel.setForeground(!selected || dateOk ? Color.black : Color.red);
+			statementLabel.setForeground(!selected || statementOk ? Color.black : Color.red);
+			this.ok = selected && dateOk && statementOk;
+		} else {
+			this.ok = false;
+		}
+		if (table!=null) {
+			Cursor cursor = ok ? CHECK_CURSOR:Cursor.getDefaultCursor();
+			table.setCursor(cursor);
+		}
 	}
 
 	public boolean isSelected() {
@@ -119,6 +139,12 @@ public class CheckModePanel extends JPanel {
 
 	public Date getValueDate() {
 		return valueDateLabel.isSelected()?valueDate.getDate():null;
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		refreshOk();
 	}
 	
 	public boolean isOk() {
