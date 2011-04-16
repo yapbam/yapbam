@@ -13,11 +13,9 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -40,12 +38,10 @@ public class TransactionsPlugInPanel extends JPanel {
 	Action editTransactionAction;
 	Action duplicateTransactionAction;
 	Action deleteTransactionAction;
-	Action checkTransactionAction;
 	Action convertToPericalTransactionAction;
 	
 	private BalanceData acFilter;
 	
-	private CheckModePanel checkModePane;
 	TransactionTable transactionTable;
 	private BalanceReportField currentBalance;
 	private BalanceReportField finalBalance;
@@ -62,10 +58,9 @@ public class TransactionsPlugInPanel extends JPanel {
 		this.editTransactionAction = new EditTransactionAction(transactionTable);
 		this.duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
 		this.deleteTransactionAction = new DeleteTransactionAction(transactionTable);
-		this.checkTransactionAction = new CheckTransactionAction(this);
 		this.convertToPericalTransactionAction = new ConvertToPeriodicalTransactionAction(transactionTable);
 
-		new MyListener(transactionTable, new Action[] { editTransactionAction, duplicateTransactionAction,
+		new JTableListener(transactionTable, new Action[] { editTransactionAction, duplicateTransactionAction,
 				deleteTransactionAction, null, convertToPericalTransactionAction }, editTransactionAction);
         
 		JPanel topPanel = new JPanel(new GridBagLayout());
@@ -91,13 +86,9 @@ public class TransactionsPlugInPanel extends JPanel {
 		c.gridx = 2;
 		topPanel.add(duplicateTransactionButton, c);
 		c.gridx = 3;
-		topPanel.add(deleteTransactionButton, c);
-
-		checkModePane = new CheckModePanel(transactionTable);
-		c.gridx = 4;
-		c.anchor = GridBagConstraints.EAST;
 		c.weightx = 1;
-		topPanel.add(checkModePane, c);
+		c.anchor = GridBagConstraints.WEST;
+		topPanel.add(deleteTransactionButton, c);
 
 		add(topPanel, BorderLayout.NORTH);
 
@@ -169,42 +160,12 @@ public class TransactionsPlugInPanel extends JPanel {
 		}
 	}
 
-	class MyListener extends JTableListener {
-
-		public MyListener(JTable jTable, Action[] actions, Action defaultAction) {
-			super(jTable, actions, defaultAction);
-		}
-
-		@Override
-		protected void fillPopUp(JPopupMenu popup) {
-			if (checkModePane.isOk()) {
-				popup.add(new JMenuItem(checkTransactionAction));
-				popup.addSeparator();
-			}
-			super.fillPopUp(popup);
-		}
-
-		@Override
-		protected Action getDoubleClickAction() {
-			if (checkModePane.isOk()) {
-				return checkTransactionAction;
-			} else {
-				return super.getDoubleClickAction();
-			}
-		}
-		
-	}
-	
 	private void updateBalances() {
 		currentBalance.setValue(acFilter.getCurrentBalance());
 		finalBalance.setValue(acFilter.getFinalBalance());
 		checkedBalance.setValue(acFilter.getCheckedBalance());
 	}
 	
-	CheckModePanel getCheckModePane() {
-		return checkModePane;
-	}
-
 	TransactionTable getTransactionTable() {
 		return transactionTable;
 	}

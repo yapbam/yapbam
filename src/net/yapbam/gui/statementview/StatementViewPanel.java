@@ -38,7 +38,10 @@ import net.yapbam.util.DateUtils;
 import net.yapbam.util.NullUtils;
 
 import javax.swing.Action;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
@@ -49,7 +52,7 @@ import javax.swing.JTable.PrintMode;
 import java.awt.Font;
 import java.awt.print.Printable;
 import net.yapbam.gui.transactiontable.CheckModePanel;
-import net.yapbam.gui.transactiontable.TransactionTable;
+import net.yapbam.gui.transactiontable.CheckTransactionAction;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -136,24 +139,23 @@ public class StatementViewPanel extends JPanel {
 					}
 				} else if (event instanceof TransactionsAddedEvent) {
 					Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
-					for (int i = 0; i < ts.length; i++) {
-						if (ts[i].getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
-							refresh();
-							break;
-						}
-					}
+					refreshIfNeeded(ts);
 				} else if (event instanceof TransactionsRemovedEvent) {
-					boolean refresh = false;
 					Transaction[] t = ((TransactionsRemovedEvent)event).getRemoved();
-					for (int i = 0; i < t.length; i++) {
-						if (t[i].getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
-							refresh = true;
-							break;
-						}
+					refreshIfNeeded(t);
+				}
+			}
+
+			private void refreshIfNeeded(Transaction[] ts) {
+				boolean refresh = false;
+				for (int i = 0; i < ts.length; i++) {
+					if (ts[i].getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
+						refresh = true;
+						break;
 					}
-					if (refresh) {
-						refresh();
-					}
+				}
+				if (refresh) {
+					refresh();
 				}
 			}
 		});
@@ -177,6 +179,23 @@ public class StatementViewPanel extends JPanel {
 			this.accountMenu.setActionEnabled(true);
 			accountMenu.setSelectedIndex(0);
 		}
+		TransactionSelector selector = new TransactionSelector() {
+			@Override
+			public Transaction getSelectedTransaction() {
+				int index = getTransactionsTable().getSelectedRow();
+				return (index>=0) ? model.getTransactions()[index]:null;
+			}
+			
+			@Override
+			public FilteredData getFilteredData() {
+				return data;
+			}
+		};
+		Action edit = new EditTransactionAction(selector);
+		Action delete = new DeleteTransactionAction(selector);
+		Action duplicate = new DuplicateTransactionAction(selector);
+		Action check = new CheckTransactionAction(getCheckModePanel(), selector);
+		new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, check);
 	}
 
 	/**
@@ -203,7 +222,6 @@ public class StatementViewPanel extends JPanel {
 			gbc_checkModePanel.gridx = 5;
 			gbc_checkModePanel.fill = GridBagConstraints.HORIZONTAL;
 			gbc_checkModePanel.gridy = 0;
-			checkModePanel = new CheckModePanel((TransactionTable) null);
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 2;
 			gridBagConstraints3.insets = new Insets(5, 5, 0, 5);
@@ -241,7 +259,7 @@ public class StatementViewPanel extends JPanel {
 			gbc_label.gridx = 4;
 			gbc_label.gridy = 0;
 			selectionPanel.add(getLabel(), gbc_label);
-			selectionPanel.add(checkModePanel, gbc_checkModePanel);
+			selectionPanel.add(getCheckModePanel(), gbc_checkModePanel);
 		}
 		return selectionPanel;
 	}
@@ -268,7 +286,7 @@ public class StatementViewPanel extends JPanel {
 		int accountIndex = accountMenu.getSelectedIndex();
 		statementMenu.setActionEnabled(false);
 //		String lastSelectedStatement = (String) (statementMenu.getSelectedIndex()==0?null:statementMenu.getSelectedItem());
-		String lastSelectedStatement = (statements==null)||(statementMenu.getSelectedIndex()<0)?null:statements[statementMenu.getSelectedIndex()].getId();
+		String lastSelectedStatement = (String) ((statements==null)||(statementMenu.getSelectedIndex()<0)?null:statementMenu.getSelectedItem());
 		statementMenu.removeAllItems();
 		if (accountIndex < 0) {
 			statements = null;
@@ -303,6 +321,7 @@ public class StatementViewPanel extends JPanel {
 			statementMenu.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					boolean visible = (statements!=null) && (statementMenu.getSelectedIndex()>=0);
+					boolean checkModeAvailable = false;
 					if (visible) {
 						Statement statement = statements[statements.length-1-statementMenu.getSelectedIndex()];
 						DecimalFormat ci = LocalizationData.getCurrencyInstance();
@@ -311,11 +330,13 @@ public class StatementViewPanel extends JPanel {
 						detail.setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
 								ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
 						model.setTransactions(getTransactions(data.getGlobalData().getAccount(accountMenu.getSelectedIndex()), statement.getId()));
+						checkModeAvailable = statement.getId()==null;
 					}
 					startBalance.setVisible(visible);
 					endBalance.setVisible(visible);
 					detail.setVisible(visible);
 					transactionsTable.setVisible(visible);
+					getCheckModePanel().setVisible(checkModeAvailable);
 				}
 			});
 		}
@@ -401,18 +422,19 @@ public class StatementViewPanel extends JPanel {
 	 */
 	private JPanel getBottomPanel() {
 		if (bottomPanel == null) {
+			bottomPanel = new JPanel();
+			bottomPanel.setLayout(new GridBagLayout());
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.weightx = 1.0;
 			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.insets = new Insets(5, 0, 0, 0);
+			gridBagConstraints5.insets = new Insets(5, 0, 5, 0);
 			gridBagConstraints5.gridy = 0;
 			detail = new JLabel();
-			bottomPanel = new JPanel();
-			bottomPanel.setLayout(new GridBagLayout());
 			GridBagConstraints gbc_columnsMenu = new GridBagConstraints();
 			gbc_columnsMenu.anchor = GridBagConstraints.WEST;
 			gbc_columnsMenu.gridx = 0;
 			gbc_columnsMenu.gridy = 0;
+			gbc_columnsMenu.insets = new Insets(0, 5, 0, 0);
 			bottomPanel.add(getColumnsMenu(), gbc_columnsMenu);
 			bottomPanel.add(detail, gridBagConstraints5);
 		}
@@ -440,29 +462,48 @@ public class StatementViewPanel extends JPanel {
 	FriendlyTable getTransactionsTable() {
 		if (transactionsTable == null) {
 			transactionsTable = new FriendlyTable();
+			transactionsTable.setAutoCreateRowSorter(true);
 			this.model = new TransactionsTableModel(transactionsTable, new Transaction[0]);
 			transactionsTable.setModel(this.model);
 			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
 			transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			TransactionSelector selector = new TransactionSelector() {
-				@Override
-				public Transaction getSelectedTransaction() {
-					int index = getTransactionsTable().getSelectedRow();
-					return (index>=0) ? model.getTransactions()[index]:null;
-				}
-				
-				@Override
-				public FilteredData getFilteredData() {
-					return data;
-				}
-			};
-			Action edit = new EditTransactionAction(selector);
-			Action delete = new DeleteTransactionAction(selector);
-			Action duplicate = new DuplicateTransactionAction(selector);
-			new JTableListener(transactionsTable, new Action[]{edit, duplicate, delete}, edit);
 		}
 		return transactionsTable;
 	}
+	
+	private CheckModePanel getCheckModePanel() {
+		if (checkModePanel == null) {
+			checkModePanel = new CheckModePanel(getTransactionsTable());
+		}
+		return checkModePanel;
+	}
+	
+	private class MyListener extends JTableListener {
+		private Action checkAction;
+		public MyListener(JTable jTable, Action[] actions, Action defaultAction, Action checkAction) {
+			super(jTable, actions, defaultAction);
+			this.checkAction = checkAction;
+		}
+
+		@Override
+		protected void fillPopUp(JPopupMenu popup) {
+			if (checkModePanel.isOk()) {
+				popup.add(new JMenuItem(checkAction));
+				popup.addSeparator();
+			}
+			super.fillPopUp(popup);
+		}
+
+		@Override
+		protected Action getDoubleClickAction() {
+			if (checkModePanel.isOk()) {
+				return checkAction;
+			} else {
+				return super.getDoubleClickAction();
+			}
+		}
+	}
+
 
 	public Printable getPrintable() {
 		return transactionsTable.getPrintable(PrintMode.FIT_WIDTH, null, null);
