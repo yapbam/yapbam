@@ -183,7 +183,7 @@ public class StatementViewPanel extends JPanel {
 			@Override
 			public Transaction getSelectedTransaction() {
 				int index = getTransactionsTable().getSelectedRow();
-				return (index>=0) ? model.getTransactions()[index]:null;
+				return (index>=0) ? model.getTransactions()[getTransactionsTable().convertRowIndexToModel(index)]:null;
 			}
 			
 			@Override
@@ -345,8 +345,8 @@ public class StatementViewPanel extends JPanel {
 
 	private Transaction[] getTransactions(Account account, String statementId) {
 		List<Transaction> transactions = new ArrayList<Transaction>();
-		for (int i = 0; i < data.getTransactionsNumber(); i++) {
-			Transaction transaction = data.getTransaction(i);
+		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
+			Transaction transaction = data.getGlobalData().getTransaction(i);
 			if (transaction.getAccount().equals(account) && NullUtils.areEquals(statementId, transaction.getStatement())) {
 				transactions.add(transaction);
 			}

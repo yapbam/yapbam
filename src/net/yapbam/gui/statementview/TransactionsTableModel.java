@@ -1,7 +1,6 @@
 package net.yapbam.gui.statementview;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -12,7 +11,6 @@ import net.yapbam.gui.LocalizationData;
 class TransactionsTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
-	private transient DateFormat dateFormater;
 	private Transaction[] transactions;
 	
 	TransactionsTableModel(JTable table, Transaction[] transactions) {
@@ -41,10 +39,13 @@ class TransactionsTableModel extends AbstractTableModel {
 		return transactions.length;
 	}
 	
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		if ((columnIndex==0)||(columnIndex==5)) return Date.class;
+		return super.getColumnClass(columnIndex);
+	}
+
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (dateFormater==null) {
-			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, LocalizationData.getLocale());
-		}
 		if (columnIndex==0) return transactions[rowIndex].getDate();
 		else if (columnIndex==1) return transactions[rowIndex].getDescription();
 		else if (columnIndex==2) return transactions[rowIndex].getCategory().getName();
