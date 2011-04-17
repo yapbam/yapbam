@@ -25,6 +25,7 @@ import javax.swing.Scrollable;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.BalanceHistoryElement;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.NullUtils;
 
 class BalanceGraphic extends JPanel implements Scrollable {
 	static final String SELECTED_DATE_PROPERTY = "selectedDate";
@@ -44,6 +45,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 
 	private Point[] points;
 	private boolean gridIsVisible;
+	private Date preferredEndDate;
 	
 	BalanceGraphic(BalanceHistory history, YAxis yAxis) {
 		super();
@@ -321,7 +323,11 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	@Override
 	public Dimension getPreferredSize() {
 		Dimension parentSize = this.getParent().getSize();
-		long days = 1 + (this.getEndDate().getTime() - this.getStartDate().getTime()) / 24 / 3600000;
+		// The actual preferred end date is
+		// - The end date if no preferred end date is set or if this date is greater than the balance history end date.
+		// - otherwise, the preferred end date
+		Date end = NullUtils.compareTo(this.getPreferredEndDate(), this.getEndDate(), false)<0?this.getPreferredEndDate():this.getEndDate();
+		long days = 1 + (end.getTime() - this.getStartDate().getTime()) / 24 / 3600000;
 		int pixels = (int) (days * PIXEL_PER_DAY);
 		int width = Math.max(pixels, parentSize.width);
 		return new Dimension(width, parentSize.height);
@@ -345,5 +351,22 @@ class BalanceGraphic extends JPanel implements Scrollable {
 
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
 		return PIXEL_PER_DAY; // Increments by one day
+	}
+
+	/** Sets the end date of this graphic.
+	 * <br>If the end date if lower than what could be displayed in the graphic's window,
+	 * the graphic will display data after this endDate. You have to think this attribute
+	 * only limit the horizontal scroll.
+	 * @param endDate a date
+	 */
+	public void setPreferredEndDate(Date endDate) {
+		this.preferredEndDate = endDate;
+	}
+
+	/** Gets the preferred end date.
+	 * @return a date or null if no end date has been selected
+	 */
+	public Date getPreferredEndDate() {
+		return preferredEndDate;
 	}
 }

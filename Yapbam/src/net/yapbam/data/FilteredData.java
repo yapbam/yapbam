@@ -79,7 +79,7 @@ public class FilteredData extends DefaultListenable {
 							Date valueDate = transaction.getValueDate();
 							if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
 								addedAmount += transaction.getAmount();
-							} else if (NullUtils.compareTo(valueDate, getValueDateTo(), false)<=0) {
+							} else {
 								accountOkTransactions.add(transaction);
 								if (isOk(transaction)) { // If the added transaction matches with the whole filter
 									okTransactions.add(transaction);
@@ -104,7 +104,7 @@ public class FilteredData extends DefaultListenable {
 							Date valueDate = transaction.getValueDate();
 							if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
 								addedAmount -= transaction.getAmount();
-							} else if (NullUtils.compareTo(valueDate, getValueDateTo(), false)<=0) {
+							} else {
 								accountOkTransactions.add(transaction);
 								if (isOk(transaction)) { // If the added transaction matches with the whole filter
 									okTransactions.add(transaction);
@@ -575,7 +575,7 @@ public class FilteredData extends DefaultListenable {
 					Date valueDate = transaction.getValueDate();
 					if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
 						addedAmount += transaction.getAmount();
-					} else if (NullUtils.compareTo(valueDate, getValueDateTo(), false)<=0) {
+					} else {
 						balanceTransactions.add(transaction);
 						if (isOk(transaction)) {
 							int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
