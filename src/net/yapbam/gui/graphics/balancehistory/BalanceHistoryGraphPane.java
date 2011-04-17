@@ -85,6 +85,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
 		graph.setSelectedDate(currentlySelected);
+		graph.setPreferredEndDate(data.getValueDateTo());
 		graph.setGridVisible(control.getIsGridVisible().isSelected());
 		control.setReportText(getBalanceReportText());
 		scrollToSelectedDate();
