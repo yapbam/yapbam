@@ -1,7 +1,8 @@
 TODO list
 	
 Features :
-* Déplacement du mode pointage dans l'onglet "relevé de compte".
+* Tenir compte de la date de fin sélectionnée dans le filtre pour régler le zoom vertical dans le graphique de l'historique du solde
+  (pour l'instant, cette échelle est fixée par rapport à la date de fin de l'historique de solde non filtré).
 * Ajout de totaux et de moyennes dans la vue budgetaire (voir TODOs Dans BudgetViewPanel, BudgetTableModel, BudgetTableRowHeaderModel)
 * La possibilité d'ignorer les alertes trop lointaines. 
 * La possibilité d'éditer plusieurs opérations à la fois.
