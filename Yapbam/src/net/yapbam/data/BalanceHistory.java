@@ -30,6 +30,7 @@ public class BalanceHistory implements Serializable {
 	private double minBalance;
 	private double maxBalance;
 	private ArrayList<BalanceHistoryElement> elements;
+	private ArrayList<Transaction> transactions;
 	
 	/** Constructor.
 	 * @param intialBalance The initial balance (at the beginning of times).
@@ -39,6 +40,7 @@ public class BalanceHistory implements Serializable {
 		this.minMaxAccurate = false;
 		this.elements = new ArrayList<BalanceHistoryElement>();
 		this.elements.add(new BalanceHistoryElement(intialBalance, null, null));
+		this.transactions = new ArrayList<Transaction>();
 	}
 	
 	/** Returns the minimum balance of the history.
@@ -159,5 +161,19 @@ public class BalanceHistory implements Serializable {
 			}
 			minMaxAccurate = false;
 		}
+	}
+
+	public void add(Transaction transaction) {
+		this.add(transaction.getAmount(), transaction.getValueDate());
+		int index = -Collections.binarySearch(transactions, transaction, TransactionComparator.VALUE_DATE_COMPARATOR)-1;
+		transactions.add(index, transaction);
+	}
+
+	public int getTransactionsNumber() {
+		return transactions.size();
+	}
+	
+	public Transaction getTransaction(int index) {
+		return transactions.get(index);
 	}
 }

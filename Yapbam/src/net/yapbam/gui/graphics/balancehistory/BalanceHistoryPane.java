@@ -72,8 +72,8 @@ public class BalanceHistoryPane extends JPanel {
 				setDisplayed(true);
 			}
 		});
-		tablePane = new BalanceHistoryTablePane();
-		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //LOCAL //$NON-NLS-1$ //$NON-NLS-2$
+		tablePane = new BalanceHistoryTablePane(data);
+		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	void setDisplayed (boolean displayed) {

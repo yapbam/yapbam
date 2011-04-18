@@ -7,8 +7,14 @@ import javax.swing.JRadioButtonMenuItem;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
+import net.yapbam.data.BalanceData;
+import net.yapbam.data.FilteredData;
+import net.yapbam.data.Transaction;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.widget.JLabelMenu;
 
@@ -23,11 +29,14 @@ import javax.swing.table.AbstractTableModel;
 public class BalanceHistoryTablePane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private FriendlyTable table;
+	private BalanceData data;
 
 	/**
 	 * Creates the panel.
+	 * @param data the data to be displayed
 	 */
-	public BalanceHistoryTablePane() {
+	public BalanceHistoryTablePane(FilteredData data) {
+		this.data = data.getBalanceData();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
@@ -42,42 +51,8 @@ public class BalanceHistoryTablePane extends JPanel {
 		add(scrollPane, gbc_scrollPane);
 		
 		table = new FriendlyTable();
-		table.setModel(new AbstractTableModel() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Object getValueAt(int rowIndex, int columnIndex) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public int getRowCount() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getColumnCount() {
-				// TODO Auto-generated method stub
-				return 10;
-			}
-			
-			@Override
-			public String getColumnName(int columnIndex) {
-				if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-				if (columnIndex==1) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
-				if (columnIndex==2) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-				if (columnIndex==3) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-				if (columnIndex==4) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
-				if (columnIndex==5) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
-				if (columnIndex==6) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
-				if (columnIndex==7) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
-				if (columnIndex==8) return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
-				if (columnIndex==9) return "Solde restant";
-				return "?"; //$NON-NLS-1$
-			}
-		});
+		table.setDefaultRenderer(Object.class, new CellRenderer());
+		table.setModel(new MyModel(this.data));
 		scrollPane.setViewportView(table);
 		
 		JLabel lblSortBy = new JLabelMenu("Sort by:") {
@@ -126,5 +101,62 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(table, this.getClass().getCanonicalName());
+	}
+
+	private final class MyModel extends AbstractTableModel {
+		private static final long serialVersionUID = 1L;
+		private BalanceData data;
+
+		public MyModel(BalanceData data) {
+			super();
+			this.data = data;
+			data.addListener(new DataListener() {
+				@Override
+				public void processEvent(DataEvent event) {
+					fireTableDataChanged();
+				}
+			});
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			Transaction transaction = data.getBalanceHistory().getTransaction(rowIndex);
+			if (columnIndex==0) return transaction.getAccount().getName();
+			if (columnIndex==1) return transaction.getDate();
+			if (columnIndex==2) return transaction.getDescription();
+			if (columnIndex==3) return transaction.getAmount();
+			if (columnIndex==4) return transaction.getCategory().getName();
+			if (columnIndex==5) return transaction.getMode().getName();
+			if (columnIndex==6) return transaction.getNumber();
+			if (columnIndex==7) return transaction.getValueDate();
+			if (columnIndex==8) return transaction.getStatement();
+			if (columnIndex==9) return "?"; //TODO
+			return "?";
+		}
+
+		@Override
+		public int getRowCount() {
+			return data.getBalanceHistory().getTransactionsNumber();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return 10;
+		}
+
+		@Override
+		public String getColumnName(int columnIndex) {
+			if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+			if (columnIndex==1) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
+			if (columnIndex==2) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+			if (columnIndex==3) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+			if (columnIndex==4) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+			if (columnIndex==5) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
+			if (columnIndex==6) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
+			if (columnIndex==7) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
+			if (columnIndex==8) return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
+			if (columnIndex==9) return "Solde restant";
+			return "?"; //$NON-NLS-1$
+		}
 	}
 }

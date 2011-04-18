@@ -45,13 +45,13 @@ public class BalanceData extends DefaultListenable {
 	void updateBalance(Transaction[] transactions, boolean add) {
 		if (transactions.length==0) return;
 		for (Transaction transaction : transactions) {
+			this.balanceHistory.add(transaction);
 			double amount = transaction.getAmount();
 			if (GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)!=0) {
 				if (!add) amount = -amount;
 				this.finalBalance += amount;
 				if (transaction.isChecked()) this.checkedBalance += amount;
 				if (DateUtils.dateToInteger(transaction.getValueDate())<=this.currentBalanceDate) this.currentBalance += amount;
-				this.balanceHistory.add(amount, transaction.getValueDate());
 			}
 		}
 		this.fireEvent(new EverythingChangedEvent(this));
