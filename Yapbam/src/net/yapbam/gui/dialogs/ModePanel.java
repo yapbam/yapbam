@@ -23,7 +23,6 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.IntegerWidget;
 
@@ -51,7 +50,7 @@ class ModePanel extends JPanel {
 	 * @param title the panel title, displayed in the border
 	 * @param option an optional component, displayed at the bottom of the panel (null if none)
 	 */
-	ModePanel(String title, Component option, final AbstractDialog dialog) {
+	ModePanel(String title, Component option, final ModeDialog dialog) {
 		super(new GridBagLayout());
 		FocusListener focusListener = new AutoSelectFocusListener();
 		KeyListener keyListener = new AutoUpdateOkButtonKeyListener(dialog);
