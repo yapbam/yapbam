@@ -51,7 +51,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.insets = new Insets(0, 0, 0, 0);
 		gbc_scrollPane.weighty = 1.0;
 		gbc_scrollPane.gridwidth = 3;
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
@@ -88,7 +88,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		label.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.insets = new Insets(0, 5, 0, 5);
-		gbc_label.anchor = GridBagConstraints.EAST;
+		gbc_label.anchor = GridBagConstraints.NORTHWEST;
 		gbc_label.gridx = 1;
 		gbc_label.gridy = 1;
 		add(label, gbc_label);
@@ -112,7 +112,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		GridBagConstraints gbc_btnExport = new GridBagConstraints();
 		gbc_btnExport.anchor = GridBagConstraints.EAST;
 		gbc_btnExport.weightx = 1.0;
-		gbc_btnExport.insets = new Insets(0, 0, 0, 5);
+		gbc_btnExport.insets = new Insets(0, 0, 5, 5);
 		gbc_btnExport.gridx = 2;
 		gbc_btnExport.gridy = 1;
 		add(btnExport, gbc_btnExport);

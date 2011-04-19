@@ -224,27 +224,27 @@ public class StatementViewPanel extends JPanel {
 			gbc_checkModePanel.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 2;
-			gridBagConstraints3.insets = new Insets(5, 5, 0, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints3.gridy = 0;
 			jLabel1 = new JLabel();
 			jLabel1.setText(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.insets = new Insets(5, 5, 0, 5);
+			gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints2.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.gridx = 3;
 			gridBagConstraints.gridy = 0;
-			gridBagConstraints.insets = new Insets(5, 5, 0, 5);
+			gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints.weightx = 0.0D;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
+			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.insets = new Insets(5, 0, 0, 5);
+			gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			gridBagConstraints1.weightx = 0.0D;
 			selectionPanel = new JPanel();
@@ -255,7 +255,7 @@ public class StatementViewPanel extends JPanel {
 			selectionPanel.add(getStatementMenu(), gridBagConstraints);
 			GridBagConstraints gbc_label = new GridBagConstraints();
 			gbc_label.weightx = 1.0;
-			gbc_label.insets = new Insets(0, 0, 0, 5);
+			gbc_label.insets = new Insets(0, 0, 0, 0);
 			gbc_label.gridx = 4;
 			gbc_label.gridy = 0;
 			selectionPanel.add(getLabel(), gbc_label);
