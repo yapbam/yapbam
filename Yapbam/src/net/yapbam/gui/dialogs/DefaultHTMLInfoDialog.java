@@ -5,12 +5,10 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
-
-import java.lang.Object;
-import java.lang.String;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class DefaultHTMLInfoDialog extends AbstractDialog<String[]> {
+public class DefaultHTMLInfoDialog extends AbstractDialog<String[], Void> {
 
 	public DefaultHTMLInfoDialog(Window owner, String title, String header, String message) {
 		super(owner, title, new String[]{header, message});
@@ -20,7 +18,7 @@ public class DefaultHTMLInfoDialog extends AbstractDialog<String[]> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Void buildResult() {
 		return null;
 	}
 

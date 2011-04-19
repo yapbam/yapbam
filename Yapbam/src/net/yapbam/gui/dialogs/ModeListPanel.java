@@ -17,6 +17,7 @@ import net.yapbam.data.Mode;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 @SuppressWarnings("serial")
@@ -67,7 +68,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 		public void actionPerformed(ActionEvent e) {
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
 			dialog.setVisible(true);
-			Mode mode = dialog.getMode();
+			Mode mode = dialog.getResult();
 			if (mode!=null) {
 				((List<Mode>)data).add(mode);
 				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
@@ -86,7 +87,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
 			dialog.setContent(old);
 			dialog.setVisible(true);
-			Mode mode = dialog.getMode();
+			Mode mode = dialog.getResult();
 			if (mode==null) {
 				((List<Mode>)data).add(row,old);
 			} else {
@@ -118,7 +119,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
 			dialog.setContent(((List<Mode>)data).get(getJTable().getSelectedRow()));
 			dialog.setVisible(true);
-			Mode mode = dialog.getMode();
+			Mode mode = dialog.getResult();
 			if (mode!=null) {
 				((List<Mode>)data).add(mode);
 				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();

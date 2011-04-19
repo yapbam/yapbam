@@ -14,8 +14,6 @@ import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
 
 import java.io.IOException;
-import java.lang.Object;
-import java.lang.String;
 import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
@@ -30,7 +28,7 @@ import java.util.concurrent.ExecutionException;
  * <LI>Once it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay.</LI></UL>
  * This url could be a useful reading to understand this class : http://java.sun.com/docs/books/tutorial/uiswing/concurrency/index.html
  */
-public class CheckUpdateDialog extends LongTaskDialog<Void> {
+public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	private boolean auto;
 
 	public CheckUpdateDialog(Window owner, boolean auto) {
@@ -41,7 +39,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void> {
 	}
 	
 	@Override
-	protected Object buildResult() {
+	protected Void buildResult() {
 		return null;
 	}
 

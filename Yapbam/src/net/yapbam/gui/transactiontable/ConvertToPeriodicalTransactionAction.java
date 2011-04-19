@@ -10,8 +10,8 @@ import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.PeriodicalTransactionDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 class ConvertToPeriodicalTransactionAction extends AbstractAction {

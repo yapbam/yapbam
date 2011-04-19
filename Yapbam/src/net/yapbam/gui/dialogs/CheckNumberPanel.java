@@ -11,6 +11,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.checkbook.CheckbookDialog;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.util.NullUtils;
 
 import javax.swing.JComboBox;

@@ -5,12 +5,10 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
-
-import java.lang.Object;
-import java.lang.String;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class AboutDialog extends AbstractDialog<Void> {
+public class AboutDialog extends AbstractDialog<Void, Void> {
 
 	public AboutDialog(Window owner) {
 		super(owner, LocalizationData.get("ApplicationName"), null);
@@ -20,7 +18,7 @@ public class AboutDialog extends AbstractDialog<Void> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Void buildResult() {
 		return null;
 	}
 

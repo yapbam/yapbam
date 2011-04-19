@@ -14,7 +14,7 @@ import net.yapbam.data.*;
 import net.yapbam.gui.LocalizationData;
 
 /** This dialog allows to create or edit a transaction */
-public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
+public class PeriodicalTransactionDialog extends AbstractTransactionDialog<PeriodicalTransaction> {
 	private static final long serialVersionUID = 1L;
 	
 	private GenerationPanel generationPanel;
@@ -72,7 +72,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected PeriodicalTransaction buildResult() {
 		double amount = getAmount();
 		ArrayList<SubTransaction> subTransactions = new ArrayList<SubTransaction>();
 		for (int i = 0; i < subtransactionsPanel.getSubtransactionsCount(); i++) {

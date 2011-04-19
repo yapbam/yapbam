@@ -15,9 +15,10 @@ import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
-public class ModeDialog extends AbstractDialog<Account> {
+public class ModeDialog extends AbstractDialog<Account, Mode> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
@@ -79,13 +80,9 @@ public class ModeDialog extends AbstractDialog<Account> {
 
 		return centerPane;
 	}
-	
-	public Mode getMode() {
-		return (Mode) getResult();
-	}
 
 	@Override
-	protected Object buildResult() {
+	protected Mode buildResult() {
 		return new Mode(name.getText(),rightPane.getValueDateComputer(),leftPane.getValueDateComputer(),checkbook.isSelected());
 	}
 	
@@ -97,7 +94,7 @@ public class ModeDialog extends AbstractDialog<Account> {
 	public static Mode open(GlobalData data, Account account, Window owner) {
 		ModeDialog dialog = new ModeDialog(owner, account);
 		dialog.setVisible(true);
-		Mode newMode = dialog.getMode();
+		Mode newMode = dialog.getResult();
 		if (newMode!=null) {
 			data.add(account, newMode);
 		}

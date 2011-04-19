@@ -8,15 +8,13 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
-
-import java.lang.Object;
-import java.lang.String;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 /** This class is a password ask dialog.
  * It can be customized to change the question, the alert message, etc ... 
  */
-public class GetPasswordDialog extends AbstractDialog<GetPasswordDialog.InitData> {
+public class GetPasswordDialog extends AbstractDialog<GetPasswordDialog.InitData, String> {
 	private GetPasswordPanel panel;
 	private boolean confirmIsRequired;
 	
@@ -45,7 +43,7 @@ public class GetPasswordDialog extends AbstractDialog<GetPasswordDialog.InitData
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected String buildResult() {
 		return this.panel.getPassword();
 	}
 

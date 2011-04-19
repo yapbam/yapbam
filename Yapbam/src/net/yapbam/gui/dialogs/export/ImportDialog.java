@@ -10,10 +10,10 @@ import javax.swing.JPanel;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
+public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importer> {
 	private ImportPanel importPanel;
 	public static File lastFile;
 
@@ -33,7 +33,7 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Importer buildResult() {
 		Importer importer = importPanel.getImporter();
 		ImporterParameters parameters = importer.getParameters();
 		YapbamState.INSTANCE.save(getStateKey(parameters.getClass()), parameters);
@@ -70,10 +70,6 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container> {
 	public void setVisible(boolean visible) {
 		this.pack();
 		super.setVisible(visible);
-	}
-
-	public Importer getImporter() {
-		return (Importer) getResult();
 	}
 
 	public boolean getAddToCurrentData() {

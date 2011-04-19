@@ -14,6 +14,7 @@ import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.DateUtils;

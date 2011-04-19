@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.util.Portable;
 
 /** This class is responsible for displaying Yapbam helpMessages. 

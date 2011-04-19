@@ -6,8 +6,9 @@ import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.util.AbstractDialog;
 
-public class ErrorDialog extends AbstractDialog<Throwable> {
+public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 	private static final long serialVersionUID = 1L;
 	
 	ErrorPanel panel;
@@ -28,7 +29,7 @@ public class ErrorDialog extends AbstractDialog<Throwable> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Boolean buildResult() {
 		setPreferences(1);
 		return Boolean.TRUE;
 	}

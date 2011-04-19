@@ -21,6 +21,7 @@ import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CoolJComboBox;
@@ -28,7 +29,7 @@ import net.yapbam.gui.widget.PopupTextFieldList;
 import net.yapbam.util.NullUtils;
 
 /** This dialog allows to create or edit a transaction */
-public abstract class AbstractTransactionDialog extends AbstractDialog<FilteredData> {
+public abstract class AbstractTransactionDialog<V> extends AbstractDialog<FilteredData, V> {
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 

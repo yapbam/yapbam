@@ -122,7 +122,7 @@ public class CheckbookPane extends JPanel {
 		return this.invalidityCause;
 	}
 
-	public Object getCheckbook() {
+	public Checkbook getCheckbook() {
 		return this.currentBook;
 	}
 

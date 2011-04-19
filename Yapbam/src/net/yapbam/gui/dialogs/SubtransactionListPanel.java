@@ -35,6 +35,7 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.transactiontable.SubTransactionsTableModel;
+import net.yapbam.gui.util.AbstractDialog;
 
 class SubtransactionListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

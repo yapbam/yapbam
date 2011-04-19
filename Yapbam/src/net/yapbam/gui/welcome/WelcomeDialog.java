@@ -7,10 +7,10 @@ import javax.swing.JPanel;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class WelcomeDialog extends AbstractDialog<GlobalData> {
+public class WelcomeDialog extends AbstractDialog<GlobalData, Void> {
 	private WelcomePanel welcomePanel;
 
 	public WelcomeDialog(Window owner, GlobalData data) {
@@ -31,7 +31,7 @@ public class WelcomeDialog extends AbstractDialog<GlobalData> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Void buildResult() {
 		Preferences.INSTANCE.setWelcomeAllowed(welcomePanel.isShowAtStartup());
 		return null;
 	}

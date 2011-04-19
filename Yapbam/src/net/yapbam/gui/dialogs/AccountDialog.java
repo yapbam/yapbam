@@ -13,10 +13,11 @@ import javax.swing.*;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
-public class AccountDialog extends AbstractDialog<String> {
+public class AccountDialog extends AbstractDialog<String, Account> {
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField bankAccountField;
@@ -89,10 +90,6 @@ public class AccountDialog extends AbstractDialog<String> {
 		return centerPane;
 	}
 	
-	public Account getAccount() {
-		return (Account) getResult();
-	}
-	
 	public void setContent(Account account) {
 		this.setTitle(LocalizationData.get("AccountDialog.title.edit")); //$NON-NLS-1$
 		this.initialName = account.getName();
@@ -103,7 +100,7 @@ public class AccountDialog extends AbstractDialog<String> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Account buildResult() {
 		Number value = (Number) this.balanceField.getValue();
 		return new Account(this.bankAccountField.getText(), value.doubleValue(), modesPanel.getModes());
 	}
@@ -118,7 +115,7 @@ public class AccountDialog extends AbstractDialog<String> {
 	public static Account open(GlobalData data, Window owner, String message) {
 		AccountDialog dialog = new AccountDialog(owner, message, data);
 		dialog.setVisible(true);
-		Account newAccount = dialog.getAccount();
+		Account newAccount = dialog.buildResult();
 		if (newAccount!=null) {
 			data.add(newAccount);
 		}

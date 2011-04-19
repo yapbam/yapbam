@@ -5,10 +5,10 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class CurrencyConverterDialog extends AbstractDialog<Void> {
+public class CurrencyConverterDialog extends AbstractDialog<Void, Void> {
 
 	public CurrencyConverterDialog(Window owner, String title) {
 		super(owner, title, null);
@@ -18,7 +18,7 @@ public class CurrencyConverterDialog extends AbstractDialog<Void> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Void buildResult() {
 		return null;
 	}
 

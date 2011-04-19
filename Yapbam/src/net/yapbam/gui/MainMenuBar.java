@@ -319,7 +319,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				if (file!=null) {
 					ImportDialog dialog = new ImportDialog(this.frame, data, file);
 					dialog.setVisible(true);
-					Importer importer = dialog.getImporter();
+					Importer importer = dialog.getResult();
 					if (importer!=null) {
 						if (SaveManager.MANAGER.verify(frame)) {
 							if (!dialog.getAddToCurrentData()) {
@@ -345,7 +345,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			} else if (source.equals(this.menuItemExport)) {
 				ExportDialog exportDialog = new ExportDialog(this.frame, this.frame.getFilteredData());
 				exportDialog.setVisible(true);
-				Exporter exporter = exportDialog.getExporter();
+				Exporter exporter = exportDialog.getResult();
 				if (exporter!=null) {
 					JFileChooser chooser = new SafeJFileChooser(null);
 					chooser.setLocale(LocalizationData.getLocale());
