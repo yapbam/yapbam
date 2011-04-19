@@ -8,9 +8,10 @@ import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class CustomFilterDialog extends AbstractDialog<FilteredData> {
+public class CustomFilterDialog extends AbstractDialog<FilteredData, Boolean> {
 
 	private CustomFilterPanel filterPanel;
 
@@ -23,7 +24,7 @@ public class CustomFilterDialog extends AbstractDialog<FilteredData> {
 	/** Returns the dialog result.
 	 * @returns true if the validate button was pressed
 	 */
-	protected Object buildResult() {
+	protected Boolean buildResult() {
 		filterPanel.apply();
 		return true;
 	}

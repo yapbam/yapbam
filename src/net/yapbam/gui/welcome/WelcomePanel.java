@@ -20,7 +20,7 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.HTMLPane;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;

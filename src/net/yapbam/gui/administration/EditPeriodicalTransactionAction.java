@@ -8,8 +8,8 @@ import javax.swing.AbstractAction;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.PeriodicalTransactionDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class EditPeriodicalTransactionAction extends AbstractAction {

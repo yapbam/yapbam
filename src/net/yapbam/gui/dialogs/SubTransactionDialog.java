@@ -10,8 +10,9 @@ import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 
-public class SubTransactionDialog extends AbstractDialog<GlobalData> {
+public class SubTransactionDialog extends AbstractDialog<GlobalData, SubTransaction> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
@@ -41,7 +42,7 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData> {
     }
 	
 	@Override
-	protected Object buildResult() {
+	protected SubTransaction buildResult() {
 		Double amount = panel.getAmount();
 		String description = panel.getDescription();
 		Category category = panel.getCategory();

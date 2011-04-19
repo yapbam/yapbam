@@ -9,8 +9,8 @@ import javax.swing.AbstractAction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.TransactionDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class DuplicateTransactionAction extends AbstractAction {

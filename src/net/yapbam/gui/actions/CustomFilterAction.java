@@ -9,8 +9,8 @@ import javax.swing.JCheckBoxMenuItem;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.CustomFilterDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class CustomFilterAction extends AbstractAction {

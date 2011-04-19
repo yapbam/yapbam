@@ -12,9 +12,10 @@ import javax.swing.*;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
-public class CategoryDialog extends AbstractDialog<String> {
+public class CategoryDialog extends AbstractDialog<String, Category> {
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField categoryField;
@@ -59,12 +60,8 @@ public class CategoryDialog extends AbstractDialog<String> {
 		return centerPane;
 	}
 	
-	public Category getCategory() {
-		return (Category) getResult();
-	}
-
 	@Override
-	protected Object buildResult() {
+	protected Category buildResult() {
 		return new Category(this.categoryField.getText());
 	}
 
@@ -78,7 +75,7 @@ public class CategoryDialog extends AbstractDialog<String> {
 	public static Category open(GlobalData data, Window owner, String message) {
 		CategoryDialog dialog = new CategoryDialog(owner, message, data);
 		dialog.setVisible(true);
-		Category newCategory = dialog.getCategory();
+		Category newCategory = dialog.buildResult();
 		if (newCategory!=null) {
 			data.add(newCategory);
 		}

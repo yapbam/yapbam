@@ -5,10 +5,10 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class ImportErrorDialog extends AbstractDialog<Object[]> {
+public class ImportErrorDialog extends AbstractDialog<Object[], Boolean> {
 
 	public ImportErrorDialog(Window owner, int[] importedFields, ImportError[] errors) {
 		super(owner, LocalizationData.get("ImportDialog.errorMessage.title"), new Object[]{importedFields, errors}); //$NON-NLS-1$
@@ -18,7 +18,7 @@ public class ImportErrorDialog extends AbstractDialog<Object[]> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Boolean buildResult() {
 		return Boolean.TRUE;
 	}
 

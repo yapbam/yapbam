@@ -22,7 +22,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalData> {
@@ -100,7 +100,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 			CheckbookDialog dialog = new CheckbookDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()));
 			dialog.setContent(old);
 			dialog.setVisible(true);
-			Checkbook checkbook = dialog.getCheckbook();
+			Checkbook checkbook = dialog.getResult();
 			if (checkbook!=null) {
 				((GlobalData)data).setCheckbook(account, old, checkbook);
 			}
@@ -147,7 +147,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	private void createBook(Window owner, Account account) {
 		CheckbookDialog dialog = new CheckbookDialog(owner);
 		dialog.setVisible(true);
-		Checkbook book = dialog.getCheckbook();
+		Checkbook book = dialog.getResult();
 		if (book!=null) {
 			data.add(account, book);
 		}

@@ -10,9 +10,9 @@ import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
-public class CheckbookDialog extends AbstractDialog<Void> {
+public class CheckbookDialog extends AbstractDialog<Void, Checkbook> {
 	private static final long serialVersionUID = 1L;
 	
 	private CheckbookPane pane;
@@ -30,15 +30,11 @@ public class CheckbookDialog extends AbstractDialog<Void> {
 				updateOkButtonEnabled();
 			}
 		});
-        return this.pane;
-    }
-	
-	public Checkbook getCheckbook() {
-		return (Checkbook) getResult();
+		return this.pane;
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Checkbook buildResult() {
 		return this.pane.getCheckbook();
 	}
 	
@@ -50,7 +46,7 @@ public class CheckbookDialog extends AbstractDialog<Void> {
 	public static Checkbook open(GlobalData data, Account account, Window owner) {
 		CheckbookDialog dialog = new CheckbookDialog(owner);
 		dialog.setVisible(true);
-		Checkbook book = dialog.getCheckbook();
+		Checkbook book = dialog.getResult();
 		if (book!=null) {
 			data.add(account, book);
 		}

@@ -17,8 +17,8 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.CategoryDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;

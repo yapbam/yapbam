@@ -11,12 +11,10 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
-
-import java.lang.Object;
-import java.lang.String;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<FilteredData> {
+public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<FilteredData, Void> {
 	private PeriodicalTransactionGeneratorPanel panel;
 
 	public GeneratePeriodicalTransactionsDialog(Window owner, FilteredData data) {
@@ -24,7 +22,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Void buildResult() {
 		Transaction[] transactions = panel.getValidTransactions();
 		GlobalData globalData = data.getGlobalData();
 		globalData.add(transactions);

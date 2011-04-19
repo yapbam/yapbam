@@ -12,6 +12,7 @@ import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.CoolJComboBox;
 import java.awt.BorderLayout;
 

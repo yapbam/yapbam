@@ -23,6 +23,7 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.IntegerWidget;
 

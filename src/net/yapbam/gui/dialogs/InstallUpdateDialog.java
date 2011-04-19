@@ -25,7 +25,7 @@ import net.yapbam.util.NullUtils;
 import net.yapbam.util.Portable;
 import net.yapbam.util.SecureDownloader;
 
-public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
+public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void> {
 	private static final long serialVersionUID = 1L;
 
 	private WaitPanel waitPanel;
@@ -52,7 +52,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Void buildResult() {
 		return null;
 	}
 

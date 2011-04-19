@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.SwingWorker;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 /** An abstract progress dialog, that manages a long task.
@@ -17,7 +18,7 @@ import net.yapbam.gui.LocalizationData;
  * <br>Once it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay).
  * @see #
  */
-public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
+public abstract class LongTaskDialog<T,V> extends AbstractDialog<T,V> {
 	private static final long DEFAULT_DELAY = 500;
 	private static final int MINIMUM_TIME_VISIBLE = 1000;
 	
@@ -31,7 +32,7 @@ public abstract class LongTaskDialog<V> extends AbstractDialog<V> {
 	 * @param title The dialog title
 	 * @param data 
 	 */
-	public LongTaskDialog(Window owner, String title, V data) {
+	public LongTaskDialog(Window owner, String title, T data) {
 		super(owner, title, data);
 		this.delay = DEFAULT_DELAY;
 		this.okButton.setVisible(false);

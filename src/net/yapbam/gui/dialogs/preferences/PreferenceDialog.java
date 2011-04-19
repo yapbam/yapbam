@@ -10,16 +10,14 @@ import javax.swing.event.ChangeListener;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.PreferencePanel;
-import net.yapbam.gui.dialogs.AbstractDialog;
+import net.yapbam.gui.util.AbstractDialog;
 
-import java.lang.Object;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class PreferenceDialog extends AbstractDialog<MainFrame> {
+public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 	public static final long LOCALIZATION_CHANGED = 1;
 	public static final long LOOK_AND_FEEL_CHANGED = 2;
 
@@ -30,7 +28,7 @@ public class PreferenceDialog extends AbstractDialog<MainFrame> {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Boolean buildResult() {
 		boolean result = false;
 		for (int i = 0; i < panels.size(); i++) {
 			result = panels.get(i).updatePreferences() || result;

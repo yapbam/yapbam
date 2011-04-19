@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.util;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -11,14 +11,31 @@ import javax.swing.*;
 
 import net.yapbam.gui.LocalizationData;
 
-public abstract class AbstractDialog<V> extends JDialog {
+/** An abstract dialog with a customizable center pane, an Ok and/or a Cancel button.
+ * <br>By default, the dialog is not resizable, call this.setResizable(true) to change this behaviour.
+ * @author Jean-Marc Astesana
+ * <BR>License : GPL v3
+ * @param <T> The class of the parameter of the dialog (information that is useful to build the center pane).
+ * @param <V> The class of the result of the dialog
+ */
+public abstract class AbstractDialog<T,V> extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
-	private Object result;
+	private V result;
 
+	/** The cancel button.
+	 * If you want the dialog not to have a cancel button, you may set the visibility of this button to false
+	 * (cancelButton.setVisible(false)).
+	 */
 	protected JButton cancelButton;
+	/** The ok button.
+	 * If you want the dialog not to have an ok button, you may set the visibility of this button to false
+	 * (okButton.setVisible(false)).
+	 */
 	protected JButton okButton;
-	protected V data;
+	/** The data passed to the dialog's constructor.
+	 */
+	protected T data;
 
 	/**
 	 * Constructor
@@ -26,7 +43,7 @@ public abstract class AbstractDialog<V> extends JDialog {
 	 * @param title Dialog's title
 	 * @param data optional data (will be transfered to createContentPane)
 	 */
-	public AbstractDialog(Window owner, String title, V data) {
+	public AbstractDialog(Window owner, String title, T data) {
 		super(owner, title, ModalityType.APPLICATION_MODAL);
 		this.data = data;
 		this.result = null;
@@ -79,9 +96,23 @@ public abstract class AbstractDialog<V> extends JDialog {
 		return contentPane;
 	}
 	
+	/** Gets the center pane of this dialog.
+	 * This method is called once by the constructor of the dialog.
+	 * The data attribute is already set to the data parameter passed to the constructor.
+	 * @return a panel
+	 */
 	protected abstract JPanel createCenterPane();
 	
-	protected abstract Object buildResult();
+	/** This method is called when the user clicks the ok button.
+	 * <br>This method should return the object, result of the dialog, that will be returned
+	 * by getResult.
+	 * <br>Note that it is not a good practice to override this method and set its visibility to public.
+	 * You should prefer calling the getResult method as buildResult may instantiate a new object each
+	 * time it is called.
+	 * @return an object
+	 * @see #getResult()
+	 */
+	protected abstract V buildResult();
 
 	/** This method is called when the user clicks the cancel button.
 	 * This default implementation does nothing.
@@ -94,22 +125,28 @@ public abstract class AbstractDialog<V> extends JDialog {
 	 */
 	protected abstract String getOkDisabledCause();
 	
-	public Object getResult() {
+	/** Gets the result of this dialog.
+	 * @return an object, or null if the dialog was cancelled.
+	 */
+	public V getResult() {
 		return result;
 	}
 	
 	/** Forces the state of the users input to be evaluated and updates the state of the ok button.
 	 * @see #getOkDisabledCause()
 	 */
-	protected void updateOkButtonEnabled() {
+	public void updateOkButtonEnabled() {
 		String cause = getOkDisabledCause();
 		this.okButton.setEnabled(cause==null);
 		this.okButton.setToolTipText(cause==null?LocalizationData.get("GenericButton.ok.toolTip"):cause);
 	}
 
-	/** Return the window which contains the component */
+	/** Gets the window which contains a component.
+	 * @param component the component
+	 * @return The window containing the component or null if no window contains the component.
+	 */
 	public static Window getOwnerWindow(Component component) {
-		while (!(component instanceof Window)) {
+		while ((component!=null) && !(component instanceof Window)) {
 			if (component instanceof JPopupMenu) {
 				component = ((JPopupMenu)component).getInvoker();
 			} else {

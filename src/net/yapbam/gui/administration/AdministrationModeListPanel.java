@@ -20,10 +20,10 @@ import net.yapbam.data.event.ModeAddedEvent;
 import net.yapbam.data.event.ModeRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractDialog;
 import net.yapbam.gui.dialogs.AbstractModeListModel;
 import net.yapbam.gui.dialogs.ModeDialog;
 import net.yapbam.gui.dialogs.ModeListPanel;
+import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 class AdministrationModeListPanel extends ModeListPanel {
@@ -120,7 +120,7 @@ class AdministrationModeListPanel extends ModeListPanel {
 		public void actionPerformed(ActionEvent e) {
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
 			dialog.setVisible(true);
-			Mode mode = dialog.getMode();
+			Mode mode = dialog.getResult();
 			if (mode!=null) {
 				((GlobalData)data).add(account, mode);
 			}
@@ -138,7 +138,7 @@ class AdministrationModeListPanel extends ModeListPanel {
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
 			dialog.setContent(old);
 			dialog.setVisible(true);
-			Mode mode = dialog.getMode();
+			Mode mode = dialog.getResult();
 			if (mode!=null) {
 				((GlobalData)data).setMode(account, old, mode);
 				((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);

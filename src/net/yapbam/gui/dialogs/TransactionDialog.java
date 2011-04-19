@@ -22,7 +22,7 @@ import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
 
 /** This dialog allows to create or edit a transaction */
-public class TransactionDialog extends AbstractTransactionDialog {
+public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	private static final int MILLIS_PER_DAY = 60000 * 24;
 
 	private static final long serialVersionUID = 1L;
@@ -185,7 +185,7 @@ public class TransactionDialog extends AbstractTransactionDialog {
 	}
 
 	@Override
-	protected Object buildResult() {
+	protected Transaction buildResult() {
 		double amount = getAmount();
 		String statementId = statement.getText().trim();
 		if (statementId.length() == 0) statementId = null;
