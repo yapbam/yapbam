@@ -1,5 +1,6 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
@@ -12,19 +13,27 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.FriendlyTable;
+import net.yapbam.gui.util.SafeJFileChooser;
 import net.yapbam.gui.widget.JLabelMenu;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class BalanceHistoryTablePane extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -66,33 +75,51 @@ public class BalanceHistoryTablePane extends JPanel {
 				popup.add(menuItem);
 			}
 		};
-		lblSortBy.setToolTipText("Ce menu permet de trier les opérations par date ou date de valeur");
+		lblSortBy.setToolTipText("Ce menu permet de trier les opérations par date ou date de valeur"); //LOCAL
 		GridBagConstraints gbc_lblSortBy = new GridBagConstraints();
-		gbc_lblSortBy.insets = new Insets(0, 5, 5, 5);
+		gbc_lblSortBy.insets = new Insets(0, 5, 0, 5);
 		gbc_lblSortBy.gridx = 0;
 		gbc_lblSortBy.gridy = 1;
 		add(lblSortBy, gbc_lblSortBy);
+		lblSortBy.setVisible(false); //TODO ... maybe
 		
-		JLabel label = table.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns"));
-		label.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip"));
+		JLabel label = table.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+		label.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		label.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.insets = new Insets(0, 5, 0, 5);
 		gbc_label.anchor = GridBagConstraints.EAST;
 		gbc_label.gridx = 1;
 		gbc_label.gridy = 1;
 		add(label, gbc_label);
 		
-		JButton btnExport = new JButton("Export");
-		btnExport.setToolTipText("Ce bouton exporte le contenu du tableau ci-dessus");
+		final JButton btnExport = new JButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
+		btnExport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new SafeJFileChooser((String)null);
+				File result = chooser.showDialog(btnExport, LocalizationData.get("BudgetPanel.export"))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
+				if (result!=null) {
+					try {
+						export(result, '\t', LocalizationData.getLocale());
+					} catch (IOException e1) {
+						ErrorManager.INSTANCE.display(btnExport, e1);
+					}
+				}
+			}
+		});
+		btnExport.setToolTipText("BudgetPanel.export.toolTip"); //$NON-NLS-1$
 		btnExport.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_btnExport = new GridBagConstraints();
 		gbc_btnExport.anchor = GridBagConstraints.EAST;
 		gbc_btnExport.weightx = 1.0;
-		gbc_btnExport.insets = new Insets(0, 0, 5, 0);
+		gbc_btnExport.insets = new Insets(0, 0, 0, 5);
 		gbc_btnExport.gridx = 2;
 		gbc_btnExport.gridy = 1;
 		add(btnExport, gbc_btnExport);
+	}
+
+	protected void export(File result, char c, Locale locale) throws IOException {
+		// TODO Auto-generated method stub
 	}
 
 	public void saveState() {
@@ -103,10 +130,12 @@ public class BalanceHistoryTablePane extends JPanel {
 		YapbamState.INSTANCE.restoreState(table, this.getClass().getCanonicalName());
 	}
 
+	/** The transaction's table model. */
 	private final class MyModel extends AbstractTableModel {
 		private static final long serialVersionUID = 1L;
 		private BalanceData data;
 
+		/** Constructor. */
 		public MyModel(BalanceData data) {
 			super();
 			this.data = data;
@@ -120,7 +149,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			Transaction transaction = data.getBalanceHistory().getTransaction(rowIndex);
+			Transaction transaction = getTransaction(rowIndex);
 			if (columnIndex==0) return transaction.getAccount().getName();
 			if (columnIndex==1) return transaction.getDate();
 			if (columnIndex==2) return transaction.getDescription();
@@ -130,8 +159,32 @@ public class BalanceHistoryTablePane extends JPanel {
 			if (columnIndex==6) return transaction.getNumber();
 			if (columnIndex==7) return transaction.getValueDate();
 			if (columnIndex==8) return transaction.getStatement();
-			if (columnIndex==9) return "?"; //TODO
-			return "?";
+			if (columnIndex==9) return getRemaining(rowIndex);
+			return "?"; //$NON-NLS-1$
+		}
+
+		/** Gets the remaining amount after a transaction.
+		 * @param rowIndex The transaction's row index
+		 * @return a Double
+		 */
+		private Double getRemaining(int rowIndex) {
+			Date valueDate = getTransaction(rowIndex).getValueDate();
+			double balance = data.getBalanceHistory().getBalance(valueDate);
+			for (int i=rowIndex+1;i<getRowCount();i++) {
+				Transaction transaction = getTransaction(i);
+				if (transaction.getValueDate().equals(valueDate)) {
+					balance = balance - transaction.getAmount();
+				} else break;
+			}
+			return balance;
+		}
+
+		/** Gets the transaction corresponding to a table row.
+		 * @param rowIndex The transaction's row index
+		 * @return a Transaction
+		 */
+		private Transaction getTransaction(int rowIndex) {
+			return data.getBalanceHistory().getTransaction(rowIndex);
 		}
 
 		@Override
