@@ -19,10 +19,15 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.SafeJFileChooser;
+import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.JLabelMenu;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -32,7 +37,9 @@ import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class BalanceHistoryTablePane extends JPanel {
@@ -118,8 +125,53 @@ public class BalanceHistoryTablePane extends JPanel {
 		add(btnExport, gbc_btnExport);
 	}
 
-	protected void export(File result, char c, Locale locale) throws IOException {
-		// TODO Auto-generated method stub
+	private void export(File file, char c, Locale locale) throws IOException {
+		//TODO Move to Friendly Table
+		//FIXME Doesn't ask for confirmation if the file already exist 
+		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		try {
+			boolean first = true;
+			int[] modelIndexes = new int[table.getColumnCount(false)];
+			for (int colIndex=0; colIndex < table.getColumnCount(false); colIndex++) {
+				if (table.isColumnVisible(colIndex)) {
+					if (first) {
+						first = false;
+					} else {
+						out.append(c);
+					}
+					modelIndexes[colIndex] = ((XTableColumnModel)table.getColumnModel()).getColumn(colIndex, false).getModelIndex();
+					out.append(table.getModel().getColumnName(modelIndexes[colIndex]));
+				}
+			}
+			out.newLine();
+			DateFormat dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
+			NumberFormat currencyFormatter = NumberFormat.getInstance(locale);
+			if (currencyFormatter instanceof DecimalFormat) {
+				// We don't use the currency instance, because it would have outputed some currency prefix or suffix, not very easy
+				// to manipulate with an excel like application
+				currencyFormatter.setMaximumFractionDigits(NumberFormat.getCurrencyInstance(locale).getMaximumFractionDigits());
+			}
+			for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+				first = false;
+				int modelRowIndex = table.convertRowIndexToModel(rowIndex);
+				for (int colIndex=0; colIndex < table.getColumnCount(false); colIndex++) {
+					if (table.isColumnVisible(colIndex)) {
+						if (first) {
+							first = false;
+						} else {
+							out.append(c);
+						}
+						Object obj = table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
+						if (obj instanceof Date) obj = dateFormater.format(obj);
+						else if (obj instanceof Double) obj = currencyFormatter.format(obj);
+						out.append(obj.toString());
+					}
+				}
+				out.newLine();
+			}
+		} finally {
+			out.close();
+		}
 	}
 
 	public void saveState() {

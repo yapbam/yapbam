@@ -187,10 +187,10 @@ public class BudgetView extends DefaultListenable {
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
 		try {
 			// Output header line
-			DateFormat DateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
+			DateFormat dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
 			for (int i = 0; i < getDatesSize(); i++) {
 				out.append(columnSeparator);
-				out.append(DateFormater.format(getDate(i)));
+				out.append(dateFormater.format(getDate(i)));
 			}
 			// Output category lines
 			NumberFormat currencyFormatter = NumberFormat.getInstance(locale);
@@ -288,7 +288,8 @@ public class BudgetView extends DefaultListenable {
 				else if (DateUtils.getMonthlyDistance(lastDate, c)>0) this.lastDate = c;
 			}
 			// Insert the category in the budget
-			addToSortedList(categories, key.category);
+			int index = Collections.binarySearch(categories, key.category);
+			if (index<0) categories.add(-index-1, key.category);
 			// Add the amount to that category/date item
 			Double value = this.values.get(key);
 			if (value==null) value = 0.0;
@@ -305,11 +306,6 @@ public class BudgetView extends DefaultListenable {
 			value += amount;
 			this.dateToSum.put (key.date, value);
 		}
-	}
-	
-	private static void addToSortedList(List list, Object element) {
-		int index = Collections.binarySearch(list, element);
-		if (index<0) list.add(-index-1, element);
 	}
 
 	private Date getNormalizedDate(Date date) {
