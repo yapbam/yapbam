@@ -84,11 +84,10 @@ public abstract class AbstractDialog<T,V> extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource().equals(okButton)) {
-					result = buildResult();
+					confirm();
 				} else {
 					cancel();
 				}
-				setVisible(false);
 			}
 		};
 		okButton.addActionListener(listener);
@@ -114,10 +113,26 @@ public abstract class AbstractDialog<T,V> extends JDialog {
 	 */
 	protected abstract V buildResult();
 
-	/** This method is called when the user clicks the cancel button.
-	 * This default implementation does nothing.
+	/** This method is called when the user clicks the ok button.
+	 * <br>This method should return the object, result of the dialog, that will be returned
+	 * by getResult.
+	 * <br>Note that it is not a good practice to override this method and set its visibility to public.
+	 * You should prefer calling the getResult method as buildResult may instantiate a new object each
+	 * time it is called.
+	 * @return an object
+	 * @see #getResult()
 	 */
-	protected void cancel() {}
+	protected void confirm() {
+		result = buildResult();
+		setVisible(false);
+	}
+
+	/** This method is called when the user clicks the cancel button.
+	 * This default implementation closes the dialog.
+	 */
+	protected void cancel() {
+		setVisible(false);
+	}
 
 	/** Checks if the user input is consistent and return a short explanation of why it is not 
 	 * @return a short message explaining why the ok button is disabled or null if the ok button has to be enabled.
