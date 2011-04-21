@@ -119,7 +119,6 @@ public abstract class AbstractDialog<T,V> extends JDialog {
 	 * <br>Note that it is not a good practice to override this method and set its visibility to public.
 	 * You should prefer calling the getResult method as buildResult may instantiate a new object each
 	 * time it is called.
-	 * @return an object
 	 * @see #getResult()
 	 */
 	protected void confirm() {

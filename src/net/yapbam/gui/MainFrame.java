@@ -23,9 +23,11 @@ import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.welcome.WelcomeDialog;
+import net.yapbam.update.ReleaseInfo;
 import net.yapbam.update.VersionManager;
 
 public class MainFrame extends JFrame implements DataListener {
+	private static final String LAST_VERSION_USED = "lastVersionUsed";
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
 	private static final long serialVersionUID = 1L;
@@ -77,6 +79,11 @@ public class MainFrame extends JFrame implements DataListener {
 				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
 				CheckNewReleaseAction.doAutoCheck(frame);
 				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
+				ReleaseInfo lastVersion = (ReleaseInfo) YapbamState.INSTANCE.restore(LAST_VERSION_USED);
+				if (lastVersion.compareTo(new ReleaseInfo("0.8.2 (10/04/2011)"))<=0) {
+					System.out.println ("Fuck, some important things has changed"); //TODO
+				}
+				System.out.println (lastVersion);
 			}
 		});
 	}
@@ -336,7 +343,7 @@ public class MainFrame extends JFrame implements DataListener {
 		for (int i = 0; i < getPlugInsNumber(); i++) {
 			if (getPlugIn(i)!=null) getPlugIn(i).saveState();
 		}
-		getStateSaver().save("lastVersionUsed", VersionManager.getVersion());
+		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {

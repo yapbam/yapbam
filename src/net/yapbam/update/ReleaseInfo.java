@@ -17,7 +17,7 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	private Date releaseDate;
 	private String preRealeaseComment;
 	
-	ReleaseInfo(String rel) {
+	public ReleaseInfo(String rel) {
 		if (rel==null) {
 			this.unknown = true;
 			this.majorRevision = 0;
