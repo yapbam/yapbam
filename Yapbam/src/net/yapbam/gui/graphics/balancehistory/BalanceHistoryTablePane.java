@@ -4,6 +4,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTable.PrintMode;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -17,9 +18,9 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.statementview.CellRenderer;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.SafeJFileChooser;
-import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.JLabelMenu;
 
 import java.awt.GridBagConstraints;
@@ -37,9 +38,8 @@ import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.BufferedWriter;
+import java.awt.print.Printable;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class BalanceHistoryTablePane extends JPanel {
@@ -103,11 +103,13 @@ public class BalanceHistoryTablePane extends JPanel {
 		final JButton btnExport = new JButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
 		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new SafeJFileChooser((String)null);
-				File result = chooser.showDialog(btnExport, LocalizationData.get("BudgetPanel.export"))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
-				if (result!=null) {
+				JFileChooser chooser = new SafeJFileChooser(btnExport.getText());
+				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
+				chooser.updateUI();
+				File file = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
+				if (file!=null) {
 					try {
-						export(result, '\t', LocalizationData.getLocale());
+						table.export(file, new DefaultExporter(LocalizationData.getLocale()));
 					} catch (IOException e1) {
 						ErrorManager.INSTANCE.display(btnExport, e1);
 					}
@@ -125,61 +127,44 @@ public class BalanceHistoryTablePane extends JPanel {
 		add(btnExport, gbc_btnExport);
 	}
 
-	private void export(File file, char c, Locale locale) throws IOException {
-		//TODO Move to Friendly Table
-		//FIXME should ask for confirmation if the file already exist 
-		BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		try {
-			boolean first = true;
-			int[] modelIndexes = new int[table.getColumnCount(false)];
-			for (int colIndex=0; colIndex < table.getColumnCount(false); colIndex++) {
-				if (table.isColumnVisible(colIndex)) {
-					if (first) {
-						first = false;
-					} else {
-						out.append(c);
-					}
-					modelIndexes[colIndex] = ((XTableColumnModel)table.getColumnModel()).getColumn(colIndex, false).getModelIndex();
-					out.append(table.getModel().getColumnName(modelIndexes[colIndex]));
-				}
-			}
-			out.newLine();
-			DateFormat dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
-			NumberFormat currencyFormatter = NumberFormat.getInstance(locale);
-			if (currencyFormatter instanceof DecimalFormat) {
-				// We don't use the currency instance, because it would have outputed some currency prefix or suffix, not very easy
-				// to manipulate with an excel like application
-				currencyFormatter.setMaximumFractionDigits(NumberFormat.getCurrencyInstance(locale).getMaximumFractionDigits());
-			}
-			for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
-				first = false;
-				int modelRowIndex = table.convertRowIndexToModel(rowIndex);
-				for (int colIndex=0; colIndex < table.getColumnCount(false); colIndex++) {
-					if (table.isColumnVisible(colIndex)) {
-						if (first) {
-							first = false;
-						} else {
-							out.append(c);
-						}
-						Object obj = table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
-						if (obj instanceof Date) obj = dateFormater.format(obj);
-						else if (obj instanceof Double) obj = currencyFormatter.format(obj);
-						out.append(obj.toString());
-					}
-				}
-				out.newLine();
-			}
-		} finally {
-			out.close();
-		}
-	}
-
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(table, this.getClass().getCanonicalName());
 	}
 
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(table, this.getClass().getCanonicalName());
+	}
+
+	private final class DefaultExporter implements FriendlyTable.ExportFormat {
+		private DateFormat dateFormater;
+		private NumberFormat currencyFormat;
+
+		private DefaultExporter (Locale locale) {
+			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
+			currencyFormat = NumberFormat.getInstance(locale);
+			if (currencyFormat instanceof DecimalFormat) {
+				// We don't use the currency instance, because it would have outputed some currency prefix or suffix, not very easy
+				// to manipulate with an excel like application
+				currencyFormat.setMaximumFractionDigits(NumberFormat.getCurrencyInstance(locale).getMaximumFractionDigits());
+			}
+		}
+		
+		@Override
+		public boolean hasHeader() {
+			return true;
+		}
+
+		@Override
+		public char getSeparator() {
+			return '\t';
+		}
+
+		@Override
+		public String format(Object obj) {
+			if (obj instanceof Date) return dateFormater.format(obj);
+			if (obj instanceof Double) return currencyFormat.format(obj);
+			return obj.toString();
+		}
 	}
 
 	/** The transaction's table model. */
@@ -260,8 +245,12 @@ public class BalanceHistoryTablePane extends JPanel {
 			if (columnIndex==6) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
 			if (columnIndex==7) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
 			if (columnIndex==8) return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
-			if (columnIndex==9) return "Solde restant";
+			if (columnIndex==9) return LocalizationData.get("BalanceHistory.transaction.remainingBalance"); //$NON-NLS-1$
 			return "?"; //$NON-NLS-1$
 		}
+	}
+
+	public Printable getPrintable() {
+		return table.getPrintable(PrintMode.FIT_WIDTH, null, null);
 	}
 }

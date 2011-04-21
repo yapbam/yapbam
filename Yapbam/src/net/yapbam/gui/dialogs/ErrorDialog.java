@@ -41,6 +41,7 @@ public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 
 	@Override
 	protected void cancel() {
+		super.cancel();
 		setPreferences(-1);
 	}
 	
