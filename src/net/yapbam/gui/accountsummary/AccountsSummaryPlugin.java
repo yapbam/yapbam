@@ -18,6 +18,7 @@ public class AccountsSummaryPlugin extends AbstractPlugIn {
 		this.panel = new AccountsSummaryPanel(data.getGlobalData());
 		this.setPanelTitle(LocalizationData.get("AccountsSummary.title")); //$NON-NLS-1$
 		this.setPanelToolTip(LocalizationData.get("AccountsSummary.tooltip")); //$NON-NLS-1$
+		setPrintingSupported(true);
 	}
 
 	@Override
@@ -44,10 +45,5 @@ public class AccountsSummaryPlugin extends AbstractPlugIn {
 	@Override
 	protected Printable getPrintable() {
 		return this.panel.getTable().getPrintable(PrintMode.FIT_WIDTH, null, null);
-	}
-
-	@Override
-	public boolean isPrintingSupported() {
-		return true;
 	}
 }

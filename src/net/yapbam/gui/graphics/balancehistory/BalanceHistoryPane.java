@@ -30,11 +30,13 @@ import java.util.List;
 public class BalanceHistoryPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static final String FIRST_ALERT = "FIRST_ALERT"; //$NON-NLS-1$
+	static final String SELECTED_PANEL = "SELECTED_PANEL"; //$NON-NLS-1$
 	private BalanceHistoryGraphPane graph;
 	private Date firstAlert;
 	private JTabbedPane tabbedPane;
 	private FilteredData data;
 	private BalanceHistoryTablePane tablePane;
+	private int selectedPanel;
 
 	/**
 	 * Create the panel.
@@ -69,16 +71,22 @@ public class BalanceHistoryPane extends JPanel {
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				setDisplayed(true);
+				changeDisplayed();
 			}
 		});
 		tablePane = new BalanceHistoryTablePane(data);
 		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	void setDisplayed (boolean displayed) {
-		if (tabbedPane.getSelectedIndex()==0) {
+	void changeDisplayed () {
+		int selected = tabbedPane.getSelectedIndex();
+		if (selected==0) {
 			graph.scrollToSelectedDate();
+		}
+		if (selected != this.selectedPanel) {
+			int old = this.selectedPanel;
+			this.selectedPanel = selected;
+			firePropertyChange(SELECTED_PANEL, old, this.selectedPanel);
 		}
 	}
 
