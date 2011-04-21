@@ -127,7 +127,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	private void export(File file, char c, Locale locale) throws IOException {
 		//TODO Move to Friendly Table
-		//FIXME Doesn't ask for confirmation if the file already exist 
+		//FIXME should ask for confirmation if the file already exist 
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
 		try {
 			boolean first = true;
