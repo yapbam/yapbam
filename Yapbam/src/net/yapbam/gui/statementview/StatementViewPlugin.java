@@ -17,6 +17,7 @@ public class StatementViewPlugin extends AbstractPlugIn {
 		this.panel = new StatementViewPanel(data);
 		this.setPanelTitle(LocalizationData.get("StatementView.title")); //$NON-NLS-1$
 		this.setPanelToolTip(LocalizationData.get("StatementView.tooltip")); //$NON-NLS-1$
+		this.setPrintingSupported(true);
 	}
 
 	@Override
@@ -39,11 +40,6 @@ public class StatementViewPlugin extends AbstractPlugIn {
 		if (menuId==FILTER_MENU) return false;
 		return super.allowMenu(menuId);
 	}
-	@Override
-	public boolean isPrintingSupported() {
-		return true;
-	}
-	
 
 	@Override
 	protected Printable getPrintable() {

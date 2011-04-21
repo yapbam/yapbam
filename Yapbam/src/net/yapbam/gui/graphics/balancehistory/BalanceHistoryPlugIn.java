@@ -38,12 +38,18 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 				setPanelToolTip(tooltip);
 			}
 		});
+		this.panel.addPropertyChangeListener(BalanceHistoryPane.SELECTED_PANEL, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setPrintingSupported((Integer)evt.getNewValue()==1);
+			}
+		});
 	}
 	
 	@Override
 	public void setDisplayed(boolean displayed) {
 		super.setDisplayed(displayed);
-		this.panel.setDisplayed(displayed);
+		this.panel.changeDisplayed();
 	}
 
 

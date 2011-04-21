@@ -42,6 +42,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		});
 		this.setPanelTitle(LocalizationData.get("StatisticsPlugin.title"));
 		this.setPanelToolTip(LocalizationData.get("StatisticsPlugin.tooltip"));
+		this.setPrintingSupported(true);
 	}
 
 	@Override
@@ -57,11 +58,6 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				new Insets(5, 0, 0, 0), 0, 0);
 		result.add(tabbedPane, c);
 		return result;
-	}
-
-	@Override
-	public boolean isPrintingSupported() {
-		return true;
 	}
 
 	@Override

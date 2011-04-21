@@ -62,11 +62,14 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public static final String PANEL_TOOLTIP_PROPERTY_NAME = "panelTooltip";
 	/** Panel title property name. */
 	public static final String PANEL_TITLE_PROPERTY_NAME = "panelTitle";
+	/** Panel title property name. */
+	public static final String PRINTING_SUPPORTED_PROPERTY_NAME = "printing";
 	
 	private PropertyChangeSupport propertyChangeSupport;
 	private Icon panelIcon;
 	private String panelToolTip;
 	private String panelTitle;
+	private boolean printSupport;
 	
 	/** Constructor.
 	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>
@@ -79,6 +82,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 		this.panelIcon = null;
 		this.panelTitle = null;
 		this.panelToolTip = null;
+		this.printSupport = false;
 	}
 	
 	/** Gets the plugin specific menus.
@@ -221,15 +225,30 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 		return null;
 	}
 
-	/** Returns wether this plugin supports printing.
+	/** Returns whether this plugin supports printing.
 	 * Only plugins with a non null panel can support printing (other are supposed to have nothing to print).
-	 * The default return value is false. The returned value is used to enable/disable the "print" menu item
-	 * in the "File" menu.
+	 * That returned value is used to enable/disable the "print" menu item in the "File" menu.
+	 * <br>By default, plugins don't support printing. To change this, plugins should use setPrintingSupported method. 
 	 * @return true if the panel supports printing.
 	 * @see #print()
+	 * @see #setPrintingSupported(boolean)
 	 */
-	public boolean isPrintingSupported() {
-		return false;
+	public final boolean isPrintingSupported() {
+		return printSupport;
+	}
+	
+	/** Sets the support printing property.
+	 * <br>Note that the printing support may depend of the state of the plugin. For instance, a plugin may have sub-panels,
+	 * some could be printable, and others not. The plugin should then use this method to set the print support depending on which
+	 * sub-panel is displayed.
+	 * @param supported true if printing is supported.
+	 * @see #isPrintingSupported()
+	 */
+	public final void setPrintingSupported(boolean supported) {
+		if (supported!=this.printSupport) {
+			this.printSupport = supported;
+			this.propertyChangeSupport.firePropertyChange(PRINTING_SUPPORTED_PROPERTY_NAME, !supported, supported);
+		}
 	}
 	
 	/** Prints the content of this plugin.
@@ -278,5 +297,4 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public final PropertyChangeSupport getPropertyChangeSupport() {
 		return this.propertyChangeSupport;
 	}
-
 }

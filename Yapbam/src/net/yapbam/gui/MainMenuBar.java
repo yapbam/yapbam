@@ -2,6 +2,8 @@ package net.yapbam.gui;
 
 import java.awt.event.*;
 import java.awt.print.PrinterException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -175,6 +177,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		updateFilterMenu();
 		this.add(filterMenu);
 
+		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				//FIXME : We should test that the plugin is currently displayed
+				menuItemPrint.setEnabled((Boolean) evt.getNewValue());
+			}
+		};
 		// Build plugins menus
 		for (int i = 0; i < this.frame.getPlugInsNumber(); i++) {
 			if (this.frame.getPlugIn(i) != null) {
@@ -184,6 +193,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 						this.add(menus[j]);
 					}
 				}
+				this.frame.getPlugIn(i).getPropertyChangeSupport().addPropertyChangeListener(AbstractPlugIn.PRINTING_SUPPORTED_PROPERTY_NAME, listener);
 			}
 		}
 

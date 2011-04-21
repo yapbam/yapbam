@@ -48,6 +48,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 				}
 			}
 		});
+		this.setPrintingSupported(true);
 	}
 	
 	private boolean eventMayChangePeridiocalTranscationToGenerate (DataEvent event) {
@@ -101,11 +102,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	@Override
 	public PreferencePanel getPreferencePanel() {
 		return new TransactionsPreferencePanel();
-	}
-
-	@Override
-	public boolean isPrintingSupported() {
-		return true;
 	}
 
 	@Override
