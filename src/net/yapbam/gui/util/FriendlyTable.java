@@ -1,6 +1,10 @@
 package net.yapbam.gui.util;
 
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
@@ -98,5 +102,72 @@ public class FriendlyTable extends JTable {
 				}
 			}
 		};
+	}
+	
+	/** Exports the visible content of this table to an excel like formatted file.
+	 * @param file The file where to export the table
+	 * @param format The export format
+	 * @throws IOException
+	 * @see ExportFormat
+	 */
+	public void export(File file, ExportFormat format) throws IOException {
+		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		try {
+			boolean first = true;
+			int[] modelIndexes = new int[getColumnCount(false)];
+			for (int colIndex=0; colIndex < getColumnCount(false); colIndex++) {
+				if (isColumnVisible(colIndex)) {
+					modelIndexes[colIndex] = ((XTableColumnModel)getColumnModel()).getColumn(colIndex, false).getModelIndex();
+					if (format.hasHeader()) {
+						if (first) {
+							first = false;
+						} else {
+							out.append(format.getSeparator());
+						}
+						out.append(getModel().getColumnName(modelIndexes[colIndex]));
+					}
+				}
+			}
+			out.newLine();
+			for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
+				first = false;
+				int modelRowIndex = convertRowIndexToModel(rowIndex);
+				for (int colIndex=0; colIndex < getColumnCount(false); colIndex++) {
+					if (isColumnVisible(colIndex)) {
+						if (first) {
+							first = false;
+						} else {
+							out.append(format.getSeparator());
+						}
+						Object obj = getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
+						out.append(format.format(obj));
+					}
+				}
+				out.newLine();
+			}
+		} finally {
+			out.close();
+		}
+	}
+	
+	/** The format of an export.
+	 * @see FriendlyTable#export(File, ExportFormat)
+	 */
+	public interface ExportFormat {
+		/** Gets the header attribute of this format.
+		 * @return true if we want an header line to be output
+		 */
+		public boolean hasHeader();
+		
+		/** Gets the columns separator.
+		 * @return a char
+		 */
+		public char getSeparator();
+		
+		/** Gets the formatted view of a cell content.
+		 * @param obj The cell content.
+		 * @return a String that will be output to the file.
+		 */
+		public String format(Object obj);
 	}
 }

@@ -1,5 +1,6 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import java.awt.print.Printable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
@@ -67,6 +68,9 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	public void restoreState() {
 		this.panel.restoreState();
 	}
-	
-	
+
+	@Override
+	protected Printable getPrintable() {
+		return panel.getPrintable();
+	}
 }

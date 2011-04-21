@@ -21,6 +21,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.NullUtils;
 
 import java.awt.BorderLayout;
+import java.awt.print.Printable;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -153,5 +154,9 @@ public class BalanceHistoryPane extends JPanel {
 
 	public void restoreState() {
 		this.tablePane.restoreState();
+	}
+
+	public Printable getPrintable() {
+		return tablePane.getPrintable();
 	}
 }
