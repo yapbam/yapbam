@@ -21,13 +21,14 @@ import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
+import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.update.ReleaseInfo;
 import net.yapbam.update.VersionManager;
 
 public class MainFrame extends JFrame implements DataListener {
-	private static final String LAST_VERSION_USED = "lastVersionUsed";
+	private static final String LAST_VERSION_USED = "lastVersionUsed"; //$NON-NLS-1$
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
 	private static final long serialVersionUID = 1L;
@@ -79,13 +80,34 @@ public class MainFrame extends JFrame implements DataListener {
 				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
 				CheckNewReleaseAction.doAutoCheck(frame);
 				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
-				ReleaseInfo lastVersion = (ReleaseInfo) YapbamState.INSTANCE.restore(LAST_VERSION_USED);
-				if (lastVersion.compareTo(new ReleaseInfo("0.8.2 (10/04/2011)"))<=0) {
-					System.out.println ("Fuck, some important things has changed"); //TODO
+				if (!Preferences.INSTANCE.isFirstRun()) {
+					String importantNews = buildNews();
+					if (importantNews.length()>0) {
+						new DefaultHTMLInfoDialog(frame, LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+					}
 				}
-				System.out.println (lastVersion);
 			}
 		});
+	}
+	
+	private static String buildNews () {
+		StringBuilder buf = new StringBuilder();
+		ReleaseInfo lastVersion = (ReleaseInfo) YapbamState.INSTANCE.restore(LAST_VERSION_USED);
+		if (lastVersion.compareTo(new ReleaseInfo("0.8.2 (10/04/2011)"))<=0) { //$NON-NLS-1$
+			String message = MessageFormat.format(LocalizationData.get("ImportantNews.0.8.2"), //$NON-NLS-1$
+					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
+					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
+			buf.append(message);
+		}
+		// The lines below are a sample for next time we want to add a "important" release information
+//		if (lastVersion.compareTo(new ReleaseInfo("0.8.2 (10/04/2011)"))<=0) { //$NON-NLS-1$
+//			if (buf.length()>0) buf.append("<br><br><hr><br>");
+//			String message = MessageFormat.format(LocalizationData.get("ImportantNews.0.8.2"), //$NON-NLS-1$
+//					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
+//					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
+//			buf.append(message);
+//		}
+		return buf.toString();
 	}
 	
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
@@ -95,7 +117,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    //Create and set up the window.
 		super();
 		
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("yapbam_16.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("yapbam_16.png"))); //$NON-NLS-1$
 		this.setMinimumSize(new Dimension(800,400));
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -118,8 +140,8 @@ public class MainFrame extends JFrame implements DataListener {
 						// The update will be done by a external program, as changing a jar on the fly
 						// may lead to serious problems.					
 						ArrayList<String> command = new ArrayList<String>();
-						command.add(System.getProperty("java.home")+"/bin/java");
-						command.add("-jar");
+						command.add(System.getProperty("java.home")+"/bin/java"); //$NON-NLS-1$ //$NON-NLS-2$
+						command.add("-jar"); //$NON-NLS-1$
 						command.add(updater.getAbsolutePath());
 						System.out.println (command);
 						ProcessBuilder builder = new ProcessBuilder(command);
@@ -358,10 +380,10 @@ public class MainFrame extends JFrame implements DataListener {
 	
 	private void restoreMainFramePosition() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = Integer.parseInt((String) getStateSaver().get(FRAME_LOCATION_X,"0"));
-		int y = Integer.parseInt((String) getStateSaver().get(FRAME_LOCATION_Y,"0"));
-		int width = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_WIDTH,""+(screenSize.width/2)));
-		int height = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_HEIGHT,""+(screenSize.height/2)));
+		int x = Integer.parseInt((String) getStateSaver().get(FRAME_LOCATION_X,"0")); //$NON-NLS-1$
+		int y = Integer.parseInt((String) getStateSaver().get(FRAME_LOCATION_Y,"0")); //$NON-NLS-1$
+		int width = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_WIDTH,""+(screenSize.width/2))); //$NON-NLS-1$
+		int height = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_HEIGHT,""+(screenSize.height/2))); //$NON-NLS-1$
 		setExtendedState(Frame.MAXIMIZED_BOTH); //TODO Save the maximized state
 		//TODO Beware of a screen size change (especially of a reduction) ?
   /*

@@ -2,6 +2,7 @@ package net.yapbam.gui.widget;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -39,7 +40,12 @@ public class HTMLPane extends JScrollPane {
 	
 	public void setContent (String text) {
 		textPane.setContentType("text/html");
-		textPane.setText(text);
+		// We should not use textPane.setText because it scrolls the textPane to the end of the text
+		try {
+			textPane.read(new StringReader(text), "text/html");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public void setContent (URL url) throws IOException {
