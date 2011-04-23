@@ -1,6 +1,7 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -25,6 +26,8 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 
 	public PreferenceDialog(MainFrame owner) {
 		super(owner, LocalizationData.get("PreferencesDialog.title"), owner);
+		this.setMinimumSize(new Dimension(760, 200));
+		this.setLocationRelativeTo(owner);
 	}
 
 	@Override
