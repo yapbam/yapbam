@@ -111,6 +111,7 @@ public class NetworkPanel extends PreferencePanel {
 		proxyPortLabel.setEnabled(enabled);
 		userLabel.setEnabled(enabled);
 		passwordLabel.setEnabled(enabled);
+		showPassCheckBox.setEnabled(enabled);
 		getProxyHostField().setEnabled(enabled);
 		getProxyPortField().setEnabled(enabled);
 		getUserField().setEnabled(enabled);

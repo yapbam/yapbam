@@ -42,7 +42,7 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 		final JTabbedPane tabbedPane = new JTabbedPane();
 		this.panels = new ArrayList<PreferencePanel>();
 		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(), new NetworkPanel(),
-				new AutoUpdatePanel(), new ReportErrorPanel()}));
+				new AutoUpdatePanel(), new ReportErrorPanel(), new TransactionEditingPanel()}));
 		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
 			PreferencePanel preferencePanel = data.getPlugIn(i).getPreferencePanel();
 			if (preferencePanel!=null) this.panels.add(preferencePanel) ;
