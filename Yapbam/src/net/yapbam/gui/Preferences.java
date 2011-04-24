@@ -46,9 +46,16 @@ public class Preferences {
 	private static final String AUTO_UPDATE_PERIOD = "auto_update_period"; //$NON-NLS-1$
 	private static final String AUTO_UPDATE_INSTALL	= "auto_update_install"; //$NON-NLS-1$
 	private static final String EXPERT_MODE = "expert_mode"; //$NON-NLS-1$
-	private static final String WELCOME_DIALOG_ALLOWED = "welcome_dialog_enabled";
-	private static final String CRASH_REPORT_ACTION = "crash_report_action";
+	private static final String WELCOME_DIALOG_ALLOWED = "welcome_dialog_enabled"; //$NON-NLS-1$
+	private static final String CRASH_REPORT_ACTION = "crash_report_action"; //$NON-NLS-1$
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
+	private static final String PREF_PREFIX = "TransactionEditing."; //$NON-NLS-1$
+	private static final String DELETE_ALERT = "alertOnDelete"; //$NON-NLS-1$
+	private static final String MODIFY_CHECKED_ALERT = "alertOnModifyChecked"; //$NON-NLS-1$
+	private static final String AUTO_FILL_STATEMENT = "autoFillStatement"; //$NON-NLS-1$
+	private static final String DATE_BASED_AUTO_STATEMENT = "dateBasedAutoStatement"; //$NON-NLS-1$
+	private static final String LONG_FORMAT_AUTO_STATEMENT = "longFormatStatement"; //$NON-NLS-1$
+	
 
 	/** The Preference instance.
 	 * This class is a singleton. All preferences can be accessed through this constant.
@@ -145,7 +152,7 @@ public class Preferences {
 	public String getLookAndFeel() {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
 		if (value==null) {
-			value = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // This is the default Yapbam L&F
+			value = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // This is the default Yapbam L&F //$NON-NLS-1$
 		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) {
 			// Versions before 0.7.4 used LOOK_AND_FEEL_JAVA_VALUE and LOOK_AND_FEEL_CUSTOM_VALUE to code the look and feel
 			return UIManager.getCrossPlatformLookAndFeelClassName();
@@ -166,13 +173,13 @@ public class Preferences {
 	public String getHttpProxyHost() {
 		String property = properties.getProperty(PROXY);
 		if (property==null) return null;
-		return new StringTokenizer(property,":").nextToken();
+		return new StringTokenizer(property,":").nextToken(); //$NON-NLS-1$
 	}
 	
 	public int getHttpProxyPort() {
 		String property = properties.getProperty(PROXY);
 		if (property==null) return -1;
-		StringTokenizer tokens = new StringTokenizer(property,":");
+		StringTokenizer tokens = new StringTokenizer(property,":"); //$NON-NLS-1$
 		tokens.nextToken();
 		return Integer.parseInt(tokens.nextToken());
 	}
@@ -187,13 +194,13 @@ public class Preferences {
 	public String getHttpProxyUser() {
 		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
 		if (property == null) return null;
-		return new StringTokenizer(Crypto.decrypt(KEY, property), ":").nextToken();
+		return new StringTokenizer(Crypto.decrypt(KEY, property), ":").nextToken(); //$NON-NLS-1$
 	}
 	
 	public String getHttpProxyPassword() {
 		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
 		if (property == null) return null;
-		StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY, property), ":");
+		StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY, property), ":"); //$NON-NLS-1$
 		tokens.nextToken();
 		return tokens.nextToken();
 	}
@@ -203,13 +210,13 @@ public class Preferences {
 			this.properties.remove(PROXY);
 			user = null;
 		} else {
-			this.properties.put(PROXY, proxyHost + ":" + proxyPort);
+			this.properties.put(PROXY, proxyHost + ":" + proxyPort); //$NON-NLS-1$
 		}
 		if (user == null) {
 			Authenticator.setDefault(null);
 			this.properties.remove(PROXY_AUTHENTICATION);
 		} else {
-			this.properties.setProperty(PROXY_AUTHENTICATION, Crypto.encrypt(KEY, user + ":" + password));
+			this.properties.setProperty(PROXY_AUTHENTICATION, Crypto.encrypt(KEY, user + ":" + password)); //$NON-NLS-1$
 			setAuthentication();
 		}
 	}
@@ -219,7 +226,7 @@ public class Preferences {
 		if (property==null) {
 			Authenticator.setDefault(null);
 		} else {
-			StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":");
+			StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":"); //$NON-NLS-1$
 			final String user = tokens.nextToken();
 			final String pwd = tokens.nextToken();
 		    Authenticator.setDefault(new Authenticator() {
@@ -276,13 +283,13 @@ public class Preferences {
 	}
 
 	static PlugInContainer[] getPlugins() {
-		File file = new File(Portable.getDataDirectory(),"plugins");
+		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$
 		if (!file.exists()) {
 			if (!file.mkdirs()) {
-				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to create the plugins folder"));
+				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to create the plugins folder")); //$NON-NLS-1$
 			}
 		} else if (!file.isDirectory()) {
-			ErrorManager.INSTANCE.display(null, new RuntimeException("./plugins is not a directory"));
+			ErrorManager.INSTANCE.display(null, new RuntimeException("./plugins is not a directory")); //$NON-NLS-1$
 		}
 		final List<PlugInContainer> plugins = new ArrayList<PlugInContainer>();
 		plugins.add(new PlugInContainer(WelcomePlugin.class));
@@ -297,17 +304,17 @@ public class Preferences {
 		file.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File file) {
-				if (!file.getName().endsWith(".jar")) return false;
+				if (!file.getName().endsWith(".jar")) return false; //$NON-NLS-1$
 				plugins.add(new PlugInContainer(file));
 				return true;
 			}
 		});
-		String testedPlugin = System.getProperty("testedPlugin.className");
+		String testedPlugin = System.getProperty("testedPlugin.className"); //$NON-NLS-1$
 		if (testedPlugin!=null) {
 			try {
 				plugins.add(new PlugInContainer(Class.forName(testedPlugin)));
 			} catch (ClassNotFoundException e) {
-				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to load the plugin "+testedPlugin+" ("+e+")"));
+				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to load the plugin "+testedPlugin+" ("+e+")")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}
 		return plugins.toArray(new PlugInContainer[plugins.size()]);
@@ -317,10 +324,22 @@ public class Preferences {
 	 * @return true if the expert mode is on.
 	 */
 	public boolean isExpertMode() {
+		return getBoolean(EXPERT_MODE);
+	}
+
+	private boolean getBoolean(String key) {
 		try {
-			return Boolean.parseBoolean(this.properties.getProperty(EXPERT_MODE));
+			return Boolean.parseBoolean(this.properties.getProperty(key));
 		} catch (Exception e) {
 			return false;
+		}
+	}
+	private void setBoolean(String key, boolean value) {
+		Preferences pref = Preferences.INSTANCE;
+		if (value) {
+			pref.setProperty(key, "true");
+		} else {
+			pref.removeProperty(key);
 		}
 	}
 
@@ -358,12 +377,19 @@ public class Preferences {
 		return this.properties.getProperty(key);
 	}
 
+	/** Removes a property.
+	 * @param key The propertyToBeRemoved
+	 */
+	public void removeProperty(String key) {
+		this.properties.remove(key);
+	}
+
 	/** Gets the action to do when a crash is detected.
 	 * @return 0 if the user should be asked, -1 to ignore, 1 to send a crash report to Yapbam
 	 */
 	public int getCrashReportAction() {
 		try {
-			return Integer.parseInt(this.properties.getProperty(CRASH_REPORT_ACTION,"0"));
+			return Integer.parseInt(this.properties.getProperty(CRASH_REPORT_ACTION,"0")); //$NON-NLS-1$
 		} catch (NumberFormatException e) {
 			return 0;
 		}
@@ -376,5 +402,25 @@ public class Preferences {
 	public void setCrashReportAction(int action) {
 		if (Math.abs(action)>1) throw new IllegalArgumentException();
 		this.properties.setProperty(CRASH_REPORT_ACTION,Integer.toString(action));
+	}
+	
+	private EditingOptions editingOptions;
+	public void setEditingOptions(EditingOptions edit) {
+		this.editingOptions = edit;
+		setBoolean(PREF_PREFIX+DELETE_ALERT, edit.isAlertOnDelete());
+		setBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, edit.isAlertOnModifyChecked());
+		setBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, edit.isAutoFillStatement());
+		setBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, edit.isDateBasedAutoStatement());
+		setBoolean(PREF_PREFIX+LONG_FORMAT_AUTO_STATEMENT, edit.isLongFormatStatement());
+	}
+	
+	public EditingOptions getEditingOptions() {
+		if (editingOptions==null) {
+			editingOptions = new EditingOptions(
+				getBoolean(PREF_PREFIX+DELETE_ALERT), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT),
+				getBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT), getBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT),
+				getBoolean(PREF_PREFIX+LONG_FORMAT_AUTO_STATEMENT));
+		}
+		return this.editingOptions;
 	}
 }
