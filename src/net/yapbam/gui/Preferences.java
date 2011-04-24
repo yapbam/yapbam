@@ -324,14 +324,15 @@ public class Preferences {
 	 * @return true if the expert mode is on.
 	 */
 	public boolean isExpertMode() {
-		return getBoolean(EXPERT_MODE);
+		return getBoolean(EXPERT_MODE, false);
 	}
 
-	private boolean getBoolean(String key) {
+	private boolean getBoolean(String key, boolean defaultValue) {
 		try {
-			return Boolean.parseBoolean(this.properties.getProperty(key));
+			String property = this.properties.getProperty(key);
+			return property==null?defaultValue:Boolean.parseBoolean(property);
 		} catch (Exception e) {
-			return false;
+			return defaultValue;
 		}
 	}
 	private void setBoolean(String key, boolean value) {
@@ -417,9 +418,9 @@ public class Preferences {
 	public EditingOptions getEditingOptions() {
 		if (editingOptions==null) {
 			editingOptions = new EditingOptions(
-				getBoolean(PREF_PREFIX+DELETE_ALERT), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT),
-				getBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT), getBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT),
-				getBoolean(PREF_PREFIX+LONG_FORMAT_AUTO_STATEMENT));
+				getBoolean(PREF_PREFIX+DELETE_ALERT, false), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, true),
+				getBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, false), getBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, false),
+				getBoolean(PREF_PREFIX+LONG_FORMAT_AUTO_STATEMENT, false));
 		}
 		return this.editingOptions;
 	}
