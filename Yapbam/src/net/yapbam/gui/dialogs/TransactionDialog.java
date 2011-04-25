@@ -57,6 +57,23 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if ((newTransaction != null) && autoAdd) {
+			EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
+			if (editingOptions.isAlertOnModifyChecked() && (transaction!=null) && (transaction.getStatement()!=null)) {
+				boolean alert = !transaction.getAccount().equals(newTransaction.getAccount());
+				alert = alert || (GlobalData.AMOUNT_COMPARATOR.compare(transaction.getAmount(), newTransaction.getAmount())!=0);
+				alert = alert || !transaction.getValueDate().equals(newTransaction.getValueDate());
+				alert = alert || !NullUtils.areEquals(transaction.getNumber(),newTransaction.getNumber());
+				alert = alert || !NullUtils.areEquals(transaction.getStatement(),newTransaction.getStatement());
+				if (alert) {
+					AlertDialog alertDial = new AlertDialog(owner, LocalizationData.get("ModifyCheckedTransactionAlert.title"), LocalizationData.get("ModifyCheckedTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$
+					alertDial.setVisible(true);
+					if (alertDial.getResult()==null) return null;
+					if (alertDial.getResult()) {
+						editingOptions.setAlertOnModifyChecked(false);
+						Preferences.INSTANCE.setEditingOptions(editingOptions);
+					}
+				}
+			}
 			globalData.add(newTransaction);
 			if (transaction != null) globalData.remove(transaction);
 		}
