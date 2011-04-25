@@ -218,13 +218,26 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	}
 	
 	/** Returns the preference panel of this plugin.
+	 * <br>Note : If the preferences deals with look and feel, they should not be managed by
+	 * the returned panel, but by the one returned by getLFPreferencePanel
 	 * @return the preferencePanel, null if no preference panel is defined.
 	 * @see PreferencePanel
+	 * @see #getLFPreferencePanel()
 	 */
 	public PreferencePanel getPreferencePanel() {
 		return null;
 	}
 
+	/** Returns the look and feel preference panel of this plugin.
+	 * <br>It will be included in the LF tab of the preference dialog
+	 * @return the l&f preferencePanel, null if no l&f preference panel is defined.
+	 * @see PreferencePanel
+	 * @see #getPreferencePanel()
+	 */
+	public PreferencePanel getLFPreferencePanel() {
+		return null;
+	}
+	
 	/** Returns whether this plugin supports printing.
 	 * Only plugins with a non null panel can support printing (other are supposed to have nothing to print).
 	 * That returned value is used to enable/disable the "print" menu item in the "File" menu.

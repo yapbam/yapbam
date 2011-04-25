@@ -295,11 +295,11 @@ public class Preferences {
 		plugins.add(new PlugInContainer(WelcomePlugin.class));
 		plugins.add(new PlugInContainer(TransactionsPlugIn.class));
 		plugins.add(new PlugInContainer(BalanceHistoryPlugIn.class));
-		plugins.add(new PlugInContainer(StatisticsPlugin.class));
-		plugins.add(new PlugInContainer(ToolsPlugIn.class));
-		plugins.add(new PlugInContainer(BudgetPlugin.class));
 		plugins.add(new PlugInContainer(StatementViewPlugin.class));
+		plugins.add(new PlugInContainer(StatisticsPlugin.class));
+		plugins.add(new PlugInContainer(BudgetPlugin.class));
 		plugins.add(new PlugInContainer(AccountsSummaryPlugin.class));
+		plugins.add(new PlugInContainer(ToolsPlugIn.class));
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
 		file.listFiles(new FileFilter() {
 			@Override

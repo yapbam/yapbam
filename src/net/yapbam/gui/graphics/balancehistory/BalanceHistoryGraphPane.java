@@ -112,7 +112,6 @@ public class BalanceHistoryGraphPane extends JPanel {
 		} else if (NullUtils.compareTo(date, BalanceHistoryGraphPane.this.data.getValueDateTo(), false)>0) {
 			BalanceHistoryGraphPane.this.data.setValueDateFilter(BalanceHistoryGraphPane.this.data.getValueDateFrom(), date);
 		}
-		System.out.println ("selectedDate");
 		graph.setSelectedDate(date);
 		scrollToSelectedDate();
 	}

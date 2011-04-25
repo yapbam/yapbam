@@ -100,7 +100,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	}
 
 	@Override
-	public PreferencePanel getPreferencePanel() {
+	public PreferencePanel getLFPreferencePanel() {
 		return new TransactionsPreferencePanel();
 	}
 

@@ -1,7 +1,6 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -26,7 +25,6 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 
 	public PreferenceDialog(MainFrame owner) {
 		super(owner, LocalizationData.get("PreferencesDialog.title"), owner);
-		this.setMinimumSize(new Dimension(760, 200));
 		this.setLocationRelativeTo(owner);
 	}
 
@@ -44,8 +42,14 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 		JPanel panel = new JPanel(new BorderLayout());
 		final JTabbedPane tabbedPane = new JTabbedPane();
 		this.panels = new ArrayList<PreferencePanel>();
-		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(), new TransactionEditingPanel(), new NetworkPanel(),
-				new AutoUpdatePanel(), new ReportErrorPanel()}));
+		ArrayList<PreferencePanel> lfPanels = new ArrayList<PreferencePanel>();
+		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
+			PreferencePanel preferencePanel = data.getPlugIn(i).getLFPreferencePanel();
+			if (preferencePanel!=null) lfPanels.add(preferencePanel) ;
+		}
+		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(),
+				new LookAndFeelPanel(lfPanels.toArray(new PreferencePanel[lfPanels.size()])),
+				new TransactionEditingPanel(), new NetworkPanel(), new AutoUpdatePanel(), new ReportErrorPanel()}));
 		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
 			PreferencePanel preferencePanel = data.getPlugIn(i).getPreferencePanel();
 			if (preferencePanel!=null) this.panels.add(preferencePanel) ;
