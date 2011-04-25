@@ -26,6 +26,7 @@ import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.update.ReleaseInfo;
 import net.yapbam.update.VersionManager;
+import net.yapbam.util.NullUtils;
 
 public class MainFrame extends JFrame implements DataListener {
 	private static final String LAST_VERSION_USED = "lastVersionUsed"; //$NON-NLS-1$
@@ -93,7 +94,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private static String buildNews () {
 		StringBuilder buf = new StringBuilder();
 		ReleaseInfo lastVersion = (ReleaseInfo) YapbamState.INSTANCE.restore(LAST_VERSION_USED);
-		if (lastVersion.compareTo(new ReleaseInfo("0.8.2 (10/04/2011)"))<=0) { //$NON-NLS-1$
+		if (NullUtils.compareTo(lastVersion, new ReleaseInfo("0.8.2 (10/04/2011)"), true)<=0) { //$NON-NLS-1$
 			String message = MessageFormat.format(LocalizationData.get("ImportantNews.0.8.2"), //$NON-NLS-1$
 					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
