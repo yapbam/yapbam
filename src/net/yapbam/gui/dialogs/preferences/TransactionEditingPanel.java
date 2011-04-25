@@ -18,7 +18,6 @@ import javax.swing.JSeparator;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @SuppressWarnings("serial")
@@ -85,6 +84,10 @@ public class TransactionEditingPanel extends PreferencePanel {
 				rdbtnBasedOnValue.setEnabled(selected);
 				rdbtnLongStyle.setEnabled(selected);
 				rdbtnShortStyle.setEnabled(selected);
+				rdbtnShortStyle.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.short.tooltip"):""); //$NON-NLS-1$
+				rdbtnLongStyle.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.long.tooltip"):""); //$NON-NLS-1$
+				rdbtnBasedOnDate.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnDate.tooltip"):""); //$NON-NLS-1$
+				rdbtnBasedOnValue.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnValueDate.tooltip"):""); //$NON-NLS-1$
 			}
 		});
 		GridBagConstraints gbc_chckbxAutoFillStatement = new GridBagConstraints();
@@ -110,10 +113,8 @@ public class TransactionEditingPanel extends PreferencePanel {
 		panel_format.setLayout(gbl_panel_1);
 		
 		Date date = new Date();
-		String shortFormat = new SimpleDateFormat("yyyyMM").format(date);  //$NON-NLS-1$
-		String longFormat = new SimpleDateFormat("yyyy MMMM").format(date); //$NON-NLS-1$
-		rdbtnShortStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.short"), shortFormat)); //$NON-NLS-1$
-		rdbtnShortStyle.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.format.short.tooltip")); //$NON-NLS-1$
+		rdbtnShortStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.short"), //$NON-NLS-1$
+				EditingOptions.SHORT_FORMAT.format(date)));
 		rdbtnShortStyle.setEnabled(false);
 		GridBagConstraints gbc_rdbtnShortStyle = new GridBagConstraints();
 		gbc_rdbtnShortStyle.anchor = GridBagConstraints.WEST;
@@ -121,17 +122,16 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gbc_rdbtnShortStyle.gridy = 0;
 		panel_format.add(rdbtnShortStyle, gbc_rdbtnShortStyle);
 		
-		rdbtnLongStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.long"), longFormat)); //$NON-NLS-1$
+		rdbtnLongStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.long"), //$NON-NLS-1$
+				EditingOptions.LONG_FORMAT.format(date)));
 		rdbtnLongStyle.setEnabled(false);
 		GridBagConstraints gbc_rdbtnLongStyle = new GridBagConstraints();
 		gbc_rdbtnLongStyle.anchor = GridBagConstraints.WEST;
 		gbc_rdbtnLongStyle.gridx = 0;
 		gbc_rdbtnLongStyle.gridy = 1;
 		panel_format.add(rdbtnLongStyle, gbc_rdbtnLongStyle);
-		rdbtnLongStyle.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.format.long.tooltip")); //$NON-NLS-1$
 		
 		rdbtnBasedOnDate = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnDate")); //$NON-NLS-1$
-		rdbtnBasedOnDate.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnDate.tooltip")); //$NON-NLS-1$
 		rdbtnBasedOnDate.setEnabled(false);
 		GridBagConstraints gbc_rdbtnBasedOnDate = new GridBagConstraints();
 		gbc_rdbtnBasedOnDate.weighty = 1.0;
@@ -143,7 +143,6 @@ public class TransactionEditingPanel extends PreferencePanel {
 		panel.add(rdbtnBasedOnDate, gbc_rdbtnBasedOnDate);
 		
 		rdbtnBasedOnValue = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnValueDate")); //$NON-NLS-1$
-		rdbtnBasedOnValue.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnValueDate.tooltip")); //$NON-NLS-1$
 		rdbtnBasedOnValue.setEnabled(false);
 		GridBagConstraints gbc_rdbtnBasedOnValue = new GridBagConstraints();
 		gbc_rdbtnBasedOnValue.fill = GridBagConstraints.BOTH;

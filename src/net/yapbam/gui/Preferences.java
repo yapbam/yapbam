@@ -337,11 +337,7 @@ public class Preferences {
 	}
 	private void setBoolean(String key, boolean value) {
 		Preferences pref = Preferences.INSTANCE;
-		if (value) {
-			pref.setProperty(key, "true");
-		} else {
-			pref.removeProperty(key);
-		}
+		pref.setProperty(key, Boolean.toString(value));
 	}
 
 	public boolean isTranslatorMode() {
@@ -418,7 +414,7 @@ public class Preferences {
 	public EditingOptions getEditingOptions() {
 		if (editingOptions==null) {
 			editingOptions = new EditingOptions(
-				getBoolean(PREF_PREFIX+DELETE_ALERT, false), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, true),
+				getBoolean(PREF_PREFIX+DELETE_ALERT, true), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, true),
 				getBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, false), getBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, false),
 				getBoolean(PREF_PREFIX+LONG_FORMAT_AUTO_STATEMENT, false));
 		}

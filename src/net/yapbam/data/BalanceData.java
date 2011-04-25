@@ -45,7 +45,7 @@ public class BalanceData extends DefaultListenable {
 	void updateBalance(Transaction[] transactions, boolean add) {
 		if (transactions.length==0) return;
 		for (Transaction transaction : transactions) {
-			this.balanceHistory.add(transaction);
+			if (add) this.balanceHistory.add(transaction); else this.balanceHistory.remove(transaction);
 			double amount = transaction.getAmount();
 			if (GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)!=0) {
 				if (!add) amount = -amount;

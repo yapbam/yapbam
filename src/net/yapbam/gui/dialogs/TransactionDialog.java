@@ -16,7 +16,9 @@ import javax.swing.*;
 
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.gui.EditingOptions;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
@@ -168,6 +170,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				map.put(ct, ranking);
 			}
 		});
+		autoFillStatement(0); autoFillStatement(1);
 	}
 
 	public void setTransactionDate(Date date) {
@@ -209,6 +212,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		defDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
+				autoFillStatement(1);
 				updateOkButtonEnabled();
 			}
 		});
@@ -272,6 +276,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					if (vdc==null) vdc = DateStepper.IMMEDIATE;
 					defDate.setDate(vdc.getNextStep(date.getDate()));
 				}
+				autoFillStatement(0);
 				updateOkButtonEnabled();
 			}
 		});
@@ -430,4 +435,22 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		return (isExpense()) && (getCurrentMode().isUseCheckBook());
 	}
 
+	/** Updates, if needed, the statement id field.
+	 * @param changed an integer that identifies what field has been changed.<ul>
+	 * <li>0 => Date field</li>
+	 * <li>1 => Value date field</li>
+	 * </ul>
+	 */
+	private void autoFillStatement(int changed) {
+		EditingOptions editOptions = Preferences.INSTANCE.getEditingOptions();
+		if (editOptions.isAutoFillStatement() && (statement.getText().length()==0)) {
+			Date aDate = null;
+			if ((changed==0) && !editOptions.isDateBasedAutoStatement()) {
+				aDate = date.getDate();
+			} else if ((changed==1) && editOptions.isDateBasedAutoStatement()) {
+				aDate = defDate.getDate();
+			}
+			if (aDate!=null) statement.setText(editOptions.getStatementId(aDate));
+		}
+	}
 }
