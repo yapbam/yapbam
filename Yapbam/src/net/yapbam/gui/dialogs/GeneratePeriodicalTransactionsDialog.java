@@ -3,6 +3,8 @@ package net.yapbam.gui.dialogs;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.JPanel;
 
@@ -10,7 +12,9 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.Transaction;
+import net.yapbam.gui.EditingOptions;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
@@ -24,6 +28,15 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 	@Override
 	protected Void buildResult() {
 		Transaction[] transactions = panel.getValidTransactions();
+		EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
+		if (editingOptions.isAutoFillStatement()) {
+			for (int i = 0; i < transactions.length; i++) {
+				Transaction t = transactions[i];
+				Date date = editingOptions.isDateBasedAutoStatement()?t.getDate():t.getValueDate();
+				transactions[i] = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
+						t.getValueDate(), editingOptions.getStatementId(date), Arrays.asList(t.getSubTransactions()));
+			}
+		}
 		GlobalData globalData = data.getGlobalData();
 		globalData.add(transactions);
 		PeriodicalTransaction[] wholeTransactions = new PeriodicalTransaction[globalData.getPeriodicalTransactionsNumber()];

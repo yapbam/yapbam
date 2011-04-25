@@ -170,7 +170,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				map.put(ct, ranking);
 			}
 		});
-		autoFillStatement(0); autoFillStatement(1);
+		if (statement.getText().length()==0) {autoFillStatement(0); autoFillStatement(1);}
 	}
 
 	public void setTransactionDate(Date date) {
@@ -443,7 +443,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 */
 	private void autoFillStatement(int changed) {
 		EditingOptions editOptions = Preferences.INSTANCE.getEditingOptions();
-		if (editOptions.isAutoFillStatement() && (statement.getText().length()==0)) {
+		if (editOptions.isAutoFillStatement()) {
 			Date aDate = null;
 			if ((changed==0) && !editOptions.isDateBasedAutoStatement()) {
 				aDate = date.getDate();
