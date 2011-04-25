@@ -1,6 +1,13 @@
 package net.yapbam.gui;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class EditingOptions {
+	public static DateFormat SHORT_FORMAT = new SimpleDateFormat("yyyyMM");  //$NON-NLS-1$
+	public static DateFormat LONG_FORMAT = new SimpleDateFormat("yyyy MMMM"); //$NON-NLS-1$
+
 	private boolean alertOnDelete;
 	private boolean alertOnModifyChecked;
 	private boolean autoFillStatement;
@@ -35,5 +42,9 @@ public class EditingOptions {
 
 	public boolean isLongFormatStatement() {
 		return longFormatAutoStatement;
+	}
+
+	public String getStatementId(Date date) {
+		return (this.longFormatAutoStatement?LONG_FORMAT:SHORT_FORMAT).format(date);
 	}
 }

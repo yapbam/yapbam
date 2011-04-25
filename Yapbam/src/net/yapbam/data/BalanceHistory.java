@@ -169,6 +169,12 @@ public class BalanceHistory implements Serializable {
 		transactions.add(index, transaction);
 	}
 
+	public void remove(Transaction transaction) {
+		this.add(-transaction.getAmount(), transaction.getValueDate());
+		int index = Collections.binarySearch(transactions, transaction, TransactionComparator.VALUE_DATE_COMPARATOR)-1;
+		if (index>=0) transactions.remove(index);
+	}
+
 	public int getTransactionsNumber() {
 		return transactions.size();
 	}
