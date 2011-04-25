@@ -24,6 +24,7 @@ public class Transaction extends AbstractTransaction implements Serializable {
 		this.number = number;
 		this.valueDate = DateUtils.dateToInteger(valueDate);
 		this.statementId = statementId;
+		if ((statementId!=null) && (statementId.trim().length()==0)) this.statementId=null;
 	}
 
 	public String getNumber() {

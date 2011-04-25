@@ -47,4 +47,12 @@ public class EditingOptions {
 	public String getStatementId(Date date) {
 		return (this.longFormatAutoStatement?LONG_FORMAT:SHORT_FORMAT).format(date);
 	}
+	
+	public void setAlertOnDelete(boolean alertOnDelete) {
+		this.alertOnDelete = alertOnDelete;
+	}
+
+	public void setAlertOnModifyChecked(boolean alertOnModifyChecked) {
+		this.alertOnModifyChecked = alertOnModifyChecked;
+	}
 }
