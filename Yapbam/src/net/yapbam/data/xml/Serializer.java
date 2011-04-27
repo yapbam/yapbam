@@ -166,6 +166,7 @@ public class Serializer {
 					data.setEventsEnabled(false);
 				}
 				read(data, is);
+				data.setPassword(password);
 			} finally {
 				if (wasEnabled) data.setEventsEnabled(true);
 				is.close();

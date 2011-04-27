@@ -161,6 +161,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 		@Override
 		public String format(Object obj) {
+			if (obj==null) return "";
 			if (obj instanceof Date) return dateFormater.format(obj);
 			if (obj instanceof Double) return currencyFormat.format(obj);
 			return obj.toString();
