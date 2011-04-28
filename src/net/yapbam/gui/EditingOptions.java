@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class EditingOptions {
 	public static DateFormat SHORT_FORMAT = new SimpleDateFormat("yyyyMM");  //$NON-NLS-1$
-	public static DateFormat LONG_FORMAT = new SimpleDateFormat("yyyy MMMM"); //$NON-NLS-1$
+	public static DateFormat LONG_FORMAT = new SimpleDateFormat("MMMM yyyy"); //$NON-NLS-1$
 
 	private boolean alertOnDelete;
 	private boolean alertOnModifyChecked;
