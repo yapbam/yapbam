@@ -37,7 +37,7 @@ class BudgetTableRowHeaderModel extends AbstractTableModel {
 		if (rowIndex==budget.getCategoriesSize()) {
 			return LocalizationData.get("BudgetPanel.sum");
 		} else {
-			return budget.getCategory(rowIndex);
+			return budget.getCategory(rowIndex).getName();
 		}
 	}
 /*
