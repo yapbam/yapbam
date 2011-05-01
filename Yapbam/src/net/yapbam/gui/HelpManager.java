@@ -49,9 +49,9 @@ public class HelpManager {
 	 * @param content The content to display.
 	 */
 	public static final void show(Component parent, Content content) {
-			loadLanguagesLocations();
-			URI url = new File(Portable.getHelpDirectory(),RESOURCE_BUNDLE.getString(content.key)).toURI();
-			show(parent, url); 
+		loadLanguagesLocations();
+		URI url = new File(Portable.getHelpDirectory(), RESOURCE_BUNDLE.getString(content.key)).toURI();
+		show(parent, url);
 	}
 
 	/** Shows help located at a specific URL.

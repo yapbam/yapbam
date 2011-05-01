@@ -46,6 +46,7 @@ import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 import net.yapbam.gui.util.SafeJFileChooser;
+import net.yapbam.util.Portable;
 
 public class MainMenuBar extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -206,7 +207,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.add(new CheckNewReleaseAction(this.frame));
 		insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
 		menu.addSeparator();
-		item = getURLMenuItem(LocalizationData.get("MainMenu.help"), "help.html"); //$NON-NLS-1$
+		item = getURLMenuItem(LocalizationData.get("MainMenu.help"), new File(Portable.getLaunchDirectory(),"help.html").toURI().toString()); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.help.tooltip")); //$NON-NLS-1$
 		menu.add(item);
 		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "http://sourceforge.net/projects/yapbam/support"); //$NON-NLS-1$ //$NON-NLS-2$
