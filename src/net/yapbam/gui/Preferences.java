@@ -11,6 +11,7 @@ import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -54,7 +55,7 @@ public class Preferences {
 	private static final String MODIFY_CHECKED_ALERT = "alertOnModifyChecked"; //$NON-NLS-1$
 	private static final String AUTO_FILL_STATEMENT = "autoFillStatement"; //$NON-NLS-1$
 	private static final String DATE_BASED_AUTO_STATEMENT = "dateBasedAutoStatement"; //$NON-NLS-1$
-	private static final String LONG_FORMAT_AUTO_STATEMENT = "longFormatStatement"; //$NON-NLS-1$
+	private static final String AUTO_STATEMENT_FORMAT = "statementDateFormat"; //$NON-NLS-1$
 	
 
 	/** The Preference instance.
@@ -408,15 +409,21 @@ public class Preferences {
 		setBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, edit.isAlertOnModifyChecked());
 		setBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, edit.isAutoFillStatement());
 		setBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, edit.isDateBasedAutoStatement());
-		setBoolean(PREF_PREFIX+LONG_FORMAT_AUTO_STATEMENT, edit.isLongFormatStatement());
+		this.properties.setProperty(PREF_PREFIX+AUTO_STATEMENT_FORMAT, edit.getStatementDateFormat().toPattern());
 	}
 	
 	public EditingOptions getEditingOptions() {
 		if (editingOptions==null) {
+			String defaultPattern = "yyyyMM";
+			String pattern = this.properties.getProperty(PREF_PREFIX+AUTO_STATEMENT_FORMAT, defaultPattern);
+			SimpleDateFormat format = new SimpleDateFormat(defaultPattern);
+			try {
+				format = new SimpleDateFormat(pattern, getLocale());
+			} catch (Exception e) {}
 			editingOptions = new EditingOptions(
 				getBoolean(PREF_PREFIX+DELETE_ALERT, true), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, true),
 				getBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, false), getBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, false),
-				getBoolean(PREF_PREFIX+LONG_FORMAT_AUTO_STATEMENT, false));
+				format);
 		}
 		return this.editingOptions;
 	}
