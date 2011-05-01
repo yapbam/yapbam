@@ -8,13 +8,15 @@ public class EditingOptions {
 	private boolean alertOnModifyChecked;
 	private boolean autoFillStatement;
 	private boolean dateBasedAutoStatement;
+	private boolean duplicateTransactionDateToCurrent;
 	private SimpleDateFormat dateFormat;
 	
-	public EditingOptions(boolean alertOnDelete, boolean alertOnModifyChecked, boolean autoFillStatement,
-			boolean dateBasedAutoStatement, SimpleDateFormat dateFormat/*boolean longFormatAutoStatement*/) {
+	public EditingOptions(boolean alertOnDelete, boolean alertOnModifyChecked, boolean duplicateTransactionDateToCurrent,
+			boolean autoFillStatement, boolean dateBasedAutoStatement, SimpleDateFormat dateFormat) {
 		super();
 		this.alertOnDelete = alertOnDelete;
 		this.alertOnModifyChecked = alertOnModifyChecked;
+		this.duplicateTransactionDateToCurrent = duplicateTransactionDateToCurrent;
 		this.autoFillStatement = autoFillStatement;
 		this.dateBasedAutoStatement = dateBasedAutoStatement;
 		this.dateFormat = dateFormat;
@@ -53,5 +55,9 @@ public class EditingOptions {
 
 	public void setAlertOnModifyChecked(boolean alertOnModifyChecked) {
 		this.alertOnModifyChecked = alertOnModifyChecked;
+	}
+
+	public boolean isDuplicateTransactionDateToCurrent() {
+		return duplicateTransactionDateToCurrent;
 	}
 }

@@ -9,6 +9,7 @@ import javax.swing.AbstractAction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.TransactionDialog;
 import net.yapbam.gui.util.AbstractDialog;
 
@@ -26,7 +27,7 @@ public class DuplicateTransactionAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		TransactionDialog dialog = new TransactionDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), selector.getFilteredData(),
 				selector.getSelectedTransaction(), false);
-		dialog.setTransactionDate(new Date());
+		if (Preferences.INSTANCE.getEditingOptions().isDuplicateTransactionDateToCurrent()) dialog.setTransactionDate(new Date());
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if (newTransaction != null) {

@@ -43,12 +43,19 @@ public class TransactionEditingPanel extends PreferencePanel {
 	private JRadioButton rdbtnCustomized;
 	private JTextField formatPatternField;
 	private JLabel labelExample;
+	private JSeparator separator_1;
+	private JPanel panel_1;
+	private JLabel lblWhen;
+	private JRadioButton rdbtnDupDateCurrent;
+	private JRadioButton rdbtnDupDateOriginal;
 
 	/**
 	 * Create the panel.
 	 */
 	public TransactionEditingPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
+		gridBagLayout.columnWeights = new double[]{1.0};
 		setLayout(gridBagLayout);
 		
 		chckbxAlertMeIf = new JCheckBox(LocalizationData.get("TransactionEditingPreferencesPanel.alertIfChangeChecked")); //$NON-NLS-1$
@@ -78,13 +85,62 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gbc_separator.gridy = 2;
 		add(separator, gbc_separator);
 		
+		panel_1 = new JPanel();
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 3;
+		add(panel_1, gbc_panel_1);
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		panel_1.setLayout(gbl_panel_1);
+		
+		lblWhen = new JLabel(LocalizationData.get("TransactionEditingPreferencesPanel.duplicateTransaction.title")); //$NON-NLS-1$
+		GridBagConstraints gbc_lblWhen = new GridBagConstraints();
+		gbc_lblWhen.anchor = GridBagConstraints.WEST;
+		gbc_lblWhen.gridheight = 0;
+		gbc_lblWhen.insets = new Insets(0, 5, 0, 5);
+		gbc_lblWhen.weighty = 1.0;
+		gbc_lblWhen.fill = GridBagConstraints.VERTICAL;
+		gbc_lblWhen.gridx = 0;
+		gbc_lblWhen.gridy = 0;
+		panel_1.add(lblWhen, gbc_lblWhen);
+		
+		rdbtnDupDateCurrent = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.duplicateTransaction.setDateToCurrent")); //$NON-NLS-1$
+		rdbtnDupDateCurrent.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.duplicateTransaction.setDateToCurrent.tooltip")); //$NON-NLS-1$
+		GridBagConstraints gbc_rdbtnDupDateCurrent = new GridBagConstraints();
+		gbc_rdbtnDupDateCurrent.weightx = 1.0;
+		gbc_rdbtnDupDateCurrent.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnDupDateCurrent.gridx = 1;
+		gbc_rdbtnDupDateCurrent.gridy = 0;
+		panel_1.add(rdbtnDupDateCurrent, gbc_rdbtnDupDateCurrent);
+		
+		rdbtnDupDateOriginal = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.duplicateTransaction.keepOriginalDate")); //$NON-NLS-1$
+		rdbtnDupDateOriginal.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.duplicateTransaction.keepOriginalDate.tooltip")); //$NON-NLS-1$
+		GridBagConstraints gbc_rdbtnDupDateOriginal = new GridBagConstraints();
+		gbc_rdbtnDupDateOriginal.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnDupDateOriginal.gridx = 1;
+		gbc_rdbtnDupDateOriginal.gridy = 1;
+		panel_1.add(rdbtnDupDateOriginal, gbc_rdbtnDupDateOriginal);
+		
+		ButtonGroup gpDuplicate = new ButtonGroup();
+		gpDuplicate.add(rdbtnDupDateCurrent); gpDuplicate.add(rdbtnDupDateOriginal);
+		
+		separator_1 = new JSeparator();
+		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
+		gbc_separator_1.fill = GridBagConstraints.BOTH;
+		gbc_separator_1.insets = new Insets(5, 50, 10, 50);
+		gbc_separator_1.gridx = 0;
+		gbc_separator_1.gridy = 4;
+		add(separator_1, gbc_separator_1);
+		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.NORTHWEST;
 		gbc_panel.weighty = 1.0;
 		gbc_panel.weightx = 1.0;
 		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 4;
+		gbc_panel.gridy = 6;
 		add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		panel.setLayout(gbl_panel);
@@ -110,10 +166,10 @@ public class TransactionEditingPanel extends PreferencePanel {
 			}
 		});
 		GridBagConstraints gbc_chckbxAutoFillStatement = new GridBagConstraints();
-		gbc_chckbxAutoFillStatement.insets = new Insets(0, 0, 0, 5);
+		gbc_chckbxAutoFillStatement.insets = new Insets(0, 0, 5, 0);
 		gbc_chckbxAutoFillStatement.anchor = GridBagConstraints.WEST;
 		gbc_chckbxAutoFillStatement.gridx = 0;
-		gbc_chckbxAutoFillStatement.gridy = 3;
+		gbc_chckbxAutoFillStatement.gridy = 5;
 		add(chckbxAutoFillStatement, gbc_chckbxAutoFillStatement);
 		chckbxAutoFillStatement.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.autoFillStatementId.tooltip")); //$NON-NLS-1$
 		ItemListener itemListener = new ItemListener() {
@@ -126,22 +182,20 @@ public class TransactionEditingPanel extends PreferencePanel {
 		
 		JPanel panel_format = new JPanel();
 		panel_format.setBorder(new TitledBorder(null, LocalizationData.get("TransactionEditingPreferencesPanel.format.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
-		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.anchor = GridBagConstraints.NORTHWEST;
-		gbc_panel_1.weightx = 1.0;
-		gbc_panel_1.insets = new Insets(0, 10, 0, 0);
-		gbc_panel_1.weighty = 1.0;
-		gbc_panel_1.gridheight = 0;
-		gbc_panel_1.gridx = 1;
-		gbc_panel_1.gridy = 0;
-		panel.add(panel_format, gbc_panel_1);
-		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWeights = new double[]{1.0, 0.0, 0.0};
-		panel_format.setLayout(gbl_panel_1);
+		GridBagConstraints gbc_panel_format = new GridBagConstraints();
+		gbc_panel_format.anchor = GridBagConstraints.NORTHWEST;
+		gbc_panel_format.weightx = 1.0;
+		gbc_panel_format.insets = new Insets(0, 10, 0, 0);
+		gbc_panel_format.weighty = 1.0;
+		gbc_panel_format.gridheight = 0;
+		gbc_panel_format.gridx = 1;
+		gbc_panel_format.gridy = 0;
+		panel.add(panel_format, gbc_panel_format);
+		panel_format.setLayout(new GridBagLayout());
 		
 		Date date = getSampleDate();
 		rdbtnShortStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.short"), //$NON-NLS-1$
-				new EditingOptions(true, true, true, true, SHORT_FORMAT).getStatementId(date)));
+				new EditingOptions(true, true, true, true, true, SHORT_FORMAT).getStatementId(date)));
 		rdbtnShortStyle.setEnabled(false);
 		rdbtnShortStyle.addItemListener(itemListener);
 		GridBagConstraints gbc_rdbtnShortStyle = new GridBagConstraints();
@@ -153,7 +207,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		panel_format.add(rdbtnShortStyle, gbc_rdbtnShortStyle);
 		
 		rdbtnLongStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.long"), //$NON-NLS-1$
-				new EditingOptions(true, true, true, true, LONG_FORMAT).getStatementId(date)));
+				new EditingOptions(true, true, true, true, true, LONG_FORMAT).getStatementId(date)));
 		rdbtnLongStyle.setEnabled(false);
 		rdbtnLongStyle.addItemListener(itemListener);
 		GridBagConstraints gbc_rdbtnLongStyle = new GridBagConstraints();
@@ -275,7 +329,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 			format = rdbtnLongStyle.isSelected()?LONG_FORMAT:SHORT_FORMAT;
 		}
 		Preferences.INSTANCE.setEditingOptions(new EditingOptions(chckbxAskMeOnDelete.isSelected(), chckbxAlertMeIf.isSelected(),
-						chckbxAutoFillStatement.isSelected(), rdbtnBasedOnDate.isSelected(), format));
+						rdbtnDupDateCurrent.isSelected(), chckbxAutoFillStatement.isSelected(), rdbtnBasedOnDate.isSelected(), format));
 		return false;
 	}
 
@@ -284,6 +338,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		chckbxAskMeOnDelete.setSelected(editOptions.isAlertOnDelete());
 		chckbxAlertMeIf.setSelected(editOptions.isAlertOnModifyChecked());
 		chckbxAutoFillStatement.setSelected(editOptions.isAutoFillStatement());
+		(editOptions.isDuplicateTransactionDateToCurrent()?rdbtnDupDateCurrent:rdbtnDupDateOriginal).setSelected(true);
 		(editOptions.isDateBasedAutoStatement()?rdbtnBasedOnDate:rdbtnBasedOnValue).setSelected(true);
 		if (editOptions.getStatementDateFormat().equals(LONG_FORMAT)) {
 			rdbtnLongStyle.setSelected(true);
