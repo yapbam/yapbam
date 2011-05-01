@@ -1,6 +1,8 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -22,6 +24,7 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 	public static final long LOOK_AND_FEEL_CHANGED = 2;
 
 	private List<PreferencePanel> panels;
+	private JTabbedPane tabbedPane;
 
 	public PreferenceDialog(MainFrame owner) {
 		super(owner, LocalizationData.get("PreferencesDialog.title"), owner);
@@ -40,7 +43,7 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 	@Override
 	protected JPanel createCenterPane() {
 		JPanel panel = new JPanel(new BorderLayout());
-		final JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane = new JTabbedPane();
 		this.panels = new ArrayList<PreferencePanel>();
 		ArrayList<PreferencePanel> lfPanels = new ArrayList<PreferencePanel>();
 		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
@@ -64,8 +67,15 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 				panels.get(lastSelected).setDisplayed(true);
 			}
 		});
+		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		};
 		for (int i = 0; i < panels.size(); i++) {
 			tabbedPane.addTab(panels.get(i).getTitle(), null, panels.get(i), panels.get(i).getToolTip());
+			panels.get(i).addPropertyChangeListener(PreferencePanel.OK_DISABLED_CAUSE_PROPERTY, listener);
 		}
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
@@ -73,7 +83,15 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 
 	@Override
 	protected String getOkDisabledCause() {
-		return null;
+		int selected = tabbedPane.getSelectedIndex();
+		String result = this.panels.get(selected).getOkDisabledCause();
+		if (result!=null) {
+			for (PreferencePanel panel:this.panels) {
+				result = panel.getOkDisabledCause();
+				if (result!=null) break;
+			}
+		}
+		return result;
 	}
 	
 	public Boolean getChanges() {
