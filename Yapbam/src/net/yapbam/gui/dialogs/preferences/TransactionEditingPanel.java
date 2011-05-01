@@ -202,8 +202,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gp.add(rdbtnLongStyle); gp.add(rdbtnShortStyle); gp.add(rdbtnCustomized);
 
 		formatPatternField = new JTextField();
-		formatPatternField.setToolTipText(LocalizationData
-				.get("TransactionEditingPreferencesPanel.format.customized.tooltip")); //$NON-NLS-1$
+		formatPatternField.setEnabled(false);
 		GridBagConstraints gbc_formatPatternField = new GridBagConstraints();
 		gbc_formatPatternField.insets = new Insets(0, 0, 5, 0);
 		gbc_formatPatternField.fill = GridBagConstraints.HORIZONTAL;
@@ -221,6 +220,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 
 		labelExample = new JLabel(
 				LocalizationData.get("TransactionEditingPreferencesPanel.format.customized.invalidFormat")); //$NON-NLS-1$
+		labelExample.setEnabled(false);
 		GridBagConstraints gbc_labelExample = new GridBagConstraints();
 		gbc_labelExample.insets = new Insets(0, 5, 0, 5);
 		gbc_labelExample.gridx = 2;
@@ -268,9 +268,14 @@ public class TransactionEditingPanel extends PreferencePanel {
 
 	@Override
 	public boolean updatePreferences() {
-		Preferences.INSTANCE.setEditingOptions(
-				new EditingOptions(chckbxAskMeOnDelete.isSelected(), chckbxAlertMeIf.isSelected(),
-						chckbxAutoFillStatement.isSelected(), rdbtnBasedOnDate.isSelected(), rdbtnLongStyle.isSelected()?LONG_FORMAT:SHORT_FORMAT));
+		SimpleDateFormat format = null;
+		if (rdbtnCustomized.isSelected()) {
+			format = new SimpleDateFormat(formatPatternField.getText(), LocalizationData.getLocale());
+		} else {
+			format = rdbtnLongStyle.isSelected()?LONG_FORMAT:SHORT_FORMAT;
+		}
+		Preferences.INSTANCE.setEditingOptions(new EditingOptions(chckbxAskMeOnDelete.isSelected(), chckbxAlertMeIf.isSelected(),
+						chckbxAutoFillStatement.isSelected(), rdbtnBasedOnDate.isSelected(), format));
 		return false;
 	}
 
@@ -280,6 +285,14 @@ public class TransactionEditingPanel extends PreferencePanel {
 		chckbxAlertMeIf.setSelected(editOptions.isAlertOnModifyChecked());
 		chckbxAutoFillStatement.setSelected(editOptions.isAutoFillStatement());
 		(editOptions.isDateBasedAutoStatement()?rdbtnBasedOnDate:rdbtnBasedOnValue).setSelected(true);
-		(editOptions.getStatementDateFormat().equals(LONG_FORMAT)?rdbtnLongStyle:rdbtnShortStyle).setSelected(true);
+		if (editOptions.getStatementDateFormat().equals(LONG_FORMAT)) {
+			rdbtnLongStyle.setSelected(true);
+		} else if (editOptions.getStatementDateFormat().equals(SHORT_FORMAT)) {
+			rdbtnShortStyle.setSelected(true);
+		} else {
+			rdbtnCustomized.setSelected(true);
+			formatPatternField.setText(editOptions.getStatementDateFormat().toPattern());
+			updateOkDisabledCause();
+		}
 	}
 }
