@@ -54,6 +54,7 @@ public class Preferences {
 	private static final String DELETE_ALERT = "alertOnDelete"; //$NON-NLS-1$
 	private static final String MODIFY_CHECKED_ALERT = "alertOnModifyChecked"; //$NON-NLS-1$
 	private static final String AUTO_FILL_STATEMENT = "autoFillStatement"; //$NON-NLS-1$
+	private static final String SET_DUPLICATE_TRANSACTION_DATE_TO_CURRENT = "setDuplicateTransactionDateToCurrent"; //$NON-NLS-1$
 	private static final String DATE_BASED_AUTO_STATEMENT = "dateBasedAutoStatement"; //$NON-NLS-1$
 	private static final String AUTO_STATEMENT_FORMAT = "statementDateFormat"; //$NON-NLS-1$
 	
@@ -407,6 +408,7 @@ public class Preferences {
 		this.editingOptions = edit;
 		setBoolean(PREF_PREFIX+DELETE_ALERT, edit.isAlertOnDelete());
 		setBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, edit.isAlertOnModifyChecked());
+		setBoolean(PREF_PREFIX+SET_DUPLICATE_TRANSACTION_DATE_TO_CURRENT, edit.isDuplicateTransactionDateToCurrent());
 		setBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, edit.isAutoFillStatement());
 		setBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, edit.isDateBasedAutoStatement());
 		this.properties.setProperty(PREF_PREFIX+AUTO_STATEMENT_FORMAT, edit.getStatementDateFormat().toPattern());
@@ -422,6 +424,7 @@ public class Preferences {
 			} catch (Exception e) {}
 			editingOptions = new EditingOptions(
 				getBoolean(PREF_PREFIX+DELETE_ALERT, true), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, true),
+				getBoolean(PREF_PREFIX+SET_DUPLICATE_TRANSACTION_DATE_TO_CURRENT, true),
 				getBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, false), getBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, false),
 				format);
 		}
