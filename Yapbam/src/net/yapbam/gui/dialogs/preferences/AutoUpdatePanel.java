@@ -4,6 +4,8 @@ import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
+
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
@@ -92,7 +94,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 		gridBagConstraints1.gridy = 0;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets = new Insets(5, 5, 0, 5);
 		gridBagConstraints.gridy = 1;
 		this.setSize(378, 200);
@@ -203,22 +205,31 @@ public class AutoUpdatePanel extends PreferencePanel {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			GridBagConstraints gbc_autoInstall = new GridBagConstraints();
+			gbc_autoInstall.fill = GridBagConstraints.HORIZONTAL;
 			gbc_autoInstall.gridx = 0;
-			gbc_autoInstall.insets = new Insets(5, 5, 5, 5);
+			gbc_autoInstall.insets = new Insets(5, 5, 0, 5);
 			gbc_autoInstall.anchor = GridBagConstraints.WEST;
 			gbc_autoInstall.gridy = 1;
 			GridBagConstraints gbc_askMe = new GridBagConstraints();
+			gbc_askMe.fill = GridBagConstraints.HORIZONTAL;
 			gbc_askMe.anchor = GridBagConstraints.WEST;
 			gbc_askMe.gridy = 0;
-			gbc_askMe.insets = new Insets(5, 5, 5, 5);
+			gbc_askMe.insets = new Insets(0, 5, 0, 5);
 			gbc_askMe.gridx = 0;
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.AutoUpdate.ifAvailable.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null)); //$NON-NLS-1$
+			TitledBorder border = BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.AutoUpdate.ifAvailable.title")); //$NON-NLS-1$
+			jPanel.setBorder(border);
 			jPanel.setEnabled(true);
-			jPanel.setVisible(false);
-			jPanel.add(getAskMe(), gbc_askMe);
+			JRadioButton btn = getAskMe();
+			jPanel.add(btn, gbc_askMe);
 			jPanel.add(getAutoInstall(), gbc_autoInstall);
+			jPanel.setVisible(false);
+			// Here is a workaround on bug http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4201045
+			Dimension d = btn.getPreferredSize();
+			if (d.width<border.getMinimumSize(jPanel).width) {
+				btn.setPreferredSize(new Dimension(border.getMinimumSize(jPanel).width, d.height));
+			}
 		}
 		return jPanel;
 	}
