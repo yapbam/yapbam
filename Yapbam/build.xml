@@ -51,6 +51,8 @@
 	    	<fileset dir="src" excludes="**/*.java"/>
 	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/plot/LocalizationBundl*.properties"/>
 	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/editor/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jcommonpath}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
 		</copy>
 		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
 		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
