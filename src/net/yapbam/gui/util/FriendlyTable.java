@@ -130,7 +130,7 @@ public class FriendlyTable extends JTable {
 			}
 			out.newLine();
 			for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
-				first = false;
+				first = true;
 				int modelRowIndex = convertRowIndexToModel(rowIndex);
 				for (int colIndex=0; colIndex < getColumnCount(false); colIndex++) {
 					if (isColumnVisible(colIndex)) {
