@@ -187,7 +187,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				map.put(ct, ranking);
 			}
 		});
-		if (statement.getText().length()==0) {autoFillStatement(0); autoFillStatement(1);}
+		if (statement.getText().length()==0) {autoFillStatement();}
 	}
 
 	public void setTransactionDate(Date date) {
@@ -229,7 +229,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		defDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				autoFillStatement(1);
+				autoFillStatement(VALUE_DATE_CHANGED);
 				updateOkButtonEnabled();
 			}
 		});
@@ -293,7 +293,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					if (vdc==null) vdc = DateStepper.IMMEDIATE;
 					defDate.setDate(vdc.getNextStep(date.getDate()));
 				}
-				autoFillStatement(0);
+				autoFillStatement(DATE_CHANGED);
 				updateOkButtonEnabled();
 			}
 		});
@@ -452,22 +452,35 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		return (isExpense()) && (getCurrentMode().isUseCheckBook());
 	}
 
+	/** Constant that indicates the date has changed.
+	 * @see #autoFillStatement(int)
+	 */
+	public static int DATE_CHANGED = 1;
+	/** Constant that indicates the date has changed.
+	 * @see #autoFillStatement(int)
+	 */
+	public static int VALUE_DATE_CHANGED = 2;
 	/** Updates, if needed, the statement id field.
-	 * @param changed an integer that identifies what field has been changed.<ul>
-	 * <li>0 => Date field</li>
-	 * <li>1 => Value date field</li>
-	 * </ul>
+	 * @param changed an integer that identifies what field has been changed.
+	 * This integer can be the sum of the DATE_CHANGED and VALUE_DATE_CHANGED constants
+	 * @see #DATE_CHANGED
+	 * @see #VALUE_DATE_CHANGED
 	 */
 	private void autoFillStatement(int changed) {
 		EditingOptions editOptions = Preferences.INSTANCE.getEditingOptions();
 		if (editOptions.isAutoFillStatement()) {
 			Date aDate = null;
-			if ((changed==0) && !editOptions.isDateBasedAutoStatement()) {
+			if (((changed&DATE_CHANGED)!=0) && !editOptions.isDateBasedAutoStatement()) {
 				aDate = date.getDate();
-			} else if ((changed==1) && editOptions.isDateBasedAutoStatement()) {
+			} else if (((changed&VALUE_DATE_CHANGED)!=0) && editOptions.isDateBasedAutoStatement()) {
 				aDate = defDate.getDate();
 			}
 			if (aDate!=null) statement.setText(editOptions.getStatementId(aDate));
 		}
+	}
+	/** Updates the statement id field.
+	 */
+	public void autoFillStatement() {
+		autoFillStatement(DATE_CHANGED+VALUE_DATE_CHANGED);
 	}
 }
