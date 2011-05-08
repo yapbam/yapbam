@@ -13,7 +13,8 @@ public class DateRenderer extends ObjectRenderer {
 	}
 
 	@Override
-    public void setValue(Object value) {
-		setText(value==null?"":SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale()).format(value));
-    }
+	public void setValue(Object value) {
+		String text = value == null ? "" : SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale()).format(value);
+		setText(text);
+	}
 }

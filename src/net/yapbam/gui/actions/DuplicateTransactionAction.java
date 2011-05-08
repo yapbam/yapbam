@@ -28,6 +28,7 @@ public class DuplicateTransactionAction extends AbstractAction {
 		TransactionDialog dialog = new TransactionDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), selector.getFilteredData(),
 				selector.getSelectedTransaction(), false);
 		if (Preferences.INSTANCE.getEditingOptions().isDuplicateTransactionDateToCurrent()) dialog.setTransactionDate(new Date());
+		dialog.autoFillStatement();
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if (newTransaction != null) {
