@@ -104,17 +104,6 @@ public class BalanceHistoryPane extends JPanel {
 				alerts.add(new Alert(date, account, balanceHistory.getBalance(date)));
 			}
 		}
-//		Account[] filteredAccounts = data.getAccounts();
-//		boolean singleAccountInFilteredData = ((filteredAccounts!=null) && (filteredAccounts.length==1)) || ((filteredAccounts==null) && (data.getGlobalData().getAccountsNumber()==1));
-//		if (!singleAccountInFilteredData) {
-//			Alert alert = data.getBalanceData().getBalanceHistory().getFirstAlert(today, null, AlertThreshold.DEFAULT);
-//			long firstAlertDate = data.getBalanceData().getBalanceHistory().getFirstAlertDate(today, null, AlertThreshold.DEFAULT);
-//			if (firstAlertDate>=0) {
-//				Date date = new Date();
-//				if (firstAlertDate>0) date.setTime(firstAlertDate);
-//				alerts.add(new Alert(date, null));
-//			}
-//		}
 		graph.setAlerts(alerts.toArray(new Alert[alerts.size()]));
 		// Compute when occurs the first alert.
 		Date first = null;
