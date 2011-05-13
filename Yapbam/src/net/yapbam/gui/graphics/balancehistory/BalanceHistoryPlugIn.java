@@ -20,10 +20,10 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 
 	public BalanceHistoryPlugIn(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
-		this.panel = new BalanceHistoryPane(data);
 		this.setPanelTitle(LocalizationData.get("BalanceHistory.title"));
+		this.panel = new BalanceHistoryPane(data);
 		this.setPanelToolTip(LocalizationData.get("BalanceHistory.toolTip"));
-		this.panel.addPropertyChangeListener(BalanceHistoryPane.FIRST_ALERT, new PropertyChangeListener() {
+		PropertyChangeListener listener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				Date first = (Date) evt.getNewValue();
@@ -38,7 +38,11 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 				}
 				setPanelToolTip(tooltip);
 			}
-		});
+		};
+		this.panel.addPropertyChangeListener(BalanceHistoryPane.FIRST_ALERT, listener);
+		if (this.panel.getFirstAlert()!=null) {
+			listener.propertyChange(new PropertyChangeEvent(this.panel, BalanceHistoryPane.FIRST_ALERT, null, this.panel.getFirstAlert()));
+		}
 		this.panel.addPropertyChangeListener(BalanceHistoryPane.SELECTED_PANEL, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
