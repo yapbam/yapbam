@@ -16,6 +16,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import terai.xrea.jp.DnDTabbedPane;
+
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
@@ -43,7 +45,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private FilteredData filteredData;
 
 	private MainMenuBar mainMenu;
-	private JTabbedPane mainPane;
+	private DnDTabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
 	private ArrayList<AbstractPlugIn> paneledPlugins;
 	private int lastSelected = -1;
@@ -115,7 +117,7 @@ public class MainFrame extends JFrame implements DataListener {
 	 * event-dispatching thread.
 	 */
 	private MainFrame(FilteredData filteredData, Object[] restartData, String path) {
-	    //Create and set up the window.
+		//Create and set up the window.
 		super();
 		
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("yapbam_16.png"))); //$NON-NLS-1$
@@ -249,7 +251,7 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	private Container createContentPane() {
-		mainPane = new JTabbedPane(JTabbedPane.TOP);
+		mainPane = new DnDTabbedPane();
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i] != null) {
 				JPanel pane = plugins[i].getPanel();
@@ -373,6 +375,7 @@ public class MainFrame extends JFrame implements DataListener {
 			e.printStackTrace();
 			//TODO What could we do ?
 		}
+		//TODO Save the JtabbedPane tab order
 	}
 
 	private YapbamState getStateSaver() {
