@@ -37,6 +37,7 @@ import javax.swing.SwingUtilities;
 /** This code is the property of http://terai.xrea.jp/
  * It was released under GPL license (http://terai.xrea.jp/Swing/DnDTabbedPane.html)
  */
+@SuppressWarnings("serial")
 public class DnDTabbedPane extends JTabbedPane {
   private static final int LINEWIDTH = 3;
   private static final String NAME = "test";
