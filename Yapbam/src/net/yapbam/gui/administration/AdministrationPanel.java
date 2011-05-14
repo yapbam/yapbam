@@ -2,9 +2,10 @@ package net.yapbam.gui.administration;
 
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.widget.TabbedPane;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -14,6 +15,8 @@ public class AdministrationPanel extends JPanel {
 
 	private FilteredData data;
 	private AbstractAdministrationPanel[] panels;
+
+	private TabbedPane tabbedPane;
 	
 	/**
 	 * This is the constructor
@@ -39,20 +42,20 @@ public class AdministrationPanel extends JPanel {
 		gridBagConstraints.gridx = 0;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
-		JTabbedPane jTabbedPane = new JTabbedPane();
-//		jTabbedPane.setTabPlacement(JTabbedPane.LEFT);
-		this.add(jTabbedPane, gridBagConstraints);
+		tabbedPane = new TabbedPane();
+		this.add(tabbedPane, gridBagConstraints);
 		panels = new AbstractAdministrationPanel[]{
 				new PeriodicalTransactionListPanel(data),
 				new AccountAdministrationPanel(data.getGlobalData()),
 				new CategoryListPanel(data.getGlobalData())
 		};
 		for (int i = 0; i < panels.length; i++) {
-			jTabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());
+			tabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());
 		}
 	}
 
 	void saveState() {
+		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
 		for (int i = 0; i < panels.length; i++) {
 			panels[i].saveState();
 		}
@@ -62,5 +65,6 @@ public class AdministrationPanel extends JPanel {
 		for (int i = 0; i < panels.length; i++) {
 			panels[i].restoreState();
 		}
+		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
 	}
 }
