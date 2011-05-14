@@ -16,8 +16,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import terai.xrea.jp.DnDTabbedPane;
-
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
@@ -26,6 +24,7 @@ import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.welcome.WelcomeDialog;
+import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.update.ReleaseInfo;
 import net.yapbam.update.VersionManager;
 import net.yapbam.util.NullUtils;
@@ -45,7 +44,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private FilteredData filteredData;
 
 	private MainMenuBar mainMenu;
-	private DnDTabbedPane mainPane;
+	private TabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
 	private ArrayList<AbstractPlugIn> paneledPlugins;
 	private int lastSelected = -1;
@@ -251,7 +250,7 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 
 	private Container createContentPane() {
-		mainPane = new DnDTabbedPane();
+		mainPane = new TabbedPane();
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i] != null) {
 				JPanel pane = plugins[i].getPanel();
