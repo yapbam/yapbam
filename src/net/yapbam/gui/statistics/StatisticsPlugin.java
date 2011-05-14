@@ -10,7 +10,6 @@ import java.awt.print.PrinterException;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import org.jfree.chart.ChartPanel;
 
@@ -22,6 +21,8 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.widget.TabbedPane;
 
 public class StatisticsPlugin extends AbstractPlugIn {
 	private FilteredData data;
@@ -29,7 +30,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	private TreeMap<Category, Summary> categoryToAmount;
 	private PieChartPanel pie;
 	private BarChartPanel bar;
-	private JTabbedPane tabbedPane;
+	private TabbedPane tabbedPane;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
@@ -47,7 +48,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 
 	@Override
 	public JPanel getPanel() {
-		tabbedPane = new JTabbedPane();
+		tabbedPane = new TabbedPane();
 		this.bar = new BarChartPanel(categoryToAmount);
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.bar.tabname"), null, this.bar, LocalizationData.get("StatisticsPlugin.bar.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.pie = new PieChartPanel(categoryToAmount);
@@ -97,4 +98,15 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.displayed = displayed;
 		if (displayed) buildSummaries();
 	}
+
+	@Override
+	public void saveState() {
+		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
+	}
+
+	@Override
+	public void restoreState() {
+		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
+	}
+	
 }

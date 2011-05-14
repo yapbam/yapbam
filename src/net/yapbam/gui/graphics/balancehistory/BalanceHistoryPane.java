@@ -1,7 +1,6 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -18,6 +17,8 @@ import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.util.NullUtils;
 
 import java.awt.BorderLayout;
@@ -34,7 +35,7 @@ public class BalanceHistoryPane extends JPanel {
 	static final String SELECTED_PANEL = "SELECTED_PANEL"; //$NON-NLS-1$
 	private BalanceHistoryGraphPane graph;
 	private Date firstAlert;
-	private JTabbedPane tabbedPane;
+	private TabbedPane tabbedPane;
 	private FilteredData data;
 	private BalanceHistoryTablePane tablePane;
 	private int selectedPanel;
@@ -46,7 +47,7 @@ public class BalanceHistoryPane extends JPanel {
 		this.data = data;
 		this.graph = new BalanceHistoryGraphPane(data);
 		setLayout(new BorderLayout(0, 0));
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new TabbedPane();
 		add(tabbedPane);
 		tabbedPane.addTab(LocalizationData.get("BalanceHistory.graph.title"), null, this.graph, LocalizationData.get("BalanceHistory.graph.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 		data.addListener(new DataListener() {
@@ -138,11 +139,13 @@ public class BalanceHistoryPane extends JPanel {
 	}
 
 	public void saveState() {
+		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
 		this.tablePane.saveState();
 	}
 
 	public void restoreState() {
 		this.tablePane.restoreState();
+		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
 	}
 
 	public Printable getPrintable() {

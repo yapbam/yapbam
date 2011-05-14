@@ -18,7 +18,7 @@ import terai.xrea.jp.DnDTabbedPane;
  * <br>panel.remove(0); // p1 is removed, now, p2 has id 0
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
- * @see #getPositions()
+ * @see #getIds()
  */
 @SuppressWarnings("serial")
 public class TabbedPane extends DnDTabbedPane {
@@ -35,9 +35,7 @@ public class TabbedPane extends DnDTabbedPane {
 
 	@Override
 	protected void convertTab(int prev, int next) {
-//		System.out.println ("_____________________");
-//		System.out.println ("Old positions : "+intArrayToString(getPositions()));
-		System.out.println (prev+"/"+this.getTabCount()+" -> "+next+"/"+this.getTabCount());
+//		System.out.println (prev+"/"+this.getTabCount()+" -> "+next+"/"+this.getTabCount());
 		if (next>prev) {
 			positions.add(next-1, positions.remove(prev));
 		} else if (next!=prev){
@@ -46,13 +44,12 @@ public class TabbedPane extends DnDTabbedPane {
 		this.movingTab = true;
 		super.convertTab(prev, next);
 		this.movingTab = false;
-		System.out.println ("New positions : "+intArrayToString(getPositions()));
+//		System.out.println ("New positions : "+ArrayUtils.toString(getIds()));
 	}
 
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		if (!movingTab) {
-			System.out.println ("insert tab is called");
 			positions.add(index, new Integer(getTabCount()));
 		}
 		super.insertTab(title, icon, component, tip, index);
@@ -61,7 +58,6 @@ public class TabbedPane extends DnDTabbedPane {
 	@Override
 	public void removeTabAt(int index) {
 		if (!movingTab) {
-			System.out.println ("remove tab is called "+index);
 			int removed = positions.remove(index);
 			for (int i = 0; i < positions.size(); i++) {
 				if (positions.get(i)>removed) {
@@ -75,7 +71,7 @@ public class TabbedPane extends DnDTabbedPane {
 	/** Gets the tabs id in the same order as the tabs into the pane.
 	 * @return an int array.
 	 */
-	public int[] getPositions() {
+	public int[] getIds() {
 		int[] result = new int[positions.size()];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = positions.get(i);
@@ -83,17 +79,24 @@ public class TabbedPane extends DnDTabbedPane {
 		return result;
 	}
 	
-	public void setOrder(int[] indexes) {
-		
+	/** Reorders the tabs.
+	 * <br><b>WARNING:</b>This method may change the selected tab.
+	 * @param ids an array of ids, in the order we want tabs to appear.
+	 */
+	public void setOrder(int[] ids) {
+		for (int i = 0; i < ids.length; i++) {
+			convertTab(getIndexOf(ids[i]), i);
+		}
 	}
 	
-	private static String intArrayToString(int[] array) {
-		StringBuilder builder = new StringBuilder("[");
-		for (int i = 0; i < array.length; i++) {
-			if (i!=0) builder.append(", ");
-			builder.append(array[i]);
+	/** Gets the position of a tab identified by its id.
+	 * @param id A tab id
+	 * @return a positive integer if there is a tab with the id in this, -1 if not.
+	 */
+	public int getIndexOf(int id) {
+		for (int i = 0; i < positions.size(); i++) {
+			if (positions.get(i)==id) return i;
 		}
-		builder.append("]");
-		return builder.toString();
+		return -1;
 	}
 }

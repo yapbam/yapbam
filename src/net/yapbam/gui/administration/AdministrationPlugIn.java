@@ -25,13 +25,11 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 
 	@Override
 	public void restoreState() {
-		super.restoreState();
 		panel.restoreState();
 	}
 
 	@Override
 	public void saveState() {
-		super.saveState();
 		panel.saveState();
 	}
 

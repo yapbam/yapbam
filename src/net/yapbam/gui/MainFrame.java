@@ -211,6 +211,7 @@ public class MainFrame extends JFrame implements DataListener {
 	    
 		// Restore initial state (last opened file and window position)
 		restoreMainFramePosition();
+		getStateSaver().restoreState(mainPane, this.getClass().getCanonicalName());
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i] != null) plugins[i].restoreState();
 		}
@@ -367,6 +368,7 @@ public class MainFrame extends JFrame implements DataListener {
 		for (int i = 0; i < getPlugInsNumber(); i++) {
 			if (getPlugIn(i)!=null) getPlugIn(i).saveState();
 		}
+		getStateSaver().saveState(mainPane, this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
 		try {
 			getStateSaver().toDisk();
@@ -374,7 +376,6 @@ public class MainFrame extends JFrame implements DataListener {
 			e.printStackTrace();
 			//TODO What could we do ?
 		}
-		//TODO Save the JtabbedPane tab order
 	}
 
 	private YapbamState getStateSaver() {

@@ -26,6 +26,8 @@ import javax.swing.table.TableColumnModel;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import net.yapbam.gui.util.XTableColumnModel;
+import net.yapbam.gui.widget.TabbedPane;
+import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.DateUtils;
 import net.yapbam.util.Portable;
 
@@ -34,6 +36,7 @@ public class YapbamState {
 	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
 	private static final String COLUMN_HIDDEN = "column.hidden."; //$NON-NLS-1$
 	private static final String PRINTING_ATTRIBUTES = ".printing.attributes"; //$NON-NLS-1$
+	private static final String TAB_ORDER = ".tab.order"; //$NON-NLS-1$
 
 	public static final YapbamState INSTANCE = new YapbamState();
 	
@@ -117,6 +120,20 @@ public class YapbamState {
 		}
 //		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
 //		YapbamState.put(prefix+SCROLL_POSITION, table.getVisibleRect());
+	}
+	
+	public void saveState(TabbedPane tabbedPane, String prefix) {
+		put(prefix+TAB_ORDER, ArrayUtils.toString(tabbedPane.getIds()));
+	}
+	
+	public void restoreState(TabbedPane tabbedPane, String prefix) {
+		String property = get(prefix+TAB_ORDER);
+		if (property!=null) {
+			tabbedPane.setOrder(ArrayUtils.parseIntArray(property));
+		}
+		// TabbedPane.setOrder changes the selected tab.
+		// I think it's better to restore with the first tab displayed
+		if (tabbedPane.getTabCount()>0) tabbedPane.setSelectedIndex(0);
 	}
 
 	public boolean contains(String key) {
