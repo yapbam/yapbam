@@ -1,12 +1,8 @@
-package net.yapbam.gui.transactiontable;
-
-import java.util.Comparator;
-import java.util.Date;
+package net.yapbam.gui.statementview;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableRowSorter;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
@@ -15,31 +11,18 @@ import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.util.NullUtils;
 
-public class TransactionTable extends FriendlyTable implements TransactionSelector {
+public class StatementTable extends FriendlyTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;
 	private Transaction lastSelected;
 	private FilteredData data;
 
-	public TransactionTable(FilteredData data) {
+	public StatementTable(FilteredData data) {
 		super();
-
 		this.data = data;
-		TransactionsTableModel model = new TransactionsTableModel(this, data);
-		this.setModel(model);
-		this.setDefaultRenderer(Date.class, new DateRenderer());
-		this.setDefaultRenderer(double[].class, new AmountRenderer());
-		this.setDefaultRenderer(SpreadState.class, new SpreadStateRenderer());
-		this.setDefaultRenderer(Object.class, new ObjectRenderer());
+		this.setModel(new StatementTableModel(this, new Transaction[0]));
+		setAutoCreateRowSorter(true);
+		setDefaultRenderer(Object.class, new CellRenderer());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.addMouseListener(new SpreadableMouseAdapter());
-		TableRowSorter<TransactionsTableModel> sorter = new TableRowSorter<TransactionsTableModel>(model);
-		sorter.setComparator(4, new Comparator<double[]>() {
-			@Override
-			public int compare(double[] o1, double[] o2) {
-				return (int) Math.signum(o1[0]-o2[0]);
-			}
-		});
-		this.setRowSorter(sorter);
 		this.lastSelected = null;
 		getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -57,7 +40,7 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 
 	public Transaction getSelectedTransaction() {
 		int index = getSelectedRow();
-		return index < 0 ? null : data.getTransaction(this.convertRowIndexToModel(index));
+		return index < 0 ? null : ((StatementTableModel)this.getModel()).getTransactions()[this.convertRowIndexToModel(index)];
 	}
 	
 	public GlobalData getGlobalData() {
@@ -72,5 +55,9 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 	 */
 	public void scrollToLastLine() {
 		scrollRectToVisible(getCellRect(getRowCount()-1, 0, true));
+	}
+
+	public void setTransactions(Transaction[] transactions) {
+		((StatementTableModel)this.getModel()).setTransactions(transactions);
 	}
 }

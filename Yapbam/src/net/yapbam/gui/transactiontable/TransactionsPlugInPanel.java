@@ -25,6 +25,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
@@ -34,11 +35,6 @@ import net.yapbam.gui.widget.JLabelMenu;
 
 public class TransactionsPlugInPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
-	Action editTransactionAction;
-	Action duplicateTransactionAction;
-	Action deleteTransactionAction;
-	Action convertToPericalTransactionAction;
 	
 	private BalanceData acFilter;
 	
@@ -55,13 +51,11 @@ public class TransactionsPlugInPanel extends JPanel {
 		transactionTable = new TransactionTable(data);
 		this.acFilter = data.getBalanceData();
 
-		this.editTransactionAction = new EditTransactionAction(transactionTable);
-		this.duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
-		this.deleteTransactionAction = new DeleteTransactionAction(transactionTable);
-		this.convertToPericalTransactionAction = new ConvertToPeriodicalTransactionAction(transactionTable);
-
+		EditTransactionAction editTransactionAction = new EditTransactionAction(transactionTable);
+		DuplicateTransactionAction duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
+		DeleteTransactionAction deleteTransactionAction = new DeleteTransactionAction(transactionTable);
 		new JTableListener(transactionTable, new Action[] { editTransactionAction, duplicateTransactionAction,
-				deleteTransactionAction, null, convertToPericalTransactionAction }, editTransactionAction);
+				deleteTransactionAction, null, new ConvertToPeriodicalTransactionAction(transactionTable) }, editTransactionAction);
         
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		String noText = ""; //$NON-NLS-1$

@@ -1,5 +1,6 @@
-package net.yapbam.gui.transactiontable;
+package net.yapbam.gui.actions;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,25 +15,25 @@ import net.yapbam.gui.dialogs.PeriodicalTransactionDialog;
 import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-class ConvertToPeriodicalTransactionAction extends AbstractAction {
-	private TransactionTable table;
+public class ConvertToPeriodicalTransactionAction extends AbstractAction {
+	private TransactionSelector selector;
 
-	public ConvertToPeriodicalTransactionAction(TransactionTable table) {
+	public ConvertToPeriodicalTransactionAction(TransactionSelector table) {
 		super(LocalizationData.get("MainMenu.Transactions.convertToPeriodical")); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.convertToPeriodical.ToolTip")); //$NON-NLS-1$
-		this.table = table;
+		this.selector = table;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction transaction = table.getSelectedTransaction();
+		Transaction transaction = selector.getSelectedTransaction();
 		List<SubTransaction> list = new ArrayList<SubTransaction>(transaction.getSubTransactionSize());
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			list.add(transaction.getSubTransaction(i));
 		}
 		PeriodicalTransaction model = new PeriodicalTransaction(transaction.getDescription(), transaction.getAmount(),
 				transaction.getAccount(), transaction.getMode(), transaction.getCategory(), list, null, false, null);
-		PeriodicalTransactionDialog.open(table.getFilteredData(), AbstractDialog.getOwnerWindow(table), model, false);
+		PeriodicalTransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component)e.getSource()), model, false);
 	}
 
 }

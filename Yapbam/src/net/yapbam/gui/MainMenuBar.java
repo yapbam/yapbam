@@ -165,9 +165,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getFilteredData()));
 		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		transactionMenu.add(item);
+		TransactionSelector selector = getTransactionSelector();
+		//TODO Add menu shortcuts
+		item = new JMenuItem(new EditTransactionAction(selector)); 
+		transactionMenu.add(item);
+		item = new JMenuItem(new DuplicateTransactionAction(selector));
+		transactionMenu.add(item);
+		item = new JMenuItem(new DeleteTransactionAction(selector));
+		item.setAccelerator(KeyStroke.getKeyStroke(
+			LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		transactionMenu.add(item);
+
 		insertPluginMenuItems(transactionMenu, AbstractPlugIn.TRANSACTIONS_PART);
 		transactionMenu.addSeparator();
 		transactionMenu.add(new JMenuItem(new GeneratePeriodicalTransactionsAction(frame.getFilteredData())));
+		transactionMenu.add(new JMenuItem(new ConvertToPeriodicalTransactionAction(selector)));
 		insertPluginMenuItems(transactionMenu,AbstractPlugIn.PERIODIC_TRANSACTIONS_PART);
 		this.add(transactionMenu);
 
@@ -546,5 +558,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		transactionMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.TRANSACTIONS_MENU));
 		filterMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.FILTER_MENU));
 		menuItemPrint.setEnabled(plugIn.isPrintingSupported());
+		getTransactionSelector().setInternalSelector(plugIn.getTransactionSelector());
+	}
+	
+	private GlobalTransactionSelector selector; 
+	public GlobalTransactionSelector getTransactionSelector() {
+		if (selector==null) {
+			selector = new GlobalTransactionSelector();
+		}
+		return selector;
 	}
 }
