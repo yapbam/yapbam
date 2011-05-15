@@ -2,6 +2,8 @@ package net.yapbam.gui.actions;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,13 @@ public class ConvertToPeriodicalTransactionAction extends AbstractAction {
 		super(LocalizationData.get("MainMenu.Transactions.convertToPeriodical")); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.convertToPeriodical.ToolTip")); //$NON-NLS-1$
 		this.selector = table;
+		this.setEnabled(selector.getSelectedTransaction()!=null);
+		this.selector.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setEnabled(evt.getNewValue()!=null);
+			}
+		});
 	}
 
 	@Override

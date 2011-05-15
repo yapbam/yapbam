@@ -346,7 +346,7 @@ public class MainFrame extends JFrame implements DataListener {
 
 	private void updateSelectedPlugin() {
 		if (lastSelected>=0) paneledPlugins.get(lastSelected).setDisplayed(false);
-		lastSelected = mainPane.getSelectedIndex();
+		lastSelected = mainPane.getId(mainPane.getSelectedIndex());
 		if (lastSelected<paneledPlugins.size()) paneledPlugins.get(lastSelected).setDisplayed(true);
 		mainMenu.updateMenu(paneledPlugins.get(lastSelected));
 	}
