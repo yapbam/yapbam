@@ -1,14 +1,9 @@
 package net.yapbam.gui.transactiontable;
 
-import java.awt.event.ActionEvent;
 import java.awt.print.Printable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import javax.swing.JTable.PrintMode;
 
 import net.yapbam.data.FilteredData;
@@ -23,6 +18,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.actions.TransactionSelector;
 
 public class TransactionsPlugIn extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.transactionTable."; //$NON-NLS-1$
@@ -56,24 +52,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	}
 	
 	@Override
-	public JMenuItem[] getMenuItem(int part) {
-		if (part==TRANSACTIONS_PART) {
-			List<JMenuItem> result = new ArrayList<JMenuItem>();
-			result.add(new JMenuItem(panel.editTransactionAction)); 
-			result.add(new JMenuItem(panel.duplicateTransactionAction));
-			JMenuItem item = new JMenuItem(panel.deleteTransactionAction); //$NON-NLS-1$
-			item.setAccelerator(KeyStroke.getKeyStroke(
-				LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-			result.add(item);
-			return result.toArray(new JMenuItem[result.size()]);
-		} else if (part==PERIODIC_TRANSACTIONS_PART) {
-			return new JMenuItem[]{new JMenuItem(panel.convertToPericalTransactionAction)};
-		} else {
-			return null;
-		}
-	}
-
-	@Override
 	public void restoreState() {
 		TransactionTable transactionTable = panel.getTransactionTable();
 		YapbamState.INSTANCE.restoreState(transactionTable, STATE_PREFIX);
@@ -88,15 +66,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	@Override
 	public JPanel getPanel() {
 		return panel;
-	}
-
-	@Override
-	public void setDisplayed(boolean displayed) {
-		boolean rowIsSelected = panel.transactionTable.getSelectedRow()>0;
-		panel.editTransactionAction.setEnabled(displayed && rowIsSelected); 
-		panel.duplicateTransactionAction.setEnabled(displayed && rowIsSelected);
-		panel.deleteTransactionAction.setEnabled(displayed && rowIsSelected);
-		panel.convertToPericalTransactionAction.setEnabled(displayed && rowIsSelected);
 	}
 
 	@Override
@@ -119,5 +88,10 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		}
 		setPanelIcon((transactions.length>0?IconManager.ALERT:null));
 		setPanelToolTip(tooltip);
+	}
+
+	@Override
+	public TransactionSelector getTransactionSelector() {
+		return panel.transactionTable;
 	}
 }

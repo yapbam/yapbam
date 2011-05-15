@@ -9,16 +9,15 @@ import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 /** This is a standard JTable listener.
- * <br>It has action attributes (typically edit/delete/duplicate row) which are automatically enabled/disabled when a row is selected/deselected.
+ * <br>It has action attributes (typically new/edit/delete/duplicate row)
  * <br>When a double click occurs on the JTable, a default action is invoked (typically an edit action).
  * <br>A pop-up menu is shown when needed (when a right click occurs under windows).
  * <br>This class register itself with the JTable in order to receive interesting events, you just have to call the constructor.
+ * <br>Please note that this class doesn't guarantee that actions will be enabled/disabled when rows are selected/deselected.
  */
-public class JTableListener extends MouseAdapter implements ListSelectionListener {
+public class JTableListener extends MouseAdapter {
 	private Action[] actions;
 	private Action defaultAction;
 	private JTable jTable;
@@ -36,25 +35,6 @@ public class JTableListener extends MouseAdapter implements ListSelectionListene
 		this.defaultAction = defaultAction;
 		this.jTable = jTable;
 		jTable.addMouseListener(this);
-		jTable.getSelectionModel().addListSelectionListener(this);
-		refreshActions();
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-			refreshActions();
-		}
-	}
-
-	private void refreshActions() {
-		boolean ok = jTable.getSelectedRow()>=0;
-		if (actions!=null) {
-			for (int i = 0; i < actions.length; i++) {
-				if (actions[i] != null) actions[i].setEnabled(ok);
-			}
-		}
-		if (defaultAction != null) defaultAction.setEnabled(ok);
 	}
 
 	@Override

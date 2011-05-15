@@ -11,7 +11,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import net.yapbam.gui.transactiontable.TransactionsPlugIn;
+import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.util.NullUtils;
 
 /** This abstract class represents a Yapbam plugin.
@@ -309,5 +309,15 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 */
 	public final PropertyChangeSupport getPropertyChangeSupport() {
 		return this.propertyChangeSupport;
+	}
+
+	/** Gets the transaction selector for this plugin.
+	 * <br>By default, this method returns null, which means that the plugin is not able to select a transaction.
+	 * Plugins that allows transaction selection may overrdide this method.
+	 * @return the transaction selector for this plugin.
+	 * @see TransactionSelector
+	 */
+	public TransactionSelector getTransactionSelector() {
+		return null;
 	}
 }

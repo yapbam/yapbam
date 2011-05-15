@@ -8,12 +8,12 @@ import javax.swing.table.AbstractTableModel;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 
-class TransactionsTableModel extends AbstractTableModel {
+class StatementTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
 	private Transaction[] transactions;
 	
-	TransactionsTableModel(JTable table, Transaction[] transactions) {
+	StatementTableModel(JTable table, Transaction[] transactions) {
 		super();
 		this.transactions = transactions;
 	}

@@ -31,7 +31,6 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.CoolJComboBox;
 import net.yapbam.util.DateUtils;
@@ -42,7 +41,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
 import java.awt.Color;
@@ -51,6 +49,7 @@ import javax.swing.JTable.PrintMode;
 
 import java.awt.Font;
 import java.awt.print.Printable;
+
 import net.yapbam.gui.transactiontable.CheckModePanel;
 import net.yapbam.gui.transactiontable.CheckTransactionAction;
 
@@ -68,8 +67,7 @@ public class StatementViewPanel extends JPanel {
 	private JLabel endBalance = null;
 	private JLabel detail = null;
 	private JScrollPane jScrollPane = null;
-	private FriendlyTable transactionsTable = null;
-	private TransactionsTableModel model;
+	private StatementTable transactionsTable = null;
 	private CheckModePanel checkModePanel;
 	
 	private FilteredData data;
@@ -179,18 +177,7 @@ public class StatementViewPanel extends JPanel {
 			this.accountMenu.setActionEnabled(true);
 			accountMenu.setSelectedIndex(0);
 		}
-		TransactionSelector selector = new TransactionSelector() {
-			@Override
-			public Transaction getSelectedTransaction() {
-				int index = getTransactionsTable().getSelectedRow();
-				return (index>=0) ? model.getTransactions()[getTransactionsTable().convertRowIndexToModel(index)]:null;
-			}
-			
-			@Override
-			public FilteredData getFilteredData() {
-				return data;
-			}
-		};
+		TransactionSelector selector = getTransactionsTable();
 		Action edit = new EditTransactionAction(selector);
 		Action delete = new DeleteTransactionAction(selector);
 		Action duplicate = new DuplicateTransactionAction(selector);
@@ -204,7 +191,6 @@ public class StatementViewPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
 		this.setLayout(new BorderLayout());
 		this.add(getSelectionPanel(), BorderLayout.NORTH);
 		this.add(getStatementPanel(), BorderLayout.CENTER);
@@ -329,7 +315,7 @@ public class StatementViewPanel extends JPanel {
 						endBalance.setText(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()))); //$NON-NLS-1$
 						detail.setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
 								ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
-						model.setTransactions(getTransactions(data.getGlobalData().getAccount(accountMenu.getSelectedIndex()), statement.getId()));
+						getTransactionsTable().setTransactions(getTransactions(data.getGlobalData().getAccount(accountMenu.getSelectedIndex()), statement.getId()));
 						checkModeAvailable = statement.getId()==null;
 					}
 					startBalance.setVisible(visible);
@@ -459,15 +445,8 @@ public class StatementViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
-	FriendlyTable getTransactionsTable() {
-		if (transactionsTable == null) {
-			transactionsTable = new FriendlyTable();
-			transactionsTable.setAutoCreateRowSorter(true);
-			this.model = new TransactionsTableModel(transactionsTable, new Transaction[0]);
-			transactionsTable.setModel(this.model);
-			transactionsTable.setDefaultRenderer(Object.class, new CellRenderer());
-			transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		}
+	StatementTable getTransactionsTable() {
+		if (transactionsTable == null) transactionsTable = new StatementTable(data);
 		return transactionsTable;
 	}
 	
@@ -503,7 +482,6 @@ public class StatementViewPanel extends JPanel {
 			}
 		}
 	}
-
 
 	public Printable getPrintable() {
 		return transactionsTable.getPrintable(PrintMode.FIT_WIDTH, null, null);

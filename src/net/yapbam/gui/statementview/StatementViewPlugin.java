@@ -8,6 +8,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.actions.TransactionSelector;
 
 public class StatementViewPlugin extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.statementView."; //$NON-NLS-1$
@@ -44,5 +45,10 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	@Override
 	protected Printable getPrintable() {
 		return panel.getPrintable();
+	}
+
+	@Override
+	public TransactionSelector getTransactionSelector() {
+		return panel.getTransactionsTable();
 	}
 }

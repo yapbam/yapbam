@@ -2,6 +2,8 @@ package net.yapbam.gui.actions;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
@@ -21,6 +23,13 @@ public class DuplicateTransactionAction extends AbstractAction {
 		super(LocalizationData.get("MainMenu.Transactions.Duplicate"), IconManager.DUPLICATE_TRANSACTION);
 		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Duplicate.ToolTip"));
 		this.selector = selector;
+		this.setEnabled(selector.getSelectedTransaction()!=null);
+		this.selector.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setEnabled(evt.getNewValue()!=null);
+			}
+		});
 	}
 	
 	@Override
