@@ -78,17 +78,9 @@ public class StatementViewPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public StatementViewPanel() {
-		super();
-		initialize();
-	}
-
-	/**
-	 * This is the default constructor
-	 */
 	public StatementViewPanel(FilteredData data) {
-		this();
 		this.data = data;
+		initialize();
 		this.data.getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {

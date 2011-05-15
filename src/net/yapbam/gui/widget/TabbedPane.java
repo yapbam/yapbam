@@ -99,4 +99,12 @@ public class TabbedPane extends DnDTabbedPane {
 		}
 		return -1;
 	}
+	
+	/** Gets the id of a tab.
+	 * @param index the view index of the tab
+	 * @return the id of the tab
+	 */
+	public int getId(int index) {
+		return positions.get(index);
+	}
 }
