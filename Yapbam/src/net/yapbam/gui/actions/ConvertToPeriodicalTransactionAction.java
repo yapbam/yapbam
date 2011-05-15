@@ -2,12 +2,8 @@ package net.yapbam.gui.actions;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.AbstractAction;
 
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.SubTransaction;
@@ -17,20 +13,10 @@ import net.yapbam.gui.dialogs.PeriodicalTransactionDialog;
 import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class ConvertToPeriodicalTransactionAction extends AbstractAction {
-	private TransactionSelector selector;
-
-	public ConvertToPeriodicalTransactionAction(TransactionSelector table) {
-		super(LocalizationData.get("MainMenu.Transactions.convertToPeriodical")); //$NON-NLS-1$
-		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.convertToPeriodical.ToolTip")); //$NON-NLS-1$
-		this.selector = table;
-		this.setEnabled(selector.getSelectedTransaction()!=null);
-		this.selector.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				setEnabled(evt.getNewValue()!=null);
-			}
-		});
+public class ConvertToPeriodicalTransactionAction extends AbstractTransactionAction {
+	public ConvertToPeriodicalTransactionAction(TransactionSelector selector) {
+		super(selector, LocalizationData.get("MainMenu.Transactions.convertToPeriodical"), null, //$NON-NLS-1$
+				LocalizationData.get("MainMenu.Transactions.convertToPeriodical.ToolTip")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -44,5 +30,4 @@ public class ConvertToPeriodicalTransactionAction extends AbstractAction {
 				transaction.getAccount(), transaction.getMode(), transaction.getCategory(), list, null, false, null);
 		PeriodicalTransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component)e.getSource()), model, false);
 	}
-
 }

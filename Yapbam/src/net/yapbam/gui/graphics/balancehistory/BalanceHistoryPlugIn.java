@@ -13,6 +13,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.actions.TransactionSelector;
 
 public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	private BalanceHistoryPane panel;
@@ -76,5 +77,11 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 	@Override
 	protected Printable getPrintable() {
 		return panel.getPrintable();
+	}
+
+	@Override
+	public TransactionSelector getTransactionSelector() {
+		// FIXME
+		return null;
 	}
 }
