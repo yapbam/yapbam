@@ -1,4 +1,4 @@
-package net.yapbam.gui;
+package net.yapbam.gui.actions;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -8,12 +8,12 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
 
-class GlobalTransactionSelector implements TransactionSelector {
+public class CompoundTransactionSelector implements TransactionSelector {
 	private ArrayList<PropertyChangeListener> listeners;
 	private TransactionSelector internalSelector;
 	private PropertyChangeListener internalListener;
 	
-	GlobalTransactionSelector() {
+	public CompoundTransactionSelector() {
 		this.listeners = new ArrayList<PropertyChangeListener>();
 		this.internalSelector = null;
 		this.internalListener = new PropertyChangeListener() {

@@ -561,10 +561,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		getTransactionSelector().setInternalSelector(plugIn.getTransactionSelector());
 	}
 	
-	private GlobalTransactionSelector selector; 
-	public GlobalTransactionSelector getTransactionSelector() {
+	private CompoundTransactionSelector selector; 
+	public CompoundTransactionSelector getTransactionSelector() {
 		if (selector==null) {
-			selector = new GlobalTransactionSelector();
+			selector = new CompoundTransactionSelector();
 		}
 		return selector;
 	}

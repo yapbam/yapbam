@@ -81,7 +81,7 @@ public class BalanceHistoryPane extends JPanel {
 	}
 	
 	void changeDisplayed () {
-		int selected = tabbedPane.getSelectedIndex();
+		int selected = tabbedPane.getId(tabbedPane.getSelectedIndex());
 		if (selected==0) {
 			graph.scrollToSelectedDate();
 		}
