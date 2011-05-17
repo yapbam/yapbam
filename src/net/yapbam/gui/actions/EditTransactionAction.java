@@ -13,8 +13,6 @@ import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class EditTransactionAction extends AbstractTransactionAction {
-	private TransactionSelector selector;
-	
 	public EditTransactionAction(TransactionSelector selector) {
 		super(selector, LocalizationData.get("MainMenu.Transactions.Edit"), IconManager.EDIT_TRANSACTION, //$NON-NLS-1$
 				LocalizationData.get("MainMenu.Transactions.Edit.ToolTip")); //$NON-NLS-1$
