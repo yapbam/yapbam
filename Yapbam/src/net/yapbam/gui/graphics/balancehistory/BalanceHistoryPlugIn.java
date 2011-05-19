@@ -81,7 +81,6 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 
 	@Override
 	public TransactionSelector getTransactionSelector() {
-		// FIXME
-		return null;
+		return this.panel.getTransactionSelector();
 	}
 }
