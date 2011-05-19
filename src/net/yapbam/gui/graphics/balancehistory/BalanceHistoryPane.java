@@ -18,6 +18,8 @@ import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.actions.CompoundTransactionSelector;
+import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.util.NullUtils;
 
@@ -39,6 +41,7 @@ public class BalanceHistoryPane extends JPanel {
 	private FilteredData data;
 	private BalanceHistoryTablePane tablePane;
 	private int selectedPanel;
+	private CompoundTransactionSelector transactionSelector;
 
 	/**
 	 * Create the panel.
@@ -78,6 +81,7 @@ public class BalanceHistoryPane extends JPanel {
 		});
 		tablePane = new BalanceHistoryTablePane(data);
 		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
+		transactionSelector = new CompoundTransactionSelector();
 	}
 	
 	void changeDisplayed () {
@@ -90,6 +94,7 @@ public class BalanceHistoryPane extends JPanel {
 			this.selectedPanel = selected;
 			firePropertyChange(SELECTED_PANEL, old, this.selectedPanel);
 		}
+		transactionSelector.setInternalSelector(selected==0?null:tablePane.table);
 	}
 
 	private void testAlert() {
@@ -150,5 +155,9 @@ public class BalanceHistoryPane extends JPanel {
 
 	public Printable getPrintable() {
 		return tablePane.getPrintable();
+	}
+	
+	TransactionSelector getTransactionSelector() {
+		return transactionSelector;
 	}
 }
