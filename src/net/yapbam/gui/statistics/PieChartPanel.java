@@ -24,6 +24,8 @@ class PieChartPanel extends ChartPanel {
 	
 	PieChartPanel(Map<Category, Summary> map) {
 		super(null);
+		super.setLocale(LocalizationData.getLocale());
+		super.setPopupMenu(createPopupMenu(true, false, false, true, false));
 		this.categoryToAmount = map;
 		dataset = new DefaultPieDataset();
 		toolTipGenerator = new OptimizedToolTipGenerator();

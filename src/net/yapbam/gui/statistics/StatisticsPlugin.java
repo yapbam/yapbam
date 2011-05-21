@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.util.ResourceBundleWrapper;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
@@ -44,8 +45,18 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.setPanelTitle(LocalizationData.get("StatisticsPlugin.title"));
 		this.setPanelToolTip(LocalizationData.get("StatisticsPlugin.tooltip"));
 		this.setPrintingSupported(true);
+		// Hack to set the right Locale for JFreeChart panels (it seems there's a bug in JFreeChart: setLocale doesn't refresh the popup menus).
+		new SimpleChartPanel();
 	}
 
+	@SuppressWarnings("serial")
+	private static class SimpleChartPanel extends ChartPanel {
+		public SimpleChartPanel() {
+			super(null);
+			localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle", LocalizationData.getLocale());
+		}
+	}
+	
 	@Override
 	public JPanel getPanel() {
 		tabbedPane = new TabbedPane();
