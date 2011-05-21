@@ -26,6 +26,7 @@ class BarChartPanel extends ChartPanel {
 
 	BarChartPanel(Map<Category, Summary> map) {
 		super(null);
+		super.setPopupMenu(createPopupMenu(true, false, false, true, false));
 		this.categoryToAmount = map;
 		dataset = new DefaultCategoryDataset();
 		updateDataSet();
