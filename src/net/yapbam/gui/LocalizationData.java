@@ -12,8 +12,8 @@ import net.yapbam.data.GlobalData;
 /** This class is the main entry point for localization concerns.
  */
 public abstract class LocalizationData {
+	public static final Locale SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));
 	private static ResourceBundle bundle;
-	private static Locale locale;
 	private static boolean translatorMode;
 	
 	static {
@@ -21,13 +21,11 @@ public abstract class LocalizationData {
 	}
 	
 	public static void reset() {
-		locale = Preferences.INSTANCE.getLocale();
+		Locale locale = Preferences.INSTANCE.getLocale();
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
 		translatorMode = Preferences.INSTANCE.isTranslatorMode();
-		Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
 		Locale.setDefault(locale);
 		ResourceBundle res = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
-		Locale.setDefault(oldDefault);
 		setBundle(res);
 	}
 	
@@ -44,7 +42,7 @@ public abstract class LocalizationData {
 	}
 
 	public static Locale getLocale() {
-		return locale;
+		return Locale.getDefault();
 	}
 
 	public static DecimalFormat getCurrencyInstance() {

@@ -74,6 +74,7 @@ public class MainFrame extends JFrame implements DataListener {
 		// Set the look and feel
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
+			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
 		} catch (Exception e) {}
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
@@ -334,6 +335,7 @@ public class MainFrame extends JFrame implements DataListener {
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		try {
 			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
+			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
 		} catch (Exception e) {}
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.

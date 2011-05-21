@@ -1,10 +1,7 @@
 package net.yapbam.gui.tools;
 
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import net.yapbam.gui.Preferences;
 
 public class CurrencyNames {
 	private static final String BUNDLE_NAME = "net.yapbam.gui.tools.currencyNames"; //$NON-NLS-1$
@@ -32,10 +29,6 @@ public class CurrencyNames {
 	}
 	
 	static void reset() {
-		Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
-		Locale.setDefault(Preferences.INSTANCE.getLocale());
-		translatorMode = Preferences.INSTANCE.isTranslatorMode();
 		RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
-		Locale.setDefault(oldDefault);
 	}
 }

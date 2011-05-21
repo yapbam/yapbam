@@ -47,6 +47,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.setPrintingSupported(true);
 		// Hack to set the right Locale for JFreeChart panels (it seems there's a bug in JFreeChart: setLocale doesn't refresh the popup menus).
 		new SimpleChartPanel();
+		// FIXME The properties dialog is not localized if the locale has just been set using the preference panel.
 	}
 
 	@SuppressWarnings("serial")
