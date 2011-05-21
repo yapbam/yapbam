@@ -16,7 +16,6 @@ import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 import java.awt.Font;
 import java.awt.Color;
-import java.util.Locale;
 
 import javax.swing.JButton;
 
@@ -241,11 +240,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		//FIXME The JColorChooser locale is wrong, it's always the system default locale
 		//This is a JRE known bug fixed in java 7 (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6524757)
 		//TODO test with JRE 7
-		Locale old = Locale.getDefault();
-		Locale.setDefault(LocalizationData.getLocale());
 		//TODO probably better to have a customized panel with a BalanceReport field
 		Color c = JColorChooser.showDialog(jButton, LocalizationData.get("MainFrame.Transactions.Preferences.ChooseColorDialog.title"), BalanceReportField.POSITIVE_COLOR); //$NON-NLS-1$
-		Locale.setDefault(old);
 		return c;
 	}
 }  //  @jve:decl-index=0:visual-constraint="64,14"

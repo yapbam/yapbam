@@ -19,7 +19,6 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.HTMLPane;
 import javax.swing.JSeparator;
@@ -33,7 +32,6 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import net.yapbam.gui.widget.IntegerWidget;
@@ -67,10 +65,7 @@ public class WelcomePanel extends JPanel {
 	 * Create the panel.
 	 */
 	public WelcomePanel(final GlobalData data) {
-		Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
-		Locale.setDefault(Preferences.INSTANCE.getLocale());
 		urlsResourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
-		Locale.setDefault(oldDefault);
 		
 		tips = new TipManager();
 		

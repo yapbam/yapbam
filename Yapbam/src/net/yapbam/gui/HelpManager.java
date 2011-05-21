@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.util.NullUtils;
 import net.yapbam.util.Portable;
 
 /** This class is responsible for displaying Yapbam helpMessages. 
@@ -33,12 +34,9 @@ public class HelpManager {
 	private static Locale currentLocale = null;
 		
 	private static void loadLanguagesLocations() {
-		if ((currentLocale==null) || !currentLocale.equals(Preferences.INSTANCE.getLocale())) {
-			currentLocale = Preferences.INSTANCE.getLocale();
-			Locale oldDefault = Locale.getDefault(); // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4303146
-			Locale.setDefault(currentLocale);
+		if (!NullUtils.areEquals(currentLocale, Locale.getDefault())) {
+			currentLocale = Locale.getDefault();
 			RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
-			Locale.setDefault(oldDefault);
 		}
 	}
 	

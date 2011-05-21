@@ -227,7 +227,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private JRadioButton getDefaultCButton() {
 		if (defaultCButton == null) {
 			defaultCButton = new JRadioButton();
-			String defaultDisplayCountry = Locale.getDefault().getDisplayCountry(Preferences.INSTANCE.getLocale());
+			String defaultDisplayCountry = LocalizationData.SYS_LOCALE.getDisplayCountry(Preferences.INSTANCE.getLocale());
 			String tip = MessageFormat.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry.toolTip"), defaultDisplayCountry); //$NON-NLS-1$
 			defaultCButton.setToolTipText(tip);
 			defaultCButton.setText(MessageFormat.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry"),defaultDisplayCountry)); //$NON-NLS-1$
@@ -259,7 +259,7 @@ public class LocalizationPanel extends PreferencePanel {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if ((!jListIsAdjusting) && (jList.getSelectedIndex()<0)) {
-							jList.setSelectedValue(Locale.getDefault().getDisplayCountry(Preferences.INSTANCE.getLocale()), true);
+							jList.setSelectedValue(LocalizationData.SYS_LOCALE.getDisplayCountry(Preferences.INSTANCE.getLocale()), true);
 						}
 						checkSomethingChanged();
 					}
@@ -332,9 +332,9 @@ public class LocalizationPanel extends PreferencePanel {
 	}
 
 	public Locale getBuiltLocale() {
-		String country = getDefaultCButton().isSelected()?Locale.getDefault().getCountry():displayCountrytoCode.get((String) jList.getSelectedValue());
+		String country = getDefaultCButton().isSelected()?LocalizationData.SYS_LOCALE.getCountry():displayCountrytoCode.get((String) jList.getSelectedValue());
 		
-		String lang = Locale.getDefault().getLanguage();
+		String lang = LocalizationData.SYS_LOCALE.getLanguage();
 		if (getFrenchButton().isSelected()) {
 			lang = Locale.FRENCH.getLanguage();
 		} else if (getEnglishButton().isSelected()) {
@@ -434,8 +434,9 @@ public class LocalizationPanel extends PreferencePanel {
 	public boolean updatePreferences() {
 		boolean needIHMRefresh = false;
 		if (isChanged()) {
-			needIHMRefresh = !(getBuiltLocale().equals(Preferences.INSTANCE.getLocale()) && (isTranslatorMode()==Preferences.INSTANCE.isTranslatorMode()));
-			Preferences.INSTANCE.setLocale(getBuiltLocale(), isDefaultCountry(), isDefaultLanguage());
+			Locale builtLocale = getBuiltLocale();
+			needIHMRefresh = !(builtLocale.equals(Preferences.INSTANCE.getLocale()) && (isTranslatorMode()==Preferences.INSTANCE.isTranslatorMode()));
+			Preferences.INSTANCE.setLocale(builtLocale, isDefaultCountry(), isDefaultLanguage());
 			Preferences.INSTANCE.setTranslatorMode(isTranslatorMode());
 			if (needIHMRefresh) {
 				LocalizationData.reset();

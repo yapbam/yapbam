@@ -121,9 +121,9 @@ public class Preferences {
 	 */
 	public Locale getLocale() {
 		String lang = this.properties.getProperty(LANGUAGE);
-		if (lang.equalsIgnoreCase(LANGUAGE_DEFAULT_VALUE)) lang = Locale.getDefault().getLanguage();
+		if (lang.equalsIgnoreCase(LANGUAGE_DEFAULT_VALUE)) lang = LocalizationData.SYS_LOCALE.getLanguage();
 		String country = this.properties.getProperty(COUNTRY);
-		if (country.equalsIgnoreCase(COUNTRY_DEFAULT_VALUE)) country = Locale.getDefault().getCountry();
+		if (country.equalsIgnoreCase(COUNTRY_DEFAULT_VALUE)) country = LocalizationData.SYS_LOCALE.getCountry();
 		return new Locale(lang, country);
 	}
 	
