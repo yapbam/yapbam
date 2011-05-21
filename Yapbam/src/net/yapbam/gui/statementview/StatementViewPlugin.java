@@ -1,8 +1,12 @@
 package net.yapbam.gui.statementview;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.print.Printable;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
@@ -50,5 +54,25 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	@Override
 	public TransactionSelector getTransactionSelector() {
 		return panel.getTransactionsTable();
+	}
+
+	@Override
+	public JMenuItem[] getMenuItem(int part) {
+		if (part==TRANSACTIONS_PART) {
+			JMenuItem item = new JMenuItem(panel.checkAction);
+			item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.CTRL_MASK));
+			return new JMenuItem[]{null, item};
+		} else {
+			return super.getMenuItem(part);
+		}
+	}
+
+	@Override
+	public void setDisplayed(boolean displayed) {
+		if (displayed) {
+			panel.checkAction.updateEnabled();
+		} else {
+			panel.checkAction.setEnabled(false);
+		}
 	}
 }

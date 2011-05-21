@@ -1,9 +1,6 @@
-package net.yapbam.gui.transactiontable;
+package net.yapbam.gui.statementview;
 
 import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -11,13 +8,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.util.Date;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -30,9 +25,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 public class CheckModePanel extends JPanel {
+	public static final String IS_OK_PROPERTY = "isOk";
 	private static final long serialVersionUID = 1L;
-
-	private static final Cursor CHECK_CURSOR;
 
 	private JLabel statementLabel;
 	private JTextField statement;
@@ -41,18 +35,10 @@ public class CheckModePanel extends JPanel {
 	private JCheckBox checkModeBox;
 	private boolean ok;
 	
-	private JTable table;
 	private JPanel panel;
 
-	static {
-		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		CHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(5, 13), "checked"); //$NON-NLS-1$
-	}
-
-	public CheckModePanel(JTable table) {
+	public CheckModePanel() {
 		super();
-		this.table = table;
 		
 		KeyListener listener = new KeyAdapter() {
 			@Override
@@ -157,6 +143,7 @@ public class CheckModePanel extends JPanel {
 	}
 
 	private void refreshOk() {
+		boolean old = this.ok;
 		if (isVisible()) {
 			boolean selected = checkModeBox.isSelected();
 			boolean dateOk = (!valueDateLabel.isSelected()) || (valueDate.getDate()!=null);
@@ -167,9 +154,8 @@ public class CheckModePanel extends JPanel {
 		} else {
 			this.ok = false;
 		}
-		if (table!=null) {
-			Cursor cursor = ok ? CHECK_CURSOR:Cursor.getDefaultCursor();
-			table.setCursor(cursor);
+		if (old!=this.ok) {
+			firePropertyChange(IS_OK_PROPERTY, old, this.ok);
 		}
 	}
 

@@ -16,6 +16,7 @@ public class DuplicateTransactionAction extends AbstractTransactionAction {
 	public DuplicateTransactionAction(TransactionSelector selector) {
 		super(selector, LocalizationData.get("MainMenu.Transactions.Duplicate"), IconManager.DUPLICATE_TRANSACTION,
 				LocalizationData.get("MainMenu.Transactions.Duplicate.ToolTip"));
+		putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Duplicate.Mnemonic")); //$NON-NLS-1$
 	}
 	
 	@Override

@@ -17,6 +17,7 @@ public class ConvertToPeriodicalTransactionAction extends AbstractTransactionAct
 	public ConvertToPeriodicalTransactionAction(TransactionSelector selector) {
 		super(selector, LocalizationData.get("MainMenu.Transactions.convertToPeriodical"), null, //$NON-NLS-1$
 				LocalizationData.get("MainMenu.Transactions.convertToPeriodical.ToolTip")); //$NON-NLS-1$
+		putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.convertToPeriodical.Mnemonic")); //$NON-NLS-1$
 	}
 
 	@Override
