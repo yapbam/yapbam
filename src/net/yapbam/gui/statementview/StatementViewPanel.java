@@ -1,10 +1,15 @@
 package net.yapbam.gui.statementview;
 
+import java.awt.Cursor;
 import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Toolkit;
+
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 import javax.swing.JComboBox;
 import java.awt.BorderLayout;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -49,12 +54,14 @@ import javax.swing.JTable.PrintMode;
 
 import java.awt.Font;
 import java.awt.print.Printable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-import net.yapbam.gui.transactiontable.CheckModePanel;
-import net.yapbam.gui.transactiontable.CheckTransactionAction;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private static final Cursor CHECK_CURSOR;
+
 	private JPanel selectionPanel = null;
 	private CoolJComboBox accountMenu = null;
 	private CoolJComboBox statementMenu = null;
@@ -74,6 +81,13 @@ public class StatementViewPanel extends JPanel {
 	private Statement[] statements;
 	private JLabel label;
 	private JLabel columnsMenu;
+	CheckTransactionAction checkAction;
+	
+	static {
+		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		CHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(5, 13), "checked"); //$NON-NLS-1$
+	}
 	
 	/**
 	 * This is the default constructor
@@ -173,8 +187,8 @@ public class StatementViewPanel extends JPanel {
 		Action edit = new EditTransactionAction(selector);
 		Action delete = new DeleteTransactionAction(selector);
 		Action duplicate = new DuplicateTransactionAction(selector);
-		Action check = new CheckTransactionAction(getCheckModePanel(), selector);
-		new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, check);
+		checkAction = new CheckTransactionAction(getCheckModePanel(), selector);
+		new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
 	}
 
 	/**
@@ -444,12 +458,19 @@ public class StatementViewPanel extends JPanel {
 	
 	private CheckModePanel getCheckModePanel() {
 		if (checkModePanel == null) {
-			checkModePanel = new CheckModePanel(getTransactionsTable());
+			checkModePanel = new CheckModePanel();
+			checkModePanel.addPropertyChangeListener(CheckModePanel.IS_OK_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					Cursor cursor = checkModePanel.isOk() ? CHECK_CURSOR : Cursor.getDefaultCursor();
+					getTransactionsTable().setCursor(cursor);
+				}
+			});
 		}
 		return checkModePanel;
 	}
 	
-	private class MyListener extends JTableListener {
+	private static class MyListener extends JTableListener {
 		private Action checkAction;
 		public MyListener(JTable jTable, Action[] actions, Action defaultAction, Action checkAction) {
 			super(jTable, actions, defaultAction);
@@ -458,7 +479,7 @@ public class StatementViewPanel extends JPanel {
 
 		@Override
 		protected void fillPopUp(JPopupMenu popup) {
-			if (checkModePanel.isOk()) {
+			if (checkAction.isEnabled()) {
 				popup.add(new JMenuItem(checkAction));
 				popup.addSeparator();
 			}
@@ -467,7 +488,7 @@ public class StatementViewPanel extends JPanel {
 
 		@Override
 		protected Action getDoubleClickAction() {
-			if (checkModePanel.isOk()) {
+			if (checkAction.isEnabled()) {
 				return checkAction;
 			} else {
 				return super.getDoubleClickAction();

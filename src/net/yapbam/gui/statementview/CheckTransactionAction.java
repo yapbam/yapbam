@@ -1,6 +1,8 @@
-package net.yapbam.gui.transactiontable;
+package net.yapbam.gui.statementview;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -19,9 +21,23 @@ public class CheckTransactionAction extends AbstractAction {
 	
 	public CheckTransactionAction (CheckModePanel checkModePanel, TransactionSelector selector) {
 		super(LocalizationData.get("MainMenu.Transactions.Check"), IconManager.CHECK_TRANSACTION); //$NON-NLS-1$
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Check.ToolTip")); //$NON-NLS-1$
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Check.ToolTip")); //$NON-NLS-1$
+		putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Check.Mnemonic")); //$NON-NLS-1$
 		this.tPanel = checkModePanel;
 		this.selector = selector;
+		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateEnabled();
+			}
+		};
+		this.tPanel.addPropertyChangeListener(CheckModePanel.IS_OK_PROPERTY, listener);
+		this.selector.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, listener);
+		updateEnabled();
+	}
+
+	public void updateEnabled() {
+		setEnabled(tPanel.isOk() && (this.selector.getSelectedTransaction()!=null));
 	}
 	
 	@Override

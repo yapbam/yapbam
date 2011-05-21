@@ -166,14 +166,15 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		transactionMenu.add(item);
 		TransactionSelector selector = getTransactionSelector();
-		//TODO Add menu shortcuts
 		item = new JMenuItem(new EditTransactionAction(selector)); 
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Edit.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		transactionMenu.add(item);
 		item = new JMenuItem(new DuplicateTransactionAction(selector));
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Duplicate.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		transactionMenu.add(item);
 		item = new JMenuItem(new DeleteTransactionAction(selector));
-		item.setAccelerator(KeyStroke.getKeyStroke(
-			LocalizationData.getChar("MainMenu.Transactions.Delete.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, ActionEvent.CTRL_MASK));
+
 		transactionMenu.add(item);
 
 		insertPluginMenuItems(transactionMenu, AbstractPlugIn.TRANSACTIONS_PART);
