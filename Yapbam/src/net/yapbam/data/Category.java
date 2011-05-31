@@ -45,7 +45,7 @@ public class Category implements Serializable, Comparable<Category> {
 	}
 
 	/** Compares this to another category.
-	 * The categories are compare accordingly to their names with String.compareTo.
+	 * The categories are compared accordingly to their names with String.compareTo.
 	 * @param o The object to compare with the category.
 	 * @return an int.
 	 */
