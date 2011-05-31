@@ -381,8 +381,8 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		long now = System.currentTimeMillis();
 		HashMap<ModeAndType, Double> modes = new HashMap<ModeAndType, Double>();
 		HashMap<Category, Double> categories = new HashMap<Category, Double>();
-		for (int i = 0; i < data.getTransactionsNumber(); i++) {
-			Transaction transaction = data.getTransaction(i);
+		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
+			Transaction transaction = data.getGlobalData().getTransaction(i);
 			if (transaction.getDescription().equalsIgnoreCase(description)) {
 				Category category = transaction.getCategory();
 				// In order to minimize the impact of very old transactions, we will use
