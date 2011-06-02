@@ -36,6 +36,8 @@ public class TabbedPane extends DnDTabbedPane {
 	@Override
 	protected void convertTab(int prev, int next) {
 //		System.out.println (prev+"/"+this.getTabCount()+" -> "+next+"/"+this.getTabCount());
+		// If the tab was moved outside of the tabs region => Do nothing
+		if (next==-1) return;
 		if (next>prev) {
 			positions.add(next-1, positions.remove(prev));
 		} else if (next!=prev){
