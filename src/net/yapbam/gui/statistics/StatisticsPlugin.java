@@ -23,6 +23,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.filter.FilterView;
 import net.yapbam.gui.widget.TabbedPane;
 
 public class StatisticsPlugin extends AbstractPlugIn {
@@ -67,8 +68,11 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.pie.tabname"), null, this.pie, LocalizationData.get("StatisticsPlugin.pie.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		buildSummaries();
 		JPanel result = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-				new Insets(5, 0, 0, 0), 0, 0);
+		GridBagConstraints cfv = new GridBagConstraints(0, 0, 1, 1, 0, 1, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+				new Insets(0, 0, 0, 0), 0, 0);
+		result.add(new FilterView(), cfv);
+		GridBagConstraints c = new GridBagConstraints(1, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+				new Insets(0, 0, 0, 0), 0, 0);
 		result.add(tabbedPane, c);
 		return result;
 	}

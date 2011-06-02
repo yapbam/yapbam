@@ -41,6 +41,8 @@ public abstract class IconManager {
 	public static final Icon EXPORT = create("images/export.png");
 	public static final Icon ALERT = create("images/alert.png");
 	public static final Icon LOCK = create("images/locked.png");
+	public static final Icon DEPLOY = SPREADABLE;
+	public static final Icon UNDEPLOY = create("images/undeploy.png");
 		
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private static ImageIcon create(String path) {
