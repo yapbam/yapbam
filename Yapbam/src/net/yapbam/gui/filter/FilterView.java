@@ -3,6 +3,7 @@ package net.yapbam.gui.filter;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
@@ -16,10 +17,11 @@ import java.awt.Color;
 public class FilterView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel btnOpen;
-	private FilterElementView filterElement;
+	private Component filterElement;
 	private JPanel elementsPane;
 	private JLabel lblFilter;
 	private boolean deployed;
+	private FilterElementView label;
 
 	/**
 	 * Create the panel.
@@ -58,7 +60,6 @@ public class FilterView extends JPanel {
 		elementsPane = new JPanel();
 		GridBagConstraints gbc_elementsPane = new GridBagConstraints();
 		gbc_elementsPane.weighty = 1.0;
-		gbc_elementsPane.insets = new Insets(0, 0, 5, 0);
 		gbc_elementsPane.fill = GridBagConstraints.BOTH;
 		gbc_elementsPane.gridx = 2;
 		gbc_elementsPane.gridy = 0;
@@ -66,14 +67,23 @@ public class FilterView extends JPanel {
 		GridBagLayout gbl_elementsPane = new GridBagLayout();
 		elementsPane.setLayout(gbl_elementsPane);
 
-		filterElement = new FilterElementView();
+		filterElement = new FilterElementView("New label just a little bit loooooooooooooooooooooooooooooooooooong, for fun !!!");
 		GridBagConstraints gbc_filterElement = new GridBagConstraints();
-		gbc_filterElement.anchor = GridBagConstraints.NORTH;
+		gbc_filterElement.insets = new Insets(0, 0, 5, 0);
+		gbc_filterElement.anchor = GridBagConstraints.NORTHWEST;
 		gbc_filterElement.weighty = 1.0;
 		gbc_filterElement.fill = GridBagConstraints.HORIZONTAL;
 		gbc_filterElement.gridx = 0;
-		gbc_filterElement.gridy = 0;
+		gbc_filterElement.gridy = 1;
 		elementsPane.add(filterElement, gbc_filterElement);
+		
+		label = new FilterElementView("New label");
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.anchor = GridBagConstraints.NORTHWEST;
+		gbc_label.fill = GridBagConstraints.HORIZONTAL;
+		gbc_label.gridx = 0;
+		gbc_label.gridy = 0;
+		elementsPane.add(label, gbc_label);
 		
 		setDeployed(false);
 	}
