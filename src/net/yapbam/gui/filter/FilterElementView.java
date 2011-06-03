@@ -4,16 +4,17 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import javax.swing.JLabel;
 
 import net.yapbam.gui.IconManager;
 
 import org.jfree.ui.DateChooserPanel;
+
+import sun.swing.SwingUtilities2;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 
 public class FilterElementView extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -22,31 +23,27 @@ public class FilterElementView extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public FilterElementView() {
+	public FilterElementView(String text) {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{100};
 		setLayout(gridBagLayout);
 		
-		label = new JLabel(" ");
-		label.setOpaque(true);
-		label.setMaximumSize(new Dimension(150, 40));
+		label = new JLabel();
 		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.fill = GridBagConstraints.BOTH;
-		gbc_label.insets = new Insets(0, 0, 0, 5);
+		gbc_label.fill = GridBagConstraints.HORIZONTAL;
+		gbc_label.anchor = GridBagConstraints.WEST;
+		gbc_label.weightx = 1.0;
 		gbc_label.gridx = 0;
 		gbc_label.gridy = 0;
 		add(label, gbc_label);
 		
-		label.setText("New label just a little bit loooooooooooooooooooooooooooooooooooong, for fun !!!");
-		Dimension d = label.getPreferredSize();  
-    label.setPreferredSize(new Dimension(150,d.height));		
+		setLabel(text);		
 		
 		final JPopupMenu popup = new JPopupMenu();
 
 		final JLabel button = new JLabel(IconManager.SPREADABLE);
 		GridBagConstraints gbc_button = new GridBagConstraints();
 		gbc_button.anchor = GridBagConstraints.WEST;
-		gbc_button.fill = GridBagConstraints.VERTICAL;
+		gbc_button.fill = GridBagConstraints.NONE;
 		gbc_button.gridx = 1;
 		gbc_button.gridy = 0;
 		add(button, gbc_button);
@@ -65,4 +62,13 @@ public class FilterElementView extends JPanel {
 		});
 	}
 
+	public void setLabel(String text) {
+		String clipped = SwingUtilities2.clipStringIfNecessary(label, label.getFontMetrics(label.getFont()), text, 150);
+		System.out.println ("clipped: "+clipped);
+		label.setText(clipped);
+//		Dimension d = label.getPreferredSize();
+//		Dimension newDimension = new Dimension(150,d.height);
+//    label.setPreferredSize(newDimension);
+//    label.setSize(newDimension);
+	}
 }
