@@ -576,7 +576,12 @@ public class FilteredData extends DefaultListenable {
 					if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
 						addedAmount += transaction.getAmount();
 					} else {
-						balanceTransactions.add(transaction);
+						// Here we have a hard choice to make: 
+						// Ignore the transactions with a value date after the upper limit of the filter or not.
+						// In the first case, users may be surprised that transactions excluded by the filter are taken into account
+						// In the second one, the balance history after the filter upper limit is WRONG, and its probably dangerous !!!
+						// Uncomment the test to implement the second one.
+						/*if (NullUtils.compareTo(valueDate, getValueDateTo(), false)<=0)*/ balanceTransactions.add(transaction);
 						if (isOk(transaction)) {
 							int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
 							transactions.add(index, transaction);
