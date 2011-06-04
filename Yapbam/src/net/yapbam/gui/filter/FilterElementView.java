@@ -64,7 +64,6 @@ public class FilterElementView extends JPanel {
 
 	public void setLabel(String text) {
 		String clipped = SwingUtilities2.clipStringIfNecessary(label, label.getFontMetrics(label.getFont()), text, 150);
-		System.out.println ("clipped: "+clipped);
 		label.setText(clipped);
 //		Dimension d = label.getPreferredSize();
 //		Dimension newDimension = new Dimension(150,d.height);

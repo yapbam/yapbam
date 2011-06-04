@@ -13,6 +13,22 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.plaf.basic.BasicLabelUI;
 
+/*
+ * The contents of this file are subject to the Sapient Public License
+ * Version 1.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * http://carbon.sf.net/License.html.
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ *
+ * The Original Code is The Carbon Component Framework.
+ *
+ * The Initial Developer of the Original Code is Sapient Corporation
+ *
+ * Copyright (C) 2003 Sapient Corporation. All Rights Reserved.
+ */
 class VerticalLabelUI extends BasicLabelUI {
 	static {
 		labelUI = new VerticalLabelUI(false);
