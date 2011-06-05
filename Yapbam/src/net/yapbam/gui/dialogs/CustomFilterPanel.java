@@ -47,7 +47,6 @@ import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
 import javax.swing.JButton;
-import java.awt.BorderLayout;
 
 public class CustomFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -202,8 +201,6 @@ public class CustomFilterPanel extends JPanel {
 		gridBagConstraints.gridy = 1;
 		this.setSize(800, 500);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0};
-		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0};
 		this.setLayout(gridBagLayout);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridwidth = 2;
@@ -270,7 +267,7 @@ public class CustomFilterPanel extends JPanel {
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.fill = GridBagConstraints.BOTH;
 			gridBagConstraints14.weighty = 1.0;
-			gridBagConstraints14.gridx = 2;
+			gridBagConstraints14.gridx = 0;
 			gridBagConstraints14.gridy = 0;
 			gridBagConstraints14.weightx = 1.0;
 			accountPanel = new JPanel();
@@ -316,6 +313,7 @@ public class CustomFilterPanel extends JPanel {
 					updateModesList(false);
 				}
 			});
+			accountList.setVisibleRowCount(7);
 		}
 		return accountList;
 	}
@@ -332,8 +330,6 @@ public class CustomFilterPanel extends JPanel {
 			gridBagConstraints4.gridy = 0;
 			amountPanel = new JPanel();
 			GridBagLayout gbl_amountPanel = new GridBagLayout();
-			gbl_amountPanel.rowWeights = new double[]{0.0};
-			gbl_amountPanel.columnWeights = new double[]{1.0, 0.0, 0.0};
 			amountPanel.setLayout(gbl_amountPanel);
 			amountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
 			GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -1545,7 +1541,7 @@ public class CustomFilterPanel extends JPanel {
 			gridBagConstraints37.fill = GridBagConstraints.BOTH;
 			gridBagConstraints37.gridy = 0;
 			gridBagConstraints37.weightx = 1.0;
-			gridBagConstraints37.weighty = 0.0D;
+			gridBagConstraints37.weighty = 1.0;
 			gridBagConstraints37.gridx = 0;
 			modePanel = new JPanel();
 			modePanel.setLayout(new GridBagLayout());
@@ -1579,6 +1575,7 @@ public class CustomFilterPanel extends JPanel {
 			modes = new JList();
 			modes.setToolTipText(LocalizationData.get("CustomFilterPanel.mode.toolTip")); //$NON-NLS-1$
 			modes.addListSelectionListener(CONSISTENCY_CHECKER_LIST);
+			modes.setVisibleRowCount(7);
 		}
 		return modes;
 	}
@@ -1810,9 +1807,27 @@ public class CustomFilterPanel extends JPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.setLayout(new BorderLayout(0, 0));
-			panel.add(getReceipts_expensesPanel(), BorderLayout.NORTH);
-			panel.add(getDescriptionPanel(), BorderLayout.CENTER);
+			GridBagLayout gbl_panel = new GridBagLayout();
+			gbl_panel.columnWidths = new int[]{551, 0};
+			gbl_panel.rowHeights = new int[]{50, 85, 0};
+			gbl_panel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+			gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+			panel.setLayout(gbl_panel);
+			GridBagConstraints gbc_Receipts_expensesPanel = new GridBagConstraints();
+			gbc_Receipts_expensesPanel.weightx = 1.0;
+			gbc_Receipts_expensesPanel.anchor = GridBagConstraints.NORTH;
+			gbc_Receipts_expensesPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbc_Receipts_expensesPanel.insets = new Insets(0, 0, 5, 0);
+			gbc_Receipts_expensesPanel.gridx = 0;
+			gbc_Receipts_expensesPanel.gridy = 0;
+			panel.add(getReceipts_expensesPanel(), gbc_Receipts_expensesPanel);
+			GridBagConstraints gbc_descriptionPanel = new GridBagConstraints();
+			gbc_descriptionPanel.weightx = 1.0;
+			gbc_descriptionPanel.weighty = 1.0;
+			gbc_descriptionPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbc_descriptionPanel.gridx = 0;
+			gbc_descriptionPanel.gridy = 1;
+			panel.add(getDescriptionPanel(), gbc_descriptionPanel);
 		}
 		return panel;
 	}
