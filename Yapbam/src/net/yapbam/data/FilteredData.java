@@ -580,6 +580,7 @@ public class FilteredData extends DefaultListenable {
 						// Ignore the transactions with a value date after the upper limit of the filter or not.
 						// In the first case, users may be surprised that transactions excluded by the filter are taken into account
 						// In the second one, the balance history after the filter upper limit is WRONG, and its probably dangerous !!!
+						// Especially, if the end date is before today, the current balance will be false and be displayed false in the transactions panel. 
 						// Uncomment the test to implement the second one.
 						/*if (NullUtils.compareTo(valueDate, getValueDateTo(), false)<=0)*/ balanceTransactions.add(transaction);
 						if (isOk(transaction)) {
