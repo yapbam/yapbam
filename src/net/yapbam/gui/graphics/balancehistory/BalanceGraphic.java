@@ -324,7 +324,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	public Dimension getPreferredSize() {
 		Dimension parentSize = this.getParent().getSize();
 		// The actual preferred end date is
-		// - The end date if no preferred end date is set or if this date is greater than the balance history end date.
+		// - The end date if no preferred end date is set or if this preferred date is greater than the balance history end date.
 		// - otherwise, the preferred end date
 		Date end = NullUtils.compareTo(this.getPreferredEndDate(), this.getEndDate(), false)<0?this.getPreferredEndDate():this.getEndDate();
 		long days = 1 + (end.getTime() - this.getStartDate().getTime()) / 24 / 3600000;
@@ -353,7 +353,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		return PIXEL_PER_DAY; // Increments by one day
 	}
 
-	/** Sets the end date of this graphic.
+	/** Sets the preferred end date of this graphic.
 	 * <br>If the end date if lower than what could be displayed in the graphic's window,
 	 * the graphic will display data after this endDate. You have to think this attribute
 	 * only limit the horizontal scroll.
