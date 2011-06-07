@@ -4,7 +4,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
@@ -31,7 +30,6 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new GridBagLayout());
 		KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
-		FocusListener focusListener = new AutoSelectFocusListener();
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -49,7 +47,7 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 		JLabel titleCompte = new JLabel(LocalizationData.get("CategoryDialog.category")); //$NON-NLS-1$
 		centerPane.add(titleCompte, c);
 		categoryField = new JTextField(20);
-		categoryField.addFocusListener(focusListener);
+		categoryField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		categoryField.addKeyListener(listener);
 		categoryField.setToolTipText(LocalizationData.get("CategoryDialog.category.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;

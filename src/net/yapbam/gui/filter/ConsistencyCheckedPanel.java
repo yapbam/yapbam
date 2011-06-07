@@ -1,0 +1,35 @@
+package net.yapbam.gui.filter;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.JPanel;
+
+import net.yapbam.util.NullUtils;
+
+public abstract class ConsistencyCheckedPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
+	public static String INCONSISTENCY_CAUSE_PROPERTY = "inconsistencyCause";
+	private String inconsistencyCause;
+	
+	protected PropertyChangeListener CONSISTENCY_CHECKER = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			String old = inconsistencyCause;
+			inconsistencyCause = computeInconsistencyCause();  //  @jve:decl-index=0:
+			if (!NullUtils.areEquals(old, inconsistencyCause)) {
+				firePropertyChange(INCONSISTENCY_CAUSE_PROPERTY, old, inconsistencyCause);
+			}
+		}
+	};
+
+	public ConsistencyCheckedPanel() {
+		this.inconsistencyCause = null;
+	}
+	
+	protected abstract String computeInconsistencyCause();
+	
+	public String getInconsistencyCause() {
+		return inconsistencyCause;
+	}
+}

@@ -3,6 +3,7 @@ package net.yapbam.gui.filter;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
@@ -64,8 +65,19 @@ public class FilterView extends JPanel {
 		GridBagLayout gbl_elementsPane = new GridBagLayout();
 		elementsPane.setLayout(gbl_elementsPane);
 
-		setFilterElements(new FilterElementView[]{new FilterElementView("New label"), new FilterElementView("New label just a little bit loooooooooooooooooooooooooooooooooooong, for fun !!!")});
+		setFilterElements(new FilterElementView[]{new FilterElementView("New label"),
+				new Toto("New label just a little bit loooooooooooooooooooooooooooooooooooong, for fun !!!")});
 		setDeployed(false);
+	}
+	
+	static class Toto extends FilterElementView {
+		Toto(String label) {
+			super(label);
+		}
+		@Override
+		protected Component buildPopupContent() {
+			return new AmountPanel(10, 20);
+		}
 	}
 	
 	private void setFilterElements(FilterElementView[] elements) {

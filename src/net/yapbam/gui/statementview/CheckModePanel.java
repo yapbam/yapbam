@@ -76,7 +76,7 @@ public class CheckModePanel extends JPanel {
 		gbc_statement.gridy = 0;
 		add(statement, gbc_statement);
 		statement.addKeyListener(listener);
-		statement.addFocusListener(new AutoSelectFocusListener());
+		statement.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip"));
 		
 		panel = new JPanel();
@@ -117,7 +117,7 @@ public class CheckModePanel extends JPanel {
 				refreshOk();
 			}
 		});
-		valueDate.getDateWidget().addFocusListener(new AutoSelectFocusListener());
+		valueDate.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 		valueDateLabel.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {

@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
@@ -52,7 +51,6 @@ class ModePanel extends JPanel {
 	 */
 	ModePanel(String title, Component option, final ModeDialog dialog) {
 		super(new GridBagLayout());
-		FocusListener focusListener = new AutoSelectFocusListener();
 		KeyListener keyListener = new AutoUpdateOkButtonKeyListener(dialog);
 		Insets insets = new Insets(5, 5, 5, 5);
 		this.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
@@ -107,7 +105,7 @@ class ModePanel extends JPanel {
 		c2.gridx = 1;
 		c2.weightx = 1.0;
 		relField = new IntegerWidget();
-		relField.addFocusListener(focusListener);
+		relField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		relField.addKeyListener(keyListener);
 		relField.setColumns(2);
 		relativePanel.add(relField, c2);
@@ -122,7 +120,7 @@ class ModePanel extends JPanel {
 		deferedPanel.add(stopLabel, c2);
 		c2.gridx = 1;
 		stopField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
-		stopField.addFocusListener(focusListener);
+		stopField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		stopField.addKeyListener(keyListener);
 		stopField.setColumns(2);
 		deferedPanel.add(stopField, c2);
@@ -130,7 +128,7 @@ class ModePanel extends JPanel {
 		debtLabel = new JLabel(LocalizationData.get("ModeDialog.debt")); //$NON-NLS-1$
 		deferedPanel.add(debtLabel, c2);
 		debtField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
-		debtField.addFocusListener(focusListener);
+		debtField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		debtField.addKeyListener(keyListener);
 		debtField.setColumns(2);
 		c2.gridx = 3;

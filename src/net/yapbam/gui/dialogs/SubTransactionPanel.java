@@ -114,7 +114,6 @@ public class SubTransactionPanel extends JPanel {
 		this.add(jLabel2, gridBagConstraints11);
 		this.add(getJCheckBox(), gridBagConstraints12);
 		
-		AutoSelectFocusListener focusListener = new AutoSelectFocusListener();
 		this.description = descriptionField.getText();
 		descriptionField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -124,7 +123,7 @@ public class SubTransactionPanel extends JPanel {
 				SubTransactionPanel.this.firePropertyChange(DESCRIPTION_PROPERTY, old, description);
 			}
 		});
-		descriptionField.addFocusListener(focusListener);
+		descriptionField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		this.amount = amountField.getValue();
 		amountField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -135,7 +134,7 @@ public class SubTransactionPanel extends JPanel {
 				SubTransactionPanel.this.firePropertyChange(AMOUNT_PROPERTY, old, description);
 			}
 		});
-		amountField.addFocusListener(focusListener);
+		amountField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 	}
 
 	/**

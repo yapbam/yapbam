@@ -148,7 +148,7 @@ public class GenerationPanel extends JPanel {
 					}
 				}
 			});
-			date.getDateWidget().addFocusListener(new AutoSelectFocusListener());
+			date.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			date.setColumns(6);
 			date.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.nextDate.toolTip")); //$NON-NLS-1$
 		}
@@ -184,7 +184,7 @@ public class GenerationPanel extends JPanel {
 	private IntegerWidget getNb() {
 		if (nb == null) {
 	        nb = new IntegerWidget(BigInteger.ONE, IntegerWidget.INTEGER_MAX_VALUE);
-	        nb.addFocusListener(new AutoSelectFocusListener());
+	        nb.addFocusListener(AutoSelectFocusListener.INSTANCE);
 	        nb.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -347,7 +347,7 @@ public class GenerationPanel extends JPanel {
 	private IntegerWidget getDay() {
 		if (day == null) {
 			day = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
-			day.addFocusListener(new AutoSelectFocusListener());
+			day.addFocusListener(AutoSelectFocusListener.INSTANCE);
 	        day.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -376,7 +376,7 @@ public class GenerationPanel extends JPanel {
 			lastDate.setDate(null);
 			lastDate.setColumns(6);
 			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
-			lastDate.getDateWidget().addFocusListener(new AutoSelectFocusListener());
+			lastDate.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			lastDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {

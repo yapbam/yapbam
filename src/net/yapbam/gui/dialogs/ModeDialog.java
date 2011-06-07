@@ -55,7 +55,7 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		name = new JTextField(10);
 		name.addKeyListener(new AutoUpdateOkButtonKeyListener(this));
-		name.addFocusListener(new AutoSelectFocusListener());
+		name.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		idPanel.add(name, c);
 
 		checkbook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
