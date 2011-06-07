@@ -13,6 +13,7 @@ import org.jfree.ui.DateChooserPanel;
 
 import sun.swing.SwingUtilities2;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
@@ -51,10 +52,7 @@ public class FilterElementView extends JPanel {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				if (button.isEnabled() && !popup.isVisible()) {
 					popup.removeAll();
-					DateChooserPanel widget = new DateChooserPanel();
-					widget.setChosenDateButtonColor(Color.RED);
-					widget.setChosenOtherButtonColor(Color.GRAY);
-					widget.setChosenMonthButtonColor(Color.WHITE);
+					Component widget = buildPopupContent();
 					popup.add(widget);
 					popup.show(button, button.getSize().width, widget.getHeight());
 				}
@@ -69,5 +67,13 @@ public class FilterElementView extends JPanel {
 //		Dimension newDimension = new Dimension(150,d.height);
 //    label.setPreferredSize(newDimension);
 //    label.setSize(newDimension);
+	}
+
+	protected Component buildPopupContent() {
+		DateChooserPanel widget = new DateChooserPanel();
+		widget.setChosenDateButtonColor(Color.RED);
+		widget.setChosenOtherButtonColor(Color.GRAY);
+		widget.setChosenMonthButtonColor(Color.WHITE);
+		return widget;
 	}
 }

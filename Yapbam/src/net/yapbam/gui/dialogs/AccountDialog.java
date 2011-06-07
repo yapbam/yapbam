@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
@@ -37,7 +36,6 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		// Create the content pane.
 		JPanel northPanel = new JPanel(new GridBagLayout());
 		KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
-		FocusListener focusListener = new AutoSelectFocusListener();
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -55,7 +53,7 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		JLabel titleCompte = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
 		northPanel.add(titleCompte, c);
 		bankAccountField = new JTextField(20);
-		bankAccountField.addFocusListener(focusListener);
+		bankAccountField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		bankAccountField.addKeyListener(listener);
 		bankAccountField.setToolTipText(LocalizationData.get("AccountDialog.account.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
@@ -70,7 +68,7 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		c.gridx = 0;
 		northPanel.add(titleBalance, c);
 		balanceField = new AmountWidget(LocalizationData.getLocale());
-		balanceField.addFocusListener(focusListener);
+		balanceField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		balanceField.setValue(new Double(0));
 		balanceField.addKeyListener(listener);
 		balanceField.setToolTipText(LocalizationData.get("AccountDialog.balance.tooltip")); //$NON-NLS-1$

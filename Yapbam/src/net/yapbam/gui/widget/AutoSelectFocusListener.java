@@ -12,8 +12,9 @@ import javax.swing.text.JTextComponent;
  * @see JTextComponent#addFocusListener(FocusListener)
  */
 public class AutoSelectFocusListener implements FocusListener {
+	public static AutoSelectFocusListener INSTANCE = new AutoSelectFocusListener();
 
-	public AutoSelectFocusListener() {}
+	private AutoSelectFocusListener() {}
 
 	public void focusLost(FocusEvent e) {}
 

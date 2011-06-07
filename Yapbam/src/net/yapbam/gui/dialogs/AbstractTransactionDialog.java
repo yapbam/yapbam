@@ -133,7 +133,6 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new GridBagLayout());
-		FocusListener focusListener = new AutoSelectFocusListener();
 		KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
 
 		// Account
@@ -171,20 +170,20 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 				if (evt.getNewValue()!=null) predefinedDescriptionSelected((String) evt.getNewValue());
 			}
 		});
-		description.addFocusListener(focusListener);
+		description.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(description, c);
 
 		// Next line
 		c = new GridBagConstraints();
 		c.insets = insets; c.gridx=0; c.gridy=2; c.anchor = GridBagConstraints.WEST;
-		buildDateField(centerPane, focusListener, c); // Subclasses may insert a date field here
+		buildDateField(centerPane, AutoSelectFocusListener.INSTANCE, c); // Subclasses may insert a date field here
 
 		c.fill=GridBagConstraints.NONE; c.anchor = GridBagConstraints.WEST; c.weightx = 0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.amount")), c); //$NON-NLS-1$
 		amount = new AmountWidget(LocalizationData.getLocale());
 		amount.setColumns(10);
-		amount.addFocusListener(focusListener);
+		amount.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		amount.addKeyListener(listener);
 		amount.setValue(new Double(0));
 		amount.setToolTipText(LocalizationData.get("TransactionDialog.amount.tooltip")); //$NON-NLS-1$
@@ -214,7 +213,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		centerPane.add(combine(modes, newMode), c);
 		
 		c.gridx = 2;
-		buildNumberField(centerPane, focusListener, c); // Subclasses may insert a number field here
+		buildNumberField(centerPane, AutoSelectFocusListener.INSTANCE, c); // Subclasses may insert a number field here
 
 		c.fill=GridBagConstraints.NONE; c.weightx=0.0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.category")), c); //$NON-NLS-1$
@@ -225,7 +224,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		// Next line
 		c = new GridBagConstraints();
 		c.insets=insets; c.gridx=0; c.gridy=5; c.anchor = GridBagConstraints.WEST;
-		buildStatementFields(centerPane, focusListener, c);
+		buildStatementFields(centerPane, AutoSelectFocusListener.INSTANCE, c);
 
 		// Next Line
 		c.gridx=0; c.gridy++; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;

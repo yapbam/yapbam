@@ -33,7 +33,7 @@ import net.yapbam.data.Mode;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.AmountWidget;
+import net.yapbam.gui.filter.AmountPanel;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 import java.text.MessageFormat;
@@ -50,20 +50,13 @@ import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final AutoSelectFocusListener AUTO_FOCUS_SELECTOR = new AutoSelectFocusListener();
 	public static final String INCONSISTENCY_CAUSE_PROPERTY = "InconsistencyCause"; //$NON-NLS-1$
 	
 	private JPanel accountPanel = null;
 	private JList accountList = null;
-	private JPanel amountPanel = null;
+	private AmountPanel amountPanel = null;
 	private JPanel categoryPanel = null;
 	private JList categoryList = null;
-	private JRadioButton amountEquals = null;
-	private JRadioButton amountBetween = null;
-	private AmountWidget minAmount = null;
-	private JLabel jLabel = null;
-	private AmountWidget maxAmount = null;
-	private JRadioButton amountAll = null;
 	private JPanel descriptionPanel = null;
 	private JCheckBox ignoreCase = null;
 	private JTextField description = null;
@@ -89,11 +82,9 @@ public class CustomFilterPanel extends JPanel {
 	private JTextField statement = null;
 	private JCheckBox ignoreDiacritics = null;
 	private JLabel regexpHelp = null;
-	private JPanel jPanel1 = null;
 	private JRadioButton descriptionEqualsTo = null;
 	private JRadioButton descriptionContains = null;
 	private JRadioButton descriptionRegular = null;
-	private JPanel jPanel2 = null;
 	private JPanel jPanel11 = null;
 	private JLabel regexpStatement = null;
 	private JRadioButton statementEqualsTo = null;
@@ -143,18 +134,16 @@ public class CustomFilterPanel extends JPanel {
 	private JTextField number = null;
 	private JCheckBox receipts;
 	private JCheckBox expenses;
-	private JPanel panel_1;
 	private JPanel Receipts_expensesPanel;
-	private JPanel panel_2;
 	private JPanel panel_3;
 	private JPanel panel;
+	private JPanel jPanel1;
+	private JPanel jPanel2;
 
-	/**
-	 * This is the default constructor
-	 */
 	public CustomFilterPanel() {
 		this(new FilteredData(new GlobalData()));
 	}
+	
 	
 	public CustomFilterPanel(FilteredData data) {
 		super();
@@ -201,6 +190,7 @@ public class CustomFilterPanel extends JPanel {
 		gridBagConstraints.gridy = 1;
 		this.setSize(800, 500);
 		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.rowHeights = new int[]{0, 155, 0, 0, 0, 0, 0, 0};
 		this.setLayout(gridBagLayout);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridwidth = 2;
@@ -323,30 +313,15 @@ public class CustomFilterPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getAmountPanel() {
+	private AmountPanel getAmountPanel() {
 		if (amountPanel == null) {
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 5;
-			gridBagConstraints4.gridy = 0;
-			amountPanel = new JPanel();
-			GridBagLayout gbl_amountPanel = new GridBagLayout();
-			amountPanel.setLayout(gbl_amountPanel);
-			amountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
-			GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-			gbc_panel_2.anchor = GridBagConstraints.WEST;
-			gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
-			gbc_panel_2.insets = new Insets(0, 0, 5, 5);
-			gbc_panel_2.gridx = 0;
-			gbc_panel_2.gridy = 0;
-			amountPanel.add(getPanel_2(), gbc_panel_2);
-			GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-			gbc_panel_1.weightx = 1.0;
-			gbc_panel_1.fill = GridBagConstraints.BOTH;
-			gbc_panel_1.anchor = GridBagConstraints.WEST;
-			gbc_panel_1.gridwidth = 3;
-			gbc_panel_1.gridx = 1;
-			gbc_panel_1.gridy = 0;
-			amountPanel.add(getPanel_1(), gbc_panel_1);
+			amountPanel = new AmountPanel(data.getMinimumAmount(), data.getMaximumAmount());
+			amountPanel.addPropertyChangeListener(AmountPanel.INCONSISTENCY_CAUSE_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					checkConsistency();
+				}
+			});
 		}
 		return amountPanel;
 	}
@@ -402,120 +377,6 @@ public class CustomFilterPanel extends JPanel {
 			categoryList.addListSelectionListener(CONSISTENCY_CHECKER_LIST);
 		}
 		return categoryList;
-	}
-
-	/**
-	 * This method initializes amountEquals	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getAmountEquals() {
-		if (amountEquals == null) {
-			amountEquals = new JRadioButton();
-			amountEquals.setText(LocalizationData.get("CustomFilterPanel.amount.equals")); //$NON-NLS-1$
-			amountEquals.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.equals.toolTip")); //$NON-NLS-1$
-			amountEquals.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (amountEquals.isSelected()) {
-						getMinAmount().setEnabled(true);
-						getMaxAmount().setEnabled(false);
-						getMaxAmount().setValue(getMinAmount().getValue());
-					}
-				}
-			});
-			amountEquals.setSelected(data.getMinimumAmount()==data.getMaximumAmount());
-		}
-		return amountEquals;
-	}
-
-	/**
-	 * This method initializes amountBetween	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getAmountBetween() {
-		if (amountBetween == null) {
-			amountBetween = new JRadioButton();
-			amountBetween.setText(LocalizationData.get("CustomFilterPanel.amout.between")); //$NON-NLS-1$
-			amountBetween.setToolTipText(LocalizationData.get("CustomFilterPanel.amout.between.toolTip")); //$NON-NLS-1$
-			amountBetween.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (amountBetween.isSelected()) {
-						getMinAmount().setEnabled(true);
-						getMaxAmount().setEnabled(true);
-					}
-				}
-			});
-			amountBetween.setSelected(((data.getMinimumAmount()!=0.0) ||
-					(data.getMaximumAmount()!=Double.POSITIVE_INFINITY)) &&
-					(data.getMaximumAmount()!=data.getMinimumAmount()));
-		}
-		return amountBetween;
-	}
-
-	/**
-	 * This method initializes minAmount	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private AmountWidget getMinAmount() {
-		if (minAmount == null) {
-			minAmount = new AmountWidget(LocalizationData.getLocale());
-			minAmount.setColumns(6);
-			minAmount.setEmptyAllowed(true);
-			minAmount.setMinValue(0.0);
-			minAmount.setToolTipText(LocalizationData.get("CustomFilterPanel.amout.minimum")); //$NON-NLS-1$
-			minAmount.setValue(data.getMinimumAmount()==0.0?null:data.getMinimumAmount());
-			minAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
-			minAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
-			minAmount.addFocusListener(AUTO_FOCUS_SELECTOR);
-		}
-		return minAmount;
-	}
-
-	/**
-	 * This method initializes maxAmount	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private AmountWidget getMaxAmount() {
-		if (maxAmount == null) {
-			maxAmount = new AmountWidget(LocalizationData.getLocale());
-			maxAmount.setColumns(6);
-			maxAmount.setEmptyAllowed(true);
-			maxAmount.setMinValue(0.0);
-			maxAmount.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.maximum")); //$NON-NLS-1$
-			maxAmount.setValue(data.getMaximumAmount()==Double.POSITIVE_INFINITY?null:data.getMaximumAmount());
-			maxAmount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
-			maxAmount.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
-			maxAmount.addFocusListener(AUTO_FOCUS_SELECTOR);
-		}
-		return maxAmount;
-	}
-
-	/**
-	 * This method initializes amountAll	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getAmountAll() {
-		if (amountAll == null) {
-			amountAll = new JRadioButton();
-			amountAll.setText(LocalizationData.get("CustomFilterPanel.amount.all")); //$NON-NLS-1$
-			amountAll.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.all.toolTip")); //$NON-NLS-1$
-			amountAll.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (amountAll.isSelected()) {
-						getMinAmount().setValue(null);
-						getMaxAmount().setValue(null);
-						getMinAmount().setEnabled(false);
-						getMaxAmount().setEnabled(false);
-					}
-				}
-			});
-			amountAll.setSelected((data.getMinimumAmount()==0.0) && (data.getMaximumAmount()==Double.POSITIVE_INFINITY));
-		}
-		return amountAll;
 	}
 
 	@SuppressWarnings("serial")
@@ -611,8 +472,8 @@ public class CustomFilterPanel extends JPanel {
 		}
 		this.data.setCategories(categories);
 		// build the expense/receipt and amount filter
-		double min = getMinAmount().getValue()==null?0.0:getMinAmount().getValue();
-		double max = getAmountEquals().isSelected()?min:(getMaxAmount().getValue()==null?Double.POSITIVE_INFINITY:getMaxAmount().getValue());
+		Double min = getAmountPanel().getMinAmount();
+		Double max = getAmountPanel().getMaxAmount();
 		int filter = 0;
 		if (getReceipts().isSelected()) filter += FilteredData.RECEIPTS;
 		if (getExpenses().isSelected()) filter += FilteredData.EXPENSES;
@@ -728,8 +589,6 @@ public class CustomFilterPanel extends JPanel {
 		if (!getDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.date.to"); //$NON-NLS-1$
 		if (!getValueDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.valueDateFrom"); //$NON-NLS-1$
 		if (!getValueDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.valueDateTo"); //$NON-NLS-1$
-		if (!getMinAmount().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.amountMimimum"); //$NON-NLS-1$
-		if (!getMaxAmount().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.amountMaximum"); //$NON-NLS-1$
 		if ((getDateFrom().getDate()!=null) && (getDateTo().getDate()!=null)
 				&& (getDateFrom().getDate().compareTo(getDateTo().getDate())>0)) {
 			return LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"); //$NON-NLS-1$
@@ -738,10 +597,7 @@ public class CustomFilterPanel extends JPanel {
 				&& (getValueDateFrom().getDate().compareTo(getValueDateTo().getDate())>0)) {
 			return LocalizationData.get("CustomFilterPanel.error.valueDateFromHigherThanTo"); //$NON-NLS-1$
 		}
-		if ((getMinAmount().getValue()!=null) && (getMaxAmount().getValue()!=null)
-				&& (getMinAmount().getValue()>getMaxAmount().getValue())) {
-			return LocalizationData.get("CustomFilterPanel.error.amountFromHigherThanTo"); //$NON-NLS-1$
-		}
+		if (getAmountPanel().getInconsistencyCause()!=null) return getAmountPanel().getInconsistencyCause();
 		if (getAccountList().getSelectedIndices().length==0) {
 			return LocalizationData.get("CustomFilterPanel.error.noAccount"); //$NON-NLS-1$
 		}
@@ -822,7 +678,7 @@ public class CustomFilterPanel extends JPanel {
 			description = new JTextField();
 			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter()); //$NON-NLS-1$
 			description.setToolTipText(LocalizationData.get("CustomFilterPanel.description.toolTip")); //$NON-NLS-1$
-			description.addFocusListener(AUTO_FOCUS_SELECTOR);
+			description.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return description;
 	}
@@ -966,7 +822,7 @@ public class CustomFilterPanel extends JPanel {
 			dateFrom = new DateWidgetPanel();
 			dateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.date.from.toolTip")); //$NON-NLS-1$
 			dateFrom.setDate(data.getDateFrom());
-			dateFrom.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
+			dateFrom.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -983,7 +839,7 @@ public class CustomFilterPanel extends JPanel {
 			dateTo = new DateWidgetPanel();
 			dateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.date.to.toolTip")); //$NON-NLS-1$
 			dateTo.setDate(data.getDateTo());
-			dateTo.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
+			dateTo.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			dateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1215,7 +1071,7 @@ public class CustomFilterPanel extends JPanel {
 			valueDateFrom = new DateWidgetPanel();
 			valueDateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.from.toolTip")); //$NON-NLS-1$
 			valueDateFrom.setDate(data.getValueDateFrom());
-			valueDateFrom.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
+			valueDateFrom.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			valueDateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1232,7 +1088,7 @@ public class CustomFilterPanel extends JPanel {
 			valueDateTo = new DateWidgetPanel();
 			valueDateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.valueDate.to.toolTip")); //$NON-NLS-1$
 			valueDateTo.setDate(data.getValueDateTo());
-			valueDateTo.getDateWidget().addFocusListener(AUTO_FOCUS_SELECTOR);
+			valueDateTo.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
 			valueDateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
 		}
@@ -1249,7 +1105,7 @@ public class CustomFilterPanel extends JPanel {
 			statement = new JTextField();
 			statement.setText(data.getStatementFilter()==null?"":data.getStatementFilter().getFilter()); //$NON-NLS-1$
 			statement.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.toolTip")); //$NON-NLS-1$
-			statement.addFocusListener(AUTO_FOCUS_SELECTOR);
+			statement.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return statement;
 	}
@@ -1512,7 +1368,7 @@ public class CustomFilterPanel extends JPanel {
 					getDescriptionContains().setSelected(true);
 					getDescription().setText(""); //$NON-NLS-1$
 					getDateAll().setSelected(true);
-					getAmountAll().setSelected(true);
+					getAmountPanel().clear();
 					getNumberContains().setSelected(true);
 					getNumber().setText(""); //$NON-NLS-1$
 					getValueDateAll().setSelected(true);
@@ -1690,7 +1546,7 @@ public class CustomFilterPanel extends JPanel {
 			number = new JTextField();
 			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
 			number.setText(data.getNumberFilter()==null?"":data.getNumberFilter().getFilter()); //$NON-NLS-1$
-			number.addFocusListener(AUTO_FOCUS_SELECTOR);
+			number.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return number;
 	}
@@ -1712,41 +1568,11 @@ public class CustomFilterPanel extends JPanel {
 		}
 		return expenses;
 	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			GridBagLayout gbl_panel_1 = new GridBagLayout();
-			gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0};
-			gbl_panel_1.rowWeights = new double[]{0.0};
-			panel_1.setLayout(gbl_panel_1);
-			GridBagConstraints gbc_maxAmount = new GridBagConstraints();
-			gbc_maxAmount.insets = new Insets(0, 5, 0, 0);
-			gbc_maxAmount.weightx = 1.0;
-			gbc_maxAmount.fill = GridBagConstraints.HORIZONTAL;
-			gbc_maxAmount.gridx = 2;
-			gbc_maxAmount.gridy = 0;
-			panel_1.add(getMaxAmount(), gbc_maxAmount);
-			GridBagConstraints gbc_minAmount = new GridBagConstraints();
-			gbc_minAmount.fill = GridBagConstraints.HORIZONTAL;
-			gbc_minAmount.insets = new Insets(0, 0, 0, 5);
-			gbc_minAmount.weightx = 1.0;
-			gbc_minAmount.gridx = 0;
-			gbc_minAmount.gridy = 0;
-			panel_1.add(getMinAmount(), gbc_minAmount);
-			jLabel = new JLabel();
-			GridBagConstraints gbc_jLabel = new GridBagConstraints();
-			gbc_jLabel.gridx = 1;
-			gbc_jLabel.gridy = 0;
-			panel_1.add(jLabel, gbc_jLabel);
-			jLabel.setText(LocalizationData.get("CustomFilterPanel.amount.to")); //$NON-NLS-1$
-		}
-		return panel_1;
-	}
 	private JPanel getReceipts_expensesPanel() {
 		if (Receipts_expensesPanel == null) {
 			Receipts_expensesPanel = new JPanel();
 			Receipts_expensesPanel.setBorder(new TitledBorder(null, LocalizationData.get("CustomFilterPanel.nature"), //$NON-NLS-1$
-					TitledBorder.LEADING, TitledBorder.TOP, null, null));
+					TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			GridBagLayout gbl_Receipts_expensesPanel = new GridBagLayout();
 			gbl_Receipts_expensesPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
 			gbl_Receipts_expensesPanel.rowHeights = new int[]{0, 0};
@@ -1765,39 +1591,6 @@ public class CustomFilterPanel extends JPanel {
 		}
 		return Receipts_expensesPanel;
 	}
-	private JPanel getPanel_2() {
-		if (panel_2 == null) {
-			panel_2 = new JPanel();
-			GridBagLayout gbl_panel_2 = new GridBagLayout();
-			gbl_panel_2.columnWidths = new int[]{0, 0, 0, 0};
-			gbl_panel_2.rowHeights = new int[]{0, 0, 0, 0};
-			gbl_panel_2.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			panel_2.setLayout(gbl_panel_2);
-			GridBagConstraints gbc_amountAll = new GridBagConstraints();
-			gbc_amountAll.anchor = GridBagConstraints.WEST;
-			gbc_amountAll.insets = new Insets(0, 0, 0, 5);
-			gbc_amountAll.gridx = 0;
-			gbc_amountAll.gridy = 0;
-			panel_2.add(getAmountAll(), gbc_amountAll);
-			GridBagConstraints gbc_amountEquals = new GridBagConstraints();
-			gbc_amountEquals.anchor = GridBagConstraints.WEST;
-			gbc_amountEquals.insets = new Insets(0, 0, 0, 5);
-			gbc_amountEquals.gridx = 0;
-			gbc_amountEquals.gridy = 1;
-			panel_2.add(getAmountEquals(), gbc_amountEquals);
-			GridBagConstraints gbc_amountBetween = new GridBagConstraints();
-			gbc_amountBetween.anchor = GridBagConstraints.WEST;
-			gbc_amountBetween.gridx = 0;
-			gbc_amountBetween.gridy = 2;
-			panel_2.add(getAmountBetween(), gbc_amountBetween);
-			ButtonGroup group = new ButtonGroup();
-			group.add(getAmountAll());
-			group.add(getAmountEquals());
-			group.add(getAmountBetween());
-		}
-		return panel_2;
-	}
 	private JPanel getPanel_3() {
 		if (panel_3 == null) {
 			panel_3 = new JPanel();
@@ -1809,9 +1602,9 @@ public class CustomFilterPanel extends JPanel {
 			panel = new JPanel();
 			GridBagLayout gbl_panel = new GridBagLayout();
 			gbl_panel.columnWidths = new int[]{551, 0};
-			gbl_panel.rowHeights = new int[]{50, 85, 0};
-			gbl_panel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-			gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+			gbl_panel.rowHeights = new int[]{50, 85, 0, 0};
+			gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+			gbl_panel.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 			panel.setLayout(gbl_panel);
 			GridBagConstraints gbc_Receipts_expensesPanel = new GridBagConstraints();
 			gbc_Receipts_expensesPanel.weightx = 1.0;
@@ -1822,6 +1615,7 @@ public class CustomFilterPanel extends JPanel {
 			gbc_Receipts_expensesPanel.gridy = 0;
 			panel.add(getReceipts_expensesPanel(), gbc_Receipts_expensesPanel);
 			GridBagConstraints gbc_descriptionPanel = new GridBagConstraints();
+			gbc_descriptionPanel.insets = new Insets(0, 0, 5, 0);
 			gbc_descriptionPanel.weightx = 1.0;
 			gbc_descriptionPanel.weighty = 1.0;
 			gbc_descriptionPanel.fill = GridBagConstraints.HORIZONTAL;
