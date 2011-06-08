@@ -30,7 +30,7 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 	/**
 	 * Create the panel.
 	 */
-	public AmountPanel(double min, double max) {
+	public AmountPanel() {
 		GridBagLayout gbl_amountPanel = new GridBagLayout();
 		setLayout(gbl_amountPanel);
 		setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
@@ -52,8 +52,6 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 0;
 		add(getPanel_1(), gbc_panel_1);
-		
-		setAmounts(min, max);
 	}
 	private JPanel getPanel_2() {
 		if (panel_2 == null) {
@@ -169,8 +167,8 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 			minAmountWidget.setEmptyAllowed(true);
 			minAmountWidget.setMinValue(0.0);
 			minAmountWidget.setToolTipText(LocalizationData.get("CustomFilterPanel.amout.minimum")); //$NON-NLS-1$
-			minAmountWidget.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
-			minAmountWidget.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
+			minAmountWidget.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, consistencyChecker);
+			minAmountWidget.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 			minAmountWidget.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return minAmountWidget;
@@ -188,8 +186,8 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 			maxAmountWidget.setEmptyAllowed(true);
 			maxAmountWidget.setMinValue(0.0);
 			maxAmountWidget.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.maximum")); //$NON-NLS-1$
-			maxAmountWidget.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, CONSISTENCY_CHECKER);
-			maxAmountWidget.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
+			maxAmountWidget.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, consistencyChecker);
+			maxAmountWidget.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 			maxAmountWidget.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return maxAmountWidget;
