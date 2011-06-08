@@ -34,6 +34,7 @@ import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.filter.AmountPanel;
+import net.yapbam.gui.filter.DateFilterPanel;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 import java.text.MessageFormat;
@@ -60,13 +61,6 @@ public class CustomFilterPanel extends JPanel {
 	private JPanel descriptionPanel = null;
 	private JCheckBox ignoreCase = null;
 	private JTextField description = null;
-	private JPanel datePanel = null;
-	private JRadioButton dateAll = null;
-	private JRadioButton dateEquals = null;
-	private JRadioButton dateBetween = null;
-	private DateWidgetPanel dateFrom = null;
-	private JLabel jLabel1 = null;
-	private DateWidgetPanel dateTo = null;
 	private JPanel statementPanel = null;
 	private JCheckBox checked = null;
 	private JCheckBox notChecked = null;
@@ -139,6 +133,8 @@ public class CustomFilterPanel extends JPanel {
 	private JPanel panel;
 	private JPanel jPanel1;
 	private JPanel jPanel2;
+	private DateFilterPanel datePanel;
+	private PropertyChangeListener inconsistencyListener;
 
 	public CustomFilterPanel() {
 		this(new FilteredData(new GlobalData()));
@@ -148,6 +144,12 @@ public class CustomFilterPanel extends JPanel {
 	public CustomFilterPanel(FilteredData data) {
 		super();
 		this.data = data;
+		inconsistencyListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				checkConsistency();
+			}
+		};
 		initialize();
 	}
 
@@ -315,15 +317,20 @@ public class CustomFilterPanel extends JPanel {
 	 */
 	private AmountPanel getAmountPanel() {
 		if (amountPanel == null) {
-			amountPanel = new AmountPanel(data.getMinimumAmount(), data.getMaximumAmount());
-			amountPanel.addPropertyChangeListener(AmountPanel.INCONSISTENCY_CAUSE_PROPERTY, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					checkConsistency();
-				}
-			});
+			amountPanel = new AmountPanel();
+			amountPanel.addPropertyChangeListener(AmountPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
+			amountPanel.setAmounts(data.getMinimumAmount(), data.getMaximumAmount());
 		}
 		return amountPanel;
+	}
+	
+	private DateFilterPanel getDatePanel() {
+		if (datePanel==null) {
+			datePanel = new DateFilterPanel();
+			datePanel.addPropertyChangeListener(DateFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
+			datePanel.setDates(data.getDateFrom(), data.getDateTo());
+		}
+		return datePanel;
 	}
 
 	/**
@@ -479,14 +486,7 @@ public class CustomFilterPanel extends JPanel {
 		if (getExpenses().isSelected()) filter += FilteredData.EXPENSES;
 		this.data.setAmountFilter(filter, min, max);
 		// build the date filter
-		Date from = getDateFrom().getDate();
-		Date to = getDateTo().getDate();
-		if (getDateAll().isSelected()) {
-			this.data.setDateFilter(null, null);
-		} else {
-			if (getDateEquals().isSelected()) to = from;
-			this.data.setDateFilter(from, to);
-		}
+		this.data.setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
 		// build the value date filter
 		Date vfrom = getValueDateFrom().getDate();
 		Date vto = getValueDateTo().getDate();
@@ -585,19 +585,14 @@ public class CustomFilterPanel extends JPanel {
 			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.checkStatus"), //$NON-NLS-1$
 					LocalizationData.get("MainMenuBar.checked"), LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		if (!getDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.dateFrom"); //$NON-NLS-1$
-		if (!getDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.date.to"); //$NON-NLS-1$
 		if (!getValueDateFrom().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.valueDateFrom"); //$NON-NLS-1$
 		if (!getValueDateTo().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.valueDateTo"); //$NON-NLS-1$
-		if ((getDateFrom().getDate()!=null) && (getDateTo().getDate()!=null)
-				&& (getDateFrom().getDate().compareTo(getDateTo().getDate())>0)) {
-			return LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"); //$NON-NLS-1$
-		}
 		if ((getValueDateFrom().getDate()!=null) && (getValueDateTo().getDate()!=null)
 				&& (getValueDateFrom().getDate().compareTo(getValueDateTo().getDate())>0)) {
 			return LocalizationData.get("CustomFilterPanel.error.valueDateFromHigherThanTo"); //$NON-NLS-1$
 		}
 		if (getAmountPanel().getInconsistencyCause()!=null) return getAmountPanel().getInconsistencyCause();
+		if (getDatePanel().getInconsistencyCause()!=null) return getDatePanel().getInconsistencyCause();
 		if (getAccountList().getSelectedIndices().length==0) {
 			return LocalizationData.get("CustomFilterPanel.error.noAccount"); //$NON-NLS-1$
 		}
@@ -681,169 +676,6 @@ public class CustomFilterPanel extends JPanel {
 			description.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return description;
-	}
-
-	/**
-	 * This method initializes datePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getDatePanel() {
-		if (datePanel == null) {
-			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
-			gridBagConstraints25.gridx = 3;
-			gridBagConstraints25.gridheight = 3;
-			gridBagConstraints25.weightx = 1.0D;
-			gridBagConstraints25.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints25.gridy = 0;
-			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
-			gridBagConstraints24.gridx = 2;
-			gridBagConstraints24.gridheight = 3;
-			gridBagConstraints24.insets = new Insets(0, 5, 0, 5);
-			gridBagConstraints24.gridy = 0;
-			jLabel1 = new JLabel();
-			jLabel1.setText(LocalizationData.get("CustomFilterPanel.date.to")); //$NON-NLS-1$
-			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
-			gridBagConstraints23.gridx = 1;
-			gridBagConstraints23.gridheight = 3;
-			gridBagConstraints23.weightx = 1.0D;
-			gridBagConstraints23.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints23.gridy = 0;
-			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
-			gridBagConstraints22.gridx = 0;
-			gridBagConstraints22.anchor = GridBagConstraints.WEST;
-			gridBagConstraints22.gridy = 2;
-			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.gridx = 0;
-			gridBagConstraints20.anchor = GridBagConstraints.WEST;
-			gridBagConstraints20.gridy = 1;
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.gridx = 0;
-			gridBagConstraints19.anchor = GridBagConstraints.WEST;
-			gridBagConstraints19.gridy = 0;
-			datePanel = new JPanel();
-			datePanel.setLayout(new GridBagLayout());
-			datePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.date"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
-			datePanel.setVisible(true);
-			datePanel.add(getDateAll(), gridBagConstraints19);
-			datePanel.add(getDateEquals(), gridBagConstraints20);
-			datePanel.add(getDateBetween(), gridBagConstraints22);
-			datePanel.add(getDateFrom(), gridBagConstraints23);
-			datePanel.add(jLabel1, gridBagConstraints24);
-			datePanel.add(getDateTo(), gridBagConstraints25);
-			ButtonGroup group = new ButtonGroup();
-			group.add(getDateAll());
-			group.add(getDateEquals());
-			group.add(getDateBetween());
-		}
-		return datePanel;
-	}
-
-	/**
-	 * This method initializes dateAll	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getDateAll() {
-		if (dateAll == null) {
-			dateAll = new JRadioButton();
-			dateAll.setText(LocalizationData.get("CustomFilterPanel.date.all")); //$NON-NLS-1$
-			dateAll.setToolTipText(LocalizationData.get("CustomFilterPanel.date.all.toolTip")); //$NON-NLS-1$
-			dateAll.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (dateAll.isSelected()) {
-						getDateFrom().setEnabled(false);
-						getDateFrom().setDate(null);
-						getDateTo().setEnabled(false);
-						getDateTo().setDate(null);
-					}
-				}
-			});
-			dateAll.setSelected(data.getDateFrom()==null && data.getDateTo()==null);
-		}
-		return dateAll;
-	}
-
-	/**
-	 * This method initializes dateEquals	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getDateEquals() {
-		if (dateEquals == null) {
-			dateEquals = new JRadioButton();
-			dateEquals.setText(LocalizationData.get("CustomFilterPanel.date.equals")); //$NON-NLS-1$
-			dateEquals.setToolTipText(LocalizationData.get("CustomFilterPanel.date.equals.toolTip")); //$NON-NLS-1$
-			dateEquals.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (dateEquals.isSelected()) {
-						getDateFrom().setEnabled(true);
-						getDateTo().setEnabled(false);
-						getDateTo().setDate(getDateFrom().getDate());
-					}
-				}
-			});
-			boolean areEquals = (data.getDateFrom()!=null) && NullUtils.areEquals(data.getDateFrom(), data.getDateTo());
-			dateEquals.setSelected(areEquals);
-		}
-		return dateEquals;
-	}
-
-	/**
-	 * This method initializes dateBetween	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getDateBetween() {
-		if (dateBetween == null) {
-			dateBetween = new JRadioButton();
-			dateBetween.setText(LocalizationData.get("CustomFilterPanel.date.between")); //$NON-NLS-1$
-			dateBetween.setToolTipText(LocalizationData.get("CustomFilterPanel.date.between.toolTip")); //$NON-NLS-1$
-			dateBetween.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (dateBetween.isSelected()) {
-						getDateFrom().setEnabled(true);
-						getDateTo().setEnabled(true);
-					}
-				}
-			});
-		}
-		dateBetween.setSelected(!NullUtils.areEquals(data.getDateFrom(), data.getDateTo()));
-		return dateBetween;
-	}
-
-	/**
-	 * This method initializes dateFrom	
-	 * 	
-	 * @return net.yapbam.gui.widget.DateWidgetPanel	
-	 */
-	private DateWidgetPanel getDateFrom() {
-		if (dateFrom == null) {
-			dateFrom = new DateWidgetPanel();
-			dateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.date.from.toolTip")); //$NON-NLS-1$
-			dateFrom.setDate(data.getDateFrom());
-			dateFrom.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
-			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
-			dateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
-		}
-		return dateFrom;
-	}
-
-	/**
-	 * This method initializes dateTo	
-	 * 	
-	 * @return net.yapbam.gui.widget.DateWidgetPanel	
-	 */
-	private DateWidgetPanel getDateTo() {
-		if (dateTo == null) {
-			dateTo = new DateWidgetPanel();
-			dateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.date.to.toolTip")); //$NON-NLS-1$
-			dateTo.setDate(data.getDateTo());
-			dateTo.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
-			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, CONSISTENCY_CHECKER);
-			dateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, CONSISTENCY_CHECKER);
-		}
-		return dateTo;
 	}
 
 	/**
@@ -1367,8 +1199,8 @@ public class CustomFilterPanel extends JPanel {
 					selectAll(getCategoryList());
 					getDescriptionContains().setSelected(true);
 					getDescription().setText(""); //$NON-NLS-1$
-					getDateAll().setSelected(true);
 					getAmountPanel().clear();
+					getDatePanel().clear();
 					getNumberContains().setSelected(true);
 					getNumber().setText(""); //$NON-NLS-1$
 					getValueDateAll().setSelected(true);

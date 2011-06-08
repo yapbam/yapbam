@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 import java.awt.Insets;
 
+import net.yapbam.data.FilteredData;
 import net.yapbam.gui.IconManager;
 import java.awt.Color;
 
@@ -20,11 +21,13 @@ public class FilterView extends JPanel {
 	private JPanel elementsPane;
 	private JLabel lblFilter;
 	private boolean deployed;
+	private FilteredData data;
 
 	/**
 	 * Create the panel.
 	 */
-	public FilterView() {
+	public FilterView(FilteredData data) {
+		this.data = data;
 		setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
 		deployed = false;
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -70,13 +73,15 @@ public class FilterView extends JPanel {
 		setDeployed(false);
 	}
 	
-	static class Toto extends FilterElementView {
+	class Toto extends FilterElementView {
 		Toto(String label) {
 			super(label);
 		}
 		@Override
 		protected Component buildPopupContent() {
-			return new AmountPanel(10, 20);
+			AmountPanel amountPanel = new AmountPanel();
+			amountPanel.setAmounts(data.getMinimumAmount(), data.getMaximumAmount());
+			return amountPanel;
 		}
 	}
 	
