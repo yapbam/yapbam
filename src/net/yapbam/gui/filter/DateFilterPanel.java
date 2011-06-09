@@ -19,17 +19,70 @@ import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
 
 public class DateFilterPanel extends ConsistencyCheckedPanel {
+	public static DateFilterPanelWordings TRANSACTION_DATE = new DateFilterPanelWordings(LocalizationData.get("Transaction.date"),
+			LocalizationData.get("CustomFilterPanel.date.all"), LocalizationData.get("CustomFilterPanel.date.all.toolTip"),
+			LocalizationData.get("CustomFilterPanel.date.equals"), LocalizationData.get("CustomFilterPanel.date.equals.toolTip"),
+			LocalizationData.get("CustomFilterPanel.date.between"), LocalizationData.get("CustomFilterPanel.date.between.toolTip"),
+			LocalizationData.get("CustomFilterPanel.date.from.toolTip"), LocalizationData.get("CustomFilterPanel.date.to.toolTip"),
+			LocalizationData.get("CustomFilterPanel.date.to"),
+			LocalizationData.get("CustomFilterPanel.error.dateFrom"), LocalizationData.get("CustomFilterPanel.error.date.to"),
+			LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"));
+	public static DateFilterPanelWordings VALUE_DATE = new DateFilterPanelWordings(LocalizationData.get("Transaction.valueDate"),
+			LocalizationData.get("CustomFilterPanel.valueDate.all"), LocalizationData.get("CustomFilterPanel.valueDate.all.toolTip"),
+			LocalizationData.get("CustomFilterPanel.valueDate.equals"), LocalizationData.get("CustomFilterPanel.valueDate.equals.toolTip"),
+			LocalizationData.get("CustomFilterPanel.valueDate.between"), LocalizationData.get("CustomFilterPanel.valueDate.between.toolTip"),
+			LocalizationData.get("CustomFilterPanel.valueDate.from.toolTip"), LocalizationData.get("CustomFilterPanel.valueDate.to.toolTip"),
+			LocalizationData.get("CustomFilterPanel.valueDate.to"),
+			LocalizationData.get("CustomFilterPanel.error.valueDateFrom"), LocalizationData.get("CustomFilterPanel.error.valueDateTo"),
+			LocalizationData.get("CustomFilterPanel.error.valueDateFromHigherThanTo"));
+	
 	private static final long serialVersionUID = 1L;
 	private JRadioButton dateAll;
 	private JRadioButton dateEquals;
 	private JRadioButton dateBetween;
 	private DateWidgetPanel dateFrom;
 	private DateWidgetPanel dateTo;
+	private DateFilterPanelWordings wordings;
+	
+	public static class DateFilterPanelWordings {
+		public String title;
+		public String all;
+		public String allTooltip;
+		public String equals;
+		public String equalsTooltip;
+		public String between;
+		public String betweenTooltip;
+		public String fromTooltip;
+		public String toTooltip;
+		public String to;
+		public String errorFrom;
+		public String errorTo;
+		public String errorFromHigherThanTo;
+		
+		public DateFilterPanelWordings(String title, String all, String allTooltip, String equals, String equalsTooltip, String between,
+				String betweenTooltip, String fromTooltip, String toTooltip, String to, String errorFrom, String errorTo, String errorFromHigherThanTo) {
+			super();
+			this.title = title;
+			this.all = all;
+			this.allTooltip = allTooltip;
+			this.equals = equals;
+			this.equalsTooltip = equalsTooltip;
+			this.between = between;
+			this.betweenTooltip = betweenTooltip;
+			this.fromTooltip = fromTooltip;
+			this.toTooltip = toTooltip;
+			this.to = to;
+			this.errorFrom = errorFrom;
+			this.errorTo = errorTo;
+			this.errorFromHigherThanTo = errorFromHigherThanTo;
+		}
+	}
 
-	public DateFilterPanel () {
+	public DateFilterPanel (DateFilterPanelWordings wordings) {
 		super();
+		this.wordings = wordings;
 		setLayout(new GridBagLayout());
-		setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.date"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+		setBorder(BorderFactory.createTitledBorder(null, wordings.title, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ 
 		GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
 		gridBagConstraints25.gridx = 3;
 		gridBagConstraints25.gridheight = 3;
@@ -41,7 +94,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 		gridBagConstraints24.gridheight = 3;
 		gridBagConstraints24.insets = new Insets(0, 5, 0, 5);
 		gridBagConstraints24.gridy = 0;
-		JLabel jLabel = new JLabel(LocalizationData.get("CustomFilterPanel.date.to")); //$NON-NLS-1$
+		JLabel jLabel = new JLabel(wordings.to);
 		GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 		gridBagConstraints23.gridx = 1;
 		gridBagConstraints23.gridheight = 3;
@@ -80,8 +133,8 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private JRadioButton getDateAll() {
 		if (dateAll == null) {
 			dateAll = new JRadioButton();
-			dateAll.setText(LocalizationData.get("CustomFilterPanel.date.all")); //$NON-NLS-1$
-			dateAll.setToolTipText(LocalizationData.get("CustomFilterPanel.date.all.toolTip")); //$NON-NLS-1$
+			dateAll.setText(wordings.all);
+			dateAll.setToolTipText(wordings.allTooltip);
 			dateAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateAll.isSelected()) {
@@ -104,8 +157,8 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private JRadioButton getDateEquals() {
 		if (dateEquals == null) {
 			dateEquals = new JRadioButton();
-			dateEquals.setText(LocalizationData.get("CustomFilterPanel.date.equals")); //$NON-NLS-1$
-			dateEquals.setToolTipText(LocalizationData.get("CustomFilterPanel.date.equals.toolTip")); //$NON-NLS-1$
+			dateEquals.setText(wordings.equals);
+			dateEquals.setToolTipText(wordings.equalsTooltip);
 			dateEquals.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateEquals.isSelected()) {
@@ -127,8 +180,8 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private JRadioButton getDateBetween() {
 		if (dateBetween == null) {
 			dateBetween = new JRadioButton();
-			dateBetween.setText(LocalizationData.get("CustomFilterPanel.date.between")); //$NON-NLS-1$
-			dateBetween.setToolTipText(LocalizationData.get("CustomFilterPanel.date.between.toolTip")); //$NON-NLS-1$
+			dateBetween.setText(wordings.between);
+			dateBetween.setToolTipText(wordings.betweenTooltip);
 			dateBetween.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateBetween.isSelected()) {
@@ -149,7 +202,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private DateWidgetPanel getDateFromField() {
 		if (dateFrom == null) {
 			dateFrom = new DateWidgetPanel();
-			dateFrom.setToolTipText(LocalizationData.get("CustomFilterPanel.date.from.toolTip")); //$NON-NLS-1$
+			dateFrom.setToolTipText(wordings.fromTooltip);
 			dateFrom.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, consistencyChecker);
 			dateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, consistencyChecker);
@@ -165,7 +218,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private DateWidgetPanel getDateToField() {
 		if (dateTo == null) {
 			dateTo = new DateWidgetPanel();
-			dateTo.setToolTipText(LocalizationData.get("CustomFilterPanel.date.to.toolTip")); //$NON-NLS-1$
+			dateTo.setToolTipText(wordings.toTooltip);
 			dateTo.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, consistencyChecker);
 			dateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, consistencyChecker);
@@ -175,11 +228,11 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 
 	@Override
 	protected String computeInconsistencyCause() {
-		if (!getDateFromField().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.dateFrom"); //$NON-NLS-1$
-		if (!getDateToField().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.date.to"); //$NON-NLS-1$
+		if (!getDateFromField().isContentValid()) return wordings.errorFrom;
+		if (!getDateToField().isContentValid()) return wordings.errorTo;
 		if ((getDateFromField().getDate()!=null) && (getDateToField().getDate()!=null)
 				&& (getDateFromField().getDate().compareTo(getDateToField().getDate())>0)) {
-			return LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"); //$NON-NLS-1$
+			return wordings.errorFromHigherThanTo;
 		}
 		return null;
 	}
