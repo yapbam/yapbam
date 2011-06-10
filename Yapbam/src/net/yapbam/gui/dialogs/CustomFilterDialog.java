@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.filter.CustomFilterPanel;
 import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
