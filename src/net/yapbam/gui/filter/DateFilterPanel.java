@@ -19,7 +19,7 @@ import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;
 
 public class DateFilterPanel extends ConsistencyCheckedPanel {
-	public static DateFilterPanelWordings TRANSACTION_DATE = new DateFilterPanelWordings(LocalizationData.get("Transaction.date"),
+	public static Wordings TRANSACTION_DATE = new Wordings(LocalizationData.get("Transaction.date"),
 			LocalizationData.get("CustomFilterPanel.date.all"), LocalizationData.get("CustomFilterPanel.date.all.toolTip"),
 			LocalizationData.get("CustomFilterPanel.date.equals"), LocalizationData.get("CustomFilterPanel.date.equals.toolTip"),
 			LocalizationData.get("CustomFilterPanel.date.between"), LocalizationData.get("CustomFilterPanel.date.between.toolTip"),
@@ -27,7 +27,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 			LocalizationData.get("CustomFilterPanel.date.to"),
 			LocalizationData.get("CustomFilterPanel.error.dateFrom"), LocalizationData.get("CustomFilterPanel.error.date.to"),
 			LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"));
-	public static DateFilterPanelWordings VALUE_DATE = new DateFilterPanelWordings(LocalizationData.get("Transaction.valueDate"),
+	public static Wordings VALUE_DATE = new Wordings(LocalizationData.get("Transaction.valueDate"),
 			LocalizationData.get("CustomFilterPanel.valueDate.all"), LocalizationData.get("CustomFilterPanel.valueDate.all.toolTip"),
 			LocalizationData.get("CustomFilterPanel.valueDate.equals"), LocalizationData.get("CustomFilterPanel.valueDate.equals.toolTip"),
 			LocalizationData.get("CustomFilterPanel.valueDate.between"), LocalizationData.get("CustomFilterPanel.valueDate.between.toolTip"),
@@ -42,9 +42,9 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private JRadioButton dateBetween;
 	private DateWidgetPanel dateFrom;
 	private DateWidgetPanel dateTo;
-	private DateFilterPanelWordings wordings;
+	private Wordings wordings;
 	
-	public static class DateFilterPanelWordings {
+	public static class Wordings {
 		public String title;
 		public String all;
 		public String allTooltip;
@@ -59,7 +59,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 		public String errorTo;
 		public String errorFromHigherThanTo;
 		
-		public DateFilterPanelWordings(String title, String all, String allTooltip, String equals, String equalsTooltip, String between,
+		public Wordings(String title, String all, String allTooltip, String equals, String equalsTooltip, String between,
 				String betweenTooltip, String fromTooltip, String toTooltip, String to, String errorFrom, String errorTo, String errorFromHigherThanTo) {
 			super();
 			this.title = title;
@@ -78,7 +78,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 		}
 	}
 
-	public DateFilterPanel (DateFilterPanelWordings wordings) {
+	public DateFilterPanel (Wordings wordings) {
 		super();
 		this.wordings = wordings;
 		setLayout(new GridBagLayout());

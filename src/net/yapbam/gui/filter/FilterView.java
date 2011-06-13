@@ -12,10 +12,14 @@ import javax.swing.JLabel;
 import java.awt.Insets;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
+import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.gui.IconManager;
 import java.awt.Color;
 
 public class FilterView extends JPanel {
+	public static String DEPLOYED_PROPERTY = "deployed";
 	private static final long serialVersionUID = 1L;
 	private JLabel btnOpen;
 	private JPanel elementsPane;
@@ -52,6 +56,7 @@ public class FilterView extends JPanel {
 		gbc_lblFilter.gridy = 0;
 		add(lblFilter, gbc_lblFilter);
 		java.awt.event.MouseAdapter listener = new java.awt.event.MouseAdapter() {
+			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				setDeployed(!deployed);
 			}
@@ -70,7 +75,19 @@ public class FilterView extends JPanel {
 
 		setFilterElements(new FilterElementView[]{new FilterElementView("New label"),
 				new Toto("New label just a little bit loooooooooooooooooooooooooooooooooooong, for fun !!!")});
-		setDeployed(false);
+		internalSetDeployed(false);
+		
+		data.addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				if (event instanceof EverythingChangedEvent) {
+					refreshFilter();
+				} else {
+					System.out.println ("event "+event.toString()+" was ignored");
+				}
+			}
+		});
+		refreshFilter();
 	}
 	
 	class Toto extends FilterElementView {
@@ -99,11 +116,30 @@ public class FilterView extends JPanel {
 		}
 	}
 
-	private void setDeployed(boolean deploy) {
+	private void internalSetDeployed(boolean deploy) {
 		elementsPane.setBorder(deploy?new TitledBorder(null, "Filters", TitledBorder.LEADING, TitledBorder.TOP, null, null):null);
 		lblFilter.setVisible(!deploy);
 		btnOpen.setIcon(deploy?IconManager.UNDEPLOY:IconManager.DEPLOY);
 		elementsPane.setVisible(deploy);
 		this.deployed = deploy;
+	}
+	
+	public void setDeployed(boolean deploy) {
+		if (deploy != this.deployed) {
+			internalSetDeployed(deploy);
+			this.firePropertyChange(DEPLOYED_PROPERTY, !deploy, deploy);
+		}
+	}
+
+	public boolean isDeployed() {
+		return this.deployed;
+	}
+	
+	private void refreshFilter() {
+		if (data.hasFilter()) {
+			lblFilter.setText("A filter is set"); //LOCAL
+		} else {
+			lblFilter.setText("No filter is set");
+		}
 	}
 }

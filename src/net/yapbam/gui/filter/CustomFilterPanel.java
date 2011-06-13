@@ -14,35 +14,25 @@ import java.awt.Color;
 import javax.swing.JCheckBox;
 import java.awt.Insets;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractListModel;
-import javax.swing.ButtonGroup;
 import javax.swing.JScrollPane;
-import javax.swing.JRadioButton;
-import javax.swing.JLabel;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
-import net.yapbam.gui.HelpManager;
-import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
 
-import javax.swing.JTextField;
 import net.yapbam.util.NullUtils;
-import net.yapbam.util.TextMatcher;
 import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel {
@@ -54,26 +44,14 @@ public class CustomFilterPanel extends JPanel {
 	private AmountPanel amountPanel = null;
 	private JPanel categoryPanel = null;
 	private JList categoryList = null;
-	private JPanel descriptionPanel = null;
-	private JCheckBox ignoreCase = null;
-	private JTextField description = null;
+	private TextMatcherFilterPanel descriptionPanel = null;
 	private JPanel statementPanel = null;
 	private JCheckBox checked = null;
 	private JCheckBox notChecked = null;
 	private DateFilterPanel valueDatePanel = null;
 	private JScrollPane jScrollPane = null;
 	private JScrollPane jScrollPane1 = null;
-	private JTextField statement = null;
-	private JCheckBox ignoreDiacritics = null;
-	private JLabel regexpHelp = null;
-	private JRadioButton descriptionEqualsTo = null;
-	private JRadioButton descriptionContains = null;
-	private JRadioButton descriptionRegular = null;
-	private JPanel jPanel11 = null;
-	private JLabel regexpStatement = null;
-	private JRadioButton statementEqualsTo = null;
-	private JRadioButton statementContains = null;
-	private JRadioButton statementRegular = null;
+	private TextMatcherFilterPanel jPanel11 = null;
 	private JButton clear = null;
 	private JPanel modePanel = null;
 	private JScrollPane jScrollPane2 = null;
@@ -81,13 +59,6 @@ public class CustomFilterPanel extends JPanel {
 		
 	private String oldInconsistencyCause;
 	private FilteredData data;
-	
-	private final static class RegexprListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			HelpManager.show(e.getComponent(), HelpManager.REGULAR_EXPRESSIONS);
-		}
-	}
 	
 	private ListSelectionListener CONSISTENCY_CHECKER_LIST = new ListSelectionListener() {
 		@Override
@@ -103,19 +74,12 @@ public class CustomFilterPanel extends JPanel {
 		}
 	};
 
-	private JPanel jPanel111 = null;
-	private JLabel regexpNumber = null;
-	private JRadioButton numberEqualsTo = null;
-	private JRadioButton numberContains = null;
-	private JRadioButton numberRegular = null;
-	private JTextField number = null;
+	private TextMatcherFilterPanel numberPanel = null;
 	private JCheckBox receipts;
 	private JCheckBox expenses;
 	private JPanel Receipts_expensesPanel;
 	private JPanel panel_3;
 	private JPanel panel;
-	private JPanel jPanel1;
-	private JPanel jPanel2;
 	private DateFilterPanel datePanel;
 	private PropertyChangeListener inconsistencyListener;
 
@@ -209,7 +173,7 @@ public class CustomFilterPanel extends JPanel {
 		gridBagConstraints111.gridx = 1;
 		gridBagConstraints111.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints111.gridy = 3;
-		this.add(getJPanel111(), gridBagConstraints111);
+		this.add(getNumberPanel(), gridBagConstraints111);
 		this.add(getValueDatePanel(), gridBagConstraints41);
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.insets = new Insets(0, 0, 0, 5);
@@ -473,53 +437,14 @@ public class CustomFilterPanel extends JPanel {
 		// build the value date filter
 		this.data.setValueDateFilter(getValueDatePanel().getDateFrom(), getValueDatePanel().getDateTo());
 		// build the description filter
-		String text = getDescription().getText().trim();
-		if (text.length()==0) {
-			this.data.setDescriptionFilter(null);
-		} else {
-			TextMatcher.Kind kind = null;
-			if (getDescriptionEqualsTo().isSelected()) {
-				kind = TextMatcher.EQUALS;
-			} else if (getDescriptionContains().isSelected()) {
-				kind = TextMatcher.CONTAINS;
-			} else if (getDescriptionRegular().isSelected()) {
-				kind = TextMatcher.REGULAR;
-			}
-			this.data.setDescriptionFilter(new TextMatcher(kind, text, !getIgnoreCase().isSelected(), !getIgnoreDiacritics().isSelected()));
-		}
+		this.data.setDescriptionFilter(getDescriptionPanel().getTextMatcher());
 		// Build the statement filter
 		filter = 0;
 		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
 		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
-		text = getStatement().getText().trim();
-		if (text.length()==0) {
-			this.data.setStatementFilter(filter, null);
-		} else {
-			TextMatcher.Kind kind = null;
-			if (getStatementEqualsTo().isSelected()) {
-				kind = TextMatcher.EQUALS;
-			} else if (getStatementContains().isSelected()) {
-				kind = TextMatcher.CONTAINS;
-			} else if (getStatementRegular().isSelected()) {
-				kind = TextMatcher.REGULAR;
-			}
-			this.data.setStatementFilter(filter, new TextMatcher(kind, text, true, true));
-		}
+		data.setStatementFilter(filter, getJPanel11().getTextMatcher());
 		// Build the number filter
-		text = getNumber().getText().trim();
-		if (text.length()==0) {
-			this.data.setNumberFilter(null);
-		} else {
-			TextMatcher.Kind kind = null;
-			if (getNumberEqualsTo().isSelected()) {
-				kind = TextMatcher.EQUALS;
-			} else if (getNumberContains().isSelected()) {
-				kind = TextMatcher.CONTAINS;
-			} else if (getNumberRegular().isSelected()) {
-				kind = TextMatcher.REGULAR;
-			}
-			this.data.setNumberFilter(new TextMatcher(kind, text, true, true));
-		}
+		this.data.setNumberFilter(this.getNumberPanel().getTextMatcher());
 		data.setSuspended(false);
 	}
 
@@ -593,60 +518,12 @@ public class CustomFilterPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getDescriptionPanel() {
+	private TextMatcherFilterPanel getDescriptionPanel() {
 		if (descriptionPanel == null) {
-			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
-			gridBagConstraints30.gridx = 1;
-			gridBagConstraints30.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints30.weightx = 1.0D;
-			gridBagConstraints30.gridy = 0;
-			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
-			gridBagConstraints33.gridx = 0;
-			gridBagConstraints33.gridheight = 0;
-			gridBagConstraints33.insets = new Insets(0, 0, 0, 5);
-			gridBagConstraints33.gridy = 0;
-			regexpHelp = new JLabel();
-			regexpHelp.setText(""); //$NON-NLS-1$
-			regexpHelp.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
-			regexpHelp.setIcon(IconManager.HELP);
-			regexpHelp.addMouseListener(new RegexprListener());
-			descriptionPanel = new JPanel();
-			descriptionPanel.setLayout(new GridBagLayout());
-			descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.description"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
-			descriptionPanel.add(getJPanel1(), gridBagConstraints33);
-			descriptionPanel.add(getJPanel2(), gridBagConstraints30);
+			descriptionPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.DESCRIPTION_WORDING);
+			descriptionPanel.setTextMatcher(data.getDescriptionFilter());
 		}
 		return descriptionPanel;
-	}
-
-	/**
-	 * This method initializes ignoreCase	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getIgnoreCase() {
-		if (ignoreCase == null) {
-			ignoreCase = new JCheckBox();
-			ignoreCase.setText(LocalizationData.get("CustomFilterPanel.description.ignoreCase")); //$NON-NLS-1$
-			ignoreCase.setToolTipText(LocalizationData.get("CustomFilterPanel.description.ignoreCase.toolTip")); //$NON-NLS-1$
-			ignoreCase.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isCaseSensitive());
-		}
-		return ignoreCase;
-	}
-
-	/**
-	 * This method initializes description	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getDescription() {
-		if (description == null) {
-			description = new JTextField();
-			description.setText(data.getDescriptionFilter()==null?"":data.getDescriptionFilter().getFilter()); //$NON-NLS-1$
-			description.setToolTipText(LocalizationData.get("CustomFilterPanel.description.toolTip")); //$NON-NLS-1$
-			description.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		}
-		return description;
 	}
 
 	/**
@@ -711,11 +588,7 @@ public class CustomFilterPanel extends JPanel {
 	}
 	
 	private void setStatementFilterEnabled() {
-		boolean ok = checked.isSelected();
-		getStatementContains().setEnabled(ok);
-		getStatementEqualsTo().setEnabled(ok);
-		getStatementRegular().setEnabled(ok);
-		getStatement().setEnabled(ok);		
+		getJPanel11().setEnabled(checked.isSelected());
 	}
 
 	/**
@@ -749,257 +622,19 @@ public class CustomFilterPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes statement	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getStatement() {
-		if (statement == null) {
-			statement = new JTextField();
-			statement.setText(data.getStatementFilter()==null?"":data.getStatementFilter().getFilter()); //$NON-NLS-1$
-			statement.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.toolTip")); //$NON-NLS-1$
-			statement.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		}
-		return statement;
-	}
-
-	/**
-	 * This method initializes ignoreDiacritics	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getIgnoreDiacritics() {
-		if (ignoreDiacritics == null) {
-			ignoreDiacritics = new JCheckBox();
-			ignoreDiacritics.setText(LocalizationData.get("CustomFilterPanel.description.ignoreDiacriticals")); //$NON-NLS-1$
-			ignoreDiacritics.setToolTipText(LocalizationData.get("CustomFilterPanel.description.ignoreDiacriticals.toolTip")); //$NON-NLS-1$
-			ignoreDiacritics.setSelected((data.getDescriptionFilter()==null)||!data.getDescriptionFilter().isDiacriticalSensitive());
-		}
-		return ignoreDiacritics;
-	}
-
-	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.gridx = 0;
-			gridBagConstraints36.gridy = 2;
-			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
-			gridBagConstraints35.gridx = 0;
-			gridBagConstraints35.anchor = GridBagConstraints.WEST;
-			gridBagConstraints35.gridheight = 1;
-			gridBagConstraints35.gridwidth = 1;
-			gridBagConstraints35.weightx = 0.0D;
-			gridBagConstraints35.gridy = 1;
-			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
-			gridBagConstraints34.gridx = 0;
-			gridBagConstraints34.anchor = GridBagConstraints.WEST;
-			gridBagConstraints34.gridy = 0;
-			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.anchor = GridBagConstraints.WEST;
-			gridBagConstraints32.gridy = 2;
-			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridx = 1;
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
-			jPanel1.add(regexpHelp, gridBagConstraints32);
-			jPanel1.add(getDescriptionEqualsTo(), gridBagConstraints34);
-			jPanel1.add(getDescriptionContains(), gridBagConstraints35);
-			jPanel1.add(getDescriptionRegular(), gridBagConstraints36);
-			ButtonGroup group = new ButtonGroup();
-			group.add(getDescriptionEqualsTo());
-			group.add(getDescriptionContains());
-			group.add(getDescriptionRegular());
-			if ((data.getDescriptionFilter()==null) || (data.getDescriptionFilter().getKind()==TextMatcher.CONTAINS)) {
-				getDescriptionContains().setSelected(true);
-			} else if (data.getDescriptionFilter().getKind()==TextMatcher.EQUALS) {
-				getDescriptionEqualsTo().setSelected(true);
-			} else {
-				getDescriptionRegular().setSelected(true);
-			}
-		}
-		return jPanel1;
-	}
-
-	/**
-	 * This method initializes descriptionEqualsTo	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getDescriptionEqualsTo() {
-		if (descriptionEqualsTo == null) {
-			descriptionEqualsTo = new JRadioButton();
-			descriptionEqualsTo.setText(LocalizationData.get("CustomFilterPanel.description.equals")); //$NON-NLS-1$
-			descriptionEqualsTo.setToolTipText(LocalizationData.get("CustomFilterPanel.description.equals.toolTip")); //$NON-NLS-1$
-		}
-		return descriptionEqualsTo;
-	}
-
-	/**
-	 * This method initializes descriptionContains	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getDescriptionContains() {
-		if (descriptionContains == null) {
-			descriptionContains = new JRadioButton();
-			descriptionContains.setText(LocalizationData.get("CustomFilterPanel.description.contains")); //$NON-NLS-1$
-			descriptionContains.setToolTipText(LocalizationData.get("CustomFilterPanel.description.contains.toolTip")); //$NON-NLS-1$
-		}
-		return descriptionContains;
-	}
-
-	/**
-	 * This method initializes descriptionRegular	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getDescriptionRegular() {
-		if (descriptionRegular == null) {
-			descriptionRegular = new JRadioButton();
-			descriptionRegular.setText(LocalizationData.get("CustomFilterPanel.description.regularExpression")); //$NON-NLS-1$
-			descriptionRegular.setToolTipText(LocalizationData.get("CustomFilterPanel.description.regularExpression.toolTip")); //$NON-NLS-1$
-		}
-		return descriptionRegular;
-	}
-
-	/**
-	 * This method initializes jPanel2	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel2() {
-		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.anchor = GridBagConstraints.NORTH;
-			gridBagConstraints18.gridwidth = 0;
-			gridBagConstraints18.gridx = 0;
-			gridBagConstraints18.gridy = 1;
-			gridBagConstraints18.weightx = 1.0;
-			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.anchor = GridBagConstraints.WEST;
-			gridBagConstraints17.gridy = 0;
-			gridBagConstraints17.gridx = 1;
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
-			gridBagConstraints16.anchor = GridBagConstraints.WEST;
-			gridBagConstraints16.gridy = -1;
-			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.add(getIgnoreCase(), gridBagConstraints16);
-			jPanel2.add(getIgnoreDiacritics(), gridBagConstraints17);
-			jPanel2.add(getDescription(), gridBagConstraints18);
-		}
-		return jPanel2;
-	}
-
-	/**
 	 * This method initializes jPanel11	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel11() {
+	private TextMatcherFilterPanel getJPanel11() {
 		if (jPanel11 == null) {
-			GridBagConstraints gridBagConstraints361 = new GridBagConstraints();
-			gridBagConstraints361.gridx = 0;
-			gridBagConstraints361.gridy = 2;
-			GridBagConstraints gridBagConstraints351 = new GridBagConstraints();
-			gridBagConstraints351.anchor = GridBagConstraints.WEST;
-			gridBagConstraints351.gridwidth = 1;
-			gridBagConstraints351.gridx = 0;
-			gridBagConstraints351.gridy = 1;
-			gridBagConstraints351.weightx = 0.0D;
-			gridBagConstraints351.gridheight = 1;
-			GridBagConstraints gridBagConstraints341 = new GridBagConstraints();
-			gridBagConstraints341.anchor = GridBagConstraints.WEST;
-			gridBagConstraints341.gridy = 0;
-			gridBagConstraints341.gridx = 0;
-			GridBagConstraints gridBagConstraints321 = new GridBagConstraints();
-			gridBagConstraints321.anchor = GridBagConstraints.WEST;
-			gridBagConstraints321.gridy = 2;
-			gridBagConstraints321.weightx = 0.0D;
-			gridBagConstraints321.gridx = 1;
-			regexpStatement = new JLabel();
-			regexpStatement.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
-			regexpStatement.setText(""); //$NON-NLS-1$
-			regexpStatement.setIcon(IconManager.HELP);
-			regexpStatement.addMouseListener(new RegexprListener());
-
-			jPanel11 = new JPanel();
-			jPanel11.setLayout(new GridBagLayout());
-			jPanel11.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.statement"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
-			jPanel11.add(regexpStatement, gridBagConstraints321);
-			jPanel11.add(getStatementEqualsTo(), gridBagConstraints341);
-			jPanel11.add(getStatementContains(), gridBagConstraints351);
-			jPanel11.add(getStatementRegular(), gridBagConstraints361);
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 2;
-			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.weightx = 1.0D;
-			gridBagConstraints5.gridheight = 0;
-			gridBagConstraints5.gridy = 0;
-			jPanel11.add(getStatement(), gridBagConstraints5);
-			ButtonGroup group = new ButtonGroup();
-			group.add(getStatementContains());
-			group.add(getStatementEqualsTo());
-			group.add(getStatementRegular());
+			jPanel11 = new TextMatcherFilterPanel(TextMatcherFilterPanel.STATEMENT_WORDING);
 			if (getChecked().isSelected()) {
-				if ((data.getStatementFilter()==null) || (data.getStatementFilter().getKind()==TextMatcher.CONTAINS)) {
-					getStatementContains().setSelected(true);
-				} else if (data.getStatementFilter().getKind()==TextMatcher.EQUALS) {
-					getStatementEqualsTo().setSelected(true);
-				} else getStatementRegular().setSelected(true);
+				jPanel11.setTextMatcher(data.getStatementFilter());
+				jPanel11.setCheckBoxesVisible(false);
 			}
 		}
 		return jPanel11;
-	}
-
-	/**
-	 * This method initializes statementEqualsTo	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getStatementEqualsTo() {
-		if (statementEqualsTo == null) {
-			statementEqualsTo = new JRadioButton();
-			statementEqualsTo.setText(LocalizationData.get("CustomFilterPanel.statement.equals")); //$NON-NLS-1$
-			statementEqualsTo.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.equals.toolTip")); //$NON-NLS-1$
-		}
-		return statementEqualsTo;
-	}
-
-	/**
-	 * This method initializes statementContains	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getStatementContains() {
-		if (statementContains == null) {
-			statementContains = new JRadioButton();
-			statementContains.setText(LocalizationData.get("CustomFilterPanel.statement.contains")); //$NON-NLS-1$
-			statementContains.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.contains.toolTip")); //$NON-NLS-1$
-		}
-		return statementContains;
-	}
-
-	/**
-	 * This method initializes statementRegular	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getStatementRegular() {
-		if (statementRegular == null) {
-			statementRegular = new JRadioButton();
-			statementRegular.setText(LocalizationData.get("CustomFilterPanel.statement.regularExpression")); //$NON-NLS-1$
-			statementRegular.setToolTipText(LocalizationData.get("CustomFilterPanel.statement.regularExpression.toolTip")); //$NON-NLS-1$
-		}
-		return statementRegular;
 	}
 
 	/**
@@ -1018,17 +653,14 @@ public class CustomFilterPanel extends JPanel {
 					selectAll(getAccountList());
 					selectAll(getModes());
 					selectAll(getCategoryList());
-					getDescriptionContains().setSelected(true);
-					getDescription().setText(""); //$NON-NLS-1$
+					getDescriptionPanel().clear();
 					getAmountPanel().clear();
 					getDatePanel().clear();
-					getNumberContains().setSelected(true);
-					getNumber().setText(""); //$NON-NLS-1$
+					getNumberPanel().clear();
 					getValueDatePanel().clear();
 					getChecked().setSelected(true);
 					getNotChecked().setSelected(true);
-					getStatementContains().setSelected(true);
-					getStatement().setText(""); //$NON-NLS-1$
+					getJPanel11().clear();
 				}
 
 				private void selectAll(JList list) {
@@ -1094,115 +726,15 @@ public class CustomFilterPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel111() {
-		if (jPanel111 == null) {
-			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
-			gridBagConstraints51.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints51.gridx = 2;
-			gridBagConstraints51.gridy = 0;
-			gridBagConstraints51.weightx = 1.0D;
-			gridBagConstraints51.gridheight = 0;
-			GridBagConstraints gridBagConstraints3611 = new GridBagConstraints();
-			gridBagConstraints3611.gridx = 0;
-			gridBagConstraints3611.gridy = 2;
-			GridBagConstraints gridBagConstraints3511 = new GridBagConstraints();
-			gridBagConstraints3511.anchor = GridBagConstraints.WEST;
-			gridBagConstraints3511.gridwidth = 1;
-			gridBagConstraints3511.gridx = 0;
-			gridBagConstraints3511.gridy = 1;
-			gridBagConstraints3511.weightx = 0.0D;
-			gridBagConstraints3511.gridheight = 1;
-			GridBagConstraints gridBagConstraints3411 = new GridBagConstraints();
-			gridBagConstraints3411.anchor = GridBagConstraints.WEST;
-			gridBagConstraints3411.gridy = 0;
-			gridBagConstraints3411.fill = GridBagConstraints.NONE;
-			gridBagConstraints3411.gridx = 0;
-			GridBagConstraints gridBagConstraints3211 = new GridBagConstraints();
-			gridBagConstraints3211.anchor = GridBagConstraints.WEST;
-			gridBagConstraints3211.gridy = 2;
-			gridBagConstraints3211.weightx = 0.0D;
-			gridBagConstraints3211.gridx = 1;
-			regexpNumber = new JLabel();
-			regexpNumber.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
-			regexpNumber.setText(""); //$NON-NLS-1$
-			regexpNumber.setIcon(IconManager.HELP);
-			jPanel111 = new JPanel();
-			jPanel111.setLayout(new GridBagLayout());
-			jPanel111.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.number"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
-			jPanel111.add(regexpNumber, gridBagConstraints3211);
-			jPanel111.add(getNumberEqualsTo(), gridBagConstraints3411);
-			jPanel111.add(getNumberContains(), gridBagConstraints3511);
-			jPanel111.add(getNumberRegular(), gridBagConstraints3611);
-			jPanel111.add(getNumber(), gridBagConstraints51);
-			ButtonGroup group = new ButtonGroup();
-			group.add(getNumberContains());
-			group.add(getNumberEqualsTo());
-			group.add(getNumberRegular());
-			if ((data.getNumberFilter()==null) || (data.getNumberFilter().getKind()==TextMatcher.CONTAINS)) {
-				getNumberContains().setSelected(true);
-			} else if (data.getNumberFilter().getKind()==TextMatcher.EQUALS) {
-				getNumberEqualsTo().setSelected(true);
-			} else getNumberRegular().setSelected(true);
+	private TextMatcherFilterPanel getNumberPanel() {
+		if (numberPanel == null) {
+			numberPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.NUMBER_WORDING);
+			numberPanel.setTextMatcher(data.getNumberFilter());
+			numberPanel.setCheckBoxesVisible(false);
 		}
-		return jPanel111;
+		return numberPanel;
 	}
 
-	/**
-	 * This method initializes numberEqualsTo	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getNumberEqualsTo() {
-		if (numberEqualsTo == null) {
-			numberEqualsTo = new JRadioButton();
-			numberEqualsTo.setToolTipText(LocalizationData.get("CustomFilterPanel.number.equals.toolTip")); //$NON-NLS-1$
-			numberEqualsTo.setText(LocalizationData.get("CustomFilterPanel.number.equals")); //$NON-NLS-1$
-		}
-		return numberEqualsTo;
-	}
-
-	/**
-	 * This method initializes numberContains	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getNumberContains() {
-		if (numberContains == null) {
-			numberContains = new JRadioButton();
-			numberContains.setToolTipText(LocalizationData.get("CustomFilterPanel.number.contains.toolTip")); //$NON-NLS-1$
-			numberContains.setText(LocalizationData.get("CustomFilterPanel.number.contains")); //$NON-NLS-1$
-		}
-		return numberContains;
-	}
-
-	/**
-	 * This method initializes numberRegular	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getNumberRegular() {
-		if (numberRegular == null) {
-			numberRegular = new JRadioButton();
-			numberRegular.setToolTipText(LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip")); //$NON-NLS-1$
-			numberRegular.setText(LocalizationData.get("CustomFilterPanel.number.regularExpression")); //$NON-NLS-1$
-		}
-		return numberRegular;
-	}
-
-	/**
-	 * This method initializes number	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getNumber() {
-		if (number == null) {
-			number = new JTextField();
-			number.setToolTipText(LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
-			number.setText(data.getNumberFilter()==null?"":data.getNumberFilter().getFilter()); //$NON-NLS-1$
-			number.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		}
-		return number;
-	}
 	private JCheckBox getReceipts() {
 		if (receipts == null) {
 			receipts = new JCheckBox(LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-1$
