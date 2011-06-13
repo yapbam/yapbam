@@ -653,21 +653,9 @@ public class FilteredData extends DefaultListenable {
 	 * even if it doesn't filter anything.
 	 */
 	public boolean hasFilter() {
-		this.filter = ALL;
-		this.dateFrom = null;
-		this.dateTo = null;
-		this.valueDateFrom = null;
-		this.valueDateTo = null;
-		this.validCategories = null;
-		this.validModes = null;
-		this.minAmount = Double.NEGATIVE_INFINITY;
-		this.maxAmount = Double.POSITIVE_INFINITY;
-		this.descriptionMatcher = null;
-		this.numberMatcher = null;
-		this.statementMatcher = null;
 		return (filter!=ALL) || (dateFrom!=null) || (dateTo != null) || (valueDateFrom!=null) || (valueDateTo != null) ||
 			(validCategories !=null) || (validModes != null) || (validAccounts!=null) ||
-			(minAmount!=Double.NEGATIVE_INFINITY) || (maxAmount!=Double.POSITIVE_INFINITY) ||
+			(minAmount!=0.0) || (maxAmount!=Double.POSITIVE_INFINITY) ||
 			(descriptionMatcher!=null) || (numberMatcher!=null) || (statementMatcher!=null);
 	}
 }

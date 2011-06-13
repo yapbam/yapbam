@@ -1,5 +1,6 @@
 package net.yapbam.gui.statistics;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -7,9 +8,12 @@ import java.awt.Insets;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.util.ResourceBundleWrapper;
@@ -67,8 +71,28 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.pie = new PieChartPanel(categoryToAmount);
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.pie.tabname"), null, this.pie, LocalizationData.get("StatisticsPlugin.pie.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		buildSummaries();
-		JPanel result = new JPanel(new GridBagLayout());
+		
+/*
+ 	An implementation based on a JSplitPane
+		JPanel result = new JPanel(new BorderLayout());
+		FilterView filterView = new FilterView(data);
+		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, filterView, tabbedPane);
+		result.add(BorderLayout.CENTER, splitPane);
+		filterView.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				splitPane.setDividerLocation(-1);
+				System.out.println (splitPane.getSize());
+				System.out.println (splitPane.getComponent(0).getPreferredSize());
+//				System.out.println (splitPane.getComponent(1).getPreferredSize());
+//				splitPane.getComponent(1).setMinimumSize(minimumSize);
+			}
+		});
+		return result;
+*/		
+		
 // Start implementation of lateral filter panel
+		JPanel result = new JPanel(new GridBagLayout());
 		GridBagConstraints cfv = new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0);
 		result.add(new FilterView(data), cfv);
