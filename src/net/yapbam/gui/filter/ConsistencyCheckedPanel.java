@@ -18,11 +18,7 @@ public abstract class ConsistencyCheckedPanel extends JPanel {
 		this.consistencyChecker = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				String old = inconsistencyCause;
-				inconsistencyCause = computeInconsistencyCause();  //  @jve:decl-index=0:
-				if (!NullUtils.areEquals(old, inconsistencyCause)) {
-					firePropertyChange(INCONSISTENCY_CAUSE_PROPERTY, old, inconsistencyCause);
-				}
+				checkConsistency();
 			}
 		};
 	}
@@ -31,5 +27,13 @@ public abstract class ConsistencyCheckedPanel extends JPanel {
 	
 	public String getInconsistencyCause() {
 		return inconsistencyCause;
+	}
+
+	protected void checkConsistency() {
+		String old = inconsistencyCause;
+		inconsistencyCause = computeInconsistencyCause();  //  @jve:decl-index=0:
+		if (!NullUtils.areEquals(old, inconsistencyCause)) {
+			firePropertyChange(INCONSISTENCY_CAUSE_PROPERTY, old, inconsistencyCause);
+		}
 	}
 }
