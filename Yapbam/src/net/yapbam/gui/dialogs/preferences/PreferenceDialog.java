@@ -52,7 +52,7 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 		}
 		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(),
 				new LookAndFeelPanel(lfPanels.toArray(new PreferencePanel[lfPanels.size()])),
-				new TransactionEditingPanel(), new NetworkPanel(), new AutoUpdatePanel(), new ReportErrorPanel()}));
+				new TransactionEditingPanel(), new NetworkPanel(), new AutoUpdatePanel(), new ReportErrorPanel(), new RestoreStatePanel()}));
 		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
 			PreferencePanel preferencePanel = data.getPlugIn(i).getPreferencePanel();
 			if (preferencePanel!=null) this.panels.add(preferencePanel) ;
