@@ -1,38 +1,45 @@
 package net.yapbam.gui.dialogs.preferences;
 
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import java.awt.GridBagLayout;
 import javax.swing.JCheckBox;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JSeparator;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class RestoreStatePanel extends PreferencePanel {
+	private static final long serialVersionUID = 1L;
+	private JCheckBox chckbxFilter;
+	private JCheckBox chckbxFile;
+	private JCheckBox chckbxHiddenColumns;
+	private JCheckBox chckbxTabsOrder;
+
 	public RestoreStatePanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
-		JCheckBox chckbxConserverLordreDes = new JCheckBox("Conserver l'ordre des onglets");
-		chckbxConserverLordreDes.setEnabled(false);
-		chckbxConserverLordreDes.setSelected(true);
-		chckbxConserverLordreDes.setToolTipText("Cochez cette case pour que l'ordre des onglets soit conserv\u00E9 d'une ex\u00E9cution \u00E0 l'autre");
+		chckbxTabsOrder = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.tabOrder"));
+		chckbxTabsOrder.setSelected(true);
+		chckbxTabsOrder.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.tabOrder.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckbxConserverLordreDes = new GridBagConstraints();
 		gbc_chckbxConserverLordreDes.anchor = GridBagConstraints.WEST;
 		gbc_chckbxConserverLordreDes.insets = new Insets(5, 0, 5, 0);
 		gbc_chckbxConserverLordreDes.gridx = 0;
 		gbc_chckbxConserverLordreDes.gridy = 0;
-		add(chckbxConserverLordreDes, gbc_chckbxConserverLordreDes);
+		add(chckbxTabsOrder, gbc_chckbxConserverLordreDes);
 		
-		JCheckBox chckbxConserverLesMasquages = new JCheckBox("Conserver les masquages de colonnes");
-		chckbxConserverLesMasquages.setEnabled(false);
-		chckbxConserverLesMasquages.setSelected(true);
-		chckbxConserverLesMasquages.setToolTipText("Cochez cette case pour que les colonnes masqu\u00E9es le restent d'une ex\u00E9cution \u00E0 l'autre");
+		chckbxHiddenColumns = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.hiddenColumns"));
+		chckbxHiddenColumns.setSelected(true);
+		chckbxHiddenColumns.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.hiddenColumns.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckbxConserverLesMasquages = new GridBagConstraints();
 		gbc_chckbxConserverLesMasquages.insets = new Insets(0, 0, 5, 0);
 		gbc_chckbxConserverLesMasquages.anchor = GridBagConstraints.WEST;
 		gbc_chckbxConserverLesMasquages.gridx = 0;
 		gbc_chckbxConserverLesMasquages.gridy = 1;
-		add(chckbxConserverLesMasquages, gbc_chckbxConserverLesMasquages);
+		add(chckbxHiddenColumns, gbc_chckbxConserverLesMasquages);
 		
 		JSeparator separator = new JSeparator();
 		GridBagConstraints gbc_separator = new GridBagConstraints();
@@ -43,28 +50,42 @@ public class RestoreStatePanel extends PreferencePanel {
 		gbc_separator.gridy = 2;
 		add(separator, gbc_separator);
 		
-		JCheckBox chckbxConserverLeFiltre = new JCheckBox("Conserver le filtre");
-		chckbxConserverLeFiltre.setToolTipText("Cochez cette case pour conserver le filtre d'une ex\u00E9cution \u00E0 l'autre");
-		chckbxConserverLeFiltre.setEnabled(false);
+		chckbxFilter = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.filter"));
+		chckbxFilter.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.filter.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckbxConserverLeFiltre = new GridBagConstraints();
+		gbc_chckbxConserverLeFiltre.insets = new Insets(0, 10, 5, 0);
 		gbc_chckbxConserverLeFiltre.weighty = 1.0;
 		gbc_chckbxConserverLeFiltre.anchor = GridBagConstraints.NORTHWEST;
 		gbc_chckbxConserverLeFiltre.gridx = 0;
-		gbc_chckbxConserverLeFiltre.gridy = 3;
-		add(chckbxConserverLeFiltre, gbc_chckbxConserverLeFiltre);
+		gbc_chckbxConserverLeFiltre.gridy = 4;
+		add(chckbxFilter, gbc_chckbxConserverLeFiltre);
+		
+		chckbxFile = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.openedFile"));
+		chckbxFile.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				chckbxFilter.setEnabled(e.getStateChange()==ItemEvent.SELECTED);
+				if (e.getStateChange()==ItemEvent.DESELECTED) {
+					chckbxFilter.setSelected(false);
+				}
+			}
+		});
+		chckbxFile.setSelected(true);
+		chckbxFile.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.openFile.tooltip")); //$NON-NLS-1$
+		GridBagConstraints gbc_chckbxSeRappelerDu = new GridBagConstraints();
+		gbc_chckbxSeRappelerDu.anchor = GridBagConstraints.WEST;
+		gbc_chckbxSeRappelerDu.gridx = 0;
+		gbc_chckbxSeRappelerDu.gridy = 3;
+		add(chckbxFile, gbc_chckbxSeRappelerDu);
 	}
-	private static final long serialVersionUID = 1L;
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return "Etat au lancement"; //LOCAL
+		return LocalizationData.get("PreferencesDialog.StartState.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		// TODO Auto-generated method stub
-		return "Cet onglet permet de régler les informations à conserver entre deux exécution de Yapbam";
+		return LocalizationData.get("PreferencesDialog.StartState.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override
