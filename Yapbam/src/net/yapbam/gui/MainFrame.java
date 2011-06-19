@@ -115,6 +115,9 @@ public class MainFrame extends JFrame implements DataListener {
 	
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
 	 * event-dispatching thread.
+	 * @param filteredData The current filtered if the application is restarted, null if the application is started
+	 * @param restartData The plugins restartData if the application is restarted, null if it is simply started 
+	 * @param path The path of the initial data file. This parameter is ignored if filteredData is not null 
 	 */
 	private MainFrame(FilteredData filteredData, Object[] restartData, String path) {
 		//Create and set up the window.
@@ -181,6 +184,7 @@ public class MainFrame extends JFrame implements DataListener {
 					ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$
 				}
 			} else {
+				//TODO restore according to the Preferences
 				restoreGlobalData();
 			}
 		}
@@ -210,7 +214,7 @@ public class MainFrame extends JFrame implements DataListener {
 		mainMenu = new MainMenuBar(this);
 		setJMenuBar(mainMenu);
 	    
-		// Restore initial state (last opened file and window position)
+		// Restore initial state (last opened file, window position, ...)
 		restoreMainFramePosition();
 		getStateSaver().restoreState(mainPane, this.getClass().getCanonicalName());
 		for (int i = 0; i < plugins.length; i++) {
