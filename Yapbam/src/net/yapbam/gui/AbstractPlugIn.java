@@ -12,6 +12,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.preferences.PreferencePanel;
 import net.yapbam.util.NullUtils;
 
 /** This abstract class represents a Yapbam plugin.

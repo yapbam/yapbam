@@ -1,7 +1,8 @@
-package net.yapbam.gui;
+package net.yapbam.gui.preferences;
 
 import javax.swing.JPanel;
 
+import net.yapbam.gui.Preferences;
 import net.yapbam.util.NullUtils;
 
 @SuppressWarnings("serial")

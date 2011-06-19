@@ -1,4 +1,4 @@
-package net.yapbam.gui;
+package net.yapbam.gui.preferences;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

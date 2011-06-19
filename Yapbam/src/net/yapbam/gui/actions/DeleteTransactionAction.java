@@ -6,11 +6,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 
 import net.yapbam.data.Transaction;
-import net.yapbam.gui.EditingOptions;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.AlertDialog;
+import net.yapbam.gui.preferences.EditingOptions;
 import net.yapbam.gui.util.AbstractDialog;
 
 /**
