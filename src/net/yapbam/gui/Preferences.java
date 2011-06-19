@@ -65,8 +65,6 @@ public class Preferences {
 	private static final String TABS_ORDER = "tabsOrder"; //$NON-NLS-1$
 	private static final String HIDDEN_COLUMNS = "hiddenColumns"; //$NON-NLS-1$
 	
-
-
 	/** The Preference instance.
 	 * This class is a singleton. All preferences can be accessed through this constant.
 	 */

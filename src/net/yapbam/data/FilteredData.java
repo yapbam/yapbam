@@ -22,30 +22,17 @@ public class FilteredData extends DefaultListenable {
 	public static final int NOT_CHECKED=2;
 	public static final int EXPENSES=4;
 	public static final int RECEIPTS=8;
-	private static final int ALL = -1;
+	public static final int ALL = -1;
 	private static final int CHECKED_MASK = (ALL ^ CHECKED) ^ NOT_CHECKED;
 	private static final int NATURE_MASK = (ALL ^ EXPENSES) ^ RECEIPTS;
 
 	private GlobalData data;
 	private ArrayList<Transaction> transactions;
-	private int filter;
-	private HashSet<Account> validAccounts;
-	private List<Mode> validModes;
-	private HashSet<Category> validCategories;
-	private Date dateFrom;
-	private Date dateTo;
-	private Date valueDateFrom;
-	private Date valueDateTo;
-	private double minAmount;
-	private double maxAmount;
-	private TextMatcher descriptionMatcher;
-	private TextMatcher numberMatcher;
-	private TextMatcher statementMatcher;
-	
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
 	private boolean suspended;
 	private boolean filteringHasToBeDone;
+	private Filter filter = new Filter();
 	
 	public FilteredData(GlobalData data) {
 		this.data = data;
@@ -59,14 +46,14 @@ public class FilteredData extends DefaultListenable {
 					fireEvent(new EverythingChangedEvent(FilteredData.this));
 				} else if (event instanceof AccountRemovedEvent) {
 					Account account = ((AccountRemovedEvent)event).getRemoved();
-					if ((validAccounts==null) || validAccounts.remove(account)) {
+					if ((filter.getValidAccounts()==null) || filter.getValidAccounts().remove(account)) {
 						double initialBalance = account.getInitialBalance();
 						balanceData.updateBalance(initialBalance, false);
 						fireEvent(new AccountRemovedEvent(FilteredData.this, -1, account)); //TODO index is not the right one
 					}
 				} else if (event instanceof CategoryRemovedEvent) {
 					Category category = ((CategoryRemovedEvent)event).getRemoved();
-					if ((validCategories==null) || validCategories.remove(category)) {
+					if ((filter.getValidCategories()==null) || filter.getValidCategories().remove(category)) {
 						fireEvent(new CategoryRemovedEvent(FilteredData.this, -1, category)); //TODO index is not the right one
 					}
 				} else if (event instanceof TransactionsAddedEvent) {
@@ -188,25 +175,8 @@ public class FilteredData extends DefaultListenable {
 	/** Erases all filters.
 	 */
 	public void clear() {
-		this.filter = ALL;
-		this.dateFrom = null;
-		this.dateTo = null;
-		this.valueDateFrom = null;
-		this.valueDateTo = null;
-		this.validCategories = null;
-		this.validModes = null;
-		this.minAmount = 0.0;
-		this.maxAmount = Double.POSITIVE_INFINITY;
-		this.descriptionMatcher = null;
-		this.numberMatcher = null;
-		this.statementMatcher = null;
-		clearAccounts();
-	}
-
-	/** Erases account filter.
-	 */
-	public void clearAccounts() {
-		setAccounts(null);
+		this.filter.clear();
+		this.filter();
 	}
 
 	/** Sets the valid accounts for this filter.
@@ -215,11 +185,11 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public void setAccounts(Account[] accounts) {
 		if ((accounts==null) || (accounts.length==data.getAccountsNumber())) {
-			this.validAccounts=null;
+			this.filter.setValidAccounts(null);
 		} else {
-			this.validAccounts = new HashSet<Account>(accounts.length);
+			this.filter.setValidAccounts(new HashSet<Account>(accounts.length));
 			for (Account account : accounts) {
-				this.validAccounts.add(account);
+				this.filter.getValidAccounts().add(account);
 			}
 		}
 		this.filter();
@@ -230,9 +200,9 @@ public class FilteredData extends DefaultListenable {
 	 * @return the valid accounts (null means, all accounts are ok).
 	 */
 	public Account[] getAccounts() {
-		if (this.validAccounts==null) return null;
-		Account[] result = new Account[validAccounts.size()];
-		Iterator<Account> iterator = validAccounts.iterator();
+		if (this.filter.getValidAccounts()==null) return null;
+		Account[] result = new Account[filter.getValidAccounts().size()];
+		Iterator<Account> iterator = filter.getValidAccounts().iterator();
 		for (int i = 0; i < result.length; i++) {
 			result[i] = iterator.next();
 		}
@@ -240,15 +210,15 @@ public class FilteredData extends DefaultListenable {
 	}
 	
 	public boolean hasFilterAccount() {
-		return this.validAccounts != null;
+		return this.filter.getValidAccounts() != null;
 	}
 
 	public boolean isOk(Account account) {
-		return (this.validAccounts==null) || (this.validAccounts.contains(account));
+		return (this.filter.getValidAccounts()==null) || (this.filter.getValidAccounts().contains(account));
 	}
 	
 	public boolean isOk(Mode mode) {
-		return (this.validModes==null) || (this.validModes.contains(mode));
+		return (this.filter.getValidModes()==null) || (this.filter.getValidModes().contains(mode));
 	}
 	
 	/** Sets the valid modes for this filter.
@@ -257,11 +227,11 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public void setModes(Mode[] modes) {
 		if (modes==null) {
-			this.validModes=null;
+			this.filter.setValidModes(null);
 		} else {
-			this.validModes = new ArrayList<Mode>(modes.length);
+			this.filter.setValidModes(new ArrayList<Mode>(modes.length));
 			for (Mode mode : modes) {
-				this.validModes.add(mode);
+				this.filter.getValidModes().add(mode);
 			}
 		}
 		this.filter();
@@ -272,9 +242,9 @@ public class FilteredData extends DefaultListenable {
 	 * @return the valid modes (null means, all modes are ok).
 	 */
 	public Mode[] getModes() {
-		if (this.validModes==null) return null;
-		Mode[] result = new Mode[validModes.size()];
-		Iterator<Mode> iterator = validModes.iterator();
+		if (this.filter.getValidModes()==null) return null;
+		Mode[] result = new Mode[filter.getValidModes().size()];
+		Iterator<Mode> iterator = filter.getValidModes().iterator();
 		for (int i = 0; i < result.length; i++) {
 			result[i] = iterator.next();
 		}
@@ -285,7 +255,7 @@ public class FilteredData extends DefaultListenable {
 	 * @param matcher a TextMatcher instance or null to apply no filter on description
 	 */
 	public void setDescriptionFilter(TextMatcher matcher) {
-		this.descriptionMatcher = matcher;
+		this.filter.setDescriptionMatcher(matcher);
 		this.filter();
 	}
 	
@@ -294,14 +264,14 @@ public class FilteredData extends DefaultListenable {
 	 * @return true if the description is ok with the filter.
 	 */
 	private boolean isDescriptionOk(String description) {
-		return this.descriptionMatcher==null?true:this.descriptionMatcher.matches(description);
+		return this.filter.getDescriptionMatcher()==null?true:this.filter.getDescriptionMatcher().matches(description);
 	}
 	
 	/** Gets the description filter.
 	 * @return a TextMatcher or null if there is no description filter
 	 */
 	public TextMatcher getDescriptionFilter() {
-		return this.descriptionMatcher;
+		return this.filter.getDescriptionMatcher();
 	}
 	
 	/** Gets a transaction's validity.
@@ -377,11 +347,11 @@ public class FilteredData extends DefaultListenable {
 	 */
 	public void setCategories(Category[] categories) {
 		if ((categories==null) || (categories.length==data.getCategoriesNumber())) {
-			this.validCategories=null;
+			this.filter.setValidCategories(null);
 		} else {
-			this.validCategories = new HashSet<Category>(categories.length);
+			this.filter.setValidCategories(new HashSet<Category>(categories.length));
 			for (Category category : categories) {
-				this.validCategories.add(category);
+				this.filter.getValidCategories().add(category);
 			}
 		}
 		this.filter();
@@ -392,9 +362,9 @@ public class FilteredData extends DefaultListenable {
 	 * @return the valid categories (null means, all categories are ok).
 	 */
 	public Category[] getCategories() {
-		if (this.validCategories==null) return null;
-		Category[] result = new Category[validCategories.size()];
-		Iterator<Category> iterator = validCategories.iterator();
+		if (this.filter.getValidCategories()==null) return null;
+		Category[] result = new Category[filter.getValidCategories().size()];
+		Iterator<Category> iterator = filter.getValidCategories().iterator();
 		for (int i = 0; i < result.length; i++) {
 			result[i] = iterator.next();
 		}
@@ -402,16 +372,16 @@ public class FilteredData extends DefaultListenable {
 	}
 	
 	public boolean isOk(Category category) {
-		return (this.validCategories==null) || (this.validCategories.contains(category));
+		return (this.filter.getValidCategories()==null) || (this.filter.getValidCategories().contains(category));
 	}
 
 	public boolean isOk(int property) {
 		if (DEBUG) {
 			System.out.println("---------- isOK("+Integer.toBinaryString(property)+") ----------");
-			System.out.println("filter  : "+Integer.toBinaryString(this.filter));
-			System.out.println("result  : "+Integer.toBinaryString(property & this.filter));
+			System.out.println("filter  : "+Integer.toBinaryString(this.filter.getFilter()));
+			System.out.println("result  : "+Integer.toBinaryString(property & this.filter.getFilter()));
 		}
-		return ((property & this.filter) != 0);
+		return ((property & this.filter.getFilter()) != 0);
 	}
 	
 	/** Sets the integer filter
@@ -428,8 +398,8 @@ public class FilteredData extends DefaultListenable {
 		if (((property & EXPENSES) != 0) || ((property & RECEIPTS) != 0)) mask = mask & NATURE_MASK;
 		if (mask == ALL) throw new IllegalArgumentException();
 		if (DEBUG) System.out.println(Integer.toBinaryString(mask));//CU
-		this.filter = (this.filter & mask) | property;
-		if (DEBUG) System.out.println("filter : "+this.filter);
+		this.filter.setFilter((this.filter.getFilter() & mask) | property);
+		if (DEBUG) System.out.println("filter : "+this.filter.getFilter());
 		filter();
 	}
 	
@@ -437,12 +407,12 @@ public class FilteredData extends DefaultListenable {
 		if (((property & CHECKED) == 0) && (statementFilter!=null)) {
 			throw new IllegalArgumentException();
 		}
-		this.statementMatcher = statementFilter;
+		this.filter.setStatementMatcher(statementFilter);
 		setFilter(property & (CHECKED+NOT_CHECKED));
 	}
 		
 	public TextMatcher getStatementFilter () {
-		return this.statementMatcher;
+		return this.filter.getStatementMatcher();
 	}
 	
 	public boolean isStatementOk(Transaction transaction) {
@@ -451,18 +421,18 @@ public class FilteredData extends DefaultListenable {
 			return isOk(NOT_CHECKED);
 		} else { // Checked transaction
 			if (!isOk(CHECKED)) return false;
-			if (statementMatcher==null) return true;
-			return statementMatcher.matches(statement);
+			if (filter.getStatementMatcher()==null) return true;
+			return filter.getStatementMatcher().matches(statement);
 		}
 	}
 	
 	public void setNumberFilter (TextMatcher numberFilter) {
-		this.numberMatcher = numberFilter;
+		this.filter.setNumberMatcher(numberFilter);
 		filter();
 	}
 	
 	public TextMatcher getNumberFilter () {
-		return this.numberMatcher;
+		return this.filter.getNumberMatcher();
 	}
 	
 	/** Gets the validity of a string according to the current number filter. 
@@ -470,7 +440,7 @@ public class FilteredData extends DefaultListenable {
 	 * @return true if the number is ok with the filter.
 	 */
 	private boolean isNumberOk(String number) {
-		return this.numberMatcher==null?true:this.numberMatcher.matches(number);
+		return this.filter.getNumberMatcher()==null?true:this.filter.getNumberMatcher().matches(number);
 	}
 		
 	/** Sets the filter on transaction date.
@@ -478,8 +448,8 @@ public class FilteredData extends DefaultListenable {
 	 * @param to transactions strictly after <i>to</i> are rejected. A null date means "end of times". 
 	 */
 	public void setDateFilter(Date from, Date to) {
-		this.dateFrom = from;
-		this.dateTo = to;
+		this.filter.setDateFrom(from);
+		this.filter.setDateTo(to);
 		filter();
 	}
 	
@@ -487,14 +457,14 @@ public class FilteredData extends DefaultListenable {
 	 * @return a transaction date or null if there's no time limit. 
 	 */
 	public Date getDateFrom() {
-		return this.dateFrom;
+		return this.filter.getDateFrom();
 	}
 	
 	/** Gets the transaction date after which all transactions are rejected.
 	 * @return a transaction date or null if there's no time limit. 
 	 */
 	public Date getDateTo() {
-		return this.dateTo;
+		return this.filter.getDateTo();
 	}
 
 	/** Sets the filter on transaction value date.
@@ -502,8 +472,8 @@ public class FilteredData extends DefaultListenable {
 	 * @param to transactions with value date strictly after <i>to</i> are rejected. A null date means "end of times". 
 	 */
 	public void setValueDateFilter(Date from, Date to) {
-		this.valueDateFrom = from;
-		this.valueDateTo = to;
+		this.filter.setValueDateFrom(from);
+		this.filter.setValueDateTo(to);
 		filter();
 	}
 	
@@ -511,14 +481,14 @@ public class FilteredData extends DefaultListenable {
 	 * @return a transaction value date or null if there's no time limit. 
 	 */
 	public Date getValueDateFrom() {
-		return this.valueDateFrom;
+		return this.filter.getValueDateFrom();
 	}
 	
 	/** Gets the transaction value date after which all transactions are rejected.
 	 * @return a transaction value date or null if there's no time limit. 
 	 */
 	public Date getValueDateTo() {
-		return this.valueDateTo;
+		return this.filter.getValueDateTo();
 	}
 	
 	/** Sets the transaction minimum and maximum amounts.
@@ -534,8 +504,8 @@ public class FilteredData extends DefaultListenable {
 	public void setAmountFilter(int mask, double minAmount, double maxAmount) {
 		if (minAmount>maxAmount) throw new IllegalArgumentException();
 		if (minAmount<0) throw new IllegalArgumentException();
-		this.minAmount = minAmount;
-		this.maxAmount = maxAmount;
+		this.filter.setMinAmount(minAmount);
+		this.filter.setMaxAmount(maxAmount);
 		this.setFilter(mask & (EXPENSES+RECEIPTS));
 		filter();
 	}
@@ -545,14 +515,14 @@ public class FilteredData extends DefaultListenable {
 	 * @return the minimum amount (0.0 if there's no low limit).
 	 */
 	public double getMinimumAmount() {
-		return this.minAmount;
+		return this.filter.getMinAmount();
 	}
 	
 	/** Gets the transaction maximum amount.
 	 * @return the maximum amount (Double.POSITIVE_INFINITY if there's no high limit).
 	 */
 	public double getMaximumAmount() {
-		return this.maxAmount;
+		return this.filter.getMaxAmount();
 	}
 	
 	private void filter() {
@@ -653,9 +623,9 @@ public class FilteredData extends DefaultListenable {
 	 * even if it doesn't filter anything.
 	 */
 	public boolean hasFilter() {
-		return (filter!=ALL) || (dateFrom!=null) || (dateTo != null) || (valueDateFrom!=null) || (valueDateTo != null) ||
-			(validCategories !=null) || (validModes != null) || (validAccounts!=null) ||
-			(minAmount!=0.0) || (maxAmount!=Double.POSITIVE_INFINITY) ||
-			(descriptionMatcher!=null) || (numberMatcher!=null) || (statementMatcher!=null);
+		return (filter.getFilter()!=ALL) || (filter.getDateFrom()!=null) || (filter.getDateTo() != null) || (filter.getValueDateFrom()!=null) || (filter.getValueDateTo() != null) ||
+			(filter.getValidCategories() !=null) || (filter.getValidModes() != null) || (filter.getValidAccounts()!=null) ||
+			(filter.getMinAmount()!=0.0) || (filter.getMaxAmount()!=Double.POSITIVE_INFINITY) ||
+			(filter.getDescriptionMatcher()!=null) || (filter.getNumberMatcher()!=null) || (filter.getStatementMatcher()!=null);
 	}
 }
