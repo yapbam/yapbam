@@ -25,6 +25,8 @@ import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
+import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.statementview.StatementViewPlugin;
 import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
@@ -57,7 +59,13 @@ public class Preferences {
 	private static final String SET_DUPLICATE_TRANSACTION_DATE_TO_CURRENT = "setDuplicateTransactionDateToCurrent"; //$NON-NLS-1$
 	private static final String DATE_BASED_AUTO_STATEMENT = "dateBasedAutoStatement"; //$NON-NLS-1$
 	private static final String AUTO_STATEMENT_FORMAT = "statementDateFormat"; //$NON-NLS-1$
+	private static final String PREF_START_PREFIX = "StartState.remember."; //$NON-NLS-1$
+	private static final String FILE = "file"; //$NON-NLS-1$
+	private static final String FILTER = "filter"; //$NON-NLS-1$
+	private static final String TABS_ORDER = "tabsOrder"; //$NON-NLS-1$
+	private static final String HIDDEN_COLUMNS = "hiddenColumns"; //$NON-NLS-1$
 	
+
 
 	/** The Preference instance.
 	 * This class is a singleton. All preferences can be accessed through this constant.
@@ -429,5 +437,22 @@ public class Preferences {
 				format);
 		}
 		return this.editingOptions;
+	}
+
+	private StartStateOptions startStateOptions;
+	public void setStartStateOptions(StartStateOptions options) {
+		this.startStateOptions = options;
+		setBoolean(PREF_START_PREFIX+FILE, options.isRememberFile());
+		setBoolean(PREF_START_PREFIX+FILTER, options.isRememberFilter());
+		setBoolean(PREF_START_PREFIX+TABS_ORDER, options.isRememberTabsOrder());
+		setBoolean(PREF_START_PREFIX+HIDDEN_COLUMNS, options.isRememberHiddenColumns());
+	}
+
+	public StartStateOptions getStartStateOptions() {
+		if (startStateOptions==null) {
+			startStateOptions = new StartStateOptions(getBoolean(PREF_START_PREFIX+FILE, true), getBoolean(PREF_START_PREFIX+FILTER, false),
+				getBoolean(PREF_START_PREFIX+TABS_ORDER, true),	getBoolean(PREF_START_PREFIX+HIDDEN_COLUMNS, true));
+		}
+		return this.startStateOptions;
 	}
 }

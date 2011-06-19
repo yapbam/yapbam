@@ -9,10 +9,10 @@ import java.awt.Insets;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-import net.yapbam.gui.EditingOptions;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.preferences.PreferencePanel;
 
 import javax.swing.JSeparator;
 import java.awt.event.ItemEvent;

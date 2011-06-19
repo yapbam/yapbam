@@ -24,8 +24,8 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.preferences.PreferencePanel;
 
 import javax.swing.JButton;
 import java.awt.event.ActionEvent;

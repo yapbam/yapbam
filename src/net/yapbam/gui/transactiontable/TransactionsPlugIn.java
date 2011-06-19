@@ -16,9 +16,9 @@ import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.preferences.PreferencePanel;
 
 public class TransactionsPlugIn extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.transactionTable."; //$NON-NLS-1$

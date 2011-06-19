@@ -16,9 +16,9 @@ import javax.swing.*;
 
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
-import net.yapbam.gui.EditingOptions;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.preferences.EditingOptions;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.NullUtils;

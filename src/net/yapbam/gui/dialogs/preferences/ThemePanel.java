@@ -14,8 +14,8 @@ import java.awt.event.ItemListener;
 import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.preferences.PreferencePanel;
 
 public class ThemePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;

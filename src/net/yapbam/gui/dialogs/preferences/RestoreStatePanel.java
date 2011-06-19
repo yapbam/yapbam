@@ -1,7 +1,10 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
+import net.yapbam.gui.Preferences;
+import net.yapbam.gui.preferences.PreferencePanel;
+import net.yapbam.gui.preferences.StartStateOptions;
+
 import java.awt.GridBagLayout;
 import javax.swing.JCheckBox;
 import java.awt.GridBagConstraints;
@@ -22,7 +25,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		setLayout(gridBagLayout);
 		
 		chckbxTabsOrder = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.tabOrder"));
-		chckbxTabsOrder.setSelected(true);
+		chckbxTabsOrder.setSelected(Preferences.INSTANCE.getStartStateOptions().isRememberTabsOrder());
 		chckbxTabsOrder.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.tabOrder.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckbxConserverLordreDes = new GridBagConstraints();
 		gbc_chckbxConserverLordreDes.anchor = GridBagConstraints.WEST;
@@ -32,7 +35,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		add(chckbxTabsOrder, gbc_chckbxConserverLordreDes);
 		
 		chckbxHiddenColumns = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.hiddenColumns"));
-		chckbxHiddenColumns.setSelected(true);
+		chckbxHiddenColumns.setSelected(Preferences.INSTANCE.getStartStateOptions().isRememberHiddenColumns());
 		chckbxHiddenColumns.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.hiddenColumns.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckbxConserverLesMasquages = new GridBagConstraints();
 		gbc_chckbxConserverLesMasquages.insets = new Insets(0, 0, 5, 0);
@@ -51,6 +54,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		add(separator, gbc_separator);
 		
 		chckbxFilter = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.filter"));
+		chckbxFilter.setSelected(Preferences.INSTANCE.getStartStateOptions().isRememberFilter());
 		chckbxFilter.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.filter.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckbxConserverLeFiltre = new GridBagConstraints();
 		gbc_chckbxConserverLeFiltre.insets = new Insets(0, 10, 5, 0);
@@ -69,7 +73,7 @@ public class RestoreStatePanel extends PreferencePanel {
 				}
 			}
 		});
-		chckbxFile.setSelected(true);
+		chckbxFile.setSelected(Preferences.INSTANCE.getStartStateOptions().isRememberFile());
 		chckbxFile.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.openFile.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckbxSeRappelerDu = new GridBagConstraints();
 		gbc_chckbxSeRappelerDu.anchor = GridBagConstraints.WEST;
@@ -90,7 +94,8 @@ public class RestoreStatePanel extends PreferencePanel {
 
 	@Override
 	public boolean updatePreferences() {
-		// TODO Auto-generated method stub
+		Preferences.INSTANCE.setStartStateOptions(new StartStateOptions(chckbxFile.isSelected(), chckbxFilter.isSelected(),
+				chckbxTabsOrder.isSelected(), chckbxHiddenColumns.isSelected()));
 		return false;
 	}
 }
