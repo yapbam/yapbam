@@ -23,7 +23,7 @@ import net.yapbam.gui.Preferences;
 
 import javax.swing.JCheckBox;
 
-public class NetworkPanel extends PreferencePanel {
+public class ProxyPanel extends PreferencePanel {
 
 	private static final long serialVersionUID = 1L;
 	private JRadioButton noProxyButton = null;
@@ -42,7 +42,7 @@ public class NetworkPanel extends PreferencePanel {
 	/**
 	 * This is the default constructor
 	 */
-	public NetworkPanel() {
+	public ProxyPanel() {
 		super();
 		initialize();
 	}

@@ -1,43 +1,32 @@
 package net.yapbam.gui.dialogs.preferences;
 
-import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
-import javax.swing.JTabbedPane;
-import java.awt.BorderLayout;
+import java.util.ArrayList;
 
-public class LookAndFeelPanel extends PreferencePanel {
+import net.yapbam.gui.CompoundPreferencePanel;
+import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.MainFrame;
+import net.yapbam.gui.PreferencePanel;
+
+public class LookAndFeelPanel extends CompoundPreferencePanel {
 	private static final long serialVersionUID = 1L;
 	
-	private PreferencePanel[] panels;
-
 	/**
 	 * This is the default constructor
+	 * @param frame Yapbam's Mainframe
 	 */
-	public LookAndFeelPanel(PreferencePanel[] extraPanels) {
-		super();
-		initialize(extraPanels);
+	public LookAndFeelPanel(MainFrame frame) {
+		super(getSubPanels(frame));
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
-	private void initialize(PreferencePanel[] extraPanels) {
-		this.panels = new PreferencePanel[extraPanels.length+1];
-		setLayout(new BorderLayout(0, 0));
+	private static PreferencePanel[] getSubPanels(MainFrame frame) {
+		ArrayList<PreferencePanel> lfPanels = new ArrayList<PreferencePanel>();
+		lfPanels.add(new ThemePanel());
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		add(tabbedPane);
-		
-		this.panels[0] = new ThemePanel();
-		for (int i = 0; i < extraPanels.length; i++) {
-			this.panels[i+1] = extraPanels[i];
+		for (int i=0 ; i<frame.getPlugInsNumber(); i++) {
+			PreferencePanel preferencePanel = frame.getPlugIn(i).getLFPreferencePanel();
+			if (preferencePanel!=null) lfPanels.add(preferencePanel) ;
 		}
-		
-		for (PreferencePanel panel:this.panels) {
-			tabbedPane.addTab(panel.getTitle(), null, panel, panel.getToolTip());
-		}
+		return lfPanels.toArray(new PreferencePanel[lfPanels.size()]);
 	}
 
 	@Override
@@ -48,14 +37,5 @@ public class LookAndFeelPanel extends PreferencePanel {
 	@Override
 	public String getToolTip() {
 		return LocalizationData.get("PreferencesDialog.LookAndFeel.toolTip");
-	}
-
-	@Override
-	public boolean updatePreferences() {
-		boolean result = false;
-		for (PreferencePanel panel:this.panels) {
-			result = result || panel.updatePreferences();
-		}
-		return result;
 	}
 }
