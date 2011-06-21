@@ -623,9 +623,6 @@ public class FilteredData extends DefaultListenable {
 	 * even if it doesn't filter anything.
 	 */
 	public boolean hasFilter() {
-		return (filter.getFilter()!=ALL) || (filter.getDateFrom()!=null) || (filter.getDateTo() != null) || (filter.getValueDateFrom()!=null) || (filter.getValueDateTo() != null) ||
-			(filter.getValidCategories() !=null) || (filter.getValidModes() != null) || (filter.getValidAccounts()!=null) ||
-			(filter.getMinAmount()!=0.0) || (filter.getMaxAmount()!=Double.POSITIVE_INFINITY) ||
-			(filter.getDescriptionMatcher()!=null) || (filter.getNumberMatcher()!=null) || (filter.getStatementMatcher()!=null);
+		return filter.isActive();
 	}
 }
