@@ -1,12 +1,15 @@
 package net.yapbam.data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
 import net.yapbam.util.TextMatcher;
 
-public class Filter {
+public class Filter implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private int filter;
 	private HashSet<Account> validAccounts;
 	private List<Mode> validModes;
@@ -22,6 +25,7 @@ public class Filter {
 	private TextMatcher statementMatcher;
 
 	public Filter() {
+		clear();
 	}
 
 	public int getFilter() {
@@ -143,4 +147,17 @@ public class Filter {
 		this.setStatementMatcher(null);
 		this.setValidAccounts(null);
 	}
+	
+
+	/** Tests whether the filter filter something or not.
+	 * @return false if no filter is set. Returns true if a filter is set
+	 * even if it doesn't filter anything.
+	 */
+	public boolean isActive() {
+		return (getFilter()!=FilteredData.ALL) || (getDateFrom()!=null) || (getDateTo() != null) || (getValueDateFrom()!=null) || (getValueDateTo() != null) ||
+			(getValidCategories() !=null) || (getValidModes() != null) || (getValidAccounts()!=null) ||
+			(getMinAmount()!=0.0) || (getMaxAmount()!=Double.POSITIVE_INFINITY) ||
+			(getDescriptionMatcher()!=null) || (getNumberMatcher()!=null) || (getStatementMatcher()!=null);
+	}
+
 }
