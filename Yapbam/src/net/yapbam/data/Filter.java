@@ -157,8 +157,10 @@ public class Filter extends Observable implements Serializable {
 	}
 
 	public void clear() {
-		init();
-		this.touch();
+		if (isActive()) {
+			init();
+			this.touch();
+		}
 	}
 	
 	private void init() {
@@ -177,7 +179,7 @@ public class Filter extends Observable implements Serializable {
 		this.setValidAccounts(null);
 	}
 	
-	/** Tests whether the filter filter something or not.
+	/** Tests whether the filter filters something or not.
 	 * @return false if no filter is set. Returns true if a filter is set
 	 * even if it doesn't filter anything.
 	 */
