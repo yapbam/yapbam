@@ -126,4 +126,16 @@ public class TextMatcher {
 			}
 		} else throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
 }
