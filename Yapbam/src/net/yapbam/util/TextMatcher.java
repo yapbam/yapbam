@@ -129,13 +129,16 @@ public class TextMatcher {
 
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		return filter.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if (obj instanceof TextMatcher) {
+			TextMatcher other = (TextMatcher) obj;
+			return this.kind.equals(other.kind) && this.filter.equals(other.filter)
+			&& (this.caseSensitive==other.caseSensitive) && (this.diacriticalSensitive==other.diacriticalSensitive);
+		}
+		return false;
 	}
 }
