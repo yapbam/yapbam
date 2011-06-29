@@ -32,18 +32,22 @@ public class FilteredData extends DefaultListenable implements Observer {
 	private BalanceData balanceData;
 	private boolean suspended;
 	private boolean filteringHasToBeDone;
-	private Filter filter = new Filter();
+	private Filter filter;
 	
 	public FilteredData(GlobalData data) {
 		this.data = data;
+		this.filter = new Filter();
+		this.filter.addObserver(this);
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				//FIXME be aware of mode removal
 				if (eventImplySorting(event)) Collections.sort(transactions, comparator);
 				if (event instanceof EverythingChangedEvent) {
-					clear(); // If everything changed, reset the filter
-					fireEvent(new EverythingChangedEvent(FilteredData.this));
+					suspended = true;
+					filter.clear(); // If everything changed, reset the filter
+					suspended = false;
+					filter();
 				} else if (event instanceof AccountRemovedEvent) {
 					Account account = ((AccountRemovedEvent)event).getRemoved();
 					if ((filter.getValidAccounts()==null) || filter.getValidAccounts().remove(account)) {
@@ -148,7 +152,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 		this.balanceData = new BalanceData();
 		this.filteringHasToBeDone = false;
 		this.suspended = false;
-		this.clear();
+		this.filter();
 	}
 	
 	/** Returns the balance data.
@@ -172,14 +176,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		return result;
 	}
 	
-	/** Erases all filters.
-	 */
-	public void clear() {
-		this.filter.clear();
-		this.filter();
-	}
-
-	
 	public Filter getFilter() {
 		return this.filter;
 	}
@@ -199,6 +195,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println ("the filter has changed");
+		this.filter();
 	}
 	
 	/** Sets the valid accounts for this filter.
@@ -213,10 +210,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		this.filter();
 	}
 	
-	public boolean hasFilterAccount() {
-		return this.filter.getValidAccounts() != null;
-	}
-
 	public boolean isOk(Account account) {
 		return (this.filter.getValidAccounts()==null) || (this.filter.getValidAccounts().contains(account));
 	}
@@ -255,14 +248,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		return result;
 	}
 
-	/** Sets the description filter.
-	 * @param matcher a TextMatcher instance or null to apply no filter on description
-	 */
-	public void setDescriptionFilter(TextMatcher matcher) {
-		this.filter.setDescriptionMatcher(matcher);
-		this.filter();
-	}
-	
 	/** Gets the validity of a string according to the current description filter. 
 	 * @param description The string to test
 	 * @return true if the description is ok with the filter.
@@ -428,11 +413,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 			if (filter.getStatementMatcher()==null) return true;
 			return filter.getStatementMatcher().matches(statement);
 		}
-	}
-	
-	public void setNumberFilter (TextMatcher numberFilter) {
-		this.filter.setNumberMatcher(numberFilter);
-		filter();
 	}
 	
 	public TextMatcher getNumberFilter () {

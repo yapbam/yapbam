@@ -434,7 +434,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			eraseItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					frame.getFilteredData().clear();
+					frame.getFilteredData().getFilter().clear();
 				}
 			});
 			filterMenu.add(eraseItem);
@@ -449,7 +449,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				}
 			};
 			FilteredData filter = frame.getFilteredData();
-			boolean hasAccountFilter = filter.hasFilterAccount();
+			boolean hasAccountFilter = (filter.getFilter()!=null);
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				Account account = data.getAccount(i);
 				JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());

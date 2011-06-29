@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
+import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
 
 public class Filter extends Observable implements Serializable {
@@ -40,14 +40,18 @@ public class Filter extends Observable implements Serializable {
 
 	public void setFilter(int filter) {
 		this.filter = filter;
-		touch();
+		setChanged();
 	}
 	
-	private void touch() {
-		if (!suspended) {
-			this.setChanged();
-			this.notifyObservers();
-		}
+	@Override
+	protected void setChanged() {
+		super.setChanged();
+		if (!suspended) this.notifyObservers();
+	}
+	
+	public void setSuspended(boolean suspended) {
+		this.suspended = suspended;
+		if (!this.suspended && this.hasChanged()) this.notifyObservers();
 	}
 
 	/** Gets the valid accounts for this filter.
@@ -77,7 +81,7 @@ public class Filter extends Observable implements Serializable {
 			}
 		}
 		// TODO Test if the accounts list was really changed before launching the event
-		touch();
+		setChanged();
 	}
 
 	public List<Mode> getValidModes() {
@@ -86,7 +90,7 @@ public class Filter extends Observable implements Serializable {
 
 	public void setValidModes(List<Mode> validModes) {
 		this.validModes = validModes;
-		this.touch();
+		this.setChanged();
 	}
 
 	public HashSet<Category> getValidCategories() {
@@ -95,7 +99,7 @@ public class Filter extends Observable implements Serializable {
 
 	public void setValidCategories(HashSet<Category> validCategories) {
 		this.validCategories = validCategories;
-		this.touch();
+		this.setChanged();
 	}
 
 	public Date getDateFrom() {
@@ -104,7 +108,7 @@ public class Filter extends Observable implements Serializable {
 
 	public void setDateFrom(Date dateFrom) {
 		this.dateFrom = dateFrom;
-		this.touch();
+		this.setChanged();
 	}
 
 	public Date getDateTo() {
@@ -113,7 +117,7 @@ public class Filter extends Observable implements Serializable {
 
 	public void setDateTo(Date dateTo) {
 		this.dateTo = dateTo;
-		this.touch();
+		this.setChanged();
 	}
 
 	public Date getValueDateFrom() {
@@ -122,7 +126,7 @@ public class Filter extends Observable implements Serializable {
 
 	public void setValueDateFrom(Date valueDateFrom) {
 		this.valueDateFrom = valueDateFrom;
-		this.touch();
+		this.setChanged();
 	}
 
 	public Date getValueDateTo() {
@@ -131,7 +135,7 @@ public class Filter extends Observable implements Serializable {
 
 	public void setValueDateTo(Date valueDateTo) {
 		this.valueDateTo = valueDateTo;
-		this.touch();
+		this.setChanged();
 	}
 
 	public double getMinAmount() {
@@ -140,7 +144,7 @@ public class Filter extends Observable implements Serializable {
 
 	public void setMinAmount(double minAmount) {
 		this.minAmount = minAmount;
-		this.touch();
+		this.setChanged();
 	}
 
 	public double getMaxAmount() {
@@ -149,16 +153,21 @@ public class Filter extends Observable implements Serializable {
 
 	public void setMaxAmount(double maxAmount) {
 		this.maxAmount = maxAmount;
-		this.touch();
+		this.setChanged();
 	}
 
 	public TextMatcher getDescriptionMatcher() {
 		return descriptionMatcher;
 	}
 
+	/** Sets the description filter.
+	 * @param matcher a TextMatcher instance or null to apply no filter on description
+	 */
 	public void setDescriptionMatcher(TextMatcher descriptionMatcher) {
-		this.descriptionMatcher = descriptionMatcher;
-		this.touch();
+		if (!NullUtils.areEquals(descriptionMatcher, this.descriptionMatcher)) {
+			this.descriptionMatcher = descriptionMatcher;
+			this.setChanged();
+		}
 	}
 
 	public TextMatcher getNumberMatcher() {
@@ -166,8 +175,10 @@ public class Filter extends Observable implements Serializable {
 	}
 
 	public void setNumberMatcher(TextMatcher numberMatcher) {
-		this.numberMatcher = numberMatcher;
-		this.touch();
+		if (!NullUtils.areEquals(numberMatcher, this.numberMatcher)) {
+			this.numberMatcher = numberMatcher;
+			this.setChanged();
+		}
 	}
 
 	public TextMatcher getStatementMatcher() {
@@ -175,14 +186,17 @@ public class Filter extends Observable implements Serializable {
 	}
 
 	public void setStatementMatcher(TextMatcher statementMatcher) {
-		this.statementMatcher = statementMatcher;
-		this.touch();
+		if (!NullUtils.areEquals(statementMatcher, this.statementMatcher)) {
+			this.statementMatcher = statementMatcher;
+			this.setChanged();
+		}
 	}
 
 	public void clear() {
 		if (isActive()) {
+			this.setSuspended(true);
 			init();
-			this.touch();
+			this.setSuspended(false);
 		}
 	}
 	

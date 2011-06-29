@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
+import net.yapbam.data.Filter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
@@ -334,7 +335,8 @@ public class CustomFilterPanel extends JPanel {
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
 	public void apply() {
-		data.setSuspended(true);
+		Filter filter = this.data.getFilter();
+		filter.setSuspended(true);
 		// build the account and mode filter
 		Object[] selectedModes = getModes().getSelectedValues();
 		ArrayList<Mode> modes = new ArrayList<Mode>();
@@ -364,24 +366,24 @@ public class CustomFilterPanel extends JPanel {
 		// build the expense/receipt and amount filter
 		Double min = getAmountPanel().getMinAmount();
 		Double max = getAmountPanel().getMaxAmount();
-		int filter = 0;
-		if (getReceipts_expensesPanel().isReceiptsSelected()) filter += FilteredData.RECEIPTS;
-		if (getReceipts_expensesPanel().isExpensesSelected()) filter += FilteredData.EXPENSES;
-		this.data.setAmountFilter(filter, min, max);
+		int mask = 0;
+		if (getReceipts_expensesPanel().isReceiptsSelected()) mask += FilteredData.RECEIPTS;
+		if (getReceipts_expensesPanel().isExpensesSelected()) mask += FilteredData.EXPENSES;
+		this.data.setAmountFilter(mask, min, max);
 		// build the date filter
 		this.data.setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
 		// build the value date filter
 		this.data.setValueDateFilter(getValueDatePanel().getDateFrom(), getValueDatePanel().getDateTo());
 		// build the description filter
-		this.data.setDescriptionFilter(getDescriptionPanel().getTextMatcher());
+		filter.setDescriptionMatcher(getDescriptionPanel().getTextMatcher());
 		// Build the statement filter
-		filter = 0;
-		if (getChecked().isSelected()) filter += FilteredData.CHECKED;
-		if (getNotChecked().isSelected()) filter += FilteredData.NOT_CHECKED;
-		data.setStatementFilter(filter, getJPanel11().getTextMatcher());
+		mask = 0;
+		if (getChecked().isSelected()) mask += FilteredData.CHECKED;
+		if (getNotChecked().isSelected()) mask += FilteredData.NOT_CHECKED;
+		data.setStatementFilter(mask, getJPanel11().getTextMatcher());
 		// Build the number filter
-		this.data.setNumberFilter(this.getNumberPanel().getTextMatcher());
-		data.setSuspended(false);
+		filter.setNumberMatcher(this.getNumberPanel().getTextMatcher());
+		filter.setSuspended(false);
 	}
 
 	/**
