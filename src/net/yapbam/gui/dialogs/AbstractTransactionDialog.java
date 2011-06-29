@@ -14,6 +14,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -143,8 +144,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		centerPane.add(titleCompte, c);
 		accounts = new JComboBox(getAccounts());
 		selectedAccount = 0; // TODO let select the last selected account
-		if (data.hasFilterAccount() && (data.getAccounts().length==1)) { // If the filter defines only one account, select this account
-			selectedAccount = data.getGlobalData().indexOf(data.getAccounts()[0]);
+		List<Account> filterAccounts = data.getFilter().getValidAccounts();
+		if ((filterAccounts!=null) && (filterAccounts.size()==1)) { // If the filter defines only one account, select this account
+			selectedAccount = data.getGlobalData().indexOf(filterAccounts.get(0));
 		}
 		accounts.setSelectedIndex(selectedAccount);
 		AccountsListener accountListener = new AccountsListener();
