@@ -1,8 +1,10 @@
 package net.yapbam.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
@@ -48,12 +50,33 @@ public class Filter extends Observable implements Serializable {
 		}
 	}
 
-	public HashSet<Account> getValidAccounts() {
-		return validAccounts;
+	/** Gets the valid accounts for this filter.
+	 * <br>Note: There's no side effect between this instance and the returned array.
+	 * @return the valid accounts (null means all accounts are ok).
+	 */
+	public List<Account> getValidAccounts() {
+		if (validAccounts==null) return null;
+		ArrayList<Account> result = new ArrayList<Account>(validAccounts.size());
+		for (Account account:validAccounts) {
+			result.add(account);
+		}
+		return result;
 	}
 
-	public void setValidAccounts(HashSet<Account> validAccounts) {
-		this.validAccounts = validAccounts;
+	/** Sets the valid accounts for this filter.
+	 * <br>Note: There's no side effect between this instance and the argument array.
+	 * @param accounts the accounts that are allowed (null or the complete list of accounts to allow all accounts).
+	 */
+	public void setValidAccounts(List<Account> accounts) {
+		if (accounts==null) {
+			validAccounts = null;
+		} else {
+			validAccounts = new HashSet<Account>(accounts.size());
+			for (Account account : accounts) {
+				validAccounts.add(account);
+			}
+		}
+		// TODO Test if the accounts list was really changed before launching the event
 		touch();
 	}
 

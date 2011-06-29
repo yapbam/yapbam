@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.AbstractAction;
@@ -494,7 +495,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		double min = filter.getMinimumAmount();
 		double max = filter.getMaximumAmount();
 		boolean amountSimple = (min==0) && (max==Double.POSITIVE_INFINITY);
-		return (isComplex(filter.getAccounts(), new int[]{1,filter.getGlobalData().getAccountsNumber()}) ||
+		List<Account> validAccounts = filter.getFilter().getValidAccounts();
+		boolean complexAccount = (validAccounts!=null) && (validAccounts.size()!=1) && (validAccounts.size()!=filter.getGlobalData().getAccountsNumber());
+		return (complexAccount ||
 				(filter.getCategories()!=null) || (filter.getModes()!=null) ||
 				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
 				(filter.getValueDateFrom()!=null) || (filter.getValueDateTo()!=null) ||
@@ -502,19 +505,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				(filter.getStatementFilter()!=null) || !amountSimple);
 	}
 	
-	/**
-	 * @param array
-	 * @return
-	 *  @see #isComplex(FilteredData)
-	 */
-	private boolean isComplex(Object[] array, int[] simpleLengths) {
-		if (array==null) return false;
-		for (int i = 0; i < simpleLengths.length; i++) {
-			if (array.length==simpleLengths[i]) return false;
-		}
-		return true;
-	}
-
 	private void buildBooleanFilterChoiceMenu(int kind, String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {
 		FilteredData filter = frame.getFilteredData();
 		ButtonGroup group = new ButtonGroup();
