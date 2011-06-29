@@ -15,7 +15,7 @@ import net.yapbam.util.TextMatcher;
  * transaction would be considered as ok.
  * @see GlobalData
  */
-public class FilteredData extends DefaultListenable {
+public class FilteredData extends DefaultListenable implements Observer {
 	private static boolean DEBUG = false;
 	
 	public static final int CHECKED=1;
@@ -179,34 +179,38 @@ public class FilteredData extends DefaultListenable {
 		this.filter();
 	}
 
+	
+	public Filter getFilter() {
+		return this.filter;
+	}
+	
+	public void setFilter(Filter filter) {
+		if (filter!=this.filter) {
+			// if the instance as really changed
+			// Stop looking for changes on the old instance
+			this.filter.deleteObserver(this);
+			this.filter = filter;
+			this.filter.addObserver(this);
+			this.filter();
+		}
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		System.out.println ("the filter has changed");
+	}
+	
 	/** Sets the valid accounts for this filter.
 	 * There's no side effect between this instance and the argument array.
 	 * @param accounts the accounts that are allowed (null or the complete list of accounts to allow all accounts).
 	 */
 	public void setAccounts(Account[] accounts) {
-		if ((accounts==null) || (accounts.length==data.getAccountsNumber())) {
+		if (accounts.length==data.getAccountsNumber()) {
 			this.filter.setValidAccounts(null);
-		} else {
-			this.filter.setValidAccounts(new HashSet<Account>(accounts.length));
-			for (Account account : accounts) {
-				this.filter.getValidAccounts().add(account);
-			}
 		}
+		this.filter.setValidAccounts(Arrays.asList(accounts));
 		this.filter();
-	}
-	
-	/** Gets the valid accounts for this filter.
-	 * There's no side effect between this instance and the returned array.
-	 * @return the valid accounts (null means, all accounts are ok).
-	 */
-	public Account[] getAccounts() {
-		if (this.filter.getValidAccounts()==null) return null;
-		Account[] result = new Account[filter.getValidAccounts().size()];
-		Iterator<Account> iterator = filter.getValidAccounts().iterator();
-		for (int i = 0; i < result.length; i++) {
-			result[i] = iterator.next();
-		}
-		return result;
 	}
 	
 	public boolean hasFilterAccount() {

@@ -132,6 +132,14 @@ public class TextMatcher {
 		return filter.hashCode();
 	}
 
+	/**
+	 * Tests whether the argument object is equals to this.
+	 * <br>Two TextMatcher are equals if their kind, filter, caseSensitive and diacriticalSensitive attributes are equals.
+	 * <br>Note that two equivalent TextMatchers can not be equals; For instance one with "FILTER" as filter, the other with "filter"
+	 * and the caseSensitive attribute set to false.
+	 * @param obj a textMatcher to test.
+	 * @see #TextMatcher(Kind, String, boolean, boolean) 
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof TextMatcher) {
