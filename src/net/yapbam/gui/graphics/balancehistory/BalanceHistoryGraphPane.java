@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Date;
 
 import javax.swing.JPanel;
@@ -17,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 
-import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
@@ -63,7 +63,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Alert alert = alerts.getSelectedAlert();
-				BalanceHistoryGraphPane.this.data.setAccounts(new Account[]{alert.getAccount()});
+				BalanceHistoryGraphPane.this.data.getFilter().setValidAccounts(Collections.singletonList(alert.getAccount()));
 				setSelectedDate(alert.getDate());
 			}
 		});

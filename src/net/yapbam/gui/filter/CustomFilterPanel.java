@@ -174,7 +174,7 @@ public class CustomFilterPanel extends JPanel {
 			accountList.setToolTipText(LocalizationData.get("CustomFilterPanel.account.toolTip")); //$NON-NLS-1$
 			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getAccountsNumber()); 
 			for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
-				if (data.isOk(data.getGlobalData().getAccount(i))) indices.add(i);
+				if (data.getFilter().isOk(data.getGlobalData().getAccount(i))) indices.add(i);
 			}
 			int[] selection = new int[indices.size()];
 			for (int i = 0; i < indices.size(); i++) {
@@ -353,7 +353,7 @@ public class CustomFilterPanel extends JPanel {
 				}
 			}
 		}
-		this.data.setAccounts(accounts);
+		this.data.getFilter().setValidAccounts(accounts.length==data.getGlobalData().getAccountsNumber()?null:Arrays.asList(accounts));
 		// set the mode filter
 		this.data.setModes(all?null:modes.toArray(new Mode[modes.size()]));
 		// build the category filter

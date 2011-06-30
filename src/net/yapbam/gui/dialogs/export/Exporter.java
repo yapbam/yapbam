@@ -45,7 +45,7 @@ public class Exporter {
 				//Export accounts initial balance
 				for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
 					Account account = data.getGlobalData().getAccount(i);
-					if (data.isOk(account) || !parameters.isExportFilteredData()) {
+					if (data.getFilter().isOk(account) || !parameters.isExportFilteredData()) {
 						for (int j = 0; j < fields.length; j++) {
 							if (j>0) writer.write(parameters.getSeparator());
 							writer.write(getField(account, fields[j]));
