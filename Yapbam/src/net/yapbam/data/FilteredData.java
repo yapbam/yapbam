@@ -66,7 +66,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					Collection<Transaction> okTransactions = new ArrayList<Transaction>(ts.length);
 					double addedAmount = 0.0;
 					for (Transaction transaction : ts) {
-						if (isOk(transaction.getAccount())) { // If the added transaction match with the account filter
+						if (filter.isOk(transaction.getAccount())) { // If the added transaction match with the account filter
 							Date valueDate = transaction.getValueDate();
 							if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
 								addedAmount += transaction.getAmount();
@@ -91,7 +91,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					Collection<Transaction> okTransactions = new ArrayList<Transaction>(ts.length);
 					double addedAmount = 0.0;
 					for (Transaction transaction : ts) {
-						if (isOk(transaction.getAccount())) {
+						if (filter.isOk(transaction.getAccount())) {
 							Date valueDate = transaction.getValueDate();
 							if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
 								addedAmount -= transaction.getAmount();
@@ -112,7 +112,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					if (okTransactions.size()>0) fireEvent(new TransactionsRemovedEvent(FilteredData.this, okTransactions.toArray(new Transaction[okTransactions.size()])));
 				} else if (event instanceof AccountAddedEvent) {
 					Account account = ((AccountAddedEvent)event).getAccount();
-					if (isOk(account)) {
+					if (filter.isOk(account)) {
 						balanceData.updateBalance(account.getInitialBalance(), true);
 						if (isOk(CHECKED)) {
 							fireEvent(new AccountAddedEvent(FilteredData.this, account));
@@ -125,7 +125,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					}
 				} else if (event instanceof AccountPropertyChangedEvent) {
 					AccountPropertyChangedEvent evt = (AccountPropertyChangedEvent) event;
-					if (isOk(evt.getAccount())) {
+					if (filter.isOk(evt.getAccount())) {
 						if (evt.getProperty().equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) {
 							double amount = ((Double)evt.getNewValue())-((Double)evt.getOldValue());
 							balanceData.updateBalance(amount, true);
@@ -166,7 +166,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	private boolean eventImplySorting (DataEvent event) {
 		boolean accountRenamed = (event instanceof AccountPropertyChangedEvent) &&
 				((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME) &&
-				isOk(((AccountPropertyChangedEvent)event).getAccount());
+				filter.isOk(((AccountPropertyChangedEvent)event).getAccount());
 		boolean categoryRenamed = (event instanceof CategoryPropertyChangedEvent) &&
 			isOk(((CategoryPropertyChangedEvent)event).getCategory());
 		boolean modeRenamed = (event instanceof ModePropertyChangedEvent) &&
@@ -196,22 +196,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		// TODO Auto-generated method stub
 		System.out.println ("the filter has changed");
 		this.filter();
-	}
-	
-	/** Sets the valid accounts for this filter.
-	 * There's no side effect between this instance and the argument array.
-	 * @param accounts the accounts that are allowed (null or the complete list of accounts to allow all accounts).
-	 */
-	public void setAccounts(Account[] accounts) {
-		if ((accounts==null) || accounts.length==data.getAccountsNumber()) {
-			this.filter.setValidAccounts(null);
-		} else {
-			this.filter.setValidAccounts(Arrays.asList(accounts));
-		}
-	}
-	
-	public boolean isOk(Account account) {
-		return (this.filter.getValidAccounts()==null) || (this.filter.getValidAccounts().contains(account));
 	}
 	
 	public boolean isOk(Mode mode) {
@@ -270,7 +254,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	 * @return true if the transaction is valid.
 	 */
 	public boolean isOk(Transaction transaction) {
-		if (!isOk(transaction.getAccount())) return false;
+		if (!filter.isOk(transaction.getAccount())) return false;
 		if (!isOk(transaction.getMode())) return false;
 		if (!isStatementOk(transaction)) return false;
 		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
@@ -516,7 +500,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 			double initialBalance = 0;
 			for (int i = 0; i < this.getGlobalData().getAccountsNumber(); i++) {
 				Account account = this.getGlobalData().getAccount(i);
-				if (isOk(account)) initialBalance += account.getInitialBalance();
+				if (filter.isOk(account)) initialBalance += account.getInitialBalance();
 			}
 			balanceData.enableEvents(false);
 			balanceData.clear(initialBalance);
@@ -525,7 +509,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 			double addedAmount = 0.0;
 			for (int i = 0; i < data.getTransactionsNumber(); i++) {
 				Transaction transaction = data.getTransaction(i);
-				if (isOk(transaction.getAccount())) {
+				if (filter.isOk(transaction.getAccount())) {
 					Date valueDate = transaction.getValueDate();
 					if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
 						addedAmount += transaction.getAmount();

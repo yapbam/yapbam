@@ -67,6 +67,10 @@ public class Filter extends Observable implements Serializable {
 		return result;
 	}
 
+	public boolean isOk(Account account) {
+		return (validAccounts==null) || (validAccounts.contains(account));
+	}	
+
 	/** Sets the valid accounts for this filter.
 	 * <br>Note: There's no side effect between this instance and the argument array.
 	 * @param accounts the accounts that are allowed (null or the complete list of accounts to allow all accounts).

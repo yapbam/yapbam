@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -445,7 +446,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				public void actionPerformed(ActionEvent e) {
 					JMenuItem item = (JMenuItem) e.getSource();
 					Account account = frame.getData().getAccount(item.getText());
-					frame.getFilteredData().setAccounts(new Account[]{account});
+					frame.getFilteredData().getFilter().setValidAccounts(Collections.singletonList(account));
 				}
 			};
 			List<Account> filterAccounts = frame.getFilteredData().getFilter().getValidAccounts();
@@ -463,7 +464,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			item.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					frame.getFilteredData().setAccounts(null);
+					frame.getFilteredData().getFilter().setValidAccounts(null);
 				}
 			});
 			item.setSelected(!hasAccountFilter);
