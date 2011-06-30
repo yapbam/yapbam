@@ -203,11 +203,11 @@ public class FilteredData extends DefaultListenable implements Observer {
 	 * @param accounts the accounts that are allowed (null or the complete list of accounts to allow all accounts).
 	 */
 	public void setAccounts(Account[] accounts) {
-		if (accounts.length==data.getAccountsNumber()) {
+		if ((accounts==null) || accounts.length==data.getAccountsNumber()) {
 			this.filter.setValidAccounts(null);
+		} else {
+			this.filter.setValidAccounts(Arrays.asList(accounts));
 		}
-		this.filter.setValidAccounts(Arrays.asList(accounts));
-		this.filter();
 	}
 	
 	public boolean isOk(Account account) {

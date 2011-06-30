@@ -448,14 +448,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					frame.getFilteredData().setAccounts(new Account[]{account});
 				}
 			};
-			FilteredData filter = frame.getFilteredData();
-			boolean hasAccountFilter = (filter.getFilter()!=null);
+			List<Account> filterAccounts = frame.getFilteredData().getFilter().getValidAccounts();
+			boolean hasAccountFilter = (filterAccounts!=null);
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				Account account = data.getAccount(i);
 				JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
-				item.setToolTipText(MessageFormat.format(
-						LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
-				if (hasAccountFilter) item.setSelected(filter.isOk(account));
+				item.setToolTipText(MessageFormat.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
+				if (hasAccountFilter) item.setSelected(filterAccounts.contains(account));
 				filterMenu.add(item);
 				item.addActionListener(listener);
 			}
