@@ -12,6 +12,11 @@ import net.yapbam.util.TextMatcher;
 
 public class Filter extends Observable implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static boolean DEBUG = false;
+	public static final int CHECKED=1;
+	public static final int NOT_CHECKED=2;
+	public static final int EXPENSES=4;
+	public static final int RECEIPTS=8;
 
 	private int filter;
 	private HashSet<Account> validAccounts;
@@ -38,6 +43,15 @@ public class Filter extends Observable implements Serializable {
 		return filter;
 	}
 
+	public boolean isOk(int property) {
+		if (DEBUG) {
+			System.out.println("---------- isOK("+Integer.toBinaryString(property)+") ----------");
+			System.out.println("filter  : "+Integer.toBinaryString(this.filter));
+			System.out.println("result  : "+Integer.toBinaryString(property & this.filter));
+		}
+		return ((property & this.filter) != 0);
+	}
+	
 	public void setFilter(int filter) {
 		this.filter = filter;
 		setChanged();
@@ -159,9 +173,33 @@ public class Filter extends Observable implements Serializable {
 		this.maxAmount = maxAmount;
 		this.setChanged();
 	}
+	
+	/** Tests whether an amount is ok or not.
+	 * @param amount The amount to test
+	 * @return true if the amount is ok.
+	 */
+	public boolean isAmountOk(double amount) {
+		// We use the currency comparator to implement amount filtering because double are very tricky to compare.
+		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<0) && (!isOk(EXPENSES))) return false;
+		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)>0) && (!isOk(RECEIPTS))) return false;
+		amount = Math.abs(amount);
+		if (GlobalData.AMOUNT_COMPARATOR.compare(amount, getMinAmount())<0) return false;
+		return GlobalData.AMOUNT_COMPARATOR.compare(amount, getMaxAmount())<=0;
+	}
 
+	/** Gets the description filter.
+	 * @return a TextMatcher or null if there is no description filter
+	 */
 	public TextMatcher getDescriptionMatcher() {
 		return descriptionMatcher;
+	}
+	
+	/** Gets the validity of a string according to the current description filter. 
+	 * @param description The string to test
+	 * @return true if the description is ok with the filter.
+	 */
+	public boolean isDescriptionOk(String description) {
+		return descriptionMatcher==null?true:descriptionMatcher.matches(description);
 	}
 
 	/** Sets the description filter.

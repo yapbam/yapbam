@@ -136,7 +136,7 @@ public class FilterView extends JPanel {
 	}
 	
 	private void refreshFilter() {
-		if (data.hasFilter()) {
+		if (data.getFilter().isActive()) {
 			lblFilter.setText("A filter is set"); //LOCAL
 		} else {
 			lblFilter.setText("No filter is set");

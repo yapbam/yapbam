@@ -26,6 +26,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import net.yapbam.data.Account;
+import net.yapbam.data.Filter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
@@ -472,14 +473,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			filterMenu.addSeparator();
 			buildBooleanFilterChoiceMenu(FilterActionItem.CHECKED_STATUS,
 					new String[] { LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
-							LocalizationData.get("MainMenuBar.notChecked") }, new int[] { FilteredData.CHECKED, FilteredData.NOT_CHECKED }, //$NON-NLS-1$
+							LocalizationData.get("MainMenuBar.notChecked") }, new int[] { Filter.CHECKED, Filter.NOT_CHECKED }, //$NON-NLS-1$
 					new String[] {
 							LocalizationData.get("MainMenuBar.checked.toolTip"), LocalizationData.get("MainMenuBar.notChecked.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("MainMenuBar.NoCheckedFilter.toolTip")); //$NON-NLS-1$
 			filterMenu.addSeparator();
 			buildBooleanFilterChoiceMenu(FilterActionItem.NATURE,
 					new String[] { LocalizationData.get("MainMenuBar.Expenses"), //$NON-NLS-1$
-							LocalizationData.get("MainMenuBar.Receipts") }, new int[] { FilteredData.EXPENSES, FilteredData.RECEIPTS }, //$NON-NLS-1$
+							LocalizationData.get("MainMenuBar.Receipts") }, new int[] { Filter.EXPENSES, Filter.RECEIPTS }, //$NON-NLS-1$
 					new String[] {
 							LocalizationData.get("MainMenuBar.Expenses.toolTip"), LocalizationData.get("MainMenuBar.Receipts.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
@@ -501,12 +502,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				(filter.getCategories()!=null) || (filter.getModes()!=null) ||
 				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
 				(filter.getValueDateFrom()!=null) || (filter.getValueDateTo()!=null) ||
-				(filter.getDescriptionFilter()!=null) || (filter.getNumberFilter()!=null) ||
-				(filter.getStatementFilter()!=null) || !amountSimple);
+				(filter.getFilter().getDescriptionMatcher()!=null) || (filter.getNumberFilter()!=null) ||
+				(filter.getFilter().getStatementMatcher()!=null) || !amountSimple);
 	}
 	
 	private void buildBooleanFilterChoiceMenu(int kind, String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {
-		FilteredData filter = frame.getFilteredData();
+		Filter filter = frame.getFilteredData().getFilter();
 		ButtonGroup group = new ButtonGroup();
 		JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(texts[0]);
 		menuItem.setToolTipText(tooltips[0]);
@@ -540,7 +541,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			FilteredData data = frame.getFilteredData();
-			if (this.kind==CHECKED_STATUS) data.setStatementFilter(property,data.getStatementFilter());
+			if (this.kind==CHECKED_STATUS) data.setStatementFilter(property,data.getFilter().getStatementMatcher());
 			else data.setAmountFilter(property, data.getMinimumAmount(), data.getMaximumAmount());
 		}
 	}

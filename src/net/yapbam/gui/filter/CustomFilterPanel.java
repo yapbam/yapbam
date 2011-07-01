@@ -367,8 +367,8 @@ public class CustomFilterPanel extends JPanel {
 		Double min = getAmountPanel().getMinAmount();
 		Double max = getAmountPanel().getMaxAmount();
 		int mask = 0;
-		if (getReceipts_expensesPanel().isReceiptsSelected()) mask += FilteredData.RECEIPTS;
-		if (getReceipts_expensesPanel().isExpensesSelected()) mask += FilteredData.EXPENSES;
+		if (getReceipts_expensesPanel().isReceiptsSelected()) mask += Filter.RECEIPTS;
+		if (getReceipts_expensesPanel().isExpensesSelected()) mask += Filter.EXPENSES;
 		this.data.setAmountFilter(mask, min, max);
 		// build the date filter
 		this.data.setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
@@ -378,8 +378,8 @@ public class CustomFilterPanel extends JPanel {
 		filter.setDescriptionMatcher(getDescriptionPanel().getTextMatcher());
 		// Build the statement filter
 		mask = 0;
-		if (getChecked().isSelected()) mask += FilteredData.CHECKED;
-		if (getNotChecked().isSelected()) mask += FilteredData.NOT_CHECKED;
+		if (getChecked().isSelected()) mask += Filter.CHECKED;
+		if (getNotChecked().isSelected()) mask += Filter.NOT_CHECKED;
 		data.setStatementFilter(mask, getJPanel11().getTextMatcher());
 		// Build the number filter
 		filter.setNumberMatcher(this.getNumberPanel().getTextMatcher());
@@ -456,7 +456,7 @@ public class CustomFilterPanel extends JPanel {
 	private TextMatcherFilterPanel getDescriptionPanel() {
 		if (descriptionPanel == null) {
 			descriptionPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.DESCRIPTION_WORDING);
-			descriptionPanel.setTextMatcher(data.getDescriptionFilter());
+			descriptionPanel.setTextMatcher(data.getFilter().getDescriptionMatcher());
 		}
 		return descriptionPanel;
 	}
@@ -510,7 +510,7 @@ public class CustomFilterPanel extends JPanel {
 			checked = new JCheckBox();
 			checked.setText(LocalizationData.get("MainMenuBar.checked")); //$NON-NLS-1$
 			checked.setToolTipText(LocalizationData.get("CustomFilterPanel.checked.toolTip")); //$NON-NLS-1$
-			checked.setSelected(data.isOk(FilteredData.CHECKED));
+			checked.setSelected(data.getFilter().isOk(Filter.CHECKED));
 			setStatementFilterEnabled();
 			checked.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -536,7 +536,7 @@ public class CustomFilterPanel extends JPanel {
 			notChecked = new JCheckBox();
 			notChecked.setText(LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$
 			notChecked.setToolTipText(LocalizationData.get("CustomFilterPanel.unchecked.toolTip")); //$NON-NLS-1$
-			notChecked.setSelected(data.isOk(FilteredData.NOT_CHECKED));
+			notChecked.setSelected(data.getFilter().isOk(Filter.NOT_CHECKED));
 			notChecked.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -570,7 +570,7 @@ public class CustomFilterPanel extends JPanel {
 		if (jPanel11 == null) {
 			jPanel11 = new TextMatcherFilterPanel(TextMatcherFilterPanel.STATEMENT_WORDING);
 			if (getChecked().isSelected()) {
-				jPanel11.setTextMatcher(data.getStatementFilter());
+				jPanel11.setTextMatcher(data.getFilter().getStatementMatcher());
 				jPanel11.setCheckBoxesVisible(false);
 			}
 		}
@@ -679,7 +679,7 @@ public class CustomFilterPanel extends JPanel {
 		if (receipts_expensesPanel == null) {
 			receipts_expensesPanel = new NatureFilterPanel();
 			receipts_expensesPanel.addPropertyChangeListener(inconsistencyListener);
-			receipts_expensesPanel.setSelected(data.isOk(FilteredData.RECEIPTS), data.isOk(FilteredData.EXPENSES));
+			receipts_expensesPanel.setSelected(data.getFilter().isOk(Filter.RECEIPTS), data.getFilter().isOk(Filter.EXPENSES));
 		}
 		return receipts_expensesPanel;
 	}

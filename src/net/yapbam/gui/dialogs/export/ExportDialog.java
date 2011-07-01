@@ -34,7 +34,8 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
 	@Override
 	protected JPanel createCenterPane() {
 		exportPanel = new ExportPanel();
-		exportPanel.getFiltered().setEnabled(data.hasFilter());
+		boolean hasFilter = data.getFilter().isActive();
+		exportPanel.getFiltered().setEnabled(hasFilter);
 		exportPanel.addPropertyChangeListener(ExportPanel.INVALIDITY_CAUSE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -43,7 +44,7 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
 		});
 		ExporterParameters parameters = (ExporterParameters) YapbamState.INSTANCE.restore(getStateKey());
 		if (parameters!=null) {
-			if (!data.hasFilter()) parameters.setExportFilteredData(false);
+			if (!hasFilter) parameters.setExportFilteredData(false);
 			exportPanel.setParameters(parameters);
 		}
 		return exportPanel;
