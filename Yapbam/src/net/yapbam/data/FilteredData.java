@@ -18,13 +18,9 @@ import net.yapbam.util.TextMatcher;
 public class FilteredData extends DefaultListenable implements Observer {
 	private static boolean DEBUG = false;
 	
-	public static final int CHECKED=1;
-	public static final int NOT_CHECKED=2;
-	public static final int EXPENSES=4;
-	public static final int RECEIPTS=8;
 	public static final int ALL = -1;
-	private static final int CHECKED_MASK = (ALL ^ CHECKED) ^ NOT_CHECKED;
-	private static final int NATURE_MASK = (ALL ^ EXPENSES) ^ RECEIPTS;
+	private static final int CHECKED_MASK = (ALL ^ Filter.CHECKED) ^ Filter.NOT_CHECKED;
+	private static final int NATURE_MASK = (ALL ^ Filter.EXPENSES) ^ Filter.RECEIPTS;
 
 	private GlobalData data;
 	private ArrayList<Transaction> transactions;
@@ -114,7 +110,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					Account account = ((AccountAddedEvent)event).getAccount();
 					if (filter.isOk(account)) {
 						balanceData.updateBalance(account.getInitialBalance(), true);
-						if (isOk(CHECKED)) {
+						if (filter.isOk(Filter.CHECKED)) {
 							fireEvent(new AccountAddedEvent(FilteredData.this, account));
 						}
 					}
@@ -232,21 +228,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		return result;
 	}
 
-	/** Gets the validity of a string according to the current description filter. 
-	 * @param description The string to test
-	 * @return true if the description is ok with the filter.
-	 */
-	private boolean isDescriptionOk(String description) {
-		return this.filter.getDescriptionMatcher()==null?true:this.filter.getDescriptionMatcher().matches(description);
-	}
-	
-	/** Gets the description filter.
-	 * @return a TextMatcher or null if there is no description filter
-	 */
-	public TextMatcher getDescriptionFilter() {
-		return this.filter.getDescriptionMatcher();
-	}
-	
 	/** Gets a transaction's validity.
 	 * Note about subtransactions : A transaction is also valid if one of its subtransactions,
 	 *  considered as transaction (completed with transactions's date, statement, etc ...), is valid. 
@@ -257,13 +238,13 @@ public class FilteredData extends DefaultListenable implements Observer {
 		if (!filter.isOk(transaction.getAccount())) return false;
 		if (!isOk(transaction.getMode())) return false;
 		if (!isStatementOk(transaction)) return false;
-		if (!isOk((transaction.getStatement()==null)?NOT_CHECKED:CHECKED)) return false;
+		if (!filter.isOk((transaction.getStatement()==null)?Filter.NOT_CHECKED:Filter.CHECKED)) return false;
 		if (!isNumberOk(transaction.getNumber())) return false;
 		if ((getDateFrom()!=null) && (transaction.getDate().compareTo(getDateFrom())<0)) return false;
 		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
 		if ((getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(getValueDateFrom())<0)) return false;
 		if ((getValueDateTo()!=null) && (transaction.getValueDate().compareTo(getValueDateTo())>0)) return false;
-		if (isOk(transaction.getCategory()) && isAmountOk(transaction.getAmount()) && isDescriptionOk(transaction.getDescription())) return true;
+		if (isOk(transaction.getCategory()) && filter.isAmountOk(transaction.getAmount()) && filter.isDescriptionOk(transaction.getDescription())) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			if (isOk(transaction.getSubTransaction(i))) {
@@ -272,19 +253,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 			if (isComplementOk(transaction)) return true;
 		}
 		return false;
-	}
-	
-	/** Tests whether an amount is ok or not.
-	 * @param amount The amount to test
-	 * @return true if the amount is ok.
-	 */
-	private boolean isAmountOk(double amount) {
-		// We use the currency comparator to implement amount filtering because double are very tricky to compare.
-		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<0) && (!isOk(EXPENSES))) return false;
-		if ((GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)>0) && (!isOk(RECEIPTS))) return false;
-		amount = Math.abs(amount);
-		if (GlobalData.AMOUNT_COMPARATOR.compare(amount, getMinimumAmount())<0) return false;
-		return GlobalData.AMOUNT_COMPARATOR.compare(amount, getMaximumAmount())<=0;
 	}
 	
 	/** Gets a subtransaction validity.
@@ -296,7 +264,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	 * @see #isOk(Transaction)
 	 */
 	public boolean isOk(SubTransaction subtransaction) {
-		return isOk(subtransaction.getCategory()) && isAmountOk(subtransaction.getAmount()) && isDescriptionOk(subtransaction.getDescription());
+		return isOk(subtransaction.getCategory()) && filter.isAmountOk(subtransaction.getAmount()) && filter.isDescriptionOk(subtransaction.getDescription());
 	}
 	
 	/** Gets a transaction complement validity.
@@ -311,7 +279,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	public boolean isComplementOk(Transaction transaction) {
 		double amount = transaction.getComplement();
 		if ((transaction.getSubTransactionSize()!=0) && (GlobalData.AMOUNT_COMPARATOR.compare(amount,0.0)==0)) return false;
-		return isOk(transaction.getCategory()) && isAmountOk(amount) && isDescriptionOk(transaction.getDescription());
+		return isOk(transaction.getCategory()) && filter.isAmountOk(amount) && filter.isDescriptionOk(transaction.getDescription());
 	}
 	
 	/** Set the valid categories for this filter.
@@ -348,15 +316,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		return (this.filter.getValidCategories()==null) || (this.filter.getValidCategories().contains(category));
 	}
 
-	public boolean isOk(int property) {
-		if (DEBUG) {
-			System.out.println("---------- isOK("+Integer.toBinaryString(property)+") ----------");
-			System.out.println("filter  : "+Integer.toBinaryString(this.filter.getFilter()));
-			System.out.println("result  : "+Integer.toBinaryString(property & this.filter.getFilter()));
-		}
-		return ((property & this.filter.getFilter()) != 0);
-	}
-	
 	/** Sets the integer filter
 	 * </BR>Boolean attributes like ("is the transaction a EXPENSE ?" or "Is the transaction checked ?"
 	 *  are managed with integer codes.
@@ -367,8 +326,8 @@ public class FilteredData extends DefaultListenable implements Observer {
 	private void setFilter(int property) {
 		if (DEBUG) System.out.println("---------- setFilter("+Integer.toBinaryString(property)+") ----------");
 		int mask = ALL;
-		if (((property & CHECKED) != 0) || ((property & NOT_CHECKED) != 0)) mask = mask & CHECKED_MASK;
-		if (((property & EXPENSES) != 0) || ((property & RECEIPTS) != 0)) mask = mask & NATURE_MASK;
+		if (((property & Filter.CHECKED) != 0) || ((property & Filter.NOT_CHECKED) != 0)) mask = mask & CHECKED_MASK;
+		if (((property & Filter.EXPENSES) != 0) || ((property & Filter.RECEIPTS) != 0)) mask = mask & NATURE_MASK;
 		if (mask == ALL) throw new IllegalArgumentException();
 		if (DEBUG) System.out.println(Integer.toBinaryString(mask));//CU
 		this.filter.setFilter((this.filter.getFilter() & mask) | property);
@@ -377,23 +336,19 @@ public class FilteredData extends DefaultListenable implements Observer {
 	}
 	
 	public void setStatementFilter (int property, TextMatcher statementFilter) {
-		if (((property & CHECKED) == 0) && (statementFilter!=null)) {
+		if (((property & Filter.CHECKED) == 0) && (statementFilter!=null)) {
 			throw new IllegalArgumentException();
 		}
 		this.filter.setStatementMatcher(statementFilter);
-		setFilter(property & (CHECKED+NOT_CHECKED));
+		setFilter(property & (Filter.CHECKED+Filter.NOT_CHECKED));
 	}
 		
-	public TextMatcher getStatementFilter () {
-		return this.filter.getStatementMatcher();
-	}
-	
 	public boolean isStatementOk(Transaction transaction) {
 		String statement = transaction.getStatement();
 		if (statement==null) { // Not checked transaction
-			return isOk(NOT_CHECKED);
+			return filter.isOk(Filter.NOT_CHECKED);
 		} else { // Checked transaction
-			if (!isOk(CHECKED)) return false;
+			if (!filter.isOk(Filter.CHECKED)) return false;
 			if (filter.getStatementMatcher()==null) return true;
 			return filter.getStatementMatcher().matches(statement);
 		}
@@ -474,7 +429,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 		if (minAmount<0) throw new IllegalArgumentException();
 		this.filter.setMinAmount(minAmount);
 		this.filter.setMaxAmount(maxAmount);
-		this.setFilter(mask & (EXPENSES+RECEIPTS));
+		this.setFilter(mask & (Filter.EXPENSES+Filter.RECEIPTS));
 		filter();
 	}
 	
@@ -584,13 +539,5 @@ public class FilteredData extends DefaultListenable implements Observer {
 	 */
 	public boolean isSuspended() {
 		return this.suspended;
-	}
-
-	/** Tests whether the filter filter something or not.
-	 * @return false if no filter is set. Returns true if a filter is set
-	 * even if it doesn't filter anything.
-	 */
-	public boolean hasFilter() {
-		return filter.isActive();
 	}
 }
