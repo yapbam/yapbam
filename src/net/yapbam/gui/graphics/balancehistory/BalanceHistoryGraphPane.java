@@ -85,7 +85,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
 		graph.setSelectedDate(currentlySelected);
-		graph.setPreferredEndDate(data.getValueDateTo());
+		graph.setPreferredEndDate(data.getFilter().getValueDateTo());
 		graph.setGridVisible(control.getIsGridVisible().isSelected());
 		control.setReportText(getBalanceReportText());
 		scrollToSelectedDate();
@@ -107,10 +107,10 @@ public class BalanceHistoryGraphPane extends JPanel {
 	}
 
 	private void setSelectedDate(Date date) {
-		if (NullUtils.compareTo(date, BalanceHistoryGraphPane.this.data.getValueDateFrom(), true)<0) {
-			BalanceHistoryGraphPane.this.data.setValueDateFilter(date, BalanceHistoryGraphPane.this.data.getValueDateTo());
-		} else if (NullUtils.compareTo(date, BalanceHistoryGraphPane.this.data.getValueDateTo(), false)>0) {
-			BalanceHistoryGraphPane.this.data.setValueDateFilter(BalanceHistoryGraphPane.this.data.getValueDateFrom(), date);
+		if (NullUtils.compareTo(date, BalanceHistoryGraphPane.this.data.getFilter().getValueDateFrom(), true)<0) {
+			BalanceHistoryGraphPane.this.data.getFilter().setValueDateFilter(date, BalanceHistoryGraphPane.this.data.getFilter().getValueDateTo());
+		} else if (NullUtils.compareTo(date, BalanceHistoryGraphPane.this.data.getFilter().getValueDateTo(), false)>0) {
+			BalanceHistoryGraphPane.this.data.getFilter().setValueDateFilter(BalanceHistoryGraphPane.this.data.getFilter().getValueDateFrom(), date);
 		}
 		graph.setSelectedDate(date);
 		scrollToSelectedDate();

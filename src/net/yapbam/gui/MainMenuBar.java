@@ -493,16 +493,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	 * @return true if the filtered could not be obtained by the filter menu (other than customized one).
 	 */
 	private boolean isComplex(FilteredData filter) {
-		double min = filter.getMinimumAmount();
-		double max = filter.getMaximumAmount();
+		double min = filter.getFilter().getMinAmount();
+		double max = filter.getFilter().getMaxAmount();
 		boolean amountSimple = (min==0) && (max==Double.POSITIVE_INFINITY);
 		List<Account> validAccounts = filter.getFilter().getValidAccounts();
 		boolean complexAccount = (validAccounts!=null) && (validAccounts.size()!=1) && (validAccounts.size()!=filter.getGlobalData().getAccountsNumber());
 		return (complexAccount ||
 				(filter.getCategories()!=null) || (filter.getModes()!=null) ||
-				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
-				(filter.getValueDateFrom()!=null) || (filter.getValueDateTo()!=null) ||
-				(filter.getFilter().getDescriptionMatcher()!=null) || (filter.getNumberFilter()!=null) ||
+				(filter.getFilter().getDateFrom()!=null) || (filter.getFilter().getDateTo()!=null) ||
+				(filter.getFilter().getValueDateFrom()!=null) || (filter.getFilter().getValueDateTo()!=null) ||
+				(filter.getFilter().getDescriptionMatcher()!=null) || (filter.getFilter().getNumberMatcher()!=null) ||
 				(filter.getFilter().getStatementMatcher()!=null) || !amountSimple);
 	}
 	
@@ -540,9 +540,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			FilteredData data = frame.getFilteredData();
-			if (this.kind==CHECKED_STATUS) data.setStatementFilter(property,data.getFilter().getStatementMatcher());
-			else data.setAmountFilter(property, data.getMinimumAmount(), data.getMaximumAmount());
+			Filter filter = frame.getFilteredData().getFilter();
+			if (this.kind==CHECKED_STATUS) filter.setStatementFilter(property,filter.getStatementMatcher());
+			else filter.setAmountFilter(property, filter.getMinAmount(), filter.getMaxAmount());
 		}
 	}
 

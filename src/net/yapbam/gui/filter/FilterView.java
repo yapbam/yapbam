@@ -97,7 +97,7 @@ public class FilterView extends JPanel {
 		@Override
 		protected Component buildPopupContent() {
 			AmountPanel amountPanel = new AmountPanel();
-			amountPanel.setAmounts(data.getMinimumAmount(), data.getMaximumAmount());
+			amountPanel.setAmounts(data.getFilter().getMinAmount(), data.getFilter().getMaxAmount());
 			return amountPanel;
 		}
 	}

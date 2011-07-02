@@ -17,6 +17,7 @@ public class Filter extends Observable implements Serializable {
 	public static final int NOT_CHECKED=2;
 	public static final int EXPENSES=4;
 	public static final int RECEIPTS=8;
+	public static final int ALL = CHECKED+NOT_CHECKED+EXPENSES+RECEIPTS;
 
 	private int filter;
 	private HashSet<Account> validAccounts;
@@ -39,10 +40,6 @@ public class Filter extends Observable implements Serializable {
 		this.suspended = false;
 	}
 
-	public int getFilter() {
-		return filter;
-	}
-
 	public boolean isOk(int property) {
 		if (DEBUG) {
 			System.out.println("---------- isOK("+Integer.toBinaryString(property)+") ----------");
@@ -50,11 +47,6 @@ public class Filter extends Observable implements Serializable {
 			System.out.println("result  : "+Integer.toBinaryString(property & this.filter));
 		}
 		return ((property & this.filter) != 0);
-	}
-	
-	public void setFilter(int filter) {
-		this.filter = filter;
-		setChanged();
 	}
 	
 	@Override
@@ -120,58 +112,96 @@ public class Filter extends Observable implements Serializable {
 		this.setChanged();
 	}
 
+	/** Gets the transaction date before which all transactions are rejected.
+	 * @return a transaction date or null if there's no time limit. 
+	 */
 	public Date getDateFrom() {
 		return dateFrom;
 	}
 
-	public void setDateFrom(Date dateFrom) {
-		this.dateFrom = dateFrom;
-		this.setChanged();
-	}
-
+	/** Gets the transaction date after which all transactions are rejected.
+	 * @return a transaction date or null if there's no time limit. 
+	 */
 	public Date getDateTo() {
 		return dateTo;
 	}
 
-	public void setDateTo(Date dateTo) {
-		this.dateTo = dateTo;
-		this.setChanged();
+	/** Sets the filter on transaction date.
+	 * @param from transactions strictly before <i>from</i> are rejected. A null date means "beginning of times".
+	 * @param to transactions strictly after <i>to</i> are rejected. A null date means "end of times". 
+	 */
+	public void setDateFilter(Date from, Date to) {
+		if (!NullUtils.areEquals(from, this.dateFrom) || !NullUtils.areEquals(to, this.dateTo)) {
+			this.dateFrom = from;
+			this.dateTo = to;
+			this.setChanged();
+		}
 	}
-
+	
+	/** Gets the transaction value date before which all transactions are rejected.
+	 * @return a transaction value date or null if there's no time limit. 
+	 */
 	public Date getValueDateFrom() {
 		return valueDateFrom;
 	}
 
-	public void setValueDateFrom(Date valueDateFrom) {
-		this.valueDateFrom = valueDateFrom;
-		this.setChanged();
-	}
-
+	/** Gets the transaction value date after which all transactions are rejected.
+	 * @return a transaction value date or null if there's no time limit. 
+	 */
 	public Date getValueDateTo() {
 		return valueDateTo;
 	}
 
-	public void setValueDateTo(Date valueDateTo) {
-		this.valueDateTo = valueDateTo;
-		this.setChanged();
+	/** Sets the filter on transaction value date.
+	 * @param from transactions with value date strictly before <i>from</i> are rejected. A null date means "beginning of times".
+	 * @param to transactions with value date strictly after <i>to</i> are rejected. A null date means "end of times". 
+	 */
+	public void setValueDateFilter(Date from, Date to) {
+		if (!NullUtils.areEquals(from, this.valueDateFrom) || !NullUtils.areEquals(to, this.valueDateTo)) {
+			this.valueDateFrom = from;
+			this.valueDateTo = to;
+			this.setChanged();
+		}
 	}
 
+	/** Gets the transaction minimum amount.
+	 * <br>Please note that the minimum amount is always a positive or null number. 
+	 * @return the minimum amount (0.0 if there's no low limit).
+	 */
 	public double getMinAmount() {
 		return minAmount;
 	}
 
-	public void setMinAmount(double minAmount) {
-		this.minAmount = minAmount;
-		this.setChanged();
-	}
-
+	/** Gets the transaction maximum amount.
+	 * @return the maximum amount (Double.POSITIVE_INFINITY if there's no high limit).
+	 */
 	public double getMaxAmount() {
 		return maxAmount;
 	}
 
-	public void setMaxAmount(double maxAmount) {
-		this.maxAmount = maxAmount;
-		this.setChanged();
+	/** Sets the transaction minimum and maximum amounts.
+	 * <BR>Note that setting this filter never change the expense/receipt filter.
+	 * @param minAmount The minimum amount (a positive or null double).
+	 * @param maxAmount The maximum amount (Double.POSITIVE_INFINITY to set no high limit).
+	 * @param mask An integer that codes if expenses or receipts, or both are ok.
+	 * <br>Note that only EXPENSES, RECEIPTS and EXPENSES+RECEIPTS constants are valid arguments.
+	 * Any other integer codes (for instance CHECKED) are ignored.
+	 * @throws IllegalArgumentException if minAmount > maxAmount or if minimum amount is negative
+	 * @see #setFilter(int)
+	 */
+	public void setAmountFilter(int property, double minAmount, double maxAmount) {
+		if (minAmount>maxAmount) throw new IllegalArgumentException();
+		if (minAmount<0) throw new IllegalArgumentException();
+		int mask = Filter.EXPENSES+Filter.RECEIPTS;
+		if ((GlobalData.AMOUNT_COMPARATOR.compare(minAmount, this.minAmount) != 0) ||
+				(GlobalData.AMOUNT_COMPARATOR.compare(maxAmount, this.maxAmount) != 0) ||
+				((property & mask)!=(filter & mask))) {
+			this.minAmount = minAmount;
+			this.maxAmount = maxAmount;
+			filter = (filter & ~mask) | (property & mask);
+			if (DEBUG) System.out.println("-> filter : "+filter);
+			this.setChanged();
+		}
 	}
 	
 	/** Tests whether an amount is ok or not.
@@ -216,6 +246,14 @@ public class Filter extends Observable implements Serializable {
 		return numberMatcher;
 	}
 
+	/** Gets the validity of a string according to the current number filter. 
+	 * @param number The string to test
+	 * @return true if the number is ok with the filter.
+	 */
+	public boolean isNumberOk(String number) {
+		return numberMatcher==null?true:numberMatcher.matches(number);
+	}
+
 	public void setNumberMatcher(TextMatcher numberMatcher) {
 		if (!NullUtils.areEquals(numberMatcher, this.numberMatcher)) {
 			this.numberMatcher = numberMatcher;
@@ -227,10 +265,24 @@ public class Filter extends Observable implements Serializable {
 		return statementMatcher;
 	}
 
-	public void setStatementMatcher(TextMatcher statementMatcher) {
-		if (!NullUtils.areEquals(statementMatcher, this.statementMatcher)) {
-			this.statementMatcher = statementMatcher;
+	public void setStatementFilter (int property, TextMatcher statementFilter) {
+		if (((property & Filter.CHECKED) == 0) && (statementFilter!=null)) throw new IllegalArgumentException();
+		int mask = Filter.CHECKED+Filter.NOT_CHECKED;
+		if (!NullUtils.areEquals(statementFilter, this.statementMatcher) || ((property & mask)!=(filter & mask))) {
+			this.statementMatcher = statementFilter;
+			filter = (filter & ~mask) | (property & mask);
+			if (DEBUG) System.out.println("-> filter : "+filter);
 			this.setChanged();
+		}
+	}
+		
+	public boolean isStatementOk(String statement) {
+		if (statement==null) { // Not checked transaction
+			return isOk(Filter.NOT_CHECKED);
+		} else { // Checked transaction
+			if (!isOk(Filter.CHECKED)) return false;
+			if (statementMatcher==null) return true;
+			return statementMatcher.matches(statement);
 		}
 	}
 
@@ -243,18 +295,14 @@ public class Filter extends Observable implements Serializable {
 	}
 	
 	private void init() {
-		this.setFilter(FilteredData.ALL);
-		this.setDateFrom(null);
-		this.setDateTo(null);
-		this.setValueDateFrom(null);
-		this.setValueDateTo(null);
+		this.setDateFilter(null, null);
+		this.setValueDateFilter(null, null);
 		this.setValidCategories(null);
 		this.setValidModes(null);
-		this.setMinAmount(0.0);
-		this.setMaxAmount(Double.POSITIVE_INFINITY);
+		this.setAmountFilter(EXPENSES+RECEIPTS, 0.0, Double.POSITIVE_INFINITY);
 		this.setDescriptionMatcher(null);
 		this.setNumberMatcher(null);
-		this.setStatementMatcher(null);
+		this.setStatementFilter(CHECKED+NOT_CHECKED, null);
 		this.setValidAccounts(null);
 	}
 	
@@ -263,7 +311,7 @@ public class Filter extends Observable implements Serializable {
 	 * even if it doesn't filter anything.
 	 */
 	public boolean isActive() {
-		return (getFilter()!=FilteredData.ALL) || (getDateFrom()!=null) || (getDateTo() != null) || (getValueDateFrom()!=null) || (getValueDateTo() != null) ||
+		return (filter!=ALL) || (getDateFrom()!=null) || (getDateTo() != null) || (getValueDateFrom()!=null) || (getValueDateTo() != null) ||
 			(getValidCategories() !=null) || (getValidModes() != null) || (getValidAccounts()!=null) ||
 			(getMinAmount()!=0.0) || (getMaxAmount()!=Double.POSITIVE_INFINITY) ||
 			(getDescriptionMatcher()!=null) || (getNumberMatcher()!=null) || (getStatementMatcher()!=null);

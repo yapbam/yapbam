@@ -203,7 +203,7 @@ public class CustomFilterPanel extends JPanel {
 		if (amountPanel == null) {
 			amountPanel = new AmountPanel();
 			amountPanel.addPropertyChangeListener(AmountPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			amountPanel.setAmounts(data.getMinimumAmount(), data.getMaximumAmount());
+			amountPanel.setAmounts(data.getFilter().getMinAmount(), data.getFilter().getMaxAmount());
 		}
 		return amountPanel;
 	}
@@ -212,7 +212,7 @@ public class CustomFilterPanel extends JPanel {
 		if (datePanel==null) {
 			datePanel = new DateFilterPanel(DateFilterPanel.TRANSACTION_DATE);
 			datePanel.addPropertyChangeListener(DateFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			datePanel.setDates(data.getDateFrom(), data.getDateTo());
+			datePanel.setDates(data.getFilter().getDateFrom(), data.getFilter().getDateTo());
 		}
 		return datePanel;
 	}
@@ -369,18 +369,18 @@ public class CustomFilterPanel extends JPanel {
 		int mask = 0;
 		if (getReceipts_expensesPanel().isReceiptsSelected()) mask += Filter.RECEIPTS;
 		if (getReceipts_expensesPanel().isExpensesSelected()) mask += Filter.EXPENSES;
-		this.data.setAmountFilter(mask, min, max);
+		this.data.getFilter().setAmountFilter(mask, min, max);
 		// build the date filter
-		this.data.setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
+		this.data.getFilter().setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
 		// build the value date filter
-		this.data.setValueDateFilter(getValueDatePanel().getDateFrom(), getValueDatePanel().getDateTo());
+		this.data.getFilter().setValueDateFilter(getValueDatePanel().getDateFrom(), getValueDatePanel().getDateTo());
 		// build the description filter
 		filter.setDescriptionMatcher(getDescriptionPanel().getTextMatcher());
 		// Build the statement filter
 		mask = 0;
 		if (getChecked().isSelected()) mask += Filter.CHECKED;
 		if (getNotChecked().isSelected()) mask += Filter.NOT_CHECKED;
-		data.setStatementFilter(mask, getJPanel11().getTextMatcher());
+		data.getFilter().setStatementFilter(mask, getJPanel11().getTextMatcher());
 		// Build the number filter
 		filter.setNumberMatcher(this.getNumberPanel().getTextMatcher());
 		filter.setSuspended(false);
@@ -556,7 +556,7 @@ public class CustomFilterPanel extends JPanel {
 		if (valueDatePanel == null) {
 			valueDatePanel = new DateFilterPanel(DateFilterPanel.VALUE_DATE);
 			valueDatePanel.addPropertyChangeListener(DateFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			valueDatePanel.setDates(data.getDateFrom(), data.getDateTo());
+			valueDatePanel.setDates(data.getFilter().getDateFrom(), data.getFilter().getDateTo());
 		}
 		return valueDatePanel;
 	}
@@ -669,7 +669,7 @@ public class CustomFilterPanel extends JPanel {
 	private TextMatcherFilterPanel getNumberPanel() {
 		if (numberPanel == null) {
 			numberPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.NUMBER_WORDING);
-			numberPanel.setTextMatcher(data.getNumberFilter());
+			numberPanel.setTextMatcher(data.getFilter().getNumberMatcher());
 			numberPanel.setCheckBoxesVisible(false);
 		}
 		return numberPanel;

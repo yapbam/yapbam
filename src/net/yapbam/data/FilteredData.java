@@ -4,7 +4,6 @@ import java.util.*;
 
 import net.yapbam.data.event.*;
 import net.yapbam.util.NullUtils;
-import net.yapbam.util.TextMatcher;
 
 /** The filtered Data (the global data viewed through a filter).
  * </BR>A filter is based on all the attributes of a transaction (amount, category, account, ...).
@@ -16,12 +15,6 @@ import net.yapbam.util.TextMatcher;
  * @see GlobalData
  */
 public class FilteredData extends DefaultListenable implements Observer {
-	private static boolean DEBUG = false;
-	
-	public static final int ALL = -1;
-	private static final int CHECKED_MASK = (ALL ^ Filter.CHECKED) ^ Filter.NOT_CHECKED;
-	private static final int NATURE_MASK = (ALL ^ Filter.EXPENSES) ^ Filter.RECEIPTS;
-
 	private GlobalData data;
 	private ArrayList<Transaction> transactions;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
@@ -64,7 +57,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					for (Transaction transaction : ts) {
 						if (filter.isOk(transaction.getAccount())) { // If the added transaction match with the account filter
 							Date valueDate = transaction.getValueDate();
-							if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
+							if (NullUtils.compareTo(valueDate, filter.getValueDateFrom(),true)<0) {
 								addedAmount += transaction.getAmount();
 							} else {
 								accountOkTransactions.add(transaction);
@@ -89,7 +82,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					for (Transaction transaction : ts) {
 						if (filter.isOk(transaction.getAccount())) {
 							Date valueDate = transaction.getValueDate();
-							if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
+							if (NullUtils.compareTo(valueDate, filter.getValueDateFrom(),true)<0) {
 								addedAmount -= transaction.getAmount();
 							} else {
 								accountOkTransactions.add(transaction);
@@ -237,13 +230,12 @@ public class FilteredData extends DefaultListenable implements Observer {
 	public boolean isOk(Transaction transaction) {
 		if (!filter.isOk(transaction.getAccount())) return false;
 		if (!isOk(transaction.getMode())) return false;
-		if (!isStatementOk(transaction)) return false;
-		if (!filter.isOk((transaction.getStatement()==null)?Filter.NOT_CHECKED:Filter.CHECKED)) return false;
-		if (!isNumberOk(transaction.getNumber())) return false;
-		if ((getDateFrom()!=null) && (transaction.getDate().compareTo(getDateFrom())<0)) return false;
-		if ((getDateTo()!=null) && (transaction.getDate().compareTo(getDateTo())>0)) return false;
-		if ((getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(getValueDateFrom())<0)) return false;
-		if ((getValueDateTo()!=null) && (transaction.getValueDate().compareTo(getValueDateTo())>0)) return false;
+		if (!filter.isStatementOk(transaction.getStatement())) return false;
+		if (!filter.isNumberOk(transaction.getNumber())) return false;
+		if ((filter.getDateFrom()!=null) && (transaction.getDate().compareTo(filter.getDateFrom())<0)) return false;
+		if ((filter.getDateTo()!=null) && (transaction.getDate().compareTo(filter.getDateTo())>0)) return false;
+		if ((filter.getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(filter.getValueDateFrom())<0)) return false;
+		if ((filter.getValueDateTo()!=null) && (transaction.getValueDate().compareTo(filter.getValueDateTo())>0)) return false;
 		if (isOk(transaction.getCategory()) && filter.isAmountOk(transaction.getAmount()) && filter.isDescriptionOk(transaction.getDescription())) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
@@ -316,138 +308,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		return (this.filter.getValidCategories()==null) || (this.filter.getValidCategories().contains(category));
 	}
 
-	/** Sets the integer filter
-	 * </BR>Boolean attributes like ("is the transaction a EXPENSE ?" or "Is the transaction checked ?"
-	 *  are managed with integer codes.
-	 *  @param the property
-	 *  @see #setStatementFilter(int, TextMatcher)
-	 *  @see #setNatureFilter(int)
-	 */
-	private void setFilter(int property) {
-		if (DEBUG) System.out.println("---------- setFilter("+Integer.toBinaryString(property)+") ----------");
-		int mask = ALL;
-		if (((property & Filter.CHECKED) != 0) || ((property & Filter.NOT_CHECKED) != 0)) mask = mask & CHECKED_MASK;
-		if (((property & Filter.EXPENSES) != 0) || ((property & Filter.RECEIPTS) != 0)) mask = mask & NATURE_MASK;
-		if (mask == ALL) throw new IllegalArgumentException();
-		if (DEBUG) System.out.println(Integer.toBinaryString(mask));//CU
-		this.filter.setFilter((this.filter.getFilter() & mask) | property);
-		if (DEBUG) System.out.println("filter : "+this.filter.getFilter());
-		filter();
-	}
-	
-	public void setStatementFilter (int property, TextMatcher statementFilter) {
-		if (((property & Filter.CHECKED) == 0) && (statementFilter!=null)) {
-			throw new IllegalArgumentException();
-		}
-		this.filter.setStatementMatcher(statementFilter);
-		setFilter(property & (Filter.CHECKED+Filter.NOT_CHECKED));
-	}
-		
-	public boolean isStatementOk(Transaction transaction) {
-		String statement = transaction.getStatement();
-		if (statement==null) { // Not checked transaction
-			return filter.isOk(Filter.NOT_CHECKED);
-		} else { // Checked transaction
-			if (!filter.isOk(Filter.CHECKED)) return false;
-			if (filter.getStatementMatcher()==null) return true;
-			return filter.getStatementMatcher().matches(statement);
-		}
-	}
-	
-	public TextMatcher getNumberFilter () {
-		return this.filter.getNumberMatcher();
-	}
-	
-	/** Gets the validity of a string according to the current number filter. 
-	 * @param number The string to test
-	 * @return true if the number is ok with the filter.
-	 */
-	private boolean isNumberOk(String number) {
-		return this.filter.getNumberMatcher()==null?true:this.filter.getNumberMatcher().matches(number);
-	}
-		
-	/** Sets the filter on transaction date.
-	 * @param from transactions strictly before <i>from</i> are rejected. A null date means "beginning of times".
-	 * @param to transactions strictly after <i>to</i> are rejected. A null date means "end of times". 
-	 */
-	public void setDateFilter(Date from, Date to) {
-		this.filter.setDateFrom(from);
-		this.filter.setDateTo(to);
-		filter();
-	}
-	
-	/** Gets the transaction date before which all transactions are rejected.
-	 * @return a transaction date or null if there's no time limit. 
-	 */
-	public Date getDateFrom() {
-		return this.filter.getDateFrom();
-	}
-	
-	/** Gets the transaction date after which all transactions are rejected.
-	 * @return a transaction date or null if there's no time limit. 
-	 */
-	public Date getDateTo() {
-		return this.filter.getDateTo();
-	}
-
-	/** Sets the filter on transaction value date.
-	 * @param from transactions with value date strictly before <i>from</i> are rejected. A null date means "beginning of times".
-	 * @param to transactions with value date strictly after <i>to</i> are rejected. A null date means "end of times". 
-	 */
-	public void setValueDateFilter(Date from, Date to) {
-		this.filter.setValueDateFrom(from);
-		this.filter.setValueDateTo(to);
-		filter();
-	}
-	
-	/** Gets the transaction value date before which all transactions are rejected.
-	 * @return a transaction value date or null if there's no time limit. 
-	 */
-	public Date getValueDateFrom() {
-		return this.filter.getValueDateFrom();
-	}
-	
-	/** Gets the transaction value date after which all transactions are rejected.
-	 * @return a transaction value date or null if there's no time limit. 
-	 */
-	public Date getValueDateTo() {
-		return this.filter.getValueDateTo();
-	}
-	
-	/** Sets the transaction minimum and maximum amounts.
-	 * <BR>Note that setting this filter never change the expense/receipt filter.
-	 * @param minAmount The minimum amount (a positive or null double).
-	 * @param maxAmount The maximum amount (Double.POSITIVE_INFINITY to set no high limit).
-	 * @param mask An integer that codes if expenses or receipts, or both are ok.
-	 * <br>Note that only EXPENSES, RECEIPTS and EXPENSES+RECEIPTS constants are valid arguments.
-	 * Any other integer codes (for instance CHECKED) are ignored.
-	 * @throws IllegalArgumentException if minAmount > maxAmount or if minimum amount is negative
-	 * @see #setFilter(int)
-	 */
-	public void setAmountFilter(int mask, double minAmount, double maxAmount) {
-		if (minAmount>maxAmount) throw new IllegalArgumentException();
-		if (minAmount<0) throw new IllegalArgumentException();
-		this.filter.setMinAmount(minAmount);
-		this.filter.setMaxAmount(maxAmount);
-		this.setFilter(mask & (Filter.EXPENSES+Filter.RECEIPTS));
-		filter();
-	}
-	
-	/** Gets the transaction minimum amount.
-	 * <br>Please note that the minimum amount is always a positive or null number. 
-	 * @return the minimum amount (0.0 if there's no low limit).
-	 */
-	public double getMinimumAmount() {
-		return this.filter.getMinAmount();
-	}
-	
-	/** Gets the transaction maximum amount.
-	 * @return the maximum amount (Double.POSITIVE_INFINITY if there's no high limit).
-	 */
-	public double getMaximumAmount() {
-		return this.filter.getMaxAmount();
-	}
-	
 	private void filter() {
 		if (this.suspended) {
 			this.filteringHasToBeDone = true;
@@ -466,7 +326,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 				Transaction transaction = data.getTransaction(i);
 				if (filter.isOk(transaction.getAccount())) {
 					Date valueDate = transaction.getValueDate();
-					if (NullUtils.compareTo(valueDate, getValueDateFrom(),true)<0) {
+					if (NullUtils.compareTo(valueDate, filter.getValueDateFrom(),true)<0) {
 						addedAmount += transaction.getAmount();
 					} else {
 						// Here we have a hard choice to make: 
