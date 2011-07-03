@@ -27,7 +27,6 @@ import javax.swing.KeyStroke;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Filter;
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
@@ -430,7 +429,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData()));
 			complexFilterMenuItem.setToolTipText(LocalizationData.get("MainMenuBar.customizedFilter.toolTip")); //$NON-NLS-1$
 			filterMenu.add(complexFilterMenuItem);
-			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData()));
+			complexFilterMenuItem.setSelected(isComplex(frame.getFilteredData().getFilter()));
 			JMenuItem eraseItem = new JMenuItem(LocalizationData.get("MainMenuBar.eraseFilters")); //$NON-NLS-1$
 			eraseItem.setToolTipText(LocalizationData.get("MainMenuBar.eraseFilters.toolTip")); //$NON-NLS-1$
 			eraseItem.addActionListener(new ActionListener() {
@@ -492,18 +491,18 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	 * @param filter The filter to test
 	 * @return true if the filtered could not be obtained by the filter menu (other than customized one).
 	 */
-	private boolean isComplex(FilteredData filter) {
-		double min = filter.getFilter().getMinAmount();
-		double max = filter.getFilter().getMaxAmount();
+	private boolean isComplex(Filter filter) {
+		double min = filter.getMinAmount();
+		double max = filter.getMaxAmount();
 		boolean amountSimple = (min==0) && (max==Double.POSITIVE_INFINITY);
-		List<Account> validAccounts = filter.getFilter().getValidAccounts();
-		boolean complexAccount = (validAccounts!=null) && (validAccounts.size()!=1) && (validAccounts.size()!=filter.getGlobalData().getAccountsNumber());
+		List<Account> validAccounts = filter.getValidAccounts();
+		boolean complexAccount = (validAccounts!=null) && (validAccounts.size()!=1);
 		return (complexAccount ||
-				(filter.getCategories()!=null) || (filter.getModes()!=null) ||
-				(filter.getFilter().getDateFrom()!=null) || (filter.getFilter().getDateTo()!=null) ||
-				(filter.getFilter().getValueDateFrom()!=null) || (filter.getFilter().getValueDateTo()!=null) ||
-				(filter.getFilter().getDescriptionMatcher()!=null) || (filter.getFilter().getNumberMatcher()!=null) ||
-				(filter.getFilter().getStatementMatcher()!=null) || !amountSimple);
+				(filter.getValidCategories()!=null) || (filter.getValidModes()!=null) ||
+				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
+				(filter.getValueDateFrom()!=null) || (filter.getValueDateTo()!=null) ||
+				(filter.getDescriptionMatcher()!=null) || (filter.getNumberMatcher()!=null) ||
+				(filter.getStatementMatcher()!=null) || !amountSimple);
 	}
 	
 	private void buildBooleanFilterChoiceMenu(int kind, String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {

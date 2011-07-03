@@ -21,6 +21,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -35,6 +36,7 @@ import javax.swing.table.TableModel;
 
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
+import net.yapbam.data.Filter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
@@ -304,26 +306,27 @@ public class BudgetViewPanel extends JPanel {
 			filter.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int[] selectedRows = getJTable().getSelectedRows();
-					boolean changed = false;
+					Filter theFilter = data.getFilter();
+					theFilter.setSuspended(true);
 					if (selectedRows.length!=getJTable().getRowCount()) {
-						changed = true;
-						data.setSuspended(true);
-						Category[] categories = new Category[selectedRows.length];
-						for (int i = 0; i < categories.length; i++) {
-							categories[i] = budget.getCategory(selectedRows[i]);
+						if (selectedRows.length==data.getGlobalData().getCategoriesNumber()) {
+							theFilter.setValidCategories(null);
+						} else {
+							ArrayList<Category> categories = new ArrayList<Category>(selectedRows.length);
+							for (int i = 0; i < selectedRows.length; i++) {
+								categories.add(budget.getCategory(selectedRows[i]));
+							}
+							theFilter.setValidCategories(categories);
 						}
-						data.setCategories(categories);
 					}
 					//FIXME Unable to select discontinuous time interval in the filter
 					int[] selectedColumns = jTable.getSelectedColumns();
 					if (selectedRows.length!=budget.getDatesSize()) {
-						changed = true;
-						data.setSuspended(true);
 						Date from = budget.getDate(selectedColumns[0]);
 						Date to = budget.getLastDate(selectedColumns[selectedColumns.length-1]);
-						data.getFilter().setDateFilter(from, to);
+						theFilter.setDateFilter(from, to);
 					}
-					if (changed) data.setSuspended(false);
+					theFilter.setSuspended(false);
 				}
 			});
 		}
