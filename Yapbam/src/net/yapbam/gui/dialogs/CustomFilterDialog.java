@@ -23,11 +23,10 @@ public class CustomFilterDialog extends AbstractDialog<FilteredData, Boolean> {
 
 	@Override
 	/** Returns the dialog result.
-	 * @returns true if the validate button was pressed
+	 * @returns true if the edited filter was changed (and, of course, the ok button is pressed).
 	 */
 	protected Boolean buildResult() {
-		filterPanel.apply();
-		return true;
+		return filterPanel.apply();
 	}
 
 	@Override

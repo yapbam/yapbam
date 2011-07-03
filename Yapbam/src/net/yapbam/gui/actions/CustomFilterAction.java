@@ -26,7 +26,8 @@ public class CustomFilterAction extends AbstractAction {
 		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
 		CustomFilterDialog dialog = new CustomFilterDialog(owner, data);
 		dialog.setVisible(true);
-		if (dialog.getResult()==null) {
+		Boolean result = dialog.getResult();
+		if ((result==null) || !result) {
 			// The menu item check box state is automatically changed, so, if nothing is done, we have to restore it
 			((JCheckBoxMenuItem)e.getSource()).setSelected(!((JCheckBoxMenuItem)e.getSource()).isSelected());
 		}
