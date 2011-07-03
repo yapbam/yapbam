@@ -19,8 +19,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 	private ArrayList<Transaction> transactions;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
-	private boolean suspended;
-	private boolean filteringHasToBeDone;
 	private Filter filter;
 	
 	public FilteredData(GlobalData data) {
@@ -33,9 +31,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 				//FIXME be aware of mode removal
 				if (eventImplySorting(event)) Collections.sort(transactions, comparator);
 				if (event instanceof EverythingChangedEvent) {
-					suspended = true;
 					filter.clear(); // If everything changed, reset the filter
-					suspended = false;
 					filter();
 				} else if (event instanceof AccountRemovedEvent) {
 					Account account = ((AccountRemovedEvent)event).getRemoved();
@@ -109,7 +105,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 					}
 				} else if (event instanceof CategoryAddedEvent) {
 					Category category = ((CategoryAddedEvent)event).getCategory();
-					if (isOk(category)) {
+					if (filter.isOk(category)) {
 						fireEvent(new CategoryAddedEvent(FilteredData.this, category));
 					}
 				} else if (event instanceof AccountPropertyChangedEvent) {
@@ -123,12 +119,12 @@ public class FilteredData extends DefaultListenable implements Observer {
 					}
 				} else if (event instanceof CategoryPropertyChangedEvent) {
 					CategoryPropertyChangedEvent evt = (CategoryPropertyChangedEvent) event;
-					if (isOk(evt.getCategory())) {
+					if (filter.isOk(evt.getCategory())) {
 						fireEvent(event);
 					}
 				} else if (event instanceof ModePropertyChangedEvent) {
 					ModePropertyChangedEvent evt = (ModePropertyChangedEvent) event;
-					if (isOk(evt.getNewMode())) {
+					if (filter.isOk(evt.getNewMode())) {
 						fireEvent(event);
 					}
 				} else if (event instanceof NeedToBeSavedChangedEvent) {
@@ -139,8 +135,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 			}
 		});
 		this.balanceData = new BalanceData();
-		this.filteringHasToBeDone = false;
-		this.suspended = false;
 		this.filter();
 	}
 	
@@ -157,10 +151,10 @@ public class FilteredData extends DefaultListenable implements Observer {
 				((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME) &&
 				filter.isOk(((AccountPropertyChangedEvent)event).getAccount());
 		boolean categoryRenamed = (event instanceof CategoryPropertyChangedEvent) &&
-			isOk(((CategoryPropertyChangedEvent)event).getCategory());
+		filter.isOk(((CategoryPropertyChangedEvent)event).getCategory());
 		boolean modeRenamed = (event instanceof ModePropertyChangedEvent) &&
 		((((ModePropertyChangedEvent)event).getChanges() & ModePropertyChangedEvent.NAME)!=0) &&
-		isOk(((ModePropertyChangedEvent)event).getNewMode());
+		filter.isOk(((ModePropertyChangedEvent)event).getNewMode());
 		boolean result = (accountRenamed || categoryRenamed || modeRenamed);
 		return result;
 	}
@@ -187,40 +181,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 		this.filter();
 	}
 	
-	public boolean isOk(Mode mode) {
-		return (this.filter.getValidModes()==null) || (this.filter.getValidModes().contains(mode));
-	}
-	
-	/** Sets the valid modes for this filter.
-	 * There's no side effect between this instance and the argument array.
-	 * @param modes the modes that are allowed (null to allow all modes).
-	 */
-	public void setModes(Mode[] modes) {
-		if (modes==null) {
-			this.filter.setValidModes(null);
-		} else {
-			this.filter.setValidModes(new ArrayList<Mode>(modes.length));
-			for (Mode mode : modes) {
-				this.filter.getValidModes().add(mode);
-			}
-		}
-		this.filter();
-	}
-	
-	/** Gets the valid modes for this filter.
-	 * There's no side effect between this instance and the returned array.
-	 * @return the valid modes (null means, all modes are ok).
-	 */
-	public Mode[] getModes() {
-		if (this.filter.getValidModes()==null) return null;
-		Mode[] result = new Mode[filter.getValidModes().size()];
-		Iterator<Mode> iterator = filter.getValidModes().iterator();
-		for (int i = 0; i < result.length; i++) {
-			result[i] = iterator.next();
-		}
-		return result;
-	}
-
 	/** Gets a transaction's validity.
 	 * Note about subtransactions : A transaction is also valid if one of its subtransactions,
 	 *  considered as transaction (completed with transactions's date, statement, etc ...), is valid. 
@@ -229,14 +189,14 @@ public class FilteredData extends DefaultListenable implements Observer {
 	 */
 	public boolean isOk(Transaction transaction) {
 		if (!filter.isOk(transaction.getAccount())) return false;
-		if (!isOk(transaction.getMode())) return false;
+		if (!filter.isOk(transaction.getMode())) return false;
 		if (!filter.isStatementOk(transaction.getStatement())) return false;
 		if (!filter.isNumberOk(transaction.getNumber())) return false;
 		if ((filter.getDateFrom()!=null) && (transaction.getDate().compareTo(filter.getDateFrom())<0)) return false;
 		if ((filter.getDateTo()!=null) && (transaction.getDate().compareTo(filter.getDateTo())>0)) return false;
 		if ((filter.getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(filter.getValueDateFrom())<0)) return false;
 		if ((filter.getValueDateTo()!=null) && (transaction.getValueDate().compareTo(filter.getValueDateTo())>0)) return false;
-		if (isOk(transaction.getCategory()) && filter.isAmountOk(transaction.getAmount()) && filter.isDescriptionOk(transaction.getDescription())) return true;
+		if (filter.isOk(transaction.getCategory()) && filter.isAmountOk(transaction.getAmount()) && filter.isDescriptionOk(transaction.getDescription())) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			if (isOk(transaction.getSubTransaction(i))) {
@@ -256,7 +216,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	 * @see #isOk(Transaction)
 	 */
 	public boolean isOk(SubTransaction subtransaction) {
-		return isOk(subtransaction.getCategory()) && filter.isAmountOk(subtransaction.getAmount()) && filter.isDescriptionOk(subtransaction.getDescription());
+		return filter.isOk(subtransaction.getCategory()) && filter.isAmountOk(subtransaction.getAmount()) && filter.isDescriptionOk(subtransaction.getDescription());
 	}
 	
 	/** Gets a transaction complement validity.
@@ -271,83 +231,45 @@ public class FilteredData extends DefaultListenable implements Observer {
 	public boolean isComplementOk(Transaction transaction) {
 		double amount = transaction.getComplement();
 		if ((transaction.getSubTransactionSize()!=0) && (GlobalData.AMOUNT_COMPARATOR.compare(amount,0.0)==0)) return false;
-		return isOk(transaction.getCategory()) && filter.isAmountOk(amount) && filter.isDescriptionOk(transaction.getDescription());
+		return filter.isOk(transaction.getCategory()) && filter.isAmountOk(amount) && filter.isDescriptionOk(transaction.getDescription());
 	}
 	
-	/** Set the valid categories for this filter.
-	 * There's no side effect between this instance and the argument array.
-	 * @param categories the categories that are allowed (null or the complete list of categories to allow all categories).
-	 */
-	public void setCategories(Category[] categories) {
-		if ((categories==null) || (categories.length==data.getCategoriesNumber())) {
-			this.filter.setValidCategories(null);
-		} else {
-			this.filter.setValidCategories(new HashSet<Category>(categories.length));
-			for (Category category : categories) {
-				this.filter.getValidCategories().add(category);
-			}
-		}
-		this.filter();
-	}
-
-	/** Returns the valid categories for this filter.
-	 * There's no side effect between this instance and the returned array.
-	 * @return the valid categories (null means, all categories are ok).
-	 */
-	public Category[] getCategories() {
-		if (this.filter.getValidCategories()==null) return null;
-		Category[] result = new Category[filter.getValidCategories().size()];
-		Iterator<Category> iterator = filter.getValidCategories().iterator();
-		for (int i = 0; i < result.length; i++) {
-			result[i] = iterator.next();
-		}
-		return result;
-	}
-	
-	public boolean isOk(Category category) {
-		return (this.filter.getValidCategories()==null) || (this.filter.getValidCategories().contains(category));
-	}
-
 	private void filter() {
-		if (this.suspended) {
-			this.filteringHasToBeDone = true;
-		} else {
-			double initialBalance = 0;
-			for (int i = 0; i < this.getGlobalData().getAccountsNumber(); i++) {
-				Account account = this.getGlobalData().getAccount(i);
-				if (filter.isOk(account)) initialBalance += account.getInitialBalance();
-			}
-			balanceData.enableEvents(false);
-			balanceData.clear(initialBalance);
-			this.transactions = new ArrayList<Transaction>();
-			Collection<Transaction> balanceTransactions = new ArrayList<Transaction>(data.getTransactionsNumber());
-			double addedAmount = 0.0;
-			for (int i = 0; i < data.getTransactionsNumber(); i++) {
-				Transaction transaction = data.getTransaction(i);
-				if (filter.isOk(transaction.getAccount())) {
-					Date valueDate = transaction.getValueDate();
-					if (NullUtils.compareTo(valueDate, filter.getValueDateFrom(),true)<0) {
-						addedAmount += transaction.getAmount();
-					} else {
-						// Here we have a hard choice to make: 
-						// Ignore the transactions with a value date after the upper limit of the filter or not.
-						// In the first case, users may be surprised that transactions excluded by the filter are taken into account
-						// In the second one, the balance history after the filter upper limit is WRONG, and its probably dangerous !!!
-						// Especially, if the end date is before today, the current balance will be false and be displayed false in the transactions panel. 
-						// Uncomment the test to implement the second one.
-						/*if (NullUtils.compareTo(valueDate, getValueDateTo(), false)<=0)*/ balanceTransactions.add(transaction);
-						if (isOk(transaction)) {
-							int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
-							transactions.add(index, transaction);
-						}
+		double initialBalance = 0;
+		for (int i = 0; i < this.getGlobalData().getAccountsNumber(); i++) {
+			Account account = this.getGlobalData().getAccount(i);
+			if (filter.isOk(account)) initialBalance += account.getInitialBalance();
+		}
+		balanceData.enableEvents(false);
+		balanceData.clear(initialBalance);
+		this.transactions = new ArrayList<Transaction>();
+		Collection<Transaction> balanceTransactions = new ArrayList<Transaction>(data.getTransactionsNumber());
+		double addedAmount = 0.0;
+		for (int i = 0; i < data.getTransactionsNumber(); i++) {
+			Transaction transaction = data.getTransaction(i);
+			if (filter.isOk(transaction.getAccount())) {
+				Date valueDate = transaction.getValueDate();
+				if (NullUtils.compareTo(valueDate, filter.getValueDateFrom(),true)<0) {
+					addedAmount += transaction.getAmount();
+				} else {
+					// Here we have a hard choice to make: 
+					// Ignore the transactions with a value date after the upper limit of the filter or not.
+					// In the first case, users may be surprised that transactions excluded by the filter are taken into account
+					// In the second one, the balance history after the filter upper limit is WRONG, and its probably dangerous !!!
+					// Especially, if the end date is before today, the current balance will be false and be displayed false in the transactions panel. 
+					// Uncomment the test to implement the second one.
+					/*if (NullUtils.compareTo(valueDate, getValueDateTo(), false)<=0)*/ balanceTransactions.add(transaction);
+					if (isOk(transaction)) {
+						int index = -Collections.binarySearch(transactions, transaction, comparator)-1;
+						transactions.add(index, transaction);
 					}
 				}
 			}
-			balanceData.updateBalance(addedAmount, true);
-			balanceData.updateBalance(balanceTransactions.toArray(new Transaction[balanceTransactions.size()]), true);
-			balanceData.enableEvents(true);
-			fireEvent(new EverythingChangedEvent(this));
 		}
+		balanceData.updateBalance(addedAmount, true);
+		balanceData.updateBalance(balanceTransactions.toArray(new Transaction[balanceTransactions.size()]), true);
+		balanceData.enableEvents(true);
+		fireEvent(new EverythingChangedEvent(this));
 	}
 
 	/** Gets the number of transactions that match the filter. 
@@ -379,25 +301,5 @@ public class FilteredData extends DefaultListenable implements Observer {
 	 */
 	public GlobalData getGlobalData() {
 		return this.data;
-	}
-	
-	/** Sets the suspended state of the filter.
-	 * When the filter is suspended, the filter changes don't automatically refresh the transaction list,
-	 * and no event is fire.
-	 * This refresh (and the event) is delayed until this method is called with false argument.
-	 * Note that if this method is called with false argument, but no filter change occurs, nothing happens.
-	 * @param suspended true to suspend auto-filtering, false to restore it.
-	 */
-	public void setSuspended(boolean suspended) {
-		this.suspended = suspended;
-		if (!suspended && this.filteringHasToBeDone) filter();
-	}
-	
-	/** Gets the suspended state of this filter.
-	 * @return true if the filtering is suspended.
-	 * @see #setSuspended(boolean)
-	 */
-	public boolean isSuspended() {
-		return this.suspended;
 	}
 }

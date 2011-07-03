@@ -2,6 +2,7 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Filter extends Observable implements Serializable {
 
 	private int filter;
 	private HashSet<Account> validAccounts;
-	private List<Mode> validModes;
+	private HashSet<Mode> validModes;
 	private HashSet<Category> validCategories;
 	private Date dateFrom;
 	private Date dateTo;
@@ -55,6 +56,12 @@ public class Filter extends Observable implements Serializable {
 		if (!suspended) this.notifyObservers();
 	}
 	
+	/** Sets the suspended state of the filter.
+	 * When the filter is suspended, the filter changes don't automatically call the filter's observers.
+	 * This refresh (and the event) is delayed until this method is called with false argument.
+	 * Note that if this method is called with false argument, but no filter change occurs, nothing happens.
+	 * @param suspended true to suspend observers notifications, false to restore it.
+	 */
 	public void setSuspended(boolean suspended) {
 		this.suspended = suspended;
 		if (!this.suspended && this.hasChanged()) this.notifyObservers();
@@ -82,34 +89,88 @@ public class Filter extends Observable implements Serializable {
 	 * @param accounts the accounts that are allowed (null or the complete list of accounts to allow all accounts).
 	 */
 	public void setValidAccounts(List<Account> accounts) {
-		if (accounts==null) {
-			validAccounts = null;
-		} else {
-			validAccounts = new HashSet<Account>(accounts.size());
-			for (Account account : accounts) {
-				validAccounts.add(account);
+		if (!testEquals(accounts, this.validAccounts)) {
+			if (accounts==null) {
+				validAccounts = null;
+			} else {
+				validAccounts = new HashSet<Account>(accounts.size());
+				this.validAccounts.addAll(accounts);
 			}
+			setChanged();
 		}
-		// TODO Test if the accounts list was really changed before launching the event
-		setChanged();
+	}
+	
+	private static <T> boolean testEquals(Collection<T> c1, Collection<T> c2) {
+		if ((c1==null) && (c2==null)) return true; 
+		if ((c1==null) || (c2==null)) return false;
+		// Both are not null if we arrive here
+		if (c1.size()!=c2.size()) return false;
+		for (T element:c1) {
+			if (!c2.contains(element)) return false;
+		}
+		return true;
 	}
 
+	/** Gets the valid modes for this filter.
+	 * There's no side effect between this instance and the returned array.
+	 * @return the valid modes (null means, all modes are ok).
+	 */
 	public List<Mode> getValidModes() {
-		return validModes;
+		if (validModes==null) return null;
+		ArrayList<Mode> result = new ArrayList<Mode>(validModes.size());
+		for (Mode account:validModes) {
+			result.add(account);
+		}
+		return result;
+	}
+	
+	public boolean isOk(Mode mode) {
+		return (validModes==null) || (validModes.contains(mode));
 	}
 
 	public void setValidModes(List<Mode> validModes) {
-		this.validModes = validModes;
-		this.setChanged();
+		if (!testEquals(validModes, this.validModes)) {
+			if (validModes==null) {
+				this.validModes = null;
+			} else {
+				this.validModes = new HashSet<Mode>(validModes.size());
+				this.validModes.addAll(validModes);
+			}
+			setChanged();
+		}
 	}
 
-	public HashSet<Category> getValidCategories() {
-		return validCategories;
+	/** Returns the valid categories for this filter.
+	 * There's no side effect between this instance and the returned array.
+	 * @return the valid categories (null means, all categories are ok).
+	 */
+	public List<Category> getValidCategories() {
+		if (validCategories==null) return null;
+		ArrayList<Category> result = new ArrayList<Category>(validCategories.size());
+		for (Category account:validCategories) {
+			result.add(account);
+		}
+		return result;
 	}
 
-	public void setValidCategories(HashSet<Category> validCategories) {
-		this.validCategories = validCategories;
-		this.setChanged();
+	public boolean isOk(Category category) {
+		return (validCategories==null) || (validCategories.contains(category));
+	}
+
+	/** Set the valid categories for this filter.
+	 * There's no side effect between this instance and the argument array.
+	 * @param categories the categories that are allowed (null or the complete list of categories to allow all categories).
+	 */
+	public void setValidCategories(List<Category> validCategories) {
+		if (!testEquals(validCategories, this.validCategories)) {
+			if (validCategories==null) {
+				this.validCategories = null;
+			} else {
+				this.validCategories = new HashSet<Category>(validCategories.size());
+				this.validCategories.addAll(validCategories);
+			}
+			setChanged();
+		}
 	}
 
 	/** Gets the transaction date before which all transactions are rejected.

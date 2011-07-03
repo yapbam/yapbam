@@ -11,6 +11,7 @@ import javax.swing.event.ListSelectionListener;
 
 import java.awt.Font;
 import java.awt.Color;
+
 import javax.swing.JCheckBox;
 import java.awt.Insets;
 import java.awt.event.ItemListener;
@@ -31,6 +32,7 @@ import net.yapbam.gui.LocalizationData;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TreeSet;
 
 import net.yapbam.util.NullUtils;
@@ -258,7 +260,7 @@ public class CustomFilterPanel extends JPanel {
 			categoryList.setToolTipText(LocalizationData.get("CustomFilterPanel.category.toolTip")); //$NON-NLS-1$
 			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getCategoriesNumber()); 
 			for (int i=0;i<data.getGlobalData().getCategoriesNumber();i++) {
-				if (data.isOk(data.getGlobalData().getCategory(i))) indices.add(i);
+				if (data.getFilter().isOk(data.getGlobalData().getCategory(i))) indices.add(i);
 			}
 			int[] selection = new int[indices.size()];
 			for (int i = 0; i < indices.size(); i++) {
@@ -307,10 +309,10 @@ public class CustomFilterPanel extends JPanel {
 		ArrayList<Integer> newSelection = new ArrayList<Integer>();
 		if (first) {
 			// set the selection to the content of the filter
-			Mode[] validModes = data.getModes();
+			List<Mode> validModes = data.getFilter().getValidModes();
 			if (validModes!=null) {
-				for (int i = 0; i < validModes.length; i++) {
-					int index = Arrays.binarySearch(arrayModes, validModes[i].getName());
+				for (int i = 0; i < validModes.size(); i++) {
+					int index = Arrays.binarySearch(arrayModes, validModes.get(i).getName());
 					if (index>=0) newSelection.add(index);
 				}
 			} else {
@@ -353,34 +355,38 @@ public class CustomFilterPanel extends JPanel {
 				}
 			}
 		}
-		this.data.getFilter().setValidAccounts(accounts.length==data.getGlobalData().getAccountsNumber()?null:Arrays.asList(accounts));
+		filter.setValidAccounts(accounts.length==data.getGlobalData().getAccountsNumber()?null:Arrays.asList(accounts));
 		// set the mode filter
-		this.data.setModes(all?null:modes.toArray(new Mode[modes.size()]));
+		filter.setValidModes(all?null:modes);
 		// build the category filter
 		int[] categoryIndices = this.categoryList.getSelectedIndices();
-		Category[] categories = new Category[categoryIndices.length];
-		for (int i = 0; i < categories.length; i++) {
-			categories[i] = data.getGlobalData().getCategory(categoryIndices[i]);
+		if (categoryIndices.length==data.getGlobalData().getCategoriesNumber()) {
+			filter.setValidCategories(null);
+		} else {
+			List<Category> categories = new ArrayList<Category>(categoryIndices.length);
+			for (int i = 0; i < categoryIndices.length; i++) {
+				categories.add(data.getGlobalData().getCategory(categoryIndices[i]));
+			}
+			filter.setValidCategories(categories);
 		}
-		this.data.setCategories(categories);
 		// build the expense/receipt and amount filter
 		Double min = getAmountPanel().getMinAmount();
 		Double max = getAmountPanel().getMaxAmount();
 		int mask = 0;
 		if (getReceipts_expensesPanel().isReceiptsSelected()) mask += Filter.RECEIPTS;
 		if (getReceipts_expensesPanel().isExpensesSelected()) mask += Filter.EXPENSES;
-		this.data.getFilter().setAmountFilter(mask, min, max);
+		filter.setAmountFilter(mask, min, max);
 		// build the date filter
-		this.data.getFilter().setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
+		filter.setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
 		// build the value date filter
-		this.data.getFilter().setValueDateFilter(getValueDatePanel().getDateFrom(), getValueDatePanel().getDateTo());
+		filter.setValueDateFilter(getValueDatePanel().getDateFrom(), getValueDatePanel().getDateTo());
 		// build the description filter
 		filter.setDescriptionMatcher(getDescriptionPanel().getTextMatcher());
 		// Build the statement filter
 		mask = 0;
 		if (getChecked().isSelected()) mask += Filter.CHECKED;
 		if (getNotChecked().isSelected()) mask += Filter.NOT_CHECKED;
-		data.getFilter().setStatementFilter(mask, getJPanel11().getTextMatcher());
+		filter.setStatementFilter(mask, getJPanel11().getTextMatcher());
 		// Build the number filter
 		filter.setNumberMatcher(this.getNumberPanel().getTextMatcher());
 		filter.setSuspended(false);
