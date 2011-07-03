@@ -336,7 +336,7 @@ public class CustomFilterPanel extends JPanel {
 	
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
-	public void apply() {
+	public boolean apply() {
 		Filter filter = this.data.getFilter();
 		filter.setSuspended(true);
 		// build the account and mode filter
@@ -389,7 +389,9 @@ public class CustomFilterPanel extends JPanel {
 		filter.setStatementFilter(mask, getJPanel11().getTextMatcher());
 		// Build the number filter
 		filter.setNumberMatcher(this.getNumberPanel().getTextMatcher());
+		boolean result = filter.hasChanged();
 		filter.setSuspended(false);
+		return result;
 	}
 
 	/**
