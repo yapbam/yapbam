@@ -96,15 +96,7 @@ public class Serializer {
 
 	private AttributesImpl atts;
 	private TransformerHandler hd;
-	
-	private static void write(GlobalData data, File file) throws IOException {
-		FileOutputStream fos = new FileOutputStream(file);
-		try {
-			new Serializer().serialize(data, fos);
-		} finally {
-			fos.close();
-		}
-	}
+	private OutputStream os;
 	
 	public static void write(GlobalData data, URI uri) throws IOException {
 		if (uri.getScheme().equals("file")) {
@@ -114,7 +106,7 @@ public class Serializer {
 			// Everything here is pretty ugly.
 			//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
 			File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file;
-			write(data, writed);
+			write (data, new FileOutputStream(writed));
 			if (!file.equals(writed)) {
 				// Ok, not so safe as I want since we could lost the file between deleting and renaming
 				// but I can't find a better way
@@ -129,13 +121,63 @@ public class Serializer {
 			// Currently this functionality isn't implemented in the gui
 			// Probably, it means implementing an ftp client to create directories and save copy
 			OutputStream os = uri.toURL().openConnection(Preferences.INSTANCE.getHttpProxy()).getOutputStream();
-			try {
-				new Serializer().serialize(data, os);
-			} finally {
-				os.close();
-			}
+			write (data, os);
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme());
+		}
+	}
+	
+	private static void write(GlobalData data, OutputStream os) throws IOException {
+		try {
+			Serializer serializer = new Serializer(data.getPassword(), os);
+			serializer.serialize(data);
+			serializer.closeDocument();
+		} finally {
+			os.close();
+		}
+	}
+
+	/** Creates a new XML Serializer.
+	 * <br>The serializer outputs the xml header. After all elements are output, you should call closedocument in order
+	 * to close the xml document
+	 * @param password The password used to protect the stream (null if no password protection).
+	 * @param os The output stream on which to write the xml document
+	 * @throws IOException if something wrong happens
+	 * @see #closeDocument()
+	 */
+	public Serializer (String password, OutputStream os) throws IOException {
+		try {
+			this.os = os;
+			if (password!=null) {
+				// If the file has to be protected by a password
+				// outputs the magic bytes that will allow Yapbam to recognize the file is crypted.
+				this.os.write(PASSWORD_ENCODED_FILE_HEADER);
+				// replace the output stream by a new encoded stream
+				this.os = Crypto.getPasswordProtectedOutputStream(password, os);
+			}
+			StreamResult streamResult = new StreamResult(this.os);
+			SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+			hd = tf.newTransformerHandler();
+			Transformer serializer = hd.getTransformer();
+			serializer.setOutputProperty(OutputKeys.ENCODING,ENCODING);
+			serializer.setOutputProperty(OutputKeys.INDENT,"yes");
+			hd.setResult(streamResult);
+			this.atts = new AttributesImpl();
+			hd.startDocument();
+		} catch (TransformerConfigurationException e) {
+			throw new IOException(e);
+		} catch (SAXException e) {
+			throw new IOException(e);
+		}
+	}
+	
+	public void closeDocument() throws IOException {
+		try {
+			hd.endDocument();
+		} catch (SAXException e) {
+			throw new IOException(e);
+		} finally {
+			this.os.close();
 		}
 	}
 
@@ -177,7 +219,7 @@ public class Serializer {
 //		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");
 	}
 	
-	/** Gets the data about the uri (what is it version, is it encoded or etc, ...).
+	/** Gets the data about the uri (what is its version, is it encoded or not, etc...).
 	 * @param uri the uniform resource locator to test.
 	 * @return A SerializationData instance
 	 * @throws IOException
@@ -216,28 +258,9 @@ public class Serializer {
 		}
 	}
 
-	private Serializer () {
-	}
-
-	private void serialize (GlobalData data, OutputStream os) throws IOException {
+	private void serialize (GlobalData data) throws IOException {
 		try {
-			if (data.getPassword()!=null) {
-				// If the file has to be protected by a password
-				// outputs the magic bytes that will allow Yapbam to recognize the file is crypted.
-				os.write(PASSWORD_ENCODED_FILE_HEADER);
-				// replace the output stream by a new encoded stream
-				os = Crypto.getPasswordProtectedOutputStream(data.getPassword(), os);
-			}
-			StreamResult streamResult = new StreamResult(os);
-			SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
-			hd = tf.newTransformerHandler();
-			Transformer serializer = hd.getTransformer();
-			serializer.setOutputProperty(OutputKeys.ENCODING,ENCODING);
-			serializer.setOutputProperty(OutputKeys.INDENT,"yes");
-			hd.setResult(streamResult);
-			hd.startDocument();
-			
-			this.atts = new AttributesImpl();
+			atts.clear();
 			hd.startElement("","",GLOBAL_DATA_TAG,atts);
 			
 			// Accounts.
@@ -260,11 +283,6 @@ public class Serializer {
 				serialize(data.getTransaction(i));
 			}		
 			hd.endElement("","",GLOBAL_DATA_TAG);
-			
-			hd.endDocument();
-			os.close();
-		} catch (TransformerConfigurationException e) {
-			throw new IOException(e);
 		} catch (SAXException e) {
 			throw new IOException(e);
 		}
