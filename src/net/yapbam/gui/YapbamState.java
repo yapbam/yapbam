@@ -23,8 +23,12 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import org.xml.sax.SAXException;
+
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
+import net.yapbam.data.Filter;
+import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.util.ArrayUtils;
@@ -220,6 +224,23 @@ public class YapbamState {
 			}
 		} else {
 			return null;
+		}
+	}
+
+	public void save(String key, Filter filter, String password) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		try {
+			Serializer serializer = new Serializer(password, stream);
+			try {
+				serializer.serialize(filter);
+			} catch (SAXException e) {
+				throw new RuntimeException(e);
+			}
+			serializer.closeDocument();
+			stream.flush();
+			properties.put(key, new String(/*Base64.encode(*/stream.toByteArray())); //TODO
+		} catch (IOException e) {
+				throw new RuntimeException(e);
 		}
 	}
 }

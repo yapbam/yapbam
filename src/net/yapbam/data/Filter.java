@@ -1,6 +1,5 @@
 package net.yapbam.data;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -11,8 +10,7 @@ import java.util.Observable;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
 
-public class Filter extends Observable implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Filter extends Observable {
 	private static boolean DEBUG = false;
 	public static final int CHECKED=1;
 	public static final int NOT_CHECKED=2;
