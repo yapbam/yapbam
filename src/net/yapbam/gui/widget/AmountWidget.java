@@ -2,8 +2,6 @@ package net.yapbam.gui.widget;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -12,6 +10,8 @@ import java.util.Currency;
 import java.util.Locale;
 
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.yapbam.util.NullUtils;
 
@@ -70,10 +70,20 @@ public class AmountWidget extends JTextField {
 			if ((decimalFormatSymbols.getDecimalSeparator()==nonBreakingSpace)) decimalFormatSymbols.setDecimalSeparator(' ');
 			format.setDecimalFormatSymbols(decimalFormatSymbols);
 		}
-		this.addKeyListener(new KeyAdapter() {
+		this.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void removeUpdate(DocumentEvent e) {
 				updateValue();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateValue();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Do nothing
 			}
 		});
 		this.addFocusListener(new FocusListener() {

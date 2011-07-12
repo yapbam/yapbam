@@ -21,13 +21,13 @@ import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 @SuppressWarnings("serial")
-public class ModeListPanel extends AbstractListAdministrationPanel {
+public class ModeListPanel extends AbstractListAdministrationPanel<Object> {
 	protected String accountName;
 	
 	protected ModeListPanel (Object data) {
 		super(data);
-        this.accountName = ""; //$NON-NLS-1$
-        getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
+		this.accountName = ""; //$NON-NLS-1$
+		getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
 	}
 	
 	ModeListPanel() {
@@ -62,7 +62,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
 			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.New.tooltip")); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.New.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -78,7 +78,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	class EditModeAction extends AbstractAction {
 		public EditModeAction() {
 			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -99,7 +99,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	class DeleteModeAction extends AbstractAction {			
 		public DeleteModeAction() {
 			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE);
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Delete.tooltip"));
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Delete.tooltip"));
 		}
 		
 		@Override
@@ -112,7 +112,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel {
 	class DuplicateModeAction extends AbstractAction {
 		public DuplicateModeAction() {
 			super(LocalizationData.get("GenericButton.duplicate")); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Duplicate.tooltip")); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Duplicate.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {

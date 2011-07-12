@@ -54,7 +54,7 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		c.weightx = 1.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		name = new JTextField(10);
-		name.addKeyListener(new AutoUpdateOkButtonKeyListener(this));
+		name.getDocument().addDocumentListener(new AutoUpdateOkButtonDocumentListener(this));
 		name.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		idPanel.add(name, c);
 

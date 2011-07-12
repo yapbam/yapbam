@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyListener;
 import java.math.BigInteger;
 
 import javax.swing.BorderFactory;
@@ -17,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.DocumentListener;
 
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
@@ -51,7 +51,7 @@ class ModePanel extends JPanel {
 	 */
 	ModePanel(String title, Component option, final ModeDialog dialog) {
 		super(new GridBagLayout());
-		KeyListener keyListener = new AutoUpdateOkButtonKeyListener(dialog);
+		DocumentListener listener = new AutoUpdateOkButtonDocumentListener(dialog);
 		Insets insets = new Insets(5, 5, 5, 5);
 		this.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
@@ -106,7 +106,7 @@ class ModePanel extends JPanel {
 		c2.weightx = 1.0;
 		relField = new IntegerWidget();
 		relField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		relField.addKeyListener(keyListener);
+		relField.getDocument().addDocumentListener(listener);
 		relField.setColumns(2);
 		relativePanel.add(relField, c2);
 		relativePanel.setVisible(false);
@@ -121,7 +121,7 @@ class ModePanel extends JPanel {
 		c2.gridx = 1;
 		stopField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		stopField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		stopField.addKeyListener(keyListener);
+		stopField.getDocument().addDocumentListener(listener);
 		stopField.setColumns(2);
 		deferedPanel.add(stopField, c2);
 		c2.gridx = 2;
@@ -129,7 +129,7 @@ class ModePanel extends JPanel {
 		deferedPanel.add(debtLabel, c2);
 		debtField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		debtField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		debtField.addKeyListener(keyListener);
+		debtField.getDocument().addDocumentListener(listener);
 		debtField.setColumns(2);
 		c2.gridx = 3;
 		deferedPanel.add(debtField, c2);

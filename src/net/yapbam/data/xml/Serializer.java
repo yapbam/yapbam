@@ -98,23 +98,23 @@ public class Serializer {
 	static final String SUBTRANSACTION_TAG = "SUBTRANSACTION";
 	
 	static final String FILTER_TAG = "FILTER";
-	private static final String FILTER_DATE_FROM_ATTRIBUTE = "dateFrom";
-	private static final String FILTER_DATE_TO_ATTRIBUTE = "dateTo";
-	private static final String FILTER_VALUE_DATE_FROM_ATTRIBUTE = "valueDateFrom";
-	private static final String FILTER__VALUE_DATE_TO_ATTRIBUTE = "valueDateTo";
-	private static final String FILTER_AMOUNT_FROM_ATTRIBUTE = "amountFrom";
-	private static final String FILTER_VALUE_AMOUNT_TO_ATTRIBUTE = "amountTo";
-	private static final String FILTER_ATTRIBUTE = "filter";
-	private static final String FILTER_DESCRIPTION_ID = DESCRIPTION_ATTRIBUTE;
-	private static final String FILTER_NUMBER_ID = NUMBER_ATTRIBUTE;
-	private static final String FILTER_STATEMENT_ID = STATEMENT_ATTRIBUTE;
+	static final String FILTER_DATE_FROM_ATTRIBUTE = "dateFrom";
+	static final String FILTER_DATE_TO_ATTRIBUTE = "dateTo";
+	static final String FILTER_VALUE_DATE_FROM_ATTRIBUTE = "valueDateFrom";
+	static final String FILTER__VALUE_DATE_TO_ATTRIBUTE = "valueDateTo";
+	static final String FILTER_AMOUNT_FROM_ATTRIBUTE = "amountFrom";
+	static final String FILTER_VALUE_AMOUNT_TO_ATTRIBUTE = "amountTo";
+	static final String FILTER_ATTRIBUTE = "filter";
+	static final String FILTER_DESCRIPTION_ID = DESCRIPTION_ATTRIBUTE;
+	static final String FILTER_NUMBER_ID = NUMBER_ATTRIBUTE;
+	static final String FILTER_STATEMENT_ID = STATEMENT_ATTRIBUTE;
 
-	private static final String TEXT_MATCHER_TAG = "TEXT_MATCHER";
-	private static final String CONTAINS = "contains";
-	private static final String EQUALS = "equals";
-	private static final String REGULAR = "regular";
-	private static final String DIACRITICAL_SENSITIVE_ATTRIBUTE = "diacriticalSensitive";
-	private static final String CASE_SENSITIVE_ATTRIBUTE = "caseSensitive";
+	static final String TEXT_MATCHER_TAG = "TEXT_MATCHER";
+	static final String CONTAINS = "contains";
+	static final String EQUALS = "equals";
+	static final String REGULAR = "regular";
+	static final String DIACRITICAL_SENSITIVE_ATTRIBUTE = "diacriticalSensitive";
+	static final String CASE_SENSITIVE_ATTRIBUTE = "caseSensitive";
 
 	private AttributesImpl atts;
 	private TransformerHandler hd;
