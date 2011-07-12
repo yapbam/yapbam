@@ -12,6 +12,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.yapbam.util.NullUtils;
 
@@ -67,11 +69,6 @@ public class DateWidget extends JTextField {
 		this.setText(formatter.format(new Date()));
 		this.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				updateDate();
-			}
-
-			@Override
 			public void keyTyped(KeyEvent e) {
 			}
 
@@ -95,6 +92,22 @@ public class DateWidget extends JTextField {
 				}
 			}
 			
+		});
+		this.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateDate();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateDate();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Does nothing
+			}
 		});
 		this.addFocusListener(new FocusListener() {
 			@Override

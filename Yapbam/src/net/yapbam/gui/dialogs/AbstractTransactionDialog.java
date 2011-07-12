@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -134,7 +133,6 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new GridBagLayout());
-		KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
 
 		// Account
 		Insets insets = new Insets(5,5,5,5);
@@ -186,8 +184,12 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		amount = new AmountWidget(LocalizationData.getLocale());
 		amount.setColumns(10);
 		amount.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		amount.addKeyListener(listener);
-		amount.setValue(new Double(0));
+		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				AbstractTransactionDialog.this.updateOkButtonEnabled();
+			}
+		});
 		amount.setToolTipText(LocalizationData.get("TransactionDialog.amount.tooltip")); //$NON-NLS-1$
 		c.gridx++; c.weightx = 1.0;c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(amount, c);
@@ -252,6 +254,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		});
 		centerPane.add(subtransactionsPanel, c);
 
+		amount.setValue(new Double(0));
 		return centerPane;
 	}
 

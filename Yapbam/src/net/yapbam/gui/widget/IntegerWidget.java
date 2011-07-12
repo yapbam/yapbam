@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.math.BigInteger;
 
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.yapbam.util.NullUtils;
 
@@ -61,16 +63,28 @@ public class IntegerWidget extends JTextField {
 				} else if (!Character.isDigit(car)) e.consume();
 			}
 			@Override
-			public void keyReleased(KeyEvent e) {
-				updateValue();
-			}
-			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_UP) {
 					if ((value!=null) && (value.compareTo(IntegerWidget.this.maxValue)<0)) setValue(value.add(BigInteger.ONE));
 				} else if (e.getKeyCode()==KeyEvent.VK_DOWN) {
 					if ((value!=null) && (value.compareTo(IntegerWidget.this.minValue)>0)) setValue(value.subtract(BigInteger.ONE));
 				}
+			}
+		});
+		this.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateValue();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateValue();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Does nothing
 			}
 		});
 	}

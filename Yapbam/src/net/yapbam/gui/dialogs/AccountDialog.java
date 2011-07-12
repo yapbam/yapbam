@@ -5,9 +5,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.KeyListener;
 
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
@@ -35,7 +35,7 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel northPanel = new JPanel(new GridBagLayout());
-		KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
+		DocumentListener listener = new AutoUpdateOkButtonDocumentListener(this);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -54,7 +54,7 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		northPanel.add(titleCompte, c);
 		bankAccountField = new JTextField(20);
 		bankAccountField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		bankAccountField.addKeyListener(listener);
+		bankAccountField.getDocument().addDocumentListener(listener);
 		bankAccountField.setToolTipText(LocalizationData.get("AccountDialog.account.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -70,7 +70,7 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		balanceField = new AmountWidget(LocalizationData.getLocale());
 		balanceField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		balanceField.setValue(new Double(0));
-		balanceField.addKeyListener(listener);
+		balanceField.getDocument().addDocumentListener(listener);
 		balanceField.setToolTipText(LocalizationData.get("AccountDialog.balance.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -113,7 +113,7 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 	public static Account open(GlobalData data, Window owner, String message) {
 		AccountDialog dialog = new AccountDialog(owner, message, data);
 		dialog.setVisible(true);
-		Account newAccount = dialog.buildResult();
+		Account newAccount = dialog.getResult();
 		if (newAccount!=null) {
 			data.add(newAccount);
 		}

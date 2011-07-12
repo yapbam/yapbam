@@ -4,9 +4,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.KeyListener;
 
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
@@ -29,7 +29,7 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new GridBagLayout());
-		KeyListener listener = new AutoUpdateOkButtonKeyListener(this);
+		DocumentListener listener = new AutoUpdateOkButtonDocumentListener(this);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -48,7 +48,7 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 		centerPane.add(titleCompte, c);
 		categoryField = new JTextField(20);
 		categoryField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		categoryField.addKeyListener(listener);
+		categoryField.getDocument().addDocumentListener(listener);
 		categoryField.setToolTipText(LocalizationData.get("CategoryDialog.category.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -73,7 +73,7 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 	public static Category open(GlobalData data, Window owner, String message) {
 		CategoryDialog dialog = new CategoryDialog(owner, message, data);
 		dialog.setVisible(true);
-		Category newCategory = dialog.buildResult();
+		Category newCategory = dialog.getResult();
 		if (newCategory!=null) {
 			data.add(newCategory);
 		}
