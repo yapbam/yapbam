@@ -3,8 +3,10 @@ package net.yapbam.data.xml;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.security.AccessControlException;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import net.yapbam.data.*;
@@ -15,6 +17,7 @@ import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.Preferences;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.FileUtils;
+import net.yapbam.util.TextMatcher;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -61,7 +64,7 @@ public class Serializer {
 	static final String STOP_DAY_ATTRIBUTE = "stopDay";
 	static final String DAY_ATTRIBUTE = "day";
 	static final String PERIOD_ATTRIBUTE = "period";
-	static final String DATE_STEPPER_KIND_ATTRIBUTE = "kind";
+	static final String KIND_ATTRIBUTE = "kind";
 	static final String IMMEDIATE_DATE_STEPPER_KIND = "immediate";
 	static final String MONTHLY_DATE_STEPPER_KIND = "monthly";
 	static final String DEFERRED_DATE_STEPPER_KIND = "deferred";
@@ -93,6 +96,25 @@ public class Serializer {
 	static final String DATE_STEPPER_TAG = "DATE_STEPPER";
 	static final String TRANSACTION_TAG = "TRANSACTION";
 	static final String SUBTRANSACTION_TAG = "SUBTRANSACTION";
+	
+	static final String FILTER_TAG = "FILTER";
+	private static final String FILTER_DATE_FROM_ATTRIBUTE = "dateFrom";
+	private static final String FILTER_DATE_TO_ATTRIBUTE = "dateTo";
+	private static final String FILTER_VALUE_DATE_FROM_ATTRIBUTE = "valueDateFrom";
+	private static final String FILTER__VALUE_DATE_TO_ATTRIBUTE = "valueDateTo";
+	private static final String FILTER_AMOUNT_FROM_ATTRIBUTE = "amountFrom";
+	private static final String FILTER_VALUE_AMOUNT_TO_ATTRIBUTE = "amountTo";
+	private static final String FILTER_ATTRIBUTE = "filter";
+	private static final String FILTER_DESCRIPTION_ID = DESCRIPTION_ATTRIBUTE;
+	private static final String FILTER_NUMBER_ID = NUMBER_ATTRIBUTE;
+	private static final String FILTER_STATEMENT_ID = STATEMENT_ATTRIBUTE;
+
+	private static final String TEXT_MATCHER_TAG = "TEXT_MATCHER";
+	private static final String CONTAINS = "contains";
+	private static final String EQUALS = "equals";
+	private static final String REGULAR = "regular";
+	private static final String DIACRITICAL_SENSITIVE_ATTRIBUTE = "diacriticalSensitive";
+	private static final String CASE_SENSITIVE_ATTRIBUTE = "caseSensitive";
 
 	private AttributesImpl atts;
 	private TransformerHandler hd;
@@ -287,6 +309,84 @@ public class Serializer {
 			throw new IOException(e);
 		}
 	}
+	
+	public void serialize(Filter filter) throws SAXException {
+		atts.clear();
+		if (filter.getDateFrom()!=null) atts.addAttribute("","",FILTER_DATE_FROM_ATTRIBUTE,"CDATA",toString(filter.getDateFrom()));
+		if (filter.getDateTo()!=null) atts.addAttribute("","",FILTER_DATE_TO_ATTRIBUTE,"CDATA",toString(filter.getDateTo()));
+		if (filter.getValueDateTo()!=null) atts.addAttribute("","",FILTER__VALUE_DATE_TO_ATTRIBUTE,"CDATA",toString(filter.getValueDateTo()));
+		if (filter.getValueDateFrom()!=null) atts.addAttribute("","",FILTER_VALUE_DATE_FROM_ATTRIBUTE,"CDATA",toString(filter.getValueDateFrom()));
+		if (filter.getMinAmount()!=0.0) atts.addAttribute("","",FILTER_AMOUNT_FROM_ATTRIBUTE,"CDATA",Double.toString(filter.getMinAmount()));
+		if (filter.getMaxAmount()!=Double.POSITIVE_INFINITY) atts.addAttribute("","",FILTER_VALUE_AMOUNT_TO_ATTRIBUTE,"CDATA",Double.toString(filter.getMaxAmount()));
+		if (filter.getValueDateFrom()!=null) atts.addAttribute("","",FILTER_VALUE_DATE_FROM_ATTRIBUTE,"CDATA",toString(filter.getValueDateFrom()));
+		List<Account> accounts = filter.getValidAccounts();
+		StringBuilder builder = new StringBuilder();
+		if (accounts!=null) {
+			for (Account account:accounts) {
+				if (builder.length()!=0) builder.append(',');
+				builder.append(encode(account.getName()));
+			}
+			atts.addAttribute("", "", ACCOUNT_ATTRIBUTE, "CDATA", builder.toString());
+		}
+		List<Mode> modes = filter.getValidModes();
+		builder = new StringBuilder();
+		if (modes!=null) {
+			for (Mode mode:modes) {
+				if (builder.length()!=0) builder.append(',');
+				builder.append(encode(mode.getName()));
+			}
+			atts.addAttribute("", "", MODE_ATTRIBUTE, "CDATA", builder.toString());
+		}
+		List<Category> categories = filter.getValidCategories();
+		builder = new StringBuilder();
+		if (categories!=null) {
+			for (Category category:categories) {
+				if (builder.length()!=0) builder.append(',');
+				builder.append(encode(category.getName()));
+			}
+			atts.addAttribute("", "", CATEGORY_ATTRIBUTE, "CDATA", builder.toString());
+		}
+		int mask = 0;
+		if (!filter.isOk(Filter.RECEIPTS)) mask += Filter.RECEIPTS;
+		if (!filter.isOk(Filter.EXPENSES)) mask += Filter.EXPENSES;
+		if (!filter.isOk(Filter.CHECKED)) mask += Filter.CHECKED;
+		if (!filter.isOk(Filter.NOT_CHECKED)) mask += Filter.NOT_CHECKED;
+		if (mask!=0) atts.addAttribute("", "", FILTER_ATTRIBUTE, "CDATA", Integer.toString(mask));
+		hd.startElement("", "", FILTER_TAG, atts);
+		if (filter.getDescriptionMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_DESCRIPTION_ID);
+		if (filter.getNumberMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_NUMBER_ID);
+		if (filter.getStatementMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_STATEMENT_ID);
+		hd.endElement("","",FILTER_TAG);
+	}
+
+	private void serialize(TextMatcher matcher, String id) throws SAXException {
+		atts.clear();
+		atts.addAttribute("", "", ID_ATTRIBUTE, "CDATA", id);
+		String kind = null;
+		if (matcher.getKind().equals(TextMatcher.CONTAINS)) {
+			kind = CONTAINS;
+		} else if (matcher.getKind().equals(TextMatcher.EQUALS)) {
+			kind = EQUALS;
+		} else if (matcher.getKind().equals(TextMatcher.REGULAR)) {
+			kind = REGULAR;
+		} else {
+			throw new IllegalArgumentException();
+		}
+		atts.addAttribute("", "", KIND_ATTRIBUTE, "CDATA", kind);
+		atts.addAttribute("", "", FILTER_ATTRIBUTE, "CDATA", encode(matcher.getFilter()));
+		if (matcher.isCaseSensitive()) atts.addAttribute("", "", CASE_SENSITIVE_ATTRIBUTE, "CDATA", "true");
+		if (matcher.isDiacriticalSensitive()) atts.addAttribute("", "", DIACRITICAL_SENSITIVE_ATTRIBUTE, "CDATA", "true");
+		hd.startElement("","",TEXT_MATCHER_TAG, atts);
+		hd.endElement("","",TEXT_MATCHER_TAG);
+	}
+	
+	private String encode(String string) {
+		try {
+			return URLEncoder.encode(string, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	private void serialize(Account account) throws SAXException {
 		atts.clear();
@@ -354,7 +454,7 @@ public class Serializer {
 		} else {
 			throw new RuntimeException("Unsupported ValueDateComputer class : "+dateStepper.getClass().getName());
 		}
-		atts.addAttribute("", "", DATE_STEPPER_KIND_ATTRIBUTE, "CDATA", kind);
+		atts.addAttribute("", "", KIND_ATTRIBUTE, "CDATA", kind);
 	}
 
 	private void serialize(Category category) throws SAXException {
@@ -425,7 +525,7 @@ public class Serializer {
 		if (stepper instanceof MonthDateStepper) {
 			MonthDateStepper mds = (MonthDateStepper) stepper;
 			atts.clear();
-			atts.addAttribute("", "", DATE_STEPPER_KIND_ATTRIBUTE, "CDATA", MONTHLY_DATE_STEPPER_KIND);
+			atts.addAttribute("", "", KIND_ATTRIBUTE, "CDATA", MONTHLY_DATE_STEPPER_KIND);
 			atts.addAttribute("", "", PERIOD_ATTRIBUTE, "CDATA", Integer.toString(mds.getPeriod()));
 			atts.addAttribute("", "", DAY_ATTRIBUTE, "CDATA", Integer.toString(mds.getDay()));
 			Date last = mds.getLastDate();
@@ -434,7 +534,7 @@ public class Serializer {
 			hd.endElement("","",DATE_STEPPER_TAG);
 		} else if (stepper instanceof DayDateStepper) {
 			DayDateStepper dds = (DayDateStepper) stepper;
-			atts.addAttribute("", "", DATE_STEPPER_KIND_ATTRIBUTE, "CDATA", RELATIVE_DATE_STEPPER_KIND);
+			atts.addAttribute("", "", KIND_ATTRIBUTE, "CDATA", RELATIVE_DATE_STEPPER_KIND);
 			atts.addAttribute("", "", PERIOD_ATTRIBUTE, "CDATA", Integer.toString(dds.getStep()));
 			Date last = dds.getLastDate();
 			if (last!=null) atts.addAttribute("", "", LAST_DATE_ATTRIBUTE, "CDATA", toString(last));

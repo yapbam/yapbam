@@ -75,7 +75,7 @@ class GlobalDataHandler extends DefaultHandler {
 			this.tempData.push (new Checkbook(prefix, first, size, next));
 		} else if (qName.equals(Serializer.EXPENSE_VDC_TAG) || qName.equals(Serializer.RECEIPT_VDC_TAG)) {
 			DateStepper vdc;
-			String kind = attributes.getValue(Serializer.DATE_STEPPER_KIND_ATTRIBUTE);
+			String kind = attributes.getValue(Serializer.KIND_ATTRIBUTE);
 			if ((kind == null) || kind.equals(Serializer.IMMEDIATE_DATE_STEPPER_KIND)) {
 				vdc = DateStepper.IMMEDIATE;
 			} else if (kind.equals(Serializer.RELATIVE_DATE_STEPPER_KIND)) {
@@ -110,7 +110,7 @@ class GlobalDataHandler extends DefaultHandler {
 			this.tempData.push(null); //To store the date stepper
 			this.tempData.push(new ArrayList<SubTransaction>());
 		} else if (qName.equals(Serializer.DATE_STEPPER_TAG)) {
-			String kind = attributes.getValue(Serializer.DATE_STEPPER_KIND_ATTRIBUTE);
+			String kind = attributes.getValue(Serializer.KIND_ATTRIBUTE);
 			DateStepper stepper;
 			if (kind.equals(Serializer.MONTHLY_DATE_STEPPER_KIND)) {
 				int period = Integer.parseInt(attributes.getValue(Serializer.PERIOD_ATTRIBUTE));

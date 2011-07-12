@@ -279,7 +279,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 		return this.transactions.size();
 	}
 
-	/** Gets a transactions that match the filter.
+	/** Gets a transaction that matches the filter.
 	 * @param index the index of the transaction (between 0 and getTransactionsNumber())
 	 * @return the transaction.
 	 */

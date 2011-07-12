@@ -30,7 +30,6 @@ import net.yapbam.update.VersionManager;
 import net.yapbam.util.NullUtils;
 
 public class MainFrame extends JFrame implements DataListener {
-	private static final String LAST_VERSION_USED = "lastVersionUsed"; //$NON-NLS-1$
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
 	private static final long serialVersionUID = 1L;
@@ -39,6 +38,8 @@ public class MainFrame extends JFrame implements DataListener {
 	private static final String FRAME_SIZE_HEIGHT = "frame.size.height"; //$NON-NLS-1$
 	private static final String FRAME_LOCATION_Y = "frame.location.y"; //$NON-NLS-1$
 	private static final String FRAME_LOCATION_X = "frame.location.x"; //$NON-NLS-1$
+	private static final String LAST_VERSION_USED = "lastVersionUsed"; //$NON-NLS-1$
+	private static final String LAST_FILTER_USED = "filter"; //$NON-NLS-1$
 
 	private GlobalData data;
 	private FilteredData filteredData;
@@ -376,6 +377,7 @@ public class MainFrame extends JFrame implements DataListener {
 		}
 		getStateSaver().saveState(mainPane, this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
+		getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
