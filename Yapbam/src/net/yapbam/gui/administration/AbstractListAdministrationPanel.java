@@ -11,6 +11,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.util.JTableListener;
@@ -19,8 +21,8 @@ import java.awt.Insets;
 import java.util.ArrayList;
 
 /** This panel is an abstract panel containing a table and "create", "delete", "duplicate", "edit" buttons.
- *  The "edit" and "duplicates" button can be ommited.
- *  If there's an edit button, its action is called when a double-clic occurs on the table.
+ *  The "edit" and "duplicates" button can be omitted.
+ *  If there's an edit button, its action is called when a double-click occurs on the table.
  */
 public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -72,6 +74,24 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		if (duplicateButtonAction!=null) actions.add(duplicateButtonAction);
 		if (deleteButtonAction!=null) actions.add(deleteButtonAction);
 		new JTableListener(jTable, actions.toArray(new Action[actions.size()]), editButtonAction);
+		jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				refreshActions();
+			}
+		});
+		refreshActions();
+	}
+
+	/** Refreshes the enabled/disabled state of actions when the selected line changes.
+	 * <br>By default, edit, duplicate and delete actions are enabled only if a line is selected.
+	 * Override this method to change this behavior. 
+	 */
+	protected void refreshActions() {
+		boolean ok = getJTable().getSelectedRow()>=0;
+		if (editButtonAction!=null) editButtonAction.setEnabled(ok);
+		if (duplicateButtonAction!=null) duplicateButtonAction.setEnabled(ok);
+		if (deleteButtonAction!=null) deleteButtonAction.setEnabled(ok);
 	}
 
 	/**

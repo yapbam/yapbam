@@ -314,7 +314,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 
 	/** Gets the transaction selector for this plugin.
 	 * <br>By default, this method returns null, which means that the plugin is not able to select a transaction.
-	 * Plugins that allows transaction selection may overrdide this method.
+	 * Plugins that allows transaction selection may override this method.
 	 * @return the transaction selector for this plugin.
 	 * @see TransactionSelector
 	 */

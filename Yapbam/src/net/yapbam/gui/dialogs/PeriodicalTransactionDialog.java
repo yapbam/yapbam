@@ -100,7 +100,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 	@Override
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause(); 
-		if ((disabledCause!=null) || !generationPanel.isActivated()) return disabledCause;
+		if ((disabledCause!=null) || (generationPanel==null) || !generationPanel.isActivated()) return disabledCause;
 		if (generationPanel.getNextDate()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
 		if (generationPanel.getDateStepper()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper"); //$NON-NLS-1$
 		return null;
