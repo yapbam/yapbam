@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Notes de mise à jour</title>
 
 <style type="text/css">
@@ -15,62 +14,138 @@ color: #AA0000;
 color: #ff9900;
 }
 -->
-</style></head>
+</style>
+</head>
 <body>
 <h1>Version 0.8.7 (??/07/2011)</h1>
 <h2>Nouveautés de cette version</h2>
-<ul><li>Le dialogue "Filtre personnalisé" est moins haut. Il est à présent compatible avec les écran de 768px de haut.</li><li><span class="bugFix">Corrections de bugs</span> dans les dialogues :</li><ul><li>Le bouton "Annuler" des dialogues de saisie des catégories et des comptes validait la saisie !</li><li>Dans
+<ul>
+<li>Le dialogue "Filtre personnalisé" est moins haut. Il est à
+présent compatible avec les écran de 768px de haut.</li>
+<li><span class="bugFix">Corrections de bugs</span>
+dans les dialogues :</li>
+<ul>
+<li>Le bouton "Annuler" des dialogues de saisie des
+catégories et des comptes validait la saisie !</li>
+<li>Dans
 certains dialogues, on pouvait entrer une valeur incorrecte et valider
 en cliquant très rapidement le bouton valider après avoir saisie la
-valeur incorrecte.</li></ul>
+valeur incorrecte.</li>
 </ul>
-
-<ul></ul>
+<li><span class="bugFix">Correction d'un bug</span> dans
+l'onglet d'administration. Les boutons "Editer" "Dupliquer" et
+"Supprimer" n'étaient pas grisés lorsqu'aucune information n'était
+sélectionnée. Parfois cela pouvait entrainer des plantages.</li>
+</ul>
+<ul>
+</ul>
 <hr>
 <h1>Versions précédentes</h1>
-<h2>Version 0.8.6 (05/06/2011)</h2><ul><li><span class="bugFix">Correction d'un bug</span> : Déplacer un onglet hors de la zone des onglets provoquait une erreur.</li></ul><h2>Version 0.8.5 (31/05/2011)</h2><ul><li><span class="bugFix">Correction d'un bug</span> dans
+<h2>Version 0.8.6 (05/06/2011)</h2>
+<ul>
+<li><span class="bugFix">Correction d'un bug</span>
+: Déplacer un onglet hors de la zone des onglets provoquait une erreur.</li>
+</ul>
+<h2>Version 0.8.5 (31/05/2011)</h2>
+<ul>
+<li><span class="bugFix">Correction d'un bug</span>
+dans
 l'assistant de saisie qui pouvait planter lorsqu'un filtre était activé
 et que la description choisie ne figurait pas dans les opérations
-filtrées.</li></ul><h2>Version 0.8.4 (30/05/2011)</h2><ul><li>L'ordre des onglets peut à présent être modifié.</li><li>Ajout de raccourcis clavier pour éditer ou dupliquer une opération.</li><li>Ajout d'un menu pour pointer une opération.</li><li>Réduit
+filtrées.</li>
+</ul>
+<h2>Version 0.8.4 (30/05/2011)</h2>
+<ul>
+<li>L'ordre des onglets peut à présent être modifié.</li>
+<li>Ajout de raccourcis clavier pour éditer ou dupliquer une
+opération.</li>
+<li>Ajout d'un menu pour pointer une opération.</li>
+<li>Réduit
 les menus contextuels dans l'onglet "Statistiques" aux items utiles
 (par exemple : plus de "Enregistrer sous". Il créait un fichier
-illisible).</li><li><span class="bugFix">Correction d'un bug</span>&nbsp;: Si le
+illisible).</li>
+<li><span class="bugFix">Correction d'un bug</span>&nbsp;:
+Si le
 fichier ouvert à l'ouverture de Yapbam présentait une alerte sur le
 solde, celle-ci n'était pas immédiatement affichée dans l'onglet
-"Historique du solde".</li><li><span class="bugFix">Correction d'un bug</span>
+"Historique du solde".</li>
+<li><span class="bugFix">Correction d'un bug</span>
 : Sélectionner une opération dans les onglets "Relevés de compte" ou
 "Historique du solde" laissait les menus Effacer/Modifier/Dupliquer
-grisés.</li><li><span class="bugFix">Correction</span> de problèmes de localisation (des libellés qui n'apparaissaient pas dans la bonne langue).</li></ul><h2>Version 0.8.3 (08/05/2011)</h2><ul><li>Ajoute un onglet de résumé des bilans de l'ensemble des comptes.</li><li>Ajoute
+grisés.</li>
+<li><span class="bugFix">Correction</span>
+de problèmes de localisation (des libellés qui n'apparaissaient pas
+dans la bonne langue).</li>
+</ul>
+<h2>Version 0.8.3 (08/05/2011)</h2>
+<ul>
+<li>Ajoute un onglet de résumé des bilans de l'ensemble des
+comptes.</li>
+<li>Ajoute
 une table des opération dans l'onglet "Historique du solde". Cette
-table récapitule les opérations triées suivant leur date de valeur et le
-solde restant après chacune d'elle.</li><li>Lorsqu'un
+table récapitule les opérations triées suivant leur date de valeur et
+le
+solde restant après chacune d'elle.</li>
+<li>Lorsqu'un
 intervalle de dates de valeur est sélectionné dans le filtre, le
-graphique d'évolution du solde débute et termine aux dates de valeur spécifiées dans le filtre.</li><li>Le
+graphique d'évolution du solde débute et termine aux dates de valeur
+spécifiées dans le filtre.</li>
+<li>Le
 mode pointage est déplacé dans la vue "Relevés de comptes". Cette vue
 s'enrichit des colonnes "catégorie" et "Mode", d'un menu permettant
 d'afficher/masquer les colonnes, et de la possibilité de trier la vue
-suivant la colonne de son choix.</li><li>Ajout d'un message de confirmation lorsque l'on exporte la vue budgétaire vers un fichier déjà existant.</li><li>Ajout
+suivant la colonne de son choix.</li>
+<li>Ajout d'un message de confirmation lorsque l'on exporte la
+vue budgétaire vers un fichier déjà existant.</li>
+<li>Ajout
 d'options d'édition (dans le menu "Préférences") permettant la saisie
 automatique du relevé, d'être alerté (ou pas) lors de la
 modification d'une opération pointée, ou lors de l'effacement d'une
-opération, etc...</li><li><span class="bugFix">Correction de bugs </span>dans
-la vue "Relevés de compte" :</li><ul><li>Lors de la modification ou de la création
-d'une opération, le relevé sélectionné pouvait être modifié.</li><li>Lorsque
+opération, etc...</li>
+<li><span class="bugFix">Correction de bugs </span>dans
+la vue "Relevés de compte" :</li>
+<ul>
+<li>Lors de la modification ou de la création
+d'une opération, le relevé sélectionné pouvait être modifié.</li>
+<li>Lorsque
 que le filtrage des opérations était activé, et qu'on changeait le
-relevé de compte, les opérations affichées tenaient compte du filtre.</li></ul><li><span class="bugFix">Correction d'un bug majeur</span> dans la protection par mot de passe : Le mot de passe était supprimé lorsque le fichier était sauvé à nouveau.</li><li><span class="bugFix">Correction d'un bug</span> : L'aide ne fonctionnait pas sous Linux.</li><li><span class="bugFix">Correction d'un bug</span> : Le menu contextuel sur les graphiques de l'onglet "Statistiques" provoquait une erreur.</li></ul><h2>Version 0.8.2 (10/04/2011)</h2><ul><li>Lorsque vous créez une
+relevé de compte, les opérations affichées tenaient compte du filtre.</li>
+</ul>
+<li><span class="bugFix">Correction d'un bug majeur</span>
+dans la protection par mot de passe : Le mot de passe était supprimé
+lorsque le fichier était sauvé à nouveau.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: L'aide ne fonctionnait pas sous Linux.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: Le menu contextuel sur les graphiques de l'onglet "Statistiques"
+provoquait une erreur.</li>
+</ul>
+<h2>Version 0.8.2 (10/04/2011)</h2>
+<ul>
+<li>Lorsque vous créez une
 nouvelle opération (ou opération périodique), et que le filtre
 n'autorise qu'un seul compte, celui-ci est maintenant automatiquement
-sélectionné dans le dialogue de création de l'opération.</li><li>D'une
+sélectionné dans le dialogue de création de l'opération.</li>
+<li>D'une
 exécution à l'autre, les colonnes cachées de la table des opérations
 sont mémorisées. Les colonnes sont à présent listée dans le menu
 "Afficher les colonnes ..." dans le même ordre que dans la table des
-opérations.</li><li>D'une
+opérations.</li>
+<li>D'une
 exécution à l'autre, les tailles et positions des colonnes de l'onglet
 "gestion des comptes" sont sauvegardées. De même pour les tableaux
 intervenant dans les dialogues (dans le dialogue d'édition d'une
 opération, par exemple),&nbsp;les réglages des impressions (format
-de papier, marges, etc ...), et les réglages de l'import/export.</li><li>Amélioration de l'assistant de saisie, et extension de celui-ci aux libellés de sous-opérations.</li><li>Ajoute l'impression basique des relevés de compte.</li><li><span class="bugFix">Correction d'un bug </span>: Un champ de montant vide dans un
-fichier importé pouvait empêcher l'import de tout le fichier.</li></ul><h2>Version 0.8.1 (05/03/2011)</h2><ul>
+de papier, marges, etc ...), et les réglages de l'import/export.</li>
+<li>Amélioration de l'assistant de saisie, et extension de
+celui-ci aux libellés de sous-opérations.</li>
+<li>Ajoute l'impression basique des relevés de compte.</li>
+<li><span class="bugFix">Correction d'un bug </span>:
+Un champ de montant vide dans un
+fichier importé pouvait empêcher l'import de tout le fichier.</li>
+</ul>
+<h2>Version 0.8.1 (05/03/2011)</h2>
+<ul>
 <li><span class="bugFix">Correction d'un bug </span>:
 Le changement de pays/langue ne changeait pas certains format de date.</li>
 <li><span class="bugFix">Correction d'un bug </span>:

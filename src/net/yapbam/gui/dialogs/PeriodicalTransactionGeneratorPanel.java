@@ -157,6 +157,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			YapbamState.INSTANCE.restoreState(jTable, STATE_PROPERTIES_PREFIX);
+			//TODO It would be better to have a popup indicating that the transactions listed can be edited
 			new JTableListener(jTable, null, new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
