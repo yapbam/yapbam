@@ -102,7 +102,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	 * @return a double, positive if the transaction is a receipt, negative if not.
 	 */
 	protected double getAmount() {
-		double amount = Math.abs(this.amount.getValue());
+		double amount = this.amount.getValue()!=null?Math.abs(this.amount.getValue()):0.0;
 		// Beware of null value, a null expense should be considered as a receipt,
 		// because expenses and receipts have not the same modes available.
 		// We will transform null value into very, very, very small non null values.
