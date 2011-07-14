@@ -196,9 +196,4 @@ class GlobalDataHandler extends DefaultHandler {
 		this.data.clear();
 		super.startDocument();
 	}
-
-	@Override
-	public void endDocument() throws SAXException {
-		super.endDocument();
-	}
 }
