@@ -377,7 +377,7 @@ public class MainFrame extends JFrame implements DataListener {
 		}
 		getStateSaver().saveState(mainPane, this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
-		getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
+//0.9.0		getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {

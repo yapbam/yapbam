@@ -176,8 +176,6 @@ public class FilteredData extends DefaultListenable implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		System.out.println ("the filter has changed");
 		this.filter();
 	}
 	
