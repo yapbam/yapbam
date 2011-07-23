@@ -173,8 +173,10 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 					((GlobalData)data).setName(account, (String)value);
 				}
 			} else if (col==1) { // Initial Balance
-				double val = (Double)value;
-				((GlobalData)data).setInitialBalance(account, val);
+				if (value!=null) {
+					double val = (Double)value;
+					((GlobalData)data).setInitialBalance(account, val);
+				}
 			} else if (col==2) { // Alert less threshold
 				AlertThreshold old = account.getAlertThreshold();
 				Double threshold = (Double) (value==null?Double.NEGATIVE_INFINITY:value);

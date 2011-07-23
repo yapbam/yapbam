@@ -47,6 +47,7 @@ public class TextMatcher {
 	 */
 	public TextMatcher(Kind kind, String filter, boolean caseSensitive, boolean diacriticalSensitive) {
 		super();
+		if (kind==null) throw new IllegalArgumentException();
 		this.kind = kind;
 		this.filter = filter;
 		this.caseSensitive = caseSensitive;

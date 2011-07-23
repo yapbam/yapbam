@@ -82,4 +82,8 @@ public class NatureFilterPanel extends ConsistencyCheckedPanel {
 		getReceipts().setSelected(receipts);
 		getExpenses().setSelected(expenses);
 	}
+	
+	public void clear() {
+		this.setSelected(true, true);
+	}
 }

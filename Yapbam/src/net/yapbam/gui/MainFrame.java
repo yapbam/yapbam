@@ -428,6 +428,8 @@ public class MainFrame extends JFrame implements DataListener {
 		if (uri!=null) {
 			try {
 				readData(uri);
+				Filter filter = getStateSaver().restore(LAST_FILTER_USED, getData());
+				if (filter!=null) this.getFilteredData().setFilter(filter);
 			} catch (IOException e) {
 				ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
 			}

@@ -602,6 +602,7 @@ public class CustomFilterPanel extends JPanel {
 					selectAll(getModes());
 					selectAll(getCategoryList());
 					getDescriptionPanel().clear();
+					getReceipts_expensesPanel().clear();
 					getAmountPanel().clear();
 					getDatePanel().clear();
 					getNumberPanel().clear();

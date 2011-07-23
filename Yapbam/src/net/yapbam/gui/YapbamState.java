@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -22,12 +23,15 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import net.yapbam.data.Filter;
+import net.yapbam.data.GlobalData;
+import net.yapbam.data.xml.FilterHandler;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.TabbedPane;
@@ -238,9 +242,31 @@ public class YapbamState {
 			}
 			serializer.closeDocument();
 			stream.flush();
-			properties.put(key, new String(/*Base64.encode(*/stream.toByteArray())); //TODO
+			String xmlContent = new String(/*Base64.encode(*/stream.toByteArray());
+			properties.put(key, xmlContent); //TODO
 		} catch (IOException e) {
 				throw new RuntimeException(e);
 		}
+	}
+
+	public Filter restore(String key, GlobalData data) {
+		String property = properties.getProperty(key);
+		if (property!=null) {
+			try {
+				//TODO Encodage base 64
+				ByteArrayInputStream stream = new ByteArrayInputStream(property.getBytes("UTF-8"));
+				//TODO Décodage du password
+				try {
+					FilterHandler handler = new FilterHandler(data);
+					SAXParserFactory.newInstance().newSAXParser().parse(stream, handler);
+					return handler.getFilter();
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			} catch (UnsupportedEncodingException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return null;
 	}
 }
