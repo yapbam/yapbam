@@ -164,7 +164,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	}
 	
 	public void setFilter(Filter filter) {
-		if (filter!=this.filter) {
+		if (!filter.equals(this.filter)) {
 			// if the instance as really changed
 			// Stop looking for changes on the old instance
 			this.filter.deleteObserver(this);

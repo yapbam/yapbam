@@ -3,6 +3,7 @@ package net.yapbam.data.xml;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.AccessControlException;
 import java.util.Date;
@@ -15,6 +16,7 @@ import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.Preferences;
+import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.FileUtils;
 import net.yapbam.util.TextMatcher;
@@ -101,9 +103,9 @@ public class Serializer {
 	static final String FILTER_DATE_FROM_ATTRIBUTE = "dateFrom";
 	static final String FILTER_DATE_TO_ATTRIBUTE = "dateTo";
 	static final String FILTER_VALUE_DATE_FROM_ATTRIBUTE = "valueDateFrom";
-	static final String FILTER__VALUE_DATE_TO_ATTRIBUTE = "valueDateTo";
+	static final String FILTER_VALUE_DATE_TO_ATTRIBUTE = "valueDateTo";
 	static final String FILTER_AMOUNT_FROM_ATTRIBUTE = "amountFrom";
-	static final String FILTER_VALUE_AMOUNT_TO_ATTRIBUTE = "amountTo";
+	static final String FILTER_AMOUNT_TO_ATTRIBUTE = "amountTo";
 	static final String FILTER_ATTRIBUTE = "filter";
 	static final String FILTER_DESCRIPTION_ID = DESCRIPTION_ATTRIBUTE;
 	static final String FILTER_NUMBER_ID = NUMBER_ATTRIBUTE;
@@ -314,44 +316,40 @@ public class Serializer {
 		atts.clear();
 		if (filter.getDateFrom()!=null) atts.addAttribute("","",FILTER_DATE_FROM_ATTRIBUTE,"CDATA",toString(filter.getDateFrom()));
 		if (filter.getDateTo()!=null) atts.addAttribute("","",FILTER_DATE_TO_ATTRIBUTE,"CDATA",toString(filter.getDateTo()));
-		if (filter.getValueDateTo()!=null) atts.addAttribute("","",FILTER__VALUE_DATE_TO_ATTRIBUTE,"CDATA",toString(filter.getValueDateTo()));
+		if (filter.getValueDateTo()!=null) atts.addAttribute("","",FILTER_VALUE_DATE_TO_ATTRIBUTE,"CDATA",toString(filter.getValueDateTo()));
 		if (filter.getValueDateFrom()!=null) atts.addAttribute("","",FILTER_VALUE_DATE_FROM_ATTRIBUTE,"CDATA",toString(filter.getValueDateFrom()));
 		if (filter.getMinAmount()!=0.0) atts.addAttribute("","",FILTER_AMOUNT_FROM_ATTRIBUTE,"CDATA",Double.toString(filter.getMinAmount()));
-		if (filter.getMaxAmount()!=Double.POSITIVE_INFINITY) atts.addAttribute("","",FILTER_VALUE_AMOUNT_TO_ATTRIBUTE,"CDATA",Double.toString(filter.getMaxAmount()));
-		if (filter.getValueDateFrom()!=null) atts.addAttribute("","",FILTER_VALUE_DATE_FROM_ATTRIBUTE,"CDATA",toString(filter.getValueDateFrom()));
+		if (filter.getMaxAmount()!=Double.POSITIVE_INFINITY) atts.addAttribute("","",FILTER_AMOUNT_TO_ATTRIBUTE,"CDATA",Double.toString(filter.getMaxAmount()));
 		List<Account> accounts = filter.getValidAccounts();
-		StringBuilder builder = new StringBuilder();
 		if (accounts!=null) {
-			for (Account account:accounts) {
-				if (builder.length()!=0) builder.append(',');
-				builder.append(encode(account.getName()));
+			String[] strings = new String[accounts.size()];
+			for (int i = 0; i < strings.length; i++) {
+				strings[i] = accounts.get(i).getName();
 			}
-			atts.addAttribute("", "", ACCOUNT_ATTRIBUTE, "CDATA", builder.toString());
+			atts.addAttribute("", "", ACCOUNT_ATTRIBUTE, "CDATA", ArrayUtils.toString(strings));
 		}
 		List<Mode> modes = filter.getValidModes();
-		builder = new StringBuilder();
 		if (modes!=null) {
-			for (Mode mode:modes) {
-				if (builder.length()!=0) builder.append(',');
-				builder.append(encode(mode.getName()));
+			String[] strings = new String[modes.size()];
+			for (int i = 0; i < strings.length; i++) {
+				strings[i] = modes.get(i).equals(Mode.UNDEFINED)?"":modes.get(i).getName();
 			}
-			atts.addAttribute("", "", MODE_ATTRIBUTE, "CDATA", builder.toString());
+			atts.addAttribute("", "", MODE_ATTRIBUTE, "CDATA", ArrayUtils.toString(strings));
 		}
 		List<Category> categories = filter.getValidCategories();
-		builder = new StringBuilder();
 		if (categories!=null) {
-			for (Category category:categories) {
-				if (builder.length()!=0) builder.append(',');
-				builder.append(encode(category.getName()));
+			String[] strings = new String[modes.size()];
+			for (int i = 0; i < strings.length; i++) {
+				strings[i] = categories.get(i).equals(Category.UNDEFINED)?"":categories.get(i).getName();
 			}
-			atts.addAttribute("", "", CATEGORY_ATTRIBUTE, "CDATA", builder.toString());
+			atts.addAttribute("", "", CATEGORY_ATTRIBUTE, "CDATA", ArrayUtils.toString(strings));
 		}
 		int mask = 0;
-		if (!filter.isOk(Filter.RECEIPTS)) mask += Filter.RECEIPTS;
-		if (!filter.isOk(Filter.EXPENSES)) mask += Filter.EXPENSES;
-		if (!filter.isOk(Filter.CHECKED)) mask += Filter.CHECKED;
-		if (!filter.isOk(Filter.NOT_CHECKED)) mask += Filter.NOT_CHECKED;
-		if (mask!=0) atts.addAttribute("", "", FILTER_ATTRIBUTE, "CDATA", Integer.toString(mask));
+		if (filter.isOk(Filter.RECEIPTS)) mask += Filter.RECEIPTS;
+		if (filter.isOk(Filter.EXPENSES)) mask += Filter.EXPENSES;
+		if (filter.isOk(Filter.CHECKED)) mask += Filter.CHECKED;
+		if (filter.isOk(Filter.NOT_CHECKED)) mask += Filter.NOT_CHECKED;
+		if (mask!=(Filter.ALL)) atts.addAttribute("", "", FILTER_ATTRIBUTE, "CDATA", Integer.toString(mask));
 		hd.startElement("", "", FILTER_TAG, atts);
 		if (filter.getDescriptionMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_DESCRIPTION_ID);
 		if (filter.getNumberMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_NUMBER_ID);
@@ -380,9 +378,19 @@ public class Serializer {
 		hd.endElement("","",TEXT_MATCHER_TAG);
 	}
 	
-	private String encode(String string) {
+	public static String encode(String string) {
+		if (string==null) return string;
 		try {
 			return URLEncoder.encode(string, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static String decode(String string) {
+		if (string==null) return string;
+		try {
+			return URLDecoder.decode(string, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
@@ -553,6 +561,7 @@ public class Serializer {
 	
 	@SuppressWarnings("deprecation")
 	static Date toDate(String value) {
+		if (value==null) return null;
 		StringTokenizer tokens = new StringTokenizer(value,"/");
 		int year = Integer.parseInt(tokens.nextToken())-1900;
 		int month = Integer.parseInt(tokens.nextToken())-1;

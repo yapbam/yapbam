@@ -240,9 +240,9 @@ public class Filter extends Observable {
 
 	/** Sets the transaction minimum and maximum amounts.
 	 * <BR>Note that setting this filter never change the expense/receipt filter.
+	 * @param property An integer that codes if expenses or receipts, or both are ok.
 	 * @param minAmount The minimum amount (a positive or null double).
 	 * @param maxAmount The maximum amount (Double.POSITIVE_INFINITY to set no high limit).
-	 * @param mask An integer that codes if expenses or receipts, or both are ok.
 	 * <br>Note that only EXPENSES, RECEIPTS and EXPENSES+RECEIPTS constants are valid arguments.
 	 * Any other integer codes (for instance CHECKED) are ignored.
 	 * @throws IllegalArgumentException if minAmount > maxAmount or if minimum amount is negative
