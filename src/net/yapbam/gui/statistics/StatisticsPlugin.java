@@ -1,6 +1,5 @@
 package net.yapbam.gui.statistics;
 
-import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,12 +7,9 @@ import java.awt.Insets;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.TreeMap;
 
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.util.ResourceBundleWrapper;
@@ -93,9 +89,9 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		
 // Start implementation of lateral filter panel
 		JPanel result = new JPanel(new GridBagLayout());
-		GridBagConstraints cfv = new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
-				new Insets(0, 0, 0, 0), 0, 0);
-		result.add(new FilterView(data), cfv);
+//		GridBagConstraints cfv = new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+//				new Insets(0, 0, 0, 0), 0, 0);
+//0.9.0		result.add(new FilterView(data), cfv);
 		GridBagConstraints c = new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0);
 //	GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,

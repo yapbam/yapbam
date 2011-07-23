@@ -13,7 +13,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.8.6"/>
+	<property name="yapbamVersion" value="0.8.7"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -27,7 +27,7 @@
 	<target name="updater.build">
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
-		<javac srcdir="srcUpdater" sourcepath="src" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" />
+		<javac srcdir="srcUpdater" sourcepath="src" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<copy todir="releaseCompile">
 	    	<fileset dir="srcUpdater" excludes="**/*.java"/>
 		</copy>
@@ -54,9 +54,9 @@
 	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/editor/LocalizationBundl*.properties"/>
 	    	<fileset dir="${jcommonpath}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
 		</copy>
-		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
-		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1"/>
-		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}" debug="true"/>
+		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="src" destdir="releaseCompile" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}"  includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>
@@ -87,7 +87,7 @@
 		<delete dir="${releaseDir}"/>
 		<!-- Build the launcher jar (for non windows users) -->
 		<copy todir="releaseCompile/net/yapbam/gui/images/" file="src/net/yapbam/gui/images/splash.png"/>
-		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" />
+		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<jar destfile="${classicRelease}/App/yapbam.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.gui.Launcher"/>
