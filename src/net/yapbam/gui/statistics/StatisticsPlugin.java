@@ -89,9 +89,9 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		
 // Start implementation of lateral filter panel
 		JPanel result = new JPanel(new GridBagLayout());
-//		GridBagConstraints cfv = new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
-//				new Insets(0, 0, 0, 0), 0, 0);
-//0.9.0		result.add(new FilterView(data), cfv);
+		GridBagConstraints cfv = new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
+				new Insets(0, 0, 0, 0), 0, 0);
+		result.add(new FilterView(data), cfv);
 		GridBagConstraints c = new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0);
 //	GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
