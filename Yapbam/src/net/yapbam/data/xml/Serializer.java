@@ -361,11 +361,11 @@ public class Serializer {
 		atts.clear();
 		atts.addAttribute("", "", ID_ATTRIBUTE, "CDATA", id);
 		String kind = null;
-		if (matcher.getKind().equals(TextMatcher.CONTAINS)) {
+		if (matcher.getKind().equals(TextMatcher.Kind.CONTAINS)) {
 			kind = CONTAINS;
-		} else if (matcher.getKind().equals(TextMatcher.EQUALS)) {
+		} else if (matcher.getKind().equals(TextMatcher.Kind.EQUALS)) {
 			kind = EQUALS;
-		} else if (matcher.getKind().equals(TextMatcher.REGULAR)) {
+		} else if (matcher.getKind().equals(TextMatcher.Kind.REGULAR)) {
 			kind = REGULAR;
 		} else {
 			throw new IllegalArgumentException();

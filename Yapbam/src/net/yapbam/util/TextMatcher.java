@@ -21,14 +21,20 @@ import java.util.regex.Pattern;
  */
 public class TextMatcher {
 	/** A kind of comparison a TextMatcher can perform. */
-	public static interface Kind {}
-	
+	public enum Kind {
 	/** Kind of comparison: Does a string matches the filter (filter is interpreted as a regular expression) ? */
-	public static final Kind REGULAR = new Kind() {};
+		REGULAR,
 	/** Kind of comparison: Does a string is equal to the filter ? */
-	public static final Kind EQUALS = new Kind() {};
+		EQUALS,
 	/** Kind of comparison: Does a string contains the filter ? */
-	public static final Kind CONTAINS = new Kind() {};
+		CONTAINS
+	}
+	
+//	public static interface Kind {  }
+//	
+//	public static final Kind REGULAR = new Kind() {};
+//	public static final Kind EQUALS = new Kind() {};
+//	public static final Kind CONTAINS = new Kind() {};
 
 	private Kind kind;
 	private String filter;
@@ -56,13 +62,13 @@ public class TextMatcher {
 		if (!diacriticalSensitive) {
 			filter = removeDiacriticals(filter);
 		}
-		if (kind==REGULAR) {
+		if (kind==Kind.REGULAR) {
 			if (caseSensitive) {
 				internalFilter = Pattern.compile(filter);
 			} else {
 				internalFilter = Pattern.compile(filter, Pattern.UNICODE_CASE+Pattern.CASE_INSENSITIVE);
 			}
-		} else if ((kind==EQUALS) || ((kind==CONTAINS) && caseSensitive)) {
+		} else if ((kind==Kind.EQUALS) || ((kind==Kind.CONTAINS) && caseSensitive)) {
 			internalFilter = filter;
 		} else {
 			internalFilter = filter.toUpperCase();
@@ -115,11 +121,11 @@ public class TextMatcher {
 	public boolean matches(String text) {
 		if (text==null) return false;
 		if (!diacriticalSensitive) text = removeDiacriticals(text);
-		if (kind==REGULAR) {
+		if (kind==Kind.REGULAR) {
 			return ((Pattern)internalFilter).matcher(text).matches();
-		} else if (kind==EQUALS) {
+		} else if (kind==Kind.EQUALS) {
 			return caseSensitive?text.equals(internalFilter):text.equalsIgnoreCase((String) internalFilter);
-		} else if (kind==CONTAINS) {
+		} else if (kind==Kind.CONTAINS) {
 			if (caseSensitive) {
 				return text.contains((CharSequence) internalFilter);
 			} else {
