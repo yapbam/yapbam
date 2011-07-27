@@ -228,7 +228,7 @@ public class PopupTextFieldList extends JTextField {
 
 	private void fillModel(String text) {
 		int maxProbaSorted = groupLimitIndexes.length==0?0:this.groupLimitIndexes[0];
-		TextMatcher matcher = new TextMatcher(TextMatcher.CONTAINS, text, false, false); //TODO Must match "starts with" ... to be implemented in TextMatcher
+		TextMatcher matcher = new TextMatcher(TextMatcher.Kind.CONTAINS, text, false, false); //TODO Must match "starts with" ... to be implemented in TextMatcher
 		ArrayList<String> okProbaSort = new ArrayList<String>();
 		TreeSet<String> okAlphabeticSort = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		for (String value : this.proposals) {

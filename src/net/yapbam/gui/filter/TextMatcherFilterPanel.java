@@ -86,11 +86,11 @@ public class TextMatcherFilterPanel extends JPanel {
 		} else {
 			TextMatcher.Kind kind = null;
 			if (getDescriptionEqualsTo().isSelected()) {
-				kind = TextMatcher.EQUALS;
+				kind = TextMatcher.Kind.EQUALS;
 			} else if (getDescriptionContains().isSelected()) {
-				kind = TextMatcher.CONTAINS;
+				kind = TextMatcher.Kind.CONTAINS;
 			} else if (getDescriptionRegular().isSelected()) {
-				kind = TextMatcher.REGULAR;
+				kind = TextMatcher.Kind.REGULAR;
 			}
 			return new TextMatcher(kind, text, !getIgnoreCase().isSelected(), !getIgnoreDiacritics().isSelected());
 		}
@@ -102,9 +102,9 @@ public class TextMatcherFilterPanel extends JPanel {
 	}
 
 	public void setTextMatcher(TextMatcher tMatcher) {
-		if ((tMatcher==null) || (tMatcher.getKind()==TextMatcher.CONTAINS)) {
+		if ((tMatcher==null) || (tMatcher.getKind()==TextMatcher.Kind.CONTAINS)) {
 			getDescriptionContains().setSelected(true);
-		} else if (tMatcher.getKind()==TextMatcher.EQUALS) {
+		} else if (tMatcher.getKind()==TextMatcher.Kind.EQUALS) {
 			getDescriptionEqualsTo().setSelected(true);
 		} else {
 			getDescriptionRegular().setSelected(true);

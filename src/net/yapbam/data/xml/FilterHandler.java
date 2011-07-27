@@ -56,11 +56,11 @@ public class FilterHandler extends DefaultHandler {
 			String kindString = attributes.getValue(Serializer.KIND_ATTRIBUTE);
 			Kind kind = null;
 			if (kindString.equals(Serializer.CONTAINS)) {
-				kind = TextMatcher.CONTAINS;
+				kind = TextMatcher.Kind.CONTAINS;
 			} else if (kindString.equals(Serializer.EQUALS)) {
-				kind = TextMatcher.EQUALS;
+				kind = TextMatcher.Kind.EQUALS;
 			} else if (kindString.equals(Serializer.REGULAR)) {
-				kind = TextMatcher.REGULAR;
+				kind = TextMatcher.Kind.REGULAR;
 			}
 			String filter = Serializer.decode(attributes.getValue(Serializer.FILTER_ATTRIBUTE));
 			String bString = attributes.getValue(Serializer.CASE_SENSITIVE_ATTRIBUTE);
