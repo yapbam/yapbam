@@ -2,6 +2,9 @@ package net.yapbam.data.xml;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import net.yapbam.data.*;
 import net.yapbam.util.ArrayUtils;
@@ -41,15 +44,39 @@ public class FilterHandler extends DefaultHandler {
 			String filterString = attributes.getValue(Serializer.FILTER_ATTRIBUTE);
 			property = filterString==null?Filter.ALL:Integer.parseInt(filterString);
 			filter.setAmountFilter(property, amountFrom==null?0.0:Double.parseDouble(amountFrom), amountFrom==null?Double.POSITIVE_INFINITY:Double.parseDouble(amountTo));
-			String accountsString = attributes.getValue(Serializer.ACCOUNT_ATTRIBUTE);
-			if (accountsString!= null) {
-				String[] names = ArrayUtils.parseStringArray(accountsString);
-				ArrayList<Account> accounts = new ArrayList<Account>();
-				for (String name: names) {
-					Account account = data.getAccount(name);
-					if (account != null) accounts.add(account);
+			{
+				String accountsString = attributes.getValue(Serializer.ACCOUNT_ATTRIBUTE);
+				if (accountsString!= null) {
+					String[] names = ArrayUtils.parseStringArray(accountsString);
+					ArrayList<Account> accounts = new ArrayList<Account>();
+					for (String name: names) {
+						Account account = data.getAccount(name);
+						if (account != null) accounts.add(account);
+					}
+					if ((accounts.size()!=0) && (accounts.size()!=data.getAccountsNumber())) filter.setValidAccounts(accounts);
 				}
-				if ((accounts.size()!=0) && (accounts.size()!=data.getAccountsNumber())) filter.setValidAccounts(accounts);
+			} {
+				String categoriesString = attributes.getValue(Serializer.CATEGORY_ATTRIBUTE);
+				if (categoriesString!= null) {
+					String[] names = ArrayUtils.parseStringArray(categoriesString);
+					ArrayList<Category> categories = new ArrayList<Category>();
+					for (String name: names) {
+						Category category = name.isEmpty()?Category.UNDEFINED:data.getCategory(name);
+						if (category != null) categories.add(category);
+					}
+					if ((categories.size()!=0) && (categories.size()!=data.getCategoriesNumber())) filter.setValidCategories(categories);
+				}
+			} {
+				String modesString = attributes.getValue(Serializer.MODE_ATTRIBUTE);
+				if (modesString!= null) {
+					String[] names = ArrayUtils.parseStringArray(modesString);
+					Set<String> dataNames = getAllValidAccountsModeNames();
+					ArrayList<String> modes = new ArrayList<String>();
+					for (String name: names) {
+						if (dataNames.contains(name)) modes.add(name);
+					}
+//					if ((modes.size()!=0) && (modes.size()!=dataNames.size())) filter.setValidModes(modes); //TODO
+				}
 			}
 		} else if (qName.equals(Serializer.TEXT_MATCHER_TAG)) {
 			String id = attributes.getValue(Serializer.ID_ATTRIBUTE);
@@ -78,6 +105,24 @@ public class FilterHandler extends DefaultHandler {
 		} else {
 			throw new IllegalArgumentException ("Unknown tag "+qName);
 		}
+	}
+	
+	private Set<String> getAllValidAccountsModeNames() {
+		HashSet<String> result = new HashSet<String>();
+		List<Account> accounts = filter.getValidAccounts();
+		if (accounts==null) {
+			accounts = new ArrayList<Account>(data.getAccountsNumber());
+			for (int i = 0; i < data.getAccountsNumber(); i++) {
+				accounts.add(data.getAccount(i));
+			}
+		}
+		for (Account account:accounts) {
+			for (int i = 0; i < account.getModesNumber(); i++) {
+				Mode mode = account.getMode(i);
+				result.add(mode.equals(Mode.UNDEFINED)?"":mode.getName());
+			}
+		}
+		return result;
 	}
 
 	@Override

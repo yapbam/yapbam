@@ -355,11 +355,10 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			return x.hashCode();
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public boolean equals(Object obj) {
-			if (this.receipt != ((XAndType)obj).receipt) return false;
-			return this.x.equals(((XAndType)obj).x);
+			if (this.receipt != ((XAndType<?>)obj).receipt) return false;
+			return this.x.equals(((XAndType<?>)obj).x);
 		}
 	}
 	

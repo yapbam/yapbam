@@ -1,15 +1,11 @@
 package net.yapbam.date;
 
-import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 import java.awt.Color;
-import java.awt.GridBagConstraints;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import org.jfree.ui.DateChooserPanel;
 
