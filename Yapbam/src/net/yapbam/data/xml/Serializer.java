@@ -338,7 +338,7 @@ public class Serializer {
 		}
 		List<Category> categories = filter.getValidCategories();
 		if (categories!=null) {
-			String[] strings = new String[modes.size()];
+			String[] strings = new String[categories.size()];
 			for (int i = 0; i < strings.length; i++) {
 				strings[i] = categories.get(i).equals(Category.UNDEFINED)?"":categories.get(i).getName();
 			}
