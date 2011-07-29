@@ -58,7 +58,6 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 		this.panel.changeDisplayed();
 	}
 
-
 	@Override
 	public JPanel getPanel() {
 		return panel;

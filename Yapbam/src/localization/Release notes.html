@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Release notes</title>
 
 <style type="text/css">
@@ -13,22 +14,27 @@ color: #aa0000;
 .develop {
 color: #ff9900;
 }
-</style></head>
-<body>
-<h1>Version 0.8.7 (07/23/2011)</h1>
-<h2>New in this version</h2><ul><li>The "customized filter" dialog is smaller and now compatible will 768px height screens.</li><li><span class="bugFix">Fixes&nbsp;bugs</span> in some dialogs:</li><ul><li>The cancel button in the category dialog and the account dialog confirmed the dialog (same action as ok !).</li><li>In
+</style></head><body>
+<h1>Version 0.8.8 (08/??/2011)</h1>
+<h2>New in this version</h2><ul><li><span class="bugFix">Fixes a bug</span>
+in the transactions table of the balance history tab; When a
+transaction was edited, the table was refreshed, but not with the right data.</li></ul>
+<ul></ul>
+
+<ul></ul>
+<hr>
+<h1>Older releases</h1>
+<h2>Version 0.8.7 (07/23/2011)</h2>
+<ul>
+<li>The "customized filter" dialog is smaller and now compatible will 768px height screens.</li><li><span class="bugFix">Fixes&nbsp;bugs</span> in some dialogs:</li><ul><li>The cancel button in the category dialog and the account dialog confirmed the dialog (same action as ok !).</li><li>In
 some dialogs, typing a wrong value didn't prevent you from validate the
 dialog if you clicked very, very, very quickly the ok button.</li></ul><li><span class="bugFix">Fixes&nbsp;bugs</span>
 in the administration tab:</li><ul><li>"Delete", "Duplicate" and "Edit" buttons
 were not greyed out when no data was selected. Sometimes it could cause
 crashes.</li><li>Deleting the content of the "initial balance" cell of an account in the accounts table caused a crash.</li></ul><li><span class="bugFix">Fixes a bug</span> in transaction dialog, checking the receipt box when amount field was empty caused a crash.</li><li><span class="bugFix">Fixes a bug</span>
 in the "customized filters" dialog: The "Clear all filters" button didn't erase the
-filter based on the receipt/expense nature of the transaction.</li></ul>
-<ul></ul>
-
-<ul></ul>
-<hr>
-<h1>Older releases</h1>
+filter based on the receipt/expense nature of the transaction.</li>
+</ul>
 <h2>Version 0.8.6 (06/05/2011)</h2><ul><li><span class="bugFix">Fixes a bug</span>: When a tab was dragged and dropped outside of the tabs area, an error occured.</li></ul><h2>Version 0.8.5 (05/31/2011)</h2><ul><li><span class="bugFix">Fixes a bug</span> in the entry wizard. It could hang when the description was not in the filtered transactions.</li></ul><h2>Version 0.8.4 (05/30/2011)</h2><ul><li>Tabs order can now be changed.</li><li>Adds menu accelerator for editing or duplicating.</li><li> Adds menu item for checking a transaction.</li><li>Reduces popup menus in the "Statistics" tab to useful items (for example: no more "save". It wrote an unreadable file).</li><li><span class="bugFix">Fixes a bug</span>: Selecting a transaction in the statement tab or in the balance history tab didn't enabled delete/edit/duplicate menu items.</li><li><span class="bugFix">Fixes a bug</span>: <span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">If</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">file opened</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">at start</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">had</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">a</span>n alert <span title="Cliquer ici pour voir d'autres traductions" class="hps">on the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">balance,</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">it</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">was not</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">immediately</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">displayed</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps atn">in the "</span><span title="Cliquer ici pour voir d'autres traductions">Balance History</span>" tab.</span></li><li><span id="result_box" class="" lang="en"><span class="bugFix">Fixes</span> some localization problems (some wordings with a wrong language).</span></li></ul><h2>Version 0.8.3 (05/08/2011)</h2><ul><li>Adds an accounts summary view.</li><li>Adds
 a transaction table in the balance history tab. This table shows
 transactions, sorted by value date, with the remaining balance after
