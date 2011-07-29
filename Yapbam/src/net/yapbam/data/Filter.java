@@ -20,7 +20,7 @@ public class Filter extends Observable {
 
 	private int filter;
 	private HashSet<Account> validAccounts;
-	private HashSet<Mode> validModes;
+	private HashSet<String> validModes;
 	private HashSet<Category> validCategories;
 	private Date dateFrom;
 	private Date dateTo;
@@ -109,29 +109,43 @@ public class Filter extends Observable {
 		return true;
 	}
 
-	/** Gets the valid modes for this filter.
-	 * There's no side effect between this instance and the returned array.
-	 * @return the valid modes (null means, all modes are ok).
+	/** Gets the valid modes names for this filter.
+	 * <br>There's no side effect between this instance and the returned array.
+	 * @return the valid modes names (null means, all modes are ok). Mode.Undefined is identified by an empty String in the returned list 
+	 * @see #setValidModes(List)
 	 */
-	public List<Mode> getValidModes() {
+	public List<String> getValidModes() {
 		if (validModes==null) return null;
-		ArrayList<Mode> result = new ArrayList<Mode>(validModes.size());
-		for (Mode account:validModes) {
-			result.add(account);
+		ArrayList<String> result = new ArrayList<String>(validModes.size());
+		for (String name:validModes) {
+			result.add(name);
 		}
 		return result;
 	}
 	
+	/** Tests whether a mode is valid or not.
+	 * @param mode The mode to test
+	 * @return true if the mode is valid
+	 * @see #setValidModes(List)
+	 */
 	public boolean isOk(Mode mode) {
-		return (validModes==null) || (validModes.contains(mode));
+		if (validModes==null) return true;
+		String name = mode.equals(Mode.UNDEFINED)?"":mode.getName();
+		return (validModes.contains(name));
 	}
 
-	public void setValidModes(List<Mode> validModes) {
+	/** Sets the valid modes names for this filter.
+	 * <br>There's no side effect between this instance and the argument of this method.
+	 * @param validModes null to enable all modes, or a list of valid mode's names.
+	 * Be aware of the Mode.UNDEFINED, as its name depends on the localization, it should be identified not by its name but by an empty string.
+	 * @see #getValidModes()
+	 */
+	public void setValidModes(List<String> validModes) {
 		if (!testEquals(validModes, this.validModes)) {
 			if (validModes==null) {
 				this.validModes = null;
 			} else {
-				this.validModes = new HashSet<Mode>(validModes.size());
+				this.validModes = new HashSet<String>(validModes.size());
 				this.validModes.addAll(validModes);
 			}
 			setChanged();

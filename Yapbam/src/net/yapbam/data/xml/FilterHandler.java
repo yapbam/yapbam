@@ -75,7 +75,7 @@ public class FilterHandler extends DefaultHandler {
 					for (String name: names) {
 						if (dataNames.contains(name)) modes.add(name);
 					}
-//					if ((modes.size()!=0) && (modes.size()!=dataNames.size())) filter.setValidModes(modes); //TODO
+					if ((modes.size()!=0) && (modes.size()!=dataNames.size())) filter.setValidModes(modes);
 				}
 			}
 		} else if (qName.equals(Serializer.TEXT_MATCHER_TAG)) {

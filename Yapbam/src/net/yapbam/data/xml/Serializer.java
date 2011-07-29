@@ -328,13 +328,9 @@ public class Serializer {
 			}
 			atts.addAttribute("", "", ACCOUNT_ATTRIBUTE, "CDATA", ArrayUtils.toString(strings));
 		}
-		List<Mode> modes = filter.getValidModes();
+		List<String> modes = filter.getValidModes();
 		if (modes!=null) {
-			String[] strings = new String[modes.size()];
-			for (int i = 0; i < strings.length; i++) {
-				strings[i] = modes.get(i).equals(Mode.UNDEFINED)?"":modes.get(i).getName();
-			}
-			atts.addAttribute("", "", MODE_ATTRIBUTE, "CDATA", ArrayUtils.toString(strings));
+			atts.addAttribute("", "", MODE_ATTRIBUTE, "CDATA", ArrayUtils.toString(modes.toArray(new String[modes.size()])));
 		}
 		List<Category> categories = filter.getValidCategories();
 		if (categories!=null) {
