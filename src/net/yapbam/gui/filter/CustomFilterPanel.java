@@ -309,10 +309,12 @@ public class CustomFilterPanel extends JPanel {
 		ArrayList<Integer> newSelection = new ArrayList<Integer>();
 		if (first) {
 			// set the selection to the content of the filter
-			List<Mode> validModes = data.getFilter().getValidModes();
+			List<String> validModes = data.getFilter().getValidModes();
 			if (validModes!=null) {
 				for (int i = 0; i < validModes.size(); i++) {
-					int index = Arrays.binarySearch(arrayModes, validModes.get(i).getName());
+					String name = validModes.get(i);
+					if (name.isEmpty()) name = Mode.UNDEFINED.getName();
+					int index = Arrays.binarySearch(arrayModes, name);
 					if (index>=0) newSelection.add(index);
 				}
 			} else {
@@ -341,17 +343,18 @@ public class CustomFilterPanel extends JPanel {
 		filter.setSuspended(true);
 		// build the account and mode filter
 		Object[] selectedModes = getModes().getSelectedValues();
-		ArrayList<Mode> modes = new ArrayList<Mode>();
+		ArrayList<String> modes = new ArrayList<String>();
 		boolean all = true;
 		int[] accountIndices = this.accountList.getSelectedIndices();
 		Account[] accounts = new Account[accountIndices.length];
 		for (int i = 0; i < accounts.length; i++) {
 			accounts[i] = data.getGlobalData().getAccount(accountIndices[i]);
 			for (int j=0; j<accounts[i].getModesNumber(); j++) {
-				if (Arrays.binarySearch(selectedModes,accounts[i].getMode(j).getName())<0) {
+				Mode mode = accounts[i].getMode(j);
+				if (Arrays.binarySearch(selectedModes,mode.getName())<0) {
 					all = false;
 				} else {
-					modes.add(accounts[i].getMode(j));
+					modes.add(mode.equals(Mode.UNDEFINED)?"":mode.getName());
 				}
 			}
 		}
