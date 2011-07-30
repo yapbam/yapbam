@@ -91,7 +91,7 @@ public class Importer {
 		// RULES : Subtransactions and initial balance have no transaction date
 		//         Every initial balances are located before the first transaction
 		
-		boolean[] invalidFields = new boolean[ExportTableModel.columns.length];
+		boolean[] invalidFields = new boolean[fields.length];
 		boolean hasError = false;
 		
 		// Decoding amount

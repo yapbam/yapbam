@@ -30,12 +30,6 @@ public class TextMatcher {
 		CONTAINS
 	}
 	
-//	public static interface Kind {  }
-//	
-//	public static final Kind REGULAR = new Kind() {};
-//	public static final Kind EQUALS = new Kind() {};
-//	public static final Kind CONTAINS = new Kind() {};
-
 	private Kind kind;
 	private String filter;
 	private boolean caseSensitive;
