@@ -32,7 +32,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
 		this.periodicTransactionListPanel = periodicTransactionListPanel;
-		this.getFilteredData().addListener(new DataListener() {
+		this.getFilteredData().getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof PeriodicalTransactionsAddedEvent) {
