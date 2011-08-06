@@ -23,6 +23,7 @@ import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
+import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.update.ReleaseInfo;
@@ -377,7 +378,7 @@ public class MainFrame extends JFrame implements DataListener {
 		}
 		getStateSaver().saveState(mainPane, this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
-//0.9.0		getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
+		if (Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
@@ -407,7 +408,7 @@ public class MainFrame extends JFrame implements DataListener {
 			y=0;
 			height = screenSize.height/2;
 		}*/
-        setLocation(x,y);
+		setLocation(x,y);
 		setSize(width,height);
 		int extendedState = Frame.NORMAL;
 		if (height<0) extendedState = extendedState | Frame.MAXIMIZED_VERT;
@@ -416,22 +417,27 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 	
 	private void restoreGlobalData() {
-		URI uri = null;
-		if (getStateSaver().contains(LAST_URI)) {
-			try {
-				uri = new URI((String) getStateSaver().get(LAST_URI));
-			} catch (URISyntaxException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
+		if (startOptions.isRememberFile()) {
+			URI uri = null;
+			if (getStateSaver().contains(LAST_URI)) {
+				try {
+					uri = new URI((String) getStateSaver().get(LAST_URI));
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
-		}
-		if (uri!=null) {
-			try {
-				readData(uri);
-				Filter filter = getStateSaver().restore(LAST_FILTER_USED, getData());
-				if (filter!=null) this.getFilteredData().setFilter(filter);
-			} catch (IOException e) {
-				ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
+			if (uri!=null) {
+				try {
+					readData(uri);
+					if (startOptions.isRememberFilter()) {
+						Filter filter = getStateSaver().restore(LAST_FILTER_USED, getData());
+						if (filter!=null) this.getFilteredData().setFilter(filter);
+					}
+				} catch (IOException e) {
+					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
+				}
 			}
 		}
 	}
