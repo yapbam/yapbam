@@ -61,24 +61,15 @@ public abstract class AbstractDialog<T,V> extends JDialog {
 
 		JPanel southPane = new JPanel(new BorderLayout());
 		southPane.setOpaque(false);
-		JPanel buttonsPane = new JPanel();
-		buttonsPane.setOpaque(false);
-		southPane.add(buttonsPane, BorderLayout.EAST);
-		okButton = new JButton(LocalizationData.get("GenericButton.ok"));
-		okButton.setOpaque(false);
-		buttonsPane.add(okButton);
-		cancelButton = new JButton(LocalizationData.get("GenericButton.cancel"));
-		cancelButton.setToolTipText(LocalizationData.get("GenericButton.cancel.toolTip"));
-		cancelButton.setOpaque(false);
-		buttonsPane.add(cancelButton);
+		JPanel buttonsPane = createButtonsPane();
 
+		southPane.add(buttonsPane, BorderLayout.EAST);
 		contentPane.add(southPane, BorderLayout.SOUTH);
 
 		JPanel centerPane = this.createCenterPane();
 		if (centerPane != null) contentPane.add(centerPane, BorderLayout.CENTER);
 		
 		this.updateOkButtonEnabled();
-		getRootPane().setDefaultButton(okButton);
 		
 		ActionListener listener = new ActionListener() {
 			@Override
@@ -93,6 +84,25 @@ public abstract class AbstractDialog<T,V> extends JDialog {
 		okButton.addActionListener(listener);
 		cancelButton.addActionListener(listener);
 		return contentPane;
+	}
+
+	/** Gets the panel that contains the ok and cancel buttons.
+	 * <br>This method creates a new JPanel with flow layout and ok and cancel buttons. Then, it defines ok has the default button.
+	 * <br>It can be override to add more buttons.
+	 * @return a JPanel
+	 */
+	protected JPanel createButtonsPane() {
+		JPanel buttonsPane = new JPanel();
+		buttonsPane.setOpaque(false);
+		okButton = new JButton(LocalizationData.get("GenericButton.ok"));
+		okButton.setOpaque(false);
+		buttonsPane.add(okButton);
+		cancelButton = new JButton(LocalizationData.get("GenericButton.cancel"));
+		cancelButton.setToolTipText(LocalizationData.get("GenericButton.cancel.toolTip"));
+		cancelButton.setOpaque(false);
+		buttonsPane.add(cancelButton);
+		getRootPane().setDefaultButton(okButton);
+		return buttonsPane;
 	}
 	
 	/** Gets the center pane of this dialog.

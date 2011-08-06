@@ -38,7 +38,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected PopupTextFieldList description;
 	protected AmountWidget amount;
 	protected JCheckBox receipt;
-	private CoolJComboBox modes;
+	protected CoolJComboBox modes;
 	protected CategoryPanel categories;
 	protected SubtransactionListPanel subtransactionsPanel;
 	private String originalMode;
