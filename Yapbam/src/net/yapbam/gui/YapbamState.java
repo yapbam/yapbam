@@ -33,6 +33,7 @@ import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.xml.FilterHandler;
 import net.yapbam.data.xml.Serializer;
+import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.util.ArrayUtils;
@@ -66,29 +67,36 @@ public class YapbamState {
 	
 	public void restoreState(JTable table, String prefix) {
 		TableColumnModel model = table.getColumnModel();
-		// Restore the width
-		for (int i = 0; i < model.getColumnCount(); i++) {
-			String valueString = (String) properties.get(prefix+COLUMN_WIDTH+i);
-			if (valueString!=null) {
-				int width = Integer.parseInt(valueString);
-				if (width>0) model.getColumn(i).setPreferredWidth(width);
+		StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
+		if (startOptions.isRememberColumnsWidth()) {
+			// Restore the width
+			for (int i = 0; i < model.getColumnCount(); i++) {
+				String valueString = (String) properties.get(prefix+COLUMN_WIDTH+i);
+				if (valueString!=null) {
+					int width = Integer.parseInt(valueString);
+					if (width>0) model.getColumn(i).setPreferredWidth(width);
+				}
 			}
 		}
-		// Restore column order
-		for (int i = model.getColumnCount()-1; i>=0 ; i--) {
-			String valueString = (String) properties.get(prefix+COLUMN_INDEX+i);
-			if (valueString!=null) {
-				int modelIndex = Integer.parseInt(valueString);
-				if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
+		if (startOptions.isRememberColumnsOrder()) {
+			// Restore column order
+			for (int i = model.getColumnCount()-1; i>=0 ; i--) {
+				String valueString = (String) properties.get(prefix+COLUMN_INDEX+i);
+				if (valueString!=null) {
+					int modelIndex = Integer.parseInt(valueString);
+					if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
+				}
 			}
 		}
-		// Restore the show/hide column
-		if (model instanceof XTableColumnModel) {
-			XTableColumnModel xModel = (XTableColumnModel)model;
-			for (int i = 0; i < xModel.getColumnCount(false); i++) {
-				if (Boolean.valueOf(properties.getProperty(prefix+COLUMN_HIDDEN+i, "false"))) {
-					TableColumn column = xModel.getColumnByModelIndex(i);
-					xModel.setColumnVisible(column, false);
+		if (startOptions.isRememberHiddenColumns()) {
+			// Restore the show/hide column
+			if (model instanceof XTableColumnModel) {
+				XTableColumnModel xModel = (XTableColumnModel)model;
+				for (int i = 0; i < xModel.getColumnCount(false); i++) {
+					if (Boolean.valueOf(properties.getProperty(prefix+COLUMN_HIDDEN+i, "false"))) {
+						TableColumn column = xModel.getColumnByModelIndex(i);
+						xModel.setColumnVisible(column, false);
+					}
 				}
 			}
 		}
@@ -135,13 +143,15 @@ public class YapbamState {
 	}
 	
 	public void restoreState(TabbedPane tabbedPane, String prefix) {
-		String property = get(prefix+TAB_ORDER);
-		if (property!=null) {
-			tabbedPane.setOrder(ArrayUtils.parseIntArray(property));
+		if (Preferences.INSTANCE.getStartStateOptions().isRememberTabsOrder()) {
+			String property = get(prefix+TAB_ORDER);
+			if (property!=null) {
+				tabbedPane.setOrder(ArrayUtils.parseIntArray(property));
+			}
+			// TabbedPane.setOrder changes the selected tab.
+			// I think it's better to restore with the first tab displayed
+			if (tabbedPane.getTabCount()>0) tabbedPane.setSelectedIndex(0);
 		}
-		// TabbedPane.setOrder changes the selected tab.
-		// I think it's better to restore with the first tab displayed
-		if (tabbedPane.getTabCount()>0) tabbedPane.setSelectedIndex(0);
 	}
 
 	public boolean contains(String key) {

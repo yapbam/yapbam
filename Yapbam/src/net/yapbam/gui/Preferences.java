@@ -63,6 +63,8 @@ public class Preferences {
 	private static final String FILE = "file"; //$NON-NLS-1$
 	private static final String FILTER = "filter"; //$NON-NLS-1$
 	private static final String TABS_ORDER = "tabsOrder"; //$NON-NLS-1$
+	private static final String COLUMNS_WIDTH = "columnsWidth"; //$NON-NLS-1$
+	private static final String COLUMNS_ORDER = "columnsOrder"; //$NON-NLS-1$
 	private static final String HIDDEN_COLUMNS = "hiddenColumns"; //$NON-NLS-1$
 	
 	/** The Preference instance.
@@ -443,13 +445,15 @@ public class Preferences {
 		setBoolean(PREF_START_PREFIX+FILE, options.isRememberFile());
 		setBoolean(PREF_START_PREFIX+FILTER, options.isRememberFilter());
 		setBoolean(PREF_START_PREFIX+TABS_ORDER, options.isRememberTabsOrder());
+		setBoolean(PREF_START_PREFIX+COLUMNS_WIDTH, options.isRememberColumnsWidth());
+		setBoolean(PREF_START_PREFIX+COLUMNS_ORDER, options.isRememberColumnsOrder());
 		setBoolean(PREF_START_PREFIX+HIDDEN_COLUMNS, options.isRememberHiddenColumns());
 	}
 
 	public StartStateOptions getStartStateOptions() {
 		if (startStateOptions==null) {
 			startStateOptions = new StartStateOptions(getBoolean(PREF_START_PREFIX+FILE, true), getBoolean(PREF_START_PREFIX+FILTER, false),
-				getBoolean(PREF_START_PREFIX+TABS_ORDER, true),	getBoolean(PREF_START_PREFIX+HIDDEN_COLUMNS, true));
+				getBoolean(PREF_START_PREFIX+TABS_ORDER, true),	getBoolean(PREF_START_PREFIX+COLUMNS_WIDTH, true),	getBoolean(PREF_START_PREFIX+COLUMNS_ORDER, true),	getBoolean(PREF_START_PREFIX+HIDDEN_COLUMNS, true));
 		}
 		return this.startStateOptions;
 	}
