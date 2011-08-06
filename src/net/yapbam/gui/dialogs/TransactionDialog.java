@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,7 +37,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	private DateWidgetPanel defDate;
 	private JTextField statement;
 	private boolean checkNumberIsVisible;
-
+	
 	/** Display the creation dialog, if the creation is confirmed, add the transaction to the global data 
 	 * @param data the global data
 	 * @param owner the dialog's parent frame
@@ -44,9 +46,13 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 * that this argument is redundant with transaction!=null, but it is not. You have to think of transaction argument as a model
 	 * to create a new transaction.
 	 * @param autoAdd if true, the created or edited transaction is automatically added to the global data instance.
+	 * @param withNextButton if this argument is true, a button is displayed, when the user clicks on it, the current transaction is added and the dialog is reset
+	 * to edit a new transaction
 	 * @return the new transaction or the edited one
+	 * @exception IllegalArgumentException if edit and withNextButton are both true
 	 */
-	public static Transaction open(FilteredData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd) {
+	public static Transaction open(FilteredData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd, boolean withNextButton) {
+		if (edit && withNextButton) throw new IllegalArgumentException();
 		GlobalData globalData = data.getGlobalData();
 		if (globalData.getAccountsNumber() == 0) {
 			// Need to create an account first
@@ -54,6 +60,10 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			if (globalData.getAccountsNumber() == 0) return null;
 		}
 		TransactionDialog dialog = new TransactionDialog(owner, data, transaction, edit);
+		if (withNextButton) {
+			dialog.nextButton.setVisible(true);
+			dialog.getRootPane().setDefaultButton(dialog.nextButton);
+		}
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if ((newTransaction != null) && autoAdd) {
@@ -199,6 +209,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		super.setContent(transaction);
 		Transaction t = (Transaction) transaction;
 		date.setDate(t.getDate());
+		transactionNumber.setText(t.getNumber());
 		checkNumber.setText(t.getNumber());
 		defDate.setDate(t.getValueDate());
 		statement.setText(t.getStatement());
@@ -481,5 +492,39 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 */
 	public void autoFillStatement() {
 		autoFillStatement(DATE_CHANGED+VALUE_DATE_CHANGED);
+	}
+
+	private JButton nextButton;
+	@Override
+	protected JPanel createButtonsPane() {
+		super.createButtonsPane(); // This line initialize the ok and cancel buttons
+		JPanel result = new JPanel();
+		super.createButtonsPane(); // This line initialize the ok and cancel buttons
+		result.add(okButton);
+		nextButton = new JButton(LocalizationData.get("TransactionDialog.next")); //$NON-NLS-1$
+		nextButton.setToolTipText(LocalizationData.get("TransactionDialog.next.tooltip")); //$NON-NLS-1$
+		nextButton.setVisible(false);
+		nextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				data.getGlobalData().add(buildResult());
+				description.requestFocus();
+				clear();
+			}
+		});
+		result.add(nextButton);
+		result.add(cancelButton);
+		return result;
+	}
+
+	private void clear() {
+		Date today = new Date();
+		setContent(new Transaction(today, null, "", 0.0, getAccount(), Mode.UNDEFINED, Category.UNDEFINED, today, null, new ArrayList<SubTransaction>())); //$NON-NLS-1$
+	}
+
+	@Override
+	public void updateOkButtonEnabled() {
+		super.updateOkButtonEnabled();
+		nextButton.setEnabled(okButton.isEnabled());
 	}
 }

@@ -69,7 +69,7 @@ public class CheckNumberPanel extends JPanel {
 	 */
 	private JComboBox getNumbers() {
 		if (numbers == null) {
-			numbers = new JComboBox(new String[]{"toto"});
+			numbers = new JComboBox(new String[]{});
 			numbers.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {

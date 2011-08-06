@@ -25,6 +25,8 @@ public class TipManager extends ArrayList<String> {
 		tip = MessageFormat.format(LocalizationData.get("Tip.5"), LocalizationData.get("AdministrationPlugIn.title")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.add(tip);
 		this.add(LocalizationData.get("Tip.6")); //$NON-NLS-1$
+		this.add(LocalizationData.get("Tip.7")); //$NON-NLS-1$
+		this.add(LocalizationData.get("Tip.8")); //$NON-NLS-1$
 	}
 	
 	public int getRandom() {
