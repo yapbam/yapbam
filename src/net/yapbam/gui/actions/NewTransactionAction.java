@@ -18,9 +18,9 @@ public class NewTransactionAction extends AbstractAction {
 	
 	public NewTransactionAction(FilteredData data) {
 		super(LocalizationData.get("MainMenu.Transactions.New"), IconManager.NEW_TRANSACTION);
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.New.ToolTip"));
-        putValue(Action.MNEMONIC_KEY,(int)LocalizationData.getChar("MainMenu.Transactions.New.Mnemonic")); //$NON-NLS-1$
-        this.data = data;
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.New.ToolTip"));
+		putValue(Action.MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.New.Mnemonic")); //$NON-NLS-1$
+		this.data = data;
 	}
 	
 	@Override
