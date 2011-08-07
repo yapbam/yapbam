@@ -167,6 +167,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getFilteredData()));
 		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		transactionMenu.add(item);
+		item = new JMenuItem(new NewTransactionAction(frame.getFilteredData()));
+		item.setText(LocalizationData.get("MainMenu.Transactions.NewMultiple")); //$NON-NLS-1$
+		item.setToolTipText(LocalizationData.get("MainMenu.Transactions.NewMultiple.ToolTip")); //$NON-NLS-1$
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK+ActionEvent.SHIFT_MASK)); //$NON-NLS-1$
+		transactionMenu.add(item);
 		TransactionSelector selector = getTransactionSelector();
 		item = new JMenuItem(new EditTransactionAction(selector)); 
 		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Edit.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
