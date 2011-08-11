@@ -18,8 +18,15 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	private boolean enabled;
 	private DateStepper nextDateBuilder;
 
+	@Deprecated
+	public PeriodicalTransaction(String description, double amount, Account account, Mode mode, Category category, List<SubTransaction> subTransactions,
+			Date nextDate, boolean enabled, DateStepper nextDateBuilder) {
+		this(description, null, amount, account, mode, category, subTransactions, nextDate, enabled, nextDateBuilder);
+	}
+
 	/** Constructor
 	 * @param description The transaction's description
+	 * @param comment The transaction's comment
 	 * @param amount The transaction's amount
 	 * @param account The transaction's account
 	 * @param mode The transaction's payment mode
@@ -30,11 +37,11 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	 * Please note that if the <b>nextDate</b> argument is null, this argument is ignored and the transaction is suspended.
 	 * @param nextDateBuilder The DateStepper that will compute the next generation date.
 	 */
-	public PeriodicalTransaction(String description, double amount,
+	public PeriodicalTransaction(String description, String comment, double amount,
 			Account account, Mode mode, Category category,
 			List<SubTransaction> subTransactions, Date nextDate,
 			boolean enabled, DateStepper nextDateBuilder) {
-		super(description, amount, account, mode, category, subTransactions);
+		super(description, comment, amount, account, mode, category, subTransactions);
 		this.nextDate = DateUtils.dateToInteger(nextDate);
 		this.enabled = enabled && (nextDate!=null);
 		this.nextDateBuilder = nextDateBuilder;
@@ -66,7 +73,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	PeriodicalTransaction change(Category oldCategory, Category newCategory) {
 		if (!hasCategory(oldCategory)) return null;
 		List<SubTransaction> subTransactions = changeSubTransactions(oldCategory, newCategory);
-		return new PeriodicalTransaction(getDescription(), getAmount(), getAccount(), getMode(),
+		return new PeriodicalTransaction(getDescription(), getComment(), getAmount(), getAccount(), getMode(),
 				(getCategory().equals(oldCategory)?newCategory:getCategory()), subTransactions,
 				getNextDate(), isEnabled(), getNextDateBuilder());
 	}
@@ -77,7 +84,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 			for (int i=0;i<getSubTransactionSize();i++) {
 				subTransactionsClone.add(getSubTransaction(i));
 			}
-			return new PeriodicalTransaction(getDescription(), getAmount(), getAccount(), newMode,
+			return new PeriodicalTransaction(getDescription(), getComment(), getAmount(), getAccount(), newMode,
 					getCategory(), subTransactionsClone, getNextDate(), isEnabled(), getNextDateBuilder());
 		} else {
 			return null;

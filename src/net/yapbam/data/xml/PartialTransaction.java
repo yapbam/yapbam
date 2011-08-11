@@ -13,6 +13,7 @@ class PartialTransaction {
 	String description;
 	Mode mode;
 	Category category;
+	String comment;
 
 	PartialTransaction(GlobalData data, Map<String, String> attributes) {
 		String accountId = attributes.get(Serializer.ACCOUNT_ATTRIBUTE);
@@ -22,6 +23,7 @@ class PartialTransaction {
 		}
 		amount = Double.parseDouble(attributes.get(Serializer.AMOUNT_ATTRIBUTE));
 		description = attributes.get(Serializer.DESCRIPTION_ATTRIBUTE);
+		comment = attributes.get(Serializer.COMMENT_ATTRIBUTE);
 		String modeId = attributes.get(Serializer.MODE_ATTRIBUTE);
 		mode = modeId==null ? Mode.UNDEFINED : account.getMode(modeId);
 		String categoryId = attributes.get(Serializer.CATEGORY_ATTRIBUTE);

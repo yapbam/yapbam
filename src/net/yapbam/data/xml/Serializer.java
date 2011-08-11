@@ -60,6 +60,7 @@ public class Serializer {
 	static final String AMOUNT_ATTRIBUTE = "amount";
 	static final String DATE_ATTRIBUTE = "date";
 	static final String DESCRIPTION_ATTRIBUTE = "description";
+	static final String COMMENT_ATTRIBUTE = "comment";
 	static final String ACCOUNT_ATTRIBUTE = "account";
 
 	static final String DEBT_DAY_ATTRIBUTE = "debtDay";
@@ -218,29 +219,35 @@ public class Serializer {
 //		long start = System.currentTimeMillis();
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) {
 			InputStream is = uri.toURL().openStream();
-			boolean wasEnabled = data.isEventsEnabled();
 			try {
-				if (password!=null) {
-					// Pass the header
-					for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
-						is.read();
-					}
-					// Create the decoder input stream
-					is = Crypto.getPasswordProtectedInputStream(password, is);
-				}
-				if (wasEnabled) {
-					data.setEventsEnabled(false);
-				}
-				read(data, is);
-				data.setPassword(password);
+				is = read(data, password, is);
 			} finally {
-				if (wasEnabled) data.setEventsEnabled(true);
 				is.close();
 			}
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme());
 		}
 //		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");
+	}
+
+	static InputStream read(GlobalData data, String password, InputStream is) throws IOException {
+		boolean wasEnabled = data.isEventsEnabled();
+		try {
+			if (password!=null) {
+				// Pass the header
+				for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
+					is.read();
+				}
+				// Create the decoder input stream
+				is = Crypto.getPasswordProtectedInputStream(password, is);
+			}
+			if (wasEnabled) data.setEventsEnabled(false);
+			read(data, is);
+			data.setPassword(password);
+		} finally {
+			if (wasEnabled) data.setEventsEnabled(true);
+		}
+		return is;
 	}
 	
 	/** Gets the data about the uri (what is its version, is it encoded or not, etc...).
@@ -282,7 +289,7 @@ public class Serializer {
 		}
 	}
 
-	private void serialize (GlobalData data) throws IOException {
+	void serialize (GlobalData data) throws IOException {
 		try {
 			atts.clear();
 			hd.startElement("","",GLOBAL_DATA_TAG,atts);
@@ -475,6 +482,8 @@ public class Serializer {
 		atts.addAttribute("","",ACCOUNT_ATTRIBUTE,"CDATA",transaction.getAccount().getName());
 		String description = transaction.getDescription();
 		if (description!=null) atts.addAttribute("","",DESCRIPTION_ATTRIBUTE,"CDATA",description);
+		String comment = transaction.getComment();
+		if (comment!=null) atts.addAttribute("","",COMMENT_ATTRIBUTE,"CDATA",comment);
 		atts.addAttribute("","",DATE_ATTRIBUTE,"CDATA",toString(transaction.getDate()));
 		atts.addAttribute("","",AMOUNT_ATTRIBUTE,"CDATA",Double.toString(transaction.getAmount()));
 		Mode mode = transaction.getMode();
@@ -508,6 +517,8 @@ public class Serializer {
 		atts.addAttribute("","",ACCOUNT_ATTRIBUTE,"CDATA",periodicalTransaction.getAccount().getName());
 		String description = periodicalTransaction.getDescription();
 		if (description!=null) atts.addAttribute("","",DESCRIPTION_ATTRIBUTE,"CDATA",description);
+		String comment = periodicalTransaction.getComment();
+		if (comment!=null) atts.addAttribute("","",COMMENT_ATTRIBUTE,"CDATA",comment);
 		atts.addAttribute("","",AMOUNT_ATTRIBUTE,"CDATA",Double.toString(periodicalTransaction.getAmount()));
 		Mode mode = periodicalTransaction.getMode();
 		if (!mode.equals(Mode.UNDEFINED)) atts.addAttribute("","",MODE_ATTRIBUTE,"CDATA",mode.getName());

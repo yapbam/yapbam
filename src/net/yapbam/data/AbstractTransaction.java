@@ -11,6 +11,7 @@ public abstract class AbstractTransaction implements Cloneable {
 	
 	private long id;
 	private String description;
+	private String comment;
 	private double amount;
 	private Account account;
 	private Mode mode;
@@ -20,17 +21,19 @@ public abstract class AbstractTransaction implements Cloneable {
 	/**
 	 * Constructor.
 	 * @param description The description
+	 * @param comment The comment associated with the transaction
 	 * @param amount The amount (negative for expenses)
 	 * @param account The account
 	 * @param mode the payment mode
 	 * @param category the category
 	 * @param subTransactions a subtransaction list
 	 */
-	public AbstractTransaction(String description, double amount, Account account, Mode mode, Category category, List<SubTransaction> subTransactions) {
+	public AbstractTransaction(String description, String comment, double amount, Account account, Mode mode, Category category, List<SubTransaction> subTransactions) {
 		super();
 		if ((mode==null) || (category==null) || (description==null) || (subTransactions==null)) throw new IllegalArgumentException();
 		this.id = currentId++;
 		this.description = getCachedDescription(description);
+		if ((comment!=null) && (comment.isEmpty())) this.comment = null;
 		this.amount = amount;
 		this.account = account;
 		this.mode = mode;
@@ -78,6 +81,13 @@ public abstract class AbstractTransaction implements Cloneable {
 	 */
 	public String getDescription() {
 		return this.description;
+	}
+
+	/** Gets the transaction's comment.
+	 * @return the comment (null if the transaction has no comment)
+	 */
+	public String getComment() {
+		return this.comment;
 	}
 
 	/** Gets the transaction's amount.

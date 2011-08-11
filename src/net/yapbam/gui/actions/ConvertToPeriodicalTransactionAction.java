@@ -27,7 +27,7 @@ public class ConvertToPeriodicalTransactionAction extends AbstractTransactionAct
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			list.add(transaction.getSubTransaction(i));
 		}
-		PeriodicalTransaction model = new PeriodicalTransaction(transaction.getDescription(), transaction.getAmount(),
+		PeriodicalTransaction model = new PeriodicalTransaction(transaction.getDescription(), transaction.getComment(), transaction.getAmount(),
 				transaction.getAccount(), transaction.getMode(), transaction.getCategory(), list, null, false, null);
 		PeriodicalTransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component)e.getSource()), model, false);
 	}

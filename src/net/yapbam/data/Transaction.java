@@ -16,15 +16,22 @@ public class Transaction extends AbstractTransaction implements Serializable {
 	private int valueDate;
 	private String statementId;
 	
+	@Deprecated
 	public Transaction(Date date, String number, String description, double amount,
 			Account account, Mode mode, Category category, Date valueDate,
 			String statementId, List<SubTransaction> subTransactions) {
-		super(description, amount, account, mode, category, subTransactions);
+		this(date, number, description, null, amount, account, mode, category, valueDate, statementId, subTransactions);
+	}
+	
+	public Transaction(Date date, String number, String description, String comment, double amount,
+			Account account, Mode mode, Category category, Date valueDate,
+			String statementId, List<SubTransaction> subTransactions) {
+		super(description, comment, amount, account, mode, category, subTransactions);
 		this.date = DateUtils.dateToInteger(date);
 		this.number = number;
 		this.valueDate = DateUtils.dateToInteger(valueDate);
 		this.statementId = statementId;
-		if ((statementId!=null) && (statementId.trim().length()==0)) this.statementId=null;
+		if ((statementId!=null) && statementId.trim().isEmpty()) this.statementId=null;
 	}
 
 	public String getNumber() {
@@ -61,7 +68,7 @@ public class Transaction extends AbstractTransaction implements Serializable {
 	Transaction change(Category oldCategory, Category newCategory) {
 		if (!hasCategory(oldCategory)) return null;
 		List<SubTransaction> subTransactions = changeSubTransactions(oldCategory, newCategory);
-		return new Transaction(getDate(), getNumber(), getDescription(), getAmount(), getAccount(), getMode(),
+		return new Transaction(getDate(), getNumber(), getDescription(), getComment(), getAmount(), getAccount(), getMode(),
 				(getCategory().equals(oldCategory)?newCategory:getCategory()), getValueDate(), getStatement(), subTransactions);
 	}
 
@@ -71,7 +78,7 @@ public class Transaction extends AbstractTransaction implements Serializable {
 			for (int i=0;i<getSubTransactionSize();i++) {
 				subTransactionsClone.add(getSubTransaction(i));
 			}
-			return new Transaction(getDate(), getNumber(), getDescription(), getAmount(), getAccount(), newMode,
+			return new Transaction(getDate(), getNumber(), getDescription(), getComment(), getAmount(), getAccount(), newMode,
 					getCategory(), getValueDate(), getStatement(), subTransactionsClone);
 		} else {
 			return null;
