@@ -180,6 +180,10 @@ public class Importer {
 			}
 			
 			if (isTransaction) {
+				// Comment
+				index = parameters.getImportedFileColumns()[ExportTableModel.COMMENT_INDEX];
+				String comment = getField(fields, index, ""); //$NON-NLS-1$
+
 				// Number
 				index = parameters.getImportedFileColumns()[ExportTableModel.NUMBER_INDEX];
 				String number = getField(fields, index, null);
@@ -201,7 +205,7 @@ public class Importer {
 					}
 				}
 				if (data!=null) recordCurrentTransaction(data);
-				current = new CurrentTransaction(account, description, date, amount, category, mode, number, valueDate, statement);
+				current = new CurrentTransaction(account, description, comment, date, amount, category, mode, number, valueDate, statement);
 			} else {
 				current.subtransactions.add(new SubTransaction(amount, description, category));
 			}
@@ -238,6 +242,7 @@ public class Importer {
 	static class CurrentTransaction {
 		Account account;
 		String description;
+		String comment;
 		Date date;
 		double amount;
 		Category category;
@@ -247,12 +252,12 @@ public class Importer {
 		String statement;
 		ArrayList<SubTransaction> subtransactions;
 		
-		public CurrentTransaction(Account account, String description,
-				Date date, double amount, Category category, Mode mode,
+		public CurrentTransaction(Account account, String description, String comment, Date date, double amount, Category category, Mode mode,
 				String number, Date valueDate, String statement) {
 			super();
 			this.account = account;
 			this.description = description;
+			this.comment = comment;
 			this.date = date;
 			this.amount = amount;
 			this.category = category;
@@ -264,7 +269,7 @@ public class Importer {
 		}
 
 		public Transaction toTransaction() {
-			return new Transaction(date, number, description, amount, account, mode, category, valueDate, statement, subtransactions);
+			return new Transaction(date, number, description, comment, amount, account, mode, category, valueDate, statement, subtransactions);
 		}
 	}
 	
