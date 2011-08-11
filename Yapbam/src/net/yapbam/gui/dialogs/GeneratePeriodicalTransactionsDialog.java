@@ -33,7 +33,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 			for (int i = 0; i < transactions.length; i++) {
 				Transaction t = transactions[i];
 				Date date = editingOptions.isDateBasedAutoStatement()?t.getDate():t.getValueDate();
-				transactions[i] = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
+				transactions[i] = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getComment(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
 						t.getValueDate(), editingOptions.getStatementId(date), Arrays.asList(t.getSubTransactions()));
 			}
 		}

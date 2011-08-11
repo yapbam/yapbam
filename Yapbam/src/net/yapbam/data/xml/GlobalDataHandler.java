@@ -165,7 +165,7 @@ class GlobalDataHandler extends DefaultHandler {
 			String number = attributes.get(Serializer.NUMBER_ATTRIBUTE);
 			Date valueDate = Serializer.toDate(attributes.get(Serializer.VALUE_DATE_ATTRIBUTE));
 			String statement = attributes.get(Serializer.STATEMENT_ATTRIBUTE);
-			this.transactions.add(new Transaction(date, number, p.description, p.amount, p.account, p.mode, p.category, valueDate, statement, lst));
+			this.transactions.add(new Transaction(date, number, p.description, p.comment, p.amount, p.account, p.mode, p.category, valueDate, statement, lst));
 		} else if (qName.equals(Serializer.SUBTRANSACTION_TAG)) {
 		} else if (qName.equals(Serializer.PERIODICAL_TAG)) {
 			ArrayList<SubTransaction> lst = (ArrayList<SubTransaction>) this.tempData.pop();
@@ -175,7 +175,7 @@ class GlobalDataHandler extends DefaultHandler {
 			String attribute = attributes.get(Serializer.NEXT_DATE_ATTRIBUTE);
 			Date nextDate = attribute==null?null:Serializer.toDate(attribute);
 			boolean enabled = Boolean.parseBoolean(attributes.get(Serializer.ENABLED_ATTRIBUTE));
-			this.data.add(new PeriodicalTransaction(p.description, p.amount, p.account, p.mode, p.category, lst, nextDate, enabled, stepper));
+			this.data.add(new PeriodicalTransaction(p.description, p.comment, p.amount, p.account, p.mode, p.category, lst, nextDate, enabled, stepper));
 		} else if (qName.equals(Serializer.DATE_STEPPER_TAG)) {
 		} else {
 			System.err.println ("Unknown tag "+qName);

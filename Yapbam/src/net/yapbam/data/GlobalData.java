@@ -205,6 +205,10 @@ public class GlobalData extends DefaultListenable {
 		}
 	}
 
+	/** Gets an account by its name.
+	 * @param name The account's name
+	 * @return an Account or null if no account with this name exists
+	 */
 	public Account getAccount(String name) {
 		for (Account account : this.accounts) {
 			if (account.getName().equalsIgnoreCase(name)) return account;
@@ -212,10 +216,17 @@ public class GlobalData extends DefaultListenable {
 		return null;
 	}
 	
+	/** Gets an account by its index.
+	 * @param index The account's index
+	 * @return an Account
+	 */
 	public Account getAccount(int index) {
 		return this.accounts.get(index);
 	}
 
+	/** Gets the number of accounts.
+	 * @return a positive or null int
+	 */
 	public int getAccountsNumber() {
 		return this.accounts.size();
 	}
@@ -476,7 +487,7 @@ public class GlobalData extends DefaultListenable {
 					}
 				}
 				removed.add(pt);
-				updated.add(new PeriodicalTransaction(pt.getDescription(), pt.getAmount(), pt.getAccount(), pt.getMode(),
+				updated.add(new PeriodicalTransaction(pt.getDescription(), pt.getComment(), pt.getAmount(), pt.getAccount(), pt.getMode(),
 						pt.getCategory(), Arrays.asList(pt.getSubTransactions()), nextDate, pt.isEnabled(), ds));
 			}
 		}
@@ -502,7 +513,7 @@ public class GlobalData extends DefaultListenable {
 				if (vdStepper==null) vdStepper = DateStepper.IMMEDIATE;
 				//Be aware, when the transaction has an "end date", and the date is after this "end date", tDate become null
 				for (Date tDate = p.getNextDate();((tDate!=null)&&(tDate.compareTo(date)<=0));tDate=p.getNextDateBuilder().getNextStep(tDate)) {
-					result.add(new Transaction(tDate, null, p.getDescription(), amount, p.getAccount(), mode, p.getCategory(),
+					result.add(new Transaction(tDate, null, p.getDescription(), p.getComment(), amount, p.getAccount(), mode, p.getCategory(),
 							vdStepper.getNextStep(tDate), null, Arrays.asList(p.getSubTransactions())));
 				}
 			}

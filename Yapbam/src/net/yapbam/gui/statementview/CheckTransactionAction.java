@@ -54,7 +54,7 @@ public class CheckTransactionAction extends AbstractAction {
 			if (ckDate!=null) date = ckDate;
 			statementId = tPanel.getStatement();
 		}
-		Transaction tChecked = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
+		Transaction tChecked = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getComment(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
 				date, statementId, list);
 		selector.getFilteredData().getGlobalData().add(tChecked);
 		selector.getFilteredData().getGlobalData().remove(t);
