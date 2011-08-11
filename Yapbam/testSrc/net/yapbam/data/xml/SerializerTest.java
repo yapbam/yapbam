@@ -22,6 +22,8 @@ public class SerializerTest {
 		GlobalData data = new GlobalData();
 		Account account = new Account("toto", 50.24);
 		data.add(account);
+		account = new Account("titi", -10.0);
+		data.add(account);
 		
 		testInstance(data);
 		
@@ -54,8 +56,9 @@ public class SerializerTest {
 			assertEquals(account.getInitialBalance(), oAccount.getInitialBalance(), doubleAccuracy);
 
 			assertEquals(account.getModesNumber(), oAccount.getModesNumber());
-
 			//TODO Test if modes are the same
+			assertEquals(account.getCheckbooksNumber(), oAccount.getCheckbooksNumber());
+			//TODO Test if checkbooks are the same
 		}
 		assertEquals(data.getPassword(), other.getPassword());
 		
