@@ -29,9 +29,12 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 
 	private transient DateFormat dateFormater;
 	private FilteredData data;
+	private boolean isCommentSeparatedFromDescription;
+
 	
 	TransactionsTableModel(TransactionTable table, FilteredData data) {
 		super();
+		this.isCommentSeparatedFromDescription = TransactionsPreferencePanel.isCommentSeparatedFromDescription();
 		this.data = data;
 		data.addListener(this);
 	}
@@ -45,7 +48,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	}
 
 	public int getColumnCount() {
-		return 10;
+		return isCommentSeparatedFromDescription?11:10;
 	}
 
 	@Override
@@ -60,6 +63,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		if (columnIndex==7) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
 		if (columnIndex==8) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
 		if (columnIndex==9) return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
+		if (columnIndex==10) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
 
@@ -125,7 +129,21 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		} else if (columnIndex==7) return transaction.getNumber();
 		else if (columnIndex==8) return transaction.getValueDate();
 		else if (columnIndex==9) return transaction.getStatement();
+		else if (columnIndex==10) return transaction.getComment();
 		return null;
+	}
+	
+	public String getDescription (AbstractTransaction transaction) {
+		if (isCommentSeparatedFromDescription || (transaction.getComment()==null)) {
+			return transaction.getDescription();
+		} else {
+			StringBuilder buffer = new StringBuilder();
+			buffer.append(transaction.getDescription());
+			buffer.append(" (");
+			buffer.append(transaction.getComment());
+			buffer.append(")");
+			return buffer.toString();
+		}
 	}
 
 	private Object getName(Category category) {

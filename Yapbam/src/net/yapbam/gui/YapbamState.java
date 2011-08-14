@@ -84,7 +84,7 @@ public class YapbamState {
 				String valueString = (String) properties.get(prefix+COLUMN_INDEX+i);
 				if (valueString!=null) {
 					int modelIndex = Integer.parseInt(valueString);
-					if (modelIndex>=0) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
+					if ((modelIndex>=0) && (modelIndex<table.getColumnCount())) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
 				}
 			}
 		}
