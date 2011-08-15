@@ -36,6 +36,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected int selectedAccount;
 	private JComboBox accounts;
 	protected PopupTextFieldList description;
+	protected JTextField comment;
 	protected AmountWidget amount;
 	protected JCheckBox receipt;
 	protected CoolJComboBox modes;
@@ -60,6 +61,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		Account account = transaction.getAccount();
 		accounts.setSelectedIndex(data.getGlobalData().indexOf(account));
 		description.setText(transaction.getDescription());
+		comment.setText(transaction.getComment());
 		subtransactionsPanel.fill(transaction);
 		// Danger, subtransaction.fill throws Property Change events that may alter the amount field content.
 		// So, always set up the amountField after the subtransactions list.
@@ -160,8 +162,12 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		// Description
 		JLabel titleLibelle = new JLabel(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
 		c = new GridBagConstraints();
-		c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST;
+		c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST; c.weightx=1.0;
 		centerPane.add(titleLibelle, c);
+		JPanel panel = new JPanel(new GridBagLayout());
+		c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;
+		centerPane.add(panel, c);
+		c = new GridBagConstraints();
 		description = new PopupTextFieldList();
 		description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
 		description.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
@@ -171,8 +177,14 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 			}
 		});
 		description.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;
-		centerPane.add(description, c);
+		c = new GridBagConstraints(); c.fill=GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		panel.add(description, c);
+		
+		// Comment
+		comment = new JTextField();
+		comment.setToolTipText(LocalizationData.get("TransactionDialog.comment.tooltip")); //$NON-NLS-1$
+		c.gridx=1;;
+		panel.add(comment, c);
 
 		// Next line
 		c = new GridBagConstraints();

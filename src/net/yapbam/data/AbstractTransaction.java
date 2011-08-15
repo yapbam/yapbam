@@ -33,7 +33,8 @@ public abstract class AbstractTransaction implements Cloneable {
 		if ((mode==null) || (category==null) || (description==null) || (subTransactions==null)) throw new IllegalArgumentException();
 		this.id = currentId++;
 		this.description = getCachedDescription(description);
-		if ((comment!=null) && (comment.isEmpty())) this.comment = null;
+		if ((comment!=null) && (comment.isEmpty())) comment = null;
+		this.comment = comment;
 		this.amount = amount;
 		this.account = account;
 		this.mode = mode;

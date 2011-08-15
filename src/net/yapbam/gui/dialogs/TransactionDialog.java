@@ -226,7 +226,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		for (int i = 0; i < subtransactionsPanel.getSubtransactionsCount(); i++) {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
-		return new Transaction(date.getDate(), number, description.getText().trim(), amount, getAccount(), getCurrentMode(),
+		return new Transaction(date.getDate(), number, description.getText().trim(), comment.getText().trim(), amount, getAccount(), getCurrentMode(),
 				categories.getCategory(), defDate.getDate(), statementId, subTransactions);
 	}
 
