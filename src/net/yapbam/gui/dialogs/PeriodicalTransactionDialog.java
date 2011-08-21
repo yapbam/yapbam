@@ -78,7 +78,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 		for (int i = 0; i < subtransactionsPanel.getSubtransactionsCount(); i++) {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
-		return new PeriodicalTransaction(description.getText().trim(), amount, this.data.getGlobalData().getAccount(selectedAccount),
+		return new PeriodicalTransaction(description.getText().trim(), comment.getText().trim(), amount, this.data.getGlobalData().getAccount(selectedAccount),
 				getCurrentMode(), categories.getCategory(), subTransactions, generationPanel.getNextDate(),
 				generationPanel.isActivated(), generationPanel.getDateStepper());
 	}

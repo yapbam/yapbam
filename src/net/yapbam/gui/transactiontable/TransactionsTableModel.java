@@ -29,12 +29,11 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 
 	private transient DateFormat dateFormater;
 	private FilteredData data;
-	private boolean isCommentSeparatedFromDescription;
+	private DescriptionSettings descriptionSettings;
 
-	
 	TransactionsTableModel(TransactionTable table, FilteredData data) {
 		super();
-		this.isCommentSeparatedFromDescription = TransactionsPreferencePanel.isCommentSeparatedFromDescription();
+		this.descriptionSettings = new DescriptionSettings();
 		this.data = data;
 		data.addListener(this);
 	}
@@ -48,7 +47,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	}
 
 	public int getColumnCount() {
-		return isCommentSeparatedFromDescription?11:10;
+		return descriptionSettings.isCommentSeparatedFromDescription()?11:10;
 	}
 
 	@Override
@@ -82,7 +81,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		else if (columnIndex==2) return transaction.getDate();
 		else if (columnIndex==3) {
 			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(getDescription(transaction)); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(descriptionSettings.getDescription(transaction)); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription()); //$NON-NLS-1$
 				}
@@ -92,7 +91,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
-				return getDescription(transaction);
+				return descriptionSettings.getDescription(transaction);
 			}
 		} else if (columnIndex==4) {
 			if (spread) {
@@ -133,19 +132,6 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		return null;
 	}
 	
-	public String getDescription (AbstractTransaction transaction) {
-		if (isCommentSeparatedFromDescription || (transaction.getComment()==null)) {
-			return transaction.getDescription();
-		} else {
-			StringBuilder buffer = new StringBuilder();
-			buffer.append(transaction.getDescription());
-			buffer.append(" (");
-			buffer.append(transaction.getComment());
-			buffer.append(")");
-			return buffer.toString();
-		}
-	}
-
 	private Object getName(Category category) {
 		return category.equals(Category.UNDEFINED) ? "" : category.getName(); //$NON-NLS-1$
 	}
