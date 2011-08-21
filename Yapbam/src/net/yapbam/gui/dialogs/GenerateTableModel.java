@@ -7,6 +7,7 @@ import javax.swing.SwingConstants;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.transactiontable.DescriptionSettings;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 
 @SuppressWarnings("serial")
@@ -58,7 +59,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Transaction t = transactions[rowIndex];
 		if (columnIndex==0) return t.getAccount().getName();
-		if (columnIndex==1) return t.getDescription();
+		if (columnIndex==1) return DescriptionSettings.getMergedDescriptionAndComment(t);
 		if (columnIndex==2) return t.getDate();
 		if (columnIndex==3) return new double[]{t.getAmount()};
 		if (columnIndex==4) return !enabled[rowIndex];

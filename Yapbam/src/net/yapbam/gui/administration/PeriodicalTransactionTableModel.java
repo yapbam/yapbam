@@ -23,15 +23,18 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.transactiontable.DescriptionSettings;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 import net.yapbam.gui.transactiontable.SpreadState;
 
 @SuppressWarnings("serial")
 final class PeriodicalTransactionTableModel extends GenericTransactionTableModel {
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
+	private DescriptionSettings descriptionSettings;
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
 		this.periodicTransactionListPanel = periodicTransactionListPanel;
+		this.descriptionSettings = new DescriptionSettings();
 		this.getFilteredData().getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
@@ -61,6 +64,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		if (columnIndex==6) return LocalizationData.get("PeriodicalTransactionManager.nextDate.column"); //$NON-NLS-1$
 		if (columnIndex==7) return LocalizationData.get("PeriodicalTransactionManager.period.column"); //$NON-NLS-1$
 		if (columnIndex==8) return LocalizationData.get("PeriodicalTransactionManager.active.column"); //$NON-NLS-1$
+		if (columnIndex==9) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
 
@@ -82,7 +86,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		else if (columnIndex==1) return transaction.getAccount().getName();
 		else if (columnIndex==2) {
 			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(transaction.getDescription()); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(descriptionSettings.getDescription(transaction)); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription()); //$NON-NLS-1$
 				}
@@ -92,7 +96,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
-				return transaction.getDescription();
+				return descriptionSettings.getDescription(transaction);
 			}
 		} else if (columnIndex==3) {
 			if (spread) {
@@ -142,7 +146,11 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.until"), result, period.getLastDate()); //$NON-NLS-1$
 			}
 			return result;
-		} else if (columnIndex==8) return transaction.isEnabled();
+		} else if (columnIndex==8) {
+			return transaction.isEnabled();
+		} else if (columnIndex==9) {
+			return transaction.getComment();
+		}
 		throw new IllegalArgumentException();
 	}
 
@@ -153,7 +161,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public int getColumnCount() {
-		return 9;
+		return descriptionSettings.isCommentSeparatedFromDescription()?10:9;
 	}
 
 	private Object getName(Category category) {
