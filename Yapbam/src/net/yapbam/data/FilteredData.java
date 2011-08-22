@@ -194,7 +194,8 @@ public class FilteredData extends DefaultListenable implements Observer {
 		if ((filter.getDateTo()!=null) && (transaction.getDate().compareTo(filter.getDateTo())>0)) return false;
 		if ((filter.getValueDateFrom()!=null) && (transaction.getValueDate().compareTo(filter.getValueDateFrom())<0)) return false;
 		if ((filter.getValueDateTo()!=null) && (transaction.getValueDate().compareTo(filter.getValueDateTo())>0)) return false;
-		if (filter.isOk(transaction.getCategory()) && filter.isAmountOk(transaction.getAmount()) && filter.isDescriptionOk(transaction.getDescription())) return true;
+		if (filter.isOk(transaction.getCategory()) && filter.isAmountOk(transaction.getAmount()) &&
+				filter.isDescriptionOk(transaction.getDescription()) && filter.isCommentOk(transaction.getComment())) return true;
 		// The transaction may also be valid if one of its subtransactions is valid 
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			if (isOk(transaction.getSubTransaction(i))) {
@@ -229,7 +230,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 	public boolean isComplementOk(Transaction transaction) {
 		double amount = transaction.getComplement();
 		if ((transaction.getSubTransactionSize()!=0) && (GlobalData.AMOUNT_COMPARATOR.compare(amount,0.0)==0)) return false;
-		return filter.isOk(transaction.getCategory()) && filter.isAmountOk(amount) && filter.isDescriptionOk(transaction.getDescription());
+		return filter.isOk(transaction.getCategory()) && filter.isAmountOk(amount) && filter.isDescriptionOk(transaction.getDescription()) && filter.isCommentOk(transaction.getComment());
 	}
 	
 	private void filter() {

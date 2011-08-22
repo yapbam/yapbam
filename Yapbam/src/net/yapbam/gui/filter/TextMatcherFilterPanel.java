@@ -30,6 +30,10 @@ public class TextMatcherFilterPanel extends JPanel {
 			LocalizationData.get("CustomFilterPanel.description.equals.toolTip"), LocalizationData.get("CustomFilterPanel.description.contains.toolTip"),
 			LocalizationData.get("CustomFilterPanel.description.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.description.toolTip"));
 
+	public static final Wordings COMMENT_WORDING = new Wordings(LocalizationData.get("Transaction.comment"),
+			LocalizationData.get("CustomFilterPanel.comment.equals.toolTip"), LocalizationData.get("CustomFilterPanel.comment.contains.toolTip"),
+			LocalizationData.get("CustomFilterPanel.comment.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.comment.toolTip"));
+
 	public static final Wordings NUMBER_WORDING = new Wordings(LocalizationData.get("Transaction.number"),
 			LocalizationData.get("CustomFilterPanel.number.equals.toolTip"), LocalizationData.get("CustomFilterPanel.number.contains.toolTip"),
 			LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.number.toolTip"));

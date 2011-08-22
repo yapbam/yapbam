@@ -29,6 +29,7 @@ public class Filter extends Observable {
 	private double minAmount;
 	private double maxAmount;
 	private TextMatcher descriptionMatcher;
+	private TextMatcher commentMatcher;
 	private TextMatcher numberMatcher;
 	private TextMatcher statementMatcher;
 	
@@ -311,6 +312,25 @@ public class Filter extends Observable {
 	public void setDescriptionMatcher(TextMatcher descriptionMatcher) {
 		if (!NullUtils.areEquals(descriptionMatcher, this.descriptionMatcher)) {
 			this.descriptionMatcher = descriptionMatcher;
+			this.setChanged();
+		}
+	}
+	
+	public TextMatcher getCommentMatcher() {
+		return this.commentMatcher;
+	}
+
+	/** Gets the validity of a string according to the current comment filter. 
+	 * @param comment The string to test
+	 * @return true if the comment is ok with the filter.
+	 */
+	public boolean isCommentOk(String comment) {
+		return commentMatcher==null?true:commentMatcher.matches(comment);
+	}
+
+	public void setCommentMatcher(TextMatcher textMatcher) {
+		if (!NullUtils.areEquals(textMatcher, this.commentMatcher)) {
+			this.commentMatcher = textMatcher;
 			this.setChanged();
 		}
 	}

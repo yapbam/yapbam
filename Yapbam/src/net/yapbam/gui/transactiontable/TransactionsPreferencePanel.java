@@ -231,12 +231,12 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gbc_separeCommentChkBx.weighty = 1.0D;
 			gbc_separeCommentChkBx.gridy = 0;
 			separeCommentChkBx = new JCheckBox();
-			separeCommentChkBx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay")); //$NON-NLS-1$
-			separeCommentChkBx.setText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay.tooltip")); //$NON-NLS-1$
+			separeCommentChkBx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay.tooltip")); //$NON-NLS-1$
+			separeCommentChkBx.setText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay")); //$NON-NLS-1$
 			separeCommentChkBx.setSelected(initialSeparateCommentState);
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.anchor = GridBagConstraints.NORTH;
+			gridBagConstraints5.anchor = GridBagConstraints.SOUTHEAST;
 			gridBagConstraints5.fill = GridBagConstraints.NONE;
 			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints5.gridy = 0;
