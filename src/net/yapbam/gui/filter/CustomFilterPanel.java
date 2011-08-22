@@ -75,6 +75,7 @@ public class CustomFilterPanel extends JPanel {
 	private JPanel panel;
 	private DateFilterPanel datePanel;
 	private PropertyChangeListener inconsistencyListener;
+	private TextMatcherFilterPanel commentPanel;
 
 	public CustomFilterPanel() {
 		this(new FilteredData(new GlobalData()));
@@ -102,13 +103,14 @@ public class CustomFilterPanel extends JPanel {
 		gridBagConstraints28.insets = new Insets(0, 0, 5, 5);
 		gridBagConstraints28.gridx = 0;
 		gridBagConstraints28.fill = GridBagConstraints.BOTH;
-		gridBagConstraints28.gridy = 4;
+		gridBagConstraints28.gridy = 2;
 		GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+		gridBagConstraints41.anchor = GridBagConstraints.NORTH;
 		gridBagConstraints41.insets = new Insets(0, 0, 5, 5);
 		gridBagConstraints41.gridx = 0;
-		gridBagConstraints41.fill = GridBagConstraints.BOTH;
+		gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints41.weightx = 1.0D;
-		gridBagConstraints41.gridy = 5;
+		gridBagConstraints41.gridy = 3;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.insets = new Insets(0, 0, 5, 5);
@@ -116,7 +118,7 @@ public class CustomFilterPanel extends JPanel {
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.weighty = 0.0D;
 		gridBagConstraints.gridwidth = 1;
-		gridBagConstraints.gridy = 2;
+		gridBagConstraints.gridy = 0;
 		this.setSize(800, 700);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		this.setLayout(gridBagLayout);
@@ -125,12 +127,16 @@ public class CustomFilterPanel extends JPanel {
 		gbc_panel.gridwidth = 2;
 		gbc_panel.weighty = 1.0;
 		gbc_panel.weightx = 1.0;
-		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 1;
-		gbc_panel.gridy = 2;
+		gbc_panel.gridy = 0;
 		add(getPanel(), gbc_panel);
 		this.add(getAccountPanel(), gridBagConstraints);
+		GridBagConstraints gbc_clear = new GridBagConstraints();
+		gbc_clear.insets = new Insets(0, 0, 0, 5);
+		gbc_clear.gridx = 0;
+		gbc_clear.gridy = 4;
+		add(getClear(), gbc_clear);
 		this.add(getValueDatePanel(), gridBagConstraints41);
 		this.add(getModePanel(), gridBagConstraints28);
 	}
@@ -385,6 +391,8 @@ public class CustomFilterPanel extends JPanel {
 		filter.setValueDateFilter(getValueDatePanel().getDateFrom(), getValueDatePanel().getDateTo());
 		// build the description filter
 		filter.setDescriptionMatcher(getDescriptionPanel().getTextMatcher());
+		// build the comment filter
+		filter.setCommentMatcher(getCommentPanel().getTextMatcher());
 		// Build the statement filter
 		mask = 0;
 		if (getChecked().isSelected()) mask += Filter.CHECKED;
@@ -700,11 +708,19 @@ public class CustomFilterPanel extends JPanel {
 			panel = new JPanel();
 			GridBagLayout gbl_panel = new GridBagLayout();
 			panel.setLayout(gbl_panel);
+			GridBagConstraints gbc_commentPanel = new GridBagConstraints();
+			gbc_commentPanel.weightx = 1.0;
+			gbc_commentPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbc_commentPanel.gridwidth = 2;
+			gbc_commentPanel.insets = new Insets(0, 0, 5, 5);
+			gbc_commentPanel.gridx = 0;
+			gbc_commentPanel.gridy = 1;
+			panel.add(getCommentPanel(), gbc_commentPanel);
 			GridBagConstraints gbc_amountPanel = new GridBagConstraints();
 			gbc_amountPanel.fill = GridBagConstraints.HORIZONTAL;
 			gbc_amountPanel.insets = new Insets(0, 0, 5, 5);
 			gbc_amountPanel.gridx = 0;
-			gbc_amountPanel.gridy = 2;
+			gbc_amountPanel.gridy = 3;
 			panel.add(getAmountPanel(), gbc_amountPanel);
 			GridBagConstraints gbc_Receipts_expensesPanel = new GridBagConstraints();
 			gbc_Receipts_expensesPanel.insets = new Insets(0, 0, 5, 5);
@@ -712,7 +728,7 @@ public class CustomFilterPanel extends JPanel {
 			gbc_Receipts_expensesPanel.anchor = GridBagConstraints.NORTH;
 			gbc_Receipts_expensesPanel.fill = GridBagConstraints.HORIZONTAL;
 			gbc_Receipts_expensesPanel.gridx = 0;
-			gbc_Receipts_expensesPanel.gridy = 1;
+			gbc_Receipts_expensesPanel.gridy = 2;
 			panel.add(getReceipts_expensesPanel(), gbc_Receipts_expensesPanel);
 			GridBagConstraints gbc_descriptionPanel = new GridBagConstraints();
 			gbc_descriptionPanel.gridwidth = 2;
@@ -727,36 +743,36 @@ public class CustomFilterPanel extends JPanel {
 			gbc_categoryPanel.gridheight = 4;
 			gbc_categoryPanel.insets = new Insets(0, 0, 5, 0);
 			gbc_categoryPanel.gridx = 1;
-			gbc_categoryPanel.gridy = 1;
+			gbc_categoryPanel.gridy = 2;
 			panel.add(getCategoryPanel(), gbc_categoryPanel);
 			GridBagConstraints gbc_numberPanel = new GridBagConstraints();
 			gbc_numberPanel.fill = GridBagConstraints.HORIZONTAL;
 			gbc_numberPanel.insets = new Insets(0, 0, 5, 5);
 			gbc_numberPanel.gridx = 0;
-			gbc_numberPanel.gridy = 3;
+			gbc_numberPanel.gridy = 4;
 			panel.add(getNumberPanel(), gbc_numberPanel);
 			GridBagConstraints gbc_statementPanel = new GridBagConstraints();
 			gbc_statementPanel.insets = new Insets(0, 0, 5, 5);
 			gbc_statementPanel.anchor = GridBagConstraints.NORTH;
 			gbc_statementPanel.fill = GridBagConstraints.HORIZONTAL;
 			gbc_statementPanel.gridx = 0;
-			gbc_statementPanel.gridy = 4;
+			gbc_statementPanel.gridy = 5;
 			panel.add(getStatementPanel(), gbc_statementPanel);
-			GridBagConstraints gbc_clear = new GridBagConstraints();
-			gbc_clear.weighty = 1.0;
-			gbc_clear.gridwidth = 2;
-			gbc_clear.insets = new Insets(0, 0, 0, 5);
-			gbc_clear.gridx = 0;
-			gbc_clear.gridy = 5;
-			panel.add(getClear(), gbc_clear);
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.insets = new Insets(0, 0, 5, 5);
 			gridBagConstraints21.gridx = 0;
-			gridBagConstraints21.fill = GridBagConstraints.BOTH;
+			gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints21.weightx = 1.0D;
-			gridBagConstraints21.gridy = 3;
+			gridBagConstraints21.gridy = 1;
 			this.add(getDatePanel(), gridBagConstraints21);
 		}
 		return panel;
+	}
+	private TextMatcherFilterPanel getCommentPanel() {
+		if (commentPanel == null) {
+			commentPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.COMMENT_WORDING);
+			commentPanel.setTextMatcher(data.getFilter().getCommentMatcher());
+		}
+		return commentPanel;
 	}
 }

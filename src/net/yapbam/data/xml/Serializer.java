@@ -109,6 +109,7 @@ public class Serializer {
 	static final String FILTER_AMOUNT_TO_ATTRIBUTE = "amountTo";
 	static final String FILTER_ATTRIBUTE = "filter";
 	static final String FILTER_DESCRIPTION_ID = DESCRIPTION_ATTRIBUTE;
+	static final String FILTER_COMMENT_ID = COMMENT_ATTRIBUTE;
 	static final String FILTER_NUMBER_ID = NUMBER_ATTRIBUTE;
 	static final String FILTER_STATEMENT_ID = STATEMENT_ATTRIBUTE;
 
@@ -355,6 +356,7 @@ public class Serializer {
 		if (mask!=(Filter.ALL)) atts.addAttribute("", "", FILTER_ATTRIBUTE, "CDATA", Integer.toString(mask));
 		hd.startElement("", "", FILTER_TAG, atts);
 		if (filter.getDescriptionMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_DESCRIPTION_ID);
+		if (filter.getCommentMatcher()!=null) serialize(filter.getCommentMatcher(), FILTER_COMMENT_ID);
 		if (filter.getNumberMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_NUMBER_ID);
 		if (filter.getStatementMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_STATEMENT_ID);
 		hd.endElement("","",FILTER_TAG);

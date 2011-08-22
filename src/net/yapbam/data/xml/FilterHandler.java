@@ -19,6 +19,7 @@ public class FilterHandler extends DefaultHandler {
 	private GlobalData data;
 	private Filter filter;
 	private TextMatcher descriptionMatcher;
+	private TextMatcher commentMatcher;
 	private TextMatcher numberMatcher;
 	private TextMatcher statementMatcher;
 	private int property;
@@ -97,6 +98,8 @@ public class FilterHandler extends DefaultHandler {
 			TextMatcher textMatcher = new TextMatcher(kind, filter, caseSensitive, diacriticalSensitive);
 			if (id.equals(Serializer.FILTER_DESCRIPTION_ID)) {
 				this.descriptionMatcher = textMatcher;
+			} else if (id.equals(Serializer.FILTER_COMMENT_ID)) {
+				this.commentMatcher = textMatcher;
 			} else if (id.equals(Serializer.FILTER_NUMBER_ID)) {
 				this.numberMatcher = textMatcher;
 			} else if (id.equals(Serializer.FILTER_STATEMENT_ID)) {
@@ -129,6 +132,7 @@ public class FilterHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equals(Serializer.FILTER_TAG)) {
 			filter.setDescriptionMatcher(this.descriptionMatcher);
+			filter.setCommentMatcher(this.commentMatcher);
 			filter.setNumberMatcher(this.numberMatcher);
 			filter.setStatementFilter(property, this.statementMatcher);
 		} else if (qName.equals(Serializer.TEXT_MATCHER_TAG)) {

@@ -9,15 +9,18 @@ import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.transactiontable.DescriptionSettings;
 
 /** The transaction's table model. */
 final class BalanceHistoryModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	private BalanceData data;
+	private DescriptionSettings descriptionSettings;
 
 	/** Constructor. */
 	public BalanceHistoryModel(BalanceData data) {
 		super();
+		this.descriptionSettings = new DescriptionSettings();
 		this.data = data;
 		data.addListener(new DataListener() {
 			@Override
@@ -32,7 +35,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		Transaction transaction = getTransaction(rowIndex);
 		if (columnIndex==0) return transaction.getAccount().getName();
 		if (columnIndex==1) return transaction.getDate();
-		if (columnIndex==2) return transaction.getDescription();
+		if (columnIndex==2) return descriptionSettings.getDescription(transaction);
 		if (columnIndex==3) return transaction.getAmount();
 		if (columnIndex==4) return transaction.getCategory().getName();
 		if (columnIndex==5) return transaction.getMode().getName();
@@ -40,6 +43,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		if (columnIndex==7) return transaction.getValueDate();
 		if (columnIndex==8) return transaction.getStatement();
 		if (columnIndex==9) return getRemaining(rowIndex);
+		if (columnIndex==10) return transaction.getComment();
 		return "?"; //$NON-NLS-1$
 	}
 
@@ -74,7 +78,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 10;
+		return descriptionSettings.isCommentSeparatedFromDescription()?11:10;
 	}
 
 	@Override
@@ -89,6 +93,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		if (columnIndex==7) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
 		if (columnIndex==8) return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
 		if (columnIndex==9) return LocalizationData.get("BalanceHistory.transaction.remainingBalance"); //$NON-NLS-1$
+		if (columnIndex==10) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
 }
