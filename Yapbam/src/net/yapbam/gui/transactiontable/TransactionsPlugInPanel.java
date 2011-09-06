@@ -28,8 +28,8 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
+import net.yapbam.gui.actions.DynamicNewTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
-import net.yapbam.gui.actions.NewTransactionAction;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.JLabelMenu;
 
@@ -59,7 +59,7 @@ public class TransactionsPlugInPanel extends JPanel {
         
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		String noText = ""; //$NON-NLS-1$
-		JButton newTransactionButton = new JButton(new NewTransactionAction(transactionTable.getFilteredData()));
+		JButton newTransactionButton = new JButton(new DynamicNewTransactionAction(transactionTable.getFilteredData()));
 		newTransactionButton.setText(noText);
 		Dimension dimension = newTransactionButton.getPreferredSize();
 		dimension.width = dimension.height;
