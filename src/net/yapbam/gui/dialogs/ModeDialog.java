@@ -122,6 +122,7 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 	class Listener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			updateOkButtonEnabled();
+			if (leftPane.getValueDateComputer()==null) checkbook.setSelected(false);
 		}
 	}
 
