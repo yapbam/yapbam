@@ -125,9 +125,9 @@ public class SubTransactionPanel extends JPanel {
 		});
 		descriptionField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		this.amount = amountField.getValue();
-		amountField.addKeyListener(new KeyAdapter() {
+		amountField.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
-			public void keyReleased(KeyEvent arg0) {
+			public void propertyChange(PropertyChangeEvent evt) {
 				Double old = amount;
 				amount = amountField.getValue();
 				if (!jCheckBox.isSelected() && (amount!=null)) amount = -amount;
@@ -175,7 +175,7 @@ public class SubTransactionPanel extends JPanel {
 			amountField = new AmountWidget(LocalizationData.getLocale());
 			amountField.setToolTipText(LocalizationData.get("SubTransactionDialog.amount.tooltip")); //$NON-NLS-1$
 			amountField.setColumns(10);
-	        amountField.setValue(new Double(0));
+			amountField.setValue(new Double(0));
 		}
 		return amountField;
 	}
@@ -230,7 +230,8 @@ public class SubTransactionPanel extends JPanel {
 	}
 	
 	public String getDescription() {
-		return description;
+System.out.println (description+" / "+descriptionField.getText());
+		return descriptionField.getText();
 	}
 	
 	public void setDescription(String description) {
