@@ -34,7 +34,8 @@ import net.yapbam.util.TextMatcher;
  * There's currently no button to deploy the popup (the user need to use the down arrow key), it would probably improve the user experience.
  */
 public class PopupTextFieldList extends JTextField {
-	/** The property name. A PropertyChangeEvent is fired when a predefined value is selected. */
+	/** A PropertyChangeEvent of this name is fired when a predefined value is selected.
+	 * The values of the event are the field content. */
 	public static final String PREDEFINED_VALUE = "PREDEFINED_VALUE";
 	
 	private JPopupMenu popup;

@@ -131,7 +131,7 @@ public class SubTransactionPanel extends JPanel {
 				Double old = amount;
 				amount = amountField.getValue();
 				if (!jCheckBox.isSelected() && (amount!=null)) amount = -amount;
-				SubTransactionPanel.this.firePropertyChange(AMOUNT_PROPERTY, old, description);
+				SubTransactionPanel.this.firePropertyChange(AMOUNT_PROPERTY, old, amount);
 			}
 		});
 		amountField.addFocusListener(AutoSelectFocusListener.INSTANCE);
@@ -154,7 +154,6 @@ public class SubTransactionPanel extends JPanel {
 						setAmount(updater.getAmount((String) evt.getNewValue()));
 						setCategory(updater.getCategory((String) evt.getNewValue()));
 					}
-					
 				}
 			});
 		}
