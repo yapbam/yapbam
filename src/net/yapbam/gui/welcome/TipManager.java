@@ -34,7 +34,7 @@ public class TipManager extends ArrayList<String> {
 		tip = MessageFormat.format(LocalizationData.get("Tip.7"), LocalizationData.get("MainMenu.File"), LocalizationData.get("MainMenu.Preferences"), LocalizationData.get("PreferencesDialog.StartState.title")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.add(tip);
 
-		tip = MessageFormat.format(LocalizationData.get("Tip.8"), LocalizationData.get("TransactionDialog.next")); //$NON-NLS-1$ //$NON-NLS-2$
+		tip = MessageFormat.format(LocalizationData.get("Tip.8"), LocalizationData.get("MainMenu.Transactions.NewMultiple"), LocalizationData.get("TransactionDialog.next")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.add(tip);
 	}
 	
