@@ -38,7 +38,7 @@ public class PopupTextFieldList extends JTextField {
 	 * The values of the event are the field content. */
 	public static final String PREDEFINED_VALUE = "PREDEFINED_VALUE";
 	
-	//TODO We should implement a value property (see AmountWidget)
+	//TODO We probably should implement a value property (see AmountWidget)
 	
 	private JPopupMenu popup;
 	private JList list;
