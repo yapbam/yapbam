@@ -13,6 +13,7 @@ import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.BasicDocumentListener;
 import net.yapbam.util.TextMatcher;
 
 import java.awt.Color;
@@ -20,27 +21,32 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.MessageFormat;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-public class TextMatcherFilterPanel extends JPanel {
+public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 	private static final long serialVersionUID = 1L;
 
-	public static final Wordings DESCRIPTION_WORDING = new Wordings(LocalizationData.get("Transaction.description"),
-			LocalizationData.get("CustomFilterPanel.description.equals.toolTip"), LocalizationData.get("CustomFilterPanel.description.contains.toolTip"),
-			LocalizationData.get("CustomFilterPanel.description.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.description.toolTip"));
+	public static final Wordings DESCRIPTION_WORDING = new Wordings(LocalizationData.get("Transaction.description"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.description.equals.toolTip"), LocalizationData.get("CustomFilterPanel.description.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.description.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.description.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 
-	public static final Wordings COMMENT_WORDING = new Wordings(LocalizationData.get("Transaction.comment"),
-			LocalizationData.get("CustomFilterPanel.comment.equals.toolTip"), LocalizationData.get("CustomFilterPanel.comment.contains.toolTip"),
-			LocalizationData.get("CustomFilterPanel.comment.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.comment.toolTip"));
+	public static final Wordings COMMENT_WORDING = new Wordings(LocalizationData.get("Transaction.comment"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.comment.equals.toolTip"), LocalizationData.get("CustomFilterPanel.comment.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.comment.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.comment.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 
-	public static final Wordings NUMBER_WORDING = new Wordings(LocalizationData.get("Transaction.number"),
-			LocalizationData.get("CustomFilterPanel.number.equals.toolTip"), LocalizationData.get("CustomFilterPanel.number.contains.toolTip"),
-			LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.number.toolTip"));
+	public static final Wordings NUMBER_WORDING = new Wordings(LocalizationData.get("Transaction.number"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.number.equals.toolTip"), LocalizationData.get("CustomFilterPanel.number.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 	
-	public static final Wordings STATEMENT_WORDING = new Wordings(LocalizationData.get("Transaction.statement"),
-			LocalizationData.get("CustomFilterPanel.statement.equals.toolTip"), LocalizationData.get("CustomFilterPanel.statement.contains.toolTip"),
-			LocalizationData.get("CustomFilterPanel.statement.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.statement.toolTip"));
+	public static final Wordings STATEMENT_WORDING = new Wordings(LocalizationData.get("Transaction.statement"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.statement.equals.toolTip"), LocalizationData.get("CustomFilterPanel.statement.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.statement.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.statement.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 	
 	public static class Wordings {
 		public String title;
@@ -221,6 +227,12 @@ public class TextMatcherFilterPanel extends JPanel {
 			descriptionRegular = new JRadioButton();
 			descriptionRegular.setText(LocalizationData.get("CustomFilterPanel.description.regularExpression")); //$NON-NLS-1$
 			descriptionRegular.setToolTipText(wordings.regExprToolTip);
+			descriptionRegular.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					checkConsistency();
+				}
+			});
 		}
 		return descriptionRegular;
 	}
@@ -280,6 +292,12 @@ public class TextMatcherFilterPanel extends JPanel {
 			description = new JTextField();
 			description.setToolTipText(wordings.descriptionToolTip);
 			description.addFocusListener(AutoSelectFocusListener.INSTANCE);
+			description.getDocument().addDocumentListener(new BasicDocumentListener() {
+				@Override
+				protected void modified() {
+					checkConsistency();
+				}
+			});
 		}
 		return description;
 	}
@@ -320,5 +338,17 @@ public class TextMatcherFilterPanel extends JPanel {
 			panel.add(getJPanel2(), gbc_jPanel2);
 		}
 		return panel;
+	}
+
+	@Override
+	protected String computeInconsistencyCause() {
+		if (!getDescriptionRegular().isSelected()) return null;
+		String text = getDescription().getText();
+		try {
+			Pattern.compile(text);
+			return null;
+		} catch (PatternSyntaxException e) {
+			return MessageFormat.format(LocalizationData.get("TextMatcherFilterPanel.invalidRegularExpression"), text); //$NON-NLS-1$
+		}
 	}
 }

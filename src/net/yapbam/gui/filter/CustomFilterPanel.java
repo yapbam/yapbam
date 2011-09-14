@@ -435,6 +435,10 @@ public class CustomFilterPanel extends JPanel {
 	 * @return A string that explains the problem, or null if the state is consistent.
 	 */
 	public String getInconsistencyCause() {
+		if (getDescriptionPanel().getInconsistencyCause()!=null) return getDescriptionPanel().getInconsistencyCause();
+		if (getCommentPanel().getInconsistencyCause()!=null) return getCommentPanel().getInconsistencyCause();
+		if (getNumberPanel().getInconsistencyCause()!=null) return getNumberPanel().getInconsistencyCause();
+		if (getJPanel11().getInconsistencyCause()!=null) return getJPanel11().getInconsistencyCause();
 		if (getReceipts_expensesPanel().getInconsistencyCause()!=null) return getReceipts_expensesPanel().getInconsistencyCause();
 		if (!getChecked().isSelected() && !getNotChecked().isSelected()) {
 			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.checkStatus"), //$NON-NLS-1$
@@ -475,6 +479,7 @@ public class CustomFilterPanel extends JPanel {
 	private TextMatcherFilterPanel getDescriptionPanel() {
 		if (descriptionPanel == null) {
 			descriptionPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.DESCRIPTION_WORDING);
+			descriptionPanel.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
 			descriptionPanel.setTextMatcher(data.getFilter().getDescriptionMatcher());
 		}
 		return descriptionPanel;
@@ -590,6 +595,7 @@ public class CustomFilterPanel extends JPanel {
 			jPanel11 = new TextMatcherFilterPanel(TextMatcherFilterPanel.STATEMENT_WORDING);
 			if (getChecked().isSelected()) {
 				jPanel11.setTextMatcher(data.getFilter().getStatementMatcher());
+				jPanel11.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
 				jPanel11.setCheckBoxesVisible(false);
 			}
 		}
@@ -689,6 +695,7 @@ public class CustomFilterPanel extends JPanel {
 	private TextMatcherFilterPanel getNumberPanel() {
 		if (numberPanel == null) {
 			numberPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.NUMBER_WORDING);
+			numberPanel.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
 			numberPanel.setTextMatcher(data.getFilter().getNumberMatcher());
 			numberPanel.setCheckBoxesVisible(false);
 		}
@@ -771,6 +778,7 @@ public class CustomFilterPanel extends JPanel {
 	private TextMatcherFilterPanel getCommentPanel() {
 		if (commentPanel == null) {
 			commentPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.COMMENT_WORDING);
+			commentPanel.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
 			commentPanel.setTextMatcher(data.getFilter().getCommentMatcher());
 		}
 		return commentPanel;
