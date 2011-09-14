@@ -1,5 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
+
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Notes de mise à jour</title>
 
 <style type="text/css">
@@ -14,8 +16,7 @@ color: #AA0000;
 color: #ff9900;
 }
 -->
-</style></head>
-<body>
+</style></head><body>
 <h1>Version 0.9.0 (??/09/2011)</h1>
 <h2>Nouveautés de cette version</h2>
 <ul>
@@ -25,17 +26,27 @@ quelles informations sont conservées entre deux exécutions de Yapbam.</li>
 <li>Ajout de la possibilité de mémoriser le filtre entre deux
 exécutions de Yapbam.</li><li>Ajout d'un champ "commentaire" aux opérations.</li>
 <li>Ajout d'une mode de création en masse des opérations.</li>
+  <li>Modification du script yapbam.sh pour permettre aux utilisateurs de lancer yapbam plus facilement sur MacOS.<br>
+  </li>
+
 <li><span class="bugFix">Correction d'un bug</span>
 : Lorsqu'il
 manquait des colonnes en fin de certaines lignes importées,
 l'importation plantait.</li>
 <li><span class="bugFix">Correction d'un bug mineur </span>: Lorsque,
 dans le dialogue de saisie des opérations, on choississait un libellé
-prédéfini, une erreur, sans aucune conséquence était remontée
+prédéfini alors que le champ date était vide, une erreur, sans aucune conséquence, était remontée
 (apparition du dialogue d'erreur).</li><li><span class="bugFix">Correction d'un bug mineur</span> : <span id="result_box" class="" lang="en"><span class="">Le
 dialogue de création de mode de paiement permettait de cocher la case
 "Utiliser un chéquier" puis de décocher "Utilisable pour les dépenses".
 La validation dans cette configuration provoquait une erreur.</span></span></li>
+  <li><span class="bugFix">Correction d'un bug mineur</span><span id="result_box" class="" lang="en"><span class=""><span class="bugFix"></span>
+dans le dialogue de création des sous-opérations: Quand on choisissais
+un libellé en cliquant dans le menu des libellés suggérés, la
+description était bien reportée dans le champ MAIS, quand on validait
+la saisie, le libellé enregistré était celui saisi avant la valeur
+prédéfinie !</span></span></li>
+
 </ul>
 <ul>
 </ul>
