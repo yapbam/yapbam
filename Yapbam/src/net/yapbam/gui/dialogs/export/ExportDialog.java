@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import net.yapbam.data.FilteredData;
@@ -28,7 +29,7 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
 	}
 
 	private String getStateKey() {
-		return this.getClass().getCanonicalName()+"."+ExporterParameters.class.getName();
+		return this.getClass().getCanonicalName()+"."+ExporterParameters.class.getName(); //$NON-NLS-1$
 	}
 
 	@Override
@@ -45,7 +46,10 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
 		ExporterParameters parameters = (ExporterParameters) YapbamState.INSTANCE.restore(getStateKey());
 		if (parameters!=null) {
 			if (!hasFilter) parameters.setExportFilteredData(false);
-			exportPanel.setParameters(parameters);
+			if (!exportPanel.setParameters(parameters)) {
+				JOptionPane.showMessageDialog(this.getOwner(), LocalizationData.get("ExportDialog.columnsChangedMessage"), //$NON-NLS-1$
+						LocalizationData.get("saveDialog.FileExist.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+			}
 		}
 		return exportPanel;
 	}

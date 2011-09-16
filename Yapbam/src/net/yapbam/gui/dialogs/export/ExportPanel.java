@@ -265,19 +265,23 @@ public class ExportPanel extends JPanel {
 		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(), includeInitialBalance.isSelected(), !all.isSelected());
 	}
 
-	public void setParameters(ExporterParameters parameters) {
+	public boolean setParameters(ExporterParameters parameters) {
 		title.setSelected(parameters.isInsertHeader());
 		separatorPanel.setSeparator(parameters.getSeparator());
 		includeInitialBalance.setSelected(parameters.isExportInitialBalance());
 		JRadioButton sel = parameters.isExportFilteredData()?filtered:all;
 		group.setSelected(sel.getModel(), true);
-		for (int i = jTable.getColumnCount()-1; i>=0 ; i--) {
-			int modelIndex = parameters.getViewIndexesToModel()[i];
-			jTable.moveColumn(jTable.convertColumnIndexToView(modelIndex), i);
+		boolean ok = (jTable.getColumnCount()==parameters.getViewIndexesToModel().length);
+		if (ok) {
+			for (int i = jTable.getColumnCount()-1; i>=0 ; i--) {
+				int modelIndex = parameters.getViewIndexesToModel()[i];
+				jTable.moveColumn(jTable.convertColumnIndexToView(modelIndex), i);
+			}
+			ExportTableModel model = (ExportTableModel) jTable.getModel();
+			for (int i = 0; i < parameters.getSelectedModelColumns().length; i++) {
+				model.setValueAt(parameters.getSelectedModelColumns()[i], 0, i);
+			}
 		}
-		ExportTableModel model = (ExportTableModel) jTable.getModel();
-		for (int i = 0; i < parameters.getSelectedModelColumns().length; i++) {
-			model.setValueAt(parameters.getSelectedModelColumns()[i], 0, i);
-		}
+		return ok;
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
