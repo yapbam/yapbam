@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
 
 import javax.swing.BorderFactory;
@@ -16,7 +17,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.DocumentListener;
 
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
@@ -27,6 +27,7 @@ import net.yapbam.gui.widget.IntegerWidget;
 
 /** This panel allows to create or modify a valueDateComputer */
 class ModePanel extends JPanel {
+	static final String IS_SELECTED_PROPERTY = "IS_SELECTED"; //$NON-NLS-1$
 	static final String IS_VALID_PROPERTY = "IS_VALID"; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
@@ -35,7 +36,7 @@ class ModePanel extends JPanel {
 	private JPanel relativePanel;
 	private JPanel deferedPanel;
 	private JPanel emptyPanel;
-	private Component optionalComponent;
+	private JCheckBox checkBook;
 	private IntegerWidget relField;
 	private IntegerWidget stopField;
 	private IntegerWidget debtField;
@@ -49,9 +50,8 @@ class ModePanel extends JPanel {
 	 * @param title the panel title, displayed in the border
 	 * @param option an optional component, displayed at the bottom of the panel (null if none)
 	 */
-	ModePanel(String title, Component option, final ModeDialog dialog) {
+	ModePanel(String title, boolean checkBookOption) {
 		super(new GridBagLayout());
-		DocumentListener listener = new AutoUpdateOkButtonDocumentListener(dialog);
 		Insets insets = new Insets(5, 5, 5, 5);
 		this.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
@@ -71,11 +71,13 @@ class ModePanel extends JPanel {
 				stopLabel.setEnabled(ok);
 				debtLabel.setEnabled(ok);
 				relLabel.setEnabled(ok);
-				if (optionalComponent!=null) optionalComponent.setEnabled(ok);
-				firePropertyChange(IS_VALID_PROPERTY, !ok, ok);
+				if (checkBook!=null) checkBook.setEnabled(ok);
+				if (!ok && (checkBook!=null)) checkBook.setSelected(false);
+				firePropertyChange(IS_SELECTED_PROPERTY, !ok, ok);
+				checkValidity();
 			}});
 		this.add(isSelectedBox, c);
-
+		
 		c = new GridBagConstraints();
 		c.gridy=1; c.anchor=GridBagConstraints.WEST; c.insets=insets; c.gridwidth=1;
 		comboLabel = new JLabel(LocalizationData.get("TransactionDialog.valueDate")); //$NON-NLS-1$
@@ -90,11 +92,18 @@ class ModePanel extends JPanel {
 				emptyPanel.setVisible((index==0));
 				relativePanel.setVisible((index==1));
 				deferedPanel.setVisible(index==2);
-				dialog.updateOkButtonEnabled();
+				checkValidity();
 			}});
 		c = new GridBagConstraints(); c.gridy=1; c.gridx=1; c.weightx=1;
 		this.add(combo, c);
 		
+		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				checkValidity();
+			}
+		};
+
 		relativePanel = new JPanel(new GridBagLayout());
 		if (DEBUG) relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
 		GridBagConstraints c2 = new GridBagConstraints();
@@ -106,7 +115,7 @@ class ModePanel extends JPanel {
 		c2.weightx = 1.0;
 		relField = new IntegerWidget();
 		relField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		relField.getDocument().addDocumentListener(listener);
+		relField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, listener);
 		relField.setColumns(2);
 		relativePanel.add(relField, c2);
 		relativePanel.setVisible(false);
@@ -121,7 +130,7 @@ class ModePanel extends JPanel {
 		c2.gridx = 1;
 		stopField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		stopField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		stopField.getDocument().addDocumentListener(listener);
+		stopField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, listener);
 		stopField.setColumns(2);
 		deferedPanel.add(stopField, c2);
 		c2.gridx = 2;
@@ -129,7 +138,7 @@ class ModePanel extends JPanel {
 		deferedPanel.add(debtLabel, c2);
 		debtField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		debtField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		debtField.getDocument().addDocumentListener(listener);
+		debtField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, listener);
 		debtField.setColumns(2);
 		c2.gridx = 3;
 		deferedPanel.add(debtField, c2);
@@ -144,15 +153,15 @@ class ModePanel extends JPanel {
 		this.add(deferedPanel, c);
 		this.add(emptyPanel, c);
 
-		if (option != null) {
+		if (checkBookOption) {
 			c = new GridBagConstraints();
 			c.insets = insets;
 			c.gridy = 3;
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			c.anchor = GridBagConstraints.WEST;
-			this.add(option, c);
-			this.optionalComponent = option;
-			option.setEnabled(false);
+			this.checkBook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
+			this.checkBook.setEnabled(false);
+			this.add(this.checkBook, c);
 		}
 	}
 	
@@ -191,6 +200,15 @@ class ModePanel extends JPanel {
 		return this.isSelectedBox.isSelected();
 	}
 
+	boolean lastValidity = true;
+	private void checkValidity() {
+		boolean isValid = hasValidContent();
+		if (lastValidity!=isValid) {
+			this.firePropertyChange(IS_VALID_PROPERTY, lastValidity, isValid);
+			lastValidity = isValid;
+		}
+	}
+
 	public boolean hasValidContent() {
 		if (!this.isSelected()) return true;
 		int index = combo.getSelectedIndex();
@@ -218,5 +236,13 @@ class ModePanel extends JPanel {
 				throw new IllegalArgumentException();
 			}
 		}
+	}
+
+	public boolean isCheckBookSelected() {
+		return (checkBook!=null) && (checkBook.isSelected());
+	}
+
+	public void setCheckBookSelected(boolean selected) {
+		checkBook.setSelected(selected);
 	}
 }

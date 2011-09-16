@@ -24,7 +24,6 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 	private static final boolean DEBUG = false;
 	
 	private JTextField name;
-	private JCheckBox checkbook;
 	private ModePanel leftPane;
 	private ModePanel rightPane;
 	private Mode original;
@@ -58,12 +57,18 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		name.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		idPanel.add(name, c);
 
-		checkbook = new JCheckBox(LocalizationData.get("ModeDialog.useCheckBook")); //$NON-NLS-1$
-		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), checkbook, this); //$NON-NLS-1$
-		rightPane = new ModePanel(LocalizationData.get("ModeDialog.forReceipts"), null, this); //$NON-NLS-1$
-		Listener listener = new Listener();
-		leftPane.addPropertyChangeListener(listener);
-		rightPane.addPropertyChangeListener(listener);
+		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), true); //$NON-NLS-1$
+		rightPane = new ModePanel(LocalizationData.get("ModeDialog.forReceipts"), false); //$NON-NLS-1$
+		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateOkButtonEnabled();
+			}
+		};
+		leftPane.addPropertyChangeListener(ModePanel.IS_SELECTED_PROPERTY, listener);
+		rightPane.addPropertyChangeListener(ModePanel.IS_SELECTED_PROPERTY, listener);
+		leftPane.addPropertyChangeListener(ModePanel.IS_VALID_PROPERTY, listener);
+		rightPane.addPropertyChangeListener(ModePanel.IS_VALID_PROPERTY, listener);
 
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -83,7 +88,7 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 
 	@Override
 	protected Mode buildResult() {
-		return new Mode(name.getText(),rightPane.getValueDateComputer(),leftPane.getValueDateComputer(),checkbook.isSelected());
+		return new Mode(name.getText(),rightPane.getValueDateComputer(),leftPane.getValueDateComputer(),leftPane.isCheckBookSelected());
 	}
 	
 	/** Opens the dialog, and add the newly created mode to the data
@@ -119,19 +124,12 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		return null;
 	}
 
-	class Listener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			updateOkButtonEnabled();
-			if (leftPane.getValueDateComputer()==null) checkbook.setSelected(false);
-		}
-	}
-
 	public void setContent(Mode mode) {
 		setTitle(LocalizationData.get("ModeDialog.title.edit")); //$NON-NLS-1$
 		original = mode;
-		checkbook.setSelected(mode.isUseCheckBook());
 		name.setText(mode.getName());
 		leftPane.setContent(mode.getExpenseVdc());
+		leftPane.setCheckBookSelected(mode.isUseCheckBook());
 		rightPane.setContent(mode.getReceiptVdc());
 		this.updateOkButtonEnabled();
 	}
