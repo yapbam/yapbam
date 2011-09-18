@@ -28,7 +28,7 @@ public class Importer {
 	
 	private CurrentTransaction current;
 	private DateFormat dateFormatter;
-	private int importFileNumberOfColumns;
+	private int lastUsedColumnInImportedFile;
 	
 	public Importer(File file, ImporterParameters parameters, GlobalData data, Account defaultAccount) {
 		super();
@@ -36,13 +36,13 @@ public class Importer {
 		this.parameters = parameters;
 		this.defaultAccount = defaultAccount;
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
-		this.importFileNumberOfColumns = -1;
+		this.lastUsedColumnInImportedFile = -1;
 		for (int i = 0; i < parameters.getImportedFileColumns().length; i++) {
-			if (parameters.getImportedFileColumns()[i]>this.importFileNumberOfColumns) {
-				this.importFileNumberOfColumns = parameters.getImportedFileColumns()[i];
+			if (parameters.getImportedFileColumns()[i]>this.lastUsedColumnInImportedFile) {
+				this.lastUsedColumnInImportedFile = parameters.getImportedFileColumns()[i];
 			}
 		}
-		this.importFileNumberOfColumns++;
+		this.lastUsedColumnInImportedFile++;
 	}
 
 	public ImportError[] importFile(GlobalData data) throws IOException {
@@ -99,7 +99,7 @@ public class Importer {
 		// RULES : Subtransactions and initial balance have no transaction date
 		//         Every initial balances are located before the first transaction
 		
-		boolean[] invalidFields = new boolean[importFileNumberOfColumns];
+		boolean[] invalidFields = new boolean[lastUsedColumnInImportedFile];
 		boolean hasError = false;
 		
 		// Decoding amount

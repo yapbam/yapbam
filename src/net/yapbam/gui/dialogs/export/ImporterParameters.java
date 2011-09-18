@@ -10,8 +10,6 @@ public class ImporterParameters implements Serializable {
 	private String separatorString;
 	private int ignoredLeadingLines;
 	private int[] importedFileColumns;
-	
-	//FIXME ATTENTION, si on rajoute une colonne et qu'on récupère une vieille sérialisation, on obtient une instance en vrac.
 
 	public ImporterParameters(char separator, int ignoredLeadingLines, int[] importedFileColumns) {
 		super();
