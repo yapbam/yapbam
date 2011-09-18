@@ -15,8 +15,9 @@ public class AboutDialog extends AbstractDialog<Void, Void> {
 		this.cancelButton.setVisible(false);
 		this.okButton.setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
 		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
-		this.setMinimumSize(getSize());
 		this.setResizable(true);
+		this.pack();
+		this.setMinimumSize(getSize());
 	}
 
 	@Override

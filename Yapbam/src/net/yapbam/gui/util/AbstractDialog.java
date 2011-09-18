@@ -12,7 +12,8 @@ import javax.swing.*;
 import net.yapbam.gui.LocalizationData;
 
 /** An abstract dialog with a customizable center pane, an Ok and/or a Cancel button.
- * <br>By default, the dialog is not resizable, call this.setResizable(true) to change this behaviour.
+ * <br>By default, the dialog is not resizable, call this.setResizable(true) to change this behavior
+ * (don't forget to call pack and set the minimum size after calling setResizable).
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  * @param <T> The class of the parameter of the dialog (information that is useful to build the center pane).
@@ -48,9 +49,9 @@ public abstract class AbstractDialog<T,V> extends JDialog {
 		this.data = data;
 		this.result = null;
 		this.setContentPane(this.createContentPane());
+		this.setResizable(false);
 		this.pack();
 		this.setLocationRelativeTo(owner);
-		this.setResizable(false);
 	}
 	
 	private Container createContentPane() {

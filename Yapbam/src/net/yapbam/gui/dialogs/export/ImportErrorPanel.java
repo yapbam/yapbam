@@ -20,51 +20,38 @@ import net.yapbam.gui.transactiontable.ColoredModel;
 import net.yapbam.gui.util.JTableUtils;
 import java.awt.Insets;
 
-/** The panel that displays import errors.
+/**
+ * The panel that displays import errors.
  */
 public class ImportErrorPanel extends JPanel {
-	
+
 	@SuppressWarnings("serial")
-	private final class ObjectRenderer extends DefaultTableCellRenderer {	
-		public ObjectRenderer () {
+	private final class ObjectRenderer extends DefaultTableCellRenderer {
+		public ObjectRenderer() {
 			super();
 		}
 
-	    @Override
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-	    	super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-/*
-	    	ColoredModel model = (ColoredModel)table.getModel();
-		    row = table.convertRowIndexToModel(row);
-		    column = table.convertColumnIndexToModel(column);
-			if (isSelected) {
-		        setBackground(table.getSelectionBackground());
-		        setForeground(table.getSelectionForeground());
-		    } else {
-		        boolean error = this.getTransaction(row).getAmount()<0;  	
-		        setForeground(table.getForeground());
-		        setBackground(error?Color.red:table.getBackground());
-		    }
-		    //		    this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
-		    setValue(value);
-		    */
-	    	if (!isSelected) { // No special rendering on the line number (displayed in the first row)
-			    column = table.convertColumnIndexToModel(column);
-			    if (column>0) {
-				    row = table.convertRowIndexToModel(row);
-			        boolean error = errors[row].hasError(column-1);
-			        setBackground(error?Color.red:table.getBackground());
-			    }
-	    	}
-	    	return this;
-	    }
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (!isSelected) {
+				column = table.convertColumnIndexToModel(column);
+				boolean error = false;
+				if (column > 0) { // No special rendering on the line number (displayed in the first row)
+					row = table.convertRowIndexToModel(row);
+					error = errors[row].hasError(column - 1);
+				}
+				setBackground(error ? Color.red : table.getBackground());
+			}
+			return this;
+		}
 	}
 
 	@SuppressWarnings("serial")
-	private final class ImportErrorTableModel extends AbstractTableModel  implements ColoredModel {
+	private final class ImportErrorTableModel extends AbstractTableModel implements ColoredModel {
 		private int columnsCount;
 		private String[] columnsHeaders;
-		
+
 		public ImportErrorTableModel() {
 			// Compute the column count (max of imported column indexes and number of columns in the error lines)
 			// We will add one column for the line number
@@ -91,7 +78,7 @@ public class ImportErrorPanel extends JPanel {
 				}
 			}
 		}
-		
+
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			if (columnIndex==0) {
@@ -126,21 +113,11 @@ public class ImportErrorPanel extends JPanel {
 
 		@Override
 		public int getAlignment(int column) {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
-			// TODO Auto-generated method stub
-			if (isSelected) {
-		        renderer.setBackground(table.getSelectionBackground());
-		        renderer.setForeground(table.getSelectionForeground());
-		    } else {
-		        boolean error = (row==0); //TODO  	
-		        renderer.setForeground(table.getForeground());
-		        renderer.setBackground(error?Color.RED:table.getBackground());
-		    }		
 		}
 	}
 
@@ -152,20 +129,19 @@ public class ImportErrorPanel extends JPanel {
 	private int[] importedFileColumns;
 
 	/**
-	 * This is the default constructor
-	 * just for Eclipse Visual Editor
+	 * This is the default constructor just for Eclipse Visual Editor
 	 */
 	public ImportErrorPanel() {
 		this(new int[0], new ImportError[0]);
 	}
-	
+
 	public ImportErrorPanel(int[] importedFileColumns, ImportError[] errors) {
 		super();
 		this.errors = errors;
 		this.importedFileColumns = importedFileColumns;
 		initialize();
 	}
-	
+
 	/**
 	 * This method initializes this
 	 * 
@@ -191,9 +167,9 @@ public class ImportErrorPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
@@ -204,9 +180,9 @@ public class ImportErrorPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jTable	
-	 * 	
-	 * @return javax.swing.JTable	
+	 * This method initializes jTable
+	 * 
+	 * @return javax.swing.JTable
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
@@ -220,15 +196,15 @@ public class ImportErrorPanel extends JPanel {
 			preferredSize.width = Math.min(preferredSize.width, 1024);
 			preferredSize.height = Math.min(preferredSize.height, 600);
 			jTable.setPreferredScrollableViewportSize(preferredSize);
-	        jTable.setFillsViewportHeight(true);
+			jTable.setFillsViewportHeight(true);
 		}
 		return jTable;
 	}
 
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes jLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getJLabel() {
 		if (jLabel == null) {
@@ -238,5 +214,4 @@ public class ImportErrorPanel extends JPanel {
 		}
 		return jLabel;
 	}
-
 }

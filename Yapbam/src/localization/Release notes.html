@@ -23,16 +23,19 @@ color: #ff9900;
 }
 </style></head>
 <body>
-<h1>Version 0.9.1 (09/16/2011)</h1>
+<h1>Version 0.9.2 (09/??/2011)</h1>
 <h2>New in this version</h2><ul>
-  <li><span class="bugFix">Fixes a major bug</span>: Exportation was impossible if a previous exportation has been made in a previous Yapbam version.<span class="bugFix"></span></li><li><span class="bugFix">Fixes a minor bug</span>: In the payment mode dialog, the "validate" but was not always disabled <span id="result_box" class="" lang="en"><span class="hps">when, some fields were empty</span></span><span id="result_box" class="" lang="en"><span class="">. </span></span><span id="result_box" class="" lang="en"><span class="">Validating such a dialog caused an error.</span></span></li>
+  <li><span class="bugFix">Fixes a bug</span>
+in importation: When the imported file contained invalid lines and the
+last column of the file wasn't attached to a transaction attribute, the
+importation failed.<span class="bugFix"></span></li>
 </ul>
 <ul></ul>
 
 <ul></ul>
 <hr>
 <h1>Older releases</h1>
-<h2>Version 0.9.0 (09/14/2011)</h2>
+<h2>Version 0.9.1 (09/16/2011)</h2><ul><li><span class="bugFix">Fixes a major bug</span>: Exportation was impossible if a previous exportation has been made in a previous Yapbam version.<span class="bugFix"></span></li><li><span class="bugFix">Fixes a minor bug</span>: In the payment mode dialog, the "validate" but was not always disabled <span id="result_box" class="" lang="en"><span class="hps">when, some fields were empty</span></span><span id="result_box" class="" lang="en"><span class="">. </span></span><span id="result_box" class="" lang="en"><span class="">Validating such a dialog caused an error.</span></span></li></ul><h2>Version 0.9.0 (09/14/2011)</h2>
 <ul>
 <li>Adds a preference dialog to set which data is remembered between two Yapbam launches.</li><li>The filter can be remembered between two launches.</li><li>Adds a comment field to the transactions.</li><li><span id="result_box" class="short_text" lang="en"><span class="hps">Adds a</span> <span class="hps">method for</span> <span class="hps">creating</span> <span class="hps">mass</span> <span class="hps">transactions</span></span>.</li><li>Changes to the yapbam.sh script in order to simplify the use on macOS.<br>
   </li><li><span class="bugFix">Fixes a bug</span>
