@@ -378,7 +378,13 @@ public class MainFrame extends JFrame implements DataListener {
 		}
 		getStateSaver().saveState(mainPane, this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
-		if (Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
+		if (Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
+			if (!getData().somethingHasChanged() && (data.getPassword()==null)) {
+				getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
+			} else {
+				getStateSaver().remove(LAST_FILTER_USED);
+			}
+		}
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
@@ -432,8 +438,13 @@ public class MainFrame extends JFrame implements DataListener {
 				try {
 					readData(uri);
 					if (startOptions.isRememberFilter()) {
-						Filter filter = getStateSaver().restore(LAST_FILTER_USED, getData());
-						if (filter!=null) this.getFilteredData().setFilter(filter);
+						try {
+							Filter filter = getStateSaver().restore(LAST_FILTER_USED, getData());
+							if (filter!=null) this.getFilteredData().setFilter(filter);
+						} catch (Exception e) {
+							ErrorManager.INSTANCE.log(this, e);
+							ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
+						}
 					}
 				} catch (IOException e) {
 					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$

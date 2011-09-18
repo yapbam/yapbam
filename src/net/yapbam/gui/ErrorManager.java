@@ -72,7 +72,7 @@ public class ErrorManager {
 	public void log(Window parent, Throwable t) {
 		try {
 			// To prevent Yapbam from sending always the same errors (and/or showing always the error dialog)
-			// We will test if this error as not alreday been sent during this session
+			// We will test if this error as not already been sent during this session
 			String trace = getTraceKey(t);
 			if (!encounteredErrors.add(trace)) {
 				return;
