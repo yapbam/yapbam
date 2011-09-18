@@ -14,13 +14,23 @@ color: #AA0000;
 color: #ff9900;
 }
 -->
-</style>
-</head>
+</style></head>
 <body>
-<h1>Version 0.9.2 (??/09/2011)</h1>
+<h1>Version 0.9.2 (18/09/2011)</h1>
 <h2>Nouveautés de cette version</h2>
 <ul>
-<li><span class="bugFix">Correction d'un bug</span> dans l'importation
+<li><span class="bugFix">Correction d'un bug majeur</span> de la
+version 0.9.0.
+Quand Yapbam était configuré pour mémoriser le filtre entre deux
+lancements, et que Yapbam était quitter alors que le fichier ouvert
+était protégé par un mot de passe, il était impossible de redémarrer
+Yapbam. La seule façon de réouvrir le fichier était de supprimer la
+ligne "filter" dans le fichier Data/.yapbam.<br>Afin
+de régler le plus rapidement possible ce problème, et dans la mesure où
+il est causé par une erreur de conception de la sauvegarde du filtre,
+cette fonctionnalité est désactivé, dans cette version, pour les
+fichiers protégés par mot de passe. Elle sera réintroduite dans une
+version future.</li><li><span class="bugFix">Correction d'un bug</span> dans l'importation
 :
 Lorsque le fichier importé contenait des erreurs et que la dernière
 colonne du fichier n'était attachée à aucune attribut d'opération,
