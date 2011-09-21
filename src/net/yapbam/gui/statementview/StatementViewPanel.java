@@ -183,12 +183,6 @@ public class StatementViewPanel extends JPanel {
 			this.accountMenu.setActionEnabled(true);
 			accountMenu.setSelectedIndex(0);
 		}
-		TransactionSelector selector = getTransactionsTable();
-		Action edit = new EditTransactionAction(selector);
-		Action delete = new DeleteTransactionAction(selector);
-		Action duplicate = new DuplicateTransactionAction(selector);
-		checkAction = new CheckTransactionAction(getCheckModePanel(), selector);
-		new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
 	}
 
 	/**
@@ -452,7 +446,14 @@ public class StatementViewPanel extends JPanel {
 	 * @return javax.swing.JTable	
 	 */
 	StatementTable getTransactionsTable() {
-		if (transactionsTable == null) transactionsTable = new StatementTable(data);
+		if (transactionsTable == null) {
+			transactionsTable = new StatementTable(data);
+			Action edit = new EditTransactionAction(transactionsTable);
+			Action delete = new DeleteTransactionAction(transactionsTable);
+			Action duplicate = new DuplicateTransactionAction(transactionsTable);
+			checkAction = new CheckTransactionAction(getCheckModePanel(), transactionsTable);
+			new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
+		}
 		return transactionsTable;
 	}
 	
