@@ -134,8 +134,8 @@ public class AmountWidget extends JTextField {
 				// We will try to convert what was typed in a "pure" english digital number (only digits and . as decimal separator),
 				// in order to use the standard decimal parser.
 				DecimalFormatSymbols decimalFormatSymbols = format.getDecimalFormatSymbols();
-				text = text.replace(decimalFormatSymbols.getDecimalSeparator(), '.');
 				text = text.replace(new String(new char[]{decimalFormatSymbols.getGroupingSeparator()}), "");
+				text = text.replace(decimalFormatSymbols.getDecimalSeparator(), '.');
 				try {
 					changed = Double.valueOf(text);
 				} catch (NumberFormatException e2) {
