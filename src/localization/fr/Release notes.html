@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
 
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Notes de mise à jour</title>
 
 <style type="text/css">
@@ -19,11 +20,17 @@ color: #ff9900;
 <h1>Version 0.9.3 (??/09/2011)</h1>
 <h2>Nouveautés de cette version</h2>
 <ul>
-<li><span class="bugFix">Correction d'un bug</span> dans la vue "Relevé
+  <li><span class="bugFix">Correction d'un bug</span> dans la saisie
+des montants, pour les pays où le séparateur de milliers est le point
+(Belgique, par exemple). Lorsqu'on saisissait un nombre sans unité
+monétaire (exemple 5,25), ce nombre était transformé en un nombre
+différent à la sortie du champ (exemple 525&nbsp;&#8364;).<br></li>
+  <li><span class="bugFix">Correction d'un bug</span> dans la vue "Relevé
 de comptes"
 : Lorsqu'on ouvrait plusieurs comptes pendant l'éxécution de Yapbam,
 l'édition des opérations entrainait l'apparition du dialogue d'édition
-de l'opération plusieurs fois.</li></ul>
+de l'opération plusieurs fois.</li>
+</ul>
 <ul>
 </ul>
 <hr>
