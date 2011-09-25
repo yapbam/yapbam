@@ -81,7 +81,7 @@ public class Exporter {
 		if ((field==ExportTableModel.DATE_INDEX) || (field==ExportTableModel.CATEGORY_INDEX) ||
 				(field==ExportTableModel.MODE_INDEX) || (field==ExportTableModel.NUMBER_INDEX) ||
 				(field==ExportTableModel.STATEMENT_INDEX) || (field==ExportTableModel.VALUE_DATE_INDEX) ||
-				(field==ExportTableModel.DESCRIPTION_INDEX)) {
+				(field==ExportTableModel.DESCRIPTION_INDEX) || (field==ExportTableModel.COMMENT_INDEX)) {
 			result = null;
 		} else if (field==ExportTableModel.ACCOUNT_INDEX) {
 			result = account.getName();
@@ -102,7 +102,8 @@ public class Exporter {
 		String result = null;
 		if ((field==ExportTableModel.ACCOUNT_INDEX) || (field==ExportTableModel.DATE_INDEX) ||
 				(field==ExportTableModel.MODE_INDEX) || (field==ExportTableModel.NUMBER_INDEX) ||
-				(field==ExportTableModel.STATEMENT_INDEX) || (field==ExportTableModel.VALUE_DATE_INDEX)) {
+				(field==ExportTableModel.STATEMENT_INDEX) || (field==ExportTableModel.VALUE_DATE_INDEX)
+				|| (field==ExportTableModel.COMMENT_INDEX)) {
 			result = null;
 		} else if (field==ExportTableModel.AMOUNT_INDEX) {
 			result = format(transaction.getAmount());
@@ -128,6 +129,8 @@ public class Exporter {
 			result = dateFormatter.format(transaction.getDate());
 		} else if (field==ExportTableModel.DESCRIPTION_INDEX) {
 			result = transaction.getDescription();
+		} else if (field==ExportTableModel.COMMENT_INDEX) {
+			result = transaction.getComment();
 		} else if (field==ExportTableModel.MODE_INDEX) {
 			result = transaction.getMode().getName();
 		} else if (field==ExportTableModel.NUMBER_INDEX) {
