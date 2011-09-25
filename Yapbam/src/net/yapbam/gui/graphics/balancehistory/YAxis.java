@@ -67,7 +67,7 @@ class YAxis {
     		current += pas;
     		int y = this.getY(current);
     		if (y>fontMetrics.getAscent()/2+5) {
-    			yGraduations.add(new Graduation(y,new Double(current)));
+    			yGraduations.add(new Graduation(y,current));
     		} else {
     			break;
     		}
@@ -77,11 +77,11 @@ class YAxis {
     		current -= pas;
     		int y = this.getY(current);
     		if (y<size.height-lineHeight) {
-    			yGraduations.add(new Graduation(y,new Double(current)));
+    			yGraduations.add(new Graduation(y, current));
     		} else {
     			break;
     		}
-    	} while (true);	
+    	} while (true);
 	}
 	
 	int getY(double value) {

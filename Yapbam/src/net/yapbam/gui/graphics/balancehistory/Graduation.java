@@ -2,9 +2,9 @@ package net.yapbam.gui.graphics.balancehistory;
 
 public class Graduation {
 	private int position;
-	private Object value;
+	private double value;
 	
-	public Graduation(int position, Object value) {
+	public Graduation(int position, double value) {
 		super();
 		this.position = position;
 		this.value = value;
@@ -14,7 +14,7 @@ public class Graduation {
 		return position;
 	}
 
-	public Object getValue() {
+	public double getValue() {
 		return value;
 	}
 }
