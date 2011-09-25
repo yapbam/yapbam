@@ -1,12 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-  
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Release notes</title>
 
-  
-  
-  <title>Release notes</title><style type="text/css">
+<style type="text/css">
 .bugFix {
 color: #009900;
 }
@@ -16,42 +12,37 @@ color: #aa0000;
 .develop {
 color: #ff9900;
 }
-  </style></head>
+</style></head>
 <body>
-<h1>Version 0.9.3 (09/25/2011)</h1>
-
+<h1>Version 0.9.4 (09/25/2011)</h1>
 <h2>New in this version</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug</span> when entering the
+<li><span class="bugFix">Fixes a bug</span>:
+the export crashed when "comment" was in the exported fields.</li>
+</ul>
+<ul>
+</ul>
+<ul>
+</ul>
+<hr>
+<h1>Older releases</h1>
+<h2>Version 0.9.3 (09/25/2011)</h2>
+<ul>
+<li><span class="bugFix">Fixes a bug</span>
+when entering the
 amounts, for
 countries where the thousands separator is the point (Belgium, for
 example). When entering a number without a currency unit (eg 5,25),
 this number was transformed into a
 different number (eg 525,00&nbsp;&#8364;).</li>
-  <li><span class="bugFix">Fixes a bug</span>
+<li><span class="bugFix">Fixes a bug</span>
 in "" tab: When opening multiple accounts while running Yapbam, editing
 transactions resulted in the appearance of the edit dialog of the
 transaction several times.</li>
 </ul>
-
-<ul>
-
-</ul>
-
-<ul>
-
-</ul>
-
-<hr>
-<h1>Older releases</h1>
-
 <h2>Version 0.9.2 (09/18/2011)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a major bug</span>
+<li><span class="bugFix">Fixes a major bug</span>
 in the 0.9.0 version. When Yapbam was configured to remember the filter
 and the opened file between two launches, and Yapbam is closed with a
 password protected file opened, Yapbam was unable to start again. The
@@ -61,928 +52,773 @@ In order to fix this major problem as fast as
 possible, and as it is caused by a misconception of the filter backup,
 the filter backup is deactivated in this release when using password
 protected file.<span class="bugFix"></span></li>
-  <li><span class="bugFix">Fixes a bug</span>
+<li><span class="bugFix">Fixes a bug</span>
 in importation: When the imported file contained invalid lines and the
 last column of the file wasn't attached to a transaction attribute, the
 importation failed.</li>
 </ul>
-
 <h2>Version 0.9.1 (09/16/2011)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a major bug</span>: Exportation was
+<li><span class="bugFix">Fixes a major bug</span>:
+Exportation was
 impossible if a previous exportation has been made in a previous Yapbam
 version.<span class="bugFix"></span></li>
-  <li><span class="bugFix">Fixes a minor bug</span>: In the payment
-mode dialog, the "validate" button was not always disabled when some fields
+<li><span class="bugFix">Fixes a minor bug</span>:
+In the payment
+mode dialog, the "validate" button was not always disabled when some
+fields
 were empty. Validating such a dialog caused an error.</li>
 </ul>
-
 <h2>Version 0.9.0 (09/14/2011)</h2>
-
 <ul>
-
-  <li>Adds a preference dialog to set which data is remembered between
+<li>Adds a preference dialog to set which data is remembered
+between
 two Yapbam launches.</li>
-  <li>The filter can be remembered between two launches.</li>
-  <li>Adds a comment field to the transactions.</li>
-  <li><span id="result_box" class="short_text" lang="en"><span class="hps">Adds a</span> <span class="hps">method for</span> <span class="hps">creating</span> <span class="hps">mass</span> <span class="hps">transactions</span></span>.</li>
-  <li>Changes to the yapbam.sh script in order to simplify the use on
+<li>The filter can be remembered between two launches.</li>
+<li>Adds a comment field to the transactions.</li>
+<li><span id="result_box" class="short_text" lang="en"><span class="hps">Adds a</span>
+<span class="hps">method for</span> <span class="hps">creating</span> <span class="hps">mass</span>
+<span class="hps">transactions</span></span>.</li>
+<li>Changes to the yapbam.sh script in order to simplify the
+use on
 macOS.<br>
-  </li>
-  <li><span class="bugFix">Fixes a bug</span>
+</li>
+<li><span class="bugFix">Fixes a bug</span>
 in the import process: When there were missing columns at the end of
 imported lines, the import failed.</li>
-  <li><span class="bugFix">Fixes a minor bug</span>: <span id="result_box" class="" lang="en"><span class="hps">When, in the</span>
-    </span><span id="result_box" class="" lang="en"><span class="hps">transaction
-    </span></span><span id="result_box" class="" lang="en"><span class="hps">input dialog</span><span class="hps"></span><span>,</span>
-    <span class="hps">you chose</span> <span class="hps">a</span> <span class="hps">predefined label</span> with the date field empty, <span>the</span>
-    <span class="hps">error dialog</span><span class=""> signaled an
+<li><span class="bugFix">Fixes a minor bug</span>:
+<span id="result_box" class="" lang="en"><span class="hps">When, in the</span> </span><span id="result_box" class="" lang="en"><span class="hps">transaction </span></span><span id="result_box" class="" lang="en"><span class="hps">input dialog</span><span class="hps"></span><span>,</span>
+<span class="hps">you chose</span> <span class="hps">a</span> <span class="hps">predefined
+label</span> with the date field empty, <span>the</span>
+<span class="hps">error dialog</span><span class=""> signaled an
 program error.</span></span></li>
-  <li><span id="result_box" class="" lang="en"><span class=""><span class="bugFix">Fixes a minor bug</span>:
+<li><span id="result_box" class="" lang="en"><span class=""><span class="bugFix">Fixes a minor bug</span>:
 The mode creation dialog allowed the user to check the "use a
 checkbook" box then to uncheck the "Usable for expenses" box.
 Validating such a dialog caused an error.</span></span></li>
-  <li><span id="result_box" class="" lang="en"><span class=""><span class="bugFix">Fixes a minor bug</span>&nbsp;in the subtransaction
+<li><span id="result_box" class="" lang="en"><span class=""><span class="bugFix">Fixes a minor bug</span>&nbsp;in
+the subtransaction
 edition dialog: When you chose a description
 in the popup menu by clicking on it with the mouse, the description
 appeared in the field (this is the normal behaviour). But, when
 validating the input, the description saved was the one before
 selecting the predefined description !</span></span></li>
-  <li><span id="result_box" class="" lang="en"><span class=""><span class="bugFix">Fixes a bug</span>: Entering an invalid regular
+<li><span id="result_box" class="" lang="en"><span class=""><span class="bugFix">Fixes a bug</span>:
+Entering an invalid regular
 expression in the "custom filter" dialog caused an error when
 validating the dialog.</span></span></li>
 </ul>
-
 <h2>Version 0.8.8 (08/03/2011)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug</span>
+<li><span class="bugFix">Fixes a bug</span>
 in the transactions table of the balance history tab; When a
 transaction was edited, the table was refreshed, but not with the right
 data.</li>
-  <li><span class="bugFix">Fixes a bug</span>
+<li><span class="bugFix">Fixes a bug</span>
 in the import process: When a the imported file contained invalid
 values and has more than none columns, the import failed.</li>
-  <li><span class="bugFix">Fixes a bug</span>&nbsp;in the "periodical
+<li><span class="bugFix">Fixes a bug</span>&nbsp;in
+the "periodical
 transactions" administration panel. The table was not refreshed when
 these transactions were modified.</li>
 </ul>
-
 <h2>Version 0.8.7 (07/23/2011)</h2>
-
 <ul>
-
-  <li>The "customized filter" dialog is smaller and now compatible will
+<li>The "customized filter" dialog is smaller and now
+compatible will
 768px height screens.</li>
-  <li><span class="bugFix">Fixes&nbsp;bugs</span> in some dialogs:</li>
-  <ul>
-    <li>The cancel button in the category dialog and the account dialog
+<li><span class="bugFix">Fixes&nbsp;bugs</span>
+in some dialogs:</li>
+<ul>
+<li>The cancel button in the category dialog and the account
+dialog
 confirmed the dialog (same action as ok !).</li>
-    <li>In
+<li>In
 some dialogs, typing a wrong value didn't prevent you from validate the
 dialog if you clicked very, very, very quickly the ok button.</li>
-  </ul>
-  <li><span class="bugFix">Fixes&nbsp;bugs</span>
+</ul>
+<li><span class="bugFix">Fixes&nbsp;bugs</span>
 in the administration tab:</li>
-  <ul>
-    <li>"Delete", "Duplicate" and "Edit" buttons
+<ul>
+<li>"Delete", "Duplicate" and "Edit" buttons
 were not greyed out when no data was selected. Sometimes it could cause
 crashes.</li>
-    <li>Deleting the content of the "initial balance" cell of an
+<li>Deleting the content of the "initial balance" cell of an
 account in the accounts table caused a crash.</li>
-  </ul>
-  <li><span class="bugFix">Fixes a bug</span> in transaction dialog,
+</ul>
+<li><span class="bugFix">Fixes a bug</span>
+in transaction dialog,
 checking the receipt box when amount field was empty caused a crash.</li>
-  <li><span class="bugFix">Fixes a bug</span>
+<li><span class="bugFix">Fixes a bug</span>
 in the "customized filters" dialog: The "Clear all filters" button
 didn't erase the
 filter based on the receipt/expense nature of the transaction.</li>
 </ul>
-
 <h2>Version 0.8.6 (06/05/2011)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug</span>: When a tab was dragged
+<li><span class="bugFix">Fixes a bug</span>:
+When a tab was dragged
 and dropped outside of the tabs area, an error occured.</li>
 </ul>
-
 <h2>Version 0.8.5 (05/31/2011)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug</span> in the entry wizard. It
+<li><span class="bugFix">Fixes a bug</span>
+in the entry wizard. It
 could hang when the description was not in the filtered transactions.</li>
 </ul>
-
 <h2>Version 0.8.4 (05/30/2011)</h2>
-
 <ul>
-
-  <li>Tabs order can now be changed.</li>
-  <li>Adds menu accelerator for editing or duplicating.</li>
-  <li> Adds menu item for checking a transaction.</li>
-  <li>Reduces popup menus in the "Statistics" tab to useful items (for
+<li>Tabs order can now be changed.</li>
+<li>Adds menu accelerator for editing or duplicating.</li>
+<li> Adds menu item for checking a transaction.</li>
+<li>Reduces popup menus in the "Statistics" tab to useful items
+(for
 example: no more "save". It wrote an unreadable file).</li>
-  <li><span class="bugFix">Fixes a bug</span>: Selecting a transaction
+<li><span class="bugFix">Fixes a bug</span>:
+Selecting a transaction
 in the statement tab or in the balance history tab didn't enabled
 delete/edit/duplicate menu items.</li>
-  <li><span class="bugFix">Fixes a bug</span>: <span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">If</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">the</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">file
-opened</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">at start</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">had</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">a</span>n
+<li><span class="bugFix">Fixes a bug</span>:
+<span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">If</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">file
+opened</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">at
+start</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">had</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">a</span>n
 alert <span title="Cliquer ici pour voir d'autres traductions" class="hps">on the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">balance,</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">it</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">was
-not</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">immediately</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">displayed</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps atn">in the "</span><span title="Cliquer ici pour voir d'autres traductions">Balance History</span>"
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">it</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">was
+not</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">immediately</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">displayed</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps atn">in the "</span><span title="Cliquer ici pour voir d'autres traductions">Balance
+History</span>"
 tab.</span></li>
-  <li><span id="result_box" class="" lang="en"><span class="bugFix">Fixes</span>
+<li><span id="result_box" class="" lang="en"><span class="bugFix">Fixes</span>
 some localization problems (some wordings with a wrong language).</span></li>
 </ul>
-
 <h2>Version 0.8.3 (05/08/2011)</h2>
-
 <ul>
-
-  <li>Adds an accounts summary view.</li>
-  <li>Adds
+<li>Adds an accounts summary view.</li>
+<li>Adds
 a transaction table in the balance history tab. This table shows
 transactions, sorted by value date, with the remaining balance after
 each transaction.</li>
-  <li>When a value date interval is selected in the filter, the balance
+<li>When a value date interval is selected in the filter, the
+balance
 history chart now&nbsp;<span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">begins</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">and</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">ends</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">on
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">and</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">ends</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">on
 the </span></span><span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">value</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps"></span></span><span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">dates</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">specified
-    </span><span title="Cliquer ici pour voir d'autres traductions" class="hps">in the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">filter</span></span>.</li>
-  <li>The check mode is moved in the Statement view.&nbsp;<span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">This</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">view</span><span title="Cliquer ici pour voir d'autres traductions" class="hps"> has now</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">column</span>s
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps atn">"</span><span class="" title="Cliquer ici pour voir d'autres traductions">category</span><span title="Cliquer ici pour voir d'autres traductions">"</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">and</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps atn">"</span><span class="" title="Cliquer ici pour voir d'autres traductions">Mode</span><span title="Cliquer ici pour voir d'autres traductions">"</span><span title="Cliquer ici pour voir d'autres traductions">,</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">a menu</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">to
-show /</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">hide</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">columns</span><span title="Cliquer ici pour voir d'autres traductions">,</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">and</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">the
+<span title="Cliquer ici pour voir d'autres traductions" class="hps"></span></span><span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">dates</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">specified </span><span title="Cliquer ici pour voir d'autres traductions" class="hps">in
+the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">filter</span></span>.</li>
+<li>The check mode is moved in the Statement view.&nbsp;<span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">This</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">view</span><span title="Cliquer ici pour voir d'autres traductions" class="hps">
+has now</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">column</span>s
+<span title="Cliquer ici pour voir d'autres traductions" class="hps atn">"</span><span class="" title="Cliquer ici pour voir d'autres traductions">category</span><span title="Cliquer ici pour voir d'autres traductions">"</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">and</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps atn">"</span><span class="" title="Cliquer ici pour voir d'autres traductions">Mode</span><span title="Cliquer ici pour voir d'autres traductions">"</span><span title="Cliquer ici pour voir d'autres traductions">,</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">a menu</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">to
+show /</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">hide</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">columns</span><span title="Cliquer ici pour voir d'autres traductions">,</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">and</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">the
 ability to</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">sort</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">the</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">view
-along</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">column
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">the</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">view
+along</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">the</span>
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">column
 of your</span> <span title="Cliquer ici pour voir d'autres traductions" class="hps">choice</span><span title="Cliquer ici pour voir d'autres traductions">.</span></span></li>
-  <li>Adds a confirm dialog when the user export the budget view to an
+<li>Adds a confirm dialog when the user export the budget view
+to an
 existing file.</li>
-  <li>Adds
+<li>Adds
 transaction editing options to fill automatically the statement id
 attribute of the transactions, to be alerted when you change a checked
 transaction,&nbsp;to confirm transactions deletion, etc...</li>
-  <li><span class="bugFix">Fixes&nbsp;bugs</span> in Statement view:</li>
-  <ul>
-    <li>When a transaction were edited or created, the selected
+<li><span class="bugFix">Fixes&nbsp;bugs</span>
+in Statement view:</li>
+<ul>
+<li>When a transaction were edited or created, the selected
 statement could be changed.</li>
-    <li>When a filter was defined, and you changed the selected
+<li>When a filter was defined, and you changed the selected
 statement, the content of the statement was filtered.</li>
-  </ul>
-  <li><span class="bugFix">Fixes a major bug</span> in password
+</ul>
+<li><span class="bugFix">Fixes a major bug</span>
+in password
 protection: The password protection was cleared every time the file was
 saved again.</li>
-  <li><span class="bugFix">Fixes a bug</span>: the help on Linux was
+<li><span class="bugFix">Fixes a bug</span>:
+the help on Linux was
 broken.</li>
-  <li><span class="bugFix">Fixes a bug</span>: Selecting an item in the
+<li><span class="bugFix">Fixes a bug</span>:
+Selecting an item in the
 contextual menu on a chart in statistics tab resulted in an error.</li>
 </ul>
-
 <h2>Version 0.8.2 (04/10/2011)</h2>
-
 <ul>
-
-  <li>When the filter selects only one account, and you create a
+<li>When the filter selects only one account, and you create a
 new
 transaction (or a periodical transaction), the filtered account is
 now automatically selected in the dialog.</li>
-  <li>The&nbsp;hidden columns in the transactions table are
+<li>The&nbsp;hidden columns in the transactions table are
 saved from one execution to another.
 The columns in "Display columns..." menu are now in the same ordre as
 in the transactions table.</li>
-  <li>The columns widths and positions of the tables in the
+<li>The columns widths and positions of the tables in the
 "account management"
 tab are now saved from one execution to another. Same for tables
 appearing in dialogs (transaction edition dialog, for instance), for
 printer settings (paper format, margins, etc...)</li>
-  <li>Improves the entry wizard.</li>
-  <li>Adds basic printing of account statements.</li>
-  <li>Adds edit wizard on subtransaction description field.</li>
-  <li><span class="bugFix">Fixes a bug</span> in file import: An empty
+<li>Improves the entry wizard.</li>
+<li>Adds basic printing of account statements.</li>
+<li>Adds edit wizard on subtransaction description field.</li>
+<li><span class="bugFix">Fixes a bug</span>
+in file import: An empty
 amount
 field could make the import fail.</li>
 </ul>
-
 <h2>Version 0.8.1 (03/05/2011)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 Setting the country/language didn't change some date format.</li>
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 When very old transactions were not checked, the&nbsp;"Not checked"
 statement may not be the most recent one in the "account statements"
 view. It led to wrong balances at beginning and end of period for
 statements placed before the "Not checked" statement.</li>
-  <li>The category-wise expenses pie is now sorted by category
+<li>The category-wise expenses pie is now sorted by category
 name.</li>
-  <li>Adds a "Tutorial" button to the welcome screen.</li>
+<li>Adds a "Tutorial" button to the welcome screen.</li>
 </ul>
-
 <h2>Version 0.8.0 (02/04/2011)</h2>
-
 <ul>
-
-  <li>Adds new look and feels (see the File/Preferences menu -
+<li>Adds new look and feels (see the File/Preferences menu -
 "Appearence" tab). We recommend that you try the Nimbus look and feel.</li>
-  <li>Adds a welcome screen with useful shortcuts and tips.</li>
-  <li>Introduces a new auto update mechanism. No need to manually
+<li>Adds a welcome screen with useful shortcuts and tips.</li>
+<li>Introduces a new auto update mechanism. No need to manually
 download the updates, now, they will install automatically.</li>
-  <li>Improves the entry wizard. The most likely choices are now
+<li>Improves the entry wizard. The most likely choices are now
 offered first.</li>
-  <li>Adds the ability to send a crash report to the Yapbam team
+<li>Adds the ability to send a crash report to the Yapbam team
 when an error occurs.</li>
-  <li>Adds an alert message if you try to save a data file in the
+<li>Adds an alert message if you try to save a data file in the
 installation directory (which may lead to data loss).</li>
-  <li><span class="bugFix">Fixes a very minor bug</span>:
+<li><span class="bugFix">Fixes a very minor bug</span>:
 use of up and down arrows in integer fields were not safe. It could
 make the value in the field out of range.</li>
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 When editing a transaction, if you chose a description with the
 wizard that would have imply the use of a checkbook, the check number
 field was not&nbsp;<span id="result_box" class="" lang="en"><span title="Cliquer ici pour voir d'autres traductions" class="hps">properly</span>
-    <span title="Cliquer ici pour voir d'autres traductions" class="hps">initialized</span></span>.</li>
-  <li><span class="bugFix">Fixes a bug</span>:
+<span title="Cliquer ici pour voir d'autres traductions" class="hps">initialized</span></span>.</li>
+<li><span class="bugFix">Fixes a bug</span>:
 Create a receipt with a null amout may lead to errors.</li>
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 Disallow a payment mode may lead to errors.</li>
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 Creating a category in a subtransaction could change the transaction
 category.</li>
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 Creating an inactive periodical transaction without frequency data
 caused crash in the administration panel.</li>
 </ul>
-
 <h2>Version 0.7.4 (12/12/2010)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 Filtering transactions with an amount equals to a value was broken (all
 transactions with amount higher or equal to the value were selected).</li>
-  <li><span class="bugFix">Fixes a minor bug</span>
+<li><span class="bugFix">Fixes a minor bug</span>
 in the currency converter tool. When connection to the ECB site failed,
 no window appeared.</li>
-  <li><span class="bugFix">Fixes minor bugs</span>
+<li><span class="bugFix">Fixes minor bugs</span>
 in the statement view.</li>
 </ul>
-
 <h2>Version 0.7.3 (11/26/2010)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug</span>:
+<li><span class="bugFix">Fixes a bug</span>:
 The statistics charts were wrong since 0.7.2.</li>
-  <li> Adds a launch script for Linux computer. </li>
+<li> Adds a launch script for Linux computer. </li>
 </ul>
-
 <h2>Version 0.7.2 (11/23/2010)</h2>
-
 <ul>
-
-  <li>Minor improvement in check mode (Changing the date field
+<li>Minor improvement in check mode (Changing the date field
 automatically selects the box "Change value date by").</li>
-  <li>The "filter" menu is now hidden when the "Account
+<li>The "filter" menu is now hidden when the "Account
 statements" tab is selected (the filter is ignored in this view).</li>
-  <li>Adds "receipts" and "expenses" check boxes in the
+<li>Adds "receipts" and "expenses" check boxes in the
 "customized filter" dialog.</li>
-  <li>The Yapbam directory structure is changed to match the
+<li>The Yapbam directory structure is changed to match the
 PortableApps.com format.</li>
-  <li><span class="bugFix">Minor bugs fixed</span>
+<li><span class="bugFix">Minor bugs fixed</span>
 in the "customized filter" dialog.</li>
-  <li><span class="bugFix">Fixes a minor bug</span>
+<li><span class="bugFix">Fixes a minor bug</span>
 under Windows Vista : After the end of the program (yapbam.exe), Vista
 asked if the program ran fine.</li>
 </ul>
-
 <h2>Version 0.7.1 (11/09/2010)</h2>
-
 <ul>
-
-  <li>Performance improvement: Adminitsration tasks are far
+<li>Performance improvement: Adminitsration tasks are far
 faster than in previous versions (for instance, deletion of an account
 or a category).</li>
-  <li><span class="bugFix">Fixes a minor bug</span>:
+<li><span class="bugFix">Fixes a minor bug</span>:
 In some countries, the parsing of grouping separator in monetary values
 was wrong (ie, in France 5 000,00 wasn't considered as a valid
 value).&nbsp;</li>
-  <li><span class="bugFix">Fixes a major bug</span>:
+<li><span class="bugFix">Fixes a major bug</span>:
 Sometimes, import&nbsp; did ... nothing ! :-(</li>
 </ul>
-
 <h2>Version 0.7.0 (10/17/2010)</h2>
-
 <ul>
-
-  <li>Adds a "bank statements" view.</li>
-  <li>When lauching Yapbam, the transactions table is
+<li>Adds a "bank statements" view.</li>
+<li>When lauching Yapbam, the transactions table is
 automatically scrolled to the most recent transactions.</li>
 </ul>
-
 <h2>Version 0.6.7 (09/21/2010)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a major bug</span>
+<li><span class="bugFix">Fixes a major bug</span>
 in data file reading: Some transactions was lost when checkbook was
 used and number was empty.</li>
 </ul>
-
 <h2>Version 0.6.6 (09/19/2010)</h2>
-
 <ul>
-
-  <li>Adds the ability to protect access to data files by
+<li>Adds the ability to protect access to data files by
 password.</li>
 </ul>
-
 <h2>Version 0.6.5 (08/10/2010)</h2>
-
 <ul>
-
-  <li>Adds a confirm dialog when the user save data in an
+<li>Adds a confirm dialog when the user save data in an
 existing file.</li>
-  <li>File import improvements:
-    <ul>
-      <li><span class="bugFix">Fixes a bug</span>
+<li>File import improvements:
+<ul>
+<li><span class="bugFix">Fixes a bug</span>
 that prevents the import error dialog to be displayed sometimes.</li>
-      <li>In the error dialog, you now have the choice to cancel
+<li>In the error dialog, you now have the choice to cancel
 the import or to process only lines without error. Fields with errors
 are now displayed in red to help identifying them.</li>
-      <li>Import settings (imported columns, column separator,
+<li>Import settings (imported columns, column separator,
 etc...) are now kept in memory, you retrieve them if you import again. </li>
-      <li>The amount parser is now more strict (previously an
+<li>The amount parser is now more strict (previously an
 amount string of "52g32" results in an transaction with an amount of
 52. Now the line is reported as an error).</li>
-    </ul>
-  </li>
-  <li><span class="bugFix">Fixes&nbsp;</span>the
-transactions list panel's tool tip.</li>
-  <li><span class="bugFix">Fixes some bugs</span>
-in balance history pane:
-    <ul>
-      <li>Sometimes, today was not visible in the window.</li>
-      <li>Sometimes, erroneous balance alerts were displayed.</li>
-    </ul>
-  </li>
 </ul>
-
-<h2>Version 0.6.4 (05/16/2010)</h2>
-
+</li>
+<li><span class="bugFix">Fixes&nbsp;</span>the
+transactions list panel's tool tip.</li>
+<li><span class="bugFix">Fixes some bugs</span>
+in balance history pane:
 <ul>
-
-  <li>Improves the balance alert: Each account can have two
+<li>Sometimes, today was not visible in the window.</li>
+<li>Sometimes, erroneous balance alerts were displayed.</li>
+</ul>
+</li>
+</ul>
+<h2>Version 0.6.4 (05/16/2010)</h2>
+<ul>
+<li>Improves the balance alert: Each account can have two
 balance thresholds. An alert is displayed in the balance history view
 whenever the balance is not between these values.</li>
-  <li>Improves the balance history pane:
-    <ul>
-      <li>Add a button to set the selected date to today.</li>
-      <li>Add a menu that lists the balance alerts. Selecting an
+<li>Improves the balance history pane:
+<ul>
+<li>Add a button to set the selected date to today.</li>
+<li>Add a menu that lists the balance alerts. Selecting an
 alert sets up the filter in order to view the balance history of the
 account on which the alert occurs. </li>
-    </ul>
-  </li>
-  <li><span class="bugFix">Fixes a bug : </span>The
+</ul>
+</li>
+<li><span class="bugFix">Fixes a bug : </span>The
 initial balance editing in the account administration panel was broken.</li>
-  <li><span class="bugFix">Fixes some bugs</span>
+<li><span class="bugFix">Fixes some bugs</span>
 in periodical transaction generation:
-    <ul>
-      <li>When the generated transactions were edited during
+<ul>
+<li>When the generated transactions were edited during
 their generation, changes where ignored.</li>
-      <li>There were many problems with periodical transaction
+<li>There were many problems with periodical transaction
 with an end date.</li>
-    </ul>
-  </li>
-  <li><span class="bugFix">Fixes minor bug</span>
+</ul>
+</li>
+<li><span class="bugFix">Fixes minor bug</span>
 in the "Filter" menu refresh.</li>
 </ul>
-
 <h2>Version 0.6.3 (04/24/2010)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Fixes a bug : </span>The
+<li><span class="bugFix">Fixes a bug : </span>The
 selected date in the balance history panel was often reset to today.</li>
-  <li>Updates the installation instructions.</li>
+<li>Updates the installation instructions.</li>
 </ul>
-
 <h2>Version 0.6.2 (04/09/2010)</h2>
-
 <ul>
-
-  <li>Adds an alert in the transactions panel when some
+<li>Adds an alert in the transactions panel when some
 periodical transactions have to be generated.</li>
-  <li>Better integration with Microsoft Windows (introduces the
+<li>Better integration with Microsoft Windows (introduces the
 Yapbam.exe application).</li>
 </ul>
-
 <h2>Version 0.6.1 (04/02/2010)</h2>
-
 <ul>
-
-  <li>Adds checkbook management.</li>
-  <li>Adds access to web resources (Yapbam site and Yapbam
+<li>Adds checkbook management.</li>
+<li>Adds access to web resources (Yapbam site and Yapbam
 support page).</li>
-  <li>Improves launch speed (The launch don't wait anymore for
+<li>Improves launch speed (The launch don't wait anymore for
 the "new release check" to finish).</li>
-  <li>Improves the check for updates process (this check can now
+<li>Improves the check for updates process (this check can now
 be interrupted if the connection takes too long).</li>
-  <li>Improves the account&nbsp;administration screen.</li>
-  <li>Improves integer field input (now only numerical characters
+<li>Improves the account&nbsp;administration screen.</li>
+<li>Improves integer field input (now only numerical characters
 can be typed in such fields and up and down arrows respectively
 increase or decrease the field value).</li>
-  <li>Simplifies account creation dialog. Users report that the
+<li>Simplifies account creation dialog. Users report that the
 ability to add payment modes in this screen was confusing.</li>
-  <li>Autoscrolls the balance history view to always have the
+<li>Autoscrolls the balance history view to always have the
 selected date visible when this panel appears.</li>
-  <li><span class="bugFix">Fixes a bug</span>
+<li><span class="bugFix">Fixes a bug</span>
 : Yapbam had a 'strange' behavior when dates where entered using a 1
 digit year format (for instance 03/20/9).</li>
 </ul>
-
 <h2>Version 0.6.0 (03/09/2010)</h2>
-
 <ul>
-
-  <li>Adds text file import/export capabilities.</li>
-  <li>Adds an alert icon to the balance history tab when there is
+<li>Adds text file import/export capabilities.</li>
+<li>Adds an alert icon to the balance history tab when there is
 a negative balance period in the future.</li>
-  <li>Improves date fields behaviour.</li>
-  <li><span class="bugFix">Fixes</span> a bug
+<li>Improves date fields behaviour.</li>
+<li><span class="bugFix">Fixes</span> a bug
 in the auto-complete wizard that sometimes failed to deduce the
 paiement mode.</li>
-  <li><span class="bugFix">Fixes</span>&nbsp;a
+<li><span class="bugFix">Fixes</span>&nbsp;a
 bug in the transactions table. Sometimes transactions with
 subtransactions appeared with a complement that had an amount equals to
 zero</li>
 </ul>
-
 <h2>Version 0.5.4 (02/08/2010)</h2>
-
 <ul>
-
-  <li>Portuguese translation (Thank's to Marco).</li>
-  <li><span class="bugFix">Fixes</span> a bug
+<li>Portuguese translation (Thank's to Marco).</li>
+<li><span class="bugFix">Fixes</span> a bug
 that deleted data files while saving under some Linux configurations.</li>
-  <li>Adds an auto-complete wizard in the "new transaction"
+<li>Adds an auto-complete wizard in the "new transaction"
 dialog that completes the description as you type and deduces the
 category and payment mode.</li>
 </ul>
-
 <h2>Version 0.5.3 (01/25/2010)</h2>
-
 <ul>
-
-  <li>Currency converter Portuguese translation (Thank's to Marco)</li>
-  <li><span class="bugFix">Fixes</span> a lot
+<li>Currency converter Portuguese translation (Thank's to Marco)</li>
+<li><span class="bugFix">Fixes</span> a lot
 of mistakes in english wording (Thank's to Sharada)</li>
-  <li>Adds the ability to show/hide columns in the transactions
+<li>Adds the ability to show/hide columns in the transactions
 table.</li>
 </ul>
-
 <h2>Version 0.5.2 (01/21/2010)</h2>
-
 <ul>
-
-  <li>Adds ability to edit payment modes.</li>
+<li>Adds ability to edit payment modes.</li>
 </ul>
-
 <h2>Version 0.5.1 (01/17/2010)</h2>
-
 <ul>
-
-  <li>Adds transactions printing (feature requested by users).</li>
-  <li>Add a button in the transactions table to show/hide all the
+<li>Adds transactions printing (feature requested by users).</li>
+<li>Add a button in the transactions table to show/hide all the
 subtransactions.</li>
 </ul>
-
 <h2>Version 0.5.0 (01/10/2010)</h2>
-
 <ul>
-
-  <li>Adds a budget view (it seems users really want it).</li>
-  <li>Adds a preference panel to configure the balance report
+<li>Adds a budget view (it seems users really want it).</li>
+<li>Adds a preference panel to configure the balance report
 fields colors (some users reported the positive balance were quite
 illegible).</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 In statistic panel, sometimes, some transactions that would have been
 rejected by the filter were not.</li>
 </ul>
-
 <h2>Version 0.4.0 (01/03/2010)</h2>
-
 <ul>
-
-  <li>Introduce extended filtering capabilities (on category,
+<li>Introduce extended filtering capabilities (on category,
 modes, etc ...).</li>
-  <li><span class="bugFix">Fixes</span> a lot
+<li><span class="bugFix">Fixes</span> a lot
 of mistakes in english wording. Fixes some missing tooltips.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Sometimes, the next date of a periodical transaction was not updated
 after generating an occurence of this transaction.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 The currency converter tool didn't work under Ubuntu (and probably
 other Linux systems).</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 The currency converter tool was very, very slow when European Central
 Bank did not refresh its rates for more than one day (for instance when
 it's new year's day).</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Sometimes, it was impossible to change the account of a transaction.</li>
 </ul>
-
 <h2>Version 0.3.7 (12/05/2009)</h2>
-
 <ul>
-
-  <li>Dates can now be selected in a calendar.</li>
+<li>Dates can now be selected in a calendar.</li>
 </ul>
-
 <h2>Version 0.3.6 (11/22/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 In the periodical transaction edit dialog, it was impossible to leave
 the end date blank if this field gained the focus.</li>
 </ul>
-
 <h2>Version 0.3.5 (11/20/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Saving data containing a periodicalTransaction with a daily period
 didn't work.</li>
-  <li>The periodical transactions can now have a end date.</li>
+<li>The periodical transactions can now have a end date.</li>
 </ul>
-
 <h2>Version 0.3.4 (11/11/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Under some Windows XP, the preferences and the last state were not
 saved.</li>
 </ul>
-
 <h2>Version 0.3.3 (11/02/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When a new file was opened, the category list in the administration tab
 was not refreshed.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Sometimes, when the transactions table was sorted, editing a
 transaction resulted in a strange Ypabam state : The transaction looked
 like it wasn't modified and the transactions table doesn't respond
 anymore.</li>
 </ul>
-
 <h2>Version 0.3.2 (11/01/2009)</h2>
-
 <ul>
-
-  <li>The main frame title now indicates if the data needs to be
+<li>The main frame title now indicates if the data needs to be
 saved (its title ends with a *).</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Deleting a category used in a transaction corrupted the data.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When reading the last opened file failed, this file was still
 considered as "last opened file".&nbsp;</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 If, after reading a file you create a new file, then quit and restart
 Yapbam, the file was&nbsp;opened again</li>
 </ul>
-
 <h2>Version 0.3.1 (10/31/2009)</h2>
-
 <ul>
-
-  <li>The currency converter tool now work through proxied
+<li>The currency converter tool now work through proxied
 Internet connections and a now displays a conversion rates table.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When the currency converter was called, closing the main window didn't
 shutdown the java virtual machine.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 The percentage in the pie statistic's chart's tooltips
 were&nbsp;wrong.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Sometimes, when a transaction was duplicated or convert to periodical,
 the payment mode of the created transaction were wrong.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 The balance history was wrong when there was a switch from summer to
 winter time in it.</li>
 </ul>
-
 <h2>Version 0.3.0 (10/25/2009)</h2>
-
 <ul>
-
-  <li>Add a category statistic panel.</li>
-  <li>Add a currency converter tool (a preview release which
+<li>Add a category statistic panel.</li>
+<li>Add a currency converter tool (a preview release which
 don't work with proxied Internet connections).</li>
-  <li>Change the administration panel layout.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li>Change the administration panel layout.</li>
+<li><span class="bugFix">Bug fixed</span> :
 The "converts to periodical transaction" menu item stayed enabled when
 we leaved the "transactions" panel.</li>
 </ul>
-
 <h2>Version 0.2.9 (10/24/2009)</h2>
-
 <ul>
-
-  <li><span class="develop">Developpers</span>
+<li><span class="develop">Developpers</span>
 : Rewrite of transactions filtering in order to prepare statistics
 plugin.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When transactions where removed, the balance history could contains
 extra segments (especially when you removed all the transactions).</li>
 </ul>
-
 <h2>Version 0.2.8 (10/18/2009)</h2>
-
 <ul>
-
-  <li>Add a payment mode administration panel with the ability to
+<li>Add a payment mode administration panel with the ability to
 remove payment modes.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When an used category was deleted, sometimes, it remained some
 transactions with that category.</li>
 </ul>
-
 <h2>Version 0.2.7 (10/16/2009)</h2>
-
 <ul>
-
-  <li>During the first startup, Yapbam now ask if you want to
+<li>During the first startup, Yapbam now ask if you want to
 connect to the Internet and check for update.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 A double-click on the transaction list in the check mode opened the
 "edit" dialog instead of mark the transaction as checked.</li>
 </ul>
-
 <h2>Version 0.2.6 (10/13/2009)</h2>
-
 <ul>
-
-  <li>Add a administration panel to manage categories.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li>Add a administration panel to manage categories.</li>
+<li><span class="bugFix">Bug fixed</span> :
 The popup menu in the accounts administration panel had many separators.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 The account manager now verified that new account name is not empty,
 and not already used.</li>
-  <li><span class="bugFix">Bug fixed </span>:
+<li><span class="bugFix">Bug fixed </span>:
 When you pressed return during editing a transaction date, the value
 date was not refreshed.</li>
-  <li><span class="bugFix">Bug fixed </span>:
+<li><span class="bugFix">Bug fixed </span>:
 The state of "ignored" check boxes in the "generate periodical
 transactions" dialog was inverted.</li>
-  <li>Improvement : A empty date field is now equivalent to
+<li>Improvement : A empty date field is now equivalent to
 "today". When you duplicate a transaction, in the dialog, the date is
 automatically setted to today</li>
 </ul>
-
 <h2>Version 0.2.5 (10/10/2009)</h2>
-
 <ul>
-
-  <li>Add account management.</li>
+<li>Add account management.</li>
 </ul>
-
 <h2>Version 0.2.4 (10/02/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span>
+<li><span class="bugFix">Bug fixed</span>
 :&nbsp;Under Linux, if Yapbam was launch with a right click on the
 jar file, the preference and state files were saved in the user home
 directory, not in Yapbam directory.<br>
 As Yabam is portable, it was a mistake.</li>
 </ul>
-
 <h2>Version 0.2.3 (10/01/2009)</h2>
-
 <ul>
-
-  <li>Add the ability to edit or ignore transactions during the
+<li>Add the ability to edit or ignore transactions during the
 periodical transactions generation process.</li>
-  <li>Add the ability to sort the transactions table and the
+<li>Add the ability to sort the transactions table and the
 periodic transactions table.</li>
 </ul>
-
 <h2>Version 0.2.2 (09/30/2009)</h2>
-
 <ul>
-
-  <li>Add auto check for Yapbam updates.</li>
-  <li>The "Transactions" menu now remains visible in all the
+<li>Add auto check for Yapbam updates.</li>
+<li>The "Transactions" menu now remains visible in all the
 panel.</li>
 </ul>
-
 <h2>Version 0.2.1 (09/28/2009)</h2>
-
 <ul>
-
-  <li>Add popup menu to edit/delete/duplicate periodical
+<li>Add popup menu to edit/delete/duplicate periodical
 transactions in the administration panel.</li>
-  <li><span class="bugFix">Bug fixed</span>
+<li><span class="bugFix">Bug fixed</span>
 :&nbsp;menuItem to check the selected transaction in the
 transactions table contextual menu was shown even if the statement
 field was not documented.</li>
 </ul>
-
 <h2>Version 0.2.0 (09/27/2009)</h2>
-
 <ul>
-
-  <li>Introduce full periodic transactions support (now, they can
+<li>Introduce full periodic transactions support (now, they can
 be generated). I plan to improve this fucntionnality which the ability
 to edit generated transactions in the generation dialog.</li>
-  <li>Add menu items to convert a transaction into a periodical
+<li>Add menu items to convert a transaction into a periodical
 transaction.</li>
 </ul>
-
 <h2>Version 0.1.20 (09/24/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 In the new/edit transaction dialog, when you created a new mode,
 account or category with a very long name, the window appearence was
 broken.</li>
-  <li>Oups ! Some wording were not translated in the new Account
+<li>Oups ! Some wording were not translated in the new Account
 dialog.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 The duplicate button in the new account dialog had no wording ... and
 did nothing.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 A lot of problems in the new account dialog with the mode list buttons.</li>
 </ul>
-
 <h2>Version 0.1.19 (09/23/2009)</h2>
-
 <ul>
-
-  <li>Add an administration panel, with the ability to define and
+<li>Add an administration panel, with the ability to define and
 manage periodical transactions.</li>
-  <li>Add tooltips on main window tabs.</li>
-  <li>Change the "duplicate" button behaviour (in the
+<li>Add tooltips on main window tabs.</li>
+<li>Change the "duplicate" button behaviour (in the
 transactions panel). Now, the edition dialog is automatically opened
 when you duplicate a transaction.</li>
 </ul>
-
 <h2>Version 0.1.18 (09/19/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 Some problems in menu items refresh. Some of them were enabled or
 disabled ... but they'd rather not.</li>
-  <li>Add some toolTips.</li>
-  <li>Add an alert dialog when Yapbam is launched with an
+<li>Add some toolTips.</li>
+<li>Add an alert dialog when Yapbam is launched with an
 incompatible old java version (prior to 1.6).</li>
 </ul>
-
 <h2>Version 0.1.17 (09/18/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 The proxy authentication was broken.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When an account was added, sometimes, the filter menu was broken.</li>
-  <li>Add a menuItem to check the selected transaction in the
+<li>Add a menuItem to check the selected transaction in the
 transactions table contextual menu.</li>
-  <li>Oups ! Some wording were not translated in the new Account
+<li>Oups ! Some wording were not translated in the new Account
 dialog.</li>
-  <li><span class="develop">Developpers</span>
+<li><span class="develop">Developpers</span>
 : Switch to a plug-in architecture for all the panels in the main
 window.</li>
 </ul>
-
 <h2>Version 0.1.16 (09/17/2009)</h2>
-
 <ul>
-
-  <li>Add support to proxid Internet connections.</li>
-  <li>Add a contextual menu on the transactions table.</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li>Add support to proxid Internet connections.</li>
+<li>Add a contextual menu on the transactions table.</li>
+<li><span class="bugFix">Bug fixed</span> :
 A double click with the right button (or the central one) edited the
 selected transaction (not the one clicked). Now right double clicks are
 ignored</li>
 </ul>
-
 <h2>Version 0.1.15 (09/14/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug2858596 fixed </span>
+<li><span class="bugFix">Bug2858596 fixed </span>
 : <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2858596&amp;group_id=276272&amp;atid=1173518">"Deleted
 or added transactions has no effect on display"</a>.</li>
-  <li>Add underground Internet proxied connection support (need
+<li>Add underground Internet proxied connection support (need
 to edit the preference file by hand).</li>
 </ul>
-
 <h2>Version 0.1.14 (09/13/2009)</h2>
-
 <ul>
-
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When the preferred localization changed, the dates in the transaction
 table were still displayed using the initial localization.</li>
-  <li>Add a new menu item to check for updates.</li>
+<li>Add a new menu item to check for updates.</li>
 </ul>
-
 <h2>Version &nbsp;0.1.13 (09/11/2009)</h2>
-
 <ul>
-
-  <li>A lot of undergroud work in order to implement account
+<li>A lot of undergroud work in order to implement account
 management in a future release.</li>
-  <li>The bank account creation dialog allows you to create
+<li>The bank account creation dialog allows you to create
 payment method.</li>
-  <li><span class="bugFix">Bug 2856006 fixed</span>
+<li><span class="bugFix">Bug 2856006 fixed</span>
 : <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2856006&amp;group_id=276272&amp;atid=1173518">"Last
 chance to save is broken in v0.1.12"</a>.</li>
-  <li><span class="bugFix">Bug 2856394 fixed </span>
+<li><span class="bugFix">Bug 2856394 fixed </span>
 : <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2856394&amp;group_id=276272&amp;atid=1173518">
 "Balances disappears during interface reloading after a preference
 change"</a>.</li>
-  <li>Improve the sort of the transactions list (in previous
+<li>Improve the sort of the transactions list (in previous
 versions a duplicated transaction could appear far away for its clone).</li>
-  <li><span class="bugFix">Bug fixed</span> :
+<li><span class="bugFix">Bug fixed</span> :
 When first transaction table column (the open/close subtransactions
 control) was moved, you still had to click the first column to deploy
 the subtransactions view.</li>
-  <li>Improve the "last state save" :
-    <ul>
-      <li><span class="beAware">Be aware</span>
+<li>Improve the "last state save" :
+<ul>
+<li><span class="beAware">Be aware</span>
 : In order to prepare a plugin architecture, the state file format
 changed. Your previous column sizes wiln not be restored when you will
 upgrade to this version.</li>
-      <li>The order of the columns is saved (in previous
+<li>The order of the columns is saved (in previous
 releases, column order where always reset to the default order, and the
 saved column size where applied tothe default column order ... which
 could be considered as a bug).</li>
-      <li>The&nbsp;scroll position of&nbsp; the
+<li>The&nbsp;scroll position of&nbsp; the
 transactions table is now saved.</li>
-    </ul>
-  </li>
 </ul>
-
+</li>
+</ul>
 <h2>Version &nbsp;0.1.12 (09/07/2009)</h2>
-
 <ul>
-
-  <li>Add a Preference item in the File menu. The localization
+<li>Add a Preference item in the File menu. The localization
 and the application's look &amp; feel can be chosen</li>
 </ul>
-
 <h2>Version &nbsp;0.1.11 (09/05/2009)</h2>
-
 <ul>
-
-  <li>The english translation is complete</li>
-  <li><span class="bugFix">Bug 2852451 fixed</span>
+<li>The english translation is complete</li>
+<li><span class="bugFix">Bug 2852451 fixed</span>
 : <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2852451&amp;group_id=276272&amp;atid=1173518">"No
 difference between new and modify dialogs title"</a></li>
 </ul>
-
 <h2>Version &nbsp;0.1.10 (09/04/2009)</h2>
-
 <ul>
-
-  <li>Improved About dialog.</li>
+<li>Improved About dialog.</li>
 </ul>
-
 <h2>Version &nbsp;0.1.09 (09/01/2009)</h2>
-
 <ul>
-
-  <li>First pre-alpha release.</li>
+<li>First pre-alpha release.</li>
 </ul>
-
 </body></html>
