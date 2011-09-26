@@ -2,6 +2,8 @@ package net.yapbam.gui.dialogs.export;
 
 import java.io.Serializable;
 
+import net.yapbam.util.ArrayUtils;
+
 @SuppressWarnings("serial")
 public class ExporterParameters implements Serializable {
 	// There's no default serial uid, because if this class changes, the easiest way to prevent problems
@@ -17,6 +19,11 @@ public class ExporterParameters implements Serializable {
 	
 	private int[] exportedIndexes;
 
+	public ExporterParameters() {
+		this(ArrayUtils.buildIntArray(ExportTableModel.columns.length, 0, 1), ArrayUtils.buildBooleanArray(ExportTableModel.columns.length, true),
+				true, ';', true, true);
+	}
+	
 	public ExporterParameters(int[] viewindexesToModel, boolean[] selectedModelColumns, boolean insertHeader, char separator,
 			boolean exportInitialBalance, boolean exportFilteredData) {
 		super();
