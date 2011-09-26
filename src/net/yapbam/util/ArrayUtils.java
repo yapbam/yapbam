@@ -3,6 +3,7 @@ package net.yapbam.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /** Utility to work with arrays.
@@ -94,5 +95,33 @@ public final class ArrayUtils {
 		} else {
 			return array;
 		}
+	}
+	
+	/** Builds an integer array.
+	 * @param length The length of the int array
+	 * @param start The value of the first element of the array
+	 * @param step The increment between two elements (result[i+1] - result[i])
+	 * @return an integer array
+	 */
+	public static int[] buildIntArray(int length, int start, int step) {
+		int[] result = new int[length];
+		if (length>0) {
+			result[0] = start;
+			for (int i = 1; i < result.length; i++) {
+				result[i] = result[i-1]+step; 
+			}
+		}
+		return result;
+	}
+	
+	/** Builds a boolean array.
+	 * @param length The length of the array
+	 * @param value the initial value of the elements of the array
+	 * @return a boolean array.
+	 */
+	public static boolean[] buildBooleanArray(int length, boolean value) {
+		boolean result[] = new boolean[length];
+		if (value) Arrays.fill(result, value);
+		return result;
 	}
 }
