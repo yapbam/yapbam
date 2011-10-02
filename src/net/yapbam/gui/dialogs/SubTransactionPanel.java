@@ -229,7 +229,6 @@ public class SubTransactionPanel extends JPanel {
 	}
 	
 	public String getDescription() {
-System.out.println (description+" / "+descriptionField.getText());
 		return descriptionField.getText();
 	}
 	

@@ -65,9 +65,15 @@ public class MainFrame extends JFrame implements DataListener {
 		EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
 		queue.push(new EventQueue() {
 			@Override
-			protected void dispatchEvent(AWTEvent newEvent) {
+			protected void dispatchEvent(AWTEvent event) {
 				try {
-					super.dispatchEvent(newEvent);
+					super.dispatchEvent(event);
+					if (event.getClass().getName().startsWith("sun.awt.AWTAutoShutdown")) {
+						// JDK 1.7 bug (?) workaround"
+						// For an unknown reason, JDK 1.7 do not stop the JVM when all the windows are disposed and
+						// an custom eventQueue has been installed in the awt dispatch thread 
+						System.exit(0); //TODO
+					}
 				} catch (Throwable t) {
 					ErrorManager.INSTANCE.log (null,t);
 				}
@@ -133,31 +139,30 @@ public class MainFrame extends JFrame implements DataListener {
 			@Override
 			public void windowClosing(WindowEvent event) {
 				MainFrame frame = (MainFrame) event.getWindow();
+				frame.saveState();
 				if (frame.isRestarting) {
-					frame.saveState();
 					super.windowClosing(event);
 					frame.dispose();
 				} else if (SaveManager.MANAGER.verify(frame)) {
-					frame.saveState();
 					Preferences.INSTANCE.save();
 					super.windowClosing(event);
 					frame.dispose();
 					
 					if ((updater!=null) && updater.exists() && updater.isFile()) {
 						// If an update is available
-						// The update will be done by a external program, as changing a jar on the fly
+						// The update will be done by an external program, as changing a jar on the fly
 						// may lead to serious problems.					
 						ArrayList<String> command = new ArrayList<String>();
 						command.add(System.getProperty("java.home")+"/bin/java"); //$NON-NLS-1$ //$NON-NLS-2$
 						command.add("-jar"); //$NON-NLS-1$
 						command.add(updater.getAbsolutePath());
-						System.out.println (command);
 						ProcessBuilder builder = new ProcessBuilder(command);
 						try {
 							// I've tried to remove these lines that prevent Yapbam from quitting before the end of the update
 							// Unfortunately, under ubuntu 10.10 ... it led to the update crash :-(
 							// The most strange is that it ran perfectly under eclipse under ubuntu 10.10 ... what a strange behaviour !!!
-							// see also http://www.javaworld.com/jw-12-2000/jw-1229-traps.html 
+							// see also http://www.javaworld.com/jw-12-2000/jw-1229-traps.html
+							// The good new is it seems to be ok under ubuntu 11.04
 							Process process = builder.start();
 							BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 							for (String line = err.readLine(); line!=null; line = err.readLine()) {
