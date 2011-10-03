@@ -384,7 +384,7 @@ public class MainFrame extends JFrame implements DataListener {
 		getStateSaver().saveState(mainPane, this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
 		if (Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
-			if (!getData().somethingHasChanged() && (data.getPassword()==null)) {
+			if (!getData().somethingHasChanged() && getFilteredData().getFilter().isActive()) {
 				getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());
 			} else {
 				getStateSaver().remove(LAST_FILTER_USED);
@@ -444,7 +444,7 @@ public class MainFrame extends JFrame implements DataListener {
 					readData(uri);
 					if (startOptions.isRememberFilter()) {
 						try {
-							Filter filter = getStateSaver().restore(LAST_FILTER_USED, getData());
+							Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
 							if (filter!=null) this.getFilteredData().setFilter(filter);
 						} catch (Exception e) {
 							ErrorManager.INSTANCE.log(this, e);
