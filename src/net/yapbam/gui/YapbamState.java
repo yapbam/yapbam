@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -252,28 +253,30 @@ public class YapbamState {
 			}
 			serializer.closeDocument();
 			stream.flush();
-			String xmlContent = new String(/*Base64.encode(*/stream.toByteArray());
-			properties.put(key, xmlContent); //TODO
+			String xmlContent = new String(Base64.encode(stream.toByteArray()));
+			properties.put(key, xmlContent);
 		} catch (IOException e) {
 				throw new RuntimeException(e);
 		}
 	}
 
-	public Filter restore(String key, GlobalData data) {
+	public Filter restoreFilter(String key, GlobalData data) {
 		String property = properties.getProperty(key);
 		if (property!=null) {
+			byte[] bytes;
+			if (property.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) {
+				// Yapbam versions until 0.9.4 did not base64 encode the saved filter.
+				bytes = property.getBytes();
+			} else {
+				bytes = Base64.decode(property);
+			}
+			InputStream stream = new ByteArrayInputStream(bytes);
 			try {
-				//TODO Encodage base 64
-				ByteArrayInputStream stream = new ByteArrayInputStream(property.getBytes("UTF-8"));
-				//TODO Décodage du password
-				try {
-					FilterHandler handler = new FilterHandler(data);
-					SAXParserFactory.newInstance().newSAXParser().parse(stream, handler);
-					return handler.getFilter();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			} catch (UnsupportedEncodingException e) {
+				stream = Serializer.getDecryptedStream(data.getPassword(), stream);
+				FilterHandler handler = new FilterHandler(data);
+				SAXParserFactory.newInstance().newSAXParser().parse(stream, handler);
+				return handler.getFilter();
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}

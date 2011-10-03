@@ -234,14 +234,7 @@ public class Serializer {
 	static InputStream read(GlobalData data, String password, InputStream is) throws IOException {
 		boolean wasEnabled = data.isEventsEnabled();
 		try {
-			if (password!=null) {
-				// Pass the header
-				for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
-					is.read();
-				}
-				// Create the decoder input stream
-				is = Crypto.getPasswordProtectedInputStream(password, is);
-			}
+			is = getDecryptedStream(password, is);
 			if (wasEnabled) data.setEventsEnabled(false);
 			read(data, is);
 			data.setPassword(password);
@@ -249,6 +242,24 @@ public class Serializer {
 			if (wasEnabled) data.setEventsEnabled(true);
 		}
 		return is;
+	}
+
+	/** Gets a stream to read in an encrypted stream.
+	 * @param password The password used for the encryption, or null if stream is not encrypted.
+	 * @param stream The encrypted (or not if password is null) stream.
+	 * @return A new stream that automatically decrypt the original stream.
+	 * @throws IOException
+	 */
+	public static InputStream getDecryptedStream(String password, InputStream stream) throws IOException {
+		if (password!=null) {
+			// Pass the header
+			for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
+				stream.read();
+			}
+			// Create the decoder input stream
+			stream = Crypto.getPasswordProtectedInputStream(password, stream);
+		}
+		return stream;
 	}
 	
 	/** Gets the data about the uri (what is its version, is it encoded or not, etc...).
