@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -63,7 +62,8 @@ public class YapbamState {
 	}
 
 	protected File getFile() {
-		return new File (Portable.getDataDirectory(), ".yapbam");
+		File file = new File (Portable.getDataDirectory(), ".yapbam");
+		return file;
 	}
 	
 	public void restoreState(JTable table, String prefix) {
@@ -198,7 +198,19 @@ public class YapbamState {
 	}
 
 	public void toDisk() throws FileNotFoundException, IOException {
-		properties.store(new FileOutputStream(getFile()), "Yapbam startup state"); //$NON-NLS-1$
+		File file = getFile();
+		if (file.isHidden() && System.getProperty("os.name", "?").startsWith("Windows")) {
+			// Under windows, it is impossible to write in a hidden file with Java
+			// You first have to make the file visible. That's what we will try to do.
+			System.out.println ("attrib -H \""+file.getAbsolutePath()+"\"");
+			Process process = Runtime.getRuntime().exec("attrib -H \""+file.getAbsolutePath()+"\"");
+			try {
+				process.waitFor();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		properties.store(new FileOutputStream(file), "Yapbam startup state"); //$NON-NLS-1$
 	}
 
 	public PrintRequestAttributeSet restorePrinterSettings(String prefix) {

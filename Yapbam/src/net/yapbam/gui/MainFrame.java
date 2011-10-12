@@ -393,8 +393,9 @@ public class MainFrame extends JFrame implements DataListener {
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
-			e.printStackTrace();
-			//TODO What could we do ?
+			ErrorManager.INSTANCE.log(this, e); //TODO
+//			JOptionPane.showMessageDialog(this, "Une erreur est survenue lors de la sauvegarde de l'état de Yapbam.", "Erreur", JOptionPane.WARNING_MESSAGE);
+//			throw new RuntimeException(e);
 		}
 	}
 
