@@ -144,7 +144,11 @@ public class MainFrame extends JFrame implements DataListener {
 					super.windowClosing(event);
 					frame.dispose();
 				} else if (SaveManager.MANAGER.verify(frame)) {
-					Preferences.INSTANCE.save();
+					try {
+						Preferences.INSTANCE.save();
+					} catch (IOException e) {
+						ErrorManager.INSTANCE.log(frame, e); //TODO a specific message
+					}
 					super.windowClosing(event);
 					frame.dispose();
 					

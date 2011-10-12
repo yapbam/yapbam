@@ -1,6 +1,8 @@
 package net.yapbam.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -86,5 +88,54 @@ public class FileUtils {
 			if (parent.equals(directory)) return true;
 		}
 		return false;
+	}
+	
+	/** Gets a FileOutputStream even on a windows hidden file.
+	 * <br>Under windows, it is impossible to write directly in a hidden file with Java.
+	 * You have to make the file visible first. That's what this method try to do.
+	 * <br>When the file was initially hidden, the close method of the returned stream hide it again.
+	 * @param file The file to be opened for writing
+	 * @return a new stream
+	 * @throws IOException
+	 */
+	public static FileOutputStream getHiddenCompliantStream(File file) throws IOException {
+		if (file.isHidden() && System.getProperty("os.name", "?").startsWith("Windows")) {
+			try {
+				Process process = Runtime.getRuntime().exec("attrib -H \""+file.getAbsolutePath()+"\"");
+				try {
+					int result = process.waitFor();
+					if (result==0) return new HiddenFileOutputStream(file);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			} catch (IOException e) {
+				// This try catch block is empty because this exception, in this context, means that the attrib command is not available.
+				// In such a case, we just have to do ... nothing: If the OutputStream creation fails, an IOException will be thrown
+			}
+		}
+		// If the file was not hidden, or if making the file visible failed, try to open a classic stream.
+		return new FileOutputStream(file);
+	}
+	
+	/** The FileOutputStream returned by getHiddenCompliantStream method when it is called on a Windows hidden file.
+	 * @see FileUtils#getHiddenCompliantStream(File)
+	 */
+	private static class HiddenFileOutputStream extends FileOutputStream {
+		private File file;
+
+		public HiddenFileOutputStream(File file) throws FileNotFoundException {
+			super(file);
+			this.file = file;
+		}
+		
+		public void close() throws IOException {
+			super.close();
+			Process process = Runtime.getRuntime().exec("attrib +H \""+file.getAbsolutePath()+"\"");
+			try {
+				process.waitFor();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 }

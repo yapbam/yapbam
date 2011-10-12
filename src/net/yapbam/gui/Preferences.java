@@ -33,6 +33,7 @@ import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
+import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
 /** This class represents the Yapbam application preferences */
@@ -82,17 +83,26 @@ public class Preferences {
 		if (getFile().exists()) {
 			try {
 				this.firstRun = false;
-				properties.load(new FileInputStream(getFile()));
+				FileInputStream inStream = new FileInputStream(getFile());
+				try {
+					properties.load(inStream);
+				} finally {
+					inStream.close();
+				}
 				setAuthentication();
 			} catch (Throwable e) {
-				// If there's an error, maybe it would be better to do something
-				//TODO
-				e.printStackTrace();
+				// If there's an error, maybe it would be better to display a specific message
+				ErrorManager.INSTANCE.log(null, e); //TODO
 			}
 		} else {
 			// On the first run, the file doesn't exist
 			setToDefault();
-			save();
+			try {
+				save();
+			} catch (IOException e) {
+				// If there's an error, maybe it would be better to display a specific message
+				ErrorManager.INSTANCE.log(null, e); //TODO
+			}
 		}
 	}
 
@@ -113,14 +123,14 @@ public class Preferences {
 		return this.firstRun;
 	}
 
-	void save() {
+	void save() throws IOException {
+		File file = getFile();
+		file.getParentFile().mkdirs();
+		FileOutputStream out = FileUtils.getHiddenCompliantStream(file);
 		try {
-			File file = getFile();
-			file.getParentFile().mkdirs();
-			properties.store(new FileOutputStream(file), "Yapbam preferences"); //$NON-NLS-1$
-		} catch (IOException e) {
-			//TODO What could we do ?
-			e.printStackTrace();
+			properties.store(out, "Yapbam preferences"); //$NON-NLS-1$
+		} finally {
+			out.close();
 		}
 	}
 
