@@ -38,6 +38,7 @@ import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.DateUtils;
+import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
 public class YapbamState {
@@ -198,24 +199,12 @@ public class YapbamState {
 	}
 
 	public void toDisk() throws FileNotFoundException, IOException {
-		File file = getFile();
-		if (file.isHidden() && System.getProperty("os.name", "?").startsWith("Windows")) {
-			// Under windows, it is impossible to write in a hidden file with Java
-			// You first have to make the file visible. That's what we will try to do.
-			try {
-				Process process = Runtime.getRuntime().exec("attrib -H \""+file.getAbsolutePath()+"\"");
-				try {
-					int result = process.waitFor();
-					System.out.println (" -> "+result);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-			} catch (IOException e) {
-				// This try catch block is empty because this exception, in this context, means that the attrib command is not available.
-				// In such a case, we just have to do ... nothing: If the OutputStream creation fails, an IOException will be thrown
-			}
+		FileOutputStream stream = FileUtils.getHiddenCompliantStream(getFile());
+		try {
+			properties.store(stream, "Yapbam startup state"); //$NON-NLS-1$
+		} finally {
+			stream.close();
 		}
-		properties.store(new FileOutputStream(file), "Yapbam startup state"); //$NON-NLS-1$
 	}
 
 	public PrintRequestAttributeSet restorePrinterSettings(String prefix) {
