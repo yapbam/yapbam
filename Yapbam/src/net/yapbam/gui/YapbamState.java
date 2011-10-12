@@ -202,12 +202,17 @@ public class YapbamState {
 		if (file.isHidden() && System.getProperty("os.name", "?").startsWith("Windows")) {
 			// Under windows, it is impossible to write in a hidden file with Java
 			// You first have to make the file visible. That's what we will try to do.
-			System.out.println ("attrib -H \""+file.getAbsolutePath()+"\"");
-			Process process = Runtime.getRuntime().exec("attrib -H \""+file.getAbsolutePath()+"\"");
 			try {
-				process.waitFor();
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
+				Process process = Runtime.getRuntime().exec("attrib -H \""+file.getAbsolutePath()+"\"");
+				try {
+					int result = process.waitFor();
+					System.out.println (" -> "+result);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			} catch (IOException e) {
+				// This try catch block is empty because this exception, in this context, means that the attrib command is not available.
+				// In such a case, we just have to do ... nothing: If the OutputStream creation fails, an IOException will be thrown
 			}
 		}
 		properties.store(new FileOutputStream(file), "Yapbam startup state"); //$NON-NLS-1$
