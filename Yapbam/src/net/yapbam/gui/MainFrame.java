@@ -68,7 +68,7 @@ public class MainFrame extends JFrame implements DataListener {
 			protected void dispatchEvent(AWTEvent event) {
 				try {
 					super.dispatchEvent(event);
-					if (event.getClass().getName().startsWith("sun.awt.AWTAutoShutdown")) {
+					if (event.getClass().getName().startsWith("sun.awt.AWTAutoShutdown")) { //$NON-NLS-1$
 						// JDK 1.7 bug (?) workaround"
 						// For an unknown reason, JDK 1.7 do not stop the JVM when all the windows are disposed and
 						// an custom eventQueue has been installed in the awt dispatch thread 
@@ -397,9 +397,8 @@ public class MainFrame extends JFrame implements DataListener {
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
-			ErrorManager.INSTANCE.log(this, e); //TODO
-//			JOptionPane.showMessageDialog(this, "Une erreur est survenue lors de la sauvegarde de l'état de Yapbam.", "Erreur", JOptionPane.WARNING_MESSAGE);
-//			throw new RuntimeException(e);
+			JOptionPane.showMessageDialog(this, MessageFormat.format(LocalizationData.get("MainFrame.SaveStateError"), getStateSaver().getFile().getAbsolutePath()),
+					LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
