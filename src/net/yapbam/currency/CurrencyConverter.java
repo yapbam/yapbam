@@ -21,6 +21,7 @@ package net.yapbam.currency;
 import java.net.*;
 import java.io.*;
 
+import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
 import org.xml.sax.*;
@@ -232,7 +233,7 @@ public final class CurrencyConverter {
 	}
 
 	/**
-	 * Initialises cache file member variable if not already initialised.
+	 * Initializes cache file member variable if not already initialized.
 	 */
 	private void initCacheFile() {
 		if (cacheFile == null) {
@@ -290,11 +291,10 @@ public final class CurrencyConverter {
 			if (errorCode == HttpURLConnection.HTTP_OK) {
 				InputStreamReader in = new InputStreamReader(ct.getInputStream());
 				try {
-					FileWriter out = new FileWriter(cacheFile);
+					Writer out = new OutputStreamWriter(FileUtils.getHiddenCompliantStream(cacheFile));
 					try {
 						int c;
-						while ((c = in.read()) != -1)
-							out.write(c);
+						while ((c = in.read()) != -1) out.write(c);
 					} catch (IOException e) {
 						lastError = "Read/Write Error: " + e.getMessage();
 					} finally {
