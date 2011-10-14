@@ -144,10 +144,13 @@ public class MainFrame extends JFrame implements DataListener {
 					super.windowClosing(event);
 					frame.dispose();
 				} else if (SaveManager.MANAGER.verify(frame)) {
+					// You could wonder why we don't save preferences when closing the preferences dialog
+					// It's because there's other dialogs that changes the preferences (for example when closing the welcome dialog: show/hide at startup) 
 					try {
 						Preferences.INSTANCE.save();
 					} catch (IOException e) {
-						ErrorManager.INSTANCE.log(frame, e); //TODO a specific message
+						JOptionPane.showMessageDialog(MainFrame.this, MessageFormat.format(LocalizationData.get("MainFrame.SavePreferencesError"), getStateSaver().getFile().getAbsolutePath()),
+								LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					super.windowClosing(event);
 					frame.dispose();
