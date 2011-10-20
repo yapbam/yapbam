@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.yapbam.data.BalanceHistory;
+import net.yapbam.data.GlobalData;
 
 class YAxis {
 	private Component parent;
@@ -36,7 +37,8 @@ class YAxis {
 		int fontHeight = this.parent.getFontMetrics(this.parent.getFont()).getHeight();
 		double min = Math.min(0, this.balanceHistory.getMinBalance());
 		double max = Math.max(0,this.balanceHistory.getMaxBalance());
-		if (min == max) {
+		
+		if (GlobalData.AMOUNT_COMPARATOR.compare(min, max) == 0) {
 			min--;
 			max++;
 		}
@@ -59,29 +61,29 @@ class YAxis {
 		Dimension size = this.parent.getSize();
 		int lineHeight = fontMetrics.getHeight();
 		int h = lineHeight * 2;
-    	double pas = RuleBuilder.getNormalizedStep(((double)h)/this.yRatio);
-    	
-    	yGraduations = new ArrayList<Graduation>();
-    	double current = 0;
-    	do {
-    		current += pas;
-    		int y = this.getY(current);
-    		if (y>fontMetrics.getAscent()/2+5) {
-    			yGraduations.add(new Graduation(y,current));
-    		} else {
-    			break;
-    		}
-    	} while (true);
-    	current = 0;
-    	do {
-    		current -= pas;
-    		int y = this.getY(current);
-    		if (y<size.height-lineHeight) {
-    			yGraduations.add(new Graduation(y, current));
-    		} else {
-    			break;
-    		}
-    	} while (true);
+		double step = RuleBuilder.getNormalizedStep(((double) h) / this.yRatio);
+
+		yGraduations = new ArrayList<Graduation>();
+		double current = 0;
+		do {
+			current += step;
+			int y = this.getY(current);
+			if (y > fontMetrics.getAscent() / 2 + 5) {
+				yGraduations.add(new Graduation(y, current));
+			} else {
+				break;
+			}
+		} while (true);
+		current = 0;
+		do {
+			current -= step;
+			int y = this.getY(current);
+			if (y < size.height - lineHeight) {
+				yGraduations.add(new Graduation(y, current));
+			} else {
+				break;
+			}
+		} while (true);
 	}
 	
 	int getY(double value) {
