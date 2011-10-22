@@ -145,7 +145,6 @@ public class SubTransactionPanel extends JPanel {
 		if (descriptionField == null) {
 			descriptionField = new PopupTextFieldList();
 			descriptionField.setToolTipText(LocalizationData.get("SubTransactionDialog.description.tooltip")); //$NON-NLS-1$
-			descriptionField.setText(""); //$NON-NLS-1$
 			descriptionField.setColumns(50);
 			descriptionField.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
 				@Override
