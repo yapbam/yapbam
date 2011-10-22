@@ -161,11 +161,12 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					this.lastDescription = description;
 					long now = System.currentTimeMillis();
 					HashMap<CategoryAndType, Double> map = new HashMap<CategoryAndType, Double>();
-					for (int i = 0; i < data.getTransactionsNumber(); i++) {
-						Transaction transaction = data.getTransaction(i);
+					GlobalData gData = data.getGlobalData();
+					for (int i = 0; i < gData.getTransactionsNumber(); i++) {
+						Transaction transaction = gData.getTransaction(i);
 						// In order to minimize the impact of very old transactions, we will use the date ranking
 						double ranking = getRankingBasedOnDate(now, transaction);
-						if (!transaction.getAccount().equals(data.getGlobalData().getAccount(selectedAccount))) ranking = ranking / 100;
+						if (!transaction.getAccount().equals(gData.getAccount(selectedAccount))) ranking = ranking / 100;
 						if (transaction.getDescription().equalsIgnoreCase(description)) {
 							add(map, transaction.getCategory(), transaction.getAmount()>0, ranking/10);
 						}

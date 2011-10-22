@@ -30,8 +30,7 @@ import net.yapbam.util.TextMatcher;
 @SuppressWarnings("serial")
 /** This class implements a kind of JComboBox that allows to select the field content into a list of predefined values
  * that are shown in a popup.
- * The difference with a JComboBox is the popup selection is updated when the user changes the text field content.
- * There's currently no button to deploy the popup (the user need to use the down arrow key), it would probably improve the user experience.
+ * <br>The difference with a JComboBox is the popup selection is updated when the user changes the text field content.
  */
 public class PopupTextFieldList extends JTextField {
 	/** A PropertyChangeEvent of this name is fired when a predefined value is selected.
