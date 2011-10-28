@@ -21,7 +21,7 @@ public class BalanceHistoryElement implements Serializable {
 	 * @param from start date
 	 * @param to end date
 	 */
-	BalanceHistoryElement(double balance, Date from, Date to) {
+	public BalanceHistoryElement(double balance, Date from, Date to) {
 		this.balance = balance;
 		this.from = from;
 		this.to = to;
@@ -62,7 +62,7 @@ public class BalanceHistoryElement implements Serializable {
 	 * is after.
 	 */
 	public int getRelativePosition(Date date) {
-		long timeFrom = (this.from==null) ? 0 : this.from.getTime();
+		long timeFrom = (this.from==null) ? Long.MIN_VALUE : this.from.getTime();
 		long timeTo = (this.to==null) ? Long.MAX_VALUE : this.to.getTime();
 		long time = date.getTime();
 		int result = 0;
