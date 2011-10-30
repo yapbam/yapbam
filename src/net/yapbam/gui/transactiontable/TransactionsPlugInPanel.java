@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -39,9 +38,7 @@ public class TransactionsPlugInPanel extends JPanel {
 	private BalanceData acFilter;
 	
 	TransactionTable transactionTable;
-	private BalanceReportField currentBalance;
-	private BalanceReportField finalBalance;
-	private BalanceReportField checkedBalance;
+	private BalanceReportPanel balancePanel;
 
 	@SuppressWarnings("serial")
 	public TransactionsPlugInPanel(FilteredData data) {
@@ -108,26 +105,17 @@ public class TransactionsPlugInPanel extends JPanel {
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		menus.add(columns, BorderLayout.SOUTH);
 		bottomPane.add(menus, BorderLayout.WEST);
-		JPanel balancePane = new JPanel(new GridLayout(1, 3));
-		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance")); //$NON-NLS-1$
-		currentBalance.setToolTipText(LocalizationData.get("MainFrame.CurrentBalance.ToolTip")); //$NON-NLS-1$
-		finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance")); //$NON-NLS-1$
-		finalBalance.setToolTipText(LocalizationData.get("MainFrame.FinalBalance.ToolTip")); //$NON-NLS-1$
-		checkedBalance = new BalanceReportField(LocalizationData.get("MainFrame.CheckedBalance")); //$NON-NLS-1$
-		checkedBalance.setToolTipText(LocalizationData.get("MainFrame.CheckedBalance.ToolTip")); //$NON-NLS-1$
-		balancePane.add(currentBalance);
-		balancePane.add(finalBalance);
-		balancePane.add(checkedBalance);
-		bottomPane.add(balancePane, BorderLayout.CENTER);
+		balancePanel = new BalanceReportPanel();
+		bottomPane.add(balancePanel, BorderLayout.CENTER);
 		add(bottomPane, BorderLayout.SOUTH);
 		
 		acFilter.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				updateBalances();
+				balancePanel.updateBalances(acFilter);
 			}
 		});
-		updateBalances();
+		balancePanel.updateBalances(acFilter);
 	}
 	
 	@SuppressWarnings("serial")
@@ -154,12 +142,6 @@ public class TransactionsPlugInPanel extends JPanel {
 		}
 	}
 
-	private void updateBalances() {
-		currentBalance.setValue(acFilter.getCurrentBalance());
-		finalBalance.setValue(acFilter.getFinalBalance());
-		checkedBalance.setValue(acFilter.getCheckedBalance());
-	}
-	
 	TransactionTable getTransactionTable() {
 		return transactionTable;
 	}
