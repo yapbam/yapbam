@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.MessageFormat;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 
-public class BalanceReportField extends JLabel {
+public class BalanceReportField extends JToggleButton {
 	private static final long serialVersionUID = 1L;
 	static Color POSITIVE_COLOR;
 	static Color NEGATIVE_COLOR;
@@ -35,7 +33,7 @@ public class BalanceReportField extends JLabel {
 		this.setOpaque(true);
     this.setFont(new Font(getFont().getFontName(), getFont().getStyle() ^ Font.BOLD, 12));
 		this.setHorizontalAlignment(SwingConstants.CENTER);
-		this.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		this.setFocusable(false);
 		this.setValue(0);
 	}
 	
