@@ -32,7 +32,7 @@ import net.yapbam.gui.widget.JLabelMenu;
 public class TransactionsPlugInPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 		
-	TransactionTable transactionTable;
+	private TransactionTable transactionTable;
 	private BalanceReportPanel balancePanel;
 
 	@SuppressWarnings("serial")
@@ -130,5 +130,9 @@ public class TransactionsPlugInPanel extends JPanel {
 
 	TransactionTable getTransactionTable() {
 		return transactionTable;
+	}
+	
+	BalanceReportPanel getBalanceReportPanel() {
+		return balancePanel;
 	}
 }

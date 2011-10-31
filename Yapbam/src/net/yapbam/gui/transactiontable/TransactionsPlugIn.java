@@ -1,6 +1,7 @@
 package net.yapbam.gui.transactiontable;
 
 import java.awt.print.Printable;
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.swing.JPanel;
@@ -19,9 +20,11 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.preferences.PreferencePanel;
+import net.yapbam.gui.transactiontable.BalanceReportPanel.Selection;
 
 public class TransactionsPlugIn extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.transactionTable."; //$NON-NLS-1$
+	private static final String BALANCE_REF = STATE_PREFIX+".balanceReport"; //$NON-NLS-1$
 	
 	private TransactionsPlugInPanel panel;
 	private FilteredData data;
@@ -56,11 +59,14 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		TransactionTable transactionTable = panel.getTransactionTable();
 		YapbamState.INSTANCE.restoreState(transactionTable, STATE_PREFIX);
 		transactionTable.scrollToLastLine();
+		Serializable restoredSelected = YapbamState.INSTANCE.restore(BALANCE_REF);
+		if ((restoredSelected!=null) && (restoredSelected!=BalanceReportPanel.Selection.NONE)) panel.getBalanceReportPanel().setSelected((Selection) restoredSelected);
 	}
 
 	@Override
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(panel.getTransactionTable(), STATE_PREFIX);
+		YapbamState.INSTANCE.save(BALANCE_REF, panel.getBalanceReportPanel().getSelected());
 	}
 
 	@Override
@@ -75,7 +81,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	@Override
 	protected Printable getPrintable() {
-		return panel.transactionTable.getPrintable(PrintMode.FIT_WIDTH, null, null);
+		return panel.getTransactionTable().getPrintable(PrintMode.FIT_WIDTH, null, null);
 	}
 		
 	private void testAlert() {
@@ -92,6 +98,6 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	@Override
 	public TransactionSelector getTransactionSelector() {
-		return panel.transactionTable;
+		return panel.getTransactionTable();
 	}
 }
