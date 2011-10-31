@@ -31,10 +31,13 @@ public class TipManager extends ArrayList<String> {
 		
 		this.add(LocalizationData.get("Tip.6")); //$NON-NLS-1$
 		
-		tip = MessageFormat.format(LocalizationData.get("Tip.7"), LocalizationData.get("MainMenu.File"), LocalizationData.get("MainMenu.Preferences"), LocalizationData.get("PreferencesDialog.StartState.title")); //$NON-NLS-1$ //$NON-NLS-2$
+		tip = MessageFormat.format(LocalizationData.get("Tip.7"), LocalizationData.get("MainMenu.File"), LocalizationData.get("MainMenu.Preferences"), LocalizationData.get("PreferencesDialog.StartState.title")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		this.add(tip);
 
-		tip = MessageFormat.format(LocalizationData.get("Tip.8"), LocalizationData.get("MainMenu.Transactions.NewMultiple"), LocalizationData.get("TransactionDialog.next")); //$NON-NLS-1$ //$NON-NLS-2$
+		tip = MessageFormat.format(LocalizationData.get("Tip.8"), LocalizationData.get("MainMenu.Transactions.NewMultiple"), LocalizationData.get("TransactionDialog.next")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		this.add(tip);
+
+		tip = MessageFormat.format(LocalizationData.get("Tip.9"), LocalizationData.get("MainFrame.Transactions")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.add(tip);
 	}
 	

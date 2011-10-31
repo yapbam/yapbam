@@ -34,11 +34,13 @@ public class BalanceReportField extends JToggleButton {
     this.setFont(new Font(getFont().getFontName(), getFont().getStyle() ^ Font.BOLD, 12));
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 		this.setFocusable(false);
-		this.setValue(0);
+		this.setValue(0, true);
 	}
 	
-	public void setValue(double balance) {
+	public void setValue(double balance, boolean absolute) {
+    this.setFont(this.getFont().deriveFont(absolute?Font.BOLD:Font.ITALIC+Font.BOLD));
 		this.setForeground(balance<0?NEGATIVE_COLOR:POSITIVE_COLOR);
-		setText(MessageFormat.format(this.contentPattern, LocalizationData.getCurrencyInstance().format(balance)));
+		String text = MessageFormat.format(this.contentPattern, LocalizationData.getCurrencyInstance().format(balance));
+		setText(text);
 	}
 }

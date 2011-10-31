@@ -137,9 +137,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
 			gridBagConstraints.gridy = 0;
 			negativeBalanceReport = new BalanceReportField(LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.negativeSample")); //$NON-NLS-1$
-			negativeBalanceReport.setValue(-100);
+			negativeBalanceReport.setValue(-100, true);
 			positiveBalanceReport = new BalanceReportField(LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.positiveSample")); //$NON-NLS-1$
-			positiveBalanceReport.setValue(100);
+			positiveBalanceReport.setValue(100, true);
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
