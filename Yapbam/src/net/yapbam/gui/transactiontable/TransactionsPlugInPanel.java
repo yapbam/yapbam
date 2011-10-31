@@ -19,10 +19,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import net.yapbam.data.BalanceData;
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.event.DataEvent;
-import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
 import net.yapbam.gui.actions.DeleteTransactionAction;
@@ -34,9 +31,7 @@ import net.yapbam.gui.widget.JLabelMenu;
 
 public class TransactionsPlugInPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
-	private BalanceData acFilter;
-	
+		
 	TransactionTable transactionTable;
 	private BalanceReportPanel balancePanel;
 
@@ -46,7 +41,6 @@ public class TransactionsPlugInPanel extends JPanel {
 		setOpaque(true);
 
 		transactionTable = new TransactionTable(data);
-		this.acFilter = data.getBalanceData();
 
 		EditTransactionAction editTransactionAction = new EditTransactionAction(transactionTable);
 		DuplicateTransactionAction duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
@@ -105,17 +99,9 @@ public class TransactionsPlugInPanel extends JPanel {
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		menus.add(columns, BorderLayout.SOUTH);
 		bottomPane.add(menus, BorderLayout.WEST);
-		balancePanel = new BalanceReportPanel();
+		balancePanel = new BalanceReportPanel(data.getBalanceData());
 		bottomPane.add(balancePanel, BorderLayout.CENTER);
 		add(bottomPane, BorderLayout.SOUTH);
-		
-		acFilter.addListener(new DataListener() {
-			@Override
-			public void processEvent(DataEvent event) {
-				balancePanel.updateBalances(acFilter);
-			}
-		});
-		balancePanel.updateBalances(acFilter);
 	}
 	
 	@SuppressWarnings("serial")

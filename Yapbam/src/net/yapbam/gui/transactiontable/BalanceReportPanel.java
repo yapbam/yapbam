@@ -8,17 +8,30 @@ import java.util.Observable;
 import java.util.Observer;
 
 import net.yapbam.data.BalanceData;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.ButtonGroup;
 
 public class BalanceReportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	private BalanceData balance;
+
 	private BalanceReportField currentBalance;
 	private BalanceReportField finalBalance;
 	private BalanceReportField checkedBalance;
+	private ButtonGroup group;
 
-	public BalanceReportPanel() {
+	public BalanceReportPanel(BalanceData balance) {
+		this.balance = balance;
+		balance.addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				updateBalances();
+			}
+		});
+		
 		setLayout(new GridLayout(1, 3, 0, 0));
 		
 		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance")); //$NON-NLS-1$
@@ -30,22 +43,37 @@ public class BalanceReportPanel extends JPanel {
 		add(currentBalance);
 		add(finalBalance);
 		add(checkedBalance);
-		ButtonGroup group = new ButtonGroup();
+		group = new ButtonGroup();
 		group.add(checkedBalance);
 		group.add(currentBalance);
 		group.add(finalBalance);
 		group.addObserver(new Observer() {
 			@Override
 			public void update(Observable o, Object arg) {
-				JToggleButton b = (JToggleButton) arg;
-				System.out.println ((b==null?"No button":b.getText())+" is selected");
+				updateBalances();
 			}
 		});
+		updateBalances();
 	}
 
-	public void updateBalances(BalanceData balance) {
-		currentBalance.setValue(balance.getCurrentBalance());
-		finalBalance.setValue(balance.getFinalBalance());
-		checkedBalance.setValue(balance.getCheckedBalance());
+	private void updateBalances() {
+		JToggleButton selected = group.getSelected();
+		if (selected==null) {
+			currentBalance.setValue(balance.getCurrentBalance());
+			finalBalance.setValue(balance.getFinalBalance());
+			checkedBalance.setValue(balance.getCheckedBalance());
+		} else if (selected==currentBalance) {
+			currentBalance.setValue(balance.getCurrentBalance());
+			finalBalance.setValue(balance.getFinalBalance()-balance.getCurrentBalance());
+			checkedBalance.setValue(balance.getCheckedBalance()-balance.getCurrentBalance());
+		} else if (selected==finalBalance) {
+			currentBalance.setValue(balance.getCurrentBalance()-balance.getFinalBalance());
+			finalBalance.setValue(balance.getFinalBalance());
+			checkedBalance.setValue(balance.getCheckedBalance()-balance.getFinalBalance());
+		} else if (selected==checkedBalance) {			
+			currentBalance.setValue(balance.getCurrentBalance()-balance.getCheckedBalance());
+			finalBalance.setValue(balance.getFinalBalance()-balance.getCheckedBalance());
+			checkedBalance.setValue(balance.getCheckedBalance());
+		}
 	}
 }
