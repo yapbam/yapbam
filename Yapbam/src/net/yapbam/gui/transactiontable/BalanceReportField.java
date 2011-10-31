@@ -1,6 +1,7 @@
 package net.yapbam.gui.transactiontable;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.text.MessageFormat;
 
@@ -35,6 +36,9 @@ public class BalanceReportField extends JToggleButton {
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 		this.setFocusable(false);
 		this.setValue(0, true);
+		Dimension size = this.getPreferredSize();
+		size.height += size.height/2;
+		this.setPreferredSize(size);
 	}
 	
 	public void setValue(double balance, boolean absolute) {
