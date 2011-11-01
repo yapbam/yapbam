@@ -1,12 +1,14 @@
 package net.yapbam.gui.transactiontable;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,7 +35,7 @@ public class TransactionsPlugInPanel extends JPanel {
 	@SuppressWarnings("serial")
 	public TransactionsPlugInPanel(FilteredData data) {
 		super(new BorderLayout());
-		setOpaque(true);
+//		setOpaque(true);
 
 		balances = new BalanceReportPanel(data.getBalanceData());
 
@@ -72,6 +74,8 @@ public class TransactionsPlugInPanel extends JPanel {
 		buttons.add(deleteTransactionButton, c);
 
 		JPanel menus = new JPanel(new BorderLayout());
+		menus.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+		menus.setBackground(new Color(240, 240, 240));
 		JLabel deploy = new JLabelMenu(LocalizationData.get("MainFrame.ShowSubtransactions")) { //$NON-NLS-1$
 			@Override
 			protected void fillPopUp(JPopupMenu popup) {
@@ -80,17 +84,17 @@ public class TransactionsPlugInPanel extends JPanel {
 			}
 		};
 		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //$NON-NLS-1$
-		menus.add(deploy, BorderLayout.EAST);
+		menus.add(deploy, BorderLayout.WEST);
 		JLabel columns = transactionTable.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
-		menus.add(columns, BorderLayout.WEST);
+		menus.add(columns, BorderLayout.EAST);
 
 		JPanel extraPane = new JPanel(new BorderLayout());
-		extraPane.add(balances, BorderLayout.NORTH);
-		extraPane.add(menus, BorderLayout.SOUTH);
-		add(extraPane, BorderLayout.NORTH);
+		extraPane.add(buttons, BorderLayout.NORTH);
+		extraPane.add(balances, BorderLayout.SOUTH);
+		add(menus, BorderLayout.NORTH);
 		add(scrollPane, BorderLayout.CENTER);
-		add(buttons, BorderLayout.SOUTH);
+		add(extraPane, BorderLayout.SOUTH);
 	}
 	
 	@SuppressWarnings("serial")
