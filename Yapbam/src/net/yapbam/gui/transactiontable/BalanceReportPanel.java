@@ -33,7 +33,7 @@ public class BalanceReportPanel extends JPanel {
 			}
 		});
 		
-		setLayout(new GridLayout(1, 3, 0, 0));
+		setLayout(new GridLayout(1, 3, 5, 0));
 		
 		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance")); //$NON-NLS-1$
 		finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance")); //$NON-NLS-1$

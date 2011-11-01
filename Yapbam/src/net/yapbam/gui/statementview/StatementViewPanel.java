@@ -35,7 +35,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
-import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.CoolJComboBox;
 import net.yapbam.util.DateUtils;
@@ -56,7 +55,6 @@ import java.awt.Font;
 import java.awt.print.Printable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -80,8 +78,10 @@ public class StatementViewPanel extends JPanel {
 	private FilteredData data;
 	private Statement[] statements;
 	private JLabel label;
-	private JLabel columnsMenu;
 	CheckTransactionAction checkAction;
+	private JPanel panel;
+	private JPanel menuPanel;
+	private JLabel lblNewLabel;
 	
 	static {
 		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
@@ -192,7 +192,7 @@ public class StatementViewPanel extends JPanel {
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.add(getSelectionPanel(), BorderLayout.NORTH);
+		add(getPanel_1(), BorderLayout.NORTH);
 		this.add(getStatementPanel(), BorderLayout.CENTER);
 	}
 
@@ -357,9 +357,9 @@ public class StatementViewPanel extends JPanel {
 		if (statementPanel == null) {
 			statementPanel = new JPanel();
 			statementPanel.setLayout(new BorderLayout());
-			statementPanel.add(getTopPanel(), BorderLayout.NORTH);
-			statementPanel.add(getBottomPanel(), BorderLayout.SOUTH);
+			statementPanel.add(getColumnsMenuPanel(), BorderLayout.NORTH);
 			statementPanel.add(getJScrollPane(), BorderLayout.CENTER);
+			statementPanel.add(getBottomPanel(), BorderLayout.SOUTH);
 		}
 		return statementPanel;
 	}
@@ -416,12 +416,6 @@ public class StatementViewPanel extends JPanel {
 			gridBagConstraints5.insets = new Insets(5, 0, 5, 0);
 			gridBagConstraints5.gridy = 0;
 			detail = new JLabel();
-			GridBagConstraints gbc_columnsMenu = new GridBagConstraints();
-			gbc_columnsMenu.anchor = GridBagConstraints.WEST;
-			gbc_columnsMenu.gridx = 0;
-			gbc_columnsMenu.gridy = 0;
-			gbc_columnsMenu.insets = new Insets(0, 5, 0, 0);
-			bottomPanel.add(getColumnsMenu(), gbc_columnsMenu);
 			bottomPanel.add(detail, gridBagConstraints5);
 		}
 		return bottomPanel;
@@ -506,10 +500,35 @@ public class StatementViewPanel extends JPanel {
 		}
 		return label;
 	}
-	private JLabel getColumnsMenu() {
-		if (columnsMenu == null) {
-			columnsMenu = getTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+	private JPanel getPanel_1() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setLayout(new BorderLayout(0, 0));
+			panel.add(getSelectionPanel(), BorderLayout.NORTH);
+			panel.add(getTopPanel(), BorderLayout.SOUTH);
 		}
-		return columnsMenu;
+		return panel;
+	}
+	private JPanel getColumnsMenuPanel() {
+		if (menuPanel == null) {
+			menuPanel = new JPanel();
+			menuPanel.setBorder(null);
+			GridBagLayout gbl_menuPanel = new GridBagLayout();
+			menuPanel.setLayout(gbl_menuPanel);
+			GridBagConstraints gbc_ColumnsMenu = new GridBagConstraints();
+			gbc_ColumnsMenu.weightx = 1.0;
+			gbc_ColumnsMenu.insets = new Insets(0, 0, 0, 5);
+			gbc_ColumnsMenu.anchor = GridBagConstraints.EAST;
+			gbc_ColumnsMenu.gridx = 0;
+			gbc_ColumnsMenu.gridy = 0;
+			menuPanel.add(getColumnsMenu(), gbc_ColumnsMenu);
+		}
+		return menuPanel;
+	}
+	private JLabel getColumnsMenu() {
+		if (lblNewLabel == null) {
+			lblNewLabel = getTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+		}
+		return lblNewLabel;
 	}
 }
