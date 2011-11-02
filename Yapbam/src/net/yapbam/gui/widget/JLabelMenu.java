@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import net.yapbam.gui.IconManager;
 
@@ -42,8 +43,12 @@ public abstract class JLabelMenu extends JLabel{
 	@Override
 	public void setSize(int width, int height) {
 		int textWidth = this.getFontMetrics(getFont()).stringWidth(getText());
-		Insets insets = getBorder().getBorderInsets(this);
-		int remaining = width - textWidth - getIcon().getIconWidth() - insets.left - insets.right;
+		int remaining = width - textWidth - getIcon().getIconWidth();
+		Border border = getBorder();
+		if (border!=null) {
+			Insets insets = border.getBorderInsets(this);
+			remaining = remaining - insets.left - insets.right;
+		}
 		setIconTextGap(Math.max(0, remaining));
 		super.setSize(width, height);
 	}
