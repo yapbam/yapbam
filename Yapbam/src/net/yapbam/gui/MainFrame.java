@@ -69,13 +69,25 @@ public class MainFrame extends JFrame implements DataListener {
 				try {
 					super.dispatchEvent(event);
 					if (event.getClass().getName().startsWith("sun.awt.AWTAutoShutdown")) { //$NON-NLS-1$
-						// JDK 1.7 bug (?) workaround"
+						// JDK 1.7 bug (?) workaround
 						// For an unknown reason, JDK 1.7 do not stop the JVM when all the windows are disposed and
 						// an custom eventQueue has been installed in the awt dispatch thread 
 						System.exit(0); //TODO
 					}
 				} catch (Throwable t) {
 					ErrorManager.INSTANCE.log (null,t);
+					// The following portion of code closes the main window if it is not visible.
+					// This solves the case where a exception is thrown during the Mainframe.setVisible(true)
+					// If we do nothing, the window is there, but invisible, so, the user has no way to close
+					// the window for exiting from yapbam.
+					Window[] windows = Window.getWindows();
+					for (int i = 0; i < windows.length; i++) {
+						if (windows[i] instanceof MainFrame) {
+							if (!windows[i].isVisible()) {
+								windows[i].dispatchEvent(new WindowEvent(windows[i],WindowEvent.WINDOW_CLOSING));
+							}
+						}
+					}
 				}
 			}
 		});
