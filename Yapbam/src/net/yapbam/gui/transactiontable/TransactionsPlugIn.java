@@ -24,7 +24,7 @@ import net.yapbam.gui.transactiontable.BalanceReportPanel.Selection;
 
 public class TransactionsPlugIn extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.transactionTable."; //$NON-NLS-1$
-	private static final String BALANCE_REF = STATE_PREFIX+".balanceReport"; //$NON-NLS-1$
+	private static final String BALANCE_REF = STATE_PREFIX+"balanceReport"; //$NON-NLS-1$
 	
 	private TransactionsPlugInPanel panel;
 	private FilteredData data;

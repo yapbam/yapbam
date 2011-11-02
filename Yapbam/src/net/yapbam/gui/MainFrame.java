@@ -139,11 +139,17 @@ public class MainFrame extends JFrame implements DataListener {
 			@Override
 			public void windowClosing(WindowEvent event) {
 				MainFrame frame = (MainFrame) event.getWindow();
-				frame.saveState();
 				if (frame.isRestarting) {
+					frame.saveState();
 					super.windowClosing(event);
 					frame.dispose();
 				} else if (SaveManager.MANAGER.verify(frame)) {
+					// Be aware, you can think that it's a good idea to write the following line before the if/then/else block.
+					// But it's not, it would lead to the state not remember which file was last saved in the following scenario:
+					// Create a new file, then add a transaction, click the close window -> The save/ignore/cancel dialog appears
+					// (The SaveManager.MANAGER.verify(frame) displays it). If the state save occurs before that, it can't save
+					// the file you will choose after clicking the save option.
+					frame.saveState();
 					// You could wonder why we don't save preferences when closing the preferences dialog
 					// It's because there's other dialogs that changes the preferences (for example when closing the welcome dialog: show/hide at startup) 
 					try {
