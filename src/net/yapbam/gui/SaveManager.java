@@ -16,7 +16,7 @@ class SaveManager {
 	private SaveManager() {}
 
 	/** This method gives a last chance to save unsaved data.
-	 * @param data The data currently edited
+	 * @param frame The frame that is currently editing data
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
 	boolean verify(MainFrame frame) {

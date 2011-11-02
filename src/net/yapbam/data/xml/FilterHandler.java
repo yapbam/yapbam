@@ -54,7 +54,7 @@ public class FilterHandler extends DefaultHandler {
 						Account account = data.getAccount(name);
 						if (account != null) accounts.add(account);
 					}
-					if ((accounts.size()!=0) && (accounts.size()!=data.getAccountsNumber())) filter.setValidAccounts(accounts);
+					if (accounts.size()!=0) filter.setValidAccounts(accounts);
 				}
 			} {
 				String categoriesString = attributes.getValue(Serializer.CATEGORY_ATTRIBUTE);
