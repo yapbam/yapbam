@@ -4,7 +4,6 @@ import java.awt.GridBagLayout;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -497,13 +496,7 @@ public class ImportPanel extends JPanel {
 	}
 	
 	private void doError(String message) {
-		JOptionPane.showMessageDialog(this, message, LocalizationData.get("ImportDialog.errorMessage.title"), JOptionPane.ERROR_MESSAGE);
-		this.invalidityCause = message;
-		getFirst().setEnabled(false);
-		getPrevious().setEnabled(false);
-		getNext().setEnabled(false);
-		getLast().setEnabled(false);
-		//TODO invalidate the separator panel 
+		throw new BadImportFileException(message);
 	}
 
 	public void setData(GlobalData data) {

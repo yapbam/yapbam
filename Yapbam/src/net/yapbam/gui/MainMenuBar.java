@@ -40,6 +40,7 @@ import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.AccountDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
+import net.yapbam.gui.dialogs.export.BadImportFileException;
 import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.dialogs.export.Exporter;
 import net.yapbam.gui.dialogs.export.ImportDialog;
@@ -348,29 +349,33 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				chooser.updateUI();
 				File file = chooser.showOpenDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 				if (file!=null) {
-					ImportDialog dialog = new ImportDialog(this.frame, data, file);
-					dialog.setVisible(true);
-					Importer importer = dialog.getResult();
-					if (importer!=null) {
-						if (SaveManager.MANAGER.verify(frame)) {
-							if (!dialog.getAddToCurrentData()) {
-								data.clear();
-							}
-							try {
-								ImportError[] errors = importer.importFile(null);
-								if (errors.length!=0) {
-									ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame, importer.getParameters().getImportedFileColumns(), errors);
-									importErrorDialog.setVisible(true);
-									if (importErrorDialog.getResult()!=null) errors = new ImportError[0];
+					try {
+						ImportDialog dialog = new ImportDialog(this.frame, data, file);
+						dialog.setVisible(true);
+						Importer importer = dialog.getResult();
+						if (importer!=null) {
+							if (SaveManager.MANAGER.verify(frame)) {
+								if (!dialog.getAddToCurrentData()) {
+									data.clear();
 								}
-								if (errors.length==0) {
-									importer.importFile(data);
+								try {
+									ImportError[] errors = importer.importFile(null);
+									if (errors.length!=0) {
+										ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame, importer.getParameters().getImportedFileColumns(), errors);
+										importErrorDialog.setVisible(true);
+										if (importErrorDialog.getResult()!=null) errors = new ImportError[0];
+									}
+									if (errors.length==0) {
+										importer.importFile(data);
+									}
+								} catch (IOException e1) {
+									//TODO Be more precise ?
+									ErrorManager.INSTANCE.display(frame, e1);
 								}
-							} catch (IOException e1) {
-								//TODO Be more precise ?
-								ErrorManager.INSTANCE.display(frame, e1);
 							}
 						}
+					} catch (BadImportFileException e2) {
+						JOptionPane.showMessageDialog(this.frame, e2.getMessage(), LocalizationData.get("ImportDialog.errorMessage.title"), JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			} else if (source.equals(this.menuItemExport)) {
