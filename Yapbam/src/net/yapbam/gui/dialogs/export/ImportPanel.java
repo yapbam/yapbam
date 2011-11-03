@@ -147,39 +147,39 @@ public class ImportPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
-	        ImportTableModel model = new ImportTableModel();
+			ImportTableModel model = new ImportTableModel();
 			jTable = new JTable(model) {
-	            //Implement table header tool tips.
-	            @Override
+				// Implement table header tool tips.
+				@Override
 				protected JTableHeader createDefaultTableHeader() {
-	                return new JTableHeader(columnModel) {
-	                    @Override
+					return new JTableHeader(columnModel) {
+						@Override
 						public String getToolTipText(MouseEvent e) {
-	                        String tip = null;
-	                        java.awt.Point p = e.getPoint();
-	                        int index = columnModel.getColumnIndexAtX(p.x);
-	                        int realIndex = columnModel.getColumn(index).getModelIndex();
-	                        if (realIndex==1) {
-	                        	tip = LocalizationData.get("ImportDialog.linkedTo.toolTip"); //$NON-NLS-1$
-	                        } else if (realIndex==2) {
-	                        	tip = LocalizationData.get("ImportDialog.importedFields.toolTip"); //$NON-NLS-1$
-	                        }
-	                        return tip;
-	                    }
-	                };
-	            }
-	        };
-	        
+							String tip = null;
+							java.awt.Point p = e.getPoint();
+							int index = columnModel.getColumnIndexAtX(p.x);
+							int realIndex = columnModel.getColumn(index).getModelIndex();
+							if (realIndex == 1) {
+								tip = LocalizationData.get("ImportDialog.linkedTo.toolTip"); //$NON-NLS-1$
+							} else if (realIndex == 2) {
+								tip = LocalizationData.get("ImportDialog.importedFields.toolTip"); //$NON-NLS-1$
+							}
+							return tip;
+						}
+					};
+				}
+			};
+
 			jTable.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
 			JTableUtils.initColumnSizes(jTable, Integer.MAX_VALUE);
 			jTable.setPreferredScrollableViewportSize(getJTable().getPreferredSize());
-			
-	        fieldsCombo = new JComboBox();	        
-	        TableColumn importedColumns = jTable.getColumnModel().getColumn(2);
+
+			fieldsCombo = new JComboBox();
+			TableColumn importedColumns = jTable.getColumnModel().getColumn(2);
 			importedColumns.setCellEditor(new DefaultCellEditor(fieldsCombo));
 
-	        jTable.setFillsViewportHeight(true);
-	        model.addTableModelListener(new TableModelListener() {
+			jTable.setFillsViewportHeight(true);
+			model.addTableModelListener(new TableModelListener() {
 				@Override
 				public void tableChanged(TableModelEvent e) {
 					updateAddToAccountPanel();
