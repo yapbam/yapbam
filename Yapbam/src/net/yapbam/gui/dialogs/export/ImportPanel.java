@@ -4,6 +4,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
@@ -426,7 +428,11 @@ public class ImportPanel extends JPanel {
 				for (String line = reader.readLine(); line!=null; line=reader.readLine()) {
 					numberOfLines++;
 				}
-				setLine(0);
+				if (this.numberOfLines==0) {
+					doError(LocalizationData.get("ImportDialog.error.emptyFile"));
+				} else {
+					setLine(0);
+				}
 			} catch (IOException e) {
 				doError(e);
 			} finally {
@@ -440,7 +446,7 @@ public class ImportPanel extends JPanel {
 	}
 	
 	public void setLine (int i) {
-		if (i>=this.numberOfLines) throw new IllegalArgumentException();
+		if (i>=this.numberOfLines) throw new IllegalArgumentException("line ("+i+") must be less than "+this.numberOfLines);
 		this.currentLine = i;
 		boolean first = this.currentLine==0;
 		getFirst().setSelected(first);
@@ -487,7 +493,17 @@ public class ImportPanel extends JPanel {
 	}
 		
 	private void doError(Throwable e) {
-		//TODO show error error dialog and close the dialog (or diable ok if closing is not easy to do)
+		doError(MessageFormat.format(LocalizationData.get("ImportDialog.error.exception"), e.getMessage()));
+	}
+	
+	private void doError(String message) {
+		JOptionPane.showMessageDialog(this, message, LocalizationData.get("ImportDialog.errorMessage.title"), JOptionPane.ERROR_MESSAGE);
+		this.invalidityCause = message;
+		getFirst().setEnabled(false);
+		getPrevious().setEnabled(false);
+		getNext().setEnabled(false);
+		getLast().setEnabled(false);
+		//TODO invalidate the separator panel 
 	}
 
 	public void setData(GlobalData data) {

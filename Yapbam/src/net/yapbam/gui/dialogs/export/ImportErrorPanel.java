@@ -66,7 +66,7 @@ public class ImportErrorPanel extends JPanel {
 			columnsHeaders = new String[columnsCount];
 			// Compute the column headers (blank or the Yapbam corresponding field)
 			// First column has a fixed header (line number)
-			columnsHeaders[0] = LocalizationData.get("ImportDialog.errorMessagelienNumberColumnHeader"); //$NON-NLS-1$
+			columnsHeaders[0] = LocalizationData.get("ImportDialog.errorMessagelineNumberColumnHeader"); //$NON-NLS-1$
 			// Initialize with empty strings
 			for (int i = 1; i < columnsHeaders.length; i++) {
 				columnsHeaders[i] = "";
