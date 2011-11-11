@@ -1,4 +1,7 @@
 TODO list
+
+Améliorations :
+Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done)
 	
 Features :
 * Tenir compte de la date de fin sélectionnée dans le filtre pour régler le zoom vertical dans le graphique de l'historique du solde
