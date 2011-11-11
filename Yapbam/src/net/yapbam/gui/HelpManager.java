@@ -65,7 +65,6 @@ public class HelpManager {
 	 */
 	public static void show(Component parent, URI uri) {
 		try {
-			if (true) throw new UnsupportedOperationException();
 			Desktop.getDesktop().browse(uri);
 		} catch (IOException exception) {
 			String message = MessageFormat.format(LocalizationData.get("HelpManager.errorDialog.message"), exception.toString()); //$NON-NLS-1$
