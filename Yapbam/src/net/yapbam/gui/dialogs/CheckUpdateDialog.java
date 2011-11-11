@@ -87,16 +87,20 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					} else {
 						YapbamState.INSTANCE.put(LAST_UPDATE_CHECK_KEY, new Date());
 						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // There's an update
+							//TODO Determine the URL with a resource 
+							String prefix = LocalizationData.getLocale().getLanguage().equals("fr")?"fr":"en"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							String url = "http://www.yapbam.net/"+prefix+"/doc/relnotes.php"; //$NON-NLS-1$ //$NON-NLS-2$
 							String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
-							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(),update.getUpdateURL());
-							String download = LocalizationData.get("MainMenu.CheckUpdate.installNow");
+							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(), url);
+							String download = LocalizationData.get("MainMenu.CheckUpdate.installNow"); //$NON-NLS-1$
 							int choice;
 							if (auto && Preferences.INSTANCE.getAutoUpdateInstall()) {
 								choice = 1;
 							} else {
-								choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Success.title"),
+								//TODO Use a HTMLPane in order to be able to display a clickable link on the relnotes url
+								choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), //$NON-NLS-1$
 									JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-									new String[]{LocalizationData.get("MainMenu.CheckUpdate.cancel"), download}, download);
+									new String[]{LocalizationData.get("MainMenu.CheckUpdate.cancel"), download}, download); //$NON-NLS-1$
 							}
 							if (choice==1) {
 								CheckUpdateDialog.this.setVisible(false);
