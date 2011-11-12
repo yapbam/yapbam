@@ -89,7 +89,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // There's an update
 							//TODO Determine the URL with a resource 
 							String prefix = LocalizationData.getLocale().getLanguage().equals("fr")?"fr":"en"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-							String url = "http://www.yapbam.net/"+prefix+"/doc/relnotes.php"; //$NON-NLS-1$ //$NON-NLS-2$
+							String url = "http://www.yapbam.net/"+prefix+"/doc/relnotes"; //$NON-NLS-1$ //$NON-NLS-2$
 							String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
 							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(), url);
 							String download = LocalizationData.get("MainMenu.CheckUpdate.installNow"); //$NON-NLS-1$
