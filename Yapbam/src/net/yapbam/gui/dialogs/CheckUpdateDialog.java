@@ -87,11 +87,8 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					} else {
 						YapbamState.INSTANCE.put(LAST_UPDATE_CHECK_KEY, new Date());
 						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // There's an update
-							//TODO Determine the URL with a resource 
-							String prefix = LocalizationData.getLocale().getLanguage().equals("fr")?"fr":"en"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-							String url = "http://www.yapbam.net/"+prefix+"/doc/relnotes"; //$NON-NLS-1$ //$NON-NLS-2$
 							String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
-							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease(), url);
+							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease());
 							String download = LocalizationData.get("MainMenu.CheckUpdate.installNow"); //$NON-NLS-1$
 							int choice;
 							if (auto && Preferences.INSTANCE.getAutoUpdateInstall()) {
