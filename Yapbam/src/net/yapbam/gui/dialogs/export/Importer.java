@@ -20,6 +20,7 @@ import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.StringUtils;
 
 public class Importer {
 	private File file;
@@ -60,7 +61,7 @@ public class Importer {
 				}
 				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 					lineNumber++;
-					String[] fields = line.split(parameters.getSeparatorString());
+					String[] fields = StringUtils.split(line, parameters.getSeparator());
 					try {
 						accountPart = !importLine(data, lineNumber, fields, accountPart) && accountPart;
 					} catch (ImportException e) {

@@ -7,7 +7,6 @@ import java.io.Serializable;
 public class ImporterParameters implements Serializable {
 	//See comment about serial uid in ExporterParameters
 	private char separator;
-	private String separatorString;
 	private int ignoredLeadingLines;
 	private int[] importedFileColumns;
 
@@ -41,7 +40,6 @@ public class ImporterParameters implements Serializable {
 
 	public void setSeparator(char separator) {
 		this.separator = separator;
-		this.separatorString = null;
 	}
 
 	public int getIgnoredLeadingLines() {
@@ -58,12 +56,5 @@ public class ImporterParameters implements Serializable {
 
 	public void setImportedFilecolumns(int[] importedFilecolumns) {
 		this.importedFileColumns = importedFilecolumns;
-	}
-
-	public String getSeparatorString() {
-		if (separatorString==null) {
-			separatorString = new String(new char[]{separator});
-		}
-		return separatorString;
 	}
 }
