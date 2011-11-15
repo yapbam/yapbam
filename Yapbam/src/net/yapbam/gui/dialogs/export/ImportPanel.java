@@ -34,6 +34,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
 import net.yapbam.util.NullUtils;
+import net.yapbam.util.StringUtils;
 
 import javax.swing.JLabel;
 import java.awt.Insets;
@@ -477,7 +478,7 @@ public class ImportPanel extends JPanel {
 					reader.readLine();
 				}
 				String line = reader.readLine();
-				result = line.split(new String(new char[]{separatorPanel.getSeparator()}));
+				result = StringUtils.split(line, separatorPanel.getSeparator());
 			} catch (IOException e) {
 				doError (e);
 			} finally {
