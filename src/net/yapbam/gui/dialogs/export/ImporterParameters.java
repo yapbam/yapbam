@@ -3,9 +3,9 @@ package net.yapbam.gui.dialogs.export;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class ImporterParameters implements Serializable {
-	//See comment about serial uid in ExporterParameters
+	private static final long serialVersionUID = 560758261413517776L;
+
 	private char separator;
 	private int ignoredLeadingLines;
 	private int[] importedFileColumns;
@@ -29,7 +29,7 @@ public class ImporterParameters implements Serializable {
 			System.arraycopy(this.importedFileColumns, ExportTableModel.AMOUNT_INDEX-1, array, ExportTableModel.AMOUNT_INDEX, array.length-ExportTableModel.AMOUNT_INDEX);
 			this.importedFileColumns = array;
 		} else {
-			throw new ObjectStreamException() {};
+			throw new ObjectStreamException() {private static final long serialVersionUID = 1L;};
 		}
 		return this;
 	}
