@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
+
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Notes de mise à jour</title>
 <style type="text/css">
 <!--
@@ -13,28 +14,32 @@ color: #AA0000;
 color: #ff9900;
 }
 -->
-</style></head>
-<body>
-<h1>Version 0.9.7 (13/11/2011)</h1>
+</style></head><body>
+<h1>Version 0.9.8 (??/11/2011)</h1>
 <h2>Nouveautés de cette version</h2>
 <ul>
-  <li>Il est désormais possible d'afficher les soldes relatifs dans l'onglet des 
+  <li><span class="bugFix">Correction d'un bug</span> : Certains
+séparateurs (par exemple \) n'étaient pas supporté dans l'import de
+fichiers. Les utiliser provoquait le plantage du dialogue d'import de
+fichiers.<br>
+</li>
+</ul>
+<hr>
+<h1>Versions précédentes</h1>
+<h2>Version 0.9.7 (13/11/2011)</h2>
+<ul>
+<li>Il est désormais possible d'afficher les soldes relatifs dans l'onglet des 
     transactions (Il suffit de cliquer sur un solde pour en faire la référence 
-    pour les autres soldes).</li>
-  <li>Les composants de l'onglet "opérations" sont réarrangés. Les boutons de 
+    pour les autres soldes).</li><li>Les composants de l'onglet "opérations" sont réarrangés. Les boutons de 
     création/édition/suppression d'opérations sont à présent sous la liste, comme 
     dans les listes affichées dans l'onglet "Administration".<br>
     Ajout d'un bouton pour créer les opérations en masse. Le menu de sélection 
     des colonnes est maintenant en haut à droite, ce qui semble une position 
-    plus classique (idem dans la vue relevé de compte).</li>
-  <li><span class="bugFix">Correction d'un bug</span> : La saisie d'une opération 
-    datée d'avant le 1/1/1970 provoquait des erreurs.</li>
-  <li><span class="bugFix">Correction d'un bug</span> : Le filtre n'était 
+    plus classique (idem dans la vue relevé de compte).</li><li><span class="bugFix">Correction d'un bug</span> : La saisie d'une opération 
+    datée d'avant le 1/1/1970 provoquait des erreurs.</li><li><span class="bugFix">Correction d'un bug</span> : Le filtre n'était 
     jamais enregistré lorsque les données n'étaient pas enregistrées 
     avant la fermeture de la fenêtre de Yapbam.</li><li><span class="bugFix">Correction d'un bug</span> : L'importation d'un fichier vide provoquait une erreur.</li><li><span class="bugFix">Correction d'un bug</span> : Cliquer sur un bouton d'aide provoquait un plantage si java était dans l'incapacité d'ouvrir un navigateur web.</li>
 </ul>
-<hr>
-<h1>Versions précédentes</h1>
 <h2>Version 0.9.6 (23/10/2011)</h2>
 <ul>
   <li><span class="bugFix">Correction d'un bug</span> : L'affichage de l'historique 

@@ -229,21 +229,22 @@ public class YapbamState {
 		}
 	}
 	
-	public Serializable restore(String prefix) {
-		String key = prefix;
-		if (contains(key)) {
-			try {
-				byte[] decoded = Base64.decode(get(key));
-				ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
-				ObjectInputStream ois = new ObjectInputStream(new GZIPInputStream(bais));
-				Serializable result = (Serializable) ois.readObject();
-				ois.close();
-				return result;
-			} catch (Exception e) {
-				// If something goes wrong, return null
-				return null;
-			}
-		} else {
+	/** Restores an object.
+	 * @param key The key used to save the object
+	 * @return a serializable object or null if the key is unknown or if an exception occurs during deserialization.
+	 * @see #save(String, Serializable)
+	 */
+	public Serializable restore(String key) {
+		if (!contains(key)) return null;
+		try {
+			byte[] decoded = Base64.decode(get(key));
+			ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
+			ObjectInputStream ois = new ObjectInputStream(new GZIPInputStream(bais));
+			Serializable result = (Serializable) ois.readObject();
+			ois.close();
+			return result;
+		} catch (Exception e) {
+			// If something goes wrong, return null
 			return null;
 		}
 	}
