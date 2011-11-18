@@ -60,7 +60,7 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 	
 	@Override
 	protected Category buildResult() {
-		return new Category(this.categoryField.getText());
+		return new Category(this.categoryField.getText()/*.trim()*/);
 	}
 
 	/** Opens the dialog, and add the newly created account to the data

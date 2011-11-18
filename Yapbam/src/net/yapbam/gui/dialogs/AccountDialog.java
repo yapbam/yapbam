@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,13 +21,10 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 	private JTextField bankAccountField;
 	private AmountWidget balanceField;
 	private GlobalData globalData;
-	private ModeListPanel modesPanel;
-	private String initialName;
 
 	public AccountDialog(Window owner, String message, GlobalData data) {
 		super(owner, LocalizationData.get("AccountDialog.title.new"), message); //$NON-NLS-1$
 		this.globalData = data;
-		this.initialName = null;
 	}
 	
 	@Override
@@ -77,30 +73,13 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		c.gridx = 1;
 		northPanel.add(balanceField, c);
 
-		JPanel centerPane = new JPanel(new BorderLayout());
-
-		modesPanel = new ModeListPanel();
-		modesPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("AccountDialog.modes.border.title"))); //$NON-NLS-1$
-		centerPane.add(northPanel, BorderLayout.NORTH);
-		centerPane.add(modesPanel, BorderLayout.CENTER);
-		modesPanel.setVisible(false); // TODO If we decide to keep it invisible, we could remove all stuff related to this panel
-
-		return centerPane;
+		return northPanel;
 	}
 	
-	public void setContent(Account account) {
-		this.setTitle(LocalizationData.get("AccountDialog.title.edit")); //$NON-NLS-1$
-		this.initialName = account.getName();
-		this.bankAccountField.setText(this.initialName);
-		this.balanceField.setValue(account.getInitialBalance());
-		this.modesPanel.setContent(account);
-		this.updateOkButtonEnabled();
-	}
-
 	@Override
 	protected Account buildResult() {
 		Number value = (Number) this.balanceField.getValue();
-		return new Account(this.bankAccountField.getText(), value.doubleValue(), modesPanel.getModes());
+		return new Account(this.bankAccountField.getText().trim(), value.doubleValue());
 	}
 
 	/** Opens the dialog, and add the newly created account to the data
@@ -125,11 +104,22 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		String name = this.bankAccountField.getText().trim();
 		if (name.length()==0) {
 			return LocalizationData.get("AccountDialog.err1"); //$NON-NLS-1$
-		} else if ((this.globalData.getAccount(name)!=null) && !name.equalsIgnoreCase(this.initialName)) {
+		} else if (!isNameOk(name)) {
 			return LocalizationData.get("AccountDialog.err2"); //$NON-NLS-1$
 		} else if (this.balanceField.getValue()==null) {
 			return LocalizationData.get("AccountDialog.err3"); //$NON-NLS-1$
 		}
 		return null;
+	}
+	
+	private boolean isNameOk(String name) {
+		// Unfortunately, before Yapbam version 0.9.8, it was possible to define account names starting or ending with a space
+		// We chose not to trim the readed account names because it was very hard to merge accounts with the same name except the spaces
+		// (because modes could not be the same).
+		// So, we have to test if the name is equivalent to a trimed previously entered name
+		for (int i = 0; i < this.globalData.getAccountsNumber(); i++) {
+			if (name.equalsIgnoreCase(this.globalData.getAccount(i).getName().trim())) return false;
+		}
+		return true;
 	}
 }

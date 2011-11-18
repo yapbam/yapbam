@@ -62,6 +62,7 @@ public class FilterHandler extends DefaultHandler {
 					String[] names = ArrayUtils.parseStringArray(categoriesString);
 					ArrayList<Category> categories = new ArrayList<Category>();
 					for (String name: names) {
+						name = name.trim();
 						Category category = name.isEmpty()?Category.UNDEFINED:data.getCategory(name);
 						if (category != null) categories.add(category);
 					}
@@ -74,6 +75,7 @@ public class FilterHandler extends DefaultHandler {
 					Set<String> dataNames = getAllValidAccountsModeNames();
 					ArrayList<String> modes = new ArrayList<String>();
 					for (String name: names) {
+						name = name.trim();
 						if (dataNames.contains(name)) modes.add(name);
 					}
 					if ((modes.size()!=0) && (modes.size()!=dataNames.size())) filter.setValidModes(modes);

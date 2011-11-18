@@ -59,9 +59,14 @@ class GlobalDataHandler extends DefaultHandler {
 			this.data.setAlertThreshold(account, alertThreshold);
 			this.tempData.push(account);
 		} else if (qName.equals(Serializer.CATEGORY_TAG)) {
-			String id = attributes.getValue(Serializer.ID_ATTRIBUTE);
-			Category cat = new Category(id);
-			this.data.add(cat);
+			String id = attributes.getValue(Serializer.ID_ATTRIBUTE).trim();
+			if (data.getCategory(id)==null) {
+				// In version before 0.9.8, it was possible to create categories ending (or starting) with a space
+				// So, it was possible to have two categories named "x" and "x ".
+				// Now, the category's name is trimed, so we have to merge those equivalent categories. 
+				Category cat = new Category(id);
+				this.data.add(cat);
+			}
 		} else if (qName.equals(Serializer.MODE_TAG)) {
 			this.tempData.push(attributes.getValue(Serializer.ID_ATTRIBUTE));
 			this.tempData.push(attributes.getValue(Serializer.CHECKBOOK_ATTRIBUTE)!=null?true:false);
@@ -99,7 +104,7 @@ class GlobalDataHandler extends DefaultHandler {
 		} else if (qName.equals(Serializer.SUBTRANSACTION_TAG)) {
 			double amount = Double.parseDouble(attributes.getValue(Serializer.AMOUNT_ATTRIBUTE));
 			String description = attributes.getValue(Serializer.DESCRIPTION_ATTRIBUTE);
-			String categoryId = attributes.getValue(Serializer.CATEGORY_ATTRIBUTE);
+			String categoryId = attributes.getValue(Serializer.CATEGORY_ATTRIBUTE).trim();
 			Category category = this.data.getCategory(categoryId);
 			SubTransaction sub = new SubTransaction(amount, description, category);
 			ArrayList<SubTransaction> lst = (ArrayList<SubTransaction>) this.tempData.peek();
@@ -147,10 +152,16 @@ class GlobalDataHandler extends DefaultHandler {
 		} else if (qName.equals(Serializer.MODE_TAG)) {
 			DateStepper[] vdcs = (DateStepper[]) this.tempData.pop();
 			boolean useCheckbook = (Boolean) this.tempData.pop();
-			String id = (String) this.tempData.pop();
-			Mode mode = new Mode(id, vdcs[1], vdcs[0], useCheckbook);
+			String id = (String) this.tempData.pop(); id = id.trim();
 			Account account = (Account) this.tempData.peek();
-			this.data.add(account, mode);
+			if (account.getMode(id)==null) {
+				// In Yapbam versions before 0.9.8, it was possible to create modes ending (or starting) with a space
+				// So, it was possible to have two modes named "x" and "x ".
+				// Now, the mode's name is trimed, so we have to merge those equivalent modes.
+				// In order to keep the code simple, we will not really merge the modes, but ignore the last one.
+				Mode mode = new Mode(id, vdcs[1], vdcs[0], useCheckbook);
+				this.data.add(account, mode);
+			}
 		} else if (qName.equals(Serializer.CHECKBOOK_TAG)) {
 			Checkbook book = (Checkbook) this.tempData.pop();
 			Account account = (Account) this.tempData.peek();

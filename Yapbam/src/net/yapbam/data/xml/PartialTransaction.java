@@ -25,8 +25,8 @@ class PartialTransaction {
 		description = attributes.get(Serializer.DESCRIPTION_ATTRIBUTE);
 		comment = attributes.get(Serializer.COMMENT_ATTRIBUTE);
 		String modeId = attributes.get(Serializer.MODE_ATTRIBUTE);
-		mode = modeId==null ? Mode.UNDEFINED : account.getMode(modeId);
-		String categoryId = attributes.get(Serializer.CATEGORY_ATTRIBUTE);
+		mode = modeId==null ? Mode.UNDEFINED : account.getMode(modeId.trim());
+		String categoryId = attributes.get(Serializer.CATEGORY_ATTRIBUTE).trim();
 		category = data.getCategory(categoryId);
 	}
 }
