@@ -104,7 +104,8 @@ class GlobalDataHandler extends DefaultHandler {
 		} else if (qName.equals(Serializer.SUBTRANSACTION_TAG)) {
 			double amount = Double.parseDouble(attributes.getValue(Serializer.AMOUNT_ATTRIBUTE));
 			String description = attributes.getValue(Serializer.DESCRIPTION_ATTRIBUTE);
-			String categoryId = attributes.getValue(Serializer.CATEGORY_ATTRIBUTE).trim();
+			String categoryId = attributes.getValue(Serializer.CATEGORY_ATTRIBUTE);
+			if (categoryId!=null) categoryId = categoryId.trim();
 			Category category = this.data.getCategory(categoryId);
 			SubTransaction sub = new SubTransaction(amount, description, category);
 			ArrayList<SubTransaction> lst = (ArrayList<SubTransaction>) this.tempData.peek();
