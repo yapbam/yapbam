@@ -125,7 +125,8 @@ public class BalanceHistoryPane extends JPanel {
 		if (!NullUtils.areEquals(first, firstAlert)) {
 			Date old = firstAlert;
 			firstAlert = first;
-			tabbedPane.setIconAt(0, first!=null?IconManager.ALERT:null);
+			int index = tabbedPane.getIndexOf(0);
+			tabbedPane.setIconAt(index, first!=null?IconManager.ALERT:null);
 			String tooltip;
 			tooltip = LocalizationData.get("BalanceHistory.graph.toolTip"); //$NON-NLS-1$
 			if (first!=null) {
@@ -134,7 +135,7 @@ public class BalanceHistoryPane extends JPanel {
 				String pattern = "<html>"+tooltip+"<br>"+LocalizationData.get("BalanceHistory.alertTooltipAdd")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				tooltip = MessageFormat.format(pattern, "<b>"+dateStr+"</b>"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			tabbedPane.setToolTipTextAt(0, tooltip);
+			tabbedPane.setToolTipTextAt(index, tooltip);
 			this.firePropertyChange(FIRST_ALERT, old, firstAlert);
 		}
 	}
