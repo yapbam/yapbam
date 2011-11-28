@@ -305,6 +305,7 @@ public class MainFrame extends JFrame implements DataListener {
 					public void propertyChange(PropertyChangeEvent evt) {
 						int tabIndex = paneledPlugins.indexOf(evt.getSource());
 						if (tabIndex >= 0) {
+							tabIndex = mainPane.getIndexOf(tabIndex);
 							if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_ICON_PROPERTY_NAME)) {
 								mainPane.setIconAt(tabIndex, (Icon) evt.getNewValue());
 							} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TITLE_PROPERTY_NAME)) {
