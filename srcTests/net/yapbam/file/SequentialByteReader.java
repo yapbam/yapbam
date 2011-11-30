@@ -1,28 +1,32 @@
 package net.yapbam.file;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 class SequentialByteReader {
-	private long current;
-	private byte last;
 	private InputStream stream;
-	
+	private ArrayList<Byte> read;
+
 	SequentialByteReader(InputStream stream) {
-		this.current = -1;
 		this.stream = stream;
+		this.read = new ArrayList<Byte>();
 	}
-	
-	byte getByte(long offset) throws IOException {
-		if (offset<0) throw new IllegalArgumentException();
-		if (offset<current) throw new IllegalArgumentException("Can't go back");
-		if (offset!=current) {
-			long toSkip = offset-current-1;
-			while (toSkip>0) {
-				toSkip = toSkip - stream.skip(toSkip);
-			}
-			last = (byte) stream.read();
+
+	byte getByte(int offset) throws IOException {
+		if (offset < 0) throw new IllegalArgumentException();
+		if (offset >= this.read.size()) {
+			read(offset);
 		}
-		return last;
+		return this.read.get(offset);
+	}
+
+	private void read(int offset) throws IOException {
+		while(this.read.size()<=offset) {
+			int b = this.stream.read();
+			if (b==-1) throw new EOFException();
+			this.read.add((byte)b);
+		}
 	}
 }
