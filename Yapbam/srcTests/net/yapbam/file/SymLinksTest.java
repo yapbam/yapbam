@@ -2,8 +2,8 @@ package net.yapbam.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+//import java.nio.file.Files;
+//import java.nio.file.Paths;
 
 public class SymLinksTest {
 
@@ -21,13 +21,13 @@ public class SymLinksTest {
 			} catch (IOException e) {
 				System.out.println ("  unable to resolve the canonical name: "+e);				
 			}
-			LnkParse lnkParse = new LnkParse();
+/*			LnkParse lnkParse = new LnkParse();
 			try {
 				lnkParse.parse(file);
 				System.out.println ("  lnkparse path    : "+(lnkParse.isLink()?lnkParse.getFullPath():file));
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
 			try {
 				LnkParser parser = new LnkParser(f);
 				System.out.println ("  real path   : "+parser.getRealFilename());
