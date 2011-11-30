@@ -2,8 +2,8 @@ package net.yapbam.file;
 
 import java.io.File;
 import java.io.IOException;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class SymLinksTest {
 
@@ -28,18 +28,24 @@ public class SymLinksTest {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}*/
-			try {
-				LnkParser parser = new LnkParser(f);
+
+/*			try {
+				OriginalLnkParser parser = new OriginalLnkParser(f);
 				System.out.println ("  real path   : "+parser.getRealFilename());
 				System.out.println ("  size of real file: "+new File(parser.getRealFilename()).length());
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
+
+			LnkParser parser = new LnkParser(f);
+			String real = parser.isLink()?parser.getRealFilename():file;
+			System.out.println ("  real path   : "+real);
+			System.out.println ("  size of real file: "+new File(real));
 			
-/**			
-			System.out.println (" java7 says: "+Files.isSymbolicLink(Paths.get(f.getPath())));
+			
+			Path path = f.toPath();
 			try {
-				System.out.println (" java7 says: "+Files.readSymbolicLink(Paths.get(f.getPath())));
+				System.out.println (" java7 says: "+(Files.isSymbolicLink(path)?Files.readSymbolicLink(path):path));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

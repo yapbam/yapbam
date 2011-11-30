@@ -47,6 +47,7 @@ public class OriginalLnkParser {
   private void parseLink(byte[] link) {
       // get the flags byte
       byte flags = link[0x14];
+System.out.print (flags);
 
       // get the file attributes byte
       final int file_atts_offset = 0x18;
@@ -57,6 +58,7 @@ public class OriginalLnkParser {
       } else {
           isDirectory = false;
       }
+System.out.print (" "+file_atts);
 
       // if the shell settings are present, skip them
       final int shell_offset = 0x4c;
@@ -65,6 +67,7 @@ public class OriginalLnkParser {
       if ((flags & has_shell_mask) > 0) {
           // the plus 2 accounts for the length marker itself
           shell_len = bytes2short(link, shell_offset) + 2;
+System.out.print (" "+shell_len);
       }
 
       // get to the file settings
@@ -72,6 +75,7 @@ public class OriginalLnkParser {
 
       final int file_location_info_flag_offset_offset = 0x08;
       int file_location_info_flag = link[file_start + file_location_info_flag_offset_offset];
+System.out.println (" "+file_location_info_flag);
       isLocal = (file_location_info_flag & 2) == 0;
       // get the local volume and local system values
       //final int localVolumeTable_offset_offset = 0x0C;
