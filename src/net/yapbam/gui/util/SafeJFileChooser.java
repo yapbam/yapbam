@@ -22,23 +22,20 @@ public class SafeJFileChooser extends JFileChooser {
 	@Override
 	public void approveSelection() {
 		File file = getSelectedFile();
-		if ((getDialogType()==SAVE_DIALOG) && (file != null) && file.exists()) {
-		    int answer = showSaveDisplayQuestion(file);
-		    if (answer == JOptionPane.NO_OPTION) {
-		    	// User doesn't want to overwrite the file
-		    	return;
-		    }
+		if ((getDialogType() == SAVE_DIALOG) && (file != null) && file.exists()) {
+			int answer = showSaveDisplayQuestion(file);
+			if (answer == JOptionPane.NO_OPTION) {
+				// User doesn't want to overwrite the file
+				return;
+			}
 		}
 		super.approveSelection();
-    }
+	}
 
-    private int showSaveDisplayQuestion(File file) {
-    	String message = LocalizationData.get("saveDialog.FileExist.message"); //$NON-NLS-1$
-    	return JOptionPane.showOptionDialog(this, message,
-    					    LocalizationData.get("saveDialog.FileExist.title"), //$NON-NLS-1$
-    					    JOptionPane.YES_NO_OPTION,
-    					    JOptionPane.WARNING_MESSAGE,
-    					    null, null, null);
-        }
+	private int showSaveDisplayQuestion(File file) {
+		String message = LocalizationData.get("saveDialog.FileExist.message"); //$NON-NLS-1$
+		return JOptionPane.showOptionDialog(this, message, LocalizationData.get("saveDialog.FileExist.title"), //$NON-NLS-1$
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+	}
 
 }
