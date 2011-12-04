@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import sun.awt.shell.ShellFolder;
+
 /** Utility to perform some operations on files.
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
@@ -16,10 +18,27 @@ public class FileUtils {
 
 	private FileUtils() {}
 	
+	/** Gets the canonical file of a file even on windows where links are ignored by File.getCanonicalPath().
+	 * <br>Even if the link is broken, the method returns the linked file. You should use File.exists() to test if the returned file is available.
+	 * <br>If the link is a link to a link to a file, this method returns the final file. 
+	 * @param file the file to test
+	 * @return a File
+	 */
+	public static File getCanonical(File file) throws IOException {
+		try {
+			ShellFolder sf;
+			sf = new sun.awt.shell.Win32ShellFolderManager2().createShellFolder(file);
+			if (sf.isLink()) return sf.getLinkLocation();
+		} catch (NoClassDefFoundError e) {
+			// We're not on a windows platform
+		}
+		return file.getCanonicalFile();
+	}
+	
 	/** Move a file from one path to another.
 	 * <br>Unlike java.io.File.renameTo, this method always moves the file (if it doesn't fail).
 	 * If the source and the destination paths are not on the same file system, the file is copied to the new file system
-	 * and then erase from the old one. 
+	 * and then erased from the old one. 
 	 * @param src The src path
 	 * @param dest The dest path
 	 * @throws IOException If the move fails
@@ -44,7 +63,7 @@ public class FileUtils {
 				while ((c = in.read()) != -1) out.write(c);
 				in.close();
 				out.close();
-				// Now, deletes the tmp file
+				// Now, deletes the src file
 				if (!src.delete()) {
 					// Oh ... we were thinking we had the right to delete the file ... but we can't
 					// delete the dest file
