@@ -519,7 +519,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	}
 
 	private void clear() {
-		Date today = new Date();
+		Date today = date.getDate();
 		setContent(new Transaction(today, null, "", null, 0.0, getAccount(), Mode.UNDEFINED, Category.UNDEFINED, today, null, new ArrayList<SubTransaction>())); //$NON-NLS-1$
 	}
 
