@@ -311,9 +311,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				if (SaveManager.MANAGER.verify(this.frame)) {
 					URI path = data.getURI();
 					String parent = path == null ? null : new File(path).getParent();
-					JFileChooser chooser = new JFileChooser(parent);
+					JFileChooser chooser = new SafeJFileChooser(parent);
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-					chooser.updateUI();
 					File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
 					if (file != null) {
 						try {
