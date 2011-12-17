@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
@@ -84,9 +85,12 @@ public class TransactionsPlugInPanel extends JPanel {
 			}
 		};
 		deploy.setToolTipText(LocalizationData.get("MainFrame.ShowSubtransactions.ToolTip")); //$NON-NLS-1$
+		EmptyBorder border = new EmptyBorder(0, 5, 0, 5);
+		deploy.setBorder(border);
 		menus.add(deploy, BorderLayout.WEST);
 		JLabel columns = transactionTable.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
+		columns.setBorder(border);
 		menus.add(columns, BorderLayout.EAST);
 
 		JPanel extraPane = new JPanel(new BorderLayout());
