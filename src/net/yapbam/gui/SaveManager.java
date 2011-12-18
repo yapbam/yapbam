@@ -66,7 +66,6 @@ class SaveManager {
 		String parent = path==null?null:new File(path).getParent();
 		JFileChooser chooser = new SafeJFileChooser(parent);
 		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-		chooser.updateUI();
 		File result = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 		return result==null?null:result.toURI();
 	}
@@ -76,7 +75,7 @@ class SaveManager {
 			if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
 				Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
 				String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
-				int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("saveDialog.FileExist.title"),
+				int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("Generic.warning"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 				if (choice==0) return false;
 			}

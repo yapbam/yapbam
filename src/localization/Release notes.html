@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-
-
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Release notes</title>
+
 <style type="text/css">
 .bugFix {
 color: #009900;
@@ -15,38 +14,74 @@ color: #ff9900;
 }
 </style></head>
 <body>
-<h1>Version 0.9.8 (12/??/2011)</h1>
+<h1>Version 0.9.8 (12/18/2011)</h1>
+<h2>Known bug</h2>
+<ul>
+<li>When selecting a shortcut to a folder in the drop down menu of a file
+selection
+dialog, under java 1.6, Yapbam hangs.<br>
+In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java
+1.6 bug</a>. The best way to fix the problem is use java 1.7.
+</li>
+</ul>
 <h2>New in this version</h2>
 <ul>
-  <li>Changes:</li><ul><li>When creating mass transactions the date is now kept when you click the next button.</li></ul><li><span class="bugFix">Bug fixes:</span></li><ul><li><span class="bugFix"></span> Some imported file separators (eg 
-    \) were not supported. Using such a separator led to a crash of the import 
-    file dialog.</li></ul>
-  <ul><li><span class="bugFix"></span>Using account names, method of 
-    payment or categories that begin or end with spaces could cause crashes in 
-    the dialog for creating these objects.</li><li>The
-icons and warning messages (when the threshold of balance is exceeded
+<li>Change:
+<ul>
+<li>When creating mass transactions the date is now kept
+when
+you click the next button.</li>
+</ul>
+</li>
+<li><span class="bugFix">Bug fixes:</span>
+<ul>
+<li>Some imported file separators (eg \) were not
+supported. Using such a
+separator led to a crash of the import file dialog.</li>
+<li>Using account names, method of payment or categories
+that begin or end with
+spaces could cause crashes in the dialog for creating these objects.</li>
+<li>The icons and warning messages (when the threshold of
+balance is exceeded
 or when there are periodic transactions to generate) were sometimes
-displayed on the wrong tab.</li></ul>
+displayed on the wrong tab.</li>
+<li>When selecting a shortcut (symbolic link) in a file
+selection dialog, Yapbam did not follow the link to read/save the
+target file, but directly read/save the shortcut file.</li>
+</ul>
+</li>
 </ul>
 <hr>
 <h1>Previous releases</h1>
 <h2>Version 0.9.7 (11/13/2011)</h2>
 <ul>
-<li>It is now possible to display relative balances in the transactions tab 
-    (you have to click a balance to make it the reference for other balances).</li><li>The components of the tab "operations" are rearranged. The buttons for creating 
-    / editing / deleting operations are now in the list, as in the lists in the 
-    "Administration". Adds button to create bulk operations.</li><li><span class="bugFix">Fixes a bug</span>: Entering a transaction with a date 
-    before 1/1/1970 caused errors.</li><li><span class="bugFix">Fixes a bug</span>: The filter was never saved when 
-    the data were not recorded before closing Yapbam's window.</li><li><span class="bugFix">Fixes a bug</span>: Importing an empty file caused an error.</li><li><span class="bugFix">Fixes a bug</span>: Click a help button caused a crash if java was unable to open a web browser.</li>
+<li>It is now possible to display relative balances in the
+transactions tab (you have to click a balance to make it the reference
+for other balances).</li>
+<li>The components of the tab "operations" are rearranged. The
+buttons for creating / editing / deleting operations are now in the
+list, as in the lists in the "Administration". Adds button to create
+bulk operations.</li>
+<li><span class="bugFix">Fixes a bug</span>:
+Entering a transaction with a date before 1/1/1970 caused errors.</li>
+<li><span class="bugFix">Fixes a bug</span>:
+The filter was never saved when the data were not recorded before
+closing Yapbam's window.</li>
+<li><span class="bugFix">Fixes a bug</span>:
+Importing an empty file caused an error.</li>
+<li><span class="bugFix">Fixes a bug</span>:
+Click a help button caused a crash if java was unable to open a web
+browser.</li>
 </ul>
 <h2>Version 0.9.6 (10/23/2011)</h2>
 <ul>
-  <li><span class="bugFix">Fixes a bug</span>: Displaying the balance history 
-    of an account that a null initial balance and all its transaction's amount 
-    null resulted in an error.</li>
-  <li><span class="bugFix">Fixes a bug</span> in the wizard for entering sub-transactions: 
-    Select a wording that does not appeared in any transaction of the account 
-    of the edited transaction caused the wizard to crash.</li>
+<li><span class="bugFix">Fixes a bug</span>:
+Displaying the balance history of an account that a null initial
+balance and all its transaction's amount null resulted in an error.</li>
+<li><span class="bugFix">Fixes a bug</span>
+in the wizard for entering sub-transactions: Select a wording that does
+not appeared in any transaction of the account of the edited
+transaction caused the wizard to crash.</li>
 </ul>
 <h2>Version 0.9.5 (10/16/2011)</h2>
 <ul>
@@ -92,7 +127,7 @@ in Data/.yapbam file.<br>
 In order to fix this major problem as fast as
 possible, and as it is caused by a misconception of the filter backup,
 the filter backup is deactivated in this release when using password
-protected file.<span class="bugFix"></span></li>
+protected file.</li>
 <li><span class="bugFix">Fixes a bug</span>
 in importation: When the imported file contained invalid lines and the
 last column of the file wasn't attached to a transaction attribute, the
@@ -103,7 +138,7 @@ importation failed.</li>
 <li><span class="bugFix">Fixes a major bug</span>:
 Exportation was
 impossible if a previous exportation has been made in a previous Yapbam
-version.<span class="bugFix"></span></li>
+version.</li>
 <li><span class="bugFix">Fixes a minor bug</span>:
 In the payment
 mode dialog, the "validate" button was not always disabled when some
@@ -125,7 +160,8 @@ use on macOS.<br>
 in the import process: When there were missing columns at the end of
 imported lines, the import failed.</li>
 <li><span class="bugFix">Fixes a minor bug</span>:
-When, in the transaction input dialog, you chose a predefined label with the date field empty, the error dialog
+When, in the transaction input dialog, you chose a predefined label
+with the date field empty, the error dialog
 signaled a program error.</li>
 <li><span class="bugFix">Fixes a minor bug</span>:
 The mode creation dialog allowed the user to check the "use a
@@ -162,24 +198,28 @@ these transactions were modified.</li>
 compatible will
 768px height screens.</li>
 <li><span class="bugFix">Fixes&nbsp;bugs</span>
-in some dialogs:</li>
+in some dialogs:
 <ul>
-<li>The cancel button in the category dialog and the account
+<li>The cancel button in the category dialog and the
+account
 dialog
 confirmed the dialog (same action as ok !).</li>
 <li>In
 some dialogs, typing a wrong value didn't prevent you from validate the
 dialog if you clicked very, very, very quickly the ok button.</li>
 </ul>
+</li>
 <li><span class="bugFix">Fixes&nbsp;bugs</span>
-in the administration tab:</li>
+in the administration tab:
 <ul>
 <li>"Delete", "Duplicate" and "Edit" buttons
 were not greyed out when no data was selected. Sometimes it could cause
 crashes.</li>
-<li>Deleting the content of the "initial balance" cell of an
+<li>Deleting the content of the "initial balance" cell of
+an
 account in the accounts table caused a crash.</li>
 </ul>
+</li>
 <li><span class="bugFix">Fixes a bug</span>
 in transaction dialog,
 checking the receipt box when amount field was empty caused a crash.</li>
@@ -216,18 +256,23 @@ delete/edit/duplicate menu items.</li>
 If the file opened at start had an alert on the balance, it was
 not immediately displayed in the "Balance History
 tab.</li>
-<li><span class="bugFix">Fixes some localization problems (some wordings with a wrong language).</span></li>
+<li><span class="bugFix">Fixes some localization
+problems (some wordings with a wrong language).</span></li>
 </ul>
 <h2>Version 0.8.3 (05/08/2011)</h2>
 <ul>
 <li>Adds an accounts summary view.</li>
-<li>Adds a transaction table in the balance history tab. This table shows
+<li>Adds a transaction table in the balance history tab. This
+table shows
 transactions, sorted by value date, with the remaining balance after
 each transaction.</li>
 <li>When a value date interval is selected in the filter, the
-balance history chart now begins and ends on the value dates in the filter.</li>
-<li>The check mode is moved in the Statement view. This view has now columns "category" and "Mode",
-a menu to show/hide columns, and the ability to sort the view along the column
+balance history chart now begins and ends on the value dates in the
+filter.</li>
+<li>The check mode is moved in the Statement view. This view
+has now columns "category" and "Mode",
+a menu to show/hide columns, and the ability to sort the view along the
+column
 of your choice.</li>
 <li>Adds a confirm dialog when the user export the budget view
 to an
@@ -237,13 +282,14 @@ transaction editing options to fill automatically the statement id
 attribute of the transactions, to be alerted when you change a checked
 transaction to confirm transactions deletion, etc...</li>
 <li><span class="bugFix">Fixes&nbsp;bugs</span>
-in Statement view:</li>
+in Statement view:
 <ul>
 <li>When a transaction were edited or created, the selected
 statement could be changed.</li>
 <li>When a filter was defined, and you changed the selected
 statement, the content of the statement was filtered.</li>
 </ul>
+</li>
 <li><span class="bugFix">Fixes a major bug</span>
 in password
 protection: The password protection was cleared every time the file was

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-
 <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Notes de mise à jour</title>
+
 <style type="text/css">
 <!--
 .bugFix {
@@ -16,81 +16,130 @@ color: #ff9900;
 -->
 </style></head>
 <body>
-<h1>Version 0.9.8 (??/11/2011)</h1>
+<h1>Version 0.9.8 (18/12/2011)</h1>
+<h2>Bug connu</h2>
+<ul>
+<li>Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on
+sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection
+de fichier.<br>
+En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug
+de java 1.6</a>.
+La meilleure façon de régler le problem est d'utiliser Java 1.7.</li>
+</ul>
 <h2>Nouveautés de cette version</h2>
-<ul><li>Lors de la création en masse d'opérations, la date est mainteant conservée lorsqu'on clique sur le bouton "Suivant".</li></ul><ul>
-  <li><span class="bugFix">Corrections de bug</span> :&nbsp;</li><ul><li>Certains séparateurs (par 
-    exemple \) n'étaient pas supportés dans l'import de fichiers. Les utiliser 
-    provoquait le plantage du dialogue d'import de fichiers.</li></ul><ul><li>Utiliser des noms de comptes, 
-    mode de paiement ou de catégories commençant ou terminant par 
-    des espaces pouvait provoquer des plantages dans les dialogues de création 
-    de ces objets.</li><li>Les
+<ul>
+<li>Changement :
+<ul>
+<li>Lors de la création en masse d'opérations, la date est
+maintenant conservée lorsqu'on clique sur le bouton "Suivant".</li>
+</ul>
+</li>
+<li><span class="bugFix">Corrections de bug</span>
+&nbsp;:
+<ul>
+<li>Certains séparateurs (par exemple \) n'étaient pas
+supportés dans l'import de fichiers. Les utiliser provoquait le
+plantage du dialogue d'import de fichiers.</li>
+<li>Utiliser des noms de comptes, mode de paiement ou de
+catégories commençant ou terminant par des espaces pouvait provoquer
+des plantages dans les dialogues de création de ces objets.</li>
+<li>Les
 icônes et messages d'alerte (seuil de solde ou opérations périodiques à
-générer) étaient parfois affichés sur le mauvais onglet.</li></ul>
+générer) étaient parfois affichés sur le mauvais onglet.</li>
+</ul>
+</li>
 </ul>
 <hr>
 <h1>Versions précédentes</h1>
 <h2>Version 0.9.7 (13/11/2011)</h2>
 <ul>
-<li>Il est désormais possible d'afficher les soldes relatifs dans l'onglet des 
-    transactions (Il suffit de cliquer sur un solde pour en faire la référence 
-    pour les autres soldes).</li><li>Les composants de l'onglet "opérations" sont réarrangés. Les boutons de 
-    création/édition/suppression d'opérations sont à présent sous la liste, comme 
-    dans les listes affichées dans l'onglet "Administration".<br>
-    Ajout d'un bouton pour créer les opérations en masse. Le menu de sélection 
-    des colonnes est maintenant en haut à droite, ce qui semble une position 
-    plus classique (idem dans la vue relevé de compte).</li><li><span class="bugFix">Correction d'un bug</span> : La saisie d'une opération 
-    datée d'avant le 1/1/1970 provoquait des erreurs.</li><li><span class="bugFix">Correction d'un bug</span> : Le filtre n'était 
-    jamais enregistré lorsque les données n'étaient pas enregistrées 
-    avant la fermeture de la fenêtre de Yapbam.</li><li><span class="bugFix">Correction d'un bug</span> : L'importation d'un fichier vide provoquait une erreur.</li><li><span class="bugFix">Correction d'un bug</span> : Cliquer sur un bouton d'aide provoquait un plantage si java était dans l'incapacité d'ouvrir un navigateur web.</li>
+<li>Il est désormais possible d'afficher les soldes relatifs
+dans l'onglet des transactions (Il suffit de cliquer sur un solde pour
+en faire la référence pour les autres soldes).</li>
+<li>Les composants de l'onglet "opérations" sont réarrangés.
+Les boutons de création/édition/suppression d'opérations sont à présent
+sous la liste, comme dans les listes affichées dans l'onglet
+"Administration".<br>
+Ajout d'un bouton pour créer les opérations en masse. Le menu de
+sélection des colonnes est maintenant en haut à droite, ce qui semble
+une position plus classique (idem dans la vue relevé de compte).</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: La saisie d'une opération datée d'avant le 1/1/1970 provoquait des
+erreurs.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: Le filtre n'était jamais enregistré lorsque les données n'étaient pas
+enregistrées avant la fermeture de la fenêtre de Yapbam.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: L'importation d'un fichier vide provoquait une erreur.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: Cliquer sur un bouton d'aide provoquait un plantage si java était
+dans l'incapacité d'ouvrir un navigateur web.</li>
 </ul>
 <h2>Version 0.9.6 (23/10/2011)</h2>
 <ul>
-  <li><span class="bugFix">Correction d'un bug</span> : L'affichage de l'historique 
-    du solde d'un compte possédant un solde initial nul et uniquement des opérations 
-    de montant nul provoquait une erreur.</li>
-  <li><span class="bugFix">Correction d'un bug</span> dans l'assistant de saisie 
-    des sous-opérations : Sélectionner un libellé qui n'apparraissait&nbsp;dans 
-    aucune opération du compte de l'opération éditée entrainait le plantage de 
-    l'assistant.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: L'affichage de l'historique du solde d'un compte possédant un solde
+initial nul et uniquement des opérations de montant nul provoquait une
+erreur.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+dans l'assistant de saisie des sous-opérations : Sélectionner un
+libellé qui n'apparraissait&nbsp;dans aucune opération du compte de
+l'opération éditée entrainait le plantage de l'assistant.</li>
 </ul>
 <h2>Version 0.9.5 (16/10/2011)</h2>
 <ul>
-  <li>La sauvegarde du filtre entre deux lancements de Yapbam est de nouveau disponible 
-    pour les fichiers de données cryptés.</li>
-  <li><span class="bugFix">Correction de bug</span> : Sous windows, lorsque les 
-    fichiers situés dans le répertoire data étaient cachés, l'état et/ou les préférences 
-    n'étaient pas sauvegardés. De même, le convertisseur de devise ne fonctionnait 
-    pas.</li>
-  <li>Ajout de messages d'erreur spécifiques en cas d'échec de la sauvegarde de 
-    l'état au démarrage et des préférences.</li>
+<li>La sauvegarde du filtre entre deux lancements de Yapbam est
+de nouveau disponible pour les fichiers de données cryptés.</li>
+<li><span class="bugFix">Correction de bug</span>
+: Sous windows, lorsque les fichiers situés dans le répertoire data
+étaient cachés, l'état et/ou les préférences n'étaient pas sauvegardés.
+De même, le convertisseur de devise ne fonctionnait pas.</li>
+<li>Ajout de messages d'erreur spécifiques en cas d'échec de la
+sauvegarde de l'état au démarrage et des préférences.</li>
 </ul>
 <h2>Version 0.9.4 (02/10/2011)</h2>
 <ul>
-<li><span class="bugFix">Correction d'un bug</span> : L'export ne fonctionnait pas si on sélectionnait les commentaires dans les champs à exporter.</li><li><span class="bugFix">Règle un problème</span> avec le JDK 1.7 : La fermeture de Yapbam ne fermait pas le processus de la machine virtuelle java.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+: L'export ne fonctionnait pas si on sélectionnait les commentaires
+dans les champs à exporter.</li>
+<li><span class="bugFix">Règle un problème</span>
+avec le JDK 1.7 : La fermeture de Yapbam ne fermait pas le processus de
+la machine virtuelle java.</li>
 </ul>
-<h2>Version 0.9.3 (25/09/2011)</h2><ul><li><span class="bugFix">Correction d'un bug</span> dans la saisie
+<h2>Version 0.9.3 (25/09/2011)</h2>
+<ul>
+<li><span class="bugFix">Correction d'un bug</span>
+dans la saisie
 des montants, pour les pays où le séparateur de milliers est le point
 (Belgique, par exemple). Lorsqu'on saisissait un nombre sans unité
 monétaire (exemple 5,25), ce nombre était transformé en un nombre
-différent à la sortie du champ (exemple 525&nbsp;&#8364;).<br></li><li><span class="bugFix">Correction d'un bug</span> dans la vue "Relevé
+différent à la sortie du champ (exemple 525&nbsp;&#8364;).<br>
+</li>
+<li><span class="bugFix">Correction d'un bug</span>
+dans la vue "Relevé
 de comptes"
 : Lorsqu'on ouvrait plusieurs comptes pendant l'éxécution de Yapbam,
 l'édition des opérations entrainait l'apparition du dialogue d'édition
-de l'opération plusieurs fois.</li></ul><h2>Version 0.9.2 (18/09/2011)</h2>
+de l'opération plusieurs fois.</li>
+</ul>
+<h2>Version 0.9.2 (18/09/2011)</h2>
 <ul>
-<li><span class="bugFix">Correction d'un bug majeur</span> de la
+<li><span class="bugFix">Correction d'un bug majeur</span>
+de la
 version 0.9.0.
 Quand Yapbam était configuré pour mémoriser le filtre entre deux
 lancements, et que Yapbam était quitter alors que le fichier ouvert
 était protégé par un mot de passe, il était impossible de redémarrer
 Yapbam. La seule façon de réouvrir le fichier était de supprimer la
-ligne "filter" dans le fichier Data/.yapbam.<br>Afin
+ligne "filter" dans le fichier Data/.yapbam.<br>
+Afin
 de régler le plus rapidement possible ce problème, et dans la mesure où
 il est causé par une erreur de conception de la sauvegarde du filtre,
 cette fonctionnalité est désactivé, dans cette version, pour les
 fichiers protégés par mot de passe. Elle sera réintroduite dans une
-version future.</li><li><span class="bugFix">Correction d'un bug</span> dans l'importation
+version future.</li>
+<li><span class="bugFix">Correction d'un bug</span>
+dans l'importation
 :
 Lorsque le fichier importé contenait des erreurs et que la dernière
 colonne du fichier n'était attachée à aucune attribut d'opération,
@@ -101,11 +150,12 @@ l'importation plantait.</li>
 <li><span class="bugFix">Correction d'un bug
 important</span>:
 L'exportation des opérations était impossible si une exportation avait
-été déjà effectuée avec une version antérieure de Yapbam.<span class="bugFix"></span></li>
+été déjà effectuée avec une version antérieure de Yapbam.</li>
 <li><span class="bugFix">Correction d'un bug
 mineur </span>dans la
 saisie des modes de paiement : Le bouton "valider" n'était pas toujours
-correctement invalidé quand les champs n'étaient pas renseignés. La validation dans cette configuration provoquait une erreur.</li>
+correctement invalidé quand les champs n'étaient pas renseignés. La
+validation dans cette configuration provoquait une erreur.</li>
 </ul>
 <h2>Version 0.9.0 (14/09/2011)</h2>
 <ul>
@@ -130,7 +180,8 @@ prédéfini alors que le champ date était vide, une erreur, sans aucune
 conséquence, était remontée
 (apparition du dialogue d'erreur).</li>
 <li><span class="bugFix">Correction d'un bug mineur</span>
-: Le dialogue de création de mode de paiement permettait de cocher la case
+: Le dialogue de création de mode de paiement permettait de cocher la
+case
 "Utiliser un chéquier" puis de décocher "Utilisable pour les dépenses".
 La validation dans cette configuration provoquait une erreur.</li>
 <li><span class="bugFix">Correction d'un bug mineur</span>
@@ -163,7 +214,7 @@ de Yapbam.</li>
 <li>Le dialogue "Filtre personnalisé" est moins haut. Il est à
 présent compatible avec les écrans de 768px de haut.</li>
 <li><span class="bugFix">Corrections de bugs</span>
-dans les dialogues :</li>
+dans les dialogues :
 <ul>
 <li>Le bouton "Annuler" des dialogues de saisie des
 catégories et des comptes validait la saisie !</li>
@@ -172,16 +223,19 @@ certains dialogues, on pouvait entrer une valeur incorrecte et valider
 en cliquant très rapidement le bouton valider après avoir saisie la
 valeur incorrecte.</li>
 </ul>
+</li>
 <li><span class="bugFix">Correction de bugs</span>
 dans
-l'onglet d'administration :</li>
+l'onglet d'administration :
 <ul>
 <li>Les boutons "Editer", "Dupliquer" et
 "Supprimer" n'étaient pas grisés lorsqu'aucune information n'était
 sélectionnée. Parfois cela pouvait entrainer des plantages.</li>
-<li>Effacer le contenu d'une cellule&nbsp;"solde initial"
+<li>Effacer le contenu d'une cellule&nbsp;"solde
+initial"
 dans l'onglet de gestion des comptes provoquait un plantage.</li>
 </ul>
+</li>
 <li><span class="bugFix">Correction d'un bug</span>
 dans le dialogue d'édition des opérations : Cocher la case "recette"
 quand le champ "montant" était vide provoquait une erreur.</li>
@@ -253,7 +307,7 @@ automatique du relevé, d'être alerté (ou pas) lors de la
 modification d'une opération pointée, ou lors de l'effacement d'une
 opération, etc...</li>
 <li><span class="bugFix">Correction de bugs </span>dans
-la vue "Relevés de compte" :</li>
+la vue "Relevés de compte" :
 <ul>
 <li>Lors de la modification ou de la création
 d'une opération, le relevé sélectionné pouvait être modifié.</li>
@@ -261,6 +315,7 @@ d'une opération, le relevé sélectionné pouvait être modifié.</li>
 que le filtrage des opérations était activé, et qu'on changeait le
 relevé de compte, les opérations affichées tenaient compte du filtre.</li>
 </ul>
+</li>
 <li><span class="bugFix">Correction d'un bug majeur</span>
 dans la protection par mot de passe : Le mot de passe était supprimé
 lorsque le fichier était sauvé à nouveau.</li>

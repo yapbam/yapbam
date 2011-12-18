@@ -31,26 +31,28 @@ public class ThemePanel extends PreferencePanel {
 	}
 
 	private class LFAction implements ItemListener {
-		String className;
+		String name;
 
 		LFAction(String className) {
-			this.className = className;
+			this.name = className;
 		}
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				selectedLookAndFeel = this.className;
+				selectedLookAndFeel = this.name;
 				/*
-				 * try { // Try to change the LAF dynamically. // Two problems :
-				 * // 1�) How to change the Mainframe LAF from there ? // 2�)
-				 * Exceptions are thrown by the dispatch thread after the LAF
-				 * was changed UIManager.setLookAndFeel(selectedLookAndFeel);
-				 * Window ownerWindow =
-				 * AbstractDialog.getOwnerWindow((Component)e.getItem());
-				 * SwingUtilities.updateComponentTreeUI(null);
-				 * ownerWindow.pack(); } catch (Throwable ex) {
-				 * ex.printStackTrace(); }
+				 * try {
+				 * // Trying to change the LAF dynamically causes two problems :
+				 * // 1) How to change the Mainframe LAF from there ?
+				 * // 2) Exceptions are thrown by the dispatch thread after the LAF was changed
+				 * 	UIManager.setLookAndFeel(selectedLookAndFeel);
+				 * 	Window ownerWindow = AbstractDialog.getOwnerWindow((Component)e.getItem());
+				 * 	SwingUtilities.updateComponentTreeUI(null);
+				 * 	ownerWindow.pack();
+				 * } catch (Throwable ex) {
+				 * 	ex.printStackTrace();
+				 * }
 				 */
 			}
 		}
@@ -76,9 +78,9 @@ public class ThemePanel extends PreferencePanel {
 			JRadioButton button = new JRadioButton(name);
 			if (lfs[i].getClassName().equals(current)) {
 				button.setSelected(true);
-				selectedLookAndFeel = lfs[i].getClassName();
+				selectedLookAndFeel = lfs[i].getName();
 			}
-			button.addItemListener(new LFAction(lfs[i].getClassName()));
+			button.addItemListener(new LFAction(lfs[i].getName()));
 			group.add(button);
 			c.gridy = i;
 			this.add(button, c);
