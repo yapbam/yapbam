@@ -172,7 +172,7 @@ public class Preferences {
 	public String getLookAndFeel() {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
 		if (value==null) {
-			value = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; // This is the default Yapbam L&F //$NON-NLS-1$
+			value = "Nimbus"; // This is the default Yapbam L&F //$NON-NLS-1$
 		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) {
 			// Versions before 0.7.4 used LOOK_AND_FEEL_JAVA_VALUE and LOOK_AND_FEEL_CUSTOM_VALUE to code the look and feel
 			return UIManager.getCrossPlatformLookAndFeelClassName();
@@ -181,13 +181,15 @@ public class Preferences {
 		}
 		LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
 		for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
-			if (lookAndFeelInfo.getClassName().equals(value)) return value;
+			// Prior the 0.9.8, the class name were used instead of the generic name.
+			// It caused problem when changing java version (ie: Nimbus in java 1.6 was implemented by a class in com.sun.etc and in javax.swing in java 1.7)
+			if (lookAndFeelInfo.getClassName().equals(value) || lookAndFeelInfo.getName().equals(value)) return lookAndFeelInfo.getClassName();
 		}
 		return UIManager.getSystemLookAndFeelClassName();
 	}
 
-	public void setLookAndFeel(String lookAndFeelClassName) {
-		this.properties.put(LOOK_AND_FEEL, lookAndFeelClassName);
+	public void setLookAndFeel(String lookAndFeelName) {
+		this.properties.put(LOOK_AND_FEEL, lookAndFeelName);
 	}
 	
 	public String getHttpProxyHost() {

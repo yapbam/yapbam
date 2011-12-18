@@ -339,7 +339,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					this.frame.getData().setPassword(newPassword);
 				}
 			} else if (source.equals(this.menuItemImport)) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new SafeJFileChooser(null);
 				chooser.setLocale(LocalizationData.getLocale());
 				if (ImportDialog.lastFile != null) {
 					File lastFile = ImportDialog.lastFile;

@@ -95,7 +95,6 @@ public class BalanceHistoryTablePane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new SafeJFileChooser(btnExport.getText());
 				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-				chooser.updateUI();
 				File file = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 				if (file!=null) {
 					try {
