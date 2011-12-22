@@ -54,6 +54,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private HashMap<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
 	private JCheckBox translatorButton = null;
 	private JRadioButton portugueseButton = null;
+	private JRadioButton deutschButton;
 	
 	/**
 	 * This is the default constructor
@@ -120,6 +121,8 @@ public class LocalizationPanel extends PreferencePanel {
 			frenchButton.setSelected(true);
 		} else if (locale.getLanguage().equals(new Locale("pt").getLanguage())) {
 			portugueseButton.setSelected(true);
+		} else if (locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
+			deutschButton.setSelected(true);
 		} else {
 			englishButton.setSelected(true);
 		}
@@ -165,6 +168,7 @@ public class LocalizationPanel extends PreferencePanel {
 			group.add(getEnglishButton());
 			group.add(getFrenchButton());
 			group.add(getPortugueseButton());
+			group.add(getDeutschButton());
 		}
 		return countryPanel;
 	}
@@ -177,6 +181,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private JPanel getLanguagePanel() {
 		if (languagePanel == null) {
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints7.weightx = 1.0;
 			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.gridx = 0;
@@ -184,16 +189,19 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints7.weighty = 1.0D;
 			gridBagConstraints7.gridy = 4;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.anchor = GridBagConstraints.WEST;
 			gridBagConstraints6.gridy = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints5.weightx = 1.0;
 			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.anchor = GridBagConstraints.WEST;
 			gridBagConstraints5.gridy = 2;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.weighty = 0.0D;
 			gridBagConstraints4.weightx = 1.0D;
@@ -201,6 +209,7 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridy = 3;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = GridBagConstraints.NORTHWEST;
@@ -215,6 +224,11 @@ public class LocalizationPanel extends PreferencePanel {
 			languagePanel.add(getEnglishButton(), gridBagConstraints5);
 			languagePanel.add(getTranslatorButton(), gridBagConstraints6);
 			languagePanel.add(getPortugueseButton(), gridBagConstraints7);
+			GridBagConstraints gbc_DeutschButton = new GridBagConstraints();
+			gbc_DeutschButton.anchor = GridBagConstraints.WEST;
+			gbc_DeutschButton.gridx = 0;
+			gbc_DeutschButton.gridy = 5;
+			languagePanel.add(getDeutschButton(), gbc_DeutschButton);
 		}
 		return languagePanel;
 	}
@@ -339,6 +353,8 @@ public class LocalizationPanel extends PreferencePanel {
 			lang = Locale.FRENCH.getLanguage();
 		} else if (getEnglishButton().isSelected()) {
 			lang = Locale.ENGLISH.getLanguage();
+		} else if (getDeutschButton().isSelected()) {
+			lang = Locale.GERMAN.getLanguage();
 		} else if (getPortugueseButton().isSelected()) {
 			lang = "pt";
 		}
@@ -370,34 +386,6 @@ public class LocalizationPanel extends PreferencePanel {
 			defaultLButton.addItemListener(basicItemListener);
 		}
 		return defaultLButton;
-	}
-
-	/**
-	 * This method initializes frenchButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getFrenchButton() {
-		if (frenchButton == null) {
-			frenchButton = new JRadioButton();
-			frenchButton.setText(Locale.FRENCH.getDisplayLanguage(Locale.FRENCH));
-			frenchButton.addItemListener(basicItemListener);
-		}
-		return frenchButton;
-	}
-
-	/**
-	 * This method initializes englishButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getEnglishButton() {
-		if (englishButton == null) {
-			englishButton = new JRadioButton();
-			englishButton.setText(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH));
-			englishButton.addItemListener(basicItemListener);
-		}
-		return englishButton;
 	}
 
 	/**
@@ -467,6 +455,35 @@ public class LocalizationPanel extends PreferencePanel {
 		return translatorButton;
 	}
 
+
+	/**
+	 * This method initializes frenchButton	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getFrenchButton() {
+		if (frenchButton == null) {
+			frenchButton = new JRadioButton();
+			frenchButton.setText(Locale.FRENCH.getDisplayLanguage(Locale.FRENCH));
+			frenchButton.addItemListener(basicItemListener);
+		}
+		return frenchButton;
+	}
+
+	/**
+	 * This method initializes englishButton	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getEnglishButton() {
+		if (englishButton == null) {
+			englishButton = new JRadioButton();
+			englishButton.setText(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH));
+			englishButton.addItemListener(basicItemListener);
+		}
+		return englishButton;
+	}
+
 	/**
 	 * This method initializes portugueseButton	
 	 * 	
@@ -482,4 +499,13 @@ public class LocalizationPanel extends PreferencePanel {
 		return portugueseButton;
 	}
 
+	private JRadioButton getDeutschButton() {
+		if (deutschButton == null) {
+			deutschButton = new JRadioButton();
+			Locale locale = new Locale("de");
+			deutschButton.setText(locale.getDisplayLanguage(Locale.GERMAN));
+			deutschButton.addItemListener(basicItemListener);
+		}
+		return deutschButton;
+	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
