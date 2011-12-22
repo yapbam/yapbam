@@ -187,7 +187,7 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints7.weighty = 1.0D;
-			gridBagConstraints7.gridy = 4;
+			gridBagConstraints7.gridy = 5;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints6.gridx = 0;
@@ -199,7 +199,7 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.anchor = GridBagConstraints.WEST;
-			gridBagConstraints5.gridy = 2;
+			gridBagConstraints5.gridy = 3;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints4.gridx = 0;
@@ -207,7 +207,7 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints4.weightx = 1.0D;
 			gridBagConstraints4.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.gridy = 3;
+			gridBagConstraints4.gridy = 4;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
@@ -225,9 +225,10 @@ public class LocalizationPanel extends PreferencePanel {
 			languagePanel.add(getTranslatorButton(), gridBagConstraints6);
 			languagePanel.add(getPortugueseButton(), gridBagConstraints7);
 			GridBagConstraints gbc_DeutschButton = new GridBagConstraints();
+			gbc_DeutschButton.insets = new Insets(0, 0, 5, 0);
 			gbc_DeutschButton.anchor = GridBagConstraints.WEST;
 			gbc_DeutschButton.gridx = 0;
-			gbc_DeutschButton.gridy = 5;
+			gbc_DeutschButton.gridy = 2;
 			languagePanel.add(getDeutschButton(), gbc_DeutschButton);
 		}
 		return languagePanel;
