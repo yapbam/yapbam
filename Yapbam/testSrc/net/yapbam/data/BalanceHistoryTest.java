@@ -1,4 +1,4 @@
-package net.yapbam.junit;
+package net.yapbam.data;
 
 import static org.junit.Assert.*;
 

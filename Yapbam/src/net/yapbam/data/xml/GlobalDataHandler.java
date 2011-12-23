@@ -91,11 +91,11 @@ class GlobalDataHandler extends DefaultHandler {
 				int debtDay = Integer.parseInt(attributes.getValue(Serializer.DEBT_DAY_ATTRIBUTE));
 				vdc = new DeferredValueDateComputer(stopDay, debtDay);
 			} else {
-				throw new RuntimeException("Invalid ValueDateComputer kind : "+kind);
+				throw new RuntimeException("Invalid ValueDateComputer kind : "+kind); //$NON-NLS-1$
 			}
 			DateStepper[] vdcs = (DateStepper[]) this.tempData.peek();
 			int index = qName.equals(Serializer.EXPENSE_VDC_TAG) ? 0 : 1;
-			if (vdcs[index]!=null) System.err.println("too much value date computer");//LOG
+			if (vdcs[index]!=null) System.err.println("too much value date computer");//LOG  //$NON-NLS-1$
 			vdcs[index] = vdc;
 		} else if (qName.equals(Serializer.TRANSACTION_TAG)) {
 			//We can't directly push the attributes because SAX may reuse the same instance to store next element's attributes.
@@ -131,15 +131,15 @@ class GlobalDataHandler extends DefaultHandler {
 				Date lastDate = dummy==null?null:Serializer.toDate(dummy);
 				stepper = new DayDateStepper(period, lastDate);
 			} else {
-				throw new IllegalArgumentException("Unknown date stepper : "+kind);
+				throw new IllegalArgumentException("Unknown date stepper : "+kind); //$NON-NLS-1$
 			}
 			Object obj = this.tempData.pop(); // The subtransaction list, will be returned in the stack in a few lines
 			Object old = this.tempData.pop();
 			this.tempData.push(stepper);
 			this.tempData.push(obj);
-			if (old!=null) throw new IllegalStateException("Two date steppers found"); // Hu ! there are two date steppers !!!
+			if (old!=null) throw new IllegalStateException("Two date steppers found"); // Hu ! there are two date steppers !!!  //$NON-NLS-1$
 		} else {
-			throw new IllegalArgumentException ("Unknown tag "+qName);
+			throw new IllegalArgumentException ("Unknown tag "+qName); //$NON-NLS-1$
 		}
 	}
 
@@ -190,7 +190,7 @@ class GlobalDataHandler extends DefaultHandler {
 			this.data.add(new PeriodicalTransaction(p.description, p.comment, p.amount, p.account, p.mode, p.category, lst, nextDate, enabled, stepper));
 		} else if (qName.equals(Serializer.DATE_STEPPER_TAG)) {
 		} else {
-			System.err.println ("Unknown tag "+qName);
+			System.err.println ("Unknown tag "+qName); //$NON-NLS-1$
 		}
 	}
 
@@ -199,7 +199,7 @@ class GlobalDataHandler extends DefaultHandler {
 		String str = new String(ch, start, length);
 		str = str.trim();
 		if (str.length()!=0) {
-			System.err.println ("strange, characters is called : "+str);
+			System.err.println ("strange, characters is called : "+str); //$NON-NLS-1$
 		}
 	}
 

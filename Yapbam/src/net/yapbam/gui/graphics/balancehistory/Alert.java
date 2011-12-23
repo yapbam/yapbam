@@ -22,8 +22,6 @@ class Alert {
 	/** Constructor.
 	 * @param date the alert's date
 	 * @param account
-	 * @param kind
-	 * @param threshold
 	 * @param balance
 	 */
 	public Alert(Date date, Account account, double balance) {

@@ -95,8 +95,6 @@ public class CustomFilterPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints28 = new GridBagConstraints();

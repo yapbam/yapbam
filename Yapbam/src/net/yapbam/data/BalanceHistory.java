@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /** A balance history.
- * The balance history is an ordered list of periods, during one of these periods, the balance is constant.
+ * <br>The balance history is an ordered list of periods, during one of these periods, the balance is constant.
  * These periods are represented by BalanceHistoryElement class.
  * @see BalanceHistoryElement
  * @see BalanceData#getBalanceHistory()
@@ -120,12 +120,12 @@ public class BalanceHistory implements Serializable {
 		return get(find(date)).getBalance();
 	}
 
-	/** Add an amount to the history at a specified date
+	/** Add an amount to the history at a specified date.
 	 * @param amount amount to add (may be negative)
 	 * @param date date or null if the amount has to be added at the beginning of times
 	 *  (ie the initial balance of a newly created account)
 	 */
-	public void add(double amount, Date date) {
+	void add(double amount, Date date) {
 		if (date==null) {
 			if (minMaxAccurate) {
 				this.minBalance += amount;
@@ -163,22 +163,35 @@ public class BalanceHistory implements Serializable {
 		}
 	}
 
-	public void add(Transaction transaction) {
+	/** Adds a transaction to the history. 
+	 * @param transaction the added transaction
+	 */
+	void add(Transaction transaction) {
 		this.add(transaction.getAmount(), transaction.getValueDate());
 		int index = -Collections.binarySearch(transactions, transaction, TransactionComparator.VALUE_DATE_COMPARATOR)-1;
 		transactions.add(index, transaction);
 	}
 
-	public void remove(Transaction transaction) {
+	/** Removes a transaction from the history.
+	 * @param transaction the transactio to be removed
+	 */
+	void remove(Transaction transaction) {
 		this.add(-transaction.getAmount(), transaction.getValueDate());
 		int index = Collections.binarySearch(transactions, transaction, TransactionComparator.VALUE_DATE_COMPARATOR);
 		if (index>=0) transactions.remove(index);
 	}
 
+	/** Gets the number of transactions in the history.
+	 * @return an positive or null integer.
+	 */
 	public int getTransactionsNumber() {
 		return transactions.size();
 	}
 	
+	/** Gets a transaction in the history.
+	 * @param index The transaction's index
+	 * @return a Transaction
+	 */
 	public Transaction getTransaction(int index) {
 		return transactions.get(index);
 	}

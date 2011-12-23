@@ -92,7 +92,6 @@ class FolderCleaner {
 	}
 	
 	/** Cleans yapbam installation folder.
-	 * @param folder
 	 */
 	static void clean() {
 		if (needToClean()) { // If we need to perform cleaning ?

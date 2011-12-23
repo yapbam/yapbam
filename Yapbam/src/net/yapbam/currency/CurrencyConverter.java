@@ -50,7 +50,7 @@ import java.util.*;
  * 
  */
 public final class CurrencyConverter {
-	private static final String ECB_RATES_URL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
+	private static final String ECB_RATES_URL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml"; //$NON-NLS-1$
 
 	transient private File cacheFile = null;
 	private String cacheFileName = null;
@@ -137,8 +137,8 @@ public final class CurrencyConverter {
 	 *           If a wrong (non-existing) currency argument was supplied.
 	 */
 	private boolean checkCurrencyArgs(String fromCurrency, String toCurrency) throws IllegalArgumentException {
-		if (!fxRates.containsKey(fromCurrency)) throw new IllegalArgumentException(fromCurrency + " currency is not available.");
-		if (!fxRates.containsKey(toCurrency)) throw new IllegalArgumentException(toCurrency + " currency is not available.");
+		if (!fxRates.containsKey(fromCurrency)) throw new IllegalArgumentException(fromCurrency + " currency is not available."); //$NON-NLS-1$
+		if (!fxRates.containsKey(toCurrency)) throw new IllegalArgumentException(toCurrency + " currency is not available."); //$NON-NLS-1$
 		return (!fromCurrency.equals(toCurrency));
 	}
 
@@ -237,8 +237,8 @@ public final class CurrencyConverter {
 	 */
 	private void initCacheFile() {
 		if (cacheFile == null) {
-			if (cacheFileName == null || cacheFileName.equals("")) {
-				cacheFile = new File(Portable.getDataDirectory(), "ExchangeRates.xml");
+			if (cacheFileName == null || cacheFileName.equals("")) { //$NON-NLS-1$
+				cacheFile = new File(Portable.getDataDirectory(), "ExchangeRates.xml"); //$NON-NLS-1$
 				cacheFileName = cacheFile.getAbsolutePath();
 			}
 		}
@@ -254,7 +254,7 @@ public final class CurrencyConverter {
 	private boolean cacheIsExpired() {
 		final int tolerance = 12;
 		if (referenceDate == null) return true;
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT")); //$NON-NLS-1$
 		long hoursOld = (cal.getTimeInMillis() - referenceDate.getTime()) / (1000 * 60 * 60);
 		int hoursValid = 24 + tolerance;
 		cal.setTime(referenceDate);
@@ -296,7 +296,7 @@ public final class CurrencyConverter {
 						int c;
 						while ((c = in.read()) != -1) out.write(c);
 					} catch (IOException e) {
-						lastError = "Read/Write Error: " + e.getMessage();
+						lastError = "Read/Write Error: " + e.getMessage(); //$NON-NLS-1$
 					} finally {
 						out.flush();
 						out.close();
@@ -305,10 +305,10 @@ public final class CurrencyConverter {
 					in.close();
 				}
 			} else {
-				throw new IOException("Http Error " + errorCode);
+				throw new IOException("Http Error " + errorCode); //$NON-NLS-1$
 			}
 		} catch (IOException e) {
-			lastError = "Connection/Open Error: " + e.getMessage();
+			lastError = "Connection/Open Error: " + e.getMessage(); //$NON-NLS-1$
 		}
 		if (lastError != null) {
 			throw new IOException(lastError);
@@ -328,18 +328,18 @@ public final class CurrencyConverter {
 	 */
 	private long stringToLong(String str) throws NumberFormatException {
 		int decimalPoint = str.indexOf('.');
-		String wholePart = "";
-		String fractionPart = "";
+		String wholePart = ""; //$NON-NLS-1$
+		String fractionPart = ""; //$NON-NLS-1$
 		if (decimalPoint > -1) {
 			if (decimalPoint > 0) wholePart = str.substring(0, decimalPoint);
 			fractionPart = str.substring(decimalPoint + 1);
-			String padString = "0000";
+			String padString = "0000"; //$NON-NLS-1$
 			int padLength = 4 - fractionPart.length();
 			if (padLength > 0) fractionPart += padString.substring(0, padLength);
 			else if (padLength < 0) fractionPart = fractionPart.substring(0, 4);
 		} else {
 			wholePart = str;
-			fractionPart = "0000";
+			fractionPart = "0000"; //$NON-NLS-1$
 		}
 		return (Long.parseLong(wholePart + fractionPart));
 	}
@@ -358,23 +358,23 @@ public final class CurrencyConverter {
 			DefaultHandler handler = new DefaultHandler() {
 				@Override
 				public void startElement(String uri, String localName, String qName, Attributes attributes) {
-					if (localName.equals("Cube")) {
-						String date = attributes.getValue("time");
+					if (localName.equals("Cube")) { //$NON-NLS-1$
+						String date = attributes.getValue("time"); //$NON-NLS-1$
 						if (date != null) {
-							SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z");
+							SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z"); //$NON-NLS-1$
 							try {
-								referenceDate = df.parse(date + " 14:15 CET");
+								referenceDate = df.parse(date + " 14:15 CET"); //$NON-NLS-1$
 							} catch (ParseException e) {
-								lastError = "Cannot parse reference date: " + date;
+								lastError = "Cannot parse reference date: " + date; //$NON-NLS-1$
 							}
 						}
-						String currency = attributes.getValue("currency");
-						String rate = attributes.getValue("rate");
+						String currency = attributes.getValue("currency"); //$NON-NLS-1$
+						String rate = attributes.getValue("rate"); //$NON-NLS-1$
 						if (currency != null && rate != null) {
 							try {
 								fxRates.put(currency, stringToLong(rate));
 							} catch (Exception e) {
-								lastError = "Cannot parse exchange rate: " + rate + ". " + e.getMessage();
+								lastError = "Cannot parse exchange rate: " + rate + ". " + e.getMessage(); //$NON-NLS-1$ //$NON-NLS-2$
 							}
 						}
 					}
@@ -382,13 +382,13 @@ public final class CurrencyConverter {
 			};
 			lastError = null;
 			fxRates.clear();
-			fxRates.put("EUR", 10000L);
+			fxRates.put("EUR", 10000L); //$NON-NLS-1$
 			saxReader.setContentHandler(handler);
 			saxReader.setErrorHandler(handler);
 			saxReader.parse(new InputSource(input));
 			input.close();
 		} catch (Exception e) {
-			lastError = "Parser error: " + e.getMessage();
+			lastError = "Parser error: " + e.getMessage(); //$NON-NLS-1$
 		}
 		if (lastError != null) {
 			throw new ParseException(lastError, 0);

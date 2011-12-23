@@ -123,7 +123,7 @@ public class Checkbook implements Serializable {
 
 	@Override
 	public String toString() {
-		return prefix+"["+getFullNumber(getNext())+"-"+getFullNumber(getLast())+"]->"+getFullNumber(getNext());
+		return prefix+"["+getFullNumber(getNext())+"-"+getFullNumber(getLast())+"]->"+getFullNumber(getNext()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	void copy(Checkbook checkbook) {

@@ -236,7 +236,7 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	public void add(Account account) {
-		if (getAccount(account.getName())!=null) throw new IllegalArgumentException("Duplicate account name : "+account);
+		if (getAccount(account.getName())!=null) throw new IllegalArgumentException("Duplicate account name : "+account); //$NON-NLS-1$
 		this.accounts.add(account);
 		fireEvent(new AccountAddedEvent(this, account));
 		this.setChanged();
@@ -562,7 +562,7 @@ public class GlobalData extends DefaultListenable {
 		String old = account.getName();
 		if (!old.equals(value)) {
 			// Check that this account name is not already used
-			if (getAccount(value) != null) throw new IllegalArgumentException("Account name already exists");
+			if (getAccount(value) != null) throw new IllegalArgumentException("Account name already exists"); //$NON-NLS-1$
 			account.setName(value);
 			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.NAME, account, old,value));
 			this.setChanged();
@@ -635,7 +635,7 @@ public class GlobalData extends DefaultListenable {
 		String old = category.getName();
 		if (!old.equals(value)) {
 			// Check that this category name is not already used
-			if (getCategory(value) != null) throw new IllegalArgumentException("Category name already exists");
+			if (getCategory(value) != null) throw new IllegalArgumentException("Category name already exists"); //$NON-NLS-1$
 			// Category list is sorted by name => we have to change the category position
 			this.categories.remove(indexOf(category));
 			category.setName(value);

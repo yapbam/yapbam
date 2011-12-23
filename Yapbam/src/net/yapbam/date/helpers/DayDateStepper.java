@@ -25,15 +25,15 @@ public class DayDateStepper extends DateStepper {
 	@Override
 	public Date getNextStep(Date date) {
 		if (DEBUG) {
-			System.out.println("date de l'opï¿½ration : "+DateFormat.getDateInstance().format(date));
-			System.out.println("  nombre de jours : "+this.nbDays);
+			System.out.println("date de l'opération : "+DateFormat.getDateInstance().format(date)); //$NON-NLS-1$
+			System.out.println("  nombre de jours : "+this.nbDays); //$NON-NLS-1$
 		}
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
 		gc.add(GregorianCalendar.DAY_OF_MONTH, this.nbDays);
 		if (DEBUG) {
-			System.out.println("Jour du dï¿½bit : "+DateFormat.getDateInstance().format(gc.getTime()));
-			System.out.println("----------------------");
+			System.out.println("Jour du débit : "+DateFormat.getDateInstance().format(gc.getTime())); //$NON-NLS-1$
+			System.out.println("----------------------"); //$NON-NLS-1$
 		}
 		return gc.getTime();
 	}

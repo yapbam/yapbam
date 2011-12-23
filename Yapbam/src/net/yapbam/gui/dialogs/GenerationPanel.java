@@ -57,7 +57,6 @@ public class GenerationPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * @return void
 	 */
 	private void initialize() {
 		jLabel3 = new JLabel();

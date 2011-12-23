@@ -83,8 +83,6 @@ public class MonthSelectorPane extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();

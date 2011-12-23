@@ -12,7 +12,7 @@ import net.yapbam.data.GlobalData;
 /** This class is the main entry point for localization concerns.
  */
 public abstract class LocalizationData {
-	public static final Locale SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));
+	public static final Locale SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));  //$NON-NLS-1$//$NON-NLS-2$
 	private static ResourceBundle bundle;
 	private static boolean translatorMode;
 	
@@ -53,10 +53,10 @@ public abstract class LocalizationData {
 //		System.out.println(document);
 //		URL[] urls = ((URLClassLoader)LocalizationData.class.getClassLoader()).getURLs();
 //		System.out.println ("urls :"+Arrays.asList(urls));
-		
-		URL url = LocalizationData.class.getResource("/localization/"+getLocale().getLanguage()+"/"+document);
+
+		URL url = LocalizationData.class.getResource("/localization/"+getLocale().getLanguage()+"/"+document);  //$NON-NLS-1$//$NON-NLS-2$
 //		if (url!=null) {System.out.println("ok 1"); return url;}
-		if (url==null) url = LocalizationData.class.getResource("/localization/"+document);
+		if (url==null) url = LocalizationData.class.getResource("/localization/"+document); //$NON-NLS-1$
 //		if (url!=null) {System.out.println("ok 2"); return url;}
 //		url = LocalizationData.class.getResource("../../../localization/"+getLocale().getLanguage()+"/"+document);
 //		if (url!=null) {System.out.println("ok 3"); return url;}

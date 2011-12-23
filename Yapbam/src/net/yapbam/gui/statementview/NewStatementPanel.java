@@ -2,6 +2,7 @@ package net.yapbam.gui.statementview;
 
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class NewStatementPanel extends JPanel {
 
 	/**

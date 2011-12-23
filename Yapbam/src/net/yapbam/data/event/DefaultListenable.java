@@ -14,9 +14,9 @@ import net.yapbam.gui.ErrorManager;
  *	</ul>
  */
 public abstract class DefaultListenable {
-	private static final boolean TRACE_LISTENERS = Boolean.getBoolean("traceEventListeners");
-	private static final boolean TRACE_EVENTS = Boolean.getBoolean("traceEvents");
-	private static final boolean TRACE_ALL = Boolean.getBoolean("traceAll");
+	private static final boolean TRACE_LISTENERS = Boolean.getBoolean("traceEventListeners"); //$NON-NLS-1$
+	private static final boolean TRACE_EVENTS = Boolean.getBoolean("traceEvents"); //$NON-NLS-1$
+	private static final boolean TRACE_ALL = Boolean.getBoolean("traceAll"); //$NON-NLS-1$
 	private static int indent = 0;
 	
 	private transient Collection<DataListener> listeners;
@@ -49,6 +49,7 @@ public abstract class DefaultListenable {
 	/** Sends an event to every listeners.
 	 * @param event The event to send.
 	 */
+	@SuppressWarnings("nls")
 	protected void fireEvent(DataEvent event) {
 		if (eventsDisabled) return;
 		if (TRACE_EVENTS && !TRACE_ALL) trace("Event "+event+" occurs on "+this);
@@ -79,14 +80,14 @@ public abstract class DefaultListenable {
 	 */
 	public void addListener(DataListener listener) {
 		if (listeners==null) this.listeners = new ArrayList<DataListener>();
-		if (TRACE_ALL || TRACE_LISTENERS) System.err.println ("Add listener "+listener+" on "+this);
+		if (TRACE_ALL || TRACE_LISTENERS) System.err.println ("Add listener "+listener+" on "+this); //$NON-NLS-1$ //$NON-NLS-2$
 		listeners.add(listener);
 	}
 	
 	/** Removes all the previously registered listeners.
 	 */
 	public void clearListeners() {
-		if (TRACE_ALL || TRACE_LISTENERS) System.err.println ("All listeners are cleared on "+this);
+		if (TRACE_ALL || TRACE_LISTENERS) System.err.println ("All listeners are cleared on "+this); //$NON-NLS-1$
 		this.listeners.clear();
 	}
 	

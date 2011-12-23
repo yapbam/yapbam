@@ -129,7 +129,7 @@ public class Account implements Serializable {
 
 	void add(Mode newMode) {
 		if (this.getMode(newMode.getName())!=null) {
-			throw new IllegalArgumentException("This account already contains the mode "+newMode.getName());
+			throw new IllegalArgumentException("This account already contains the mode "+newMode.getName()); //$NON-NLS-1$
 		}
 		this.modes.add(newMode);
 	}
@@ -146,7 +146,7 @@ public class Account implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.getName()+"["+this.initialBalance+"]";
+		return this.getName()+"["+this.initialBalance+"]"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** Gets the index of a payment mode in this account.

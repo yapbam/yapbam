@@ -10,13 +10,13 @@ import java.util.jar.JarFile;
 import net.yapbam.data.FilteredData;
 
 public class PlugInContainer {
-	private File location;
-	private Class<AbstractPlugIn> plugin;
+//	private File location;
+	private Class<? extends AbstractPlugIn> plugin;
 	private boolean isActivated;
 	private Throwable e;
 	
 	PlugInContainer (File file) {
-		this.location = file;
+//		this.location = file;
 		try {
 			JarFile jar = new JarFile(file);
 			Attributes attributes = jar.getManifest().getMainAttributes();
@@ -30,8 +30,8 @@ public class PlugInContainer {
 		}
 	}
 
-	PlugInContainer(Class plugin) {
-		this.location = null;
+	PlugInContainer(Class<? extends AbstractPlugIn> plugin) {
+//		this.location = null;
 		this.plugin = plugin;
 		this.isActivated = true;
 	}
@@ -39,7 +39,7 @@ public class PlugInContainer {
 	public AbstractPlugIn build(FilteredData filteredData, Object restartData) {
 		if (this.plugin==null) return null;
 		try {
-			Constructor<AbstractPlugIn> constructor = this.plugin.getConstructor(FilteredData.class, Object.class);
+			Constructor<? extends AbstractPlugIn> constructor = this.plugin.getConstructor(FilteredData.class, Object.class);
 			return (AbstractPlugIn) constructor.newInstance(filteredData, restartData);
 		} catch (Throwable e) {
 			this.e = e;

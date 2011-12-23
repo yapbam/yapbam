@@ -3,7 +3,7 @@ package net.yapbam.data.event;
 import net.yapbam.data.Category;
 
 public class CategoryPropertyChangedEvent extends DataEvent {
-	public static final String NAME = "name";
+	public static final String NAME = "name"; //$NON-NLS-1$
 	
 	private Category category;
 	private String property;

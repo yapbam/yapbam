@@ -90,6 +90,7 @@ public class FilterView extends JPanel {
 		refreshFilter();
 	}
 	
+	@SuppressWarnings("serial")
 	class Toto extends FilterElementView {
 		Toto(String label) {
 			super(label);

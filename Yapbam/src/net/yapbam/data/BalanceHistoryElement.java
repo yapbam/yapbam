@@ -53,7 +53,7 @@ public class BalanceHistoryElement implements Serializable {
 
 	@Override
 	public String toString() {
-		return MessageFormat.format("[{0,date,short}->{1,date,short}:{2,number,currency}[", from, to, balance);
+		return MessageFormat.format("[{0,date,short}->{1,date,short}:{2,number,currency}[", from, to, balance); //$NON-NLS-1$
 	}
 
 	/** Returns the position of this element relative to a date.

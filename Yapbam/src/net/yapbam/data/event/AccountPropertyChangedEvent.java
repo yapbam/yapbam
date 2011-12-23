@@ -3,9 +3,9 @@ package net.yapbam.data.event;
 import net.yapbam.data.Account;
 
 public class AccountPropertyChangedEvent extends DataEvent {
-	public static final String NAME = "name";
-	public static final String INITIAL_BALANCE = "initialBalance";
-	public static final String ALERT_THRESHOLD = "alertThreshold";
+	public static final String NAME = "name"; //$NON-NLS-1$
+	public static final String INITIAL_BALANCE = "initialBalance"; //$NON-NLS-1$
+	public static final String ALERT_THRESHOLD = "alertThreshold"; //$NON-NLS-1$
 	
 	private Account account;
 	private String property;

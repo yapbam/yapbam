@@ -72,8 +72,6 @@ public class CurrencyConverterPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();

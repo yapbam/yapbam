@@ -62,7 +62,6 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * @return void
 	 */
 	private void initialize() {
 //		this.setSize(300, 200);

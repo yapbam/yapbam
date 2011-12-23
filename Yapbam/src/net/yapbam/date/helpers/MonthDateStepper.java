@@ -43,8 +43,8 @@ public class MonthDateStepper extends  DateStepper {
 	@Override
 	public Date getNextStep(Date date) {
 		if (DEBUG) {
-			System.out.println("date : "+DateFormat.getDateInstance().format(date));
-			System.out.println("  number of months : "+this.period);
+			System.out.println("date : "+DateFormat.getDateInstance().format(date)); //$NON-NLS-1$
+			System.out.println("  number of months : "+this.period); //$NON-NLS-1$
 		}
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
@@ -53,8 +53,8 @@ public class MonthDateStepper extends  DateStepper {
 		int max = gc.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		gc.set(GregorianCalendar.DAY_OF_MONTH, Math.min(max, this.day));
 		if (DEBUG) {
-			System.out.println("  -> nextDate : "+DateFormat.getDateInstance().format(gc.getTime()));
-			System.out.println("----------------------");
+			System.out.println("  -> nextDate : "+DateFormat.getDateInstance().format(gc.getTime())); //$NON-NLS-1$
+			System.out.println("----------------------"); //$NON-NLS-1$
 		}
 		Date result = gc.getTime();
 		if (DateUtils.dateToInteger(result)>this.lastDate) result = null;
