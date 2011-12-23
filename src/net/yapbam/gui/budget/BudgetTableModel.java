@@ -60,10 +60,10 @@ class BudgetTableModel extends AbstractTableModel {
 		return columnIndex==budget.getDatesSize();
 	}
 
-	private boolean isAverageColumn(int columnIndex) {
-		//TODO
-		return columnIndex==budget.getDatesSize()+1;
-	}
+//	private boolean isAverageColumn(int columnIndex) {
+//		//TODO
+//		return columnIndex==budget.getDatesSize()+1;
+//	}
 
 	@SuppressWarnings("deprecation")
 	@Override

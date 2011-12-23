@@ -38,8 +38,6 @@ public class CategoryPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));

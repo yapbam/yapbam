@@ -23,7 +23,7 @@ public class RoundButton extends Component {
 	 * Constructs a RoundButton with no label.
 	 */
 	public RoundButton() {
-		this("");
+		this(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -41,8 +41,7 @@ public class RoundButton extends Component {
 
 	/**
 	 * gets the label
-	 * 
-	 * @see setLabel
+	 * @see #setLabel
 	 */
 	public String getLabel() {
 		return label;
@@ -50,8 +49,7 @@ public class RoundButton extends Component {
 
 	/**
 	 * sets the label
-	 * 
-	 * @see getLabel
+	 * @see #getLabel
 	 */
 	public void setLabel(String label) {
 		this.label = label;
@@ -62,7 +60,7 @@ public class RoundButton extends Component {
 	/**
 	 * Gets the transparency (alpha channel)
 	 * @return a float between 0 and 1 (opaque)
-	 * @see setLabel
+	 * @see #setLabel
 	 */
 	public float getTransparency() {
 		return this.transparency;
@@ -70,7 +68,7 @@ public class RoundButton extends Component {
 
 	/**
 	 * Sets the transparency
-	 * @see getLabel
+	 * @see #getLabel
 	 */
 	public void setTransparency(float alpha) {
 		if ((alpha<0) || (alpha>1)) throw new IllegalArgumentException();

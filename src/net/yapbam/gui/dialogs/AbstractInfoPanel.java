@@ -31,8 +31,6 @@ public abstract class AbstractInfoPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setSize(309, 281);

@@ -3,8 +3,8 @@ package net.yapbam.gui.transactiontable;
 import java.awt.GridBagLayout;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.preferences.PreferencePanel;
 
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
@@ -55,8 +55,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();

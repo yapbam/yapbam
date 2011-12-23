@@ -16,13 +16,19 @@ public class Transaction extends AbstractTransaction implements Serializable {
 	private int valueDate;
 	private String statementId;
 	
-	@Deprecated
-	public Transaction(Date date, String number, String description, double amount,
-			Account account, Mode mode, Category category, Date valueDate,
-			String statementId, List<SubTransaction> subTransactions) {
-		this(date, number, description, null, amount, account, mode, category, valueDate, statementId, subTransactions);
-	}
-	
+	/** Constructor.
+	 * @param date The transaction's date
+	 * @param number The transaction's number (null if the description has not any number)
+	 * @param description The transaction's description
+	 * @param comment The transaction's comment (null if the transaction has no comment)
+	 * @param amount The transaction's amount (negative for an expense)
+	 * @param account  The transaction's account
+	 * @param mode The transaction's payment mode 
+	 * @param category The transaction's category
+	 * @param valueDate The transaction's value date
+	 * @param statementId The transaction's the statement id (null if the transaction doesn't blong to a statement)
+	 * @param subTransactions the subtransactions of the transaction (an empty List if the transaction has no subtransaction)
+	 */
 	public Transaction(Date date, String number, String description, String comment, double amount,
 			Account account, Mode mode, Category category, Date valueDate,
 			String statementId, List<SubTransaction> subTransactions) {
@@ -50,6 +56,7 @@ public class Transaction extends AbstractTransaction implements Serializable {
 		return statementId;
 	}
 
+	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
 		return "["+this.getAccount()+"|"+this.date+"|"+this.getDescription()+"|"+this.getAmount()+"]";

@@ -2,7 +2,6 @@ package net.yapbam.gui;
 
 import javax.swing.JTabbedPane;
 
-import net.yapbam.gui.preferences.PreferencePanel;
 
 import java.awt.BorderLayout;
 
@@ -25,7 +24,6 @@ public abstract class CompoundPreferencePanel extends PreferencePanel {
 
 	/**
 	 * This method initializes this
-	 * @return void
 	 */
 	private void initialize() {
 		setLayout(new BorderLayout());

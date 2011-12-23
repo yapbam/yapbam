@@ -10,6 +10,8 @@ import java.util.Observable;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.TextMatcher;
 
+/** A data filter.
+ */
 public class Filter extends Observable {
 	private static boolean DEBUG = false;
 	public static final int CHECKED=1;
@@ -35,6 +37,7 @@ public class Filter extends Observable {
 	
 	private boolean suspended;
 
+	/** Constructor. */
 	public Filter() {
 		init();
 		this.suspended = false;
@@ -42,9 +45,9 @@ public class Filter extends Observable {
 
 	public boolean isOk(int property) {
 		if (DEBUG) {
-			System.out.println("---------- isOK("+Integer.toBinaryString(property)+") ----------");
-			System.out.println("filter  : "+Integer.toBinaryString(this.filter));
-			System.out.println("result  : "+Integer.toBinaryString(property & this.filter));
+			System.out.println("---------- isOK("+Integer.toBinaryString(property)+") ----------"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.out.println("filter  : "+Integer.toBinaryString(this.filter)); //$NON-NLS-1$
+			System.out.println("result  : "+Integer.toBinaryString(property & this.filter)); //$NON-NLS-1$
 		}
 		return ((property & this.filter) != 0);
 	}
@@ -131,7 +134,7 @@ public class Filter extends Observable {
 	 */
 	public boolean isOk(Mode mode) {
 		if (validModes==null) return true;
-		String name = mode.equals(Mode.UNDEFINED)?"":mode.getName();
+		String name = mode.equals(Mode.UNDEFINED)?"":mode.getName(); //$NON-NLS-1$
 		return (validModes.contains(name));
 	}
 
@@ -172,7 +175,7 @@ public class Filter extends Observable {
 
 	/** Set the valid categories for this filter.
 	 * There's no side effect between this instance and the argument array.
-	 * @param categories the categories that are allowed (null or the complete list of categories to allow all categories).
+	 * @param validCategories the categories that are allowed (null or the complete list of categories to allow all categories).
 	 */
 	public void setValidCategories(List<Category> validCategories) {
 		if (!testEquals(validCategories, this.validCategories)) {
@@ -254,14 +257,12 @@ public class Filter extends Observable {
 	}
 
 	/** Sets the transaction minimum and maximum amounts.
-	 * <BR>Note that setting this filter never change the expense/receipt filter.
 	 * @param property An integer that codes if expenses or receipts, or both are ok.
-	 * @param minAmount The minimum amount (a positive or null double).
-	 * @param maxAmount The maximum amount (Double.POSITIVE_INFINITY to set no high limit).
 	 * <br>Note that only EXPENSES, RECEIPTS and EXPENSES+RECEIPTS constants are valid arguments.
 	 * Any other integer codes (for instance CHECKED) are ignored.
+	 * @param minAmount The minimum amount (a positive or null double).
+	 * @param maxAmount The maximum amount (Double.POSITIVE_INFINITY to set no high limit).
 	 * @throws IllegalArgumentException if minAmount > maxAmount or if minimum amount is negative
-	 * @see #setFilter(int)
 	 */
 	public void setAmountFilter(int property, double minAmount, double maxAmount) {
 		if (minAmount>maxAmount) throw new IllegalArgumentException();
@@ -273,7 +274,7 @@ public class Filter extends Observable {
 			this.minAmount = minAmount;
 			this.maxAmount = maxAmount;
 			filter = (filter & ~mask) | (property & mask);
-			if (DEBUG) System.out.println("-> filter : "+filter);
+			if (DEBUG) System.out.println("-> filter : "+filter); //$NON-NLS-1$
 			this.setChanged();
 		}
 	}
@@ -309,9 +310,9 @@ public class Filter extends Observable {
 	/** Sets the description filter.
 	 * @param matcher a TextMatcher instance or null to apply no filter on description
 	 */
-	public void setDescriptionMatcher(TextMatcher descriptionMatcher) {
-		if (!NullUtils.areEquals(descriptionMatcher, this.descriptionMatcher)) {
-			this.descriptionMatcher = descriptionMatcher;
+	public void setDescriptionMatcher(TextMatcher matcher) {
+		if (!NullUtils.areEquals(matcher, this.descriptionMatcher)) {
+			this.descriptionMatcher = matcher;
 			this.setChanged();
 		}
 	}
@@ -364,7 +365,7 @@ public class Filter extends Observable {
 		if (!NullUtils.areEquals(statementFilter, this.statementMatcher) || ((property & mask)!=(filter & mask))) {
 			this.statementMatcher = statementFilter;
 			filter = (filter & ~mask) | (property & mask);
-			if (DEBUG) System.out.println("-> filter : "+filter);
+			if (DEBUG) System.out.println("-> filter : "+filter); //$NON-NLS-1$
 			this.setChanged();
 		}
 	}

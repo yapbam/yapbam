@@ -14,17 +14,27 @@ import net.yapbam.util.NullUtils;
  * transaction would be considered as ok.
  * @see GlobalData
  */
-public class FilteredData extends DefaultListenable implements Observer {
+public class FilteredData extends DefaultListenable {
 	private GlobalData data;
 	private ArrayList<Transaction> transactions;
 	private Comparator<Transaction> comparator = TransactionComparator.INSTANCE;
 	private BalanceData balanceData;
 	private Filter filter;
+	private Observer filterObserver;
 	
+	/** Constructor.
+	 * @param data The data that is filtered
+	 */
 	public FilteredData(GlobalData data) {
 		this.data = data;
 		this.filter = new Filter();
-		this.filter.addObserver(this);
+		this.filterObserver = new Observer() {
+			@Override
+			public void update(Observable o, Object arg) {
+				filter();
+			}
+		};
+		this.filter.addObserver(this.filterObserver);
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
@@ -130,7 +140,7 @@ public class FilteredData extends DefaultListenable implements Observer {
 				} else if (event instanceof NeedToBeSavedChangedEvent) {
 					fireEvent(event);
 				} else {
-					System.out.println ("Be aware "+event+" is not propagated by the fileredData"); //FIXME Not sure it's really a bug
+					System.out.println ("Be aware "+event+" is not propagated by the fileredData");  //$NON-NLS-1$//$NON-NLS-2$
 				}
 			}
 		});
@@ -159,24 +169,25 @@ public class FilteredData extends DefaultListenable implements Observer {
 		return result;
 	}
 	
+	/** Gets the filter used in this filtered data.
+	 * @return a Filter
+	 */
 	public Filter getFilter() {
 		return this.filter;
 	}
 	
+	/** Sets the filter used in this filtered data.
+	 * @param filter the new filter
+	 */
 	public void setFilter(Filter filter) {
 		if (!filter.equals(this.filter)) {
 			// if the instance as really changed
 			// Stop looking for changes on the old instance
-			this.filter.deleteObserver(this);
+			this.filter.deleteObserver(this.filterObserver);
 			this.filter = filter;
-			this.filter.addObserver(this);
+			this.filter.addObserver(this.filterObserver);
 			this.filter();
 		}
-	}
-	
-	@Override
-	public void update(Observable o, Object arg) {
-		this.filter();
 	}
 	
 	/** Gets a transaction's validity.

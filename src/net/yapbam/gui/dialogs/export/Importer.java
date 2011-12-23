@@ -93,7 +93,7 @@ public class Importer {
 	 * @param fields The line, converted to fields 
 	 * @param accountPart The file part; true if the line is located before the first transaction
 	 * @return true if the line is a transaction line (it contains a date)
-	 * @throws ParseException
+	 * @throws ImportException
 	 */
 	private boolean importLine(GlobalData data, int lineNumber, String[] fields, boolean accountPart) throws ImportException {
 		// The challenge here is to detect subtransactions and account initial balance.

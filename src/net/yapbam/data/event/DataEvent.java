@@ -11,6 +11,7 @@ public abstract class DataEvent {
 		return this.source;
 	}
 
+	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName()+"->"+this.source;

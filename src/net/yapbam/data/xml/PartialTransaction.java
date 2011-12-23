@@ -19,7 +19,7 @@ class PartialTransaction {
 		String accountId = attributes.get(Serializer.ACCOUNT_ATTRIBUTE);
 		account = data.getAccount(accountId);
 		if (account == null) {
-			throw new IllegalArgumentException("Unknown account id : "+accountId);
+			throw new IllegalArgumentException("Unknown account id : "+accountId); //$NON-NLS-1$
 		}
 		amount = Double.parseDouble(attributes.get(Serializer.AMOUNT_ATTRIBUTE));
 		description = attributes.get(Serializer.DESCRIPTION_ATTRIBUTE);

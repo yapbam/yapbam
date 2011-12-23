@@ -334,8 +334,9 @@ public class Preferences {
 		String testedPlugin = System.getProperty("testedPlugin.className"); //$NON-NLS-1$
 		if (testedPlugin!=null) {
 			try {
-				plugins.add(new PlugInContainer(Class.forName(testedPlugin)));
-			} catch (ClassNotFoundException e) {
+				Class<? extends AbstractPlugIn> pClass = (Class<? extends AbstractPlugIn>) Class.forName(testedPlugin);
+				plugins.add(new PlugInContainer(pClass));
+			} catch (Exception e) {
 				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to load the plugin "+testedPlugin+" ("+e+")")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}

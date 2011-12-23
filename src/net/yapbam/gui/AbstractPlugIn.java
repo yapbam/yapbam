@@ -12,7 +12,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.preferences.PreferencePanel;
 import net.yapbam.util.NullUtils;
 
 /** This abstract class represents a Yapbam plugin.
@@ -30,7 +29,6 @@ import net.yapbam.util.NullUtils;
  * was saved.</LI></OL>
  * The net.yapbam.ihm.transactiontable.TransactionsPlugIn is a good example of what could be done by a plugin.
  * @see #AbstractPlugIn()
- * @see TransactionsPlugIn
  */
 public abstract class AbstractPlugIn { //TODO Define how to check for updates and how to download plugins
 	/** The open, save ... part of the file menu */
@@ -58,13 +56,13 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	public static final int TRANSACTIONS_MENU = 1;
 	
 	/** Panel icon property name. */
-	public static final String PANEL_ICON_PROPERTY_NAME = "panelIcon";
+	public static final String PANEL_ICON_PROPERTY_NAME = "panelIcon"; //$NON-NLS-1$
 	/** Panel tooltip property name. */
-	public static final String PANEL_TOOLTIP_PROPERTY_NAME = "panelTooltip";
+	public static final String PANEL_TOOLTIP_PROPERTY_NAME = "panelTooltip"; //$NON-NLS-1$
 	/** Panel title property name. */
-	public static final String PANEL_TITLE_PROPERTY_NAME = "panelTitle";
+	public static final String PANEL_TITLE_PROPERTY_NAME = "panelTitle"; //$NON-NLS-1$
 	/** Panel title property name. */
-	public static final String PRINTING_SUPPORTED_PROPERTY_NAME = "printing";
+	public static final String PRINTING_SUPPORTED_PROPERTY_NAME = "printing"; //$NON-NLS-1$
 	
 	private PropertyChangeSupport propertyChangeSupport;
 	private Icon panelIcon;
@@ -125,7 +123,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	
 	/** Sets the main panel icon of the plugin.
 	 * @param panelIcon the new panel icon. Note that if the plugin has no panel, this Icon is never displayed
-	 * @see #getPanelIcon().
+	 * @see #getPanelIcon()
 	 */
 	public final void setPanelIcon(Icon panelIcon) {
 		if (this.panelIcon!=panelIcon) {
@@ -145,7 +143,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	
 	/** Sets the tab title of the plugin.
 	 * @param title the new panel title. Note that if the plugin has no panel, this title is never displayed
-	 * @see #getPanelTitle().
+	 * @see #getPanelTitle()
 	 */
 	public final void setPanelTitle(String title) {
 		if (!NullUtils.areEquals(this.panelTitle,title)) {
@@ -165,7 +163,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 
 	/** Sets the tab tooltip of the plugin.
 	 * @param tooltip the new panel tooltip. Note that if the plugin has no panel, this tooltip is never displayed
-	 * @see #getPanelToolTip().
+	 * @see #getPanelToolTip()
 	 */
 	public final void setPanelToolTip(String tooltip) {
 		if (!NullUtils.areEquals(this.panelToolTip,tooltip)) {

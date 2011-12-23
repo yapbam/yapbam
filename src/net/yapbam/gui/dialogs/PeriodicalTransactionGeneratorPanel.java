@@ -59,8 +59,6 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		jLabel = new JLabel();

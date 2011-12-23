@@ -95,7 +95,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 * @param data the global data
 	 * @param transaction the transaction that will initialize the dialog or null ?
 	 * @param edit True if we edit an existing transaction, false if we edit a new transaction
-	 * @see #open(GlobalData, Window, Transaction, boolean, boolean)
+	 * @see #open(FilteredData, Window, Transaction, boolean, boolean, boolean)
 	 */
 	public TransactionDialog(Window owner, final FilteredData data, Transaction transaction, boolean edit) {
 		super(owner,

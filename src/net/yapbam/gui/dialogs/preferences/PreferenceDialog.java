@@ -11,7 +11,7 @@ import javax.swing.event.ChangeListener;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
-import net.yapbam.gui.preferences.PreferencePanel;
+import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.util.AbstractDialog;
 
 import java.util.ArrayList;

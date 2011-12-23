@@ -44,8 +44,6 @@ public class CheckNumberPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setLayout(new GridBagLayout());

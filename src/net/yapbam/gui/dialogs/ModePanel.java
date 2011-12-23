@@ -48,7 +48,7 @@ class ModePanel extends JPanel {
 
 	/** Constructor
 	 * @param title the panel title, displayed in the border
-	 * @param option an optional component, displayed at the bottom of the panel (null if none)
+	 * @param checkBookOption an optional component, displayed at the bottom of the panel (null if none)
 	 */
 	ModePanel(String title, boolean checkBookOption) {
 		super(new GridBagLayout());

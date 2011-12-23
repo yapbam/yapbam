@@ -33,8 +33,6 @@ class BalanceHistoryControlPane extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		report = new JLabel();

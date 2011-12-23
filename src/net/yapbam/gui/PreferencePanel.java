@@ -1,19 +1,18 @@
-package net.yapbam.gui.preferences;
+package net.yapbam.gui;
 
 import javax.swing.JPanel;
 
-import net.yapbam.gui.Preferences;
 import net.yapbam.util.NullUtils;
 
-@SuppressWarnings("serial")
 /** This abstract class represents a preference panel.
  * The preference panels are displayed each in a tab of the preferences dialog.
  */
+@SuppressWarnings("serial")
 public abstract class PreferencePanel extends JPanel {
 	/** The name of the property containing the reason why the panel can't be validated.
 	 * @see PreferencePanel#getOkDisabledCause()
 	 */
-	public static String OK_DISABLED_CAUSE_PROPERTY = "okDisableCause";
+	public static String OK_DISABLED_CAUSE_PROPERTY = "okDisableCause"; //$NON-NLS-1$
 	
 	private String okDisabledCause;
 	

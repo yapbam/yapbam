@@ -108,7 +108,7 @@ public class FilterHandler extends DefaultHandler {
 				this.statementMatcher = textMatcher;
 			}
 		} else {
-			throw new IllegalArgumentException ("Unknown tag "+qName);
+			throw new IllegalArgumentException ("Unknown tag "+qName); //$NON-NLS-1$
 		}
 	}
 	
@@ -124,7 +124,7 @@ public class FilterHandler extends DefaultHandler {
 		for (Account account:accounts) {
 			for (int i = 0; i < account.getModesNumber(); i++) {
 				Mode mode = account.getMode(i);
-				result.add(mode.equals(Mode.UNDEFINED)?"":mode.getName());
+				result.add(mode.equals(Mode.UNDEFINED)?"":mode.getName()); //$NON-NLS-1$
 			}
 		}
 		return result;
@@ -139,7 +139,7 @@ public class FilterHandler extends DefaultHandler {
 			filter.setStatementFilter(property, this.statementMatcher);
 		} else if (qName.equals(Serializer.TEXT_MATCHER_TAG)) {
 		} else {
-			System.err.println ("Unknown tag "+qName);
+			System.err.println ("Unknown tag "+qName); //$NON-NLS-1$
 		}
 	}
 
@@ -148,7 +148,7 @@ public class FilterHandler extends DefaultHandler {
 		String str = new String(ch, start, length);
 		str = str.trim();
 		if (str.length()!=0) {
-			System.err.println ("strange, characters is called : "+str);
+			System.err.println ("strange, characters is called : "+str); //$NON-NLS-1$
 		}
 	}
 

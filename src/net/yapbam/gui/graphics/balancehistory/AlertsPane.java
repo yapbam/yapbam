@@ -29,8 +29,6 @@ class AlertsPane extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();

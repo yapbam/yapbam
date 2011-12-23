@@ -101,8 +101,6 @@ public class DateWidgetPanel extends JPanel {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();

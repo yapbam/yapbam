@@ -13,9 +13,9 @@ import java.util.regex.Pattern;
  * 	<li>Case could be ignored ... or not.</li> 
  * 	<li>Diacritical marks could be ignored ... or not.</li> 
  * </ul>
- * @see #REGULAR
- * @see #EQUALS
- * @see #CONTAINS
+ * @see Kind#REGULAR
+ * @see Kind#EQUALS
+ * @see Kind#CONTAINS
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
@@ -41,9 +41,9 @@ public class TextMatcher {
 	 * @param filter The filter string
 	 * @param caseSensitive sets the case sensitivity of the comparison (true if the comparison is case sensitive) 
 	 * @param diacriticalSensitive sets the diacritical sensitivity of the comparison (false to ignore diacritical marks). 
-	 * @see #REGULAR
-	 * @see #EQUALS
-	 * @see #CONTAINS
+	 * @see Kind#REGULAR
+	 * @see Kind#EQUALS
+	 * @see Kind#CONTAINS
 	 */
 	public TextMatcher(Kind kind, String filter, boolean caseSensitive, boolean diacriticalSensitive) {
 		super();
@@ -79,9 +79,9 @@ public class TextMatcher {
 
 	/** Gets the kind of comparison.
 	 * @return a Kind of comparison.
-	 * @see #REGULAR
-	 * @see #EQUALS
-	 * @see #CONTAINS
+	 * @see Kind#REGULAR
+	 * @see Kind#EQUALS
+	 * @see Kind#CONTAINS
 	 */
 	public Kind getKind() {
 		return kind;

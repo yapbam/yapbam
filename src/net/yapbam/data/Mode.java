@@ -62,6 +62,7 @@ public class Mode implements Serializable {
 		return this.getName().hashCode();
 	}
 	
+	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
 		return this.getName() + "[" + this.getExpenseVdc()+"/"+this.getReceiptVdc()+"-"+(this.isUseCheckBook()?"check":"no check")+"]";
