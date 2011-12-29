@@ -11,17 +11,21 @@ public class AmountRenderer extends ObjectRenderer {
 
 	@Override
 	public void setValue(Object value) {
-		double[] amount = (double[]) value;
 		String text;
-		if (amount.length == 1) {
-			text = LocalizationData.getCurrencyInstance().format(amount[0]);
+		if (value==null) {
+			text = ""; //$NON-NLS-1$
 		} else {
-			StringBuilder buf = new StringBuilder("<html><body>").append(LocalizationData.getCurrencyInstance().format(amount[0]));
-			for (int i = 1; i < amount.length; i++) {
-				buf.append("<BR>[").append(LocalizationData.getCurrencyInstance().format(amount[i])).append("]");
+			double[] amount = (double[]) value;
+			if (amount.length == 1) {
+				text = LocalizationData.getCurrencyInstance().format(amount[0]);
+			} else {
+				StringBuilder buf = new StringBuilder("<html><body>").append(LocalizationData.getCurrencyInstance().format(amount[0])); //$NON-NLS-1$
+				for (int i = 1; i < amount.length; i++) {
+					buf.append("<BR>[").append(LocalizationData.getCurrencyInstance().format(amount[i])).append("]"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+				buf.append("</body></html>"); //$NON-NLS-1$
+				text = buf.toString();
 			}
-			buf.append("</body></html>");
-			text = buf.toString();
 		}
 		setText(text);
 	}
