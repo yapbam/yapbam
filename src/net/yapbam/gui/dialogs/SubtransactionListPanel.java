@@ -70,6 +70,7 @@ class SubtransactionListPanel extends JPanel {
 		tableModel = new SubTransactionsTableModel();
 		table = new JTable(tableModel);
 		ListSelectionModel selModel = table.getSelectionModel();
+		selModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		selModel.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();
