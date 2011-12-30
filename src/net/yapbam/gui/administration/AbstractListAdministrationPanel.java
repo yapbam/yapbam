@@ -1,5 +1,6 @@
 package net.yapbam.gui.administration;
 
+import java.awt.Component;
 import java.awt.GridBagLayout;
 
 import javax.swing.Action;
@@ -19,6 +20,7 @@ import net.yapbam.gui.util.JTableListener;
 
 import java.awt.Insets;
 import java.util.ArrayList;
+import javax.swing.JLabel;
 
 /** This panel is an abstract panel containing a table and "create", "delete", "duplicate", "edit" buttons.
  *  The "edit" and "duplicates" button can be omitted.
@@ -32,6 +34,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	private JPanel southPanel = null;
 	private JButton newButton = null;
 	private JButton editButton = null;
+	private JButton duplicateButton = null;
 	private JButton deleteButton = null;
 	private Action newButtonAction;
 	private Action editButtonAction;
@@ -40,8 +43,6 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 
 	protected V data;
 
-	private JButton duplicateButton = null;
-	
 	/**
 	 * This is the default constructor
 	 */
@@ -129,30 +130,46 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	 */
 	private JPanel getSouthPanel() {
 		if (southPanel == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 2;
-			gridBagConstraints11.insets = new Insets(5, 0, 5, 5);
-			gridBagConstraints11.gridy = 0;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.insets = new Insets(5, 0, 5, 5);
-			gridBagConstraints2.anchor = GridBagConstraints.WEST;
-			gridBagConstraints2.gridx = 3;
-			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.weightx = 1.0D;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.insets = new Insets(5, 0, 5, 5);
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.gridx = 0;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 1;
-			gridBagConstraints.insets = new Insets(5, 0, 5, 5);
-			gridBagConstraints.gridy = 0;
 			southPanel = new JPanel();
 			southPanel.setLayout(new GridBagLayout());
+
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			Insets leftInset = new Insets(0, 5, getBottomInset(), 0);
+			
+			gridBagConstraints1.insets = leftInset;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.gridx = 0;
 			southPanel.add(getNewButton(), gridBagConstraints1);
+			
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 1;
+			gridBagConstraints.insets = leftInset;
+			gridBagConstraints.gridy = 0;
 			if (getEditButton()!=null) southPanel.add(getEditButton(), gridBagConstraints);
-			southPanel.add(getDeleteButton(), gridBagConstraints2);
+
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 2;
+			gridBagConstraints11.insets = leftInset;
+			gridBagConstraints11.gridy = 0;
 			if (getDuplicateButton()!=null) southPanel.add(getDuplicateButton(), gridBagConstraints11);
+
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.insets = leftInset;
+			gridBagConstraints2.gridx = 3;
+			gridBagConstraints2.gridy = 0;
+			southPanel.add(getDeleteButton(), gridBagConstraints2);
+			
+			
+			Component rightComponent = getRightComponent();
+			if (rightComponent==null) rightComponent = new JLabel(" "); //$NON-NLS-1$
+			GridBagConstraints gbc_lblToto = new GridBagConstraints();
+			gbc_lblToto.anchor = GridBagConstraints.EAST;
+			Insets rightInset = new Insets(0, 5, getBottomInset(), 0);
+			gbc_lblToto.insets = rightInset;
+			gbc_lblToto.gridx = 4;
+			gbc_lblToto.gridy = 0;
+			gbc_lblToto.weightx = 1.0D;
+			southPanel.add(rightComponent, gbc_lblToto);
 		}
 		return southPanel;
 	}
@@ -200,7 +217,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		}
 		return deleteButton;
 	}
-
+	
 	/**
 	 * This method initializes duplicateButton	
 	 * 	
@@ -225,5 +242,17 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	}
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(getJTable(), getStatePrefix());
+	}
+	
+	protected Component getRightComponent() {
+		return null;
+	}
+	
+	/** Gets the bottom inset of the panel.
+	 * This inset will be applied to the buttons at the bottom of the panel.   
+	 * @return an int (0 in this implementation)
+	 */
+	protected int getBottomInset() {
+		return 0;
 	}
 }
