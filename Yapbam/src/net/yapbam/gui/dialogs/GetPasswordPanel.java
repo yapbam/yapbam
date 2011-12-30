@@ -13,10 +13,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.BasicDocumentListener;
+
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import java.awt.Color;
@@ -85,9 +85,9 @@ public class GetPasswordPanel extends JPanel {
 			passwordField = new JPasswordField();
 			passwordField.setColumns(10);
 			passwordField.setColumns(8);
-			passwordField.addKeyListener(new KeyAdapter() {
+			passwordField.getDocument().addDocumentListener(new BasicDocumentListener() {
 				@Override
-				public void keyReleased(KeyEvent e) {
+				protected void modified() {
 					updateConfirmed();
 				}
 			});
@@ -256,9 +256,9 @@ public class GetPasswordPanel extends JPanel {
 			confirmPasswordField = new JPasswordField();
 			confirmPasswordField.setToolTipText(LocalizationData.get("FilePasswordDialog.confirm.tooltip")); //$NON-NLS-1$
 			confirmPasswordField.setVisible(false);
-			confirmPasswordField.addKeyListener(new KeyAdapter() {
+			confirmPasswordField.getDocument().addDocumentListener(new BasicDocumentListener() {
 				@Override
-				public void keyReleased(KeyEvent e) {
+				protected void modified() {
 					updateConfirmed();
 				}
 			});

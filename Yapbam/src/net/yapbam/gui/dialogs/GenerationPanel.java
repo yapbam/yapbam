@@ -7,8 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -182,11 +180,11 @@ public class GenerationPanel extends JPanel {
 	 */
 	private IntegerWidget getNb() {
 		if (nb == null) {
-	        nb = new IntegerWidget(BigInteger.ONE, IntegerWidget.INTEGER_MAX_VALUE);
-	        nb.addFocusListener(AutoSelectFocusListener.INSTANCE);
-	        nb.addKeyListener(new KeyAdapter() {
+			nb = new IntegerWidget(BigInteger.ONE, IntegerWidget.INTEGER_MAX_VALUE);
+			nb.addFocusListener(AutoSelectFocusListener.INSTANCE);
+			nb.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 				@Override
-				public void keyReleased(KeyEvent e) {
+				public void propertyChange(PropertyChangeEvent evt) {
 					updateDateStepper();
 				}
 			});
@@ -347,9 +345,9 @@ public class GenerationPanel extends JPanel {
 		if (day == null) {
 			day = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 			day.addFocusListener(AutoSelectFocusListener.INSTANCE);
-	        day.addKeyListener(new KeyAdapter() {
+			day.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 				@Override
-				public void keyReleased(KeyEvent e) {
+				public void propertyChange(PropertyChangeEvent evt) {
 					updateDateStepper();
 				}
 			});

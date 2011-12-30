@@ -11,11 +11,10 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.BasicDocumentListener;
 import net.yapbam.gui.widget.PopupTextFieldList;
 
 import java.awt.Insets;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -113,9 +112,9 @@ public class SubTransactionPanel extends JPanel {
 		this.add(getJCheckBox(), gridBagConstraints12);
 		
 		this.description = descriptionField.getText();
-		descriptionField.addKeyListener(new KeyAdapter() {
+		descriptionField.getDocument().addDocumentListener(new BasicDocumentListener() {
 			@Override
-			public void keyReleased(KeyEvent arg0) {
+			protected void modified() {
 				String old = description;
 				description = descriptionField.getText();
 				SubTransactionPanel.this.firePropertyChange(DESCRIPTION_PROPERTY, old, description);

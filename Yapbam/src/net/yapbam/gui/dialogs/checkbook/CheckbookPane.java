@@ -12,8 +12,6 @@ import net.yapbam.util.NullUtils;
 
 import javax.swing.JTextField;
 import java.awt.Insets;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
@@ -223,12 +221,6 @@ public class CheckbookPane extends JPanel {
 			prefix = new JTextField();
 			prefix.setColumns(10);
 			prefix.setToolTipText(LocalizationData.get("checkbookDialog.prefix.tooltip")); //$NON-NLS-1$
-			prefix.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyReleased(KeyEvent e) {
-					parse();
-				}
-			});
 		}
 		return prefix;
 	}

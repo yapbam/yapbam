@@ -125,6 +125,8 @@ public class SeparatorPanel extends JPanel {
 			customSeparatorValue = new JTextField();
 			customSeparatorValue.setColumns(1);
 			customSeparatorValue.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customizedChar.toolTip")); //$NON-NLS-1$
+			// We will not use a document listener to listen the field modifications because we want to change the field (truncate it to its fisrt character)
+			// and document listener can't modify the source event (it throws an IllegalStateException).
 			customSeparatorValue.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
