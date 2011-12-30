@@ -131,6 +131,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 
 		menu.addSeparator();
 		this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.PRINT); //$NON-NLS-1$
+		this.menuItemPrint.setMnemonic(LocalizationData.getChar("MainMenu.Print.Mnemonic")); //$NON-NLS-1$
 		this.menuItemPrint.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenuBar.Print.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		this.menuItemPrint.setToolTipText(LocalizationData.get("MainMenuBar.Print.ToolTip")); //$NON-NLS-1$
 		this.menuItemPrint.addActionListener(this);
