@@ -23,8 +23,7 @@ public class DuplicatePeriodicTransactionAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		PeriodicalTransactionDialog.open(table.getFilteredData(),
-				AbstractTransactionDialog.getOwnerWindow(table),
+		PeriodicalTransactionDialog.open(table.getFilteredData(),AbstractTransactionDialog.getOwnerWindow(table),
 				(PeriodicalTransaction) table.getSelectedTransaction().clone(), false);
 	}
 }

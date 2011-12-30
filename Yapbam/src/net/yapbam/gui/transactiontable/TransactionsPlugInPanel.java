@@ -72,7 +72,7 @@ public class TransactionsPlugInPanel extends JPanel {
 		c.gridx = 4;
 		c.anchor = GridBagConstraints.WEST;
 		buttons.add(deleteTransactionButton, c);
-		final JButton periodicalTransactionsButton = new JButton(new GeneratePeriodicalTransactionsAction(data));
+		final JButton periodicalTransactionsButton = new JButton(new GeneratePeriodicalTransactionsAction(data, false));
 		c.gridx = 5;
 		c.weightx = 1;
 		c.anchor = GridBagConstraints.EAST;

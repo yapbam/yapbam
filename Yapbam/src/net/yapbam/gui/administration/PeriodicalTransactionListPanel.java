@@ -1,12 +1,16 @@
 package net.yapbam.gui.administration;
 
+import java.awt.Component;
+
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewPeriodicalTransactionAction;
+import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 
 public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<FilteredData> implements AbstractAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration.";
@@ -23,7 +27,14 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	public String getPanelTitle() {
 		return LocalizationData.get("PeriodicalTransactionManager.title"); //$NON-NLS-1$
 	}
-
+	@Override
+	protected Component getRightComponent() {
+		return new JButton(new GeneratePeriodicalTransactionsAction(data, false));
+	}
+	@Override
+	protected int getBottomInset() {
+		return 5;
+	}
 	@Override
 	protected Action getNewButtonAction() {
 		return new NewPeriodicalTransactionAction(super.data);

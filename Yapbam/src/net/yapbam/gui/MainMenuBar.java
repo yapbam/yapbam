@@ -187,7 +187,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 
 		insertPluginMenuItems(transactionMenu, AbstractPlugIn.TRANSACTIONS_PART);
 		transactionMenu.addSeparator();
-		transactionMenu.add(new JMenuItem(new GeneratePeriodicalTransactionsAction(frame.getFilteredData())));
+		transactionMenu.add(new JMenuItem(new GeneratePeriodicalTransactionsAction(frame.getFilteredData(), true)));
 		transactionMenu.add(new JMenuItem(new ConvertToPeriodicalTransactionAction(selector)));
 		insertPluginMenuItems(transactionMenu,AbstractPlugIn.PERIODIC_TRANSACTIONS_PART);
 		this.add(transactionMenu);

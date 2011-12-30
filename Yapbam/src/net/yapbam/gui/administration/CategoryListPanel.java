@@ -201,4 +201,9 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@Override
 	public void saveState() {
 	}
+
+	@Override
+	protected int getBottomInset() {
+		return 5;
+	}
 }
