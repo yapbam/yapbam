@@ -37,9 +37,9 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData, SubTransact
 				updateOkButtonEnabled();
 			}
 		});
-        if (DEBUG) this.panel.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
-        return this.panel;
-    }
+		if (DEBUG) this.panel.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
+		return this.panel;
+	}
 	
 	@Override
 	protected SubTransaction buildResult() {

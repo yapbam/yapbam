@@ -13,12 +13,11 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.widget.BasicDocumentListener;
 
 import javax.swing.JSeparator;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -264,9 +263,9 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gbc_formatPatternField.gridy = 2;
 		panel_format.add(formatPatternField, gbc_formatPatternField);
 		formatPatternField.setColumns(10);
-		formatPatternField.addKeyListener(new KeyAdapter() {
+		formatPatternField.getDocument().addDocumentListener(new BasicDocumentListener() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			protected void modified() {
 				rdbtnCustomized.setSelected(true);
 				updateOkDisabledCause();
 			}

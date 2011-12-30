@@ -3,9 +3,6 @@ package net.yapbam.gui.statementview;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
@@ -19,6 +16,7 @@ import javax.swing.event.ChangeListener;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.BasicDocumentListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -39,13 +37,6 @@ public class CheckModePanel extends JPanel {
 
 	public CheckModePanel() {
 		super();
-		
-		KeyListener listener = new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				refreshOk();
-			}
-		};
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		checkModeBox = new JCheckBox(LocalizationData.get("CheckModePanel.title")); //$NON-NLS-1$
@@ -75,7 +66,12 @@ public class CheckModePanel extends JPanel {
 		gbc_statement.gridx = 2;
 		gbc_statement.gridy = 0;
 		add(statement, gbc_statement);
-		statement.addKeyListener(listener);
+		statement.getDocument().addDocumentListener(new BasicDocumentListener() {
+			@Override
+			protected void modified() {
+				refreshOk();
+			}
+		});
 		statement.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip"));
 		
