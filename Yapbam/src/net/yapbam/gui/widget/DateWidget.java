@@ -4,16 +4,14 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import net.yapbam.util.NullUtils;
 
@@ -26,7 +24,7 @@ import net.yapbam.util.NullUtils;
  * with a non null argument, the empty field will always be valid.
  * The up/down arrow keys increments/decrements the date.
  */
-public class DateWidget extends JTextField {
+public class DateWidget extends CoolJTextField {
 	private static final long serialVersionUID = 1L;
 	public static final String DATE_PROPERTY = "date";
 	public static final String CONTENT_VALID_PROPERTY = "contentValid";
@@ -93,20 +91,10 @@ public class DateWidget extends JTextField {
 			}
 			
 		});
-		this.getDocument().addDocumentListener(new DocumentListener() {
+		this.addPropertyChangeListener(TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
-			public void removeUpdate(DocumentEvent e) {
+			public void propertyChange(PropertyChangeEvent evt) {
 				updateDate();
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateDate();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// Does nothing
 			}
 		});
 		this.addFocusListener(new FocusListener() {

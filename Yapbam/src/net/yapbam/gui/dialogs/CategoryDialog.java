@@ -4,20 +4,22 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
+import java.beans.PropertyChangeListener;
 
-import javax.swing.*;
-import javax.swing.event.DocumentListener;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.CoolJTextField;
 
 public class CategoryDialog extends AbstractDialog<String, Category> {
 	private static final long serialVersionUID = 1L;
 	
-	private JTextField categoryField;
+	private CoolJTextField categoryField;
 	private GlobalData globalData;
 
 	private CategoryDialog(Window owner, String message, GlobalData data) {
@@ -29,7 +31,7 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 	protected JPanel createCenterPane() {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new GridBagLayout());
-		DocumentListener listener = new AutoUpdateOkButtonDocumentListener(this);
+		PropertyChangeListener listener = new AutoUpdateOkButtonPropertyListener(this);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -46,9 +48,9 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 
 		JLabel titleCompte = new JLabel(LocalizationData.get("CategoryDialog.category")); //$NON-NLS-1$
 		centerPane.add(titleCompte, c);
-		categoryField = new JTextField(20);
+		categoryField = new CoolJTextField(20);
 		categoryField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		categoryField.getDocument().addDocumentListener(listener);
+		categoryField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, listener);
 		categoryField.setToolTipText(LocalizationData.get("CategoryDialog.category.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;

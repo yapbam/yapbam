@@ -2,16 +2,14 @@ package net.yapbam.gui.widget;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Currency;
 import java.util.Locale;
-
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import net.yapbam.util.NullUtils;
 
@@ -24,7 +22,7 @@ import net.yapbam.util.NullUtils;
  * <br>The CONTENT_VALID_PROPERTY is a read only property.</li>
  * </ul>
  */
-public class AmountWidget extends JTextField {
+public class AmountWidget extends CoolJTextField {
 	private static final long serialVersionUID = 1L;
 	private final static boolean DEBUG = false;
 	
@@ -70,20 +68,10 @@ public class AmountWidget extends JTextField {
 			if ((decimalFormatSymbols.getDecimalSeparator()==nonBreakingSpace)) decimalFormatSymbols.setDecimalSeparator(' ');
 			format.setDecimalFormatSymbols(decimalFormatSymbols);
 		}
-		this.getDocument().addDocumentListener(new DocumentListener() {
+		this.addPropertyChangeListener(TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
-			public void removeUpdate(DocumentEvent e) {
+			public void propertyChange(PropertyChangeEvent evt) {
 				updateValue();
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateValue();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// Do nothing
 			}
 		});
 		this.addFocusListener(new FocusListener() {
