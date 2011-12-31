@@ -9,7 +9,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
@@ -17,13 +19,14 @@ import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.CoolJTextField;
 
 public class ModeDialog extends AbstractDialog<Account, Mode> {
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean DEBUG = false;
 	
-	private JTextField name;
+	private CoolJTextField name;
 	private ModePanel leftPane;
 	private ModePanel rightPane;
 	private Mode original;
@@ -52,8 +55,8 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		c.gridx = 1;
 		c.weightx = 1.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		name = new JTextField(10);
-		name.getDocument().addDocumentListener(new AutoUpdateOkButtonDocumentListener(this));
+		name = new CoolJTextField(10);
+		name.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		name.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		idPanel.add(name, c);
 

@@ -4,7 +4,6 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
@@ -165,7 +164,7 @@ public class SubTransactionPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getAmountField() {
+	private AmountWidget getAmountField() {
 		if (amountField == null) {
 			amountField = new AmountWidget(LocalizationData.getLocale());
 			amountField.setToolTipText(LocalizationData.get("SubTransactionDialog.amount.tooltip")); //$NON-NLS-1$

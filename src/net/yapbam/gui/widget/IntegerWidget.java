@@ -2,11 +2,9 @@ package net.yapbam.gui.widget;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
-
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import net.yapbam.util.NullUtils;
 
@@ -14,7 +12,7 @@ import net.yapbam.util.NullUtils;
  *  You can set minimum and maximum values accepted by this field.
  *  It is a java bean, so you can listen to its VALUE_PROPERTY change.
  */
-public class IntegerWidget extends JTextField {
+public class IntegerWidget extends CoolJTextField {
 	private static final long serialVersionUID = 1L;
 	private final static boolean DEBUG = false;
 	/** The field value property name. */
@@ -71,20 +69,10 @@ public class IntegerWidget extends JTextField {
 				}
 			}
 		});
-		this.getDocument().addDocumentListener(new DocumentListener() {
+		this.addPropertyChangeListener(TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
-			public void removeUpdate(DocumentEvent e) {
+			public void propertyChange(PropertyChangeEvent evt) {
 				updateValue();
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateValue();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// Does nothing
 			}
 		});
 	}
