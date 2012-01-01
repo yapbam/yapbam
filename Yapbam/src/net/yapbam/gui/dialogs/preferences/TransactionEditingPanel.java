@@ -13,11 +13,13 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingOptions;
-import net.yapbam.gui.widget.BasicDocumentListener;
+import net.yapbam.gui.widget.CoolJTextField;
 
 import javax.swing.JSeparator;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -254,7 +256,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		ButtonGroup gp = new ButtonGroup();
 		gp.add(rdbtnLongStyle); gp.add(rdbtnShortStyle); gp.add(rdbtnCustomized);
 
-		formatPatternField = new JTextField();
+		formatPatternField = new CoolJTextField();
 		formatPatternField.setEnabled(false);
 		GridBagConstraints gbc_formatPatternField = new GridBagConstraints();
 		gbc_formatPatternField.insets = new Insets(0, 0, 5, 0);
@@ -263,9 +265,9 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gbc_formatPatternField.gridy = 2;
 		panel_format.add(formatPatternField, gbc_formatPatternField);
 		formatPatternField.setColumns(10);
-		formatPatternField.getDocument().addDocumentListener(new BasicDocumentListener() {
+		formatPatternField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
-			protected void modified() {
+			public void propertyChange(PropertyChangeEvent evt) {
 				rdbtnCustomized.setSelected(true);
 				updateOkDisabledCause();
 			}

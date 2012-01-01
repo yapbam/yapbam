@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.CoolJTextField;
 
 import java.awt.Font;
 import java.awt.Color;
@@ -17,9 +18,9 @@ import javax.swing.JTextField;
 import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class SeparatorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -122,15 +123,14 @@ public class SeparatorPanel extends JPanel {
 	 */
 	private JTextField getCustomSeparatorValue() {
 		if (customSeparatorValue == null) {
-			customSeparatorValue = new JTextField();
+			customSeparatorValue = new CoolJTextField();
 			customSeparatorValue.setColumns(1);
 			customSeparatorValue.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customizedChar.toolTip")); //$NON-NLS-1$
 			// We will not use a document listener to listen the field modifications because we want to change the field (truncate it to its fisrt character)
 			// and document listener can't modify the source event (it throws an IllegalStateException).
-			customSeparatorValue.addKeyListener(new KeyAdapter() {
+			customSeparatorValue.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new PropertyChangeListener() {
 				@Override
-				public void keyReleased(KeyEvent e) {
-					super.keyReleased(e);
+				public void propertyChange(PropertyChangeEvent evt) {
 					String text = customSeparatorValue.getText();
 					if (text.length()==0) {
 						defaultSeparatorButton.setSelected(true);

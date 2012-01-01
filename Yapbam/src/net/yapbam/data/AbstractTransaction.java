@@ -7,7 +7,7 @@ import java.util.List;
  * These transactions have a description, an amount, an account, a mode, a category and a list of subtransactions.
  */
 public abstract class AbstractTransaction implements Cloneable {
-	private static long currentId = 0;
+	private static volatile long currentId = 0;
 	
 	private long id;
 	private String description;
@@ -17,6 +17,11 @@ public abstract class AbstractTransaction implements Cloneable {
 	private Mode mode;
 	private Category category;
 	private List<SubTransaction> subTransactions;
+	
+	private static synchronized void setId(AbstractTransaction transaction) {
+		if (currentId==Long.MAX_VALUE) throw new RuntimeException("Transaction counter has an overflow");
+		transaction.id = currentId++;
+	}
 
 	/**
 	 * Constructor.
@@ -31,7 +36,6 @@ public abstract class AbstractTransaction implements Cloneable {
 	public AbstractTransaction(String description, String comment, double amount, Account account, Mode mode, Category category, List<SubTransaction> subTransactions) {
 		super();
 		if ((mode==null) || (category==null) || (description==null) || (subTransactions==null)) throw new IllegalArgumentException();
-		this.id = currentId++;
 		this.description = getCachedDescription(description);
 		if ((comment!=null) && (comment.isEmpty())) comment = null;
 		this.comment = comment;
@@ -40,6 +44,7 @@ public abstract class AbstractTransaction implements Cloneable {
 		this.mode = mode;
 		this.category = category;
 		this.subTransactions = subTransactions;
+		setId(this);
 	}
 	
 	// The following lines are a test to implement a description cache in order to prevent from duplicating same description into memory.
@@ -60,11 +65,11 @@ public abstract class AbstractTransaction implements Cloneable {
 		AbstractTransaction result = null;
 		try {
 			result = (AbstractTransaction) super.clone();
-			result.id = currentId++;
 			result.subTransactions = new ArrayList<SubTransaction>();
 			for (int i=0;i<getSubTransactionSize();i++) {
 				result.subTransactions.add(getSubTransaction(i));
 			}
+			setId(result);
 		} catch (CloneNotSupportedException e) {
 		}
 		return result;
