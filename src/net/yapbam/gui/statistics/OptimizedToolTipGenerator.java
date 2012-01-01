@@ -10,7 +10,7 @@ import org.jfree.data.general.PieDataset;
 class OptimizedToolTipGenerator implements PieToolTipGenerator {
 	Double total = null;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public String generateToolTip(PieDataset dataset, Comparable key) {
 		if (total == null) {

@@ -10,7 +10,6 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.BasicDocumentListener;
 import net.yapbam.gui.widget.PopupTextFieldList;
 
 import java.awt.Insets;
@@ -32,10 +31,9 @@ public class SubTransactionPanel extends JPanel {
 	private AmountWidget amountField = null;
 	private CategoryPanel categoryPanel = null;
 	private JLabel jLabel2 = null;
-	
-	private String description;  //  @jve:decl-index=0:
-	private Double amount;
 	private JCheckBox jCheckBox = null;
+	
+	private Double amount;
 	
 	private PredefinedDescriptionUpdater updater;
 
@@ -110,13 +108,10 @@ public class SubTransactionPanel extends JPanel {
 		this.add(jLabel2, gridBagConstraints11);
 		this.add(getJCheckBox(), gridBagConstraints12);
 		
-		this.description = descriptionField.getText();
-		descriptionField.getDocument().addDocumentListener(new BasicDocumentListener() {
+		descriptionField.addPropertyChangeListener(PopupTextFieldList.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
-			protected void modified() {
-				String old = description;
-				description = descriptionField.getText();
-				SubTransactionPanel.this.firePropertyChange(DESCRIPTION_PROPERTY, old, description);
+			public void propertyChange(PropertyChangeEvent evt) {
+				SubTransactionPanel.this.firePropertyChange(DESCRIPTION_PROPERTY, evt.getOldValue(), evt.getNewValue());
 			}
 		});
 		descriptionField.addFocusListener(AutoSelectFocusListener.INSTANCE);
@@ -228,10 +223,7 @@ public class SubTransactionPanel extends JPanel {
 	}
 	
 	public void setDescription(String description) {
-		Object old = this.description;
-		this.description = description;
 		this.descriptionField.setText(description);
-		this.firePropertyChange(DESCRIPTION_PROPERTY, old, description);
 	}
 	
 	public Category getCategory() {

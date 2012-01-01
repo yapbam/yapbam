@@ -13,7 +13,7 @@ import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.BasicDocumentListener;
+import net.yapbam.gui.widget.CoolJTextField;
 import net.yapbam.util.TextMatcher;
 
 import java.awt.Color;
@@ -25,6 +25,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -289,12 +291,12 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 	 */
 	private JTextField getDescription() {
 		if (description == null) {
-			description = new JTextField();
+			description = new CoolJTextField();
 			description.setToolTipText(wordings.descriptionToolTip);
 			description.addFocusListener(AutoSelectFocusListener.INSTANCE);
-			description.getDocument().addDocumentListener(new BasicDocumentListener() {
+			description.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new PropertyChangeListener() {
 				@Override
-				protected void modified() {
+				public void propertyChange(PropertyChangeEvent evt) {
 					checkConsistency();
 				}
 			});
