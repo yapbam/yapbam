@@ -55,8 +55,6 @@ public class TransactionEditingPanel extends PreferencePanel {
 	 */
 	public TransactionEditingPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
-		gridBagLayout.columnWeights = new double[]{1.0};
 		setLayout(gridBagLayout);
 		
 		chckbxAlertMeIf = new JCheckBox(LocalizationData.get("TransactionEditingPreferencesPanel.alertIfChangeChecked")); //$NON-NLS-1$
