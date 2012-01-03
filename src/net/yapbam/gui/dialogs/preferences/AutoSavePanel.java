@@ -8,22 +8,35 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JCheckBox;
 import java.awt.Insets;
+import java.math.BigInteger;
+
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import net.yapbam.gui.dialogs.preferences.backup.FTPPanel;
 
 public class AutoSavePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
+	
+	private JCheckBox chckbxBackup;
 	private IntegerWidget maxDiskField;
+	private JRadioButton rdbtnOnDisk;
+	private JTextField diskFolder;
+	private final javax.swing.ButtonGroup buttonGroup = new javax.swing.ButtonGroup();
+	private FTPPanel ftpPanel;
 
 	/**
 	 * Create the panel.
 	 */
 	public AutoSavePanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0};
 		gridBagLayout.columnWeights = new double[]{1.0};
 		setLayout(gridBagLayout);
 		
@@ -37,14 +50,12 @@ public class AutoSavePanel extends PreferencePanel {
 		gbc_intro.gridy = 0;
 		add(intro, gbc_intro);
 		
-		JCheckBox chckbxActiverLesSauvegardes = new JCheckBox("Activer les sauvegardes automatiques");
-		chckbxActiverLesSauvegardes.setToolTipText("Cochez cette case pour activer les sauvegardes");
-		GridBagConstraints gbc_chckbxActiverLesSauvegardes = new GridBagConstraints();
-		gbc_chckbxActiverLesSauvegardes.anchor = GridBagConstraints.WEST;
-		gbc_chckbxActiverLesSauvegardes.insets = new Insets(0, 0, 5, 0);
-		gbc_chckbxActiverLesSauvegardes.gridx = 0;
-		gbc_chckbxActiverLesSauvegardes.gridy = 1;
-		add(chckbxActiverLesSauvegardes, gbc_chckbxActiverLesSauvegardes);
+		GridBagConstraints gbc_chckbxBackup = new GridBagConstraints();
+		gbc_chckbxBackup.anchor = GridBagConstraints.WEST;
+		gbc_chckbxBackup.insets = new Insets(0, 0, 5, 0);
+		gbc_chckbxBackup.gridx = 0;
+		gbc_chckbxBackup.gridy = 1;
+		add(getChckbxBackup(), gbc_chckbxBackup);
 		
 		JPanel panelDisk = new JPanel();
 		panelDisk.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -55,38 +66,24 @@ public class AutoSavePanel extends PreferencePanel {
 		gbc_panelDisk.gridy = 2;
 		add(panelDisk, gbc_panelDisk);
 		GridBagLayout gbl_panelDisk = new GridBagLayout();
-		gbl_panelDisk.columnWidths = new int[]{0, 0};
-		gbl_panelDisk.rowHeights = new int[]{0, 0};
-		gbl_panelDisk.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelDisk.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panelDisk.columnWeights = new double[]{1.0, 0.0};
 		panelDisk.setLayout(gbl_panelDisk);
 		
-		JRadioButton rdbtnSurDisque = new JRadioButton("Sur disque");
-		rdbtnSurDisque.setToolTipText("Sélectionnez cette option pour effectuer vos sauvegardes sur un disque de votre ordinateur ou une clef USB");
-		GridBagConstraints gbc_rdbtnSurDisque = new GridBagConstraints();
-		gbc_rdbtnSurDisque.gridx = 0;
-		gbc_rdbtnSurDisque.gridy = 0;
-		panelDisk.add(rdbtnSurDisque, gbc_rdbtnSurDisque);
+		GridBagConstraints gbc_rdbtnOnDisk = new GridBagConstraints();
+		gbc_rdbtnOnDisk.gridwidth = 0;
+		gbc_rdbtnOnDisk.insets = new Insets(0, 0, 5, 0);
+		gbc_rdbtnOnDisk.weightx = 1.0;
+		gbc_rdbtnOnDisk.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnOnDisk.gridx = 0;
+		gbc_rdbtnOnDisk.gridy = 0;
+		panelDisk.add(getRdbtnOnDisk(), gbc_rdbtnOnDisk);
 		
-		JPanel panelFTP = new JPanel();
-		panelFTP.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GridBagConstraints gbc_panelFTP = new GridBagConstraints();
-		gbc_panelFTP.insets = new Insets(5, 5, 5, 0);
-		gbc_panelFTP.fill = GridBagConstraints.BOTH;
-		gbc_panelFTP.gridx = 0;
-		gbc_panelFTP.gridy = 3;
-		add(panelFTP, gbc_panelFTP);
-		GridBagLayout gbl_panelFTP = new GridBagLayout();
-		panelFTP.setLayout(gbl_panelFTP);
-		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Sur un serveur FTP");
-		rdbtnNewRadioButton.setToolTipText("Sélectionnez cette option pour effectuer la sauvegarde sur un serveur FTP");
-		GridBagConstraints gbc_rdbtnNewRadioButton = new GridBagConstraints();
-		gbc_rdbtnNewRadioButton.weightx = 1.0;
-		gbc_rdbtnNewRadioButton.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnNewRadioButton.gridx = 0;
-		gbc_rdbtnNewRadioButton.gridy = 0;
-		panelFTP.add(rdbtnNewRadioButton, gbc_rdbtnNewRadioButton);
+		GridBagConstraints gbc_ftpPanel = new GridBagConstraints();
+		gbc_ftpPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_ftpPanel.fill = GridBagConstraints.BOTH;
+		gbc_ftpPanel.gridx = 0;
+		gbc_ftpPanel.gridy = 3;
+		add(getFtpPanel(), gbc_ftpPanel);
 		
 		JPanel panelSize = new JPanel();
 		GridBagConstraints gbc_panelSize = new GridBagConstraints();
@@ -106,16 +103,12 @@ public class AutoSavePanel extends PreferencePanel {
 		gbc_lblTailleMaximumRserve.gridy = 0;
 		panelSize.add(lblTailleMaximumRserve, gbc_lblTailleMaximumRserve);
 		
-		maxDiskField = new IntegerWidget();
-		maxDiskField.setLocale(LocalizationData.getLocale());
-		maxDiskField.setToolTipText("Entrez ici la taille maximum allouée au sauvegardes. Une fois cette taille atteinte, les sauvegardes les plus anciennes seront effacées");
 		GridBagConstraints gbc_maxDiskField = new GridBagConstraints();
 		gbc_maxDiskField.insets = new Insets(0, 5, 0, 5);
 		gbc_maxDiskField.anchor = GridBagConstraints.WEST;
 		gbc_maxDiskField.gridx = 1;
 		gbc_maxDiskField.gridy = 0;
-		panelSize.add(maxDiskField, gbc_maxDiskField);
-		maxDiskField.setColumns(5);
+		panelSize.add(getMaxDiskField(), gbc_maxDiskField);
 		
 		JLabel lblNewLabel = new JLabel("Mo");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -133,6 +126,85 @@ public class AutoSavePanel extends PreferencePanel {
 		gbc_panel.gridy = 5;
 		add(panel, gbc_panel);
 
+		JRadioButton defaultDisk = new JRadioButton("Emplacement par d\u00E9faut ()");
+		buttonGroup.add(defaultDisk);
+		GridBagConstraints gbc_defaultDisk = new GridBagConstraints();
+		gbc_defaultDisk.insets = new Insets(0, 10, 5, 0);
+		gbc_defaultDisk.anchor = GridBagConstraints.WEST;
+		gbc_defaultDisk.gridx = 0;
+		gbc_defaultDisk.gridy = 1;
+		panelDisk.add(defaultDisk, gbc_defaultDisk);
+		
+		JRadioButton customDisk = new JRadioButton("Emplacement personnalis\u00E9");
+		buttonGroup.add(customDisk);
+		GridBagConstraints gbc_customDisk = new GridBagConstraints();
+		gbc_customDisk.insets = new Insets(0, 10, 5, 0);
+		gbc_customDisk.anchor = GridBagConstraints.WEST;
+		gbc_customDisk.gridx = 0;
+		gbc_customDisk.gridy = 2;
+		panelDisk.add(customDisk, gbc_customDisk);
+		
+		diskFolder = new JTextField();
+		diskFolder.setEditable(false);
+		GridBagConstraints gbc_diskFolder = new GridBagConstraints();
+		gbc_diskFolder.insets = new Insets(0, 15, 0, 5);
+		gbc_diskFolder.ipadx = 10;
+		gbc_diskFolder.anchor = GridBagConstraints.WEST;
+		gbc_diskFolder.fill = GridBagConstraints.HORIZONTAL;
+		gbc_diskFolder.gridx = 0;
+		gbc_diskFolder.gridy = 3;
+		panelDisk.add(diskFolder, gbc_diskFolder);
+		diskFolder.setColumns(10);
+		
+		JButton btnNewButton_1 = new JButton("Choisir");
+		btnNewButton_1.setToolTipText("Cliquez sur ce bouton pour choisir l'emplacement o\u00F9 sauvegarder vos donn\u00E9es");
+		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+		gbc_btnNewButton_1.gridx = 1;
+		gbc_btnNewButton_1.gridy = 3;
+		panelDisk.add(btnNewButton_1, gbc_btnNewButton_1);
+	}
+
+	public IntegerWidget getMaxDiskField() {
+		if (maxDiskField==null) {
+			maxDiskField = new IntegerWidget(BigInteger.ONE, null);
+			maxDiskField.setLocale(LocalizationData.getLocale());
+			maxDiskField.setToolTipText("<html>Entrez ici la l'espace maximum alloué au sauvegardes.<br>Une fois la limite atteinte, les sauvegardes les plus anciennes seront effacées.<br><br>Laissez ce champ vide pour ne pas limiter l'espace dédié au sauvegardes</html>");
+			maxDiskField.setColumns(5);
+		}
+		return maxDiskField;
+	}
+
+	public JCheckBox getChckbxBackup() {
+		if (chckbxBackup==null) {
+			chckbxBackup = new JCheckBox("Activer les sauvegardes automatiques");
+			chckbxBackup.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					boolean enabled = e.getStateChange()==ItemEvent.SELECTED;
+					getRdbtnOnDisk().setEnabled(enabled);
+					getFtpPanel().setEnabled(enabled);
+					getMaxDiskField().setEnabled(enabled);
+					getMaxDiskField().setEditable(enabled);
+				}
+			});
+			chckbxBackup.setToolTipText("Cochez cette case pour activer les sauvegardes");
+		}
+		return chckbxBackup;
+	}
+	
+	public JRadioButton getRdbtnOnDisk() {
+		if (rdbtnOnDisk==null) {
+			rdbtnOnDisk = new JRadioButton("Sur disque");
+			rdbtnOnDisk.setToolTipText("Sélectionnez cette option pour effectuer vos sauvegardes sur un disque de votre ordinateur ou une clef USB");
+			rdbtnOnDisk.setSelected(true);
+		}
+		return rdbtnOnDisk;
+	}
+
+	private FTPPanel getFtpPanel() {
+		if (ftpPanel == null) {
+			ftpPanel = new FTPPanel();
+		}
+		return ftpPanel;
 	}
 
 	@Override
@@ -150,5 +222,4 @@ public class AutoSavePanel extends PreferencePanel {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
