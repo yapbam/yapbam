@@ -42,4 +42,10 @@ public final class Portable {
 	public static File getUpdateFileDirectory() {
 		return new File(getDataDirectory(),"update");
 	}
+
+	public static File getBackupDirectory() {
+		File file = getDataDirectory();
+		file = new File(file,"Backup");
+		return file;
+	}
 }

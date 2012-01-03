@@ -52,10 +52,10 @@ public class ProxyPanel extends PreferencePanel {
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.weighty = 1.0;
 		gridBagConstraints2.gridx = 0;
-		gridBagConstraints2.weighty = 1.0D;
-		gridBagConstraints2.fill = GridBagConstraints.BOTH;
-		gridBagConstraints2.anchor = GridBagConstraints.WEST;
+		gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints2.anchor = GridBagConstraints.NORTH;
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridy = 2;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -64,11 +64,11 @@ public class ProxyPanel extends PreferencePanel {
 		gridBagConstraints1.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.gridy = 0;
-		this.setSize(300, 200);
+		this.setSize(388, 282);
 		this.setLayout(new GridBagLayout());
 		this.add(getNoProxyButton(), gridBagConstraints);
 		this.add(getProxyButton(), gridBagConstraints1);
@@ -144,7 +144,6 @@ public class ProxyPanel extends PreferencePanel {
 			gridBagConstraints7.fill = GridBagConstraints.BOTH;
 			gridBagConstraints7.gridwidth = 2;
 			gridBagConstraints7.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints7.weighty = 1.0D;
 			gridBagConstraints7.gridy = 2;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 0;
