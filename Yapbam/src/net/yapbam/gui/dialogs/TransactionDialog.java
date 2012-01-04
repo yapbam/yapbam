@@ -204,6 +204,10 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	public void setTransactionDate(Date date) {
 		this.date.setDate(date);
 	}
+	
+	public void setStatement(String statement) {
+		this.statement.setText(statement==null?"":statement);
+	}
 
 	@Override
 	protected void setContent(AbstractTransaction transaction) {

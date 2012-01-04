@@ -16,7 +16,7 @@ color: #ff9900;
 -->
 </style></head>
 <body>
-<h1>Version 0.9.9 (02/01/2012)</h1>
+<h1>Version 0.10.0 (02/01/2012)</h1>
 <h2>Bug connu</h2>
 <ul>
 <li>Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on
@@ -30,30 +30,36 @@ La meilleure façon de régler le problem est d'utiliser Java 1.7.</li>
 <h2>Nouveautés de cette version</h2>
 <ul>
 <li>Changements :
-<ul>
-<li>Yapbam est à présent également disponible en allemand
-(un grand merci à Jean-René Thies).</li>
-<li>Ajout d'un bouton "Générer les opérations périodiques"
-dans la table des
-opérations et dans l'onglet d'administration des opérations périodiques.</li>
+<ul><li>Lorsqu'on duplique une opération pointée, le numéro de relevé
+est mis à blanc (sauf si la fonction de remplissage automatique du
+numéro de relevé est activé, auquel cas, il est renseigné
+automatiquement).</li>
 </ul>
 </li>
 <li><span class="bugFix">Corrections de bugs :</span>
-<ul>
-<li>Dans le dialogue de saisie des sous-opérations, on
-pouvait valider
-une sous-opération sans libellé en effaçant le libellé et en cliquant
-très vite sur le bouton "Valider".</li>
-<li>Quand on entrait une valeur incorrecte dans le champ
-"Personnalisé" dans l'onglet "Edition des opérations" des préférences,
-on&nbsp;avait le temps de cliquer sur le bouton "Valider" avant
-qu'il ne devienne grisé.</li><li>Dans certains dialogues lorsqu'on cliquait sur le bouton "Valider" alors qu'un champ de date ou de montant était édité, le clic ne vallidait pas la saisie.</li>
+<ul><li>Quand on validait le dialogue des préférences, Yapbam redémarrait systématiquement, même que ce n'était pas utile (TODO).</li>
 </ul>
 </li>
 </ul>
 <hr>
 <h1>Versions précédentes</h1>
-<h2>Version 0.9.8 (18/12/2011)</h2>
+<h2>Version 0.9.9 (02/01/2012)</h2><ul><li>Changements :
+<ul><li>Yapbam est à présent également disponible en allemand
+(un grand merci à Jean-René Thies).</li><li>Ajout d'un bouton "Générer les opérations périodiques"
+dans la table des
+opérations et dans l'onglet d'administration des opérations périodiques.</li></ul>
+</li><li><span class="bugFix">Corrections de bugs :</span>
+<ul><li>Dans le dialogue de saisie des sous-opérations, on
+pouvait valider
+une sous-opération sans libellé en effaçant le libellé et en cliquant
+très vite sur le bouton "Valider".</li><li>Quand on entrait une valeur incorrecte dans le champ
+"Personnalisé" dans l'onglet "Edition des opérations" des préférences,
+on&nbsp;avait le temps de cliquer sur le bouton "Valider" avant
+qu'il ne devienne grisé.</li><li>Dans
+certains dialogues lorsqu'on cliquait sur le bouton "Valider" alors
+qu'un champ de date ou de montant était édité, le clic ne vallidait pas
+la saisie.</li></ul>
+</li></ul><h2>Version 0.9.8 (18/12/2011)</h2>
 <ul>
 <li>Changement :
 <ul>
