@@ -13,6 +13,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -92,10 +93,7 @@ public class MainFrame extends JFrame implements DataListener {
 			}
 		});
 		// Set the look and feel
-		try {
-			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
-			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
-		} catch (Exception e) {}
+		setLookAndFeel();
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -370,10 +368,7 @@ public class MainFrame extends JFrame implements DataListener {
 			restartData[i] = this.plugins[i].getRestartData();
 		}
 		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-		try {
-			UIManager.setLookAndFeel(Preferences.INSTANCE.getLookAndFeel());
-			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
-		} catch (Exception e) {}
+		setLookAndFeel();
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -381,6 +376,24 @@ public class MainFrame extends JFrame implements DataListener {
 				new MainFrame(filteredData, restartData, null);
 			}
 		});
+	}
+	
+	public static void setLookAndFeel() {
+		try {
+			String lookAndFeelName = Preferences.INSTANCE.getLookAndFeel();
+			LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
+			String lookAndFeelClass = UIManager.getSystemLookAndFeelClassName();
+			for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
+				// Prior the 0.9.8, the class name were used instead of the generic name.
+				// It caused problem when changing java version (ie: Nimbus in java 1.6 was implemented by a class in com.sun.etc and in javax.swing in java 1.7)
+				if (lookAndFeelInfo.getName().equals(lookAndFeelName)) {
+					lookAndFeelClass = lookAndFeelInfo.getClassName();
+					break;
+				}
+			}
+			UIManager.setLookAndFeel(lookAndFeelClass);
+			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
+		} catch (Exception e) {}
 	}
 
 	private void updateSelectedPlugin() {
