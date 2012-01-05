@@ -165,27 +165,31 @@ public class Preferences {
 	}
 	
 	/** Gets the preferred look and feel.
-	 * <BR>This method guarantees that the returned l&f is installed in this JVM.
-	 * If the preferred l&f is not installed, it returns the system look and feel.
+	 * <br>If the preferred l&f is not installed, it returns the default look and feel.
 	 * @return the name of the preferred look and feel class
 	 */
 	public String getLookAndFeel() {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
+		if (LOOK_AND_FEEL_JAVA_VALUE.equalsIgnoreCase(value)) {
+			// Versions before 0.7.4 used LOOK_AND_FEEL_JAVA_VALUE and LOOK_AND_FEEL_CUSTOM_VALUE to code the look and feel
+			value = getLookAndFeelName(UIManager.getCrossPlatformLookAndFeelClassName());
+		} else if (LOOK_AND_FEEL_CUSTOM_VALUE.equalsIgnoreCase(value)) {
+			value = getLookAndFeelName(UIManager.getSystemLookAndFeelClassName());
+		}
 		if (value==null) {
 			value = "Nimbus"; // This is the default Yapbam L&F //$NON-NLS-1$
-		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_JAVA_VALUE)) {
-			// Versions before 0.7.4 used LOOK_AND_FEEL_JAVA_VALUE and LOOK_AND_FEEL_CUSTOM_VALUE to code the look and feel
-			return UIManager.getCrossPlatformLookAndFeelClassName();
-		} else if (value.equalsIgnoreCase(LOOK_AND_FEEL_CUSTOM_VALUE)) {
-			return UIManager.getSystemLookAndFeelClassName();
 		}
+		return value;
+	}
+	
+	private String getLookAndFeelName(String className) {
 		LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
 		for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
 			// Prior the 0.9.8, the class name were used instead of the generic name.
 			// It caused problem when changing java version (ie: Nimbus in java 1.6 was implemented by a class in com.sun.etc and in javax.swing in java 1.7)
-			if (lookAndFeelInfo.getClassName().equals(value) || lookAndFeelInfo.getName().equals(value)) return lookAndFeelInfo.getClassName();
+			if (lookAndFeelInfo.getClassName().equals(className)) return lookAndFeelInfo.getName();
 		}
-		return UIManager.getSystemLookAndFeelClassName();
+		return null;
 	}
 
 	public void setLookAndFeel(String lookAndFeelName) {
