@@ -178,6 +178,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 		class DoShowDialog implements Runnable {
 			boolean proceedConfirmed;
 
+			@Override
 			public void run() {
 				Object[] options = { LocalizationData.get("GenericButton.cancel"), LocalizationData.get("Update.DownloadFailed.retry") };
 				int n = JOptionPane.showOptionDialog(owner, LocalizationData.get("Update.DownloadFailed.message"),

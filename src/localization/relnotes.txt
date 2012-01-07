@@ -1,0 +1,199 @@
+﻿version	next
+known
+	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problem est d'utiliser Java 1.7.
+improvement
+	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
+	Lorsqu'on duplique une opération pointée, le numéro de relevé est mis à blanc (sauf si la fonction de remplissage automatique du numéro de relevé est activé, auquel cas, il est renseigné automatiquement).
+fix
+	Quand on validait le dialogue des préférences, Yapbam redémarrait systématiquement, même quand ce n'était pas utile.
+	Le convertisseur de devises ne fonctionnait pas quand la langue sélectionnée était l'allemand.
+
+version	0.9.9 (02/01/2012)
+improvement
+	Yapbam est à présent également disponible en allemand (un grand merci à Jean-René Thies).
+	Ajout d'un bouton "Générer les opérations périodiques" dans la table des opérations et dans l'onglet d'administration des opérations périodiques.
+fix
+	Dans le dialogue de saisie des sous-opérations, on pouvait valider une sous-opération sans libellé en effaçant le libellé et en cliquant très vite sur le bouton "Valider".
+	Quand on entrait une valeur incorrecte dans le champ "Personnalisé" dans l'onglet "Edition des opérations" des préférences, on avait le temps de cliquer sur le bouton "Valider" avant qu'il ne devienne grisé.
+	Dans certains dialogues lorsqu'on cliquait sur le bouton "Valider" alors qu'un champ de date ou de montant était édité, le clic ne validait pas la saisie.
+
+version	0.9.8 (18/12/2011)
+improvement
+	Lors de la création en masse d'opérations, la date est maintenant conservée lorsqu'on clique sur le bouton "Suivant".
+fix
+	Certains séparateurs (par exemple \) n'étaient pas supportés dans l'import de fichiers. Les utiliser provoquait le plantage du dialogue d'import de fichiers.
+	Utiliser des noms de comptes, mode de paiement ou de catégories commençant ou terminant par des espaces pouvait provoquer des plantages dans les dialogues de création de ces objets.
+	Les icônes et messages d'alerte (seuil de solde ou opérations périodiques à générer) étaient parfois affichés sur le mauvais onglet.
+	Quand, dans un dialogue de sélection de fichier, vous sélectionniez un raccourci (lien symbolique), Yapbam ne suivait pas le lien pour lire (ou sauver vers) la cible du lien, mais lisait/sauvait directement dans le fichier raccourci.
+
+version	0.9.7 (13/11/2011)
+improvement
+	Il est désormais possible d'afficher les soldes relatifs dans l'onglet des transactions (Il suffit de cliquer sur un solde pour en faire la référence pour les autres soldes).
+	Les composants de l'onglet "opérations" sont réarrangés. Les boutons de création/édition/suppression d'opérations sont à présent sous la liste, comme dans les listes affichées dans l'onglet "Administration".<br/>Ajout d'un bouton pour créer les opérations en masse. Le menu de sélection des colonnes est maintenant en haut à droite, ce qui semble une position plus classique (idem dans la vue relevé de compte).
+fix
+	La saisie d'une opération datée d'avant le 1/1/1970 provoquait des erreurs.
+	Le filtre n'était jamais enregistré lorsque les données n'étaient pas enregistrées avant la fermeture de la fenêtre de Yapbam.
+	L'importation d'un fichier vide provoquait une erreur.
+	Cliquer sur un bouton d'aide provoquait un plantage si java était dans l'incapacité d'ouvrir un navigateur web.
+
+version	0.9.6 (23/10/2011)
+fix
+	L'affichage de l'historique du solde d'un compte possédant un solde initial nul et uniquement des opérations de montant nul provoquait une erreur.
+	Correction d'un bug dans l'assistant de saisie des sous-opérations : Sélectionner un libellé qui n'apparraissait&nbsp;dans aucune opération du compte de l'opération éditée entrainait le plantage de l'assistant.
+
+version	0.9.5 (16/10/2011)
+improvement
+	La sauvegarde du filtre entre deux lancements de Yapbam est de nouveau disponible pour les fichiers de données cryptés.
+	Ajout de messages d'erreur spécifiques en cas d'échec de la sauvegarde de l'état au démarrage et des préférences.
+fix
+	Sous windows, lorsque les fichiers situés dans le répertoire data étaient cachés, l'état et/ou les préférences n'étaient pas sauvegardés. De même, le convertisseur de devise ne fonctionnait pas.
+
+version	0.9.4 (02/10/2011)
+fix
+	L'export ne fonctionnait pas si on sélectionnait les commentaires dans les champs à exporter.
+	Règle un problème avec le JDK 1.7 : La fermeture de Yapbam ne fermait pas le processus de la machine virtuelle java.
+
+version	0.9.3 (25/09/2011)
+fix
+	Correction d'un bug dans la saisie des montants, pour les pays où le séparateur de milliers est le point (Belgique, par exemple). Lorsqu'on saisissait un nombre sans unité monétaire (exemple 5,25), ce nombre était transformé en un nombre différent à la sortie du champ (exemple 525&nbsp;€).
+	Correction d'un bug dans la vue "Relevé de comptes" : Lorsqu'on ouvrait plusieurs comptes pendant l'éxécution de Yapbam, l'édition des opérations entrainait l'apparition du dialogue d'édition de l'opération plusieurs fois.
+
+version	0.9.2 (18/09/2011)
+fix
+	Correction d'un bug majeur de la version 0.9.0. Quand Yapbam était configuré pour mémoriser le filtre entre deux lancements, et que Yapbam était quitter alors que le fichier ouvert était protégé par un mot de passe, il était impossible de redémarrer Yapbam. La seule façon de réouvrir le fichier était de supprimer la ligne "filter" dans le fichier Data/.yapbam.<br/>Afin de régler le plus rapidement possible ce problème, et dans la mesure où il est causé par une erreur de conception de la sauvegarde du filtre, cette fonctionnalité est désactivé, dans cette version, pour les fichiers protégés par mot de passe. Elle sera réintroduite dans une version future.
+	Correction d'un bug dans l'importation : Lorsque le fichier importé contenait des erreurs et que la dernière colonne du fichier n'était attachée à aucune attribut d'opération, l'importation plantait.
+
+version	0.9.1 (16/09/2011)
+fix
+	Correction d'un bug important : L'exportation des opérations était impossible si une exportation avait été déjà effectuée avec une version antérieure de Yapbam.
+	Correction d'un bug mineur dans la saisie des modes de paiement : Le bouton "valider" n'était pas toujours correctement invalidé quand les champs n'étaient pas renseignés. La validation dans cette configuration provoquait une erreur.
+
+version	0.9.0 (14/09/2011)
+improvement
+	Ajout d'un onglet dans le dialogue des préférences pour régler quelles informations sont conservées entre deux exécutions de Yapbam.
+	Ajout de la possibilité de mémoriser le filtre entre deux exécutions de Yapbam.
+	Ajout d'un champ "commentaire" aux opérations.<li>Ajout d'un mode de création en masse des opérations.
+	Modification du script yapbam.sh pour permettre aux utilisateurs de lancer yapbam plus facilement sur MacOS.
+fix
+	Lorsqu'il manquait des colonnes en fin de certaines lignes importées, l'importation plantait.
+	Lorsque, dans le dialogue de saisie des opérations, on choississait un libellé prédéfini alors que le champ date était vide, une erreur, sans aucune conséquence, était remontée (apparition du dialogue d'erreur).
+	Le dialogue de création de mode de paiement permettait de cocher la case "Utiliser un chéquier" puis de décocher "Utilisable pour les dépenses". La validation dans cette configuration provoquait une erreur.
+	Correction d'un bug mineur dans le dialogue de création des sous-opérations: Quand on choisissait un libellé en cliquant dans le menu des libellés suggérés, la description était bien reportée dans le champ MAIS, quand on validait la saisie, le libellé enregistré était celui saisi avant la valeur prédéfinie !
+	Saisir une expression régulière incorrecte dans la dialogue "Filtre personnalisé" causait une erreur quand on confirmait la saisie.
+
+version	0.8.8 (03/08/2011)
+fix
+	Dans la table des opérations de l'onglet "Historique du solde" : Lorsqu'une opération était modifiée, la table était mise à jour mais présentait des données incorrectes.
+	L'import échouait lorsque le fichier comportait plus de neuf colonnes et contenait des valeurs incorrectes.
+	Les modifications d'opérations périodiques faite dans l'administration n'étaient pas reportées dans le tableau sans redémarrage de Yapbam.
+
+version	0.8.7 (23/07/2011)
+improvement
+	Le dialogue "Filtre personnalisé" est moins haut. Il est à présent compatible avec les écrans de 768px de haut.
+fix
+	Dans les dialogues :<ul><li>Le bouton "Annuler" des dialogues de saisie des catégories et des comptes validait la saisie !</li><li>Dans certains dialogues, on pouvait entrer une valeur incorrecte et valider en cliquant très rapidement le bouton valider après avoir saisie la valeur incorrecte.</li></ul>
+	Dans l'onglet d'administration :<ul><li>Les boutons "Editer", "Dupliquer" et "Supprimer" n'étaient pas grisés lorsqu'aucune information n'était sélectionnée. Parfois cela pouvait entrainer des plantages.</li><li>Effacer le contenu d'une cellule "solde initial" dans l'onglet de gestion des comptes provoquait un plantage.</li></ul>
+	Dans le dialogue d'édition des opérations : Cocher la case "recette" quand le champ "montant" était vide provoquait une erreur.
+	Dans le dialogue "Filtre personnalisé" : Le bouton "Effacer tous les filtres" n'effaçait pas le filtre sur la nature recette/dépense des opérations.
+
+version	0.8.6 (05/06/2011)
+fix
+	Déplacer un onglet hors de la zone des onglets provoquait une erreur.
+
+version	0.8.5 (31/05/2011)
+fix
+	L'assistant de saisie pouvait planter lorsqu'un filtre était activé et que la description choisie ne figurait pas dans les opérations filtrées.
+
+version	0.8.4 (30/05/2011)
+improvement
+	L'ordre des onglets peut à présent être modifié.
+	Ajout de raccourcis clavier pour éditer ou dupliquer une opération.
+	Ajout d'un menu pour pointer une opération.
+	Réduit les menus contextuels dans l'onglet "Statistiques" aux items utiles (par exemple : plus de "Enregistrer sous". Il créait un fichier illisible).
+fix
+	Si le fichier ouvert à l'ouverture de Yapbam présentait une alerte sur le solde, celle-ci n'était pas immédiatement affichée dans l'onglet "Historique du solde".
+	Sélectionner une opération dans les onglets "Relevés de compte" ou "Historique du solde" laissait les menus Effacer/Modifier/Dupliquer grisés.
+	Correction de problèmes de localisation (des libellés qui n'apparaissaient pas dans la bonne langue).
+
+version	0.8.3 (08/05/2011)
+improvement
+	Ajoute un onglet de résumé des bilans de l'ensemble des comptes.
+	Ajoute une table des opération dans l'onglet "Historique du solde". Cette table récapitule les opérations triées suivant leur date de valeur et le solde restant après chacune d'elle.
+	Lorsqu'un intervalle de dates de valeur est sélectionné dans le filtre, le graphique d'évolution du solde débute et termine aux dates de valeur spécifiées dans le filtre.
+	Le mode pointage est déplacé dans la vue "Relevés de comptes". Cette vue s'enrichit des colonnes "catégorie" et "Mode", d'un menu permettant d'afficher/masquer les colonnes, et de la possibilité de trier la vue suivant la colonne de son choix.
+	Ajout d'un message de confirmation lorsque l'on exporte la vue budgétaire vers un fichier déjà existant.
+	Ajout d'options d'édition (dans le menu "Préférences") permettant la saisie automatique du relevé, d'être alerté (ou pas) lors de la modification d'une opération pointée, ou lors de l'effacement d'une opération, etc...
+fix
+	Dans la vue "Relevés de compte" :<ul><li>Lors de la modification ou de la création d'une opération, le relevé sélectionné pouvait être modifié.</li><li>Lorsque que le filtrage des opérations était activé, et qu'on changeait le relevé de compte, les opérations affichées tenaient compte du filtre.</li></ul>
+	Le mot de passe était supprimé lorsque le fichier était sauvé à nouveau.
+	L'aide ne fonctionnait pas sous Linux.
+	Le menu contextuel sur les graphiques de l'onglet "Statistiques" provoquait une erreur.
+
+version	0.8.2 (10/04/2011)
+improvement
+	Lorsque vous créez une nouvelle opération (ou opération périodique), et que le filtre n'autorise qu'un seul compte, celui-ci est maintenant automatiquement sélectionné dans le dialogue de création de l'opération.
+	D'une exécution à l'autre, les colonnes cachées de la table des opérations sont mémorisées. Les colonnes sont à présent listée dans le menu "Afficher les colonnes ..." dans le même ordre que dans la table des opérations.
+	D'une exécution à l'autre, les tailles et positions des colonnes de l'onglet "gestion des comptes" sont sauvegardées. De même pour les tableaux intervenant dans les dialogues (dans le dialogue d'édition d'une opération, par exemple), les réglages des impressions (format de papier, marges, etc ...), et les réglages de l'import/export.
+	Amélioration de l'assistant de saisie, et extension de celui-ci aux libellés de sous-opérations.
+	Ajoute l'impression basique des relevés de compte.
+fix
+	Un champ de montant vide dans un fichier importé pouvait empêcher l'import de tout le fichier.
+
+version	0.8.1 (05/03/2011)
+improvement
+	Le camembert de dépenses par catégorie est maintenant trié par libellé croissant de catégorie.
+	Ajout d'un bouton "Tutoriel" dans l'écran d'accueil.
+fix
+	Le changement de pays/langue ne changeait pas certains format de date.
+	Lorsque d'anciennes opérations n'étaient pas pointées, le relevé "Non pointé" pouvait ne pas être le plus récent dans l'onglet "Relevés de compte". Ceci rendait les soldes en début et fin de périodes faux pour les relevés situés avant le relevé "Non pointé".
+
+version	0.8.0 (04/02/2011)
+improvement
+	Ajout de nouveaux thèmes visuels (Voir le dialogue accessible par le menu "Fichier/Préférences", onglet "Apparence").<br/>Nous vous recommandons de tester l'apparence "Nimbus".
+	Ajout d'un écran de bienvenue, regroupant des raccourcis utiles et des astuces d'utilisation de Yapbam.
+	Introduction d'un nouveau mécanisme de mise à jour. Plus besoin de télécharger manuellement les mises à jour, elles s'installeront automatiquement.
+	Amélioration de l'assistant de saisie. Les choix les plus probables sont à présent présentés en premier (précédemment, les choix étaient classés par ordre alphabétique).
+	Ajout de la possibilité d'envoyer des rapports d'erreur à l'équipe Yapbam lorsqu'un problème survient.
+	Ajout d'un message d'alerte si vous tentez d'enregister un fichier de données dans le répertoire d'installation de Yapbam (ce qui pourrait provoquer la perte de vos données).
+fix
+	L'utilisation des fléches hautes et basse permettait de saisir des valeurs hors des limites autorisées.
+	Dans l'édition d'une opération, lorsque vous choisissiez un libellé avec l'assistant de saisie, et que le mode déduit impliquait l'utilisation d'un carnet de chèque, le champ numéro n'était pas correctement initialisé.
+	Créer une recette d'un montant nul pouvait provoquer des erreurs.
+	Ne plus autoriser un mode de paiment pour un type d'opération (recette/dépense) pour lequel il était précédemment utilisé pouvait provoquer des erreurs.
+	Créer une catégorie dans une sous-opération pouvait changer la catégorie de l'opération.
+	Créer une opération périodique inactive sans données de périodicité empéchait l'affichage de l'onglet d'administration.
+
+version	0.7.4 (12/12/2010)
+fix
+	Le filtrage des opérations de montant égal à une certaine valeur ne fonctionnait pas (toutes les opérations avec un montant supérieur ou égale à la valeur étaient retenues).
+	Dans le convertisseur de devises, aucune fenêtre n'apparraissait lorsque la connexion à la BCE échouait.
+	Correction de bugs mineurs dans la vue "rélevé de comptes'.
+
+version	0.7.3 (26/11/2010)
+improvement
+	Ajout d'un script de lancement pour Linux.
+fix
+	L'onglet statistique affichait des graphiques erronés depuis la 0.7.2.
+
+version	0.7.2 (23/11/2010)
+improvement
+	Amélioration mineure du mode pointage (la modification du champ date coche automatiquement "Remplacer la date de valeur par").
+	Le menu "filtre" est à présent caché dans la vue "Relevés de compte" (cette vue ne prend pas en compte le filtrage).
+	Ajout de cases à cocher "Dépenses" et "Recettes" dans le dialogue "Filtre personnalisé".
+	La structure du répertoire contenant l'application est modifiée pour correspondre à celle de PortableApps.com.
+fix
+	Correction de bugs mineurs dans le dialogue "Filtre personnalisé".
+	Sous Windows Vista, une fois l'exécution de Yapbam.exe terminée, Vista demandait si le programme avait fonctionné correctement
+
+version	0.7.1 (09/11/2010)
+improvement
+	Amélioration de performance : Les tâches d'administration sont beaucoup plus rapides que dans les versions précédentes (Par exemple, la suppression d'un compte ou d'une catégorie).
+fix
+	Dans certains pays, la prise en compte des séparateurs de milliers dans les montants de transaction était incorrecte(par exemple, en France 5 000,00 était considéré comme une valeur invalide).
+	Parfois, l'importation ne faisait ... rien ! :-(
+
+version	0.7.0 (17/10/2010)
+improvement
+  Ajout d'un onglet de consultation des relevés de comptes.
+  Lors du lancement de Yapbam, la table des transactions est automatiquement scrollée jusqu'aux opérations les plus récentes.
+

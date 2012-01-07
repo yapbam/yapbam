@@ -41,6 +41,7 @@ abstract class AbstractPredefinedComputer implements PredefinedDescriptionComput
 		// Sort the map by ranking
 		LinkedList<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(map.entrySet());
 		Collections.sort(list, new Comparator<Object>() {
+			@Override
 			@SuppressWarnings("unchecked")
 			public int compare(Object o1, Object o2) {
 				return -((Comparable<Double>) ((Map.Entry<String, Double>) (o1)).getValue()).compareTo(((Map.Entry<String, Double>) (o2)).getValue());
