@@ -11,8 +11,16 @@ import java.text.MessageFormat;
 
 import java.awt.Dimension;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.net.URL;
 
 import javax.swing.JTabbedPane;
+
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+
+import net.yapbam.relnotes.ReleaseNotesFormatter;
 import net.yapbam.update.VersionManager;
 
 public class AboutPanel extends AbstractInfoPanel {
@@ -56,7 +64,16 @@ public class AboutPanel extends AbstractInfoPanel {
 	 */
 	private HTMLPane getRelnotesPane() throws IOException {
 		if (relnotesPane == null) {
-			relnotesPane = new HTMLPane(LocalizationData.getURL("Release notes.html")); //$NON-NLS-1$
+			URL url = LocalizationData.getURL("relnotes.txt"); //$NON-NLS-1$
+			Reader reader = new InputStreamReader(url.openStream(), "UTF-8");
+			try {
+				ByteOutputStream stream = new ByteOutputStream();
+				new ReleaseNotesFormatter().build(reader, new OutputStreamWriter(stream));
+				String html = new String(stream.getBytes());
+				relnotesPane = new HTMLPane(html);
+			} finally {
+				reader.close();
+			}
 			relnotesPane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
 		}
 		return relnotesPane;
