@@ -12,8 +12,10 @@ import java.util.Currency;
 
 
 import net.yapbam.currency.CurrencyConverter;
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AmountWidget;
 
 import javax.swing.JLabel;
@@ -175,6 +177,7 @@ public class CurrencyConverterPanel extends JPanel {
 				}
 			}
 			currency1.addActionListener(new java.awt.event.ActionListener() {
+				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount1.setCurrency(Currency.getInstance(codes[currency1.getSelectedIndex()]));
 					if (tableModel!=null) tableModel.setCurrency(codes[currency1.getSelectedIndex()]);
@@ -201,6 +204,7 @@ public class CurrencyConverterPanel extends JPanel {
 				}
 			}
 			currency2.addActionListener(new java.awt.event.ActionListener() {
+				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount2.setCurrency(Currency.getInstance(codes[currency2.getSelectedIndex()]));
 					doConvert();
@@ -260,7 +264,7 @@ public class CurrencyConverterPanel extends JPanel {
 	}
 
 	private void doError(Exception e) {
-//		e.printStackTrace();
+		ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
 		String format = Messages.getString("CurrencyConverterPanel.errorMessage");
 		getErrField().setText(MessageFormat.format(format, e.toString())); //$NON-NLS-1$
 	}

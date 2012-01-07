@@ -72,6 +72,7 @@ class SubtransactionListPanel extends JPanel {
 		ListSelectionModel selModel = table.getSelectionModel();
 		selModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		selModel.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();
 				if (!e.getValueIsAdjusting()) {

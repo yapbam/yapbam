@@ -341,6 +341,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	}
 
 	class AccountsListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == accounts) {
 				int index = accounts.getSelectedIndex();
@@ -362,6 +363,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	}
 
 	class ReceiptListener implements ItemListener {
+		@Override
 		public void itemStateChanged(ItemEvent e) {
 			buildModes(e.getStateChange() == ItemEvent.DESELECTED);
 		}
@@ -370,6 +372,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	class ModesListener implements ActionListener {
 		private Object lastSelected = null;
 		private boolean lastWasExpense = true;
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == modes) {
 				Object selected = modes.getSelectedItem();

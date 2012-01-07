@@ -203,6 +203,7 @@ public class GenerationPanel extends JPanel {
 		if (kind == null) {
 			kind = new JComboBox(new String[]{LocalizationData.get("PeriodicalTransactionDialog.months"),LocalizationData.get("PeriodicalTransactionDialog.days")}); //$NON-NLS-1$ //$NON-NLS-2$
 			kind.addActionListener(new java.awt.event.ActionListener() {
+				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					boolean visible = isMonthly();
 					jLabel2.setVisible(visible);

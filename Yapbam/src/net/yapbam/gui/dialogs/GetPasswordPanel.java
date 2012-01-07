@@ -107,6 +107,7 @@ public class GetPasswordPanel extends JPanel {
 			showPassword.setToolTipText(LocalizationData.get("PreferencesDialog.Network.showPassword.toolTip")); //$NON-NLS-1$
 			showPassword.addItemListener(new java.awt.event.ItemListener() {
 				char oldEcho;
+				@Override
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (e.getStateChange()==ItemEvent.DESELECTED) {
 						passwordField.setEchoChar(oldEcho);

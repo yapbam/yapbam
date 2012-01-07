@@ -73,6 +73,7 @@ public class CategoryPanel extends JPanel {
 			newButton.setToolTipText(LocalizationData.get("TransactionDialog.category.new.tooltip")); //$NON-NLS-1$
 			newButton.setIcon(IconManager.NEW_CATEGORY);
 			newButton.addActionListener(new java.awt.event.ActionListener() {
+				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// New category required
 					Container wd = CategoryPanel.this.getParent();

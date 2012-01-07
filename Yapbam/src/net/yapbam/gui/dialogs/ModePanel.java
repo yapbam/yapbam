@@ -61,6 +61,7 @@ class ModePanel extends JPanel {
 		c.anchor = GridBagConstraints.WEST;
 		isSelectedBox = new JCheckBox(title);
 		isSelectedBox.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				boolean ok = (e.getStateChange() == ItemEvent.SELECTED);
 				combo.setEnabled(ok);
@@ -87,6 +88,7 @@ class ModePanel extends JPanel {
 		combo.setEditable(false);
 		combo.setEnabled(false);
 		combo.addActionListener(new ActionListener(){
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				int index = combo.getSelectedIndex();
 				emptyPanel.setVisible((index==0));

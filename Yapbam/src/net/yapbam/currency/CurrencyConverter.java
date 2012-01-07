@@ -361,7 +361,7 @@ public final class CurrencyConverter {
 					if (localName.equals("Cube")) { //$NON-NLS-1$
 						String date = attributes.getValue("time"); //$NON-NLS-1$
 						if (date != null) {
-							SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z"); //$NON-NLS-1$
+							SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z", Locale.US); //$NON-NLS-1$
 							try {
 								referenceDate = df.parse(date + " 14:15 CET"); //$NON-NLS-1$
 							} catch (ParseException e) {
