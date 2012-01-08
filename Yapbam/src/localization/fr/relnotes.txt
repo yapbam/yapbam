@@ -73,7 +73,8 @@ version	0.9.0 (14/09/2011)
 improvement
 	Ajout d'un onglet dans le dialogue des préférences pour régler quelles informations sont conservées entre deux exécutions de Yapbam.
 	Ajout de la possibilité de mémoriser le filtre entre deux exécutions de Yapbam.
-	Ajout d'un champ "commentaire" aux opérations.<li>Ajout d'un mode de création en masse des opérations.
+	Ajout d'un champ "commentaire" aux opérations.
+	Ajout d'un mode de création en masse des opérations.
 	Modification du script yapbam.sh pour permettre aux utilisateurs de lancer yapbam plus facilement sur MacOS.
 fix
 	Lorsqu'il manquait des colonnes en fin de certaines lignes importées, l'importation plantait.
