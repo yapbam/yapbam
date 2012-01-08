@@ -99,7 +99,9 @@ public class ReleaseNotesFormatter {
 		this.fixSingular=fields[5];
 		this.fixPlural=fields[6];
 		}
+		int lineNumber = 1;
 		for (String line=reader.readLine(); line!=null; line=reader.readLine()) {
+			lineNumber++;
 			String[] fields = StringUtils.split(line, '\t');
 			String code = fields[0].trim();
 			line = fields.length>1?fields[1].trim():"";
@@ -111,13 +113,22 @@ public class ReleaseNotesFormatter {
 				this.currentList = this.fixes;
 			} else if (code.equals("known")) {
 				this.currentList = this.known;
-			} else if ((code.length()==0) && (line.length()!=0)) {
-				this.currentList.add(line);
+			} else if (code.length()==0) {
+				if (line.length()!=0) this.currentList.add(line);
+			} else {
+				wrongLine(lineNumber);
+			}
+			if (fields.length>2) {
+				wrongLine(lineNumber);
 			}
 		}
 		this.closeVersion();
 		this.echoBottom();
 		this.writer.flush();
+	}
+
+	private void wrongLine(int lineNumber) {
+		System.err.println ("It seems, line "+lineNumber+" is wrong");
 	}
 	
 	private void openVersion(String version) throws IOException {
