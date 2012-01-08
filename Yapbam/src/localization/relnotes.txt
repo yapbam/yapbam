@@ -201,7 +201,7 @@ improvement
 	When launching Yapbam, the transactions table is automatically scrolled to the most recent transactions.
 
 version	0.6.7 (09/21/2010)
-fixes
+fix
 	Fixes a major bug in data file reading: Some transactions was lost when checkbook was used and number was empty.
 
 version	0.6.6 (09/19/2010)
@@ -230,7 +230,7 @@ version	0.6.3 (04/24/2010)
 improvement
 	Updates the installation instructions.
 fix
-    The selected date in the balance history panel was often reset to today.
+	The selected date in the balance history panel was often reset to today.
 
 version	0.6.2 (04/09/2010)
 improvement

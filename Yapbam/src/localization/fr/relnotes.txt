@@ -199,3 +199,61 @@ improvement
 	Ajout d'un onglet de consultation des relevés de comptes.
 	Lors du lancement de Yapbam, la table des transactions est automatiquement scrollée jusqu'aux opérations les plus récentes.
 
+version	0.6.7 (21/09/2010)
+fix
+	Correction d'un bug très génant dans la lecture des fichiers de données : Des opérations pouvaient être perdues lorsqu'elles utilisaient un chéquier et que le numéro d'opération n'était pas renseigné.
+
+version	0.6.6 (19/09/2010)
+improvement
+	Ajoute la possibilité de protéger l'accès aux fichiers de données par mot de passe.
+
+version	0.6.5 (10/08/2010)
+improvement
+	Ajout d'un message de confirmation lorsque l'on sauve les données dans un fichier déjà existant.
+	Amélioration dans l'importation :<ul><li>Ce dialogue permet à présent d'annuler l'importation ou de traiter uniquement les lignes sans erreur. Les champs comprenant des erreurs sont affichés en rouge pour faciliter leur identification.</li><li>Les réglages de l'importation (colonnes importées, séparateur, etc...) sont mémorisés. Vous les retrouvez lorsque vous réouvrez le dialogue d'importation.</li><li>Le décodage des montants est plus strict (Auparavant, "52g32" était décodé comme un montant de 52. A présent, la ligne est considérée comme une erreur).</li></ul>
+fix
+	Dans certains cas, le dialogue de compte rendu des erreurs d'importation ne s'affichait pas, alors qu'il aurait dû.
+	Correction de bugs dans l'onglet d'historique du solde :<ul><li>Parfois, la date courante n'était pas visible dans la fenêtre.</li><li>Parfois, en particulier lors du pointage, des alertes erronnées apparaissaient.</li></ul>
+	Correction de la bulle d'aide du panneau contenant la liste des opérations.
+
+version	0.6.4 (16/05/2010)
+improvement
+	Amélioration des alertes sur les soldes : A présent, on peut définir, pour chaque compte deux seuils. Une alerte est affichée dans l'historique du solde lorsque celui-ci n'est pas compris entre ces bornes.
+	Amélioration de l'historique du solde :<ul><li>Ajout d'un bouton pour régler la date sélectionnée à aujourd'hui.</li><li>Ajout d'un menu listant les alertes sur le solde. La sélection d'une alerte règle le filtre de manière à visualiser l'historique du compte concerné.</li></ul>
+fix
+	L'édition du solde initial dans l'onglet d'administration des comptes ne fonctionnait plus.
+	Dans la génération des opérations périodiques :<ul><li>Quand les opérations étaient éditées durant la phase de génération, les changements faits étaient  ignorés.</li><li>Les opérations avec une date d'expiration ne fonctionnaient pas correctement.</li></ul>
+	Correction d'un bug mineur dans la mise à jour de l'apparence du menu "Filtre".
+
+version	0.6.3 (24/04/2010)
+fix
+	La date sélectionnée dans l'onglet d'historique des soldes étaient fréquemment remise à la date du jour.
+improvement
+	Mise à jour des instructions d'installation.
+
+version	0.6.2 (09/04/2010)
+improvement
+	Ajout d'une alerte dans la liste des opérations lorsque des opérations périodiques sont en attente de génération.
+	Meilleure intégration à l'environnement Microsoft Windows (Ajout de l'application Yapbam.exe).
+
+version	0.6.1 (02/04/2010)
+improvement
+	Ajout de la gestion des chéquiers.
+	Ajout de menus d'accès direct aux ressources web de Yapbam (Le site de Yapbam et la page de support).
+	Améliore la vitesse de lancement (L'application démarre sans attendre la fin de la vérification de l'existence d'une nouvelle version).
+	Améliore le processus de recherche des mises à jour (La vérification peut-être interrompue si la connexion prend trop de temps).
+	Améliore l'écran d'administration des comptes.
+	Améliore la saisie des entiers (A présent seuls des caractères numériques peuvent être saisis et les flèches haute et basse augmentent ou diminuent la valeur contenue dans le champ).
+	Simplifie le dialogue de création de compte. Des utilisateurs ont rapporté que la possibilité de définir des modes dans cet écran était perturbant.
+	A l'arrivée dans l'historique du solde, positionne le graphique de façon à ce que la date sélectionnnée soit visible.
+fix
+	Yapbam avait un comportement étrange quand une date était saisie avec l'année sur un seul caractère (ex : 20/3/9).
+
+version	0.6.0 (09/03/2010)
+improvement
+	Ajoute la possibilité d'importer/exporter vers des fichiers texte.
+	Ajout d'une icône d'alerte dans l'onglet de l'historique du solde quand celui-ci présente une période de découvert dans le futur.
+	Améliore le comportement des champs de saisie de dates.
+fix
+	Parfois, l'autocomplétion ne parvenait pas à déduire le mode de paiement.
+	Parfois, quand une opération avait des sous-opérations, un complément de montant nul apparaissait dans la table des opérations.
