@@ -10,15 +10,15 @@ import net.yapbam.gui.widget.HTMLPane;
 import java.text.MessageFormat;
 
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.net.URL;
 
 import javax.swing.JTabbedPane;
-
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 import net.yapbam.relnotes.ReleaseNotesFormatter;
 import net.yapbam.update.VersionManager;
@@ -51,7 +51,7 @@ public class AboutPanel extends AbstractInfoPanel {
 				jTabbedPane.addTab(LocalizationData.get("AboutDialog.RelNotes.TabName"), null, getRelnotesPane(), null); //$NON-NLS-1$
 				jTabbedPane.addTab(LocalizationData.get("AboutDialog.Contributors.TabName"), null, getAboutPane(), null); //$NON-NLS-1$
 			} catch (IOException e) {
-				ErrorManager.INSTANCE.display(AbstractDialog.getOwnerWindow(this), e);
+				ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
 			}
 		}
 		return jTabbedPane;
@@ -65,11 +65,13 @@ public class AboutPanel extends AbstractInfoPanel {
 	private HTMLPane getRelnotesPane() throws IOException {
 		if (relnotesPane == null) {
 			URL url = LocalizationData.getURL("relnotes.txt"); //$NON-NLS-1$
-			Reader reader = new InputStreamReader(url.openStream(), "UTF-8");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
 			try {
-				ByteOutputStream stream = new ByteOutputStream();
-				new ReleaseNotesFormatter().build(reader, new OutputStreamWriter(stream));
-				String html = new String(stream.getBytes());
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				ReleaseNotesFormatter releaseNotesFormatter = new ReleaseNotesFormatter();
+				releaseNotesFormatter.setIgnoreNext(true);
+				releaseNotesFormatter.build(reader, new BufferedWriter(new OutputStreamWriter(stream)));
+				String html = stream.toString();
 				relnotesPane = new HTMLPane(html);
 			} finally {
 				reader.close();

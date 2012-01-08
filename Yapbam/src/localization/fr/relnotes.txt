@@ -1,4 +1,5 @@
-﻿version	next
+Version en cours de développement	Bug connu :	Bugs connus :	Changement :	Changements :	Correction de bug :	Corrections de bugs :
+version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problem est d'utiliser Java 1.7.
 improvement
@@ -194,6 +195,6 @@ fix
 
 version	0.7.0 (17/10/2010)
 improvement
-  Ajout d'un onglet de consultation des relevés de comptes.
-  Lors du lancement de Yapbam, la table des transactions est automatiquement scrollée jusqu'aux opérations les plus récentes.
+	Ajout d'un onglet de consultation des relevés de comptes.
+	Lors du lancement de Yapbam, la table des transactions est automatiquement scrollée jusqu'aux opérations les plus récentes.
 
