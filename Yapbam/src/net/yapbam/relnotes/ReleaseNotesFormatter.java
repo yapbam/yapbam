@@ -52,10 +52,40 @@ public class ReleaseNotesFormatter {
 	public void setIgnoreNext(boolean ignoreNext) {
 		this.ignoreNext = ignoreNext;
 	}
+	
+	private void echoHead() throws IOException {
+		echo("<html>");
+		echo("<head>");
+	  echo("<style type=\"text/css\">");
+	  echo(".relnotes-version {");
+	  echo("background: #f0f0f0;");
+	  echo("margin-bottom: 10px;");
+	  echo("padding-left: 5px;");
+	  echo("}");
+	  echo(".relnotes-bugFix {");
+	  echo("background: #f8fff8;");
+	  echo("color: #202020;");
+	  echo("padding-left: 10px;");
+	  echo("margin-bottom: 5px;");
+	  echo("margin-right: 5px;");
+	  echo("}");
+	  echo("h2 {");
+	  echo("font-size: 1.2em;");
+	  echo("}");
+	  echo("</style>");
+	  echo("</head>");
+	  echo("<body>");
+	}
+	
+	private void echoBottom() throws IOException {
+	  echo("</body>");
+		echo("</html>");
+	}
 
 	public synchronized void build(BufferedReader reader, BufferedWriter writer) throws IOException {
 		this.writer = writer;
-		// Read the wordings (there at the first line
+		this.echoHead();
+		// Read the wordings (there at the first line)
 		{
 		String line = reader.readLine();
 		if (line==null) throw new EOFException();
@@ -69,7 +99,6 @@ public class ReleaseNotesFormatter {
 		this.fixSingular=fields[5];
 		this.fixPlural=fields[6];
 		}
-//		echo ("<h1>"+LocalizationData.get("AboutDialog.RelNotes.TabName")+"</h1>");
 		for (String line=reader.readLine(); line!=null; line=reader.readLine()) {
 			String[] fields = StringUtils.split(line, '\t');
 			String code = fields[0].trim();
@@ -87,6 +116,7 @@ public class ReleaseNotesFormatter {
 			}
 		}
 		this.closeVersion();
+		this.echoBottom();
 		this.writer.flush();
 	}
 	
