@@ -24,7 +24,7 @@ import net.yapbam.relnotes.ReleaseNotesFormatter;
 import net.yapbam.update.VersionManager;
 
 public class AboutPanel extends AbstractInfoPanel {
-	private static final Dimension PREFERED_HTML_PANE_SIZE = new Dimension(480,240);  //  @jve:decl-index=0:
+	private static final Dimension PREFERED_HTML_PANE_SIZE = new Dimension(640,480);  //  @jve:decl-index=0:
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane jTabbedPane = null;
 	private HTMLPane relnotesPane = null;
