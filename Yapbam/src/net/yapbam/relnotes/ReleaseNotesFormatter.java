@@ -10,6 +10,10 @@ import java.util.List;
 //import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.StringUtils;
 
+/** Format the release notes from csv to html format. 
+ * @author Jean-Marc Astesana
+ * <BR>License : GPL v3
+ */
 public class ReleaseNotesFormatter {
 	private boolean ignoreNext;
 	
@@ -33,6 +37,7 @@ public class ReleaseNotesFormatter {
 	private String fixSingular;
 	private String fixPlural;
 	
+	/** Constructor. */
 	public ReleaseNotesFormatter() {
 		this.ignoreNext = false;
 		
@@ -56,22 +61,24 @@ public class ReleaseNotesFormatter {
 	private void echoHead() throws IOException {
 		echo("<html>");
 		echo("<head>");
+		// Output the css styles
 	  echo("<style type=\"text/css\">");
 	  echo(".relnotes-version {");
 	  echo("background: #f0f0f0;");
 	  echo("margin-bottom: 10px;");
 	  echo("padding-left: 5px;");
 	  echo("}");
+	  
 	  echo(".relnotes-bugFix {");
 	  echo("background: #f8fff8;");
 	  echo("color: #202020;");
-	  echo("padding-left: 10px;");
+	  echo("padding-left: 5px;");
 	  echo("margin-bottom: 5px;");
 	  echo("margin-right: 5px;");
 	  echo("}");
-	  echo("h2 {");
-	  echo("font-size: 1.2em;");
-	  echo("}");
+	  
+	  echo("h2 { font-size: 1.2em; }");
+	  echo ("ul { margin-top: 0px; }");
 	  echo("</style>");
 	  echo("</head>");
 	  echo("<body>");

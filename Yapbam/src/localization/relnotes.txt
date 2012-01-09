@@ -246,7 +246,7 @@ improvement
 	Improves the account administration screen.
 	Improves integer field input (now only numerical characters can be typed in such fields and up and down arrows respectively increase or decrease the field value).
 	Simplifies account creation dialog. Users report that the ability to add payment modes in this screen was confusing.
-	Autoscrolls the balance history view to always have the selected date visible when this panel appears.
+	Auto-scrolls the balance history view to always have the selected date visible when this panel appears.
 fix
 	Yapbam had a 'strange' behavior when dates where entered using a 1 digit year format (for instance 03/20/9).
 
@@ -254,7 +254,229 @@ version	0.6.0 (03/09/2010)
 improvement
 	Adds text file import/export capabilities.
 	Adds an alert icon to the balance history tab when there is a negative balance period in the future.
-	Improves date fields behaviour.
+	Improves date fields behavior.
 fix
-	The auto-complete wizard sometimes failed to deduce the paiement mode.
+	The auto-complete wizard sometimes failed to deduce the payment mode.
 	Sometimes, in the transactions table, transactions with subtransactions appeared with a complement that had an amount equals to zero
+
+version	0.5.4 (02/08/2010)
+improvement
+	Portuguese translation (Thank's to Marco).
+	Adds an auto-complete wizard in the "new transaction" dialog that completes the description as you type and deduces the category and payment mode.
+fix
+	Data files were deleted while saving under some Linux configurations.
+
+version	0.5.3 (01/25/2010)
+improvement
+	Currency converter Portuguese translation (Thank's to Marco)
+	Adds the ability to show/hide columns in the transactions table.
+fix
+	Fixes a lot of mistakes in english wording (Thank's to Sharada)
+
+version	0.5.2 (01/21/2010)
+improvement
+	Adds ability to edit payment modes.
+
+version	0.5.1 (01/17/2010)
+improvement
+	Adds transactions printing (feature requested by users).
+	Adds a button in the transactions table to show/hide all the subtransactions.
+
+version	0.5.0 (01/10/2010)
+improvement
+	Adds a budget view (it seems users really want it).
+	Adds a preference panel to configure the balance report fields colors (some users reported the positive balance were quite illegible).
+fix
+	In statistic panel, sometimes, some transactions that would have been rejected by the filter were not.
+
+version	0.4.0 (01/03/2010)
+improvement
+	Introduce extended filtering capabilities (on category, modes, etc ...).
+fix
+	Fixes a lot of mistakes in english wordings. Fixes some missing tooltips.
+	Sometimes, the next date of a periodical transaction was not updated after generating an occurence of this transaction.
+	The currency converter tool didn't work under Ubuntu (and probably other Linux systems).
+	The currency converter tool was very, very slow when European Central Bank did not refresh its rates for more than one day (for instance when it's new year's day).
+	Sometimes, it was impossible to change the account of a transaction.
+	
+version	0.3.7 (12/05/2009)
+improvement
+	Dates can now be selected in a calendar.
+
+version	0.3.6 (11/22/2009)
+fix
+	In the periodical transaction edit dialog, it was impossible to leave the end date blank if this field gained the focus.
+
+version	0.3.5 (11/20/2009)
+improvement
+	The periodical transactions can now have a end date.
+fix
+	Saving data containing a periodicalTransaction with a daily period didn't work.
+
+version	0.3.4 (11/11/2009)
+fix
+	Under some Windows XP, the preferences and the last state were not saved.
+
+version	0.3.3 (11/02/2009)
+fix
+	When a new file was opened, the category list in the administration tab was not refreshed.
+	Sometimes, when the transactions table was sorted, editing a transaction resulted in a strange Yapbam state : The transaction looked like it wasn't modified and the transactions table doesn't respond anymore.
+
+version	0.3.2 (11/01/2009)
+improvement
+	The main frame title now indicates if the data needs to be saved (its title ends with a *).
+fix
+	Deleting a category used in a transaction corrupted the data.
+	When reading the last opened file failed, this file was still considered as "last opened file". 
+	If, after reading a file you create a new file, then quit and restart Yapbam, the file was opened again
+
+version	0.3.1 (10/31/2009)
+improvement
+	The currency converter tool now work through proxied Internet connections and a now displays a conversion rates table.
+fix
+	When the currency converter was called, closing the main window didn't shutdown the java virtual machine.
+	The percentage in the pie statistic's chart's tooltips were wrong.
+	Sometimes, when a transaction was duplicated or convert to periodical, the payment mode of the created transaction were wrong.
+	The balance history was wrong when there was a switch from summer to winter time in it.
+
+version	0.3.0 (10/25/2009)
+improvement
+	Add a category statistic panel.
+	Add a currency converter tool (a preview release which don't work with Internet connections through a proxy).
+	Change the administration panel layout.
+fix
+	The "converts to periodical transaction" menu item stayed enabled when we leaved the "transactions" panel.
+
+version	0.2.9 (10/24/2009)
+improvement
+	Developers : Rewrite of transactions filtering in order to prepare statistics plugin.
+fix
+	When transactions where removed, the balance history could contains extra segments (especially when you removed all the transactions).
+
+version	0.2.8 (10/18/2009)
+improvement
+	Add a payment mode administration panel with the ability to remove payment modes.
+fix
+	When an used category was deleted, sometimes, it remained some transactions with that category.
+
+version	0.2.7 (10/16/2009)
+improvement
+	During the first startup, Yapbam now ask if you want to connect to the Internet and check for update.
+fix
+	A double-click on the transaction list in the check mode opened the "edit" dialog instead of mark the transaction as checked.
+
+version	0.2.6 (10/13/2009)
+improvement
+	Add a administration panel to manage categories.
+	An empty date field is now equivalent to "today". When you duplicate a transaction, in the dialog, the date is automatically set to today
+fix
+	The popup menu in the accounts administration panel had many separators.
+	The account manager now verified that new account name is not empty, and not already used.
+	When you pressed return during editing a transaction date, the value date was not refreshed.
+	The state of "ignored" check boxes in the "generate periodical transactions" dialog was inverted.
+
+version	0.2.5 (10/10/2009)
+improvement
+	Add account management.
+
+version	0.2.4 (10/02/2009)
+fix
+	Under Linux, if Yapbam was launch with a right click on the jar file, the preference and state files were saved in the user home directory, not in Yapbam directory.<br>As Yabam is portable, it was a mistake.
+
+version	0.2.3 (10/01/2009)
+improvement
+	Adds the ability to edit or ignore transactions during the periodical transactions generation process.
+	Adds the ability to sort the transactions table and the periodic transactions table.
+
+version	0.2.2 (09/30/2009)
+improvement
+	Add auto check for Yapbam updates.
+	The "Transactions" menu now remains visible in all the panel.
+
+version	0.2.1 (09/28/2009)
+improvement
+	Add popup menu to edit/delete/duplicate periodical transactions in the administration panel.
+fix
+	menuItem to check the selected transaction in the transactions table contextual menu was shown even if the statement field was not documented.
+
+version	0.2.0 (09/27/2009)
+improvement
+	Introduce full periodic transactions support (now, they can be generated). I plan to improve this functionality which the ability to edit generated transactions in the generation dialog.
+	Adds menu items to convert a transaction into a periodical transaction.
+
+version	0.1.20 (09/24/2009)
+fix
+	In the new/edit transaction dialog, when you created a new mode, account or category with a very long name, the window appearance was broken.
+	Oups ! Some wording were not translated in the new Account dialog.
+	The duplicate button in the new account dialog had no wording ... and did nothing.
+	A lot of problems in the new account dialog with the mode list buttons.
+
+version	0.1.19 (09/23/2009)
+improvement
+	Adds an administration panel, with the ability to define and manage periodical transactions.
+	Adds tooltips on main window tabs.
+	Changes the "duplicate" button behavior (in the transactions panel). Now, the edition dialog is automatically opened when you duplicate a transaction.
+
+version	0.1.18 (09/19/2009)
+improvement
+	Adds some toolTips.
+	Adds an alert dialog when Yapbam is launched with an incompatible old java version (prior to 1.6).
+fix
+	Some problems in menu items refresh. Some of them were enabled or disabled ... but they'd rather not.
+
+version	0.1.17 (09/18/2009)
+improvement
+	Add a menuItem to check the selected transaction in the transactions table contextual menu.
+	Developpers : Switch to a plug-in architecture for all the panels in the main window.
+fix
+	The proxy authentication was broken.
+	When an account was added, sometimes, the filter menu was broken.
+	Oups ! Some wording were not translated in the new Account dialog.
+
+version	0.1.16 (09/17/2009)
+improvement
+	Add support Internet connection through a proxy.
+	Add a contextual menu on the transactions table.
+fix
+	A double click with the right button (or the central one) edited the selected transaction (not the one clicked). Now right double clicks are ignored.
+	
+version	0.1.15 (09/14/2009)
+improvement
+	Add underground Internet connection through proxy support (need to edit the preference file by hand).
+fix
+	<a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2858596&amp;group_id=276272&amp;atid=1173518">Bug 2858596</a> fixed : "Deleted or added transactions has no effect on display".
+
+version	0.1.14 (09/13/2009)
+fix
+	When the preferred localization changed, the dates in the transaction table were still displayed using the initial localization.
+improvement
+	Add a new menu item to check for updates.
+
+version	0.1.13 (09/11/2009)
+improvement
+	A lot of undergroud work in order to implement account management in a future release.
+	The bank account creation dialog allows you to create payment method.
+	Improves the sort of the transactions list (in previous versions a duplicated transaction could appear far away for its clone).
+	Improves the "last state save":<ul><li>Be aware : In order to prepare a plugin architecture, the state file format changed. Your previous column sizes wiln not be restored when you will upgrade to this version.</li><li>The order of the columns is saved (in previous releases, column order where always reset to the default order, and the saved column size where applied tothe default column order ... which could be considered as a bug).</li><li>The scroll position of the transactions table is now saved.</li></ul>
+fix
+	<a href="https://sourceforge.net/tracker/?func=detail&aid=2856006&group_id=276272&atid=1173518">Bug 2856006</a> fixed : "Last chance to save is broken in v0.1.12".
+	<a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2856394&amp;group_id=276272&amp;atid=1173518">Bug 2856394</a> fixed : "Balances disappears during interface reloading after a preference change".
+	When first transaction table column (the open/close subtransactions control) was moved, you still had to click the first column to deploy the subtransactions view.
+
+version	0.1.12 (09/07/2009)
+improvement
+	Adds a Preference item in the File menu. The localization and the application's look & feel can be chosen
+
+version	0.1.11 (09/05/2009)
+improvement
+	The english translation is complete
+fix
+	<a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2852451&amp;group_id=276272&amp;atid=1173518">Bug 2852451</a> fixed : "No difference between new and modify dialogs title"
+
+version	0.1.10 (09/04/2009)
+improvement
+	Improved About dialog.
+
+version	0.1.09 (09/01/2009)
+improvement
+	First pre-alpha release.
