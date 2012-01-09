@@ -121,7 +121,13 @@ public class ReleaseNotesFormatter {
 			} else if (code.equals("known")) {
 				this.currentList = this.known;
 			} else if (code.length()==0) {
-				if (line.length()!=0) this.currentList.add(line);
+				if (line.length()!=0) {
+					if (this.currentList==null) {
+						System.err.println ("Line "+lineNumber+" is not preceded by a kind");
+					} else {
+						this.currentList.add(line);
+					}
+				}
 			} else {
 				wrongLine(lineNumber);
 			}
@@ -135,7 +141,7 @@ public class ReleaseNotesFormatter {
 	}
 
 	private void wrongLine(int lineNumber) {
-		System.err.println ("It seems, line "+lineNumber+" is wrong");
+		System.err.println ("Line "+lineNumber+" is wrong");
 	}
 	
 	private void openVersion(String version) throws IOException {
@@ -173,6 +179,7 @@ public class ReleaseNotesFormatter {
 		}
 		this.changes.clear();
 		this.fixes.clear();
+		this.currentList=null;
 		// known bugs are propagated to next release
 		this.ignoredVersion = false;
 	}
