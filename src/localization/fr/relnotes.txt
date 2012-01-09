@@ -257,3 +257,223 @@ improvement
 fix
 	Parfois, l'autocomplétion ne parvenait pas à déduire le mode de paiement.
 	Parfois, quand une opération avait des sous-opérations, un complément de montant nul apparaissait dans la table des opérations.
+
+version	0.5.4 (08/02/2010)
+improvement
+	Traduction en portugais (Merci à Marco).
+	Ajout d'une auto-complétion dans le dialogue de création d'une opération. Celui-ci complète les descriptions possibles au fur et à mesure de la saisie et en déduit la catégorie et le mode de paiement.
+fix
+	Correction d'un bug entrainant la suppression du fichier de données lors de la sauvegarde sur certaines configurations Linux.
+
+version	0.5.3 (25/01/2010)
+improvement
+	Traduction en portugais du convertisseur de devises (Merci à Marco).
+	Ajout de la possibilité de masquer les colonnes dans la tables des opérations.
+fix
+	Correction de nombreuses erreurs dans la version anglaise (Merci à Sharada)
+
+version	0.5.2 (21/01/2010)
+improvement
+	Ajout de la possibilité d'éditer les modes de paiement.
+
+version	0.5.1 (17/01/2010)
+improvement
+	Support de l'impression de la liste des opérations.
+	Ajout d'un bouton dans la table des opérations pour afficher/masquer toutes les sous-opérations.
+
+version	0.5.0 (10/01/2010)
+improvement
+	Ajout d'un vue budgetaire (Il semble que certains utilisateurs la veulent vraiment).
+	Ajout d'un panneau de préférénces permettant de configurer la couleur du rapport des soldes (des utilisateurs ont rapporté que les soldes positifs étaient quasiment illisibles).
+fix
+	Parfois, dans le panneau statistiques, certaines opérations étaient prises en compte alors qu'elles auraient du être rejetées par le filtre.
+
+version	0.4.0 (03/01/2010)
+improvement
+	Ajout de capacités de filtrage complètes des opérations (sur les catégories, les modes, etc ...).
+fix
+	Correction de nombreuses erreurs de traduction dans la version anglaise.
+	Parfois, la prochaine échéance d'une opération périodique n'était pas mise à jour lors de la génération des opérations périodiques.
+	L'outil de conversion des devises ne fonctionnait pas sous Ubuntu (et probablement sous d'autres OS Linux).
+	L'outil de conversion des devises était très, très, très lent quand la banque centrale européenne n'avait pas mis à jour ses taux depuis plus de 24h (comme au jour de l'an, par exemple).
+	Parfois, le changement de compte d'une transaction ne fonctionnait pas.
+
+version	0.3.7 (05/12/2009)
+improvement
+	Les dates peuvent à présent être sélectionnées dans un calendrier.
+
+version	0.3.6 (22/11/2009)
+fix
+	Dans le dialogue d'édition des opérations périodiques, il était impossible de laisser la date de fin vide une fois ce champ sélectionné.
+
+version	0.3.5 (20/11/2009)
+fix
+	La sauvegarde ne fonctionnait pas quand une opération périodique journalière était définie.
+improvement
+	Les opérations périodiques peuvent maintenant avoir une date de fin.
+
+version	0.3.4 (11/11/2009)
+fix
+	Sur certains windows XP, les préférences et le dernier état n'étaient pas sauvés
+
+version	0.3.3 (02/11/2009)
+fix
+	Quand un nouveau fichier était ouvert, la liste des catégories n'était pas raffraichie dans le panneau d'administration.
+	Parfois, lorsque la table des opérations était triée, et qu'on éditait une opération, la table se retrouvait dans un état étrange : Les modifications n'étaient plus prises en compte et la table ne répondait plus aux événements.
+
+version	0.3.2 (01/11/2009)
+improvement
+	Le titre de la fenêtre principale indique à présent que des modifications ont étés apportées depuis la dernière sauvegarde (le titre se termine alors par une étoile).
+fix
+	Supprimer une catégorie utilisait dans une opération corrompait les données.
+	Quand la lecture du dernier fichier ouvert échouait, ce fichier était toujours considéré comme le dernier fichier ouvert. 
+	Si, après avoir lu un fichier, on créait un nouveau fichier, puis qu'on redémarrait Yapbam, le fichier était de nouveau ouvert
+
+version	0.3.1 (31/10/2009)
+improvement
+	L'outil de conversion des devises fonctionne à présent avec les connexions Internet par proxy et affiche à présent une table de conversion des devises.
+	Quand l'outil de conversion des devises avait été appelé, fermer la fenêtre principale n'arrêtait pas la machine virtuelle java. 
+	Les pourcentages affichés dans les bulles d'aide du camembert des dépenses nettes étaient faux.
+	Parfois, quand une opération était dupliquée ou transformée en opération périodique, l'opération créée avait un mode de paiement erroné.
+	L'historique du solde était décalé d'un jour quand il y avait un passage heure d'été à heure d'hiver dans son scope.
+
+version	0.3.0 (25/10/2009)
+improvement
+	Ajout d'un panneau de statistiques sur les catégories.
+	Ajout d'un outil de conversion de devises (en version expérimentale : ne fonctionne pas avec les connexions Internet par proxy).
+	Change l'apparence du panneau d'administration.
+fix
+	L'item de menu "convertir en opération périodique" restaient valide quand on quittait le panneau "opérations"
+
+version	0.2.9 (24/10/2009)
+improvement
+	Développeurs : Réécriture du filtrage des opérations pour préparer l'arrivée du plugin "statistiques".
+fix
+	Quand des opérations étaient supprimées, l'historique du solde pouvait contenir des segments surnuméraires (typiquement lorsqu'on supprimait toutes les opérations.
+
+version	0.2.8 (18/10/2009)
+improvement
+	Ajout d'un panneau d'administration des modes de paiement permettant l'ajout et la suppression de modes.
+fix
+	Lorsqu'une catégorie était supprimée, elle n'était parfois pas retirée de toutes les opérations.
+
+version	0.2.7 (16/10/2009)
+improvement
+	Au premier démarrage, Yapbam demande l'autorisation de se connecter pour rechercher automatiquement des mises à jour.
+fix
+	Un double-clic sur la liste des opérations en mode "pointage" ouvrait le dialogue d'édition de l'opération au lieu de la marquer "pointée".
+
+version	0.2.6 (13/10/2009)
+improvement
+	Ajout d'un panneau d'administration pour gérer les catégories.
+	Un champ date laissé à vide est à présent équivalent à "aujourd'hui".
+	Lors de la duplication d'une opération, la date de l'opération crée est automatiquement mise à aujourd'hui dans le dialogue de création.
+fix
+	Le popup menu dans l'écran d'administration des comptes comportait de nombreux séparateurs.
+	Dans l'écran d'administration, on contrôle à présent que le nouveau nom n'est ni vide, ni déjà utilisé.
+	Quand on pressait la touche "Entrée" lors de l'édition d'une date d'opération, la date de valeur n'était pas mise à jour.
+	L'état des cases à cocher "ignorée" était inversé dans le dialogue "Générer les opérations périodiques".
+
+version	0.2.5 (10/10/2009)
+improvement
+	Ajout de la possibilité de gérer les comptes (changer leur nom et le solde initial).
+
+version	0.2.4 (02/10/2009)
+fix
+	Sous Linux, quand Yapbam était démarré avec un clic droit sur le fichier jar, les fichiers de préférences et d'état étaient sauvegardés dans le répertoire de l'utilisateur (home directory) et pas dans le répertoire de Yapbam. Du coup, Yabam n'était pas tout à fait portable.
+
+version	0.2.3 (01/10/2009)
+improvement
+	Ajout de la possibilité d'éditer ou d'ignorer les opérations générées par "Générer les opérations périodiques".
+	Ajout de la possibilité de trier la table des opérations et celle des opérations périodiques.
+
+version	0.2.2 (30/09/2009)
+improvement
+	Ajout de la recherche automatique des mises à jour de Yapbam.
+	Le menu "Opérations" reste maintenant visible dans tous les onglet.
+
+version	0.2.1 (28/09/2009)
+improvement
+	Ajout d'un popup menu pour éditer/supprimer/dupliquer les opérations périodiques dans le panneau d'administration.
+fix
+	Dans le menu contextuel de la table des transactions, l'item pour pointer l'opération sélectionnée étaient présent même quand le champ "Relevé" était vide.
+
+version	0.2.0 (27/09/2009)
+improvement
+	Ajout de la génération des opérations périodiques. Cette fonctionnalité sera bientôt améliorée par la possibilité d'éditer les opérations générées à l'intérieur même du dialogue de génération.
+	Ajout d'item de menu permettant de convertir une opération en opération périodique.
+
+version	0.1.20 (24/09/2009)
+fix
+	Lorsque, dans le dialogue de création/édition d'opération on créait un mode, compte ou une catégorie avec un nom plus long que la taille de la comboBox, l'apparence de la fenêtre était ... détruite.
+	Le bouton "dupliquer" du dialogue de création de compte n'avait pas de libellé et ne faisait rien.
+	Beaucoup de problèmes dans les boutons de la liste des modes de paiement du dialogue de création de compte.
+
+version	0.1.19 (23/09/2009)
+improvement
+	Ajout d'un panneau d'administration permettant la définition et la gestion d'opérations périodiques.
+	Ajout de bulles d'aide sur les onglets de la fenêtre principale.
+	Changement du comportement du bouton "Dupliquer" du tableau des opérations. A présent, le dialogue d'édition de l'opération est automatiquement ouvert.
+
+version	0.1.18 (18/09/2009)
+fix
+	Correction de divers bugs mineurs dans le raffraichissement des menus. Certains menus étaient désactivés (ou activés) à tort.
+improvement
+	Ajout de quelques bulles d'aide.
+	Ajout d'un dialogue d'alerte quand Yapbam est lancé avec une ancienne et incompatible version de java (avant 1.6).
+
+version	0.1.17 (18/09/2009)
+fix
+	L'authentification sur le serveur mandataire (proxy) ne fonctionnait pas.
+	Quand un compte était créé, le menu "filtre" devenait parfois incohérent.
+improvement
+	Dans le menu contextuel de la table des transactions, ajout d'un item pour pointer l'opération sélectionnée.
+	Développeurs : Passage à une architecture de plugins pour tous les panneaux de la fenêtre principale.
+
+version	0.1.16 (17/09/2009)
+improvement
+	Ajout du support des connexions Internet via un proxy.
+	Ajout d'un menu contextuel sur la liste des transactions.
+fix
+	Un double clic sur le bouton droit de la souris (ou le central) éditait l'opération sélectionnée (et pas forcément celle ou avait lieu le clic). A présent, les double clics droit sont ignorés.
+
+version	0.1.15 (14/09/2009)
+fix
+	Correction du <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2858596&amp;group_id=276272&amp;atid=1173518">bug 2858596</a> "Après certains changements dans les préférences, les mises à jour des opérations ne sont plus répercutées dans la fenêtre des opérations".
+improvement
+	Ajout d'un hack pour supporter les connexions via un proxy (nécessite d'éditer le fichier des préférences à la main).
+
+version	0.1.14 (13/09/2009)
+fix
+	Lorsque la localisation était modifiée dans les préférences, les dates dans la table des opérations continuaient à être affichées sous le format de la localisation d'origine.
+improvement
+	Ajout d'un nouvel item de menu permettant de vérifier les mises à jour.
+
+version	0.1.13 (11/09/2009)
+improvement
+	Beaucoup de travail souterrain pour préparer l'implémentation de la gestion des comptes, des catégories, etc ...
+	Le dialogue de création de comptes permet à présent également de créer des modes de paiement.
+	Amélioration du tri de la liste des opérations (dans les précédentes versions, une opération dupliquée pouvait apparaitre très loin de son original).
+	Amélioration de la sauvegarde du dernier état :<ul><li>Attention : Dans le but de préparer une architecture de plug-in, le format du fichier dans lequel on sauvegarde le dernier état a changé. Lors du passage à cette version, la taille des colonnes sauvegardées dans la version précédente sera perdue.</li><li>L'ordre des colonnes de la table des transactions est sauvegardé (dans les versions précédentes, les colonnes étaient systématiquement remises dans l'odre par défaut. La taille mémorisée était appliquée aux colonnes dans l'ordre par défaut ... ce qui peut-être considéré comme un bug).</li><li>Le défilement de la table des transactions est à présent sauvegardé.</li></ul>
+fix
+	Correction du <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2852451&amp;group_id=276272&amp;atid=1173518">bug 2856006</a> "Le bouton annuler du dialogue 'Des modifications n'ont pas été sauvegardées' ne fonctionne pas".
+	Correction du <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2856394&amp;group_id=276272&amp;atid=1173518">bug 2856394</a> "Les soldes disparaissent lors de rechargement de l'interface après un changement de préférence".
+	Quand la première colonne de la table des opérations (la zone qui permet de déployer/replier la vue des sous-opérations) était déplacée, ce contrôle restait effectué par la première colonne de la table.
+
+version	0.1.12 (07/09/2009)
+improvement
+	Ajout d'un item "Préférences" dans le menu "Fichiers", possibilité de choisir la langue et le look and feel de l'application.
+
+version	0.1.11 (05/09/2009)
+improvement
+	Traduction anglaise complète.
+fix
+	Correction du <a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2852451&amp;group_id=276272&amp;atid=1173518">bug 2852451</a> "Pas de différence entre les titres des dialogues de création et de modification".
+
+version	0.1.10 (04/09/2009)
+improvement
+	Amélioration du dialogue (A propos ...).
+
+version	0.1.09 (01/09/2009)
+improvement
+	Première version publiée.
