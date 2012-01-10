@@ -1,5 +1,7 @@
 package net.yapbam.gui.dialogs.preferences;
 
+import net.yapbam.gui.HelpManager;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.widget.IntegerWidget;
@@ -15,6 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import net.yapbam.gui.dialogs.preferences.backup.FTPPanel;
 import net.yapbam.gui.dialogs.preferences.backup.DiskPanel;
 
@@ -22,6 +27,7 @@ public class BackupPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JCheckBox chckbxBackup;
+	private JLabel helpChckbxBackup;
 	private IntegerWidget maxDiskField;
 	private FTPPanel ftpPanel;
 	private DiskPanel diskPanel;
@@ -35,45 +41,38 @@ public class BackupPanel extends PreferencePanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
-		JLabel intro = new JLabel("<html>Sauvegarder ses données est essentiel pour en assurer la sécurité.<br><br>Yapbam vous permet de faire une copie compressée de chaque fichier lu.<br>" +
-				"Pour plus de sécurité, il est recommandé de ne pas conserver ses sauvegardes sur le même support que l'original. L'idéal étant de les faire sur un serveur à l'extérieur de votre domicile.<br>" +
-				"La plupart des opérateurs Internet fournissent un accès à un serveur FTP (consultez le site de votre opérateur ou votre moteur de recherche favori pour en savoir plus).</html>");
-		GridBagConstraints gbc_intro = new GridBagConstraints();
-		gbc_intro.fill = GridBagConstraints.HORIZONTAL;
-		gbc_intro.weightx = 1.0;
-		gbc_intro.insets = new Insets(0, 0, 5, 0);
-		gbc_intro.anchor = GridBagConstraints.NORTHWEST;
-		gbc_intro.gridx = 0;
-		gbc_intro.gridy = 0;
-		add(intro, gbc_intro);
-		
 		GridBagConstraints gbc_chckbxBackup = new GridBagConstraints();
 		gbc_chckbxBackup.anchor = GridBagConstraints.WEST;
-		gbc_chckbxBackup.insets = new Insets(0, 0, 5, 0);
+		gbc_chckbxBackup.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxBackup.gridx = 0;
-		gbc_chckbxBackup.gridy = 1;
+		gbc_chckbxBackup.gridy = 0;
 		add(getChckbxBackup(), gbc_chckbxBackup);
 		
 		GridBagConstraints gbc_diskPanel = new GridBagConstraints();
+		gbc_diskPanel.gridwidth = 0;
 		gbc_diskPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_diskPanel.fill = GridBagConstraints.BOTH;
 		gbc_diskPanel.gridx = 0;
-		gbc_diskPanel.gridy = 2;
+		gbc_diskPanel.gridy = 1;
 		add(getDiskPanel(), gbc_diskPanel);
 		
 		GridBagConstraints gbc_ftpPanel = new GridBagConstraints();
+		gbc_ftpPanel.gridwidth = 0;
 		gbc_ftpPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_ftpPanel.fill = GridBagConstraints.BOTH;
 		gbc_ftpPanel.gridx = 0;
-		gbc_ftpPanel.gridy = 3;
+		gbc_ftpPanel.gridy = 2;
 		add(getFtpPanel(), gbc_ftpPanel);
 		
 		JPanel panelSize = new JPanel();
 		GridBagConstraints gbc_panelSize = new GridBagConstraints();
-		gbc_panelSize.insets = new Insets(0, 0, 5, 0);
-		gbc_panelSize.fill = GridBagConstraints.BOTH;
+		gbc_panelSize.anchor = GridBagConstraints.NORTH;
+		gbc_panelSize.weighty = 1.0;
+		gbc_panelSize.gridwidth = 0;
+		gbc_panelSize.insets = new Insets(0, 0, 0, 5);
+		gbc_panelSize.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelSize.gridx = 0;
-		gbc_panelSize.gridy = 4;
+		gbc_panelSize.gridy = 3;
 		add(panelSize, gbc_panelSize);
 		GridBagLayout gbl_panelSize = new GridBagLayout();
 		panelSize.setLayout(gbl_panelSize);
@@ -101,17 +100,16 @@ public class BackupPanel extends PreferencePanel {
 		gbc_lblSizeUnit.gridy = 0;
 		panelSize.add(lblSizeUnit, gbc_lblSizeUnit);
 		
-		JPanel panel = new JPanel();
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.weighty = 1.0;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 5;
-		add(panel, gbc_panel);
-		
 		ButtonGroup group = new ButtonGroup();
 		group.add(getFtpPanel().getFtpRdnButton());
 		group.add(getDiskPanel().getDiskRdnButton());
+		GridBagConstraints gbc_helpChckbxBackup = new GridBagConstraints();
+		gbc_helpChckbxBackup.anchor = GridBagConstraints.WEST;
+		gbc_helpChckbxBackup.weightx = 1.0;
+		gbc_helpChckbxBackup.insets = new Insets(0, 0, 5, 0);
+		gbc_helpChckbxBackup.gridx = 1;
+		gbc_helpChckbxBackup.gridy = 0;
+		add(getHelpChckbxBackup(), gbc_helpChckbxBackup);
 	}
 
 	public IntegerWidget getMaxDiskField() {
@@ -141,6 +139,21 @@ public class BackupPanel extends PreferencePanel {
 			chckbxBackup.setToolTipText("Cochez cette case pour activer les sauvegardes");
 		}
 		return chckbxBackup;
+	}
+
+	private JLabel getHelpChckbxBackup() {
+		if (helpChckbxBackup == null) {
+			helpChckbxBackup = new JLabel();
+			helpChckbxBackup.setToolTipText(LocalizationData.get("Backup.helpButton.toolTip")); //$NON-NLS-1$
+			helpChckbxBackup.setIcon(IconManager.HELP);
+			helpChckbxBackup.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					HelpManager.show(e.getComponent(), HelpManager.BACKUP);
+				}
+			});
+		}
+		return helpChckbxBackup;
 	}
 
 	private FTPPanel getFtpPanel() {
