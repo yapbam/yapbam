@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs.preferences;
+package net.yapbam.gui.dialogs.preferences.backup;
 
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
@@ -20,8 +20,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import net.yapbam.gui.dialogs.preferences.backup.FTPPanel;
-import net.yapbam.gui.dialogs.preferences.backup.DiskPanel;
 
 public class BackupPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
@@ -77,7 +75,7 @@ public class BackupPanel extends PreferencePanel {
 		GridBagLayout gbl_panelSize = new GridBagLayout();
 		panelSize.setLayout(gbl_panelSize);
 		
-		lblTailleMaximumReserve = new JLabel("Taille maximum réservée aux sauvegardes :");
+		lblTailleMaximumReserve = new JLabel(LocalizationData.get("Backup.preference.maxSize")); //$NON-NLS-1$
 		GridBagConstraints gbc_lblTailleMaximumReserve = new GridBagConstraints();
 		gbc_lblTailleMaximumReserve.insets = new Insets(0, 5, 0, 0);
 		gbc_lblTailleMaximumReserve.anchor = GridBagConstraints.WEST;
@@ -92,7 +90,7 @@ public class BackupPanel extends PreferencePanel {
 		gbc_maxDiskField.gridy = 0;
 		panelSize.add(getMaxDiskField(), gbc_maxDiskField);
 		
-		lblSizeUnit = new JLabel("Mo");
+		lblSizeUnit = new JLabel(LocalizationData.get("Backup.preference.maxSize.unit")); //$NON-NLS-1$
 		GridBagConstraints gbc_lblSizeUnit = new GridBagConstraints();
 		gbc_lblSizeUnit.anchor = GridBagConstraints.WEST;
 		gbc_lblSizeUnit.weightx = 1.0;
@@ -116,7 +114,7 @@ public class BackupPanel extends PreferencePanel {
 		if (maxDiskField==null) {
 			maxDiskField = new IntegerWidget(BigInteger.ONE, null);
 			maxDiskField.setLocale(LocalizationData.getLocale());
-			maxDiskField.setToolTipText("<html>Entrez ici la l'espace maximum alloué au sauvegardes.<br>Une fois la limite atteinte, les sauvegardes les plus anciennes seront effacées.<br><br>Laissez ce champ vide pour ne pas limiter l'espace dédié au sauvegardes.</html>");
+			maxDiskField.setToolTipText(LocalizationData.get("Backup.preference.maxSize.tooltip")); //$NON-NLS-1$
 			maxDiskField.setColumns(5);
 		}
 		return maxDiskField;
@@ -124,7 +122,8 @@ public class BackupPanel extends PreferencePanel {
 
 	public JCheckBox getChckbxBackup() {
 		if (chckbxBackup==null) {
-			chckbxBackup = new JCheckBox("Activer les sauvegardes automatiques");
+			chckbxBackup = new JCheckBox(LocalizationData.get("Backup.preference.activate")); //$NON-NLS-1$
+			chckbxBackup.setSelected(true);
 			chckbxBackup.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					boolean enabled = e.getStateChange()==ItemEvent.SELECTED;
@@ -136,7 +135,7 @@ public class BackupPanel extends PreferencePanel {
 					lblSizeUnit.setEnabled(enabled);
 				}
 			});
-			chckbxBackup.setToolTipText("Cochez cette case pour activer les sauvegardes");
+			chckbxBackup.setToolTipText(LocalizationData.get("Backup.preference.activate.tooltip")); //$NON-NLS-1$
 		}
 		return chckbxBackup;
 	}
@@ -144,7 +143,7 @@ public class BackupPanel extends PreferencePanel {
 	private JLabel getHelpChckbxBackup() {
 		if (helpChckbxBackup == null) {
 			helpChckbxBackup = new JLabel();
-			helpChckbxBackup.setToolTipText(LocalizationData.get("Backup.helpButton.toolTip")); //$NON-NLS-1$
+			helpChckbxBackup.setToolTipText(LocalizationData.get("Backup.preference.helpButton.toolTip")); //$NON-NLS-1$
 			helpChckbxBackup.setIcon(IconManager.HELP);
 			helpChckbxBackup.addMouseListener(new MouseAdapter() {
 				@Override
@@ -172,12 +171,12 @@ public class BackupPanel extends PreferencePanel {
 
 	@Override
 	public String getTitle() {
-		return "Sauvegardes";
+		return LocalizationData.get("Backup.preference.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		return "Cet onglet permet de paramétrer les sauvegardes automatiques";
+		return LocalizationData.get("Backup.preference.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override
