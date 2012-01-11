@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ButtonGroup;
 
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.Portable;
 
 import java.awt.event.ItemListener;
@@ -33,7 +34,7 @@ public class DiskPanel extends JPanel {
 	}
 	
 	private void initialize() {
-		setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_diskRdnButton = new GridBagConstraints();
@@ -75,8 +76,8 @@ public class DiskPanel extends JPanel {
 
 	public JRadioButton getDiskRdnButton() {
 		if (diskRdnButton == null) {
-			diskRdnButton = new JRadioButton("Sur disque");
-			diskRdnButton.setToolTipText("S\u00E9lectionnez cette option pour effectuer vos sauvegardes sur un disque de votre ordinateur ou une clef USB");
+			diskRdnButton = new JRadioButton(LocalizationData.get("Backup.preference.disk.disk")); //$NON-NLS-1$
+			diskRdnButton.setToolTipText(LocalizationData.get("Backup.preference.disk.disk.tooltip")); //$NON-NLS-1$
 			diskRdnButton.setSelected(true);
 			diskRdnButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
@@ -93,8 +94,10 @@ public class DiskPanel extends JPanel {
 	
 	private JRadioButton getDefaultRdnButton() {
 		if (defaultRdnButton == null) {
-			String text = MessageFormat.format("Emplacement par défaut ({0})", Portable.getBackupDirectory());
+			String text = MessageFormat.format(LocalizationData.get("Backup.preference.disk.default"), Portable.getBackupDirectory()); //$NON-NLS-1$
 			defaultRdnButton = new JRadioButton(text);
+			defaultRdnButton.setToolTipText(LocalizationData.get("Backup.preference.disk.default.tooltip")); //$NON-NLS-1$
+			defaultRdnButton.setSelected(true);
 			buttonGroup.add(defaultRdnButton);
 		}
 		return defaultRdnButton;
@@ -102,7 +105,8 @@ public class DiskPanel extends JPanel {
 	
 	private JRadioButton getCustomRdnButton() {
 		if (customRdnButton == null) {
-			customRdnButton = new JRadioButton("Emplacement personnalis\u00E9");
+			customRdnButton = new JRadioButton(LocalizationData.get("Backup.preference.disk.custom")); //$NON-NLS-1$
+			customRdnButton.setToolTipText(LocalizationData.get("Backup.preference.disk.custom.tooltip")); //$NON-NLS-1$
 			buttonGroup.add(customRdnButton);
 		}
 		return customRdnButton;
@@ -119,8 +123,8 @@ public class DiskPanel extends JPanel {
 	
 	private JButton getSelectButton() {
 		if (selectButton == null) {
-			selectButton = new JButton("Choisir");
-			selectButton.setToolTipText("Cliquez sur ce bouton pour choisir l'emplacement o\u00F9 sauvegarder vos donn\u00E9es");
+			selectButton = new JButton(LocalizationData.get("Backup.preference.disk.select")); //$NON-NLS-1$
+			selectButton.setToolTipText(LocalizationData.get("Backup.preference.disk.select.tooltip")); //$NON-NLS-1$
 		}
 		return selectButton;
 	}

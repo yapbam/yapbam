@@ -93,7 +93,7 @@ public class FTPPanel extends JPanel {
 		gbc_label.insets = new Insets(0, 0, 5, 5);
 		gbc_label.gridx = 0;
 		gbc_label.gridy = 1;
-		labels.add(new JLabel("Serveur :"));
+		labels.add(new JLabel(LocalizationData.get("Backup.preference.ftp.server"))); //$NON-NLS-1$
 		add(labels.get(labels.size()-1), gbc_label);
 		GridBagConstraints gbc_hostField = new GridBagConstraints();
 		gbc_hostField.gridwidth = 0;
@@ -108,7 +108,7 @@ public class FTPPanel extends JPanel {
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 0;
 		gbc_label_1.gridy = 2;
-		labels.add(new JLabel("R\u00E9pertoire :"));
+		labels.add(new JLabel(LocalizationData.get("Backup.preference.ftp.directory"))); //$NON-NLS-1$
 		add(labels.get(labels.size()-1), gbc_label_1);
 		GridBagConstraints gbc_folderField = new GridBagConstraints();
 		gbc_folderField.gridwidth = 0;
@@ -123,7 +123,7 @@ public class FTPPanel extends JPanel {
 	private JTextField getHostField() {
 		if (hostField == null) {
 			hostField = new JTextField();
-			hostField.setToolTipText("Entrez ici le nom du serveur o\u00F9 sauvegarder vos donn\u00E9es");
+			hostField.setToolTipText(LocalizationData.get("Backup.preference.ftp.server.tooltip")); //$NON-NLS-1$
 			hostField.setColumns(10);
 		}
 		return hostField;
@@ -132,7 +132,7 @@ public class FTPPanel extends JPanel {
 	private JTextField getFolderField() {
 		if (folderField == null) {
 			folderField = new JTextField();
-			folderField.setToolTipText("Entrez ici le chemin du r\u00E9pertoire o\u00F9 stocker vos donn\u00E9es");
+			folderField.setToolTipText(LocalizationData.get("Backup.preference.ftp.directory.tooltip")); //$NON-NLS-1$
 			folderField.setColumns(10);
 		}
 		return folderField;
@@ -140,8 +140,8 @@ public class FTPPanel extends JPanel {
 	
 	public JRadioButton getFtpRdnButton() {
 		if (ftpRdnButton == null) {
-			ftpRdnButton = new JRadioButton("FTP");
-			ftpRdnButton.setToolTipText("S\u00E9lectionner cette option pour sauvegarder sur un serveur FTP");
+			ftpRdnButton = new JRadioButton(LocalizationData.get("Backup.preference.ftp.ftp")); //$NON-NLS-1$
+			ftpRdnButton.setToolTipText(LocalizationData.get("Backup.preference.ftp.ftp.tooltip")); //$NON-NLS-1$
 			ftpRdnButton.setSelected(true);
 			ftpRdnButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
@@ -163,7 +163,7 @@ public class FTPPanel extends JPanel {
 	private JTextField getUserField() {
 		if (userField == null) {
 			userField = new JTextField();
-			userField.setToolTipText("Entrez ici le compte utilis\u00E9 pour se connecter au serveur");
+			userField.setToolTipText(LocalizationData.get("Backup.preference.ftp.user.tooltip")); //$NON-NLS-1$
 		}
 		return userField;
 	}
@@ -171,7 +171,7 @@ public class FTPPanel extends JPanel {
 	private JPasswordField getPasswordField() {
 		if (passwordField == null) {
 			passwordField = new JPasswordField();
-			passwordField.setToolTipText("Entrez ici le mot de passe du compte");
+			passwordField.setToolTipText(LocalizationData.get("Backup.preference.ftp.password.tooltip")); //$NON-NLS-1$
 			passwordField.setColumns(10);
 		}
 		return passwordField;
