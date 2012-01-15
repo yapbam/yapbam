@@ -65,7 +65,6 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-//		this.setSize(300, 200);
 		this.setLayout(new BorderLayout());
 		this.add(getSouthPanel(), BorderLayout.SOUTH);
 		this.add(getJScrollPane(), BorderLayout.CENTER);
@@ -77,7 +76,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) refreshActions();
+				refreshActions();
 			}
 		});
 		refreshActions();
