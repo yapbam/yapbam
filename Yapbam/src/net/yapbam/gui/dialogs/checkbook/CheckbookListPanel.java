@@ -52,8 +52,8 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 				}
 			}
 		});
-        this.account = null;
-        getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
+		this.account = null;
+		getJTable().setPreferredScrollableViewportSize(new Dimension(1, getJTable().getRowHeight() * 6));
 	}
 		
 	public void setContent(Account account) {
@@ -80,8 +80,8 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	private final class NewCheckbookAction extends AbstractAction {
 		public NewCheckbookAction() {
 			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.New.tooltip")); //$NON-NLS-1$
-	        setEnabled(false);
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.New.tooltip")); //$NON-NLS-1$
+			setEnabled(false);
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -91,7 +91,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	private final class EditBookAction extends AbstractAction {
 		public EditBookAction() {
 			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -109,7 +109,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	private final class DeleteBookAction extends AbstractAction {			
 		public DeleteBookAction() {
 			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE); //$NON-NLS-1$
-	        putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Delete.tooltip")); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Delete.tooltip")); //$NON-NLS-1$
 		}
 		
 		@Override

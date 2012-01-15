@@ -72,30 +72,30 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	@Override
 	protected JTable instantiateJTable() {
 		JTable jTable = new JTable(getTableModel()) {
-		    //Implement table cell tool tips.
-		    @Override
+			//Implement table cell tool tips.
+			@Override
 			public String getToolTipText(MouseEvent e) {
-		        String tip;
-		        int column = convertColumnIndexToModel(columnAtPoint(e.getPoint()));
-		        if (column == 0) {
-		            tip = LocalizationData.get("AccountManager.nameColumn.toolTip"); //$NON-NLS-1$
-		        } else if (column == 1) {
-		            tip = LocalizationData.get("AccountManager.balanceColumn.toolTip"); //$NON-NLS-1$
-		        } else if (column == 2) {
-		        	tip = LocalizationData.get("AccountManager.alertThresholdLess.toolTip"); //$NON-NLS-1$
-		        } else if (column == 3) {
-		        	tip = LocalizationData.get("AccountManager.alertThresholdMore.toolTip"); //$NON-NLS-1$
-		        } else if (column == 4) {
-		            tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
-		        } else if (column == 5) {
-		            tip = LocalizationData.get("AccountManager.modesNumber.toolTip"); //$NON-NLS-1$
-		        } else if (column == 6) {
-		            tip = LocalizationData.get("AccountManager.checkbooksNumber.toolTip"); //$NON-NLS-1$
-		        } else { //another column
-		            tip = super.getToolTipText(e);
-		        }
-		        return tip;
-		    }
+				String tip;
+				int column = convertColumnIndexToModel(columnAtPoint(e.getPoint()));
+				if (column == 0) {
+					tip = LocalizationData.get("AccountManager.nameColumn.toolTip"); //$NON-NLS-1$
+				} else if (column == 1) {
+					tip = LocalizationData.get("AccountManager.balanceColumn.toolTip"); //$NON-NLS-1$
+				} else if (column == 2) {
+					tip = LocalizationData.get("AccountManager.alertThresholdLess.toolTip"); //$NON-NLS-1$
+				} else if (column == 3) {
+					tip = LocalizationData.get("AccountManager.alertThresholdMore.toolTip"); //$NON-NLS-1$
+				} else if (column == 4) {
+					tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
+				} else if (column == 5) {
+					tip = LocalizationData.get("AccountManager.modesNumber.toolTip"); //$NON-NLS-1$
+				} else if (column == 6) {
+					tip = LocalizationData.get("AccountManager.checkbooksNumber.toolTip"); //$NON-NLS-1$
+				} else { // another column
+					tip = super.getToolTipText(e);
+				}
+				return tip;
+			}
 		};
 		jTable.setDefaultRenderer(Double.class, new DefaultTableCellRenderer(){
 		    @Override
