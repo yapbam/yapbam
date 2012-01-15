@@ -19,6 +19,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 
 public class BackupPanel extends PreferencePanel {
@@ -158,6 +160,13 @@ public class BackupPanel extends PreferencePanel {
 	private FTPPanel getFtpPanel() {
 		if (ftpPanel == null) {
 			ftpPanel = new FTPPanel();
+			ftpPanel.addPropertyChangeListener(OK_DISABLED_CAUSE_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					//FIXME have a look at the other components properties
+					setOkDisabledCause(ftpPanel.getOkDisabledCause());
+				}
+			});
 		}
 		return ftpPanel;
 	}
