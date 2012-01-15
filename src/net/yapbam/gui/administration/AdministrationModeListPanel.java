@@ -78,7 +78,8 @@ class AdministrationModeListPanel extends ModeListPanel {
 					} else if (event instanceof ModeRemovedEvent) {
 						ModeRemovedEvent e = (ModeRemovedEvent) event;
 						if (account==((ModeRemovedEvent)event).getAccount()) {
-							fireTableRowsDeleted(e.getIndex(), e.getIndex());
+							int row = e.getIndex()-1; // -1 because undefined mode is the first one and is not displayed
+							fireTableRowsDeleted(row, row);
 						}
 					}
 				}

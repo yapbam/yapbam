@@ -77,7 +77,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				refreshActions();
+				if (!e.getValueIsAdjusting()) refreshActions();
 			}
 		});
 		refreshActions();
