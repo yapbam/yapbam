@@ -1,11 +1,11 @@
 package net.yapbam.gui.widget;
 
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-/** A JTextField with a property that maps its text.
+/** A JPasswordField with a property that maps its text.
  * <br>I've found no way to track efficiently the modifications of the text of a JTextField ... so I developed this widget.
  * <br>DocumentListeners are intended to do it, unfortunately, when a text is replace in a field, the listener receive two events:<ol>
  * <li>One when the replaced text is removed.</li>
@@ -20,16 +20,16 @@ import javax.swing.text.PlainDocument;
  * <BR>License : GPL v3
  */
 
-public class CoolJTextField extends JTextField {
+public class CoolJPasswordField extends JPasswordField {
 	private static final long serialVersionUID = 1L;
 
 	public static final String TEXT_PROPERTY = "text";
 	
-	public CoolJTextField() {
+	public CoolJPasswordField() {
 		this(0);
 	}
 
-	public CoolJTextField(int nbColumns) {
+	public CoolJPasswordField(int nbColumns) {
 		super("", nbColumns);
 		this.setDocument(new MyDocument());
 	}
@@ -40,20 +40,20 @@ public class CoolJTextField extends JTextField {
 		
 		@Override
 		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-			String oldValue = CoolJTextField.this.getText();
+			String oldValue = new String(CoolJPasswordField.this.getPassword());
 			this.ignoreEvents = true;
 			super.replace(offset, length, text, attrs);
 			this.ignoreEvents = false;
-			String newValue = CoolJTextField.this.getText();
-			if (!oldValue.equals(newValue)) CoolJTextField.this.firePropertyChange(TEXT_PROPERTY, oldValue, newValue);
+			String newValue = new String(CoolJPasswordField.this.getPassword());
+			if (!oldValue.equals(newValue)) CoolJPasswordField.this.firePropertyChange(TEXT_PROPERTY, oldValue, newValue);
 		}
 		
 		@Override
 		public void remove(int offs, int len) throws BadLocationException {
-			String oldValue = CoolJTextField.this.getText();
+			String oldValue = new String(CoolJPasswordField.this.getPassword());
 			super.remove(offs, len);
-			String newValue = CoolJTextField.this.getText();
-			if (!ignoreEvents && !oldValue.equals(newValue)) CoolJTextField.this.firePropertyChange(TEXT_PROPERTY, oldValue, newValue);
+			String newValue = new String(CoolJPasswordField.this.getPassword());
+			if (!ignoreEvents && !oldValue.equals(newValue)) CoolJPasswordField.this.firePropertyChange(TEXT_PROPERTY, oldValue, newValue);
 		}
 	}
 }

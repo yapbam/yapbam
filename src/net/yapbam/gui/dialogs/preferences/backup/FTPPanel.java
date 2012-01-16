@@ -8,7 +8,6 @@ import javax.swing.JTextField;
 import java.awt.Insets;
 
 import javax.swing.JRadioButton;
-import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -22,6 +21,7 @@ import javax.swing.border.TitledBorder;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
+import net.yapbam.gui.widget.CoolJPasswordField;
 import net.yapbam.gui.widget.CoolJTextField;
 import net.yapbam.util.NullUtils;
 
@@ -32,7 +32,7 @@ public class FTPPanel extends JPanel {
 	private JTextField folderField;
 	private JRadioButton ftpRdnButton;
 	private CoolJTextField userField;
-	private JPasswordField passwordField;
+	private CoolJPasswordField passwordField;
 	private JCheckBox showPassWordCheckBox;
 
 	private List<JLabel> labels;
@@ -142,11 +142,13 @@ public class FTPPanel extends JPanel {
 	private void updateOkDisabledCause() {
 		String old = this.okDisabledCause;
 		this.okDisabledCause = null;
-		if (getFtpRdnButton().isSelected()) {
-			if (getHostField().getText().length()==0) {
-				this.okDisabledCause = MessageFormat.format("Le nom du serveur FTP n'est pas renseigné dans l''onglet {0}",LocalizationData.get("Backup.preference.title")); //LOCAL
-			} else {
-				//TODO
+		if (getFtpRdnButton().isSelected()) { // If the button is not selected, the fields content doesn't matter
+			if (getHostField().getText().trim().length()==0) {
+				// No host name entered !
+				this.okDisabledCause = MessageFormat.format(LocalizationData.get("Backup.preference.ftp.server.missing"),LocalizationData.get("Backup.preference.title"));  //$NON-NLS-1$//$NON-NLS-2$
+			} else if (getUserField().getText().trim().length()==0) {
+				// No user account entered
+				this.okDisabledCause = MessageFormat.format(LocalizationData.get("Backup.preference.ftp.user.missing"),LocalizationData.get("Backup.preference.title"));  //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 		if (!NullUtils.areEquals(this.okDisabledCause, old)) {
@@ -179,7 +181,7 @@ public class FTPPanel extends JPanel {
 		if (ftpRdnButton == null) {
 			ftpRdnButton = new JRadioButton(LocalizationData.get("Backup.preference.ftp.ftp")); //$NON-NLS-1$
 			ftpRdnButton.setSelected(true);
-			ftpRdnButton.setToolTipText(LocalizationData.get("Backup.preference.ftp.ftp.tooltip"));
+			ftpRdnButton.setToolTipText(LocalizationData.get("Backup.preference.ftp.ftp.tooltip")); //$NON-NLS-1$
 			ftpRdnButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					boolean selected = e.getStateChange()==ItemEvent.SELECTED;
@@ -207,13 +209,14 @@ public class FTPPanel extends JPanel {
 		if (userField == null) {
 			userField = new CoolJTextField();
 			userField.setToolTipText(LocalizationData.get("Backup.preference.ftp.user.tooltip")); //$NON-NLS-1$
+			userField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.updateOkListener);
 		}
 		return userField;
 	}
 	
-	private JPasswordField getPasswordField() {
+	private CoolJPasswordField getPasswordField() {
 		if (passwordField == null) {
-			passwordField = new JPasswordField();
+			passwordField = new CoolJPasswordField();
 			passwordField.setToolTipText(LocalizationData.get("Backup.preference.ftp.password.tooltip")); //$NON-NLS-1$
 		}
 		return passwordField;

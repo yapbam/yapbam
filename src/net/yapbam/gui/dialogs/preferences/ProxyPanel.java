@@ -14,31 +14,44 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.math.BigInteger;
+import java.text.MessageFormat;
 
 import javax.swing.JPasswordField;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.widget.CoolJPasswordField;
+import net.yapbam.gui.widget.CoolJTextField;
+import net.yapbam.gui.widget.IntegerWidget;
 
 import javax.swing.JCheckBox;
 
 public class ProxyPanel extends PreferencePanel {
-
 	private static final long serialVersionUID = 1L;
+	private static final int DEFAULT_PROXY_PORT = 3128;
+	private static final int IP_PORT_MAX_VALUE = 65535;
+	
 	private JRadioButton noProxyButton = null;
 	private JRadioButton proxyButton = null;
 	private JPanel proxyPanel = null;
 	private JLabel proxyLabel = null;
-	private JTextField proxyHostField = null;
+	private CoolJTextField proxyHostField = null;
 	private JLabel proxyPortLabel = null;
-	private JTextField proxyPortField = null;
+	private IntegerWidget proxyPortField = null;
 	private JPanel authenticationPanel = null;
 	private JLabel userLabel = null;
-	private JTextField userField = null;
+	private CoolJTextField userField = null;
 	private JLabel passwordLabel = null;
-	private JPasswordField passwordField = null;
+	private CoolJPasswordField passwordField = null;
 	private JCheckBox showPassCheckBox = null;
+	
+	private PropertyChangeListener updateOkListener;
+	
 	/**
 	 * This is the default constructor
 	 */
@@ -51,6 +64,12 @@ public class ProxyPanel extends PreferencePanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
+		this.updateOkListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setOkDisabledCause(buildOkDisabledCause());
+			}
+		};
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.weighty = 1.0;
 		gridBagConstraints2.gridx = 0;
@@ -84,6 +103,14 @@ public class ProxyPanel extends PreferencePanel {
 		getUserField().setText(Preferences.INSTANCE.getHttpProxyUser());
 		getPasswordField().setText(Preferences.INSTANCE.getHttpProxyPassword());
 	}
+	
+	private String buildOkDisabledCause() {
+		if (getProxyButton().isSelected()) {
+			if (getProxyHost()==null) return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.proxyNameMissing"),getTitle()); //$NON-NLS-1$
+			if (getProxyPort()>IP_PORT_MAX_VALUE) return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.invalidPort"),getTitle(),IP_PORT_MAX_VALUE); //$NON-NLS-1$
+		}
+		return null;
+	}
 
 	/**
 	 * This method initializes noProxyButton	
@@ -98,6 +125,7 @@ public class ProxyPanel extends PreferencePanel {
 			noProxyButton.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					setProxyEnabled(!getNoProxyButton().isSelected());
+					setOkDisabledCause(buildOkDisabledCause());
 				}
 			});
 		}
@@ -128,6 +156,12 @@ public class ProxyPanel extends PreferencePanel {
 			proxyButton = new JRadioButton();
 			proxyButton.setText(LocalizationData.get("PreferencesDialog.Network.proxy.title")); //$NON-NLS-1$
 			proxyButton.setToolTipText(LocalizationData.get("PreferencesDialog.Network.proxy.tooltip")); //$NON-NLS-1$
+			proxyButton.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					setOkDisabledCause(buildOkDisabledCause());
+				}
+			});
 		}
 		return proxyButton;
 	}
@@ -187,9 +221,9 @@ public class ProxyPanel extends PreferencePanel {
 	 */
 	private JTextField getProxyHostField() {
 		if (proxyHostField == null) {
-			proxyHostField = new JTextField();
-			proxyHostField.setColumns(10);
+			proxyHostField = new CoolJTextField(10);
 			proxyHostField.setToolTipText(LocalizationData.get("PreferencesDialog.Network.proxyField.tooltip")); //$NON-NLS-1$
+			proxyHostField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.updateOkListener);
 		}
 		return proxyHostField;
 	}
@@ -199,11 +233,12 @@ public class ProxyPanel extends PreferencePanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getProxyPortField() {
+	private IntegerWidget getProxyPortField() {
 		if (proxyPortField == null) {
-			proxyPortField = new JTextField();
+			proxyPortField = new IntegerWidget(BigInteger.ONE, null); //$NON-NLS-1$
 			proxyPortField.setColumns(10);
 			proxyPortField.setToolTipText(LocalizationData.get("PreferencesDialog.Network.port.tooltip")); //$NON-NLS-1$
+			proxyPortField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, this.updateOkListener);
 		}
 		return proxyPortField;
 	}
@@ -264,9 +299,9 @@ public class ProxyPanel extends PreferencePanel {
 	 */
 	private JTextField getUserField() {
 		if (userField == null) {
-			userField = new JTextField();
-			userField.setColumns(10);
+			userField = new CoolJTextField();
 			userField.setToolTipText(LocalizationData.get("PreferencesDialog.Network.user.toolTip")); //$NON-NLS-1$
+			userField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, updateOkListener);
 		}
 		return userField;
 	}
@@ -278,9 +313,9 @@ public class ProxyPanel extends PreferencePanel {
 	 */
 	private JPasswordField getPasswordField() {
 		if (passwordField == null) {
-			passwordField = new JPasswordField();
-			passwordField.setText(""); //$NON-NLS-1$
+			passwordField = new CoolJPasswordField();
 			passwordField.setToolTipText(LocalizationData.get("PreferencesDialog.Network.password.tooltip")); //$NON-NLS-1$
+			passwordField.addPropertyChangeListener(CoolJPasswordField.TEXT_PROPERTY, updateOkListener);
 		}
 		return passwordField;
 	}
@@ -294,16 +329,14 @@ public class ProxyPanel extends PreferencePanel {
 		}
 	}
 
-	public int getProxyPort() {
+	public Integer getProxyPort() {
 		if (getProxyHost()==null) {
-			return 0;
+			return null;
 		} else {
-			int port = 0;
-			try {
-				port = Integer.parseInt(getProxyPortField().getText().trim());
-			} catch (NumberFormatException e) {
-			}
-			return port>0?port:3128;
+			if (getProxyPortField().getText().trim().length()==0) return DEFAULT_PROXY_PORT; // The default port
+			BigInteger port = getProxyPortField().getValue();
+			if (port.compareTo(new BigInteger(Integer.toString(IP_PORT_MAX_VALUE)))>0) return Integer.MAX_VALUE;
+			return port.intValue();
 		}
 	}
 
