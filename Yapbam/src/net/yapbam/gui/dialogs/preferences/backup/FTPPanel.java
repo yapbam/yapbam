@@ -40,6 +40,8 @@ public class FTPPanel extends JPanel {
 	private String okDisabledCause;
 
 	private PropertyChangeListener updateOkListener;
+	private PropertyChangeListener autoSelectListener;
+	private JPanel panel;
 
 	/**
 	 * Create the panel.
@@ -55,6 +57,13 @@ public class FTPPanel extends JPanel {
 				updateOkDisabledCause();
 			}
 		};
+		this.autoSelectListener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				String text = (String) evt.getNewValue();
+				if ((text!=null) && (text.length()>0)) getFtpRdnButton().setSelected(true);
+			}
+		};
 		setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 		labels = new LinkedList<JLabel>(); 
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -63,19 +72,16 @@ public class FTPPanel extends JPanel {
 		gbc_ftpRdnButton.weightx = 1.0;
 		gbc_ftpRdnButton.gridwidth = 0;
 		gbc_ftpRdnButton.anchor = GridBagConstraints.WEST;
-		gbc_ftpRdnButton.insets = new Insets(0, 0, 5, 5);
+		gbc_ftpRdnButton.insets = new Insets(0, 0, 5, 0);
 		gbc_ftpRdnButton.gridx = 0;
 		gbc_ftpRdnButton.gridy = 0;
 		add(getFtpRdnButton(), gbc_ftpRdnButton);
 		GridBagConstraints gbc_showPassWordCheckBox = new GridBagConstraints();
-		gbc_showPassWordCheckBox.anchor = GridBagConstraints.NORTH;
-		gbc_showPassWordCheckBox.insets = new Insets(0, 0, 5, 5);
+		gbc_showPassWordCheckBox.insets = new Insets(0, 0, 5, 0);
 		gbc_showPassWordCheckBox.gridx = 2;
 		gbc_showPassWordCheckBox.gridy = 4;
 		add(getShowPassWordCheckBox(), gbc_showPassWordCheckBox);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
-		gbc_passwordField.anchor = GridBagConstraints.NORTH;
-		gbc_passwordField.weighty = 1.0;
 		gbc_passwordField.weightx = 1.0;
 		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
@@ -91,7 +97,7 @@ public class FTPPanel extends JPanel {
 		labels.add(label);
 		add(label, gbc_label_3);
 		GridBagConstraints gbc_userField = new GridBagConstraints();
-		gbc_userField.insets = new Insets(0, 0, 5, 5);
+		gbc_userField.insets = new Insets(0, 0, 5, 0);
 		gbc_userField.gridwidth = 0;
 		gbc_userField.weightx = 1.0;
 		gbc_userField.fill = GridBagConstraints.HORIZONTAL;
@@ -115,7 +121,7 @@ public class FTPPanel extends JPanel {
 		GridBagConstraints gbc_hostField = new GridBagConstraints();
 		gbc_hostField.gridwidth = 0;
 		gbc_hostField.weightx = 1.0;
-		gbc_hostField.insets = new Insets(0, 0, 5, 5);
+		gbc_hostField.insets = new Insets(0, 0, 5, 0);
 		gbc_hostField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_hostField.gridx = 1;
 		gbc_hostField.gridy = 1;
@@ -129,7 +135,7 @@ public class FTPPanel extends JPanel {
 		add(labels.get(labels.size()-1), gbc_label_1);
 		GridBagConstraints gbc_folderField = new GridBagConstraints();
 		gbc_folderField.gridwidth = 0;
-		gbc_folderField.insets = new Insets(0, 0, 5, 5);
+		gbc_folderField.insets = new Insets(0, 0, 5, 0);
 		gbc_folderField.weightx = 1.0;
 		gbc_folderField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_folderField.gridx = 1;
@@ -137,6 +143,14 @@ public class FTPPanel extends JPanel {
 		add(getFolderField(), gbc_folderField);
 		this.okDisabledCause = null;
 		this.getFtpRdnButton().setSelected(false);
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.weighty = 1.0;
+		gbc_panel.gridwidth = 0;
+		gbc_panel.insets = new Insets(0, 0, 0, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 5;
+		add(getPanel(), gbc_panel);
 	}
 	
 	private void updateOkDisabledCause() {
@@ -165,14 +179,16 @@ public class FTPPanel extends JPanel {
 			hostField = new CoolJTextField();
 			hostField.setToolTipText(LocalizationData.get("Backup.preference.ftp.server.tooltip")); //$NON-NLS-1$
 			hostField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.updateOkListener);
+			hostField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.autoSelectListener);
 		}
 		return hostField;
 	}
 
 	private JTextField getFolderField() {
 		if (folderField == null) {
-			folderField = new JTextField();
+			folderField = new CoolJTextField();
 			folderField.setToolTipText(LocalizationData.get("Backup.preference.ftp.directory.tooltip")); //$NON-NLS-1$
+			folderField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.autoSelectListener);
 		}
 		return folderField;
 	}
@@ -182,19 +198,6 @@ public class FTPPanel extends JPanel {
 			ftpRdnButton = new JRadioButton(LocalizationData.get("Backup.preference.ftp.ftp")); //$NON-NLS-1$
 			ftpRdnButton.setSelected(true);
 			ftpRdnButton.setToolTipText(LocalizationData.get("Backup.preference.ftp.ftp.tooltip")); //$NON-NLS-1$
-			ftpRdnButton.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					boolean selected = e.getStateChange()==ItemEvent.SELECTED;
-					getUserField().setVisible(selected);
-					getPasswordField().setVisible(selected);
-					getHostField().setVisible(selected);
-					getFolderField().setVisible(selected);
-					getShowPassWordCheckBox().setVisible(selected);
-					for (JLabel label : labels) {
-						label.setVisible(selected);
-					}
-				}
-			});
 			ftpRdnButton.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
@@ -210,6 +213,7 @@ public class FTPPanel extends JPanel {
 			userField = new CoolJTextField();
 			userField.setToolTipText(LocalizationData.get("Backup.preference.ftp.user.tooltip")); //$NON-NLS-1$
 			userField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.updateOkListener);
+			userField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.autoSelectListener);
 		}
 		return userField;
 	}
@@ -257,5 +261,11 @@ public class FTPPanel extends JPanel {
 		for (JLabel label : labels) {
 			label.setEnabled(enabled);
 		}
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+		}
+		return panel;
 	}
 }

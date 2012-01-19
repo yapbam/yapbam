@@ -33,6 +33,8 @@ public class BackupPanel extends PreferencePanel {
 	private DiskPanel diskPanel;
 	private JLabel lblTailleMaximumReserve;
 	private JLabel lblSizeUnit;
+	private JCheckBox chckbxCompress;
+	private JPanel panel;
 
 	/**
 	 * Create the panel.
@@ -66,10 +68,9 @@ public class BackupPanel extends PreferencePanel {
 		
 		JPanel panelSize = new JPanel();
 		GridBagConstraints gbc_panelSize = new GridBagConstraints();
+		gbc_panelSize.insets = new Insets(0, 0, 5, 0);
 		gbc_panelSize.anchor = GridBagConstraints.NORTH;
-		gbc_panelSize.weighty = 1.0;
 		gbc_panelSize.gridwidth = 0;
-		gbc_panelSize.insets = new Insets(0, 0, 0, 5);
 		gbc_panelSize.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelSize.gridx = 0;
 		gbc_panelSize.gridy = 3;
@@ -110,6 +111,20 @@ public class BackupPanel extends PreferencePanel {
 		gbc_helpChckbxBackup.gridx = 1;
 		gbc_helpChckbxBackup.gridy = 0;
 		add(getHelpChckbxBackup(), gbc_helpChckbxBackup);
+		GridBagConstraints gbc_chckbxCompress = new GridBagConstraints();
+		gbc_chckbxCompress.insets = new Insets(0, 0, 5, 0);
+		gbc_chckbxCompress.anchor = GridBagConstraints.WEST;
+		gbc_chckbxCompress.gridwidth = 0;
+		gbc_chckbxCompress.gridx = 0;
+		gbc_chckbxCompress.gridy = 4;
+		add(getChckbxCompress(), gbc_chckbxCompress);
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.weighty = 1.0;
+		gbc_panel.insets = new Insets(0, 0, 0, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 5;
+		add(getPanel(), gbc_panel);
 	}
 
 	public IntegerWidget getMaxDiskField() {
@@ -133,6 +148,7 @@ public class BackupPanel extends PreferencePanel {
 					getFtpPanel().setEnabled(enabled);
 					getMaxDiskField().setEnabled(enabled);
 					getMaxDiskField().setEditable(enabled);
+					getChckbxCompress().setEnabled(enabled);
 					lblTailleMaximumReserve.setEnabled(enabled);
 					lblSizeUnit.setEnabled(enabled);
 				}
@@ -192,5 +208,18 @@ public class BackupPanel extends PreferencePanel {
 	public boolean updatePreferences() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	private JCheckBox getChckbxCompress() {
+		if (chckbxCompress == null) {
+			chckbxCompress = new JCheckBox(LocalizationData.get("Backup.preference.compress")); //$NON-NLS-1$
+			chckbxCompress.setToolTipText(LocalizationData.get("Backup.preference.compress.tooltip")); //$NON-NLS-1$
+		}
+		return chckbxCompress;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+		}
+		return panel;
 	}
 }
