@@ -6,6 +6,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.preferences.BackupOptions;
 import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.IntegerWidget;
 
@@ -131,6 +132,19 @@ public class BackupPanel extends PreferencePanel {
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 5;
 		add(getPanel(), gbc_panel);
+		init();
+	}
+
+	private void init() {
+		BackupOptions options = Preferences.INSTANCE.getBackupOptions();
+		getChckbxBackup().setSelected(options.isEnabled());
+		getChckbxCompress().setSelected(options.isCompressed());
+		getMaxDiskField().setValue(options.getSpaceLimit());
+		if ("file".equalsIgnoreCase(options.getUri().getScheme())) {
+			getDiskPanel().setFile(new File(options.getUri()));
+		} else {
+			getFtpPanel().setURI(options.getUri());
+		}
 	}
 
 	public IntegerWidget getMaxDiskField() {
@@ -185,7 +199,6 @@ public class BackupPanel extends PreferencePanel {
 			ftpPanel.addPropertyChangeListener(OK_DISABLED_CAUSE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					//FIXME have a look at the other components properties
 					setOkDisabledCause(ftpPanel.getOkDisabledCause());
 				}
 			});
@@ -227,32 +240,21 @@ public class BackupPanel extends PreferencePanel {
 
 	@Override
 	public boolean updatePreferences() {
-		URI backupURL = null;
-		if (getChckbxBackup().isSelected()) {
+		boolean enabled = getChckbxBackup().isSelected();
+		URI uri = null;
+		if (enabled) {
 			File file = getDiskPanel().getFile();
 			if (file!=null) {
 				try {
-					backupURL = file.getCanonicalFile().toURI();
+					uri = file.getCanonicalFile().toURI();
 				} catch (IOException e) {
 					ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
 				} 
 			} else {
-				backupURL = getFtpPanel().getURI();
+				uri = getFtpPanel().getURI();
 			}
 		}
-		if (backupURL==null) {
-			Preferences.INSTANCE.removeProperty("backup.URI");
-			Preferences.INSTANCE.removeProperty("backup.compressed");
-			Preferences.INSTANCE.removeProperty("backup.limitSpace");
-		} else {
-			Preferences.INSTANCE.setProperty("backup.URI", backupURL.toString());
-			Preferences.INSTANCE.setProperty("backup.compressed", getChckbxCompress().isSelected()?"TRUE":"FALSE");
-			if (getMaxDiskField().getValue()==null) {
-				Preferences.INSTANCE.removeProperty("backup.limitSpace");
-			} else {
-				Preferences.INSTANCE.setProperty("backup.limitSpace", getMaxDiskField().getValue().toString());
-			}
-		}
+		Preferences.INSTANCE.setBackupOptions(new BackupOptions(enabled, uri, getChckbxCompress().isSelected(), getMaxDiskField().getValue()));
 		return false;
 	}
 }
