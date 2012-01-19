@@ -1,27 +1,33 @@
 package net.yapbam.gui.dialogs.preferences.backup;
 
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
+import net.yapbam.gui.Preferences;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.IntegerWidget;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JCheckBox;
 import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URI;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 
 public class BackupPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
@@ -194,6 +200,21 @@ public class BackupPanel extends PreferencePanel {
 		return diskPanel;
 	}
 
+	private JCheckBox getChckbxCompress() {
+		if (chckbxCompress == null) {
+			chckbxCompress = new JCheckBox(LocalizationData.get("Backup.preference.compress")); //$NON-NLS-1$
+			chckbxCompress.setToolTipText(LocalizationData.get("Backup.preference.compress.tooltip")); //$NON-NLS-1$
+		}
+		return chckbxCompress;
+	}
+
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+		}
+		return panel;
+	}
+
 	@Override
 	public String getTitle() {
 		return LocalizationData.get("Backup.preference.title"); //$NON-NLS-1$
@@ -206,20 +227,32 @@ public class BackupPanel extends PreferencePanel {
 
 	@Override
 	public boolean updatePreferences() {
-		// TODO Auto-generated method stub
+		URI backupURL = null;
+		if (getChckbxBackup().isSelected()) {
+			File file = getDiskPanel().getFile();
+			if (file!=null) {
+				try {
+					backupURL = file.getCanonicalFile().toURI();
+				} catch (IOException e) {
+					ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
+				} 
+			} else {
+				backupURL = getFtpPanel().getURI();
+			}
+		}
+		if (backupURL==null) {
+			Preferences.INSTANCE.removeProperty("backup.URI");
+			Preferences.INSTANCE.removeProperty("backup.compressed");
+			Preferences.INSTANCE.removeProperty("backup.limitSpace");
+		} else {
+			Preferences.INSTANCE.setProperty("backup.URI", backupURL.toString());
+			Preferences.INSTANCE.setProperty("backup.compressed", getChckbxCompress().isSelected()?"TRUE":"FALSE");
+			if (getMaxDiskField().getValue()==null) {
+				Preferences.INSTANCE.removeProperty("backup.limitSpace");
+			} else {
+				Preferences.INSTANCE.setProperty("backup.limitSpace", getMaxDiskField().getValue().toString());
+			}
+		}
 		return false;
-	}
-	private JCheckBox getChckbxCompress() {
-		if (chckbxCompress == null) {
-			chckbxCompress = new JCheckBox(LocalizationData.get("Backup.preference.compress")); //$NON-NLS-1$
-			chckbxCompress.setToolTipText(LocalizationData.get("Backup.preference.compress.tooltip")); //$NON-NLS-1$
-		}
-		return chckbxCompress;
-	}
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-		}
-		return panel;
 	}
 }

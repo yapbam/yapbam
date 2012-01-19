@@ -40,7 +40,7 @@ public abstract class CompoundPreferencePanel extends PreferencePanel {
 	public boolean updatePreferences() {
 		boolean result = false;
 		for (PreferencePanel panel:this.panels) {
-			result = result || panel.updatePreferences();
+			result = panel.updatePreferences() || result;
 		}
 		return result;
 	}

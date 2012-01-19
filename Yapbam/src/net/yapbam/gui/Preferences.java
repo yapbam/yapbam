@@ -231,7 +231,7 @@ public class Preferences {
 		return tokens.nextToken();
 	}
 	
-	public void setHttpProxy(String proxyHost, int proxyPort, String user, String password) {
+	public void setHttpProxy(String proxyHost, Integer proxyPort, String user, String password) {
 		if (proxyHost == null) {
 			this.properties.remove(PROXY);
 			user = null;
