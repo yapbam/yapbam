@@ -5,11 +5,14 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.Authenticator;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
+import net.yapbam.gui.preferences.BackupOptions;
 import net.yapbam.gui.preferences.EditingOptions;
 import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.statementview.StatementViewPlugin;
@@ -67,6 +71,11 @@ public class Preferences {
 	private static final String COLUMNS_WIDTH = "columnsWidth"; //$NON-NLS-1$
 	private static final String COLUMNS_ORDER = "columnsOrder"; //$NON-NLS-1$
 	private static final String HIDDEN_COLUMNS = "hiddenColumns"; //$NON-NLS-1$
+	private static final String PREF_BACKUP_PREFIX = "backup.";
+	private static final String ENABLED = "enabled";
+	private static final String COMPRESSED = "compressed";
+	private static final String SPACE_LIMIT = "spaceLimit";
+	private static final String URi = "uri";
 	
 	/** The Preference instance.
 	 * This class is a singleton. All preferences can be accessed through this constant.
@@ -473,5 +482,43 @@ public class Preferences {
 				getBoolean(PREF_START_PREFIX+TABS_ORDER, true),	getBoolean(PREF_START_PREFIX+COLUMNS_WIDTH, true),	getBoolean(PREF_START_PREFIX+COLUMNS_ORDER, true),	getBoolean(PREF_START_PREFIX+HIDDEN_COLUMNS, true));
 		}
 		return this.startStateOptions;
+	}
+	
+	private BackupOptions backupOptions;
+	public void setBackupOptions(BackupOptions options) {
+		this.backupOptions = options;
+		setBoolean(PREF_BACKUP_PREFIX+ENABLED, options.isEnabled());
+		setBoolean(PREF_BACKUP_PREFIX+COMPRESSED, options.isCompressed());
+		setProperty(PREF_BACKUP_PREFIX+SPACE_LIMIT, options.getSpaceLimit()==null?"none":options.getSpaceLimit().toString());
+		if (options.getUri()==null) {
+			removeProperty(PREF_BACKUP_PREFIX+URi);
+		} else {
+			setProperty(PREF_BACKUP_PREFIX+URi, options.getUri().toString());
+		}
+		//TODO Encode the password
+	}
+
+	public BackupOptions getBackupOptions() {
+		if (backupOptions==null) {
+			String uriStr = getProperty(PREF_BACKUP_PREFIX+URi);
+			URI uri = Portable.getBackupDirectory().toURI();
+			if (uriStr!=null) {
+				try {
+					uri = new URI(uriStr);
+				} catch (URISyntaxException e) {
+					// Hum ... the URI in the preference file is invalid ... maybe somebody has edit it by hand
+					// Do nothing, it strange ... the best is to ignore it and use the default value
+				}
+			}
+			String limitStr = getProperty(PREF_BACKUP_PREFIX+SPACE_LIMIT);
+			BigInteger limit = new BigInteger("10"); // The default space limit
+			try {
+				if (limitStr!=null) limit = "none".equalsIgnoreCase(limitStr) ? null : new BigInteger(limitStr);
+			} catch (NumberFormatException e) {
+				// Same thing as for the URI ... if it is wrong, we ignore and use the default value
+			}
+			backupOptions = new BackupOptions(getBoolean(PREF_BACKUP_PREFIX+ENABLED, true), uri, getBoolean(PREF_BACKUP_PREFIX+COMPRESSED, true),	limit);
+		}
+		return this.backupOptions;
 	}
 }

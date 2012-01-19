@@ -13,6 +13,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
@@ -28,6 +29,7 @@ import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.CoolJPasswordField;
 import net.yapbam.gui.widget.CoolJTextField;
 import net.yapbam.util.NullUtils;
+import net.yapbam.util.StringUtils;
 
 public class FTPPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -275,11 +277,33 @@ public class FTPPanel extends JPanel {
 
 	public URI getURI() {
 		try {
-			//TODO
-			return new URI("ftp", "jma:toto", "ftpperso.free.fr", 21, "/blabla", null, null);
+			StringBuilder uriBuf = new StringBuilder("ftp://").append(getUserField().getText());
+			if (getPasswordField().getPassword().length>0) uriBuf.append(':').append(getPasswordField().getPassword());
+			uriBuf.append('@').append(getHostField().getText());
+			String folder = getFolderField().getText();
+			if (folder.startsWith("/")) folder = folder.substring(1);
+			if (folder.length()>0) uriBuf.append('/').append(folder);
+			URI uri = new URI(uriBuf.toString());
+try {
+	System.out.println (uri.toURL());
+} catch (MalformedURLException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}//TODO
+			return uri;
 		} catch (URISyntaxException e) {
 			ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
 			return null;
 		}
+	}
+	
+	public void setURI(URI uri) {
+		if (!"ftp".equalsIgnoreCase(uri.getScheme())) throw new IllegalArgumentException();
+		getHostField().setText(uri.getHost());
+		String userInfo = uri.getUserInfo();
+		String[] split = StringUtils.split(userInfo, ':');
+		getUserField().setText(split[0]);
+		if (split.length>1) getPasswordField().setText(split[1]);
+		getFolderField().setText(uri.getPath());
 	}
 }
