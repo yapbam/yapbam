@@ -13,14 +13,18 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.border.TitledBorder;
 
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
+import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.CoolJPasswordField;
 import net.yapbam.gui.widget.CoolJTextField;
 import net.yapbam.util.NullUtils;
@@ -267,5 +271,15 @@ public class FTPPanel extends JPanel {
 			panel = new JPanel();
 		}
 		return panel;
+	}
+
+	public URI getURI() {
+		try {
+			//TODO
+			return new URI("ftp", "jma:toto", "ftpperso.free.fr", 21, "/blabla", null, null);
+		} catch (URISyntaxException e) {
+			ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
+			return null;
+		}
 	}
 }
