@@ -13,8 +13,6 @@ import javax.swing.ButtonGroup;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.Portable;
 
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 import java.text.MessageFormat;
 
 public class DiskPanel extends JPanel {
@@ -79,15 +77,6 @@ public class DiskPanel extends JPanel {
 			diskRdnButton = new JRadioButton(LocalizationData.get("Backup.preference.disk.disk")); //$NON-NLS-1$
 			diskRdnButton.setToolTipText(LocalizationData.get("Backup.preference.disk.disk.tooltip")); //$NON-NLS-1$
 			diskRdnButton.setSelected(true);
-			diskRdnButton.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					boolean selected = e.getStateChange()==ItemEvent.SELECTED;
-					getCustomRdnButton().setVisible(selected);
-					getDefaultRdnButton().setVisible(selected);
-					getFolderField().setVisible(selected);
-					getSelectButton().setVisible(selected);
-				}
-			});
 		}
 		return diskRdnButton;
 	}
