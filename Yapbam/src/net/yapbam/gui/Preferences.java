@@ -76,6 +76,7 @@ public class Preferences {
 	private static final String COMPRESSED = "compressed";
 	private static final String SPACE_LIMIT = "spaceLimit";
 	private static final String URi = "uri";
+	private static final String FTP_ACCOUNT = "ftpAccount";
 	
 	/** The Preference instance.
 	 * This class is a singleton. All preferences can be accessed through this constant.
@@ -490,12 +491,24 @@ public class Preferences {
 		setBoolean(PREF_BACKUP_PREFIX+ENABLED, options.isEnabled());
 		setBoolean(PREF_BACKUP_PREFIX+COMPRESSED, options.isCompressed());
 		setProperty(PREF_BACKUP_PREFIX+SPACE_LIMIT, options.getSpaceLimit()==null?"none":options.getSpaceLimit().toString());
-		if (options.getUri()==null) {
+		URI uri = options.getUri();
+		if (uri==null) {
 			removeProperty(PREF_BACKUP_PREFIX+URi);
+			removeProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
 		} else {
-			setProperty(PREF_BACKUP_PREFIX+URi, options.getUri().toString());
+			if (uri.getRawUserInfo()==null) {
+				removeProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
+			} else {
+				setProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT, Crypto.encrypt(KEY, uri.getRawUserInfo()));
+			}
+			try {
+				uri = new URI(uri.getScheme(),"",uri.getHost(),uri.getPort(),uri.getPath(),uri.getQuery(),uri.getFragment());
+				setProperty(PREF_BACKUP_PREFIX+URi, uri.toString());
+			} catch (URISyntaxException e) {
+				// I can't see a reason why this could happen !
+				ErrorManager.INSTANCE.log(null, e);
+			}
 		}
-		//TODO Encode the password
 	}
 
 	public BackupOptions getBackupOptions() {
@@ -505,6 +518,10 @@ public class Preferences {
 			if (uriStr!=null) {
 				try {
 					uri = new URI(uriStr);
+					String userInfo = getProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
+					if (userInfo!=null) {
+						uri = new URI(uri.getScheme(),Crypto.decrypt(KEY, userInfo),uri.getHost(),uri.getPort(),uri.getPath(),uri.getQuery(),uri.getFragment());
+					}
 				} catch (URISyntaxException e) {
 					// Hum ... the URI in the preference file is invalid ... maybe somebody has edit it by hand
 					// Do nothing, it strange ... the best is to ignore it and use the default value
