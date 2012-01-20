@@ -1,7 +1,5 @@
 TODO list
 
-Sortir le mot de passe ftp de l'uri du backup dans les préférences (la sauvegarder cryptée).
-
 Améliorations :
 Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done)
 	
