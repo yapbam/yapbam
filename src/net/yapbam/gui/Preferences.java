@@ -496,6 +496,8 @@ public class Preferences {
 			removeProperty(PREF_BACKUP_PREFIX+URi);
 			removeProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
 		} else {
+			// To preserve a relative secret on the user login and password to an ftp account, we will
+			// store these information crypted in a separate property.
 			if (uri.getRawUserInfo()==null) {
 				removeProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
 			} else {
