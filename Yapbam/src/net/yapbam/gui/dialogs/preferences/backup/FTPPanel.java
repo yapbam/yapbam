@@ -13,7 +13,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.MalformedURLException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
@@ -30,6 +30,7 @@ import net.yapbam.gui.widget.CoolJPasswordField;
 import net.yapbam.gui.widget.CoolJTextField;
 import net.yapbam.util.NullUtils;
 import net.yapbam.util.StringUtils;
+import net.yapbam.gui.widget.IntegerWidget;
 
 public class FTPPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -48,6 +49,8 @@ public class FTPPanel extends JPanel {
 	private PropertyChangeListener updateOkListener;
 	private PropertyChangeListener autoSelectListener;
 	private JPanel panel;
+	private JPanel hostPanel;
+	private IntegerWidget portField;
 
 	/**
 	 * Create the panel.
@@ -82,6 +85,13 @@ public class FTPPanel extends JPanel {
 		gbc_ftpRdnButton.gridx = 0;
 		gbc_ftpRdnButton.gridy = 0;
 		add(getFtpRdnButton(), gbc_ftpRdnButton);
+		GridBagConstraints gbc_hostPanel = new GridBagConstraints();
+		gbc_hostPanel.weightx = 1.0;
+		gbc_hostPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_hostPanel.gridwidth = 0;
+		gbc_hostPanel.gridx = 1;
+		gbc_hostPanel.gridy = 1;
+		add(getHostPanel(), gbc_hostPanel);
 		GridBagConstraints gbc_showPassWordCheckBox = new GridBagConstraints();
 		gbc_showPassWordCheckBox.insets = new Insets(0, 0, 5, 0);
 		gbc_showPassWordCheckBox.gridx = 2;
@@ -124,14 +134,6 @@ public class FTPPanel extends JPanel {
 		gbc_label.gridy = 1;
 		labels.add(new JLabel(LocalizationData.get("Backup.preference.ftp.server"))); //$NON-NLS-1$
 		add(labels.get(labels.size()-1), gbc_label);
-		GridBagConstraints gbc_hostField = new GridBagConstraints();
-		gbc_hostField.gridwidth = 0;
-		gbc_hostField.weightx = 1.0;
-		gbc_hostField.insets = new Insets(0, 0, 5, 0);
-		gbc_hostField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_hostField.gridx = 1;
-		gbc_hostField.gridy = 1;
-		add(getHostField(), gbc_hostField);
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.anchor = GridBagConstraints.WEST;
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
@@ -152,7 +154,6 @@ public class FTPPanel extends JPanel {
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.weighty = 1.0;
 		gbc_panel.gridwidth = 0;
-		gbc_panel.insets = new Insets(0, 0, 0, 5);
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 5;
@@ -166,9 +167,15 @@ public class FTPPanel extends JPanel {
 			if (getHostField().getText().trim().length()==0) {
 				// No host name entered !
 				this.okDisabledCause = MessageFormat.format(LocalizationData.get("Backup.preference.ftp.server.missing"),LocalizationData.get("Backup.preference.title"));  //$NON-NLS-1$//$NON-NLS-2$
-			} else if (getUserField().getText().trim().length()==0) {
-				// No user account entered
-				this.okDisabledCause = MessageFormat.format(LocalizationData.get("Backup.preference.ftp.user.missing"),LocalizationData.get("Backup.preference.title"));  //$NON-NLS-1$//$NON-NLS-2$
+			} else {
+				BigInteger port = getPortField().getValue();
+				if ((port!=null) && ((port.equals(BigInteger.ZERO)) || (port.compareTo(BigInteger.valueOf(65535))>0))) {
+					// Port is out of range !
+					this.okDisabledCause = MessageFormat.format(LocalizationData.get("Backup.preference.ftp.invalidPort"),LocalizationData.get("Backup.preference.title"), 65535);  //$NON-NLS-1$//$NON-NLS-2$
+				} else if (getUserField().getText().trim().length()==0) {
+					// No user account entered
+					this.okDisabledCause = MessageFormat.format(LocalizationData.get("Backup.preference.ftp.user.missing"),LocalizationData.get("Backup.preference.title"));  //$NON-NLS-1$//$NON-NLS-2$
+				}
 			}
 		}
 		if (!NullUtils.areEquals(this.okDisabledCause, old)) {
@@ -275,21 +282,58 @@ public class FTPPanel extends JPanel {
 		return panel;
 	}
 
+	private JPanel getHostPanel() {
+		if (hostPanel == null) {
+			hostPanel = new JPanel();
+			GridBagLayout gbl_hostPanel = new GridBagLayout();
+			hostPanel.setLayout(gbl_hostPanel);
+			GridBagConstraints gbc_hostField = new GridBagConstraints();
+			gbc_hostField.weightx = 1.0;
+			gbc_hostField.fill = GridBagConstraints.HORIZONTAL;
+			gbc_hostField.insets = new Insets(0, 0, 5, 0);
+			gbc_hostField.gridx = 0;
+			gbc_hostField.gridy = 0;
+			hostPanel.add(getHostField(), gbc_hostField);
+			GridBagConstraints gbc_label_3 = new GridBagConstraints();
+			gbc_label_3 .anchor = GridBagConstraints.WEST;
+			gbc_label_3.insets = new Insets(0, 5, 5, 5);
+			gbc_label_3.gridx = 1;
+			gbc_label_3.gridy = 0;
+			JLabel label = new JLabel(LocalizationData.get("PreferencesDialog.Network.port.label")); //$NON-NLS-1$
+			labels.add(label);
+			hostPanel.add(label, gbc_label_3);
+			GridBagConstraints gbc_portField = new GridBagConstraints();
+			gbc_portField.insets = new Insets(0, 0, 5, 0);
+			gbc_portField.fill = GridBagConstraints.HORIZONTAL;
+			gbc_portField.gridx = 2;
+			gbc_portField.gridy = 0;
+			hostPanel.add(getPortField(), gbc_portField);
+		}
+		return hostPanel;
+	}
+	
+	private IntegerWidget getPortField() {
+		if (portField == null) {
+			portField = new IntegerWidget(BigInteger.ZERO, null); //$NON-NLS-1$
+			portField.setToolTipText(LocalizationData.get("Backup.preference.ftp.port.tooltip")); //$NON-NLS-1$
+			portField.setColumns(5);
+			portField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, this.updateOkListener);
+		}
+		return portField;
+	}
+
 	public URI getURI() {
 		try {
-			StringBuilder uriBuf = new StringBuilder("ftp://").append(getUserField().getText());
+			StringBuilder uriBuf = new StringBuilder("ftp://").append(getUserField().getText()); //$NON-NLS-1$
 			if (getPasswordField().getPassword().length>0) uriBuf.append(':').append(getPasswordField().getPassword());
 			uriBuf.append('@').append(getHostField().getText());
+			if (portField.getValue()!=null) {
+				uriBuf.append(':').append(portField.getValue());
+			}
 			String folder = getFolderField().getText();
-			if (folder.startsWith("/")) folder = folder.substring(1);
+			if (folder.startsWith("/")) folder = folder.substring(1); //$NON-NLS-1$
 			if (folder.length()>0) uriBuf.append('/').append(folder);
 			URI uri = new URI(uriBuf.toString());
-try {
-	System.out.println (uri.toURL());
-} catch (MalformedURLException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-}//TODO
 			return uri;
 		} catch (URISyntaxException e) {
 			ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
@@ -298,8 +342,10 @@ try {
 	}
 	
 	public void setURI(URI uri) {
-		if (!"ftp".equalsIgnoreCase(uri.getScheme())) throw new IllegalArgumentException();
+		if (!"ftp".equalsIgnoreCase(uri.getScheme())) throw new IllegalArgumentException(); //$NON-NLS-1$
 		getHostField().setText(uri.getHost());
+		int port = uri.getPort();
+		if (port>0)	getPortField().setValue(BigInteger.valueOf(port));
 		String userInfo = uri.getUserInfo();
 		String[] split = StringUtils.split(userInfo, ':');
 		getUserField().setText(split[0]);
