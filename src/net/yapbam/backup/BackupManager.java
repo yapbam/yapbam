@@ -3,12 +3,16 @@ package net.yapbam.backup;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
+import java.io.OutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import net.yapbam.util.StringUtils;
 
 /**
  * A class that backup files to a folder on the machine or to a ftp server.
@@ -16,7 +20,7 @@ import java.util.TimeZone;
  * <BR>License : GPL v3
  */
 public class BackupManager {
-	private URI backupFolder;
+	private URL backupFolder;
 	private long sizeLimit;
 	private AbstractBackupManager manager;
 	
@@ -25,10 +29,10 @@ public class BackupManager {
 	 * @param sizeLimit The space allocated to backups (0 or less if there's no limit) in MBytes
 	 * @throws IOException 
 	 */
-	public BackupManager(URI backupFolder, long sizeLimit) throws IOException {
+	public BackupManager(URL backupFolder, long sizeLimit) throws IOException {
 		this.backupFolder = backupFolder;
 		this.sizeLimit = sizeLimit;
-		String scheme = backupFolder.getScheme();
+		String scheme = backupFolder.getProtocol();
 		if ((scheme==null) || ("file".equalsIgnoreCase(scheme))) {
 			this.manager = new DiskManager();
 		} else if ("ftp".equalsIgnoreCase(scheme)) {
@@ -43,33 +47,93 @@ public class BackupManager {
 	 * @param compress true to have a zip backup file
 	 * @throws IOException 
 	 */
-	public void backup(URI originalFile, boolean compress) throws IOException {
+	public void backup(URL originalFile, boolean compress) throws IOException {
 		// Ensure that the backup folder is created.
 		this.manager.createFolder(backupFolder);
-		InputStream originalStream = originalFile.toURL().openStream();
+		// Get the backup file name
+		String backupFileName = getBackupFileName(originalFile, compress);
+		// Open the original file
+		InputStream in = originalFile.openStream();
 		try {
-			this.manager.copy(originalStream, getTimeStamp(originalFile), backupFolder.getPath(), getBackupFileName(originalFile));
+			OutputStream out = this.manager.getOutputStream(backupFolder, backupFileName);
+			try {
+				if (compress) {
+					zip(getFileName(originalFile), getTimeStamp(originalFile).getTimeInMillis(), in, out);
+				} else {
+					copy(in, out);
+				}
+			} finally {
+				this.manager.close(out);
+			}
+			this.manager.setTime(backupFolder, backupFileName, getTimeStamp(originalFile));
 		} finally {
-			originalStream.close();
+			in.close();
 		}
-//		File f = this.createFile();
-//		purgeBackupFolder();
+//TODO		purgeBackupFolder();
 	}
 	
-	private String getBackupFileName(URI originalContent) {
+	private void copy(InputStream in, OutputStream out) throws IOException {
+		// Create a buffer for reading the files
+		byte[] buf = new byte[1024];
+		// Transfer bytes from the file to the ZIP file
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+	}
+	
+	private void zip(String entryName, long time, InputStream in, OutputStream out) throws IOException {
+		// Create a buffer for reading the files
+		byte[] buf = new byte[1024];
+
+		// Create the ZIP file
+		ZipOutputStream zipOut = new ZipOutputStream(out);
+		try {
+			// Add ZIP entry to output stream.
+			ZipEntry entry = new ZipEntry(entryName);
+			entry.setTime(time);
+			zipOut.putNextEntry(entry);
+
+			// Transfer bytes from the file to the ZIP file
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				zipOut.write(buf, 0, len);
+			}
+
+			// Complete the entry
+			zipOut.closeEntry();
+		} finally {
+			// Complete the ZIP file
+			zipOut.close();
+		}
+	}
+
+	/** Gets the file name of the backup file. 
+	 * @param originalContent the url of the original content
+	 * @param compress 
+	 * @return a file name. This file name includes date information in order to be able to purge the older files (if it is needed), even if the server
+	 * doesn't support setting the time stamp of the remote files. 
+	 */
+	private String getBackupFileName(URL originalContent, boolean compress) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
-		if ((originalContent.getScheme()==null) || (originalContent.getScheme().equalsIgnoreCase("file"))) {
-			File file = new File(originalContent);
-			return format.format(new Date(file.lastModified()))+"_"+file.getName();
+		if ((originalContent.getProtocol()==null) || (originalContent.getProtocol().equalsIgnoreCase("file"))) {
+			String fileName = format.format(getTimeStamp(originalContent).getTime())+"_"+getFileName(originalContent);
+			if (compress) fileName = fileName+".zip";
+			return fileName;
 		} else {
 			throw new IllegalArgumentException("only files are currently supported");
 		}
 	}
 	
-	private Calendar getTimeStamp(URI uri) {
-		if ((uri.getScheme()==null) || (uri.getScheme().equalsIgnoreCase("file"))) {
-			File file = new File(uri);
-			Calendar result = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+	private String getFileName(URL url) {
+		String[] path = StringUtils.split(url.getPath(), '/');
+		return path[path.length-1];
+	}
+		
+	private Calendar getTimeStamp(URL url) {
+		if ((url.getProtocol()==null) || (url.getProtocol().equalsIgnoreCase("file"))) {
+			File file = new File(url.getPath());
+			Calendar result = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
 			result.setTimeInMillis(file.lastModified());
 			return result;
 		} else {
@@ -95,9 +159,9 @@ public class BackupManager {
 	 */
 	public static void main(String[] args) {
 		try {
-			BackupManager bkMgr = new BackupManager(new URI(args[0]), Long.parseLong(args[1]));
+			BackupManager bkMgr = new BackupManager(new URL(args[0]), Long.parseLong(args[1]));
 			try {
-				bkMgr.backup(new URI(args[2]), Boolean.parseBoolean(args[3]));
+				bkMgr.backup(new URL(args[2]), Boolean.parseBoolean(args[3]));
 			} finally {
 				bkMgr.close();
 			}
