@@ -165,7 +165,7 @@ public class MainFrame extends JFrame implements DataListener {
 					try {
 						Preferences.INSTANCE.save();
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog(MainFrame.this, MessageFormat.format(LocalizationData.get("MainFrame.SavePreferencesError"), getStateSaver().getFile().getAbsolutePath()),
+						JOptionPane.showMessageDialog(MainFrame.this, MessageFormat.format(LocalizationData.get("MainFrame.SavePreferencesError"), getStateSaver().getFile().getAbsolutePath()), //$NON-NLS-1$
 								LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					super.windowClosing(event);
@@ -432,8 +432,8 @@ public class MainFrame extends JFrame implements DataListener {
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this, MessageFormat.format(LocalizationData.get("MainFrame.SaveStateError"), getStateSaver().getFile().getAbsolutePath()),
-					LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			JOptionPane.showMessageDialog(this, MessageFormat.format(LocalizationData.get("MainFrame.SaveStateError"), getStateSaver().getFile().getAbsolutePath()), //$NON-NLS-1$
+					LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 		}
 	}
 
@@ -474,8 +474,8 @@ public class MainFrame extends JFrame implements DataListener {
 				try {
 					uri = new URI((String) getStateSaver().get(LAST_URI));
 				} catch (URISyntaxException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					// The saved uri is invalidFormat
+					//TODO inform the user !!!
 				}
 			}
 			if (uri!=null) {
@@ -490,6 +490,8 @@ public class MainFrame extends JFrame implements DataListener {
 							ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
 						}
 					}
+				} catch (FileNotFoundException e) {
+					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
 				} catch (IOException e) {
 					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
 				}
