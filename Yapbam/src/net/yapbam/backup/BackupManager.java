@@ -58,7 +58,15 @@ public class BackupManager {
 			OutputStream out = this.manager.getOutputStream(backupFolder, backupFileName);
 			try {
 				if (compress) {
-					zip(getFileName(originalFile), getTimeStamp(originalFile).getTimeInMillis(), in, out);
+					// Create the ZIP file
+					ZipOutputStream zipOut = new ZipOutputStream(out);
+					try {
+						zipOut.setLevel(9); // Sets maximum compression level
+						zip(getFileName(originalFile), getTimeStamp(originalFile).getTimeInMillis(), in, zipOut);
+					} finally {
+						// Complete the ZIP file
+						zipOut.close();
+					}
 				} else {
 					copy(in, out);
 				}
@@ -82,30 +90,16 @@ public class BackupManager {
 		}
 	}
 	
-	private void zip(String entryName, long time, InputStream in, OutputStream out) throws IOException {
-		// Create a buffer for reading the files
-		byte[] buf = new byte[1024];
-
-		// Create the ZIP file
-		ZipOutputStream zipOut = new ZipOutputStream(out);
-		try {
-			// Add ZIP entry to output stream.
-			ZipEntry entry = new ZipEntry(entryName);
-			entry.setTime(time);
-			zipOut.putNextEntry(entry);
-
-			// Transfer bytes from the file to the ZIP file
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				zipOut.write(buf, 0, len);
-			}
-
-			// Complete the entry
-			zipOut.closeEntry();
-		} finally {
-			// Complete the ZIP file
-			zipOut.close();
-		}
+	private ZipEntry zip(String entryName, long time, InputStream in, ZipOutputStream out) throws IOException {
+		// Add ZIP entry to output stream.
+		ZipEntry entry = new ZipEntry(entryName);
+		entry.setTime(time);
+		out.putNextEntry(entry);
+		// Copy input to the entry
+		copy(in, out);
+		// Complete the entry
+		out.closeEntry();
+		return entry;
 	}
 
 	/** Gets the file name of the backup file. 
