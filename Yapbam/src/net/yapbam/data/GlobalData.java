@@ -509,10 +509,10 @@ public class GlobalData extends DefaultListenable {
 				double amount = p.getAmount();
 				Mode mode = p.getMode();
 				DateStepper vdStepper = amount<0?mode.getExpenseVdc():mode.getReceiptVdc();
-				// Be aware that the date stepper may not be available anymore (is the mode is no more usable for this kind of transaction)
+				// Be aware that the date stepper may not be available anymore (if the mode is no more usable for this kind of transaction)
 				if (vdStepper==null) vdStepper = DateStepper.IMMEDIATE;
 				//Be aware, when the transaction has an "end date", and the date is after this "end date", tDate become null
-				for (Date tDate = p.getNextDate();((tDate!=null)&&(tDate.compareTo(date)<=0));tDate=p.getNextDateBuilder().getNextStep(tDate)) {
+				for (Date tDate = p.getNextDate();((tDate!=null)&&(tDate.compareTo(date)<=0)/*&&(tDate.compareTo(p.getNextDateBuilder().getLastDate())<=0)*/);tDate=p.getNextDateBuilder().getNextStep(tDate)) {
 					result.add(new Transaction(tDate, null, p.getDescription(), p.getComment(), amount, p.getAccount(), mode, p.getCategory(),
 							vdStepper.getNextStep(tDate), null, Arrays.asList(p.getSubTransactions())));
 				}

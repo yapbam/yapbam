@@ -31,11 +31,13 @@ public class DayDateStepper extends DateStepper {
 		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
 		gc.add(GregorianCalendar.DAY_OF_MONTH, this.nbDays);
+		Date result = gc.getTime();
 		if (DEBUG) {
-			System.out.println("Jour du débit : "+DateFormat.getDateInstance().format(gc.getTime())); //$NON-NLS-1$
+			System.out.println("Jour du débit : "+DateFormat.getDateInstance().format(result)); //$NON-NLS-1$
 			System.out.println("----------------------"); //$NON-NLS-1$
 		}
-		return gc.getTime();
+		if (DateUtils.dateToInteger(result)>this.lastDate) result = null;
+		return result;
 	}
 
 	public int getStep() {

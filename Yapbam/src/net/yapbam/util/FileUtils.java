@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import sun.awt.shell.ShellFolder;
 
@@ -24,13 +25,27 @@ public class FileUtils {
 	 * @param file the file to test
 	 * @return a File
 	 */
+	@SuppressWarnings("unchecked")
 	public static File getCanonical(File file) throws IOException {
 		try {
+			// The following lines are equivalent to sf = new sun.awt.shell.Win32ShellFolderManager2().createShellFolder(file);
+			// We use reflection in order the code to compile on non Windows platform (where new sun.awt.shell.Win32ShellFolderManager2
+			// is a unknown class.
 			ShellFolder sf;
-			sf = new sun.awt.shell.Win32ShellFolderManager2().createShellFolder(file);
+			@SuppressWarnings("rawtypes")
+			Class cl = Class.forName("sun.awt.shell.Win32ShellFolderManager2");
+			Object windowsFolderManager = cl.newInstance();
+			sf = (ShellFolder) cl.getMethod("createShellFolder", File.class).invoke(windowsFolderManager, file);
 			if (sf.isLink()) return sf.getLinkLocation();
-		} catch (NoClassDefFoundError e) {
+		} catch (ClassNotFoundException e) {
 			// We're not on a windows platform
+			// We also ignore other errors that may not happen.
+			// Ok, errors always happens ... In such a case, we can do we have already done our best effort and
+			// we will let file.CanonicalFile do better.
+		} catch (IllegalAccessException e) {
+		} catch (InvocationTargetException e) {
+		} catch (NoSuchMethodException e) {
+		} catch (InstantiationException e) {
 		}
 		return file.getCanonicalFile();
 	}
