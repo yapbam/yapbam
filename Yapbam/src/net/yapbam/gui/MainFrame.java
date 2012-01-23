@@ -62,19 +62,41 @@ public class MainFrame extends JFrame implements DataListener {
 	public static void main(final String[] args) {
 		// Remove obsolete files from previous installations
 		FolderCleaner.clean();
-		// Install the exceptions logger on the AWT event queue. 
+		// Warning the new event queue may ABSOLUTLY be NOT installed by the event dispatch thread under java 1.6 or the program will never exit
+		if (isJava6()) installEventQueue();
+		// Set the look and feel
+		setLookAndFeel();
+		// Schedule a job for the event-dispatching thread:
+		// creating and showing this application's GUI.
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				// Install the exceptions logger on the AWT event queue.
+				// Warning the new event queue may ABSOLUTLY be installed by the event dispatch thread under java 1.7 or the program will never exit
+				if (!isJava6()) installEventQueue();
+				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
+				CheckNewReleaseAction.doAutoCheck(frame);
+				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
+				if (!Preferences.INSTANCE.isFirstRun()) {
+					String importantNews = buildNews();
+					if (importantNews.length()>0) {
+						new DefaultHTMLInfoDialog(frame, LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+					}
+				}
+			}
+		});
+	}
+	
+	private static boolean isJava6() {
+		return "1.6".equals(System.getProperty("java.specification.version"));
+	}
+	
+	private static void installEventQueue() {
 		EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
 		queue.push(new EventQueue() {
 			@Override
 			protected void dispatchEvent(AWTEvent event) {
 				try {
 					super.dispatchEvent(event);
-					if (event.getClass().getName().startsWith("sun.awt.AWTAutoShutdown")) { //$NON-NLS-1$
-						// JDK 1.7 bug (?) workaround
-						// For an unknown reason, JDK 1.7 do not stop the JVM when all the windows are disposed and
-						// an custom eventQueue has been installed in the awt dispatch thread 
-						System.exit(0); //TODO
-					}
 				} catch (Throwable t) {
 					ErrorManager.INSTANCE.log (null,t);
 					// The following portion of code closes the main window if it is not visible.
@@ -92,25 +114,8 @@ public class MainFrame extends JFrame implements DataListener {
 				}
 			}
 		});
-		// Set the look and feel
-		setLookAndFeel();
-		// Schedule a job for the event-dispatching thread:
-		// creating and showing this application's GUI.
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
-				CheckNewReleaseAction.doAutoCheck(frame);
-				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
-				if (!Preferences.INSTANCE.isFirstRun()) {
-					String importantNews = buildNews();
-					if (importantNews.length()>0) {
-						new DefaultHTMLInfoDialog(frame, LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
-					}
-				}
-			}
-		});
 	}
-	
+
 	private static String buildNews () {
 		StringBuilder buf = new StringBuilder();
 		ReleaseInfo lastVersion = (ReleaseInfo) YapbamState.INSTANCE.restore(LAST_VERSION_USED);
