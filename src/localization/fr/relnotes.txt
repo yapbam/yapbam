@@ -6,6 +6,7 @@ improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 fix
 	Quand on supprimait le mode de paiement en bas de la liste dans l'onglet d'administration des comptes, les boutons d'édition et de suppression de mode n'étaient pas désactivés. Cliquer sur l'un d'eux à ce moment causait une erreur.
+	Quand on supprimait le seul compte autorisé par le filtre, Yapbam se retrouvait dans un état incohérent. Le menu filtre était étrange et la création d'une opération se terminait par une erreur.
 	Lors de la génération des opérations périodiques, la date de fin des opérations dont la fréquence était exprimée en jour était ignorée.
 
 version	0.9.10 (09/01/2012)
