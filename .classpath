@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="JCommon"/>
 	<classpathentry kind="var" path="JFreeChart"/>
+	<classpathentry kind="var" path="COMMONS-NET"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
