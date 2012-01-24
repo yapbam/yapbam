@@ -6,6 +6,7 @@ improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
 fix
 	When deleting the payment mode at the bottom the table in the account administration tab, the edit and delete bottom were not disabled. Clicking on them at this time caused an error.
+	When deleting an account, mode or category authorized by the filter, Yapbam went sometimes found in an inconsistent state. The display of the transaction creation dialog could end with an error.
 	When generating periodic operations, the end date of operations whose frequency was expressed in days was ignored.
 	
 version	0.9.10 (01/09/2012)

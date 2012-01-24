@@ -38,7 +38,6 @@ public class FilteredData extends DefaultListenable {
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				//FIXME be aware of mode removal
 				if (eventImplySorting(event)) Collections.sort(transactions, comparator);
 				if (event instanceof EverythingChangedEvent) {
 					filter.clear(); // If everything changed, reset the filter
@@ -50,7 +49,7 @@ public class FilteredData extends DefaultListenable {
 						double initialBalance = account.getInitialBalance();
 						balanceData.updateBalance(initialBalance, false);
 						int index = validAccounts==null?((AccountRemovedEvent) event).getIndex():filter.getValidAccounts().indexOf(account);
-						filter.setValidAccounts(validAccounts.size()==0?null:validAccounts);
+						filter.setValidAccounts((validAccounts==null) || (validAccounts.size()==0)?null:validAccounts);
 						fireEvent(new AccountRemovedEvent(FilteredData.this, index, account));
 					}
 				} else if (event instanceof CategoryRemovedEvent) {
@@ -58,7 +57,7 @@ public class FilteredData extends DefaultListenable {
 					List<Category> validCategories = filter.getValidCategories();
 					if ((validCategories==null) || validCategories.remove(category)) {
 						int index = validCategories==null?((CategoryRemovedEvent) event).getIndex():filter.getValidCategories().indexOf(category);
-						filter.setValidCategories(validCategories.size()==0?null:validCategories);
+						filter.setValidCategories((validCategories==null) || (validCategories.size()==0)?null:validCategories);
 						fireEvent(new CategoryRemovedEvent(FilteredData.this, index, category));
 					}
 				} else if (event instanceof TransactionsAddedEvent) {
@@ -142,6 +141,26 @@ public class FilteredData extends DefaultListenable {
 					ModePropertyChangedEvent evt = (ModePropertyChangedEvent) event;
 					if (filter.isOk(evt.getNewMode())) {
 						fireEvent(event);
+					}
+				} else if (event instanceof ModeRemovedEvent) {
+					ModeRemovedEvent evt = (ModeRemovedEvent) event;
+					List<String> validModes = filter.getValidModes();
+					String removedModeName = evt.getMode().getName();
+					if ((validModes!=null) && (validModes.remove(removedModeName))) {
+						// If the suppressed mode belongs to the filter modes list
+						// We have to remove it if it is no more a mode of the one of the valid accounts of the filter.
+						boolean needRemoving = true;
+						for (int i = 0; i < FilteredData.this.data.getAccountsNumber(); i++) {
+							Account account = FilteredData.this.getGlobalData().getAccount(i);
+							if (filter.isOk(account) && (account.findMode(evt.getMode())>=0)) {
+								needRemoving = false;
+								break;
+							}
+						}
+						if (needRemoving) {
+							filter.setValidModes(validModes.size()==0?null:validModes);
+							fireEvent (event);
+						}
 					}
 				} else if (event instanceof NeedToBeSavedChangedEvent) {
 					fireEvent(event);
