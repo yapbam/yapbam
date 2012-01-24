@@ -45,15 +45,21 @@ public class FilteredData extends DefaultListenable {
 					filter();
 				} else if (event instanceof AccountRemovedEvent) {
 					Account account = ((AccountRemovedEvent)event).getRemoved();
-					if ((filter.getValidAccounts()==null) || filter.getValidAccounts().remove(account)) {
+					List<Account> validAccounts = filter.getValidAccounts();
+					if ((validAccounts==null) || validAccounts.remove(account)) {
 						double initialBalance = account.getInitialBalance();
 						balanceData.updateBalance(initialBalance, false);
-						fireEvent(new AccountRemovedEvent(FilteredData.this, -1, account)); //TODO index is not the right one
+						int index = validAccounts==null?((AccountRemovedEvent) event).getIndex():filter.getValidAccounts().indexOf(account);
+						filter.setValidAccounts(validAccounts.size()==0?null:validAccounts);
+						fireEvent(new AccountRemovedEvent(FilteredData.this, index, account));
 					}
 				} else if (event instanceof CategoryRemovedEvent) {
 					Category category = ((CategoryRemovedEvent)event).getRemoved();
-					if ((filter.getValidCategories()==null) || filter.getValidCategories().remove(category)) {
-						fireEvent(new CategoryRemovedEvent(FilteredData.this, -1, category)); //TODO index is not the right one
+					List<Category> validCategories = filter.getValidCategories();
+					if ((validCategories==null) || validCategories.remove(category)) {
+						int index = validCategories==null?((CategoryRemovedEvent) event).getIndex():filter.getValidCategories().indexOf(category);
+						filter.setValidCategories(validCategories.size()==0?null:validCategories);
+						fireEvent(new CategoryRemovedEvent(FilteredData.this, index, category));
 					}
 				} else if (event instanceof TransactionsAddedEvent) {
 					Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
