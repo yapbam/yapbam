@@ -73,7 +73,6 @@ public class MonthDateStepper extends  DateStepper {
 		return this.lastDate==Integer.MAX_VALUE?null:DateUtils.integerToDate(this.lastDate);
 	}
 	
-
 	@Override
 	public boolean equals(Object obj) {
 		boolean result = super.equals(obj);

@@ -19,7 +19,7 @@ public class DayDateStepper extends DateStepper {
 	public DayDateStepper(int nbDays, Date lastDate) {
 		super();
 		this.nbDays = nbDays;
-		this.lastDate = DateUtils.dateToInteger(lastDate);
+		this.lastDate = lastDate==null?Integer.MAX_VALUE:DateUtils.dateToInteger(lastDate);
 	}
 	
 	@Override

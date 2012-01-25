@@ -4,11 +4,13 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
+	
+version	0.9.11 (01/25/2012)
 fix
 	When deleting the payment mode at the bottom the table in the account administration tab, the edit and delete bottom were not disabled. Clicking on them at this time caused an error.
 	When deleting an account, mode or category authorized by the filter, Yapbam went sometimes found in an inconsistent state. The display of the transaction creation dialog could end with an error.
 	When generating periodic operations, the end date of operations whose frequency was expressed in days was ignored.
-	
+
 version	0.9.10 (01/09/2012)
 improvement
 	When an operation pointed is duplicated, the statement is emptied (unless the autofill function is set in the preferences dialog. In such a case, this field is automatically filed).
