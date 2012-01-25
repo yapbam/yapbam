@@ -4,6 +4,8 @@ known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problem est d'utiliser Java 1.7.
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
+
+version	0.9.11 (25/01/2012)
 fix
 	Quand on supprimait le mode de paiement en bas de la liste dans l'onglet d'administration des comptes, les boutons d'édition et de suppression de mode n'étaient pas désactivés. Cliquer sur l'un d'eux à ce moment causait une erreur.
 	Quand on supprimait un compte, mode ou une catégorie autorisés par le filtre, Yapbam se retrouvait parfois dans un état incohérent. L'affichage du dialogue création d'une opération pouvait se terminer par une erreur.
