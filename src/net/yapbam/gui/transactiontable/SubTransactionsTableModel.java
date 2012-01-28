@@ -70,18 +70,18 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 	@Override
 	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
 		if (isSelected) {
-	        renderer.setBackground(table.getSelectionBackground());
-	        renderer.setForeground(table.getSelectionForeground());
-	    } else {
-	        boolean expense = this.subTransactions.get(row).getAmount()<0;  	
-	        renderer.setForeground(table.getForeground());
-	        renderer.setBackground(expense?GenericTransactionTableModel.CASHOUT:GenericTransactionTableModel.CASHIN);
-	    }
+			renderer.setBackground(table.getSelectionBackground());
+			renderer.setForeground(table.getSelectionForeground());
+		} else {
+			boolean expense = this.subTransactions.get(row).getAmount() < 0;
+			renderer.setForeground(table.getForeground());
+			renderer.setBackground(expense ? GenericTransactionTableModel.CASHOUT : GenericTransactionTableModel.CASHIN);
+		}
 	}
 
 	@Override
 	public int getAlignment(int column) {
-    	return SwingConstants.LEFT;
+		return SwingConstants.LEFT;
 	}
 
 	public void add(SubTransaction sub) {

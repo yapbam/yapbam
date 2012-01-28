@@ -192,7 +192,7 @@ public class SubTransactionPanel extends JPanel {
 			jCheckBox.addItemListener(new java.awt.event.ItemListener() {
 				@Override
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (amount!=0) {
+					if ((amount!=null) && (amount!=0)) {
 						Double old = amount;
 						amount = -amount;
 						SubTransactionPanel.this.firePropertyChange(AMOUNT_PROPERTY, old, amount);
