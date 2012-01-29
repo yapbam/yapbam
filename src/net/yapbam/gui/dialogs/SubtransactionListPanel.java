@@ -74,6 +74,7 @@ class SubtransactionListPanel extends JPanel {
 		selModel.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+//System.out.println(e);
 				ListSelectionModel m = (javax.swing.ListSelectionModel) e.getSource();
 				if (!e.getValueIsAdjusting()) {
 					boolean ok = m.getMinSelectionIndex()>=0;
@@ -85,6 +86,7 @@ class SubtransactionListPanel extends JPanel {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+//System.out.println(e);
 				if (e.getClickCount() == 2) {
 					Point p = e.getPoint();
 					int row = table.rowAtPoint(p);
@@ -201,27 +203,34 @@ class SubtransactionListPanel extends JPanel {
 
 	private void editSelected(final GlobalData data) {
 		int index = table.getSelectedRow();
-		SubTransaction old = tableModel.get(index);
-		SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, old);
-		setPredefinedDescriptions(dialog);
-		if (this.updater!=null) dialog.setPredefinedUpdater(updater);
-		dialog.setVisible(true);
-		SubTransaction sub = dialog.getSubTransaction();
-		if (sub!=null) {
-			tableModel.replace(index, sub);
-			double oldSum = this.sum;
-			this.sum = this.sum - old.getAmount() + sub.getAmount();
-			this.firePropertyChange(SUM_PROPERTY, oldSum, this.sum);
+		if (index>=0) {
+			// One can think this method is only called when a row is selected, it's wrong
+			// It is called when the user double-click on a row. If the ctrl key is down while clicking,
+			// the first click selects the row, the second erases the selection it !
+			SubTransaction old = tableModel.get(index);
+			SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, old);
+			setPredefinedDescriptions(dialog);
+			if (this.updater!=null) dialog.setPredefinedUpdater(updater);
+			dialog.setVisible(true);
+			SubTransaction sub = dialog.getSubTransaction();
+			if (sub!=null) {
+				tableModel.replace(index, sub);
+				double oldSum = this.sum;
+				this.sum = this.sum - old.getAmount() + sub.getAmount();
+				this.firePropertyChange(SUM_PROPERTY, oldSum, this.sum);
+			}
 		}
 	}
 	
 	private void deleteSelected() {
 		int index = table.getSelectedRow();
-		SubTransaction old = tableModel.get(index);
-		tableModel.remove(index);
-		double oldSum = this.sum;
-		this.sum = this.sum - old.getAmount();
-		this.firePropertyChange(SUM_PROPERTY, oldSum, this.sum);
+		if (index>=0) {
+			SubTransaction old = tableModel.get(index);
+			tableModel.remove(index);
+			double oldSum = this.sum;
+			this.sum = this.sum - old.getAmount();
+			this.firePropertyChange(SUM_PROPERTY, oldSum, this.sum);
+		}
 	}
 
 	private void create(final GlobalData data) {
