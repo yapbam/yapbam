@@ -6,6 +6,7 @@ improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 fix
 	Lors de l'édition de sous-opérations, cliquer sur la case à cocher "Recette" lorsque le champ "montant" était vide provoquait une erreur.
+	Double cliquer sur certaines listes (exemple, la liste des opérations) avec la touche "ctrl" enfoncée, pouvait provoquer une erreur ou laisser les boutons "éditer/supprimer" activés alors qu'aucune liste de la liste n'était sélectionnée.
 
 version	0.9.11 (25/01/2012)
 fix
