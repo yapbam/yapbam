@@ -15,6 +15,7 @@ public class DayDateStepper extends DateStepper {
 	/** Constructor.
 	 *  @param nbDays Number of days between the value date and the operation date.
 	 *  If this number is negative, the value dates will be before operation dates.
+	 *  @param lastDate lastDate or null if there's no time limit.
 	 */
 	public DayDateStepper(int nbDays, Date lastDate) {
 		super();
@@ -46,7 +47,7 @@ public class DayDateStepper extends DateStepper {
 
 	@Override
 	public Date getLastDate() {
-		return DateUtils.integerToDate(lastDate);
+		return this.lastDate==Integer.MAX_VALUE?null:DateUtils.integerToDate(this.lastDate);
 	}
 
 	@Override

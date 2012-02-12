@@ -4,9 +4,12 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
+
+version	0.9.12 (02/12/2012)
 fix
 	When editing of subtransaction, clicking the check box "receipt" when the "amount" was empty caused an error.
 	Double-click on a some lists (for example in the transactions table) with the crtl key down could caused an error, or leave the edit/delete button enabled when no lines were selected in the list.
+	When editing a periodic transaction with an end date, moving from a daily to monthly transaction caused an error.
 	
 version	0.9.11 (01/25/2012)
 fix
