@@ -25,9 +25,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.net.util.Base64;
 import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
@@ -222,7 +221,7 @@ public class YapbamState {
 			ObjectOutputStream oos = new ObjectOutputStream(new GZIPOutputStream(baos));
 			oos.writeObject(serializable);
 			oos.close();
-			properties.put(key, Base64.encode(baos.toByteArray()));
+			properties.put(key, Base64.encodeBase64String(baos.toByteArray()));
 		} catch (IOException e) {
 			// Should not happen ... because the serialization is made into memory
 			throw new RuntimeException(e);
@@ -237,7 +236,7 @@ public class YapbamState {
 	public Serializable restore(String key) {
 		if (!contains(key)) return null;
 		try {
-			byte[] decoded = Base64.decode(get(key));
+			byte[] decoded = Base64.decodeBase64(get(key));
 			ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
 			ObjectInputStream ois = new ObjectInputStream(new GZIPInputStream(bais));
 			Serializable result = (Serializable) ois.readObject();
@@ -260,7 +259,7 @@ public class YapbamState {
 			}
 			serializer.closeDocument();
 			stream.flush();
-			String xmlContent = new String(Base64.encode(stream.toByteArray()));
+			String xmlContent = Base64.encodeBase64String(stream.toByteArray());
 			properties.put(key, xmlContent);
 		} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -275,7 +274,7 @@ public class YapbamState {
 				// Yapbam versions until 0.9.4 did not base64 encode the saved filter.
 				bytes = property.getBytes();
 			} else {
-				bytes = Base64.decode(property);
+				bytes = Base64.decodeBase64(property);
 			}
 			InputStream stream = new ByteArrayInputStream(bytes);
 			try {
