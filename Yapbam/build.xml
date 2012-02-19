@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="build" name="Create Runnable Jar for Yapbam project">
 	<!--======================================  README ================================================>
-	| if you want to run this build file, you have to set the following jcommonpath and jfreechartpath |
-	| properties in the customPaths.properties file used in the line below.                            |
-	| These properties have to reference the jfreeChart sources and the JCommon sources.               |
-	| These sources are available at http://www.jfree.org                                              |
+	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
+	| jfreechartpath properties in the customPaths.properties file used in the line below.             |
+	| These properties have to reference the apache commonsnet sources, jfreeChart sources and the     |
+	| JCommon sources.                                                                                 |
+	| These sources are available at http://commons.apache.org/net/ and http://www.jfree.org           |
 	| Here is a sample of what this file could contain :                                               |
+	| commonsnetpath=C:/username/externalLibs/commonsNet                                               |
 	| jcommonpath=C:/username/externalLibs/jCommon                                                     |
 	| jfreechartpath=C:/username/externalLibs/jFreeChart                                               |
 	| This file may also contains a pointer to PortableApps.comInstaller.exe (in the variable          |
@@ -56,8 +58,7 @@
 		</copy>
 		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
-		<!--javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}" includeAntRuntime="false" debug="true"/-->
-		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath}" excludes="net/yapbam/backup/*.java" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>
@@ -172,7 +173,7 @@ Start=PortableYapbam.exe</echo>
 	</target>
 	
 	<target name="doc">
-		<javadoc header="${yapbamVersion}" sourcepath="src;${jcommonpath};${jfreechartpath}"
+		<javadoc header="${yapbamVersion}" sourcepath="src;${jcommonpath};${jfreechartpath};${commonsnetpath}"
 			packagenames="net.yapbam.data,net.yapbam.data.xml,net.yapbam.data.event,net.yapbam.date.helpers,net.yapbam.util,net.yapbam.gui,net.yapbam.gui.util,net.yapbam.gui.widget"
 			destdir="doc" doctitle="Yapbam" windowtitle="Yapbam"/>
 	</target>
