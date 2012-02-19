@@ -47,7 +47,7 @@ public class BackupManager {
 	 * @param compress true to have a zip backup file
 	 * @throws IOException 
 	 */
-	public void backup(URL originalFile, boolean compress) throws IOException {
+	public synchronized void backup(URL originalFile, boolean compress) throws IOException {
 		// Ensure that the backup folder is created.
 		this.manager.createFolder(backupFolder);
 		// Get the backup file name
@@ -85,10 +85,19 @@ public class BackupManager {
 		byte[] buf = new byte[1024];
 		// Transfer bytes from the file to the ZIP file
 		int len;
+		long total = 0; 
 		while ((len = in.read(buf)) > 0) {
 			out.write(buf, 0, len);
+			total += len;
+			setBytesCopied(total);
 		}
 	}
+	
+	/** This method is called each time a bunch of bytes are copied.
+	 * <br>This method does nothing but you can override it to produce an progress report.
+	 * @param bytesCopied The number of bytes that have been copied since backup was called.
+	 */
+	protected void setBytesCopied (long bytesCopied) {}
 	
 	private ZipEntry zip(String entryName, long time, InputStream in, ZipOutputStream out) throws IOException {
 		// Add ZIP entry to output stream.
@@ -138,7 +147,7 @@ public class BackupManager {
 	/** Closes the backup manager.
 	 * If the bakcup is performed to a remote server, closes the connection to that server.
 	 */
-	public void close() {
+	public synchronized void close() {
 		if (this.manager!=null) this.manager.close();
 	}
 	
@@ -153,7 +162,7 @@ public class BackupManager {
 	 */
 	public static void main(String[] args) {
 		try {
-			BackupManager bkMgr = new BackupManager(new URL(args[0]), Long.parseLong(args[1]));
+			BackupManager bkMgr = new VerboseBM(new URL(args[0]), Long.parseLong(args[1]));
 			try {
 				bkMgr.backup(new URL(args[2]), Boolean.parseBoolean(args[3]));
 			} finally {
@@ -161,6 +170,17 @@ public class BackupManager {
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private static class VerboseBM extends BackupManager {
+		public VerboseBM(URL backupFolder, long sizeLimit) throws IOException {
+			super(backupFolder, sizeLimit);
+		}
+
+		@Override
+		protected void setBytesCopied(long bytesCopied) {
+			System.out.println (bytesCopied+" bytes were copied");
 		}
 	}
 }
