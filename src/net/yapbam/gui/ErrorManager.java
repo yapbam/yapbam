@@ -51,20 +51,23 @@ public class ErrorManager {
 	 * @param t the exception that occurred
 	 */
 	public void display(Component parent, Throwable t) {
-//		StringWriter writer = new StringWriter();
-//		t.printStackTrace(new PrintWriter(writer));
-//		String trace = writer.getBuffer().toString();
-//		t.printStackTrace();
-		display (parent, t, LocalizationData.get("ErrorManager.message")/*+"\n\n"+trace*/); //$NON-NLS-1$
+		display (parent, t, LocalizationData.get("ErrorManager.message")); //$NON-NLS-1$
 	}
 
 	/** Displays a dialog to signal an error.
 	 * <br>Note that the throwable instance is not logged (transmitted to yapbam team). 
 	 * @param parent The dialog's parent component
-	 * @param t the exception that occurred
+	 * @param t the exception that occurred or null if we only want to display a message
 	 * @param message The dialog message
 	 */
 	public void display(Component parent, Throwable t, String message) {
+		if (t!=null) {
+			StringWriter writer = new StringWriter();
+			t.printStackTrace(new PrintWriter(writer));
+			String trace = writer.getBuffer().toString();
+			t.printStackTrace();
+			message = message + "\n\n" + trace; //$NON-NLS-1$
+		}
 		JOptionPane.showMessageDialog(parent, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 	}
 	
