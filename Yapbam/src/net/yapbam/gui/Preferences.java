@@ -81,7 +81,11 @@ public class Preferences {
 	/** The Preference instance.
 	 * This class is a singleton. All preferences can be accessed through this constant.
 	 */
-	public static final Preferences INSTANCE = new Preferences();
+	public static final Preferences INSTANCE;
+	
+	static {
+		INSTANCE = new Preferences();
+	}
 	
 	private Properties properties;
 	private boolean firstRun;
@@ -144,7 +148,7 @@ public class Preferences {
 		}
 	}
 
-	/** Get the preferred locale
+	/** Gets the preferred locale
 	 * @return the preferred locale
 	 */
 	public Locale getLocale() {
@@ -153,6 +157,10 @@ public class Preferences {
 		String country = this.properties.getProperty(COUNTRY);
 		if (country.equalsIgnoreCase(COUNTRY_DEFAULT_VALUE)) country = LocalizationData.SYS_LOCALE.getCountry();
 		return new Locale(lang, country);
+	}
+	
+	static Locale safeGetLocale() {
+		return INSTANCE!=null?INSTANCE.getLocale():LocalizationData.SYS_LOCALE;
 	}
 	
 	/** @return true if the preferred country is the OS default.
@@ -381,6 +389,10 @@ public class Preferences {
 		return translatorMode;
 	}
 	
+	static boolean safeIsTranslatorMode() {
+		return INSTANCE!=null?INSTANCE.isTranslatorMode():false;
+	}
+	
 	/** Sets the translator mode.
 	 * In translator mode, all the wording should (plugins are responsible for this to be achieved) be replaced
 	 * in the GUI by their key in the translation files.
@@ -428,7 +440,11 @@ public class Preferences {
 			return 0;
 		}
 	}
-	
+
+	static int safeGetCrashReportAction() {
+		return INSTANCE==null?0:INSTANCE.getCrashReportAction();
+	}
+
 	/** Sets the action to do when a crash is detected.
 	 * @param action 0 if the user should be asked, -1 to ignore, 1 to send a crash report to Yapbam
 	 * @throws IllegalArgumentException if the action is an invalid parameter (not one of the value listed above) 
@@ -539,5 +555,9 @@ public class Preferences {
 			backupOptions = new BackupOptions(getBoolean(PREF_BACKUP_PREFIX+ENABLED, true), uri, getBoolean(PREF_BACKUP_PREFIX+COMPRESSED, true),	limit);
 		}
 		return this.backupOptions;
+	}
+
+	public static boolean canSave() {
+		return INSTANCE!=null;
 	}
 }

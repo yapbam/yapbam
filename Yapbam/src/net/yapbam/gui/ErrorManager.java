@@ -51,7 +51,11 @@ public class ErrorManager {
 	 * @param t the exception that occurred
 	 */
 	public void display(Component parent, Throwable t) {
-		display (parent, t, LocalizationData.get("ErrorManager.message")); //$NON-NLS-1$
+//		StringWriter writer = new StringWriter();
+//		t.printStackTrace(new PrintWriter(writer));
+//		String trace = writer.getBuffer().toString();
+//		t.printStackTrace();
+		display (parent, t, LocalizationData.get("ErrorManager.message")/*+"\n\n"+trace*/); //$NON-NLS-1$
 	}
 
 	/** Displays a dialog to signal an error.
@@ -78,7 +82,8 @@ public class ErrorManager {
 				return;
 			}
 			// Ok, if the program pointer is there, this is a new error.
-			int action =Preferences.INSTANCE.getCrashReportAction();
+			// We have to be careful, if an error occurred during the preferences instantiation, Preferences.INSTANCE is null 
+			int action = Preferences.safeGetCrashReportAction();
 			if (action==0) {
 				ErrorDialog errorDialog = new ErrorDialog(parent, t);
 				errorDialog.setVisible(true);
