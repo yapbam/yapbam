@@ -12,18 +12,19 @@ import net.yapbam.data.GlobalData;
 /** This class is the main entry point for localization concerns.
  */
 public abstract class LocalizationData {
-	public static final Locale SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));  //$NON-NLS-1$//$NON-NLS-2$
+	public static final Locale SYS_LOCALE;
 	private static ResourceBundle bundle;
 	private static boolean translatorMode;
 	
 	static {
+		SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));  //$NON-NLS-1$//$NON-NLS-2$
 		reset();
 	}
 	
 	public static void reset() {
-		Locale locale = Preferences.INSTANCE.getLocale();
+		Locale locale = Preferences.safeGetLocale(); // Be aware that Preferences.INSTANCE may not be initialized (if its instantiation failed)
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
-		translatorMode = Preferences.INSTANCE.isTranslatorMode();
+		translatorMode = Preferences.safeIsTranslatorMode();
 		Locale.setDefault(locale);
 		ResourceBundle res = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
 		setBundle(res);

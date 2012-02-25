@@ -93,4 +93,8 @@ public class ErrorPanel extends JPanel {
 	public boolean isDontAskMeSelected() {
 		return chckbxDontAskMe.isSelected();
 	}
+
+	public void setDontAskMeVisible(boolean visible) {
+		chckbxDontAskMe.setVisible(visible);
+	}
 }

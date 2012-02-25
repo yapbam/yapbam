@@ -12,6 +12,7 @@ public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 	private static final long serialVersionUID = 1L;
 	
 	ErrorPanel panel;
+	private boolean prefcanBeSaved;
 	
 	public ErrorDialog(Window parent, Throwable throwable) {
 		super(parent, LocalizationData.get("ErrorManager.title"), throwable); //$NON-NLS-1$
@@ -19,6 +20,8 @@ public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 		this.cancelButton.setToolTipText(LocalizationData.get("ErrorManager.report.dontSend.tootip")); //$NON-NLS-1$
 		this.okButton.setText(LocalizationData.get("GenericButton.yes")); //$NON-NLS-1$
 		this.okButton.setToolTipText(LocalizationData.get("ErrorManager.report.send.tootip")); //$NON-NLS-1$
+		this.prefcanBeSaved = Preferences.canSave();
+		panel.setDontAskMeVisible(this.prefcanBeSaved);
 		this.pack();
 	}
 
@@ -46,6 +49,8 @@ public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 	}
 	
 	private void setPreferences(int action) {
-		Preferences.INSTANCE.setCrashReportAction(panel.isDontAskMeSelected()?action:0);
+		// Be aware that Preferences.INSTANCE could be null (if we are reporting an error during its instantiation)
+		// Be also aware that in such a case, you absolutely may not access Preferences.INSTANCE, it would cause a deadlock !
+		if (this.prefcanBeSaved) Preferences.INSTANCE.setCrashReportAction(panel.isDontAskMeSelected()?action:0);
 	}
 }
