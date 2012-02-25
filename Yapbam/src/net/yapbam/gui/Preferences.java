@@ -120,7 +120,7 @@ public class Preferences {
 		}
 	}
 
-	static File getFile() {
+	private static File getFile() {
 		return new File (Portable.getDataDirectory(), ".yapbampref"); //$NON-NLS-1$
 	}
 	
@@ -327,14 +327,7 @@ public class Preferences {
 	}
 
 	static PlugInContainer[] getPlugins() {
-		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$
-		if (!file.exists()) {
-			if (!file.mkdirs()) {
-				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to create the plugins folder")); //$NON-NLS-1$
-			}
-		} else if (!file.isDirectory()) {
-			ErrorManager.INSTANCE.display(null, new RuntimeException("./plugins is not a directory")); //$NON-NLS-1$
-		}
+		// Load the default plugins
 		final List<PlugInContainer> plugins = new ArrayList<PlugInContainer>();
 		plugins.add(new PlugInContainer(WelcomePlugin.class));
 		plugins.add(new PlugInContainer(TransactionsPlugIn.class));
@@ -345,14 +338,30 @@ public class Preferences {
 		plugins.add(new PlugInContainer(AccountsSummaryPlugin.class));
 		plugins.add(new PlugInContainer(ToolsPlugIn.class));
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
-		file.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File file) {
-				if (!file.getName().endsWith(".jar")) return false; //$NON-NLS-1$
-				plugins.add(new PlugInContainer(file));
-				return true;
+
+		// Load additionnal plugins
+		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$
+		if (!file.exists()) {
+			if (!file.mkdirs()) {
+				// We are unable to create the plugin directory. It's probably because the installation directory is write protected (for example by windows UAC).
+				// It doesn't matter
 			}
-		});
+		}
+//		else if (!file.isDirectory()) {
+//			ErrorManager.INSTANCE.display(null, null, MessageFormat.format("It seems your yapbam copy is corrupted.\n {0} is not a directory.",file.getAbsolutePath()));
+//		}
+		if (file.exists() && file.isDirectory()) { // Adds the custom plugins
+			file.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File file) {
+					if (!file.getName().endsWith(".jar")) return false; //$NON-NLS-1$
+					plugins.add(new PlugInContainer(file));
+					return true;
+				}
+			});
+		}
+		
+		// Load plugin under development
 		String testedPlugin = System.getProperty("testedPlugin.className"); //$NON-NLS-1$
 		if (testedPlugin!=null) {
 			try {
