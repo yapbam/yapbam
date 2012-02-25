@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.prefs.BackingStoreException;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -90,36 +91,26 @@ public class Preferences {
 	private Properties properties;
 	private boolean firstRun;
 	private boolean translatorMode;
+	private boolean portable;
 
 	private Preferences() {
+		this.portable = FileUtils.isWritable(Portable.getLaunchDirectory());
 		this.properties = new Properties();
-		this.firstRun = true;
-		if (getFile().exists()) {
-			try {
-				this.firstRun = false;
-				FileInputStream inStream = new FileInputStream(getFile());
-				try {
-					properties.load(inStream);
-				} finally {
-					inStream.close();
-				}
+		
+		try {
+			if (load()) {
 				setAuthentication();
-			} catch (Throwable e) {
-				// If there's an error, maybe it would be better to display a specific message
-				ErrorManager.INSTANCE.log(null, e); //TODO
-			}
-		} else {
-			// On the first run, the file doesn't exist
-			setToDefault();
-			try {
+			} else {
+				// On the first run, the file doesn't exist
+				setToDefault();
 				save();
-			} catch (IOException e) {
-				// If there's an error, maybe it would be better to display a specific message
-				ErrorManager.INSTANCE.log(null, e); //TODO
 			}
+		} catch (Throwable e) {
+			// If there's an error, maybe it would be better to display a specific message
+			ErrorManager.INSTANCE.log(null, e); //TODO
 		}
 	}
-
+	
 	private static File getFile() {
 		return new File (Portable.getDataDirectory(), ".yapbampref"); //$NON-NLS-1$
 	}
@@ -137,15 +128,63 @@ public class Preferences {
 		return this.firstRun;
 	}
 
-	void save() throws IOException {
-		File file = getFile();
-		file.getParentFile().mkdirs();
-		FileOutputStream out = FileUtils.getHiddenCompliantStream(file);
-		try {
-			properties.store(out, "Yapbam preferences"); //$NON-NLS-1$
-		} finally {
-			out.close();
+	private boolean load() throws IOException {
+		this.firstRun = true;
+		if (this.portable) {
+			if (getFile().exists()) {
+				this.firstRun = false;
+				FileInputStream inStream = new FileInputStream(getFile());
+				try {
+					properties.load(inStream);
+				} finally {
+					inStream.close();
+				}
+				return true;
+			}
+		} else {
+			java.util.prefs.Preferences pref = getJavaPref();
+			try {
+				String[] keys = pref.keys();
+				this.firstRun = keys.length==0;
+				for (String key : keys) {
+					String value = pref.get(key, null);
+					properties.put(key, value);
+				}
+			} catch (BackingStoreException e) {
+				throw new IOException(e);
+			}
+			return true;
 		}
+		return false;
+	}
+
+	void save() throws IOException {
+		if (this.portable) {
+			File file = getFile();
+			file.getParentFile().mkdirs();
+			FileOutputStream out = FileUtils.getHiddenCompliantStream(file);
+			try {
+				properties.store(out, "Yapbam preferences"); //$NON-NLS-1$
+			} finally {
+				out.close();
+			}
+		} else {
+			java.util.prefs.Preferences pref = getJavaPref();
+			for (Object obj : properties.keySet()) {
+				String key = (String)obj;
+				String value = properties.getProperty(key);
+				pref.put(key, value);
+			}
+			try {
+				pref.flush();
+			} catch (BackingStoreException e) {
+				throw new IOException(e);
+			}
+		}
+	}
+	
+	private java.util.prefs.Preferences getJavaPref() {
+		return java.util.prefs.Preferences.userRoot().node("net.yapbam.prefs");
 	}
 
 	/** Gets the preferred locale
@@ -368,7 +407,7 @@ public class Preferences {
 				Class<? extends AbstractPlugIn> pClass = (Class<? extends AbstractPlugIn>) Class.forName(testedPlugin);
 				plugins.add(new PlugInContainer(pClass));
 			} catch (Exception e) {
-				ErrorManager.INSTANCE.display(null, new RuntimeException("unable to load the plugin "+testedPlugin+" ("+e+")")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				ErrorManager.INSTANCE.display(null, e, "Unable to load the plugin "+testedPlugin); //$NON-NLS-1$
 			}
 		}
 		return plugins.toArray(new PlugInContainer[plugins.size()]);
