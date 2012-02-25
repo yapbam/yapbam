@@ -172,4 +172,31 @@ public class FileUtils {
 			}
 		}
 	}
+	
+	/** Tests if the application can write to a folder.
+	 * <br>It differs from File.canWrite because File.canWrite ignore the security policies of the platform.
+	 * This method returns true only if the calling thread have all the rights necessary to write to the folder.
+	 * @param folder The folder to test
+	 * @return true if the folder exists and the calling thread can write into it
+	 * @throws IllegalArgumentException if the parameter is not a directory.
+	 */
+	public static boolean isWritable(File folder) {
+		if (!folder.canWrite()) return false;
+		if (folder.isDirectory()) {
+			for (int i = 0; i < Integer.MAX_VALUE; i++) {
+				File tmpFile = new File(folder,Integer.toString(i));
+				if (!tmpFile.exists()) {
+					try {
+						if (tmpFile.createNewFile()) {
+							tmpFile.delete();
+							return true;
+						}
+					} catch (IOException e) {
+						return false;
+					}
+				}
+			}
+		}
+		throw new IllegalArgumentException();
+	}
 }
