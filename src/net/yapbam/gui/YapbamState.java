@@ -38,6 +38,7 @@ import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.DateUtils;
 import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
+import net.yapbam.util.PreferencesUtils;
 
 public class YapbamState {
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
@@ -53,11 +54,25 @@ public class YapbamState {
 	protected YapbamState() {
 		this.properties = new Properties();
 		try {
-			properties.load(new FileInputStream(getFile()));
+			if (Preferences.INSTANCE.isPortable()) {
+				FileInputStream inStream = new FileInputStream(getFile());
+				try {
+					properties.load(inStream);
+				} finally {
+					inStream.close();
+				}
+			} else {
+				PreferencesUtils.fromPreferences(getPreferences(), properties);
+			}
 		} catch (Throwable e) {
 			// On the first run, the file doesn't exist
-			// If there's another error, maybe it would be better to do something else //TODO
+			// If there's another error, maybe it would be better to do something else
+			//TODO
 		}
+	}
+
+	private java.util.prefs.Preferences getPreferences() {
+		return java.util.prefs.Preferences.userRoot().node(this.getClass().getName());
 	}
 
 	protected File getFile() {
@@ -197,11 +212,15 @@ public class YapbamState {
 	}
 
 	public void toDisk() throws IOException {
-		FileOutputStream stream = FileUtils.getHiddenCompliantStream(getFile());
-		try {
-			properties.store(stream, "Yapbam startup state"); //$NON-NLS-1$
-		} finally {
-			stream.close();
+		if (Preferences.INSTANCE.isPortable()) {
+			FileOutputStream stream = FileUtils.getHiddenCompliantStream(getFile());
+			try {
+				properties.store(stream, "Yapbam startup state"); //$NON-NLS-1$
+			} finally {
+				stream.close();
+			}
+		} else {
+			PreferencesUtils.toPreferences(getPreferences(), properties);
 		}
 	}
 
