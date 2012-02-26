@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.prefs.BackingStoreException;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -40,6 +39,7 @@ import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
+import net.yapbam.util.PreferencesUtils;
 
 /** This class represents the Yapbam application preferences */
 public class Preferences {
@@ -142,17 +142,9 @@ public class Preferences {
 				return true;
 			}
 		} else {
-			java.util.prefs.Preferences pref = getJavaPref();
-			try {
-				String[] keys = pref.keys();
-				this.firstRun = keys.length==0;
-				for (String key : keys) {
-					String value = pref.get(key, null);
-					properties.put(key, value);
-				}
-			} catch (BackingStoreException e) {
-				throw new IOException(e);
-			}
+			java.util.prefs.Preferences prefs = getJavaPref();
+			this.firstRun = PreferencesUtils.isEmpty(prefs);
+			PreferencesUtils.fromPreferences(prefs, properties);
 			return true;
 		}
 		return false;
@@ -169,20 +161,10 @@ public class Preferences {
 				out.close();
 			}
 		} else {
-			java.util.prefs.Preferences pref = getJavaPref();
-			for (Object obj : properties.keySet()) {
-				String key = (String)obj;
-				String value = properties.getProperty(key);
-				pref.put(key, value);
-			}
-			try {
-				pref.flush();
-			} catch (BackingStoreException e) {
-				throw new IOException(e);
-			}
+			PreferencesUtils.toPreferences(getJavaPref(), this.properties);
 		}
 	}
-	
+
 	private java.util.prefs.Preferences getJavaPref() {
 		return java.util.prefs.Preferences.userRoot().node("net.yapbam.prefs");
 	}
@@ -605,7 +587,22 @@ public class Preferences {
 		return this.backupOptions;
 	}
 
+	/** Tests whether is Preferences is able to save preferences at this time.
+	 * <br>It is not during the instantiation of the preferences singleton.
+	 * So, code executing during this instantiation should not refer to Preferences.INSTANCE
+	 * @return true if the singleton is ready to be modified.
+	 */
 	public static boolean canSave() {
 		return INSTANCE!=null;
+	}
+
+	/** Tests whether the application is portable.
+	 * <br>If it is, the preferences are saved in the execution directory. If not, they are store using the java.util.prefs utilities.
+	 * <br>Note : A I'm really found of the "portable application concept", the application is declared portable as soon as it is able
+	 * to write in its installation directory.  
+	 * @return true if the application is portable
+	 */
+	public boolean isPortable() {
+		return portable;
 	}
 }
