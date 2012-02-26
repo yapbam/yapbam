@@ -2,9 +2,14 @@ Version en cours de développement	Bug connu :	Bugs connus :	Changement :	Change
 version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
+fix
+	Lorsque Yapbam est installé sur un emplacement protégé par l'<a href="http://fr.wikipedia.org/wiki/User_Account_Control">UAC de Windows</a>, comme le dossier "Program files", des messages d'erreur apparaissent au lancement et à l'arrêt de Yapbam, ainsi que lors des mises à jour.
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 
+version 0.9.13 (??/02/2012)
+fix
+    Lorsque 
 version	0.9.12 (12/02/2012)
 fix
 	Lors de l'édition de sous-opérations, cliquer sur la case à cocher "Recette" lorsque le champ "montant" était vide provoquait une erreur.
