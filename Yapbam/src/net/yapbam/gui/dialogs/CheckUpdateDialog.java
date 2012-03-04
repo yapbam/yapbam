@@ -7,14 +7,19 @@ import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
 import net.yapbam.gui.ErrorManager;
+import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
+import net.yapbam.util.FileUtils;
+import net.yapbam.util.Portable;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.Date;
@@ -31,6 +36,10 @@ import java.util.concurrent.ExecutionException;
 public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	private boolean auto;
 
+	/** Constructor.
+	 * @param owner The owner window of the this dialog. 
+	 * @param auto true if the dialog is created by an automated task, false, if it is the result of a user action.
+	 */
 	public CheckUpdateDialog(Window owner, boolean auto) {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
 		this.auto = auto;
@@ -69,7 +78,6 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		
 		@Override
 		protected UpdateInformation doInBackground() throws Exception {
-//			Thread.sleep(1000); //TODO
 			return VersionManager.getUpdateInformation();
 		}
 		@Override
@@ -79,27 +87,17 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					UpdateInformation update = get();
 					CheckUpdateDialog.this.setVisible(false);
 					if (update.getHttpErrorCode()!=HttpURLConnection.HTTP_OK) { // Connection error
+						// If an error occured while getting the update information
 						if (!auto) {
 							String pattern = LocalizationData.get("MainMenu.CheckUpdate.HttpError"); //$NON-NLS-1$
 							String message = MessageFormat.format(pattern, update.getHttpErrorCode(), VersionManager.YABAM_HOME_URL);
 							JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE);	//$NON-NLS-1$
 						}
 					} else {
+						// If we've got the update information
 						YapbamState.INSTANCE.put(LAST_UPDATE_CHECK_KEY, new Date());
-						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // There's an update
-							String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
-							String message = MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease());
-							String download = LocalizationData.get("MainMenu.CheckUpdate.installNow"); //$NON-NLS-1$
-							int choice;
-							if (auto && Preferences.INSTANCE.getAutoUpdateInstall()) {
-								choice = 1;
-							} else {
-								//TODO Use a HTMLPane in order to be able to display a clickable link on the relnotes url
-								choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), //$NON-NLS-1$
-									JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-									new String[]{LocalizationData.get("MainMenu.CheckUpdate.cancel"), download}, download); //$NON-NLS-1$
-							}
-							if (choice==1) {
+						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // If there's an update
+							if (isUpdateInstallable(update)) {
 								CheckUpdateDialog.this.setVisible(false);
 								InstallUpdateDialog dialog = new InstallUpdateDialog(owner, auto && Preferences.INSTANCE.getAutoUpdateInstall(), update);
 								dialog.setVisible(true);
@@ -124,6 +122,50 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 						ErrorManager.INSTANCE.log(owner,cause);
 					}
 				}
+			}
+		}
+
+		/** Gets the action to do when an update is available.
+		 * @param update The update information
+		 * @return 1 if the update should be installed
+		 */
+		private boolean isUpdateInstallable(UpdateInformation update) {
+			//TODO Use a HTMLPane in order to be able to display a the relnotes
+			File launchDirectory = Portable.getLaunchDirectory();
+			boolean canWrite = FileUtils.isWritable(launchDirectory);
+			if (auto && Preferences.INSTANCE.getAutoUpdateInstall() && canWrite) return true;
+
+			String title = LocalizationData.get("MainMenu.CheckUpdate.Success.title"); //$NON-NLS-1$
+			if (!canWrite) {
+				// The application hasn't the write permission to the installation directory
+				String open = LocalizationData.get("MainMenu.CheckUpdate.Success.openSite"); //$NON-NLS-1$
+				String cancel = LocalizationData.get("GenericButton.cancel"); //$NON-NLS-1$
+				String message;
+				if (launchDirectory.canWrite()) {
+					// If the launch directory is writable but this application has not the right (example, "program files" protected by Windows UAC).
+					message = LocalizationData.get("MainMenu.CheckUpdate.Success.systemProtected"); //$NON-NLS-1$
+				} else {
+					// If the launch directory is not writable.
+					message = LocalizationData.get("MainMenu.CheckUpdate.Success.writeProtected"); //$NON-NLS-1$
+				}
+				message = MessageFormat.format(message, VersionManager.getVersion(), update.getLastestRelease());
+				int choice = JOptionPane.showOptionDialog(owner, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{cancel, open}, open);
+				if (choice==1) {
+					try {
+						HelpManager.show(owner, new URI("http://www.yapbam.net"));//$NON-NLS-1$
+					} catch (Exception e) {
+						ErrorManager.INSTANCE.log(owner, e);
+					}
+				}
+				return false;
+			} else {
+				// The application can write to the the installation directory
+				String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
+				String download = LocalizationData.get("MainMenu.CheckUpdate.installNow"); //$NON-NLS-1$
+				int choice = JOptionPane.showOptionDialog(owner, MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease()), title, //$NON-NLS-1$
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+					new String[]{LocalizationData.get("MainMenu.CheckUpdate.cancel"), download}, download); //$NON-NLS-1$
+				return choice == 1;
 			}
 		}
 	}
