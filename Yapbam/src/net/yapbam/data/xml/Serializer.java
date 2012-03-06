@@ -308,6 +308,10 @@ public class Serializer {
 	void serialize (GlobalData data) throws IOException {
 		try {
 			atts.clear();
+			atts.addAttribute(EMPTY, EMPTY, "nbAccounts", CDATA, Integer.toString(data.getAccountsNumber()));
+			atts.addAttribute(EMPTY, EMPTY, "nbCategories", CDATA, Integer.toString(data.getCategoriesNumber()));
+			atts.addAttribute(EMPTY, EMPTY, "nbPeriodicalTransactions", CDATA, Integer.toString(data.getPeriodicalTransactionsNumber()));
+			atts.addAttribute(EMPTY, EMPTY, "nbTransactions", CDATA, Integer.toString(data.getTransactionsNumber()));
 			hd.startElement(EMPTY,EMPTY,GLOBAL_DATA_TAG,atts);
 			
 			// Accounts.
