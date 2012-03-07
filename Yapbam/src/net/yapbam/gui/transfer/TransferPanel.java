@@ -86,7 +86,7 @@ public class TransferPanel extends JPanel {
 	private JPanel getFromPane() {
 		if (fromPane == null) {
 			fromPane = new JPanel();
-			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			GridBagLayout gbl_fromPane = new GridBagLayout();
 			fromPane.setLayout(gbl_fromPane);
 			GridBagConstraints gbc_fromAccountLabel = new GridBagConstraints();
@@ -100,7 +100,7 @@ public class TransferPanel extends JPanel {
 	private JPanel getToPane() {
 		if (toPane == null) {
 			toPane = new JPanel();
-			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			GridBagLayout gbl_toPane = new GridBagLayout();
 			toPane.setLayout(gbl_toPane);
 			GridBagConstraints gbc_toAccountLabel = new GridBagConstraints();
