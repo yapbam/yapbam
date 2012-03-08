@@ -16,7 +16,7 @@ public class TransferDialog extends AbstractDialog<GlobalData, Boolean> {
 
 	@Override
 	protected JPanel createCenterPane() {
-		return new TransferPanel();
+		return new TransferPanel(data);
 	}
 
 	@Override
