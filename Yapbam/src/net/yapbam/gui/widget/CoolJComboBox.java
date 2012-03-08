@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
  * <LI>The method <b>contains</b> tests whether the menu contains an item or not</LI>
  * </UL>
  */
-public class CoolJComboBox<T> extends JComboBox<T> {
+public class CoolJComboBox extends JComboBox {
 	private static final long serialVersionUID = 1L;
 
 	private boolean isActionEnabled = true;

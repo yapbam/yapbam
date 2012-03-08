@@ -67,8 +67,8 @@ public class CategoryPanel extends JPanel {
 	private JButton getNewButton() {
 		if (newButton == null) {
 			newButton = new JButton();
-			Dimension dimension = getComboBox().getPreferredSize();
 			newButton.setFocusable(false);
+			Dimension dimension = getComboBox().getPreferredSize();
 			newButton.setPreferredSize(new Dimension(dimension.height, dimension.height));
 			newButton.setToolTipText(LocalizationData.get("TransactionDialog.category.new.tooltip")); //$NON-NLS-1$
 			newButton.setIcon(IconManager.NEW_CATEGORY);

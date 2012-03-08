@@ -1,10 +1,9 @@
 package net.yapbam.gui.transfer;
 
-import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 
-public class AccountWidget extends AbstractSelector<Account> {
+public class AccountWidget extends AbstractSelector {
 	private static final long serialVersionUID = 1L;
 	
 
