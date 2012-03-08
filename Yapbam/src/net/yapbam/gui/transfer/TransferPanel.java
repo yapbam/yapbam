@@ -11,28 +11,31 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.DateWidget;
 import net.yapbam.gui.widget.AmountWidget;
 import java.awt.GridLayout;
+import net.yapbam.data.GlobalData;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel upperPane;
-	private JPanel fromPane;
-	private JPanel toPane;
+	private FromOrToPane fromPane;
+	private FromOrToPane toPane;
 	private JLabel dateLabel;
 	private DateWidget dateField;
 	private JLabel amountLabel;
 	private AmountWidget amountField;
-	private JLabel fromAccountLabel;
 	private JPanel panel;
-	private JLabel toAccountLabel;
+	private CategoryWidget categoryWidget;
 
+	private GlobalData data;
+	
 	/**
 	 * Create the panel.
 	 */
-	public TransferPanel() {
-
+	public TransferPanel(GlobalData data) {
+		this.data = data;
 		initialize();
 	}
+	
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
@@ -60,55 +63,50 @@ public class TransferPanel extends JPanel {
 			GridBagLayout gbl_upperPane = new GridBagLayout();
 			upperPane.setLayout(gbl_upperPane);
 			GridBagConstraints gbc_dateLabel = new GridBagConstraints();
-			gbc_dateLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_dateLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_dateLabel.anchor = GridBagConstraints.WEST;
 			gbc_dateLabel.gridx = 0;
 			gbc_dateLabel.gridy = 0;
 			upperPane.add(getDateLabel(), gbc_dateLabel);
 			GridBagConstraints gbc_dateField = new GridBagConstraints();
-			gbc_dateField.insets = new Insets(0, 0, 0, 5);
+			gbc_dateField.insets = new Insets(0, 0, 5, 5);
 			gbc_dateField.gridx = 1;
 			gbc_dateField.gridy = 0;
 			upperPane.add(getDateField(), gbc_dateField);
 			GridBagConstraints gbc_amountLabel = new GridBagConstraints();
-			gbc_amountLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_amountLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_amountLabel.anchor = GridBagConstraints.EAST;
 			gbc_amountLabel.gridx = 2;
 			gbc_amountLabel.gridy = 0;
 			upperPane.add(getAmountLabel(), gbc_amountLabel);
 			GridBagConstraints gbc_amountField = new GridBagConstraints();
+			gbc_amountField.insets = new Insets(0, 0, 5, 0);
 			gbc_amountField.gridx = 3;
 			gbc_amountField.gridy = 0;
 			upperPane.add(getAmountField(), gbc_amountField);
+			GridBagConstraints gbc_categoryWidget = new GridBagConstraints();
+			gbc_categoryWidget.insets = new Insets(0, 0, 0, 5);
+			gbc_categoryWidget.gridx = 0;
+			gbc_categoryWidget.gridy = 1;
+			upperPane.add(getCategoryWidget(), gbc_categoryWidget);
 		}
 		return upperPane;
 	}
-	private JPanel getFromPane() {
+	private FromOrToPane getFromPane() {
 		if (fromPane == null) {
-			fromPane = new JPanel();
+			fromPane = new FromOrToPane(data);
 			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			GridBagLayout gbl_fromPane = new GridBagLayout();
 			fromPane.setLayout(gbl_fromPane);
-			GridBagConstraints gbc_fromAccountLabel = new GridBagConstraints();
-			gbc_fromAccountLabel.anchor = GridBagConstraints.WEST;
-			gbc_fromAccountLabel.gridx = 0;
-			gbc_fromAccountLabel.gridy = 0;
-			fromPane.add(getFromAccountLabel(), gbc_fromAccountLabel);
 		}
 		return fromPane;
 	}
-	private JPanel getToPane() {
+	private FromOrToPane getToPane() {
 		if (toPane == null) {
-			toPane = new JPanel();
+			toPane = new FromOrToPane(data);
 			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			GridBagLayout gbl_toPane = new GridBagLayout();
 			toPane.setLayout(gbl_toPane);
-			GridBagConstraints gbc_toAccountLabel = new GridBagConstraints();
-			gbc_toAccountLabel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_toAccountLabel.anchor = GridBagConstraints.WEST;
-			gbc_toAccountLabel.gridx = 1;
-			gbc_toAccountLabel.gridy = 0;
-			toPane.add(getToAccountLabel(), gbc_toAccountLabel);
 		}
 		return toPane;
 	}
@@ -139,12 +137,6 @@ public class TransferPanel extends JPanel {
 		}
 		return amountField;
 	}
-	private JLabel getFromAccountLabel() {
-		if (fromAccountLabel == null) {
-			fromAccountLabel = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
-		}
-		return fromAccountLabel;
-	}
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -154,10 +146,10 @@ public class TransferPanel extends JPanel {
 		}
 		return panel;
 	}
-	private JLabel getToAccountLabel() {
-		if (toAccountLabel == null) {
-			toAccountLabel = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
+	private CategoryWidget getCategoryWidget() {
+		if (categoryWidget == null) {
+			categoryWidget = new CategoryWidget(data);
 		}
-		return toAccountLabel;
+		return categoryWidget;
 	}
 }
