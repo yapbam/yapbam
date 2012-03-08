@@ -1,10 +1,11 @@
 package net.yapbam.gui.transfer;
 
 import javax.swing.JPanel;
+
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import javax.swing.JComboBox;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +13,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.widget.CoolJComboBox;
 
-public class AbstractSelector<T> extends JPanel {
+public class AbstractSelector extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel label;
-	private JComboBox<T> combo;
+	private CoolJComboBox combo;
 	private JButton newButton;
 
 	/**
@@ -46,7 +48,10 @@ public class AbstractSelector<T> extends JPanel {
 		gbc_newButton.gridx = 2;
 		gbc_newButton.gridy = 0;
 		add(getNewButton(), gbc_newButton);
-		
+
+		Dimension dimension = getCombo().getPreferredSize();
+		getNewButton().setPreferredSize(new Dimension(dimension.height, dimension.height));
+
 		if (label!=null) getLabel().setText(label);
 		if (tipCombo!=null) getCombo().setToolTipText(tipCombo);
 		if (tipButton!=null) getNewButton().setToolTipText(tipButton);
@@ -59,9 +64,9 @@ public class AbstractSelector<T> extends JPanel {
 		return label;
 	}
 	
-	protected JComboBox<T> getCombo() {
+	protected CoolJComboBox getCombo() {
 		if (combo == null) {
-			combo = new JComboBox<T>();
+			combo = new CoolJComboBox();
 		}
 		return combo;
 	}
