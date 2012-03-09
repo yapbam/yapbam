@@ -15,28 +15,31 @@ import javax.swing.JButton;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.widget.CoolJComboBox;
 
-public class AbstractSelector extends JPanel {
+/** An abstract widget composed of a label, a combo box and a new button.
+ * <br>It is typically used to select a value in a list of possible values.
+ */
+public abstract class AbstractSelector<T> extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JLabel label;
+	private JLabel labelField;
 	private CoolJComboBox combo;
 	private JButton newButton;
 
 	/**
-	 * Create the panel.
+	 * Constructor.
 	 */
-	public AbstractSelector(String label, String tipCombo, String tipButton) {
-		initialize(label, tipCombo, tipButton);
+	public AbstractSelector() {
+		initialize();
 	}
 	
-	private void initialize(String label, String tipCombo, String tipButton) {
+	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.insets = new Insets(0, 0, 0, 5);
-		gbc_label.anchor = GridBagConstraints.WEST;
-		gbc_label.gridx = 0;
-		gbc_label.gridy = 0;
-		add(getLabel(), gbc_label);
+		GridBagConstraints gbc_labelField = new GridBagConstraints();
+		gbc_labelField.insets = new Insets(0, 0, 0, 5);
+		gbc_labelField.anchor = GridBagConstraints.WEST;
+		gbc_labelField.gridx = 0;
+		gbc_labelField.gridy = 0;
+		add(getLabelField(), gbc_labelField);
 		GridBagConstraints gbc_combo = new GridBagConstraints();
 		gbc_combo.weightx = 1.0;
 		gbc_combo.fill = GridBagConstraints.HORIZONTAL;
@@ -52,23 +55,16 @@ public class AbstractSelector extends JPanel {
 		Dimension dimension = getCombo().getPreferredSize();
 		getNewButton().setPreferredSize(new Dimension(dimension.height, dimension.height));
 
-		if (label!=null) getLabel().setText(label);
-		if (tipCombo!=null) getCombo().setToolTipText(tipCombo);
-		if (tipButton!=null) getNewButton().setToolTipText(tipButton);
+		if (getLabel()!=null) getLabelField().setText(getLabel());
+		if (getComboTip()!=null) getCombo().setToolTipText(getComboTip());
+		if (getNewButtonTip()!=null) getNewButton().setToolTipText(getNewButtonTip());
 	}
 
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel();
+	private JLabel getLabelField() {
+		if (labelField == null) {
+			labelField = new JLabel();
 		}
-		return label;
-	}
-	
-	protected CoolJComboBox getCombo() {
-		if (combo == null) {
-			combo = new CoolJComboBox();
-		}
-		return combo;
+		return labelField;
 	}
 	
 	private JButton getNewButton() {
@@ -86,6 +82,54 @@ public class AbstractSelector extends JPanel {
 		return newButton;
 	}
 	
+	int selectedIndex = -1; //TODO
+	protected CoolJComboBox getCombo() {
+		if (combo == null) {
+			combo = new CoolJComboBox();
+			combo.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int index = combo.getSelectedIndex();
+					if (index != selectedIndex) {
+						Object old = combo.getItemAt(selectedIndex);
+						selectedIndex = index;
+						firePropertyChange(getPropertyName(), old, combo.getItemAt(index));
+					} else {
+						System.out.println ("We selected the same index");
+					}
+				}
+			});
+		}
+		return combo;
+	}
+	
 	protected void createNew() {
+	}
+	
+	protected String getLabel() {
+		return null;
+	}
+	
+	protected String getComboTip() {
+		return null;
+	}
+	
+	protected String getNewButtonTip() {
+		return null;
+	}
+	
+	protected abstract String getPropertyName(); 
+	
+	@SuppressWarnings("unchecked")
+	public T get() {
+		return (T)getCombo().getSelectedItem();
+	}
+	
+	public void set(T value) {
+		Object oldValue = this.get();
+		if (!value.equals(oldValue)) {
+			getCombo().setSelectedItem(value);
+			this.firePropertyChange(getPropertyName(), oldValue, value);
+		}
 	}
 }
