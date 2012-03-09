@@ -24,18 +24,11 @@ public class CategoryPanel extends JPanel {
 	private GlobalData data;
 	
 	public CategoryPanel(GlobalData data) {
-		this();
+		super();
+		initialize();
 		setData(data);
 	}
 	
-	/**
-	 * This is the default constructor
-	 */
-	public CategoryPanel() {
-		super();
-		initialize();
-	}
-
 	/**
 	 * This method initializes this
 	 */
@@ -104,7 +97,7 @@ public class CategoryPanel extends JPanel {
 		this.firePropertyChange(CATEGORY_PROPERTY, oldValue, category);
 	}
 
-	public void setData(GlobalData data) {
+	private void setData(GlobalData data) {
 		this.data = data;
 		this.getNewButton().setEnabled(data!=null);
 		buildCategories();
@@ -114,9 +107,9 @@ public class CategoryPanel extends JPanel {
 		this.comboBox.setActionEnabled(false);
 		this.comboBox.removeAllItems();
 		if (data!=null){
-			int nb = ((GlobalData) data).getCategoriesNumber();
+			int nb = data.getCategoriesNumber();
 			for (int i = 0; i < nb; i++) {
-				this.comboBox.addItem(((GlobalData) data).getCategory(i).getName());
+				this.comboBox.addItem(data.getCategory(i));
 			}
 		}
 		comboBox.setActionEnabled(true);

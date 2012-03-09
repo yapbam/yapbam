@@ -24,11 +24,14 @@ public abstract class AbstractSelector<T> extends JPanel {
 	private CoolJComboBox combo;
 	private JButton newButton;
 
+	private int selectedIndex;
+
 	/**
 	 * Constructor.
 	 */
 	public AbstractSelector() {
 		initialize();
+		this.selectedIndex = getCombo().getSelectedIndex();
 	}
 	
 	private void initialize() {
@@ -43,7 +46,6 @@ public abstract class AbstractSelector<T> extends JPanel {
 		GridBagConstraints gbc_combo = new GridBagConstraints();
 		gbc_combo.weightx = 1.0;
 		gbc_combo.fill = GridBagConstraints.HORIZONTAL;
-		gbc_combo.insets = new Insets(0, 0, 0, 5);
 		gbc_combo.gridx = 1;
 		gbc_combo.gridy = 0;
 		add(getCombo(), gbc_combo);
@@ -82,7 +84,6 @@ public abstract class AbstractSelector<T> extends JPanel {
 		return newButton;
 	}
 	
-	int selectedIndex = -1; //TODO
 	protected CoolJComboBox getCombo() {
 		if (combo == null) {
 			combo = new CoolJComboBox();
@@ -94,8 +95,6 @@ public abstract class AbstractSelector<T> extends JPanel {
 						Object old = combo.getItemAt(selectedIndex);
 						selectedIndex = index;
 						firePropertyChange(getPropertyName(), old, combo.getItemAt(index));
-					} else {
-						System.out.println ("We selected the same index");
 					}
 				}
 			});
@@ -103,28 +102,46 @@ public abstract class AbstractSelector<T> extends JPanel {
 		return combo;
 	}
 	
-	protected void createNew() {
-	}
+	/** Creates a new element (when the new button is clicked). */
+	protected void createNew() {}
 	
+	/** Gets the widget's label.
+	 * @return a String, null to have no label.
+	 */
 	protected String getLabel() {
 		return null;
 	}
 	
+	/** Gets the combo's tooltip.
+	 * @return a String, null to have no tooltip.
+	 */
 	protected String getComboTip() {
 		return null;
 	}
 	
+	/** Gets the new button's tooltip.
+	 * @return a String, null to have no tooltip.
+	 */
 	protected String getNewButtonTip() {
 		return null;
 	}
 	
+	/** Gets the name of the property that changes when the selection changes.
+	 * @return a String
+	 */
 	protected abstract String getPropertyName(); 
 	
 	@SuppressWarnings("unchecked")
+	/** Gets the selected value.
+	 * @return the selected value.
+	 */
 	public T get() {
 		return (T)getCombo().getSelectedItem();
 	}
 	
+	/** Sets the selected value.
+	 * @param value The value to select
+	 */
 	public void set(T value) {
 		Object oldValue = this.get();
 		if (!value.equals(oldValue)) {

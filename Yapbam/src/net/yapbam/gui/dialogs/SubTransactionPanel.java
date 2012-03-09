@@ -33,6 +33,7 @@ public class SubTransactionPanel extends JPanel {
 	private JLabel jLabel2 = null;
 	private JCheckBox jCheckBox = null;
 	
+	private GlobalData data;
 	private Double amount;
 	
 	private PredefinedDescriptionUpdater updater;
@@ -45,8 +46,8 @@ public class SubTransactionPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public SubTransactionPanel() {
-		super();
+	public SubTransactionPanel(GlobalData data) {
+		this.data = data;
 		initialize();
 	}
 
@@ -175,7 +176,7 @@ public class SubTransactionPanel extends JPanel {
 	 */
 	private CategoryPanel getCategoryPanel() {
 		if (categoryPanel == null) {
-			categoryPanel = new CategoryPanel();
+			categoryPanel = new CategoryPanel(data);
 		}
 		return categoryPanel;
 	}
@@ -203,10 +204,6 @@ public class SubTransactionPanel extends JPanel {
 		return jCheckBox;
 	}
 
-	public void setData(GlobalData data) {
-		this.getCategoryPanel().setData(data);
-	}
-	
 	public Double getAmount() {
 		return amount;
 	}
