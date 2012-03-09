@@ -35,8 +35,8 @@ public class Category implements Serializable, Comparable<Category> {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		Category category = (Category)obj;
-		return category.name.equals(name);
+		if (obj==null) return false;
+		return ((Category)obj).name.equals(name);
 	}
 
 	@Override

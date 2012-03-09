@@ -12,6 +12,8 @@ import net.yapbam.gui.widget.DateWidget;
 import net.yapbam.gui.widget.AmountWidget;
 import java.awt.GridLayout;
 import net.yapbam.data.GlobalData;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -149,6 +151,11 @@ public class TransferPanel extends JPanel {
 	private CategoryWidget getCategoryWidget() {
 		if (categoryWidget == null) {
 			categoryWidget = new CategoryWidget(data);
+			categoryWidget.addPropertyChangeListener(CategoryWidget.CATEGORY_PROPERTY, new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent evt) {
+					System.out.println ("Category changed from "+evt.getOldValue()+" to "+evt.getNewValue()); //TODO
+				}
+			});
 		}
 		return categoryWidget;
 	}
