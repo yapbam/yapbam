@@ -12,7 +12,7 @@ public abstract class PreferencePanel extends JPanel {
 	/** The name of the property containing the reason why the panel can't be validated.
 	 * @see PreferencePanel#getOkDisabledCause()
 	 */
-	public static String OK_DISABLED_CAUSE_PROPERTY = "okDisableCause"; //$NON-NLS-1$
+	public static String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause"; //$NON-NLS-1$
 	
 	private String okDisabledCause;
 	

@@ -2,6 +2,7 @@ package net.yapbam.gui.transfer;
 
 import javax.swing.JPanel;
 
+import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.dialogs.AccountWidget;
 
@@ -12,7 +13,10 @@ import java.beans.PropertyChangeListener;
 
 public class FromOrToPane extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private AccountWidget panel;
+	
+	public static final String ACCOUNT_PROPERTY = AccountWidget.ACCOUNT_PROPERTY;
+	
+	private AccountWidget accountWidget;
 	private GlobalData data;
 
 	/**
@@ -26,21 +30,25 @@ public class FromOrToPane extends JPanel {
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		add(getPanel(), gbc_panel);
+		GridBagConstraints gbc_accountWidget = new GridBagConstraints();
+		gbc_accountWidget.gridx = 0;
+		gbc_accountWidget.gridy = 0;
+		add(getAccountWidget(), gbc_accountWidget);
 	}
 
-	private AccountWidget getPanel() {
-		if (panel == null) {
-			panel = new AccountWidget(data);
-			panel.addPropertyChangeListener(AccountWidget.ACCOUNT_PROPERTY, new PropertyChangeListener() {
+	private AccountWidget getAccountWidget() {
+		if (accountWidget == null) {
+			accountWidget = new AccountWidget(data);
+			accountWidget.addPropertyChangeListener(AccountWidget.ACCOUNT_PROPERTY, new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
-					System.out.println ("Account changed from "+evt.getOldValue()+" to "+evt.getNewValue()); //TODO
+					firePropertyChange(ACCOUNT_PROPERTY, evt.getOldValue(), evt.getNewValue());
 				}
 			});
 		}
-		return panel;
+		return accountWidget;
+	}
+	
+	public Account getAccount() {
+		return accountWidget.get();
 	}
 }
