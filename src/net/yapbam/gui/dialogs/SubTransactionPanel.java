@@ -29,7 +29,7 @@ public class SubTransactionPanel extends JPanel {
 	private PopupTextFieldList descriptionField = null;
 	private JLabel jLabel1 = null;
 	private AmountWidget amountField = null;
-	private CategoryPanel categoryPanel = null;
+	private CategoryWidget categoryPanel = null;
 	private JLabel jLabel2 = null;
 	private JCheckBox jCheckBox = null;
 	
@@ -174,9 +174,16 @@ public class SubTransactionPanel extends JPanel {
 	 * This method initializes categoryPanel	
 	 * @return net.astesana.comptes.ihm.dialogs.CategoryPanel	
 	 */
-	private CategoryPanel getCategoryPanel() {
+	private CategoryWidget getCategoryPanel() {
 		if (categoryPanel == null) {
-			categoryPanel = new CategoryPanel(data);
+			categoryPanel = new CategoryWidget(data);
+			categoryPanel.getJLabel().setVisible(false);
+			categoryPanel.addPropertyChangeListener(CategoryWidget.CATEGORY_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					firePropertyChange(CATEGORY_PROPERTY, evt.getOldValue(), evt.getNewValue());
+				}
+			});
 		}
 		return categoryPanel;
 	}
@@ -225,13 +232,11 @@ public class SubTransactionPanel extends JPanel {
 	}
 	
 	public Category getCategory() {
-		return this.getCategoryPanel().getCategory();
+		return this.getCategoryPanel().get();
 	}
 	
 	public void setCategory (Category category) {
-		Object old = this.getCategory();
-		this.categoryPanel.setCategory(category);
-		this.firePropertyChange(CATEGORY_PROPERTY, old, category);
+		this.categoryPanel.set(category);
 	}
 	
 	public void setPredefined(String[] predefined, int[] groupSizes) {

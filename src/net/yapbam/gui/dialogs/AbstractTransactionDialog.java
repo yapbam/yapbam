@@ -40,7 +40,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected AmountWidget amount;
 	protected JCheckBox receipt;
 	protected CoolJComboBox modes;
-	protected CategoryPanel categories;
+	protected CategoryWidget categories;
 	protected SubtransactionListPanel subtransactionsPanel;
 	private String originalMode;
 	private boolean originalIsExpense;
@@ -82,7 +82,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 			modes.setActionEnabled(old);
 		}
 		modes.setSelectedItem(transaction.getMode().getName());
-		categories.setCategory(transaction.getCategory());
+		categories.set(transaction.getCategory());
 	}
 
 	protected void setMode(Mode mode) {
@@ -231,9 +231,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c.gridx = 2;
 		buildNumberField(centerPane, AutoSelectFocusListener.INSTANCE, c); // Subclasses may insert a number field here
 
-		c.fill=GridBagConstraints.NONE; c.weightx=0.0;
-		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.category")), c); //$NON-NLS-1$
-		categories = new CategoryPanel(this.data.getGlobalData());
+		categories = new CategoryWidget(this.data.getGlobalData());
 		c.gridx++; c.weightx = 1.0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(categories, c);
 
