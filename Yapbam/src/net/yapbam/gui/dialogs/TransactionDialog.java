@@ -232,7 +232,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
 		}
 		return new Transaction(date.getDate(), number, description.getText().trim(), comment.getText().trim(), amount, getAccount(), getCurrentMode(),
-				categories.getCategory(), defDate.getDate(), statementId, subTransactions);
+				categories.get(), defDate.getDate(), statementId, subTransactions);
 	}
 
 	@Override
@@ -424,7 +424,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				max = categories.get(next);
 			}
 		}
-		this.categories.setCategory(category);
+		this.categories.set(category);
 		ModeAndType modeAndType = null;
 		max = 0;
 		for (Iterator<ModeAndType> iterator = modes.keySet().iterator(); iterator.hasNext();) {

@@ -8,6 +8,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.dialogs.CategoryWidget;
 import net.yapbam.gui.widget.DateWidget;
 import net.yapbam.gui.widget.AmountWidget;
 import java.awt.GridLayout;
