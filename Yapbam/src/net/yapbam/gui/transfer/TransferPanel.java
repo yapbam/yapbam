@@ -9,27 +9,37 @@ import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryWidget;
-import net.yapbam.gui.widget.DateWidget;
 import net.yapbam.gui.widget.AmountWidget;
 import java.awt.GridLayout;
 import net.yapbam.data.GlobalData;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import net.yapbam.gui.widget.DateWidgetPanel;
+import net.yapbam.util.NullUtils;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	
+	private static final String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause";
 
 	private JPanel upperPane;
 	private FromOrToPane fromPane;
 	private FromOrToPane toPane;
 	private JLabel dateLabel;
-	private DateWidget dateField;
+	private DateWidgetPanel dateField;
 	private JLabel amountLabel;
 	private AmountWidget amountField;
 	private JPanel panel;
 	private CategoryWidget categoryWidget;
 
 	private GlobalData data;
+	private String okDisabledCause;
+	private PropertyChangeListener listener = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			updateOkDisabledCause();
+		}
+	};
 	
 	/**
 	 * Create the panel.
@@ -37,8 +47,9 @@ public class TransferPanel extends JPanel {
 	public TransferPanel(GlobalData data) {
 		this.data = data;
 		initialize();
+		updateOkDisabledCause();
 	}
-	
+
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
@@ -83,11 +94,15 @@ public class TransferPanel extends JPanel {
 			gbc_amountLabel.gridy = 0;
 			upperPane.add(getAmountLabel(), gbc_amountLabel);
 			GridBagConstraints gbc_amountField = new GridBagConstraints();
+			gbc_amountField.anchor = GridBagConstraints.WEST;
 			gbc_amountField.insets = new Insets(0, 0, 5, 0);
 			gbc_amountField.gridx = 3;
 			gbc_amountField.gridy = 0;
 			upperPane.add(getAmountField(), gbc_amountField);
 			GridBagConstraints gbc_categoryWidget = new GridBagConstraints();
+			gbc_categoryWidget.weightx = 1.0;
+			gbc_categoryWidget.fill = GridBagConstraints.HORIZONTAL;
+			gbc_categoryWidget.gridwidth = 0;
 			gbc_categoryWidget.insets = new Insets(0, 0, 0, 5);
 			gbc_categoryWidget.gridx = 0;
 			gbc_categoryWidget.gridy = 1;
@@ -99,8 +114,7 @@ public class TransferPanel extends JPanel {
 		if (fromPane == null) {
 			fromPane = new FromOrToPane(data);
 			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
-			GridBagLayout gbl_fromPane = new GridBagLayout();
-			fromPane.setLayout(gbl_fromPane);
+			fromPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 		}
 		return fromPane;
 	}
@@ -108,8 +122,7 @@ public class TransferPanel extends JPanel {
 		if (toPane == null) {
 			toPane = new FromOrToPane(data);
 			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
-			GridBagLayout gbl_toPane = new GridBagLayout();
-			toPane.setLayout(gbl_toPane);
+			toPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 		}
 		return toPane;
 	}
@@ -119,9 +132,9 @@ public class TransferPanel extends JPanel {
 		}
 		return dateLabel;
 	}
-	private DateWidget getDateField() {
+	private DateWidgetPanel getDateField() {
 		if (dateField == null) {
-			dateField = new DateWidget();
+			dateField = new DateWidgetPanel();
 			dateField.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
 			dateField.setColumns(10);
 		}
@@ -160,4 +173,21 @@ public class TransferPanel extends JPanel {
 		}
 		return categoryWidget;
 	}
+	
+	public String getOkDisabledCause() {
+		return okDisabledCause;
+	}
+	
+	
+	private void updateOkDisabledCause() {
+		String old = okDisabledCause;
+		if (getFromPane().getAccount().equals(getToPane().getAccount())) {
+			okDisabledCause = "Both accounts are the same";
+		}
+		okDisabledCause = null;
+		if (NullUtils.areEquals(old, okDisabledCause)) {
+			firePropertyChange(OK_DISABLED_CAUSE_PROPERTY, old, okDisabledCause);
+		}
+	}
+
 }
