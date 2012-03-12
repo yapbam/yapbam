@@ -69,6 +69,15 @@ public abstract class AbstractSelector<T,V> extends JPanel {
 	 */
 	protected abstract void populateCombo();
 	
+	protected void refresh() {
+		T old = get();
+		getCombo().setActionEnabled(false);
+		getCombo().removeAllItems();
+		populateCombo();
+		if (getCombo().contains(old)) getCombo().setSelectedItem(old);
+		getCombo().setActionEnabled(true);
+	}
+
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);

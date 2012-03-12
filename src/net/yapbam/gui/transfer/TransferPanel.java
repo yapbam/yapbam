@@ -77,7 +77,7 @@ public class TransferPanel extends JPanel {
 			GridBagLayout gbl_upperPane = new GridBagLayout();
 			upperPane.setLayout(gbl_upperPane);
 			GridBagConstraints gbc_dateLabel = new GridBagConstraints();
-			gbc_dateLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_dateLabel.insets = new Insets(0, 0, 0, 5);
 			gbc_dateLabel.anchor = GridBagConstraints.WEST;
 			gbc_dateLabel.gridx = 0;
 			gbc_dateLabel.gridy = 0;
@@ -88,7 +88,7 @@ public class TransferPanel extends JPanel {
 			gbc_dateField.gridy = 0;
 			upperPane.add(getDateField(), gbc_dateField);
 			GridBagConstraints gbc_amountLabel = new GridBagConstraints();
-			gbc_amountLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_amountLabel.insets = new Insets(0, 0, 0, 5);
 			gbc_amountLabel.anchor = GridBagConstraints.EAST;
 			gbc_amountLabel.gridx = 2;
 			gbc_amountLabel.gridy = 0;
@@ -104,8 +104,8 @@ public class TransferPanel extends JPanel {
 			gbc_categoryWidget.fill = GridBagConstraints.HORIZONTAL;
 			gbc_categoryWidget.gridwidth = 0;
 			gbc_categoryWidget.insets = new Insets(0, 0, 0, 5);
-			gbc_categoryWidget.gridx = 0;
-			gbc_categoryWidget.gridy = 1;
+			gbc_categoryWidget.gridx = 4;
+			gbc_categoryWidget.gridy = 0;
 			upperPane.add(getCategoryWidget(), gbc_categoryWidget);
 		}
 		return upperPane;

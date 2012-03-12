@@ -2,6 +2,11 @@ package net.yapbam.gui.dialogs;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.event.CategoryAddedEvent;
+import net.yapbam.data.event.CategoryPropertyChangedEvent;
+import net.yapbam.data.event.CategoryRemovedEvent;
+import net.yapbam.data.event.DataEvent;
+import net.yapbam.data.event.DataListener;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AbstractSelector;
@@ -13,6 +18,18 @@ public class CategoryWidget extends AbstractSelector<Category, GlobalData> {
 	
 	public CategoryWidget(GlobalData data) {
 		super(data);
+		if (data!=null) {
+			data.addListener(new DataListener() {
+				@Override
+				public void processEvent(DataEvent event) {
+					if ((event instanceof CategoryAddedEvent) || (event instanceof CategoryRemovedEvent)) {
+						refresh();
+					} else if ((event instanceof CategoryPropertyChangedEvent) && ((CategoryPropertyChangedEvent)event).getProperty().equals(CategoryPropertyChangedEvent.NAME)) {
+						refresh();
+					}
+				}
+			});
+		}
 	}
 
 	@Override
