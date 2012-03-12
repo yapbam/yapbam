@@ -4,14 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.FocusListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
 import net.yapbam.data.*;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 /** This dialog allows to create or edit a transaction */
 public class PeriodicalTransactionDialog extends AbstractTransactionDialog<PeriodicalTransaction> {
@@ -62,12 +61,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 	private JComponent buildPeriodicalPanel() {
 		generationPanel = new GenerationPanel();
 		generationPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PeriodicalTransactionDialog.generationBorderTitle"))); //$NON-NLS-1$
-		generationPanel.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		generationPanel.addPropertyChangeListener(new AutoUpdateOkButtonPropertyListener(this));
 		return generationPanel;
 	}
 

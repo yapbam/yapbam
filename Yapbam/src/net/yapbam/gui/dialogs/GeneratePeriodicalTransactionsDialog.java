@@ -1,8 +1,6 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -16,6 +14,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingOptions;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<FilteredData, Void> {
@@ -48,12 +47,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 	@Override
 	protected JPanel createCenterPane() {
 		panel = new PeriodicalTransactionGeneratorPanel(data);
-		panel.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		panel.addPropertyChangeListener(new AutoUpdateOkButtonPropertyListener(this));
 		return panel;
 	}
 

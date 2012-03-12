@@ -1,8 +1,6 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 
@@ -11,6 +9,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 public class SubTransactionDialog extends AbstractDialog<GlobalData, SubTransaction> {
 	private static final long serialVersionUID = 1L;
@@ -30,12 +29,7 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData, SubTransact
 	@Override
 	protected JPanel createCenterPane() {
 		this.panel = new SubTransactionPanel(data);
-		this.panel.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		this.panel.addPropertyChangeListener(new AutoUpdateOkButtonPropertyListener(this));
 		if (DEBUG) this.panel.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
 		return this.panel;
 	}

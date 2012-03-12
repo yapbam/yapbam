@@ -1,8 +1,6 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.JPanel;
@@ -11,6 +9,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")
 public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importer> {
@@ -50,12 +49,7 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 		importPanel = new ImportPanel();
 		importPanel.setData(data.data);
 		importPanel.setFile(data.file);
-		importPanel.addPropertyChangeListener(ImportPanel.INVALIDITY_CAUSE, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		importPanel.addPropertyChangeListener(ImportPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
 		ImporterParameters parameters = (ImporterParameters) YapbamState.INSTANCE.restore(getStateKey(ImporterParameters.class));
 		if (parameters!=null) importPanel.setParameters(parameters);
 		return importPanel;

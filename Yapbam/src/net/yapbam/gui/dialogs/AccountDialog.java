@@ -13,6 +13,7 @@ import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CoolJTextField;

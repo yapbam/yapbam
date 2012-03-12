@@ -1,8 +1,6 @@
 package net.yapbam.gui.dialogs.checkbook;
 
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 
@@ -11,6 +9,7 @@ import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 public class CheckbookDialog extends AbstractDialog<Void, Checkbook> {
 	private static final long serialVersionUID = 1L;
@@ -24,12 +23,7 @@ public class CheckbookDialog extends AbstractDialog<Void, Checkbook> {
 	@Override
 	protected JPanel createCenterPane() {
 		this.pane = new CheckbookPane();
-		this.pane.addPropertyChangeListener(CheckbookPane.INVALIDITY_CAUSE, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		this.pane.addPropertyChangeListener(CheckbookPane.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
 		return this.pane;
 	}
 
@@ -56,12 +50,6 @@ public class CheckbookDialog extends AbstractDialog<Void, Checkbook> {
 	@Override
 	protected String getOkDisabledCause() {
 		return this.pane.getInvalidityCause();
-	}
-
-	class Listener implements PropertyChangeListener {
-		public void propertyChange(PropertyChangeEvent evt) {
-			updateOkButtonEnabled();
-		}
 	}
 
 	public void setContent(Checkbook book) {

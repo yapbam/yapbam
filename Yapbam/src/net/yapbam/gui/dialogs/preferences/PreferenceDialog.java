@@ -1,8 +1,6 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.BorderLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -14,6 +12,7 @@ import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.dialogs.preferences.backup.BackupPanel;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,15 +61,9 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 				panels.get(lastSelected).setDisplayed(true);
 			}
 		});
-		PropertyChangeListener listener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		};
 		for (int i = 0; i < panels.size(); i++) {
 			tabbedPane.addTab(panels.get(i).getTitle(), null, panels.get(i), panels.get(i).getToolTip());
-			panels.get(i).addPropertyChangeListener(PreferencePanel.OK_DISABLED_CAUSE_PROPERTY, listener);
+			panels.get(i).addPropertyChangeListener(PreferencePanel.OK_DISABLED_CAUSE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		}
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
