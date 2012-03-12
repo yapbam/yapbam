@@ -1,8 +1,6 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
@@ -10,6 +8,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.filter.CustomFilterPanel;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")
 public class CustomFilterDialog extends AbstractDialog<FilteredData, Boolean> {
@@ -32,12 +31,7 @@ public class CustomFilterDialog extends AbstractDialog<FilteredData, Boolean> {
 	@Override
 	protected JPanel createCenterPane() {
 		filterPanel = new CustomFilterPanel(data);
-		filterPanel.addPropertyChangeListener(CustomFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		filterPanel.addPropertyChangeListener(CustomFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		return filterPanel;
 	}
 

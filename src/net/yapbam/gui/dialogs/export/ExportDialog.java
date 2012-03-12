@@ -1,8 +1,6 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -11,6 +9,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")
 public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
@@ -37,12 +36,7 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
 		exportPanel = new ExportPanel();
 		boolean hasFilter = data.getFilter().isActive();
 		exportPanel.getFiltered().setEnabled(hasFilter);
-		exportPanel.addPropertyChangeListener(ExportPanel.INVALIDITY_CAUSE, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		exportPanel.addPropertyChangeListener(ExportPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
 		ExporterParameters parameters = (ExporterParameters) YapbamState.INSTANCE.restore(getStateKey());
 		if (parameters!=null) {
 			if (!hasFilter) parameters.setExportFilteredData(false);

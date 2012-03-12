@@ -1,14 +1,13 @@
 package net.yapbam.gui.dialogs;
 
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")
 /** This class is a password ask dialog.
@@ -53,12 +52,7 @@ public class GetPasswordDialog extends AbstractDialog<GetPasswordDialog.InitData
 		if (data.password!=null) panel.setPassword(data.password);
 		this.panel.setIcon(data.icon);
 		this.panel.setQuestion(data.question);
-		this.panel.addPropertyChangeListener(GetPasswordPanel.CONFIRMED_PROPERTY, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		});
+		this.panel.addPropertyChangeListener(GetPasswordPanel.CONFIRMED_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		return panel;
 	}
 

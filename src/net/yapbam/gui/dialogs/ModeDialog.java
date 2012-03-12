@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 
@@ -18,6 +17,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CoolJTextField;
 
@@ -55,19 +55,14 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		c.gridx = 1;
 		c.weightx = 1.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
+		PropertyChangeListener listener = new AutoUpdateOkButtonPropertyListener(this);
 		name = new CoolJTextField(10);
-		name.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
+		name.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, listener);
 		name.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		idPanel.add(name, c);
 
 		leftPane = new ModePanel(LocalizationData.get("ModeDialog.forDebts"), true); //$NON-NLS-1$
 		rightPane = new ModePanel(LocalizationData.get("ModeDialog.forReceipts"), false); //$NON-NLS-1$
-		PropertyChangeListener listener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateOkButtonEnabled();
-			}
-		};
 		leftPane.addPropertyChangeListener(ModePanel.IS_SELECTED_PROPERTY, listener);
 		rightPane.addPropertyChangeListener(ModePanel.IS_SELECTED_PROPERTY, listener);
 		leftPane.addPropertyChangeListener(ModePanel.IS_VALID_PROPERTY, listener);

@@ -1,9 +1,8 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.util;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.CoolJTextField;
 
 /** Utility PropertyChangeListener that calls the updateOkButtonEnabled of a dialog each
@@ -13,7 +12,7 @@ import net.yapbam.gui.widget.CoolJTextField;
  * <BR>License : GPL v3
  * @see CoolJTextField
  */
-class AutoUpdateOkButtonPropertyListener implements PropertyChangeListener {
+public class AutoUpdateOkButtonPropertyListener implements PropertyChangeListener {
 	// Note that, previously, I used a keyAdapter listener or a DocumentListener to perform such a functionality.
 	// Both simply didn't worked !!!
 	// With keyAdapter, if you typed an invalid text and, very, very quickly, press the ok button of the dialog,
@@ -22,7 +21,7 @@ class AutoUpdateOkButtonPropertyListener implements PropertyChangeListener {
 	
 	private AbstractDialog<?,?> dialog;
 	
-	AutoUpdateOkButtonPropertyListener (AbstractDialog<?,?> dialog) {
+	public AutoUpdateOkButtonPropertyListener (AbstractDialog<?,?> dialog) {
 		this.dialog = dialog;
 	}
 

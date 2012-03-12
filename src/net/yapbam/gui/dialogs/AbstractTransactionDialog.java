@@ -22,6 +22,7 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
+import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CoolJComboBox;
@@ -196,12 +197,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		amount = new AmountWidget(LocalizationData.getLocale());
 		amount.setColumns(10);
 		amount.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				AbstractTransactionDialog.this.updateOkButtonEnabled();
-			}
-		});
+		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		amount.setToolTipText(LocalizationData.get("TransactionDialog.amount.tooltip")); //$NON-NLS-1$
 		c.gridx++; c.weightx = 1.0;c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(amount, c);

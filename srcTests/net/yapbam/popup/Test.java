@@ -1,15 +1,7 @@
 package net.yapbam.popup;
 
-import java.awt.BorderLayout;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import net.yapbam.gui.widget.PopupTextFieldList;
-import net.yapbam.util.DateUtils;
 
 public class Test {
 
@@ -26,10 +18,10 @@ public class Test {
         f.add(pane);
         JPanel p1 = new JPanel(new BorderLayout());
         p1.add(new JLabel("Question : "),BorderLayout.WEST);
-        String[] array = new String[] {"Carrefour", "Plein voiture", "Plein moto", "Carrefour Market", "Magazines", "Réparation", "Charges", "Impôts locaux",
+        String[] array = new String[] {"Carrefour", "Plein moto", "Carrefour Market", "Plein voiture", "Magazines", "Réparation", "Charges", "Impôts locaux",
         		"Impots fonciers", "Impôt sur le revenu", "Cadeau Isa", "Inscription vacances CE", "Cinéma", "Barrete mémoire Maman"};
         final PopupTextFieldList field = new PopupTextFieldList();
-        field.setPredefined(array, new int[]{3,2});
+        field.setPredefined(array);
         field.setColumns(10);
         p1.add(field,BorderLayout.CENTER);
         pane.add(p1,BorderLayout.NORTH);

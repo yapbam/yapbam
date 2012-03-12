@@ -20,7 +20,7 @@ import net.yapbam.util.NullUtils;
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private static final String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause";
+	public static final String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause";
 
 	private JPanel upperPane;
 	private FromOrToPane fromPane;
@@ -178,14 +178,13 @@ public class TransferPanel extends JPanel {
 		return okDisabledCause;
 	}
 	
-	
 	private void updateOkDisabledCause() {
 		String old = okDisabledCause;
+		okDisabledCause = null;
 		if (getFromPane().getAccount().equals(getToPane().getAccount())) {
 			okDisabledCause = "Both accounts are the same";
 		}
-		okDisabledCause = null;
-		if (NullUtils.areEquals(old, okDisabledCause)) {
+		if (!NullUtils.areEquals(old, okDisabledCause)) {
 			firePropertyChange(OK_DISABLED_CAUSE_PROPERTY, old, okDisabledCause);
 		}
 	}
