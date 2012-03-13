@@ -496,7 +496,7 @@ public class MainFrame extends JFrame implements DataListener {
 						}
 					}
 				} catch (FileNotFoundException e) {
-					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
+					ErrorManager.INSTANCE.display(this, null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
 				} catch (IOException e) {
 					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
 				}
