@@ -13,14 +13,14 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
+import net.astesana.swing.widget.IntegerWidget;
+import net.astesana.utilities.NullUtils;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
-import net.yapbam.gui.widget.IntegerWidget;
-import net.yapbam.util.NullUtils;
 
 import java.math.BigInteger;
 import java.util.Date;

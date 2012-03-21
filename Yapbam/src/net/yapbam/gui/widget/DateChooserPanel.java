@@ -80,7 +80,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import net.yapbam.util.NullUtils;
+import net.astesana.utilities.NullUtils;
 
 /**
  * A panel that allows the user to select a date.

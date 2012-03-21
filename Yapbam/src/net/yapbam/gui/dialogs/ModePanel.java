@@ -18,12 +18,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.astesana.swing.widget.IntegerWidget;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.IntegerWidget;
 
 /** This panel allows to create or modify a valueDateComputer */
 class ModePanel extends JPanel {

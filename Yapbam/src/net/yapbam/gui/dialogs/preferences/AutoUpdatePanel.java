@@ -14,10 +14,10 @@ import java.math.BigInteger;
 
 import javax.swing.JLabel;
 
+import net.astesana.swing.widget.IntegerWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.widget.IntegerWidget;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;

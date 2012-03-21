@@ -3,14 +3,11 @@ package net.yapbam.gui.util;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.yapbam.gui.widget.CoolJTextField;
-
 /** Utility PropertyChangeListener that calls the updateOkButtonEnabled of a dialog each
  * time the property listened by this class is updated.
  * <BR>Here is a typical use: coolJTextField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new AutoUpdateOkButtonPropertyListener(dialog));
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
- * @see CoolJTextField
  */
 public class AutoUpdateOkButtonPropertyListener implements PropertyChangeListener {
 	// Note that, previously, I used a keyAdapter listener or a DocumentListener to perform such a functionality.

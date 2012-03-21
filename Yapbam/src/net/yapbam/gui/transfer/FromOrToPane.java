@@ -2,6 +2,7 @@ package net.yapbam.gui.transfer;
 
 import javax.swing.JPanel;
 
+import net.astesana.swing.widget.CoolJTextField;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
@@ -14,8 +15,6 @@ import java.beans.PropertyChangeListener;
 import java.awt.Insets;
 import net.yapbam.gui.dialogs.ModeWidget;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-import net.yapbam.gui.widget.CoolJTextField;
 import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class FromOrToPane extends JPanel {

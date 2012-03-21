@@ -5,10 +5,10 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
+import net.astesana.swing.widget.IntegerWidget;
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.Checkbook;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.IntegerWidget;
-import net.yapbam.util.NullUtils;
 
 import javax.swing.JTextField;
 import java.awt.Insets;

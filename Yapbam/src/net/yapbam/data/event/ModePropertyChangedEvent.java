@@ -1,9 +1,9 @@
 package net.yapbam.data.event;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
-import net.yapbam.util.NullUtils;
 
 /** This event is sent when a mode is updated. */
 public class ModePropertyChangedEvent extends DataEvent {

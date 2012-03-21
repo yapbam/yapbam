@@ -2,9 +2,9 @@ package net.yapbam.gui.dialogs;
 
 import javax.swing.JComponent;
 
-import java.awt.Dimension;
+import net.astesana.swing.widget.HTMLPane;
 
-import net.yapbam.gui.widget.HTMLPane;
+import java.awt.Dimension;
 
 public class DefaultHTMLInfoPanel extends AbstractInfoPanel {
 	private static final long serialVersionUID = 1L;

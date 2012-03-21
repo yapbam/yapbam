@@ -7,6 +7,7 @@ import java.awt.Insets;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryWidget;
 import net.yapbam.gui.widget.AmountWidget;
@@ -15,7 +16,6 @@ import net.yapbam.data.GlobalData;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import net.yapbam.gui.widget.DateWidgetPanel;
-import net.yapbam.util.NullUtils;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

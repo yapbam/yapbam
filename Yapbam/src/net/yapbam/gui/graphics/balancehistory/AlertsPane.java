@@ -6,8 +6,8 @@ import javax.swing.JComboBox;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 
+import net.astesana.swing.widget.CoolJComboBox;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.CoolJComboBox;
 
 import java.awt.Insets;
 import java.text.MessageFormat;

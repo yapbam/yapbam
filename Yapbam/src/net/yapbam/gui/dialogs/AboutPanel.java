@@ -2,10 +2,10 @@ package net.yapbam.gui.dialogs;
 
 import javax.swing.JComponent;
 
+import net.astesana.swing.widget.HTMLPane;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AbstractDialog;
-import net.yapbam.gui.widget.HTMLPane;
 
 import java.text.MessageFormat;
 

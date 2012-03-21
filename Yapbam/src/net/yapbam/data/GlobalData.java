@@ -14,10 +14,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
-import net.yapbam.util.NullUtils;
 
 /** The whole Yapbam data.
  *  <br>You can also have a look at FilteredData which presents a filtered view of Yapbam data.
