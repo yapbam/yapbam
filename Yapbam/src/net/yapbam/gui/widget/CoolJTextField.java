@@ -23,14 +23,14 @@ import javax.swing.text.PlainDocument;
 public class CoolJTextField extends JTextField {
 	private static final long serialVersionUID = 1L;
 
-	public static final String TEXT_PROPERTY = "text";
+	public static final String TEXT_PROPERTY = "text"; //$NON-NLS-1$
 	
 	public CoolJTextField() {
 		this(0);
 	}
 
 	public CoolJTextField(int nbColumns) {
-		super("", nbColumns);
+		super("", nbColumns); //$NON-NLS-1$
 		this.setDocument(new MyDocument());
 	}
 
