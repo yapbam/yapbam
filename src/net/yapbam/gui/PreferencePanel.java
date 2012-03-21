@@ -2,7 +2,7 @@ package net.yapbam.gui;
 
 import javax.swing.JPanel;
 
-import net.yapbam.util.NullUtils;
+import net.astesana.utilities.NullUtils;
 
 /** This abstract class represents a preference panel.
  * The preference panels are displayed each in a tab of the preferences dialog.

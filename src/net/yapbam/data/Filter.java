@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
 
-import net.yapbam.util.NullUtils;
+import net.astesana.utilities.NullUtils;
 import net.yapbam.util.TextMatcher;
 
 /** A data filter.

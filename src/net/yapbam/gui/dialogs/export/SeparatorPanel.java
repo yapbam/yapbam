@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
+import net.astesana.swing.widget.CoolJTextField;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.CoolJTextField;
 
 import java.awt.Font;
 import java.awt.Color;

@@ -21,6 +21,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
@@ -35,7 +36,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TreeSet;
 
-import net.yapbam.util.NullUtils;
 import javax.swing.JButton;
 
 public class CustomFilterPanel extends JPanel {

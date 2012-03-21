@@ -16,8 +16,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.util.NullUtils;
 import java.awt.Insets;
 
 public class ExportPanel extends JPanel {

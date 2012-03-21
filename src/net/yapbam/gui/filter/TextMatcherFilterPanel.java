@@ -9,11 +9,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import net.astesana.swing.widget.CoolJTextField;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.CoolJTextField;
 import net.yapbam.util.TextMatcher;
 
 import java.awt.Color;

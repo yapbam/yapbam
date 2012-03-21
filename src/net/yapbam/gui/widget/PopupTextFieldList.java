@@ -23,7 +23,8 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
-import net.yapbam.util.NullUtils;
+import net.astesana.swing.widget.CoolJTextField;
+import net.astesana.utilities.NullUtils;
 import net.yapbam.util.TextMatcher;
 
 @SuppressWarnings("serial")

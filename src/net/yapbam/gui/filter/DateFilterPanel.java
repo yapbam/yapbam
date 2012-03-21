@@ -13,10 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
-import net.yapbam.util.NullUtils;
 
 public class DateFilterPanel extends ConsistencyCheckedPanel {
 	public static Wordings TRANSACTION_DATE = new Wordings(LocalizationData.get("Transaction.date"),

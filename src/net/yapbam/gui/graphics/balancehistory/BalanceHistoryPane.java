@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
@@ -21,7 +22,6 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.CompoundTransactionSelector;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.widget.TabbedPane;
-import net.yapbam.util.NullUtils;
 
 import java.awt.BorderLayout;
 import java.awt.print.Printable;

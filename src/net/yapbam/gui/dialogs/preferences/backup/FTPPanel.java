@@ -22,15 +22,15 @@ import java.util.List;
 
 import javax.swing.border.TitledBorder;
 
+import net.astesana.swing.widget.CoolJTextField;
+import net.astesana.swing.widget.IntegerWidget;
+import net.astesana.utilities.NullUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.CoolJPasswordField;
-import net.yapbam.gui.widget.CoolJTextField;
-import net.yapbam.util.NullUtils;
 import net.yapbam.util.StringUtils;
-import net.yapbam.gui.widget.IntegerWidget;
 
 public class FTPPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

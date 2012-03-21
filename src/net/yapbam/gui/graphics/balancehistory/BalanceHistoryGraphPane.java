@@ -18,11 +18,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.DateUtils;
-import net.yapbam.util.NullUtils;
 
 public class BalanceHistoryGraphPane extends JPanel {
 	private static final long serialVersionUID = 1L;

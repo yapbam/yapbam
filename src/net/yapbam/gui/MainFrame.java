@@ -17,6 +17,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
@@ -29,7 +30,6 @@ import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.update.ReleaseInfo;
 import net.yapbam.update.VersionManager;
-import net.yapbam.util.NullUtils;
 
 public class MainFrame extends JFrame implements DataListener {
 	//TODO implements undo support (see package undo in JustSomeTests project)

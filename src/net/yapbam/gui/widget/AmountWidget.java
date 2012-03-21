@@ -11,7 +11,8 @@ import java.text.ParseException;
 import java.util.Currency;
 import java.util.Locale;
 
-import net.yapbam.util.NullUtils;
+import net.astesana.swing.widget.CoolJTextField;
+import net.astesana.utilities.NullUtils;
 
 /** A widget to enter a monetary value.
  * <br>This widget automatically format the value it contains according to its local's currency.

@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
@@ -12,7 +13,6 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.checkbook.CheckbookDialog;
 import net.yapbam.gui.util.AbstractDialog;
-import net.yapbam.util.NullUtils;
 
 import javax.swing.JComboBox;
 import java.awt.GridBagConstraints;

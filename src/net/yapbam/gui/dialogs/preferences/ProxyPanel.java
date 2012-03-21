@@ -22,12 +22,12 @@ import java.text.MessageFormat;
 
 import javax.swing.JPasswordField;
 
+import net.astesana.swing.widget.CoolJTextField;
+import net.astesana.swing.widget.IntegerWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.widget.CoolJPasswordField;
-import net.yapbam.gui.widget.CoolJTextField;
-import net.yapbam.gui.widget.IntegerWidget;
 
 import javax.swing.JCheckBox;
 

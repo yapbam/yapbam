@@ -22,10 +22,10 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.BalanceHistoryElement;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.util.NullUtils;
 
 class BalanceGraphic extends JPanel implements Scrollable {
 	static final String SELECTED_DATE_PROPERTY = "selectedDate";

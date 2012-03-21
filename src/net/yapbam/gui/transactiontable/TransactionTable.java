@@ -8,12 +8,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.util.FriendlyTable;
-import net.yapbam.util.NullUtils;
 
 public class TransactionTable extends FriendlyTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;

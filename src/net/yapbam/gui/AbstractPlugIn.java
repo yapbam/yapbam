@@ -11,8 +11,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import net.astesana.utilities.NullUtils;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.util.NullUtils;
 
 /** This abstract class represents a Yapbam plugin.
  * Such a plugin can define (or not) some GUI elements that will be added to the Yapbam interface :<UL>
