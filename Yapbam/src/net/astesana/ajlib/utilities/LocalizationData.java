@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
  */
 public class LocalizationData {
 	public static final Locale SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country")); //$NON-NLS-1$ //$NON-NLS-2$
-	public static final LocalizationData DEFAULT = new LocalizationData("net.astesana.swing.framework.Resources"); //$NON-NLS-1$
+	public static final LocalizationData DEFAULT = new LocalizationData("net.astesana.ajlib.Resources"); //$NON-NLS-1$
 	
 	private ResourceBundle bundle;
 	private boolean translatorMode;

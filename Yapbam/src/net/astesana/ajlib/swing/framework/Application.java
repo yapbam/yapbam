@@ -24,7 +24,7 @@ public abstract class Application {
 	
 	private JFrame frame;
 	
-	public static LocalizationData LOCALIZATION = new LocalizationData("net.astesana.swing.framework.Resources"); //$NON-NLS-1$
+	public static LocalizationData LOCALIZATION = LocalizationData.DEFAULT;
 	
 	public static String getString(String key) {
 		return LOCALIZATION.getString(key);
