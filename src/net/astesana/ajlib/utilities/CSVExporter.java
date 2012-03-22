@@ -1,11 +1,11 @@
-package net.astesana.utilities;
+package net.astesana.ajlib.utilities;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 
 import javax.swing.table.TableModel;
 
-import net.astesana.swing.table.TitledRowsTableModel;
+import net.astesana.ajlib.swing.table.TitledRowsTableModel;
 
 public class CSVExporter {
 	private char separator;

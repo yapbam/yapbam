@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.astesana.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.CoolJTextField;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;

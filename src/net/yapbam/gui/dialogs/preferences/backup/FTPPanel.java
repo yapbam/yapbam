@@ -22,9 +22,9 @@ import java.util.List;
 
 import javax.swing.border.TitledBorder;
 
-import net.astesana.swing.widget.CoolJTextField;
-import net.astesana.swing.widget.IntegerWidget;
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.IntegerWidget;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;

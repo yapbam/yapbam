@@ -1,4 +1,4 @@
-package net.astesana.swing.framework;
+package net.astesana.ajlib.swing.framework;
 
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -13,7 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import net.astesana.utilities.LocalizationData;
+import net.astesana.ajlib.utilities.LocalizationData;
 
 /** A basic canvas to create simple java application. */
 public abstract class Application {

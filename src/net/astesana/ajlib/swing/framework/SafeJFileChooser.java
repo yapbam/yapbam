@@ -1,11 +1,11 @@
-package net.astesana.swing.framework;
+package net.astesana.ajlib.swing.framework;
 
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import net.astesana.utilities.LocalizationData;
+import net.astesana.ajlib.utilities.LocalizationData;
 
 /** A file chooser with a confirm dialog when the selected file already exists
  * SaveAs mode.

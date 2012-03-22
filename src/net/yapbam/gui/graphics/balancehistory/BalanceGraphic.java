@@ -22,7 +22,7 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.BalanceHistoryElement;
 import net.yapbam.gui.LocalizationData;

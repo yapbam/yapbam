@@ -2,7 +2,7 @@ package net.yapbam.data;
 
 import java.util.Comparator;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 
 abstract class TransactionComparator implements Comparator<Transaction> {
 	static final TransactionComparator INSTANCE = new TransactionComparator() {

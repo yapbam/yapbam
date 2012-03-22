@@ -1,4 +1,4 @@
-package net.astesana.swing.test;
+package net.astesana.ajlib.swing.test;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,9 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.astesana.swing.framework.Application;
-import net.astesana.swing.framework.JobFrame;
-import net.astesana.swing.framework.SwingWorkerJobAdapter;
+import net.astesana.ajlib.swing.framework.Application;
+import net.astesana.ajlib.swing.framework.JobFrame;
+import net.astesana.ajlib.swing.framework.SwingWorkerJobAdapter;
 
 public class JobFrameTest extends Application {
 

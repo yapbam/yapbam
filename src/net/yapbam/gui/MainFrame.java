@@ -17,7 +17,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;

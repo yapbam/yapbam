@@ -1,4 +1,4 @@
-package net.astesana.swing.widget;
+package net.astesana.ajlib.swing.widget;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -16,8 +16,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import net.astesana.swing.framework.Utils;
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.swing.framework.Utils;
+import net.astesana.ajlib.utilities.NullUtils;
 
 /** An abstract widget composed of an optional label, a combo box and a new button.
  * <br>It is typically used to select a value in a list of possible values.

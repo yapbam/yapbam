@@ -2,7 +2,7 @@ package net.yapbam.gui.dialogs;
 
 import javax.swing.JComponent;
 
-import net.astesana.swing.widget.HTMLPane;
+import net.astesana.ajlib.swing.widget.HTMLPane;
 
 import java.awt.Dimension;
 

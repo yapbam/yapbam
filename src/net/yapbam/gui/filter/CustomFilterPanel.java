@@ -21,7 +21,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;

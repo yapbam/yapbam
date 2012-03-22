@@ -1,4 +1,4 @@
-package net.astesana.utilities;
+package net.astesana.ajlib.utilities;
 
 /** Utility to securely test whether two instances are equals ... even if one of them is null.
  * @author Jean-Marc Astesana

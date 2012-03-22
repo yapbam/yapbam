@@ -1,4 +1,4 @@
-package net.astesana.swing.widget;
+package net.astesana.ajlib.swing.widget;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -25,12 +25,12 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.astesana.swing.framework.Application;
-import net.astesana.swing.framework.SafeJFileChooser;
-import net.astesana.swing.framework.Utils;
-import net.astesana.swing.table.RowHeaderRenderer;
-import net.astesana.swing.table.TitledRowsTableModel;
-import net.astesana.utilities.CSVExporter;
+import net.astesana.ajlib.swing.framework.Application;
+import net.astesana.ajlib.swing.framework.SafeJFileChooser;
+import net.astesana.ajlib.swing.framework.Utils;
+import net.astesana.ajlib.swing.table.RowHeaderRenderer;
+import net.astesana.ajlib.swing.table.TitledRowsTableModel;
+import net.astesana.ajlib.utilities.CSVExporter;
 
 /** A widget with a JTable and a button that is able to save it in csv format.*/ 
 public class ExcelPane extends JPanel {

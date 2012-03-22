@@ -15,8 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
-import net.astesana.swing.widget.HTMLPane;
-import net.astesana.swing.widget.IntegerWidget;
+import net.astesana.ajlib.swing.widget.HTMLPane;
+import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;

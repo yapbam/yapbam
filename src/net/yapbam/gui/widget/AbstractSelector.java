@@ -11,7 +11,7 @@ import net.yapbam.gui.IconManager;
  * @see #getPropertyName()
  * @see #getDefaultRenderedValue(Object)
  */
-public abstract class AbstractSelector<T,V> extends net.astesana.swing.widget.AbstractSelector<T, V> {
+public abstract class AbstractSelector<T,V> extends net.astesana.ajlib.swing.widget.AbstractSelector<T, V> {
 	private static final long serialVersionUID = 1L;
 
 	/**

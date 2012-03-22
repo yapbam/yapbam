@@ -13,8 +13,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
-import net.astesana.swing.widget.IntegerWidget;
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.swing.widget.IntegerWidget;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.MonthDateStepper;

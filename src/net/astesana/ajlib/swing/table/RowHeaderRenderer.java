@@ -1,7 +1,7 @@
 /** This class is copied from http://www.chka.de/swing/table/row-headers/JTable.html.
  * Seems to not be copyrighted ? Hope it isn't ...
  */
-package net.astesana.swing.table;
+package net.astesana.ajlib.swing.table;
 
 import java.awt.Component;
 import java.awt.Insets;

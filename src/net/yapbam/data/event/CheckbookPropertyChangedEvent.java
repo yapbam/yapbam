@@ -1,6 +1,6 @@
 package net.yapbam.data.event;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;

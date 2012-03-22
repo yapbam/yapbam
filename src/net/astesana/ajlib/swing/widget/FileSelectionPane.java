@@ -1,4 +1,4 @@
-package net.astesana.swing.widget;
+package net.astesana.ajlib.swing.widget;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.swing.framework.Application;
+import net.astesana.ajlib.swing.framework.Application;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
