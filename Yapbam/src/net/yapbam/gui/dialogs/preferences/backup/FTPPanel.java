@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.border.TitledBorder;
 
+import net.astesana.ajlib.swing.widget.PasswordWidget;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.astesana.ajlib.utilities.NullUtils;
@@ -29,7 +30,6 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.util.AbstractDialog;
-import net.yapbam.gui.widget.CoolJPasswordField;
 import net.yapbam.util.StringUtils;
 
 public class FTPPanel extends JPanel {
@@ -39,7 +39,7 @@ public class FTPPanel extends JPanel {
 	private JTextField folderField;
 	private JRadioButton ftpRdnButton;
 	private TextWidget userField;
-	private CoolJPasswordField passwordField;
+	private PasswordWidget passwordField;
 	private JCheckBox showPassWordCheckBox;
 
 	private List<JLabel> labels;
@@ -231,9 +231,9 @@ public class FTPPanel extends JPanel {
 		return userField;
 	}
 	
-	private CoolJPasswordField getPasswordField() {
+	private PasswordWidget getPasswordField() {
 		if (passwordField == null) {
-			passwordField = new CoolJPasswordField();
+			passwordField = new PasswordWidget();
 			passwordField.setToolTipText(LocalizationData.get("Backup.preference.ftp.password.tooltip")); //$NON-NLS-1$
 		}
 		return passwordField;
