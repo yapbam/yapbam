@@ -22,12 +22,12 @@ import java.text.MessageFormat;
 
 import javax.swing.JPasswordField;
 
+import net.astesana.ajlib.swing.widget.PasswordWidget;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.widget.CoolJPasswordField;
 
 import javax.swing.JCheckBox;
 
@@ -47,7 +47,7 @@ public class ProxyPanel extends PreferencePanel {
 	private JLabel userLabel = null;
 	private TextWidget userField = null;
 	private JLabel passwordLabel = null;
-	private CoolJPasswordField passwordField = null;
+	private PasswordWidget passwordField = null;
 	private JCheckBox showPassCheckBox = null;
 	
 	private PropertyChangeListener updateOkListener;
@@ -314,9 +314,9 @@ public class ProxyPanel extends PreferencePanel {
 	 */
 	private JPasswordField getPasswordField() {
 		if (passwordField == null) {
-			passwordField = new CoolJPasswordField();
+			passwordField = new PasswordWidget();
 			passwordField.setToolTipText(LocalizationData.get("PreferencesDialog.Network.password.tooltip")); //$NON-NLS-1$
-			passwordField.addPropertyChangeListener(CoolJPasswordField.TEXT_PROPERTY, updateOkListener);
+			passwordField.addPropertyChangeListener(PasswordWidget.TEXT_PROPERTY, updateOkListener);
 		}
 		return passwordField;
 	}
