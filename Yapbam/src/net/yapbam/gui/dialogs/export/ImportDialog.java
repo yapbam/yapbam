@@ -5,10 +5,10 @@ import java.io.File;
 
 import javax.swing.JPanel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")

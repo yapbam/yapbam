@@ -4,9 +4,9 @@ import java.awt.Window;
 
 import javax.swing.JPanel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.util.AbstractDialog;
 
 public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 	private static final long serialVersionUID = 1L;

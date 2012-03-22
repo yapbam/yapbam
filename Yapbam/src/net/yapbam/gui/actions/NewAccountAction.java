@@ -6,11 +6,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AccountDialog;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class NewAccountAction extends AbstractAction {

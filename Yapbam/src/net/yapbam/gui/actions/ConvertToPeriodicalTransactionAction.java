@@ -5,12 +5,12 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.PeriodicalTransactionDialog;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class ConvertToPeriodicalTransactionAction extends AbstractTransactionAction {

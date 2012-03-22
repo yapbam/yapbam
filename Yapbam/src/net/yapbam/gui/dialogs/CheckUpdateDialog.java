@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.LocalizationData;
@@ -13,7 +14,6 @@ import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
-import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
 import java.io.File;

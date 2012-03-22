@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
@@ -23,7 +24,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractModeListModel;
 import net.yapbam.gui.dialogs.ModeDialog;
 import net.yapbam.gui.dialogs.ModeListPanel;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 class AdministrationModeListPanel extends ModeListPanel {

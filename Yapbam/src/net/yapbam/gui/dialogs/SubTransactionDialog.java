@@ -4,11 +4,11 @@ import java.awt.Window;
 
 import javax.swing.*;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 public class SubTransactionDialog extends AbstractDialog<GlobalData, SubTransaction> {

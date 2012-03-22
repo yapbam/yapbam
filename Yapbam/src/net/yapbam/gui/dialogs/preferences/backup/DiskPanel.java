@@ -11,8 +11,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.util.Portable;
 
 import java.text.MessageFormat;

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.util.CheckSum;
-import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 
 /** This class is in charge of removing obsolete files from previous Yapbam installations. 

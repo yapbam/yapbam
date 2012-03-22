@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.Currency;
 
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.widget.AmountWidget;
 
 import javax.swing.JLabel;

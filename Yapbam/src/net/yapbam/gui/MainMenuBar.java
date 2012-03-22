@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
+import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.yapbam.data.Account;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
@@ -48,7 +49,6 @@ import net.yapbam.gui.dialogs.export.ImportError;
 import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
-import net.yapbam.gui.util.SafeJFileChooser;
 import net.yapbam.util.Portable;
 
 public class MainMenuBar extends JMenuBar implements ActionListener {
@@ -312,7 +312,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				if (SaveManager.MANAGER.verify(this.frame)) {
 					URI path = data.getURI();
 					String parent = path == null ? null : new File(path).getParent();
-					JFileChooser chooser = new SafeJFileChooser(parent);
+					JFileChooser chooser = new FileChooser(parent);
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 					File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
 					if (file != null) {
@@ -340,7 +340,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					this.frame.getData().setPassword(newPassword);
 				}
 			} else if (source.equals(this.menuItemImport)) {
-				JFileChooser chooser = new SafeJFileChooser(null);
+				JFileChooser chooser = new FileChooser(null);
 				chooser.setLocale(LocalizationData.getLocale());
 				if (ImportDialog.lastFile != null) {
 					File lastFile = ImportDialog.lastFile;
@@ -383,7 +383,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				exportDialog.setVisible(true);
 				Exporter exporter = exportDialog.getResult();
 				if (exporter!=null) {
-					JFileChooser chooser = new SafeJFileChooser(null);
+					JFileChooser chooser = new FileChooser(null);
 					chooser.setLocale(LocalizationData.getLocale());
 					chooser.updateUI();
 					File file = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;

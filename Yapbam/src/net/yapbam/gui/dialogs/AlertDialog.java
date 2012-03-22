@@ -6,8 +6,8 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
 
 public class AlertDialog extends AbstractDialog<String, Boolean> {
 	private static final long serialVersionUID = 1L;

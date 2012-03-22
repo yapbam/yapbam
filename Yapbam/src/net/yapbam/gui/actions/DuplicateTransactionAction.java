@@ -4,12 +4,12 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.TransactionDialog;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class DuplicateTransactionAction extends AbstractTransactionAction {

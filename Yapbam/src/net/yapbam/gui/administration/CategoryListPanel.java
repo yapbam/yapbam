@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.CategoryAddedEvent;
@@ -18,7 +19,6 @@ import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryDialog;
-import net.yapbam.gui.util.AbstractDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;

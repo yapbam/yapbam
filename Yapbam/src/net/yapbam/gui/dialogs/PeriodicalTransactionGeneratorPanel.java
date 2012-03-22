@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
@@ -14,7 +15,6 @@ import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.DateUtils;
