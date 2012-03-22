@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-import net.astesana.ajlib.swing.widget.CoolJComboBox;
+import net.astesana.ajlib.swing.widget.ComboBox;
 import net.astesana.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.*;
@@ -41,7 +41,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected JTextField comment;
 	protected AmountWidget amount;
 	protected JCheckBox receipt;
-	protected CoolJComboBox modes;
+	protected ComboBox modes;
 	protected CategoryWidget categories;
 	protected SubtransactionListPanel subtransactionsPanel;
 	private String originalMode;
@@ -213,7 +213,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c = new GridBagConstraints();
 		c.insets = insets; c.gridx = 0; c.gridy = 3; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.mode")), c); //$NON-NLS-1$
-		modes = new CoolJComboBox();
+		modes = new ComboBox();
 		buildModes(!receipt.isSelected());
 		ModesListener modeListener = new ModesListener();
 		modes.addActionListener(modeListener);

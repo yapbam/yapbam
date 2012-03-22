@@ -11,7 +11,7 @@ import java.text.ParseException;
 import java.util.Currency;
 import java.util.Locale;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 
 /** A widget to enter a monetary value.
@@ -23,7 +23,7 @@ import net.astesana.ajlib.utilities.NullUtils;
  * <br>The CONTENT_VALID_PROPERTY is a read only property.</li>
  * </ul>
  */
-public class AmountWidget extends CoolJTextField {
+public class AmountWidget extends TextWidget {
 	private static final long serialVersionUID = 1L;
 	private final static boolean DEBUG = false;
 	

@@ -9,7 +9,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -291,10 +291,10 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 	 */
 	private JTextField getDescription() {
 		if (description == null) {
-			description = new CoolJTextField();
+			description = new TextWidget();
 			description.setToolTipText(wordings.descriptionToolTip);
 			description.addFocusListener(AutoSelectFocusListener.INSTANCE);
-			description.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new PropertyChangeListener() {
+			description.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					checkConsistency();

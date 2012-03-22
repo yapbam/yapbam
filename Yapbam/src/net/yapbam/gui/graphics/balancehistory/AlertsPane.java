@@ -6,7 +6,7 @@ import javax.swing.JComboBox;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.widget.CoolJComboBox;
+import net.astesana.ajlib.swing.widget.ComboBox;
 import net.yapbam.gui.LocalizationData;
 
 import java.awt.Insets;
@@ -16,7 +16,7 @@ class AlertsPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel jLabel1 = null;
-	private CoolJComboBox alertsMenu = null;
+	private ComboBox alertsMenu = null;
 	private Alert[] alerts;
 
 	/**
@@ -58,7 +58,7 @@ class AlertsPane extends JPanel {
 	 */
 	JComboBox getAlerts() {
 		if (alertsMenu == null) {
-			alertsMenu = new CoolJComboBox();
+			alertsMenu = new ComboBox();
 			alertsMenu.setToolTipText(LocalizationData.get("BalanceHistory.alerts.toolTip")); //$NON-NLS-1$
 		}
 		return alertsMenu;

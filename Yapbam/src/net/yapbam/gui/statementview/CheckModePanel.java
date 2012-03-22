@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.DateWidgetPanel;
@@ -59,14 +59,14 @@ public class CheckModePanel extends JPanel {
 		gbc_statementLabel.gridx = 1;
 		gbc_statementLabel.gridy = 0;
 		add(statementLabel, gbc_statementLabel);
-		statement = new CoolJTextField(5);
+		statement = new TextWidget(5);
 		GridBagConstraints gbc_statement = new GridBagConstraints();
 		gbc_statement.anchor = GridBagConstraints.WEST;
 		gbc_statement.insets = new Insets(0, 0, 5, 0);
 		gbc_statement.gridx = 2;
 		gbc_statement.gridy = 0;
 		add(statement, gbc_statement);
-		statement.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new PropertyChangeListener() {
+		statement.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				refreshOk();

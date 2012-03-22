@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 
 /** This class allows the user to just enter a day, or a day and a month, instead of a complete date (day, month, year).
@@ -25,7 +25,7 @@ import net.astesana.ajlib.utilities.NullUtils;
  * with a non null argument, the empty field will always be valid.
  * The up/down arrow keys increments/decrements the date.
  */
-public class DateWidget extends CoolJTextField {
+public class DateWidget extends TextWidget {
 	private static final long serialVersionUID = 1L;
 	public static final String DATE_PROPERTY = "date";
 	public static final String CONTENT_VALID_PROPERTY = "contentValid";

@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.widget.CoolJComboBox;
+import net.astesana.ajlib.swing.widget.ComboBox;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
@@ -61,8 +61,8 @@ public class StatementViewPanel extends JPanel {
 	private static final Cursor CHECK_CURSOR;
 
 	private JPanel selectionPanel = null;
-	private CoolJComboBox accountMenu = null;
-	private CoolJComboBox statementMenu = null;
+	private ComboBox accountMenu = null;
+	private ComboBox statementMenu = null;
 	private JLabel jLabel = null;
 	private JLabel jLabel1 = null;
 	private JPanel statementPanel = null;
@@ -253,9 +253,9 @@ public class StatementViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private CoolJComboBox getAccountMenu() {
+	private ComboBox getAccountMenu() {
 		if (accountMenu == null) {
-			accountMenu = new CoolJComboBox();
+			accountMenu = new ComboBox();
 			accountMenu.setToolTipText(LocalizationData.get("StatementView.accountMenu.tooltip")); //$NON-NLS-1$
 			accountMenu.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -300,7 +300,7 @@ public class StatementViewPanel extends JPanel {
 	 */
 	private JComboBox getStatementMenu() {
 		if (statementMenu == null) {
-			statementMenu = new CoolJComboBox();
+			statementMenu = new ComboBox();
 			statementMenu.setToolTipText(LocalizationData.get("StatementView.statementMenu.statementMenu.tooltip")); //$NON-NLS-1$
 			statementMenu.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {

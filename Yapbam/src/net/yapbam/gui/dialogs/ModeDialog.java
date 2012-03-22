@@ -12,7 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
@@ -26,7 +26,7 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 	
 	private static final boolean DEBUG = false;
 	
-	private CoolJTextField name;
+	private TextWidget name;
 	private ModePanel leftPane;
 	private ModePanel rightPane;
 	private Mode original;
@@ -56,8 +56,8 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		c.weightx = 1.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		PropertyChangeListener listener = new AutoUpdateOkButtonPropertyListener(this);
-		name = new CoolJTextField(10);
-		name.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, listener);
+		name = new TextWidget(10);
+		name.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, listener);
 		name.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		idPanel.add(name, c);
 

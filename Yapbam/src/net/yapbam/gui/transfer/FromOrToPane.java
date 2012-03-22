@@ -2,7 +2,7 @@ package net.yapbam.gui.transfer;
 
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
@@ -28,11 +28,11 @@ public class FromOrToPane extends JPanel {
 	private JLabel lblAccount;
 	private JLabel lblMode;
 	private JLabel lblNumber;
-	private CoolJTextField numberField;
+	private TextWidget numberField;
 	private JLabel lblDateVal;
 	private DateWidgetPanel valueDateField;
 	private JLabel lblStatement;
-	private CoolJTextField statementField;
+	private TextWidget statementField;
 
 	/**
 	 * Create the panel.
@@ -151,9 +151,9 @@ public class FromOrToPane extends JPanel {
 		}
 		return lblNumber;
 	}
-	private CoolJTextField getNumberField() {
+	private TextWidget getNumberField() {
 		if (numberField == null) {
-			numberField = new CoolJTextField();
+			numberField = new TextWidget();
 			numberField.setColumns(10);
 		}
 		return numberField;
@@ -176,9 +176,9 @@ public class FromOrToPane extends JPanel {
 		}
 		return lblStatement;
 	}
-	private CoolJTextField getStatementField() {
+	private TextWidget getStatementField() {
 		if (statementField == null) {
-			statementField = new CoolJTextField();
+			statementField = new TextWidget();
 			statementField.setColumns(10);
 		}
 		return statementField;

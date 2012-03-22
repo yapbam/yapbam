@@ -22,7 +22,7 @@ import java.text.MessageFormat;
 
 import javax.swing.JPasswordField;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
@@ -40,12 +40,12 @@ public class ProxyPanel extends PreferencePanel {
 	private JRadioButton proxyButton = null;
 	private JPanel proxyPanel = null;
 	private JLabel proxyLabel = null;
-	private CoolJTextField proxyHostField = null;
+	private TextWidget proxyHostField = null;
 	private JLabel proxyPortLabel = null;
 	private IntegerWidget proxyPortField = null;
 	private JPanel authenticationPanel = null;
 	private JLabel userLabel = null;
-	private CoolJTextField userField = null;
+	private TextWidget userField = null;
 	private JLabel passwordLabel = null;
 	private CoolJPasswordField passwordField = null;
 	private JCheckBox showPassCheckBox = null;
@@ -222,9 +222,9 @@ public class ProxyPanel extends PreferencePanel {
 	 */
 	private JTextField getProxyHostField() {
 		if (proxyHostField == null) {
-			proxyHostField = new CoolJTextField(10);
+			proxyHostField = new TextWidget(10);
 			proxyHostField.setToolTipText(LocalizationData.get("PreferencesDialog.Network.proxyField.tooltip")); //$NON-NLS-1$
-			proxyHostField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.updateOkListener);
+			proxyHostField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, this.updateOkListener);
 		}
 		return proxyHostField;
 	}
@@ -300,9 +300,9 @@ public class ProxyPanel extends PreferencePanel {
 	 */
 	private JTextField getUserField() {
 		if (userField == null) {
-			userField = new CoolJTextField();
+			userField = new TextWidget();
 			userField.setToolTipText(LocalizationData.get("PreferencesDialog.Network.user.toolTip")); //$NON-NLS-1$
-			userField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, updateOkListener);
+			userField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, updateOkListener);
 		}
 		return userField;
 	}

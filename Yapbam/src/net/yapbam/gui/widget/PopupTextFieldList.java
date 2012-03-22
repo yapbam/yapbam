@@ -23,7 +23,7 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.util.TextMatcher;
 
@@ -32,7 +32,7 @@ import net.yapbam.util.TextMatcher;
  * that are shown in a popup.
  * <br>The difference with a JComboBox is the popup selection is updated when the user changes the text field content.
  */
-public class PopupTextFieldList extends CoolJTextField {
+public class PopupTextFieldList extends TextWidget {
 	/** A PropertyChangeEvent of this name is fired when a predefined value is selected.
 	 * The values of the event are the field content. */
 	public static final String PREDEFINED_VALUE = "PREDEFINED_VALUE";
