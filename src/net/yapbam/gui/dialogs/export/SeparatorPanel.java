@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.LocalizationData;
 
 import java.awt.Font;
@@ -123,12 +123,12 @@ public class SeparatorPanel extends JPanel {
 	 */
 	private JTextField getCustomSeparatorValue() {
 		if (customSeparatorValue == null) {
-			customSeparatorValue = new CoolJTextField();
+			customSeparatorValue = new TextWidget();
 			customSeparatorValue.setColumns(1);
 			customSeparatorValue.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customizedChar.toolTip")); //$NON-NLS-1$
 			// We will not use a document listener to listen the field modifications because we want to change the field (truncate it to its fisrt character)
 			// and document listener can't modify the source event (it throws an IllegalStateException).
-			customSeparatorValue.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new PropertyChangeListener() {
+			customSeparatorValue.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					String text = customSeparatorValue.getText();

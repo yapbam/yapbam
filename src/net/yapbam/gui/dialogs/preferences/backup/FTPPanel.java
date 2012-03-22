@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.ErrorManager;
@@ -35,10 +35,10 @@ import net.yapbam.util.StringUtils;
 public class FTPPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private CoolJTextField hostField;
+	private TextWidget hostField;
 	private JTextField folderField;
 	private JRadioButton ftpRdnButton;
-	private CoolJTextField userField;
+	private TextWidget userField;
 	private CoolJPasswordField passwordField;
 	private JCheckBox showPassWordCheckBox;
 
@@ -189,19 +189,19 @@ public class FTPPanel extends JPanel {
 
 	private JTextField getHostField() {
 		if (hostField == null) {
-			hostField = new CoolJTextField();
+			hostField = new TextWidget();
 			hostField.setToolTipText(LocalizationData.get("Backup.preference.ftp.server.tooltip")); //$NON-NLS-1$
-			hostField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.updateOkListener);
-			hostField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.autoSelectListener);
+			hostField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, this.updateOkListener);
+			hostField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, this.autoSelectListener);
 		}
 		return hostField;
 	}
 
 	private JTextField getFolderField() {
 		if (folderField == null) {
-			folderField = new CoolJTextField();
+			folderField = new TextWidget();
 			folderField.setToolTipText(LocalizationData.get("Backup.preference.ftp.directory.tooltip")); //$NON-NLS-1$
-			folderField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.autoSelectListener);
+			folderField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, this.autoSelectListener);
 		}
 		return folderField;
 	}
@@ -223,10 +223,10 @@ public class FTPPanel extends JPanel {
 	
 	private JTextField getUserField() {
 		if (userField == null) {
-			userField = new CoolJTextField();
+			userField = new TextWidget();
 			userField.setToolTipText(LocalizationData.get("Backup.preference.ftp.user.tooltip")); //$NON-NLS-1$
-			userField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.updateOkListener);
-			userField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, this.autoSelectListener);
+			userField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, this.updateOkListener);
+			userField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, this.autoSelectListener);
 		}
 		return userField;
 	}

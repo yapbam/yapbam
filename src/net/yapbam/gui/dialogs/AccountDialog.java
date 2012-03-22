@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
@@ -21,7 +21,7 @@ import net.yapbam.gui.widget.AutoSelectFocusListener;
 public class AccountDialog extends AbstractDialog<String, Account> {
 	private static final long serialVersionUID = 1L;
 	
-	private CoolJTextField bankAccountField;
+	private TextWidget bankAccountField;
 	private AmountWidget balanceField;
 	private GlobalData globalData;
 
@@ -51,9 +51,9 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 
 		JLabel titleCompte = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
 		northPanel.add(titleCompte, c);
-		bankAccountField = new CoolJTextField(20);
+		bankAccountField = new TextWidget(20);
 		bankAccountField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		bankAccountField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, listener);
+		bankAccountField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, listener);
 		bankAccountField.setToolTipText(LocalizationData.get("AccountDialog.account.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;

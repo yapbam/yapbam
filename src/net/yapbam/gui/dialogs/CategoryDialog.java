@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
@@ -20,7 +20,7 @@ import net.yapbam.gui.widget.AutoSelectFocusListener;
 public class CategoryDialog extends AbstractDialog<String, Category> {
 	private static final long serialVersionUID = 1L;
 	
-	private CoolJTextField categoryField;
+	private TextWidget categoryField;
 	private GlobalData globalData;
 
 	private CategoryDialog(Window owner, String message, GlobalData data) {
@@ -49,9 +49,9 @@ public class CategoryDialog extends AbstractDialog<String, Category> {
 
 		JLabel titleCompte = new JLabel(LocalizationData.get("CategoryDialog.category")); //$NON-NLS-1$
 		centerPane.add(titleCompte, c);
-		categoryField = new CoolJTextField(20);
+		categoryField = new TextWidget(20);
 		categoryField.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		categoryField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, listener);
+		categoryField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, listener);
 		categoryField.setToolTipText(LocalizationData.get("CategoryDialog.category.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;

@@ -9,7 +9,7 @@ import java.awt.Insets;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
@@ -254,7 +254,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		ButtonGroup gp = new ButtonGroup();
 		gp.add(rdbtnLongStyle); gp.add(rdbtnShortStyle); gp.add(rdbtnCustomized);
 
-		formatPatternField = new CoolJTextField();
+		formatPatternField = new TextWidget();
 		formatPatternField.setEnabled(false);
 		GridBagConstraints gbc_formatPatternField = new GridBagConstraints();
 		gbc_formatPatternField.insets = new Insets(0, 0, 5, 0);
@@ -263,7 +263,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gbc_formatPatternField.gridy = 2;
 		panel_format.add(formatPatternField, gbc_formatPatternField);
 		formatPatternField.setColumns(10);
-		formatPatternField.addPropertyChangeListener(CoolJTextField.TEXT_PROPERTY, new PropertyChangeListener() {
+		formatPatternField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				rdbtnCustomized.setSelected(true);
