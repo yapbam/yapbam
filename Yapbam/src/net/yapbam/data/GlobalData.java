@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;

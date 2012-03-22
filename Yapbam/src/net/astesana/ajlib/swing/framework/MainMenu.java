@@ -1,4 +1,4 @@
-package net.astesana.swing.framework;
+package net.astesana.ajlib.swing.framework;
 
 import java.awt.event.ActionEvent;
 

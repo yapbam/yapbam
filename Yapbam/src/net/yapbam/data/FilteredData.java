@@ -2,7 +2,7 @@ package net.yapbam.data;
 
 import java.util.*;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.event.*;
 
 /** The filtered Data (the global data viewed through a filter).

@@ -1,8 +1,8 @@
-package net.astesana.swing.framework;
+package net.astesana.ajlib.swing.framework;
 
 import javax.swing.SwingWorker;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 
 public abstract class SwingWorkerJobAdapter<T,V> extends SwingWorker<T,V> {
 	/** The state property name of the SwingWorker (Should have been defined in SwingWorker by Oracle ?) */

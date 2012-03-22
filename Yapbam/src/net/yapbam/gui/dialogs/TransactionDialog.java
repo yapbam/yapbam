@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;

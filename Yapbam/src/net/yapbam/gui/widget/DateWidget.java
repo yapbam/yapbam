@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import net.astesana.swing.widget.CoolJTextField;
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.swing.widget.CoolJTextField;
+import net.astesana.ajlib.utilities.NullUtils;
 
 /** This class allows the user to just enter a day, or a day and a month, instead of a complete date (day, month, year).
  * It auto completes the typed date with the current month and year.

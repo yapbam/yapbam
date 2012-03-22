@@ -14,7 +14,7 @@ import java.math.BigInteger;
 
 import javax.swing.JLabel;
 
-import net.astesana.swing.widget.IntegerWidget;
+import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;

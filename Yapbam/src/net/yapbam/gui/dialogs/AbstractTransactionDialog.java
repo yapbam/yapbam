@@ -17,8 +17,8 @@ import java.util.List;
 
 import javax.swing.*;
 
-import net.astesana.swing.widget.CoolJComboBox;
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.swing.widget.CoolJComboBox;
+import net.astesana.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;

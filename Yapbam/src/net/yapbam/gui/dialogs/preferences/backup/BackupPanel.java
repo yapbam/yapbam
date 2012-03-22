@@ -1,6 +1,6 @@
 package net.yapbam.gui.dialogs.preferences.backup;
 
-import net.astesana.swing.widget.IntegerWidget;
+import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;

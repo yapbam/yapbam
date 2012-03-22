@@ -5,8 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
-import net.astesana.swing.widget.IntegerWidget;
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.swing.widget.IntegerWidget;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Checkbook;
 import net.yapbam.gui.LocalizationData;
 

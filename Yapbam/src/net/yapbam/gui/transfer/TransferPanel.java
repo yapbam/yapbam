@@ -7,7 +7,7 @@ import java.awt.Insets;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryWidget;
 import net.yapbam.gui.widget.AmountWidget;

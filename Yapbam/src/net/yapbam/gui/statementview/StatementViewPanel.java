@@ -19,8 +19,8 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import net.astesana.swing.widget.CoolJComboBox;
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.swing.widget.CoolJComboBox;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;

@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.DateWidgetPanel;

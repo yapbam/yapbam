@@ -1,4 +1,4 @@
-package net.astesana.swing.widget;
+package net.astesana.ajlib.swing.widget;
 
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;

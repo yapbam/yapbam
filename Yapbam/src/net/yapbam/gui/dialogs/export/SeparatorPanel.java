@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.CoolJTextField;
 import net.yapbam.gui.LocalizationData;
 
 import java.awt.Font;

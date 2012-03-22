@@ -9,7 +9,7 @@ import java.awt.Insets;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.swing.widget.CoolJTextField;
+import net.astesana.ajlib.swing.widget.CoolJTextField;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;

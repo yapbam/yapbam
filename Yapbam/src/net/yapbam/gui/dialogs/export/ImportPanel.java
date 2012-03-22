@@ -27,7 +27,7 @@ import java.text.MessageFormat;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
-import net.astesana.utilities.NullUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;

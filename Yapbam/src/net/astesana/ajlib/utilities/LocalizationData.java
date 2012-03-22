@@ -1,4 +1,4 @@
-package net.astesana.utilities;
+package net.astesana.ajlib.utilities;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
