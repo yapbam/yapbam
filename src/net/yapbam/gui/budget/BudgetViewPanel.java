@@ -34,6 +34,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
@@ -41,8 +43,6 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
-import net.yapbam.gui.util.SafeJFileChooser;
 import javax.swing.JCheckBox;
 
 public class BudgetViewPanel extends JPanel {
@@ -207,7 +207,7 @@ public class BudgetViewPanel extends JPanel {
 			export.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser chooser = new SafeJFileChooser(export.getText());
+					JFileChooser chooser = new FileChooser(export.getText());
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 					File result = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {

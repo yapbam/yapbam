@@ -9,6 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
@@ -19,7 +20,6 @@ import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GeneratePeriodicalTransactionsDialog;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsAction extends AbstractAction {

@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs.preferences.backup;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.HelpManager;
@@ -8,7 +9,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.BackupOptions;
-import net.yapbam.gui.util.AbstractDialog;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;

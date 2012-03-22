@@ -5,11 +5,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.TransactionDialog;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class EditTransactionAction extends AbstractTransactionAction {

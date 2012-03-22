@@ -4,11 +4,11 @@ import java.awt.Window;
 
 import javax.swing.*;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 public class CheckbookDialog extends AbstractDialog<Void, Checkbook> {

@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
@@ -22,7 +23,6 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalData> {

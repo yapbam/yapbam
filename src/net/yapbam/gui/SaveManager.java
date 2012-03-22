@@ -7,8 +7,8 @@ import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import net.yapbam.gui.util.SafeJFileChooser;
-import net.yapbam.util.FileUtils;
+import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.util.Portable;
 
 class SaveManager {
@@ -64,7 +64,7 @@ class SaveManager {
 	private URI getFile(MainFrame frame) {
 		URI path = frame.getData().getURI();
 		String parent = path==null?null:new File(path).getParent();
-		JFileChooser chooser = new SafeJFileChooser(parent);
+		JFileChooser chooser = new FileChooser(parent);
 		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 		File result = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 		return result==null?null:result.toURI();

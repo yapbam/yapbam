@@ -4,8 +4,8 @@ import java.awt.Window;
 
 import javax.swing.JPanel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.GlobalData;
-import net.yapbam.gui.util.AbstractDialog;
 
 public class TestDialog extends AbstractDialog<GlobalData, Void> {
 

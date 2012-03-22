@@ -16,8 +16,7 @@ public class DialogUtils {
 	 */
 	public static boolean isModalDialogShowing() {
 		Window[] windows = Window.getWindows();
-		if (windows != null) { // don't rely on current implementation, which at
-														// least returns [0].
+		if (windows != null) { // don't rely on current implementation, which at least returns an empty array.
 			for (Window w : windows) {
 				if (w.isShowing() && w instanceof Dialog && ((Dialog) w).isModal()) return true;
 			}

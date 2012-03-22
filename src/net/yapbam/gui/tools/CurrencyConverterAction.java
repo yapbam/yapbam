@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.yapbam.gui.util.AbstractDialog;
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 
 
 @SuppressWarnings("serial")

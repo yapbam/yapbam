@@ -9,6 +9,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Account;
 import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.GlobalData;
@@ -27,7 +28,6 @@ import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
-import net.yapbam.gui.util.AbstractDialog;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

@@ -9,13 +9,13 @@ import javax.swing.JTable.PrintMode;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.FriendlyTable;
-import net.yapbam.gui.util.SafeJFileChooser;
 import net.yapbam.gui.widget.JLabelMenu;
 
 import java.awt.GridBagConstraints;
@@ -93,7 +93,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		final JButton btnExport = new JButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
 		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new SafeJFileChooser(btnExport.getText());
+				JFileChooser chooser = new FileChooser(btnExport.getText());
 				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 				File file = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 				if (file!=null) {

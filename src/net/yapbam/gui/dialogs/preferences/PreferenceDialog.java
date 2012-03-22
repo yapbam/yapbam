@@ -7,11 +7,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.dialogs.preferences.backup.BackupPanel;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 import java.util.ArrayList;

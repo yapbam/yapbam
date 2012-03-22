@@ -21,7 +21,7 @@ package net.yapbam.currency;
 import java.net.*;
 import java.io.*;
 
-import net.yapbam.util.FileUtils;
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.util.Portable;
 
 import org.xml.sax.*;

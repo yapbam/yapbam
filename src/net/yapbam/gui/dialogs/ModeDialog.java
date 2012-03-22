@@ -12,12 +12,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 

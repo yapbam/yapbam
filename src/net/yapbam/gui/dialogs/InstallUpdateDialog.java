@@ -15,13 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.Preferences;
 import net.yapbam.update.UpdateInformation;
-import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 import net.yapbam.util.SecureDownloader;
 

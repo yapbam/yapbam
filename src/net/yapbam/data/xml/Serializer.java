@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
@@ -18,7 +19,6 @@ import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.Preferences;
 import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.Crypto;
-import net.yapbam.util.FileUtils;
 import net.yapbam.util.TextMatcher;
 
 import org.xml.sax.*;

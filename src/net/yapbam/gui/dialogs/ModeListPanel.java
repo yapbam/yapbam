@@ -12,12 +12,12 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Account;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 @SuppressWarnings("serial")

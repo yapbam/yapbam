@@ -27,6 +27,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
@@ -35,7 +36,6 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.transactiontable.SubTransactionsTableModel;
-import net.yapbam.gui.util.AbstractDialog;
 
 class SubtransactionListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

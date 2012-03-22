@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.SwingWorker;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.AbstractDialog;
 
 @SuppressWarnings("serial")
 /** An abstract progress dialog, that manages a long task.
@@ -96,7 +96,7 @@ public abstract class LongTaskDialog<T,V> extends AbstractDialog<T,V> {
 	protected abstract SwingWorker<?, ?> getWorker();
 	
 	private void doShow() {
-		LongTaskDialog.this.setVisibleTime = System.currentTimeMillis(); // Remember when the dialog was displayed
+		this.setVisibleTime = System.currentTimeMillis(); // Remember when the dialog was displayed
 		super.setVisible(true);
 	}
 }

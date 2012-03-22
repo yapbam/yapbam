@@ -24,6 +24,7 @@ import java.util.StringTokenizer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
@@ -37,7 +38,6 @@ import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
-import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 import net.yapbam.util.PreferencesUtils;
 

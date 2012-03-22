@@ -27,6 +27,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.net.util.Base64;
 import org.xml.sax.SAXException;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.xml.FilterHandler;
@@ -36,7 +37,6 @@ import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.DateUtils;
-import net.yapbam.util.FileUtils;
 import net.yapbam.util.Portable;
 import net.yapbam.util.PreferencesUtils;
 

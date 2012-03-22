@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.GlobalData;
-import net.yapbam.gui.util.AbstractDialog;
 
 public class TransferAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;

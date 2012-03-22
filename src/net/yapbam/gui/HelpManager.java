@@ -14,8 +14,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.utilities.NullUtils;
-import net.yapbam.gui.util.AbstractDialog;
 import net.yapbam.util.Portable;
 
 /** This class is responsible for displaying Yapbam helpMessages. 
