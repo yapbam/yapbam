@@ -14,13 +14,13 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
 import net.astesana.ajlib.swing.widget.IntegerWidget;
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.DateWidgetPanel;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -34,7 +34,7 @@ public class GenerationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JCheckBox activatedBox = null;
 	private JLabel jLabel = null;
-	private DateWidgetPanel date = null;
+	private DateWidget date = null;
 	private JLabel jLabel1 = null;
 	private IntegerWidget nb = null;
 	private JComboBox kind = null;
@@ -46,7 +46,7 @@ public class GenerationPanel extends JPanel {
 	private DateStepper currentDateStepper;  //  @jve:decl-index=0:
 	private Date currentNextDate;  //  @jve:decl-index=0:
 	private JLabel jLabel3 = null;
-	private DateWidgetPanel lastDate = null;
+	private DateWidget lastDate = null;
 
 	public GenerationPanel() {
 		super();
@@ -131,11 +131,11 @@ public class GenerationPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private DateWidgetPanel getDate() {
+	private DateWidget getDate() {
 		if (date == null) {
-			date = new DateWidgetPanel();
+			date = new DateWidget();
 			date.setLocale(LocalizationData.getLocale());
-			date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
+			date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					Date old = currentNextDate;
@@ -368,15 +368,15 @@ public class GenerationPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.DateWidget	
 	 */
-	private DateWidgetPanel getLastDate() {
+	private DateWidget getLastDate() {
 		if (lastDate == null) {
-			lastDate = new DateWidgetPanel();
+			lastDate = new DateWidget();
 			lastDate.setLocale(LocalizationData.getLocale());
 			lastDate.setDate(null);
 			lastDate.setColumns(6);
 			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
 			lastDate.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
-			lastDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
+			lastDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					updateDateStepper();

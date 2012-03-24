@@ -51,7 +51,7 @@ class BalanceHistoryControlPane extends JPanel {
 	JButton getToday() {
 		if (today == null) {
 			today = new JButton();
-			today.setIcon(new ImageIcon(getClass().getResource("/net/yapbam/gui/widget/stop.png"))); //$NON-NLS-1$
+			today.setIcon(new ImageIcon(getClass().getResource("/net/astesana/ajlib/swing/widget/date/stop.png"))); //$NON-NLS-1$
 			today.setToolTipText(LocalizationData.get("BalanceHistory.toDay.toolTip")); //$NON-NLS-1$
 			today.setPreferredSize(new Dimension(20, 20));
 		}

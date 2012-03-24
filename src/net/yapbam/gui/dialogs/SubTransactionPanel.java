@@ -5,10 +5,10 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.PopupTextFieldList;
 
@@ -28,7 +28,7 @@ public class SubTransactionPanel extends JPanel {
 	private JLabel jLabel = null;
 	private PopupTextFieldList descriptionField = null;
 	private JLabel jLabel1 = null;
-	private AmountWidget amountField = null;
+	private CurrencyWidget amountField = null;
 	private CategoryWidget categoryPanel = null;
 	private JLabel jLabel2 = null;
 	private JCheckBox jCheckBox = null;
@@ -117,7 +117,7 @@ public class SubTransactionPanel extends JPanel {
 		});
 		descriptionField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		this.amount = amountField.getValue();
-		amountField.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+		amountField.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				Double old = amount;
@@ -160,9 +160,9 @@ public class SubTransactionPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private AmountWidget getAmountField() {
+	private CurrencyWidget getAmountField() {
 		if (amountField == null) {
-			amountField = new AmountWidget(LocalizationData.getLocale());
+			amountField = new CurrencyWidget(LocalizationData.getLocale());
 			amountField.setToolTipText(LocalizationData.get("SubTransactionDialog.amount.tooltip")); //$NON-NLS-1$
 			amountField.setColumns(10);
 			amountField.setValue(new Double(0));

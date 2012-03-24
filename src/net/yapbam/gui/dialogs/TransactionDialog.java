@@ -16,14 +16,14 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingOptions;
-import net.yapbam.gui.widget.AmountWidget;
-import net.yapbam.gui.widget.DateWidgetPanel;
 
 /** This dialog allows to create or edit a transaction */
 public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
@@ -31,10 +31,10 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 
 	private static final long serialVersionUID = 1L;
 
-	private DateWidgetPanel date;
+	private DateWidget date;
 	private JTextField transactionNumber;
 	private CheckNumberPanel checkNumber;
-	private DateWidgetPanel defDate;
+	private DateWidget defDate;
 	private JTextField statement;
 	private boolean checkNumberIsVisible;
 	
@@ -100,7 +100,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	public TransactionDialog(Window owner, final FilteredData data, Transaction transaction, boolean edit) {
 		super(owner,
 				(edit ? LocalizationData.get("TransactionDialog.title.edit") : LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
-		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+		amount.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				// I've implemented that with Math.signum ... but, I missed that the value may be null
@@ -238,11 +238,11 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	@Override
 	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.valueDate")), c); //$NON-NLS-1$
-		defDate = new DateWidgetPanel();
+		defDate = new DateWidget();
 		defDate.setLocale(LocalizationData.getLocale());
 		defDate.setToolTipText(LocalizationData.get("TransactionDialog.valueDate.tooltip")); //$NON-NLS-1$
 		defDate.getDateWidget().addFocusListener(focusListener);
-		defDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
+		defDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				autoFillStatement(VALUE_DATE_CHANGED);
@@ -295,11 +295,11 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
 		JLabel titleDate = new JLabel(LocalizationData.get("TransactionDialog.date")); //$NON-NLS-1$
 		centerPane.add(titleDate, c);
-		date = new DateWidgetPanel();
+		date = new DateWidget();
 		date.setLocale(LocalizationData.getLocale());
 		date.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
 		date.getDateWidget().addFocusListener(focusListener);
-		date.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
+		date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getNewValue() != null) {

@@ -12,11 +12,11 @@ import java.util.Currency;
 
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.widget.AmountWidget;
 
 import javax.swing.JLabel;
 import java.awt.Insets;
@@ -29,8 +29,8 @@ public class CurrencyConverterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JComboBox currency1 = null;
 	private JComboBox currency2 = null;
-	private AmountWidget amount1 = null;
-	private AmountWidget amount2 = null;
+	private CurrencyWidget amount1 = null;
+	private CurrencyWidget amount2 = null;
 	private JLabel jLabel = null;
 	
 	private CurrencyConverter converter;
@@ -219,13 +219,13 @@ public class CurrencyConverterPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.AmountWidget	
 	 */
-	private AmountWidget getAmount1() {
+	private CurrencyWidget getAmount1() {
 		if (amount1 == null) {
-			amount1 = new AmountWidget(LocalizationData.getLocale());
+			amount1 = new CurrencyWidget(LocalizationData.getLocale());
 			amount1.setColumns(10);
 			amount1.setToolTipText(Messages.getString("CurrencyConverterPanel.amount.toolTip")); //$NON-NLS-1$
 			amount1.setValue(0.0);
-			amount1.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+			amount1.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					doConvert();
@@ -240,9 +240,9 @@ public class CurrencyConverterPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.AmountWidget	
 	 */
-	private AmountWidget getAmount2() {
+	private CurrencyWidget getAmount2() {
 		if (amount2 == null) {
-			amount2 = new AmountWidget(LocalizationData.getLocale());
+			amount2 = new CurrencyWidget(LocalizationData.getLocale());
 			amount2.setColumns(10);
 			amount2.setToolTipText(Messages.getString("CurrencyConverterPanel.result.toolTip")); //$NON-NLS-1$
 			amount2.setEditable(false);

@@ -13,10 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class DateFilterPanel extends ConsistencyCheckedPanel {
 	public static Wordings TRANSACTION_DATE = new Wordings(LocalizationData.get("Transaction.date"),
@@ -40,8 +40,8 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private JRadioButton dateAll;
 	private JRadioButton dateEquals;
 	private JRadioButton dateBetween;
-	private DateWidgetPanel dateFrom;
-	private DateWidgetPanel dateTo;
+	private DateWidget dateFrom;
+	private DateWidget dateTo;
 	private Wordings wordings;
 	
 	public static class Wordings {
@@ -199,13 +199,13 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.DateWidgetPanel	
 	 */
-	private DateWidgetPanel getDateFromField() {
+	private DateWidget getDateFromField() {
 		if (dateFrom == null) {
-			dateFrom = new DateWidgetPanel();
+			dateFrom = new DateWidget();
 			dateFrom.setToolTipText(wordings.fromTooltip);
 			dateFrom.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
-			dateFrom.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, consistencyChecker);
-			dateFrom.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, consistencyChecker);
+			dateFrom.addPropertyChangeListener(DateWidget.DATE_PROPERTY, consistencyChecker);
+			dateFrom.addPropertyChangeListener(DateWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 		}
 		return dateFrom;
 	}
@@ -215,13 +215,13 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.DateWidgetPanel	
 	 */
-	private DateWidgetPanel getDateToField() {
+	private DateWidget getDateToField() {
 		if (dateTo == null) {
-			dateTo = new DateWidgetPanel();
+			dateTo = new DateWidget();
 			dateTo.setToolTipText(wordings.toTooltip);
 			dateTo.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
-			dateTo.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, consistencyChecker);
-			dateTo.addPropertyChangeListener(DateWidgetPanel.CONTENT_VALID_PROPERTY, consistencyChecker);
+			dateTo.addPropertyChangeListener(DateWidget.DATE_PROPERTY, consistencyChecker);
+			dateTo.addPropertyChangeListener(DateWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 		}
 		return dateTo;
 	}
