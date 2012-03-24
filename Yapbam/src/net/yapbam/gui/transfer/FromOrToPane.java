@@ -3,6 +3,7 @@ package net.yapbam.gui.transfer;
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
@@ -15,7 +16,6 @@ import java.beans.PropertyChangeListener;
 import java.awt.Insets;
 import net.yapbam.gui.dialogs.ModeWidget;
 import javax.swing.JLabel;
-import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class FromOrToPane extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class FromOrToPane extends JPanel {
 	private JLabel lblNumber;
 	private TextWidget numberField;
 	private JLabel lblDateVal;
-	private DateWidgetPanel valueDateField;
+	private DateWidget valueDateField;
 	private JLabel lblStatement;
 	private TextWidget statementField;
 
@@ -164,9 +164,9 @@ public class FromOrToPane extends JPanel {
 		}
 		return lblDateVal;
 	}
-	private DateWidgetPanel getValueDateField() {
+	private DateWidget getValueDateField() {
 		if (valueDateField == null) {
-			valueDateField = new DateWidgetPanel();
+			valueDateField = new DateWidget();
 		}
 		return valueDateField;
 	}

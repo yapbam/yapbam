@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.*;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.swing.widget.ComboBox;
 import net.astesana.ajlib.utilities.NullUtils;
 
@@ -26,7 +27,6 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
-import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.PopupTextFieldList;
 
@@ -39,7 +39,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	private JComboBox accounts;
 	protected PopupTextFieldList description;
 	protected JTextField comment;
-	protected AmountWidget amount;
+	protected CurrencyWidget amount;
 	protected JCheckBox receipt;
 	protected ComboBox modes;
 	protected CategoryWidget categories;
@@ -195,10 +195,10 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 		c.fill=GridBagConstraints.NONE; c.anchor = GridBagConstraints.WEST; c.weightx = 0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.amount")), c); //$NON-NLS-1$
-		amount = new AmountWidget(LocalizationData.getLocale());
+		amount = new CurrencyWidget(LocalizationData.getLocale());
 		amount.setColumns(10);
 		amount.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		amount.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
+		amount.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		amount.setToolTipText(LocalizationData.get("TransactionDialog.amount.tooltip")); //$NON-NLS-1$
 		c.gridx++; c.weightx = 1.0;c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(amount, c);

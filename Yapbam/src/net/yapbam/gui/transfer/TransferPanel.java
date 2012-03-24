@@ -7,15 +7,15 @@ import java.awt.Insets;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryWidget;
-import net.yapbam.gui.widget.AmountWidget;
 import java.awt.GridLayout;
 import net.yapbam.data.GlobalData;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
-import net.yapbam.gui.widget.DateWidgetPanel;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -26,9 +26,9 @@ public class TransferPanel extends JPanel {
 	private FromOrToPane fromPane;
 	private FromOrToPane toPane;
 	private JLabel dateLabel;
-	private DateWidgetPanel dateField;
+	private DateWidget dateField;
 	private JLabel amountLabel;
-	private AmountWidget amountField;
+	private CurrencyWidget amountField;
 	private JPanel panel;
 	private CategoryWidget categoryWidget;
 
@@ -132,9 +132,9 @@ public class TransferPanel extends JPanel {
 		}
 		return dateLabel;
 	}
-	private DateWidgetPanel getDateField() {
+	private DateWidget getDateField() {
 		if (dateField == null) {
-			dateField = new DateWidgetPanel();
+			dateField = new DateWidget();
 			dateField.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
 			dateField.setColumns(10);
 		}
@@ -146,9 +146,9 @@ public class TransferPanel extends JPanel {
 		}
 		return amountLabel;
 	}
-	private AmountWidget getAmountField() {
+	private CurrencyWidget getAmountField() {
 		if (amountField == null) {
-			amountField = new AmountWidget();
+			amountField = new CurrencyWidget();
 			amountField.setColumns(10);
 		}
 		return amountField;

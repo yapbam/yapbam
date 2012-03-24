@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 import java.awt.Color;
@@ -22,8 +22,8 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 	private JPanel panel_2;
 	private JPanel panel_1;
 	private JRadioButton amountAll;
-	private AmountWidget maxAmountWidget;
-	private AmountWidget minAmountWidget;
+	private CurrencyWidget maxAmountWidget;
+	private CurrencyWidget minAmountWidget;
 	private JRadioButton amountBetween;
 	private JRadioButton amountEquals;
 	
@@ -160,15 +160,15 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private AmountWidget getMinAmountWidget() {
+	private CurrencyWidget getMinAmountWidget() {
 		if (minAmountWidget == null) {
-			minAmountWidget = new AmountWidget(LocalizationData.getLocale());
+			minAmountWidget = new CurrencyWidget(LocalizationData.getLocale());
 			minAmountWidget.setColumns(6);
 			minAmountWidget.setEmptyAllowed(true);
 			minAmountWidget.setMinValue(0.0);
 			minAmountWidget.setToolTipText(LocalizationData.get("CustomFilterPanel.amout.minimum")); //$NON-NLS-1$
-			minAmountWidget.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, consistencyChecker);
-			minAmountWidget.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
+			minAmountWidget.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, consistencyChecker);
+			minAmountWidget.addPropertyChangeListener(CurrencyWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 			minAmountWidget.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return minAmountWidget;
@@ -179,15 +179,15 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private AmountWidget getMaxAmountWidget() {
+	private CurrencyWidget getMaxAmountWidget() {
 		if (maxAmountWidget == null) {
-			maxAmountWidget = new AmountWidget(LocalizationData.getLocale());
+			maxAmountWidget = new CurrencyWidget(LocalizationData.getLocale());
 			maxAmountWidget.setColumns(6);
 			maxAmountWidget.setEmptyAllowed(true);
 			maxAmountWidget.setMinValue(0.0);
 			maxAmountWidget.setToolTipText(LocalizationData.get("CustomFilterPanel.amount.maximum")); //$NON-NLS-1$
-			maxAmountWidget.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, consistencyChecker);
-			maxAmountWidget.addPropertyChangeListener(AmountWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
+			maxAmountWidget.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, consistencyChecker);
+			maxAmountWidget.addPropertyChangeListener(CurrencyWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 			maxAmountWidget.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return maxAmountWidget;

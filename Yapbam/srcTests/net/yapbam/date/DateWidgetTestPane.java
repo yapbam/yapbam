@@ -6,13 +6,14 @@ import java.awt.GridBagConstraints;
 import java.util.Locale;
 
 import javax.swing.JTextField;
-import net.yapbam.gui.widget.DateWidgetPanel;
+
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 
 public class DateWidgetTestPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField jTextField = null;
-	private DateWidgetPanel dateWidgetPanel = null;
+	private DateWidget dateWidgetPanel = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -46,9 +47,9 @@ public class DateWidgetTestPane extends JPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.DateWidgetPanel	
 	 */
-	private DateWidgetPanel getDateWidgetPanel() {
+	private DateWidget getDateWidgetPanel() {
 		if (dateWidgetPanel == null) {
-			dateWidgetPanel = new DateWidgetPanel();
+			dateWidgetPanel = new DateWidget();
 			dateWidgetPanel.setLocale(Locale.ENGLISH);
 			dateWidgetPanel.addPropertyChangeListener("date",
 					new java.beans.PropertyChangeListener() {

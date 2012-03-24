@@ -15,9 +15,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.DateWidgetPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -29,7 +29,7 @@ public class CheckModePanel extends JPanel {
 	private JLabel statementLabel;
 	private JTextField statement;
 	private JCheckBox valueDateLabel;
-	private DateWidgetPanel valueDate;
+	private DateWidget valueDate;
 	private JCheckBox checkModeBox;
 	private boolean ok;
 	
@@ -98,7 +98,7 @@ public class CheckModePanel extends JPanel {
 		gbc_valueDateLabel.gridy = 0;
 		panel.add(valueDateLabel, gbc_valueDateLabel);
 		valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
-		valueDate = new DateWidgetPanel();
+		valueDate = new DateWidget();
 		GridBagConstraints gbc_valueDate = new GridBagConstraints();
 		gbc_valueDate.gridx = 1;
 		gbc_valueDate.gridy = 0;
@@ -106,7 +106,7 @@ public class CheckModePanel extends JPanel {
 		valueDate.setDate(null);
 		valueDate.setLocale(LocalizationData.getLocale());
 		valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
-		valueDate.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
+		valueDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				valueDateLabel.setSelected(true);

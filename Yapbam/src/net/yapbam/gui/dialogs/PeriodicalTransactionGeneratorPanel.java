@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
@@ -16,7 +17,6 @@ import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.util.JTableListener;
-import net.yapbam.gui.widget.DateWidgetPanel;
 import net.yapbam.util.DateUtils;
 
 import java.awt.Insets;
@@ -39,7 +39,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;
-	private DateWidgetPanel dateField = null;
+	private DateWidget dateField = null;
 	private Date lastDate;
 	private JLabel summary = null;
 	private JScrollPane jScrollPane = null;
@@ -110,12 +110,12 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.ihm.widget.DateWidget	
 	 */
-	private DateWidgetPanel getDateField() {
+	private DateWidget getDateField() {
 		if (dateField == null) {
-			dateField = new DateWidgetPanel();
+			dateField = new DateWidget();
 			dateField.setColumns(6);
 			dateField.setToolTipText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate.toolTip")); //$NON-NLS-1$
-			dateField.addPropertyChangeListener(DateWidgetPanel.DATE_PROPERTY, new PropertyChangeListener() {
+			dateField.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					updateTransactions();

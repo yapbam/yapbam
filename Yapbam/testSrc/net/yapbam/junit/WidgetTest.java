@@ -9,8 +9,8 @@ import javax.swing.JDialog;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import net.yapbam.gui.widget.AmountWidget;
-import net.yapbam.gui.widget.DateWidgetPanel;
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
+import net.astesana.ajlib.swing.widget.date.DateWidget;
 
 public class WidgetTest {
 	private PropertyChangeSpy listener = new PropertyChangeSpy();
@@ -49,7 +49,7 @@ public class WidgetTest {
 	}
 
 	private void testAmountWidget(Locale locale, String str, double value) {
-		AmountWidget widget = new AmountWidget(locale);
+		CurrencyWidget widget = new CurrencyWidget(locale);
 		widget.setText(str);
 		assertTrue (widget.getValue()==value);
 //		System.out.println (locale+" is ok");

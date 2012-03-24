@@ -10,19 +10,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
-import net.yapbam.gui.widget.AmountWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 public class AccountDialog extends AbstractDialog<String, Account> {
 	private static final long serialVersionUID = 1L;
 	
 	private TextWidget bankAccountField;
-	private AmountWidget balanceField;
+	private CurrencyWidget balanceField;
 	private GlobalData globalData;
 
 	public AccountDialog(Window owner, String message, GlobalData data) {
@@ -66,10 +66,10 @@ public class AccountDialog extends AbstractDialog<String, Account> {
 		c.gridy++;
 		c.gridx = 0;
 		northPanel.add(titleBalance, c);
-		balanceField = new AmountWidget(LocalizationData.getLocale());
+		balanceField = new CurrencyWidget(LocalizationData.getLocale());
 		balanceField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		balanceField.setValue(new Double(0));
-		balanceField.addPropertyChangeListener(AmountWidget.VALUE_PROPERTY, listener);
+		balanceField.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, listener);
 		balanceField.setToolTipText(LocalizationData.get("AccountDialog.balance.tooltip")); //$NON-NLS-1$
 		c.weightx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
