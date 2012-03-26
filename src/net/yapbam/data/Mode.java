@@ -5,7 +5,8 @@ import java.io.Serializable;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 
-/** A payment mode (Blue card, check ...) */
+/** A payment mode (Blue card, check ...).
+ */
 public class Mode implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -19,9 +20,9 @@ public class Mode implements Serializable {
 
 	/** Constructor
 	 * @param name The name
-	 * @param receiptVDC A ValueDateComputer used to compute value date for receipts, or null this mode
+	 * @param receiptVDC A ValueDateComputer used to compute value date for receipts, or null if this mode
 	 *  can't be used for receipts
-	 * @param expenseVDC A ValueDateComputer used to compute value date for expenditures, or null this mode
+	 * @param expenseVDC A ValueDateComputer used to compute value date for expenditures, or null if this mode
 	 *  can't be used for receipts
 	 * @param useCheckbook true if this mode use a checkbook
 	 * @throws IllegalArgumentException if useCheckbook is true and vdcForExpenditure is false;
