@@ -1,17 +1,19 @@
 package net.yapbam.gui.dialogs;
 
-import net.yapbam.data.GlobalData;
+import net.astesana.ajlib.swing.Utils;
+import net.yapbam.data.Account;
 import net.yapbam.data.Mode;
+import net.yapbam.date.helpers.DateStepper;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AbstractSelector;
 
 @SuppressWarnings("serial")
 /** A category selector widget. */
-public class ModeWidget extends AbstractSelector<Mode, GlobalData> {
+public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 	public static final String MODE_PROPERTY = "mode"; //$NON-NLS-1$
 	
-	public ModeWidget(GlobalData data) {
+	public ModeWidget(ModeWidgetParams data) {
 		super(data);
 	}
 
@@ -38,8 +40,11 @@ public class ModeWidget extends AbstractSelector<Mode, GlobalData> {
 	@Override
 	protected void populateCombo() {
 		if (getParameters()!=null) {
-			for (int i = 0; i < getParameters().getCategoriesNumber(); i++) {
-				getCombo().addItem(getParameters().getCategory(i));
+			Account account = getParameters().getAccount();
+			for (int i = 0; i < account.getModesNumber(); i++) {
+				Mode mode = account.getMode(i);
+				DateStepper ds = getParameters().isExpense()?mode.getExpenseVdc():mode.getReceiptVdc();
+				if (ds!=null)	getCombo().addItem(mode);
 			}
 		}
 	}
@@ -52,7 +57,7 @@ public class ModeWidget extends AbstractSelector<Mode, GlobalData> {
 	@Override
 	protected Mode createNew() {
 		if (getParameters()!=null) {
-			return ModeDialog.open(getParameters(), null, CategoryDialog.getOwnerWindow(this)); //TODO
+			return ModeDialog.open(getParameters().getGlobalData(), getParameters().getAccount(), Utils.getOwnerWindow(this));
 		} else {
 			return null;
 		}

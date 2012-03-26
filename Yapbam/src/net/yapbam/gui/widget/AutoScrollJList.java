@@ -6,7 +6,7 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 
 @SuppressWarnings("serial")
-/** A JList that autoscrolls when the selected index is programaticaly changed. */
+/** A JList that auto scrolls when its selected index is programaticaly changed. */
 public class AutoScrollJList extends JList {
 	public AutoScrollJList() {
 		super();

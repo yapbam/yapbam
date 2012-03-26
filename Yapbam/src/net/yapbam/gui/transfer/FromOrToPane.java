@@ -8,6 +8,7 @@ import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AccountWidget;
+import net.yapbam.gui.dialogs.ModeWidgetParams;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -136,7 +137,7 @@ public class FromOrToPane extends JPanel {
 	
 	private ModeWidget getModeWidget() {
 		if (modeWidget == null) {
-			modeWidget = new ModeWidget((GlobalData) null);
+			modeWidget = new ModeWidget((ModeWidgetParams) null); //TODO
 			modeWidget.getJLabel().setVisible(false);
 		}
 		return modeWidget;
