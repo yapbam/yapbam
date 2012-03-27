@@ -57,7 +57,8 @@
 	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/editor/LocalizationBundl*.properties"/>
 	    	<fileset dir="${jcommonpath}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
 	    	<fileset dir="${ajlibpath}" includes="**/*.properties"/>
-		</copy>
+	    	<fileset dir="${ajlibpath}" includes="**/*.png"/>
+	    			</copy>
 		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath};${ajlibpath}" includeAntRuntime="false" debug="true"/>
