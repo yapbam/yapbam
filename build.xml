@@ -3,10 +3,11 @@
 	<!--======================================  README ================================================>
 	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
 	| jfreechartpath properties in the customPaths.properties file used in the line below.             |
-	| These properties have to reference the apache commonsnet sources, jfreeChart sources and the     |
-	| JCommon sources.                                                                                 |
-	| These sources are available at http://commons.apache.org/net/ and http://www.jfree.org           |
+	| These properties have to reference the apache commonsnet, jfreeChart, JCommon and A-JLib sources.|
+	| These sources are available at http://commons.apache.org/net/, http://www.jfree.org and          |
+	| http://sourceforge.net/projects/ajlib/                                                           |
 	| Here is a sample of what this file could contain :                                               |
+	| ajlibpath=C:/username/externalLibs/AJLib                                                         |
 	| commonsnetpath=C:/username/externalLibs/commonsNet                                               |
 	| jcommonpath=C:/username/externalLibs/jCommon                                                     |
 	| jfreechartpath=C:/username/externalLibs/jFreeChart                                               |
@@ -15,7 +16,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.9.13"/>
+	<property name="yapbamVersion" value="0.10.0"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -55,10 +56,11 @@
 	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/LocalizationBundl*.properties"/>
 	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/editor/LocalizationBundl*.properties"/>
 	    	<fileset dir="${jcommonpath}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
+	    	<fileset dir="${ajlibpath}" includes="**/*.properties"/>
 		</copy>
 		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
-		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath}" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath};${ajlibpath}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>

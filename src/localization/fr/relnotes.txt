@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 
+version	0.10.0 (27/03/2012)
+improvement
+	La vue budgétaire peut à présent présenter une ligne et/ou une colonne de totaux.
+
 version	0.9.13 (06/03/2012)
 fix
 	Lorsque Yapbam était installé dans un dossier vérouillé en écriture, ou installé à un emplacement protégé par l'<a href="http://fr.wikipedia.org/wiki/User_Account_Control">UAC de Windows</a>, comme le dossier "Program files", des messages d'erreur apparaissaient au lancement et à l'arrêt de Yapbam, ainsi que lors des mises à jour.
