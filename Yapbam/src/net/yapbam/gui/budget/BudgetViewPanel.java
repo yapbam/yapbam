@@ -1,7 +1,6 @@
 package net.yapbam.gui.budget;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
@@ -9,7 +8,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 
 import java.awt.GridBagConstraints;
@@ -25,18 +23,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.dialog.FileChooser;
-import net.astesana.ajlib.swing.table.RowHeaderRenderer;
+import net.astesana.ajlib.swing.table.Table;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
@@ -53,15 +47,13 @@ public class BudgetViewPanel extends JPanel {
 	private JRadioButton month = null;
 	private JRadioButton year = null;
 	private JButton export = null;
-	private JScrollPane jScrollPane = null;
-	private JTable jTable = null;
+	private Table budgetTable = null;
 	private JButton filter = null;
 	
 	private BudgetView budget;
 	private FilteredData data;
 	private JCheckBox chckbxAddSumColumn;
 	private JCheckBox chckbxAddSumLine;
-	private BudgetTableRowHeaderModel rowHeaderModel;
 	
 	/**
 	 * This is the default constructor
@@ -80,12 +72,12 @@ public class BudgetViewPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-		gridBagConstraints4.fill = GridBagConstraints.BOTH;
-		gridBagConstraints4.gridy = 1;
-		gridBagConstraints4.weightx = 1.0;
-		gridBagConstraints4.weighty = 1.0;
-		gridBagConstraints4.gridx = 0;
+		GridBagConstraints gbc_budgetTable = new GridBagConstraints();
+		gbc_budgetTable.fill = GridBagConstraints.BOTH;
+		gbc_budgetTable.gridy = 1;
+		gbc_budgetTable.weightx = 1.0;
+		gbc_budgetTable.weighty = 1.0;
+		gbc_budgetTable.gridx = 0;
 		GridBagConstraints gbc_topPanel = new GridBagConstraints();
 		gbc_topPanel.gridx = 0;
 		gbc_topPanel.fill = GridBagConstraints.HORIZONTAL;
@@ -94,7 +86,7 @@ public class BudgetViewPanel extends JPanel {
 		this.setSize(529, 287);
 		this.setLayout(new GridBagLayout());
 		this.add(getTopPanel(), gbc_topPanel);
-		this.add(getJScrollPane(), gridBagConstraints4);
+		this.add(getTable(), gbc_budgetTable);
 	}
 
 	/**
@@ -222,35 +214,12 @@ public class BudgetViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JScrollPane	
 	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			rowHeaderModel = new BudgetTableRowHeaderModel(budget);
-			final JTable rowView = new JTable(rowHeaderModel);
-			rowHeaderModel.addTableModelListener(new TableModelListener() {
-				@Override
-				public void tableChanged(TableModelEvent e) {
-					setRowViewSize(rowView);
-				}
-			});
-			rowView.setDefaultRenderer(Object.class, new RowHeaderRenderer(true));
-	        LookAndFeel.installColorsAndFont (rowView, "TableHeader.background", "TableHeader.foreground", "TableHeader.font"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			jScrollPane.setRowHeaderView(rowView);
-			jScrollPane.setViewportView(getJTable());
-			setRowViewSize(rowView);
-		}
-		return jScrollPane;
-	}
-
-	/**
-	 * This method initializes jTable	
-	 * 	
-	 * @return javax.swing.JTable	
-	 */
 	@SuppressWarnings("serial")
-	private JTable getJTable() {
-		if (jTable == null) {
-			jTable = new JTable(new BudgetTableModel(budget));
+	private Table getTable() {
+		if (budgetTable == null) {
+			budgetTable = new Table();
+			budgetTable.setModel(new BudgetTableModel(budget));
+			JTable jTable = budgetTable.getJTable();
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			jTable.getTableHeader().setReorderingAllowed(false);
 			jTable.setCellSelectionEnabled(true);
@@ -258,8 +227,7 @@ public class BudgetViewPanel extends JPanel {
 				@Override
 				public Component getTableCellRendererComponent(JTable table, Object value,
 						boolean isSelected, boolean hasFocus, int row, int column) {
-					JLabel result = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-							row, column);
+					JLabel result = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 					this.setHorizontalAlignment(SwingConstants.RIGHT);
 					return result;
 				}
@@ -272,16 +240,13 @@ public class BudgetViewPanel extends JPanel {
 				}
 			});
 		}
-		return jTable;
-	}
-	
-	private void setRowViewSize(final JTable rowView) {
-		int width = Utils.packColumn(rowView, 0, 2);
-		Dimension d = rowView.getPreferredScrollableViewportSize();
-		d.width = width;
-		rowView.setPreferredScrollableViewportSize(d);
+		return budgetTable;
 	}
 
+	private JTable getJTable() {
+		return getTable().getJTable();
+	}
+	
 	/**
 	 * This method initializes filter	
 	 * 	
@@ -310,7 +275,7 @@ public class BudgetViewPanel extends JPanel {
 						}
 					}
 					//FIXME Unable to select discontinuous time interval in the filter
-					int[] selectedColumns = jTable.getSelectedColumns();
+					int[] selectedColumns = getJTable().getSelectedColumns();
 					if (selectedRows.length!=budget.getDatesSize()) {
 						Date from = budget.getDate(selectedColumns[0]);
 						Date to = budget.getLastDate(selectedColumns[selectedColumns.length-1]);
@@ -356,7 +321,6 @@ public class BudgetViewPanel extends JPanel {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					((BudgetTableModel)getJTable().getModel()).setHasSumLine(chckbxAddSumLine.isSelected());
-					rowHeaderModel.setHasExtraLine(chckbxAddSumLine.isSelected());
 				}
 			});
 		}
