@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
 
+version	0.10.0 (03/27/2012)
+improvement
+	The budget view can now have sum column and line.
+
 version	0.9.13 (03/06/2012)
 fix
 	When Yapbam was installed in a write protected folder or in a folder protected by <a href="http://en.wikipedia.org/wiki/User_Account_Control">Windows UAC windows</a>, as the folder "Program files", error messages appeared when launching or quitting Yapbam and during updates.

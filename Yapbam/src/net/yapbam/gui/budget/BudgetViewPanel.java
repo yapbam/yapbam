@@ -1,6 +1,7 @@
 package net.yapbam.gui.budget;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
@@ -26,8 +27,11 @@ import java.util.Locale;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.swing.table.Table;
@@ -41,7 +45,6 @@ import net.yapbam.gui.LocalizationData;
 import javax.swing.JCheckBox;
 
 public class BudgetViewPanel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
 	private JPanel topPanel = null;
 	private JRadioButton month = null;
@@ -150,7 +153,7 @@ public class BudgetViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getMonth() {
+	JRadioButton getMonth() {
 		if (month == null) {
 			month = new JRadioButton();
 			month.setText(LocalizationData.get("BudgetPanel.perMonth")); //$NON-NLS-1$
@@ -165,7 +168,7 @@ public class BudgetViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getYear() {
+	JRadioButton getYear() {
 		if (year == null) {
 			year = new JRadioButton();
 			year.setToolTipText(LocalizationData.get("BudgetPanel.perYear.tooltip")); //$NON-NLS-1$
@@ -214,25 +217,22 @@ public class BudgetViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JScrollPane	
 	 */
-	@SuppressWarnings("serial")
 	private Table getTable() {
 		if (budgetTable == null) {
 			budgetTable = new Table();
-			budgetTable.setModel(new BudgetTableModel(budget));
+			BudgetTableModel model = new BudgetTableModel(budget);
+			model.addTableModelListener(new TableModelListener() {
+				@Override
+				public void tableChanged(TableModelEvent e) {
+					Utils.packColumns(getJTable(), 2);
+				}
+			});
+			budgetTable.setModel(model);
 			JTable jTable = budgetTable.getJTable();
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			jTable.getTableHeader().setReorderingAllowed(false);
 			jTable.setCellSelectionEnabled(true);
-			jTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-				@Override
-				public Component getTableCellRendererComponent(JTable table, Object value,
-						boolean isSelected, boolean hasFocus, int row, int column) {
-					JLabel result = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-					this.setHorizontalAlignment(SwingConstants.RIGHT);
-					return result;
-				}
-				
-			});
+			jTable.setDefaultRenderer(Object.class, new CellRenderer());
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -298,7 +298,7 @@ public class BudgetViewPanel extends JPanel {
 //		return chckbxAdd;
 //	}
 
-	private JCheckBox getChckbxAddSumColumn() {
+	JCheckBox getChckbxAddSumColumn() {
 		if (chckbxAddSumColumn == null) {
 			chckbxAddSumColumn = new JCheckBox(LocalizationData.get("BudgetPanel.sumColumn.checkBox")); //$NON-NLS-1$
 			chckbxAddSumColumn.setSelected(false);
@@ -306,13 +306,14 @@ public class BudgetViewPanel extends JPanel {
 			chckbxAddSumColumn.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					((BudgetTableModel)getJTable().getModel()).setHasSumColumn(chckbxAddSumColumn.isSelected());
+					boolean selected = chckbxAddSumColumn.isSelected();
+					((BudgetTableModel)getJTable().getModel()).setHasSumColumn(selected);
 				}
 			});
 		}
 		return chckbxAddSumColumn;
 	}
-	private JCheckBox getChckbxAddSumLine() {
+	JCheckBox getChckbxAddSumLine() {
 		if (chckbxAddSumLine == null) {
 			chckbxAddSumLine = new JCheckBox(LocalizationData.get("BudgetPanel.sumLine.checkBox")); //$NON-NLS-1$
 			chckbxAddSumLine.setSelected(false);
@@ -320,10 +321,32 @@ public class BudgetViewPanel extends JPanel {
 			chckbxAddSumLine.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					((BudgetTableModel)getJTable().getModel()).setHasSumLine(chckbxAddSumLine.isSelected());
+					boolean selected = chckbxAddSumLine.isSelected();
+					((BudgetTableModel)getJTable().getModel()).setHasSumLine(selected);
 				}
 			});
 		}
 		return chckbxAddSumLine;
+	}
+	
+	private final class CellRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		Font bold;
+		Font plain;
+		
+		CellRenderer() {
+			plain = new Font(this.getFont().getName(),Font.PLAIN,this.getFont().getSize());
+			bold = new Font(this.getFont().getName(),Font.BOLD,this.getFont().getSize());
+		}
+		
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value,
+				boolean isSelected, boolean hasFocus, int row, int column) {
+			JLabel result = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			this.setHorizontalAlignment(SwingConstants.RIGHT);
+			Font font = ((column==budget.getDatesSize()) || (row==budget.getCategoriesSize())) ? bold : plain;
+			result.setFont(font);
+			return result;
+		}
 	}
 }

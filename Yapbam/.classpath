@@ -10,5 +10,6 @@
 	<classpathentry kind="var" path="JCommon"/>
 	<classpathentry kind="var" path="JFreeChart"/>
 	<classpathentry kind="var" path="COMMONS-NET"/>
+	<classpathentry kind="var" path="A-JLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
