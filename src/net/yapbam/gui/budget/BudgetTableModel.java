@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
 
+import net.astesana.ajlib.swing.table.TitledRowsTableModel;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
 import net.yapbam.data.event.DataEvent;
@@ -12,7 +13,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
-class BudgetTableModel extends AbstractTableModel {
+class BudgetTableModel extends AbstractTableModel implements TitledRowsTableModel {
 	private BudgetView budget;
 	private boolean hasExtraLine;
 	private boolean hasExtraColumn;
@@ -46,7 +47,7 @@ class BudgetTableModel extends AbstractTableModel {
 		Double value;
 		boolean isSumColumn = (columnIndex==budget.getDatesSize());
 		if (rowIndex==this.budget.getCategoriesSize()) { // If this is the date sums line
-			if (isSumColumn) { // If this is a date column
+			if (!isSumColumn) { // If this is a date column
 				value = this.budget.getSum(this.budget.getDate(columnIndex));
 			} else { // If this is another column
 				value = null; //TODO
@@ -88,6 +89,15 @@ class BudgetTableModel extends AbstractTableModel {
 		if (hasExtraColumn!=this.hasExtraColumn) {
 			this.hasExtraColumn = hasExtraColumn;
 			fireTableStructureChanged();
+		}
+	}
+
+	@Override
+	public String getRowName(int rowIndex) {
+		if (rowIndex==budget.getCategoriesSize()) {
+			return LocalizationData.get("BudgetPanel.sum");
+		} else {
+			return budget.getCategory(rowIndex).getName();
 		}
 	}
 }
