@@ -32,10 +32,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.ajlib.swing.table.RowHeaderRenderer;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
@@ -48,7 +49,7 @@ import javax.swing.JCheckBox;
 public class BudgetViewPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel jPanel = null;
+	private JPanel topPanel = null;
 	private JRadioButton month = null;
 	private JRadioButton year = null;
 	private JButton export = null;
@@ -58,9 +59,9 @@ public class BudgetViewPanel extends JPanel {
 	
 	private BudgetView budget;
 	private FilteredData data;
-	private JCheckBox chckbxAdd;
 	private JCheckBox chckbxAddSumColumn;
 	private JCheckBox chckbxAddSumLine;
+	private BudgetTableRowHeaderModel rowHeaderModel;
 	
 	/**
 	 * This is the default constructor
@@ -85,14 +86,14 @@ public class BudgetViewPanel extends JPanel {
 		gridBagConstraints4.weightx = 1.0;
 		gridBagConstraints4.weighty = 1.0;
 		gridBagConstraints4.gridx = 0;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints.weightx = 1.0D;
-		gridBagConstraints.gridy = 0;
+		GridBagConstraints gbc_topPanel = new GridBagConstraints();
+		gbc_topPanel.gridx = 0;
+		gbc_topPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_topPanel.weightx = 1.0D;
+		gbc_topPanel.gridy = 0;
 		this.setSize(529, 287);
 		this.setLayout(new GridBagLayout());
-		this.add(getJPanel(), gridBagConstraints);
+		this.add(getTopPanel(), gbc_topPanel);
 		this.add(getJScrollPane(), gridBagConstraints4);
 	}
 
@@ -101,18 +102,18 @@ public class BudgetViewPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
+	private JPanel getTopPanel() {
+		if (topPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 3;
+			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.gridheight = 2;
 			gridBagConstraints5.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 4;
+			gridBagConstraints3.gridx = 3;
 			gridBagConstraints3.gridheight = 0;
 			gridBagConstraints3.fill = GridBagConstraints.NONE;
-			gridBagConstraints3.insets = new Insets(5, 5, 0, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 0, 0);
 			gridBagConstraints3.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.insets = new Insets(0, 5, 0, 5);
@@ -121,31 +122,24 @@ public class BudgetViewPanel extends JPanel {
 			gridBagConstraints2.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints1.insets = new Insets(0, 5, 5, 5);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(getMonth(), gridBagConstraints1);
-			GridBagConstraints gbc_chckbxAdd = new GridBagConstraints();
-			gbc_chckbxAdd.anchor = GridBagConstraints.WEST;
-			gbc_chckbxAdd.insets = new Insets(0, 0, 0, 5);
-			gbc_chckbxAdd.gridx = 1;
-			gbc_chckbxAdd.gridy = 0;
-			jPanel.add(getChckbxAdd(), gbc_chckbxAdd);
+			topPanel = new JPanel();
+			topPanel.setLayout(new GridBagLayout());
+			topPanel.add(getMonth(), gridBagConstraints1);
 			GridBagConstraints gbc_chckbxAddSumLine = new GridBagConstraints();
-			gbc_chckbxAddSumLine.gridheight = 2;
 			gbc_chckbxAddSumLine.anchor = GridBagConstraints.WEST;
 			gbc_chckbxAddSumLine.weightx = 1.0;
-			gbc_chckbxAddSumLine.insets = new Insets(0, 0, 0, 5);
-			gbc_chckbxAddSumLine.gridx = 2;
+			gbc_chckbxAddSumLine.insets = new Insets(0, 0, 5, 5);
+			gbc_chckbxAddSumLine.gridx = 1;
 			gbc_chckbxAddSumLine.gridy = 0;
-			jPanel.add(getChckbxAddSumLine(), gbc_chckbxAddSumLine);
-			jPanel.add(getYear(), gridBagConstraints2);
-			jPanel.add(getExport(), gridBagConstraints3);
-			jPanel.add(getFilter(), gridBagConstraints5);
+			topPanel.add(getChckbxAddSumLine(), gbc_chckbxAddSumLine);
+			topPanel.add(getYear(), gridBagConstraints2);
+			topPanel.add(getExport(), gridBagConstraints3);
+			topPanel.add(getFilter(), gridBagConstraints5);
 			ButtonGroup group = new ButtonGroup();
 			group.add(getMonth());
 			group.add(getYear());
@@ -154,9 +148,9 @@ public class BudgetViewPanel extends JPanel {
 			gbc_chckbxAddSumColumn.insets = new Insets(0, 0, 0, 5);
 			gbc_chckbxAddSumColumn.gridx = 1;
 			gbc_chckbxAddSumColumn.gridy = 1;
-			jPanel.add(getChckbxAddSumColumn(), gbc_chckbxAddSumColumn);
+			topPanel.add(getChckbxAddSumColumn(), gbc_chckbxAddSumColumn);
 		}
-		return jPanel;
+		return topPanel;
 	}
 
 	/**
@@ -231,7 +225,7 @@ public class BudgetViewPanel extends JPanel {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			TableModel rowHeaderModel = new BudgetTableRowHeaderModel(budget);
+			rowHeaderModel = new BudgetTableRowHeaderModel(budget);
 			final JTable rowView = new JTable(rowHeaderModel);
 			rowHeaderModel.addTableModelListener(new TableModelListener() {
 				@Override
@@ -282,10 +276,9 @@ public class BudgetViewPanel extends JPanel {
 	}
 	
 	private void setRowViewSize(final JTable rowView) {
-		int width = TableColumnUtils.packColumn(rowView, 0, 2);
+		int width = Utils.packColumn(rowView, 0, 2);
 		Dimension d = rowView.getPreferredScrollableViewportSize();
 		d.width = width;
-		rowView.getColumnModel().getColumn(0).setPreferredWidth(width);
 		rowView.setPreferredScrollableViewportSize(d);
 	}
 
@@ -329,30 +322,43 @@ public class BudgetViewPanel extends JPanel {
 		}
 		return filter;
 	}
-	private JCheckBox getChckbxAdd() {
-		if (chckbxAdd == null) {
-			chckbxAdd = new JCheckBox(LocalizationData.get("BudgetPanel.averageColumn.checkBox")); //$NON-NLS-1$
-			chckbxAdd.setSelected(true);
-			chckbxAdd.setToolTipText(LocalizationData.get("BudgetPanel.averageColumn.checkBox.tooltip"));
-			chckbxAdd.setVisible(false);
-		}
-		return chckbxAdd;
-	}
+
+//	private JCheckBox getChckbxAdd() {
+//		if (chckbxAdd == null) {
+//			chckbxAdd = new JCheckBox(LocalizationData.get("BudgetPanel.averageColumn.checkBox")); //$NON-NLS-1$
+//			chckbxAdd.setSelected(true);
+//			chckbxAdd.setToolTipText(LocalizationData.get("BudgetPanel.averageColumn.checkBox.tooltip"));
+//			chckbxAdd.setVisible(false);
+//		}
+//		return chckbxAdd;
+//	}
+
 	private JCheckBox getChckbxAddSumColumn() {
 		if (chckbxAddSumColumn == null) {
 			chckbxAddSumColumn = new JCheckBox(LocalizationData.get("BudgetPanel.sumColumn.checkBox")); //$NON-NLS-1$
-			chckbxAddSumColumn.setSelected(true);
+			chckbxAddSumColumn.setSelected(false);
 			chckbxAddSumColumn.setToolTipText(LocalizationData.get("BudgetPanel.sumColumn.checkBox.tooltip")); //$NON-NLS-1$
-			chckbxAddSumColumn.setVisible(false);
+			chckbxAddSumColumn.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					((BudgetTableModel)getJTable().getModel()).setHasSumColumn(chckbxAddSumColumn.isSelected());
+				}
+			});
 		}
 		return chckbxAddSumColumn;
 	}
 	private JCheckBox getChckbxAddSumLine() {
 		if (chckbxAddSumLine == null) {
 			chckbxAddSumLine = new JCheckBox(LocalizationData.get("BudgetPanel.sumLine.checkBox")); //$NON-NLS-1$
-			chckbxAddSumLine.setSelected(true);
+			chckbxAddSumLine.setSelected(false);
 			chckbxAddSumLine.setToolTipText(LocalizationData.get("BudgetPanel.sumLine.checkBox.tooltip")); //$NON-NLS-1$
-			chckbxAddSumLine.setVisible(false);
+			chckbxAddSumLine.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					((BudgetTableModel)getJTable().getModel()).setHasSumLine(chckbxAddSumLine.isSelected());
+					rowHeaderModel.setHasExtraLine(chckbxAddSumLine.isSelected());
+				}
+			});
 		}
 		return chckbxAddSumLine;
 	}

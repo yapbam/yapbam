@@ -14,6 +14,8 @@ import net.yapbam.gui.LocalizationData;
 @SuppressWarnings("serial")
 class BudgetTableModel extends AbstractTableModel {
 	private BudgetView budget;
+	private boolean hasExtraLine;
+	private boolean hasExtraColumn;
 
 	BudgetTableModel (BudgetView budget) {
 		this.budget = budget;
@@ -27,26 +29,31 @@ class BudgetTableModel extends AbstractTableModel {
 	
 	@Override
 	public int getColumnCount() {
-		return this.budget.getDatesSize();
+		int count = this.budget.getDatesSize();
+		if (hasExtraColumn) count++;
+		return count;
 	}
 
 	@Override
 	public int getRowCount() {
-		return this.budget.getCategoriesSize();
+		int count = this.budget.getCategoriesSize();
+		if (hasExtraLine) count++;
+		return count;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Double value;
+		boolean isSumColumn = (columnIndex==budget.getDatesSize());
 		if (rowIndex==this.budget.getCategoriesSize()) { // If this is the date sums line
-			if (columnIndex<this.budget.getDatesSize()) { // If this is a date column
+			if (isSumColumn) { // If this is a date column
 				value = this.budget.getSum(this.budget.getDate(columnIndex));
 			} else { // If this is another column
-				value = 0.0; //TODO
+				value = null; //TODO
 			}
-		} else if (columnIndex>=this.budget.getDatesSize()) {
+		} else if (isSumColumn) { // If this is the category sum column
 			Category category = this.budget.getCategory(rowIndex);
-			value = isSumColumn(columnIndex)?budget.getSum(category):budget.getAverage(category);
+			value = budget.getSum(category);
 		} else {
 			Date date = this.budget.getDate(columnIndex);
 			Category category = this.budget.getCategory(rowIndex);
@@ -54,16 +61,6 @@ class BudgetTableModel extends AbstractTableModel {
 		}
 		return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value);
 	}
-	
-	private boolean isSumColumn(int columnIndex) {
-		//TODO
-		return columnIndex==budget.getDatesSize();
-	}
-
-//	private boolean isAverageColumn(int columnIndex) {
-//		//TODO
-//		return columnIndex==budget.getDatesSize()+1;
-//	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -75,10 +72,22 @@ class BudgetTableModel extends AbstractTableModel {
 			//TODO It would be better to have a localized version for this formatter ...
 			// but I can't find how to do that (simple with the day, but not documented without)
 			return new SimpleDateFormat("yyyy/MM").format(date);
-		} else if (isSumColumn(column)) {
-			return LocalizationData.get("BudgetPanel.sum");
 		} else {
-			return LocalizationData.get("BudgetPanel.average");
+			return LocalizationData.get("BudgetPanel.sum");
+		}
+	}
+	
+	public void setHasSumLine(boolean hasExtraLine) {
+		if (hasExtraLine!=this.hasExtraLine) {
+			this.hasExtraLine = hasExtraLine;
+			fireTableStructureChanged();
+		}
+	}
+	
+	public void setHasSumColumn(boolean hasExtraColumn) {
+		if (hasExtraColumn!=this.hasExtraColumn) {
+			this.hasExtraColumn = hasExtraColumn;
+			fireTableStructureChanged();
 		}
 	}
 }

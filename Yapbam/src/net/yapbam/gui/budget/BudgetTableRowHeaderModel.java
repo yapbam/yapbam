@@ -9,7 +9,8 @@ import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 class BudgetTableRowHeaderModel extends AbstractTableModel {
-	BudgetView budget;
+	private BudgetView budget;
+	private boolean hasExtraLine;
 	
 	BudgetTableRowHeaderModel(BudgetView budget) {
 		super();
@@ -29,7 +30,9 @@ class BudgetTableRowHeaderModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return budget.getCategoriesSize();
+		int count = budget.getCategoriesSize();
+		if (hasExtraLine) count++;
+		return count;
 	}
 
 	@Override
@@ -40,10 +43,11 @@ class BudgetTableRowHeaderModel extends AbstractTableModel {
 			return budget.getCategory(rowIndex).getName();
 		}
 	}
-/*
-	@Override
-	public String getColumnName(int column) {
-		return "";
+	
+	public void setHasExtraLine(boolean hasExtraLine) {
+		if (this.hasExtraLine!=hasExtraLine) {
+			this.hasExtraLine = hasExtraLine;
+			fireTableStructureChanged();
+		}
 	}
-*/
 }
