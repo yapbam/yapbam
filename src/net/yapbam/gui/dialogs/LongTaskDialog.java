@@ -16,9 +16,9 @@ import net.yapbam.gui.LocalizationData;
  * So, instead of displaying immediately the dialog, we wait a little. If the long task completes during this time, the dialog is not displayed
  * (of course, the done method of the swingWorker is invoked).
  * <br>Once it is displayed, it remains visible for a minimum time (to prevent a flash effect if the search completes just after the pop up delay).
- * @see #
  */
 public abstract class LongTaskDialog<T,V> extends AbstractDialog<T,V> {
+//TODO Should be refactored to use A-JLib JobFrame
 	private static final long DEFAULT_DELAY = 500;
 	private static final int MINIMUM_TIME_VISIBLE = 1000;
 	
