@@ -250,7 +250,7 @@ class SubtransactionListPanel extends JPanel {
 	private PredefinedDescriptionComputer predefinedDescriptionComputer;
 	private void setPredefinedDescriptions(SubTransactionDialog dialog) {
 		if (predefinedDescriptionComputer!=null) dialog.setPredefined(predefinedDescriptionComputer.getPredefined(),
-				predefinedDescriptionComputer.getGroupSizes());
+				predefinedDescriptionComputer.getUnsortedSize());
 	}
 	public void setPredefinedDescriptionComputer(PredefinedDescriptionComputer predefinedDescriptionComputer) {
 		this.predefinedDescriptionComputer = predefinedDescriptionComputer;

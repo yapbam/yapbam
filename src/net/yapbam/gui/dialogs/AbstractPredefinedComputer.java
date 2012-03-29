@@ -25,10 +25,10 @@ abstract class AbstractPredefinedComputer implements PredefinedDescriptionComput
 
 	@Override
 	/** Gets the groups sizes.
-	 * @return null by default.
+	 * @return 3 by default.
 	 */
-	public int[] getGroupSizes() {
-		return null;
+	public int getUnsortedSize() {
+		return 3;
 	}
 
 	@Override

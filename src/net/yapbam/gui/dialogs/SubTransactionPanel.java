@@ -239,7 +239,7 @@ public class SubTransactionPanel extends JPanel {
 		this.categoryPanel.set(category);
 	}
 	
-	public void setPredefined(String[] predefined, int[] groupSizes) {
-		this.getDescriptionField().setPredefined(predefined, groupSizes);
+	public void setPredefined(String[] predefined, int unsortedSize) {
+		this.getDescriptionField().setPredefined(predefined, unsortedSize);
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,53"
