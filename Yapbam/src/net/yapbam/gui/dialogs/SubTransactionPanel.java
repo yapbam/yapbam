@@ -6,11 +6,11 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
 import net.astesana.ajlib.swing.widget.CurrencyWidget;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.PopupTextFieldList;
 
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
@@ -26,7 +26,7 @@ public class SubTransactionPanel extends JPanel {
 	private static final String CATEGORY_PROPERTY = "category"; //$NON-NLS-1$
 	
 	private JLabel jLabel = null;
-	private PopupTextFieldList descriptionField = null;
+	private TextWidget descriptionField = null;
 	private JLabel jLabel1 = null;
 	private CurrencyWidget amountField = null;
 	private CategoryWidget categoryPanel = null;
@@ -109,7 +109,7 @@ public class SubTransactionPanel extends JPanel {
 		this.add(jLabel2, gridBagConstraints11);
 		this.add(getJCheckBox(), gridBagConstraints12);
 		
-		descriptionField.addPropertyChangeListener(PopupTextFieldList.TEXT_PROPERTY, new PropertyChangeListener() {
+		descriptionField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				SubTransactionPanel.this.firePropertyChange(DESCRIPTION_PROPERTY, evt.getOldValue(), evt.getNewValue());
@@ -133,12 +133,12 @@ public class SubTransactionPanel extends JPanel {
 	 * This method initializes descriptionField	
 	 * @return javax.swing.JTextField	
 	 */
-	private PopupTextFieldList getDescriptionField() {
+	private TextWidget getDescriptionField() {
 		if (descriptionField == null) {
-			descriptionField = new PopupTextFieldList();
+			descriptionField = new TextWidget();
 			descriptionField.setToolTipText(LocalizationData.get("SubTransactionDialog.description.tooltip")); //$NON-NLS-1$
 			descriptionField.setColumns(50);
-			descriptionField.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
+			descriptionField.addPropertyChangeListener(TextWidget.PREDEFINED_VALUE, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if ((updater!=null) && (evt.getNewValue()!=null)) {

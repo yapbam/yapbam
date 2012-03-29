@@ -20,6 +20,7 @@ import javax.swing.*;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.swing.widget.ComboBox;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.*;
@@ -28,7 +29,6 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.PopupTextFieldList;
 
 /** This dialog allows to create or edit a transaction */
 public abstract class AbstractTransactionDialog<V> extends AbstractDialog<FilteredData, V> {
@@ -37,7 +37,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 	protected int selectedAccount;
 	private JComboBox accounts;
-	protected PopupTextFieldList description;
+	protected TextWidget description;
 	protected JTextField comment;
 	protected CurrencyWidget amount;
 	protected JCheckBox receipt;
@@ -170,9 +170,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(panel, c);
 		c = new GridBagConstraints();
-		description = new PopupTextFieldList();
+		description = new TextWidget();
 		description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
-		description.addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
+		description.addPropertyChangeListener(TextWidget.PREDEFINED_VALUE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getNewValue()!=null) predefinedDescriptionSelected((String) evt.getNewValue());

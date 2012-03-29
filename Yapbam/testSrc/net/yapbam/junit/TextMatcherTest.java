@@ -2,7 +2,7 @@ package net.yapbam.junit;
 
 import static org.junit.Assert.*;
 
-import net.yapbam.util.TextMatcher;
+import net.astesana.ajlib.utilities.TextMatcher;
 
 import org.junit.Test;
 
