@@ -56,7 +56,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	
 	protected void setPredefinedDescriptionComputer(PredefinedDescriptionComputer pdc) {
 		this.pdc = pdc;
-		if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getGroupSizes());
+		if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
@@ -344,7 +344,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 					selectedAccount = index;
 					if (DEBUG) System.out.println("Account " + selectedAccount + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
 					buildModes(isExpense());
-					if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getGroupSizes());
+					if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
 				}
 			} else {
 				Account ac = AccountDialog.open(data.getGlobalData(), AbstractTransactionDialog.this, null);
