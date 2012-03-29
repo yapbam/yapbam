@@ -2,7 +2,6 @@ package net.yapbam.popup;
 
 import java.awt.GridBagLayout;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -12,14 +11,14 @@ import java.util.HashSet;
 
 import javax.swing.JTextField;
 
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.GlobalData;
-import net.yapbam.gui.widget.PopupTextFieldList;
 
 public class TestPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel jLabel = null;
-	private PopupTextFieldList field1 = null;
+	private TextWidget field1 = null;
 	private JLabel jLabel1 = null;
 	private JTextField jTextField = null;
 	private JLabel jLabel2 = null;
@@ -75,7 +74,7 @@ public class TestPanel extends JPanel {
 		this.add(jLabel1, gridBagConstraints2);
 		this.add(getJTextField(), gridBagConstraints3);
 		this.add(jLabel2, gridBagConstraints11);
-		getField1().addPropertyChangeListener(PopupTextFieldList.PREDEFINED_VALUE, new PropertyChangeListener() {
+		getField1().addPropertyChangeListener(TextWidget.PREDEFINED_VALUE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				System.out.println (evt.getPropertyName()+" : "+evt.getOldValue()+" -> "+evt.getNewValue());
@@ -88,9 +87,9 @@ public class TestPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.popup.PopupTextFieldList	
 	 */
-	private PopupTextFieldList getField1() {
+	private TextWidget getField1() {
 		if (field1 == null) {
-			field1 = new PopupTextFieldList();
+			field1 = new TextWidget();
 		}
 		return field1;
 	}

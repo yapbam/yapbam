@@ -1,29 +1,17 @@
 package net.yapbam.gui.widget;
 
-import java.util.Vector;
-
 import javax.swing.JList;
 import javax.swing.ListModel;
 
 @SuppressWarnings("serial")
 /** A JList that auto scrolls when its selected index is programaticaly changed. */
-public class AutoScrollJList extends JList {
+public class AutoScrollJList<E> extends JList<E> {
 	public AutoScrollJList() {
 		super();
 		setAutoscrolls(true);
 	}
 
-	public AutoScrollJList(Object[] listData) {
-		super(listData);
-		setAutoscrolls(true);
-	}
-
-	public AutoScrollJList(Vector<?> listData) {
-		super(listData);
-		setAutoscrolls(true);
-	}
-
-	public AutoScrollJList(ListModel model) {
+	public AutoScrollJList(ListModel<E> model) {
 		super(model);
 		setAutoscrolls(true);
 	}
