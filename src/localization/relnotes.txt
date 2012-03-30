@@ -5,7 +5,7 @@ known
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
 
-version	0.10.0 (03/27/2012)
+version	0.10.0 (03/30/2012)
 improvement
 	The budget view can now have sum column and line.
 
