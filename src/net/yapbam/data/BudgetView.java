@@ -32,7 +32,8 @@ public class BudgetView extends DefaultListenable {
 	private Calendar lastDate;
 	private List<Category> categories;
 	private HashMap<Category, Double> categoryToSum;
-	private HashMap<Date, Double> dateToSum;	
+	private HashMap<Date, Double> dateToSum;
+	private double sum;	
 	
 	private static final class Key {
 		Date date;
@@ -183,7 +184,7 @@ public class BudgetView extends DefaultListenable {
 	 * @param locale The locale to use to export the dates and numbers
 	 * @throws IOException
 	 */
-	public void export(File file, char columnSeparator, Locale locale) throws IOException {
+	public void export(File file, char columnSeparator, Locale locale, String dateSumWording, String categorySumWording) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
 		try {
 			// Output header line
@@ -191,6 +192,10 @@ public class BudgetView extends DefaultListenable {
 			for (int i = 0; i < getDatesSize(); i++) {
 				out.append(columnSeparator);
 				out.append(dateFormater.format(getDate(i)));
+			}
+			if (categorySumWording!=null) {
+				out.append(columnSeparator);
+				out.append(categorySumWording);
 			}
 			// Output category lines
 			NumberFormat currencyFormatter = NumberFormat.getInstance(locale);
@@ -205,6 +210,31 @@ public class BudgetView extends DefaultListenable {
 				for (int j = 0; j < getDatesSize(); j++) {
 					out.append(columnSeparator);
 					Double value = values.get(new Key(getDate(j), category));
+					if (value!=null) {
+						out.append(currencyFormatter.format(value));
+					}
+				}
+				if (categorySumWording!=null) {
+					out.append(columnSeparator);
+					Double value = getSum(category);
+					if (value!=null) {
+						out.append(currencyFormatter.format(value));
+					}
+				}
+			}
+			if (dateSumWording!=null) {
+				out.newLine();
+				out.append(dateSumWording);
+				for (int j = 0; j < getDatesSize(); j++) {
+					out.append(columnSeparator);
+					Double value = getSum(getDate(j));
+					if (value!=null) {
+						out.append(currencyFormatter.format(value));
+					}
+				}
+				if (categorySumWording!=null) {
+					out.append(columnSeparator);
+					Double value = getSum();
 					if (value!=null) {
 						out.append(currencyFormatter.format(value));
 					}
@@ -259,6 +289,7 @@ public class BudgetView extends DefaultListenable {
 		this.firstDate = null;
 		this.lastDate = null;
 		this.categories = new LinkedList<Category>();
+		this.sum = 0.0;
 		
 		for (int i = 0; i < data.getTransactionsNumber(); i++) {
 			Transaction transaction = data.getTransaction(i);
@@ -267,10 +298,12 @@ public class BudgetView extends DefaultListenable {
 				SubTransaction subTransaction = transaction.getSubTransaction(j);
 				if (this.data.isOk(subTransaction)) {
 					add (new Key(date, subTransaction.getCategory()), subTransaction.getAmount());
+					this.sum = this.sum + subTransaction.getAmount();
 				}
 			}
 			if (this.data.isComplementOk(transaction)) {
 				add (new Key(date, transaction.getCategory()), transaction.getComplement());
+				this.sum = this.sum + transaction.getComplement();
 			}
 		}
 	}
@@ -314,5 +347,12 @@ public class BudgetView extends DefaultListenable {
 		c.set(Calendar.DAY_OF_MONTH, 1);
 		if (year) c.set(Calendar.MONTH, 0);
 		return c.getTime();
+	}
+	
+	/** Gets the sum of all amounts contained in this view.
+	 * @return a Double
+	 */
+	public Double getSum() {
+		return this.sum;
 	}
 }

@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.ajlib.swing.table.RowHeaderRenderer;
 import net.astesana.ajlib.swing.table.Table;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
@@ -201,7 +202,9 @@ public class BudgetViewPanel extends JPanel {
 					File result = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {
 						try {
-							budget.export(result, '\t', LocalizationData.getLocale());
+							String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null;
+							String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null;
+							budget.export(result, '\t', LocalizationData.getLocale(), sumLineName, sumColumnName);
 						} catch (IOException e1) {
 							ErrorManager.INSTANCE.display(BudgetViewPanel.this, e1);
 						}
@@ -231,6 +234,7 @@ public class BudgetViewPanel extends JPanel {
 			JTable jTable = budgetTable.getJTable();
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			jTable.getTableHeader().setReorderingAllowed(false);
+			jTable.getTableHeader().setDefaultRenderer(new HeaderRenderer(true));
 			jTable.setCellSelectionEnabled(true);
 			jTable.setDefaultRenderer(Object.class, new CellRenderer());
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -239,6 +243,7 @@ public class BudgetViewPanel extends JPanel {
 					getFilter().setEnabled(getJTable().getSelectedRowCount()>0);
 				}
 			});
+			budgetTable.getRowJTable().setDefaultRenderer(Object.class, new HeaderRenderer(false));
 		}
 		return budgetTable;
 	}
@@ -346,6 +351,25 @@ public class BudgetViewPanel extends JPanel {
 			this.setHorizontalAlignment(SwingConstants.RIGHT);
 			Font font = ((column==budget.getDatesSize()) || (row==budget.getCategoriesSize())) ? bold : plain;
 			result.setFont(font);
+			return result;
+		}
+	}
+
+	private final class HeaderRenderer extends RowHeaderRenderer {
+		private boolean centered;
+		HeaderRenderer(boolean centered) {
+			super(false);
+			this.centered = centered;
+		}
+		
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value,
+				boolean isSelected, boolean hasFocus, int row, int column) {
+			if ((column==budget.getDatesSize()) || (row==budget.getCategoriesSize())) {
+				value = "<html><b>"+value.toString()+"</b></html>";
+			}
+			Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (centered && (result instanceof JLabel)) ((JLabel)result).setHorizontalAlignment(JLabel.CENTER);
 			return result;
 		}
 	}

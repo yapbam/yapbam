@@ -49,8 +49,8 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 		if (rowIndex==this.budget.getCategoriesSize()) { // If this is the date sums line
 			if (!isSumColumn) { // If this is a date column
 				value = this.budget.getSum(this.budget.getDate(columnIndex));
-			} else { // If this is another column
-				value = null; //TODO
+			} else { // If this is sum of sums cell
+				value = budget.getSum();
 			}
 		} else if (isSumColumn) { // If this is the category sum column
 			Category category = this.budget.getCategory(rowIndex);
