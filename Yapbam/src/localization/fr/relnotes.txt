@@ -5,7 +5,7 @@ known
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 
-version	0.10.0 (27/03/2012)
+version	0.10.0 (30/03/2012)
 improvement
 	La vue budgétaire peut à présent présenter une ligne et/ou une colonne de totaux.
 
