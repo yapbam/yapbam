@@ -16,6 +16,7 @@ import java.awt.GridLayout;
 import net.yapbam.data.GlobalData;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import net.yapbam.gui.dialogs.SubtransactionListPanel;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -40,6 +41,7 @@ public class TransferPanel extends JPanel {
 			updateOkDisabledCause();
 		}
 	};
+	private SubtransactionListPanel panel_1;
 	
 	/**
 	 * Create the panel.
@@ -52,6 +54,8 @@ public class TransferPanel extends JPanel {
 
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout.columnWeights = new double[]{1.0};
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_upperPane = new GridBagConstraints();
 		gbc_upperPane.insets = new Insets(0, 0, 5, 0);
@@ -61,7 +65,13 @@ public class TransferPanel extends JPanel {
 		gbc_upperPane.gridx = 0;
 		gbc_upperPane.gridy = 0;
 		add(getUpperPane(), gbc_upperPane);
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 2;
+		add(getPanel_1(), gbc_panel_1);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.gridwidth = 0;
 		gbc_panel.weighty = 1.0;
 		gbc_panel.weightx = 1.0;
@@ -189,4 +199,10 @@ public class TransferPanel extends JPanel {
 		}
 	}
 
+	private SubtransactionListPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new SubtransactionListPanel((GlobalData) null);
+		}
+		return panel_1;
+	}
 }

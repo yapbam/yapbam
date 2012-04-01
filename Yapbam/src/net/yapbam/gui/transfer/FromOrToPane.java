@@ -155,10 +155,6 @@ public class FromOrToPane extends JPanel {
 		return modeWidget;
 	}
 
-	private void doModeChanges() {
-		System.out.println ("Mode: "+getModeWidget().get()); //TODO
-	}
-
 	public Account getAccount() {
 		return getAccountWidget().get();
 	}
@@ -199,5 +195,9 @@ public class FromOrToPane extends JPanel {
 			statementField.setColumns(10);
 		}
 		return statementField;
+	}
+
+	private void doModeChanges() {
+		System.out.println ("Mode: "+getModeWidget().get()); //TODO
 	}
 }

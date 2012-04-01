@@ -41,10 +41,12 @@ public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 	protected void populateCombo() {
 		if (getParameters()!=null) {
 			Account account = getParameters().getAccount();
-			for (int i = 0; i < account.getModesNumber(); i++) {
-				Mode mode = account.getMode(i);
-				DateStepper ds = getParameters().isExpense()?mode.getExpenseVdc():mode.getReceiptVdc();
-				if (ds!=null)	getCombo().addItem(mode);
+			if (account!=null) {
+				for (int i = 0; i < account.getModesNumber(); i++) {
+					Mode mode = account.getMode(i);
+					DateStepper ds = getParameters().isExpense()?mode.getExpenseVdc():mode.getReceiptVdc();
+					if (ds!=null)	getCombo().addItem(mode);
+				}
 			}
 		}
 	}

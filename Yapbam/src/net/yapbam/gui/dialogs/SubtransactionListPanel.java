@@ -37,7 +37,7 @@ import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.transactiontable.SubTransactionsTableModel;
 
-class SubtransactionListPanel extends JPanel {
+public class SubtransactionListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String SUM_PROPERTY = "sum"; //$NON-NLS-1$
