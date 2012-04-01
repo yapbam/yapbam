@@ -41,7 +41,7 @@ public class TransferPanel extends JPanel {
 			updateOkDisabledCause();
 		}
 	};
-	private SubtransactionListPanel panel_1;
+	private SubtransactionListPanel subTransactionsPanel;
 	
 	/**
 	 * Create the panel.
@@ -65,11 +65,11 @@ public class TransferPanel extends JPanel {
 		gbc_upperPane.gridx = 0;
 		gbc_upperPane.gridy = 0;
 		add(getUpperPane(), gbc_upperPane);
-		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
-		gbc_panel_1.gridx = 0;
-		gbc_panel_1.gridy = 2;
-		add(getPanel_1(), gbc_panel_1);
+		GridBagConstraints gbc_subTransactionsPanel = new GridBagConstraints();
+		gbc_subTransactionsPanel.fill = GridBagConstraints.BOTH;
+		gbc_subTransactionsPanel.gridx = 0;
+		gbc_subTransactionsPanel.gridy = 2;
+		add(getSubTransactionsPanel(), gbc_subTransactionsPanel);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.gridwidth = 0;
@@ -199,10 +199,10 @@ public class TransferPanel extends JPanel {
 		}
 	}
 
-	private SubtransactionListPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new SubtransactionListPanel((GlobalData) null);
+	private SubtransactionListPanel getSubTransactionsPanel() {
+		if (subTransactionsPanel == null) {
+			subTransactionsPanel = new SubtransactionListPanel((GlobalData) null);
 		}
-		return panel_1;
+		return subTransactionsPanel;
 	}
 }

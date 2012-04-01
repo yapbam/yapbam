@@ -3,7 +3,13 @@ version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 improvement
+	Adds a new dialog to enter transfers between accounts
 	Yapbam is able to automatically save your data to a disk or a ftp server.
+
+version	0.10.1 (04/02/2012)
+fix
+	Removes the backup preference tab (backup are not yet implemented)
+	An error occurred when validating the "Transaction editing" preferences while the customized automatic statement id field contained an invalid pattern. 
 
 version	0.10.0 (03/30/2012)
 improvement

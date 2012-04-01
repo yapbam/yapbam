@@ -322,10 +322,9 @@ public class TransactionEditingPanel extends PreferencePanel {
 	@Override
 	public boolean updatePreferences() {
 		SimpleDateFormat format = null;
-		if (rdbtnCustomized.isSelected()) {
+		format = rdbtnLongStyle.isSelected()?LONG_FORMAT:SHORT_FORMAT;
+		if (chckbxAutoFillStatement.isSelected() && rdbtnCustomized.isSelected()) {
 			format = new SimpleDateFormat(formatPatternField.getText(), LocalizationData.getLocale());
-		} else {
-			format = rdbtnLongStyle.isSelected()?LONG_FORMAT:SHORT_FORMAT;
 		}
 		Preferences.INSTANCE.setEditingOptions(new EditingOptions(chckbxAskMeOnDelete.isSelected(), chckbxAlertMeIf.isSelected(),
 						rdbtnDupDateCurrent.isSelected(), chckbxAutoFillStatement.isSelected(), rdbtnBasedOnDate.isSelected(), format));
