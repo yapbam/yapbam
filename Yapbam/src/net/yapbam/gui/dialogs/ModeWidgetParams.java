@@ -8,6 +8,13 @@ public class ModeWidgetParams {
 	private Account account;
 	private boolean isExpense;
 	
+	public ModeWidgetParams(GlobalData data, Account account, boolean isExpense) {
+		super();
+		this.data = data;
+		this.account = account;
+		this.isExpense = isExpense;
+	}
+
 	public GlobalData getGlobalData() {
 		return data;
 	}
@@ -18,5 +25,9 @@ public class ModeWidgetParams {
 	
 	public boolean isExpense() {
 		return isExpense;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 }

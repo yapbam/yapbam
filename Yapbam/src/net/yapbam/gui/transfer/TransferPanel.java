@@ -112,7 +112,7 @@ public class TransferPanel extends JPanel {
 	}
 	private FromOrToPane getFromPane() {
 		if (fromPane == null) {
-			fromPane = new FromOrToPane(data);
+			fromPane = new FromOrToPane(data, true);
 			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			fromPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 		}
@@ -120,7 +120,7 @@ public class TransferPanel extends JPanel {
 	}
 	private FromOrToPane getToPane() {
 		if (toPane == null) {
-			toPane = new FromOrToPane(data);
+			toPane = new FromOrToPane(data, false);
 			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			toPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 		}
