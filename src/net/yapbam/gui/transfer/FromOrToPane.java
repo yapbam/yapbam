@@ -6,6 +6,8 @@ import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Mode;
+import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AccountWidget;
 import net.yapbam.gui.dialogs.ModeWidgetParams;
@@ -198,6 +200,10 @@ public class FromOrToPane extends JPanel {
 	}
 
 	private void doModeChanges() {
-		System.out.println ("Mode: "+getModeWidget().get()); //TODO
+		Mode mode = getModeWidget().get();
+		System.out.println ("Mode: "+mode); //TODO
+		//TODO setTransactionNumberWidget();
+		DateStepper vdc = from ? mode.getExpenseVdc() : mode.getReceiptVdc();
+		//TODO if ((vdc!=null) && (date.getDate()!=null)) defDate.setDate(vdc.getNextStep(date.getDate()));
 	}
 }
