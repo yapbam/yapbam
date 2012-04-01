@@ -2,6 +2,7 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 
@@ -55,7 +56,8 @@ public class Mode implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		return this.getName().equals(((Mode)obj).getName());
+		if (obj==null) return false;
+		return NullUtils.areEquals(this.getName(),((Mode)obj).getName());
 	}
 
 	@Override

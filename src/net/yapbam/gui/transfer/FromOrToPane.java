@@ -34,11 +34,13 @@ public class FromOrToPane extends JPanel {
 	private DateWidget valueDateField;
 	private JLabel lblStatement;
 	private TextWidget statementField;
+	private boolean from;
 
 	/**
 	 * Create the panel.
 	 */
-	public FromOrToPane(GlobalData data) {
+	public FromOrToPane(GlobalData data, boolean from) {
+		this.from = from;
 		this.data = data;
 		initialize();
 	}
@@ -122,6 +124,9 @@ public class FromOrToPane extends JPanel {
 			accountWidget.addPropertyChangeListener(AccountWidget.ACCOUNT_PROPERTY, new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
 					firePropertyChange(ACCOUNT_PROPERTY, evt.getOldValue(), evt.getNewValue());
+					getModeWidget().getParameters().setAccount(accountWidget.get());
+					getModeWidget().refresh();
+					doModeChanges();
 				}
 			});
 		}
@@ -137,14 +142,25 @@ public class FromOrToPane extends JPanel {
 	
 	private ModeWidget getModeWidget() {
 		if (modeWidget == null) {
-			modeWidget = new ModeWidget((ModeWidgetParams) null); //TODO
+			modeWidget = new ModeWidget(new ModeWidgetParams(data, getAccount(), from));
 			modeWidget.getJLabel().setVisible(false);
+			modeWidget.addPropertyChangeListener(ModeWidget.MODE_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					doModeChanges();
+				}
+
+			});
 		}
 		return modeWidget;
 	}
 
+	private void doModeChanges() {
+		System.out.println ("Mode: "+getModeWidget().get()); //TODO
+	}
+
 	public Account getAccount() {
-		return accountWidget.get();
+		return getAccountWidget().get();
 	}
 	private JLabel getLblNumber() {
 		if (lblNumber == null) {

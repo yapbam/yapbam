@@ -62,4 +62,12 @@ public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 			return null;
 		}
 	}
+//
+//	@Override
+//	protected void setSelectionAfterRefresh(Mode old) {
+//		super.setSelectionAfterRefresh(old);
+//		if (getCombo().contains(old)) {
+//			firePropertyChange(MODE_PROPERTY, old, getCombo().getSelectedItem());
+//		}
+//	}
 }
