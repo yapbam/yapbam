@@ -46,7 +46,7 @@ import java.util.*;
  * created/updated the first time a call to convert() is made.
  * 
  * @version 1.01 2009-26-10
- * @author Thomas Knierim (modified by Jean-Marc Astesana : proxy support)
+ * @author Thomas Knierim (modified by Jean-Marc Astesana : proxy support and some bug fixes)
  * 
  */
 public final class CurrencyConverter {
@@ -237,8 +237,9 @@ public final class CurrencyConverter {
 	 */
 	private void initCacheFile() {
 		if (cacheFile == null) {
-			if (cacheFileName == null || cacheFileName.equals("")) { //$NON-NLS-1$
-				cacheFile = new File(Portable.getDataDirectory(), "ExchangeRates.xml"); //$NON-NLS-1$
+			if (cacheFileName == null || (cacheFileName.length()==0)) {
+				File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir"));
+				cacheFile = new File(folder, "ExchangeRates.xml"); //$NON-NLS-1$
 				cacheFileName = cacheFile.getAbsolutePath();
 			}
 		}

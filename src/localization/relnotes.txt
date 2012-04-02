@@ -9,8 +9,9 @@ improvement
 version	0.10.1 (04/02/2012)
 fix
 	Removes the backup preference tab (backup are not yet implemented)
-	An error occurred when validating the "Transaction editing" preferences while the customized automatic statement id field contained an invalid pattern. 
-
+	An error occurred when validating the "Transaction editing" preferences while the customized automatic statement id field contained an invalid pattern.
+	When Yapbam was installed in a write protected folder or in a folder protected by <a href="http://en.wikipedia.org/wiki/User_Account_Control">Windows UAC windows</a>, as the folder "Program files", the currency converter did not work.
+	
 version	0.10.0 (03/30/2012)
 improvement
 	The budget view can now have sum column and line.
