@@ -125,6 +125,7 @@ public class TransferPanel extends JPanel {
 			fromPane = new FromOrToPane(data, true);
 			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			fromPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
+			fromPane.setDate(getDateField().getDate());
 		}
 		return fromPane;
 	}
@@ -133,6 +134,7 @@ public class TransferPanel extends JPanel {
 			toPane = new FromOrToPane(data, false);
 			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			toPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
+			toPane.setDate(getDateField().getDate());
 		}
 		return toPane;
 	}
@@ -147,6 +149,13 @@ public class TransferPanel extends JPanel {
 			dateField = new DateWidget();
 			dateField.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
 			dateField.setColumns(10);
+			dateField.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					getFromPane().setDate(dateField.getDate());
+					getToPane().setDate(dateField.getDate());
+				}
+			});
 		}
 		return dateField;
 	}
