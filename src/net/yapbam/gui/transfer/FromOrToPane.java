@@ -16,6 +16,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Date;
 import java.awt.Insets;
 import net.yapbam.gui.dialogs.ModeWidget;
 import javax.swing.JLabel;
@@ -37,6 +38,7 @@ public class FromOrToPane extends JPanel {
 	private JLabel lblStatement;
 	private TextWidget statementField;
 	private boolean from;
+	private Date date;
 
 	/**
 	 * Create the panel.
@@ -200,10 +202,22 @@ public class FromOrToPane extends JPanel {
 	}
 
 	private void doModeChanges() {
+		setTransactionNumberWidget();
+		setValueDate();
+	}
+	
+	private void setTransactionNumberWidget() {
+		// TODO Auto-generated method stub
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+		setValueDate();
+	}
+
+	private void setValueDate() {
 		Mode mode = getModeWidget().get();
-		System.out.println ("Mode: "+mode); //TODO
-		//TODO setTransactionNumberWidget();
 		DateStepper vdc = from ? mode.getExpenseVdc() : mode.getReceiptVdc();
-		//TODO if ((vdc!=null) && (date.getDate()!=null)) defDate.setDate(vdc.getNextStep(date.getDate()));
+		if ((vdc!=null) && (date!=null)) getValueDateField().setDate(vdc.getNextStep(date));
 	}
 }
