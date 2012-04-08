@@ -16,12 +16,15 @@ import java.awt.GridLayout;
 import net.yapbam.data.GlobalData;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.text.MessageFormat;
+
 import net.yapbam.gui.dialogs.SubtransactionListPanel;
+import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause";
+	public static final String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause"; //$NON-NLS-1$
 
 	private JPanel upperPane;
 	private FromOrToPane fromPane;
@@ -125,6 +128,7 @@ public class TransferPanel extends JPanel {
 			fromPane = new FromOrToPane(data, true);
 			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			fromPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
+			fromPane.addPropertyChangeListener(FromOrToPane.VALUE_DATE_PROPERTY, listener);
 			fromPane.setDate(getDateField().getDate());
 		}
 		return fromPane;
@@ -134,6 +138,7 @@ public class TransferPanel extends JPanel {
 			toPane = new FromOrToPane(data, false);
 			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			toPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
+			toPane.addPropertyChangeListener(FromOrToPane.VALUE_DATE_PROPERTY, listener);
 			toPane.setDate(getDateField().getDate());
 		}
 		return toPane;
@@ -154,8 +159,10 @@ public class TransferPanel extends JPanel {
 				public void propertyChange(PropertyChangeEvent evt) {
 					getFromPane().setDate(dateField.getDate());
 					getToPane().setDate(dateField.getDate());
+					updateOkDisabledCause();
 				}
 			});
+			dateField.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return dateField;
 	}
@@ -168,7 +175,10 @@ public class TransferPanel extends JPanel {
 	private CurrencyWidget getAmountField() {
 		if (amountField == null) {
 			amountField = new CurrencyWidget();
+			amountField.setToolTipText("Enter the transfer amount here");
 			amountField.setColumns(10);
+			amountField.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, listener);
+			amountField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return amountField;
 	}
@@ -184,11 +194,6 @@ public class TransferPanel extends JPanel {
 	private CategoryWidget getCategoryWidget() {
 		if (categoryWidget == null) {
 			categoryWidget = new CategoryWidget(data);
-			categoryWidget.addPropertyChangeListener(CategoryWidget.CATEGORY_PROPERTY, new PropertyChangeListener() {
-				public void propertyChange(PropertyChangeEvent evt) {
-					System.out.println ("Category changed from "+evt.getOldValue()+" to "+evt.getNewValue()); //TODO
-				}
-			});
 		}
 		return categoryWidget;
 	}
@@ -200,8 +205,16 @@ public class TransferPanel extends JPanel {
 	private void updateOkDisabledCause() {
 		String old = okDisabledCause;
 		okDisabledCause = null;
-		if (getFromPane().getAccount().equals(getToPane().getAccount())) {
+		if (getDateField().getDate()==null) {
+			okDisabledCause = LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
+		} else if (getAmountField().getValue() == null) {
+			okDisabledCause = LocalizationData.get("TransactionDialog.bad.amount"); //$NON-NLS-1$
+		} else if (getFromPane().getAccountWidget().get().equals(getToPane().getAccountWidget().get())) {
 			okDisabledCause = "Both accounts are the same";
+		} else if (getFromPane().getValueDateField().getDate()==null) {
+			okDisabledCause = MessageFormat.format("The value date in the \"{0}\" panel is wrong", "from");
+		} else if (getFromPane().getValueDateField().getDate()==null) {
+			okDisabledCause = MessageFormat.format("The value date in the \"{0}\" panel is wrong", "to");
 		}
 		if (!NullUtils.areEquals(old, okDisabledCause)) {
 			firePropertyChange(OK_DISABLED_CAUSE_PROPERTY, old, okDisabledCause);

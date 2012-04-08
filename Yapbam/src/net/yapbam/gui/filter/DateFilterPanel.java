@@ -203,7 +203,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 		if (dateFrom == null) {
 			dateFrom = new DateWidget();
 			dateFrom.setToolTipText(wordings.fromTooltip);
-			dateFrom.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
+			dateFrom.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			dateFrom.addPropertyChangeListener(DateWidget.DATE_PROPERTY, consistencyChecker);
 			dateFrom.addPropertyChangeListener(DateWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 		}
@@ -219,7 +219,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 		if (dateTo == null) {
 			dateTo = new DateWidget();
 			dateTo.setToolTipText(wordings.toTooltip);
-			dateTo.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
+			dateTo.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			dateTo.addPropertyChangeListener(DateWidget.DATE_PROPERTY, consistencyChecker);
 			dateTo.addPropertyChangeListener(DateWidget.CONTENT_VALID_PROPERTY, consistencyChecker);
 		}

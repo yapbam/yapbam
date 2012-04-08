@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
-import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.date.helpers.DateStepper;
@@ -20,11 +19,14 @@ import java.util.Date;
 import java.awt.Insets;
 import net.yapbam.gui.dialogs.ModeWidget;
 import javax.swing.JLabel;
+import net.yapbam.gui.dialogs.TransactionNumberWidget;
+import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 public class FromOrToPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String ACCOUNT_PROPERTY = AccountWidget.ACCOUNT_PROPERTY;
+	public static final String VALUE_DATE_PROPERTY = "ValueDate"; //$NON-NLS-1$
 	
 	private AccountWidget accountWidget;
 	private GlobalData data;
@@ -32,7 +34,7 @@ public class FromOrToPane extends JPanel {
 	private JLabel lblAccount;
 	private JLabel lblMode;
 	private JLabel lblNumber;
-	private TextWidget numberField;
+	private TransactionNumberWidget numberField;
 	private JLabel lblDateVal;
 	private DateWidget valueDateField;
 	private JLabel lblStatement;
@@ -116,12 +118,12 @@ public class FromOrToPane extends JPanel {
 
 	private JLabel getLblAccount() {
 		if (lblAccount == null) {
-			lblAccount = new JLabel(LocalizationData.get("AccountDialog.account"));
+			lblAccount = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
 		}
 		return lblAccount;
 	}
 
-	private AccountWidget getAccountWidget() {
+	public AccountWidget getAccountWidget() {
 		if (accountWidget == null) {
 			accountWidget = new AccountWidget(data);
 			accountWidget.getJLabel().setVisible(false);
@@ -139,14 +141,14 @@ public class FromOrToPane extends JPanel {
 	
 	private JLabel getLblMode() {
 		if (lblMode == null) {
-			lblMode = new JLabel(LocalizationData.get("TransactionDialog.mode"));
+			lblMode = new JLabel(LocalizationData.get("TransactionDialog.mode")); //$NON-NLS-1$
 		}
 		return lblMode;
 	}
 	
-	private ModeWidget getModeWidget() {
+	public ModeWidget getModeWidget() {
 		if (modeWidget == null) {
-			modeWidget = new ModeWidget(new ModeWidgetParams(data, getAccount(), from));
+			modeWidget = new ModeWidget(new ModeWidgetParams(data, getAccountWidget().get(), from));
 			modeWidget.getJLabel().setVisible(false);
 			modeWidget.addPropertyChangeListener(ModeWidget.MODE_PROPERTY, new PropertyChangeListener() {
 				@Override
@@ -159,57 +161,57 @@ public class FromOrToPane extends JPanel {
 		return modeWidget;
 	}
 
-	public Account getAccount() {
-		return getAccountWidget().get();
-	}
 	private JLabel getLblNumber() {
 		if (lblNumber == null) {
-			lblNumber = new JLabel(LocalizationData.get("TransactionDialog.number"));
+			lblNumber = new JLabel(LocalizationData.get("TransactionDialog.number")); //$NON-NLS-1$
 		}
 		return lblNumber;
 	}
-	private TextWidget getNumberField() {
+	public TransactionNumberWidget getNumberField() {
 		if (numberField == null) {
-			numberField = new TextWidget();
-			numberField.setColumns(10);
+			numberField = new TransactionNumberWidget();
 		}
 		return numberField;
 	}
 	private JLabel getLblDateVal() {
 		if (lblDateVal == null) {
-			lblDateVal = new JLabel(LocalizationData.get("TransactionDialog.valueDate"));
+			lblDateVal = new JLabel(LocalizationData.get("TransactionDialog.valueDate")); //$NON-NLS-1$
 		}
 		return lblDateVal;
 	}
-	private DateWidget getValueDateField() {
+	public DateWidget getValueDateField() {
 		if (valueDateField == null) {
 			valueDateField = new DateWidget();
+			valueDateField.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
+			valueDateField.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent evt) {
+					firePropertyChange(VALUE_DATE_PROPERTY, evt.getOldValue(), evt.getNewValue());
+				}
+			});
+			valueDateField.setToolTipText("blabla todo");
 		}
 		return valueDateField;
 	}
 	private JLabel getLblStatement() {
 		if (lblStatement == null) {
-			lblStatement = new JLabel(LocalizationData.get("TransactionDialog.statement"));
+			lblStatement = new JLabel(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 		}
 		return lblStatement;
 	}
-	private TextWidget getStatementField() {
+	public TextWidget getStatementField() {
 		if (statementField == null) {
 			statementField = new TextWidget();
 			statementField.setColumns(10);
+			statementField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return statementField;
 	}
 
 	private void doModeChanges() {
-		setTransactionNumberWidget();
+		getNumberField().set(data, getAccountWidget().get(), getModeWidget().get(), from);
 		setValueDate();
 	}
 	
-	private void setTransactionNumberWidget() {
-		// TODO Auto-generated method stub
-	}
-
 	public void setDate(Date date) {
 		this.date = date;
 		setValueDate();

@@ -23,7 +23,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 
-public class CheckNumberPanel extends JPanel {
+public class CheckNumberWidget extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final String NUMBER_PROPERTY = "Number"; // @jve:decl-index=0:
 
@@ -37,7 +37,7 @@ public class CheckNumberPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public CheckNumberPanel() {
+	public CheckNumberWidget() {
 		super();
 		initialize();
 	}
