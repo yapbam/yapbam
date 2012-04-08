@@ -113,7 +113,7 @@ public class CheckModePanel extends JPanel {
 				refreshOk();
 			}
 		});
-		valueDate.getDateWidget().addFocusListener(AutoSelectFocusListener.INSTANCE);
+		valueDate.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
 		valueDateLabel.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {

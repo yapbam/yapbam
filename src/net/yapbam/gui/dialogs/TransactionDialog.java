@@ -33,7 +33,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 
 	private DateWidget date;
 	private JTextField transactionNumber;
-	private CheckNumberPanel checkNumber;
+	private CheckNumberWidget checkNumber;
 	private DateWidget defDate;
 	private JTextField statement;
 	private boolean checkNumberIsVisible;
@@ -241,7 +241,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		defDate = new DateWidget();
 		defDate.setLocale(LocalizationData.getLocale());
 		defDate.setToolTipText(LocalizationData.get("TransactionDialog.valueDate.tooltip")); //$NON-NLS-1$
-		defDate.getDateWidget().addFocusListener(focusListener);
+		defDate.getDateField().addFocusListener(focusListener);
 		defDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -272,8 +272,8 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		transactionNumber.setToolTipText(LocalizationData.get("TransactionDialog.number.tooltip")); //$NON-NLS-1$
 		transactionNumber.addFocusListener(focusListener);
 
-		checkNumber = new CheckNumberPanel();
-		checkNumber.addPropertyChangeListener(CheckNumberPanel.NUMBER_PROPERTY, new PropertyChangeListener() {
+		checkNumber = new CheckNumberWidget();
+		checkNumber.addPropertyChangeListener(CheckNumberWidget.NUMBER_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				transactionNumber.setText(checkNumber.getNumber());
@@ -298,7 +298,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		date = new DateWidget();
 		date.setLocale(LocalizationData.getLocale());
 		date.setToolTipText(LocalizationData.get("TransactionDialog.date.tooltip")); //$NON-NLS-1$
-		date.getDateWidget().addFocusListener(focusListener);
+		date.getDateField().addFocusListener(focusListener);
 		date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
