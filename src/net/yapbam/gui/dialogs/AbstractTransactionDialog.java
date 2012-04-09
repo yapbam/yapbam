@@ -107,9 +107,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	 */
 	protected double getAmount() {
 		double amount = this.amount.getValue()!=null?Math.abs(this.amount.getValue()):0.0;
-		// Beware of null value, a null expense should be considered as a receipt,
+		// Beware of zero value, a zero expense should be considered as a receipt,
 		// because expenses and receipts have not the same modes available.
-		// We will transform null value into very, very, very small non null values.
+		// We will transform zero value into very, very, very small non zero values.
 		if (amount==0) {
 			amount=Double.MIN_VALUE;
 		}
@@ -261,7 +261,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		});
 		centerPane.add(subtransactionsPanel, c);
 
-		amount.setValue(new Double(0));
+		amount.setValue(0.0);
 		return centerPane;
 	}
 

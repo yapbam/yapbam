@@ -46,6 +46,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		return String.class;
 	}
 
+	@Override
 	public int getColumnCount() {
 		return descriptionSettings.isCommentSeparatedFromDescription()?11:10;
 	}
@@ -66,10 +67,12 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		return "?"; //$NON-NLS-1$
 	}
 
+	@Override
 	public int getRowCount() {
 		return data.getTransactionsNumber();
 	}
 	
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		boolean spread = isSpread(rowIndex);
 		if (dateFormater==null) {
@@ -141,6 +144,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		return false;
 	}
 
+	@Override
 	public void processEvent(DataEvent event) {
 		if (event instanceof EverythingChangedEvent) {
 			this.clearSpreadData();

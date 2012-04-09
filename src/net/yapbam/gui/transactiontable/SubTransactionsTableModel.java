@@ -27,6 +27,7 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 		return String.class;
 	}
 
+	@Override
 	public int getColumnCount() {
 		return 3;
 	}
@@ -39,10 +40,12 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 		return "?"; //$NON-NLS-1$
 	}
 
+	@Override
 	public int getRowCount() {
 		return this.subTransactions.size();
 	}
 
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		SubTransaction st = this.subTransactions.get(rowIndex);
 		if (columnIndex==0) return st.getDescription();

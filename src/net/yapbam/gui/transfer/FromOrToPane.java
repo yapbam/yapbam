@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
+import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.date.helpers.DateStepper;
@@ -128,6 +129,7 @@ public class FromOrToPane extends JPanel {
 			accountWidget = new AccountWidget(data);
 			accountWidget.getJLabel().setVisible(false);
 			accountWidget.addPropertyChangeListener(AccountWidget.ACCOUNT_PROPERTY, new PropertyChangeListener() {
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					firePropertyChange(ACCOUNT_PROPERTY, evt.getOldValue(), evt.getNewValue());
 					getModeWidget().getParameters().setAccount(accountWidget.get());
@@ -184,11 +186,11 @@ public class FromOrToPane extends JPanel {
 			valueDateField = new DateWidget();
 			valueDateField.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			valueDateField.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					firePropertyChange(VALUE_DATE_PROPERTY, evt.getOldValue(), evt.getNewValue());
 				}
 			});
-			valueDateField.setToolTipText("blabla todo");
 		}
 		return valueDateField;
 	}
@@ -202,6 +204,7 @@ public class FromOrToPane extends JPanel {
 		if (statementField == null) {
 			statementField = new TextWidget();
 			statementField.setColumns(10);
+			statementField.setToolTipText(LocalizationData.get("TransactionDialog.statement.tooltip")); //$NON-NLS-1$
 			statementField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
 		return statementField;
@@ -221,5 +224,9 @@ public class FromOrToPane extends JPanel {
 		Mode mode = getModeWidget().get();
 		DateStepper vdc = from ? mode.getExpenseVdc() : mode.getReceiptVdc();
 		if ((vdc!=null) && (date!=null)) getValueDateField().setDate(vdc.getNextStep(date));
+	}
+
+	public void setAccount(Account account) {
+		getAccountWidget().set(account);
 	}
 }

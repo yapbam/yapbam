@@ -55,6 +55,7 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		});
 	}
 
+	@Override
 	public Transaction getSelectedTransaction() {
 		int index = getSelectedRow();
 		return index < 0 ? null : data.getTransaction(this.convertRowIndexToModel(index));
@@ -64,6 +65,7 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		return data.getGlobalData();
 	}
 	
+	@Override
 	public FilteredData getFilteredData() {
 		return data;
 	}

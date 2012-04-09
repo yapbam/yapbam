@@ -161,6 +161,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jButton.setText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor")); //$NON-NLS-1$
 			jButton.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor.tooltip")); //$NON-NLS-1$
 			jButton.addActionListener(new java.awt.event.ActionListener() {
+				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Color c = localizedColorChooser();
 					if (c!=null) {
@@ -183,6 +184,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jButton1.setText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor")); //$NON-NLS-1$
 			jButton1.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.changeColor.tooltip")); //$NON-NLS-1$
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
+				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Color c = localizedColorChooser();
 					if (c!=null) {
@@ -205,6 +207,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			setTodefault.setText(LocalizationData.get("MainFrame.Transactions.Preferences.setDefault")); //$NON-NLS-1$
 			setTodefault.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.setDefault.tooltip")); //$NON-NLS-1$
 			setTodefault.addActionListener(new java.awt.event.ActionListener() {
+				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					negativeBalanceReport.setForeground(DEFAULT_NEGATIVE);
 					positiveBalanceReport.setForeground(DEFAULT_POSITIVE);

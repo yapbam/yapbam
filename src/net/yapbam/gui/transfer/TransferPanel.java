@@ -61,7 +61,7 @@ public class TransferPanel extends JPanel {
 		gridBagLayout.columnWeights = new double[]{1.0};
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_upperPane = new GridBagConstraints();
-		gbc_upperPane.insets = new Insets(0, 0, 5, 0);
+		gbc_upperPane.insets = new Insets(0, 5, 0, 5);
 		gbc_upperPane.weightx = 1.0;
 		gbc_upperPane.fill = GridBagConstraints.HORIZONTAL;
 		gbc_upperPane.anchor = GridBagConstraints.NORTHWEST;
@@ -96,19 +96,19 @@ public class TransferPanel extends JPanel {
 			gbc_dateLabel.gridy = 0;
 			upperPane.add(getDateLabel(), gbc_dateLabel);
 			GridBagConstraints gbc_dateField = new GridBagConstraints();
-			gbc_dateField.insets = new Insets(0, 0, 5, 5);
+			gbc_dateField.insets = new Insets(0, 0, 0, 5);
 			gbc_dateField.gridx = 1;
 			gbc_dateField.gridy = 0;
 			upperPane.add(getDateField(), gbc_dateField);
 			GridBagConstraints gbc_amountLabel = new GridBagConstraints();
-			gbc_amountLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_amountLabel.insets = new Insets(0, 5, 0, 5);
 			gbc_amountLabel.anchor = GridBagConstraints.EAST;
 			gbc_amountLabel.gridx = 2;
 			gbc_amountLabel.gridy = 0;
 			upperPane.add(getAmountLabel(), gbc_amountLabel);
 			GridBagConstraints gbc_amountField = new GridBagConstraints();
 			gbc_amountField.anchor = GridBagConstraints.WEST;
-			gbc_amountField.insets = new Insets(0, 0, 5, 0);
+			gbc_amountField.insets = new Insets(0, 0, 0, 5);
 			gbc_amountField.gridx = 3;
 			gbc_amountField.gridy = 0;
 			upperPane.add(getAmountField(), gbc_amountField);
@@ -116,7 +116,6 @@ public class TransferPanel extends JPanel {
 			gbc_categoryWidget.weightx = 1.0;
 			gbc_categoryWidget.fill = GridBagConstraints.HORIZONTAL;
 			gbc_categoryWidget.gridwidth = 0;
-			gbc_categoryWidget.insets = new Insets(0, 0, 0, 5);
 			gbc_categoryWidget.gridx = 4;
 			gbc_categoryWidget.gridy = 0;
 			upperPane.add(getCategoryWidget(), gbc_categoryWidget);
@@ -126,6 +125,8 @@ public class TransferPanel extends JPanel {
 	private FromOrToPane getFromPane() {
 		if (fromPane == null) {
 			fromPane = new FromOrToPane(data, true);
+			fromPane.getAccountWidget().setToolTipText("Sélectionnez le compte de départ dans ce menu");
+			fromPane.getValueDateField().setToolTipText("Entrez ici la date de valeur pour le compte de départ");
 			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			fromPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 			fromPane.addPropertyChangeListener(FromOrToPane.VALUE_DATE_PROPERTY, listener);
@@ -136,6 +137,9 @@ public class TransferPanel extends JPanel {
 	private FromOrToPane getToPane() {
 		if (toPane == null) {
 			toPane = new FromOrToPane(data, false);
+			if ((data!=null) && (data.getAccountsNumber()>1)) toPane.setAccount(data.getAccount(1));
+			toPane.getAccountWidget().setToolTipText("Sélectionnez le compte de d'arrivée dans ce menu");
+			toPane.getValueDateField().setToolTipText("Entrez ici la date de valeur pour le compte d'arrivée");
 			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
 			toPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 			toPane.addPropertyChangeListener(FromOrToPane.VALUE_DATE_PROPERTY, listener);
@@ -177,6 +181,7 @@ public class TransferPanel extends JPanel {
 			amountField = new CurrencyWidget();
 			amountField.setToolTipText("Enter the transfer amount here");
 			amountField.setColumns(10);
+			amountField.setValue(0.0);
 			amountField.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, listener);
 			amountField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		}
@@ -209,6 +214,8 @@ public class TransferPanel extends JPanel {
 			okDisabledCause = LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
 		} else if (getAmountField().getValue() == null) {
 			okDisabledCause = LocalizationData.get("TransactionDialog.bad.amount"); //$NON-NLS-1$
+		} else if (GlobalData.AMOUNT_COMPARATOR.compare(getAmountField().getValue(),0.0)==0) {
+			okDisabledCause = "The transfer's amount can't be null";
 		} else if (getFromPane().getAccountWidget().get().equals(getToPane().getAccountWidget().get())) {
 			okDisabledCause = "Both accounts are the same";
 		} else if (getFromPane().getValueDateField().getDate()==null) {
@@ -223,7 +230,20 @@ public class TransferPanel extends JPanel {
 
 	private SubtransactionListPanel getSubTransactionsPanel() {
 		if (subTransactionsPanel == null) {
-			subTransactionsPanel = new SubtransactionListPanel((GlobalData) null);
+			subTransactionsPanel = new SubtransactionListPanel(data);
+			subTransactionsPanel.addPropertyChangeListener(SubtransactionListPanel.SUM_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					if ((getAmountField().getValue() != null) && subTransactionsPanel.isAddToTransactionSelected()) {
+						double diff = (Double) evt.getNewValue() - (Double) evt.getOldValue();
+						double newValue = getAmountField().getValue() + diff;
+						if (newValue < 0) {
+							newValue = -newValue;
+						}
+						getAmountField().setValue(newValue);
+					}
+				}
+			});
 		}
 		return subTransactionsPanel;
 	}
