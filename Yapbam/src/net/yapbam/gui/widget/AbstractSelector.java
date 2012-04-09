@@ -22,6 +22,7 @@ public abstract class AbstractSelector<T,V> extends net.astesana.ajlib.swing.wid
 		super(parameters);
 	}
 	
+	@Override
 	protected Icon getNewButtonIcon() {
 		return IconManager.NEW_ACCOUNT;
 	}
