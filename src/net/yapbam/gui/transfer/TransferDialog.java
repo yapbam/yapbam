@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Transaction;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 public class TransferDialog extends AbstractDialog<GlobalData, Boolean> {
@@ -26,8 +27,10 @@ public class TransferDialog extends AbstractDialog<GlobalData, Boolean> {
 
 	@Override
 	protected Boolean buildResult() {
-		// TODO Auto-generated method stub
-		return null;
+		//TODO
+		Transaction[] transactions = new Transaction[0];
+		data.add(transactions);
+		return Boolean.TRUE;
 	}
 
 	@Override

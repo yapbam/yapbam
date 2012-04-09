@@ -16,7 +16,7 @@ public class TransferPlugin extends AbstractPlugIn {
 	@Override
 	public JMenuItem[] getMenuItem(int part) {
 		if (part==ACCOUNTS_PART) {
-			return new JMenuItem[] {null, new JMenuItem(new TransferAction(this.data))};
+			return new JMenuItem[] {null, new JMenuItem(new NewTransferAction(this.data))};
 		} else {
 			return null;
 		}
