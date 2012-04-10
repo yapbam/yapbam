@@ -243,7 +243,6 @@ public class BudgetViewPanel extends JPanel {
 					getFilter().setEnabled(getJTable().getSelectedRowCount()>0);
 				}
 			});
-			budgetTable.getRowJTable().setDefaultRenderer(Object.class, new HeaderRenderer(false));
 		}
 		return budgetTable;
 	}
@@ -358,7 +357,6 @@ public class BudgetViewPanel extends JPanel {
 	private final class HeaderRenderer extends RowHeaderRenderer {
 		private boolean centered;
 		HeaderRenderer(boolean centered) {
-			super(false);
 			this.centered = centered;
 		}
 		
