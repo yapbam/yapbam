@@ -11,7 +11,6 @@ import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.PreferencePanel;
-import net.yapbam.gui.dialogs.preferences.backup.BackupPanel;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 		tabbedPane = new JTabbedPane();
 		this.panels = new ArrayList<PreferencePanel>();
 		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(data),
-				new TransactionEditingPanel(), new ProxyPanel(), new AutoUpdatePanel(), new ReportErrorPanel(), new RestoreStatePanel()/*, new BackupPanel()*/})); //0.11.0
+				new TransactionEditingPanel(), new ProxyPanel(), new AutoUpdatePanel(), new ReportErrorPanel(), new RestoreStatePanel()}));
 		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
 			PreferencePanel preferencePanel = data.getPlugIn(i).getPreferencePanel();
 			if (preferencePanel!=null) this.panels.add(preferencePanel) ;

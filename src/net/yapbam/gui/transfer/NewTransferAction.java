@@ -17,7 +17,7 @@ public class NewTransferAction extends AbstractAction {
 	private GlobalData data;
 	
 	NewTransferAction(GlobalData data) {
-		super("New transfer");
+		super(LocalizationData.get("TransferDialog.menu")); //$NON-NLS-1$
 		this.data = data;
 	}
 
@@ -25,10 +25,10 @@ public class NewTransferAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		while (data.getAccountsNumber()<2) {
 			// Need to create two accounts first
-			Account account = AccountDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), "Creating a transfer requires at least two accounts");
+			Account account = AccountDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
 			if (account == null) return;
 		}
-		TransferDialog dialog = new TransferDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), "New transfer", data);
+		TransferDialog dialog = new TransferDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
 		dialog.setVisible(true);
 		if (dialog.getResult()!=null) {
 			System.out.println ("validated"); //TODO

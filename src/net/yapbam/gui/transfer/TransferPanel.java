@@ -125,9 +125,9 @@ public class TransferPanel extends JPanel {
 	private FromOrToPane getFromPane() {
 		if (fromPane == null) {
 			fromPane = new FromOrToPane(data, true);
-			fromPane.getAccountWidget().setToolTipText("Sélectionnez le compte de départ dans ce menu");
-			fromPane.getValueDateField().setToolTipText("Entrez ici la date de valeur pour le compte de départ");
-			fromPane.setBorder(new TitledBorder(null, "From", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
+			fromPane.getAccountWidget().setToolTipText(LocalizationData.get("TransferDialog.from.account.tooltip")); //$NON-NLS-1$
+			fromPane.getValueDateField().setToolTipText(LocalizationData.get("TransferDialog.from.valueDate.tooltip")); //$NON-NLS-1$
+			fromPane.setBorder(new TitledBorder(null, LocalizationData.get("TransferDialog.from.title"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null)); //$NON-NLS-1$
 			fromPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 			fromPane.addPropertyChangeListener(FromOrToPane.VALUE_DATE_PROPERTY, listener);
 			fromPane.setDate(getDateField().getDate());
@@ -138,9 +138,9 @@ public class TransferPanel extends JPanel {
 		if (toPane == null) {
 			toPane = new FromOrToPane(data, false);
 			if ((data!=null) && (data.getAccountsNumber()>1)) toPane.setAccount(data.getAccount(1));
-			toPane.getAccountWidget().setToolTipText("Sélectionnez le compte de d'arrivée dans ce menu");
-			toPane.getValueDateField().setToolTipText("Entrez ici la date de valeur pour le compte d'arrivée");
-			toPane.setBorder(new TitledBorder(null, "to", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
+			toPane.getAccountWidget().setToolTipText(LocalizationData.get("TransferDialog.to.account.tooltip")); //$NON-NLS-1$
+			toPane.getValueDateField().setToolTipText(LocalizationData.get("TransferDialog.to.valueDate.tooltip")); //$NON-NLS-1$
+			toPane.setBorder(new TitledBorder(null, LocalizationData.get("TransferDialog.to.title"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null)); //$NON-NLS-1$
 			toPane.addPropertyChangeListener(FromOrToPane.ACCOUNT_PROPERTY, listener);
 			toPane.addPropertyChangeListener(FromOrToPane.VALUE_DATE_PROPERTY, listener);
 			toPane.setDate(getDateField().getDate());
@@ -179,7 +179,7 @@ public class TransferPanel extends JPanel {
 	private CurrencyWidget getAmountField() {
 		if (amountField == null) {
 			amountField = new CurrencyWidget();
-			amountField.setToolTipText("Enter the transfer amount here");
+			amountField.setToolTipText(LocalizationData.get("TransferDialog.amount")); //$NON-NLS-1$
 			amountField.setColumns(10);
 			amountField.setValue(0.0);
 			amountField.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, listener);
@@ -214,14 +214,14 @@ public class TransferPanel extends JPanel {
 			okDisabledCause = LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
 		} else if (getAmountField().getValue() == null) {
 			okDisabledCause = LocalizationData.get("TransactionDialog.bad.amount"); //$NON-NLS-1$
-		} else if (GlobalData.AMOUNT_COMPARATOR.compare(getAmountField().getValue(),0.0)==0) {
-			okDisabledCause = "The transfer's amount can't be null";
+		} else if (GlobalData.AMOUNT_COMPARATOR.compare(getAmountField().getValue(),0.0)<=0) {
+			okDisabledCause = LocalizationData.get("TransferDialog.error.amountIsNotPositive"); //$NON-NLS-1$
 		} else if (getFromPane().getAccountWidget().get().equals(getToPane().getAccountWidget().get())) {
-			okDisabledCause = "Both accounts are the same";
+			okDisabledCause = LocalizationData.get("TransferDialog.error.accountAreEquals"); //$NON-NLS-1$
 		} else if (getFromPane().getValueDateField().getDate()==null) {
-			okDisabledCause = MessageFormat.format("The value date in the \"{0}\" panel is wrong", "from");
-		} else if (getFromPane().getValueDateField().getDate()==null) {
-			okDisabledCause = MessageFormat.format("The value date in the \"{0}\" panel is wrong", "to");
+			okDisabledCause = MessageFormat.format(LocalizationData.get("TransferDialog.errorValueDate"), LocalizationData.get("TransferDialog.from.title")); //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (getToPane().getValueDateField().getDate()==null) {
+			okDisabledCause = MessageFormat.format(LocalizationData.get("TransferDialog.errorValueDate"), LocalizationData.get("TransferDialog.to.title")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (!NullUtils.areEquals(old, okDisabledCause)) {
 			firePropertyChange(OK_DISABLED_CAUSE_PROPERTY, old, okDisabledCause);
@@ -237,9 +237,6 @@ public class TransferPanel extends JPanel {
 					if ((getAmountField().getValue() != null) && subTransactionsPanel.isAddToTransactionSelected()) {
 						double diff = (Double) evt.getNewValue() - (Double) evt.getOldValue();
 						double newValue = getAmountField().getValue() + diff;
-						if (newValue < 0) {
-							newValue = -newValue;
-						}
 						getAmountField().setValue(newValue);
 					}
 				}

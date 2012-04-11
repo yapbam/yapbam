@@ -40,6 +40,7 @@ import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
 import net.yapbam.util.PreferencesUtils;
+import net.yapbam.util.StringUtils;
 
 /** This class represents the Yapbam application preferences */
 public class Preferences {
@@ -385,11 +386,16 @@ public class Preferences {
 		// Load plugin under development
 		String testedPlugin = System.getProperty("testedPlugin.className"); //$NON-NLS-1$
 		if (testedPlugin!=null) {
-			try {
-				Class<? extends AbstractPlugIn> pClass = (Class<? extends AbstractPlugIn>) Class.forName(testedPlugin);
-				plugins.add(new PlugInContainer(pClass));
-			} catch (Exception e) {
-				ErrorManager.INSTANCE.display(null, e, "Unable to load the plugin "+testedPlugin); //$NON-NLS-1$
+			String[] testedPlugins = StringUtils.split(testedPlugin, ',');
+			for (String className : testedPlugins) {
+				if (className.length()!=0) {
+					try {
+						Class<? extends AbstractPlugIn> pClass = (Class<? extends AbstractPlugIn>) Class.forName(className);
+						plugins.add(new PlugInContainer(pClass));
+					} catch (Exception e) {
+						ErrorManager.INSTANCE.display(null, e, "Unable to load the plugin "+className); //$NON-NLS-1$
+					}
+				}
 			}
 		}
 		return plugins.toArray(new PlugInContainer[plugins.size()]);
