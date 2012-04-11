@@ -6,19 +6,24 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
-import javax.swing.JLabel;
 import java.awt.Insets;
 
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.table.AbstractTableModel;
+
 import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JTable;
+import javax.swing.border.LineBorder;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class TransactionsPreferencePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +35,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JButton setTodefault = null;
 	private JPanel jPanel1 = null;
 	private JCheckBox separeCommentChkBx;
-	private JLabel jLabel1 = null;
 	
 	private boolean initialSeparateCommentState;
 	
@@ -39,6 +43,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	static String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
 	static Color DEFAULT_POSITIVE = new Color(0,200,0);
 	static Color DEFAULT_NEGATIVE = Color.RED;
+	private JTable table;
+	private JCheckBox chckBxCustomBackground;
 		
 	/**
 	 * This is the default constructor
@@ -60,17 +66,25 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 		gridBagConstraints6.gridx = 0;
 		gridBagConstraints6.fill = GridBagConstraints.BOTH;
-		gridBagConstraints6.weighty = 1.0D;
 		gridBagConstraints6.weightx = 1.0D;
-		gridBagConstraints6.gridy = 1;
+		gridBagConstraints6.gridy = 0;
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+		gridBagConstraints4.insets = new Insets(5, 0, 5, 0);
 		gridBagConstraints4.gridx = 0;
 		gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints4.anchor = GridBagConstraints.NORTH;
 		gridBagConstraints4.weightx = 1.0D;
-		gridBagConstraints4.gridy = 0;
+		gridBagConstraints4.gridy = 1;
 		this.setLayout(new GridBagLayout());
 		this.add(getJPanel(), gridBagConstraints4);
+		GridBagConstraints gbc_setTodefault = new GridBagConstraints();
+		gbc_setTodefault.anchor = GridBagConstraints.SOUTHEAST;
+		gbc_setTodefault.weighty = 1.0;
+		gbc_setTodefault.weightx = 1.0;
+		gbc_setTodefault.insets = new Insets(0, 0, 5, 5);
+		gbc_setTodefault.gridx = 0;
+		gbc_setTodefault.gridy = 2;
+		add(getSetTodefault(), gbc_setTodefault);
 		this.add(getJPanel1(), gridBagConstraints6);
 	}
 
@@ -107,24 +121,21 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
-			gridBagConstraints61.gridx = 2;
-			gridBagConstraints61.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints61.weightx = 1.0D;
-			gridBagConstraints61.gridy = 0;
-			jLabel1 = new JLabel();
-			jLabel1.setText(""); //$NON-NLS-1$
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.anchor = GridBagConstraints.WEST;
+			gridBagConstraints3.weightx = 1.0;
 			gridBagConstraints3.gridx = 1;
-			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints3.gridy = 1;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.anchor = GridBagConstraints.WEST;
+			gridBagConstraints2.weightx = 1.0;
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints2.gridy = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints1.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			gridBagConstraints1.gridy = 1;
@@ -140,12 +151,11 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			positiveBalanceReport.setValue(100, true);
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+			jPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("MainFrame.Transactions.Preferences.balanceSummary.title"))); //$NON-NLS-1$
 			jPanel.add(positiveBalanceReport, gridBagConstraints);
 			jPanel.add(negativeBalanceReport, gridBagConstraints1);
 			jPanel.add(getJButton(), gridBagConstraints2);
 			jPanel.add(getJButton1(), gridBagConstraints3);
-			jPanel.add(jLabel1, gridBagConstraints61);
 		}
 		return jPanel;
 	}
@@ -225,26 +235,36 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
-			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
-			gbc_separeCommentChkBx.anchor = GridBagConstraints.NORTHWEST;
-			gbc_separeCommentChkBx.gridx = 0;
-			gbc_separeCommentChkBx.weightx = 1.0D;
-			gbc_separeCommentChkBx.weighty = 1.0D;
-			gbc_separeCommentChkBx.gridy = 0;
+			jPanel1 = new JPanel();
+			jPanel1.setBorder(null);
+			GridBagLayout gbl_jPanel1 = new GridBagLayout();
+			gbl_jPanel1.rowWeights = new double[]{0.0, 1.0, 0.0};
+			gbl_jPanel1.columnWeights = new double[]{1.0};
+			jPanel1.setLayout(gbl_jPanel1);
+			GridBagConstraints gbc_chckBxCustomBackground = new GridBagConstraints();
+			gbc_chckBxCustomBackground.anchor = GridBagConstraints.WEST;
+			gbc_chckBxCustomBackground.insets = new Insets(5, 5, 0, 0);
+			gbc_chckBxCustomBackground.gridx = 0;
+			gbc_chckBxCustomBackground.gridy = 0;
+			jPanel1.add(getChckBxCustomBackground(), gbc_chckBxCustomBackground);
+			GridBagConstraints gbc_table = new GridBagConstraints();
+			gbc_table.anchor = GridBagConstraints.WEST;
+			gbc_table.insets = new Insets(0, 10, 5, 10);
+			gbc_table.gridx = 0;
+			gbc_table.gridy = 1;
+			jPanel1.add(getTable(), gbc_table);
 			separeCommentChkBx = new JCheckBox();
+			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
+			gbc_separeCommentChkBx.weightx = 1.0;
+			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
+			gbc_separeCommentChkBx.gridwidth = 0;
+			gbc_separeCommentChkBx.insets = new Insets(0, 5, 0, 0);
+			gbc_separeCommentChkBx.gridx = 0;
+			gbc_separeCommentChkBx.gridy = 2;
+			jPanel1.add(separeCommentChkBx, gbc_separeCommentChkBx);
 			separeCommentChkBx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay.tooltip")); //$NON-NLS-1$
 			separeCommentChkBx.setText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay")); //$NON-NLS-1$
 			separeCommentChkBx.setSelected(initialSeparateCommentState);
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.anchor = GridBagConstraints.SOUTHEAST;
-			gridBagConstraints5.fill = GridBagConstraints.NONE;
-			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints5.gridy = 0;
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.add(getSetTodefault(), gridBagConstraints5);
-			jPanel1.add(separeCommentChkBx, gbc_separeCommentChkBx);
 		}
 		return jPanel1;
 	}
@@ -256,5 +276,75 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		//TODO probably better to have a customized panel with a BalanceReport field
 		Color c = JColorChooser.showDialog(jButton, LocalizationData.get("MainFrame.Transactions.Preferences.ChooseColorDialog.title"), BalanceReportField.POSITIVE_COLOR); //$NON-NLS-1$
 		return c;
+	}
+	
+	private JTable getTable() {
+		if (table == null) {
+			table = new JTable(new MyTableModel());
+			table.setBorder(new LineBorder(new Color(0, 0, 0)));
+			table.setDefaultRenderer(Object.class, new ObjectRenderer());
+		}
+		return table;
+	}
+	
+	@SuppressWarnings("serial")
+	class MyTableModel extends AbstractTableModel implements ColoredModel {
+
+		@Override
+		public int getRowCount() {
+			return 2;
+		}
+
+		@Override
+		public int getColumnCount() {
+			return 2;
+		}
+
+		@Override
+		public Object getValueAt(int row, int column) {
+			if (column==0) {
+				return row==0?"Expense":"Receipt";
+			} else {
+				return null;
+			}
+		}
+
+		@Override
+		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
+			if (isSelected) {
+				renderer.setBackground(table.getSelectionBackground());
+				renderer.setForeground(table.getSelectionForeground());
+			} else {
+				boolean expense = row==0;
+				renderer.setForeground(table.getForeground());
+				if (getChckBxCustomBackground().isSelected()) {
+					renderer.setBackground(expense ? GenericTransactionTableModel.CASHOUT : GenericTransactionTableModel.CASHIN);
+				} else {
+					renderer.setBackground(table.getBackground());
+				}
+			}
+		}
+
+		@Override
+		public int getAlignment(int column) {
+			return SwingConstants.CENTER;
+		}
+		
+		public void refresh() {
+			fireTableDataChanged();
+		}
+	}
+	
+	private JCheckBox getChckBxCustomBackground() {
+		if (chckBxCustomBackground == null) {
+			chckBxCustomBackground = new JCheckBox("Use custom background color");
+			chckBxCustomBackground.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					((MyTableModel)getTable().getModel()).refresh();
+				}
+			});
+			chckBxCustomBackground.setToolTipText("Check this box to have custom background colors");
+		}
+		return chckBxCustomBackground;
 	}
 }  //  @jve:decl-index=0:visual-constraint="64,14"
