@@ -238,7 +238,7 @@ public final class CurrencyConverter {
 	private void initCacheFile() {
 		if (cacheFile == null) {
 			if (cacheFileName == null || (cacheFileName.length()==0)) {
-				File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir"));
+				File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 				cacheFile = new File(folder, "ExchangeRates.xml"); //$NON-NLS-1$
 				cacheFileName = cacheFile.getAbsolutePath();
 			}

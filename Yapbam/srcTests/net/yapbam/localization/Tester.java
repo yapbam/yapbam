@@ -28,7 +28,7 @@ public class Tester {
 	}
 
 	public static void check(String name, PropertyFile pFile) {
-		System.out.println ("checking "+name);
+		System.out.println ("Checking "+name);
 		for (String key : pFile) {
 			int[] lines = pFile.getLines(key);
 			if (lines.length>1) {
@@ -50,7 +50,7 @@ public class Tester {
 		check(name, pFile);
 		for (String key : pFile) {
 			if (refFile.getLines(key).length==0) {
-				System.out.println ("  "+key+" is not in reference");
+				System.out.println ("  "+key+" is not in reference (line "+pFile.getLines(key)[0]+")");
 			}
 		}
 		for (String key : refFile) {

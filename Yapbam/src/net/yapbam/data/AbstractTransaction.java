@@ -19,7 +19,7 @@ public abstract class AbstractTransaction implements Cloneable {
 	private List<SubTransaction> subTransactions;
 	
 	private static synchronized void setId(AbstractTransaction transaction) {
-		if (currentId==Long.MAX_VALUE) throw new RuntimeException("Transaction counter has an overflow");
+		if (currentId==Long.MAX_VALUE) throw new RuntimeException("Transaction counter has an overflow"); //$NON-NLS-1$
 		transaction.id = currentId++;
 	}
 
