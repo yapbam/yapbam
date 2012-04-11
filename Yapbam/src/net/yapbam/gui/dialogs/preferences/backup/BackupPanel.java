@@ -140,7 +140,7 @@ public class BackupPanel extends PreferencePanel {
 		getChckbxBackup().setSelected(options.isEnabled());
 		getChckbxCompress().setSelected(options.isCompressed());
 		getMaxDiskField().setValue(options.getSpaceLimit());
-		if ("file".equalsIgnoreCase(options.getUri().getScheme())) {
+		if ("file".equalsIgnoreCase(options.getUri().getScheme())) { //$NON-NLS-1$
 			getDiskPanel().setFile(new File(options.getUri()));
 		} else {
 			getFtpPanel().setURI(options.getUri());
