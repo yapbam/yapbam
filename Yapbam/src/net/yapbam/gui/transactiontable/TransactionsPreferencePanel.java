@@ -22,8 +22,10 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.JLabel;
 
 public class TransactionsPreferencePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
@@ -45,6 +47,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	static Color DEFAULT_NEGATIVE = Color.RED;
 	private JTable table;
 	private JCheckBox chckBxCustomBackground;
+	private JButton btnExpense;
+	private JButton btnReceipt;
+	private JLabel lblNewLabel;
 		
 	/**
 	 * This is the default constructor
@@ -238,33 +243,56 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jPanel1 = new JPanel();
 			jPanel1.setBorder(null);
 			GridBagLayout gbl_jPanel1 = new GridBagLayout();
-			gbl_jPanel1.rowWeights = new double[]{0.0, 1.0, 0.0};
-			gbl_jPanel1.columnWeights = new double[]{1.0};
+			gbl_jPanel1.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0};
+			gbl_jPanel1.columnWeights = new double[]{1.0, 0.0, 0.0};
 			jPanel1.setLayout(gbl_jPanel1);
 			GridBagConstraints gbc_chckBxCustomBackground = new GridBagConstraints();
+			gbc_chckBxCustomBackground.gridwidth = 0;
 			gbc_chckBxCustomBackground.anchor = GridBagConstraints.WEST;
-			gbc_chckBxCustomBackground.insets = new Insets(5, 5, 0, 0);
+			gbc_chckBxCustomBackground.insets = new Insets(5, 5, 5, 0);
 			gbc_chckBxCustomBackground.gridx = 0;
 			gbc_chckBxCustomBackground.gridy = 0;
 			jPanel1.add(getChckBxCustomBackground(), gbc_chckBxCustomBackground);
 			GridBagConstraints gbc_table = new GridBagConstraints();
-			gbc_table.anchor = GridBagConstraints.WEST;
+			gbc_table.gridheight = 2;
+			gbc_table.fill = GridBagConstraints.HORIZONTAL;
+			gbc_table.weightx = 0.2;
 			gbc_table.insets = new Insets(0, 10, 5, 10);
 			gbc_table.gridx = 0;
 			gbc_table.gridy = 1;
 			jPanel1.add(getTable(), gbc_table);
+			GridBagConstraints gbc_btnReceipt = new GridBagConstraints();
+			gbc_btnReceipt.fill = GridBagConstraints.HORIZONTAL;
+			gbc_btnReceipt.anchor = GridBagConstraints.WEST;
+			gbc_btnReceipt.insets = new Insets(0, 0, 5, 0);
+			gbc_btnReceipt.gridx = 1;
+			gbc_btnReceipt.gridy = 2;
+			jPanel1.add(getBtnReceipt(), gbc_btnReceipt);
 			separeCommentChkBx = new JCheckBox();
 			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
 			gbc_separeCommentChkBx.weightx = 1.0;
 			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
 			gbc_separeCommentChkBx.gridwidth = 0;
-			gbc_separeCommentChkBx.insets = new Insets(0, 5, 0, 0);
+			gbc_separeCommentChkBx.insets = new Insets(10, 5, 10, 0);
 			gbc_separeCommentChkBx.gridx = 0;
-			gbc_separeCommentChkBx.gridy = 2;
+			gbc_separeCommentChkBx.gridy = 3;
 			jPanel1.add(separeCommentChkBx, gbc_separeCommentChkBx);
 			separeCommentChkBx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay.tooltip")); //$NON-NLS-1$
 			separeCommentChkBx.setText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay")); //$NON-NLS-1$
 			separeCommentChkBx.setSelected(initialSeparateCommentState);
+			GridBagConstraints gbc_btnExpense = new GridBagConstraints();
+			gbc_btnExpense.fill = GridBagConstraints.HORIZONTAL;
+			gbc_btnExpense.insets = new Insets(0, 0, 5, 0);
+			gbc_btnExpense.anchor = GridBagConstraints.WEST;
+			gbc_btnExpense.gridx = 1;
+			gbc_btnExpense.gridy = 1;
+			jPanel1.add(getBtnExpense(), gbc_btnExpense);
+			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.weightx = 1.0;
+			gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_lblNewLabel.gridx = 2;
+			gbc_lblNewLabel.gridy = 1;
+			jPanel1.add(getLblNewLabel(), gbc_lblNewLabel);
 		}
 		return jPanel1;
 	}
@@ -289,7 +317,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	@SuppressWarnings("serial")
 	class MyTableModel extends AbstractTableModel implements ColoredModel {
-
 		@Override
 		public int getRowCount() {
 			return 2;
@@ -297,7 +324,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 		@Override
 		public int getColumnCount() {
-			return 2;
+			return 1;
 		}
 
 		@Override
@@ -341,10 +368,34 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			chckBxCustomBackground.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					((MyTableModel)getTable().getModel()).refresh();
+					getBtnExpense().setEnabled(getChckBxCustomBackground().isSelected());
+					getBtnReceipt().setEnabled(getChckBxCustomBackground().isSelected());
 				}
 			});
 			chckBxCustomBackground.setToolTipText("Check this box to have custom background colors");
 		}
 		return chckBxCustomBackground;
+	}
+	private JButton getBtnExpense() {
+		if (btnExpense == null) {
+			btnExpense = new JButton("Change expense background");
+			btnExpense.setEnabled(false);
+			btnExpense.setToolTipText("Click this button to choose the expense background");
+		}
+		return btnExpense;
+	}
+	private JButton getBtnReceipt() {
+		if (btnReceipt == null) {
+			btnReceipt = new JButton("Change receipt background");
+			btnReceipt.setEnabled(false);
+			btnReceipt.setToolTipText("Click this button to choose the reicept background");
+		}
+		return btnReceipt;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel();
+		}
+		return lblNewLabel;
 	}
 }  //  @jve:decl-index=0:visual-constraint="64,14"
