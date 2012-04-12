@@ -7,6 +7,7 @@ import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -248,46 +249,46 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jPanel1.setBorder(null);
 			GridBagLayout gbl_jPanel1 = new GridBagLayout();
 			jPanel1.setLayout(gbl_jPanel1);
+			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
+			gbc_separeCommentChkBx.weightx = 1.0;
+			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
+			gbc_separeCommentChkBx.gridwidth = 0;
+			gbc_separeCommentChkBx.insets = new Insets(5, 5, 5, 0);
+			gbc_separeCommentChkBx.gridx = 0;
+			gbc_separeCommentChkBx.gridy = 0;
+			jPanel1.add(getSeparateCommentChkBx(), gbc_separeCommentChkBx);
 			GridBagConstraints gbc_chckBxCustomBackground = new GridBagConstraints();
 			gbc_chckBxCustomBackground.gridwidth = 0;
 			gbc_chckBxCustomBackground.anchor = GridBagConstraints.WEST;
 			gbc_chckBxCustomBackground.insets = new Insets(5, 5, 5, 0);
 			gbc_chckBxCustomBackground.gridx = 0;
-			gbc_chckBxCustomBackground.gridy = 0;
+			gbc_chckBxCustomBackground.gridy = 1;
 			jPanel1.add(getChckBxCustomBackground(), gbc_chckBxCustomBackground);
 			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 			gbc_scrollPane.gridheight = 2;
 			gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
 			gbc_scrollPane.gridx = 0;
-			gbc_scrollPane.gridy = 1;
+			gbc_scrollPane.gridy = 2;
 			jPanel1.add(getScrollPane(), gbc_scrollPane);
 			GridBagConstraints gbc_btnReceipt = new GridBagConstraints();
 			gbc_btnReceipt.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnReceipt.anchor = GridBagConstraints.WEST;
 			gbc_btnReceipt.insets = new Insets(0, 0, 5, 5);
 			gbc_btnReceipt.gridx = 1;
-			gbc_btnReceipt.gridy = 2;
+			gbc_btnReceipt.gridy = 3;
 			jPanel1.add(getBtnReceipt(), gbc_btnReceipt);
-			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
-			gbc_separeCommentChkBx.weightx = 1.0;
-			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
-			gbc_separeCommentChkBx.gridwidth = 0;
-			gbc_separeCommentChkBx.insets = new Insets(10, 5, 10, 0);
-			gbc_separeCommentChkBx.gridx = 0;
-			gbc_separeCommentChkBx.gridy = 3;
-			jPanel1.add(getSeparateCommentChkBx(), gbc_separeCommentChkBx);
 			GridBagConstraints gbc_btnExpense = new GridBagConstraints();
 			gbc_btnExpense.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnExpense.insets = new Insets(0, 0, 5, 5);
 			gbc_btnExpense.anchor = GridBagConstraints.WEST;
 			gbc_btnExpense.gridx = 1;
-			gbc_btnExpense.gridy = 1;
+			gbc_btnExpense.gridy = 2;
 			jPanel1.add(getBtnExpense(), gbc_btnExpense);
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
 			gbc_lblNewLabel.weightx = 1.0;
 			gbc_lblNewLabel.gridx = 2;
-			gbc_lblNewLabel.gridy = 1;
+			gbc_lblNewLabel.gridy = 2;
 			jPanel1.add(getLblNewLabel(), gbc_lblNewLabel);
 		}
 		return jPanel1;
@@ -321,6 +322,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		if (table == null) {
 			tableModel = new MyTableModel();
 			table = new JTable(tableModel);
+			table.setPreferredScrollableViewportSize (new Dimension(500, table.getRowCount() * table.getRowHeight()));
 			table.setDefaultRenderer(Object.class, new ObjectRenderer());
 		}
 		return table;
@@ -440,8 +442,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	}
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setViewportView(getTable());
+			scrollPane = new JScrollPane(getTable());
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		}
 		return scrollPane;
 	}
