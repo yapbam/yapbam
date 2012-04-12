@@ -21,11 +21,11 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
-import javax.swing.border.LineBorder;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 public class TransactionsPreferencePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +37,16 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JButton setTodefault = null;
 	private JPanel jPanel1 = null;
 	private JCheckBox separeCommentChkBx;
-	
+	private JTable table;
+	private JCheckBox chckBxCustomBackground;
+	private JButton btnExpense;
+	private JButton btnReceipt;
+	private JLabel lblNewLabel;
+	private JScrollPane scrollPane;
+
+	private MyTableModel tableModel;
+	private Color expenseColor = GenericTransactionTableModel.CASHOUT;
+	private Color receiptColor = GenericTransactionTableModel.CASHIN;
 	private boolean initialSeparateCommentState;
 	
 	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
@@ -45,11 +54,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	static String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
 	static Color DEFAULT_POSITIVE = new Color(0,200,0);
 	static Color DEFAULT_NEGATIVE = Color.RED;
-	private JTable table;
-	private JCheckBox chckBxCustomBackground;
-	private JButton btnExpense;
-	private JButton btnReceipt;
-	private JLabel lblNewLabel;
 		
 	/**
 	 * This is the default constructor
@@ -243,8 +247,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jPanel1 = new JPanel();
 			jPanel1.setBorder(null);
 			GridBagLayout gbl_jPanel1 = new GridBagLayout();
-			gbl_jPanel1.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0};
-			gbl_jPanel1.columnWeights = new double[]{1.0, 0.0, 0.0};
 			jPanel1.setLayout(gbl_jPanel1);
 			GridBagConstraints gbc_chckBxCustomBackground = new GridBagConstraints();
 			gbc_chckBxCustomBackground.gridwidth = 0;
@@ -253,22 +255,19 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gbc_chckBxCustomBackground.gridx = 0;
 			gbc_chckBxCustomBackground.gridy = 0;
 			jPanel1.add(getChckBxCustomBackground(), gbc_chckBxCustomBackground);
-			GridBagConstraints gbc_table = new GridBagConstraints();
-			gbc_table.gridheight = 2;
-			gbc_table.fill = GridBagConstraints.HORIZONTAL;
-			gbc_table.weightx = 0.2;
-			gbc_table.insets = new Insets(0, 10, 5, 10);
-			gbc_table.gridx = 0;
-			gbc_table.gridy = 1;
-			jPanel1.add(getTable(), gbc_table);
+			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+			gbc_scrollPane.gridheight = 2;
+			gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+			gbc_scrollPane.gridx = 0;
+			gbc_scrollPane.gridy = 1;
+			jPanel1.add(getScrollPane(), gbc_scrollPane);
 			GridBagConstraints gbc_btnReceipt = new GridBagConstraints();
 			gbc_btnReceipt.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnReceipt.anchor = GridBagConstraints.WEST;
-			gbc_btnReceipt.insets = new Insets(0, 0, 5, 0);
+			gbc_btnReceipt.insets = new Insets(0, 0, 5, 5);
 			gbc_btnReceipt.gridx = 1;
 			gbc_btnReceipt.gridy = 2;
 			jPanel1.add(getBtnReceipt(), gbc_btnReceipt);
-			separeCommentChkBx = new JCheckBox();
 			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
 			gbc_separeCommentChkBx.weightx = 1.0;
 			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
@@ -276,25 +275,37 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gbc_separeCommentChkBx.insets = new Insets(10, 5, 10, 0);
 			gbc_separeCommentChkBx.gridx = 0;
 			gbc_separeCommentChkBx.gridy = 3;
-			jPanel1.add(separeCommentChkBx, gbc_separeCommentChkBx);
-			separeCommentChkBx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay.tooltip")); //$NON-NLS-1$
-			separeCommentChkBx.setText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay")); //$NON-NLS-1$
-			separeCommentChkBx.setSelected(initialSeparateCommentState);
+			jPanel1.add(getSeparateCommentChkBx(), gbc_separeCommentChkBx);
 			GridBagConstraints gbc_btnExpense = new GridBagConstraints();
 			gbc_btnExpense.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnExpense.insets = new Insets(0, 0, 5, 0);
+			gbc_btnExpense.insets = new Insets(0, 0, 5, 5);
 			gbc_btnExpense.anchor = GridBagConstraints.WEST;
 			gbc_btnExpense.gridx = 1;
 			gbc_btnExpense.gridy = 1;
 			jPanel1.add(getBtnExpense(), gbc_btnExpense);
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
 			gbc_lblNewLabel.weightx = 1.0;
-			gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
 			gbc_lblNewLabel.gridx = 2;
 			gbc_lblNewLabel.gridy = 1;
 			jPanel1.add(getLblNewLabel(), gbc_lblNewLabel);
 		}
 		return jPanel1;
+	}
+
+	private JCheckBox getSeparateCommentChkBx() {
+		if (separeCommentChkBx == null) {
+			separeCommentChkBx = new JCheckBox();
+			separeCommentChkBx.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					tableModel.refresh();
+				}
+			});
+			separeCommentChkBx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay.tooltip")); //$NON-NLS-1$
+			separeCommentChkBx.setText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay")); //$NON-NLS-1$
+			separeCommentChkBx.setSelected(initialSeparateCommentState);
+		}
+		return separeCommentChkBx;
 	}
 
 	private Color localizedColorChooser() {
@@ -308,8 +319,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	private JTable getTable() {
 		if (table == null) {
-			table = new JTable(new MyTableModel());
-			table.setBorder(new LineBorder(new Color(0, 0, 0)));
+			tableModel = new MyTableModel();
+			table = new JTable(tableModel);
 			table.setDefaultRenderer(Object.class, new ObjectRenderer());
 		}
 		return table;
@@ -324,15 +335,17 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 		@Override
 		public int getColumnCount() {
-			return 1;
+			return getSeparateCommentChkBx().isSelected()?2:1;
 		}
 
 		@Override
 		public Object getValueAt(int row, int column) {
 			if (column==0) {
-				return row==0?"Expense":"Receipt";
+				String result = row==0?"Expense":"Receipt";
+				if (!getSeparateCommentChkBx().isSelected()) result = result+" ("+LocalizationData.get("Transaction.comment")+")";
+				return result;
 			} else {
-				return null;
+				return LocalizationData.get("Transaction.comment");
 			}
 		}
 
@@ -345,7 +358,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 				boolean expense = row==0;
 				renderer.setForeground(table.getForeground());
 				if (getChckBxCustomBackground().isSelected()) {
-					renderer.setBackground(expense ? GenericTransactionTableModel.CASHOUT : GenericTransactionTableModel.CASHIN);
+					renderer.setBackground(expense ? expenseColor : receiptColor);
 				} else {
 					renderer.setBackground(table.getBackground());
 				}
@@ -358,7 +371,14 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		}
 		
 		public void refresh() {
-			fireTableDataChanged();
+			fireTableStructureChanged();
+		}
+
+		@Override
+		public String getColumnName(int column) {
+			if (column==0) return LocalizationData.get("Transaction.description");
+			if (column==1) return LocalizationData.get("Transaction.comment");
+			return null;
 		}
 	}
 	
@@ -367,7 +387,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			chckBxCustomBackground = new JCheckBox("Use custom background color");
 			chckBxCustomBackground.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					((MyTableModel)getTable().getModel()).refresh();
+					tableModel.refresh();
 					getBtnExpense().setEnabled(getChckBxCustomBackground().isSelected());
 					getBtnReceipt().setEnabled(getChckBxCustomBackground().isSelected());
 				}
@@ -381,6 +401,16 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			btnExpense = new JButton("Change expense background");
 			btnExpense.setEnabled(false);
 			btnExpense.setToolTipText("Click this button to choose the expense background");
+			btnExpense.addActionListener(new java.awt.event.ActionListener() {
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Color c = localizedColorChooser();
+					if (c!=null) {
+						expenseColor = c;
+						tableModel.refresh();
+					}
+				}
+			});
 		}
 		return btnExpense;
 	}
@@ -389,6 +419,16 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			btnReceipt = new JButton("Change receipt background");
 			btnReceipt.setEnabled(false);
 			btnReceipt.setToolTipText("Click this button to choose the reicept background");
+			btnReceipt.addActionListener(new java.awt.event.ActionListener() {
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Color c = localizedColorChooser();
+					if (c!=null) {
+						receiptColor = c;
+						tableModel.refresh();
+					}
+				}
+			});
 		}
 		return btnReceipt;
 	}
@@ -397,5 +437,12 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			lblNewLabel = new JLabel();
 		}
 		return lblNewLabel;
+	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setViewportView(getTable());
+		}
+		return scrollPane;
 	}
 }  //  @jve:decl-index=0:visual-constraint="64,14"
