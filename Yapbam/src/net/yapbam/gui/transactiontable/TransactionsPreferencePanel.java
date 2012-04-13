@@ -53,6 +53,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
 	static String POSITIVE_KEY = "net.yapbam.balanceReport.positive"; //$NON-NLS-1$
 	static String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
+	
 	static Color DEFAULT_POSITIVE = new Color(0,200,0);
 	static Color DEFAULT_NEGATIVE = Color.RED;
 		
@@ -343,11 +344,11 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		@Override
 		public Object getValueAt(int row, int column) {
 			if (column==0) {
-				String result = row==0?"Expense":"Receipt";
-				if (!getSeparateCommentChkBx().isSelected()) result = result+" ("+LocalizationData.get("Transaction.comment")+")";
+				String result = row==0?LocalizationData.get("MainFrame.Transactions.Preferences.expenseSample"):LocalizationData.get("MainFrame.Transactions.Preferences.receiptSample"); //$NON-NLS-1$ //$NON-NLS-2$
+				if (!getSeparateCommentChkBx().isSelected()) result = result+" ("+LocalizationData.get("Transaction.comment")+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				return result;
 			} else {
-				return LocalizationData.get("Transaction.comment");
+				return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
 			}
 		}
 
@@ -378,15 +379,15 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 		@Override
 		public String getColumnName(int column) {
-			if (column==0) return LocalizationData.get("Transaction.description");
-			if (column==1) return LocalizationData.get("Transaction.comment");
+			if (column==0) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+			if (column==1) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
 			return null;
 		}
 	}
 	
 	private JCheckBox getChckBxCustomBackground() {
 		if (chckBxCustomBackground == null) {
-			chckBxCustomBackground = new JCheckBox("Use custom background color");
+			chckBxCustomBackground = new JCheckBox(LocalizationData.get("MainFrame.Transactions.Preferences.customBackground.title")); //$NON-NLS-1$
 			chckBxCustomBackground.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					tableModel.refresh();
@@ -394,15 +395,15 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 					getBtnReceipt().setEnabled(getChckBxCustomBackground().isSelected());
 				}
 			});
-			chckBxCustomBackground.setToolTipText("Check this box to have custom background colors");
+			chckBxCustomBackground.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.customBackground.tooltip")); //$NON-NLS-1$
 		}
 		return chckBxCustomBackground;
 	}
 	private JButton getBtnExpense() {
 		if (btnExpense == null) {
-			btnExpense = new JButton("Change expense background");
+			btnExpense = new JButton(LocalizationData.get("MainFrame.Transactions.Preferences.changeExpenseBackground.title")); //$NON-NLS-1$
 			btnExpense.setEnabled(false);
-			btnExpense.setToolTipText("Click this button to choose the expense background");
+			btnExpense.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.changeExpenseBackground.tooltip")); //$NON-NLS-1$
 			btnExpense.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -418,9 +419,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	}
 	private JButton getBtnReceipt() {
 		if (btnReceipt == null) {
-			btnReceipt = new JButton("Change receipt background");
+			btnReceipt = new JButton(LocalizationData.get("MainFrame.Transactions.Preferences.changeReceiptBackground.title")); //$NON-NLS-1$
 			btnReceipt.setEnabled(false);
-			btnReceipt.setToolTipText("Click this button to choose the reicept background");
+			btnReceipt.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.changeReceiptBackground.tooltip")); //$NON-NLS-1$
 			btnReceipt.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {

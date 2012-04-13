@@ -6,6 +6,11 @@ improvement
 	Adds a new dialog to enter transfers between accounts
 	Yapbam is able to automatically save your data to a disk or a ftp server.
 
+version	0.11.0 (04/13/2012)
+improvement
+	Adds an item to "Transactions" menu to create tranfers between accounts.
+	Background colors of the transaction table can now be customized.
+
 version	0.10.1 (04/02/2012)
 fix
 	Removes the backup preference tab (backup are not yet implemented)

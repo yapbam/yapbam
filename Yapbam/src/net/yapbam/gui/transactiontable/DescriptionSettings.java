@@ -25,9 +25,9 @@ public class DescriptionSettings {
 		} else {
 			StringBuilder buffer = new StringBuilder();
 			buffer.append(description);
-			buffer.append(" (");
+			buffer.append(" ("); //$NON-NLS-1$
 			buffer.append(transaction.getComment());
-			buffer.append(")");
+			buffer.append(")"); //$NON-NLS-1$
 			return buffer.toString();
 		}
 	}

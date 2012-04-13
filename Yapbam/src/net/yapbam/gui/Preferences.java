@@ -28,6 +28,7 @@ import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
+import net.yapbam.gui.dialogs.preferences.backup.BackupPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.gui.preferences.BackupOptions;
 import net.yapbam.gui.preferences.EditingOptions;
@@ -36,6 +37,7 @@ import net.yapbam.gui.statementview.StatementViewPlugin;
 import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
+import net.yapbam.gui.transfer.TransferPlugin;
 import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
@@ -360,6 +362,9 @@ public class Preferences {
 		plugins.add(new PlugInContainer(AccountsSummaryPlugin.class));
 		plugins.add(new PlugInContainer(ToolsPlugIn.class));
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
+		
+		plugins.add(new PlugInContainer(TransferPlugin.class)); //TODO
+		plugins.add(new PlugInContainer(BackupPlugin.class)); //TODO
 
 		// Load additionnal plugins
 		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$

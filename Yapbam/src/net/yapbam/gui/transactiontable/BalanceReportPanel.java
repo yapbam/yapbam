@@ -81,7 +81,7 @@ public class BalanceReportPanel extends JPanel {
 	private String getTooltip(JToggleButton button, String baseTip) {
 		StringBuilder b = new StringBuilder("<html>").append(baseTip).append("<br>"); //$NON-NLS-1$ //$NON-NLS-2$
 		JToggleButton selected = group.getSelected();
-		if ((selected!=null)&&(selected!=button)) b.append(LocalizationData.get("MainFrame.BalancePanel.Relative.ToolTip")).append("<br><br>");
+		if ((selected!=null)&&(selected!=button)) b.append(LocalizationData.get("MainFrame.BalancePanel.Relative.ToolTip")).append("<br><br>"); //$NON-NLS-1$ //$NON-NLS-2$
 		b.append(LocalizationData.get(selected==button?"MainFrame.BalancePanel.Selected.ToolTip":"MainFrame.BalancePanel.NotSelected.ToolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 		b.append("</html>"); //$NON-NLS-1$
 		return b.toString();
