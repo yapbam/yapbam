@@ -14,7 +14,7 @@ public class DateRenderer extends ObjectRenderer {
 
 	@Override
 	public void setValue(Object value) {
-		String text = value == null ? "" : SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale()).format(value);
+		String text = value == null ? "" : SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale()).format(value); //$NON-NLS-1$
 		setText(text);
 	}
 }

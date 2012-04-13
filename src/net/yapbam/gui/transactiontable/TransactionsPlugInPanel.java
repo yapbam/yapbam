@@ -52,15 +52,15 @@ public class TransactionsPlugInPanel extends JPanel {
 				deleteTransactionAction, null, new ConvertToPeriodicalTransactionAction(transactionTable) }, editTransactionAction);
        
 		final JButton newTransactionButton = new JButton(new NewTransactionAction(transactionTable.getFilteredData(),false));
-		newTransactionButton.setText(LocalizationData.get("GenericButton.new"));
+		newTransactionButton.setText(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
 		final JButton massNewTransactionButton = new JButton(new NewTransactionAction(transactionTable.getFilteredData(),true));
-		massNewTransactionButton.setText(LocalizationData.get("MainMenu.Transactions.NewMultiple"));
+		massNewTransactionButton.setText(LocalizationData.get("MainMenu.Transactions.NewMultiple")); //$NON-NLS-1$
 		final JButton editTransactionButton = new JButton(editTransactionAction);
-		editTransactionButton.setText(LocalizationData.get("GenericButton.edit"));
+		editTransactionButton.setText(LocalizationData.get("GenericButton.edit")); //$NON-NLS-1$
 		final JButton duplicateTransactionButton = new JButton(duplicateTransactionAction);
-		duplicateTransactionButton.setText(LocalizationData.get("GenericButton.duplicate"));
+		duplicateTransactionButton.setText(LocalizationData.get("GenericButton.duplicate")); //$NON-NLS-1$
 		final JButton deleteTransactionButton = new JButton(deleteTransactionAction);
-		deleteTransactionButton.setText(LocalizationData.get("GenericButton.delete"));
+		deleteTransactionButton.setText(LocalizationData.get("GenericButton.delete")); //$NON-NLS-1$
 		GridBagConstraints c = new GridBagConstraints();
 		buttons.add(newTransactionButton, c);
 		c.gridx = 1;

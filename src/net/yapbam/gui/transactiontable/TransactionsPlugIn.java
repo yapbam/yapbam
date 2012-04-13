@@ -32,8 +32,8 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 	public TransactionsPlugIn(FilteredData filteredData, Object restoreData) {
 		data = filteredData;
 		this.panel = new TransactionsPlugInPanel(data);
-		setPanelTitle(LocalizationData.get("MainFrame.Transactions"));
-		setPanelToolTip(LocalizationData.get("MainFrame.Transactions.toolTip"));
+		setPanelTitle(LocalizationData.get("MainFrame.Transactions")); //$NON-NLS-1$
+		setPanelToolTip(LocalizationData.get("MainFrame.Transactions.toolTip")); //$NON-NLS-1$
 		testAlert();
 		// Add a listener in order to be able to display an alert if some periodical transactions need to be generated
 		// We will listen to the global data because, events may not be thrown by the filtered data (for example if the
@@ -88,9 +88,9 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		//TODO Preferences may say if we want alert on all data, or just on filtered data.
 		Transaction[] transactions = data.getGlobalData().generateTransactionsFromPeriodicals(new Date());
 		String tooltip;
-		tooltip = LocalizationData.get("MainFrame.Transactions.toolTip");
+		tooltip = LocalizationData.get("MainFrame.Transactions.toolTip"); //$NON-NLS-1$
 		if (transactions.length!=0) {
-			tooltip = "<html>"+tooltip+"<br>"+LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")+"</html>";
+			tooltip = "<html>"+tooltip+"<br>"+LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 		setPanelIcon((transactions.length>0?IconManager.ALERT:null));
 		setPanelToolTip(tooltip);

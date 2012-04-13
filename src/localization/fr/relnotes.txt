@@ -6,6 +6,11 @@ improvement
 	Ajout d'un nouveau dialogue permettant la saisie de transferts entre comptes.
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 
+version	0.11.0 (13/04/2012)
+improvement
+	Ajoute un item au menu "Opérations" permettant de saisir des transferts entre comptes.
+	Les couleurs de fond de la table des opérations sont à présent paramétrables
+
 version	0.10.1 (02/04/2012)
 fix
 	Supprime le panneau de préférence des sauvegardes automatiques (qui sont encore en cours de développement).
