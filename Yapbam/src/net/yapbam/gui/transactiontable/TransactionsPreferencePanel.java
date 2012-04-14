@@ -46,8 +46,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JScrollPane scrollPane;
 
 	private MyTableModel tableModel;
-	private Color expenseColor = GenericTransactionTableModel.CASHOUT;
-	private Color receiptColor = GenericTransactionTableModel.CASHIN;
+	private Color expenseColor = GenericTransactionTableModel.CASHOUT!=null?GenericTransactionTableModel.CASHOUT:DEFAULT_CASHOUT;
+	private Color receiptColor = GenericTransactionTableModel.CASHIN!=null?GenericTransactionTableModel.CASHIN:DEFAULT_CASHIN;
 	private boolean initialSeparateCommentState;
 	
 	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
@@ -383,10 +383,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 		@Override
 		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
-			if (isSelected) {
-				renderer.setBackground(table.getSelectionBackground());
-				renderer.setForeground(table.getSelectionForeground());
-			} else {
 				boolean expense = row==0;
 				renderer.setForeground(table.getForeground());
 				if (getChckBxCustomBackground().isSelected()) {
@@ -394,7 +390,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 				} else {
 					renderer.setBackground(table.getBackground());
 				}
-			}
 		}
 
 		@Override

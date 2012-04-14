@@ -17,18 +17,18 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 	private HashSet<Long> spreadTransactionId;
 
 	private void initBackgroundColors() {
-		try {
 			if (TransactionsPreferencePanel.isCustomBackgroundColors()) { 
-				CASHIN = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY)));
-				CASHOUT = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY)));
+				try {
+					CASHIN = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY)));
+					CASHOUT = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY)));
+				} catch (Throwable e) {
+					CASHIN = TransactionsPreferencePanel.DEFAULT_CASHIN;
+					CASHOUT = TransactionsPreferencePanel.DEFAULT_CASHOUT;
+				}
 			} else {
 				CASHIN = null;
 				CASHOUT = null;
 			}
-		} catch (Throwable e) {
-			CASHIN = TransactionsPreferencePanel.DEFAULT_CASHIN;
-			CASHOUT = TransactionsPreferencePanel.DEFAULT_CASHOUT;
-		}
 	}
 	
 	protected GenericTransactionTableModel() {
