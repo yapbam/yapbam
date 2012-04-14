@@ -180,16 +180,16 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	@Override
 	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
 		super.setRowLook(renderer, table, row, isSelected);
-	    boolean isChecked = this.data.getTransaction(row).isChecked();
-    	Font font = renderer.getFont().deriveFont(isChecked ? Font.ITALIC : Font.PLAIN + Font.BOLD);
-    	renderer.setFont(font);
+		boolean isChecked = this.data.getTransaction(row).isChecked();
+		Font font = renderer.getFont().deriveFont(isChecked ? Font.ITALIC : Font.PLAIN + Font.BOLD);
+		renderer.setFont(font);
 	}
 	
 	@Override
 	public int getAlignment(int column) {
-		if (column==4) return SwingConstants.RIGHT;
-    	if ((column==1) || (column==3)) return SwingConstants.LEFT;
-    	else return SwingConstants.CENTER;
+		if (column == 4) return SwingConstants.RIGHT;
+		if ((column == 1) || (column == 3)) return SwingConstants.LEFT;
+		else return SwingConstants.CENTER;
 	}
 
 	@Override
