@@ -461,6 +461,17 @@ public class Preferences {
 		return this.properties.getProperty(key);
 	}
 
+	/** Gets a property's value.
+	 * @param key the key of the property.
+	 * @param defaultValue The default value of the property (if the key doesn't exist).
+	 * @return the property's value or its default value if the key doesn't exists.
+	 */
+	public String getProperty(String key, String defaultValue) {
+		String result = getProperty(key);
+		if (result==null) result = defaultValue;
+		return result;
+	}
+	
 	/** Removes a property.
 	 * @param key The propertyToBeRemoved
 	 */

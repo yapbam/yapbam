@@ -52,6 +52,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
 	static String POSITIVE_KEY = "net.yapbam.balanceReport.positive"; //$NON-NLS-1$
+	static String CUSTOMIZED_BACKGROUND_KEY = "net.yapbam.transactionTable.customized.background"; //$NON-NLS-1$
 	static String EXPENSE_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.expense.color"; //$NON-NLS-1$
 	static String RECEIPT_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.receipt.color"; //$NON-NLS-1$
 	static String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
@@ -72,6 +73,10 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 	public static boolean isCommentSeparatedFromDescription() {
 		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(SEPARATE_COMMENT));
+	}
+	
+	public static boolean isCustomBackgroundColors() {
+		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.CUSTOMIZED_BACKGROUND_KEY, "true"));
 	}
 
 	/**
@@ -117,8 +122,10 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	public boolean updatePreferences() {
 		Color positive = positiveBalanceReport.getForeground();
 		Color negative = negativeBalanceReport.getForeground();
+		boolean bckHasChange = (GenericTransactionTableModel.CASHIN!=null) && !(GenericTransactionTableModel.CASHIN.equals(receiptColor) && GenericTransactionTableModel.CASHOUT.equals(expenseColor));
 		if (positive.equals(BalanceReportField.POSITIVE_COLOR) && negative.equals(BalanceReportField.NEGATIVE_COLOR)
-				&& (separeCommentChkBx.isSelected()==initialSeparateCommentState)) {
+				&& (separeCommentChkBx.isSelected()==initialSeparateCommentState) &&
+				(getChckBxCustomBackground().isSelected()==(GenericTransactionTableModel.CASHIN!=null)) && !bckHasChange) {
 			return false;
 		}
 		BalanceReportField.POSITIVE_COLOR = positive;
@@ -126,6 +133,14 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.POSITIVE_KEY, Integer.toString(positive.getRGB()));
 		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.NEGATIVE_KEY, Integer.toString(negative.getRGB()));
 		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.SEPARATE_COMMENT, Boolean.toString(separeCommentChkBx.isSelected()));
+		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.CUSTOMIZED_BACKGROUND_KEY, Boolean.toString(getChckBxCustomBackground().isSelected()));
+		if (getChckBxCustomBackground().isSelected()) {
+			Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY, Integer.toString(expenseColor.getRGB()));
+			Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY, Integer.toString(receiptColor.getRGB()));
+		} else {
+			Preferences.INSTANCE.removeProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY);
+			Preferences.INSTANCE.removeProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY);
+		}
 		return true;
 	}
 
@@ -240,7 +255,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 					getChckBxCustomBackground().setSelected(true);
 					expenseColor = DEFAULT_CASHOUT;
 					receiptColor = DEFAULT_CASHIN;
-					tableModel.refresh();
+					getTableModel().refresh();
 				}
 			});
 		}
@@ -308,7 +323,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			separeCommentChkBx = new JCheckBox();
 			separeCommentChkBx.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					tableModel.refresh();
+					getTableModel().refresh();
 				}
 			});
 			separeCommentChkBx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.commentDisplay.tooltip")); //$NON-NLS-1$
@@ -329,12 +344,18 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	private JTable getTable() {
 		if (table == null) {
-			tableModel = new MyTableModel();
-			table = new JTable(tableModel);
+			table = new JTable(getTableModel());
 			table.setPreferredScrollableViewportSize (new Dimension(500, table.getRowCount() * table.getRowHeight()));
 			table.setDefaultRenderer(Object.class, new ObjectRenderer());
 		}
 		return table;
+	}
+	
+	private MyTableModel getTableModel() {
+		if (tableModel==null) {
+			tableModel = new MyTableModel();
+		}
+		return tableModel;
 	}
 	
 	@SuppressWarnings("serial")
@@ -400,11 +421,12 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			chckBxCustomBackground.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.customBackground.tooltip")); //$NON-NLS-1$
 			chckBxCustomBackground.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					tableModel.refresh();
+					getTableModel().refresh();
 					getBtnExpense().setEnabled(getChckBxCustomBackground().isSelected());
 					getBtnReceipt().setEnabled(getChckBxCustomBackground().isSelected());
 				}
 			});
+			chckBxCustomBackground.setSelected(isCustomBackgroundColors());
 		}
 		return chckBxCustomBackground;
 	}
@@ -419,7 +441,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 					Color c = localizedColorChooser();
 					if (c!=null) {
 						expenseColor = c;
-						tableModel.refresh();
+						getTableModel().refresh();
 					}
 				}
 			});
@@ -437,7 +459,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 					Color c = localizedColorChooser();
 					if (c!=null) {
 						receiptColor = c;
-						tableModel.refresh();
+						getTableModel().refresh();
 					}
 				}
 			});

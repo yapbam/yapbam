@@ -16,10 +16,15 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 	static Color CASHOUT;
 	private HashSet<Long> spreadTransactionId;
 
-	static {
+	private void initBackgroundColors() {
 		try {
-			CASHIN = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY)));
-			CASHOUT = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY)));
+			if (TransactionsPreferencePanel.isCustomBackgroundColors()) { 
+				CASHIN = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY)));
+				CASHOUT = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY)));
+			} else {
+				CASHIN = null;
+				CASHOUT = null;
+			}
 		} catch (Throwable e) {
 			CASHIN = TransactionsPreferencePanel.DEFAULT_CASHIN;
 			CASHOUT = TransactionsPreferencePanel.DEFAULT_CASHOUT;
@@ -27,6 +32,7 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 	}
 	
 	protected GenericTransactionTableModel() {
+		initBackgroundColors();
 		this.spreadTransactionId = new HashSet<Long>();
 	}
 	
@@ -36,9 +42,13 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 			renderer.setBackground(table.getSelectionBackground());
 			renderer.setForeground(table.getSelectionForeground());
 		} else {
-			boolean expense = this.getTransaction(row).getAmount() < 0;
 			renderer.setForeground(table.getForeground());
-			renderer.setBackground(expense ? CASHOUT : CASHIN);
+			if ((CASHIN!=null) && (CASHOUT!=null)) {
+				boolean expense = this.getTransaction(row).getAmount() < 0;
+				renderer.setBackground(expense ? CASHOUT : CASHIN);
+			} else {
+				renderer.setBackground(table.getBackground());
+			}
 		}
 	}
 
