@@ -52,10 +52,14 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
 	static String POSITIVE_KEY = "net.yapbam.balanceReport.positive"; //$NON-NLS-1$
+	static String EXPENSE_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.expense.color"; //$NON-NLS-1$
+	static String RECEIPT_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.receipt.color"; //$NON-NLS-1$
 	static String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
 	
-	static Color DEFAULT_POSITIVE = new Color(0,200,0);
-	static Color DEFAULT_NEGATIVE = Color.RED;
+	static final Color DEFAULT_POSITIVE = new Color(0,200,0);
+	static final Color DEFAULT_NEGATIVE = Color.RED;
+	static final Color DEFAULT_CASHIN = new Color(240,255,240);
+	static final Color DEFAULT_CASHOUT = new Color(255,240,240);
 		
 	/**
 	 * This is the default constructor
@@ -233,6 +237,10 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 					negativeBalanceReport.setForeground(DEFAULT_NEGATIVE);
 					positiveBalanceReport.setForeground(DEFAULT_POSITIVE);
 					separeCommentChkBx.setSelected(false);
+					getChckBxCustomBackground().setSelected(true);
+					expenseColor = DEFAULT_CASHOUT;
+					receiptColor = DEFAULT_CASHIN;
+					tableModel.refresh();
 				}
 			});
 		}
@@ -387,7 +395,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	private JCheckBox getChckBxCustomBackground() {
 		if (chckBxCustomBackground == null) {
-			chckBxCustomBackground = new JCheckBox(LocalizationData.get("MainFrame.Transactions.Preferences.customBackground.title")); //$NON-NLS-1$
+			chckBxCustomBackground = new JCheckBox();
+			chckBxCustomBackground.setText(LocalizationData.get("MainFrame.Transactions.Preferences.customBackground.title")); //$NON-NLS-1$
+			chckBxCustomBackground.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.customBackground.tooltip")); //$NON-NLS-1$
 			chckBxCustomBackground.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					tableModel.refresh();
@@ -395,7 +405,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 					getBtnReceipt().setEnabled(getChckBxCustomBackground().isSelected());
 				}
 			});
-			chckBxCustomBackground.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.customBackground.tooltip")); //$NON-NLS-1$
 		}
 		return chckBxCustomBackground;
 	}

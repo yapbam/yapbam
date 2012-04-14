@@ -8,13 +8,24 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
+import net.yapbam.gui.Preferences;
 
 @SuppressWarnings("serial")
 public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel, ColoredModel {
-	static Color CASHIN = new Color(240,255,240);
-	static Color CASHOUT = new Color(255,240,240);
+	static Color CASHIN;
+	static Color CASHOUT;
 	private HashSet<Long> spreadTransactionId;
 
+	static {
+		try {
+			CASHIN = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY)));
+			CASHOUT = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY)));
+		} catch (Throwable e) {
+			CASHIN = TransactionsPreferencePanel.DEFAULT_CASHIN;
+			CASHOUT = TransactionsPreferencePanel.DEFAULT_CASHOUT;
+		}
+	}
+	
 	protected GenericTransactionTableModel() {
 		this.spreadTransactionId = new HashSet<Long>();
 	}
