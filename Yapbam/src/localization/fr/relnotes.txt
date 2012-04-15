@@ -10,6 +10,8 @@ version	0.11.0 (13/04/2012)
 improvement
 	Ajoute un item au menu "Opérations" permettant de saisir des transferts entre comptes.
 	Les couleurs de fond de la table des opérations sont à présent paramétrables
+fix
+	Il était possible, dans l'onglet "Budget", de sélectionner des lignes/colonnes dans les totaux. Cliquer sur le bouton "Filtre" provoquait alors une erreur.
 
 version	0.10.1 (02/04/2012)
 fix
