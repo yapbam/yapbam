@@ -3,13 +3,9 @@ version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 improvement
-	Ajout d'un nouveau dialogue permettant la saisie de transferts entre comptes.
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
-
-version	0.11.0 (13/04/2012)
-improvement
 	Ajoute un item au menu "Opérations" permettant de saisir des transferts entre comptes.
-	Les couleurs de fond de la table des opérations sont à présent paramétrables
+	Les couleurs de fond de la table des opérations sont à présent paramétrables.
 fix
 	Il était possible, dans l'onglet "Budget", de sélectionner des lignes/colonnes dans les totaux. Cliquer sur le bouton "Filtre" provoquait alors une erreur.
 
