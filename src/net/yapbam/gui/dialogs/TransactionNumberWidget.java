@@ -72,4 +72,8 @@ public class TransactionNumberWidget extends JPanel {
 			checkNumber.setAccount(data, account);
 		}
 	}
+	
+	public String getNumber() {
+		return checkNumberIsVisible?getCheckNumberWidget().getNumber():getTransactionNumberField().getText();
+	}
 }

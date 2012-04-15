@@ -13,10 +13,16 @@ import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryWidget;
 import java.awt.GridLayout;
+
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.SubTransaction;
+import net.yapbam.data.Transaction;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.yapbam.gui.dialogs.SubtransactionListPanel;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
@@ -243,5 +249,25 @@ public class TransferPanel extends JPanel {
 			});
 		}
 		return subTransactionsPanel;
+	}
+
+	public Transaction[] getTransactions() {
+		Transaction[] result = new Transaction[2];
+		List<SubTransaction> subFrom = new ArrayList<SubTransaction>();
+		List<SubTransaction> subTo = new ArrayList<SubTransaction>();
+		for (int i = 0; i < getSubTransactionsPanel().getSubtransactionsCount(); i++) {
+			SubTransaction sub = getSubTransactionsPanel().getSubtransaction(i);
+			subTo.add(sub);
+			subFrom.add(new SubTransaction(-sub.getAmount(), sub.getDescription(), sub.getCategory()));
+		}
+		String descriptionFrom = MessageFormat.format(LocalizationData.get("TransferDialog.from.description"),getToPane().getAccountWidget().get().getName()); //$NON-NLS-1$
+		String descriptionTo = MessageFormat.format(LocalizationData.get("TransferDialog.to.description"),getFromPane().getAccountWidget().get().getName()); //$NON-NLS-1$
+		result[0] = new Transaction(getDateField().getDate(), getFromPane().getNumberField().getNumber(), descriptionFrom, null, -getAmountField().getValue(),
+				getFromPane().getAccountWidget().get(), getFromPane().getModeWidget().get(), getCategoryWidget().get(), getFromPane().getValueDateField().getDate(),
+				getFromPane().getStatementField().getText(), subFrom);
+		result[1] = new Transaction(getDateField().getDate(), getToPane().getNumberField().getNumber(), descriptionTo, null, getAmountField().getValue(),
+				getToPane().getAccountWidget().get(), getToPane().getModeWidget().get(), getCategoryWidget().get(), getToPane().getValueDateField().getDate(),
+				getToPane().getStatementField().getText(), subFrom);
+		return result;
 	}
 }

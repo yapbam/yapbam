@@ -35,6 +35,7 @@ public class Transaction extends AbstractTransaction implements Serializable {
 		super(description, comment, amount, account, mode, category, subTransactions);
 		this.date = DateUtils.dateToInteger(date);
 		this.number = number;
+		if ((number!=null) && number.trim().isEmpty()) this.number = null;
 		this.valueDate = DateUtils.dateToInteger(valueDate);
 		this.statementId = statementId;
 		if ((statementId!=null) && statementId.trim().isEmpty()) this.statementId=null;
