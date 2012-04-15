@@ -240,9 +240,14 @@ public class BudgetViewPanel extends JPanel {
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					getFilter().setEnabled(getJTable().getSelectedRowCount()>0);
+					int[] rows = getJTable().getSelectedRows();
+					int[] columns = getJTable().getSelectedColumns();
+					int[] fRows = filterSelected(rows, budget.getCategoriesSize());
+					int[] fColumns = filterSelected(columns, budget.getDatesSize());
+					getFilter().setEnabled((fRows.length>0) && (fColumns.length>0));
 				}
 			});
+			budgetTable.getRowJTable().setDefaultRenderer(Object.class, new HeaderRenderer(false));
 		}
 		return budgetTable;
 	}
@@ -264,10 +269,10 @@ public class BudgetViewPanel extends JPanel {
 			filter.setToolTipText(LocalizationData.get("BudgetPanel.filter.tooltip")); //$NON-NLS-1$
 			filter.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					int[] selectedRows = getJTable().getSelectedRows();
+					int[] selectedRows = filterSelected(getJTable().getSelectedRows(), budget.getCategoriesSize());
 					Filter theFilter = data.getFilter();
 					theFilter.setSuspended(true);
-					if (selectedRows.length!=getJTable().getRowCount()) {
+					if (selectedRows.length!=budget.getCategoriesSize()) {
 						if (selectedRows.length==data.getGlobalData().getCategoriesNumber()) {
 							theFilter.setValidCategories(null);
 						} else {
@@ -279,8 +284,8 @@ public class BudgetViewPanel extends JPanel {
 						}
 					}
 					//FIXME Unable to select discontinuous time interval in the filter
-					int[] selectedColumns = getJTable().getSelectedColumns();
-					if (selectedRows.length!=budget.getDatesSize()) {
+					int[] selectedColumns = filterSelected(getJTable().getSelectedColumns(), budget.getDatesSize());
+					if (selectedColumns.length!=budget.getDatesSize()) {
 						Date from = budget.getDate(selectedColumns[0]);
 						Date to = budget.getLastDate(selectedColumns[selectedColumns.length-1]);
 						theFilter.setDateFilter(from, to);
@@ -290,6 +295,13 @@ public class BudgetViewPanel extends JPanel {
 			});
 		}
 		return filter;
+	}
+	
+	private int[] filterSelected(int[] selected, int maxValue) {
+		if ((selected.length==0) || ((selected[selected.length-1]!=maxValue))) return selected;
+		int[] result = new int[selected.length-1];
+		System.arraycopy(selected, 0, result, 0, result.length);
+		return result;
 	}
 
 //	private JCheckBox getChckbxAdd() {
@@ -346,9 +358,11 @@ public class BudgetViewPanel extends JPanel {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected, boolean hasFocus, int row, int column) {
+			boolean extra = (column==budget.getDatesSize()) || (row==budget.getCategoriesSize());
+			if (extra) isSelected = false;
 			JLabel result = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			this.setHorizontalAlignment(SwingConstants.RIGHT);
-			Font font = ((column==budget.getDatesSize()) || (row==budget.getCategoriesSize())) ? bold : plain;
+			Font font = extra ? bold : plain;
 			result.setFont(font);
 			return result;
 		}
