@@ -30,8 +30,5 @@ public class NewTransferAction extends AbstractAction {
 		}
 		TransferDialog dialog = new TransferDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
 		dialog.setVisible(true);
-		if (dialog.getResult()!=null) {
-			System.out.println ("validated"); //TODO
-		}
 	}
 }
