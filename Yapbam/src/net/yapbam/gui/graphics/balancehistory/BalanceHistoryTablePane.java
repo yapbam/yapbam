@@ -93,7 +93,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		final JButton btnExport = new JButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
 		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new FileChooser(btnExport.getText());
+				JFileChooser chooser = new FileChooser();
 				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 				File file = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 				if (file!=null) {
