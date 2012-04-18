@@ -197,7 +197,7 @@ public class BudgetViewPanel extends JPanel {
 			export.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser chooser = new FileChooser(export.getText());
+					JFileChooser chooser = new FileChooser();
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 					File result = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {
