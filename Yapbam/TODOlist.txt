@@ -16,6 +16,4 @@ Features :
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
 
 Bugs :
-- Les transferts ne générent pas d'opérations
-- Les couleurs de fond de table des opérations saisies dans le panneau de preferences ne sont pas prises en compte
 - Les info de backup du panneau de préférénces ne sont pas prises en compte
