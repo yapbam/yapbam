@@ -203,7 +203,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Color c = localizedColorChooser();
+					Color c = localizedColorChooser(positiveBalanceReport.getForeground());
 					if (c!=null) {
 						positiveBalanceReport.setForeground(c);
 					}
@@ -226,7 +226,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Color c = localizedColorChooser();
+					Color c = localizedColorChooser(negativeBalanceReport.getForeground());
 					if (c!=null) {
 						negativeBalanceReport.setForeground(c);
 					}
@@ -333,12 +333,12 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		return separeCommentChkBx;
 	}
 
-	private Color localizedColorChooser() {
+	private Color localizedColorChooser(Color initialColor) {
 		//FIXME The JColorChooser locale is wrong, it's always the system default locale
 		//This is a JRE known bug fixed in java 7 (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6524757)
 		//TODO test with JRE 7
 		//TODO probably better to have a customized panel with a BalanceReport field
-		Color c = JColorChooser.showDialog(jButton, LocalizationData.get("MainFrame.Transactions.Preferences.ChooseColorDialog.title"), BalanceReportField.POSITIVE_COLOR); //$NON-NLS-1$
+		Color c = JColorChooser.showDialog(jButton, LocalizationData.get("MainFrame.Transactions.Preferences.ChooseColorDialog.title"), initialColor); //$NON-NLS-1$
 		return c;
 	}
 	
@@ -433,7 +433,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			btnExpense.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Color c = localizedColorChooser();
+					Color c = localizedColorChooser(expenseColor);
 					if (c!=null) {
 						expenseColor = c;
 						getTableModel().refresh();
@@ -451,7 +451,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			btnReceipt.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Color c = localizedColorChooser();
+					Color c = localizedColorChooser(receiptColor);
 					if (c!=null) {
 						receiptColor = c;
 						getTableModel().refresh();
