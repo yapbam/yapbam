@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.update;
 
 import java.awt.Window;
 import java.awt.event.WindowEvent;

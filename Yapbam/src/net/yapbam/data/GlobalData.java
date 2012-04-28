@@ -150,7 +150,10 @@ public class GlobalData extends DefaultListenable {
 	public void read(URI uri, String password) throws IOException {
 		this.setEventsEnabled(false);
 		try {
+//System.out.println ("Start reading");
+//long st = System.currentTimeMillis();
 			Serializer.read (this, uri, password);
+//System.out.println ("Reading in "+(System.currentTimeMillis()-st)+"ms");
 			this.uri = uri;
 			// We do not want the file reading results in a "modified" state for the file,
 			// even if, of course, a lot of things changed on the screen. But, the file

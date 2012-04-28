@@ -30,7 +30,7 @@
 	<target name="updater.build">
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
-		<javac srcdir="srcUpdater" sourcepath="src" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="srcUpdater" sourcepath="src;${ajlibpath}" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<copy todir="releaseCompile">
 	    	<fileset dir="srcUpdater" excludes="**/*.java"/>
 		</copy>

@@ -65,7 +65,7 @@ public final class CurrencyConverter {
 
 	/**
 	 * Returns a singleton instance of CurrencyConverter.
-	 * @param proxy The new proxy to use to get the data (Proxy.NoProxy to not use any proxy)
+	 * @param proxy The proxy to use to get the data (Proxy.NoProxy to not use any proxy)
 	 * @return CurrencyConverter instance
 	 * @throws ParseException 
 	 * @throws IOException 

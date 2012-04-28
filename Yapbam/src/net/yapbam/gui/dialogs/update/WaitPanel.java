@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.update;
 
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
