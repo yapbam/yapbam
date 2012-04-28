@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.update;
 
 import java.awt.Window;
 
@@ -80,6 +80,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		protected UpdateInformation doInBackground() throws Exception {
 			return VersionManager.getUpdateInformation();
 		}
+		
 		@Override
 		public void done() {
 			try {

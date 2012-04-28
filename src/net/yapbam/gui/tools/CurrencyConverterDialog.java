@@ -5,13 +5,14 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
-public class CurrencyConverterDialog extends AbstractDialog<Void, Void> {
+public class CurrencyConverterDialog extends AbstractDialog<CurrencyConverter, Void> {
 
-	public CurrencyConverterDialog(Window owner, String title) {
-		super(owner, title, null);
+	public CurrencyConverterDialog(Window owner, String title, CurrencyConverter converter) {
+		super(owner, title, converter);
 		this.cancelButton.setVisible(false);
 		this.okButton.setText(LocalizationData.get("GenericButton.close"));
 		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip"));
@@ -24,12 +25,11 @@ public class CurrencyConverterDialog extends AbstractDialog<Void, Void> {
 
 	@Override
 	protected JPanel createCenterPane() {
-		return new CurrencyConverterPanel();
+		return new CurrencyConverterPanel(data);
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
 		return null;
 	}
-
 }

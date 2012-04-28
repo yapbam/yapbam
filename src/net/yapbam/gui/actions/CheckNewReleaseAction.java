@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.dialogs.CheckUpdateDialog;
+import net.yapbam.gui.dialogs.update.CheckUpdateDialog;
 import net.yapbam.util.DateUtils;
 
 /** This class is in charge of checking for Yapbam updates over the Internet */

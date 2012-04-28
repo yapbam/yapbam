@@ -10,13 +10,9 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Currency;
 
-
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.currency.CurrencyConverter;
-import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 
 import javax.swing.JLabel;
 import java.awt.Insets;
@@ -44,17 +40,14 @@ public class CurrencyConverterPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public CurrencyConverterPanel() {
-		super();
-		try {
-			this.converter = CurrencyConverter.getInstance(Preferences.INSTANCE.getHttpProxy());
+	public CurrencyConverterPanel(CurrencyConverter converter) {
+		this.converter = converter;
+		if (this.converter!=null) {
 			this.codes = this.converter.getCurrencies();
 			Arrays.sort(this.codes);
-		} catch (Exception e) {
-			doError(e);
 		}
-		initialize();
 		tableModel = new CurrencyTableModel(this.converter);
+		initialize();
 		if (this.converter!=null) {
 			Currency currency = Currency.getInstance(LocalizationData.getLocale());
 			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
@@ -255,18 +248,8 @@ public class CurrencyConverterPanel extends JPanel {
 		if ((value!=null) && (codes!=null)) {
 			String from = codes[currency1.getSelectedIndex()];
 			String to = codes[currency2.getSelectedIndex()];
-			try {
-				amount2.setValue(this.converter.convert(value, from, to));
-			} catch (Exception e) {
-				doError(e);
-			}
+			amount2.setValue(this.converter.convert(value, from, to));
 		}
-	}
-
-	private void doError(Exception e) {
-		ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
-		String format = Messages.getString("CurrencyConverterPanel.errorMessage");
-		getErrField().setText(MessageFormat.format(format, e.toString())); //$NON-NLS-1$
 	}
 
 	/**
