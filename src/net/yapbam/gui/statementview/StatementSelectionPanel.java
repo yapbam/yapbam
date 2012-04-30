@@ -236,7 +236,7 @@ public class StatementSelectionPanel extends JPanel {
 	}
 
 	public Statement getSelectedStatement() {
-		if (statements==null) return null;
+		if ((statements==null) || (getStatementMenu().getSelectedIndex()<0)) return null;
 		Statement statement = statements[statements.length-1-getStatementMenu().getSelectedIndex()];
 		return statement;
 	}

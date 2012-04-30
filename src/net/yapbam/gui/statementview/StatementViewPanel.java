@@ -29,6 +29,7 @@ import net.yapbam.gui.util.JTableListener;
 import net.yapbam.util.DateUtils;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -42,6 +43,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.JSplitPane;
+import javax.swing.border.Border;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -69,7 +71,7 @@ public class StatementViewPanel extends JPanel {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		CHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(5, 13), "checked"); //$NON-NLS-1$
 		imgURL = LocalizationData.class.getResource("images/uncheckCursor.png"); //$NON-NLS-1$
-		UNCHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(6, 6), "unchecked"); //$NON-NLS-1$
+		UNCHECK_CURSOR = toolkit.createCustomCursor(toolkit.getImage(imgURL), new Point(8, 8), "unchecked"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -78,7 +80,7 @@ public class StatementViewPanel extends JPanel {
 	public StatementViewPanel(FilteredData data) {
 		this.data = data;
 		initialize();
-		setStatements();
+		setTables();
 	}
 	
 	/**
@@ -123,60 +125,14 @@ public class StatementViewPanel extends JPanel {
 			statementSelectionPanel = new StatementSelectionPanel(data);
 			statementSelectionPanel.getStatementMenu().addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setStatements();
+					if (getStatementSelectionPanel().getSelectedStatement().getId()!=null) getCheckModePanel().setSelected(false);
+					setTables();
 				}
 			});
 		}
 		return statementSelectionPanel;
 	}
 	
-	private void setStatements() {
-		Statement statement = getStatementSelectionPanel().getSelectedStatement();
-		boolean visible = statement!=null;
-		boolean checkModeAvailable = false;
-		if (visible) {
-			DecimalFormat ci = LocalizationData.getCurrencyInstance();
-			checkModeAvailable = statement.getId()==null;
-			if (getCheckModePanel().isSelected()) {
-				getUncheckedTransactionsTable().setTransactions(getTransactions(statementSelectionPanel.getAccount(), null));
-				double uncheckedStart = statement.getStartBalance();
-				statement = getStatementSelectionPanel().getStatement(getCheckModePanel().getStatement());
-				if (statement==null) {
-					statement = new Statement(getCheckModePanel().getStatement());
-					statement.setStartBalance(uncheckedStart);
-				}
-			}
-			getBalancePanel().setStart(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), ci.format(statement.getStartBalance()))); //$NON-NLS-1$
-			getBalancePanel().setEnd(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()))); //$NON-NLS-1$
-			getDetail().setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
-					ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
-			getTransactionsTable().setTransactions(getTransactions(statementSelectionPanel.getAccount(), statement.getId()));
-		}
-		getBalancePanel().setVisible(visible);
-		getDetail().setVisible(visible);
-		getTransactionsTable().setVisible(visible);
-		getCheckModePanel().setVisible(checkModeAvailable);
-	}
- 
-	private Transaction[] getTransactions(Account account, String statementId) {
-		List<Transaction> transactions = new ArrayList<Transaction>();
-		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
-			Transaction transaction = data.getGlobalData().getTransaction(i);
-			if (transaction.getAccount().equals(account) && NullUtils.areEquals(statementId, transaction.getStatement())) {
-				transactions.add(transaction);
-			}
-		}
-		Collections.sort(transactions, new Comparator<Transaction>() {
-			@Override
-			public int compare(Transaction o1, Transaction o2) {
-				int result = DateUtils.dateToInteger(o1.getValueDate())-DateUtils.dateToInteger(o2.getValueDate());
-				if (result == 0) result = DateUtils.dateToInteger(o1.getDate())-DateUtils.dateToInteger(o2.getDate());
-				return result;
-			}
-		});
-		return transactions.toArray(new Transaction[transactions.size()]);
-	}
-
 	/**
 	 * This method initializes statementPanel	
 	 * 	
@@ -185,6 +141,10 @@ public class StatementViewPanel extends JPanel {
 	private JPanel getStatementPanel() {
 		if (statementPanel == null) {
 			statementPanel = new JPanel();
+			Border border = BorderFactory.createLineBorder(Color.gray, 3);
+			border = BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3), border);
+			statementPanel.setBorder(border);
+
 			statementPanel.setLayout(new GridBagLayout());
 
 			GridBagConstraints gbc_balance = new GridBagConstraints();
@@ -256,7 +216,7 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(transactionsTable);
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
-			checkAction = new CheckTransactionAction(getCheckModePanel(), transactionsTable); //FIXME
+			checkAction = new CheckTransactionAction(getCheckModePanel(), transactionsTable, false);
 			new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return transactionsTable;
@@ -268,7 +228,7 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(uncheckedTransactionsTable);
 			Action delete = new DeleteTransactionAction(uncheckedTransactionsTable);
 			Action duplicate = new DuplicateTransactionAction(uncheckedTransactionsTable);
-			checkAction = new CheckTransactionAction(getCheckModePanel(), uncheckedTransactionsTable);
+			checkAction = new CheckTransactionAction(getCheckModePanel(), uncheckedTransactionsTable, true);
 			new MyListener(getUncheckedTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return uncheckedTransactionsTable;
@@ -376,6 +336,13 @@ public class StatementViewPanel extends JPanel {
 		return splitPane;
 	}
 	
+	private JLabel getNotCheckedColumns() {
+		if (notCheckedColumns == null) {
+			notCheckedColumns = getUncheckedTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+		}
+		return notCheckedColumns;
+	}
+	
 	private void setTables() {
 		boolean checkMode = getCheckModePanel().getStatement()!=null;
 		getNotCheckedColumns().setVisible(checkMode);
@@ -384,7 +351,7 @@ public class StatementViewPanel extends JPanel {
 		if (checkMode) {
 			if (!getSplitPane().isDividerVisible()) {
 				getSplitPane().setDividerVisible(true);
-				getSplitPane().setDividerLocation(0.5);
+				getSplitPane().setDividerLocation(0.33);
 			}
 		} else {
 			getSplitPane().setDividerLocation(0.0);
@@ -392,10 +359,52 @@ public class StatementViewPanel extends JPanel {
 		}
 		setStatements();
 	}
-	private JLabel getNotCheckedColumns() {
-		if (notCheckedColumns == null) {
-			notCheckedColumns = getUncheckedTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+
+	private void setStatements() {
+		Statement statement = getStatementSelectionPanel().getSelectedStatement();
+		boolean visible = statement!=null;
+		boolean checkModeAvailable = false;
+		if (visible) {
+			DecimalFormat ci = LocalizationData.getCurrencyInstance();
+			checkModeAvailable = statement.getId()==null;
+			if (getCheckModePanel().isSelected()) {
+				getUncheckedTransactionsTable().setTransactions(getTransactions(statementSelectionPanel.getAccount(), null));
+				double uncheckedStart = statement.getStartBalance();
+				statement = getStatementSelectionPanel().getStatement(getCheckModePanel().getStatement());
+				if (statement==null) {
+					statement = new Statement(getCheckModePanel().getStatement());
+					statement.setStartBalance(uncheckedStart);
+				}
+			}
+			getBalancePanel().setStatementId(checkModePanel.getStatement());
+			getBalancePanel().setStart(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), ci.format(statement.getStartBalance()))); //$NON-NLS-1$
+			getBalancePanel().setEnd(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()))); //$NON-NLS-1$
+			getDetail().setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
+					ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
+			getTransactionsTable().setTransactions(getTransactions(statementSelectionPanel.getAccount(), statement.getId()));
 		}
-		return notCheckedColumns;
+		getBalancePanel().setVisible(visible);
+		getDetail().setVisible(visible);
+		getTransactionsTable().setVisible(visible);
+		getCheckModePanel().setVisible(checkModeAvailable);
+	}
+ 
+	private Transaction[] getTransactions(Account account, String statementId) {
+		List<Transaction> transactions = new ArrayList<Transaction>();
+		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
+			Transaction transaction = data.getGlobalData().getTransaction(i);
+			if (transaction.getAccount().equals(account) && NullUtils.areEquals(statementId, transaction.getStatement())) {
+				transactions.add(transaction);
+			}
+		}
+		Collections.sort(transactions, new Comparator<Transaction>() {
+			@Override
+			public int compare(Transaction o1, Transaction o2) {
+				int result = DateUtils.dateToInteger(o1.getValueDate())-DateUtils.dateToInteger(o2.getValueDate());
+				if (result == 0) result = DateUtils.dateToInteger(o1.getDate())-DateUtils.dateToInteger(o2.getDate());
+				return result;
+			}
+		});
+		return transactions.toArray(new Transaction[transactions.size()]);
 	}
 }
