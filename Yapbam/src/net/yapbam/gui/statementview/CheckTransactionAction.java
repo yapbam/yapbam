@@ -17,12 +17,15 @@ import net.yapbam.gui.actions.TransactionSelector;
 public class CheckTransactionAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private CheckModePanel tPanel;
+	private boolean check;
 	private TransactionSelector selector;
 	
-	public CheckTransactionAction (CheckModePanel checkModePanel, TransactionSelector selector) {
-		super(LocalizationData.get("MainMenu.Transactions.Check"), IconManager.CHECK_TRANSACTION); //$NON-NLS-1$
-		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Check.ToolTip")); //$NON-NLS-1$
-		putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Check.Mnemonic")); //$NON-NLS-1$
+	public CheckTransactionAction (CheckModePanel checkModePanel, TransactionSelector selector, boolean check) {
+		super(check?LocalizationData.get("MainMenu.Transactions.Check"):LocalizationData.get("MainMenu.Transactions.Uncheck"), //$NON-NLS-1$
+				check?IconManager.CHECK_TRANSACTION:IconManager.UNCHECK_TRANSACTION);
+		this.check = check;
+		putValue(SHORT_DESCRIPTION, check?LocalizationData.get("MainMenu.Transactions.Check.ToolTip"):LocalizationData.get("MainMenu.Transactions.Uncheck.ToolTip")); //$NON-NLS-1$
+		if (check) putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Check.Mnemonic")); //$NON-NLS-1$
 		this.tPanel = checkModePanel;
 		this.selector = selector;
 		PropertyChangeListener listener = new PropertyChangeListener() {
@@ -37,7 +40,13 @@ public class CheckTransactionAction extends AbstractAction {
 	}
 
 	public void updateEnabled() {
-		setEnabled(tPanel.isOk() && (this.selector.getSelectedTransaction()!=null));
+		boolean isEnabled = this.selector.getSelectedTransaction()!=null;
+		if (check) {
+			isEnabled = isEnabled && tPanel.isOk();
+		} else {
+			isEnabled = isEnabled && (this.tPanel.getStatement()!=null);
+		}
+		setEnabled(isEnabled);
 	}
 	
 	@Override

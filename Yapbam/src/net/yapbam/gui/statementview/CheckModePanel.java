@@ -152,11 +152,15 @@ public class CheckModePanel extends JPanel {
 		}
 	}
 
-	/** Tests wether the check mode is selected or not. 
+	/** Tests whether the check mode is selected or not. 
 	 * @return true is check mode is selected.
 	 */
 	public boolean isSelected() {
 		return checkModeBox.isSelected();
+	}
+	
+	public void setSelected(boolean selected) {
+		checkModeBox.setSelected(selected);
 	}
 	
 	public String getStatement() {

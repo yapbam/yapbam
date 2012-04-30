@@ -28,6 +28,7 @@ public abstract class IconManager {
 	public static final Icon SPREAD = create("images/spread.png");
 	public static final Icon SPREADABLE = create("images/spreadable.png");
 	public static final Icon CHECK_TRANSACTION = create("images/check.png");
+	public static final Icon UNCHECK_TRANSACTION = create("images/uncheck.png");
 	public static final Icon HELP = create("images/help.png");
 	public static final Icon PRINT = create("images/print.png");
 	public static final Icon FIRST = create("images/first.png");
