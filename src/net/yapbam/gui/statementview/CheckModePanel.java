@@ -10,12 +10,12 @@ import java.util.Date;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import java.awt.GridBagLayout;
@@ -23,15 +23,17 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 public class CheckModePanel extends JPanel {
-	public static final String IS_OK_PROPERTY = "isOk";
+	public static final String IS_OK_PROPERTY = "isOk"; //$NON-NLS-1$
+	public static final String EDITED_STATEMENT_PROPERTY = "editedStatement"; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 
 	private JLabel statementLabel;
-	private JTextField statement;
+	private TextWidget statement;
 	private JCheckBox valueDateLabel;
 	private DateWidget valueDate;
 	private JCheckBox checkModeBox;
 	private boolean ok;
+	private String editedStatement;
 	
 	private JPanel panel;
 
@@ -45,35 +47,36 @@ public class CheckModePanel extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				refresh();
+				refreshEditedStatement();
 			}
 		});
 		GridBagConstraints gbc_checkModeBox = new GridBagConstraints();
 		gbc_checkModeBox.anchor = GridBagConstraints.WEST;
-		gbc_checkModeBox.insets = new Insets(0, 0, 5, 5);
+		gbc_checkModeBox.insets = new Insets(0, 0, 0, 5);
 		gbc_checkModeBox.gridx = 0;
 		gbc_checkModeBox.gridy = 0;
 		add(checkModeBox, gbc_checkModeBox);
-		statementLabel = new JLabel(LocalizationData.get("TransactionDialog.statement"));
+		statementLabel = new JLabel(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 		GridBagConstraints gbc_statementLabel = new GridBagConstraints();
-		gbc_statementLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_statementLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_statementLabel.gridx = 1;
 		gbc_statementLabel.gridy = 0;
 		add(statementLabel, gbc_statementLabel);
 		statement = new TextWidget(5);
 		GridBagConstraints gbc_statement = new GridBagConstraints();
 		gbc_statement.anchor = GridBagConstraints.WEST;
-		gbc_statement.insets = new Insets(0, 0, 5, 0);
 		gbc_statement.gridx = 2;
 		gbc_statement.gridy = 0;
 		add(statement, gbc_statement);
 		statement.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
+				refreshEditedStatement();
 				refreshOk();
 			}
 		});
 		statement.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip"));
+		statement.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
 		
 		panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -120,12 +123,6 @@ public class CheckModePanel extends JPanel {
 				refreshOk();
 			}
 		});
-
-		setSelected(false);
-	}
-	
-	public void setSelected(boolean selected) {
-		checkModeBox.setSelected(selected);
 		refresh();
 	}
 	
@@ -155,12 +152,15 @@ public class CheckModePanel extends JPanel {
 		}
 	}
 
+	/** Tests wether the check mode is selected or not. 
+	 * @return true is check mode is selected.
+	 */
 	public boolean isSelected() {
 		return checkModeBox.isSelected();
 	}
 	
 	public String getStatement() {
-		return statement.getText();
+		return editedStatement;
 	}
 
 	public Date getValueDate() {
@@ -175,5 +175,19 @@ public class CheckModePanel extends JPanel {
 	
 	public boolean isOk() {
 		return this.ok;
+	}
+	
+	public String getEditedStatement() {
+		return this.editedStatement;
+	}
+	
+	private void refreshEditedStatement() {
+		String old = this.editedStatement;
+		String edited = statement.getText().trim();
+		this.editedStatement = checkModeBox.isSelected() && (edited.length()!=0)? edited: null;
+		if (!NullUtils.areEquals(old, editedStatement)) {
+//System.out.println (SELECTED_STATEMENT_PROPERTY+" from "+old+" to "+this.lastSelectedStatement); //TODO
+			firePropertyChange(EDITED_STATEMENT_PROPERTY, old, this.editedStatement);
+		}
 	}
 }
