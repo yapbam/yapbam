@@ -44,7 +44,7 @@ public class CheckTransactionAction extends AbstractAction {
 		if (check) {
 			isEnabled = isEnabled && tPanel.isOk();
 		} else {
-			isEnabled = isEnabled && (this.tPanel.getStatement()!=null);
+//TODO			isEnabled = isEnabled && (this.tPanel.getStatement()!=null);
 		}
 		setEnabled(isEnabled);
 	}
@@ -61,7 +61,7 @@ public class CheckTransactionAction extends AbstractAction {
 		if (t.getStatement()==null) {
 			Date ckDate = tPanel.getValueDate();
 			if (ckDate!=null) date = ckDate;
-			statementId = tPanel.getStatement();
+//TODO			statementId = tPanel.getStatement();
 		}
 		Transaction tChecked = new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getComment(), t.getAmount(), t.getAccount(), t.getMode(), t.getCategory(),
 				date, statementId, list);

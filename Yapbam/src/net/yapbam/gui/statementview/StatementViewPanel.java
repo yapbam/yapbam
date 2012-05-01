@@ -188,6 +188,13 @@ public class StatementViewPanel extends JPanel {
 	private BalancePanel getBalancePanel() {
 		if (balancePanel == null) {
 			balancePanel = new BalancePanel();
+			balancePanel.addPropertyChangeListener(BalancePanel.EDITED_STATEMENT_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					setTables(); 
+					getTransactionsTable().setCursor(balancePanel.getEditedStatement()!=null ? UNCHECK_CURSOR : Cursor.getDefaultCursor());
+				}
+			});
 		}
 		return balancePanel;
 	}
@@ -237,18 +244,10 @@ public class StatementViewPanel extends JPanel {
 	private CheckModePanel getCheckModePanel() {
 		if (checkModePanel == null) {
 			checkModePanel = new CheckModePanel();
-			checkModePanel.setBackground(Color.YELLOW);
 			checkModePanel.addPropertyChangeListener(CheckModePanel.IS_OK_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					getUncheckedTransactionsTable().setCursor(checkModePanel.isOk() ? CHECK_CURSOR : Cursor.getDefaultCursor());
-				}
-			});
-			checkModePanel.addPropertyChangeListener(CheckModePanel.EDITED_STATEMENT_PROPERTY, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					setTables(); 
-					getTransactionsTable().setCursor(checkModePanel.getEditedStatement()!=null ? UNCHECK_CURSOR : Cursor.getDefaultCursor());
+					setTables();
 				}
 			});
 		}
@@ -344,49 +343,72 @@ public class StatementViewPanel extends JPanel {
 	}
 	
 	private void setTables() {
-		boolean checkMode = getCheckModePanel().getStatement()!=null;
-		getNotCheckedColumns().setVisible(checkMode);
-		notCheckedJScrollPane.setVisible(checkMode);
-		getUncheckedTransactionsTable().setVisible(checkMode);
-		if (checkMode) {
-			if (!getSplitPane().isDividerVisible()) {
-				getSplitPane().setDividerVisible(true);
-				getSplitPane().setDividerLocation(0.33);
-			}
-		} else {
-			getSplitPane().setDividerLocation(0.0);
-			getSplitPane().setDividerVisible(false);
-		}
-		setStatements();
-	}
-
-	private void setStatements() {
+		// Gets the currently selected statement
 		Statement statement = getStatementSelectionPanel().getSelectedStatement();
+		// If no statement is selected, everything but the statement selection panel should be invisible
 		boolean visible = statement!=null;
-		boolean checkModeAvailable = false;
+		// The check mode is available only if the selected statement is the "not checked" pseudo-statement
+		boolean checkModeAvailable = visible && (statement.getId()==null);
+		// The check mode is activated if it is available and the check box is selected
+		boolean checkMode = checkModeAvailable && getCheckModePanel().isSelected();
+		
+		// Show/hide the check mode widget
+		getCheckModePanel().setVisible(checkModeAvailable);
+		// Show hide the split pane (it contains all other widgets)
+		getSplitPane().setVisible(visible);
+		
 		if (visible) {
-			DecimalFormat ci = LocalizationData.getCurrencyInstance();
-			checkModeAvailable = statement.getId()==null;
-			if (getCheckModePanel().isSelected()) {
-				getUncheckedTransactionsTable().setTransactions(getTransactions(statementSelectionPanel.getAccount(), null));
-				double uncheckedStart = statement.getStartBalance();
-				statement = getStatementSelectionPanel().getStatement(getCheckModePanel().getStatement());
-				if (statement==null) {
-					statement = new Statement(getCheckModePanel().getStatement());
-					statement.setStartBalance(uncheckedStart);
+			// Show hide the widgets of the check mode
+			getNotCheckedColumns().setVisible(checkMode);
+			notCheckedJScrollPane.setVisible(checkMode);
+			getUncheckedTransactionsTable().setVisible(checkMode);
+			if (checkMode) {
+				if (!getSplitPane().isDividerVisible()) {
+					getSplitPane().setDividerLocation(0.33);
 				}
+			} else {
+				getSplitPane().setDividerLocation(0.0);
 			}
-			getBalancePanel().setStatementId(checkModePanel.getStatement());
+			getSplitPane().setDividerVisible(checkMode);
+			
+			DecimalFormat ci = LocalizationData.getCurrencyInstance();
+			Transaction[] transactions;
+			if (checkMode) { // If check mode is on
+				// Fill the top table with not checked transactions
+				getUncheckedTransactionsTable().setTransactions(getTransactions(statementSelectionPanel.getAccount(), null));
+				// Fill the bottom table with the edited statement.
+				String statementId = getBalancePanel().getEditedStatement();
+				double uncheckedStart = statement.getStartBalance();
+				// If a statement is entered, take this one 
+				statement = statementId==null ? null : getStatementSelectionPanel().getStatement(statementId);
+				boolean showWarningMessage = false;
+				if (statement==null) {
+					// If the statement doesn't exist (or no statement id is entered), create a fake one.
+					statement = new Statement(statementId);
+					statement.setStartBalance(uncheckedStart);
+					transactions = new Transaction[0];
+				} else {
+					// Verify that this statement is the last one
+					showWarningMessage = getStatementSelectionPanel().IsThereANewerStatement(statementId);
+					transactions = getTransactions(statementSelectionPanel.getAccount(), statementId);
+				}
+				getBalancePanel().setAlertVisible(showWarningMessage);
+			} else {
+				transactions = getTransactions(statementSelectionPanel.getAccount(), statement.getId());
+			}
+			getTransactionsTable().setTransactions(transactions);
+
+			// Set up the balance panel
+			getBalancePanel().setStatementVisible(checkMode);
 			getBalancePanel().setStart(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), ci.format(statement.getStartBalance()))); //$NON-NLS-1$
 			getBalancePanel().setEnd(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()))); //$NON-NLS-1$
+			// Set up the details
 			getDetail().setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
 					ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
-			getTransactionsTable().setTransactions(getTransactions(statementSelectionPanel.getAccount(), statement.getId()));
+			
+			// Sets the cursor
+			getUncheckedTransactionsTable().setCursor(checkModePanel.isOk() ? CHECK_CURSOR : Cursor.getDefaultCursor());
 		}
-		getBalancePanel().setVisible(visible);
-		getDetail().setVisible(visible);
-		getTransactionsTable().setVisible(visible);
-		getCheckModePanel().setVisible(checkModeAvailable);
 	}
  
 	private Transaction[] getTransactions(Account account, String statementId) {

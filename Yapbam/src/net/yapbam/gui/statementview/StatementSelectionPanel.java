@@ -248,4 +248,16 @@ public class StatementSelectionPanel extends JPanel {
 		}
 		return null;
 	}
+	
+	public boolean IsThereANewerStatement(String statementId) {
+		if (statements==null) return false;
+		int index = -1;
+		for (int i = 0; i < statements.length; i++) {
+			if (NullUtils.areEquals(statements[i].getId(), statementId)) {
+				index = i;
+				break;
+			}
+		}
+		return index>=0 && (index!=statements.length-1) && ((index!=statements.length-2) || (statements[statements.length-1].getId()!=null));
+	}
 }
