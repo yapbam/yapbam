@@ -32,7 +32,8 @@ public class CheckTransactionAction extends AbstractAction {
 				updateEnabled();
 			}
 		};
-		statementViewPanel.addPropertyChangeListener(StatementViewPanel.CHECK_MODE_READY_PROPERTY, listener);
+		// The test is mandatory to prevent Window builder from crashing when editing StatementViewPanel
+		if (statementViewPanel!=null) statementViewPanel.addPropertyChangeListener(StatementViewPanel.CHECK_MODE_READY_PROPERTY, listener);
 		this.selector.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, listener);
 		updateEnabled();
 	}
