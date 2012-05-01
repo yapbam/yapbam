@@ -17,7 +17,7 @@ import net.yapbam.gui.util.FriendlyTable;
 
 public class TransactionTable extends FriendlyTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;
-	private Transaction lastSelected;
+	private Transaction[] lastSelected;
 	private FilteredData data;
 
 	public TransactionTable(FilteredData data) {
@@ -45,10 +45,10 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					Transaction selectedTransaction = getSelectedTransaction();
-					if (!NullUtils.areEquals(selectedTransaction,lastSelected)) {
-						firePropertyChange(SELECTED_PROPERTY, lastSelected, selectedTransaction);
-						lastSelected = selectedTransaction;
+					Transaction[] selectedTransactions = getSelectedTransactions();
+					if (!NullUtils.areEquals(selectedTransactions,lastSelected)) { //FIXME
+						firePropertyChange(SELECTED_PROPERTY, lastSelected, selectedTransactions);
+						lastSelected = selectedTransactions;
 					}
 				}
 			}
@@ -56,9 +56,13 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 	}
 
 	@Override
-	public Transaction getSelectedTransaction() {
-		int index = getSelectedRow();
-		return index < 0 ? null : data.getTransaction(this.convertRowIndexToModel(index));
+	public Transaction[] getSelectedTransactions() {
+		int[] indexes = getSelectedRows();
+		Transaction[] result = new Transaction[indexes.length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = data.getTransaction(this.convertRowIndexToModel(indexes[i]));
+		}
+		return result;
 	}
 	
 	public GlobalData getGlobalData() {

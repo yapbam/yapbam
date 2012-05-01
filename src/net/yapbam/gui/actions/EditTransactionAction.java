@@ -21,9 +21,9 @@ public class EditTransactionAction extends AbstractTransactionAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction transaction = selector.getSelectedTransaction();
-		if (transaction != null) {
-			TransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction, true, true, false);
+		Transaction[] transactions = selector.getSelectedTransactions();
+		if (transactions.length==1) {
+			TransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transactions[0], true, true, false);
 		}
 	}
 }
