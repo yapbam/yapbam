@@ -13,7 +13,7 @@ public interface TransactionSelector {
 	 * This constant is the name of that property.
 	 */
 	public static final String SELECTED_PROPERTY = "selectedTransaction";
-	public Transaction getSelectedTransaction();
+	public Transaction[] getSelectedTransactions();
 	public FilteredData getFilteredData();
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
 	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);

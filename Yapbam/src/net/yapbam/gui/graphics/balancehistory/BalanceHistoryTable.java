@@ -13,7 +13,7 @@ import net.yapbam.gui.util.FriendlyTable;
 
 public class BalanceHistoryTable extends FriendlyTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;
-	private Transaction lastSelected;
+	private Transaction[] lastSelected;
 	private FilteredData data;
 
 	public BalanceHistoryTable(FilteredData data) {
@@ -27,8 +27,8 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					Transaction selectedTransaction = getSelectedTransaction();
-					if (!NullUtils.areEquals(selectedTransaction,lastSelected)) {
+					Transaction[] selectedTransaction = getSelectedTransactions();
+					if (!NullUtils.areEquals(selectedTransaction,lastSelected)) { 					//FIXME The equality 
 						firePropertyChange(SELECTED_PROPERTY, lastSelected, selectedTransaction);
 						lastSelected = selectedTransaction;
 					}
@@ -37,9 +37,13 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 		});
 	}
 
-	public Transaction getSelectedTransaction() {
-		int index = getSelectedRow();
-		return index < 0 ? null : ((BalanceHistoryModel)this.getModel()).getTransaction(this.convertRowIndexToModel(index));
+	public Transaction[] getSelectedTransactions() {
+		int[] indexes = getSelectedRows();
+		Transaction[] result = new Transaction[indexes.length];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = ((BalanceHistoryModel)this.getModel()).getTransaction(this.convertRowIndexToModel(indexes[i]));
+		}
+		return result;
 	}
 	
 	public FilteredData getFilteredData() {

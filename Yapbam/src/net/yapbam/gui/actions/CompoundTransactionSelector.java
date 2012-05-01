@@ -25,8 +25,8 @@ public class CompoundTransactionSelector implements TransactionSelector {
 	}
 	
 	@Override
-	public Transaction getSelectedTransaction() {
-		return internalSelector==null?null:internalSelector.getSelectedTransaction();
+	public Transaction[] getSelectedTransactions() {
+		return internalSelector==null?new Transaction[0]:internalSelector.getSelectedTransactions();
 	}
 
 	@Override
@@ -36,10 +36,10 @@ public class CompoundTransactionSelector implements TransactionSelector {
 
 	public void setInternalSelector(TransactionSelector selector) {
 		if (internalSelector!=null) internalSelector.removePropertyChangeListener(SELECTED_PROPERTY, this.internalListener);
-		Transaction old = getSelectedTransaction();
+		Transaction[] old = getSelectedTransactions();
 		this.internalSelector = selector;
 		if (selector!=null) selector.addPropertyChangeListener(SELECTED_PROPERTY, internalListener);
-		firePropertyChangedEvent(new PropertyChangeEvent(this, SELECTED_PROPERTY, old, this.getSelectedTransaction()));
+		firePropertyChangedEvent(new PropertyChangeEvent(this, SELECTED_PROPERTY, old, this.getSelectedTransactions()));
 	}
 
 	@Override

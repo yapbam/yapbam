@@ -82,7 +82,7 @@ public class BalancePanel extends JPanel {
 		panel.add(getLabelStatement(), gbc_labelStatement);
 		
 		statementField = new TextWidget(8);
-		statementField.setFont(new Font("Dialog", Font.BOLD, 14));
+		statementField.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
 		statementField.setMinimumSize(statementField.getPreferredSize());
 		statementField.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_statementField = new GridBagConstraints();
@@ -104,7 +104,7 @@ public class BalancePanel extends JPanel {
 		});
 		
 		warningLabel = new JLabel(IconManager.ALERT);
-		warningLabel.setText("Attention, il existe des relevés plus récents que celui-ci !");
+		warningLabel.setText(LocalizationData.get("CheckModePanel.notLast.message")); //$NON-NLS-1$
 		warningLabel.setForeground(Color.RED);
 		GridBagConstraints gbc_warningLabel = new GridBagConstraints();
 		gbc_warningLabel.anchor = GridBagConstraints.EAST;
@@ -139,7 +139,7 @@ public class BalancePanel extends JPanel {
 	
 	private JLabel getLabelStatement() {
 		if (labelStatement == null) {
-			labelStatement = new JLabel(LocalizationData.get("TransactionDialog.statement"));
+			labelStatement = new JLabel(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 			labelStatement.setForeground(Color.RED);
 			labelStatement.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
 		}

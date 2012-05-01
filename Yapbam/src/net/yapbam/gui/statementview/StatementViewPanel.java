@@ -348,7 +348,7 @@ public class StatementViewPanel extends JPanel {
 			GridBagLayout gbl_panel = new GridBagLayout();
 			panel.setLayout(gbl_panel);
 			notCheckedPanel.add(panel, gbc_panel);
-			JLabel label = new JLabel("Opérations non pointées");
+			JLabel label = new JLabel(LocalizationData.get("CheckModePanel.notChecked.title")); //$NON-NLS-1$
 			label.setHorizontalAlignment(SwingConstants.LEFT);
 			GridBagConstraints gbc_label = new GridBagConstraints();
 			gbc_label.weightx = 1.0;
@@ -357,7 +357,7 @@ public class StatementViewPanel extends JPanel {
 			gbc_label.gridx = 0;
 			gbc_label.gridy = 0;
 			panel.add(label, gbc_label);
-			label.setFont(new Font("Dialog", Font.PLAIN, 14));
+			label.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
 
 			GridBagConstraints gbc_notCheckedColumns = new GridBagConstraints();
 			gbc_notCheckedColumns.anchor = GridBagConstraints.EAST;

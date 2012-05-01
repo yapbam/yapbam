@@ -14,12 +14,16 @@ public abstract class AbstractTransactionAction extends AbstractAction {
 		super(name, icon);
 		putValue(SHORT_DESCRIPTION, tooltip);
 		this.selector = selector;
-		this.setEnabled(selector.getSelectedTransaction()!=null);
+		this.updateEnabled();
 		this.selector.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				setEnabled(evt.getNewValue()!=null);
+				updateEnabled();
 			}
 		});
+	}
+	
+	protected void updateEnabled() {
+		this.setEnabled(selector.getSelectedTransactions().length==1);
 	}
 }

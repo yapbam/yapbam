@@ -22,7 +22,7 @@ public class ConvertToPeriodicalTransactionAction extends AbstractTransactionAct
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction transaction = selector.getSelectedTransaction();
+		Transaction transaction = selector.getSelectedTransactions()[0];
 		List<SubTransaction> list = new ArrayList<SubTransaction>(transaction.getSubTransactionSize());
 		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 			list.add(transaction.getSubTransaction(i));

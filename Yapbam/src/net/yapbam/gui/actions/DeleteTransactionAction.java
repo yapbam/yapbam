@@ -28,7 +28,7 @@ public class DeleteTransactionAction extends AbstractTransactionAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction transaction = selector.getSelectedTransaction();
+		Transaction transaction = selector.getSelectedTransactions()[0];
 		EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
 		if (editingOptions.isAlertOnModifyChecked() && (transaction.getStatement() != null)) {
 			AlertDialog alert = new AlertDialog(
