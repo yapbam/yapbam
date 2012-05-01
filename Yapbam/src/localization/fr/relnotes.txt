@@ -5,6 +5,7 @@ known
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 	Ajout d'un message d'attente lors de la connexion à la BCE par le convertisseur de devises.
+	Introduit un nouveau mode pointage, plus simple, plus clair (le relevé en cours de pointage est affiché sous la liste des opérations à pointer) et plus puissant (on peut pointer plusieurs opérations à la fois, dépointer celles qui l'ont été par erreur, etc ...).
 
 version	0.10.2 (25/04/2012)
 improvement

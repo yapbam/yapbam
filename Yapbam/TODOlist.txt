@@ -16,4 +16,4 @@ Features :
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
 
 Bugs :
-- Les info de backup du panneau de préférénces ne sont pas prises en compte
+- Les info de backup du panneau de préférences ne sont pas prises en compte

@@ -5,6 +5,8 @@ known
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
 	Adds a  waiting message when the currency converter connects to the ECB.
+	Introduces a simpler, clearer (the current statement is displayed below the list of transactions to check) and more powerful (one can check multiple transactions at once, undo check, etc ...) check mode in the statement tab.
+	
 version	0.10.2 (04/25/2012)
 improvement
 	Adds an item to "Transactions" menu to create tranfers between accounts.
