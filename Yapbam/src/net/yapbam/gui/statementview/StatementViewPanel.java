@@ -30,6 +30,7 @@ import net.yapbam.util.DateUtils;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -37,6 +38,8 @@ import javax.swing.JTable;
 import java.awt.Insets;
 import javax.swing.JTable.PrintMode;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.print.Printable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -47,16 +50,18 @@ import javax.swing.border.Border;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+
+	public static final String CHECK_MODE_READY_PROPERTY = "CheckModeReady"; //$NON-NLS-1$
 	private static final Cursor CHECK_CURSOR;
 	private static final Cursor UNCHECK_CURSOR;
 
 	private StatementSelectionPanel statementSelectionPanel;
 	private JPanel statementPanel = null;
-	private BalancePanel balancePanel = null;
-	private JLabel detail = null;
+	private BalancePanel balancePanel;
+	private JLabel detail;
 	private StatementTable uncheckedTransactionsTable;
-	private StatementTable transactionsTable = null;
-	private CheckModePanel checkModePanel;
+	private StatementTable transactionsTable;
+	private JCheckBox checkModeChkbx;
 	
 	private FilteredData data;
 	CheckTransactionAction checkAction;
@@ -65,6 +70,8 @@ public class StatementViewPanel extends JPanel {
 	private SplitPane splitPane;
 	private JScrollPane notCheckedJScrollPane;
 	private JLabel notCheckedColumns;
+	
+	private boolean checkModeReady = false;
 	
 	static {
 		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
@@ -104,13 +111,13 @@ public class StatementViewPanel extends JPanel {
 		gridBagConstraints.insets = new Insets(0, 5, 0, 5);
 		gridBagConstraints.weightx = 1.0;
 		add(getStatementSelectionPanel(), gridBagConstraints);
-		GridBagConstraints gbc_checkModePanel = new GridBagConstraints();
-		gbc_checkModePanel.insets = new Insets(0, 0, 5, 0);
-		gbc_checkModePanel.weightx = 1.0;
-		gbc_checkModePanel.anchor = GridBagConstraints.EAST;
-		gbc_checkModePanel.gridx = 1;
-		gbc_checkModePanel.gridy = 0;
-		add(getCheckModePanel(), gbc_checkModePanel);
+		GridBagConstraints gbc_checkModeChkbx = new GridBagConstraints();
+		gbc_checkModeChkbx.insets = new Insets(0, 0, 0, 5);
+		gbc_checkModeChkbx.weightx = 1.0;
+		gbc_checkModeChkbx.anchor = GridBagConstraints.EAST;
+		gbc_checkModeChkbx.gridx = 1;
+		gbc_checkModeChkbx.gridy = 0;
+		add(getCheckModeChkbx(), gbc_checkModeChkbx);
 		GridBagConstraints gbc_splitPane = new GridBagConstraints();
 		gbc_splitPane.weighty = 1.0;
 		gbc_splitPane.fill = GridBagConstraints.BOTH;
@@ -125,7 +132,7 @@ public class StatementViewPanel extends JPanel {
 			statementSelectionPanel = new StatementSelectionPanel(data);
 			statementSelectionPanel.getStatementMenu().addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (getStatementSelectionPanel().getSelectedStatement().getId()!=null) getCheckModePanel().setSelected(false);
+					if (getStatementSelectionPanel().getSelectedStatement().getId()!=null) getCheckModeChkbx().setSelected(false);
 					setTables();
 				}
 			});
@@ -223,7 +230,7 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(transactionsTable);
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
-			checkAction = new CheckTransactionAction(getCheckModePanel(), transactionsTable, false);
+			Action checkAction = new CheckTransactionAction(this, transactionsTable, false);
 			new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return transactionsTable;
@@ -235,23 +242,24 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(uncheckedTransactionsTable);
 			Action delete = new DeleteTransactionAction(uncheckedTransactionsTable);
 			Action duplicate = new DuplicateTransactionAction(uncheckedTransactionsTable);
-			checkAction = new CheckTransactionAction(getCheckModePanel(), uncheckedTransactionsTable, true);
+			checkAction = new CheckTransactionAction(this, uncheckedTransactionsTable, true);
 			new MyListener(getUncheckedTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return uncheckedTransactionsTable;
 	}
 
-	private CheckModePanel getCheckModePanel() {
-		if (checkModePanel == null) {
-			checkModePanel = new CheckModePanel();
-			checkModePanel.addPropertyChangeListener(CheckModePanel.IS_OK_PROPERTY, new PropertyChangeListener() {
+	private JCheckBox getCheckModeChkbx() {
+		if (checkModeChkbx == null) {
+			checkModeChkbx = new JCheckBox(LocalizationData.get("CheckModePanel.title")); //$NON-NLS-1$
+			checkModeChkbx.setToolTipText(LocalizationData.get("CheckModePanel.title.tooltip")); //$NON-NLS-1$
+			checkModeChkbx.addItemListener(new ItemListener() {
 				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
+				public void itemStateChanged(ItemEvent e) {
 					setTables();
 				}
 			});
 		}
-		return checkModePanel;
+		return checkModeChkbx;
 	}
 	
 	private static class MyListener extends JTableListener {
@@ -350,10 +358,10 @@ public class StatementViewPanel extends JPanel {
 		// The check mode is available only if the selected statement is the "not checked" pseudo-statement
 		boolean checkModeAvailable = visible && (statement.getId()==null);
 		// The check mode is activated if it is available and the check box is selected
-		boolean checkMode = checkModeAvailable && getCheckModePanel().isSelected();
+		boolean checkMode = checkModeAvailable && getCheckModeChkbx().isSelected();
 		
 		// Show/hide the check mode widget
-		getCheckModePanel().setVisible(checkModeAvailable);
+		getCheckModeChkbx().setVisible(checkModeAvailable);
 		// Show hide the split pane (it contains all other widgets)
 		getSplitPane().setVisible(visible);
 		
@@ -406,9 +414,23 @@ public class StatementViewPanel extends JPanel {
 			getDetail().setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statement.getNbTransactions(), //$NON-NLS-1$
 					ci.format(statement.getNegativeBalance()), ci.format(statement.getPositiveBalance())));
 			
-			// Sets the cursor
-			getUncheckedTransactionsTable().setCursor(checkModePanel.isOk() ? CHECK_CURSOR : Cursor.getDefaultCursor());
+			// Sets the cursors
+			getUncheckedTransactionsTable().setCursor(isCheckModeReady() ? CHECK_CURSOR : Cursor.getDefaultCursor());
+			getTransactionsTable().setCursor(isCheckModeReady() ? UNCHECK_CURSOR : Cursor.getDefaultCursor());
+			
+			if (isCheckModeReady()!=this.checkModeReady) {
+				this.checkModeReady = !this.checkModeReady;
+				firePropertyChange(CHECK_MODE_READY_PROPERTY, !this.isCheckModeReady(), this.isCheckModeReady());
+			}
 		}
+	}
+	
+	boolean isCheckModeReady() {
+		return getCheckModeChkbx().isSelected() && (getBalancePanel().getEditedStatement()!=null);
+	}
+	
+	String getEditedStatement() {
+		return getBalancePanel().getEditedStatement();
 	}
  
 	private Transaction[] getTransactions(Account account, String statementId) {
