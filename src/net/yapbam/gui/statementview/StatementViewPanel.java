@@ -1,6 +1,7 @@
 package net.yapbam.gui.statementview;
 
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -72,6 +73,8 @@ public class StatementViewPanel extends JPanel {
 	private JLabel notCheckedColumns;
 	
 	private boolean checkModeReady = false;
+
+	private JPanel notCheckedPanel;
 	
 	static {
 		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
@@ -319,28 +322,60 @@ public class StatementViewPanel extends JPanel {
 	private SplitPane getSplitPane() {
 		if (splitPane == null) {
 			splitPane = new SplitPane(JSplitPane.VERTICAL_SPLIT, true);
-			
-			JPanel panel = new JPanel(new GridBagLayout());
+			splitPane.setTopComponent(getNotCheckedPanel());
+			splitPane.setBottomComponent(getStatementPanel());
+			setTables();
+		}
+		return splitPane;
+	}
+
+	protected JPanel getNotCheckedPanel() {
+		if (notCheckedPanel==null) {
+			notCheckedPanel = new JPanel(new GridBagLayout());
+			Border border = BorderFactory.createLineBorder(Color.gray, 3);
+			border = BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3), border);
+			notCheckedPanel.setBorder(border);
+
+			GridBagConstraints gbc_panel = new GridBagConstraints();
+			gbc_panel.gridwidth = 0;
+			gbc_panel.weightx = 1.0;
+			gbc_panel.fill = GridBagConstraints.HORIZONTAL;
+			gbc_panel.gridx = 0;
+			gbc_panel.gridy = 0;
+			JPanel panel = new JPanel();
+			panel.setBackground(Color.WHITE);
+			panel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.GRAY));
+			GridBagLayout gbl_panel = new GridBagLayout();
+			panel.setLayout(gbl_panel);
+			notCheckedPanel.add(panel, gbc_panel);
+			JLabel label = new JLabel("Opérations non pointées");
+			label.setHorizontalAlignment(SwingConstants.LEFT);
+			GridBagConstraints gbc_label = new GridBagConstraints();
+			gbc_label.weightx = 1.0;
+			gbc_label.insets = new Insets(0, 5, 0, 0);
+			gbc_label.anchor = GridBagConstraints.WEST;
+			gbc_label.gridx = 0;
+			gbc_label.gridy = 0;
+			panel.add(label, gbc_label);
+			label.setFont(new Font("Dialog", Font.PLAIN, 14));
+
 			GridBagConstraints gbc_notCheckedColumns = new GridBagConstraints();
 			gbc_notCheckedColumns.anchor = GridBagConstraints.EAST;
 			gbc_notCheckedColumns.gridx = 0;
-			gbc_notCheckedColumns.gridy = 0;
-			panel.add(getNotCheckedColumns(), gbc_notCheckedColumns);
-
+			gbc_notCheckedColumns.gridy = 1;
+			notCheckedPanel.add(getNotCheckedColumns(), gbc_notCheckedColumns);
+	
 			notCheckedJScrollPane = new JScrollPane();
 			notCheckedJScrollPane.setViewportView(getUncheckedTransactionsTable());
 			GridBagConstraints gbc_notCheckedJScrollPane = new GridBagConstraints();
 			gbc_notCheckedJScrollPane.weighty = 1.0;
 			gbc_notCheckedJScrollPane.weightx = 1.0;
 			gbc_notCheckedJScrollPane.fill = GridBagConstraints.BOTH;
-			gbc_notCheckedJScrollPane.gridy = 1;
+			gbc_notCheckedJScrollPane.gridy = 2;
 			gbc_notCheckedJScrollPane.gridx = 0;
-			panel.add(notCheckedJScrollPane, gbc_notCheckedJScrollPane);
-			splitPane.setTopComponent(panel);
-			splitPane.setBottomComponent(getStatementPanel());
-			setTables();
+			notCheckedPanel.add(notCheckedJScrollPane, gbc_notCheckedJScrollPane);
 		}
-		return splitPane;
+		return notCheckedPanel;
 	}
 	
 	private JLabel getNotCheckedColumns() {
@@ -367,12 +402,10 @@ public class StatementViewPanel extends JPanel {
 		
 		if (visible) {
 			// Show hide the widgets of the check mode
-			getNotCheckedColumns().setVisible(checkMode);
-			notCheckedJScrollPane.setVisible(checkMode);
-			getUncheckedTransactionsTable().setVisible(checkMode);
+			getNotCheckedPanel().setVisible(checkMode);
 			if (checkMode) {
 				if (!getSplitPane().isDividerVisible()) {
-					getSplitPane().setDividerLocation(0.33);
+					getSplitPane().setDividerLocation(0.5);
 				}
 			} else {
 				getSplitPane().setDividerLocation(0.0);
