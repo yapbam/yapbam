@@ -71,11 +71,7 @@ public class JTableListener extends MouseAdapter {
 			Point p = e.getPoint();
 		    int row = jTable.rowAtPoint(p);
 	    	if (!jTable.isRowSelected(row)) {
-	    		if (e.isControlDown()) {
-		    		jTable.getSelectionModel().addSelectionInterval(row, row);
-		    	} else {
-			    	jTable.getSelectionModel().setSelectionInterval(row, row);
-		    	}
+		    	jTable.getSelectionModel().setSelectionInterval(row, row);
 		    }
 		    if ((actions!=null) && (actions.length>0)) {
 				JPopupMenu popup = new JPopupMenu();

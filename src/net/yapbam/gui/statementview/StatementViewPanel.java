@@ -108,7 +108,8 @@ public class StatementViewPanel extends JPanel {
 		gbc_panel.gridy = 0;
 
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.insets = new Insets(0, 5, 0, 5);
@@ -135,7 +136,8 @@ public class StatementViewPanel extends JPanel {
 			statementSelectionPanel = new StatementSelectionPanel(data);
 			statementSelectionPanel.getStatementMenu().addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (getStatementSelectionPanel().getSelectedStatement().getId()!=null) getCheckModeChkbx().setSelected(false);
+					Statement selectedStatement = getStatementSelectionPanel().getSelectedStatement();
+					if ((selectedStatement==null) || (selectedStatement.getId()!=null)) getCheckModeChkbx().setSelected(false);
 					setTables();
 				}
 			});
