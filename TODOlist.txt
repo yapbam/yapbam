@@ -17,4 +17,3 @@ Features :
 
 Bugs :
 - Les info de backup du panneau de préférences ne sont pas prises en compte
-- Lorsqu'un compte ne possède pas d'opérations , ou qu'il n'y a pas de compte, l'onglet relevé est ... bizarre
