@@ -75,6 +75,7 @@ public class StatementViewPanel extends JPanel {
 	private boolean checkModeReady = false;
 
 	private JPanel notCheckedPanel;
+	private ChangeValueDatePanel changeValueDatePanel;
 	
 	static {
 		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
@@ -236,7 +237,7 @@ public class StatementViewPanel extends JPanel {
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
 			Action checkAction = new CheckTransactionAction(this, transactionsTable, false);
-			new MyListener(getTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
+			new MyListener(transactionsTable, new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return transactionsTable;
 	}
@@ -248,7 +249,7 @@ public class StatementViewPanel extends JPanel {
 			Action delete = new DeleteTransactionAction(uncheckedTransactionsTable);
 			Action duplicate = new DuplicateTransactionAction(uncheckedTransactionsTable);
 			checkAction = new CheckTransactionAction(this, uncheckedTransactionsTable, true);
-			new MyListener(getUncheckedTransactionsTable(), new Action[]{edit, duplicate, delete}, edit, checkAction);
+			new MyListener(uncheckedTransactionsTable, new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return uncheckedTransactionsTable;
 	}
@@ -339,6 +340,7 @@ public class StatementViewPanel extends JPanel {
 			notCheckedPanel.setBorder(border);
 
 			GridBagConstraints gbc_panel = new GridBagConstraints();
+			gbc_panel.insets = new Insets(0, 0, 5, 0);
 			gbc_panel.gridwidth = 0;
 			gbc_panel.weightx = 1.0;
 			gbc_panel.fill = GridBagConstraints.HORIZONTAL;
@@ -366,6 +368,13 @@ public class StatementViewPanel extends JPanel {
 			gbc_notCheckedColumns.gridx = 0;
 			gbc_notCheckedColumns.gridy = 1;
 			notCheckedPanel.add(getNotCheckedColumns(), gbc_notCheckedColumns);
+			GridBagConstraints gbc_changeValueDatePanel = new GridBagConstraints();
+			gbc_changeValueDatePanel.anchor = GridBagConstraints.WEST;
+			gbc_changeValueDatePanel.weightx = 1.0;
+			gbc_changeValueDatePanel.insets = new Insets(0, 5, 0, 0);
+			gbc_changeValueDatePanel.gridx = 0;
+			gbc_changeValueDatePanel.gridy = 3;
+			notCheckedPanel.add(getChangeValueDatePanel(), gbc_changeValueDatePanel);
 	
 			notCheckedJScrollPane = new JScrollPane();
 			notCheckedJScrollPane.setViewportView(getUncheckedTransactionsTable());
@@ -481,5 +490,11 @@ public class StatementViewPanel extends JPanel {
 			}
 		});
 		return transactions.toArray(new Transaction[transactions.size()]);
+	}
+	private ChangeValueDatePanel getChangeValueDatePanel() {
+		if (changeValueDatePanel == null) {
+			changeValueDatePanel = new ChangeValueDatePanel(getUncheckedTransactionsTable());
+		}
+		return changeValueDatePanel;
 	}
 }
