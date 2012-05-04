@@ -16,6 +16,7 @@ class StatementTableModel extends AbstractTableModel {
 	
 	StatementTableModel(JTable table, Transaction[] transactions) {
 		super();
+		if (transactions==null) throw new NullPointerException();
 		this.transactions = transactions;
 	}
 
@@ -59,6 +60,7 @@ class StatementTableModel extends AbstractTableModel {
 	}
 
 	public void setTransactions(Transaction[] transactions) {
+		if (transactions==null) throw new NullPointerException();
 		this.transactions = transactions;
 		this.fireTableDataChanged();
 	}
