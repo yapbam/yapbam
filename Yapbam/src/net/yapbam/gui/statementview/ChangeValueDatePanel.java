@@ -49,7 +49,7 @@ public class ChangeValueDatePanel extends JPanel {
 		gbc_valueDateLabel.gridx = 0;
 		gbc_valueDateLabel.gridy = 0;
 		add(valueDateLabel, gbc_valueDateLabel);
-		valueDateLabel.setToolTipText("Cliquez ici pour changer la date de valeur des opérations sélectionnées");
+		valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
 		valueDate = new DateWidget();
 		valueDate.getDateField().setMinimumSize(valueDate.getDateField().getPreferredSize());
 		GridBagConstraints gbc_valueDate = new GridBagConstraints();
