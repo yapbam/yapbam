@@ -26,6 +26,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
+import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.util.JTableListener;
 import net.yapbam.util.DateUtils;
 
@@ -76,6 +77,7 @@ public class StatementViewPanel extends JPanel {
 
 	private JPanel notCheckedPanel;
 	private ChangeValueDatePanel changeValueDatePanel;
+	private JLabel summaryLabel;
 	
 	static {
 		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
@@ -360,31 +362,40 @@ public class StatementViewPanel extends JPanel {
 			gbc_label.anchor = GridBagConstraints.WEST;
 			gbc_label.gridx = 0;
 			gbc_label.gridy = 0;
-			panel.add(label, gbc_label);
 			label.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
+			panel.add(label, gbc_label);
 
 			GridBagConstraints gbc_notCheckedColumns = new GridBagConstraints();
 			gbc_notCheckedColumns.anchor = GridBagConstraints.EAST;
 			gbc_notCheckedColumns.gridx = 0;
 			gbc_notCheckedColumns.gridy = 1;
+			gbc_notCheckedColumns.gridwidth = 0;
 			notCheckedPanel.add(getNotCheckedColumns(), gbc_notCheckedColumns);
-			GridBagConstraints gbc_changeValueDatePanel = new GridBagConstraints();
-			gbc_changeValueDatePanel.anchor = GridBagConstraints.WEST;
-			gbc_changeValueDatePanel.weightx = 1.0;
-			gbc_changeValueDatePanel.insets = new Insets(0, 5, 0, 0);
-			gbc_changeValueDatePanel.gridx = 0;
-			gbc_changeValueDatePanel.gridy = 3;
-			notCheckedPanel.add(getChangeValueDatePanel(), gbc_changeValueDatePanel);
 	
 			notCheckedJScrollPane = new JScrollPane();
 			notCheckedJScrollPane.setViewportView(getUncheckedTransactionsTable());
 			GridBagConstraints gbc_notCheckedJScrollPane = new GridBagConstraints();
+			gbc_notCheckedJScrollPane.gridwidth = 0;
 			gbc_notCheckedJScrollPane.weighty = 1.0;
 			gbc_notCheckedJScrollPane.weightx = 1.0;
 			gbc_notCheckedJScrollPane.fill = GridBagConstraints.BOTH;
 			gbc_notCheckedJScrollPane.gridy = 2;
 			gbc_notCheckedJScrollPane.gridx = 0;
 			notCheckedPanel.add(notCheckedJScrollPane, gbc_notCheckedJScrollPane);
+
+			GridBagConstraints gbc_changeValueDatePanel = new GridBagConstraints();
+			gbc_changeValueDatePanel.anchor = GridBagConstraints.WEST;
+			gbc_changeValueDatePanel.insets = new Insets(0, 5, 0, 0);
+			gbc_changeValueDatePanel.gridx = 0;
+			gbc_changeValueDatePanel.gridy = 3;
+			notCheckedPanel.add(getChangeValueDatePanel(), gbc_changeValueDatePanel);
+
+			GridBagConstraints gbc_summaryLabel = new GridBagConstraints();
+			gbc_summaryLabel.anchor = GridBagConstraints.EAST;
+			gbc_summaryLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_summaryLabel.gridx = 1;
+			gbc_summaryLabel.gridy = 3;
+			notCheckedPanel.add(getSummaryLabel(), gbc_summaryLabel);
 		}
 		return notCheckedPanel;
 	}
@@ -394,6 +405,33 @@ public class StatementViewPanel extends JPanel {
 			notCheckedColumns = getUncheckedTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		}
 		return notCheckedColumns;
+	}
+	
+	private JLabel getSummaryLabel() {
+		if (summaryLabel == null) {
+			summaryLabel = new JLabel();
+			getUncheckedTransactionsTable().addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					Transaction[] transactions = getUncheckedTransactionsTable().getSelectedTransactions();
+					summaryLabel.setVisible(transactions.length>0);
+					if (transactions.length>0) {
+						String message;
+						if (transactions.length==1) {
+							message = MessageFormat.format(LocalizationData.get("CheckModePanel.selectedSummarySingular"),LocalizationData.getCurrencyInstance().format(transactions[0].getAmount())); //$NON-NLS-1$
+						} else {
+							double total = 0.0;
+							for (Transaction transaction : transactions) {
+								total += transaction.getAmount();
+							}
+							message = MessageFormat.format(LocalizationData.get("CheckModePanel.selectedSummaryPlural"), transactions.length, LocalizationData.getCurrencyInstance().format(total)); //$NON-NLS-1$
+						}
+						summaryLabel.setText(message);
+					}
+				}
+			});
+		}
+		return summaryLabel;
 	}
 	
 	private void setTables() {
@@ -449,8 +487,8 @@ public class StatementViewPanel extends JPanel {
 
 		// Set up the balance panel
 		getBalancePanel().setStatementVisible(checkMode);
-		getBalancePanel().setStart(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), statementSelected?ci.format(statement.getStartBalance()):"")); //$NON-NLS-1$
-		getBalancePanel().setEnd(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), statementSelected?ci.format(statement.getEndBalance()):"")); //$NON-NLS-1$
+		getBalancePanel().setStart(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), statementSelected?ci.format(statement.getStartBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
+		getBalancePanel().setEnd(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), statementSelected?ci.format(statement.getEndBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
 		// Set up the details
 		getDetail().setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statementSelected?statement.getNbTransactions():0, //$NON-NLS-1$
 				statementSelected?ci.format(statement.getNegativeBalance()):0.0, statementSelected?ci.format(statement.getPositiveBalance()):0.0));
