@@ -68,4 +68,11 @@ class StatementTableModel extends AbstractTableModel {
 	public Transaction[] getTransactions() {
 		return this.transactions;
 	}
+
+	public int find(long id) {
+		for (int i = 0; i < this.transactions.length; i++) {
+			if (transactions[i].getId()==id) return i;
+		}
+		return -1;
+	}
 }

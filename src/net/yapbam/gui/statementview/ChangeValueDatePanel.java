@@ -16,6 +16,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -23,7 +24,7 @@ public class ChangeValueDatePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JButton valueDateLabel;
 	private DateWidget valueDate;
-	private TransactionSelector selector;
+	private StatementTable table;
 	private TransactionsUpdater updater = new TransactionsUpdater() {
 		@Override
 		protected Transaction update(Transaction t) {
@@ -32,15 +33,19 @@ public class ChangeValueDatePanel extends JPanel {
 		}
 	};
 
-	public ChangeValueDatePanel(TransactionSelector selector) {
+	public ChangeValueDatePanel(StatementTable transactionTable) {
 		super();
-		this.selector = selector;
+		this.table = transactionTable;
 		setLayout(new GridBagLayout());
 		
 		valueDateLabel = new JButton(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
 		valueDateLabel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updater.update(ChangeValueDatePanel.this.selector);
+				long[] ids = updater.update(table);
+				for (int i = 0; i < ids.length; i++) {
+					int row = ((StatementTableModel) table.getModel()).find(ids[i]);
+					if (row>=0) table.getSelectionModel().addSelectionInterval(row, row);
+				}
 			}
 		});
 		GridBagConstraints gbc_valueDateLabel = new GridBagConstraints();
@@ -66,7 +71,7 @@ public class ChangeValueDatePanel extends JPanel {
 				refreshOk();
 			}
 		};
-		if (selector!=null) selector.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, listener);
+		if (transactionTable!=null) transactionTable.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, listener);
 		valueDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, listener);
 		
 		valueDate.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
@@ -75,7 +80,7 @@ public class ChangeValueDatePanel extends JPanel {
 	
 	private void refreshOk() {
 		boolean ok = valueDate.getDate()!=null;
-		ok = ok && (selector!=null) && (selector.getSelectedTransactions().length>0);
+		ok = ok && (table!=null) && (table.getSelectedTransactions().length>0);
 		valueDateLabel.setEnabled(ok);
 	}
 
