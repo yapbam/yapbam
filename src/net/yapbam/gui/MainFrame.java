@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements DataListener {
 	private GlobalData data;
 	private FilteredData filteredData;
 
-	private MainMenuBar mainMenu;
+	MainMenuBar mainMenu;
 	private TabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
 	private ArrayList<AbstractPlugIn> paneledPlugins;
@@ -227,8 +227,12 @@ public class MainFrame extends JFrame implements DataListener {
 		PlugInContainer[] pluginContainers = Preferences.getPlugins();
 		if (restartData == null) restartData = new Object[pluginContainers.length];
 		this.plugins = new AbstractPlugIn[pluginContainers.length];
+		Context context = new Context(this);
 		for (int i = 0; i < plugins.length; i++) {
-			if (pluginContainers[i].isActivated()) this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
+			if (pluginContainers[i].isActivated()) {
+				this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
+				this.plugins[i].setContext(context);
+			}
 			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instantiation
 				ErrorManager.INSTANCE.display(null, pluginContainers[i].getInstanciationException(), "Une erreur est survenue durant l'instanciation du plugin "+"?"); //LOCAL //TODO
 				ErrorManager.INSTANCE.log(this, pluginContainers[i].getInstanciationException());

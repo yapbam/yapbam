@@ -69,6 +69,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	private String panelToolTip;
 	private String panelTitle;
 	private boolean printSupport;
+	private Context context;
 	
 	/** Constructor.
 	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>
@@ -82,6 +83,14 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 		this.panelTitle = null;
 		this.panelToolTip = null;
 		this.printSupport = false;
+	}
+	
+	void setContext(Context context) {
+		this.context = context;
+	}
+	
+	public Context getContext() {
+		return this.context;
 	}
 	
 	/** Gets the plugin specific menus.
