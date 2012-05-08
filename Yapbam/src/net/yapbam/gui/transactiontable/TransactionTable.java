@@ -42,6 +42,7 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		});
 		this.setRowSorter(sorter);
 		this.lastSelected = null;
+		this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
