@@ -195,4 +195,8 @@ public class BalanceHistory implements Serializable {
 	public Transaction getTransaction(int index) {
 		return transactions.get(index);
 	}
+
+	public int find(Transaction transaction) {
+		return transactions.indexOf(transaction);
+	}
 }

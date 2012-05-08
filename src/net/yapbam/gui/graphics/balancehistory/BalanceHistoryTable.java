@@ -8,6 +8,7 @@ import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.actions.TransactionsJTableSelector;
 import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.FriendlyTable;
 
@@ -46,6 +47,20 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 		return result;
 	}
 	
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.actions.TransactionSelector#setSelectedTransactions(net.yapbam.data.Transaction[])
+	 */
+	@Override
+	public void setSelectedTransactions(Transaction[] transactions) {
+		TransactionsJTableSelector selector = new TransactionsJTableSelector(this) {
+			@Override
+			public int getModelIndex(Transaction transaction) {
+				return ((BalanceHistoryModel) getModel()).find(transaction);
+			}
+		};
+		selector.setSelectedTransactions(transactions);
+	}
+
 	public FilteredData getFilteredData() {
 		return data;
 	}

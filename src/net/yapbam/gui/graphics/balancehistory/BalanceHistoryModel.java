@@ -96,4 +96,8 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		if (columnIndex==10) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
 		return "?"; //$NON-NLS-1$
 	}
+
+	public int find(Transaction transaction) {
+		return data.getBalanceHistory().find(transaction);
+	}
 }
