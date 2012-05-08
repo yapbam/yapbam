@@ -244,7 +244,7 @@ public class StatementViewPanel extends JPanel {
 		return transactionsTable;
 	}
 	
-	private StatementTable getUncheckedTransactionsTable() {
+	StatementTable getUncheckedTransactionsTable() {
 		if (uncheckedTransactionsTable==null) {
 			uncheckedTransactionsTable = new StatementTable(data);
 			Action edit = new EditTransactionAction(uncheckedTransactionsTable);

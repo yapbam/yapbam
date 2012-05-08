@@ -51,9 +51,9 @@ public class TransactionsPlugInPanel extends JPanel {
 		new JTableListener(transactionTable, new Action[] { editTransactionAction, duplicateTransactionAction,
 				deleteTransactionAction, null, new ConvertToPeriodicalTransactionAction(transactionTable) }, editTransactionAction);
        
-		final JButton newTransactionButton = new JButton(new NewTransactionAction(transactionTable.getFilteredData(),false));
+		final JButton newTransactionButton = new JButton(new NewTransactionAction(transactionTable,false));
 		newTransactionButton.setText(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
-		final JButton massNewTransactionButton = new JButton(new NewTransactionAction(transactionTable.getFilteredData(),true));
+		final JButton massNewTransactionButton = new JButton(new NewTransactionAction(transactionTable,true));
 		massNewTransactionButton.setText(LocalizationData.get("MainMenu.Transactions.NewMultiple")); //$NON-NLS-1$
 		final JButton editTransactionButton = new JButton(editTransactionAction);
 		editTransactionButton.setText(LocalizationData.get("GenericButton.edit")); //$NON-NLS-1$
