@@ -36,9 +36,8 @@ public class TransactionsPlugInPanel extends JPanel {
 	@SuppressWarnings("serial")
 	public TransactionsPlugInPanel(FilteredData data) {
 		super(new BorderLayout());
-//		setOpaque(true);
 
-		balances = new BalanceReportPanel(data.getBalanceData());
+		balances = new BalanceReportPanel(data==null?null:data.getBalanceData());
 
 		transactionTable = new TransactionTable(data);
 		JScrollPane scrollPane = new JScrollPane(transactionTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,

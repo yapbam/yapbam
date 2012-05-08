@@ -35,7 +35,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		super();
 		this.descriptionSettings = new DescriptionSettings();
 		this.data = data;
-		data.addListener(this);
+		if (data!=null) data.addListener(this);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 
 	@Override
 	public int getRowCount() {
-		return data.getTransactionsNumber();
+		return data==null?0:data.getTransactionsNumber();
 	}
 	
 	@Override

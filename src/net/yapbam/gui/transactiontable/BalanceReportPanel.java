@@ -26,14 +26,16 @@ public class BalanceReportPanel extends JPanel {
 
 	public BalanceReportPanel(BalanceData balance) {
 		this.balance = balance;
-		balance.addListener(new DataListener() {
-			@Override
-			public void processEvent(DataEvent event) {
-				updateBalances();
-			}
-		});
+		if (balance!=null) {
+			balance.addListener(new DataListener() {
+				@Override
+				public void processEvent(DataEvent event) {
+					updateBalances();
+				}
+			});
+		}
 		
-		setLayout(new GridLayout(1, 3, 5, 0));
+		setLayout(new GridLayout(1, 3, 3, 0));
 		
 		currentBalance = new BalanceReportField(LocalizationData.get("MainFrame.CurrentBalance")); //$NON-NLS-1$
 		finalBalance = new BalanceReportField(LocalizationData.get("MainFrame.FinalBalance")); //$NON-NLS-1$
@@ -56,22 +58,24 @@ public class BalanceReportPanel extends JPanel {
 
 	private void updateBalances() {
 		JToggleButton selected = group.getSelected();
-		if (selected==null) {
-			currentBalance.setValue(balance.getCurrentBalance(), true);
-			finalBalance.setValue(balance.getFinalBalance(), true);
-			checkedBalance.setValue(balance.getCheckedBalance(), true);
-		} else if (selected==currentBalance) {
-			currentBalance.setValue(balance.getCurrentBalance(), true);
-			finalBalance.setValue(balance.getFinalBalance()-balance.getCurrentBalance(), false);
-			checkedBalance.setValue(balance.getCheckedBalance()-balance.getCurrentBalance(), false);
-		} else if (selected==finalBalance) {
-			currentBalance.setValue(balance.getCurrentBalance()-balance.getFinalBalance(), false);
-			finalBalance.setValue(balance.getFinalBalance(), true);
-			checkedBalance.setValue(balance.getCheckedBalance()-balance.getFinalBalance(), false);
-		} else if (selected==checkedBalance) {			
-			currentBalance.setValue(balance.getCurrentBalance()-balance.getCheckedBalance(), false);
-			finalBalance.setValue(balance.getFinalBalance()-balance.getCheckedBalance(), false);
-			checkedBalance.setValue(balance.getCheckedBalance(), true);
+		if (balance!=null) {
+			if (selected==null) {
+				currentBalance.setValue(balance.getCurrentBalance(), true);
+				finalBalance.setValue(balance.getFinalBalance(), true);
+				checkedBalance.setValue(balance.getCheckedBalance(), true);
+			} else if (selected==currentBalance) {
+				currentBalance.setValue(balance.getCurrentBalance(), true);
+				finalBalance.setValue(balance.getFinalBalance()-balance.getCurrentBalance(), false);
+				checkedBalance.setValue(balance.getCheckedBalance()-balance.getCurrentBalance(), false);
+			} else if (selected==finalBalance) {
+				currentBalance.setValue(balance.getCurrentBalance()-balance.getFinalBalance(), false);
+				finalBalance.setValue(balance.getFinalBalance(), true);
+				checkedBalance.setValue(balance.getCheckedBalance()-balance.getFinalBalance(), false);
+			} else if (selected==checkedBalance) {			
+				currentBalance.setValue(balance.getCurrentBalance()-balance.getCheckedBalance(), false);
+				finalBalance.setValue(balance.getFinalBalance()-balance.getCheckedBalance(), false);
+				checkedBalance.setValue(balance.getCheckedBalance(), true);
+			}
 		}
 		currentBalance.setToolTipText(getTooltip(currentBalance, LocalizationData.get("MainFrame.CurrentBalance.ToolTip"))); //$NON-NLS-1$
 		finalBalance.setToolTipText(getTooltip(finalBalance,LocalizationData.get("MainFrame.FinalBalance.ToolTip"))); //$NON-NLS-1$

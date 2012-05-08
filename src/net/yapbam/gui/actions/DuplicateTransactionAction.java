@@ -30,6 +30,7 @@ public class DuplicateTransactionAction extends AbstractTransactionAction {
 		Transaction newTransaction = dialog.getTransaction();
 		if (newTransaction != null) {
 			selector.getFilteredData().getGlobalData().add(newTransaction);
+			selector.setSelectedTransactions(new Transaction[]{newTransaction});
 		}
 	}
 }

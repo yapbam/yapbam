@@ -238,7 +238,7 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(transactionsTable);
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
-			Action checkAction = new CheckTransactionAction(this, transactionsTable, false);
+			Action checkAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
 			new MyListener(transactionsTable, new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return transactionsTable;
@@ -250,7 +250,7 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(uncheckedTransactionsTable);
 			Action delete = new DeleteTransactionAction(uncheckedTransactionsTable);
 			Action duplicate = new DuplicateTransactionAction(uncheckedTransactionsTable);
-			checkAction = new CheckTransactionAction(this, uncheckedTransactionsTable, true);
+			checkAction = new CheckTransactionAction(this, uncheckedTransactionsTable, getTransactionsTable(), true);
 			new MyListener(uncheckedTransactionsTable, new Action[]{edit, duplicate, delete}, edit, checkAction);
 		}
 		return uncheckedTransactionsTable;
