@@ -13,6 +13,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.actions.TransactionsJTableSelector;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class TransactionTable extends FriendlyTable implements TransactionSelector {
@@ -65,6 +66,20 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		return result;
 	}
 	
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.actions.TransactionSelector#setSelectedTransactions(net.yapbam.data.Transaction[])
+	 */
+	@Override
+	public void setSelectedTransactions(Transaction[] transactions) {
+		TransactionsJTableSelector selector = new TransactionsJTableSelector(this) {
+			@Override
+			public int getModelIndex(Transaction transaction) {
+				return data.indexOf(transaction);
+			}
+		};
+		selector.setSelectedTransactions(transactions);
+	}
+
 	public GlobalData getGlobalData() {
 		return data.getGlobalData();
 	}

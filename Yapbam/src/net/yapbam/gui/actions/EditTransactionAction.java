@@ -23,7 +23,10 @@ public class EditTransactionAction extends AbstractTransactionAction {
 	public void actionPerformed(ActionEvent e) {
 		Transaction[] transactions = selector.getSelectedTransactions();
 		if (transactions.length==1) {
-			TransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transactions[0], true, true, false);
+			Transaction transaction = TransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transactions[0], true, true, false);
+			if (transaction!=null) {
+				selector.setSelectedTransactions(new Transaction[]{transaction});
+			}
 		}
 	}
 }

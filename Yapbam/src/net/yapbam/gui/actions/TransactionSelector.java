@@ -14,6 +14,7 @@ public interface TransactionSelector {
 	 */
 	public static final String SELECTED_PROPERTY = "selectedTransaction";
 	public Transaction[] getSelectedTransactions();
+	public void setSelectedTransactions(Transaction[] transactions);
 	public FilteredData getFilteredData();
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
 	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);

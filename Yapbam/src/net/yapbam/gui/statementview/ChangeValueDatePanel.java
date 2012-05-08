@@ -41,11 +41,7 @@ public class ChangeValueDatePanel extends JPanel {
 		valueDateLabel = new JButton(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
 		valueDateLabel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				long[] ids = updater.update(table);
-				for (int i = 0; i < ids.length; i++) {
-					int row = ((StatementTableModel) table.getModel()).find(ids[i]);
-					if (row>=0) table.getSelectionModel().addSelectionInterval(row, row);
-				}
+				table.setSelectedTransactions(updater.update(table));
 			}
 		});
 		GridBagConstraints gbc_valueDateLabel = new GridBagConstraints();

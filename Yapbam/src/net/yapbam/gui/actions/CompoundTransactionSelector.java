@@ -30,6 +30,11 @@ public class CompoundTransactionSelector implements TransactionSelector {
 	}
 
 	@Override
+	public void setSelectedTransactions(Transaction[] transactions) {
+		if (internalSelector!=null) internalSelector.setSelectedTransactions(transactions);
+	}
+	
+	@Override
 	public FilteredData getFilteredData() {
 		return internalSelector==null?null:internalSelector.getFilteredData();
 	}
