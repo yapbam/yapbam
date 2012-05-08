@@ -16,6 +16,7 @@ import net.yapbam.gui.actions.TransactionSelector;
 
 public class StatementViewPlugin extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.statementView."; //$NON-NLS-1$
+	private static final String UNCHECKED_PREFIX = "net.yapbam.statementView.unchecked."; //$NON-NLS-1$
 	private StatementViewPanel panel;
 
 	public StatementViewPlugin(FilteredData data, Object state) {
@@ -33,11 +34,13 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	@Override
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(panel.getTransactionsTable(), STATE_PREFIX);
+		YapbamState.INSTANCE.restoreState(panel.getUncheckedTransactionsTable(), UNCHECKED_PREFIX);
 	}
 
 	@Override
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(panel.getTransactionsTable(), STATE_PREFIX);
+		YapbamState.INSTANCE.saveState(panel.getUncheckedTransactionsTable(), UNCHECKED_PREFIX);
 	}
 
 	@Override
