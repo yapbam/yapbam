@@ -4,12 +4,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.astesana.ajlib.swing.table.JTableSelector;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.actions.TransactionsJTableSelector;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class StatementTable extends FriendlyTable implements TransactionSelector {
@@ -51,7 +51,7 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 	
 	@Override
 	public void setSelectedTransactions(Transaction[] transactions) {
-		TransactionsJTableSelector selector = new TransactionsJTableSelector(this) {
+		JTableSelector<Transaction> selector = new JTableSelector<Transaction>(this) {
 			@Override
 			public int getModelIndex(Transaction transaction) {
 				return ((StatementTableModel) getModel()).find(transaction);

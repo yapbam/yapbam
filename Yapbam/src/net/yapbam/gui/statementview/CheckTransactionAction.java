@@ -15,6 +15,7 @@ public class CheckTransactionAction extends AbstractTransactionAction {
 	private static final long serialVersionUID = 1L;
 	
 	private StatementViewPanel tPanel;
+	private TransactionSelector destSelector;
 	private TransactionsUpdater updater = new TransactionsUpdater() {
 		@Override
 		protected Transaction update(Transaction t) {
@@ -26,13 +27,15 @@ public class CheckTransactionAction extends AbstractTransactionAction {
 					t.getValueDate(), statementId, Arrays.asList(t.getSubTransactions()));
 		}
 	};
+
 	
-	public CheckTransactionAction (StatementViewPanel statementViewPanel, TransactionSelector selector, boolean check) {
+	public CheckTransactionAction (StatementViewPanel statementViewPanel, TransactionSelector selector, TransactionSelector destSelector, boolean check) {
 		super(selector, check?LocalizationData.get("MainMenu.Transactions.Check"):LocalizationData.get("MainMenu.Transactions.Uncheck"), //$NON-NLS-1$ //$NON-NLS-2$);
 				check?IconManager.CHECK_TRANSACTION:IconManager.UNCHECK_TRANSACTION,
 				check?LocalizationData.get("MainMenu.Transactions.Check.ToolTip"):LocalizationData.get("MainMenu.Transactions.Uncheck.ToolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 		if (check) putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Check.Mnemonic")); //$NON-NLS-1$
 		this.tPanel = statementViewPanel;
+		this.destSelector = destSelector;
 		PropertyChangeListener listener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -53,6 +56,7 @@ public class CheckTransactionAction extends AbstractTransactionAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		updater.update(selector);
+		Transaction[] update = updater.update(selector);
+		destSelector.setSelectedTransactions(update);
 	}
 }

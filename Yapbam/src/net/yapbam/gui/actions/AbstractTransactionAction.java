@@ -24,6 +24,6 @@ public abstract class AbstractTransactionAction extends AbstractAction {
 	}
 	
 	protected void updateEnabled() {
-		this.setEnabled(selector.getSelectedTransactions().length==1);
+		this.setEnabled((this.selector!=null)&&(selector.getSelectedTransactions().length==1));
 	}
 }
