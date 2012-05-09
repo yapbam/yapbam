@@ -56,7 +56,7 @@ public class StatementViewPlugin extends AbstractPlugIn {
 
 	@Override
 	public TransactionSelector getTransactionSelector() {
-		return panel.getTransactionsTable();
+		return new DualTransactionSelector(panel);
 	}
 
 	@Override
