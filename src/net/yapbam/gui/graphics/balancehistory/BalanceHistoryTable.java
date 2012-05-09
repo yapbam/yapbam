@@ -1,11 +1,12 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import java.util.Arrays;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.astesana.ajlib.swing.table.JTableSelector;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
@@ -23,13 +24,13 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 		this.setModel(new BalanceHistoryModel(data.getBalanceData()));
 		setDefaultRenderer(Object.class, new CellRenderer());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.lastSelected = null;
+		this.lastSelected = new Transaction[0];
 		getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					Transaction[] selectedTransaction = getSelectedTransactions();
-					if (!NullUtils.areEquals(selectedTransaction,lastSelected)) { 					//FIXME The equality 
+					if (!Arrays.equals(selectedTransaction,lastSelected)) {
 						firePropertyChange(SELECTED_PROPERTY, lastSelected, selectedTransaction);
 						lastSelected = selectedTransaction;
 					}

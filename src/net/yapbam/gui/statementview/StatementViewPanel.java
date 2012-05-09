@@ -535,4 +535,12 @@ public class StatementViewPanel extends JPanel {
 		}
 		return changeValueDatePanel;
 	}
+	
+	FilteredData getFilteredData() {
+		return this.data;
+	}
+
+	public boolean isCheckMode() {
+		return getCheckModeChkbx().isSelected();
+	}
 }
