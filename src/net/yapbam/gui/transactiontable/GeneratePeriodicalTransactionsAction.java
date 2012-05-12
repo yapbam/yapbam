@@ -28,8 +28,8 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 	public GeneratePeriodicalTransactionsAction(FilteredData filteredData, boolean isMenu) {
 		super(LocalizationData.get("MainMenu.Transactions.Periodical")); //$NON-NLS-1$
 		if (isMenu) putValue(Action.MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Periodical.Mnemonic")); //$NON-NLS-1$
+		this.data = filteredData;
 		if (data!=null) {
-			this.data = filteredData;
 			filteredData.getGlobalData().addListener(new DataListener() {
 				@Override
 				public void processEvent(DataEvent event) {
