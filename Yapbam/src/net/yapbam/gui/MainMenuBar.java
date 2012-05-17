@@ -314,14 +314,17 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					String parent = path == null ? null : new File(path).getParent();
 					JFileChooser chooser = new FileChooser(parent);
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-					File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
+					final File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
 					if (file != null) {
-						try {
-							frame.readData(file.toURI());
-						} catch (IOException exception) {
-							ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData
-									.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
-						}
+						frame.readData(file.toURI(), new BackgroundTaskContext() {
+							@Override
+							public void exceptionOccured(Throwable exception) {
+								ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData
+										.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
+							}
+							@Override
+							public void doAfter() {}
+						});
 					}
 				}
 			} else if (source.equals(this.menuItemSave)) {

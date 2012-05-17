@@ -40,7 +40,7 @@ public class SerializerTest {
 		
 		ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
 		GlobalData other = new GlobalData();
-		Serializer.read(other, data.getPassword(), is);
+		Serializer.read(other, data.getPassword(), is, null);
 		
 		assertEquals(data.getCategoriesNumber(), other.getCategoriesNumber());
 		for (int i = 0; i < data.getCategoriesNumber(); i++) {

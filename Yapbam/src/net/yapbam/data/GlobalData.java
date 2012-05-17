@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.SwingUtilities;
+
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.event.*;
 import net.yapbam.data.xml.Serializer;
@@ -24,6 +26,8 @@ import net.yapbam.date.helpers.DateStepper;
  *  @see FilteredData
  */
 public class GlobalData extends DefaultListenable {
+	private static final boolean CHECK_EVENT_ON_EDT = Boolean.getBoolean("CheckGlobalDataEventAreOnEDT");
+	
 	private List<Account> accounts;
 	private List<PeriodicalTransaction> periodicals;
 	private List<Transaction> transactions;
@@ -128,14 +132,21 @@ public class GlobalData extends DefaultListenable {
 	/** Saves the data into a file.
 	 * @param uri The URI where to save the data.
 	 * @throws IOException if a problem occurs while saving the data.
-	 * @see #read(URI, String)
+	 * @see #read(URI, String, ProgressReport)
 	 */
 	public void save(URI uri) throws IOException {
 		Serializer.write(this, uri);
 		this.somethingChanged = false;
+		setURI(uri);
+		fireEvent(new NeedToBeSavedChangedEvent(this));
+	}
+
+	/** Sets the URI attached to the data.
+	 * @param uri The new URI.
+	 */
+	public void setURI(URI uri) {
 		URI old = this.uri;
 		this.uri = uri;
-		fireEvent(new NeedToBeSavedChangedEvent(this));
 		if (!this.uri.equals(old)) fireEvent(new URIChangedEvent(this));
 	}
 
@@ -143,16 +154,17 @@ public class GlobalData extends DefaultListenable {
 	 * The only DataEvent sent during the read is EverythingChangedEvent, where the read is successfully finished.
 	 * @param uri The URI we want to read the data from.
 	 * @param password the password that protects the data or null if there's no password.
+	 * @param report A progress report where to report the progress of the operation or null, to not report anything.
 	 * @throws IOException if a problem occurs while reading the data.
 	 * @throws AccessControlException if the password is wrong
 	 * @see EverythingChangedEvent
 	 */	
-	public void read(URI uri, String password) throws IOException {
+	public void read(URI uri, String password, ProgressReport report) throws IOException {
 		this.setEventsEnabled(false);
 		try {
 //System.out.println ("Start reading");
 //long st = System.currentTimeMillis();
-			Serializer.read (this, uri, password);
+			Serializer.read (this, uri, password, report);
 //System.out.println ("Reading in "+(System.currentTimeMillis()-st)+"ms");
 			this.uri = uri;
 			// We do not want the file reading results in a "modified" state for the file,
@@ -202,6 +214,11 @@ public class GlobalData extends DefaultListenable {
 	@Override
 	protected void fireEvent(DataEvent event) {
 		if (IsEventsEnabled()) {
+			if (CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread()) {
+				RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !");
+				e.fillInStackTrace();
+				e.printStackTrace();
+			}
 			super.fireEvent(event);
 		} else {
 			eventsPending = true;
@@ -525,8 +542,12 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	private void setChanged() {
-		if (!this.somethingChanged) {
-			this.somethingChanged = true;
+		setChanged(true);
+	}
+
+	public void setChanged(boolean changed) {
+		if (changed!=this.somethingChanged) {
+			this.somethingChanged = changed;
 			this.fireEvent(new NeedToBeSavedChangedEvent(this));
 		}
 	}

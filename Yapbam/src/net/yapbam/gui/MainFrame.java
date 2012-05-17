@@ -1,6 +1,7 @@
 package net.yapbam.gui;
 
 import java.awt.*;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
@@ -8,15 +9,19 @@ import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.AccessControlException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
+import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.astesana.ajlib.swing.Utils;
+import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
+import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
@@ -73,15 +78,12 @@ public class MainFrame extends JFrame implements DataListener {
 				// Install the exceptions logger on the AWT event queue.
 				// Warning the new event queue may ABSOLUTLY be installed by the event dispatch thread under java 1.7 or the program will never exit
 				if (!isJava6()) installEventQueue();
-				MainFrame frame = new MainFrame(null, null, args.length > 0 ? args[0] : null);
-				CheckNewReleaseAction.doAutoCheck(frame);
-				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
-				if (!Preferences.INSTANCE.isFirstRun()) {
-					String importantNews = buildNews();
-					if (importantNews.length()>0) {
-						new DefaultHTMLInfoDialog(frame, LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
-					}
-				}
+				MainFrame frame = new MainFrame(null, null);
+
+				// Initialize the data ... and start the end of the initialization process :
+				// As the initialization uses a background task, the end of the process is called at the end of this background task
+				// If we had let this extra initialization tasks here, they would have start during the data initialization.
+				frame.initData(args.length==0?null:args[0]);
 			}
 		});
 	}
@@ -138,11 +140,10 @@ public class MainFrame extends JFrame implements DataListener {
 	
 	/** Create the GUI and show it.  For thread safety, this method should be invoked from the
 	 * event-dispatching thread.
-	 * @param filteredData The current filtered if the application is restarted, null if the application is started
+	 * @param filteredData The current filtered data if the application is restarted, null if the application is simply started
 	 * @param restartData The plugins restartData if the application is restarted, null if it is simply started 
-	 * @param path The path of the initial data file. This parameter is ignored if filteredData is not null 
 	 */
-	private MainFrame(FilteredData filteredData, Object[] restartData, String path) {
+	private MainFrame(FilteredData filteredData, Object[] restartData) {
 		//Create and set up the window.
 		super();
 		
@@ -204,24 +205,12 @@ public class MainFrame extends JFrame implements DataListener {
 		});
 	
 		if (filteredData == null) {
+			// Create the data structures if they are not provided as argument
 			this.data = new GlobalData();
 			this.filteredData = new FilteredData(this.data);
 		} else {
 			this.data = filteredData.getGlobalData();
 			this.filteredData = filteredData;
-		}
-		if (filteredData == null) {
-			if (path != null) {
-				URI file = new File(path).toURI();
-				try {
-					this.readData(file);
-				} catch (IOException e) {
-					ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$
-				}
-			} else {
-				//TODO restore according to the Preferences
-				restoreGlobalData();
-			}
 		}
 	    
 		PlugInContainer[] pluginContainers = Preferences.getPlugins();
@@ -246,8 +235,6 @@ public class MainFrame extends JFrame implements DataListener {
 				updateSelectedPlugin();
 			}
 		});
-		newDataOccured();
-
 		this.data.addListener(this);
 
 		mainMenu = new MainMenuBar(this);
@@ -261,26 +248,27 @@ public class MainFrame extends JFrame implements DataListener {
 		}
 
 		updateSelectedPlugin();
+		updateWindowTitle();
 
 		// Display the window.
 		setVisible(true);
 	}
 	
-	void readData(URI uri) throws IOException {
-		SerializationData info = Serializer.getSerializationData(uri);
-		if (info.isPasswordRequired()) {
-			GetPasswordDialog dialog = new GetPasswordDialog(this,
-					LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.question"), //$NON-NLS-1$ //$NON-NLS-2$
-					UIManager.getIcon("OptionPane.questionIcon"), null); //$NON-NLS-1$
-			dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
-			dialog.setVisible(true);
-			String password = dialog.getPassword();
-			while (true) {
-				try {
-					if (password==null) break;
-					this.data.read(uri, password);
-					break;
-				} catch (AccessControlException e) {
+	void readData(URI uri, final BackgroundTaskContext context) {
+		String password = null;
+		try {
+			SerializationData info = Serializer.getSerializationData(uri);
+			// Retrieving the file password
+			if (info.isPasswordRequired()) {
+				GetPasswordDialog dialog = new GetPasswordDialog(this,
+						LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.question"), //$NON-NLS-1$ //$NON-NLS-2$
+						UIManager.getIcon("OptionPane.questionIcon"), null); //$NON-NLS-1$
+				dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.openFile.tooltip")); //$NON-NLS-1$
+				dialog.setVisible(true);
+				password = dialog.getPassword();
+				while (true) {
+					if (password==null) uri = null; // The user cancels the read
+					if ((password==null) || Serializer.isPasswordOk(uri, password)) break; // If the user cancels or entered the right password ... go next step
 					dialog = new GetPasswordDialog(this,
 							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
 							UIManager.getIcon("OptionPane.warningIcon"), null); //$NON-NLS-1$
@@ -289,11 +277,79 @@ public class MainFrame extends JFrame implements DataListener {
 					password = dialog.getPassword();
 				}
 			}
-		} else {
-			this.data.read(uri, null);
+		} catch (IOException e) {
+			context.exceptionOccured(e);
+		}
+		final BackgroundReader worker = new BackgroundReader(uri, password, data);
+		WorkInProgressFrame waitFrame = new WorkInProgressFrame(this, "Reading ...", ModalityType.APPLICATION_MODAL, worker);
+		Utils.centerWindow(waitFrame, this);
+		waitFrame.setVisible(true);
+		worker.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(Worker.STATE_PROPERTY_NAME)) {
+					if (evt.getNewValue().equals(StateValue.DONE)) {
+						if (!worker.isCancelled()) {
+							try {
+								worker.get();
+							} catch (InterruptedException e) {
+							} catch (ExecutionException e) {
+								context.exceptionOccured(e.getCause());
+							}
+						}
+						context.doAfter();
+					}
+				}
+			}
+		});
+	}
+	
+	/** A worker (see AJLib library) that reads a GlobalData URI in background. 
+	 */
+	public static class BackgroundReader extends Worker<Void, Void> implements ProgressReport {
+		private URI uri;
+		private String password;
+		private GlobalData data;
+	
+		/** Constructor.
+		 * @param uri The source URI (null to do nothing)
+		 * @param password The password to access to the source (null if no password is needed)
+		 * @param data the data structure where the source will be stored
+		 */
+		public BackgroundReader (URI uri, String password, GlobalData data) {
+			this.uri = uri;
+			this.password = password;
+			this.data = data;
+			this.data.setEventsEnabled(false);
+		}
+		
+		@Override
+		protected Void doInBackground() throws Exception {
+			if (uri!=null) {
+				Serializer.read (this.data, uri, password, this);
+				data.setURI(uri);
+				// We do not want the file reading results in a "modified" state for the file,
+				// even if, of course, a lot of things changed on the screen. But, the file
+				// is unmodified.
+				data.setChanged(false);
+			}
+			return null;
+		}
+	
+		/* (non-Javadoc)
+		 * @see javax.swing.SwingWorker#done()
+		 */
+		@Override
+		protected void done() {
+			this.data.setEventsEnabled(true);
+		}
+
+		@Override
+		public void setMax(int length) {
+			super.setPhase("Reading file", length); //LOCAL
 		}
 	}
-
+	
 	private Container createContentPane() {
 		mainPane = new TabbedPane();
 		for (int i = 0; i < plugins.length; i++) {
@@ -353,11 +409,11 @@ public class MainFrame extends JFrame implements DataListener {
 
 	public void processEvent(DataEvent event) {
 		if ((event instanceof URIChangedEvent) || (event instanceof EverythingChangedEvent) || (event instanceof NeedToBeSavedChangedEvent)) {
-			newDataOccured();
+			updateWindowTitle();
 		}
 	}
 
-	private void newDataOccured() {
+	private void updateWindowTitle() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
 		URI file = data.getURI();
 		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
@@ -382,7 +438,7 @@ public class MainFrame extends JFrame implements DataListener {
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new MainFrame(filteredData, restartData, null);
+				new MainFrame(filteredData, restartData);
 			}
 		});
 	}
@@ -475,36 +531,80 @@ public class MainFrame extends JFrame implements DataListener {
 		setExtendedState(extendedState);
 	}
 	
-	private void restoreGlobalData() {
-		StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
-		if (startOptions.isRememberFile()) {
-			URI uri = null;
-			if (getStateSaver().contains(LAST_URI)) {
-				try {
-					uri = new URI((String) getStateSaver().get(LAST_URI));
-				} catch (URISyntaxException e1) {
-					// The saved uri is invalidFormat
-					//TODO inform the user !!!
+	private class InitDataBackgroundTaskContext implements BackgroundTaskContext {
+		private boolean hasFailed;
+		private URI uri;
+		private boolean restore;
+		
+		InitDataBackgroundTaskContext(URI uri, boolean restore) {
+			this.hasFailed = false;
+			this.uri = uri;
+			this.restore = restore;
+		}
+		
+		@Override
+		public void exceptionOccured(Throwable e) {
+			this.hasFailed = true;
+			if (restore && (e instanceof FileNotFoundException)) {
+				ErrorManager.INSTANCE.display(MainFrame.this, null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
+			} else if (e instanceof IOException) {
+				if (restore) {
+					ErrorManager.INSTANCE.display(MainFrame.this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
+				} else {
+					ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
 				}
 			}
-			if (uri!=null) {
+			ErrorManager.INSTANCE.log(MainFrame.this, e);
+		}
+		
+		@Override
+		public void doAfter() {
+			if (!hasFailed && restore && (uri!=null) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
 				try {
-					readData(uri);
-					if (startOptions.isRememberFilter()) {
-						try {
-							Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
-							if (filter!=null) this.getFilteredData().setFilter(filter);
-						} catch (Exception e) {
-							ErrorManager.INSTANCE.log(this, e);
-							ErrorManager.INSTANCE.display(this, e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
-						}
+					Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
+					if (filter!=null) getFilteredData().setFilter(filter);
+				} catch (Exception e) {
+					ErrorManager.INSTANCE.log(MainFrame.this, e);
+					ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
+				}
+			}
+			// Check for an update
+			CheckNewReleaseAction.doAutoCheck(MainFrame.this);
+			
+			//FIXME launch this after the new release check is complete !
+			if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(MainFrame.this, getData()).setVisible(true);
+			if (!Preferences.INSTANCE.isFirstRun()) {
+				String importantNews = buildNews();
+				if (importantNews.length()>0) {
+					new DefaultHTMLInfoDialog(MainFrame.this, LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			}
+		}
+	}
+
+	private void initData(String path) {
+		URI uri = null;
+		if (path!=null) { // If a path was provided
+			uri = new File(path).toURI();
+		} else {
+			// Restore the data according to the Preferences
+			StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
+			if (startOptions.isRememberFile()) {
+				if (getStateSaver().contains(LAST_URI)) {
+					try {
+						uri = new URI((String) getStateSaver().get(LAST_URI));
+					} catch (URISyntaxException e1) {
+						// The saved uri is invalidFormat
+						//TODO inform the user !!!
 					}
-				} catch (FileNotFoundException e) {
-					ErrorManager.INSTANCE.display(this, null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
-				} catch (IOException e) {
-					ErrorManager.INSTANCE.display(this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
 				}
 			}
+		}
+		BackgroundTaskContext context = new InitDataBackgroundTaskContext(uri, path==null);
+		if (uri!=null) {
+			readData(uri, context);
+		} else {
+			context.doAfter();
 		}
 	}
 }
