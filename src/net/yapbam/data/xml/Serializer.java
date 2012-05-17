@@ -56,6 +56,7 @@ public class Serializer {
 		PASSWORD_ENCODED_FILE_HEADER = bytes;
 	}
 
+	static final String NB_TRANSACTIONS_ATTRIBUTE = "nbTransactions"; //$NON-NLS-1$
 	static final String STATEMENT_ATTRIBUTE = "statement"; //$NON-NLS-1$
 	static final String VALUE_DATE_ATTRIBUTE = "valueDate"; //$NON-NLS-1$
 	static final String CATEGORY_ATTRIBUTE = "category"; //$NON-NLS-1$
@@ -216,31 +217,49 @@ public class Serializer {
 	 * @param data
 	 * @param uri
 	 * @param password
+	 * @param report 
 	 * @throws IOException
 	 * @throws AccessControlException
-	 * @see GlobalData#read(URI, String)
+	 * @see GlobalData#read(URI, String, ProgressReport)
 	 */
-	public static void read(GlobalData data, URI uri, String password) throws IOException, AccessControlException {
-//		long start = System.currentTimeMillis();
+	public static void read(GlobalData data, URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
+//		long start = System.currentTimeMillis();//TODO
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) { //$NON-NLS-1$ //$NON-NLS-2$
 			InputStream is = uri.toURL().openStream();
 			try {
-				is = read(data, password, is);
+				is = read(data, password, is, report);
 			} finally {
 				is.close();
 			}
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme()); //$NON-NLS-1$
 		}
-//		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");
+//		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");//TODO
+	}
+	
+	/** Tests whether a password is the right one for an uri.
+	 * @param uri The URI containing Yapbam data
+	 * @param password A password (null for no password)
+	 * @throws IOException If an I/O error occurred
+	 */
+	public static boolean isPasswordOk(URI uri, String password) throws IOException {
+		InputStream is = uri.toURL().openStream();
+		try {
+			getDecryptedStream(password, is);
+			return true;
+		} catch (AccessControlException e) {
+			return false;
+		} finally {
+			is.close();
+		}
 	}
 
-	static InputStream read(GlobalData data, String password, InputStream is) throws IOException {
+	static InputStream read(GlobalData data, String password, InputStream is, ProgressReport report) throws IOException, AccessControlException {
 		boolean wasEnabled = data.isEventsEnabled();
 		try {
 			is = getDecryptedStream(password, is);
 			if (wasEnabled) data.setEventsEnabled(false);
-			read(data, is);
+			read(data, is, report);
 			data.setPassword(password);
 		} finally {
 			if (wasEnabled) data.setEventsEnabled(true);
@@ -254,7 +273,7 @@ public class Serializer {
 	 * @return A new stream that automatically decrypt the original stream.
 	 * @throws IOException
 	 */
-	public static InputStream getDecryptedStream(String password, InputStream stream) throws IOException {
+	public static InputStream getDecryptedStream(String password, InputStream stream) throws IOException, AccessControlException {
 		if (password!=null) {
 			// Pass the header
 			for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
@@ -297,9 +316,9 @@ public class Serializer {
 		}
 	}
 
-	private static void read(GlobalData data, InputStream is) throws IOException {
+	private static void read(GlobalData data, InputStream is, ProgressReport report) throws IOException {
 		try {
-			SAXParserFactory.newInstance().newSAXParser().parse(is, new GlobalDataHandler(data));
+			SAXParserFactory.newInstance().newSAXParser().parse(is, new GlobalDataHandler(data, report));
 		} catch (Exception e) {
 			throw new IOException(e);
 		}
@@ -311,7 +330,7 @@ public class Serializer {
 			atts.addAttribute(EMPTY, EMPTY, "nbAccounts", CDATA, Integer.toString(data.getAccountsNumber()));
 			atts.addAttribute(EMPTY, EMPTY, "nbCategories", CDATA, Integer.toString(data.getCategoriesNumber()));
 			atts.addAttribute(EMPTY, EMPTY, "nbPeriodicalTransactions", CDATA, Integer.toString(data.getPeriodicalTransactionsNumber()));
-			atts.addAttribute(EMPTY, EMPTY, "nbTransactions", CDATA, Integer.toString(data.getTransactionsNumber()));
+			atts.addAttribute(EMPTY, EMPTY, NB_TRANSACTIONS_ATTRIBUTE, CDATA, Integer.toString(data.getTransactionsNumber()));
 			hd.startElement(EMPTY,EMPTY,GLOBAL_DATA_TAG,atts);
 			
 			// Accounts.

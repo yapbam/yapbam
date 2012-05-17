@@ -131,7 +131,7 @@ public class WelcomePanel extends JPanel {
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				try {
-					data.read(file.toURI(), null);
+					data.read(file.toURI(), null, null);
 				} catch (IOException e) {
 					String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
 							file.getAbsolutePath());

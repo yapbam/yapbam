@@ -19,17 +19,23 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 class GlobalDataHandler extends DefaultHandler {
+	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
+	
 	private GlobalData data;
+	private ProgressReport report;
 	// used to save temporary object data
 	private Stack<Object> tempData;
+	private int currentProgress;
 	
 	private Collection<Transaction> transactions;
 
-	GlobalDataHandler(GlobalData data) {
+	GlobalDataHandler(GlobalData data, ProgressReport report) {
 		super();
+		this.report = report;
 		this.data = data;
 		this.tempData = new Stack<Object>();
 		this.transactions = new ArrayList<Transaction>();
+		if (report!=null) report.setMax(-1);
 	}
 	
 	private Map<String, String> buildMap(Attributes attributes) {
@@ -43,6 +49,15 @@ class GlobalDataHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
+			try {
+				if (SLOW_READING) Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+			if (report!=null) {
+				report.setMax(Integer.parseInt(attributes.getValue(Serializer.NB_TRANSACTIONS_ATTRIBUTE)));
+				this.currentProgress = 0;
+				report.reportProgress(this.currentProgress);
+			}
 		} else if (qName.equals(Serializer.ACCOUNT_TAG)) {
 			String id = attributes.getValue(Serializer.ID_ATTRIBUTE);
 			double balance = Double.parseDouble(attributes.getValue(Serializer.INITIAL_BALANCE_ATTRIBUTE));
@@ -178,6 +193,14 @@ class GlobalDataHandler extends DefaultHandler {
 			Date valueDate = Serializer.toDate(attributes.get(Serializer.VALUE_DATE_ATTRIBUTE));
 			String statement = attributes.get(Serializer.STATEMENT_ATTRIBUTE);
 			this.transactions.add(new Transaction(date, number, p.description, p.comment, p.amount, p.account, p.mode, p.category, valueDate, statement, lst));
+			if (report!=null) {
+				this.currentProgress++;
+				report.reportProgress(currentProgress);
+				try {
+					if (SLOW_READING) Thread.sleep(1);
+				} catch (InterruptedException e) {
+				}
+			}
 		} else if (qName.equals(Serializer.SUBTRANSACTION_TAG)) {
 		} else if (qName.equals(Serializer.PERIODICAL_TAG)) {
 			ArrayList<SubTransaction> lst = (ArrayList<SubTransaction>) this.tempData.pop();
