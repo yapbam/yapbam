@@ -34,6 +34,8 @@ import java.util.concurrent.ExecutionException;
  * This url could be a useful reading to understand this class : http://java.sun.com/docs/books/tutorial/uiswing/concurrency/index.html
  */
 public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
+	private static final boolean SLOW_UPDATE_CHECKING = Boolean.getBoolean("SlowUpdateChecking");
+
 	private boolean auto;
 
 	/** Constructor.
@@ -78,6 +80,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		
 		@Override
 		protected UpdateInformation doInBackground() throws Exception {
+			if (SLOW_UPDATE_CHECKING) Thread.sleep(2000);
 			return VersionManager.getUpdateInformation();
 		}
 		

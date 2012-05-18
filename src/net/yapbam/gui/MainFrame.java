@@ -571,7 +571,8 @@ public class MainFrame extends JFrame implements DataListener {
 			// Check for an update
 			CheckNewReleaseAction.doAutoCheck(MainFrame.this);
 			
-			//FIXME launch this after the new release check is complete !
+			// As the check for update is a (possibly) long background task, we do not wait its completion before showing the dialogs
+			// So, we do not need to use a BackgroundTaskContext there
 			if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(MainFrame.this, getData()).setVisible(true);
 			if (!Preferences.INSTANCE.isFirstRun()) {
 				String importantNews = buildNews();
