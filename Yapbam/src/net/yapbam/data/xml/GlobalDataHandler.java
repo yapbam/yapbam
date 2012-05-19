@@ -54,9 +54,15 @@ class GlobalDataHandler extends DefaultHandler {
 			} catch (InterruptedException e) {
 			}
 			if (report!=null) {
-				report.setMax(Integer.parseInt(attributes.getValue(Serializer.NB_TRANSACTIONS_ATTRIBUTE)));
-				this.currentProgress = 0;
-				report.reportProgress(this.currentProgress);
+				String attr = attributes.getValue(Serializer.NB_TRANSACTIONS_ATTRIBUTE);
+				if (attr!=null) {
+					report.setMax(Integer.parseInt(attr));
+					this.currentProgress = 0;
+					report.reportProgress(this.currentProgress);
+				} else {
+					// If the file has an old formar, initialize the current progress to a value which mean that progress should stay unchanged (as max was not set)
+					this.currentProgress = -1;
+				}
 			}
 		} else if (qName.equals(Serializer.ACCOUNT_TAG)) {
 			String id = attributes.getValue(Serializer.ID_ATTRIBUTE);
@@ -194,8 +200,10 @@ class GlobalDataHandler extends DefaultHandler {
 			String statement = attributes.get(Serializer.STATEMENT_ATTRIBUTE);
 			this.transactions.add(new Transaction(date, number, p.description, p.comment, p.amount, p.account, p.mode, p.category, valueDate, statement, lst));
 			if (report!=null) {
-				this.currentProgress++;
-				report.reportProgress(currentProgress);
+				if (this.currentProgress>=0) {
+					this.currentProgress++;
+					report.reportProgress(currentProgress);
+				}
 				try {
 					if (SLOW_READING) Thread.sleep(1);
 				} catch (InterruptedException e) {

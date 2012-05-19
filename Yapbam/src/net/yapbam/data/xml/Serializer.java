@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.AccessControlException;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -129,7 +130,7 @@ public class Serializer {
 	private TransformerHandler hd;
 	private OutputStream os;
 	
-	public static void write(GlobalData data, URI uri) throws IOException {
+	public static void write(GlobalData data, URI uri, ProgressReport report) throws IOException {
 		if (uri.getScheme().equals("file")) { //$NON-NLS-1$
 			File file = new File(uri);
 			if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -137,13 +138,13 @@ public class Serializer {
 			// Everything here is pretty ugly.
 			//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
 			File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file; //$NON-NLS-1$ //$NON-NLS-2$
-			write (data, new FileOutputStream(writed));
+			write (data, new FileOutputStream(writed), report);
 			if (!file.equals(writed)) {
 				// Ok, not so safe as I want since we could lost the file between deleting and renaming
 				// but I can't find a better way
 				if (!file.delete()) {
 					writed.delete();
-					throw new IOException("Unable to delete old copy of "+file); //$NON-NLS-1$
+					throw new IOException(MessageFormat.format("Unable to delete previous version of {0}",file)); //LOCAL
 				}
 				FileUtils.move(writed, file);
 			}
@@ -152,16 +153,16 @@ public class Serializer {
 			// Currently this functionality isn't implemented in the gui
 			// Probably, it means implementing an ftp client to create directories and save copy
 			OutputStream os = uri.toURL().openConnection(Preferences.INSTANCE.getHttpProxy()).getOutputStream();
-			write (data, os);
+			write (data, os, report);
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme()); //$NON-NLS-1$
 		}
 	}
 	
-	private static void write(GlobalData data, OutputStream os) throws IOException {
+	private static void write(GlobalData data, OutputStream os, ProgressReport report) throws IOException {
 		try {
 			Serializer serializer = new Serializer(data.getPassword(), os);
-			serializer.serialize(data);
+			serializer.serialize(data, report);
 			serializer.closeDocument();
 		} finally {
 			os.close();
@@ -324,7 +325,7 @@ public class Serializer {
 		}
 	}
 
-	void serialize (GlobalData data) throws IOException {
+	void serialize (GlobalData data, ProgressReport report) throws IOException {
 		try {
 			atts.clear();
 			atts.addAttribute(EMPTY, EMPTY, "nbAccounts", CDATA, Integer.toString(data.getAccountsNumber()));
@@ -347,10 +348,12 @@ public class Serializer {
 			for (int i = 0; i < data.getPeriodicalTransactionsNumber(); i++) {
 				serialize(data.getPeriodicalTransaction(i));
 			}
+			if (report!=null) report.setMax(data.getTransactionsNumber());
 			//Transactions
 			for (int i=0;i<data.getTransactionsNumber();i++)
 			{
 				serialize(data.getTransaction(i));
+				if (report!=null) report.reportProgress(i+1);
 			}		
 			hd.endElement(EMPTY,EMPTY,GLOBAL_DATA_TAG);
 		} catch (SAXException e) {

@@ -109,7 +109,7 @@ public class GlobalData extends DefaultListenable {
 	
 	/** Tests if the data needs to be saved.
 	 * @return true if the data needs to be saved, false, if there's nothing to change (no changes since last save).
-	 * @see #save(URI)
+	 * @see #save(URI, ProgressReport)
 	 */
 	public boolean somethingHasChanged() {
 		return this.somethingChanged;
@@ -131,11 +131,12 @@ public class GlobalData extends DefaultListenable {
 
 	/** Saves the data into a file.
 	 * @param uri The URI where to save the data.
+	 * @param report A progress report where to report the progress of the operation or null, to not report anything.
 	 * @throws IOException if a problem occurs while saving the data.
 	 * @see #read(URI, String, ProgressReport)
 	 */
-	public void save(URI uri) throws IOException {
-		Serializer.write(this, uri);
+	public void save(URI uri, ProgressReport report) throws IOException {
+		Serializer.write(this, uri, report);
 		this.somethingChanged = false;
 		setURI(uri);
 		fireEvent(new NeedToBeSavedChangedEvent(this));
