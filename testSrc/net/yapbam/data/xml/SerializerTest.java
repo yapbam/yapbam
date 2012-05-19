@@ -34,7 +34,7 @@ public class SerializerTest {
 	private void testInstance(GlobalData data) throws IOException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
 		Serializer serializer = new Serializer(data.getPassword(), os);
-		serializer.serialize(data);
+		serializer.serialize(data, null);
 		serializer.closeDocument();
 		os.flush();
 		

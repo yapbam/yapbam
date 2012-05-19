@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.utilities.FileUtils;
+import net.yapbam.data.ProgressReport;
 import net.yapbam.util.Portable;
 
 class SaveManager {
@@ -79,7 +80,19 @@ class SaveManager {
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 				if (choice==0) return false;
 			}
-			frame.getData().save(uri);
+			frame.getData().save(uri, new ProgressReport() { //TODO
+				private int max;
+
+				@Override
+				public void setMax(int length) {
+					this.max = length;
+				}
+				
+				@Override
+				public void reportProgress(int progress) {
+					System.out.println (progress+"/"+max);
+				}
+			});
 			return true;
 		} catch (Throwable e) {
 			ErrorManager.INSTANCE.display(frame, e);

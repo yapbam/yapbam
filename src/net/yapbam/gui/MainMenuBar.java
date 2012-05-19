@@ -12,6 +12,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -316,15 +317,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 					final File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
 					if (file != null) {
-						frame.readData(file.toURI(), new BackgroundTaskContext() {
-							@Override
-							public void exceptionOccured(Throwable exception) {
-								ErrorManager.INSTANCE.display(frame, exception, MessageFormat.format(LocalizationData
-										.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
-							}
-							@Override
-							public void doAfter() {}
-						});
+						try {
+							frame.readData(file.toURI());
+						} catch (InterruptedException e1) {
+						} catch (ExecutionException exception) {
+							ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
+									.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
+						}
 					}
 				}
 			} else if (source.equals(this.menuItemSave)) {

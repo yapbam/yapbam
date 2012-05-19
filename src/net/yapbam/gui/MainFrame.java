@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
-import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -84,6 +83,20 @@ public class MainFrame extends JFrame implements DataListener {
 				// As the initialization uses a background task, the end of the process is called at the end of this background task
 				// If we had let this extra initialization tasks here, they would have start during the data initialization.
 				frame.initData(args.length==0?null:args[0]);
+
+				// Check for an update
+				CheckNewReleaseAction.doAutoCheck(frame);
+				
+				// As the check for update is a (possibly) long background task, we do not wait its completion before showing the dialogs
+				// So, we do not need to use a BackgroundTaskContext there
+				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
+				
+				if (!Preferences.INSTANCE.isFirstRun()) {
+					String importantNews = buildNews();
+					if (importantNews.length()>0) {
+						new DefaultHTMLInfoDialog(frame, LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+					}
+				}
 			}
 		});
 	}
@@ -254,7 +267,7 @@ public class MainFrame extends JFrame implements DataListener {
 		setVisible(true);
 	}
 	
-	void readData(URI uri, final BackgroundTaskContext context) {
+	boolean readData(URI uri) throws InterruptedException, ExecutionException {
 		String password = null;
 		try {
 			SerializationData info = Serializer.getSerializationData(uri);
@@ -278,30 +291,17 @@ public class MainFrame extends JFrame implements DataListener {
 				}
 			}
 		} catch (IOException e) {
-			context.exceptionOccured(e);
+			new ExecutionException(e);
 		}
 		final BackgroundReader worker = new BackgroundReader(uri, password, data);
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(this, "Reading ...", ModalityType.APPLICATION_MODAL, worker);
 		Utils.centerWindow(waitFrame, this);
 		waitFrame.setVisible(true);
-		worker.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals(Worker.STATE_PROPERTY_NAME)) {
-					if (evt.getNewValue().equals(StateValue.DONE)) {
-						if (!worker.isCancelled()) {
-							try {
-								worker.get();
-							} catch (InterruptedException e) {
-							} catch (ExecutionException e) {
-								context.exceptionOccured(e.getCause());
-							}
-						}
-						context.doAfter();
-					}
-				}
-			}
-		});
+		boolean cancelled = worker.isCancelled();
+		if (!cancelled) {
+				worker.get();
+		}
+		return !cancelled;
 	}
 	
 	/** A worker (see AJLib library) that reads a GlobalData URI in background. 
@@ -531,58 +531,6 @@ public class MainFrame extends JFrame implements DataListener {
 		setExtendedState(extendedState);
 	}
 	
-	private class InitDataBackgroundTaskContext implements BackgroundTaskContext {
-		private boolean hasFailed;
-		private URI uri;
-		private boolean restore;
-		
-		InitDataBackgroundTaskContext(URI uri, boolean restore) {
-			this.hasFailed = false;
-			this.uri = uri;
-			this.restore = restore;
-		}
-		
-		@Override
-		public void exceptionOccured(Throwable e) {
-			this.hasFailed = true;
-			if (restore && (e instanceof FileNotFoundException)) {
-				ErrorManager.INSTANCE.display(MainFrame.this, null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
-			} else if (e instanceof IOException) {
-				if (restore) {
-					ErrorManager.INSTANCE.display(MainFrame.this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
-				} else {
-					ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
-				}
-			}
-			ErrorManager.INSTANCE.log(MainFrame.this, e);
-		}
-		
-		@Override
-		public void doAfter() {
-			if (!hasFailed && restore && (uri!=null) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
-				try {
-					Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
-					if (filter!=null) getFilteredData().setFilter(filter);
-				} catch (Exception e) {
-					ErrorManager.INSTANCE.log(MainFrame.this, e);
-					ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
-				}
-			}
-			// Check for an update
-			CheckNewReleaseAction.doAutoCheck(MainFrame.this);
-			
-			// As the check for update is a (possibly) long background task, we do not wait its completion before showing the dialogs
-			// So, we do not need to use a BackgroundTaskContext there
-			if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(MainFrame.this, getData()).setVisible(true);
-			if (!Preferences.INSTANCE.isFirstRun()) {
-				String importantNews = buildNews();
-				if (importantNews.length()>0) {
-					new DefaultHTMLInfoDialog(MainFrame.this, LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
-		}
-	}
-
 	private void initData(String path) {
 		URI uri = null;
 		if (path!=null) { // If a path was provided
@@ -601,11 +549,33 @@ public class MainFrame extends JFrame implements DataListener {
 				}
 			}
 		}
-		BackgroundTaskContext context = new InitDataBackgroundTaskContext(uri, path==null);
+		boolean restore = (path == null);
 		if (uri!=null) {
-			readData(uri, context);
-		} else {
-			context.doAfter();
+			try {
+				readData(uri);
+				if (restore && (uri!=null) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
+					try {
+						Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
+						if (filter!=null) getFilteredData().setFilter(filter);
+					} catch (Exception e) {
+						ErrorManager.INSTANCE.log(MainFrame.this, e);
+						ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
+					}
+				}
+			} catch (InterruptedException e) {
+			} catch (ExecutionException exception) {
+				Throwable e = exception.getCause();
+				if (restore && (e instanceof FileNotFoundException)) {
+					ErrorManager.INSTANCE.display(MainFrame.this, null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
+				} else if (e instanceof IOException) {
+					if (restore) {
+						ErrorManager.INSTANCE.display(MainFrame.this, e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
+					} else {
+						ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
+					}
+				}
+				ErrorManager.INSTANCE.log(MainFrame.this, e);
+			}
 		}
 	}
 }
