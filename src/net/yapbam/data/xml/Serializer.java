@@ -36,6 +36,8 @@ import javax.xml.transform.sax.*;
  * </UL>
  */
 public class Serializer {
+	private static final boolean SLOW_WRITING = Boolean.getBoolean("slowDataWriting"); //$NON-NLS-1$
+
 	private static final byte[] PASSWORD_ENCODED_FILE_HEADER;
 	private static final String EMPTY = ""; //$NON-NLS-1$
 	private static final String CDATA = "CDATA"; //$NON-NLS-1$
@@ -350,11 +352,15 @@ public class Serializer {
 			}
 			if (report!=null) report.setMax(data.getTransactionsNumber());
 			//Transactions
-			for (int i=0;i<data.getTransactionsNumber();i++)
-			{
+			for (int i=0;i<data.getTransactionsNumber();i++) {
+				if (SLOW_WRITING) {
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {}
+				}
 				serialize(data.getTransaction(i));
 				if (report!=null) report.reportProgress(i+1);
-			}		
+			}
 			hd.endElement(EMPTY,EMPTY,GLOBAL_DATA_TAG);
 		} catch (SAXException e) {
 			throw new IOException(e);

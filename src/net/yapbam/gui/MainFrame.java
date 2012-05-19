@@ -307,6 +307,7 @@ public class MainFrame extends JFrame implements DataListener {
 	/** A worker (see AJLib library) that reads a GlobalData URI in background. 
 	 */
 	public static class BackgroundReader extends Worker<Void, Void> implements ProgressReport {
+		//FIXME IF the worker is cancelled, the event are enabled on the global. As the parsing continue, this results in event posted outside the EDT !!!
 		private URI uri;
 		private String password;
 		private GlobalData data;
@@ -342,6 +343,11 @@ public class MainFrame extends JFrame implements DataListener {
 		@Override
 		protected void done() {
 			this.data.setEventsEnabled(true);
+			try {
+				get();
+			} catch (ExecutionException e) {
+				data.clear();
+			} catch (InterruptedException e) {}
 		}
 
 		@Override
@@ -573,8 +579,9 @@ public class MainFrame extends JFrame implements DataListener {
 					} else {
 						ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
 					}
+				} else {
+					ErrorManager.INSTANCE.log(MainFrame.this, e);
 				}
-				ErrorManager.INSTANCE.log(MainFrame.this, e);
 			}
 		}
 	}
