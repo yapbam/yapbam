@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
@@ -342,12 +343,17 @@ public class MainFrame extends JFrame implements DataListener {
 		 */
 		@Override
 		protected void done() {
-			this.data.setEventsEnabled(true);
-			try {
-				get();
-			} catch (ExecutionException e) {
-				data.clear();
-			} catch (InterruptedException e) {}
+			synchronized (data) {
+				this.data.setEventsEnabled(true);
+				try {
+					get();
+				} catch (ExecutionException e) {
+					data.clear();
+				} catch (InterruptedException e) {
+				} catch (CancellationException e) {
+					data.clear();
+				}
+			}
 		}
 
 		@Override

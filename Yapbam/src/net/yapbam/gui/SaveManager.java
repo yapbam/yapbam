@@ -92,6 +92,11 @@ class SaveManager {
 				public void reportProgress(int progress) {
 					System.out.println (progress+"/"+max);
 				}
+
+				@Override
+				public boolean isCancelled() {
+					return false;
+				}
 			});
 			return true;
 		} catch (Throwable e) {
