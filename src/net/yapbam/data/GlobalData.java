@@ -160,7 +160,7 @@ public class GlobalData extends DefaultListenable {
 	 * @throws AccessControlException if the password is wrong
 	 * @see EverythingChangedEvent
 	 */	
-	public void read(URI uri, String password, ProgressReport report) throws IOException {
+	public void read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
 		this.setEventsEnabled(false);
 		try {
 //System.out.println ("Start reading");
