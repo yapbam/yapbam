@@ -4,7 +4,12 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
+
+version	0.11.2 (05/31/2012)
+improvement
 	The csv exports doesn't contain anymore thousands separators (Excel doesn't recognize strings with such separators as numbers).
+fix
+	In countries where space is the thousand separator (France, Sweden, ...), amounts including a space as thousand separator were rejected during import (This was due to a <a href="http://bugs.sun.com/view_bug.do?bug_id=4510618">java bug</a>).
 	
 version	0.11.1 (05/12/2012)
 fix
