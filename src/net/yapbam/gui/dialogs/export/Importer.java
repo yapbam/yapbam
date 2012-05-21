@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -222,6 +223,12 @@ public class Importer {
 	private ParsePosition ppos = new ParsePosition(0);
 	private double parseAmount(String text) throws ParseException {
 		NumberFormat format = NumberFormat.getCurrencyInstance(LocalizationData.getLocale());
+		char groupingSeparator = ((DecimalFormat)format).getDecimalFormatSymbols().getGroupingSeparator();
+		if (groupingSeparator==160) {
+			// If separator is non breaking space, replace spaces by non breaking space
+			// see http://bugs.sun.com/view_bug.do?bug_id=4510618
+			text = text.replace(' ', groupingSeparator);
+		}
 		try {
 			return format.parse(text).doubleValue();
 		} catch (ParseException e) {
@@ -230,7 +237,9 @@ public class Importer {
 			Number parsed = format.parse(text, ppos);
 			if (parsed==null) throw new ParseException(text, ppos.getIndex());
 			double value = parsed.doubleValue();
-			if (ppos.getIndex()<text.length()) throw new ParseException(text, ppos.getIndex());
+			if (ppos.getIndex()<text.length()) {
+				throw new ParseException(text, ppos.getIndex());
+			}
 			return value;
 		}
 	}
