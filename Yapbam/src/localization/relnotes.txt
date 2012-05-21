@@ -4,6 +4,7 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
+	The csv exports doesn't contain anymore thousands separators (Excel doesn't recognize strings with such separators as numbers).
 	
 version	0.11.1 (05/12/2012)
 fix

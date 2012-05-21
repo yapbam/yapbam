@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import net.astesana.ajlib.utilities.CSVExporter;
 import net.yapbam.data.event.*;
 import net.yapbam.util.DateUtils;
 
@@ -198,12 +198,7 @@ public class BudgetView extends DefaultListenable {
 				out.append(categorySumWording);
 			}
 			// Output category lines
-			NumberFormat currencyFormatter = NumberFormat.getInstance(locale);
-			if (currencyFormatter instanceof DecimalFormat) {
-				// We don't use the currency instance, because it would have outputed some currency prefix or suffix, not very easy
-				// to manipulate with an excel like application
-				currencyFormatter.setMaximumFractionDigits(NumberFormat.getCurrencyInstance(locale).getMaximumFractionDigits());
-			}
+			NumberFormat currencyFormatter = CSVExporter.getCurrencyFormater(locale);
 			for (Category category : categories) {
 				out.newLine();
 				out.append(category.getName());

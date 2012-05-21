@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.ajlib.utilities.CSVExporter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
@@ -21,7 +22,6 @@ import net.yapbam.gui.widget.JLabelMenu;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -130,12 +130,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 		private DefaultExporter (Locale locale) {
 			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
-			currencyFormat = NumberFormat.getInstance(locale);
-			if (currencyFormat instanceof DecimalFormat) {
-				// We don't use the currency instance, because it would have outputed some currency prefix or suffix, not very easy
-				// to manipulate with an excel like application
-				currencyFormat.setMaximumFractionDigits(NumberFormat.getCurrencyInstance(locale).getMaximumFractionDigits());
-			}
+			currencyFormat = CSVExporter.getCurrencyFormater(locale);
 		}
 		
 		@Override
