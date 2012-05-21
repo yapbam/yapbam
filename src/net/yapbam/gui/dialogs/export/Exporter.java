@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
+import net.astesana.ajlib.utilities.CSVExporter;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.SubTransaction;
@@ -24,9 +25,7 @@ public class Exporter {
 		super();
 		this.parameters = parameters;
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
-		amountFormatter = NumberFormat.getNumberInstance(LocalizationData.getLocale());
-		amountFormatter.setMaximumFractionDigits(LocalizationData.getCurrencyInstance().getMaximumFractionDigits());
-		amountFormatter.setMinimumFractionDigits(LocalizationData.getCurrencyInstance().getMinimumFractionDigits());
+		amountFormatter = CSVExporter.getCurrencyFormater(LocalizationData.getLocale());
 	}
 	
 	public void exportFile(File file, FilteredData data) throws IOException {
