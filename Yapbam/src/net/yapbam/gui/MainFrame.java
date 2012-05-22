@@ -11,7 +11,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
@@ -90,7 +89,7 @@ public class MainFrame extends JFrame implements DataListener {
 				
 				// As the check for update is a (possibly) long background task, we do not wait its completion before showing the dialogs
 				// So, we do not need to use a BackgroundTaskContext there
-				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame, frame.getData()).setVisible(true);
+				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame).setVisible(true);
 				
 				if (!Preferences.INSTANCE.isFirstRun()) {
 					String importantNews = buildNews();
@@ -268,7 +267,7 @@ public class MainFrame extends JFrame implements DataListener {
 		setVisible(true);
 	}
 	
-	boolean readData(URI uri) throws InterruptedException, ExecutionException {
+	public boolean readData(URI uri) throws ExecutionException {
 		String password = null;
 		try {
 			SerializationData info = Serializer.getSerializationData(uri);
@@ -294,68 +293,47 @@ public class MainFrame extends JFrame implements DataListener {
 		} catch (IOException e) {
 			new ExecutionException(e);
 		}
-		final BackgroundReader worker = new BackgroundReader(uri, password, data);
+		final BackgroundReader worker = new BackgroundReader(uri, password);
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(this, "Reading ...", ModalityType.APPLICATION_MODAL, worker);
 		Utils.centerWindow(waitFrame, this);
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
 		if (!cancelled) {
-				worker.get();
+				GlobalData redData;
+				try {
+					redData = worker.get();
+					boolean enabled = data.isEventsEnabled();
+					data.setEventsEnabled(false);
+					data.copy(redData);
+					data.setChanged(false);
+					data.setEventsEnabled(enabled);
+				} catch (InterruptedException e) {
+					throw new ExecutionException(e);
+				}
 		}
 		return !cancelled;
 	}
 	
 	/** A worker (see AJLib library) that reads a GlobalData URI in background. 
 	 */
-	public static class BackgroundReader extends Worker<Void, Void> implements ProgressReport {
-		//FIXME IF the worker is cancelled, the event are enabled on the global. As the parsing continue, this results in event posted outside the EDT !!!
+	public static class BackgroundReader extends Worker<GlobalData, Void> implements ProgressReport {
 		private URI uri;
 		private String password;
-		private GlobalData data;
 	
 		/** Constructor.
 		 * @param uri The source URI (null to do nothing)
 		 * @param password The password to access to the source (null if no password is needed)
-		 * @param data the data structure where the source will be stored
 		 */
-		public BackgroundReader (URI uri, String password, GlobalData data) {
+		public BackgroundReader (URI uri, String password) {
 			this.uri = uri;
 			this.password = password;
-			this.data = data;
-			this.data.setEventsEnabled(false);
 		}
 		
 		@Override
-		protected Void doInBackground() throws Exception {
-			if (uri!=null) {
-				Serializer.read (this.data, uri, password, this);
-				data.setURI(uri);
-				// We do not want the file reading results in a "modified" state for the file,
-				// even if, of course, a lot of things changed on the screen. But, the file
-				// is unmodified.
-				data.setChanged(false);
-			}
-			return null;
+		protected GlobalData doInBackground() throws Exception {
+			return uri==null ? null : Serializer.read(uri, password, this);
 		}
 	
-		/* (non-Javadoc)
-		 * @see javax.swing.SwingWorker#done()
-		 */
-		@Override
-		protected void done() {
-			synchronized (data) {
-				this.data.setEventsEnabled(true);
-				try {
-					get();
-				} catch (ExecutionException e) {
-					data.clear();
-				} catch (InterruptedException e) {
-				} catch (CancellationException e) {
-					data.clear();
-				}
-			}
-		}
-
 		@Override
 		public void setMax(int length) {
 			super.setPhase("Reading file", length); //LOCAL
@@ -574,7 +552,6 @@ public class MainFrame extends JFrame implements DataListener {
 						ErrorManager.INSTANCE.display(MainFrame.this, e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
 					}
 				}
-			} catch (InterruptedException e) {
 			} catch (ExecutionException exception) {
 				Throwable e = exception.getCause();
 				if (restore && (e instanceof FileNotFoundException)) {

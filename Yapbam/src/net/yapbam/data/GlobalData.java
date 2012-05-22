@@ -3,7 +3,6 @@ package net.yapbam.data;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URI;
-import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,13 +28,13 @@ public class GlobalData extends DefaultListenable {
 	private static final boolean CHECK_EVENT_ON_EDT = Boolean.getBoolean("CheckGlobalDataEventAreOnEDT");
 	
 	private List<Account> accounts;
+	private List<Category> categories;
 	private List<PeriodicalTransaction> periodicals;
 	private List<Transaction> transactions;
 	private URI uri;
-	private boolean somethingChanged;
-	private List<Category> categories;
 	private String password;
 
+	private boolean somethingChanged;
 	private boolean eventsPending;
 
 	private static Currency defaultCurrency;
@@ -133,7 +132,6 @@ public class GlobalData extends DefaultListenable {
 	 * @param uri The URI where to save the data.
 	 * @param report A progress report where to report the progress of the operation or null, to not report anything.
 	 * @throws IOException if a problem occurs while saving the data.
-	 * @see #read(URI, String, ProgressReport)
 	 */
 	public void save(URI uri, ProgressReport report) throws IOException {
 		Serializer.write(this, uri, report);
@@ -151,32 +149,6 @@ public class GlobalData extends DefaultListenable {
 		if (!this.uri.equals(old)) fireEvent(new URIChangedEvent(this));
 	}
 
-	/** Reads the data from an URI.
-	 * The only DataEvent sent during the read is EverythingChangedEvent, where the read is successfully finished.
-	 * @param uri The URI we want to read the data from.
-	 * @param password the password that protects the data or null if there's no password.
-	 * @param report A progress report where to report the progress of the operation or null, to not report anything.
-	 * @throws IOException if a problem occurs while reading the data.
-	 * @throws AccessControlException if the password is wrong
-	 * @see EverythingChangedEvent
-	 */	
-	public void read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
-		this.setEventsEnabled(false);
-		try {
-//System.out.println ("Start reading");
-//long st = System.currentTimeMillis();
-			Serializer.read (this, uri, password, report);
-//System.out.println ("Reading in "+(System.currentTimeMillis()-st)+"ms");
-			this.uri = uri;
-			// We do not want the file reading results in a "modified" state for the file,
-			// even if, of course, a lot of things changed on the screen. But, the file
-			// is unmodified.
-			this.somethingChanged = false;
-		} finally {
-			this.setEventsEnabled(true);
-		}
-	}
-	
 	/** Sets the password used to protect the data (to encrypt the file containing it).
 	 * @param password a string (null or an empty string if the data is not protected).
 	 */
@@ -215,7 +187,7 @@ public class GlobalData extends DefaultListenable {
 	@Override
 	protected void fireEvent(DataEvent event) {
 		if (IsEventsEnabled()) {
-			if (CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread()) {
+			if (CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread() && (getNumberOfListeners()>0)) {
 				RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !");
 				e.fillInStackTrace();
 				e.printStackTrace();
@@ -758,5 +730,21 @@ public class GlobalData extends DefaultListenable {
 			this.fireEvent(event);
 			this.setChanged();
 		}
+	}
+
+	/** Copies source data into this.
+	 * <br><b>Warning:</b> There are side effects between this and src.
+	 * somethingHasChanged returns true after call to this method.
+	 * @param src The data that will be copied into this 
+	 */
+	public void copy(GlobalData src) {
+		accounts = src.accounts;
+		categories = src.categories;
+		periodicals = src.periodicals;
+		transactions = src.transactions;
+		password = src.password;
+		uri = src.uri;
+		this.fireEvent(new EverythingChangedEvent(this));
+		this.setChanged();
 	}
 }

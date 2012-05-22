@@ -215,22 +215,23 @@ public class Serializer {
 		}
 	}
 
-	/** Please do not use this method directly.
-	 * This may result in the data read to have its changed attribute set to true.
-	 * @param data
+	/** Reads data from an uri.
 	 * @param uri
 	 * @param password
 	 * @param report 
+	 * @return The GlobalData that was located at the uri
 	 * @throws IOException
 	 * @throws AccessControlException
-	 * @see GlobalData#read(URI, String, ProgressReport)
 	 */
-	public static void read(GlobalData data, URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
+	public static GlobalData read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
 //		long start = System.currentTimeMillis();//TODO
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) { //$NON-NLS-1$ //$NON-NLS-2$
 			InputStream is = uri.toURL().openStream();
 			try {
-				is = read(data, password, is, report);
+				GlobalData redData = read(password, is, report);
+				redData.setURI(uri);
+				redData.setChanged(false);
+				return redData;
 			} finally {
 				is.close();
 			}
@@ -257,17 +258,11 @@ public class Serializer {
 		}
 	}
 
-	static InputStream read(GlobalData data, String password, InputStream is, ProgressReport report) throws IOException, AccessControlException {
-		boolean wasEnabled = data.isEventsEnabled();
-		try {
-			is = getDecryptedStream(password, is);
-			if (wasEnabled) data.setEventsEnabled(false);
-			read(data, is, report);
-			data.setPassword(password);
-		} finally {
-			if (wasEnabled) data.setEventsEnabled(true);
-		}
-		return is;
+	static GlobalData read(String password, InputStream is, ProgressReport report) throws IOException, AccessControlException {
+		is = getDecryptedStream(password, is);
+		GlobalData data = read(is, report);
+		data.setPassword(password);
+		return data;
 	}
 
 	/** Gets a stream to read in an encrypted stream.
@@ -319,9 +314,11 @@ public class Serializer {
 		}
 	}
 
-	private static void read(GlobalData data, InputStream is, ProgressReport report) throws IOException {
+	private static GlobalData read(InputStream is, ProgressReport report) throws IOException {
 		try {
-			SAXParserFactory.newInstance().newSAXParser().parse(is, new GlobalDataHandler(data, report));
+			GlobalDataHandler dh = new GlobalDataHandler(report);
+			SAXParserFactory.newInstance().newSAXParser().parse(is, dh);
+			return dh.getData();
 		} catch (Exception e) {
 			throw new IOException(e);
 		}
