@@ -15,4 +15,8 @@ public class Context {
 	public TransactionSelector getCurrentTransactionSelector() {
 		return this.frame.mainMenu.getTransactionSelector();
 	}
+	
+	public MainFrame getMainFrame() {
+		return this.frame;
+	}
 }

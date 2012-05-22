@@ -319,7 +319,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					if (file != null) {
 						try {
 							frame.readData(file.toURI());
-						} catch (InterruptedException e1) {
 						} catch (ExecutionException exception) {
 							ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
 									.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$

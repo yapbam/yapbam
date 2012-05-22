@@ -1,20 +1,18 @@
 package net.yapbam.gui.welcome;
 
-import java.awt.Window;
-
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.Preferences;
 
 @SuppressWarnings("serial")
-public class WelcomeDialog extends AbstractDialog<GlobalData, Void> {
+public class WelcomeDialog extends AbstractDialog<Void, Void> {
 	private WelcomePanel welcomePanel;
 
-	public WelcomeDialog(Window owner, GlobalData data) {
-		super(owner, "Welcome to Yapbam", data);
+	public WelcomeDialog(MainFrame owner) {
+		super(owner, "Welcome to Yapbam", null);
 //		Image image = Toolkit.getDefaultToolkit().getImage(WelcomePlugin.class.getResource("background.png"));
 //		this.setContentPane(JImage.wrapInBackgroundImage((JComponent)this.getContentPane(), image));
 		this.okButton.setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
@@ -27,7 +25,7 @@ public class WelcomeDialog extends AbstractDialog<GlobalData, Void> {
 
 	@Override
 	protected JPanel createCenterPane() {
-		welcomePanel = new WelcomePanel(this.data);
+		welcomePanel = new WelcomePanel((MainFrame) this.getOwner());
 		welcomePanel.setShowAtStartup(Preferences.INSTANCE.isWelcomeAllowed());
 		return welcomePanel;
 	}

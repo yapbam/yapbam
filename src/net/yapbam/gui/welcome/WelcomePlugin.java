@@ -1,22 +1,17 @@
 package net.yapbam.gui.welcome;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 
 public class WelcomePlugin extends AbstractPlugIn {
-	private GlobalData data;
 
 	public WelcomePlugin(FilteredData data, Object restoreData) {
-		this.data = data.getGlobalData();
 	}
 
 	@Override
@@ -37,7 +32,7 @@ public class WelcomePlugin extends AbstractPlugIn {
 
     @Override
 		public void actionPerformed(ActionEvent e) {
-			new WelcomeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), data).setVisible(true);
+			new WelcomeDialog(getContext().getMainFrame()).setVisible(true);
 		}
 	}
 }

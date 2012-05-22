@@ -18,10 +18,10 @@ import javax.swing.UIManager;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.MainFrame;
 
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
@@ -35,6 +35,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
@@ -64,7 +65,7 @@ public class WelcomePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public WelcomePanel(final GlobalData data) {
+	public WelcomePanel(final MainFrame frame) {
 		urlsResourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
 		
 		tips = new TipManager();
@@ -131,8 +132,8 @@ public class WelcomePanel extends JPanel {
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				try {
-					data.read(file.toURI(), null, null);
-				} catch (IOException e) {
+					frame.readData(file.toURI());
+				} catch (ExecutionException e) {
 					String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
 							file.getAbsolutePath());
 					JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(WelcomePanel.this), message,
