@@ -23,7 +23,7 @@ import net.yapbam.date.helpers.DateStepper;
  *  @see FilteredData
  */
 public class GlobalData extends DefaultListenable {
-	private static final boolean CHECK_EVENT_ON_EDT = Boolean.getBoolean("CheckGlobalDataEventAreOnEDT");
+	private static final boolean CHECK_EVENT_ON_EDT = Boolean.getBoolean("CheckGlobalDataEventAreOnEDT"); //$NON-NLS-1$
 	
 	private List<Account> accounts;
 	private List<Category> categories;
@@ -173,7 +173,7 @@ public class GlobalData extends DefaultListenable {
 	protected void fireEvent(DataEvent event) {
 		if (IsEventsEnabled()) {
 			if (CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread() && (getNumberOfListeners()>0)) {
-				RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !");
+				RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !"); //$NON-NLS-1$
 				e.fillInStackTrace();
 				e.printStackTrace();
 			}

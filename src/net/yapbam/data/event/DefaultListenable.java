@@ -50,12 +50,12 @@ public abstract class DefaultListenable {
 	@SuppressWarnings("nls")
 	protected void fireEvent(DataEvent event) {
 		if (eventsDisabled) return;
-		if (TRACE_EVENTS && !TRACE_ALL) trace("Event "+event+" occurs on "+this);
+		if (TRACE_EVENTS && !TRACE_ALL) trace("Event "+event+" occurs on "+this); //$NON-NLS-1$ //$NON-NLS-2$
 		Iterator<DataListener> iterator = listeners.iterator();
-		if (TRACE_ALL && (listeners.size()==0)) trace("Event "+event+" occurs on "+this+" but nobody is listening");
+		if (TRACE_ALL && (listeners.size()==0)) trace("Event "+event+" occurs on "+this+" but nobody is listening"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		while (iterator.hasNext()) {
 			DataListener listener = iterator.next();
-			if (TRACE_ALL) trace("Send event "+event+" on "+this+" to "+listener);
+			if (TRACE_ALL) trace("Send event "+event+" on "+this+" to "+listener); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			indent += 2;
 			try {
 				listener.processEvent(event);

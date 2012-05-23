@@ -14,6 +14,6 @@ public abstract class DataEvent {
 	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName()+"->"+this.source;
+		return this.getClass().getSimpleName()+"->"+this.source; //$NON-NLS-1$
 	}
 }

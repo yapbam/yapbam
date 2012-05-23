@@ -119,7 +119,7 @@ public class MainFrame extends JFrame implements DataListener {
 	}
 	
 	private static boolean isJava6() {
-		return "1.6".equals(System.getProperty("java.specification.version"));
+		return "1.6".equals(System.getProperty("java.specification.version")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private static void installEventQueue() {
