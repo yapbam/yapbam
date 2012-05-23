@@ -1,15 +1,22 @@
 package net.yapbam.gui;
 
+import java.awt.Dialog.ModalityType;
 import java.io.File;
 import java.net.URI;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
+import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.FileUtils;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
+import net.yapbam.data.xml.Serializer;
 import net.yapbam.util.Portable;
 
 class SaveManager {
@@ -72,36 +79,51 @@ class SaveManager {
 	}
 
 	private boolean saveTo(MainFrame frame, URI uri) {
+		if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
+			Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
+			String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
+			int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("Generic.warning"),
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
+			if (choice==0) return false;
+		}
+		final Worker<Void, Void> worker = new BackgroundSaver(frame.getData(), uri);
+		//FIXME There's a major problem here: If the task is cancelled (especially if it is saved over ftp), the file can be overwritted !!!
+		//Actually, this worker should absolutly not be interrupted
+		WorkInProgressFrame waitFrame = new WorkInProgressFrame(frame, "Writing ...", ModalityType.APPLICATION_MODAL, worker); //LOCAL
+		Utils.centerWindow(waitFrame, frame);
+		waitFrame.setVisible(true);
+		boolean cancelled = worker.isCancelled();
+		if (cancelled) return false;
 		try {
-			if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
-				Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
-				String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
-				int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("Generic.warning"),
-						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
-				if (choice==0) return false;
-			}
-			frame.getData().save(uri, new ProgressReport() { //TODO
-				private int max;
-
-				@Override
-				public void setMax(int length) {
-					this.max = length;
-				}
-				
-				@Override
-				public void reportProgress(int progress) {
-					System.out.println (progress+"/"+max);
-				}
-
-				@Override
-				public boolean isCancelled() {
-					return false;
-				}
-			});
-			return true;
-		} catch (Throwable e) {
-			ErrorManager.INSTANCE.display(frame, e);
+			worker.get();
+			frame.getData().setURI(uri);
+			frame.getData().setChanged(false);
+		} catch (ExecutionException e) {
+			ErrorManager.INSTANCE.display(frame, e.getCause());
 			return false;
+		} catch (InterruptedException e) {
+		}
+		return true;
+	}
+	
+	private static class BackgroundSaver extends Worker<Void, Void> implements ProgressReport {
+		private GlobalData data;
+		private URI uri;
+
+		BackgroundSaver(GlobalData data, URI uri) {
+			this.data = data;
+			this.uri = uri;
+		}
+
+		@Override
+		public void setMax(int length) {
+			super.setPhase("Writing file ...", length); //LOCAL
+		}
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			Serializer.write(data, uri, this);
+			return null;
 		}
 	}
 }

@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
@@ -66,17 +67,33 @@ public class MainFrame extends JFrame implements DataListener {
 	public static void main(final String[] args) {
 		// Remove obsolete files from previous installations
 		FolderCleaner.clean();
-		// Warning the new event queue may ABSOLUTLY be NOT installed by the event dispatch thread under java 1.6 or the program will never exit
-		if (isJava6()) installEventQueue();
 		// Set the look and feel
 		setLookAndFeel();
+		// Install the exceptions logger on the AWT event queue.
+		if (isJava6()) {
+			// Warning the new event queue may ABSOLUTLY be NOT installed by the event dispatch thread under java 1.6 or the program will never exit
+			installEventQueue();
+		} else {
+			// Warning the new event queue may ABSOLUTLY be installed by the event dispatch thread under java 1.7 or the program will never exit
+			// Warning - 2, if the new event queue is installed by the Runnable that launches start, it sometimes cause a NullPointerException
+			// at java.awt.EventQueue.getCurrentEventImpl(EventQueue.java:796), for instance when setting the selectedItem of a JComboBox in the start method
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					@Override
+					public void run() {
+						installEventQueue();
+					}
+				});
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e.getCause());
+			}
+		}
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				// Install the exceptions logger on the AWT event queue.
-				// Warning the new event queue may ABSOLUTLY be installed by the event dispatch thread under java 1.7 or the program will never exit
-				if (!isJava6()) installEventQueue();
 				MainFrame frame = new MainFrame(null, null);
 
 				// Initialize the data ... and start the end of the initialization process :
@@ -294,7 +311,7 @@ public class MainFrame extends JFrame implements DataListener {
 			new ExecutionException(e);
 		}
 		final BackgroundReader worker = new BackgroundReader(uri, password);
-		WorkInProgressFrame waitFrame = new WorkInProgressFrame(this, "Reading ...", ModalityType.APPLICATION_MODAL, worker);
+		WorkInProgressFrame waitFrame = new WorkInProgressFrame(this, "Reading ...", ModalityType.APPLICATION_MODAL, worker); // LOCAL
 		Utils.centerWindow(waitFrame, this);
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
@@ -336,7 +353,7 @@ public class MainFrame extends JFrame implements DataListener {
 	
 		@Override
 		public void setMax(int length) {
-			super.setPhase("Reading file", length); //LOCAL
+			super.setPhase("Reading file ...", length); //LOCAL
 		}
 	}
 	
