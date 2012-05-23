@@ -1,6 +1,5 @@
 package net.yapbam.data;
 
-import java.io.*;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import javax.swing.SwingUtilities;
 
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.event.*;
-import net.yapbam.data.xml.Serializer;
 import net.yapbam.date.helpers.DateStepper;
 
 /** The whole Yapbam data.
@@ -108,7 +106,6 @@ public class GlobalData extends DefaultListenable {
 	
 	/** Tests if the data needs to be saved.
 	 * @return true if the data needs to be saved, false, if there's nothing to change (no changes since last save).
-	 * @see #save(URI, ProgressReport)
 	 */
 	public boolean somethingHasChanged() {
 		return this.somethingChanged;
@@ -126,18 +123,6 @@ public class GlobalData extends DefaultListenable {
 	 */
 	public String getPassword() {
 		return this.password;
-	}
-
-	/** Saves the data into a file.
-	 * @param uri The URI where to save the data.
-	 * @param report A progress report where to report the progress of the operation or null, to not report anything.
-	 * @throws IOException if a problem occurs while saving the data.
-	 */
-	public void save(URI uri, ProgressReport report) throws IOException {
-		Serializer.write(this, uri, report);
-		this.somethingChanged = false;
-		setURI(uri);
-		fireEvent(new NeedToBeSavedChangedEvent(this));
 	}
 
 	/** Sets the URI attached to the data.
