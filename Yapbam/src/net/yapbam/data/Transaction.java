@@ -60,7 +60,7 @@ public class Transaction extends AbstractTransaction implements Serializable {
 	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
-		return "["+this.getAccount()+"|"+this.date+"|"+this.getDescription()+"|"+this.getAmount()+"]";
+		return "["+this.getAccount()+"|"+this.date+"|"+this.getDescription()+"|"+this.getAmount()+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
 	public boolean isChecked() {

@@ -76,7 +76,7 @@ public class YapbamState {
 	}
 
 	protected File getFile() {
-		File file = new File (Portable.getDataDirectory(), ".yapbam");
+		File file = new File (Portable.getDataDirectory(), ".yapbam"); //$NON-NLS-1$
 		return file;
 	}
 	
@@ -108,7 +108,7 @@ public class YapbamState {
 			if (model instanceof XTableColumnModel) {
 				XTableColumnModel xModel = (XTableColumnModel)model;
 				for (int i = 0; i < xModel.getColumnCount(false); i++) {
-					if (Boolean.valueOf(properties.getProperty(prefix+COLUMN_HIDDEN+i, "false"))) {
+					if (Boolean.valueOf(properties.getProperty(prefix+COLUMN_HIDDEN+i, "false"))) { //$NON-NLS-1$
 						TableColumn column = xModel.getColumnByModelIndex(i);
 						xModel.setColumnVisible(column, false);
 					}
@@ -200,13 +200,13 @@ public class YapbamState {
 	}
 	
 	public void put(String key, Rectangle value) {
-		properties.put(key, value.x+","+value.y+","+value.width+","+value.height);
+		properties.put(key, value.x+","+value.y+","+value.width+","+value.height); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	public Rectangle getRectangle(String key) {
 		String value = properties.getProperty(key);
 		if (value==null) return null;
-		StringTokenizer tokens = new StringTokenizer(value, ",");
+		StringTokenizer tokens = new StringTokenizer(value, ","); //$NON-NLS-1$
 		return new Rectangle(Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()),
 				Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()));
 	}
@@ -288,7 +288,7 @@ public class YapbamState {
 		String property = properties.getProperty(key);
 		if (property!=null) {
 			byte[] bytes;
-			if (property.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) {
+			if (property.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) { //$NON-NLS-1$
 				// Yapbam versions until 0.9.4 did not base64 encode the saved filter.
 				bytes = property.getBytes();
 			} else {

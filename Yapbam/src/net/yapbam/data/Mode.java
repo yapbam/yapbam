@@ -68,7 +68,7 @@ public class Mode implements Serializable {
 	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
-		return this.getName() + "[" + this.getExpenseVdc()+"/"+this.getReceiptVdc()+"-"+(this.isUseCheckBook()?"check":"no check")+"]";
+		return this.getName() + "[" + this.getExpenseVdc()+"/"+this.getReceiptVdc()+"-"+(this.isUseCheckBook()?"check":"no check")+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 	}
 
 	void updateTo(Mode newMode) {

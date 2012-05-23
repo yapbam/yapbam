@@ -376,7 +376,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 							}
 						}
 					} catch (BadImportFileException e2) {
-						JOptionPane.showMessageDialog(this.frame, e2.getMessage(), LocalizationData.get("ImportDialog.errorMessage.title"), JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(this.frame, e2.getMessage(), LocalizationData.get("ImportDialog.errorMessage.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 					}
 				}
 			} else if (source.equals(this.menuItemExport)) {

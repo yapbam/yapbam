@@ -37,6 +37,6 @@ public class SubTransaction implements Serializable, Cloneable {
 	@SuppressWarnings("nls")
 	@Override
 	public String toString() {
-		return "[{"+description+"}{"+category+"}{"+amount+"}]";
+		return "[{"+description+"}{"+category+"}{"+amount+"}]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 }
