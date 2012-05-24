@@ -1,17 +1,20 @@
 package net.yapbam.gui;
 
-import java.awt.Dialog.ModalityType;
+import java.awt.Window;
 import java.io.File;
 import java.net.URI;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.ajlib.swing.worker.DefaultWorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
+import net.astesana.ajlib.swing.worker.WorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.GlobalData;
@@ -87,9 +90,7 @@ class SaveManager {
 			if (choice==0) return false;
 		}
 		final Worker<Void, Void> worker = new BackgroundSaver(frame.getData(), uri);
-		//FIXME There's a major problem here: If the task is cancelled (especially if it is saved over ftp), the file can be overwritted !!!
-		//Actually, this worker should absolutly not be interrupted
-		WorkInProgressFrame waitFrame = new WorkInProgressFrame(frame, "Writing ...", ModalityType.APPLICATION_MODAL, worker); //LOCAL
+		WorkInProgressFrame waitFrame = new SaveProgressFrame(frame, worker);
 		Utils.centerWindow(waitFrame, frame);
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
@@ -104,6 +105,28 @@ class SaveManager {
 		} catch (InterruptedException e) {
 		}
 		return true;
+	}
+	
+	private static class SaveProgressFrame extends WorkInProgressFrame {
+		// The save task should not be interrupted: Especially if we save over ftp, the file could be partially overwritted, this could lead to data corruption !!!
+		// This window gives no chance to the user to cancel the task
+		private static final long serialVersionUID = 1L;
+
+		public SaveProgressFrame(Window owner, Worker<?, ?> worker) {
+			super(owner, "Writing ...", ModalityType.APPLICATION_MODAL, worker); //LOCAL
+			this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		}
+
+		/* (non-Javadoc)
+		 * @see net.astesana.ajlib.swing.worker.WorkInProgressFrame#buildProgressPanel()
+		 */
+		@Override
+		protected WorkInProgressPanel buildProgressPanel() {
+			DefaultWorkInProgressPanel panel = new DefaultWorkInProgressPanel();
+			panel.getBtnCancel().setVisible(false);
+			return panel;
+		}
+
 	}
 	
 	private static class BackgroundSaver extends Worker<Void, Void> implements ProgressReport {
