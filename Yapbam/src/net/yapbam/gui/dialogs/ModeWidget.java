@@ -19,17 +19,17 @@ public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 
 	@Override
 	protected String getLabel() {
-		return LocalizationData.get("TransactionDialog.mode");
+		return LocalizationData.get("TransactionDialog.mode"); //$NON-NLS-1$
 	}
 	
 	@Override
 	protected String getComboTip() {
-		return LocalizationData.get("TransactionDialog.mode.tooltip");
+		return LocalizationData.get("TransactionDialog.mode.tooltip"); //$NON-NLS-1$
 	}
 	
 	@Override
 	protected String getNewButtonTip() {
-		return LocalizationData.get("TransactionDialog.mode.new.tooltip");
+		return LocalizationData.get("TransactionDialog.mode.new.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override

@@ -14,8 +14,8 @@ import net.yapbam.gui.dialogs.TransactionDialog;
 @SuppressWarnings("serial")
 public class DuplicateTransactionAction extends AbstractTransactionAction {
 	public DuplicateTransactionAction(TransactionSelector selector) {
-		super(selector, LocalizationData.get("MainMenu.Transactions.Duplicate"), IconManager.DUPLICATE_TRANSACTION,
-				LocalizationData.get("MainMenu.Transactions.Duplicate.ToolTip"));
+		super(selector, LocalizationData.get("MainMenu.Transactions.Duplicate"), IconManager.DUPLICATE_TRANSACTION, //$NON-NLS-1$
+				LocalizationData.get("MainMenu.Transactions.Duplicate.ToolTip")); //$NON-NLS-1$
 		putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Duplicate.Mnemonic")); //$NON-NLS-1$
 	}
 	

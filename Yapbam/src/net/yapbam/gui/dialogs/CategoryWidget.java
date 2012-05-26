@@ -34,17 +34,17 @@ public class CategoryWidget extends AbstractSelector<Category, GlobalData> {
 
 	@Override
 	protected String getLabel() {
-		return LocalizationData.get("TransactionDialog.category");
+		return LocalizationData.get("TransactionDialog.category"); //$NON-NLS-1$
 	}
 	
 	@Override
 	protected String getComboTip() {
-		return LocalizationData.get("TransactionDialog.category.tooltip");
+		return LocalizationData.get("TransactionDialog.category.tooltip"); //$NON-NLS-1$
 	}
 	
 	@Override
 	protected String getNewButtonTip() {
-		return LocalizationData.get("TransactionDialog.category.new.tooltip");
+		return LocalizationData.get("TransactionDialog.category.new.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override

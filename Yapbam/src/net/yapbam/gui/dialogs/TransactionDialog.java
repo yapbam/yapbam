@@ -206,7 +206,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	}
 	
 	public void setStatement(String statement) {
-		this.statement.setText(statement==null?"":statement);
+		this.statement.setText(statement==null?"":statement); //$NON-NLS-1$
 	}
 
 	@Override

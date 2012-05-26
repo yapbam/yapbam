@@ -20,7 +20,7 @@ public class PlugInContainer {
 		try {
 			JarFile jar = new JarFile(file);
 			Attributes attributes = jar.getManifest().getMainAttributes();
-			String className = attributes.getValue("Plugin-Class");
+			String className = attributes.getValue("Plugin-Class"); //$NON-NLS-1$
 			if (className!=null) {
 				this.plugin = (Class<AbstractPlugIn>) new URLClassLoader(new URL[]{file.toURI().toURL()}).loadClass(className);
 			}

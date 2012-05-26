@@ -19,8 +19,8 @@ public class BudgetPlugin extends AbstractPlugIn {
 	
 	public BudgetPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
-		this.setPanelTitle(LocalizationData.get("BudgetPanel.title"));
-		this.setPanelToolTip(LocalizationData.get("BudgetPanel.tooltip"));
+		this.setPanelTitle(LocalizationData.get("BudgetPanel.title")); //$NON-NLS-1$
+		this.setPanelToolTip(LocalizationData.get("BudgetPanel.tooltip")); //$NON-NLS-1$
 	}
 
 	@Override

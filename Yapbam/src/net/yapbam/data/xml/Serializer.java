@@ -141,6 +141,7 @@ public class Serializer {
 			//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
 			File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file; //$NON-NLS-1$ //$NON-NLS-2$
 			write (data, new FileOutputStream(writed), report);
+			report.setMax(-1);
 			if (!file.equals(writed)) {
 				// Ok, not so safe as I want since we could lost the file between deleting and renaming
 				// but I can't find a better way
@@ -327,9 +328,9 @@ public class Serializer {
 	void serialize (GlobalData data, ProgressReport report) throws IOException {
 		try {
 			atts.clear();
-			atts.addAttribute(EMPTY, EMPTY, "nbAccounts", CDATA, Integer.toString(data.getAccountsNumber()));
-			atts.addAttribute(EMPTY, EMPTY, "nbCategories", CDATA, Integer.toString(data.getCategoriesNumber()));
-			atts.addAttribute(EMPTY, EMPTY, "nbPeriodicalTransactions", CDATA, Integer.toString(data.getPeriodicalTransactionsNumber()));
+			atts.addAttribute(EMPTY, EMPTY, "nbAccounts", CDATA, Integer.toString(data.getAccountsNumber())); //$NON-NLS-1$
+			atts.addAttribute(EMPTY, EMPTY, "nbCategories", CDATA, Integer.toString(data.getCategoriesNumber())); //$NON-NLS-1$
+			atts.addAttribute(EMPTY, EMPTY, "nbPeriodicalTransactions", CDATA, Integer.toString(data.getPeriodicalTransactionsNumber())); //$NON-NLS-1$
 			atts.addAttribute(EMPTY, EMPTY, NB_TRANSACTIONS_ATTRIBUTE, CDATA, Integer.toString(data.getTransactionsNumber()));
 			hd.startElement(EMPTY,EMPTY,GLOBAL_DATA_TAG,atts);
 			

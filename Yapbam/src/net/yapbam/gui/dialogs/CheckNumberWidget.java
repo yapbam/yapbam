@@ -25,7 +25,7 @@ import javax.swing.JButton;
 
 public class CheckNumberWidget extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final String NUMBER_PROPERTY = "Number"; // @jve:decl-index=0:
+	public static final String NUMBER_PROPERTY = "Number"; // @jve:decl-index=0: //$NON-NLS-1$
 
 	private JComboBox numbers = null;
 	private JButton newButton = null;

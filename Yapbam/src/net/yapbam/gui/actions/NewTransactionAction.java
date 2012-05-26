@@ -25,8 +25,8 @@ public class NewTransactionAction extends AbstractAction {
 	 * @param massMode true to select mass modification
 	 */
 	public NewTransactionAction(FilteredData data, TransactionSelector selector, boolean massMode) {
-		super(LocalizationData.get("MainMenu.Transactions.New"), massMode?IconManager.NEW_BULK_TRANSACTION:IconManager.NEW_TRANSACTION);
-		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.New.ToolTip"));
+		super(LocalizationData.get("MainMenu.Transactions.New"), massMode?IconManager.NEW_BULK_TRANSACTION:IconManager.NEW_TRANSACTION); //$NON-NLS-1$
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.New.ToolTip")); //$NON-NLS-1$
 		putValue(Action.MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.New.Mnemonic")); //$NON-NLS-1$
 		this.data = data;
 		this.selector = selector;

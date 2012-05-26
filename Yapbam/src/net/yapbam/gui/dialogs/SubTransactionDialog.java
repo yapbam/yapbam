@@ -18,7 +18,7 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData, SubTransact
 	private SubTransactionPanel panel;
 	
 	public SubTransactionDialog(Window owner, GlobalData data, SubTransaction subtransaction) {
-		super(owner, subtransaction==null?LocalizationData.get("SubTransactionDialog.title.new"):LocalizationData.get("SubTransactionDialog.title.edit"), data); //$NON-NLS-1$
+		super(owner, subtransaction==null?LocalizationData.get("SubTransactionDialog.title.new"):LocalizationData.get("SubTransactionDialog.title.edit"), data); //$NON-NLS-1$ //$NON-NLS-2$
 		if (subtransaction!=null) {
 			panel.setDescription(subtransaction.getDescription());
 			panel.setAmount(subtransaction.getAmount());

@@ -13,7 +13,7 @@ import net.yapbam.gui.actions.NewPeriodicalTransactionAction;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 
 public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<FilteredData> implements AbstractAdministrationPanel {
-	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration.";
+	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration."; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 
 	public PeriodicalTransactionListPanel(FilteredData data) {
