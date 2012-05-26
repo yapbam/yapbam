@@ -11,7 +11,7 @@ import net.yapbam.gui.LocalizationData;
 public class AboutDialog extends AbstractDialog<Void, Void> {
 
 	public AboutDialog(Window owner) {
-		super(owner, LocalizationData.get("ApplicationName"), null);
+		super(owner, LocalizationData.get("ApplicationName"), null); //$NON-NLS-1$
 		this.cancelButton.setVisible(false);
 		this.okButton.setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
 		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$

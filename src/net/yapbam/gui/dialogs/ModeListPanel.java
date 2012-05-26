@@ -98,8 +98,8 @@ public class ModeListPanel extends AbstractListAdministrationPanel<Object> {
 	}
 	class DeleteModeAction extends AbstractAction {			
 		public DeleteModeAction() {
-			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE);
-			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Delete.tooltip"));
+			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Delete.tooltip")); //$NON-NLS-1$
 		}
 		
 		@Override

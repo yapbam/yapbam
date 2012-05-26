@@ -17,8 +17,8 @@ public class NewAccountAction extends AbstractAction {
 	private GlobalData data;
 	
 	public NewAccountAction(GlobalData data) {
-		super(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT);
-        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Accounts.New.ToolTip"));
+		super(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT); //$NON-NLS-1$
+        putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Accounts.New.ToolTip")); //$NON-NLS-1$
         this.data = data;
 	}
 	

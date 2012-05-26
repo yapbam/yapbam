@@ -24,7 +24,7 @@ import java.beans.PropertyChangeListener;
 
 public class SeparatorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final String SEPARATOR_PROPERTY = "separator";
+	public static final String SEPARATOR_PROPERTY = "separator"; //$NON-NLS-1$
 	
 	private JRadioButton defaultSeparatorButton = null;
 	private JRadioButton customSeparatorButton = null;

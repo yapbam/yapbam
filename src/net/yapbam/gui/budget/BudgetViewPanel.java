@@ -202,8 +202,8 @@ public class BudgetViewPanel extends JPanel {
 					File result = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {
 						try {
-							String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null;
-							String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null;
+							String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
+							String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
 							budget.export(result, '\t', LocalizationData.getLocale(), sumLineName, sumColumnName);
 						} catch (IOException e1) {
 							ErrorManager.INSTANCE.display(BudgetViewPanel.this, e1);
@@ -378,7 +378,7 @@ public class BudgetViewPanel extends JPanel {
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected, boolean hasFocus, int row, int column) {
 			if ((column==budget.getDatesSize()) || (row==budget.getCategoriesSize())) {
-				value = "<html><b>"+value.toString()+"</b></html>";
+				value = "<html><b>"+value.toString()+"</b></html>"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			if (centered && (result instanceof JLabel)) ((JLabel)result).setHorizontalAlignment(JLabel.CENTER);

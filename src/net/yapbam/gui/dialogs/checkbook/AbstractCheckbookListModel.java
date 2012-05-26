@@ -26,7 +26,7 @@ public abstract class AbstractCheckbookListModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Checkbook book = getCheckBook(rowIndex);
-		if (columnIndex==0) return book.getFullNumber(book.getFirst())+"->"+book.getFullNumber(book.getLast());
+		if (columnIndex==0) return book.getFullNumber(book.getFirst())+"->"+book.getFullNumber(book.getLast()); //$NON-NLS-1$
 		if (columnIndex==1) return book.getFullNumber(book.getNext());
 		if (columnIndex==2) return book.getRemaining();
 		return "?"; //$NON-NLS-1$

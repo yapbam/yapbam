@@ -3,6 +3,7 @@ package net.yapbam.gui;
 import java.awt.Window;
 import java.io.File;
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
@@ -85,7 +86,7 @@ class SaveManager {
 		if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
 			Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
 			String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
-			int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("Generic.warning"),
+			int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("Generic.warning"), //$NON-NLS-1$
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 			if (choice==0) return false;
 		}
@@ -113,7 +114,7 @@ class SaveManager {
 		private static final long serialVersionUID = 1L;
 
 		public SaveProgressFrame(Window owner, Worker<?, ?> worker) {
-			super(owner, "Writing ...", ModalityType.APPLICATION_MODAL, worker); //LOCAL
+			super(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 			this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		}
 
@@ -126,7 +127,6 @@ class SaveManager {
 			panel.getBtnCancel().setVisible(false);
 			return panel;
 		}
-
 	}
 	
 	private static class BackgroundSaver extends Worker<Void, Void> implements ProgressReport {
@@ -136,11 +136,12 @@ class SaveManager {
 		BackgroundSaver(GlobalData data, URI uri) {
 			this.data = data;
 			this.uri = uri;
+			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
 		}
 
 		@Override
 		public void setMax(int length) {
-			super.setPhase("Writing file ...", length); //LOCAL
+			super.setPhase(getPhase(), length);
 		}
 
 		@Override

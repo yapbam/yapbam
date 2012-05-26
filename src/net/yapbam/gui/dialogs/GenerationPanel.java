@@ -58,7 +58,7 @@ public class GenerationPanel extends JPanel {
 	 */
 	private void initialize() {
 		jLabel3 = new JLabel();
-		jLabel3.setText(LocalizationData.get("PeriodicalTransactionDialog.until"));
+		jLabel3.setText(LocalizationData.get("PeriodicalTransactionDialog.until")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.gridwidth = 3;

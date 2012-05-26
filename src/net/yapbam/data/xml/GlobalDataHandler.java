@@ -19,6 +19,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 class GlobalDataHandler extends DefaultHandler {
+	private static final String PARSING_WAS_CANCELLED = "Parsing was cancelled"; //$NON-NLS-1$
+
 	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
 	
 	private GlobalData data;
@@ -49,7 +51,7 @@ class GlobalDataHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if ((report!=null) && report.isCancelled()) {
-			throw new SAXException("Parsing was cancelled");
+			throw new SAXException(PARSING_WAS_CANCELLED);
 		}
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
 			try {
@@ -170,7 +172,7 @@ class GlobalDataHandler extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if ((report!=null) && report.isCancelled()) {
-			throw new SAXException("Parsing was cancelled");
+			throw new SAXException(PARSING_WAS_CANCELLED);
 		}
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
 			this.data.add(this.transactions.toArray(new Transaction[this.transactions.size()]));

@@ -65,7 +65,7 @@ public class AboutPanel extends AbstractInfoPanel {
 	private HTMLPane getRelnotesPane() throws IOException {
 		if (relnotesPane == null) {
 			URL url = LocalizationData.getURL("relnotes.txt"); //$NON-NLS-1$
-			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8")); //$NON-NLS-1$
 			try {
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				ReleaseNotesFormatter releaseNotesFormatter = new ReleaseNotesFormatter();

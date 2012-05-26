@@ -32,12 +32,12 @@ public class AccountWidget extends AbstractSelector<Account, GlobalData> {
 	
 	@Override
 	protected String getLabel() {
-		return LocalizationData.get("AccountDialog.account");
+		return LocalizationData.get("AccountDialog.account"); //$NON-NLS-1$
 	}
 	
 	@Override
 	protected String getNewButtonTip() {
-		return LocalizationData.get("TransactionDialog.account.new.tooltip");
+		return LocalizationData.get("TransactionDialog.account.new.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override

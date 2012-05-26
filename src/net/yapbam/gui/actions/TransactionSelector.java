@@ -12,7 +12,7 @@ public interface TransactionSelector {
 	/** When the selection changes, this selector must throw a PropertyChangedEvent.
 	 * This constant is the name of that property.
 	 */
-	public static final String SELECTED_PROPERTY = "selectedTransaction";
+	public static final String SELECTED_PROPERTY = "selectedTransaction"; //$NON-NLS-1$
 	public Transaction[] getSelectedTransactions();
 	public void setSelectedTransactions(Transaction[] transactions);
 	public FilteredData getFilteredData();

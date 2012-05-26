@@ -60,7 +60,7 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 			Category category = this.budget.getCategory(rowIndex);
 			value = this.budget.getAmount(date, category);
 		}
-		return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value);
+		return ((value==null)||(value==0.0))?"":LocalizationData.getCurrencyInstance().format(value); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("deprecation")
@@ -69,12 +69,12 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 		int datesSize = this.budget.getDatesSize();
 		if (column<datesSize) {
 			Date date = this.budget.getDate(column);
-			if (this.budget.isYear()) return ""+(date.getYear()+1900);
+			if (this.budget.isYear()) return ""+(date.getYear()+1900); //$NON-NLS-1$
 			//TODO It would be better to have a localized version for this formatter ...
 			// but I can't find how to do that (simple with the day, but not documented without)
 			return new SimpleDateFormat("yyyy/MM").format(date);
 		} else {
-			return LocalizationData.get("BudgetPanel.sum");
+			return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 		}
 	}
 	
@@ -95,7 +95,7 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 	@Override
 	public String getRowName(int rowIndex) {
 		if (rowIndex==budget.getCategoriesSize()) {
-			return LocalizationData.get("BudgetPanel.sum");
+			return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 		} else {
 			return budget.getCategory(rowIndex).getName();
 		}

@@ -78,7 +78,7 @@ public abstract class AbstractInfoPanel extends JPanel {
 	private JLabel getIconLabel() {
 		if (iconLabel == null) {
 			iconLabel = new JLabel();
-			iconLabel.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
+			iconLabel.setIcon(UIManager.getIcon("OptionPane.informationIcon")); //$NON-NLS-1$
 		}
 		return iconLabel;
 	}

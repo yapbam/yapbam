@@ -14,8 +14,8 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 
 	public AdministrationPlugIn(FilteredData filteredData, Object restartData) {
 		this.panel = new AdministrationPanel(filteredData);
-		this.setPanelTitle(LocalizationData.get("AdministrationPlugIn.title"));
-		this.setPanelToolTip(LocalizationData.get("AdministrationPlugIn.toolTip"));
+		this.setPanelTitle(LocalizationData.get("AdministrationPlugIn.title")); //$NON-NLS-1$
+		this.setPanelToolTip(LocalizationData.get("AdministrationPlugIn.toolTip")); //$NON-NLS-1$
 	}
 
 	@Override
