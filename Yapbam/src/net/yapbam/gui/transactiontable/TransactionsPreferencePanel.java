@@ -37,6 +37,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JButton jButton1 = null;
 	private JButton setTodefault = null;
 	private JPanel jPanel1 = null;
+	private JCheckBox chckbxReverseDateOrder;
 	private JCheckBox separeCommentChkBx;
 	private JTable table;
 	private JCheckBox chckBxCustomBackground;
@@ -49,13 +50,15 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private Color expenseColor = GenericTransactionTableModel.CASHOUT!=null?GenericTransactionTableModel.CASHOUT:DEFAULT_CASHOUT;
 	private Color receiptColor = GenericTransactionTableModel.CASHIN!=null?GenericTransactionTableModel.CASHIN:DEFAULT_CASHIN;
 	private boolean initialSeparateCommentState;
+	private boolean initialReverseDateOrder;
 	
 	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
 	static String POSITIVE_KEY = "net.yapbam.balanceReport.positive"; //$NON-NLS-1$
-	static String CUSTOMIZED_BACKGROUND_KEY = "net.yapbam.transactionTable.customized.background"; //$NON-NLS-1$
+	private static String CUSTOMIZED_BACKGROUND_KEY = "net.yapbam.transactionTable.customized.background"; //$NON-NLS-1$
 	static String EXPENSE_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.expense.color"; //$NON-NLS-1$
 	static String RECEIPT_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.receipt.color"; //$NON-NLS-1$
-	static String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
+	private static final String REVERSE_DATE_ORDER ="net.yapbam.transactionTable.reverseDateOrder"; //$NON-NLS-1$
+	private static final String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
 	
 	static final Color DEFAULT_POSITIVE = new Color(0,200,0);
 	static final Color DEFAULT_NEGATIVE = Color.RED;
@@ -68,11 +71,16 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	public TransactionsPreferencePanel() {
 		super();
 		this.initialSeparateCommentState = isCommentSeparatedFromDescription();
+		this.initialReverseDateOrder = isReverseDateOrder();
 		initialize();
 	}
 
 	public static boolean isCommentSeparatedFromDescription() {
 		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(SEPARATE_COMMENT));
+	}
+	
+	public static boolean isReverseDateOrder() {
+		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(REVERSE_DATE_ORDER));
 	}
 	
 	public static boolean isCustomBackgroundColors() {
@@ -124,7 +132,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		Color negative = negativeBalanceReport.getForeground();
 		boolean bckHasChange = (GenericTransactionTableModel.CASHIN!=null) && !(GenericTransactionTableModel.CASHIN.equals(receiptColor) && GenericTransactionTableModel.CASHOUT.equals(expenseColor));
 		if (positive.equals(BalanceReportField.POSITIVE_COLOR) && negative.equals(BalanceReportField.NEGATIVE_COLOR)
-				&& (separeCommentChkBx.isSelected()==initialSeparateCommentState) &&
+				&& (separeCommentChkBx.isSelected()==initialSeparateCommentState) && (getChckbxReverseDateOrder().isSelected()==initialReverseDateOrder) &&
 				(getChckBxCustomBackground().isSelected()==(GenericTransactionTableModel.CASHIN!=null)) && !bckHasChange) {
 			return false;
 		}
@@ -132,6 +140,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		BalanceReportField.NEGATIVE_COLOR = negative;
 		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.POSITIVE_KEY, Integer.toString(positive.getRGB()));
 		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.NEGATIVE_KEY, Integer.toString(negative.getRGB()));
+		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.REVERSE_DATE_ORDER, Boolean.toString(getChckbxReverseDateOrder().isSelected()));
 		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.SEPARATE_COMMENT, Boolean.toString(separeCommentChkBx.isSelected()));
 		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.CUSTOMIZED_BACKGROUND_KEY, Boolean.toString(getChckBxCustomBackground().isSelected()));
 		if (getChckBxCustomBackground().isSelected()) {
@@ -273,46 +282,54 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jPanel1.setBorder(null);
 			GridBagLayout gbl_jPanel1 = new GridBagLayout();
 			jPanel1.setLayout(gbl_jPanel1);
+			GridBagConstraints gbc_chckbxReverseDateOrder = new GridBagConstraints();
+			gbc_chckbxReverseDateOrder.weightx = 1.0;
+			gbc_chckbxReverseDateOrder.gridwidth = 0;
+			gbc_chckbxReverseDateOrder.anchor = GridBagConstraints.WEST;
+			gbc_chckbxReverseDateOrder.insets = new Insets(5, 5, 5, 0);
+			gbc_chckbxReverseDateOrder.gridx = 0;
+			gbc_chckbxReverseDateOrder.gridy = 0;
+			jPanel1.add(getChckbxReverseDateOrder(), gbc_chckbxReverseDateOrder);
 			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
 			gbc_separeCommentChkBx.weightx = 1.0;
 			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
 			gbc_separeCommentChkBx.gridwidth = 0;
 			gbc_separeCommentChkBx.insets = new Insets(5, 5, 5, 0);
 			gbc_separeCommentChkBx.gridx = 0;
-			gbc_separeCommentChkBx.gridy = 0;
+			gbc_separeCommentChkBx.gridy = 1;
 			jPanel1.add(getSeparateCommentChkBx(), gbc_separeCommentChkBx);
 			GridBagConstraints gbc_chckBxCustomBackground = new GridBagConstraints();
 			gbc_chckBxCustomBackground.gridwidth = 0;
 			gbc_chckBxCustomBackground.anchor = GridBagConstraints.WEST;
 			gbc_chckBxCustomBackground.insets = new Insets(5, 5, 5, 0);
 			gbc_chckBxCustomBackground.gridx = 0;
-			gbc_chckBxCustomBackground.gridy = 1;
+			gbc_chckBxCustomBackground.gridy = 2;
 			jPanel1.add(getChckBxCustomBackground(), gbc_chckBxCustomBackground);
 			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 			gbc_scrollPane.gridheight = 2;
-			gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+			gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
 			gbc_scrollPane.gridx = 0;
-			gbc_scrollPane.gridy = 2;
+			gbc_scrollPane.gridy = 3;
 			jPanel1.add(getScrollPane(), gbc_scrollPane);
 			GridBagConstraints gbc_btnReceipt = new GridBagConstraints();
 			gbc_btnReceipt.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnReceipt.anchor = GridBagConstraints.WEST;
-			gbc_btnReceipt.insets = new Insets(0, 0, 5, 5);
+			gbc_btnReceipt.insets = new Insets(0, 0, 0, 5);
 			gbc_btnReceipt.gridx = 1;
-			gbc_btnReceipt.gridy = 3;
+			gbc_btnReceipt.gridy = 4;
 			jPanel1.add(getBtnReceipt(), gbc_btnReceipt);
 			GridBagConstraints gbc_btnExpense = new GridBagConstraints();
 			gbc_btnExpense.fill = GridBagConstraints.HORIZONTAL;
 			gbc_btnExpense.insets = new Insets(0, 0, 5, 5);
 			gbc_btnExpense.anchor = GridBagConstraints.WEST;
 			gbc_btnExpense.gridx = 1;
-			gbc_btnExpense.gridy = 2;
+			gbc_btnExpense.gridy = 3;
 			jPanel1.add(getBtnExpense(), gbc_btnExpense);
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
 			gbc_lblNewLabel.weightx = 1.0;
 			gbc_lblNewLabel.gridx = 2;
-			gbc_lblNewLabel.gridy = 2;
+			gbc_lblNewLabel.gridy = 3;
 			jPanel1.add(getLblNewLabel(), gbc_lblNewLabel);
 		}
 		return jPanel1;
@@ -474,5 +491,14 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		}
 		return scrollPane;
+	}
+	private JCheckBox getChckbxReverseDateOrder() {
+		if (chckbxReverseDateOrder == null) {
+			chckbxReverseDateOrder = new JCheckBox("Afficher les op\u00E9rations les plus r\u00E9centes en premier");
+			chckbxReverseDateOrder.setToolTipText("Cochez cette case pour que les op\u00E9rations les plus r\u00E9centes apparaissent en haut de la liste");
+			chckbxReverseDateOrder.setSelected(initialReverseDateOrder);
+			chckbxReverseDateOrder.setVisible(false); //TODO
+		}
+		return chckbxReverseDateOrder;
 	}
 }  //  @jve:decl-index=0:visual-constraint="64,14"
