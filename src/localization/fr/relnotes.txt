@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 	
+version	0.11.3 (06/??/2012)
+improvement
+	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux antre deux éxécutions de Yapbam. 
+	
 version	0.11.2 (28/05/2012)
 improvement
 	Les exports au format csv ne contiennent plus de séparateurs de milliers (Excel ne reconnait pas les chaînes de caractères qui en contiennent comme des nombres).
