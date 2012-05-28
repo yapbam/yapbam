@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
 import net.astesana.ajlib.swing.table.JTableSelector;
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
@@ -33,7 +34,7 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		this.setDefaultRenderer(Object.class, new ObjectRenderer());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.addMouseListener(new SpreadableMouseAdapter());
-		TableRowSorter<TransactionsTableModel> sorter = new TableRowSorter<TransactionsTableModel>(model);
+		TableRowSorter<TransactionsTableModel> sorter = new RowSorter<TransactionsTableModel>(model);
 		sorter.setComparator(4, new Comparator<double[]>() {
 			@Override
 			public int compare(double[] o1, double[] o2) {

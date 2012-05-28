@@ -94,7 +94,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
-				return descriptionSettings.getDescription(transaction);
+				return "<html><body>"+descriptionSettings.getDescription(transaction)+"</body></html>";
 			}
 		} else if (columnIndex==4) {
 			if (spread) {
@@ -123,7 +123,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
-				return getName(transaction.getCategory());
+				return "<html><body>"+getName(transaction.getCategory())+"</body></html>";
 			}
 		} else if (columnIndex==6) {
 			Mode mode = transaction.getMode();
