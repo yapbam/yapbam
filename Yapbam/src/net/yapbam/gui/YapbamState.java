@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
@@ -20,8 +22,12 @@ import java.util.zip.GZIPOutputStream;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.net.util.Base64;
@@ -39,11 +45,13 @@ import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.DateUtils;
 import net.yapbam.util.Portable;
 import net.yapbam.util.PreferencesUtils;
+import net.yapbam.util.StringUtils;
 
 public class YapbamState {
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$
 	private static final String COLUMN_INDEX = "column.index."; //$NON-NLS-1$
 	private static final String COLUMN_HIDDEN = "column.hidden."; //$NON-NLS-1$
+	private static final String COLUMN_SORTER = "column.sorter"; //$NON-NLS-1$
 	private static final String PRINTING_ATTRIBUTES = ".printing.attributes"; //$NON-NLS-1$
 	private static final String TAB_ORDER = ".tab.order"; //$NON-NLS-1$
 
@@ -115,6 +123,20 @@ public class YapbamState {
 				}
 			}
 		}
+		if (startOptions.isRememberRowsSortKeys()) {
+			RowSorter<? extends TableModel> sorter = table.getRowSorter();
+			if (sorter!=null) {
+				String sorters = properties.getProperty(prefix+COLUMN_SORTER);
+				if (sorters!=null) {
+					ArrayList<SortKey> keys = new ArrayList<RowSorter.SortKey>();
+					String[] split = StringUtils.split(sorters, ',');
+					for (int i = 0; i < split.length; i++) {
+						keys.add(getSortKey(split[i]));
+					}
+					sorter.setSortKeys(keys);
+				}
+			}
+		}
 		// Now the selected row (not a very good idea).
 //		String valueString = (String) properties.get(prefix+SELECTED_ROW);
 //		if (valueString!=null) {
@@ -125,8 +147,35 @@ public class YapbamState {
 //		Rectangle visibleRect = YapbamState.getRectangle(prefix+SCROLL_POSITION);
 //		if (visibleRect!=null) table.scrollRectToVisible(visibleRect);
 	}
+	
+	private static SortKey getSortKey(String encodedForm) {
+		String[] split = StringUtils.split(encodedForm, ':');
+		int column = Integer.parseInt(split[0]);
+		boolean ascending = Boolean.parseBoolean(split[1]);
+		return new SortKey(column, ascending?SortOrder.ASCENDING:SortOrder.DESCENDING);
+	}
+	
 
 	public void saveState(JTable table, String prefix) {
+		// Save the sort order
+		StringBuilder buf = new StringBuilder();
+		RowSorter<? extends TableModel> sorter = table.getRowSorter();
+		if (sorter!=null) {
+			List<? extends SortKey> sortKeys = sorter.getSortKeys();
+			for (SortKey sortKey : sortKeys) {
+				if (sortKey.getSortOrder()!=SortOrder.UNSORTED) {
+					if (buf.length()!=0) buf.append(',');
+					buf.append(sortKey.getColumn()+":"+sortKey.getSortOrder().equals(SortOrder.ASCENDING));
+				}
+			}
+		}
+		if (buf.length()>0) {
+			properties.put(prefix+COLUMN_SORTER, buf.toString());
+		} else {
+			properties.remove(prefix+COLUMN_SORTER);
+		}
+		
+		// Save columns width, order and visibility
 		TableColumnModel model = table.getColumnModel();
 		if (model instanceof XTableColumnModel) {
 			XTableColumnModel xModel = (XTableColumnModel)model;

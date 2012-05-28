@@ -25,6 +25,7 @@ public class RestoreStatePanel extends PreferencePanel {
 	private JPanel panel;
 	private JPanel panel_1;
 	private JPanel panel_2;
+	private JCheckBox chckbxRowsSortKeys;
 
 	public RestoreStatePanel() {
 		StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
@@ -53,9 +54,9 @@ public class RestoreStatePanel extends PreferencePanel {
 		add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		chckBxColumnsWitdth = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.columnsWidth")); //$NON-NLS-1$
@@ -68,12 +69,22 @@ public class RestoreStatePanel extends PreferencePanel {
 		chckBxColumnsWitdth.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.columnsWidth.tooltip")); //$NON-NLS-1$
 		chckBxColumnsWitdth.setSelected(startOptions.isRememberColumnsWidth());
 		
+		chckbxRowsSortKeys = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.rowOrder")); //$NON-NLS-1$
+		chckbxRowsSortKeys.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.rowOrder.tooltip")); //$NON-NLS-1$
+		chckbxRowsSortKeys.setSelected(startOptions.isRememberRowsSortKeys());
+		GridBagConstraints gbc_chckbxRowsSortKeys = new GridBagConstraints();
+		gbc_chckbxRowsSortKeys.anchor = GridBagConstraints.WEST;
+		gbc_chckbxRowsSortKeys.insets = new Insets(0, 0, 5, 0);
+		gbc_chckbxRowsSortKeys.gridx = 0;
+		gbc_chckbxRowsSortKeys.gridy = 1;
+		panel.add(chckbxRowsSortKeys, gbc_chckbxRowsSortKeys);
+		
 		chckBxColumnsOrder = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.columnsOrder")); //$NON-NLS-1$
 		GridBagConstraints gbc_chckBxColumnsOrder = new GridBagConstraints();
 		gbc_chckBxColumnsOrder.anchor = GridBagConstraints.WEST;
 		gbc_chckBxColumnsOrder.insets = new Insets(0, 0, 5, 0);
 		gbc_chckBxColumnsOrder.gridx = 0;
-		gbc_chckBxColumnsOrder.gridy = 1;
+		gbc_chckBxColumnsOrder.gridy = 2;
 		panel.add(chckBxColumnsOrder, gbc_chckBxColumnsOrder);
 		chckBxColumnsOrder.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.columnsOrder.tooltip")); //$NON-NLS-1$
 		chckBxColumnsOrder.setSelected(startOptions.isRememberColumnsOrder());
@@ -82,7 +93,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		GridBagConstraints gbc_chckbxHiddenColumns = new GridBagConstraints();
 		gbc_chckbxHiddenColumns.anchor = GridBagConstraints.NORTHWEST;
 		gbc_chckbxHiddenColumns.gridx = 0;
-		gbc_chckbxHiddenColumns.gridy = 2;
+		gbc_chckbxHiddenColumns.gridy = 3;
 		panel.add(chckbxHiddenColumns, gbc_chckbxHiddenColumns);
 		chckbxHiddenColumns.setSelected(startOptions.isRememberHiddenColumns());
 		chckbxHiddenColumns.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.hiddenColumns.tooltip")); //$NON-NLS-1$
@@ -151,7 +162,7 @@ public class RestoreStatePanel extends PreferencePanel {
 	@Override
 	public boolean updatePreferences() {
 		Preferences.INSTANCE.setStartStateOptions(new StartStateOptions(chckbxFile.isSelected(), chckbxFilter.isSelected(),
-				chckbxTabsOrder.isSelected(), chckBxColumnsWitdth.isSelected(), chckBxColumnsOrder.isSelected(), chckbxHiddenColumns.isSelected()));
+				chckbxTabsOrder.isSelected(), chckBxColumnsWitdth.isSelected(), chckBxColumnsOrder.isSelected(), chckbxHiddenColumns.isSelected(), chckbxRowsSortKeys.isSelected()));
 		return false;
 	}
 }

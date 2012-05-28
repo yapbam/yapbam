@@ -7,14 +7,16 @@ public class StartStateOptions {
 	private boolean rememberColumnsWidth;
 	private boolean rememberColumnsOrder;
 	private boolean rememberHiddenColumns;
+	private boolean rememberRowsSortKeys;
 	
-	public StartStateOptions(boolean rememberFile, boolean rememberFilter, boolean rememberTabsOrder, boolean rememberColumnsWidth, boolean rememberColumnsOrder, boolean rememberHiddenColumns) {
+	public StartStateOptions(boolean rememberFile, boolean rememberFilter, boolean rememberTabsOrder, boolean rememberColumnsWidth, boolean rememberColumnsOrder, boolean rememberHiddenColumns, boolean rememberRowsSortKeys) {
 		this.rememberFile = rememberFile;
 		this.rememberFilter = rememberFilter;
 		this.rememberTabsOrder = rememberTabsOrder;
 		this.rememberColumnsWidth = rememberColumnsWidth;
 		this.rememberColumnsOrder = rememberColumnsOrder;
 		this.rememberHiddenColumns = rememberHiddenColumns;
+		this.rememberRowsSortKeys = rememberRowsSortKeys;
 	}
 
 	public boolean isRememberFile() {
@@ -39,5 +41,9 @@ public class StartStateOptions {
 
 	public boolean isRememberColumnsWidth() {
 		return rememberColumnsWidth;
+	}
+
+	public boolean isRememberRowsSortKeys() {
+		return rememberRowsSortKeys;
 	}
 }
