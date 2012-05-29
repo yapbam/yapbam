@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Currency;
 
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.LocalizationData;
@@ -19,6 +20,7 @@ import java.awt.Insets;
 import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 public class CurrencyConverterPanel extends JPanel {
 
@@ -63,6 +65,7 @@ public class CurrencyConverterPanel extends JPanel {
 			}
 		}
 		getJTable().setModel(tableModel);
+		getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 	}
 
 	/**

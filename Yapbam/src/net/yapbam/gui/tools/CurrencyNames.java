@@ -21,7 +21,7 @@ public class CurrencyNames {
 			return key;
 		} else {
 			try {
-				return RESOURCE_BUNDLE.getString(key)+" ("+key+")";
+				return RESOURCE_BUNDLE.getString(key);
 			} catch (MissingResourceException e) {
 				return key;
 			}

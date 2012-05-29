@@ -34,7 +34,7 @@ public class CurrencyTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		if ((this.converter==null) || (this.codes.length==0)) return 0;
-		else return 3;
+		else return 4;
 	}
 
 	@Override
@@ -45,18 +45,20 @@ public class CurrencyTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		String currencyCode = this.codes[(rowIndex<this.currentCurrency)?rowIndex:rowIndex+1];
-		if (columnIndex==0) return CurrencyNames.getString(currencyCode);
-		if (columnIndex==1) return this.converter.convert(1.0, this.codes[currentCurrency], currencyCode);
-		if (columnIndex==2) return this.converter.convert(1.0, currencyCode, this.codes[currentCurrency]);
+		if (columnIndex==0) return currencyCode;
+		if (columnIndex==1) return CurrencyNames.getString(currencyCode);
+		if (columnIndex==2) return this.converter.convert(1.0, this.codes[currentCurrency], currencyCode);
+		if (columnIndex==3) return this.converter.convert(1.0, currencyCode, this.codes[currentCurrency]);
 		throw new IllegalArgumentException();
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		if (column==0) return Messages.getString("CurrencyConverterPanel.CurrencyColumnName"); //$NON-NLS-1$
+		if (column==0) return Messages.getString("CurrencyConverterPanel.CodeColumnName"); //$NON-NLS-1$
+		if (column==1) return Messages.getString("CurrencyConverterPanel.CurrencyColumnName"); //$NON-NLS-1$
 		String currencyName = CurrencyNames.getString(this.codes[currentCurrency]);
-		if (column==1) return MessageFormat.format(Messages.getString("CurrencyConverterPanel.ToCurrencyColumnName"), currencyName); //$NON-NLS-1$
-		if (column==2) return MessageFormat.format(Messages.getString("CurrencyConverterPanel.CurrencyToColumnName"),currencyName); //$NON-NLS-1$
+		if (column==2) return MessageFormat.format(Messages.getString("CurrencyConverterPanel.ToCurrencyColumnName"), currencyName); //$NON-NLS-1$
+		if (column==3) return MessageFormat.format(Messages.getString("CurrencyConverterPanel.CurrencyToColumnName"),currencyName); //$NON-NLS-1$
 		return super.getColumnName(column);
 	}
 }
