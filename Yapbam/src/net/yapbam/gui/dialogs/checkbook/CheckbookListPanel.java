@@ -14,6 +14,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
@@ -54,6 +55,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		});
 		this.account = null;
 		getJTable().setPreferredScrollableViewportSize(new Dimension(1, getJTable().getRowHeight() * 6));
+		getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 	}
 		
 	public void setContent(Account account) {

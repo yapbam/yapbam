@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.GlobalData;
@@ -111,6 +112,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		    	return this;
 		    }
 		});
+		jTable.setRowSorter(new RowSorter<TableModel>(getTableModel()));
 		return jTable;
 	}
 	

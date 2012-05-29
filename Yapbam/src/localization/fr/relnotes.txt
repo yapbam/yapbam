@@ -7,7 +7,9 @@ improvement
 	
 version	0.11.3 (06/??/2012)
 improvement
-	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux antre deux éxécutions de Yapbam. 
+	Les lignes des tableaux de la rubrique "Gestion des comptes" de l'onglet "Administration" peuvent à présent être triées.
+	Il est à présent possible de supprimer une clef de tri dans les tableaux (en cliquant plusieurs fois sur l'entête de la colonne qui sert de clef de tri). 
+	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux antre deux éxécutions de Yapbam.
 	
 version	0.11.2 (28/05/2012)
 improvement

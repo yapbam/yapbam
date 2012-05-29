@@ -5,6 +5,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.astesana.ajlib.swing.table.JTableSelector;
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
@@ -20,10 +21,12 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 	public StatementTable(FilteredData data) {
 		super();
 		this.data = data;
-		this.setModel(new StatementTableModel(this, new Transaction[0]));
+		StatementTableModel model = new StatementTableModel(this, new Transaction[0]);
+		this.setModel(model);
 		setAutoCreateRowSorter(true);
 		setDefaultRenderer(Object.class, new CellRenderer());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		this.setRowSorter(new RowSorter<StatementTableModel>(model));
 		this.lastSelected = null;
 		getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override

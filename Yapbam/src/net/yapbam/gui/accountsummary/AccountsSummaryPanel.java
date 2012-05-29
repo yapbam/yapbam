@@ -69,6 +69,8 @@ public class AccountsSummaryPanel extends JPanel {
 			table = new JTable();
 			this.model = new AccountsSummaryTableModel(table, data);
 			table.setModel(this.model);
+			//TODO It could be cool to add the ability to sort the table lines ... but we have to ensure the total line is always the last one 
+			//			table.setRowSorter(new RowSorter<AccountsSummaryTableModel>(model));
 			table.setDefaultRenderer(Object.class, new MyRenderer());
 			table.setDefaultRenderer(Double.class, new MyRenderer());
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
