@@ -26,8 +26,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
@@ -69,6 +71,7 @@ public class SubtransactionListPanel extends JPanel {
 		
 		tableModel = new SubTransactionsTableModel();
 		table = new JTable(tableModel);
+		table.setRowSorter(new RowSorter<TableModel>(tableModel));
 		ListSelectionModel selModel = table.getSelectionModel();
 		selModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		selModel.addListSelectionListener(new ListSelectionListener() {

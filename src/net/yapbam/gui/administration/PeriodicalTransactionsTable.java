@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.table.TableRowSorter;
 
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
@@ -28,7 +29,7 @@ class PeriodicalTransactionsTable extends JTable {
 		this.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 		this.setDefaultRenderer(Object.class, new ObjectRenderer());
 		this.addMouseListener(new SpreadableMouseAdapter());
-		TableRowSorter<PeriodicalTransactionTableModel> sorter = new TableRowSorter<PeriodicalTransactionTableModel>(model);
+		TableRowSorter<PeriodicalTransactionTableModel> sorter = new RowSorter<PeriodicalTransactionTableModel>(model);
 		sorter.setComparator(3, new Comparator<double[]>() {
 			@Override
 			public int compare(double[] o1, double[] o2) {

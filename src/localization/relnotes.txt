@@ -7,6 +7,8 @@ improvement
 
 version	0.11.3 (06/??/2012)
 improvement
+	The rows of tables under "Accounts Management" part of "Administration" tab can now be sorted.
+	It is now possible to delete a sort key in tables (by repeatedly clicking the column header that serves as sort key).
 	It's now possible to remember the row sorter keys of the tables across two Yapbam launches. 
 	
 version	0.11.2 (05/28/2012)
