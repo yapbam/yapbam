@@ -1,9 +1,18 @@
 TODO list
 
 Améliorations :
-Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done)
+- Trier les devises dans l'ordre de leur libellé dans les menus du convertisseur de devises
+- Trier le tableau de synthèse des comptes
 	
+Bugs :
+- Les info de backup du panneau de préférences ne sont pas prises en compte
+- Les montants dans le tableau du convertisseur de devise sont affichés dans un "drôle" de format
+- Dans la table des opérations, le tri sur les libellés et les catégories donne un résultat étrange
+
+TRADUCTION : IL Y A DES TRUCS A TRADUIRE DANS net.yapbam.gui.tools.messages.properties !!!
+
 Features :
+* Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done).
 * Tenir compte de la date de fin sélectionnée dans le filtre pour régler le zoom vertical dans le graphique de l'historique du solde
   (pour l'instant, cette échelle est fixée par rapport à la date de fin de l'historique de solde non filtré).
 * Ajout de moyennes dans la vue budgetaire ?
@@ -14,6 +23,3 @@ Features :
 * La possibilité de définir un budget cible et de le comparer à la dure réalité ;-)
 * La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
-
-Bugs :
-- Les info de backup du panneau de préférences ne sont pas prises en compte
