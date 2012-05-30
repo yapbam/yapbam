@@ -32,6 +32,12 @@ public class CurrencyTableModel extends AbstractTableModel {
 	}
 
 	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		if ((columnIndex==2)||(columnIndex==3)) return Double.class;
+		return String.class;
+	}
+
+	@Override
 	public int getColumnCount() {
 		if ((this.converter==null) || (this.codes.length==0)) return 0;
 		else return 4;

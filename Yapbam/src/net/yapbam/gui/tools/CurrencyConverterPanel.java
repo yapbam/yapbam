@@ -48,7 +48,6 @@ public class CurrencyConverterPanel extends JPanel {
 			this.codes = this.converter.getCurrencies();
 			Arrays.sort(this.codes);
 		}
-		tableModel = new CurrencyTableModel(this.converter);
 		initialize();
 		if (this.converter!=null) {
 			Currency currency = Currency.getInstance(LocalizationData.getLocale());
@@ -64,8 +63,6 @@ public class CurrencyConverterPanel extends JPanel {
 				this.title.setText("?"); //TODO
 			}
 		}
-		getJTable().setModel(tableModel);
-		getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 	}
 
 	/**
@@ -275,7 +272,9 @@ public class CurrencyConverterPanel extends JPanel {
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
-			jTable = new JTable();
+			tableModel = new CurrencyTableModel(this.converter);
+			jTable = new JTable(tableModel);
+			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 		}
 		return jTable;
 	}
