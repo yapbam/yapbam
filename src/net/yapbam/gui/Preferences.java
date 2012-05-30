@@ -25,6 +25,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.astesana.ajlib.utilities.FileUtils;
+import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
@@ -41,7 +42,6 @@ import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
 import net.yapbam.util.PreferencesUtils;
-import net.yapbam.util.StringUtils;
 
 /** This class represents the Yapbam application preferences */
 public class Preferences {

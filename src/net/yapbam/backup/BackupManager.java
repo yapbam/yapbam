@@ -12,7 +12,7 @@ import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import net.yapbam.util.StringUtils;
+import net.astesana.ajlib.utilities.StringUtils;
 
 /**
  * A class that backup files to a folder on the machine or to a ftp server.

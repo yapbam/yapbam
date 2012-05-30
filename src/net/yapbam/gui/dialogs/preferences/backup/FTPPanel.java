@@ -27,10 +27,10 @@ import net.astesana.ajlib.swing.widget.PasswordWidget;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.astesana.ajlib.utilities.NullUtils;
+import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
-import net.yapbam.util.StringUtils;
 
 public class FTPPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

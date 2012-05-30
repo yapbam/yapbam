@@ -34,6 +34,7 @@ import org.apache.commons.net.util.Base64;
 import org.xml.sax.SAXException;
 
 import net.astesana.ajlib.utilities.FileUtils;
+import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.xml.FilterHandler;
@@ -45,7 +46,6 @@ import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.DateUtils;
 import net.yapbam.util.Portable;
 import net.yapbam.util.PreferencesUtils;
-import net.yapbam.util.StringUtils;
 
 public class YapbamState {
 	private static final String COLUMN_WIDTH = "column.width."; //$NON-NLS-1$

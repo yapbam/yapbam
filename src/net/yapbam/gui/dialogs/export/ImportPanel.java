@@ -28,13 +28,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
 import net.astesana.ajlib.utilities.NullUtils;
+import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
-import net.yapbam.util.StringUtils;
 
 import javax.swing.JLabel;
 import java.awt.Insets;
