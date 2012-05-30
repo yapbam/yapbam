@@ -2,7 +2,6 @@ TODO list
 
 Améliorations :
 - Trier les devises dans l'ordre de leur libellé dans les menus du convertisseur de devises
-- Trier le tableau de synthèse des comptes
 	
 Bugs :
 - Les info de backup du panneau de préférences ne sont pas prises en compte
