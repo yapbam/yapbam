@@ -83,26 +83,14 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 	public int getRowCount() {
 		if (data==null) return 0;
 		int nb = data.getAccountsNumber();
-		if (nb>1) nb = nb + 1;
 		return nb;
 	}
 	
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (rowIndex==data.getAccountsNumber()) {
-			if (columnIndex==0) return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
-			double result = 0.0;
-			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				if (columnIndex==3) result += data.getAccount(i).getBalanceData().getCheckedBalance();
-				else if (columnIndex==1) result += data.getAccount(i).getBalanceData().getCurrentBalance();
-				else if (columnIndex==2) result += data.getAccount(i).getBalanceData().getFinalBalance();
-			}
-			return result;
-		} else {
-			if (columnIndex==0) return data.getAccount(rowIndex).getName();
-			if (columnIndex==3) return data.getAccount(rowIndex).getBalanceData().getCheckedBalance();
-			if (columnIndex==1) return data.getAccount(rowIndex).getBalanceData().getCurrentBalance();
-			if (columnIndex==2) return data.getAccount(rowIndex).getBalanceData().getFinalBalance();
-		}
+		if (columnIndex==0) return data.getAccount(rowIndex).getName();
+		if (columnIndex==3) return data.getAccount(rowIndex).getBalanceData().getCheckedBalance();
+		if (columnIndex==1) return data.getAccount(rowIndex).getBalanceData().getCurrentBalance();
+		if (columnIndex==2) return data.getAccount(rowIndex).getBalanceData().getFinalBalance();
 		return null;
 	}
 }

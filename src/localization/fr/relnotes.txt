@@ -7,7 +7,7 @@ improvement
 	
 version	0.11.3 (06/??/2012)
 improvement
-	Les lignes des tableaux de la rubrique "Gestion des comptes" de l'onglet "Administration" peuvent à présent être triées.
+	Les lignes des tableaux de la rubrique "Gestion des comptes" de l'onglet "Administration" peuvent à présent être triées. Il en est de même pour le "Bilan des comptes".
 	Il est à présent possible de supprimer une clef de tri dans les tableaux (en cliquant plusieurs fois sur l'entête de la colonne qui sert de clef de tri). 
 	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux entre deux exécutions de Yapbam.
 	Dans le convertisseur de devise, le nom de la devise et son code sont à présent dans des colonnes distinctes. Le tableau des devises peut être trié.
