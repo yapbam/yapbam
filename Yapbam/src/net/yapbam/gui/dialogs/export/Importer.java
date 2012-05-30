@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
@@ -21,7 +22,6 @@ import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.util.StringUtils;
 
 public class Importer {
 	private File file;

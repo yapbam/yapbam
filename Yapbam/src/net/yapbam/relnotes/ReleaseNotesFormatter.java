@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//import net.yapbam.gui.LocalizationData;
-import net.yapbam.util.StringUtils;
+import net.astesana.ajlib.utilities.StringUtils;
 
 /** Format the release notes from csv to html format. 
  * @author Jean-Marc Astesana
