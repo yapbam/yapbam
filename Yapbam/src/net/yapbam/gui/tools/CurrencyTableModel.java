@@ -27,7 +27,7 @@ public class CurrencyTableModel extends AbstractTableModel {
 	public void setCurrency(String currencyCode) {
 		if (this.converter!=null) {
 			this.currentCurrency = Arrays.binarySearch(this.codes, currencyCode);
-			this.fireTableStructureChanged();
+			this.fireTableDataChanged();
 		}
 	}
 

@@ -11,6 +11,8 @@ improvement
 	It is now possible to delete a sort key in tables (by repeatedly clicking the column header that serves as sort key).
 	It's now possible to remember the row sorter keys of the tables across two Yapbam launches.
 	In the currency converter, the currency names and codes are now in separate columns. Currency table can be sorted.
+fix
+	In the currency converter, conversion rates were not displayed in the decimal format of the countrie (eg, in France, the point was used as decimal separator).
 	
 version	0.11.2 (05/28/2012)
 improvement
