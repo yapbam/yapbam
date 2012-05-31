@@ -11,7 +11,9 @@ improvement
 	Il est à présent possible de supprimer une clef de tri dans les tableaux (en cliquant plusieurs fois sur l'entête de la colonne qui sert de clef de tri). 
 	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux entre deux exécutions de Yapbam.
 	Dans le convertisseur de devise, le nom de la devise et son code sont à présent dans des colonnes distinctes. Le tableau des devises peut être trié.
-	
+fix
+	Dans le convertisseur de devises, les taux de conversion n'étaient pas affichés en respectant le format décimal du pays (exemple, en France, le point était utilisé comme séparateur décimal).
+
 version	0.11.2 (28/05/2012)
 improvement
 	Les exports au format csv ne contiennent plus de séparateurs de milliers (Excel ne reconnait pas les chaînes de caractères qui en contiennent comme des nombres).

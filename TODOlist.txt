@@ -5,7 +5,6 @@ Améliorations :
 	
 Bugs :
 - Les info de backup du panneau de préférences ne sont pas prises en compte
-- Les montants dans le tableau du convertisseur de devise sont affichés dans un "drôle" de format
 - Dans la table des opérations, le tri sur les libellés et les catégories donne un résultat étrange
 
 TRADUCTION : IL Y A DES TRUCS A TRADUIRE DANS net.yapbam.gui.tools.messages.properties !!!

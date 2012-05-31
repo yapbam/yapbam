@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Currency;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.currency.CurrencyConverter;
@@ -276,6 +277,7 @@ public class CurrencyConverterPanel extends JPanel {
 			jTable = new JTable(tableModel);
 			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 			getJTable().setDefaultRenderer(Double.class, new ConversionRateRenderer());
+			Utils.packColumns(jTable, 2);
 		}
 		return jTable;
 	}

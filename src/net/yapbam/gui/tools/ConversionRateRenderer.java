@@ -12,6 +12,7 @@ public class ConversionRateRenderer extends DefaultTableCellRenderer {
 	
 	public ConversionRateRenderer () {
 		super();
+		this.setHorizontalAlignment(RIGHT);
 		formatter = NumberFormat.getNumberInstance(LocalizationData.getLocale());
 		formatter.setMinimumFractionDigits(3);
 		formatter.setMaximumFractionDigits(Integer.MAX_VALUE);
