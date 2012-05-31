@@ -275,6 +275,7 @@ public class CurrencyConverterPanel extends JPanel {
 			tableModel = new CurrencyTableModel(this.converter);
 			jTable = new JTable(tableModel);
 			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
+			getJTable().setDefaultRenderer(Double.class, new ConversionRateRenderer());
 		}
 		return jTable;
 	}
