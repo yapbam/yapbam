@@ -310,6 +310,7 @@ public class MainFrame extends JFrame implements DataListener {
 		} catch (IOException e) {
 			new ExecutionException(e);
 		}
+		if (uri==null) return false;
 		final BackgroundReader worker = new BackgroundReader(uri, password);
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(this, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 		Utils.centerWindow(waitFrame, this);
@@ -344,12 +345,11 @@ public class MainFrame extends JFrame implements DataListener {
 		public BackgroundReader (URI uri, String password) {
 			this.uri = uri;
 			this.password = password;
-			if (uri!=null) setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), uri.getPath()),-1); //LOCAL //$NON-NLS-1$
+			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), uri.getPath()),-1); //$NON-NLS-1$
 		}
 		
 		@Override
 		protected GlobalData doInBackground() throws Exception {
-			if (uri==null) return null;
 			return Serializer.read(uri, password, this);
 		}
 	

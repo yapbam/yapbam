@@ -13,7 +13,8 @@ improvement
 	In the currency converter, the currency names and codes are now in separate columns. Currency table can be sorted.
 fix
 	In the currency converter, conversion rates were not displayed in the decimal format of the countrie (eg, in France, the point was used as decimal separator).
-	
+	A bug was introduced in 0.11.2: Opening a file protected by password, then clicking on "Cancel" in the password dialog, resulted in an error.
+
 version	0.11.2 (05/28/2012)
 improvement
 	The csv exports doesn't contain anymore thousands separators (Excel doesn't recognize strings with such separators as numbers).
