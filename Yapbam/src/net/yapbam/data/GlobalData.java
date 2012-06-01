@@ -76,7 +76,7 @@ public class GlobalData extends DefaultListenable {
 	 */
 	public GlobalData() {
 		super();
-	    this.clear();
+		this.clear();
 	}
 	
 	/** Sets the currency to be used in Yapbam.
