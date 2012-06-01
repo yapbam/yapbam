@@ -313,7 +313,6 @@ public class MainFrame extends JFrame implements DataListener {
 		if (uri==null) return false;
 		final BackgroundReader worker = new BackgroundReader(uri, password);
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(this, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
-		Utils.centerWindow(waitFrame, this);
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
 		if (!cancelled) {

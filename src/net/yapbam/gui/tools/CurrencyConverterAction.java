@@ -50,7 +50,6 @@ final public class CurrencyConverterAction extends AbstractAction {
 				return panel;
 			}
 		};
-		Utils.centerWindow(waitFrame, owner);
 		worker.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

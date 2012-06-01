@@ -92,7 +92,6 @@ class SaveManager {
 		}
 		final Worker<Void, Void> worker = new BackgroundSaver(frame.getData(), uri);
 		WorkInProgressFrame waitFrame = new SaveProgressFrame(frame, worker);
-		Utils.centerWindow(waitFrame, frame);
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
 		if (cancelled) return false;
