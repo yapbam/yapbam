@@ -58,13 +58,6 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return false;
 	}
-
-	public void fill(AbstractTransaction transaction) {
-		this.subTransactions.clear();
-		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-			this.subTransactions.add(transaction.getSubTransaction(i));
-		}
-	}
 	
 	public SubTransaction get(int index) {
 		return this.subTransactions.get(index);
@@ -85,6 +78,14 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 	@Override
 	public int getAlignment(int column) {
 		return SwingConstants.LEFT;
+	}
+
+	public void fill(AbstractTransaction transaction) {
+		this.subTransactions.clear();
+		for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
+			this.subTransactions.add(transaction.getSubTransaction(i));
+		}
+		this.fireTableDataChanged();
 	}
 
 	public void add(SubTransaction sub) {
