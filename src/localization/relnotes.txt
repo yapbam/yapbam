@@ -14,6 +14,7 @@ improvement
 fix
 	In the currency converter, conversion rates were not displayed in the decimal format of the countrie (eg, in France, the point was used as decimal separator).
 	A bug was introduced in 0.11.2: Opening a file protected by password, then clicking on "Cancel" in the password dialog, resulted in an error.
+	A bug was introduced in 0.11.2: Reading a file that contained no transactions resulted in an error.
 
 version	0.11.2 (05/28/2012)
 improvement

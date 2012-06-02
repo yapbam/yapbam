@@ -36,11 +36,11 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@Override
 	protected JTable instantiateJTable() {
 		return new JTable(getTableModel()) {
-		    //Implement table cell tool tips.
-		    @Override
+			// Implement table cell tool tips.
+			@Override
 			public String getToolTipText(MouseEvent e) {
-		        return LocalizationData.get("CategoryManager.nameColumn.toolTip"); //$NON-NLS-1$;
-		    }
+				return LocalizationData.get("CategoryManager.nameColumn.toolTip"); //$NON-NLS-1$;
+			}
 		};
 	}
 
@@ -91,7 +91,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 				((GlobalData)data).setName(getCategory(row), name);
 		        fireTableDataChanged();
 			}
-	    }
+		}
 
 		@Override
 		public int getRowCount() {
