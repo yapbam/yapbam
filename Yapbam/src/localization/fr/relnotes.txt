@@ -14,6 +14,7 @@ improvement
 fix
 	Dans le convertisseur de devises, les taux de conversion n'étaient pas affichés en respectant le format décimal du pays (exemple, en France, le point était utilisé comme séparateur décimal).
 	Correction d'un bug introduit en 0.11.2 : Lorsqu'on ouvrait un fichier protégé par mot de passe, et qu'on cliquait sur "Annuler" dans le dialogue de demande de mot de passe, cela provoquait une erreur. 
+	Correction d'un bug introduit en 0.11.2 : La lecture d'un fichier ne contenant aucune opération provoquait une erreur. 
 
 version	0.11.2 (28/05/2012)
 improvement
