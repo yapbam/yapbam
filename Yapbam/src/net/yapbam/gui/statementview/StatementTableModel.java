@@ -44,6 +44,7 @@ class StatementTableModel extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		if ((columnIndex==0)||(columnIndex==5)) return Date.class;
+		if ((columnIndex==6)||(columnIndex==7)) return Double.class;
 		return super.getColumnClass(columnIndex);
 	}
 
