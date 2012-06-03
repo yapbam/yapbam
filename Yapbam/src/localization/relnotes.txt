@@ -7,14 +7,13 @@ improvement
 
 version	0.11.3 (06/??/2012)
 improvement
+	It's now possible to remember the row sorter keys of the tables across two Yapbam launches.
 	The rows of tables under "Accounts Management" part of "Administration" tab can now be sorted. It is the same for the "accounts summary".
 	It is now possible to delete a sort key in tables (by repeatedly clicking the column header that serves as sort key).
-	It's now possible to remember the row sorter keys of the tables across two Yapbam launches.
-	In the currency converter, the currency names and codes are now in separate columns. Currency table can be sorted.
+	In the currency converter:<ul><li>the currency names and codes are now in separate columns.</li><li>Currency table can be sorted, by default it is sorted, as well as the menus in the order of names of currencies.</li><li>The target currency can be selected by clicking its row in the table.</li></ul>
 fix
-	In the currency converter, conversion rates were not displayed in the decimal format of the countrie (eg, in France, the point was used as decimal separator).
-	A bug was introduced in 0.11.2: Opening a file protected by password, then clicking on "Cancel" in the password dialog, resulted in an error.
-	A bug was introduced in 0.11.2: Reading a file that contained no transactions resulted in an error.
+	In the currency converter, conversion rates were not displayed in the decimal format of the country (eg, in France, the point was used as decimal separator).
+	Bugs introduced in 0.11.2:<ul><li>Opening a file protected by password, then clicking on "Cancel" in the password dialog, resulted in an error.</li><li>Reading a file that contained no transactions resulted in an error.</li></ul>
 
 version	0.11.2 (05/28/2012)
 improvement
