@@ -3,11 +3,14 @@ package net.yapbam.gui.tools;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
+import javax.swing.ListSelectionModel;
+
 import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Currency;
 
 import net.astesana.ajlib.swing.Utils;
@@ -21,6 +24,8 @@ import java.awt.Insets;
 import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 public class CurrencyConverterPanel extends JPanel {
@@ -47,14 +52,21 @@ public class CurrencyConverterPanel extends JPanel {
 		this.converter = converter;
 		if (this.converter!=null) {
 			this.codes = this.converter.getCurrencies();
-			Arrays.sort(this.codes);
+			// Sort the codes accordingly to their wordings
+			Arrays.sort(this.codes, new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					String w1 = CurrencyNames.getString(o1);
+					String w2 = CurrencyNames.getString(o2);
+					return w1.compareToIgnoreCase(w2);
+				}
+			});
 		}
 		initialize();
 		if (this.converter!=null) {
 			Currency currency = Currency.getInstance(LocalizationData.getLocale());
 			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
 			if (index>=0) {
-//				this.tableModel.setCurrency(this.codes[index]);
 				getCurrency1().setSelectedIndex(index);
 				getCurrency2().setSelectedIndex(index);
 				String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
@@ -273,11 +285,22 @@ public class CurrencyConverterPanel extends JPanel {
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
-			tableModel = new CurrencyTableModel(this.converter);
+			tableModel = new CurrencyTableModel(this.converter, this.codes);
 			jTable = new JTable(tableModel);
 			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 			getJTable().setDefaultRenderer(Double.class, new ConversionRateRenderer());
 			Utils.packColumns(jTable, 2);
+			getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			getJTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					if (!e.getValueIsAdjusting()) {
+						int selectedRow = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
+						String selectedCode = tableModel.getCode(selectedRow);
+						getCurrency2().setSelectedItem(CurrencyNames.getString(selectedCode));
+					}
+				}
+			});
 		}
 		return jTable;
 	}

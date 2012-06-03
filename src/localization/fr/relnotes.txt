@@ -7,14 +7,13 @@ improvement
 	
 version	0.11.3 (06/??/2012)
 improvement
+	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux entre deux exécutions de Yapbam.
 	Les lignes des tableaux de la rubrique "Gestion des comptes" de l'onglet "Administration" peuvent à présent être triées. Il en est de même pour le "Bilan des comptes".
 	Il est à présent possible de supprimer une clef de tri dans les tableaux (en cliquant plusieurs fois sur l'entête de la colonne qui sert de clef de tri). 
-	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux entre deux exécutions de Yapbam.
-	Dans le convertisseur de devise, le nom de la devise et son code sont à présent dans des colonnes distinctes. Le tableau des devises peut être trié.
+	Dans le convertisseur de devises :<ul><li>le nom de la devise et son code sont à présent dans des colonnes distinctes.</li><li>Le tableau des devises peut être trié. Par défaut, il est trié, de même que les menus, dans l'ordre des noms de devises et plus, comme auparavant, des codes.</li><li>La devise cible peut être sélectionnée en cliquant sur sa ligne dans le tableau.</li></ul>
 fix
-	Dans le convertisseur de devises, les taux de conversion n'étaient pas affichés en respectant le format décimal du pays (exemple, en France, le point était utilisé comme séparateur décimal).
-	Correction d'un bug introduit en 0.11.2 : Lorsqu'on ouvrait un fichier protégé par mot de passe, et qu'on cliquait sur "Annuler" dans le dialogue de demande de mot de passe, cela provoquait une erreur. 
-	Correction d'un bug introduit en 0.11.2 : La lecture d'un fichier ne contenant aucune opération provoquait une erreur. 
+	Dans le convertisseur de devises les taux de conversion n'étaient pas affichés en respectant le format décimal du pays (exemple, en France, le point était utilisé comme séparateur décimal).
+	Correction de bugs introduits en 0.11.2 :<ul><li>Lorsqu'on ouvrait un fichier protégé par mot de passe, et qu'on cliquait sur "Annuler" dans le dialogue de demande de mot de passe, cela provoquait une erreur.</li><li>La lecture d'un fichier ne contenant aucune opération provoquait une erreur.</li></ul> 
 
 version	0.11.2 (28/05/2012)
 improvement
