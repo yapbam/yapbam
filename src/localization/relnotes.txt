@@ -14,6 +14,7 @@ improvement
 fix
 	In the currency converter, conversion rates were not displayed in the decimal format of the country (eg, in France, the point was used as decimal separator).
 	Bugs introduced in 0.11.2:<ul><li>Opening a file protected by password, then clicking on "Cancel" in the password dialog, resulted in an error.</li><li>Reading a file that contained no transactions resulted in an error.</li></ul>
+	In the "Account statements" tab, the optionnal sort order of "Debt" and "Receipt" columns was alphabetical instead of numerical. 
 
 version	0.11.2 (05/28/2012)
 improvement
