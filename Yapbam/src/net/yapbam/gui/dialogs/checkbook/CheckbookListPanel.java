@@ -34,7 +34,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged(); //TODO We should test the event class and ignore some events (ie : ModeAddedEvent) 
 				if (event instanceof CheckbookPropertyChangedEvent) { // Test if a checkbook is finished
 					CheckbookPropertyChangedEvent checkbookChangedEvt = (CheckbookPropertyChangedEvent)event;
 					Checkbook old = checkbookChangedEvt.getOldCheckbook();
@@ -97,7 +97,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int row = getJTable().getSelectedRow();
+			int row = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			Checkbook old = account.getCheckbook(row);
 			CheckbookDialog dialog = new CheckbookDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()));
 			dialog.setContent(old);
@@ -116,7 +116,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int row = getJTable().getSelectedRow();
+			int row = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			data.remove(account, account.getCheckbook(row));
 		}
 	}
