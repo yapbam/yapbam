@@ -76,4 +76,11 @@ public class CurrencyTableModel extends AbstractTableModel {
 	public String getCode(int rowIndex) {
 		return this.codes[(rowIndex<this.currentCurrency)?rowIndex:rowIndex+1];
 	}
+
+	public int indexOf(String currencyCode) {
+		for (int i = 0; i < getRowCount(); i++) {
+			if (currencyCode.equals(getValueAt(i, 1))) return i; 
+		}
+		return -1;
+	}
 }

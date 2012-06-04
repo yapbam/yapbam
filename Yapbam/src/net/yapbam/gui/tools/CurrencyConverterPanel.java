@@ -212,7 +212,16 @@ public class CurrencyConverterPanel extends JPanel {
 			currency2.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					amount2.setCurrency(Currency.getInstance(codes[currency2.getSelectedIndex()]));
+					String currencyCode = codes[currency2.getSelectedIndex()];
+					int index = tableModel.indexOf(currencyCode);
+					if (index<0) {
+						getJTable().clearSelection();
+					} else {
+						index = getJTable().convertRowIndexToView(index);
+						getJTable().getSelectionModel().setSelectionInterval(index, index);
+						getJTable().scrollRectToVisible(getJTable().getCellRect(index, 0, true));
+					}
+					amount2.setCurrency(Currency.getInstance(currencyCode));
 					doConvert();
 				}
 			});
@@ -295,9 +304,12 @@ public class CurrencyConverterPanel extends JPanel {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					if (!e.getValueIsAdjusting()) {
-						int selectedRow = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
-						String selectedCode = tableModel.getCode(selectedRow);
-						getCurrency2().setSelectedItem(CurrencyNames.getString(selectedCode));
+						int viewRow = getJTable().getSelectedRow();
+						if (viewRow>=0) {
+							int selectedRow = getJTable().convertRowIndexToModel(viewRow);
+							String selectedCode = tableModel.getCode(selectedRow);
+							getCurrency2().setSelectedItem(CurrencyNames.getString(selectedCode));
+						}
 					}
 				}
 			});
