@@ -18,6 +18,7 @@ import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.ModeAddedEvent;
+import net.yapbam.data.event.ModePropertyChangedEvent;
 import net.yapbam.data.event.ModeRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -72,7 +73,7 @@ class AdministrationModeListPanel extends ModeListPanel {
 				public void processEvent(DataEvent event) {
 					if (event instanceof ModeAddedEvent) {
 						if (account==((ModeAddedEvent)event).getAccount()) {
-							int row = account.indexOf(((ModeAddedEvent)event).getMode());
+							int row = account.indexOf(((ModeAddedEvent)event).getMode()) - 1;
 							fireTableRowsInserted(row, row);
 						}
 					} else if (event instanceof ModeRemovedEvent) {
@@ -80,6 +81,11 @@ class AdministrationModeListPanel extends ModeListPanel {
 						if (account==((ModeRemovedEvent)event).getAccount()) {
 							int row = e.getIndex()-1; // -1 because undefined mode is the first one and is not displayed
 							fireTableRowsDeleted(row, row);
+						}
+					} else if (event instanceof ModePropertyChangedEvent) {
+						if (account==((ModePropertyChangedEvent)event).getAccount()) {
+							int row = account.indexOf(((ModePropertyChangedEvent)event).getNewMode()) - 1;
+							fireTableRowsUpdated(row, row); 
 						}
 					}
 				}
@@ -134,7 +140,7 @@ class AdministrationModeListPanel extends ModeListPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int row = getJTable().getSelectedRow();
+			int row = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			Mode old = account.getMode(row+1);
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
 			dialog.setContent(old);
@@ -142,7 +148,6 @@ class AdministrationModeListPanel extends ModeListPanel {
 			Mode mode = dialog.getResult();
 			if (mode!=null) {
 				((GlobalData)data).setMode(account, old, mode);
-				((AbstractTableModel)getJTable().getModel()).fireTableRowsUpdated(row, row);
 			}
 		}
 	}
@@ -154,7 +159,7 @@ class AdministrationModeListPanel extends ModeListPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int selectedRow = getJTable().getSelectedRow();
+			int selectedRow = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			Mode mode = ((ModeListTableModel)getJTable().getModel()).getMode(selectedRow);
 			boolean confirmed = true;
 			if (isUsed(mode)) {
