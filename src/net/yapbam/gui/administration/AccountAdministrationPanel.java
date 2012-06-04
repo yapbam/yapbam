@@ -40,7 +40,8 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					int row = jTable.getSelectedRow();
+					int viewRow = jTable.getSelectedRow();
+					int row = viewRow<0?viewRow:jTable.convertRowIndexToModel(viewRow);
 					Account account = row>=0?AccountAdministrationPanel.this.data.getAccount(row):null;
 					getModeListPanel().setContent(account);
 					getCheckbookListPanel().setContent(account);

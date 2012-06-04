@@ -3,7 +3,6 @@ package net.yapbam.gui.dialogs;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -15,6 +14,7 @@ import javax.swing.table.TableModel;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -25,15 +25,11 @@ import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 public class ModeListPanel extends AbstractListAdministrationPanel<Object> {
 	protected String accountName;
 	
-	protected ModeListPanel (Object data) {
+	protected ModeListPanel (GlobalData data) {
 		super(data);
 		this.accountName = ""; //$NON-NLS-1$
 		getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
 		getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
-	}
-	
-	ModeListPanel() {
-		this(new ArrayList<Mode>());
 	}
 	
 	public void setContent(Account account) {
@@ -84,7 +80,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel<Object> {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int row = getJTable().getSelectedRow();
+			int row = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			Mode old = ((List<Mode>)data).remove(row);
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
 			dialog.setContent(old);
@@ -106,7 +102,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel<Object> {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int row = getJTable().getSelectedRow();
+			int row = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			((List<Mode>)data).remove(row);
 			((AbstractTableModel)getJTable().getModel()).fireTableRowsDeleted(row,row);
 		}
@@ -119,7 +115,7 @@ public class ModeListPanel extends AbstractListAdministrationPanel<Object> {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), new Account(accountName, 0, (List<Mode>)data));
-			dialog.setContent(((List<Mode>)data).get(getJTable().getSelectedRow()));
+			dialog.setContent(((List<Mode>)data).get(getJTable().convertRowIndexToModel(getJTable().getSelectedRow())));
 			dialog.setVisible(true);
 			Mode mode = dialog.getResult();
 			if (mode!=null) {
