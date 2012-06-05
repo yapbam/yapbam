@@ -5,7 +5,7 @@ known
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 	
-version	0.11.3 (06/??/2012)
+version	0.11.3 (06/06/2012)
 improvement
 	Il est à présent possible de mémoriser l'ordre de tri des lignes de tableaux entre deux exécutions de Yapbam.
 	Les lignes des tableaux de la rubrique "Gestion des comptes" de l'onglet "Administration" peuvent à présent être triées. Il en est de même pour le "Bilan des comptes".

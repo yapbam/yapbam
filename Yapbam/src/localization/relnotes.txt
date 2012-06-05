@@ -5,7 +5,7 @@ known
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
 
-version	0.11.3 (06/??/2012)
+version	0.11.3 (06/06/2012)
 improvement
 	It's now possible to remember the row sorter keys of the tables across two Yapbam launches.
 	The rows of tables under "Accounts Management" part of "Administration" tab can now be sorted. It is the same for the "accounts summary".

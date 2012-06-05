@@ -1,12 +1,12 @@
 TODO list
 
+Code cleaning :
+La classe ModeListPanel ne sert plus à rien ... à fusionner avec AdminstrationModeListPanel
+
 Améliorations :
 	
 Bugs :
 - Les info de backup du panneau de préférences ne sont pas prises en compte
-- Dans la table des opérations, le tri sur les libellés et les catégories donne un résultat étrange
-
-TRADUCTION : IL Y A DES TRUCS A TRADUIRE DANS net.yapbam.gui.tools.messages.properties !!!
 
 Features :
 * Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done).
