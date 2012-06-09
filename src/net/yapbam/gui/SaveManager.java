@@ -11,7 +11,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.swing.worker.DefaultWorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;

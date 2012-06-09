@@ -11,7 +11,6 @@ import java.awt.GridBagConstraints;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.ModeListPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -27,7 +26,7 @@ import java.awt.Insets;
 public class AccountAdministrationPanel extends JPanel implements AbstractAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 	private AccountListPanel accountListPanel = null;
-	private ModeListPanel modeListPanel = null;
+	private AdministrationModeListPanel modeListPanel = null;
 	private CheckbookListPanel checkbookListPanel = null;
 	private GlobalData data;
 	
@@ -111,7 +110,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	 * 	
 	 * @return net.yapbam.gui.dialogs.ModeListPanel	
 	 */
-	private ModeListPanel getModeListPanel() {
+	private AdministrationModeListPanel getModeListPanel() {
 		if (modeListPanel == null) {
 			modeListPanel = new AdministrationModeListPanel(data);
 			modeListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("AccountDialog.modes.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$
