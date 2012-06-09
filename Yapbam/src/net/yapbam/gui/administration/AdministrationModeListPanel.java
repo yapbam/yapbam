@@ -1,15 +1,19 @@
 package net.yapbam.gui.administration;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
@@ -24,14 +28,16 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractModeListModel;
 import net.yapbam.gui.dialogs.ModeDialog;
-import net.yapbam.gui.dialogs.ModeListPanel;
+import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 @SuppressWarnings("serial")
-class AdministrationModeListPanel extends ModeListPanel {
+class AdministrationModeListPanel extends AbstractListAdministrationPanel<GlobalData> {
 	private Account account;
 	
 	public AdministrationModeListPanel(GlobalData data) {
 		super(data);
+		getJTable().setPreferredScrollableViewportSize(new Dimension(1,getJTable().getRowHeight()*6));
+		getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 	}
 	
 	@Override
@@ -54,16 +60,26 @@ class AdministrationModeListPanel extends ModeListPanel {
 		return null;
 	}
 	
-	@Override
-	protected TableModel getTableModel() {
+	private TableModel getTableModel() {
 		return new ModeListTableModel();
 	}
 	
-	@Override
 	public void setContent(Account account) {
 		this.account = account;
 		this.getNewButton().getAction().setEnabled(account!=null);
 		((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+	}
+	
+	@Override
+	protected JTable instantiateJTable() {
+		JTable table = new JTable(getTableModel());
+		// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
+		table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
+		return table;
+	}
+	
+	public List<Mode> getModes() {
+		return (List<Mode>) this.data;
 	}
 
 	private final class ModeListTableModel extends AbstractModeListModel {
