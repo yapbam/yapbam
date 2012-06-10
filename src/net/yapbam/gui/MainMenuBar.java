@@ -161,7 +161,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menuItemNewAccount.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AccountDialog.open(MainMenuBar.this.frame.getData(), MainMenuBar.this.frame, null);
+				AccountDialog.open(MainMenuBar.this.frame.getData(), MainMenuBar.this.frame.getJFrame(), null);
 			}
 		});
 		this.transactionMenu.add(menuItemNewAccount);
@@ -227,7 +227,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.setToolTipText(LocalizationData.get("MainMenu.QuestionMark.ToolTip")); //$NON-NLS-1$
 		this.add(menu);
 
-		menu.add(new CheckNewReleaseAction(this.frame));
+		menu.add(new CheckNewReleaseAction(this.frame.getJFrame()));
 		insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
 		menu.addSeparator();
 		item = getURLMenuItem(LocalizationData.get("MainMenu.help"), new File(Portable.getLaunchDirectory(),"help.html").toURI().toString()); //$NON-NLS-1$ //$NON-NLS-2$
@@ -272,7 +272,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					HelpManager.show(MainMenuBar.this.frame, new URI(url));
+					HelpManager.show(MainMenuBar.this, new URI(url));
 				} catch (URISyntaxException e1) {
 					e1.printStackTrace(); //TODO
 				}
@@ -302,36 +302,36 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		// output.setText("Menu selected"+e.getSource().toString());
 		Object source = e.getSource();
 		if (source.equals(this.menuItemQuit)) {
-			this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
+			this.frame.getJFrame().dispatchEvent(new WindowEvent(this.frame.getJFrame(), WindowEvent.WINDOW_CLOSING));
 		} else {
 			GlobalData data = this.frame.getData();
 			if (source.equals(this.menuItemNew)) {
-				if (SaveManager.MANAGER.verify(this.frame)) {
+				if (SaveManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
 					data.clear();
 				}
 			} else if (source.equals(this.menuItemOpen)) {
-				if (SaveManager.MANAGER.verify(this.frame)) {
+				if (SaveManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
 					URI path = data.getURI();
 					String parent = path == null ? null : new File(path).getParent();
 					JFileChooser chooser = new FileChooser(parent);
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-					final File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
+					final File file = chooser.showOpenDialog(frame.getJFrame()) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
 					if (file != null) {
 						try {
-							frame.readData(file.toURI());
+							DataReader.INSTANCE.readData(frame.getJFrame(), frame.getData(), file.toURI());
 						} catch (ExecutionException exception) {
-							ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
+							ErrorManager.INSTANCE.display(frame.getJFrame(), exception.getCause(), MessageFormat.format(LocalizationData
 									.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
 						}
 					}
 				}
 			} else if (source.equals(this.menuItemSave)) {
-				SaveManager.MANAGER.save(this.frame);
+				SaveManager.MANAGER.save(this.frame.getOwner(), this.frame.getData());
 			} else if (source.equals(this.menuItemSaveAs)) {
-				SaveManager.MANAGER.saveAs(this.frame);
+				SaveManager.MANAGER.saveAs(this.frame.getOwner(), this.frame.getData());
 			} else if (source.equals(this.menuItemProtect)) {
 				String password = this.frame.getData().getPassword();
-				GetPasswordDialog dialog = new GetPasswordDialog(frame, LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
+				GetPasswordDialog dialog = new GetPasswordDialog(frame.getJFrame(), LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
 				dialog.setWarningMessage(LocalizationData.get("FilePasswordDialog.setPassword.warning")); //$NON-NLS-1$
 				dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.setPassword.tooltip")); //$NON-NLS-1$
 				dialog.setConfirmIsRequired(true);
@@ -348,21 +348,21 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					if (lastFile.exists() && lastFile.canRead()) chooser.setSelectedFile(lastFile);
 				}
 				chooser.updateUI();
-				File file = chooser.showOpenDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+				File file = chooser.showOpenDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 				if (file!=null) {
 					try {
-						ImportDialog dialog = new ImportDialog(this.frame, data, file);
+						ImportDialog dialog = new ImportDialog(this.frame.getJFrame(), data, file);
 						dialog.setVisible(true);
 						Importer importer = dialog.getResult();
 						if (importer!=null) {
-							if (SaveManager.MANAGER.verify(frame)) {
+							if (SaveManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
 								if (!dialog.getAddToCurrentData()) {
 									data.clear();
 								}
 								try {
 									ImportError[] errors = importer.importFile(null);
 									if (errors.length!=0) {
-										ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame, importer.getParameters().getImportedFileColumns(), errors);
+										ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame.getJFrame(), importer.getParameters().getImportedFileColumns(), errors);
 										importErrorDialog.setVisible(true);
 										if (importErrorDialog.getResult()!=null) errors = new ImportError[0];
 									}
@@ -371,29 +371,29 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 									}
 								} catch (IOException e1) {
 									//TODO Be more precise ?
-									ErrorManager.INSTANCE.display(frame, e1);
+									ErrorManager.INSTANCE.display(frame.getJFrame(), e1);
 								}
 							}
 						}
 					} catch (BadImportFileException e2) {
-						JOptionPane.showMessageDialog(this.frame, e2.getMessage(), LocalizationData.get("ImportDialog.errorMessage.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+						JOptionPane.showMessageDialog(this.frame.getJFrame(), e2.getMessage(), LocalizationData.get("ImportDialog.errorMessage.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 					}
 				}
 			} else if (source.equals(this.menuItemExport)) {
-				ExportDialog exportDialog = new ExportDialog(this.frame, this.frame.getFilteredData());
+				ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
 				exportDialog.setVisible(true);
 				Exporter exporter = exportDialog.getResult();
 				if (exporter!=null) {
 					JFileChooser chooser = new FileChooser(null);
 					chooser.setLocale(LocalizationData.getLocale());
 					chooser.updateUI();
-					File file = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+					File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 					if (file!=null) {
 						try {
 							exporter.exportFile(file, frame.getFilteredData());
-							JOptionPane.showMessageDialog(frame, LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+							JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 						} catch (IOException e1) {
-							ErrorManager.INSTANCE.display(frame, e1);
+							ErrorManager.INSTANCE.display(frame.getJFrame(), e1);
 						}
 					}					
 				}
@@ -403,13 +403,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				} catch (PrinterException e1) {
 					String okButton = LocalizationData.get("GenericButton.ok"); //$NON-NLS-1$
 					String message = MessageFormat.format(LocalizationData.get("MainMenuBar.Print.Error.Message"),e1.getMessage()); //$NON-NLS-1$
-					JOptionPane.showOptionDialog(frame,
+					JOptionPane.showOptionDialog(frame.getJFrame(),
 						    message, LocalizationData.get("MainMenuBar.Print.Error.Title"), //$NON-NLS-1$
 						    JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE, null,
 						    new String[]{okButton}, okButton);
 				}
 			} else if (source.equals(this.menuItemAbout)) {
-				new AboutDialog(MainMenuBar.this.frame).setVisible(true);
+				new AboutDialog(MainMenuBar.this.frame.getJFrame()).setVisible(true);
 			}
 		}
 	}

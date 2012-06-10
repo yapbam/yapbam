@@ -15,13 +15,15 @@ import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
+import net.yapbam.data.GlobalData;
+import net.yapbam.gui.DataReader;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.MainFrame;
 
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
@@ -51,6 +53,8 @@ public class WelcomePanel extends JPanel {
 	private JButton firstTip;
 	private int currentTip;
 	private ResourceBundle urlsResourceBundle;
+	
+	private GlobalData data;
 		
 	private URI getURI(String key) {
 		try {
@@ -65,7 +69,9 @@ public class WelcomePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public WelcomePanel(final MainFrame frame) {
+	public WelcomePanel(GlobalData data) {
+		this.data = data;
+		
 		urlsResourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
 		
 		tips = new TipManager();
@@ -132,7 +138,7 @@ public class WelcomePanel extends JPanel {
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				try {
-					frame.readData(file.toURI());
+					DataReader.INSTANCE.readData(Utils.getOwnerWindow(WelcomePanel.this), WelcomePanel.this.data, file.toURI());
 				} catch (ExecutionException e) {
 					String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
 							file.getAbsolutePath());

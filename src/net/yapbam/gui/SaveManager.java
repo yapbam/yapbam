@@ -27,13 +27,14 @@ class SaveManager {
 	private SaveManager() {}
 
 	/** This method gives a last chance to save unsaved data.
-	 * @param frame The frame that is currently editing data
+	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
+	 * @param data The data to save
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
-	boolean verify(MainFrame frame) {
-		if (frame.getData().somethingHasChanged()) { // Some modifications has not been saved
+	boolean verify(Window owner, GlobalData data) {
+		if (data.somethingHasChanged()) { // Some modifications has not been saved
 			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			int n = JOptionPane.showOptionDialog(frame,
+			int n = JOptionPane.showOptionDialog(owner,
 				    LocalizationData.get("NotSavedDialog.message"), //$NON-NLS-1$
 				    LocalizationData.get("NotSavedDialog.title"), //$NON-NLS-1$
 				    JOptionPane.YES_NO_CANCEL_OPTION,
@@ -43,63 +44,65 @@ class SaveManager {
 				    options[2]); //default button title
 			if (n==2) return false;
 			if (n==0) {
-				return save(frame);
+				return save(owner, data);
 			}
 		}
 		return true;
 	}
 
 	/** Save the data associated with a main frame. Ask for the file where to save if needed.
-	 * @param frame
+	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
+	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	boolean save(MainFrame frame) {
-		URI file = frame.getData().getURI();
+	boolean save(Window owner, GlobalData data) {
+		URI file = data.getURI();
 		if (file==null) {
-			file = getFile(frame);
+			file = getFile(owner, data);
 		}
 		if (file==null) return false;
-		return saveTo(frame, file);
+		return saveTo(owner, data, file);
 	}
 
 	/** Save the data associated with a main frame. Ask for the file where to save if needed.
-	 * @param frame
+	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
+	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	boolean saveAs(MainFrame frame) {
-		URI file = getFile(frame);
+	boolean saveAs(Window owner, GlobalData data) {
+		URI file = getFile(owner, data);
 		if (file==null) return false;
-		return saveTo(frame, file);
+		return saveTo(owner, data, file);
 	}
 
-	private URI getFile(MainFrame frame) {
-		URI path = frame.getData().getURI();
+	private URI getFile(Window owner, GlobalData data) {
+		URI path = data.getURI();
 		String parent = path==null?null:new File(path).getParent();
 		JFileChooser chooser = new FileChooser(parent);
 		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-		File result = chooser.showSaveDialog(frame)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+		File result = chooser.showSaveDialog(owner)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 		return result==null?null:result.toURI();
 	}
 
-	private boolean saveTo(MainFrame frame, URI uri) {
+	private boolean saveTo(Window owner, GlobalData data, URI uri) {
 		if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
 			Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
 			String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
-			int choice = JOptionPane.showOptionDialog(frame, message,	LocalizationData.get("Generic.warning"), //$NON-NLS-1$
+			int choice = JOptionPane.showOptionDialog(owner, message,	LocalizationData.get("Generic.warning"), //$NON-NLS-1$
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 			if (choice==0) return false;
 		}
-		final Worker<Void, Void> worker = new BackgroundSaver(frame.getData(), uri);
-		WorkInProgressFrame waitFrame = new SaveProgressFrame(frame, worker);
+		final Worker<Void, Void> worker = new BackgroundSaver(data, uri);
+		WorkInProgressFrame waitFrame = new SaveProgressFrame(owner, worker);
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
 		if (cancelled) return false;
 		try {
 			worker.get();
-			frame.getData().setURI(uri);
-			frame.getData().setChanged(false);
+			data.setURI(uri);
+			data.setChanged(false);
 		} catch (ExecutionException e) {
-			ErrorManager.INSTANCE.display(frame, e.getCause());
+			ErrorManager.INSTANCE.display(owner, e.getCause());
 			return false;
 		} catch (InterruptedException e) {
 		}
