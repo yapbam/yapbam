@@ -26,8 +26,8 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 	private JTabbedPane tabbedPane;
 
 	public PreferenceDialog(MainFrame owner) {
-		super(owner, LocalizationData.get("PreferencesDialog.title"), owner);
-		this.setLocationRelativeTo(owner);
+		super(owner.getJFrame(), LocalizationData.get("PreferencesDialog.title"), owner);
+		this.setLocationRelativeTo(owner.getJFrame());
 	}
 
 	@Override

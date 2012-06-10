@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.MainFrame;
 
 public class WelcomePlugin extends AbstractPlugIn {
 
@@ -32,7 +33,8 @@ public class WelcomePlugin extends AbstractPlugIn {
 
     @Override
 		public void actionPerformed(ActionEvent e) {
-			new WelcomeDialog(getContext().getMainFrame()).setVisible(true);
+			MainFrame mainFrame = getContext().getMainFrame();
+			new WelcomeDialog(mainFrame.getJFrame(), mainFrame.getData()).setVisible(true);
 		}
 	}
 }
