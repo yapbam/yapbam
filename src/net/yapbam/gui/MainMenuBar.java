@@ -326,9 +326,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					}
 				}
 			} else if (source.equals(this.menuItemSave)) {
-				SaveManager.MANAGER.save(this.frame.getOwner(), this.frame.getData());
+				SaveManager.MANAGER.save(this.frame.getJFrame(), this.frame.getData());
 			} else if (source.equals(this.menuItemSaveAs)) {
-				SaveManager.MANAGER.saveAs(this.frame.getOwner(), this.frame.getData());
+				SaveManager.MANAGER.saveAs(this.frame.getJFrame(), this.frame.getData());
 			} else if (source.equals(this.menuItemProtect)) {
 				String password = this.frame.getData().getPassword();
 				GetPasswordDialog dialog = new GetPasswordDialog(frame.getJFrame(), LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
