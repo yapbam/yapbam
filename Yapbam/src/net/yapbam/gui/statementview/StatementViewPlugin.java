@@ -72,6 +72,7 @@ public class StatementViewPlugin extends AbstractPlugIn {
 
 	@Override
 	public void setDisplayed(boolean displayed) {
+		super.setDisplayed(displayed);
 		if (displayed) {
 			panel.checkAction.updateEnabled();
 		} else {
