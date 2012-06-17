@@ -15,13 +15,12 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
+import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
 import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.welcome.WelcomeDialog;
@@ -29,7 +28,7 @@ import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.update.ReleaseInfo;
 import net.yapbam.update.VersionManager;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements YapbamInstance {
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
 	private static final long serialVersionUID = 1L;
@@ -45,10 +44,7 @@ public class MainFrame extends JFrame {
 	private FilteredData filteredData;
 
 	MainMenuBar mainMenu;
-	private TabbedPane mainPane;
 	private AbstractPlugIn[] plugins;
-	private ArrayList<AbstractPlugIn> paneledPlugins;
-	private int lastSelected = -1;
 	private boolean isRestarting = false;
 	
 	/** The updater jar file. If this attribute is not null, the jar it contains will be executed when
@@ -242,23 +238,21 @@ public class MainFrame extends JFrame {
 		PlugInContainer[] pluginContainers = Preferences.getPlugins();
 		if (restartData == null) restartData = new Object[pluginContainers.length];
 		this.plugins = new AbstractPlugIn[pluginContainers.length];
-		Context context = new Context(this);
 		for (int i = 0; i < plugins.length; i++) {
 			if (pluginContainers[i].isActivated()) {
-				this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[0]);
-				this.plugins[i].setContext(context);
+				this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[i]);
+				this.plugins[i].setContext(this);
 			}
 			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instantiation
 				ErrorManager.INSTANCE.display(null, pluginContainers[i].getInstanciationException(), "Une erreur est survenue durant l'instanciation du plugin "+"?"); //LOCAL //TODO
-				ErrorManager.INSTANCE.log(this.getJFrame(), pluginContainers[i].getInstanciationException());
+				ErrorManager.INSTANCE.log(null, pluginContainers[i].getInstanciationException());
 			}
 		}
-		this.paneledPlugins = new ArrayList<AbstractPlugIn>();
-		getJFrame().setContentPane(this.createContentPane());
-		mainPane.addChangeListener(new ChangeListener() {
+		getJFrame().setContentPane(new MainPanel(this.plugins));
+		getJFrame().getContentPane().addPropertyChangeListener(MainPanel.SELECTED_PLUGIN_PROPERTY, new PropertyChangeListener() {
 			@Override
-			public void stateChanged(ChangeEvent e) {
-				updateSelectedPlugin();
+			public void propertyChange(PropertyChangeEvent evt) {
+				mainMenu.updateMenu(((MainPanel)getJFrame().getContentPane()).getSelectedPlugIn());
 			}
 		});
 		this.data.addListener(new DataListener() {
@@ -275,52 +269,17 @@ public class MainFrame extends JFrame {
 	    
 		// Restore initial state (last opened file, window position, ...)
 		restoreMainFramePosition();
-		getStateSaver().restoreState(mainPane, this.getClass().getCanonicalName());
+		getStateSaver().restoreState((TabbedPane)getContentPane(), this.getClass().getCanonicalName());
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i] != null) plugins[i].restoreState();
 		}
 
-		updateSelectedPlugin();
 		updateWindowTitle();
 
 		// Display the window.
 		getJFrame().setVisible(true);
 	}
 	
-	private Container createContentPane() {
-		mainPane = new TabbedPane();
-		for (int i = 0; i < plugins.length; i++) {
-			if (plugins[i] != null) {
-				JPanel pane = plugins[i].getPanel();
-				if (pane != null) {
-					paneledPlugins.add(plugins[i]);
-					mainPane.addTab(plugins[i].getPanelTitle(), null, pane, plugins[i].getPanelToolTip());
-					if (plugins[i].getPanelIcon() != null) {
-						mainPane.setIconAt(mainPane.getTabCount() - 1, plugins[i].getPanelIcon());
-					}
-				}
-				// Listening for panel title, tooltip and icon changes
-				plugins[i].getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						int tabIndex = paneledPlugins.indexOf(evt.getSource());
-						if (tabIndex >= 0) {
-							tabIndex = mainPane.getIndexOf(tabIndex);
-							if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_ICON_PROPERTY_NAME)) {
-								mainPane.setIconAt(tabIndex, (Icon) evt.getNewValue());
-							} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TITLE_PROPERTY_NAME)) {
-								mainPane.setTitleAt(tabIndex, (String) evt.getNewValue());
-							} else if (evt.getPropertyName().equals(AbstractPlugIn.PANEL_TOOLTIP_PROPERTY_NAME)) {
-								mainPane.setToolTipTextAt(tabIndex, (String) evt.getNewValue());
-							}
-						}
-					}
-				});
-			}
-		}
-		return mainPane;
-	}
-
 	public GlobalData getData() {
 		return data;
 	}
@@ -341,7 +300,7 @@ public class MainFrame extends JFrame {
 	 * @return the currently displayed plugin
 	 */
 	public AbstractPlugIn getCurrentPlugIn() {
-		return lastSelected<0?null:this.paneledPlugins.get(lastSelected);
+		return ((MainPanel)getContentPane()).getSelectedPlugIn();
 	}
 
 	private void updateWindowTitle() {
@@ -370,7 +329,7 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
-	public static void setLookAndFeel() {
+	public static void setLookAndFeel() {//DONE
 		try {
 			String lookAndFeelName = Preferences.INSTANCE.getLookAndFeel();
 			LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
@@ -388,13 +347,6 @@ public class MainFrame extends JFrame {
 		} catch (Exception e) {}
 	}
 
-	private void updateSelectedPlugin() {
-		if (lastSelected>=0) paneledPlugins.get(lastSelected).setDisplayed(false);
-		lastSelected = mainPane.getId(mainPane.getSelectedIndex());
-		if (lastSelected<paneledPlugins.size()) paneledPlugins.get(lastSelected).setDisplayed(true);
-		mainMenu.updateMenu(paneledPlugins.get(lastSelected));
-	}
-	
 	private void saveState() {
 		if (getData().getURI()!=null) {
 			getStateSaver().put(LAST_URI, getData().getURI().toString());
@@ -412,7 +364,7 @@ public class MainFrame extends JFrame {
 		for (int i = 0; i < getPlugInsNumber(); i++) {
 			if (getPlugIn(i)!=null) getPlugIn(i).saveState();
 		}
-		getStateSaver().saveState(mainPane, this.getClass().getCanonicalName());
+		getStateSaver().saveState((TabbedPane)getContentPane(), this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
 		if (Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
 			if (!getData().somethingHasChanged() && getFilteredData().getFilter().isActive()) {
@@ -504,5 +456,14 @@ public class MainFrame extends JFrame {
 				}
 			}
 		}
+	}
+	
+	public TransactionSelector getCurrentTransactionSelector() {
+		return this.mainMenu.getTransactionSelector();
+	}
+
+	@Override
+	public Window getApplicationWindow() {
+		return getJFrame();
 	}
 }

@@ -69,7 +69,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	private String panelToolTip;
 	private String panelTitle;
 	private boolean printSupport;
-	private Context context;
+	private YapbamInstance context;
 	
 	/** Constructor.
 	 * <br>Be aware that a <b>Yapbam plugin has to had a public constructor with two arguments</b> :<OL>
@@ -85,11 +85,11 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 		this.printSupport = false;
 	}
 	
-	void setContext(Context context) {
+	void setContext(YapbamInstance context) {
 		this.context = context;
 	}
 	
-	public Context getContext() {
+	public YapbamInstance getContext() {
 		return this.context;
 	}
 	
