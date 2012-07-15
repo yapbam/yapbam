@@ -89,7 +89,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 				fireTableRowsUpdated(row, row);
 			} else {
 				((GlobalData)data).setName(getCategory(row), name);
-		        fireTableDataChanged();
+				fireTableDataChanged();
 			}
 		}
 
@@ -150,6 +150,9 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if (getJTable().getCellEditor() != null) {
+		    getJTable().getCellEditor().cancelCellEditing();
+			}			
 			int selectedRow = getJTable().getSelectedRow();
 			Category category = ((CategoryTableModel)getJTable().getModel()).getCategory(selectedRow);
 			boolean confirmed = true;
