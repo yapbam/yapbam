@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam is able to automatically save your data to a disk or a ftp server.
 
+version	0.11.4 (07/15/2012)
+fix
+	In the preference dialog, it was possible to enter a proxy server address containing the char ':'. This resulted in an error when opening the preference dialog again. This error prevents the user from being able to fix the proxy server name.
+
 version	0.11.3 (06/06/2012)
 improvement
 	It's now possible to remember the row sorter keys of the tables across two Yapbam launches.

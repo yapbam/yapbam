@@ -107,6 +107,7 @@ public class ProxyPanel extends PreferencePanel {
 	private String buildOkDisabledCause() {
 		if (getProxyButton().isSelected()) {
 			if (getProxyHost()==null) return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.proxyNameMissing"),getTitle()); //$NON-NLS-1$
+			if (getProxyHost().indexOf(':')>=0) return LocalizationData.get("PreferencesDialog.Network.invalidProxyName"); //$NON-NLS-1$
 			Integer port = getProxyPort();
 			if ((port==0) || (port>IP_PORT_MAX_VALUE)) return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.invalidPort"),getTitle(),IP_PORT_MAX_VALUE); //$NON-NLS-1$
 		}
