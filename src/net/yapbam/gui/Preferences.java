@@ -240,16 +240,24 @@ public class Preferences {
 	
 	public String getHttpProxyHost() {
 		String property = properties.getProperty(PROXY);
-		if (property==null) return null;
-		return new StringTokenizer(property,":").nextToken(); //$NON-NLS-1$
+		if ((property==null) || (property.length()==0)) return null;
+		int index = property.lastIndexOf(':');
+		if (index<0) {
+			return property;
+		} else {
+			return property.substring(0, index); 
+		}
 	}
 	
 	public int getHttpProxyPort() {
 		String property = properties.getProperty(PROXY);
 		if (property==null) return -1;
-		StringTokenizer tokens = new StringTokenizer(property,":"); //$NON-NLS-1$
-		tokens.nextToken();
-		return Integer.parseInt(tokens.nextToken());
+		String[] tokens = StringUtils.split(property, ':');
+		try {
+			return Integer.parseInt(tokens[tokens.length-1]);
+		} catch (NumberFormatException e) {
+			return -1;
+		}
 	}
 
 	public Proxy getHttpProxy() throws UnknownHostException {
