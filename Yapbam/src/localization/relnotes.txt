@@ -8,6 +8,7 @@ improvement
 version	0.11.4 (07/15/2012)
 fix
 	In the preference dialog, it was possible to enter a proxy server address containing the char ':'. This resulted in an error when opening the preference dialog again. This error prevents the user from being able to fix the proxy server name.
+	In the administration panel, deleting a category while editing it could resulted in errors.
 
 version	0.11.3 (06/06/2012)
 improvement

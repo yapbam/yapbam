@@ -8,6 +8,7 @@ improvement
 version	0.11.4 (15/07/2012)
 fix
 	Dans le dialogue de préférence, il était possible d'entrer un nom de serveur proxy contenant le caractère ':'. Ceci provoquait une erreur lorsqu'on ré-ouvrait le dialogue de préférence. Cette erreur empéchait de corriger le nom du serveur proxy.
+	Dans l'onglet d'administration, supprimer une catégorie alors qu'on l'éditait pouvait causer une erreur.
 
 version	0.11.3 (06/06/2012)
 improvement
