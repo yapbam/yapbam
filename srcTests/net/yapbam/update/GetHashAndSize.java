@@ -11,8 +11,8 @@ public class GetHashAndSize {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String release = "0.11.3";
-		String date = "06/06/2012";
+		String release = "0.11.4";
+		String date = "15/07/2012";
 		System.out.println ("lastestRelease="+release+" ("+date+")");
 		System.out.println ("updateURL=http://sourceforge.net/project/platformdownload.php?group_id=276272");
 		System.out.println ();
