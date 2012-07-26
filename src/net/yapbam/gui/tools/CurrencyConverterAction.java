@@ -23,7 +23,6 @@ import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.Preferences;
 
-
 @SuppressWarnings("serial")
 final public class CurrencyConverterAction extends AbstractAction {
 	
@@ -38,7 +37,7 @@ final public class CurrencyConverterAction extends AbstractAction {
 		final Worker<CurrencyConverter, Void> worker = new Worker<CurrencyConverter, Void>() {
 			@Override
 			protected CurrencyConverter doInBackground() throws Exception {
-				return CurrencyConverter.getInstance(Preferences.INSTANCE.getHttpProxy());
+				return new CurrencyConverter(Preferences.INSTANCE.getHttpProxy());
 			}
 		};
 		final WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), ModalityType.APPLICATION_MODAL, worker) { //$NON-NLS-1$
