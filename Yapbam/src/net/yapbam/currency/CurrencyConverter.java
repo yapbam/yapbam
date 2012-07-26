@@ -49,7 +49,9 @@ import java.util.*;
  * @author Thomas Knierim (modified by Jean-Marc Astesana : proxy support and some bug fixes)
  * 
  */
-public final class CurrencyConverter {
+public class CurrencyConverter {
+	//FIXME Should not throw an IOException when it fails to refresh the cache and the cache is already filled (even with obsolete data)
+	//instead it should set up an ObsoleteCacheException, or something like that
 	private static final String ECB_RATES_URL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml"; //$NON-NLS-1$
 
 	transient private File cacheFile = null;
@@ -60,21 +62,15 @@ public final class CurrencyConverter {
 	private String lastError = null;
 	private Proxy proxy = Proxy.NO_PROXY;
 
-	private CurrencyConverter() {
-	}
-
 	/**
-	 * Returns a singleton instance of CurrencyConverter.
+	 * Constructor.
 	 * @param proxy The proxy to use to get the data (Proxy.NoProxy to not use any proxy)
-	 * @return CurrencyConverter instance
 	 * @throws ParseException 
 	 * @throws IOException 
 	 */
-	public static CurrencyConverter getInstance(Proxy proxy) throws IOException, ParseException {
-		CurrencyConverter instance = new CurrencyConverter();
-		instance.proxy = proxy;
-		instance.update();
-		return instance;
+	public CurrencyConverter(Proxy proxy) throws IOException, ParseException {
+		this.proxy = proxy;
+		this.update();
 	}
 
 	/**
@@ -183,9 +179,9 @@ public final class CurrencyConverter {
 	 * 
 	 * @return Path name of the XML cache file.
 	 */
-	public String getCacheFileName() {
-		return cacheFileName;
-	}
+//	public String getCacheFileName() {
+//		return cacheFileName;
+//	}
 
 	/**
 	 * Set the location where the XML cache file should be stored.
@@ -193,9 +189,9 @@ public final class CurrencyConverter {
 	 * @param cacheFileName
 	 * @see #getCacheFileName() Fully qualified path name of the XML cache file.
 	 */
-	public void setCacheFileName(String cacheFileName) {
-		this.cacheFileName = cacheFileName;
-	}
+//	public void setCacheFileName(String cacheFileName) {
+//		this.cacheFileName = cacheFileName;
+//	}
 
 	/**
 	 * Delete XML cache file and reset internal data structure. Calling
@@ -241,7 +237,7 @@ public final class CurrencyConverter {
 				File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 				cacheFile = new File(folder, "ExchangeRates.xml"); //$NON-NLS-1$
 				cacheFileName = cacheFile.getAbsolutePath();
-			}
+			} //FIXME seems that cacheFileName is ignored if not null or empty !!!
 		}
 	}
 
