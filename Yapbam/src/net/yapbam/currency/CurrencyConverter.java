@@ -21,9 +21,6 @@ package net.yapbam.currency;
 import java.net.*;
 import java.io.*;
 
-import net.astesana.ajlib.utilities.FileUtils;
-import net.yapbam.util.Portable;
-
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 import java.text.*;
@@ -53,23 +50,29 @@ public class CurrencyConverter {
 	//FIXME Should not throw an IOException when it fails to refresh the cache and the cache is already filled (even with obsolete data)
 	//instead it should set up an ObsoleteCacheException, or something like that
 	private static final String ECB_RATES_URL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml"; //$NON-NLS-1$
+	
+	public interface Cache {
+		public void clear();
+		public Writer getWriter() throws IOException;
+		public Reader getReader() throws IOException;
+	}
 
-	transient private File cacheFile = null;
-	private String cacheFileName = null;
+	private Cache cache;
 	private HashMap<String, Long> fxRates = new HashMap<String, Long>(40);
 	private Date referenceDate = null;
 	private long lastTryCacheRefresh;
-	private String lastError = null;
 	private Proxy proxy = Proxy.NO_PROXY;
 
 	/**
 	 * Constructor.
 	 * @param proxy The proxy to use to get the data (Proxy.NoProxy to not use any proxy)
+	 * @param cache A cache instance, or null to use no cache
 	 * @throws ParseException 
 	 * @throws IOException 
 	 */
-	public CurrencyConverter(Proxy proxy) throws IOException, ParseException {
+	public CurrencyConverter(Proxy proxy, Cache cache) throws IOException, ParseException {
 		this.proxy = proxy;
+		this.cache = cache;
 		this.update();
 	}
 
@@ -160,7 +163,7 @@ public class CurrencyConverter {
 	}
 
 	/**
-	 * Get the reference date for the exchange rates as a Java Date. The time part
+	 * Gets the reference date for the exchange rates as a Java Date. The time part
 	 * is always 14:15 Central European Time (CET).
 	 * 
 	 * @return Date for which currency exchange rates are valid, or null if the
@@ -198,12 +201,12 @@ public class CurrencyConverter {
 	 * clearCache() before the convert() method forces a fresh download of the
 	 * currency exchange rates.
 	 */
-	public void clearCache() {
-		initCacheFile();
-		cacheFile.delete();
-		cacheFile = null;
-		referenceDate = null;
-	}
+//	public void clearCache() {
+//		initCacheFile();
+//		cacheFile.delete();
+//		cacheFile = null;
+//		referenceDate = null;
+//	}
 
 	/**
 	 * Check whether cache is initialized and up-to-date. If not, re-download
@@ -215,29 +218,9 @@ public class CurrencyConverter {
 	 *           If an error occurs while parsing the XML cache file.
 	 */
 	public void update() throws IOException, ParseException {
-		if (referenceDate == null) {
-			initCacheFile();
-			if (!cacheFile.exists()) {
-				refreshCacheFile();
-			}
-			parse();
-		}
-		if (cacheIsExpired()) {
+		if ((referenceDate == null) || (cacheIsExpired())) {
 			refreshCacheFile();
 			parse();
-		}
-	}
-
-	/**
-	 * Initializes cache file member variable if not already initialized.
-	 */
-	private void initCacheFile() {
-		if (cacheFile == null) {
-			if (cacheFileName == null || (cacheFileName.length()==0)) {
-				File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
-				cacheFile = new File(folder, "ExchangeRates.xml"); //$NON-NLS-1$
-				cacheFileName = cacheFile.getAbsolutePath();
-			} //FIXME seems that cacheFileName is ignored if not null or empty !!!
 		}
 	}
 
@@ -275,20 +258,19 @@ public class CurrencyConverter {
 	 *           opened, or (3) if a read/write error occurs.
 	 */
 	private void refreshCacheFile() throws IOException {
-		lastError = null;
+		String lastError = null;
 		// If we connect to ECB since less than one minute ... do nothing
 		// This could happened if ECB don't refresh its rates since the last time we
 		// updated the cache file (and more than the cache expiration time)
 		if (System.currentTimeMillis() - lastTryCacheRefresh < 60000) return;
 		lastTryCacheRefresh = System.currentTimeMillis();
-		initCacheFile();
 		try {
 			HttpURLConnection ct = (HttpURLConnection) new URL(ECB_RATES_URL).openConnection(proxy);
 			int errorCode = ct.getResponseCode();
 			if (errorCode == HttpURLConnection.HTTP_OK) {
 				InputStreamReader in = new InputStreamReader(ct.getInputStream());
 				try {
-					Writer out = new OutputStreamWriter(FileUtils.getHiddenCompliantStream(cacheFile));
+					Writer out = cache.getWriter();
 					try {
 						int c;
 						while ((c = in.read()) != -1) out.write(c);
@@ -348,47 +330,46 @@ public class CurrencyConverter {
 	 * @throws ParseException
 	 *           If XML file cannot be parsed.
 	 */
-	private void parse() throws ParseException {
-		try {
-			FileReader input = new FileReader(cacheFile);
-			XMLReader saxReader = XMLReaderFactory.createXMLReader();
-			DefaultHandler handler = new DefaultHandler() {
-				@Override
-				public void startElement(String uri, String localName, String qName, Attributes attributes) {
-					if (localName.equals("Cube")) { //$NON-NLS-1$
-						String date = attributes.getValue("time"); //$NON-NLS-1$
-						if (date != null) {
-							SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z", Locale.US); //$NON-NLS-1$
-							try {
-								referenceDate = df.parse(date + " 14:15 CET"); //$NON-NLS-1$
-							} catch (ParseException e) {
-								lastError = "Cannot parse reference date: " + date; //$NON-NLS-1$
-							}
+	private void parse() throws ParseException, IOException {
+		fxRates.clear();
+		fxRates.put("EUR", 10000L); //$NON-NLS-1$
+		DefaultHandler handler = new DefaultHandler() {
+			@Override
+			public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+				if (localName.equals("Cube")) { //$NON-NLS-1$
+					String date = attributes.getValue("time"); //$NON-NLS-1$
+					if (date != null) {
+						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z", Locale.US); //$NON-NLS-1$
+						try {
+							referenceDate = df.parse(date + " 14:15 CET"); //$NON-NLS-1$
+						} catch (ParseException e) {
+							throw new SAXException("Cannot parse reference date: " + date); //$NON-NLS-1$
 						}
-						String currency = attributes.getValue("currency"); //$NON-NLS-1$
-						String rate = attributes.getValue("rate"); //$NON-NLS-1$
-						if (currency != null && rate != null) {
-							try {
-								fxRates.put(currency, stringToLong(rate));
-							} catch (Exception e) {
-								lastError = "Cannot parse exchange rate: " + rate + ". " + e.getMessage(); //$NON-NLS-1$ //$NON-NLS-2$
-							}
+					}
+					String currency = attributes.getValue("currency"); //$NON-NLS-1$
+					String rate = attributes.getValue("rate"); //$NON-NLS-1$
+					if (currency != null && rate != null) {
+						try {
+							fxRates.put(currency, stringToLong(rate));
+						} catch (Exception e) {
+							throw new SAXException("Cannot parse exchange rate: " + rate + ". " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 						}
 					}
 				}
-			};
-			lastError = null;
-			fxRates.clear();
-			fxRates.put("EUR", 10000L); //$NON-NLS-1$
+			}
+		};
+		try {
+			XMLReader saxReader = XMLReaderFactory.createXMLReader();
 			saxReader.setContentHandler(handler);
 			saxReader.setErrorHandler(handler);
-			saxReader.parse(new InputSource(input));
-			input.close();
-		} catch (Exception e) {
-			lastError = "Parser error: " + e.getMessage(); //$NON-NLS-1$
-		}
-		if (lastError != null) {
-			throw new ParseException(lastError, 0);
+			Reader input = cache.getReader();
+			try {
+				saxReader.parse(new InputSource(input));
+			} finally {
+				input.close();
+			}
+		} catch (SAXException e) {
+			e.printStackTrace();
 		}
 	}
 }
