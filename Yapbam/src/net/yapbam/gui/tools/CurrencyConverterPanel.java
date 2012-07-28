@@ -17,6 +17,7 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.currency.CurrencyConverter;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JLabel;
@@ -69,12 +70,10 @@ public class CurrencyConverterPanel extends JPanel {
 			if (index>=0) {
 				getCurrency1().setSelectedIndex(index);
 				getCurrency2().setSelectedIndex(index);
-				String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
-				this.title.setText(title);
-			} else {
-				//The locale is unknown
-				this.title.setText("?"); //TODO
 			}
+			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
+			this.title.setText(title);
+			if (!this.converter.isNetworkSynchronized()) this.title.setIcon(IconManager.ALERT);
 		}
 	}
 

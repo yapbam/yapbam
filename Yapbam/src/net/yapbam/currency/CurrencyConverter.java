@@ -185,7 +185,7 @@ public class CurrencyConverter {
 	/** Tests whether this converter is synchronized with ECB.
 	 * <br>When an error occurs while connecting to ECB, the converter should be created from cache data.
 	 * This allows offline usage of the converter.
-	 * <br>Be aware that, in order to preserve ECB resources, ECB is not called if cache is not so old (see update comment). In such a case, this method returns true.
+	 * <br>Be aware that, in order to preserve ECB resources, ECB is not called if cache is not so old (see update method's comment). In such a case, this method returns true.
 	 * @return true if the rates are up to date
 	 * @see #update()
 	 */
