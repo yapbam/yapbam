@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam peut effectuer automatiquement la sauvegarde de vos données sur un disque ou sur un serveur via ftp.
 	
+version	0.11.5 (01/08/2012)
+improvement
+	Le convertisseur de devises est à présent disponible hors ligne. Dans ce cas, les derniers taux téléchargés sont utilisés.
+
 version	0.11.4 (15/07/2012)
 fix
 	Dans le dialogue de préférence, il était possible d'entrer un nom de serveur proxy contenant le caractère ':'. Ceci provoquait une erreur lorsqu'on ré-ouvrait le dialogue de préférence. Cette erreur empéchait de corriger le nom du serveur proxy.
