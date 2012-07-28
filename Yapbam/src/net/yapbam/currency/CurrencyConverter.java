@@ -38,44 +38,52 @@ import java.util.*;
  * The convert() method performs currency conversions using either double values
  * or 64-bit long integer values. Long values are preferred in order to avoid
  * problems associated with floating point arithmetics. A local cache file is
- * used for storing exchange rates to reduce network latency. The cache file is
- * updated automatically when new exchange rates become available. It is
- * created/updated the first time a call to convert() is made.
- * 
+ * used for storing exchange rates to reduce network latency and allow offline mode.
+ *  
  * @version 1.01 2009-26-10
- * @author Thomas Knierim (modified by Jean-Marc Astesana : proxy support and some bug fixes)
+ * @author Thomas Knierim (modified by Jean-Marc Astesana : proxy support, offline mode and some bug fixes)
  * 
  */
 public class CurrencyConverter {
-	//FIXME Should not throw an IOException when it fails to refresh the cache and the cache is already filled (even with obsolete data)
-	//instead it should set up an ObsoleteCacheException, or something like that
 	private static final String ECB_RATES_URL = "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml"; //$NON-NLS-1$
 	
 	public interface Cache {
-		public void clear();
 		public Writer getWriter() throws IOException;
 		public Reader getReader() throws IOException;
+		public void commit();
 	}
 
+	private Proxy proxy = Proxy.NO_PROXY;
 	private Cache cache;
 	private HashMap<String, Long> fxRates = new HashMap<String, Long>(40);
 	private Date referenceDate = null;
 	private long lastTryCacheRefresh;
-	private Proxy proxy = Proxy.NO_PROXY;
+	private boolean updateSucceed;
 
 	/**
 	 * Constructor.
 	 * @param proxy The proxy to use to get the data (Proxy.NoProxy to not use any proxy)
 	 * @param cache A cache instance, or null to use no cache
-	 * @throws ParseException 
 	 * @throws IOException 
+	 * @throws ParseException 
 	 */
 	public CurrencyConverter(Proxy proxy, Cache cache) throws IOException, ParseException {
 		this.proxy = proxy;
-		this.cache = cache;
-		this.update();
+		this.cache = cache==null?new MemoryCache():cache;
+		this.updateSucceed = true;
+		try {
+			parse();
+			try {
+				this.update();
+			} catch (Throwable e) {
+				this.updateSucceed = false;
+			}
+		} catch (Throwable e) {
+			// Parse failed, we will call update without try/catch clause (It must succeed, because we can start with cache data).
+			this.update();
+		}
 	}
-
+	
 	/**
 	 * Converts a double precision floating point value from one currency to
 	 * another. Example: convert(29.95, "USD", "EUR") - converts $29.95 US Dollars
@@ -174,54 +182,35 @@ public class CurrencyConverter {
 		return referenceDate;
 	}
 
-	/**
-	 * Get the name of the fully qualified path name of the XML cache file. By
-	 * default this is a file named "ExchangeRates.xml" located in the system's
-	 * temporary file directory. The cache file can be shared by multiple
-	 * threads/applications.
-	 * 
-	 * @return Path name of the XML cache file.
+	/** Tests whether this converter is synchronized with ECB.
+	 * <br>When an error occurs while connecting to ECB, the converter should be created from cache data.
+	 * This allows offline usage of the converter.
+	 * <br>Be aware that, in order to preserve ECB resources, ECB is not called if cache is not so old (see update comment). In such a case, this method returns true.
+	 * @return true if the rates are up to date
+	 * @see #update()
 	 */
-//	public String getCacheFileName() {
-//		return cacheFileName;
-//	}
-
-	/**
-	 * Set the location where the XML cache file should be stored.
-	 * 
-	 * @param cacheFileName
-	 * @see #getCacheFileName() Fully qualified path name of the XML cache file.
-	 */
-//	public void setCacheFileName(String cacheFileName) {
-//		this.cacheFileName = cacheFileName;
-//	}
-
-	/**
-	 * Delete XML cache file and reset internal data structure. Calling
-	 * clearCache() before the convert() method forces a fresh download of the
-	 * currency exchange rates.
-	 */
-//	public void clearCache() {
-//		initCacheFile();
-//		cacheFile.delete();
-//		cacheFile = null;
-//		referenceDate = null;
-//	}
+	public boolean isNetworkSynchronized() {
+		return this.updateSucceed;
+	}
 
 	/**
 	 * Check whether cache is initialized and up-to-date. If not, re-download
 	 * cache file and parse data into internal data structure.
-	 * 
+	 * @return true if the ECB was called. In order to preserve ECB resources, ECB is not called if cache is not so old (ECB refresh its rates never more
+	 * than 1 time per day, we don't call ECB again if data is younger than 24 hours). In such a case, this method returns false.
 	 * @throws IOException
 	 *           If cache file cannot be read/written or if URL cannot be opened.
 	 * @throws ParseException
 	 *           If an error occurs while parsing the XML cache file.
 	 */
-	public void update() throws IOException, ParseException {
+	public boolean update() throws IOException, ParseException {
 		if ((referenceDate == null) || (cacheIsExpired())) {
 			refreshCacheFile();
 			parse();
+			cache.commit();
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -273,7 +262,9 @@ public class CurrencyConverter {
 					Writer out = cache.getWriter();
 					try {
 						int c;
-						while ((c = in.read()) != -1) out.write(c);
+						while ((c = in.read()) != -1) {
+							out.write(c);
+						}
 					} catch (IOException e) {
 						lastError = "Read/Write Error: " + e.getMessage(); //$NON-NLS-1$
 					} finally {
@@ -369,7 +360,7 @@ public class CurrencyConverter {
 				input.close();
 			}
 		} catch (SAXException e) {
-			e.printStackTrace();
+			throw new ParseException(e.toString(), 0);
 		}
 	}
 }
