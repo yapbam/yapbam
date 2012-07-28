@@ -2,32 +2,38 @@ package net.yapbam.currency;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 
-import net.astesana.ajlib.utilities.FileUtils;
-
 public class FileCache implements CurrencyConverter.Cache {
 	private File cacheFile;
+	private boolean isNotCommited;
 	
 	public FileCache(File file) {
 		cacheFile = file;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
+		this.isNotCommited = false;
 	}
 
 	@Override
 	public Writer getWriter() throws IOException {
-		return new OutputStreamWriter(FileUtils.getHiddenCompliantStream(cacheFile));
+		isNotCommited = true;
+		return new FileWriter(getTmpFile());
+	}
+
+	private File getTmpFile() {
+		return new File(cacheFile.getAbsolutePath()+".tmp");
 	}
 
 	@Override
 	public Reader getReader() throws IOException {
-		return new FileReader(cacheFile);
+		return new FileReader(isNotCommited?getTmpFile():cacheFile);
+	}
+
+	@Override
+	public void commit() {
+		if (cacheFile.exists()) cacheFile.delete();
+		isNotCommited = !getTmpFile().renameTo(cacheFile);
 	}
 }
