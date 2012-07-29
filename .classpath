@@ -10,7 +10,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="JCommon"/>
 	<classpathentry kind="var" path="JFreeChart" sourcepath="/JFreeChartSrc"/>
-	<classpathentry kind="var" path="COMMONS-NET/commons-net-3.0.1.jar" sourcepath="/COMMONS-NET/commons-net-3.0.1-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/A-JLib"/>
+	<classpathentry kind="var" path="COMMONS-LOGGING"/>
+	<classpathentry kind="var" path="COMMONS-NET/commons-net-3.0.1.jar" sourcepath="/COMMONS-NET/commons-net-3.0.1-sources.jar"/>
+	<classpathentry kind="var" path="DROPBOX"/>
+	<classpathentry kind="var" path="HTTP-CLIENT"/>
+	<classpathentry kind="var" path="HTTP-CORE"/>
+	<classpathentry kind="var" path="HTTP-MIME"/>
+	<classpathentry kind="var" path="JSON-SIMPLE"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
