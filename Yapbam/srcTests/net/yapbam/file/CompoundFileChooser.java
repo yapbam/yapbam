@@ -7,22 +7,37 @@ import javax.swing.JRadioButton;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import javax.swing.JFileChooser;
 import javax.swing.ButtonGroup;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+import net.astesana.ajlib.swing.dialog.FileChooser;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
 @SuppressWarnings("serial")
 public class CompoundFileChooser extends JPanel {
-
+	public enum Type {
+    OPEN, SAVE 
+	}
+	
+	public enum Source {
+		FILE, DROPBOX
+	}
+	
 	private static final String FILE = "file";
 	private static final String DROPBOX = "dropbox";
+	
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JRadioButton fileBtn;
 	private JRadioButton dropboxBtn;
 	private JPanel chooserPanel;
+	private JFileChooser fileChooser;
+	private DropboxFileChooser dropboxChooser;
 
 	/**
 	 * Create the panel.
@@ -33,16 +48,12 @@ public class CompoundFileChooser extends JPanel {
 		JPanel panel = new JPanel();
 		add(panel, BorderLayout.WEST);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{109, 0};
-		gbl_panel.rowHeights = new int[]{23, 0, 0};
-		gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		fileBtn = new JRadioButton("File");
 		fileBtn.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				if (fileBtn.isSelected()) ((CardLayout)chooserPanel.getLayout()).show(chooserPanel, FILE);
+				if (fileBtn.isSelected()) ((CardLayout)getChooserPanel().getLayout()).show(getChooserPanel(), FILE);
 			}
 		});
 		buttonGroup.add(fileBtn);
@@ -57,26 +68,58 @@ public class CompoundFileChooser extends JPanel {
 		dropboxBtn = new JRadioButton("Dropbox");
 		dropboxBtn.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				if (dropboxBtn.isSelected()) ((CardLayout)chooserPanel.getLayout()).show(chooserPanel, DROPBOX);
+				if (dropboxBtn.isSelected()) ((CardLayout)getChooserPanel().getLayout()).show(getChooserPanel(), DROPBOX);
 			}
 		});
 		buttonGroup.add(dropboxBtn);
 		GridBagConstraints gbc_dropboxBtn = new GridBagConstraints();
+		gbc_dropboxBtn.weighty = 1.0;
 		gbc_dropboxBtn.anchor = GridBagConstraints.NORTHWEST;
 		gbc_dropboxBtn.gridx = 0;
 		gbc_dropboxBtn.gridy = 1;
 		panel.add(dropboxBtn, gbc_dropboxBtn);
 		
-		chooserPanel = new JPanel();
-		add(chooserPanel, BorderLayout.CENTER);
-		chooserPanel.setLayout(new CardLayout(0, 0));
-		
-		JFileChooser fileComponent = new JFileChooser();
-		chooserPanel.add(fileComponent, FILE);
-		
-		JPanel dropboxComponent = new JPanel();
-		chooserPanel.add(dropboxComponent, DROPBOX);
+		add(getChooserPanel(), BorderLayout.CENTER);
+	}
 
+	private JPanel getChooserPanel() {
+		if (chooserPanel==null) {
+			chooserPanel = new JPanel();
+			chooserPanel.setLayout(new CardLayout(0, 0));
+			
+			chooserPanel.add(getFileChooser(), FILE);
+			chooserPanel.add(getDropboxChooser(), DROPBOX);
+		}
+		return chooserPanel;
+	}
+
+	private DropboxFileChooser getDropboxChooser() {
+		if (dropboxChooser==null) {
+			dropboxChooser = new DropboxFileChooser();
+		}
+		return dropboxChooser;
+	}
+
+	private JFileChooser getFileChooser() {
+		if (fileChooser==null) {
+			fileChooser = new FileChooser();
+			fileChooser.addActionListener(new ActionListener() {
+			  public void actionPerformed(ActionEvent e) {
+			     if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
+			        System.out.println("File selected: " + fileChooser.getSelectedFile());
+			     } else if (e.getActionCommand().equals(JFileChooser.CANCEL_SELECTION)) {
+			       System.out.println("Cancel was called");	 
+			     } else {
+			    	 System.out.println ("Something else: "+e.getActionCommand());
+			     }
+			  }
+			});
+		}
+		return fileChooser;
+	}
+	
+	public void setDialogType(Type type) {
+		getFileChooser().setDialogType(type.equals(Type.OPEN)?JFileChooser.OPEN_DIALOG:JFileChooser.SAVE_DIALOG);
 	}
 	
   /**
