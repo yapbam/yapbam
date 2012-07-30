@@ -1,20 +1,11 @@
 package net.yapbam.gui;
 
 import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
-
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.util.Portable;
 
@@ -66,18 +57,6 @@ public class HelpManager {
 	 * @param uri The URI of the document to display.
 	 */
 	public static void show(Component parent, URI uri) {
-		try {
-			Desktop.getDesktop().browse(uri);
-		} catch (IOException exception) {
-			String message = MessageFormat.format(LocalizationData.get("HelpManager.errorDialog.message"), exception.toString()); //$NON-NLS-1$
-			JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(parent), message, LocalizationData.get("HelpManager.errorDialog.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-		} catch (UnsupportedOperationException e) {
-			String url = uri.toString();
-			String message = MessageFormat.format(LocalizationData.get("HelpManager.unsupported.message"), url); //$NON-NLS-1$
-			StringSelection stringSelection = new StringSelection(url);
-		    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		    clipboard.setContents( stringSelection, null);
-		    JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(parent), message, LocalizationData.get("HelpManager.errorDialog.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
-		}
+		Browser.show(uri, parent, LocalizationData.get("HelpManager.errorDialog.title"));
 	}
 }

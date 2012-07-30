@@ -8,6 +8,8 @@ improvement
 version	0.11.5 (01/08/2012)
 improvement
 	Le convertisseur de devises est à présent disponible hors ligne. Dans ce cas, les derniers taux téléchargés sont utilisés.
+fix
+	Sur les systèmes ne permettant pas l'ouverture d'un navigateur par Yapbam, cliquer sur les boutons d'accès aux questions fréquentes et au tutoriel dans l'écran d'accueil provoquait une erreur. 
 
 version	0.11.4 (15/07/2012)
 fix

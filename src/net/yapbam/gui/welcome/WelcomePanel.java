@@ -4,10 +4,10 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -20,18 +20,18 @@ import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.Browser;
 import net.yapbam.gui.DataReader;
-import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JSeparator;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -333,11 +333,7 @@ public class WelcomePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			try {
-				Desktop.getDesktop().browse(uri);
-			} catch (IOException e) {
-				ErrorManager.INSTANCE.display(WelcomePanel.this, e);
-			}
+			Browser.show(uri, WelcomePanel.this, null);
 		}
 	}
 	

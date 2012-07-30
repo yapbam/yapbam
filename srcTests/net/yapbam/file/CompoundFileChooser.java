@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.yapbam.gui.dropbox.DropboxFileChooser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

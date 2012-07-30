@@ -8,6 +8,8 @@ improvement
 version	0.11.5 (08/01/2012)
 improvement
 	The currency converter is now available offline. When offline, the last downloaded rates are used.
+fix
+	On systems that do not allow Yapbam to open a browser, clicking on the buttons to access frequently asked questions and the tutorial in the welcome screen resulted in an error. 
 
 version	0.11.4 (07/15/2012)
 fix

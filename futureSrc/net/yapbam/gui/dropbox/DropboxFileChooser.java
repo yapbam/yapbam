@@ -1,4 +1,4 @@
-package net.yapbam.file;
+package net.yapbam.gui.dropbox;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
