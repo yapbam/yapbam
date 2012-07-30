@@ -453,7 +453,7 @@ public class Preferences {
 	
 	/** Sets a property value.
 	 * This method may be used by plugin in order to save their preferences.
-	 * As we have to prevent one plugin to overide the key used by other plugins, it is recommended
+	 * As we have to prevent one plugin to override the key used by other plugins, it is recommended
 	 * that the key is prefixed with the package name of the plugin.
 	 * @param key the key that will be used by getProperty method to retrieve the property
 	 * @param value the property's value.
