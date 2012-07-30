@@ -305,11 +305,12 @@ public class Preferences {
 			StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY,property),":"); //$NON-NLS-1$
 			final String user = tokens.nextToken();
 			final String pwd = tokens.nextToken();
-		    Authenticator.setDefault(new Authenticator() {
-		        @Override
+			Authenticator.setDefault(new Authenticator() {
+				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
-		          return new PasswordAuthentication(user,pwd.toCharArray());
-		      }});
+					return new PasswordAuthentication(user, pwd.toCharArray());
+				}
+			});
 		}
 	}
 
