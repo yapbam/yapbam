@@ -12,8 +12,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class DropboxFileChooser extends JPanel {
-	private JPanel panel;
+	private JPanel northPanel;
 	private JPanel panel_1;
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
@@ -29,17 +30,17 @@ public class DropboxFileChooser extends JPanel {
 	 */
 	public DropboxFileChooser() {
 		setLayout(new BorderLayout(0, 0));
-		add(getPanel(), BorderLayout.NORTH);
+		add(getNorthPanel(), BorderLayout.NORTH);
 		add(getPanel_1(), BorderLayout.SOUTH);
 		add(getPanel_2(), BorderLayout.CENTER);
 
 	}
 
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
+	private JPanel getNorthPanel() {
+		if (northPanel == null) {
+			northPanel = new ConnectionPanel();
 		}
-		return panel;
+		return northPanel;
 	}
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
