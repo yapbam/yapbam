@@ -1,24 +1,21 @@
 package net.yapbam.gui.dropbox;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
-import java.awt.Dialog.ModalityType;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import javax.swing.JButton;
 
 import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
-import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.gui.Browser;
 
-import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
@@ -30,33 +27,59 @@ import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class ConnectionPanel extends JPanel {
+	public enum State {
+		PENDING, GRANTED, REJECTED, FAILED
+	}
+	
+	public static final String STATE_PROPERTY = "State";
+	
 	private JLabel lblNewLabel;
 	private JButton connectButton;
-
+	private State state;
+	private String userId;
+	private AccessTokenPair token;
+	private JLabel lblNewLabel_1;
+	
 	/**
 	 * Create the panel.
 	 */
 	public ConnectionPanel() {
+		this.state = State.PENDING;
+		this.userId = null;
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel_1.gridx = 0;
+		gbc_lblNewLabel_1.gridy = 0;
+		add(getLblNewLabel_1(), gbc_lblNewLabel_1);
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel.weightx = 1.0;
-		gbc_lblNewLabel.insets = new Insets(5, 5, 0, 5);
+		gbc_lblNewLabel.insets = new Insets(5, 5, 5, 5);
 		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
+		gbc_lblNewLabel.gridy = 1;
 		add(getLblNewLabel(), gbc_lblNewLabel);
 		GridBagConstraints gbc_connectButton = new GridBagConstraints();
 		gbc_connectButton.insets = new Insets(0, 0, 0, 5);
-		gbc_connectButton.gridx = 1;
-		gbc_connectButton.gridy = 0;
+		gbc_connectButton.gridx = 0;
+		gbc_connectButton.gridy = 2;
 		add(getConnectButton(), gbc_connectButton);
 	}
 
+	private JLabel getLblNewLabel_1() {
+		if (lblNewLabel_1 == null) {
+			lblNewLabel_1 = new JLabel("<html>Storing data to Dropbox requires that you authorize Yapbam to connect to your Yapbam account.</html>");
+			lblNewLabel_1.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
+		}
+		return lblNewLabel_1;
+	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			String message = "<html>Storing data to Dropbox requires that you authorize Yapbam to connect to your Yapbam account.<br>" +
-					"<br>Yapbam will only have access to a specific folder (/Applications/Yapbam), not your whole account.<br>" +
+			String message = "<html>Yapbam will only have access to a specific folder (/Applications/Yapbam), not your whole account.<br>" +
 					"<br>Click the \"<b>{0}</b>\" button when you are ready to link Yapbam to your account (requires an Internet connection)<br>" +
 					"Then, you will be redirected to a browser window where Dropbox will ask you to grant access to Yapbam.<br></html>";
 			message = MessageFormat.format(message, getConnectButtonName());
@@ -73,49 +96,43 @@ public class ConnectionPanel extends JPanel {
 			connectButton = new JButton(getConnectButtonName());
 			connectButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
-					final WebAuthSession was = new YapbamDropboxSession();
+					WebAuthSession was = new YapbamDropboxSession();
 					try {
 						Window window = Utils.getOwnerWindow(connectButton);
 						final WebAuthInfo info = was.getAuthInfo();
 						Browser.show(new URI(info.url), window, "Unable to launch browser");
-						boolean ok = false;
-						while (!ok) {
-							try {
-								System.out.println (was.retrieveWebAccessToken(info.requestTokenPair));
-								System.out.println (was.getAccessTokenPair());
-								ok = true;
-							} catch (DropboxUnlinkedException e) {
-								try {
-									Thread.sleep(1000);
-								} catch (InterruptedException e1) {
-								}
-							}
-						}
-//
-//						WorkInProgressFrame dialog = new WorkInProgressFrame(window, "Waiting ...", ModalityType.APPLICATION_MODAL, new Worker<AccessTokenPair, Void>() {
-//							@Override
-//							protected AccessTokenPair doInBackground() throws Exception {
-//								System.out.println ("Let's go !!!");
-//								while (true) {
-//									System.out.println (was.retrieveWebAccessToken(info.requestTokenPair));
-//									System.out.println (was.getAccessTokenPair());
-//									break;
-//								}
-//								System.out.println ("We are leaving");
-//								return was.getAccessTokenPair();
-//							}
-//						});
-//						dialog.setVisible(true);
-					} catch (URISyntaxException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (DropboxException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(window, "<html>Please close this message box <b>after<b> granted access to your Dropbox account to Yapbam", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+						userId = was.retrieveWebAccessToken(info.requestTokenPair);
+						token = was.getAccessTokenPair();
+						setState(State.GRANTED);
+					} catch (DropboxUnlinkedException e) {
+						setState(State.REJECTED);
+					} catch (Throwable e) {
+						setState(State.FAILED);
 					}
 				}
 			});
 		}
 		return connectButton;
+	}
+	
+	private void setState(State state) {
+		if (!state.equals(this.state)) {
+			State old = this.state;
+			this.state = state;
+			firePropertyChange(STATE_PROPERTY, old, this.state);
+		}
+	}
+	
+	public State getState() {
+		return this.state;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public AccessTokenPair getAccessTokenPair() {
+		return token;
 	}
 }
