@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 
@@ -24,6 +25,7 @@ import com.dropbox.client2.session.WebAuthSession.WebAuthInfo;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class ConnectionPanel extends JPanel {
@@ -33,12 +35,13 @@ public class ConnectionPanel extends JPanel {
 	
 	public static final String STATE_PROPERTY = "State";
 	
-	private JLabel lblNewLabel;
+	private JTextArea lblNewLabel;
 	private JButton connectButton;
 	private State state;
 	private String userId;
 	private AccessTokenPair token;
 	private JLabel lblNewLabel_1;
+	private JTextArea textArea;
 	
 	/**
 	 * Create the panel.
@@ -52,11 +55,19 @@ public class ConnectionPanel extends JPanel {
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 0;
 		add(getLblNewLabel_1(), gbc_lblNewLabel_1);
+		GridBagConstraints gbc_textArea = new GridBagConstraints();
+		gbc_textArea.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textArea.weightx = 1.0;
+		gbc_textArea.insets = new Insets(0, 0, 5, 0);
+		gbc_textArea.gridx = 1;
+		gbc_textArea.gridy = 0;
+		add(getTextArea(), gbc_textArea);
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.gridwidth = 0;
 		gbc_lblNewLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel.weightx = 1.0;
 		gbc_lblNewLabel.insets = new Insets(5, 5, 5, 5);
@@ -64,6 +75,9 @@ public class ConnectionPanel extends JPanel {
 		gbc_lblNewLabel.gridy = 1;
 		add(getLblNewLabel(), gbc_lblNewLabel);
 		GridBagConstraints gbc_connectButton = new GridBagConstraints();
+		gbc_connectButton.gridwidth = 0;
+		gbc_connectButton.weighty = 1.0;
+		gbc_connectButton.anchor = GridBagConstraints.NORTH;
 		gbc_connectButton.insets = new Insets(0, 0, 0, 5);
 		gbc_connectButton.gridx = 0;
 		gbc_connectButton.gridy = 2;
@@ -72,18 +86,19 @@ public class ConnectionPanel extends JPanel {
 
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("<html>Storing data to Dropbox requires that you authorize Yapbam to connect to your Yapbam account.</html>");
-			lblNewLabel_1.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
+			lblNewLabel_1 = new JLabel(UIManager.getIcon("OptionPane.informationIcon"));
 		}
 		return lblNewLabel_1;
 	}
-	private JLabel getLblNewLabel() {
+	
+	private JTextArea getLblNewLabel() {
 		if (lblNewLabel == null) {
 			String message = "<html>Yapbam will only have access to a specific folder (/Applications/Yapbam), not your whole account.<br>" +
 					"<br>Click the \"<b>{0}</b>\" button when you are ready to link Yapbam to your account (requires an Internet connection)<br>" +
 					"Then, you will be redirected to a browser window where Dropbox will ask you to grant access to Yapbam.<br></html>";
 			message = MessageFormat.format(message, getConnectButtonName());
-			lblNewLabel = new JLabel(message);
+			lblNewLabel = new JTextArea(message);
+			lblNewLabel.setLineWrap(true);
 		}
 		return lblNewLabel;
 	}
@@ -134,5 +149,14 @@ public class ConnectionPanel extends JPanel {
 
 	public AccessTokenPair getAccessTokenPair() {
 		return token;
+	}
+	private JTextArea getTextArea() {
+		if (textArea == null) {
+			textArea = new JTextArea("<html>Storing data to <b>Dropbox<b> requires that you authorize Yapbam to connect to your Yapbam account.</html>");
+			textArea.setLineWrap(true);
+			textArea.setEditable(false);
+			textArea.setOpaque(false);
+		}
+		return textArea;
 	}
 }
