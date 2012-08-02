@@ -2,9 +2,10 @@ package net.yapbam.gui.dropbox;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 
@@ -25,7 +26,7 @@ import com.dropbox.client2.session.WebAuthSession.WebAuthInfo;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 @SuppressWarnings("serial")
 public class ConnectionPanel extends JPanel {
@@ -35,13 +36,13 @@ public class ConnectionPanel extends JPanel {
 	
 	public static final String STATE_PROPERTY = "State";
 	
-	private JTextArea lblNewLabel;
+	private JTextComponent lblNewLabel;
 	private JButton connectButton;
 	private State state;
 	private String userId;
 	private AccessTokenPair token;
 	private JLabel lblNewLabel_1;
-	private JTextArea textArea;
+	private JTextComponent textArea;
 	
 	/**
 	 * Create the panel.
@@ -91,14 +92,13 @@ public class ConnectionPanel extends JPanel {
 		return lblNewLabel_1;
 	}
 	
-	private JTextArea getLblNewLabel() {
+	private JTextComponent getLblNewLabel() {
 		if (lblNewLabel == null) {
 			String message = "<html>Yapbam will only have access to a specific folder (/Applications/Yapbam), not your whole account.<br>" +
 					"<br>Click the \"<b>{0}</b>\" button when you are ready to link Yapbam to your account (requires an Internet connection)<br>" +
 					"Then, you will be redirected to a browser window where Dropbox will ask you to grant access to Yapbam.<br></html>";
 			message = MessageFormat.format(message, getConnectButtonName());
-			lblNewLabel = new JTextArea(message);
-			lblNewLabel.setLineWrap(true);
+			lblNewLabel = buildTextComponent(message);
 		}
 		return lblNewLabel;
 	}
@@ -150,13 +150,20 @@ public class ConnectionPanel extends JPanel {
 	public AccessTokenPair getAccessTokenPair() {
 		return token;
 	}
-	private JTextArea getTextArea() {
+	private JTextComponent getTextArea() {
 		if (textArea == null) {
-			textArea = new JTextArea("<html>Storing data to <b>Dropbox<b> requires that you authorize Yapbam to connect to your Yapbam account.</html>");
-			textArea.setLineWrap(true);
-			textArea.setEditable(false);
-			textArea.setOpaque(false);
+			textArea = buildTextComponent("<html>Storing data to <b>Dropbox</b> requires that you authorize Yapbam to connect to your Yapbam account.</html>");
 		}
 		return textArea;
+	}
+	
+	private JTextComponent buildTextComponent(String text) {
+		JTextArea result = new JTextArea();
+//		result.setContentType("text/html");
+		result.setLineWrap(true);
+		result.setText(text);
+		result.setEditable(false);
+		result.setOpaque(false);
+		return result;
 	}
 }
