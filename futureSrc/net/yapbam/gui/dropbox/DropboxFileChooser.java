@@ -15,6 +15,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
+import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.session.AccessTokenPair;
 
 import net.yapbam.gui.Preferences;
@@ -27,11 +28,12 @@ public class DropboxFileChooser extends JPanel {
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
 	private JPanel bottomPanel;
-	private JButton btnNewButton_2;
 	private JList list;
 	private JPanel panel_3;
 	private JLabel lblNewLabel;
 	private JTextField fileNameField;
+	
+	private DropboxAPI<YapbamDropboxSession> dropboxAPI;
 
 	/**
 	 * Create the panel.
@@ -59,9 +61,8 @@ public class DropboxFileChooser extends JPanel {
 							AccessTokenPair pair = connectionPanel.getAccessTokenPair();
 							Preferences.INSTANCE.setProperty("Dropbox.access.key", pair.key);
 							Preferences.INSTANCE.setProperty("Dropbox.access.secret", pair.secret);
-							northPanel = new ConnectedPanel();
 							remove(connectionPanel);
-							add(northPanel, BorderLayout.NORTH);
+							buildStandardPanel(pair);
 							getContentPanel().setVisible(true);
 							getBottomPanel().setVisible(true);
 						}
@@ -71,11 +72,26 @@ public class DropboxFileChooser extends JPanel {
 				getContentPanel().setVisible(false);
 				getBottomPanel().setVisible(false);
 			} else {
-				northPanel = new ConnectedPanel();
+				buildStandardPanel(new AccessTokenPair(accessKey, accessSecret));
 			}
 		}
 		return northPanel;
 	}
+
+	private void buildStandardPanel(AccessTokenPair pair) {
+		System.out.println(System.currentTimeMillis());
+		YapbamDropboxSession session = new YapbamDropboxSession();
+		System.out.println("After new session : "+System.currentTimeMillis());
+		session.setAccessTokenPair(pair);
+		System.out.println("After setAccessToken : "+System.currentTimeMillis());
+		dropboxAPI = new DropboxAPI<YapbamDropboxSession>(session);
+		System.out.println("After new DropbaxAPI : "+System.currentTimeMillis());
+		northPanel = new ConnectedPanel();
+		((ConnectedPanel)northPanel).setConnection(dropboxAPI);
+		System.out.println("After panel.setConnection() : "+System.currentTimeMillis());
+		add(northPanel, BorderLayout.NORTH);
+	}
+	
 	private JPanel getContentPanel() {
 		if (contentPanel == null) {
 			contentPanel = new JPanel();
@@ -113,20 +129,6 @@ public class DropboxFileChooser extends JPanel {
 			bottomPanel = new JPanel();
 			GridBagLayout gbl_bottomPanel = new GridBagLayout();
 			bottomPanel.setLayout(gbl_bottomPanel);
-			
-			JLabel lblHereIsThe = new JLabel("Last synchronization on ...");
-			GridBagConstraints gbc_lblHereIsThe = new GridBagConstraints();
-			gbc_lblHereIsThe.insets = new Insets(0, 5, 5, 5);
-			gbc_lblHereIsThe.anchor = GridBagConstraints.WEST;
-			gbc_lblHereIsThe.gridx = 0;
-			gbc_lblHereIsThe.gridy = 0;
-			bottomPanel.add(lblHereIsThe, gbc_lblHereIsThe);
-			GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
-			gbc_btnNewButton_2.anchor = GridBagConstraints.WEST;
-			gbc_btnNewButton_2.insets = new Insets(0, 10, 5, 0);
-			gbc_btnNewButton_2.gridx = 1;
-			gbc_btnNewButton_2.gridy = 0;
-			bottomPanel.add(getBtnNewButton_2(), gbc_btnNewButton_2);
 			GridBagConstraints gbc_list = new GridBagConstraints();
 			gbc_list.weightx = 1.0;
 			gbc_list.fill = GridBagConstraints.BOTH;
@@ -145,12 +147,6 @@ public class DropboxFileChooser extends JPanel {
 			bottomPanel.add(getPanel_3(), gbc_panel_3);
 		}
 		return bottomPanel;
-	}
-	private JButton getBtnNewButton_2() {
-		if (btnNewButton_2 == null) {
-			btnNewButton_2 = new JButton("Synchonize", new ImageIcon(getClass().getResource("Synchronize32.png")));
-		}
-		return btnNewButton_2;
 	}
 	private JList getList() {
 		if (list == null) {

@@ -8,10 +8,14 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dropbox.DropboxFileChooser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class MultiSourceFileChooser extends JTabbedPane {
@@ -74,7 +78,18 @@ public class MultiSourceFileChooser extends JTabbedPane {
   private static void createAndShowGUI() {
     //Create and set up the window.
     JFrame frame = new JFrame("MultiSourceFileChooser Demo");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				try {
+					Preferences.INSTANCE.save();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 
     //Add content to the window.
     frame.getContentPane().add(new MultiSourceFileChooser());
