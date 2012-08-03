@@ -9,7 +9,6 @@ import net.yapbam.gui.AbstractPlugIn;
 public class ToolsPlugIn extends AbstractPlugIn {
 	public ToolsPlugIn(FilteredData data, Object restoreData) {
 		Messages.reset();
-		CurrencyNames.reset();
 	}
 	
 	@Override
