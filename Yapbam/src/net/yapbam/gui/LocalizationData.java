@@ -26,12 +26,7 @@ public abstract class LocalizationData {
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
 		translatorMode = Preferences.safeIsTranslatorMode();
 		Locale.setDefault(locale);
-		ResourceBundle res = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
-		setBundle(res);
-	}
-	
-	private static void setBundle(ResourceBundle aBundle) {
-		bundle = aBundle;
+		bundle = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
 	}
 	
 	public static String get(String key) {

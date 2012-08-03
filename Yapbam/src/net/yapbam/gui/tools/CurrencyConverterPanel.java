@@ -17,6 +17,7 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.currency.CurrencyConverter;
+import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 
@@ -57,8 +58,8 @@ public class CurrencyConverterPanel extends JPanel {
 			Arrays.sort(this.codes, new Comparator<String>() {
 				@Override
 				public int compare(String o1, String o2) {
-					String w1 = CurrencyNames.getString(o1);
-					String w2 = CurrencyNames.getString(o2);
+					String w1 = CurrencyNames.get(o1);
+					String w2 = CurrencyNames.get(o2);
 					return w1.compareToIgnoreCase(w2);
 				}
 			});
@@ -177,7 +178,7 @@ public class CurrencyConverterPanel extends JPanel {
 			currency1.setToolTipText(Messages.getString("CurrencyConverterPanel.origin.toolTip")); //$NON-NLS-1$
 			if (codes!=null) {
 				for (int i = 0; i < codes.length; i++) {
-					String symbol = CurrencyNames.getString(this.codes[i]);
+					String symbol = CurrencyNames.get(this.codes[i]);
 					currency1.addItem(symbol);
 				}
 			}
@@ -204,7 +205,7 @@ public class CurrencyConverterPanel extends JPanel {
 			currency2.setToolTipText(Messages.getString("CurrencyConverterPanel.destination.toolTip")); //$NON-NLS-1$
 			if (codes!=null) {
 				for (int i = 0; i < codes.length; i++) {
-					String symbol = CurrencyNames.getString(this.codes[i]);
+					String symbol = CurrencyNames.get(this.codes[i]);
 					currency2.addItem(symbol);
 				}
 			}
@@ -307,7 +308,7 @@ public class CurrencyConverterPanel extends JPanel {
 						if (viewRow>=0) {
 							int selectedRow = getJTable().convertRowIndexToModel(viewRow);
 							String selectedCode = tableModel.getCode(selectedRow);
-							getCurrency2().setSelectedItem(CurrencyNames.getString(selectedCode));
+							getCurrency2().setSelectedItem(CurrencyNames.get(selectedCode));
 						}
 					}
 				}
