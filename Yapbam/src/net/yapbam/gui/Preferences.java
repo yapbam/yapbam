@@ -153,7 +153,7 @@ public class Preferences {
 		return false;
 	}
 
-	void save() throws IOException {
+	public void save() throws IOException {
 		if (this.portable) {
 			File file = getFile();
 			file.getParentFile().mkdirs();

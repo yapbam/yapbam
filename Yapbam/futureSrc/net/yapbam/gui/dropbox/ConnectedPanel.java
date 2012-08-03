@@ -2,6 +2,10 @@ package net.yapbam.gui.dropbox;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.exception.DropboxException;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -43,5 +47,14 @@ public class ConnectedPanel extends JPanel {
 			accountLabel = new JLabel(" ");
 		}
 		return accountLabel;
+	}
+
+	public void setConnection(DropboxAPI<YapbamDropboxSession> dropbox) {
+		try {
+			getAccountLabel().setText(dropbox.accountInfo().displayName);
+		} catch (DropboxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
