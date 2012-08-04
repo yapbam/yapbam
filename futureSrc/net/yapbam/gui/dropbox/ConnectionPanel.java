@@ -2,7 +2,6 @@ package net.yapbam.gui.dropbox;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
 import java.awt.GridBagLayout;
@@ -97,7 +96,8 @@ public class ConnectionPanel extends JPanel {
 					"<br>Click the \"<b>{0}</b>\" button when you are ready to link Yapbam to your account (requires an Internet connection)<br>" +
 					"Then, you will be redirected to a browser window where Dropbox will ask you to grant access to Yapbam.<br></html>";
 			message = MessageFormat.format(message, getConnectButtonName());
-			lblNewLabel = buildTextComponent(message);
+			lblNewLabel = new MagicTextComponent();
+			lblNewLabel.setText(message);
 		}
 		return lblNewLabel;
 	}
@@ -151,18 +151,9 @@ public class ConnectionPanel extends JPanel {
 	}
 	private JTextComponent getTextArea() {
 		if (textArea == null) {
-			textArea = buildTextComponent("<html>Storing data to <b>Dropbox</b> requires that you authorize Yapbam to connect to your Yapbam account.</html>");
+			textArea = new MagicTextComponent(); 
+			textArea.setText("<html>Storing data to <b>Dropbox</b> requires that you authorize Yapbam to connect to your Yapbam account.</html>");
 		}
 		return textArea;
-	}
-	
-	private JTextComponent buildTextComponent(String text) {
-		JTextArea result = new JTextArea();
-//		result.setContentType("text/html");
-		result.setLineWrap(true);
-		result.setText(text);
-		result.setEditable(false);
-		result.setOpaque(false);
-		return result;
 	}
 }
