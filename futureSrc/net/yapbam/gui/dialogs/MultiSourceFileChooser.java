@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.yapbam.gui.Preferences;
@@ -39,6 +41,14 @@ public class MultiSourceFileChooser extends JTabbedPane {
 		dummy.add(getFileChooser());
 		addTab("Computer", new ImageIcon(getClass().getResource("computer.png")), dummy, "Select this tab to save/read data to/from a local storage");
 		addTab("Dropbox", new ImageIcon(getClass().getResource("dropbox.png")), getDropboxChooser(), "Select this tab to save/read data to/from Dropbox");
+		addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(getSelectedComponent() instanceof DropboxFileChooser) {
+					((DropboxFileChooser)getSelectedComponent()).connect();
+				}
+			}
+		});
 	}
 
 	private DropboxFileChooser getDropboxChooser() {

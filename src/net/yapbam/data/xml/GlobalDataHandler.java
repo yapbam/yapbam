@@ -165,7 +165,7 @@ class GlobalDataHandler extends DefaultHandler {
 			this.tempData.push(obj);
 			if (old!=null) throw new IllegalStateException("Two date steppers found"); // Hu ! there are two date steppers !!!  //$NON-NLS-1$
 		} else {
-			throw new IllegalArgumentException ("Unknown tag "+qName); //$NON-NLS-1$
+			// Simply ignore unknown tags (Maybe we're using a previous Yapbam version)
 		}
 	}
 
@@ -229,6 +229,7 @@ class GlobalDataHandler extends DefaultHandler {
 			this.data.add(new PeriodicalTransaction(p.description, p.comment, p.amount, p.account, p.mode, p.category, lst, nextDate, enabled, stepper));
 		} else if (qName.equals(Serializer.DATE_STEPPER_TAG)) {
 		} else {
+			// Simply ignore unknown tags. Maybe we're using a previous Yapbam version
 			System.err.println ("Unknown tag "+qName); //$NON-NLS-1$
 		}
 	}
