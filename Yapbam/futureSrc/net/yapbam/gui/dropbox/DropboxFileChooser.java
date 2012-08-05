@@ -12,6 +12,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -136,7 +137,7 @@ public class DropboxFileChooser extends JPanel {
 					getFileList().setListData(info.files.toArray(new Entry[info.files.size()]));
 					long percentUsed = 100*(info.account.quotaNormal+info.account.quotaShared) / info.account.quota; 
 					getProgressBar().setValue((int)percentUsed);
-					long remaining = info.account.quota-info.account.quotaNormal-info.account.quotaShared;
+					double remaining = info.account.quota-info.account.quotaNormal-info.account.quotaShared;
 					String unit = "bytes";
 					if (remaining>1024) {
 						unit = "kB";
@@ -150,7 +151,7 @@ public class DropboxFileChooser extends JPanel {
 							}
 						}
 					}
-					getProgressBar().setString(MessageFormat.format("{1}{0} free", unit, remaining));
+					getProgressBar().setString(MessageFormat.format("{1}{0} free", unit, new DecimalFormat("0.0").format(remaining)));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} catch (ExecutionException e) {
@@ -188,6 +189,7 @@ public class DropboxFileChooser extends JPanel {
 	private JButton getOkButton() {
 		if (okButton == null) {
 			okButton = new JButton(LocalizationData.get("GenericButton.ok"));
+			okButton.setEnabled(false);
 		}
 		return okButton;
 	}
@@ -310,6 +312,7 @@ public class DropboxFileChooser extends JPanel {
 		if (progressBar == null) {
 			progressBar = new JProgressBar();
 			progressBar.setStringPainted(true);
+			progressBar.setString("");
 		}
 		return progressBar;
 	}
