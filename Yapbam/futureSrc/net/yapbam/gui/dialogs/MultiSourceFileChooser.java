@@ -10,8 +10,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.dropbox.DropboxFileChooser;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.dropbox.DropboxFileChooser;
+import net.yapbam.gui.dropbox.YapbamDropboxFileChooser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,7 +54,7 @@ public class MultiSourceFileChooser extends JTabbedPane {
 
 	private DropboxFileChooser getDropboxChooser() {
 		if (dropboxChooser==null) {
-			dropboxChooser = new DropboxFileChooser();
+			dropboxChooser = new YapbamDropboxFileChooser();
 		}
 		return dropboxChooser;
 	}

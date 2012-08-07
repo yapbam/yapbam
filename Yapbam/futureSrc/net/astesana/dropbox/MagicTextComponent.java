@@ -1,4 +1,4 @@
-package net.yapbam.gui.dropbox;
+package net.astesana.dropbox;
 
 import javax.swing.JTextArea;
 
