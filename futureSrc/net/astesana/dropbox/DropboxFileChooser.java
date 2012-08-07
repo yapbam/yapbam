@@ -314,6 +314,11 @@ public abstract class DropboxFileChooser extends JPanel {
 		}
 	}
 
+	/** Filters an entry.
+	 * <br>By default, this method returns the entry path.
+	 * @param entry The entry available in the current Dropbox folder
+	 * @return a string that will be displayed in the files list, or null to ignore this entry
+	 */
 	protected String filter(Entry entry) {
 		String fileName = entry.fileName();
 		if (fileName.endsWith(".zip")) {
@@ -323,6 +328,11 @@ public abstract class DropboxFileChooser extends JPanel {
 		}
 	}
 
+	/** This method is called after the user granted access to Dropbox.
+	 * <br>By default, this method does nothing, but this is the place where you would store the access key in a key store.
+	 * <br>The session could be retrieve by using getDropboxAPI().getSession().
+	 * @see #getDropboxAPI()
+	 */
 	protected void accessGranted() {
 	}
 }
