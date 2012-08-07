@@ -26,7 +26,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.text.JTextComponent;
 
 @SuppressWarnings("serial")
-public class ConnectionPanel extends JPanel {
+class ConnectionPanel extends JPanel {
 	public enum State {
 		PENDING, GRANTED, REJECTED, FAILED
 	}
@@ -44,7 +44,7 @@ public class ConnectionPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ConnectionPanel(WebAuthSession session) {
+	ConnectionPanel(WebAuthSession session) {
 		this.session = session;
 		this.state = State.PENDING;
 		
@@ -110,8 +110,8 @@ public class ConnectionPanel extends JPanel {
 			connectButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 					try {
-						Window window = Utils.getOwnerWindow(connectButton);
 						final WebAuthInfo info = session.getAuthInfo();
+						Window window = Utils.getOwnerWindow(connectButton);
 						Browser.show(new URI(info.url), window, "Unable to launch browser");
 						JOptionPane.showMessageDialog(window, "<html>Please close this message box <b>after<b> granted access to your Dropbox account to Yapbam", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
 						session.retrieveWebAccessToken(info.requestTokenPair);
