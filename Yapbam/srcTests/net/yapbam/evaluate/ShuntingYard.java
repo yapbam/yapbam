@@ -1,10 +1,29 @@
 package net.yapbam.evaluate;
 
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
 public class ShuntingYard {
 	private Operator[] operators;
+	private Function[] functions;
 	
-	public ShuntingYard(Operator[] operators) {
+	private HashMap<String, Object> map;
+	
+	public ShuntingYard(Operator[] operators, Function[] functions) {
 		this.operators = operators;
+		this.functions = functions;
+		this.map = new HashMap<String, Object>();
+		if (operators!=null) {
+			for (Operator ope : operators) {
+				this.map.put(new String(new char[]{ope.getChar()}), ope);
+			}
+		}
+		if (functions!=null) {
+			for (Function function : functions) {
+				//TODO if function name contains operators => error
+				this.map.put(function.getName(), function);
+			}			
+		}
 	}
 	
 	int op_preced(char c) {
@@ -172,38 +191,41 @@ public class ShuntingYard {
 	}
 
 	public String evaluate(String rpnExpression) {
-		System.out.println("order:");
+		System.out.println("order of "+rpnExpression+":");
 		String res;
-		int sl = 0, rn = 0;
+		int sl = 0, resultNumber = 0;
+		//TODO implement with a java.util.Stack
 		String[] stack = new String[32];
 		String sc;
+		
+		StringTokenizer tokens = new StringTokenizer(rpnExpression, " ", false);
 		// While there are input tokens left
-		for (int i = 0; i < rpnExpression.length(); i++) {
+		while (tokens.hasMoreTokens()) {
 			// Read the next token from input.
-			char c = rpnExpression.charAt(i);
+			Object token = getNext(tokens.nextToken());
 			// If the token is a value or identifier
-			if (isIdent(c)) {
+			if (token instanceof Literal) {
 				// Push it onto the stack.
-				stack[sl] = new String(new char[] { c });
+				stack[sl] = ((Literal) token).getLiteral();
 				++sl;
-			}
-			// Otherwise, the token is an operator (operator here includes both
-			// operators, and functions).
-			else if (isOperator(c) || isFunction(c)) {
-				res = "result_" + rn;
+			} else {
+				// Otherwise, the token is an operator (operator here includes both
+				// operators, and functions).
+				res = "result_" + resultNumber;
 				System.out.print(res + " = ");
-				++rn;
+				++resultNumber;
 				// It is known a priori that the operator takes n arguments.
-				int nargs = op_arg_count(c);
+				int nargs = token instanceof Function ? ((Function)token).getArgumentCount() : ((Operator)token).getArgumentCount();
 				// If there are fewer than n values on the stack
 				if (sl < nargs) {
 					// (Error) The user has not input sufficient values in the expression.
-					throw new IllegalArgumentException("Not enough args for " + c);
+					throw new IllegalArgumentException("Not enough args for " + (token instanceof Function ? ((Function)token).getName() : ((Operator)token).getChar()));
 				}
 				// Else, Pop the top n values from the stack.
 				// Evaluate the operator, with the values as arguments.
-				if (isFunction(c)) {
-					System.out.print(c+"(");
+				if (token instanceof Function) {
+					Function function = (Function) token;
+					System.out.print(function.getName()+"(");
 					while (nargs > 0) {
 						sc = stack[sl - nargs]; // to remove reverse order of arguments
 						if (nargs > 1) {
@@ -213,15 +235,16 @@ public class ShuntingYard {
 						}
 						--nargs;
 					}
-					sl -= op_arg_count(c);
+					sl -= function.getArgumentCount();
 				} else {
+					Operator ope = (Operator) token;
 					if (nargs == 1) {
 						sc = stack[sl - 1];
 						sl--;
-						System.out.println(c + " " + sc);
+						System.out.println(ope.getChar() + " " + sc);
 					} else {
 						sc = stack[sl - 2];
-						System.out.print(sc + " " + c + " ");
+						System.out.print(sc + " " + ope.getChar() + " ");
 						sc = stack[sl - 1];
 						sl--;
 						sl--;
@@ -246,25 +269,30 @@ public class ShuntingYard {
 		throw new IllegalArgumentException("Too many values on the stack");
 	}
 
+	private Object getNext(String token) {
+		Object result = map.get(token);
+		return (result!=null) ? result : new Literal(token);
+	}
+
 	public static void main(String[] args) {
 		// functions: A() B(a) C(a, b), D(a, b, c) ...
 		// identifiers: 0 1 2 3 ... and a b c d e ...
 		// operators: = - + / * % !
 //		String input = "a = D(f - b * c + d, !e, g)";
-		String input = "1+4*B(x)+C(y,z)";
-		ShuntingYard sy = new ShuntingYard(Operators.SET);
-		System.out.println("input: " + input);
-		String rpn = sy.toRPN(input);
-		System.out.println("RPN: " + rpn);
-		try {
-			System.out.println("result=" + sy.evaluate(rpn));
-		} catch (Throwable e) {
-			e.printStackTrace();
-			System.out.println("Invalid input");
-		}
+		ShuntingYard sy = new ShuntingYard(Operators.SET, Functions.SET);
+//		String input = "1+!4*B(x)+C(y,z)";
+//		System.out.println("input: " + input);
+//		String rpn = sy.toRPN(input);
+//		System.out.println("RPN: " + rpn);
+//		try {
+//			System.out.println("result=" + sy.evaluate(rpn));
+//		} catch (Throwable e) {
+//			e.printStackTrace();
+//			System.out.println("Invalid input");
+//		}
 		
 		try {
-			rpn = "14 12 +";
+			String rpn = "45 sin 14 12 ! + *";
 			System.out.println("result=" + sy.evaluate(rpn));
 		} catch (Throwable e) {
 			e.printStackTrace();
