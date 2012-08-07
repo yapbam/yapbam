@@ -1,5 +1,6 @@
-package net.yapbam.gui.dropbox;
+package net.astesana.dropbox;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,19 +20,19 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JList;
-import javax.swing.JTextField;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Account;
 import com.dropbox.client2.DropboxAPI.Entry;
-import com.dropbox.client2.session.AccessTokenPair;
+import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.Utils;
+import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
-import net.yapbam.gui.dropbox.ConnectionPanel.State;
+import net.astesana.ajlib.utilities.LocalizationData;
+import net.astesana.dropbox.ConnectionPanel.State;
+
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -39,22 +40,22 @@ import java.awt.event.ActionEvent;
 import javax.swing.JProgressBar;
 
 @SuppressWarnings("serial")
-public class DropboxFileChooser extends JPanel {
+public abstract class DropboxFileChooser extends JPanel {
 	private JPanel southPanel;
 	private JButton okButton;
 	private JButton cancelButton;
 	private JPanel centerPanel;
-	private JList fileList;
+	private JList<String> fileList;
 	private JPanel filePanel;
 	private JLabel lblNewLabel;
-	private JTextField fileNameField;
+	private TextWidget fileNameField;
 	
-	private DropboxAPI<YapbamDropboxSession> dropboxAPI;
 	private JLabel lblAccount;
 	private JButton disconnectButton;
 	private JPanel northPanel;
 	private JButton refreshButton;
 	private JProgressBar progressBar;
+	private DefaultListModel<String> filesModel;
 
 	/**
 	 * Create the panel.
@@ -67,8 +68,8 @@ public class DropboxFileChooser extends JPanel {
 	}
 	
 	public void connect() {
-		if (getDropboxAPI()==null) {
-			final ConnectionPanel connectionPanel = new ConnectionPanel();
+		if (getDropboxAPI().getSession().getAccessTokenPair()==null) {
+			final ConnectionPanel connectionPanel = new ConnectionPanel(getDropboxAPI().getSession());
 			connectionPanel.addPropertyChangeListener(ConnectionPanel.STATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -76,9 +77,7 @@ public class DropboxFileChooser extends JPanel {
 					if (state.equals(ConnectionPanel.State.FAILED)) {
 						JOptionPane.showMessageDialog(DropboxFileChooser.this, "There was something wrong", "Error", JOptionPane.ERROR_MESSAGE);
 					} else if (state.equals(ConnectionPanel.State.GRANTED)) {
-						AccessTokenPair pair = connectionPanel.getAccessTokenPair();
-						Preferences.INSTANCE.setProperty("Dropbox.access.key", pair.key);
-						Preferences.INSTANCE.setProperty("Dropbox.access.secret", pair.secret);
+						accessGranted();
 						getSouthPanel().setVisible(true);
 						getNorthPanel().setVisible(true);
 						remove(connectionPanel);
@@ -101,18 +100,7 @@ public class DropboxFileChooser extends JPanel {
 		List<Entry> files;
 	}
 	
-	public DropboxAPI<YapbamDropboxSession> getDropboxAPI() {
-		if (dropboxAPI==null) {
-			String accessKey = Preferences.INSTANCE.getProperty("Dropbox.access.key");
-			String accessSecret = Preferences.INSTANCE.getProperty("Dropbox.access.secret");
-			if (accessKey!=null || accessSecret!=null) {
-				YapbamDropboxSession session = new YapbamDropboxSession();
-				session.setAccessTokenPair(new AccessTokenPair(accessKey, accessSecret));
-				dropboxAPI = new DropboxAPI<YapbamDropboxSession>(session);
-			}
-		}
-		return dropboxAPI;
-	}
+	protected abstract DropboxAPI<? extends WebAuthSession> getDropboxAPI();
 	
 	private void refresh() {
 		add(northPanel, BorderLayout.NORTH);
@@ -134,7 +122,8 @@ public class DropboxFileChooser extends JPanel {
 				try {
 					DropboxInfo info = get();
 					getLblAccount().setText(MessageFormat.format("Account: {0}", info.account.displayName));
-					getFileList().setListData(info.files.toArray(new Entry[info.files.size()]));
+					Entry[] entries = info.files.toArray(new Entry[info.files.size()]);
+					fillList(entries);
 					long percentUsed = 100*(info.account.quotaNormal+info.account.quotaShared) / info.account.quota; 
 					getProgressBar().setValue((int)percentUsed);
 					double remaining = info.account.quota-info.account.quotaNormal-info.account.quotaShared;
@@ -188,14 +177,14 @@ public class DropboxFileChooser extends JPanel {
 	}
 	private JButton getOkButton() {
 		if (okButton == null) {
-			okButton = new JButton(LocalizationData.get("GenericButton.ok"));
+			okButton = new JButton(LocalizationData.DEFAULT.getString("GenericButton.ok"));
 			okButton.setEnabled(false);
 		}
 		return okButton;
 	}
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
-			cancelButton = new JButton(LocalizationData.get("GenericButton.cancel"));
+			cancelButton = new JButton(LocalizationData.DEFAULT.getString("GenericButton.cancel"));
 		}
 		return cancelButton;
 	}
@@ -223,9 +212,10 @@ public class DropboxFileChooser extends JPanel {
 		}
 		return centerPanel;
 	}
-	private JList getFileList() {
+	private JList<String> getFileList() {
 		if (fileList == null) {
-			fileList = new JList();
+			filesModel = new DefaultListModel<String>();
+			fileList = new JList<String>(filesModel);
 			fileList.setBorder(new LineBorder(new Color(0, 0, 0)));
 		}
 		return fileList;
@@ -245,10 +235,9 @@ public class DropboxFileChooser extends JPanel {
 		}
 		return lblNewLabel;
 	}
-	private JTextField getFileNameField() {
+	private TextWidget getFileNameField() {
 		if (fileNameField == null) {
-			fileNameField = new JTextField();
-			fileNameField.setColumns(10);
+			fileNameField = new TextWidget();
 		}
 		return fileNameField;
 	}
@@ -260,7 +249,7 @@ public class DropboxFileChooser extends JPanel {
 	}
 	private JButton getDisconnectButton() {
 		if (disconnectButton == null) {
-			disconnectButton = new JButton("Disconnect", new ImageIcon(getClass().getResource("brokenLink.png")));
+			disconnectButton = new JButton("Disconnect", new ImageIcon(getClass().getResource("/net/astesana/dropbox/brokenLink.png")));
 		}
 		return disconnectButton;
 	}
@@ -299,7 +288,7 @@ public class DropboxFileChooser extends JPanel {
 	}
 	private JButton getRefreshButton() {
 		if (refreshButton == null) {
-			refreshButton = new JButton("Refresh", new ImageIcon(getClass().getResource("synchronize.png")));
+			refreshButton = new JButton("Refresh", new ImageIcon(getClass().getResource("/net/astesana/dropbox/synchronize.png")));
 			refreshButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					refresh();
@@ -315,5 +304,25 @@ public class DropboxFileChooser extends JPanel {
 			progressBar.setString("");
 		}
 		return progressBar;
+	}
+
+	private void fillList(Entry[] entries) {
+		filesModel.clear();
+		for (Entry entry : entries) {
+			String name = filter(entry);
+			if (name!=null) filesModel.addElement(name);
+		}
+	}
+
+	protected String filter(Entry entry) {
+		String fileName = entry.fileName();
+		if (fileName.endsWith(".zip")) {
+			return fileName.substring(0, fileName.length()-".zip".length());
+		} else {
+			return null;
+		}
+	}
+
+	protected void accessGranted() {
 	}
 }

@@ -1,4 +1,4 @@
-package net.yapbam.gui.dropbox;
+package net.astesana.dropbox;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,7 +17,6 @@ import net.astesana.ajlib.swing.Utils;
 import net.yapbam.gui.Browser;
 
 import com.dropbox.client2.exception.DropboxUnlinkedException;
-import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 import com.dropbox.client2.session.WebAuthSession.WebAuthInfo;
 
@@ -37,17 +36,17 @@ public class ConnectionPanel extends JPanel {
 	private JTextComponent lblNewLabel;
 	private JButton connectButton;
 	private State state;
-	private String userId;
-	private AccessTokenPair token;
 	private JLabel lblNewLabel_1;
 	private JTextComponent textArea;
+
+	private WebAuthSession session;
 	
 	/**
 	 * Create the panel.
 	 */
-	public ConnectionPanel() {
+	public ConnectionPanel(WebAuthSession session) {
+		this.session = session;
 		this.state = State.PENDING;
-		this.userId = null;
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
@@ -110,14 +109,12 @@ public class ConnectionPanel extends JPanel {
 			connectButton = new JButton(getConnectButtonName());
 			connectButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
-					WebAuthSession was = new YapbamDropboxSession();
 					try {
 						Window window = Utils.getOwnerWindow(connectButton);
-						final WebAuthInfo info = was.getAuthInfo();
+						final WebAuthInfo info = session.getAuthInfo();
 						Browser.show(new URI(info.url), window, "Unable to launch browser");
 						JOptionPane.showMessageDialog(window, "<html>Please close this message box <b>after<b> granted access to your Dropbox account to Yapbam", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
-						userId = was.retrieveWebAccessToken(info.requestTokenPair);
-						token = was.getAccessTokenPair();
+						session.retrieveWebAccessToken(info.requestTokenPair);
 						setState(State.GRANTED);
 					} catch (DropboxUnlinkedException e) {
 						setState(State.REJECTED);
@@ -142,13 +139,6 @@ public class ConnectionPanel extends JPanel {
 		return this.state;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public AccessTokenPair getAccessTokenPair() {
-		return token;
-	}
 	private JTextComponent getTextArea() {
 		if (textArea == null) {
 			textArea = new MagicTextComponent(); 

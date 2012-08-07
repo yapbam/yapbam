@@ -1,4 +1,4 @@
-package net.yapbam.dropbox;
+package net.astesana.dropbox;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

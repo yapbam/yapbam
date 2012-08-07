@@ -3,7 +3,7 @@ package net.yapbam.gui.dropbox;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import net.yapbam.dropbox.AuthenticatedProxiedSession;
+import net.astesana.dropbox.AuthenticatedProxiedSession;
 import net.yapbam.gui.Preferences;
 
 import com.dropbox.client2.session.AppKeyPair;
