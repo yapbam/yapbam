@@ -1,6 +1,6 @@
 package net.yapbam.evaluate;
 
-public class Operator/* implements Comparable<Operator>*/ {
+public class Operator {
 	private char car;
 	private int precedence;
 	private int argumentCount;
@@ -29,9 +29,4 @@ public class Operator/* implements Comparable<Operator>*/ {
 	public int getPrecedence() {
 		return this.precedence;
 	}
-//
-//	@Override
-//	public int compareTo(Operator ope) {
-//		return this.precedence - ope.precedence;
-//	}
 }
