@@ -4,25 +4,21 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class ShuntingYard {
-	private Operator[] operators;
-	private Function[] functions;
+	private static final String FUNCTION_ARGUMENT_SEPARATOR = ",";
+	private static final String CLOSE_BRACKET = ")";
+	private static final String OPEN_BRACKET = "(";
+	
 	private String tokenDelimiters;
 	private HashMap<String, Object> map;
 	
 	public ShuntingYard(Operator[] operators, Function[] functions) {
-		this.operators = operators;
-		this.functions = functions;
 		this.map = new HashMap<String, Object>();
-		StringBuilder tokenDelimiters = new StringBuilder();
-		tokenDelimiters.append(" (),");
 		if (operators!=null) {
 			for (Operator ope : operators) {
 				this.map.put(new String(new char[]{ope.getChar()}), ope);
-				tokenDelimiters.append(ope.getChar());
 			}
 		}
-		this.tokenDelimiters = tokenDelimiters.toString();
-		if (functions!=null) {
+		if (functions!=null && functions.length>0) {
 			for (Function function : functions) {
 				//TODO if function name contains operators => error
 				this.map.put(function.getName(), function);
@@ -30,40 +26,38 @@ public class ShuntingYard {
 		}
 	}
 	
-	int op_preced(char c) {
-		return getOperator(c).getPrecedence();
-	}
-
-	boolean op_left_assoc(char c) {
-		return getOperator(c).isLeftToRight();
-	}
-
-	int op_arg_count(char c) {
-		Operator ope = getOperator(c);
-		if (ope!=null) {
-			return ope.getArgumentCount();
-		} else {
-			return c - 'A';
+	private synchronized String getDelimiters() {
+		if (tokenDelimiters==null) {
+			boolean needFunctionSeparator = false;
+			StringBuilder builder = new StringBuilder();
+			builder.append(" ").append(OPEN_BRACKET).append(CLOSE_BRACKET);
+			for (Object obj:map.values()) {
+				if (obj instanceof Operator) {
+					builder.append(((Operator)obj).getChar());
+				} else {
+					if (((Function)obj).getArgumentCount()>1) needFunctionSeparator = true;
+				}
+			}
+			if (needFunctionSeparator) builder.append(FUNCTION_ARGUMENT_SEPARATOR);
+			tokenDelimiters = builder.toString();
 		}
+		return tokenDelimiters;
+	}
+	
+	private int op_preced(String token) {
+		return ((Operator) toObject(token)).getPrecedence();
 	}
 
-	private Operator getOperator(char c) {
-		for (Operator operator : operators) {
-			if (operator.getChar()==c) return operator;
-		}
-		return null;
+	private boolean op_left_assoc(String token) {
+		return ((Operator) toObject(token)).isLeftToRight();
 	}
 
-	private boolean isOperator(char c) {
-		return getOperator(c)!=null;
+	private boolean isOperator(String token) {
+		return toObject(token) instanceof Operator;
 	}
 
-	private boolean isFunction(char c) {
-		return (c >= 'A' && c <= 'Z');
-	}
-
-	private boolean isIdent(char c) {
-		return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'));
+	private boolean isFunction(String token) {
+		return toObject(token) instanceof Function;
 	}
 
 	public String toRPN(String input) {
@@ -72,80 +66,24 @@ public class ShuntingYard {
 		String sc; // used for record stack element
 
 		StringBuilder output = new StringBuilder();
-		StringTokenizer tokens = new StringTokenizer(input, tokenDelimiters, true);
+		StringTokenizer tokens = new StringTokenizer(input, getDelimiters(), true);
 		while (tokens.hasMoreTokens()) {
 			// read one token from the input stream
 			String token = tokens.nextToken();
 			if (token.equals(" ")) {
 				// If the token is a space ... do nothing
-			} else if (isIdent(token)) {
-				// If the token is a number (identifier), then add it to the output
-				// queue.
-				if (output.length() != 0) output.append(' ');
-				output.append(token);
-			} else if (isFunction(token)) {
-				// If the token is a function token, then push it onto the stack.
-				stack[sl] = token;
-				++sl;
-			} else if (token.equals(",")) {
-				// If the token is a function argument separator (e.g., a comma):
-				boolean pe = false;
-				while (sl > 0) {
-					sc = stack[sl - 1];
-					if (sc == "(") {
-						pe = true;
-						break;
-					} else {
-						// Until the token at the top of the stack is a left parenthesis,
-						// pop operators off the stack onto the output queue.
-						if (output.length() != 0) output.append(' ');
-						output.append(sc);
-						sl--;
-					}
-				}
-				// If no left parentheses are encountered, either the separator was
-				// misplaced
-				// or parentheses were mismatched.
-				if (!pe) {
-					throw new IllegalArgumentException("Separator or parentheses mismatched");
-				}
-			} else if (isOperator(token)) {
-				// If the token is an operator, op1, then:
-				while (sl > 0) {
-					sc = stack[sl - 1];
-					// While there is an operator token, o2, at the top of the stack
-					// op1 is left-associative and its precedence is less than or equal
-					// to that of op2,
-					// or op1 has precedence less than that of op2,
-					// Let + and ^ be right associative.
-					// Correct transformation from 1^2+3 is 12^3+
-					// The differing operator priority decides pop / push
-					// If 2 operators have equal priority then associativity decides.
-					if (isOperator(token)
-							&& ((op_left_assoc(c) && (op_preced(c) <= op_preced(sc))) || (op_preced(c) < op_preced(sc)))) {
-						// Pop o2 off the stack, onto the output queue;
-						if (output.length() != 0) output.append(' ');
-						output.append(sc);
-						sl--;
-					} else {
-						break;
-					}
-				}
-				// push op1 onto the stack.
-				stack[sl] = c;
-				++sl;
-			} else if (token.equals("(")) {
+			} else if (token.equals(OPEN_BRACKET)) {
 				// If the token is a left parenthesis, then push it onto the stack.
 				stack[sl] = token;
 				++sl;
-			} else if (token.equals(")")) {
+			} else if (token.equals(CLOSE_BRACKET)) {
 				// If the token is a right parenthesis:
 				boolean pe = false;
 				// Until the token at the top of the stack is a left parenthesis,
 				// pop operators off the stack onto the output queue
 				while (sl > 0) {
 					sc = stack[sl - 1];
-					if (sc.equals("(")) {
+					if (sc.equals(OPEN_BRACKET)) {
 						pe = true;
 						break;
 					} else {
@@ -172,13 +110,68 @@ public class ShuntingYard {
 						sl--;
 					}
 				}
+			} else if (token.equals(FUNCTION_ARGUMENT_SEPARATOR)) {
+				// If the token is a function argument separator (e.g., a comma):
+				boolean pe = false;
+				while (sl > 0) {
+					sc = stack[sl - 1];
+					if (sc.equals(OPEN_BRACKET)) {
+						pe = true;
+						break;
+					} else {
+						// Until the token at the top of the stack is a left parenthesis,
+						// pop operators off the stack onto the output queue.
+						if (output.length() != 0) output.append(' ');
+						output.append(sc);
+						sl--;
+					}
+				}
+				// If no left parentheses are encountered, either the separator was
+				// misplaced
+				// or parentheses were mismatched.
+				if (!pe) {
+					throw new IllegalArgumentException("Separator or parentheses mismatched");
+				}
+			} else if (isFunction(token)) {
+				// If the token is a function token, then push it onto the stack.
+				stack[sl] = token;
+				++sl;
+			} else if (isOperator(token)) {
+				// If the token is an operator, op1, then:
+				while (sl > 0) {
+					sc = stack[sl - 1];
+					// While there is an operator token, o2, at the top of the stack
+					// op1 is left-associative and its precedence is less than or equal
+					// to that of op2,
+					// or op1 has precedence less than that of op2,
+					// Let + and ^ be right associative.
+					// Correct transformation from 1^2+3 is 12^3+
+					// The differing operator priority decides pop / push
+					// If 2 operators have equal priority then associativity decides.
+					if (isOperator(token)
+							&& ((op_left_assoc(token) && (op_preced(token) <= op_preced(sc))) || (op_preced(token) < op_preced(sc)))) {
+						// Pop o2 off the stack, onto the output queue;
+						if (output.length() != 0) output.append(' ');
+						output.append(sc);
+						sl--;
+					} else {
+						break;
+					}
+				}
+				// push op1 onto the stack.
+				stack[sl] = token;
+				++sl;
+			} else {
+				// If the token is a number (identifier), then add it to the output queue.
+				if (output.length() != 0) output.append(' ');
+				output.append(token);
 			}
 		}
 		// When there are no more tokens to read:
 		// While there are still operator tokens in the stack:
 		while (sl > 0) {
 			sc = stack[sl - 1];
-			if (sc.equals("(") || sc.equals(")")) {
+			if (sc.equals(OPEN_BRACKET) || sc.equals(CLOSE_BRACKET)) {
 				throw new IllegalArgumentException("Parentheses mismatched");
 			}
 			if (output.length() != 0) output.append(' ');
@@ -189,7 +182,7 @@ public class ShuntingYard {
 	}
 
 	public String evaluate(String rpnExpression) {
-		System.out.println("order of "+rpnExpression+":");
+		System.out.println("evaluation of "+rpnExpression+":");
 		String res;
 		int sl = 0, resultNumber = 0;
 		//TODO implement with a java.util.Stack
@@ -200,7 +193,7 @@ public class ShuntingYard {
 		// While there are input tokens left
 		while (tokens.hasMoreTokens()) {
 			// Read the next token from input.
-			Object token = getNext(tokens.nextToken());
+			Object token = toObject(tokens.nextToken());
 			// If the token is a value or identifier
 			if (token instanceof Literal) {
 				// Push it onto the stack.
@@ -223,13 +216,13 @@ public class ShuntingYard {
 				// Evaluate the operator, with the values as arguments.
 				if (token instanceof Function) {
 					Function function = (Function) token;
-					System.out.print(function.getName()+"(");
+					System.out.print(function.getName()+OPEN_BRACKET);
 					while (nargs > 0) {
 						sc = stack[sl - nargs]; // to remove reverse order of arguments
 						if (nargs > 1) {
 							System.out.print(sc + ", ");
 						} else {
-							System.out.println(sc + ")");
+							System.out.println(sc + CLOSE_BRACKET);
 						}
 						--nargs;
 					}
@@ -267,7 +260,7 @@ public class ShuntingYard {
 		throw new IllegalArgumentException("Too many values on the stack");
 	}
 
-	private Object getNext(String token) {
+	private Object toObject(String token) {
 		Object result = map.get(token);
 		return (result!=null) ? result : new Literal(token);
 	}
@@ -276,24 +269,23 @@ public class ShuntingYard {
 		// functions: A() B(a) C(a, b), D(a, b, c) ...
 		// identifiers: 0 1 2 3 ... and a b c d e ...
 		// operators: = - + / * % !
-//		String input = "a = D(f - b * c + d, !e, g)";
 		ShuntingYard sy = new ShuntingYard(Operators.SET, Functions.SET);
-//		String input = "1+!4*B(x)+C(y,z)";
-//		System.out.println("input: " + input);
-//		String rpn = sy.toRPN(input);
-//		System.out.println("RPN: " + rpn);
-//		try {
-//			System.out.println("result=" + sy.evaluate(rpn));
-//		} catch (Throwable e) {
-//			e.printStackTrace();
-//			System.out.println("Invalid input");
-//		}
-		
+		String input = "1+!4*sin(x)+min(y,z)";
+		System.out.println("input: " + input);
+		String rpn = sy.toRPN(input);
+		System.out.println("RPN: " + rpn);
 		try {
-			String rpn = "45 43 min 14 12 ! + *";
 			System.out.println("result=" + sy.evaluate(rpn));
 		} catch (Throwable e) {
 			e.printStackTrace();
+			System.out.println("Invalid input");
 		}
+		
+//		try {
+//			String rpn = "45 43 min 14 12 ! + *";
+//			System.out.println("result=" + sy.evaluate(rpn));
+//		} catch (Throwable e) {
+//			e.printStackTrace();
+//		}
 	}
 }
