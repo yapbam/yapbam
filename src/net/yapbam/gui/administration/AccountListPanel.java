@@ -103,7 +103,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 		    		boolean hasFocus, int row, int column) {
 		    	super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-		    	if (value.equals(Double.POSITIVE_INFINITY) || value.equals(Double.NEGATIVE_INFINITY)) {
+		    	if ((value==null) || value.equals(Double.POSITIVE_INFINITY) || value.equals(Double.NEGATIVE_INFINITY)) {
 		    		setText(""); //$NON-NLS-1$
 		    	} else {
 		    		setText(LocalizationData.getCurrencyInstance().format(value));

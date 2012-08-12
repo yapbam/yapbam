@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 	
+version	0.11.6 (15/08/2012)
+fix
+	Certains libellés des versions allemandes et portuguaises n'étaient pas traduits. 
+
 version	0.11.5 (03/08/2012)
 improvement
 	Le convertisseur de devises est à présent disponible hors ligne. Dans ce cas, les derniers taux téléchargés sont utilisés.
