@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam is able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
+version	0.11.6 (08/15/2012)
+fix
+	Some wordings in Portuguese and German versions were not translated. 
+
 version	0.11.5 (08/03/2012)
 improvement
 	The currency converter is now available offline. When offline, the last downloaded rates are used.

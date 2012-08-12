@@ -7,14 +7,14 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import net.astesana.ajlib.swing.framework.Application;
 import net.yapbam.data.GlobalData;
 
 /** This class is the main entry point for localization concerns.
  */
 public abstract class LocalizationData {
 	public static final Locale SYS_LOCALE;
-	private static ResourceBundle bundle;
-	private static boolean translatorMode;
+	private static net.astesana.ajlib.utilities.LocalizationData locData;
 	
 	static {
 		SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));  //$NON-NLS-1$//$NON-NLS-2$
@@ -24,17 +24,19 @@ public abstract class LocalizationData {
 	public static void reset() {
 		Locale locale = Preferences.safeGetLocale(); // Be aware that Preferences.INSTANCE may not be initialized (if its instantiation failed)
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
-		translatorMode = Preferences.safeIsTranslatorMode();
 		Locale.setDefault(locale);
-		bundle = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
+		ResourceBundle bundle = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
+		locData = new net.astesana.ajlib.utilities.LocalizationData(bundle);
+		locData.setTranslatorMode(Preferences.safeIsTranslatorMode());
+		Application.LOCALIZATION = locData;
 	}
 	
 	public static String get(String key) {
-		return translatorMode?key:bundle.getString(key);
+		return locData.getString(key);
 	}
 	
 	public static char getChar(String key) {
-		return get(key).charAt(0);
+		return locData.getChar(key);
 	}
 
 	public static Locale getLocale() {
