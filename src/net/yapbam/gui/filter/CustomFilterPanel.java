@@ -25,7 +25,6 @@ import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
@@ -61,7 +60,8 @@ public class CustomFilterPanel extends JPanel {
 	private JList modes = null;
 		
 	private String oldInconsistencyCause;
-	private FilteredData data;
+	private Filter filter;
+	private GlobalData gData;
 	
 	private ListSelectionListener CONSISTENCY_CHECKER_LIST = new ListSelectionListener() {
 		@Override
@@ -78,12 +78,13 @@ public class CustomFilterPanel extends JPanel {
 	private TextMatcherFilterPanel commentPanel;
 
 	public CustomFilterPanel() {
-		this(new FilteredData(new GlobalData()));
+		this(new Filter(), new GlobalData());
 	}
 	
-	public CustomFilterPanel(FilteredData data) {
+	public CustomFilterPanel(Filter filter, GlobalData data) {
 		super();
-		this.data = data;
+		this.gData = data;
+		this.filter = filter;
 		inconsistencyListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -171,16 +172,16 @@ public class CustomFilterPanel extends JPanel {
 			accountList = new JList();
 			accountList.setModel(new AbstractListModel(){
 				public Object getElementAt(int index) {
-					return data.getGlobalData().getAccount(index).getName();
+					return gData.getAccount(index).getName();
 				}
 				public int getSize() {
-					return data.getGlobalData().getAccountsNumber();
+					return gData.getAccountsNumber();
 				}
 			});
 			accountList.setToolTipText(LocalizationData.get("CustomFilterPanel.account.toolTip")); //$NON-NLS-1$
-			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getAccountsNumber()); 
-			for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
-				if (data.getFilter().isOk(data.getGlobalData().getAccount(i))) indices.add(i);
+			ArrayList<Integer> indices = new ArrayList<Integer>(gData.getAccountsNumber()); 
+			for (int i=0;i<gData.getAccountsNumber();i++) {
+				if (filter.isOk(gData.getAccount(i))) indices.add(i);
 			}
 			int[] selection = new int[indices.size()];
 			for (int i = 0; i < indices.size(); i++) {
@@ -209,7 +210,7 @@ public class CustomFilterPanel extends JPanel {
 		if (amountPanel == null) {
 			amountPanel = new AmountPanel();
 			amountPanel.addPropertyChangeListener(AmountPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			amountPanel.setAmounts(data.getFilter().getMinAmount(), data.getFilter().getMaxAmount());
+			amountPanel.setAmounts(filter.getMinAmount(), filter.getMaxAmount());
 		}
 		return amountPanel;
 	}
@@ -218,7 +219,7 @@ public class CustomFilterPanel extends JPanel {
 		if (datePanel==null) {
 			datePanel = new DateFilterPanel(DateFilterPanel.TRANSACTION_DATE);
 			datePanel.addPropertyChangeListener(DateFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			datePanel.setDates(data.getFilter().getDateFrom(), data.getFilter().getDateTo());
+			datePanel.setDates(filter.getDateFrom(), filter.getDateTo());
 		}
 		return datePanel;
 	}
@@ -255,16 +256,16 @@ public class CustomFilterPanel extends JPanel {
 			categoryList = new JList();
 			categoryList.setModel(new AbstractListModel(){
 				public Object getElementAt(int index) {
-					return data.getGlobalData().getCategory(index).getName();
+					return gData.getCategory(index).getName();
 				}
 				public int getSize() {
-					return data.getGlobalData().getCategoriesNumber();
+					return gData.getCategoriesNumber();
 				}
 			});
 			categoryList.setToolTipText(LocalizationData.get("CustomFilterPanel.category.toolTip")); //$NON-NLS-1$
-			ArrayList<Integer> indices = new ArrayList<Integer>(data.getGlobalData().getCategoriesNumber()); 
-			for (int i=0;i<data.getGlobalData().getCategoriesNumber();i++) {
-				if (data.getFilter().isOk(data.getGlobalData().getCategory(i))) indices.add(i);
+			ArrayList<Integer> indices = new ArrayList<Integer>(gData.getCategoriesNumber()); 
+			for (int i=0;i<gData.getCategoriesNumber();i++) {
+				if (filter.isOk(gData.getCategory(i))) indices.add(i);
 			}
 			int[] selection = new int[indices.size()];
 			for (int i = 0; i < indices.size(); i++) {
@@ -293,7 +294,7 @@ public class CustomFilterPanel extends JPanel {
 		int[] accountIndices =	this.accountList.getSelectedIndices();
 		TreeSet<String> modes = new TreeSet<String>();
 		for (int i = 0; i < accountIndices.length; i++) {
-			Account account = data.getGlobalData().getAccount(accountIndices[i]);
+			Account account = gData.getAccount(accountIndices[i]);
 			int nb = account.getModesNumber();
 			for (int j = 0; j < nb; j++) {
 				modes.add(account.getMode(j).getName());
@@ -313,7 +314,7 @@ public class CustomFilterPanel extends JPanel {
 		ArrayList<Integer> newSelection = new ArrayList<Integer>();
 		if (first) {
 			// set the selection to the content of the filter
-			List<String> validModes = data.getFilter().getValidModes();
+			List<String> validModes = filter.getValidModes();
 			if (validModes!=null) {
 				for (int i = 0; i < validModes.size(); i++) {
 					String name = validModes.get(i);
@@ -343,7 +344,6 @@ public class CustomFilterPanel extends JPanel {
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
 	public boolean apply() {
-		Filter filter = this.data.getFilter();
 		filter.setSuspended(true);
 		// build the account and mode filter
 		Object[] selectedModes = getModes().getSelectedValues();
@@ -352,7 +352,7 @@ public class CustomFilterPanel extends JPanel {
 		int[] accountIndices = this.accountList.getSelectedIndices();
 		Account[] accounts = new Account[accountIndices.length];
 		for (int i = 0; i < accounts.length; i++) {
-			accounts[i] = data.getGlobalData().getAccount(accountIndices[i]);
+			accounts[i] = gData.getAccount(accountIndices[i]);
 			for (int j=0; j<accounts[i].getModesNumber(); j++) {
 				Mode mode = accounts[i].getMode(j);
 				if (Arrays.binarySearch(selectedModes,mode.getName())<0) {
@@ -362,17 +362,17 @@ public class CustomFilterPanel extends JPanel {
 				}
 			}
 		}
-		filter.setValidAccounts(accounts.length==data.getGlobalData().getAccountsNumber()?null:Arrays.asList(accounts));
+		filter.setValidAccounts(accounts.length==gData.getAccountsNumber()?null:Arrays.asList(accounts));
 		// set the mode filter
 		filter.setValidModes(all?null:modes);
 		// build the category filter
 		int[] categoryIndices = this.categoryList.getSelectedIndices();
-		if (categoryIndices.length==data.getGlobalData().getCategoriesNumber()) {
+		if (categoryIndices.length==gData.getCategoriesNumber()) {
 			filter.setValidCategories(null);
 		} else {
 			List<Category> categories = new ArrayList<Category>(categoryIndices.length);
 			for (int i = 0; i < categoryIndices.length; i++) {
-				categories.add(data.getGlobalData().getCategory(categoryIndices[i]));
+				categories.add(gData.getCategory(categoryIndices[i]));
 			}
 			filter.setValidCategories(categories);
 		}
@@ -478,7 +478,7 @@ public class CustomFilterPanel extends JPanel {
 		if (descriptionPanel == null) {
 			descriptionPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.DESCRIPTION_WORDING);
 			descriptionPanel.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			descriptionPanel.setTextMatcher(data.getFilter().getDescriptionMatcher());
+			descriptionPanel.setTextMatcher(filter.getDescriptionMatcher());
 		}
 		return descriptionPanel;
 	}
@@ -532,7 +532,7 @@ public class CustomFilterPanel extends JPanel {
 			checked = new JCheckBox();
 			checked.setText(LocalizationData.get("MainMenuBar.checked")); //$NON-NLS-1$
 			checked.setToolTipText(LocalizationData.get("CustomFilterPanel.checked.toolTip")); //$NON-NLS-1$
-			checked.setSelected(data.getFilter().isOk(Filter.CHECKED));
+			checked.setSelected(filter.isOk(Filter.CHECKED));
 			setStatementFilterEnabled();
 			checked.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -558,7 +558,7 @@ public class CustomFilterPanel extends JPanel {
 			notChecked = new JCheckBox();
 			notChecked.setText(LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$
 			notChecked.setToolTipText(LocalizationData.get("CustomFilterPanel.unchecked.toolTip")); //$NON-NLS-1$
-			notChecked.setSelected(data.getFilter().isOk(Filter.NOT_CHECKED));
+			notChecked.setSelected(filter.isOk(Filter.NOT_CHECKED));
 			notChecked.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -578,7 +578,7 @@ public class CustomFilterPanel extends JPanel {
 		if (valueDatePanel == null) {
 			valueDatePanel = new DateFilterPanel(DateFilterPanel.VALUE_DATE);
 			valueDatePanel.addPropertyChangeListener(DateFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			valueDatePanel.setDates(data.getFilter().getDateFrom(), data.getFilter().getDateTo());
+			valueDatePanel.setDates(filter.getDateFrom(), filter.getDateTo());
 		}
 		return valueDatePanel;
 	}
@@ -592,7 +592,7 @@ public class CustomFilterPanel extends JPanel {
 		if (jPanel11 == null) {
 			jPanel11 = new TextMatcherFilterPanel(TextMatcherFilterPanel.STATEMENT_WORDING);
 			if (getChecked().isSelected()) {
-				jPanel11.setTextMatcher(data.getFilter().getStatementMatcher());
+				jPanel11.setTextMatcher(filter.getStatementMatcher());
 				jPanel11.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
 				jPanel11.setCheckBoxesVisible(false);
 			}
@@ -694,7 +694,7 @@ public class CustomFilterPanel extends JPanel {
 		if (numberPanel == null) {
 			numberPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.NUMBER_WORDING);
 			numberPanel.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			numberPanel.setTextMatcher(data.getFilter().getNumberMatcher());
+			numberPanel.setTextMatcher(filter.getNumberMatcher());
 			numberPanel.setCheckBoxesVisible(false);
 		}
 		return numberPanel;
@@ -704,7 +704,7 @@ public class CustomFilterPanel extends JPanel {
 		if (receipts_expensesPanel == null) {
 			receipts_expensesPanel = new NatureFilterPanel();
 			receipts_expensesPanel.addPropertyChangeListener(inconsistencyListener);
-			receipts_expensesPanel.setSelected(data.getFilter().isOk(Filter.RECEIPTS), data.getFilter().isOk(Filter.EXPENSES));
+			receipts_expensesPanel.setSelected(filter.isOk(Filter.RECEIPTS), filter.isOk(Filter.EXPENSES));
 		}
 		return receipts_expensesPanel;
 	}
@@ -777,7 +777,7 @@ public class CustomFilterPanel extends JPanel {
 		if (commentPanel == null) {
 			commentPanel = new TextMatcherFilterPanel(TextMatcherFilterPanel.COMMENT_WORDING);
 			commentPanel.addPropertyChangeListener(TextMatcherFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			commentPanel.setTextMatcher(data.getFilter().getCommentMatcher());
+			commentPanel.setTextMatcher(filter.getCommentMatcher());
 		}
 		return commentPanel;
 	}

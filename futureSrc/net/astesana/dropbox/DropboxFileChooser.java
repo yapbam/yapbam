@@ -45,7 +45,7 @@ public abstract class DropboxFileChooser extends JPanel {
 	private JButton okButton;
 	private JButton cancelButton;
 	private JPanel centerPanel;
-	private JList<String> fileList;
+	private JList fileList;
 	private JPanel filePanel;
 	private JLabel lblNewLabel;
 	private TextWidget fileNameField;
@@ -55,7 +55,7 @@ public abstract class DropboxFileChooser extends JPanel {
 	private JPanel northPanel;
 	private JButton refreshButton;
 	private JProgressBar progressBar;
-	private DefaultListModel<String> filesModel;
+	private DefaultListModel filesModel;
 
 	/**
 	 * Create the panel.
@@ -212,10 +212,10 @@ public abstract class DropboxFileChooser extends JPanel {
 		}
 		return centerPanel;
 	}
-	private JList<String> getFileList() {
+	private JList getFileList() {
 		if (fileList == null) {
-			filesModel = new DefaultListModel<String>();
-			fileList = new JList<String>(filesModel);
+			filesModel = new DefaultListModel();
+			fileList = new JList(filesModel);
 			fileList.setBorder(new LineBorder(new Color(0, 0, 0)));
 		}
 		return fileList;

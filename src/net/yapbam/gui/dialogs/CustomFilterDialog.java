@@ -30,7 +30,7 @@ public class CustomFilterDialog extends AbstractDialog<FilteredData, Boolean> {
 
 	@Override
 	protected JPanel createCenterPane() {
-		filterPanel = new CustomFilterPanel(data);
+		filterPanel = new CustomFilterPanel(data.getFilter(), data.getGlobalData());
 		filterPanel.addPropertyChangeListener(CustomFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		return filterPanel;
 	}
