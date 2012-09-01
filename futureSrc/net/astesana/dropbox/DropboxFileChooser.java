@@ -2,20 +2,18 @@ package net.astesana.dropbox;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog.ModalityType;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.List;
@@ -33,15 +31,22 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
+import net.astesana.ajlib.utilities.NullUtils;
 
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
 public abstract class DropboxFileChooser extends JPanel {
+	public static final String SELECTED_FILE_PROPERTY = "selectedFile";
+	
 	private JPanel centerPanel;
 	private JList fileList;
 	private JPanel filePanel;
@@ -54,6 +59,9 @@ public abstract class DropboxFileChooser extends JPanel {
 	private JButton refreshButton;
 	private JProgressBar progressBar;
 	private DefaultListModel filesModel;
+	private JScrollPane scrollPane;
+	
+	private String currentSelection;
 
 	/**
 	 * Create the panel.
@@ -64,32 +72,6 @@ public abstract class DropboxFileChooser extends JPanel {
 		add(getCenterPanel(), BorderLayout.CENTER);
 	}
 	
-//	public void connect() {
-//		if (getDropboxAPI().getSession().getAccessTokenPair()==null) {
-//			final ConnectionPanel connectionPanel = new ConnectionPanel(getDropboxAPI().getSession());
-//			connectionPanel.addPropertyChangeListener(ConnectionPanel.STATE_PROPERTY, new PropertyChangeListener() {
-//				@Override
-//				public void propertyChange(PropertyChangeEvent evt) {
-//					ConnectionPanel.State state = (State) evt.getNewValue();
-//					if (state.equals(ConnectionPanel.State.FAILED)) {
-//						JOptionPane.showMessageDialog(DropboxFileChooser.this, "There was something wrong", "Error", JOptionPane.ERROR_MESSAGE);
-//					} else if (state.equals(ConnectionPanel.State.GRANTED)) {
-//						accessGranted();
-//						getNorthPanel().setVisible(true);
-//						remove(connectionPanel);
-//						add(getCenterPanel(), BorderLayout.CENTER);
-//						refresh();
-//					}
-//				}
-//			});
-//			getNorthPanel().setVisible(false);
-//			remove(getCenterPanel());
-//			add(connectionPanel, BorderLayout.CENTER);
-//		} else {
-//			refresh();
-//		}
-//	}
-
 	public void showOpenDialog(Component parent) {
 		Window owner = Utils.getOwnerWindow(parent);
 		if (getDropboxAPI().getSession().getAccessTokenPair()==null) {
@@ -97,7 +79,6 @@ public abstract class DropboxFileChooser extends JPanel {
 			connectionDialog.setVisible(true);
 			if (connectionDialog.getResult()==null) return;
 			accessGranted();
-System.out.println ("Cool, the access was granted !!!"); //TODO
 		}
 		DropboxFileChooserDialog dialog = new DropboxFileChooserDialog(owner, "DropboxChooser", this);
 		dialog.setVisible(true);
@@ -111,8 +92,8 @@ System.out.println ("Cool, the access was granted !!!"); //TODO
 	protected abstract DropboxAPI<? extends WebAuthSession> getDropboxAPI();
 	protected abstract void clearAccess();
 	
-	private void refresh() {
-		add(northPanel, BorderLayout.NORTH);
+	public void refresh() {
+//		add(northPanel, BorderLayout.NORTH);
 		new WorkInProgressFrame(Utils.getOwnerWindow(this), "Please wait", ModalityType.APPLICATION_MODAL, new Worker<DropboxInfo, Void>() {
 			@Override
 			protected DropboxInfo doInBackground() throws Exception {
@@ -166,24 +147,9 @@ System.out.println ("Cool, the access was granted !!!"); //TODO
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
-			GridBagLayout gbl_centerPanel = new GridBagLayout();
-			centerPanel.setLayout(gbl_centerPanel);
-			GridBagConstraints gbc_fileList = new GridBagConstraints();
-			gbc_fileList.weightx = 1.0;
-			gbc_fileList.fill = GridBagConstraints.BOTH;
-			gbc_fileList.gridwidth = 0;
-			gbc_fileList.weighty = 1.0;
-			gbc_fileList.insets = new Insets(5, 5, 5, 5);
-			gbc_fileList.gridx = 0;
-			gbc_fileList.gridy = 0;
-			centerPanel.add(getFileList(), gbc_fileList);
-			GridBagConstraints gbc_filePanel = new GridBagConstraints();
-			gbc_filePanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_filePanel.gridwidth = 0;
-			gbc_filePanel.insets = new Insets(0, 5, 5, 5);
-			gbc_filePanel.gridx = 0;
-			gbc_filePanel.gridy = 1;
-			centerPanel.add(getFilePanel(), gbc_filePanel);
+			centerPanel.setLayout(new BorderLayout(0, 0));
+			centerPanel.add(getScrollPane(), BorderLayout.CENTER);
+			centerPanel.add(getFilePanel(), BorderLayout.SOUTH);
 		}
 		return centerPanel;
 	}
@@ -192,6 +158,18 @@ System.out.println ("Cool, the access was granted !!!"); //TODO
 			filesModel = new DefaultListModel();
 			fileList = new JList(filesModel);
 			fileList.setBorder(new LineBorder(new Color(0, 0, 0)));
+			fileList.addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					if (!e.getValueIsAdjusting()) {
+						if (!NullUtils.areEquals((String) getFileList().getSelectedValue(), currentSelection)) {
+							Object old = currentSelection;
+							currentSelection = (String) getFileList().getSelectedValue();
+							firePropertyChange(SELECTED_FILE_PROPERTY, old, currentSelection);
+						}
+					}
+				}
+			});
 		}
 		return fileList;
 	}
@@ -219,6 +197,7 @@ System.out.println ("Cool, the access was granted !!!"); //TODO
 	private JLabel getLblAccount() {
 		if (lblAccount == null) {
 			lblAccount = new JLabel("Account :");
+			lblAccount.setPreferredSize(new Dimension(300, lblAccount.getPreferredSize().height));
 		}
 		return lblAccount;
 	}
@@ -229,7 +208,6 @@ System.out.println ("Cool, the access was granted !!!"); //TODO
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					clearAccess();
-//					connect();
 				}
 			});
 		}
@@ -316,5 +294,17 @@ System.out.println ("Cool, the access was granted !!!"); //TODO
 	 * @see #getDropboxAPI()
 	 */
 	protected void accessGranted() {
+	}
+	
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setViewportView(getFileList());
+		}
+		return scrollPane;
+	}
+
+	public String getSelectedFile() {
+		return currentSelection;
 	}
 }
