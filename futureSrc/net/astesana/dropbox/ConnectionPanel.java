@@ -1,53 +1,32 @@
 package net.astesana.dropbox;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import java.awt.GridBagLayout;
-import java.awt.Window;
 
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import java.net.URI;
 import java.text.MessageFormat;
-import javax.swing.JButton;
-
-import net.astesana.ajlib.swing.Utils;
-import net.yapbam.gui.Browser;
-
-import com.dropbox.client2.exception.DropboxUnlinkedException;
-import com.dropbox.client2.session.WebAuthSession;
-import com.dropbox.client2.session.WebAuthSession.WebAuthInfo;
 
 import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.text.JTextComponent;
 
 @SuppressWarnings("serial")
 class ConnectionPanel extends JPanel {
-	public enum State {
-		PENDING, GRANTED, REJECTED, FAILED
-	}
 	
 	public static final String STATE_PROPERTY = "State";
 	
-	private JTextComponent lblNewLabel;
-	private JButton connectButton;
-	private State state;
+	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
-	private JTextComponent textArea;
+	private JLabel textArea;
 
-	private WebAuthSession session;
+	private String okButtonName;
 	
 	/**
 	 * Create the panel.
 	 */
-	ConnectionPanel(WebAuthSession session) {
-		this.session = session;
-		this.state = State.PENDING;
-		
+	ConnectionPanel(String okButtonName) {
+		this.okButtonName = okButtonName;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
@@ -72,14 +51,6 @@ class ConnectionPanel extends JPanel {
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 1;
 		add(getLblNewLabel(), gbc_lblNewLabel);
-		GridBagConstraints gbc_connectButton = new GridBagConstraints();
-		gbc_connectButton.gridwidth = 0;
-		gbc_connectButton.weighty = 1.0;
-		gbc_connectButton.anchor = GridBagConstraints.NORTH;
-		gbc_connectButton.insets = new Insets(0, 0, 0, 5);
-		gbc_connectButton.gridx = 0;
-		gbc_connectButton.gridy = 2;
-		add(getConnectButton(), gbc_connectButton);
 	}
 
 	private JLabel getLblNewLabel_1() {
@@ -89,60 +60,26 @@ class ConnectionPanel extends JPanel {
 		return lblNewLabel_1;
 	}
 	
-	private JTextComponent getLblNewLabel() {
+	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			String message = "<html>Yapbam will only have access to a specific folder (/Applications/Yapbam), not your whole account.<br>" +
 					"<br>Click the \"<b>{0}</b>\" button when you are ready to link Yapbam to your account (requires an Internet connection)<br>" +
-					"Then, you will be redirected to a browser window where Dropbox will ask you to grant access to Yapbam.<br></html>";
-			message = MessageFormat.format(message, getConnectButtonName());
-			lblNewLabel = new MagicTextComponent();
+					"Then, you will be redirected to a browser window where Dropbox will ask you to grant access to Yapbam.<br>" +
+					"<br><b>After</b> you''ve granted access to Dropbox click the \"<b>{1}</b>\" button</html>";
+			message = MessageFormat.format(message, getConnectButtonName(), okButtonName);
+			lblNewLabel = new JLabel();
 			lblNewLabel.setText(message);
 		}
 		return lblNewLabel;
 	}
 
-	private String getConnectButtonName() {
-		return "Connect";
-	}
-	private JButton getConnectButton() {
-		if (connectButton == null) {
-			connectButton = new JButton(getConnectButtonName());
-			connectButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent event) {
-					try {
-						final WebAuthInfo info = session.getAuthInfo();
-						Window window = Utils.getOwnerWindow(connectButton);
-						Browser.show(new URI(info.url), window, "Unable to launch browser");
-						JOptionPane.showMessageDialog(window, "<html>Please close this message box <b>after<b> granted access to your Dropbox account to Yapbam", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
-						session.retrieveWebAccessToken(info.requestTokenPair);
-						setState(State.GRANTED);
-					} catch (DropboxUnlinkedException e) {
-						setState(State.REJECTED);
-					} catch (Throwable e) {
-						setState(State.FAILED);
-					}
-				}
-			});
-		}
-		return connectButton;
+	String getConnectButtonName() {
+		return "Start Connection";
 	}
 	
-	private void setState(State state) {
-		if (!state.equals(this.state)) {
-			State old = this.state;
-			this.state = state;
-			firePropertyChange(STATE_PROPERTY, old, this.state);
-		}
-	}
-	
-	public State getState() {
-		return this.state;
-	}
-
-	private JTextComponent getTextArea() {
+	private JLabel getTextArea() {
 		if (textArea == null) {
-			textArea = new MagicTextComponent(); 
-			textArea.setText("<html>Storing data to <b>Dropbox</b> requires that you authorize Yapbam to connect to your Yapbam account.</html>");
+			textArea = new JLabel("<html>Storing data to <b>Dropbox</b> requires that you authorize Yapbam to connect to your Yapbam account.</html>"); 
 		}
 		return textArea;
 	}

@@ -16,10 +16,10 @@ public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 	
 	public ErrorDialog(Window parent, Throwable throwable) {
 		super(parent, LocalizationData.get("ErrorManager.title"), throwable); //$NON-NLS-1$
-		this.cancelButton.setText(LocalizationData.get("GenericButton.no")); //$NON-NLS-1$
-		this.cancelButton.setToolTipText(LocalizationData.get("ErrorManager.report.dontSend.tootip")); //$NON-NLS-1$
-		this.okButton.setText(LocalizationData.get("GenericButton.yes")); //$NON-NLS-1$
-		this.okButton.setToolTipText(LocalizationData.get("ErrorManager.report.send.tootip")); //$NON-NLS-1$
+		getCancelButton().setText(LocalizationData.get("GenericButton.no")); //$NON-NLS-1$
+		getCancelButton().setToolTipText(LocalizationData.get("ErrorManager.report.dontSend.tootip")); //$NON-NLS-1$
+		getOkButton().setText(LocalizationData.get("GenericButton.yes")); //$NON-NLS-1$
+		getOkButton().setToolTipText(LocalizationData.get("ErrorManager.report.send.tootip")); //$NON-NLS-1$
 		this.prefcanBeSaved = Preferences.canSave();
 		panel.setDontAskMeVisible(this.prefcanBeSaved);
 		this.pack();

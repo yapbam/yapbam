@@ -12,9 +12,9 @@ public class DefaultHTMLInfoDialog extends AbstractDialog<String[], Void> {
 
 	public DefaultHTMLInfoDialog(Window owner, String title, String header, String message) {
 		super(owner, title, new String[]{header, message});
-		this.cancelButton.setVisible(false);
-		this.okButton.setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
-		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
+		getCancelButton().setVisible(false);
+		getOkButton().setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
+		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
 	}
 
 	@Override

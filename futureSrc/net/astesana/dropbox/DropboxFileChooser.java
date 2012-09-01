@@ -6,8 +6,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dialog.ModalityType;
 import java.awt.GridBagLayout;
+import java.awt.Window;
+
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -30,8 +33,6 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.astesana.ajlib.utilities.LocalizationData;
-import net.astesana.dropbox.ConnectionPanel.State;
 
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -41,9 +42,6 @@ import javax.swing.JProgressBar;
 
 @SuppressWarnings("serial")
 public abstract class DropboxFileChooser extends JPanel {
-	private JPanel southPanel;
-	private JButton okButton;
-	private JButton cancelButton;
 	private JPanel centerPanel;
 	private JList fileList;
 	private JPanel filePanel;
@@ -63,44 +61,55 @@ public abstract class DropboxFileChooser extends JPanel {
 	public DropboxFileChooser() {
 		setLayout(new BorderLayout(0, 0));
 		add(getNorthPanel(), BorderLayout.NORTH);
-		add(getSouthPanel(), BorderLayout.SOUTH);
 		add(getCenterPanel(), BorderLayout.CENTER);
 	}
 	
-	public void connect() {
-		if (getDropboxAPI().getSession().getAccessTokenPair()==null) {
-			final ConnectionPanel connectionPanel = new ConnectionPanel(getDropboxAPI().getSession());
-			connectionPanel.addPropertyChangeListener(ConnectionPanel.STATE_PROPERTY, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					ConnectionPanel.State state = (State) evt.getNewValue();
-					if (state.equals(ConnectionPanel.State.FAILED)) {
-						JOptionPane.showMessageDialog(DropboxFileChooser.this, "There was something wrong", "Error", JOptionPane.ERROR_MESSAGE);
-					} else if (state.equals(ConnectionPanel.State.GRANTED)) {
-						accessGranted();
-						getSouthPanel().setVisible(true);
-						getNorthPanel().setVisible(true);
-						remove(connectionPanel);
-						add(getCenterPanel(), BorderLayout.CENTER);
-						refresh();
-					}
-				}
-			});
-			getNorthPanel().setVisible(false);
-			getSouthPanel().setVisible(false);
-			remove(getCenterPanel());
-			add(connectionPanel, BorderLayout.CENTER);
-		} else {
-			refresh();
-		}
-	}
+//	public void connect() {
+//		if (getDropboxAPI().getSession().getAccessTokenPair()==null) {
+//			final ConnectionPanel connectionPanel = new ConnectionPanel(getDropboxAPI().getSession());
+//			connectionPanel.addPropertyChangeListener(ConnectionPanel.STATE_PROPERTY, new PropertyChangeListener() {
+//				@Override
+//				public void propertyChange(PropertyChangeEvent evt) {
+//					ConnectionPanel.State state = (State) evt.getNewValue();
+//					if (state.equals(ConnectionPanel.State.FAILED)) {
+//						JOptionPane.showMessageDialog(DropboxFileChooser.this, "There was something wrong", "Error", JOptionPane.ERROR_MESSAGE);
+//					} else if (state.equals(ConnectionPanel.State.GRANTED)) {
+//						accessGranted();
+//						getNorthPanel().setVisible(true);
+//						remove(connectionPanel);
+//						add(getCenterPanel(), BorderLayout.CENTER);
+//						refresh();
+//					}
+//				}
+//			});
+//			getNorthPanel().setVisible(false);
+//			remove(getCenterPanel());
+//			add(connectionPanel, BorderLayout.CENTER);
+//		} else {
+//			refresh();
+//		}
+//	}
 
+	public void showOpenDialog(Component parent) {
+		Window owner = Utils.getOwnerWindow(parent);
+		if (getDropboxAPI().getSession().getAccessTokenPair()==null) {
+			ConnectionDialog connectionDialog = new ConnectionDialog(owner, "Be cool, connect to Dropbox", getDropboxAPI().getSession());
+			connectionDialog.setVisible(true);
+			if (connectionDialog.getResult()==null) return;
+			accessGranted();
+System.out.println ("Cool, the access was granted !!!"); //TODO
+		}
+		DropboxFileChooserDialog dialog = new DropboxFileChooserDialog(owner, "DropboxChooser", this);
+		dialog.setVisible(true);
+	}
+	
 	private static class DropboxInfo {
 		Account account;
 		List<Entry> files;
 	}
 	
 	protected abstract DropboxAPI<? extends WebAuthSession> getDropboxAPI();
+	protected abstract void clearAccess();
 	
 	private void refresh() {
 		add(northPanel, BorderLayout.NORTH);
@@ -153,40 +162,6 @@ public abstract class DropboxFileChooser extends JPanel {
 			}
 			
 		}).setVisible(true);
-	}
-	
-	private JPanel getSouthPanel() {
-		if (southPanel == null) {
-			southPanel = new JPanel();
-			GridBagLayout gbl_southPanel = new GridBagLayout();
-			southPanel.setLayout(gbl_southPanel);
-			GridBagConstraints gbc_okButton = new GridBagConstraints();
-			gbc_okButton.anchor = GridBagConstraints.EAST;
-			gbc_okButton.insets = new Insets(0, 0, 5, 5);
-			gbc_okButton.weightx = 1.0;
-			gbc_okButton.gridx = 0;
-			gbc_okButton.gridy = 0;
-			southPanel.add(getOkButton(), gbc_okButton);
-			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
-			gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
-			gbc_cancelButton.gridx = 1;
-			gbc_cancelButton.gridy = 0;
-			southPanel.add(getCancelButton(), gbc_cancelButton);
-		}
-		return southPanel;
-	}
-	private JButton getOkButton() {
-		if (okButton == null) {
-			okButton = new JButton(LocalizationData.DEFAULT.getString("GenericButton.ok"));
-			okButton.setEnabled(false);
-		}
-		return okButton;
-	}
-	private JButton getCancelButton() {
-		if (cancelButton == null) {
-			cancelButton = new JButton(LocalizationData.DEFAULT.getString("GenericButton.cancel"));
-		}
-		return cancelButton;
 	}
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {
@@ -250,6 +225,13 @@ public abstract class DropboxFileChooser extends JPanel {
 	private JButton getDisconnectButton() {
 		if (disconnectButton == null) {
 			disconnectButton = new JButton("Disconnect", new ImageIcon(getClass().getResource("/net/astesana/dropbox/brokenLink.png")));
+			disconnectButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					clearAccess();
+//					connect();
+				}
+			});
 		}
 		return disconnectButton;
 	}

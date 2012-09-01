@@ -505,7 +505,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		super.createButtonsPane(); // This line initialize the ok and cancel buttons
 		JPanel result = new JPanel();
 		super.createButtonsPane(); // This line initialize the ok and cancel buttons
-		result.add(okButton);
+		result.add(getOkButton());
 		nextButton = new JButton(LocalizationData.get("TransactionDialog.next")); //$NON-NLS-1$
 		nextButton.setToolTipText(LocalizationData.get("TransactionDialog.next.tooltip")); //$NON-NLS-1$
 		nextButton.setVisible(false);
@@ -518,7 +518,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			}
 		});
 		result.add(nextButton);
-		result.add(cancelButton);
+		result.add(getCancelButton());
 		return result;
 	}
 
@@ -530,6 +530,6 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	@Override
 	public void updateOkButtonEnabled() {
 		super.updateOkButtonEnabled();
-		nextButton.setEnabled(okButton.isEnabled());
+		nextButton.setEnabled(getOkButton().isEnabled());
 	}
 }

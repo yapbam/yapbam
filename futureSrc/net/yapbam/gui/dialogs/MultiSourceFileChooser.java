@@ -46,7 +46,7 @@ public class MultiSourceFileChooser extends JTabbedPane {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if(getSelectedComponent() instanceof DropboxFileChooser) {
-					((DropboxFileChooser)getSelectedComponent()).connect();
+//					((DropboxFileChooser)getSelectedComponent()).connect();
 				}
 			}
 		});
