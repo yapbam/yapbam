@@ -17,9 +17,9 @@ public class WelcomeDialog extends AbstractDialog<GlobalData, Void> {
 		super(owner, "Welcome to Yapbam", data);
 //		Image image = Toolkit.getDefaultToolkit().getImage(WelcomePlugin.class.getResource("background.png"));
 //		this.setContentPane(JImage.wrapInBackgroundImage((JComponent)this.getContentPane(), image));
-		this.okButton.setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
-		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
-		this.cancelButton.setVisible(false);
+		getOkButton().setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
+		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
+		getCancelButton().setVisible(false);
 		this.setResizable(true);
 		this.pack();
 		this.setMinimumSize(getSize());

@@ -35,9 +35,9 @@ public abstract class LongTaskDialog<T,V> extends AbstractDialog<T,V> {
 	public LongTaskDialog(Window owner, String title, T data) {
 		super(owner, title, data);
 		this.delay = DEFAULT_DELAY;
-		this.okButton.setVisible(false);
-		this.cancelButton.setText(LocalizationData.get("GenericButton.cancel")); //$NON-NLS-1$
-		this.cancelButton.addActionListener(new ActionListener() {
+		getOkButton().setVisible(false);
+		getCancelButton().setText(LocalizationData.get("GenericButton.cancel")); //$NON-NLS-1$
+		getCancelButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				worker.cancel(true);

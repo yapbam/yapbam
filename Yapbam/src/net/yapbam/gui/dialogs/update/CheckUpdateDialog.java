@@ -46,7 +46,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
 		this.auto = auto;
 		if (auto) setDelay(Long.MAX_VALUE);
-		this.cancelButton.setToolTipText(LocalizationData.get("MainMenu.CheckUpdate.Dialog.cancel.tooltip")); //$NON-NLS-1$
+		getCancelButton().setToolTipText(LocalizationData.get("MainMenu.CheckUpdate.Dialog.cancel.tooltip")); //$NON-NLS-1$
 	}
 	
 	@Override

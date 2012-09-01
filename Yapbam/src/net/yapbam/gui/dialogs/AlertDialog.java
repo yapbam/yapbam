@@ -16,7 +16,7 @@ public class AlertDialog extends AbstractDialog<String, Boolean> {
 	
 	public AlertDialog(Window parent, String title, String message) {
 		super(parent, title, message);
-		this.okButton.setText(LocalizationData.get("GenericButton.continue")); //$NON-NLS-1$
+		getOkButton().setText(LocalizationData.get("GenericButton.continue")); //$NON-NLS-1$
 		this.pack();
 	}
 

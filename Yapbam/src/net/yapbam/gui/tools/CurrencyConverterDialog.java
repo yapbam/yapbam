@@ -13,9 +13,9 @@ public class CurrencyConverterDialog extends AbstractDialog<CurrencyConverter, V
 
 	public CurrencyConverterDialog(Window owner, String title, CurrencyConverter converter) {
 		super(owner, title, converter);
-		this.cancelButton.setVisible(false);
-		this.okButton.setText(LocalizationData.get("GenericButton.close"));
-		this.okButton.setToolTipText(LocalizationData.get("GenericButton.close.ToolTip"));
+		getCancelButton().setVisible(false);
+		getOkButton().setText(LocalizationData.get("GenericButton.close"));
+		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip"));
 	}
 
 	@Override
