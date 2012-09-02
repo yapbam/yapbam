@@ -1,9 +1,12 @@
 package net.astesana.dropbox;
 
-import javax.swing.DefaultListModel;
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog.ModalityType;
@@ -20,26 +23,26 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JList;
-
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Account;
 import com.dropbox.client2.DropboxAPI.Entry;
+import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.astesana.ajlib.utilities.NullUtils;
+import net.yapbam.gui.util.JTableListener;
 
-import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
@@ -48,7 +51,7 @@ public abstract class DropboxFileChooser extends JPanel {
 	public static final String SELECTED_FILE_PROPERTY = "selectedFile";
 	
 	private JPanel centerPanel;
-	private JList fileList;
+	private JTable fileList;
 	private JPanel filePanel;
 	private JLabel lblNewLabel;
 	private TextWidget fileNameField;
@@ -58,10 +61,10 @@ public abstract class DropboxFileChooser extends JPanel {
 	private JPanel northPanel;
 	private JButton refreshButton;
 	private JProgressBar progressBar;
-	private DefaultListModel filesModel;
+	private FilesTableModel filesModel;
 	private JScrollPane scrollPane;
 	
-	private String currentSelection;
+	private DropboxInfo info;
 
 	/**
 	 * Create the panel.
@@ -72,18 +75,28 @@ public abstract class DropboxFileChooser extends JPanel {
 		add(getCenterPanel(), BorderLayout.CENTER);
 	}
 	
-	public void showOpenDialog(Component parent) {
+	public FileId showOpenDialog(Component parent) {
+		return showDialog(parent, false);
+	}
+	
+	public FileId showSaveDialog(Component parent) {
+		return showDialog(parent, true);
+	}
+	
+	public FileId showDialog(Component parent, boolean save) {
 		Window owner = Utils.getOwnerWindow(parent);
 		if (getDropboxAPI().getSession().getAccessTokenPair()==null) {
 			ConnectionDialog connectionDialog = new ConnectionDialog(owner, "Be cool, connect to Dropbox", getDropboxAPI().getSession());
 			connectionDialog.setVisible(true);
-			if (connectionDialog.getResult()==null) return;
-			accessGranted();
+			if (!accessGranted(connectionDialog.getResult())) return null;
 		}
+		this.getFilePanel().setVisible(save);
 		DropboxFileChooserDialog dialog = new DropboxFileChooserDialog(owner, "DropboxChooser", this);
 		dialog.setVisible(true);
+		return dialog.getResult();
 	}
-	
+
+
 	private static class DropboxInfo {
 		Account account;
 		List<Entry> files;
@@ -93,7 +106,6 @@ public abstract class DropboxFileChooser extends JPanel {
 	protected abstract void clearAccess();
 	
 	public void refresh() {
-//		add(northPanel, BorderLayout.NORTH);
 		new WorkInProgressFrame(Utils.getOwnerWindow(this), "Please wait", ModalityType.APPLICATION_MODAL, new Worker<DropboxInfo, Void>() {
 			@Override
 			protected DropboxInfo doInBackground() throws Exception {
@@ -110,10 +122,10 @@ public abstract class DropboxFileChooser extends JPanel {
 			@Override
 			protected void done() {
 				try {
-					DropboxInfo info = get();
+					info = get();
 					getLblAccount().setText(MessageFormat.format("Account: {0}", info.account.displayName));
 					Entry[] entries = info.files.toArray(new Entry[info.files.size()]);
-					fillList(entries);
+					fillTable(entries);
 					long percentUsed = 100*(info.account.quotaNormal+info.account.quotaShared) / info.account.quota; 
 					getProgressBar().setValue((int)percentUsed);
 					double remaining = info.account.quota-info.account.quotaNormal-info.account.quotaShared;
@@ -153,19 +165,23 @@ public abstract class DropboxFileChooser extends JPanel {
 		}
 		return centerPanel;
 	}
-	private JList getFileList() {
+	private JTable getFileList() {
 		if (fileList == null) {
-			filesModel = new DefaultListModel();
-			fileList = new JList(filesModel);
-			fileList.setBorder(new LineBorder(new Color(0, 0, 0)));
-			fileList.addListSelectionListener(new ListSelectionListener() {
+			filesModel = new FilesTableModel();
+			fileList = new JTable(filesModel);
+			fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			new JTableListener(getFileList(), null, new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.out.println ("Double click detected"); //TODO
+				}
+			});
+			fileList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					if (!e.getValueIsAdjusting()) {
-						if (!NullUtils.areEquals((String) getFileList().getSelectedValue(), currentSelection)) {
-							Object old = currentSelection;
-							currentSelection = (String) getFileList().getSelectedValue();
-							firePropertyChange(SELECTED_FILE_PROPERTY, old, currentSelection);
+						if (getFileList().getSelectedRow()!=-1) {
+							getFileNameField().setText((String) filesModel.getValueAt(getFileList().getSelectedRow(), 0));
 						}
 					}
 				}
@@ -191,6 +207,25 @@ public abstract class DropboxFileChooser extends JPanel {
 	private TextWidget getFileNameField() {
 		if (fileNameField == null) {
 			fileNameField = new TextWidget();
+			fileNameField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {	
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					int index = -1;
+					for (int rowIndex=0;rowIndex<filesModel.getRowCount();rowIndex++) {
+						if (filesModel.getValueAt(rowIndex, 0).equals(evt.getNewValue())) {
+							index = rowIndex;
+							break;
+						}
+					}
+					ListSelectionModel selectionModel = getFileList().getSelectionModel();
+					if (index<0) {
+						selectionModel.clearSelection();
+					} else {
+						selectionModel.setSelectionInterval(index, index);
+					}
+					firePropertyChange(SELECTED_FILE_PROPERTY, evt.getOldValue(), evt.getNewValue());
+				}
+			});
 		}
 		return fileNameField;
 	}
@@ -266,11 +301,11 @@ public abstract class DropboxFileChooser extends JPanel {
 		return progressBar;
 	}
 
-	private void fillList(Entry[] entries) {
+	private void fillTable(Entry[] entries) {
 		filesModel.clear();
 		for (Entry entry : entries) {
 			String name = filter(entry);
-			if (name!=null) filesModel.addElement(name);
+			if (name!=null) filesModel.add(entry);
 		}
 	}
 
@@ -289,22 +324,31 @@ public abstract class DropboxFileChooser extends JPanel {
 	}
 
 	/** This method is called after the user granted access to Dropbox.
-	 * <br>By default, this method does nothing, but this is the place where you would store the access key in a key store.
+	 * <br>By default, this method does nothing except returns true if the access token pair is not null.
+	 * <br>By overriding this method, you could store the access keys in a key store. Be sure to return
+	 * true if the access was granted.
 	 * <br>The session could be retrieve by using getDropboxAPI().getSession().
+	 * @param accessTokenPair The access token pair or null 
+	 * @return true if the access is granted.
 	 * @see #getDropboxAPI()
 	 */
-	protected void accessGranted() {
+	protected boolean accessGranted(AccessTokenPair accessTokenPair) {
+		return accessTokenPair!=null;
 	}
 	
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setViewportView(getFileList());
+			// Do not diplay column names
+			getFileList().setTableHeader(null);
+			scrollPane.setColumnHeaderView(null);
 		}
 		return scrollPane;
 	}
 
-	public String getSelectedFile() {
-		return currentSelection;
+	public FileId getSelectedFile() {
+		String name = getFileNameField().getText();
+		return name.length()==0?null:new FileId(getDropboxAPI().getSession().getAccessTokenPair(), info.account.displayName, name);
 	}
 }

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class DropboxFileChooserDialog extends AbstractDialog<DropboxFileChooser, String> {
+public class DropboxFileChooserDialog extends AbstractDialog<DropboxFileChooser, FileId> {
 
 	public DropboxFileChooserDialog(Window owner, String title, DropboxFileChooser panel) {
 		super(owner, title, panel);
@@ -27,7 +27,7 @@ public class DropboxFileChooserDialog extends AbstractDialog<DropboxFileChooser,
 	}
 
 	@Override
-	protected String buildResult() {
+	protected FileId buildResult() {
 		return this.data.getSelectedFile();
 	}
 
