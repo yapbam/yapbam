@@ -15,12 +15,13 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser {
 	private DropboxAPI<? extends WebAuthSession> dropboxAPI;
 
 	/**
-	 * Create the panel.
+	 * Creates the panel.
 	 */
 	public YapbamDropboxFileChooser() {
 		super();
 	}
 
+	@Override
 	protected String filter(Entry entry) {
 		String fileName = entry.fileName();
 		if (fileName.endsWith(".zip")) {
@@ -30,6 +31,7 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser {
 		}
 	}
 	
+	@Override
 	protected DropboxAPI<? extends WebAuthSession> getDropboxAPI() {
 		if (dropboxAPI==null) {
 			YapbamDropboxSession session = new YapbamDropboxSession();
@@ -43,10 +45,13 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser {
 		return dropboxAPI;
 	}
 
-	protected void accessGranted() {
-		AccessTokenPair pair = getDropboxAPI().getSession().getAccessTokenPair();
-		Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_KEY, pair.key);
-		Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_SECRET, pair.secret);
+	@Override
+	protected boolean accessGranted(AccessTokenPair pair) {
+		if (pair!=null) {
+			Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_KEY, pair.key);
+			Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_SECRET, pair.secret);
+		}
+		return super.accessGranted(pair);
 	}
 
 	@Override

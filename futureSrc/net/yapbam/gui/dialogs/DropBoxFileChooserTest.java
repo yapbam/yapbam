@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.framework.Application;
+import net.astesana.dropbox.FileId;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dropbox.YapbamDropboxFileChooser;
 
@@ -22,7 +23,11 @@ public class DropBoxFileChooserTest extends Application{
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new YapbamDropboxFileChooser().showOpenDialog(button);
+				FileId id = new YapbamDropboxFileChooser().showSaveDialog(button);
+				if (id!=null) {
+					System.out.println (id.toString());
+					System.out.println (id.getURI());
+				}
 			}
 		});
 		panel.add(button);
