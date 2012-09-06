@@ -58,5 +58,6 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser {
 	protected void clearAccess() {
 		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_KEY);
 		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_SECRET);
+		dropboxAPI = null;
 	}
 }

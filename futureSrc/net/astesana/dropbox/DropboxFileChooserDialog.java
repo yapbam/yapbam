@@ -36,10 +36,19 @@ public class DropboxFileChooserDialog extends AbstractDialog<DropboxFileChooser,
 		return this.data.getSelectedFile()==null?"Please select a file":null;
 	}
 
-	public void setVisible(boolean visible) {
-		if (!isVisible() && visible) {
-			this.data.refresh();
-		}
-		super.setVisible(visible);
+	/* (non-Javadoc)
+	 * @see net.astesana.ajlib.swing.dialog.AbstractDialog#confirm()
+	 */
+	@Override
+	protected void confirm() {
+		super.confirm();
+	}
+
+	/* (non-Javadoc)
+	 * @see net.astesana.ajlib.swing.dialog.AbstractDialog#cancel()
+	 */
+	@Override
+	protected void cancel() {
+		super.cancel();
 	}
 }

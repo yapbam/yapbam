@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
@@ -23,6 +24,7 @@ import net.yapbam.gui.Browser;
 public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessTokenPair> {
 	private boolean connectionHasStarted;
 	private WebAuthInfo info;
+	private AccessTokenPair pair;
 
 	public ConnectionDialog(Window owner, String title, WebAuthSession session) {
 		super(owner, title, session);
@@ -36,18 +38,25 @@ public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessToken
 
 	@Override
 	protected AccessTokenPair buildResult() {
+		return pair;
+	}
+	
+	/* (non-Javadoc)
+	 * @see net.astesana.ajlib.swing.dialog.AbstractDialog#confirm()
+	 */
+	@Override
+	protected void confirm() {
 		try {
 			data.retrieveWebAccessToken(info.requestTokenPair);
-			return data.getAccessTokenPair();
+			pair = data.getAccessTokenPair();
 		} catch (DropboxUnlinkedException e) {
 			// The user didn't grant the access to Dropbox
-			e.printStackTrace();
-			//TODO
-//			setState(State.REJECTED);
-		} catch (Throwable e) {
-			JOptionPane.showMessageDialog(this, "There was something wrong", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "It seems you didn't grant access to Yapbam, please retry", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		} catch (DropboxException e) {
+			JOptionPane.showMessageDialog(this, "An error occurred", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		return null;
+		super.confirm();
 	}
 
 	@Override
