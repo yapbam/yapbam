@@ -31,6 +31,7 @@ public class GlobalData extends DefaultListenable {
 	private List<Transaction> transactions;
 	private URI uri;
 	private String password;
+	private char subCategoryDelimiter;
 
 	private boolean somethingChanged;
 	private boolean eventsPending;
@@ -331,7 +332,7 @@ public class GlobalData extends DefaultListenable {
 		return this.categories.size();
 	}
 	
-	/** Get a category by its index.
+	/** Gets a category by its index.
 	 * @param index category index
 	 * @return the category (note : categories are always sorted by their name) 
 	 */
@@ -348,7 +349,7 @@ public class GlobalData extends DefaultListenable {
 			return this.categories.get(index);
 		}
 	}
-
+	
 	public int indexOf(Category category) {
 		return Collections.binarySearch(categories, category);
 	}
@@ -361,9 +362,18 @@ public class GlobalData extends DefaultListenable {
 		setChanged();
 	}
 
+	/** Gets the character used to separate the category from sub category in category names
+	 * <br>For instance in "Leisures/Sports", '/' means Sports is a subcategory of "Leisures".
+	 * @return a char
+	 */
+	public char getSubCategoryDelimiter() {
+		return this.subCategoryDelimiter;
+	}
+
 	public void clear() {
 		this.categories = new ArrayList<Category>();
 		this.categories.add(Category.UNDEFINED);
+		this.subCategoryDelimiter = '.';
 		this.accounts = new ArrayList<Account>();
 		this.periodicals = new ArrayList<PeriodicalTransaction>();
 		this.transactions = new ArrayList<Transaction>();
