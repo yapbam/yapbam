@@ -20,7 +20,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 class GlobalDataHandler extends DefaultHandler {
 	private static final String PARSING_WAS_CANCELLED = "Parsing was cancelled"; //$NON-NLS-1$
-
 	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
 	
 	private GlobalData data;
@@ -68,6 +67,10 @@ class GlobalDataHandler extends DefaultHandler {
 					// If the file has an old formar, initialize the current progress to a value which mean that progress should stay unchanged (as max was not set)
 					this.currentProgress = -1;
 				}
+			}
+			String attr = attributes.getValue(Serializer.SUBCATEGORY_SEPARATOR_ATTRIBUTE);
+			if (attr!=null) {
+				data.setSubCategorySeparator(attr.charAt(0));
 			}
 		} else if (qName.equals(Serializer.ACCOUNT_TAG)) {
 			String id = attributes.getValue(Serializer.ID_ATTRIBUTE);

@@ -59,6 +59,7 @@ public class Serializer {
 		PASSWORD_ENCODED_FILE_HEADER = bytes;
 	}
 
+	static final String SUBCATEGORY_SEPARATOR_ATTRIBUTE = "subCategorySeparator"; //$NON-NLS-1$
 	static final String NB_TRANSACTIONS_ATTRIBUTE = "nbTransactions"; //$NON-NLS-1$
 	static final String STATEMENT_ATTRIBUTE = "statement"; //$NON-NLS-1$
 	static final String VALUE_DATE_ATTRIBUTE = "valueDate"; //$NON-NLS-1$
@@ -330,6 +331,7 @@ public class Serializer {
 			atts.clear();
 			atts.addAttribute(EMPTY, EMPTY, "nbAccounts", CDATA, Integer.toString(data.getAccountsNumber())); //$NON-NLS-1$
 			atts.addAttribute(EMPTY, EMPTY, "nbCategories", CDATA, Integer.toString(data.getCategoriesNumber())); //$NON-NLS-1$
+			atts.addAttribute(EMPTY, EMPTY, SUBCATEGORY_SEPARATOR_ATTRIBUTE, CDATA, Character.toString(data.getSubCategorySeparator())); //$NON-NLS-1$
 			atts.addAttribute(EMPTY, EMPTY, "nbPeriodicalTransactions", CDATA, Integer.toString(data.getPeriodicalTransactionsNumber())); //$NON-NLS-1$
 			atts.addAttribute(EMPTY, EMPTY, NB_TRANSACTIONS_ATTRIBUTE, CDATA, Integer.toString(data.getTransactionsNumber()));
 			hd.startElement(EMPTY,EMPTY,GLOBAL_DATA_TAG,atts);
