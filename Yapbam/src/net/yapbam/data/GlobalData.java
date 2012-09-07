@@ -31,7 +31,7 @@ public class GlobalData extends DefaultListenable {
 	private List<Transaction> transactions;
 	private URI uri;
 	private String password;
-	private char subCategoryDelimiter;
+	private char subCategorySeparator;
 
 	private boolean somethingChanged;
 	private boolean eventsPending;
@@ -367,7 +367,7 @@ public class GlobalData extends DefaultListenable {
 	 * @return a char
 	 */
 	public char getSubCategorySeparator() {
-		return this.subCategoryDelimiter;
+		return this.subCategorySeparator;
 	}
 
 	/** Sets the character used to separate the category from sub category in category names
@@ -375,10 +375,12 @@ public class GlobalData extends DefaultListenable {
 	 * @param separator The separator between subcategories.
 	 */
 	public void setSubCategorySeparator(char separator) {
-		char old = this.subCategoryDelimiter;
-		this.subCategoryDelimiter = separator;
-		fireEvent(new SubCategorySeparatorChangedEvent(this, old, separator));
-		setChanged();
+		if (separator!=this.subCategorySeparator) {
+			char old = this.subCategorySeparator;
+			this.subCategorySeparator = separator;
+			fireEvent(new SubCategorySeparatorChangedEvent(this, old, separator));
+			setChanged();
+		}
 	}
 
 	/** Clears all data in this instance.
@@ -386,7 +388,7 @@ public class GlobalData extends DefaultListenable {
 	public void clear() {
 		this.categories = new ArrayList<Category>();
 		this.categories.add(Category.UNDEFINED);
-		this.subCategoryDelimiter = '.';
+		this.subCategorySeparator = '.';
 		this.accounts = new ArrayList<Account>();
 		this.periodicals = new ArrayList<PeriodicalTransaction>();
 		this.transactions = new ArrayList<Transaction>();
@@ -748,6 +750,7 @@ public class GlobalData extends DefaultListenable {
 	public void copy(GlobalData src) {
 		accounts = src.accounts;
 		categories = src.categories;
+		subCategorySeparator = src.subCategorySeparator;
 		periodicals = src.periodicals;
 		transactions = src.transactions;
 		password = src.password;

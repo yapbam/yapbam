@@ -122,6 +122,7 @@ public class SeparatorPanel extends JPanel {
 	 * @return javax.swing.JTextField	
 	 */
 	private JTextField getCustomSeparatorValue() {
+		//TODO Use CharWidget
 		if (customSeparatorValue == null) {
 			customSeparatorValue = new TextWidget();
 			customSeparatorValue.setColumns(1);

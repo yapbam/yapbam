@@ -3,8 +3,11 @@ package net.yapbam.gui.administration;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -16,17 +19,23 @@ import net.yapbam.data.event.CategoryRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.SubCategorySeparatorChangedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryDialog;
+import net.yapbam.gui.widget.CharWidget;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.Object;
 import java.text.MessageFormat;
 
 public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel { //TODO Add split functions
 	private static final long serialVersionUID = 1L;
+	private CharWidget subcategorySeparator;
 
 	public CategoryListPanel(GlobalData data) {
 		super(data);
@@ -51,7 +60,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@SuppressWarnings("serial")
 	private final class CategoryTableModel extends AbstractTableModel implements DataListener {
 		CategoryTableModel() {
-			((GlobalData)data).addListener(this);
+			data.addListener(this);
 		}
 		
 		@Override
@@ -208,5 +217,40 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@Override
 	protected int getBottomInset() {
 		return 5;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.administration.AbstractListAdministrationPanel#getRightComponent()
+	 */
+	@Override
+	protected Component getRightComponent() {
+		JPanel result = new JPanel();
+		result.add(new JLabel("Subcategory separator: "));
+		result.add(getSeparator());
+		return result;
+	}
+	
+	private JTextField getSeparator() {
+		if (subcategorySeparator == null) {
+			subcategorySeparator = new CharWidget(data.getSubCategorySeparator());
+			subcategorySeparator.setDefaultValue('.');
+			data.addListener(new DataListener() {
+				@Override
+				public void processEvent(DataEvent event) {
+					if (event instanceof SubCategorySeparatorChangedEvent || event instanceof EverythingChangedEvent) {
+						subcategorySeparator.setChar(data.getSubCategorySeparator());
+					}
+				}
+			});
+			subcategorySeparator.addPropertyChangeListener(CharWidget.CONTENT_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					data.setSubCategorySeparator((Character) evt.getNewValue());
+				}
+			});
+			subcategorySeparator.setToolTipText("TODO"); //TODO
+		}
+		return subcategorySeparator;
 	}
 }
