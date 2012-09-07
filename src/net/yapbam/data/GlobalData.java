@@ -366,10 +366,23 @@ public class GlobalData extends DefaultListenable {
 	 * <br>For instance in "Leisures/Sports", '/' means Sports is a subcategory of "Leisures".
 	 * @return a char
 	 */
-	public char getSubCategoryDelimiter() {
+	public char getSubCategorySeparator() {
 		return this.subCategoryDelimiter;
 	}
 
+	/** Sets the character used to separate the category from sub category in category names
+	 * <br>For instance in "Leisures/Sports", '/' means Sports is a subcategory of "Leisures".
+	 * @param separator The separator between subcategories.
+	 */
+	public void setSubCategorySeparator(char separator) {
+		char old = this.subCategoryDelimiter;
+		this.subCategoryDelimiter = separator;
+		fireEvent(new SubCategorySeparatorChangedEvent(this, old, separator));
+		setChanged();
+	}
+
+	/** Clears all data in this instance.
+	 */
 	public void clear() {
 		this.categories = new ArrayList<Category>();
 		this.categories.add(Category.UNDEFINED);
