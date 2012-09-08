@@ -101,7 +101,8 @@ public class Preferences {
 		this.properties = new Properties();
 		
 		try {
-			if (load()) {
+			load();
+			if (!firstRun) {
 				setAuthentication();
 			} else {
 				// On the first run, the file doesn't exist
@@ -131,26 +132,22 @@ public class Preferences {
 		return this.firstRun;
 	}
 
-	private boolean load() throws IOException {
-		this.firstRun = true;
+	private void load() throws IOException {
 		if (this.portable) {
-			if (getFile().exists()) {
-				this.firstRun = false;
+			this.firstRun = !getFile().exists();
+			if (!firstRun) {
 				FileInputStream inStream = new FileInputStream(getFile());
 				try {
 					properties.load(inStream);
 				} finally {
 					inStream.close();
 				}
-				return true;
 			}
 		} else {
 			java.util.prefs.Preferences prefs = getJavaPref();
 			this.firstRun = PreferencesUtils.isEmpty(prefs);
 			PreferencesUtils.fromPreferences(prefs, properties);
-			return true;
 		}
-		return false;
 	}
 
 	public void save() throws IOException {
@@ -168,7 +165,7 @@ public class Preferences {
 		}
 	}
 
-	private java.util.prefs.Preferences getJavaPref() {
+	private static java.util.prefs.Preferences getJavaPref() {
 		return java.util.prefs.Preferences.userRoot().node("net.yapbam.prefs");
 	}
 
@@ -177,9 +174,9 @@ public class Preferences {
 	 */
 	public Locale getLocale() {
 		String lang = this.properties.getProperty(LANGUAGE);
-		if (lang.equalsIgnoreCase(LANGUAGE_DEFAULT_VALUE)) lang = LocalizationData.SYS_LOCALE.getLanguage();
+		if (LANGUAGE_DEFAULT_VALUE.equalsIgnoreCase(lang)) lang = LocalizationData.SYS_LOCALE.getLanguage();
 		String country = this.properties.getProperty(COUNTRY);
-		if (country.equalsIgnoreCase(COUNTRY_DEFAULT_VALUE)) country = LocalizationData.SYS_LOCALE.getCountry();
+		if (COUNTRY_DEFAULT_VALUE.equalsIgnoreCase(country)) country = LocalizationData.SYS_LOCALE.getCountry();
 		return new Locale(lang, country);
 	}
 	
