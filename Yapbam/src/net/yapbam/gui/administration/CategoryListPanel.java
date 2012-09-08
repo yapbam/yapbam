@@ -233,8 +233,9 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	
 	private JTextField getSeparator() {
 		if (subcategorySeparator == null) {
-			subcategorySeparator = new CharWidget(data.getSubCategorySeparator());
-			subcategorySeparator.setDefaultValue('.');
+			subcategorySeparator = new CharWidget();
+			subcategorySeparator.setChar(data.getSubCategorySeparator());
+			subcategorySeparator.setDefaultChar('.');
 			data.addListener(new DataListener() {
 				@Override
 				public void processEvent(DataEvent event) {
@@ -243,7 +244,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 					}
 				}
 			});
-			subcategorySeparator.addPropertyChangeListener(CharWidget.CONTENT_PROPERTY, new PropertyChangeListener() {
+			subcategorySeparator.addPropertyChangeListener(CharWidget.CHAR_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					data.setSubCategorySeparator((Character) evt.getNewValue());

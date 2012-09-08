@@ -7,17 +7,14 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.CharWidget;
 
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -28,7 +25,7 @@ public class SeparatorPanel extends JPanel {
 	
 	private JRadioButton defaultSeparatorButton = null;
 	private JRadioButton customSeparatorButton = null;
-	private JTextField customSeparatorValue = null;
+	private CharWidget customSeparatorValue = null;
 	
 	private char defaultSeparator = '\t';
 	private char separator = defaultSeparator;
@@ -121,36 +118,21 @@ public class SeparatorPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getCustomSeparatorValue() {
+	private CharWidget getCustomSeparatorValue() {
 		//TODO Use CharWidget
 		if (customSeparatorValue == null) {
-			customSeparatorValue = new TextWidget();
-			customSeparatorValue.setColumns(1);
+			customSeparatorValue = new CharWidget();
 			customSeparatorValue.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customizedChar.toolTip")); //$NON-NLS-1$
 			// We will not use a document listener to listen the field modifications because we want to change the field (truncate it to its fisrt character)
 			// and document listener can't modify the source event (it throws an IllegalStateException).
-			customSeparatorValue.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
+			customSeparatorValue.addPropertyChangeListener(CharWidget.CHAR_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					String text = customSeparatorValue.getText();
-					if (text.length()==0) {
+					if (evt.getNewValue()==null) {
 						defaultSeparatorButton.setSelected(true);
-					} else if (text.length()==1) {
-						setSeparator(text.charAt(0));
 					} else {
-						setSeparator(text.charAt(0));
+						setSeparator(customSeparatorValue.getChar());
 					}
-					customSeparatorValue.selectAll();
-				}
-			});
-			customSeparatorValue.addFocusListener(new FocusListener() {
-				@Override
-				public void focusLost(FocusEvent e) {
-				}
-				
-				@Override
-				public void focusGained(FocusEvent e) {
-					customSeparatorValue.selectAll();
 				}
 			});
 		}
