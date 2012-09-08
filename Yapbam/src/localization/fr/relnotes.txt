@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 	
+version	0.11.7 (09/09/2012)
+fix
+	Le démarrage échouait lorsque Yapbam était installé dans le répertoire "Programmes" sous Windows.
+
 version	0.11.6 (26/08/2012)
 fix
 	Certains libellés des versions allemandes et portuguaises n'étaient pas traduits. 
