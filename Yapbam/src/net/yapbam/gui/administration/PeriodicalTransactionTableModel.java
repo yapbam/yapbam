@@ -136,9 +136,25 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 			DateStepper period = transaction.getNextDateBuilder();
 			String result;
 			if (period instanceof DayDateStepper) {
-				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.daily.content"), ((DayDateStepper)period).getStep()); //$NON-NLS-1$
+				if (((DayDateStepper) period).getStep()==1) {
+					result = LocalizationData.get("PeriodicalTransactionManager.period.daily.singular.content");
+				} else {
+					result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.daily.content"), ((DayDateStepper)period).getStep()); //$NON-NLS-1$
+				}
 			} else if (period instanceof MonthDateStepper) {
-				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.monthly.content"), ((MonthDateStepper)period).getPeriod(), ((MonthDateStepper)period).getDay()); //$NON-NLS-1$
+				MonthDateStepper monthlyPeriod = (MonthDateStepper)period;
+				if (monthlyPeriod.getPeriod() % 12 == 0) {
+					// Yearly period
+					if (monthlyPeriod.getPeriod() == 12) {
+						result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.yearly.singular.content"), monthlyPeriod.getDay()); //$NON-NLS-1$
+					} else {
+						result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.yearly.content"), monthlyPeriod.getPeriod()/12, monthlyPeriod.getDay()); //$NON-NLS-1$
+					}
+				}	else if (monthlyPeriod.getPeriod()==1) {
+					result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.monthly.singular.content"), monthlyPeriod.getDay()); //$NON-NLS-1$
+				} else {
+					result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.monthly.content"), monthlyPeriod.getPeriod(), monthlyPeriod.getDay()); //$NON-NLS-1$
+				}
 			} else {
 				result = ""; //$NON-NLS-1$
 			}

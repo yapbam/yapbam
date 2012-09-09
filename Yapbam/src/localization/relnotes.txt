@@ -8,6 +8,9 @@ improvement
 version	0.11.7 (09/09/2012)
 fix
 	Startup fails when Yapbam was installed in the "Programs" folder on Windows.
+	In the "Periodical transactions management" tab of the "Administration" tab, there was some spelling errors, and the background color of the "Active" column was wrong when table was sorted.
+improvement
+	It is now possible to create periodical transactions with a yearly period.
 
 version	0.11.6 (08/26/2012)
 fix
