@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 
 public class VersionManager {
@@ -56,6 +57,7 @@ public class VersionManager {
 			addPropertyParameter (url, "javaVendor", "java.vendor");
 			addPropertyParameter (url, "javaVersion", "java.version");
 			String serialNumber = YapbamState.INSTANCE.get(SERIAL_NUMBER);
+			url.append("&portable=").append(URLEncoder.encode(Boolean.toString(Preferences.INSTANCE.isPortable()),"UTF-8"));
 			if (serialNumber!=null) url.append("&id=").append(URLEncoder.encode(serialNumber,"UTF-8"));
 			return new URL(url.toString());
 		} catch (Exception e) {

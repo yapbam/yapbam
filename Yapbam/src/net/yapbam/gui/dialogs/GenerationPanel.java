@@ -31,6 +31,11 @@ public class GenerationPanel extends JPanel {
 	public static final String DATE_STEPPER_PROPERTY = "dateStepper"; //$NON-NLS-1$
 	public static final String NEXT_DATE_PROPERTY = "nextDate"; //$NON-NLS-1$  //  @jve:decl-index=0:
 
+	// Indexes of date stepper kind
+	private static final int YEARLY_INDEX = 0;
+	private static final int MONTHLY_INDEX = 1;
+	private static final int DAILY_INDEX = 2;
+
 	private static final long serialVersionUID = 1L;
 	private JCheckBox activatedBox = null;
 	private JLabel jLabel = null;
@@ -201,11 +206,16 @@ public class GenerationPanel extends JPanel {
 	 */
 	private JComboBox getKind() {
 		if (kind == null) {
-			kind = new JComboBox(new String[]{LocalizationData.get("PeriodicalTransactionDialog.months"),LocalizationData.get("PeriodicalTransactionDialog.days")}); //$NON-NLS-1$ //$NON-NLS-2$
+			String[] kinds = new String[3];
+			kinds[YEARLY_INDEX] = LocalizationData.get("PeriodicalTransactionDialog.years"); //$NON-NLS-1$
+			kinds[MONTHLY_INDEX] = LocalizationData.get("PeriodicalTransactionDialog.months"); //$NON-NLS-1$
+			kinds[DAILY_INDEX] = LocalizationData.get("PeriodicalTransactionDialog.days"); //$NON-NLS-1$
+			kind = new JComboBox(kinds);
+			kind.setSelectedIndex(MONTHLY_INDEX);
 			kind.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					boolean visible = isMonthly();
+					boolean visible = isMonthly() || isYearly();
 					jLabel2.setVisible(visible);
 					day.setVisible(visible);
 					updateDateStepper();
@@ -215,15 +225,16 @@ public class GenerationPanel extends JPanel {
 		return kind;
 	}
 	
-	private void updateDateStepper() {
+	private void updateDateStepper() { //FIXME
 		DateStepper newStepper;
 		if (nb.getValue()==null) {
 			newStepper = null;
-		} else if (isMonthly()) {
+		} else if (isMonthly() || isYearly()) {
 			if (day.getValue()==null) {
 				newStepper = null;
 			} else {
-				newStepper = new MonthDateStepper(nb.getValue().intValue(), day.getValue().intValue(), getLastDate().getDate());
+				int value = nb.getValue().intValue();
+				newStepper = new MonthDateStepper(isMonthly()?value:value*12, day.getValue().intValue(), getLastDate().getDate());
 			}
 		} else {
 			newStepper = new DayDateStepper(nb.getValue().intValue(), getLastDate().getDate());
@@ -260,16 +271,22 @@ public class GenerationPanel extends JPanel {
 	public void setDateStepper(DateStepper nextDateBuilder) {
 		if (!areEquals(nextDateBuilder, currentDateStepper)) {
 			if (nextDateBuilder instanceof MonthDateStepper) {
-				kind.setSelectedIndex(0);
-				nb.setValue(((MonthDateStepper)nextDateBuilder).getPeriod());
-				day.setValue(((MonthDateStepper)nextDateBuilder).getDay());
+				MonthDateStepper monthStepper = (MonthDateStepper)nextDateBuilder;
+				if (monthStepper.getPeriod()%12==0) {
+					nb.setValue(monthStepper.getPeriod()/12);					
+					kind.setSelectedIndex(YEARLY_INDEX);
+				} else {
+					nb.setValue(monthStepper.getPeriod());
+					kind.setSelectedIndex(MONTHLY_INDEX);
+				}
+				day.setValue(monthStepper.getDay());
 				getLastDate().setDate(nextDateBuilder.getLastDate());
 			} else if (nextDateBuilder instanceof DayDateStepper) {
-				kind.setSelectedIndex(1);
+				kind.setSelectedIndex(DAILY_INDEX);
 				nb.setValue(((DayDateStepper)nextDateBuilder).getStep());
 				getLastDate().setDate(nextDateBuilder.getLastDate());
 			} else if (nextDateBuilder==null) {
-				kind.setSelectedIndex(-1);
+				kind.setSelectedIndex(MONTHLY_INDEX);
 				nb.setText(""); //$NON-NLS-1$
 				day.setText(""); //$NON-NLS-1$
 			} else {
@@ -359,8 +376,12 @@ public class GenerationPanel extends JPanel {
 		return day;
 	}
 
+	private boolean isYearly() {
+		return (kind.getSelectedIndex()==YEARLY_INDEX);
+	}
+
 	private boolean isMonthly() {
-		return (kind.getSelectedIndex()==0);
+		return (kind.getSelectedIndex()==MONTHLY_INDEX);
 	}
 
 	/**
