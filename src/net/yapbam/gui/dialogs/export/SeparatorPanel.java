@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
+import net.astesana.ajlib.swing.widget.CharWidget;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.widget.CharWidget;
 
 import java.awt.Font;
 import java.awt.Color;

@@ -12,6 +12,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.widget.CharWidget;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.CategoryAddedEvent;
@@ -23,7 +24,6 @@ import net.yapbam.data.event.SubCategorySeparatorChangedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryDialog;
-import net.yapbam.gui.widget.CharWidget;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

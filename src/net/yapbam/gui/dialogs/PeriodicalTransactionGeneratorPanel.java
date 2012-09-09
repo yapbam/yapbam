@@ -47,6 +47,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private GenerateTableModel tableModel;
 
 	private FilteredData data;
+	private JPanel panel;
 
 	/**
 	 * This is the default constructor
@@ -61,8 +62,6 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		jLabel = new JLabel();
-		jLabel.setText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate")); //$NON-NLS-1$
 		this.setSize(360, 200);
 		this.setLayout(new BorderLayout());
 		this.add(getJPanel(), BorderLayout.NORTH);
@@ -78,28 +77,22 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.anchor = GridBagConstraints.WEST;
+			gridBagConstraints3.weightx = 1.0;
 			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints3.insets = new Insets(5, 5, 0, 0);
 			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridy = 1;
-			gridBagConstraints3.gridwidth=GridBagConstraints.REMAINDER;
 			summary = new JLabel();
-			summary.setText(" "); //$NON-NLS-1$
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints1.gridy = 0;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints.gridy = 0;
-			gridBagConstraints.weightx = 1.0;
-			gridBagConstraints.anchor = GridBagConstraints.WEST;
-			gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints.gridx = 1;
+			summary.setText(" ");
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(jLabel, gridBagConstraints1);
-			jPanel.add(getDateField(), gridBagConstraints);
+			GridBagConstraints gbc_panel = new GridBagConstraints();
+			gbc_panel.fill = GridBagConstraints.BOTH;
+			gbc_panel.insets = new Insets(0, 5, 0, 5);
+			gbc_panel.gridx = 0;
+			gbc_panel.gridy = 0;
+			jPanel.add(getPanel(), gbc_panel);
 			jPanel.add(summary, gridBagConstraints3);
 		}
 		return jPanel;
@@ -234,5 +227,30 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			if (isValid(i)) result.add((Transaction) tableModel.getTransaction(i));
 		}
 		return (Transaction[]) result.toArray(new Transaction[result.size()]);
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			GridBagLayout gbl_panel = new GridBagLayout();
+			gbl_panel.columnWidths = new int[]{0, 0, 0};
+			gbl_panel.rowHeights = new int[]{0, 0};
+			gbl_panel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+			gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+			panel.setLayout(gbl_panel);
+			jLabel = new JLabel();
+			GridBagConstraints gbc_jLabel = new GridBagConstraints();
+			gbc_jLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_jLabel.gridx = 0;
+			gbc_jLabel.gridy = 0;
+			panel.add(jLabel, gbc_jLabel);
+			jLabel.setText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate")); //$NON-NLS-1$
+			GridBagConstraints gbc_dateField = new GridBagConstraints();
+			gbc_dateField.anchor = GridBagConstraints.WEST;
+			gbc_dateField.fill = GridBagConstraints.VERTICAL;
+			gbc_dateField.gridx = 1;
+			gbc_dateField.gridy = 0;
+			panel.add(getDateField(), gbc_dateField);
+		}
+		return panel;
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
