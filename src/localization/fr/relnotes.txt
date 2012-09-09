@@ -8,6 +8,9 @@ improvement
 version	0.11.7 (09/09/2012)
 fix
 	Le démarrage échouait lorsque Yapbam était installé dans le répertoire "Programmes" sous Windows.
+	Dans l'onglet "Gestion des opérations périodiques" de l'onglet "Administration", Il y a avait quelques fautes d'orthographe, et la couleur de fond de la colonne "Active" était mauvaise quand la table était triée.
+improvement
+	Ajout de la possibilité de créer des opérations périodiques sur base annuelle.
 
 version	0.11.6 (26/08/2012)
 fix
