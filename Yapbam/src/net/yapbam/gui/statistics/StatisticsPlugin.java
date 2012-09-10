@@ -1,14 +1,17 @@
 package net.yapbam.gui.statistics;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.TreeMap;
 
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
@@ -23,6 +26,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.filter.FilterView;
 import net.yapbam.gui.widget.TabbedPane;
 
 public class StatisticsPlugin extends AbstractPlugIn {
@@ -32,6 +36,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	private PieChartPanel pie;
 	private BarChartPanel bar;
 	private TabbedPane tabbedPane;
+	private JCheckBox groupSubCategories;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
@@ -87,16 +92,28 @@ public class StatisticsPlugin extends AbstractPlugIn {
 */		
 		
 // Start implementation of lateral filter panel
-		JPanel result = new JPanel(new GridBagLayout());
-//		GridBagConstraints cfv = new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
-//				new Insets(0, 0, 0, 0), 0, 0);
-//0.9.0		result.add(new FilterView(data), cfv);
-		GridBagConstraints c = new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-				new Insets(0, 0, 0, 0), 0, 0);
-//	GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-//	new Insets(0, 0, 0, 0), 0, 0);
-		result.add(tabbedPane, c);
+		JPanel result = new JPanel(new BorderLayout());
+//0.9.0		result.add(new FilterView(data), BorderLayout.WEST);
+		result.add(tabbedPane, BorderLayout.CENTER);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(getGroupSubCategories(), BorderLayout.WEST);
+		panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+		result.add(panel, BorderLayout.SOUTH);
 		return result;
+	}
+	
+	private JCheckBox getGroupSubCategories() {
+		if (groupSubCategories==null) {
+			groupSubCategories = new JCheckBox("Group subcategories"); //LOCAL
+			groupSubCategories.setToolTipText("Check this box to group the subcategories (uncheck to get the detail of subcategories)"); //LOCAL
+			groupSubCategories.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					buildSummaries();
+				}
+			});
+		}
+		return groupSubCategories;
 	}
 
 	@Override
@@ -126,8 +143,17 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				if (this.data.isComplementOk(transaction)) categoryToAmount.get(category).add(transaction.getComplement());
 			}
 		}
+		if (getGroupSubCategories().isSelected()) {
+			groupBySuperCategory();
+		}
 		pie.updateDataSet();
 		bar.updateDataSet();
+	}
+
+	private void groupBySuperCategory() {
+		for (Category category : categoryToAmount.keySet()) {
+			System.out.println (category.getName()+" -> "+categoryToAmount.get(category));
+		}
 	}
 
 	@Override
