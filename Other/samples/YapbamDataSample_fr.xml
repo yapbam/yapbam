@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DATA>
+<DATA nbAccounts="4" nbCategories="29" subCategorySeparator="/" nbPeriodicalTransactions="16" nbTransactions="210">
 <ACCOUNT id="Compte courant" initialBalance="588.0">
 <MODE id="Carte bleue">
 <EXPENSE stopDay="15" debtDay="31" kind="deferred"/>

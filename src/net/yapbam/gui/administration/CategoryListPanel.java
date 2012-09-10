@@ -228,7 +228,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 		JPanel result = new JPanel();
 		result.add(new JLabel("Subcategory separator: "));
 		result.add(getSeparator());
-		return null; //TODO
+		return result;
 	}
 	
 	private JTextField getSeparator() {
