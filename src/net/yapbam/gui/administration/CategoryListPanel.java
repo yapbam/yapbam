@@ -226,7 +226,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@Override
 	protected Component getRightComponent() {
 		JPanel result = new JPanel();
-		result.add(new JLabel("Subcategory separator: "));
+		result.add(new JLabel(LocalizationData.get("Subcategories.separatorField.title"))); //$NON-NLS-1$
 		result.add(getSeparator());
 		return result;
 	}
@@ -250,7 +250,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 					data.setSubCategorySeparator((Character) evt.getNewValue());
 				}
 			});
-			subcategorySeparator.setToolTipText("TODO"); //TODO
+			subcategorySeparator.setToolTipText(LocalizationData.get("Subcategories.separatorField.tooltip")); //$NON-NLS-1$
 		}
 		return subcategorySeparator;
 	}

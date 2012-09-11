@@ -8,6 +8,7 @@ import java.awt.event.ItemListener;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
@@ -26,7 +27,6 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.filter.FilterView;
 import net.yapbam.gui.widget.TabbedPane;
 
 public class StatisticsPlugin extends AbstractPlugIn {
@@ -47,8 +47,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				if (displayed) buildSummaries();
 			}
 		});
-		this.setPanelTitle(LocalizationData.get("StatisticsPlugin.title"));
-		this.setPanelToolTip(LocalizationData.get("StatisticsPlugin.tooltip"));
+		this.setPanelTitle(LocalizationData.get("StatisticsPlugin.title")); //$NON-NLS-1$
+		this.setPanelToolTip(LocalizationData.get("StatisticsPlugin.tooltip")); //$NON-NLS-1$
 		this.setPrintingSupported(true);
 		// Hack to set the right Locale for JFreeChart panels (it seems there's a bug in JFreeChart: setLocale doesn't refresh the popup menus).
 		new SimpleChartPanel();
@@ -59,7 +59,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	private static class SimpleChartPanel extends ChartPanel {
 		public SimpleChartPanel() {
 			super(null);
-			localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle", LocalizationData.getLocale());
+			localizationResources = ResourceBundleWrapper.getBundle("org.jfree.chart.LocalizationBundle", LocalizationData.getLocale()); //$NON-NLS-1$
 		}
 	}
 	
@@ -104,8 +104,8 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	
 	private JCheckBox getGroupSubCategories() {
 		if (groupSubCategories==null) {
-			groupSubCategories = new JCheckBox("Group subcategories"); //LOCAL
-			groupSubCategories.setToolTipText("Check this box to group the subcategories (uncheck to get the detail of subcategories)"); //LOCAL
+			groupSubCategories = new JCheckBox(LocalizationData.get("Subcategories.groupButton.title")); //$NON-NLS-1$
+			groupSubCategories.setToolTipText(LocalizationData.get("Subcategories.groupButton.tooltip")); //$NON-NLS-1$
 			groupSubCategories.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
@@ -151,8 +151,36 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	}
 
 	private void groupBySuperCategory() {
+		// First extract the list of keys of categoryToAmount
+		// We can't directly work with the categoryToAmount key set, because we will
+		// add and remove some keys (ConcurrentModificationException is thrown when 
+		// adding/removing a key while iterating on the key set.
+		ArrayList<Category> keys = new ArrayList<Category>(categoryToAmount.size());
 		for (Category category : categoryToAmount.keySet()) {
-			System.out.println (category.getName()+" -> "+categoryToAmount.get(category));
+			keys.add(category);
+		}
+		for (Category category : keys) {
+			Category superCategory = getSuperCategory(category);
+			if (!category.equals(superCategory)) {
+				Summary amounts = categoryToAmount.remove(category);
+				Summary superAmounts = categoryToAmount.get(superCategory);
+				if (superAmounts==null) {
+					superAmounts = new Summary();
+					categoryToAmount.put(superCategory, superAmounts);
+				}
+				superAmounts.add(amounts);
+			}
+		}
+	}
+
+	private Category getSuperCategory(Category category) {
+		if (category==Category.UNDEFINED) return category;
+		String name = category.getName();
+		int index = name.indexOf(data.getGlobalData().getSubCategorySeparator());
+		if (index>=0) {
+			return new Category(name.substring(0,index));
+		} else {
+			return category;
 		}
 	}
 

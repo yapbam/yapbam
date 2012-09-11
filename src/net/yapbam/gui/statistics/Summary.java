@@ -18,6 +18,11 @@ class Summary {
 			this.debts += amount;
 		}
 	}
+	
+	void add (Summary summary) {
+		this.debts += summary.debts;
+		this.receipts += summary.receipts;
+	}
 
 	double getDebts() {
 		return debts;
@@ -31,5 +36,4 @@ class Summary {
 	public String toString() {
 		return "{"+LocalizationData.getCurrencyInstance().format(this.receipts)+":"+LocalizationData.getCurrencyInstance().format(this.debts)+"}";
 	}
-
 }

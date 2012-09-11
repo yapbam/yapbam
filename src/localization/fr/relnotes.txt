@@ -4,7 +4,8 @@ known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
-	
+	Il est à présent possible de définir des sous-catégories et de visualiser les statistiques en groupant les sous-catégories d'une même catégorie.
+
 version	0.11.7 (09/09/2012)
 fix
 	Le démarrage échouait lorsque Yapbam était installé dans le répertoire "Programmes" sous Windows.
