@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -38,9 +36,9 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.URIChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
+import net.yapbam.data.persistence.SaveManager;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
-import net.yapbam.gui.dialogs.AccountDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.dialogs.export.BadImportFileException;
 import net.yapbam.gui.dialogs.export.ExportDialog;
@@ -89,23 +87,17 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.menuItemNew.setToolTipText(LocalizationData.get("MainMenu.NewFile.ToolTip")); //$NON-NLS-1$
 		this.menuItemNew.addActionListener(this);
 		menu.add(this.menuItemNew);
-		this.menuItemOpen = new JMenuItem(LocalizationData.get("MainMenu.Open"), LocalizationData.getChar("MainMenu.Open.Mnemonic")); //$NON-NLS-1$ //$NON-NLS-2$
-		this.menuItemOpen.setIcon(IconManager.OPEN);
+		this.menuItemOpen = new JMenuItem(new OpenAction(this.frame));
+		this.menuItemOpen.setMnemonic(LocalizationData.getChar("MainMenu.Open.Mnemonic")); //$NON-NLS-1$
 		this.menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
-		this.menuItemOpen.setToolTipText(LocalizationData.get("MainMenu.Open.ToolTip")); //$NON-NLS-1$
-		this.menuItemOpen.addActionListener(this);
 		menu.add(this.menuItemOpen);
-		this.menuItemSave = new JMenuItem(LocalizationData.get("MainMenu.Save"), IconManager.SAVE); //$NON-NLS-1$
+		this.menuItemSave = new JMenuItem(new SaveAction(this.frame));
 		this.menuItemSave.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Save.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		this.menuItemSave.setMnemonic(LocalizationData.getChar("MainMenu.Save.Mnemonic")); //$NON-NLS-1$
-		this.menuItemSave.setToolTipText(LocalizationData.get("MainMenu.Save.ToolTip")); //$NON-NLS-1$
-		this.menuItemSave.addActionListener(this);
 		this.menuItemSave.setEnabled(frame.getData().somethingHasChanged());
 		menu.add(this.menuItemSave);
-		this.menuItemSaveAs = new JMenuItem(LocalizationData.get("MainMenu.SaveAs"), IconManager.SAVE_AS); //$NON-NLS-1$
+		this.menuItemSaveAs = new JMenuItem(new SaveAsAction(this.frame)); //$NON-NLS-1$
 		this.menuItemSaveAs.setMnemonic(LocalizationData.getChar("MainMenu.SaveAs.Mnemonic")); //$NON-NLS-1$
-		this.menuItemSaveAs.setToolTipText(LocalizationData.get("MainMenu.SaveAs.ToolTip")); //$NON-NLS-1$
-		this.menuItemSaveAs.addActionListener(this);
 		this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
 		menu.add(this.menuItemSaveAs);
 		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.LOCK); //$NON-NLS-1$;
@@ -155,15 +147,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
 		transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
 		transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
-		JMenuItem menuItemNewAccount = new JMenuItem(LocalizationData.get("MainMenu.Accounts.New"), IconManager.NEW_ACCOUNT); //$NON-NLS-1$
+		JMenuItem menuItemNewAccount = new JMenuItem(new NewAccountAction(frame.getData())); //$NON-NLS-1$
 		menuItemNewAccount.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.New.Mnemonic")); //$NON-NLS-1$
-		menuItemNewAccount.setToolTipText(LocalizationData.get("MainMenu.Accounts.New.ToolTip")); //$NON-NLS-1$
-		menuItemNewAccount.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AccountDialog.open(MainMenuBar.this.frame.getData(), MainMenuBar.this.frame.getJFrame(), null);
-			}
-		});
 		this.transactionMenu.add(menuItemNewAccount);
 		insertPluginMenuItems(this.transactionMenu, AbstractPlugIn.ACCOUNTS_PART);
 		this.transactionMenu.addSeparator();
@@ -309,26 +294,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				if (SaveManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
 					data.clear();
 				}
-			} else if (source.equals(this.menuItemOpen)) {
-				if (SaveManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
-					URI path = data.getURI();
-					String parent = path == null ? null : new File(path).getParent();
-					JFileChooser chooser = new FileChooser(parent);
-					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-					final File file = chooser.showOpenDialog(frame.getJFrame()) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
-					if (file != null) {
-						try {
-							DataReader.INSTANCE.readData(frame.getJFrame(), frame.getData(), file.toURI());
-						} catch (ExecutionException exception) {
-							ErrorManager.INSTANCE.display(frame.getJFrame(), exception.getCause(), MessageFormat.format(LocalizationData
-									.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
-						}
-					}
-				}
-			} else if (source.equals(this.menuItemSave)) {
-				SaveManager.MANAGER.save(this.frame.getJFrame(), this.frame.getData());
-			} else if (source.equals(this.menuItemSaveAs)) {
-				SaveManager.MANAGER.saveAs(this.frame.getJFrame(), this.frame.getData());
 			} else if (source.equals(this.menuItemProtect)) {
 				String password = this.frame.getData().getPassword();
 				GetPasswordDialog dialog = new GetPasswordDialog(frame.getJFrame(), LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$

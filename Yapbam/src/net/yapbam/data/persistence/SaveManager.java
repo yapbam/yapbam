@@ -1,4 +1,4 @@
-package net.yapbam.gui;
+package net.yapbam.data.persistence;
 
 import java.awt.Window;
 import java.io.File;
@@ -20,10 +20,12 @@ import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
+import net.yapbam.gui.ErrorManager;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.Portable;
 
-class SaveManager {
-	static SaveManager MANAGER = new SaveManager();
+public class SaveManager {
+	public static SaveManager MANAGER = new SaveManager();
 	private SaveManager() {}
 
 	/** This method gives a last chance to save unsaved data.
@@ -31,7 +33,7 @@ class SaveManager {
 	 * @param data The data to save
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
-	boolean verify(Window owner, GlobalData data) {
+	public boolean verify(Window owner, GlobalData data) {
 		if (data.somethingHasChanged()) { // Some modifications has not been saved
 			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			int n = JOptionPane.showOptionDialog(owner,
@@ -55,7 +57,7 @@ class SaveManager {
 	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	boolean save(Window owner, GlobalData data) {
+	public boolean save(Window owner, GlobalData data) {
 		URI file = data.getURI();
 		if (file==null) {
 			file = getFile(owner, data);
@@ -69,7 +71,7 @@ class SaveManager {
 	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	boolean saveAs(Window owner, GlobalData data) {
+	public boolean saveAs(Window owner, GlobalData data) {
 		URI file = getFile(owner, data);
 		if (file==null) return false;
 		return saveTo(owner, data, file);

@@ -19,6 +19,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
+import net.yapbam.data.persistence.PersistencePlugin;
+import net.yapbam.data.persistence.SaveManager;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
@@ -45,6 +47,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 
 	MainMenuBar mainMenu;
 	private AbstractPlugIn[] plugins;
+	private PersistencePlugin[] persistencePlugins;
 	private boolean isRestarting = false;
 	
 	/** The updater jar file. If this attribute is not null, the jar it contains will be executed when
@@ -225,7 +228,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				}
 			}
 		});
-	
+
+		this.persistencePlugins = Preferences.getPersistencePlugins();
+		
 		if (filteredData == null) {
 			// Create the data structures if they are not provided as argument
 			this.data = new GlobalData();
@@ -295,6 +300,15 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	public AbstractPlugIn getPlugIn(int index) {
 		return plugins[index];
 	}
+	
+	int getPersistencePlugInsNumber() {
+		return persistencePlugins.length;
+	}
+
+	PersistencePlugin getPersistencePlugIn(int index) {
+		return persistencePlugins[index];
+	}
+
 	
 	/** Gets the plugin currently displayed in the tabbed pane.
 	 * @return the currently displayed plugin
