@@ -1,10 +1,12 @@
 TODO list
 
+Améliorations en cours :
+- Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).
+- La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
+	
 Code cleaning :
 Utiliser le framework AJLib pour créer l'application.
 
-Améliorations :
-	
 Bugs :
 - Les info de backup du panneau de préférences ne sont pas prises en compte
 
@@ -16,7 +18,5 @@ Features :
 * Ajout de moyennes dans la vue budgetaire ?
 * La possibilité d'ignorer les alertes trop lointaines. 
 * La possibilité de supprimer ou d'éditer plusieurs opérations à la fois.
-* Améliorations dans les graphiques de statistiques (possibilité de grouper plusieurs catégories).
 * La possibilité de définir un budget cible et de le comparer à la dure réalité ;-)
-* La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.

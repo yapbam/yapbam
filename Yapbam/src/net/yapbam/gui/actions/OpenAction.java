@@ -12,7 +12,7 @@ import javax.swing.JFileChooser;
 
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.persistence.SaveManager;
+import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.DataReader;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
@@ -31,21 +31,6 @@ public class OpenAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		GlobalData data = frame.getData();
-		if (SaveManager.MANAGER.verify(frame, data)) {
-			URI path = data.getURI();
-			String parent = path == null ? null : new File(path).getParent();
-			JFileChooser chooser = new FileChooser(parent);
-			chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-			final File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
-			if (file != null) {
-				try {
-					DataReader.INSTANCE.readData(frame, data, file.toURI());
-				} catch (ExecutionException exception) {
-					ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
-							.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
-				}
-			}
-		}
-		}
+		PersistenceManager.MANAGER.open(frame, frame.getData());
+	}
 }

@@ -36,7 +36,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.URIChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
-import net.yapbam.data.persistence.SaveManager;
+import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
@@ -291,7 +291,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		} else {
 			GlobalData data = this.frame.getData();
 			if (source.equals(this.menuItemNew)) {
-				if (SaveManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
+				if (PersistenceManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
 					data.clear();
 				}
 			} else if (source.equals(this.menuItemProtect)) {
@@ -320,7 +320,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 						dialog.setVisible(true);
 						Importer importer = dialog.getResult();
 						if (importer!=null) {
-							if (SaveManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
+							if (PersistenceManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
 								if (!dialog.getAddToCurrentData()) {
 									data.clear();
 								}

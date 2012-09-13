@@ -20,13 +20,15 @@ import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
+import net.yapbam.gui.DataReader;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.MainFrame;
 import net.yapbam.util.Portable;
 
-public class SaveManager {
-	public static SaveManager MANAGER = new SaveManager();
-	private SaveManager() {}
+public class PersistenceManager {
+	public static PersistenceManager MANAGER = new PersistenceManager();
+	private PersistenceManager() {}
 
 	/** This method gives a last chance to save unsaved data.
 	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
@@ -151,6 +153,24 @@ public class SaveManager {
 		protected Void doInBackground() throws Exception {
 			Serializer.write(data, uri, this);
 			return null;
+		}
+	}
+
+	public void open(MainFrame frame, GlobalData data) {
+		if (verify(frame, data)) {
+			URI path = data.getURI();
+			String parent = path == null ? null : new File(path).getParent();
+			JFileChooser chooser = new FileChooser(parent);
+			chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
+			final File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
+			if (file != null) {
+				try {
+					DataReader.INSTANCE.readData(frame, data, file.toURI());
+				} catch (ExecutionException exception) {
+					ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
+							.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
+				}
+			}
 		}
 	}
 }
