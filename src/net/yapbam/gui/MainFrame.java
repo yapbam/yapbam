@@ -20,7 +20,7 @@ import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.data.persistence.PersistencePlugin;
-import net.yapbam.data.persistence.SaveManager;
+import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
@@ -184,7 +184,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					MainFrame.this.saveState();
 					super.windowClosing(event);
 					event.getWindow().dispose();
-				} else if (SaveManager.MANAGER.verify(getJFrame(), getData())) {
+				} else if (PersistenceManager.MANAGER.verify(getJFrame(), getData())) {
 					// Be aware, you can think that it's a good idea to write the following line before the if/then/else block.
 					// But it's not, it would lead to the state not remember which file was last saved in the following scenario:
 					// Create a new file, then add a transaction, click the close window -> The save/ignore/cancel dialog appears

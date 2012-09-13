@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.yapbam.data.persistence.SaveManager;
+import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
@@ -21,6 +21,6 @@ public class SaveAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		SaveManager.MANAGER.save(frame, frame.getData());
+		PersistenceManager.MANAGER.save(frame, frame.getData());
 	}
 }
