@@ -26,6 +26,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import net.astesana.ajlib.utilities.FileUtils;
 import net.astesana.ajlib.utilities.StringUtils;
+import net.yapbam.data.persistence.FilePersistencePlugin;
+import net.yapbam.data.persistence.PersistencePlugin;
 import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
@@ -399,6 +401,7 @@ public class Preferences {
 			for (String className : testedPlugins) {
 				if (className.length()!=0) {
 					try {
+						@SuppressWarnings("unchecked")
 						Class<? extends AbstractPlugIn> pClass = (Class<? extends AbstractPlugIn>) Class.forName(className);
 						plugins.add(new PlugInContainer(pClass));
 					} catch (Exception e) {
@@ -409,6 +412,31 @@ public class Preferences {
 		}
 		return plugins.toArray(new PlugInContainer[plugins.size()]);
 	}
+	
+	static PersistencePlugin[] getPersistencePlugins() {
+		// Load the default persistence plugins
+		final List<PersistencePlugin> plugins = new ArrayList<PersistencePlugin>();
+		plugins.add(new FilePersistencePlugin());
+		
+		// Load plugins under development
+		String testedPlugin = System.getProperty("testedPersistencePlugin.className"); //$NON-NLS-1$
+		if (testedPlugin!=null) {
+			String[] testedPlugins = StringUtils.split(testedPlugin, ',');
+			for (String className : testedPlugins) {
+				if (className.length()!=0) {
+					try {
+						@SuppressWarnings("unchecked")
+						Class<? extends PersistencePlugin> pClass = (Class<? extends PersistencePlugin>) Class.forName(className);
+						plugins.add(pClass.newInstance());
+					} catch (Exception e) {
+						ErrorManager.INSTANCE.display(null, e, "Unable to load the persistence plugin "+className); //$NON-NLS-1$
+					}
+				}
+			}
+		}
+		return plugins.toArray(new PersistencePlugin[plugins.size()]);
+	}
+
 
 	/** Gets the expert mode.
 	 * @return true if the expert mode is on.
