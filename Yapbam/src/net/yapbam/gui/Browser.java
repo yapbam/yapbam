@@ -18,7 +18,7 @@ import net.astesana.ajlib.swing.dialog.AbstractDialog;
  */
 public abstract class Browser {
 	/** Displays an URI in a browser.
-	 * @param The uri to display
+	 * @param uri The uri to display
 	 * @param parent The parent component of the dialog displayed if browser is not available.
 	 * @param errorDialogTitle The title of the dialog displayed if browser is not available.
 	 */

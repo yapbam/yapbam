@@ -343,11 +343,15 @@ public class YapbamState {
 			} else {
 				bytes = Base64.decodeBase64(property);
 			}
-			InputStream stream = new ByteArrayInputStream(bytes);
+			final InputStream stream = new ByteArrayInputStream(bytes);
 			try {
-				stream = Serializer.getDecryptedStream(data.getPassword(), stream);
 				FilterHandler handler = new FilterHandler(data);
-				SAXParserFactory.newInstance().newSAXParser().parse(stream, handler);
+				InputStream decryptedStream = Serializer.getDecryptedStream(data.getPassword(), stream);
+				try {
+					SAXParserFactory.newInstance().newSAXParser().parse(decryptedStream, handler);
+				} finally {
+					decryptedStream.close();
+				}
 				return handler.getFilter();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
