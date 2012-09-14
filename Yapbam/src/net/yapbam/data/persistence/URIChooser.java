@@ -35,7 +35,12 @@ public class URIChooser extends JTabbedPane {
 		addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				// TODO
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						refresh();
+					}
+				});
 			}
 		});
 	}
@@ -83,9 +88,8 @@ public class URIChooser extends JTabbedPane {
 		return dialog.getResult();
 	}
 
-  protected void refresh() {
-		// TODO Auto-generated method stub
-		System.out.println ("refresh not yet implemented");
+  private void refresh() {
+		((AbstractURIChooserPanel)getSelectedComponent()).refresh();
 	}
 
 	public static void main(String[] args) {
