@@ -20,8 +20,8 @@ import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.Browser;
-import net.yapbam.gui.DataReader;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 
@@ -37,7 +37,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
@@ -137,15 +136,17 @@ public class WelcomePanel extends JPanel {
 		final JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				try {
-					DataReader.INSTANCE.readData(Utils.getOwnerWindow(WelcomePanel.this), WelcomePanel.this.data, file.toURI());
-				} catch (ExecutionException e) {
-					String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
-							file.getAbsolutePath());
-					JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(WelcomePanel.this), message,
-							LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-					btnOpenSampleData.setEnabled(false);
-				}
+				PersistenceManager.MANAGER.read(Utils.getOwnerWindow(WelcomePanel.this), WelcomePanel.this.data,
+						file.toURI(), new PersistenceManager.ErrorProcessor() {
+					public boolean processError(Throwable e) {
+						String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
+								file.getAbsolutePath());
+						JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(WelcomePanel.this), message,
+								LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+						btnOpenSampleData.setEnabled(false);
+						return true;
+					}
+				});
 			}
 		});
 		btnOpenSampleData.setEnabled((file.exists() && file.isFile() && file.canRead()));

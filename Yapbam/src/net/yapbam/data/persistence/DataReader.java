@@ -1,4 +1,4 @@
-package net.yapbam.gui;
+package net.yapbam.data.persistence;
 
 import java.awt.Dialog.ModalityType;
 import java.awt.Window;
@@ -15,12 +15,13 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 
-public class DataReader {
-	public final static DataReader INSTANCE = new DataReader();
+class DataReader {
+	final static DataReader INSTANCE = new DataReader();
 
-	public boolean readData(Window owner, GlobalData data, URI uri) throws ExecutionException {
+	boolean readData(Window owner, GlobalData data, URI uri) throws ExecutionException {
 		String password = null;
 		try {
 			SerializationData info = Serializer.getSerializationData(uri);
@@ -69,7 +70,7 @@ public class DataReader {
 	
 	/** A worker (see AJLib library) that reads a GlobalData URI in background. 
 	 */
-	public static class BackgroundReader extends Worker<GlobalData, Void> implements ProgressReport {
+	static class BackgroundReader extends Worker<GlobalData, Void> implements ProgressReport {
 		private URI uri;
 		private String password;
 	

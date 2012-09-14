@@ -20,14 +20,19 @@ import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
-import net.yapbam.gui.DataReader;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.MainFrame;
 import net.yapbam.util.Portable;
 
 public class PersistenceManager {
 	public static PersistenceManager MANAGER = new PersistenceManager();
+	public interface ErrorProcessor {
+		/** Process an error.
+		 * @param e The error to be processed
+		 * @return true if the error was processed by the manager.
+		 */
+		public abstract boolean processError(Throwable e);
+	}
 	private PersistenceManager() {}
 
 	/** This method gives a last chance to save unsaved data.
@@ -156,19 +161,34 @@ public class PersistenceManager {
 		}
 	}
 
-	public void open(MainFrame frame, GlobalData data) {
+	/** Reads the data contains at an URI.
+	 * <br>This checks if data has unsaved content. If it has, it displays a message to ask the user if he wants to save
+	 * its modifications or not.
+	 * @param frame The parent frame for the dialogs
+	 * @param data The data to be updated
+	 * @param path the path to read or null to choose this path in a dialog.
+	 * @param errProcessor An ErrorManager that will be used if the read fails or null to display the standard error message. 
+	 */
+	public void read(Window frame, GlobalData data, URI path, ErrorProcessor errProcessor) {
 		if (verify(frame, data)) {
-			URI path = data.getURI();
-			String parent = path == null ? null : new File(path).getParent();
-			JFileChooser chooser = new FileChooser(parent);
-			chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-			final File file = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
-			if (file != null) {
+			if (path==null) {
+				String parent = data.getURI() == null ? null : new File(data.getURI()).getParent();
+				JFileChooser chooser = new FileChooser(parent);
+				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
+				path = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile().toURI() : null;
+			}
+			if (path != null) {
 				try {
-					DataReader.INSTANCE.readData(frame, data, file.toURI());
+					DataReader.INSTANCE.readData(frame, data, path);
 				} catch (ExecutionException exception) {
-					ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
-							.get("MainMenu.Open.Error.DialogContent"), file)); //$NON-NLS-1$
+					boolean notProcessed = true;
+					if (errProcessor!=null) {
+						notProcessed = !errProcessor.processError(exception.getCause());
+					}
+					if (notProcessed) {
+						ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
+								.get("MainMenu.Open.Error.DialogContent"), new File(path))); //$NON-NLS-1$
+					}
 				}
 			}
 		}
