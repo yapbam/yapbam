@@ -5,7 +5,9 @@ known
 improvement
 	Yapbam is able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 	It is now possible to define sub-categories and view statistics by grouping sub-categories of a category.
-
+fix
+	When clicking on the button "View a sample data file" of the welcome dialog, there was no warning if changes were not saved. In this case, changes were lost.
+	
 version	0.11.7 (09/09/2012)
 fix
 	Startup fails when Yapbam was installed in the "Programs" folder on Windows.

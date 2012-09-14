@@ -1,20 +1,10 @@
 package net.yapbam.gui.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.net.URI;
-import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
 
-import net.astesana.ajlib.swing.dialog.FileChooser;
-import net.yapbam.data.GlobalData;
 import net.yapbam.data.persistence.PersistenceManager;
-import net.yapbam.gui.DataReader;
-import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
@@ -31,6 +21,6 @@ public class OpenAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		PersistenceManager.MANAGER.open(frame, frame.getData());
+		PersistenceManager.MANAGER.read(frame, frame.getData(), null, null);
 	}
 }

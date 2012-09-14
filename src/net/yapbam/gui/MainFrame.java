@@ -11,7 +11,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -442,31 +441,33 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				}
 			}
 		}
-		boolean restore = (path == null);
+		final boolean restore = (path == null);
 		if (uri!=null) {
-			try {
-				DataReader.INSTANCE.readData(getJFrame(), getData(), uri);
-				if (restore && (uri!=null) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
-					try {
-						Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
-						if (filter!=null) getFilteredData().setFilter(filter);
-					} catch (Exception e) {
-						ErrorManager.INSTANCE.log(getJFrame(), e);
-						ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
-					}
-				}
-			} catch (ExecutionException exception) {
-				Throwable e = exception.getCause();
-				if (restore && (e instanceof FileNotFoundException)) {
-					ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),uri)); //$NON-NLS-1$
-				} else if (e instanceof IOException) {
-					if (restore) {
-						ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),uri)); //$NON-NLS-1$
+			final URI finalURI = uri; // Just to be able to use it in the ErrorManager.
+			PersistenceManager.MANAGER.read(getJFrame(), getData(), uri, new PersistenceManager.ErrorProcessor() {
+				@Override
+				public boolean processError(Throwable e) {
+					if (restore && (e instanceof FileNotFoundException)) {
+						ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),finalURI)); //$NON-NLS-1$
+					} else if (e instanceof IOException) {
+						if (restore) {
+							ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),finalURI)); //$NON-NLS-1$
+						} else {
+							ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
+						}
 					} else {
-						ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
+						ErrorManager.INSTANCE.log(getJFrame(), e);
 					}
-				} else {
+					return true;
+				}
+			});
+			if (restore && (uri!=null) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
+				try {
+					Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
+					if (filter!=null) getFilteredData().setFilter(filter);
+				} catch (Exception e) {
 					ErrorManager.INSTANCE.log(getJFrame(), e);
+					ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
 				}
 			}
 		}
