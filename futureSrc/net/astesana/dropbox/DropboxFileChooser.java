@@ -138,7 +138,7 @@ public abstract class DropboxFileChooser extends AbstractURIChooserPanel {
 	protected abstract DropboxAPI<? extends WebAuthSession> getDropboxAPI();
 	protected abstract void clearAccess();
 	
-	void refresh() {
+	public void refresh() {
 		Window owner = Utils.getOwnerWindow(this);
 		AccessTokenPair pair = getDropboxAPI().getSession().getAccessTokenPair();
 		while (!accessGranted(pair)) {
