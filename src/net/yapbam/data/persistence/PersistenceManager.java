@@ -4,6 +4,9 @@ import java.awt.Window;
 import java.io.File;
 import java.net.URI;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
@@ -17,6 +20,7 @@ import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.WorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.FileUtils;
+import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
@@ -33,7 +37,40 @@ public class PersistenceManager {
 		 */
 		public abstract boolean processError(Throwable e);
 	}
-	private PersistenceManager() {}
+	
+	private HashMap<String, PersistencePlugin> pluginsMap;
+	private List<String> pluginSchemes;
+
+	private PersistenceManager() {
+		// Load the default persistence plugins
+		this.pluginsMap = new HashMap<String, PersistencePlugin>();
+		this.pluginSchemes = new ArrayList<String>();
+		
+		add(new FilePersistencePlugin());
+		
+		// Load plugins under development
+		String testedPlugin = System.getProperty("testedPersistencePlugin.className"); //$NON-NLS-1$
+		if (testedPlugin!=null) {
+			String[] testedPlugins = StringUtils.split(testedPlugin, ',');
+			for (String className : testedPlugins) {
+				if (className.length()!=0) {
+					try {
+						@SuppressWarnings("unchecked")
+						Class<? extends PersistencePlugin> pClass = (Class<? extends PersistencePlugin>) Class.forName(className);
+						add(pClass.newInstance());
+					} catch (Exception e) {
+						ErrorManager.INSTANCE.display(null, e, "Unable to load the persistence plugin "+className);
+					}
+				}
+			}
+		}
+	}
+	
+	private void add(PersistencePlugin plugin) {
+		// TODO Check there's no duplicated schemes in persistence plugins. 
+		pluginsMap.put(plugin.getScheme(), plugin);
+		pluginSchemes.add(plugin.getScheme());
+	}
 
 	/** This method gives a last chance to save unsaved data.
 	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
@@ -192,5 +229,13 @@ public class PersistenceManager {
 				}
 			}
 		}
+	}
+
+	public int getPluginsNumber() {
+		return this.pluginSchemes.size();
+	}
+
+	public PersistencePlugin getPlugin(int index) {
+		return this.pluginsMap.get(this.pluginSchemes.get(index));
 	}
 }

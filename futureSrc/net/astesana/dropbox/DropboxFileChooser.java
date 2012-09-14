@@ -33,6 +33,7 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
+import net.yapbam.data.persistence.AbstractURIChooserPanel;
 import net.yapbam.gui.util.JTableListener;
 
 import javax.swing.event.ListSelectionEvent;
@@ -49,7 +50,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
-public abstract class DropboxFileChooser extends JPanel {
+public abstract class DropboxFileChooser extends AbstractURIChooserPanel {
 	public static final String SELECTED_FILE_PROPERTY = "selectedFile";
 	
 	private JPanel centerPanel;
