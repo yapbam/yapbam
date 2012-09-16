@@ -1,15 +1,21 @@
 package net.yapbam.data.persistence;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.swing.Utils;
+import net.astesana.ajlib.swing.framework.Application;
 import net.astesana.dropbox.FileId;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -89,16 +95,28 @@ public class URIChooser extends JTabbedPane {
 	}
 
   private void refresh() {
-		((AbstractURIChooserPanel)getSelectedComponent()).refresh();
+		AbstractURIChooserPanel panel = (AbstractURIChooserPanel)getSelectedComponent();
+		if (panel!=null) panel.refresh();
 	}
 
+	private static final class MyApp extends Application {
+		@Override
+		protected Container buildMainPanel() {
+			JPanel result = new JPanel();
+			JButton button = new JButton("DO IT !");
+			result.add(button);
+			button.setAction(new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					new URIChooser().showOpenDialog(getJFrame());
+				}
+			});
+			return result;
+		}
+	}
+	
 	public static void main(String[] args) {
-		// Schedule a job for the event dispatch thread:
-		// creating and showing this application's GUI.
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-		    new URIChooser().showOpenDialog(null);
-			}
-		});
+		Application app = new MyApp();
+		app.launch();
 	}
 }
