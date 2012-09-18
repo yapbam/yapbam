@@ -1,7 +1,6 @@
 TODO list
 
 Améliorations en cours :
-- Possibilité de grouper plusieurs catégories : Sauver l'état catégories groupées ou pas.
 - La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
 	
 Code cleaning :
