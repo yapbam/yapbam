@@ -13,6 +13,7 @@ public class BudgetPlugin extends AbstractPlugIn {
 	private static final String SUM_COLUMN = "sumColumn";
 	private static final String SUM_LINE = "sumLine";
 	private static final String PER_YEAR = "perYear";
+	private static final String GROUP_SUB_CATEGORIES = "grouped.subcategories";
 	
 	private FilteredData data;
 	private BudgetViewPanel panel;
@@ -34,6 +35,7 @@ public class BudgetPlugin extends AbstractPlugIn {
 		YapbamState.INSTANCE.put(STATE_PREFIX+SUM_COLUMN, Boolean.toString(panel.getChckbxAddSumColumn().isSelected()));
 		YapbamState.INSTANCE.put(STATE_PREFIX+SUM_LINE, Boolean.toString(panel.getChckbxAddSumLine().isSelected()));
 		YapbamState.INSTANCE.put(STATE_PREFIX+PER_YEAR, Boolean.toString(panel.getYear().isSelected()));
+		YapbamState.INSTANCE.put(STATE_PREFIX+GROUP_SUB_CATEGORIES, Boolean.toString(panel.getGroupSubCategories().isSelected()));
 	}
 
 	@Override
@@ -42,5 +44,6 @@ public class BudgetPlugin extends AbstractPlugIn {
 		panel.getChckbxAddSumLine().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(STATE_PREFIX+SUM_LINE, "false")));
 		boolean perYear = Boolean.parseBoolean(YapbamState.INSTANCE.get(STATE_PREFIX+PER_YEAR, "false"));
 		if (perYear) panel.getYear().setSelected(true);
+		panel.getGroupSubCategories().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(STATE_PREFIX+GROUP_SUB_CATEGORIES, "false")));
 	}
 }

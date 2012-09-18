@@ -63,4 +63,15 @@ public class Category implements Serializable, Comparable<Category> {
 		if (name==null) throw new IllegalArgumentException();
 		this.name = name;
 	}
+	
+	public Category getSuperCategory(char categorySeparator) {
+		if (this==Category.UNDEFINED) return this;
+		int index = name.indexOf(categorySeparator);
+		if (index>=0) {
+			return new Category(name.substring(0,index));
+		} else {
+			return this;
+		}
+	}
+
 }
