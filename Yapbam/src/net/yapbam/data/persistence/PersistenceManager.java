@@ -46,7 +46,7 @@ public class PersistenceManager {
 		this.pluginsMap = new HashMap<String, PersistencePlugin>();
 		this.pluginSchemes = new ArrayList<String>();
 		
-//		add(new FilePersistencePlugin());
+		add(new FilePersistencePlugin());
 		
 		// Load plugins under development
 		String testedPlugin = System.getProperty("testedPersistencePlugin.className"); //$NON-NLS-1$

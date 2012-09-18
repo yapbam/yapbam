@@ -58,6 +58,7 @@ public class BudgetViewPanel extends JPanel {
 	private FilteredData data;
 	private JCheckBox chckbxAddSumColumn;
 	private JCheckBox chckbxAddSumLine;
+	private JCheckBox groupSubCategories;
 	
 	/**
 	 * This is the default constructor
@@ -77,12 +78,14 @@ public class BudgetViewPanel extends JPanel {
 	 */
 	private void initialize() {
 		GridBagConstraints gbc_budgetTable = new GridBagConstraints();
+		gbc_budgetTable.insets = new Insets(0, 0, 5, 0);
 		gbc_budgetTable.fill = GridBagConstraints.BOTH;
 		gbc_budgetTable.gridy = 1;
 		gbc_budgetTable.weightx = 1.0;
 		gbc_budgetTable.weighty = 1.0;
 		gbc_budgetTable.gridx = 0;
 		GridBagConstraints gbc_topPanel = new GridBagConstraints();
+		gbc_topPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_topPanel.gridx = 0;
 		gbc_topPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_topPanel.weightx = 1.0D;
@@ -101,12 +104,12 @@ public class BudgetViewPanel extends JPanel {
 	private JPanel getTopPanel() {
 		if (topPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 2;
-			gridBagConstraints5.gridheight = 2;
+			gridBagConstraints5.gridx = 3;
+			gridBagConstraints5.gridheight = 0;
 			gridBagConstraints5.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 3;
+			gridBagConstraints3.gridx = 4;
 			gridBagConstraints3.gridheight = 0;
 			gridBagConstraints3.fill = GridBagConstraints.NONE;
 			gridBagConstraints3.insets = new Insets(5, 5, 0, 0);
@@ -118,7 +121,7 @@ public class BudgetViewPanel extends JPanel {
 			gridBagConstraints2.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new Insets(0, 5, 5, 5);
+			gridBagConstraints1.insets = new Insets(0, 5, 0, 5);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
@@ -129,8 +132,8 @@ public class BudgetViewPanel extends JPanel {
 			GridBagConstraints gbc_chckbxAddSumLine = new GridBagConstraints();
 			gbc_chckbxAddSumLine.anchor = GridBagConstraints.WEST;
 			gbc_chckbxAddSumLine.weightx = 1.0;
-			gbc_chckbxAddSumLine.insets = new Insets(0, 0, 5, 5);
-			gbc_chckbxAddSumLine.gridx = 1;
+			gbc_chckbxAddSumLine.insets = new Insets(0, 0, 0, 5);
+			gbc_chckbxAddSumLine.gridx = 2;
 			gbc_chckbxAddSumLine.gridy = 0;
 			topPanel.add(getChckbxAddSumLine(), gbc_chckbxAddSumLine);
 			topPanel.add(getYear(), gridBagConstraints2);
@@ -142,9 +145,16 @@ public class BudgetViewPanel extends JPanel {
 			GridBagConstraints gbc_chckbxAddSumColumn = new GridBagConstraints();
 			gbc_chckbxAddSumColumn.anchor = GridBagConstraints.WEST;
 			gbc_chckbxAddSumColumn.insets = new Insets(0, 0, 0, 5);
-			gbc_chckbxAddSumColumn.gridx = 1;
+			gbc_chckbxAddSumColumn.gridx = 2;
 			gbc_chckbxAddSumColumn.gridy = 1;
 			topPanel.add(getChckbxAddSumColumn(), gbc_chckbxAddSumColumn);
+			GridBagConstraints gbc_groupSubCategories = new GridBagConstraints();
+			gbc_groupSubCategories.weightx = 1.0;
+			gbc_groupSubCategories.insets = new Insets(0, 0, 0, 5);
+			gbc_groupSubCategories.anchor = GridBagConstraints.WEST;
+			gbc_groupSubCategories.gridx = 1;
+			gbc_groupSubCategories.gridy = 0;
+			topPanel.add(getGroupSubCategories(), gbc_groupSubCategories);
 		}
 		return topPanel;
 	}
@@ -278,7 +288,8 @@ public class BudgetViewPanel extends JPanel {
 						} else {
 							ArrayList<Category> categories = new ArrayList<Category>(selectedRows.length);
 							for (int i = 0; i < selectedRows.length; i++) {
-								categories.add(budget.getCategory(selectedRows[i]));
+								Category category = budget.getCategory(selectedRows[i]);
+								categories.addAll(getDataCategories(category));
 							}
 							theFilter.setValidCategories(categories);
 						}
@@ -295,6 +306,22 @@ public class BudgetViewPanel extends JPanel {
 			});
 		}
 		return filter;
+	}
+	
+	private ArrayList<Category> getDataCategories(Category category) {
+		ArrayList<Category> result = new ArrayList<Category>();
+		if (category.equals(Category.UNDEFINED) || !getGroupSubCategories().isSelected()) {
+			result.add(category);
+		} else {
+			final GlobalData globalData = data.getGlobalData();
+			for (int i = 0; i < globalData.getCategoriesNumber(); i++) {
+				Category cat = globalData.getCategory(i);
+				if (cat.getSuperCategory(globalData.getSubCategorySeparator()).equals(category)) {
+					result.add(cat);
+				}
+			}
+		}
+		return result;
 	}
 	
 	private int[] filterSelected(int[] selected, int maxValue) {
@@ -384,5 +411,19 @@ public class BudgetViewPanel extends JPanel {
 			if (centered && (result instanceof JLabel)) ((JLabel)result).setHorizontalAlignment(JLabel.CENTER);
 			return result;
 		}
+	}
+	
+	JCheckBox getGroupSubCategories() {
+		if (groupSubCategories==null) {
+			groupSubCategories = new JCheckBox(LocalizationData.get("Subcategories.groupButton.title")); //$NON-NLS-1$
+			groupSubCategories.setToolTipText(LocalizationData.get("Subcategories.groupButton.tooltip")); //$NON-NLS-1$
+			groupSubCategories.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					budget.setGroupedSubCategories(getGroupSubCategories().isSelected());
+				}
+			});
+		}
+		return groupSubCategories;
 	}
 }

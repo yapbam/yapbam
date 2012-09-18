@@ -33,7 +33,8 @@ public class BudgetView extends DefaultListenable {
 	private List<Category> categories;
 	private HashMap<Category, Double> categoryToSum;
 	private HashMap<Date, Double> dateToSum;
-	private double sum;	
+	private double sum;
+	private boolean groupSubCategories;
 	
 	private static final class Key {
 		Date date;
@@ -67,6 +68,7 @@ public class BudgetView extends DefaultListenable {
 			}
 		});
 		this.year = year;
+		this.groupSubCategories = false;
 		build();
 	}
 	
@@ -81,6 +83,16 @@ public class BudgetView extends DefaultListenable {
 			|| (event instanceof ModeAddedEvent) || (event instanceof ModeRemovedEvent) || (event instanceof ModePropertyChangedEvent)
 			|| (event instanceof CheckbookPropertyChangedEvent) || (event instanceof CheckbookAddedEvent) || (event instanceof CheckbookRemovedEvent)
 			|| (event instanceof PeriodicalTransactionsAddedEvent) || (event instanceof PeriodicalTransactionsRemovedEvent);
+	}
+	
+	/** Sets the sub-categories grouped attribute.
+	 * @param grouped true to merge sub-categories.
+	 */
+	public void setGroupedSubCategories(boolean grouped) {
+		if (grouped!=this.groupSubCategories) {
+			this.groupSubCategories = grouped;
+			update();
+		}
 	}
 	
 	/**
@@ -286,23 +298,29 @@ public class BudgetView extends DefaultListenable {
 		this.categories = new LinkedList<Category>();
 		this.sum = 0.0;
 		
+		HashMap<Category, Category> catMap = new HashMap<Category, Category>();
+		for (int i = 0; i < data.getGlobalData().getCategoriesNumber(); i++) {
+			Category cat = data.getGlobalData().getCategory(i);
+			catMap.put(cat, groupSubCategories?cat.getSuperCategory(data.getGlobalData().getSubCategorySeparator()):cat);
+		}
+		
 		for (int i = 0; i < data.getTransactionsNumber(); i++) {
 			Transaction transaction = data.getTransaction(i);
 			Date date = getNormalizedDate(transaction.getDate());
 			for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 				SubTransaction subTransaction = transaction.getSubTransaction(j);
 				if (this.data.isOk(subTransaction)) {
-					add (new Key(date, subTransaction.getCategory()), subTransaction.getAmount());
+					add (new Key(date, catMap.get(subTransaction.getCategory())), subTransaction.getAmount());
 					this.sum = this.sum + subTransaction.getAmount();
 				}
 			}
 			if (this.data.isComplementOk(transaction)) {
-				add (new Key(date, transaction.getCategory()), transaction.getComplement());
+				add (new Key(date, catMap.get(transaction.getCategory())), transaction.getComplement());
 				this.sum = this.sum + transaction.getComplement();
 			}
 		}
 	}
-
+	
 	private void add(Key key, double amount) {
 		if (amount!=0) {
 			// Insert the date in the budget (refresh first and last date)

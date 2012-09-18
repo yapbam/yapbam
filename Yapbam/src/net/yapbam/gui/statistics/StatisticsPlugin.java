@@ -160,7 +160,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 			keys.add(category);
 		}
 		for (Category category : keys) {
-			Category superCategory = getSuperCategory(category);
+			Category superCategory = category.getSuperCategory(data.getGlobalData().getSubCategorySeparator());
 			if (!category.equals(superCategory)) {
 				Summary amounts = categoryToAmount.remove(category);
 				Summary superAmounts = categoryToAmount.get(superCategory);
@@ -170,17 +170,6 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				}
 				superAmounts.add(amounts);
 			}
-		}
-	}
-
-	private Category getSuperCategory(Category category) {
-		if (category==Category.UNDEFINED) return category;
-		String name = category.getName();
-		int index = name.indexOf(data.getGlobalData().getSubCategorySeparator());
-		if (index>=0) {
-			return new Category(name.substring(0,index));
-		} else {
-			return category;
 		}
 	}
 
