@@ -234,7 +234,13 @@ public class YapbamState {
 		return properties.getProperty(key, defaultValue);
 	}
 
+	/** Sets a state value.
+	 * @param key The key to set
+	 * @param value The value to link with the key
+	 * @see PreferencesUtils#verifyPreferencesCompliance(String, String)
+	 */
 	public void put(String key, String value) {
+		PreferencesUtils.verifyPreferencesCompliance(key, value);
 		properties.put(key, value);
 	}
 
@@ -288,7 +294,7 @@ public class YapbamState {
 			ObjectOutputStream oos = new ObjectOutputStream(new GZIPOutputStream(baos));
 			oos.writeObject(serializable);
 			oos.close();
-			properties.put(key, Base64.encodeBase64String(baos.toByteArray()));
+			put(key, Base64.encodeBase64String(baos.toByteArray()));
 		} catch (IOException e) {
 			// Should not happen ... because the serialization is made into memory
 			throw new RuntimeException(e);
@@ -327,7 +333,7 @@ public class YapbamState {
 			serializer.closeDocument();
 			stream.flush();
 			String xmlContent = Base64.encodeBase64String(stream.toByteArray());
-			properties.put(key, xmlContent);
+			put(key, xmlContent);
 		} catch (IOException e) {
 				throw new RuntimeException(e);
 		}

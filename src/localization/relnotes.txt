@@ -7,6 +7,7 @@ improvement
 	It is now possible to define sub-categories and view statistics by grouping sub-categories of a category.
 fix
 	When clicking on the button "View a sample data file" of the welcome dialog, there was no warning if changes were not saved. In this case, changes were lost.
+	When Yapbam was installed in the directory "Programs" in Windows, import / export crashed.
 	
 version	0.11.7 (09/09/2012)
 fix
