@@ -183,11 +183,17 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	@Override
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
+		YapbamState.INSTANCE.put(getGroupSubCategoriesStateKey(), Boolean.toString(getGroupSubCategories().isSelected()));
 	}
 
 	@Override
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
+		getGroupSubCategories().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getGroupSubCategoriesStateKey(), "false")));
 	}
-	
+
+	private String getGroupSubCategoriesStateKey() {
+		return this.getClass().getCanonicalName()+".groupSubCategories";
+	}
+
 }
