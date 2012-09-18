@@ -458,6 +458,7 @@ public class Preferences {
 	 * @see #getProperty(String)
 	 */
 	public void setProperty (String key, String value) {
+		PreferencesUtils.verifyPreferencesCompliance(key, value);
 		this.properties.setProperty(key, value);
 	}
 	
@@ -615,7 +616,7 @@ public class Preferences {
 		return this.backupOptions;
 	}
 
-	/** Tests whether is Preferences is able to save preferences at this time.
+	/** Tests whether Preferences is able to save preferences at this time.
 	 * <br>It is not during the instantiation of the preferences singleton.
 	 * So, code executing during this instantiation should not refer to Preferences.INSTANCE
 	 * @return true if the singleton is ready to be modified.
@@ -625,7 +626,7 @@ public class Preferences {
 	}
 
 	/** Tests whether the application is portable.
-	 * <br>If it is, the preferences are saved in the execution directory. If not, they are store using the java.util.prefs utilities.
+	 * <br>If it is, the preferences are saved in the execution directory. If not, they are stored using the java.util.prefs utilities.
 	 * <br>Note : A I'm really found of the "portable application concept", the application is declared portable as soon as it is able
 	 * to write in its installation directory.  
 	 * @return true if the application is portable

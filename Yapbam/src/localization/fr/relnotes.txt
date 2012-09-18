@@ -6,7 +6,8 @@ improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 	Il est à présent possible de définir des sous-catégories et de visualiser les statistiques en groupant les sous-catégories d'une même catégorie.
 fix
-	Lorsqu'on cliquait sur le bouton "Ouvrir un fichier exemple" de l'écran d'accueil, il n'y avait pas d'avertissement si des modifications n'avaient pas été sauvegardées. Dans ce cas, elles étaient perdues. 
+	Lorsqu'on cliquait sur le bouton "Ouvrir un fichier exemple" de l'écran d'accueil, il n'y avait pas d'avertissement si des modifications n'avaient pas été sauvegardées. Dans ce cas, elles étaient perdues.
+	Lorsque Yapbam était installé dans le répertoire "Programmes" sous Windows, l'import/export plantait. 
 
 version	0.11.7 (09/09/2012)
 fix

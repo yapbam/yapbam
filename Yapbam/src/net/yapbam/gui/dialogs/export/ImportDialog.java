@@ -35,13 +35,17 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 	protected Importer buildResult() {
 		Importer importer = importPanel.getImporter();
 		ImporterParameters parameters = importer.getParameters();
-		YapbamState.INSTANCE.save(getStateKey(parameters.getClass()), parameters);
+		YapbamState.INSTANCE.save(getStateKey(), parameters);
 		lastFile = importer.getFile();
 		return importer;
 	}
 
-	private String getStateKey(Class<?> saved) {
+	private String getOldStateKey(Class<?> saved) {
 		return this.getClass().getCanonicalName()+"."+saved.getName();
+	}
+
+	private String getStateKey() {
+		return this.getClass().getCanonicalName()+".params";
 	}
 
 	@Override
@@ -50,7 +54,16 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 		importPanel.setData(data.data);
 		importPanel.setFile(data.file);
 		importPanel.addPropertyChangeListener(ImportPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
-		ImporterParameters parameters = (ImporterParameters) YapbamState.INSTANCE.restore(getStateKey(ImporterParameters.class));
+		ImporterParameters parameters = (ImporterParameters) YapbamState.INSTANCE.restore(getStateKey());
+		// The key name has changed after 0.11.7 (the old key was too long to be saved by java.utils.Preferences)
+		// Try with the old name if the new one can't be found
+		if (parameters==null) {
+			parameters = (ImporterParameters) YapbamState.INSTANCE.restore(getOldStateKey(ImporterParameters.class));
+			if (parameters != null) {
+				YapbamState.INSTANCE.remove(getOldStateKey(ImporterParameters.class));
+				YapbamState.INSTANCE.save(getStateKey(), parameters);
+			}
+		}
 		if (parameters!=null) importPanel.setParameters(parameters);
 		return importPanel;
 	}

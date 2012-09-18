@@ -11,6 +11,18 @@ import java.util.prefs.Preferences;
  */   
 public final class PreferencesUtils {
 	private PreferencesUtils() {}
+	
+	/** Verifies that a key/value couple is compliant with the limitations of java.util.prefs.Preferences.
+	 * <br>As state could be saved by java.util.prefs.Preferences, we should verify that the key and
+	 * value conform to Preferences restrictions. Especially, the fact that key and values size are limited.
+	 * @param key a Key
+	 * @param value a Value
+	 * @throws IllegalArgumentException if the key or value is not compliant with the limitations of java.util.prefs.Preferences.
+	 */
+	public static void verifyPreferencesCompliance(String key, String value) {
+		if (key.length()>java.util.prefs.Preferences.MAX_KEY_LENGTH) throw new IllegalArgumentException("Key is to long: "+key);
+		if (value.length()>java.util.prefs.Preferences.MAX_VALUE_LENGTH) throw new IllegalArgumentException("Value is to long: "+value);
+	}
 
 	/** Saves properties to a Preferences node.
 	 * @param pref The preferences node in which the properties will be saved.
