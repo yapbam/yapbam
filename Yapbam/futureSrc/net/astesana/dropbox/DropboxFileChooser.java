@@ -33,7 +33,6 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.yapbam.data.persistence.AbstractURIChooserPanel;
 import net.yapbam.gui.util.JTableListener;
 
 import javax.swing.event.ListSelectionEvent;
@@ -50,9 +49,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
-public abstract class DropboxFileChooser extends AbstractURIChooserPanel {
-	public static final String SELECTED_FILE_PROPERTY = "selectedFile";
-	
+public abstract class DropboxFileChooser extends JPanel {
+	public static final String SELECTED_FILEID_PROPERTY = "selectedIds";
 	private JPanel centerPanel;
 	private JTable fileList;
 	private JPanel filePanel;
@@ -145,8 +143,8 @@ public abstract class DropboxFileChooser extends AbstractURIChooserPanel {
 			ConnectionDialog connectionDialog = new ConnectionDialog(owner, "Be cool, connect to Dropbox", getDropboxAPI().getSession());
 			connectionDialog.setVisible(true);
 			pair = connectionDialog.getResult();
-			if (pair==null && cancelAction!=null) {
-				cancelAction.run(); // Calls the cancel action if any is defined
+			if (pair==null) {
+				if (cancelAction!=null) cancelAction.run(); // Calls the cancel action if any is defined
 				return; // And exit
 			}
 		}
@@ -268,7 +266,7 @@ public abstract class DropboxFileChooser extends AbstractURIChooserPanel {
 					} else {
 						selectionModel.setSelectionInterval(index, index);
 					}
-					firePropertyChange(SELECTED_FILE_PROPERTY, evt.getOldValue(), evt.getNewValue());
+					firePropertyChange(SELECTED_FILEID_PROPERTY, evt.getOldValue(), evt.getNewValue());
 				}
 			});
 		}

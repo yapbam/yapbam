@@ -17,7 +17,7 @@ public class DropboxFileChooserDialog extends AbstractDialog<DropboxFileChooser,
 
 	@Override
 	protected JPanel createCenterPane() {
-		this.data.addPropertyChangeListener(DropboxFileChooser.SELECTED_FILE_PROPERTY, new PropertyChangeListener() {
+		this.data.addPropertyChangeListener(DropboxFileChooser.SELECTED_FILEID_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateOkButtonEnabled();
