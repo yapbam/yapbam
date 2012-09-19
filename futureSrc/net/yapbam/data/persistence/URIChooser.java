@@ -1,6 +1,5 @@
 package net.yapbam.data.persistence;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -10,23 +9,22 @@ import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.framework.Application;
-import net.astesana.dropbox.FileId;
 
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.net.URI;
 
 @SuppressWarnings("serial")
 public class URIChooser extends JTabbedPane {
 	public enum Type {
     OPEN, SAVE 
-	}
-	
-	public enum Source {
-		FILE, DROPBOX
 	}
 	
 	/**
@@ -36,7 +34,13 @@ public class URIChooser extends JTabbedPane {
 		setTabPlacement(JTabbedPane.LEFT);
 		for (int i = 0; i < PersistenceManager.MANAGER.getPluginsNumber(); i++) {
 			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(i);
-			addTab(plugin.getName(), plugin.getIcon(), plugin.getChooser(), plugin.getTooltip());
+			addTab(plugin.getName(), plugin.getIcon(), plugin.getChooser().getComponent(), plugin.getTooltip());
+			plugin.getChooser().getComponent().addPropertyChangeListener(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					firePropertyChange(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, evt.getOldValue(), evt.getNewValue());
+				}
+			});
 		}
 		addChangeListener(new ChangeListener() {
 			@Override
@@ -55,15 +59,15 @@ public class URIChooser extends JTabbedPane {
 //TODO		getFileChooser().setDialogType(type.equals(Type.OPEN)?JFileChooser.OPEN_DIALOG:JFileChooser.SAVE_DIALOG);
 	}
 	
-	public FileId showOpenDialog(Component parent) {
+	public URI showOpenDialog(Component parent) {
 		return showDialog(parent, false);
 	}
 	
-	public FileId showSaveDialog(Component parent) {
+	public URI showSaveDialog(Component parent) {
 		return showDialog(parent, true);
 	}
 	
-	public FileId showDialog(Component parent, boolean save) {
+	public URI showDialog(Component parent, boolean save) {
 //TODO		this.getFilePanel().setVisible(save);
 		Window owner = Utils.getOwnerWindow(parent);
 		final URIChooserDialog dialog = new URIChooserDialog(owner, "URI Chooser", this);
@@ -76,21 +80,7 @@ public class URIChooser extends JTabbedPane {
 				refresh();
 			}
 		});
-//		this.setCancelAction(new Runnable() {
-//			@Override
-//			public void run() {
-//				dialog.cancel();
-//			}
-//		});
-//		this.setConfirmAction(new Runnable() {
-//			@Override
-//			public void run() {
-//				dialog.confirm();
-//			}
-//		});
 		dialog.setVisible(true);
-//		this.setCancelAction(null);
-//		this.setConfirmAction(null);
 		return dialog.getResult();
 	}
 
@@ -99,16 +89,29 @@ public class URIChooser extends JTabbedPane {
 		if (panel!=null) panel.refresh();
 	}
 
+	public URI getSelectedURI() {
+		AbstractURIChooserPanel panel = (AbstractURIChooserPanel)getSelectedComponent();
+		return panel.getSelectedURI();
+	}
+
 	private static final class MyApp extends Application {
 		@Override
 		protected Container buildMainPanel() {
 			JPanel result = new JPanel();
-			JButton button = new JButton("DO IT !");
+			JButton button = new JButton("Open");
 			result.add(button);
-			button.setAction(new AbstractAction() {
+			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					new URIChooser().showOpenDialog(getJFrame());
+					System.out.println (new URIChooser().showOpenDialog(getJFrame()));
+				}
+			});
+			JButton saveButton = new JButton("Save");
+			result.add(saveButton);
+			saveButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.out.println (new URIChooser().showSaveDialog(getJFrame()));
 				}
 			});
 			return result;

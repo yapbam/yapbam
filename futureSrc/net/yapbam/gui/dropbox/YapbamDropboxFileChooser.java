@@ -1,24 +1,42 @@
 package net.yapbam.gui.dropbox;
 
+import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.net.URI;
+
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.dropbox.DropboxFileChooser;
+import net.astesana.dropbox.FileId;
+import net.yapbam.data.persistence.AbstractURIChooserPanel;
 import net.yapbam.gui.Preferences;
 
 @SuppressWarnings("serial")
-public class YapbamDropboxFileChooser extends DropboxFileChooser {
+public class YapbamDropboxFileChooser extends DropboxFileChooser implements AbstractURIChooserPanel {
 	private static final String DROPBOX_ACCESS_KEY = "Dropbox.access.key";
 	private static final String DROPBOX_ACCESS_SECRET = "Dropbox.access.secret";
 	private DropboxAPI<? extends WebAuthSession> dropboxAPI;
+	private URI selectedURI;
 
 	/**
 	 * Creates the panel.
 	 */
 	public YapbamDropboxFileChooser() {
 		super();
+		this.selectedURI = null;
+		this.addPropertyChangeListener(DropboxFileChooser.SELECTED_FILEID_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				URI old = selectedURI;
+				FileId selectedFile = getSelectedFile();
+				selectedURI = selectedFile==null?null:selectedFile.getURI();
+				firePropertyChange(SELECTED_URI_PROPERTY, old, selectedURI);
+			}
+		});
 	}
 
 	@Override
@@ -59,5 +77,15 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser {
 		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_KEY);
 		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_SECRET);
 		dropboxAPI = null;
+	}
+	
+	@Override
+	public URI getSelectedURI() {
+		return this.selectedURI;
+	}
+
+	@Override
+	public Component getComponent() {
+		return this;
 	}
 }

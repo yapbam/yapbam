@@ -4,15 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URI;
 
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.astesana.dropbox.DropboxFileChooser;
-import net.astesana.dropbox.FileId;
 
 @SuppressWarnings("serial")
-class URIChooserDialog extends AbstractDialog<URIChooser, FileId> {
+class URIChooserDialog extends AbstractDialog<URIChooser, URI> {
 
 	public URIChooserDialog(Window owner, String title, URIChooser panel) {
 		super(owner, title, panel);
@@ -20,7 +19,7 @@ class URIChooserDialog extends AbstractDialog<URIChooser, FileId> {
 
 	@Override
 	protected JPanel createCenterPane() {
-		this.data.addPropertyChangeListener(DropboxFileChooser.SELECTED_FILE_PROPERTY, new PropertyChangeListener() {
+		this.data.addPropertyChangeListener(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateOkButtonEnabled();
@@ -32,14 +31,15 @@ class URIChooserDialog extends AbstractDialog<URIChooser, FileId> {
 	}
 
 	@Override
-	protected FileId buildResult() {
-		return null; //TODO this.data.getSelectedFile();
+	protected URI buildResult() {
+		return this.data.getSelectedURI();
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
+		System.out.println ("URIChooserDialog.getokDisabledCause is called : "+data.getSelectedURI()); //TODO
+		if (this.data.getSelectedURI()==null) return "This button is disabled because no file is selected";
 		return null;
-//TODO		return this.data.getSelectedFile()==null?"Please select a file":null;
 	}
 
 	/* (non-Javadoc)
