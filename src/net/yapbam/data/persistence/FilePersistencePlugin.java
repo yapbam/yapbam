@@ -4,7 +4,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class FilePersistencePlugin extends PersistencePlugin {
-	private AbstractURIChooserPanel panel;
 
 	@Override
 	public String getName() {
@@ -29,11 +28,8 @@ public class FilePersistencePlugin extends PersistencePlugin {
 	}
 
 	@Override
-	public AbstractURIChooserPanel getChooser() {
-		if (panel==null) {
-			panel = new FileChooserPanel();
-		}
-		return panel;
+	public AbstractURIChooserPanel buildChooser() {
+		return new FileChooserPanel();
 	}
 
 	@Override
