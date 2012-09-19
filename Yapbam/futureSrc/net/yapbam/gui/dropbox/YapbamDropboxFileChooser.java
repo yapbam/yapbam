@@ -1,6 +1,5 @@
 package net.yapbam.gui.dropbox;
 
-import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
@@ -82,10 +81,5 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	@Override
 	public URI getSelectedURI() {
 		return this.selectedURI;
-	}
-
-	@Override
-	public Component getComponent() {
-		return this;
 	}
 }

@@ -9,8 +9,6 @@ import net.yapbam.gui.dropbox.YapbamDropboxFileChooser;
 
 public class DropboxPersistencePlugin extends PersistencePlugin {
 
-	private AbstractURIChooserPanel dropboxChooser;
-
 	@Override
 	public String getName() {
 		return "Dropbox";
@@ -27,11 +25,8 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 	}
 	
 	@Override
-	public AbstractURIChooserPanel getChooser() {
-		if (dropboxChooser==null) {
-			dropboxChooser = new YapbamDropboxFileChooser();
-		}
-		return dropboxChooser;
+	public AbstractURIChooserPanel buildChooser() {
+		return new YapbamDropboxFileChooser();
 	}
 	
 	@Override

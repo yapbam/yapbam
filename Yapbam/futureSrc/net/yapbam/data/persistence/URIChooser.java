@@ -34,8 +34,9 @@ public class URIChooser extends JTabbedPane {
 		setTabPlacement(JTabbedPane.LEFT);
 		for (int i = 0; i < PersistenceManager.MANAGER.getPluginsNumber(); i++) {
 			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(i);
-			addTab(plugin.getName(), plugin.getIcon(), plugin.getChooser().getComponent(), plugin.getTooltip());
-			plugin.getChooser().getComponent().addPropertyChangeListener(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
+			Component uiChooser = (Component) plugin.buildChooser();
+			addTab(plugin.getName(), plugin.getIcon(), uiChooser, plugin.getTooltip());
+			uiChooser.addPropertyChangeListener(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					firePropertyChange(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, evt.getOldValue(), evt.getNewValue());

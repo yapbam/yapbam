@@ -1,6 +1,6 @@
 package net.yapbam.data.persistence;
+
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -32,7 +32,22 @@ public class FileChooserPanel extends JPanel implements AbstractURIChooserPanel 
 	
 	private JFileChooser getFileChooser() {
 		if (fileChooser == null) {
-			fileChooser = new FileChooser();
+			fileChooser = new FileChooser() {
+				private boolean approved;
+				
+				public void approveSelection() {
+					System.out.println ("ApproveSelection was pressed "+getSelectedFile()); //TODO
+				}
+
+				/* (non-Javadoc)
+				 * @see javax.swing.JFileChooser#getSelectedFile()
+				 */
+				@Override
+				public File getSelectedFile() {
+					return super.getSelectedFile();
+				}
+				
+			};
 			fileChooser.setControlButtonsAreShown(false);
 		}
 		return fileChooser;
@@ -46,9 +61,4 @@ public class FileChooserPanel extends JPanel implements AbstractURIChooserPanel 
 
 	@Override
 	public void refresh() {}
-
-	@Override
-	public Component getComponent() {
-		return this;
-	}
 }
