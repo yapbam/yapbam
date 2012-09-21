@@ -38,15 +38,6 @@ public class FileChooserPanel extends JPanel implements AbstractURIChooserPanel 
 				public void approveSelection() {
 					System.out.println ("ApproveSelection was pressed "+getSelectedFile()); //TODO
 				}
-
-				/* (non-Javadoc)
-				 * @see javax.swing.JFileChooser#getSelectedFile()
-				 */
-				@Override
-				public File getSelectedFile() {
-					return super.getSelectedFile();
-				}
-				
 			};
 			fileChooser.setControlButtonsAreShown(false);
 		}
@@ -61,4 +52,9 @@ public class FileChooserPanel extends JPanel implements AbstractURIChooserPanel 
 
 	@Override
 	public void refresh() {}
+
+	@Override
+	public void setDialogType(boolean save) {
+		this.fileChooser.setDialogType(save?FileChooser.SAVE_DIALOG:FileChooser.OPEN_DIALOG);
+	}
 }

@@ -23,15 +23,11 @@ import java.net.URI;
 
 @SuppressWarnings("serial")
 public class URIChooser extends JTabbedPane {
-	public enum Type {
-    OPEN, SAVE 
-	}
-	
 	/**
 	 * Create the panel.
 	 */
 	public URIChooser() {
-		setTabPlacement(JTabbedPane.LEFT);
+		setTabPlacement(JTabbedPane.TOP);
 		for (int i = 0; i < PersistenceManager.MANAGER.getPluginsNumber(); i++) {
 			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(i);
 			Component uiChooser = (Component) plugin.buildChooser();
@@ -56,20 +52,24 @@ public class URIChooser extends JTabbedPane {
 		});
 	}
 
-	public void setDialogType(Type type) {
-//TODO		getFileChooser().setDialogType(type.equals(Type.OPEN)?JFileChooser.OPEN_DIALOG:JFileChooser.SAVE_DIALOG);
+	private void setDialogType(boolean save) {
+		for (int i = 0; i < this.getTabCount(); i++) {
+			AbstractURIChooserPanel tab = (AbstractURIChooserPanel)this.getComponentAt(i);
+			tab.setDialogType(save);
+		}
 	}
 	
 	public URI showOpenDialog(Component parent) {
-		return showDialog(parent, false);
+		setDialogType(false);
+		return showDialog(parent);
 	}
 	
 	public URI showSaveDialog(Component parent) {
-		return showDialog(parent, true);
+		setDialogType(true);
+		return showDialog(parent);
 	}
 	
-	public URI showDialog(Component parent, boolean save) {
-//TODO		this.getFilePanel().setVisible(save);
+	private URI showDialog(Component parent) {
 		Window owner = Utils.getOwnerWindow(parent);
 		final URIChooserDialog dialog = new URIChooserDialog(owner, "URI Chooser", this);
 		dialog.addWindowListener(new WindowAdapter() {

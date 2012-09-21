@@ -88,15 +88,20 @@ public abstract class DropboxFileChooser extends JPanel {
 	}
 	
 	public FileId showOpenDialog(Component parent) {
-		return showDialog(parent, false);
+		setDialogType(false);
+		return showDialog(parent);
 	}
 	
 	public FileId showSaveDialog(Component parent) {
-		return showDialog(parent, true);
+		setDialogType(true);
+		return showDialog(parent);
 	}
 	
-	public FileId showDialog(Component parent, boolean save) {
+	public void setDialogType(boolean save) {
 		this.getFilePanel().setVisible(save);
+	}
+
+	public FileId showDialog(Component parent) {
 		Window owner = Utils.getOwnerWindow(parent);
 		final DropboxFileChooserDialog dialog = new DropboxFileChooserDialog(owner, "DropboxChooser", this);
 		dialog.addWindowListener(new WindowAdapter() {
