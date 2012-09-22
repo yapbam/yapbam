@@ -23,6 +23,10 @@ import java.net.URI;
 
 @SuppressWarnings("serial")
 public class URIChooser extends JTabbedPane {
+	public static final String SELECTED_URI_PROPERTY = AbstractURIChooserPanel.SELECTED_URI_PROPERTY;
+	private URI selectedURI;
+	private URIChooserDialog dialog;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -35,17 +39,23 @@ public class URIChooser extends JTabbedPane {
 			uiChooser.addPropertyChangeListener(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					firePropertyChange(AbstractURIChooserPanel.SELECTED_URI_PROPERTY, evt.getOldValue(), evt.getNewValue());
+					URI old = selectedURI;
+					selectedURI = (URI) evt.getNewValue();
+					firePropertyChange(SELECTED_URI_PROPERTY, old, selectedURI);
 				}
 			});
+			((AbstractURIChooserPanel)uiChooser).setURIChooser(this);
 		}
 		addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
+				URI old = selectedURI;
+				selectedURI = ((AbstractURIChooserPanel)getSelectedComponent()).getSelectedURI();
+				firePropertyChange(SELECTED_URI_PROPERTY, old, selectedURI);
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						refresh();
+						setUp();
 					}
 				});
 			}
@@ -78,21 +88,19 @@ public class URIChooser extends JTabbedPane {
 			 */
 			@Override
 			public void windowOpened(WindowEvent e) {
-				refresh();
+				setUp();
 			}
 		});
 		dialog.setVisible(true);
 		return dialog.getResult();
 	}
 
-  private void refresh() {
-		AbstractURIChooserPanel panel = (AbstractURIChooserPanel)getSelectedComponent();
-		if (panel!=null) panel.refresh();
+  private void setUp() {
+		((AbstractURIChooserPanel)getSelectedComponent()).setUp();
 	}
 
 	public URI getSelectedURI() {
-		AbstractURIChooserPanel panel = (AbstractURIChooserPanel)getSelectedComponent();
-		return panel.getSelectedURI();
+		return selectedURI;
 	}
 
 	private static final class MyApp extends Application {
@@ -122,5 +130,13 @@ public class URIChooser extends JTabbedPane {
 	public static void main(String[] args) {
 		Application app = new MyApp();
 		app.launch();
+	}
+
+	void setDialog(URIChooserDialog uriChooserDialog) {
+		this.dialog = uriChooserDialog;
+	}
+
+	public void approveSelection() {
+		this.dialog.confirm();
 	}
 }

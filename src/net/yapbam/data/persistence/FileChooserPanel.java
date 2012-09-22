@@ -14,6 +14,7 @@ import net.astesana.ajlib.swing.dialog.FileChooser;
 @SuppressWarnings("serial")
 public class FileChooserPanel extends JPanel implements AbstractURIChooserPanel {
 	private FileChooser fileChooser;
+	private URIChooser chooser;
 
 	public FileChooserPanel() {
 		setLayout(new BorderLayout(0, 0));
@@ -33,10 +34,8 @@ public class FileChooserPanel extends JPanel implements AbstractURIChooserPanel 
 	private JFileChooser getFileChooser() {
 		if (fileChooser == null) {
 			fileChooser = new FileChooser() {
-				private boolean approved;
-				
 				public void approveSelection() {
-					System.out.println ("ApproveSelection was pressed "+getSelectedFile()); //TODO
+					chooser.approveSelection();
 				}
 			};
 			fileChooser.setControlButtonsAreShown(false);
@@ -51,10 +50,15 @@ public class FileChooserPanel extends JPanel implements AbstractURIChooserPanel 
 	}
 
 	@Override
-	public void refresh() {}
+	public void setUp() {}
 
 	@Override
 	public void setDialogType(boolean save) {
 		this.fileChooser.setDialogType(save?FileChooser.SAVE_DIALOG:FileChooser.OPEN_DIALOG);
+	}
+
+	@Override
+	public void setURIChooser(URIChooser chooser) {
+		this.chooser = chooser;
 	}
 }
