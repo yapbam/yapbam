@@ -2,6 +2,7 @@ package net.astesana.dropbox;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -26,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Account;
 import com.dropbox.client2.DropboxAPI.Entry;
+import com.dropbox.client2.exception.DropboxIOException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
@@ -141,8 +143,8 @@ public abstract class DropboxFileChooser extends JPanel {
 	protected abstract DropboxAPI<? extends WebAuthSession> getDropboxAPI();
 	protected abstract void clearAccess();
 	
-	public void refresh() {
-		Window owner = Utils.getOwnerWindow(this);
+	public boolean refresh() {
+		final Window owner = Utils.getOwnerWindow(this);
 		AccessTokenPair pair = getDropboxAPI().getSession().getAccessTokenPair();
 		while (!accessGranted(pair)) {
 			ConnectionDialog connectionDialog = new ConnectionDialog(owner, "Be cool, connect to Dropbox", getDropboxAPI().getSession());
@@ -150,10 +152,10 @@ public abstract class DropboxFileChooser extends JPanel {
 			pair = connectionDialog.getResult();
 			if (pair==null) {
 				if (cancelAction!=null) cancelAction.run(); // Calls the cancel action if any is defined
-				return; // And exit
+				return false; // And exit
 			}
 		}
-		new WorkInProgressFrame(owner, "Please wait", ModalityType.APPLICATION_MODAL, new Worker<DropboxInfo, Void>() {
+		Worker<DropboxInfo, Void> worker = new Worker<DropboxInfo, Void>() {
 			@Override
 			protected DropboxInfo doInBackground() throws Exception {
 				setPhase("Connecting to Dropbox", -1);
@@ -162,46 +164,44 @@ public abstract class DropboxFileChooser extends JPanel {
 				info.files = getDropboxAPI().metadata("", 0, null, true, null).contents;
 				return info;
 			}
-
-			/* (non-Javadoc)
-			 * @see javax.swing.SwingWorker#done()
-			 */
-			@Override
-			protected void done() {
-				try {
-					info = get();
-					setAccountName(info.account.displayName);
-					Entry[] entries = info.files.toArray(new Entry[info.files.size()]);
-					fillTable(entries);
-					long percentUsed = 100*(info.account.quotaNormal+info.account.quotaShared) / info.account.quota; 
-					getProgressBar().setValue((int)percentUsed);
-					double remaining = info.account.quota-info.account.quotaNormal-info.account.quotaShared;
-					String unit = "bytes";
+		};
+		new WorkInProgressFrame(owner, "Please wait", ModalityType.APPLICATION_MODAL, worker).setVisible(true);
+		try {
+			info = worker.get();
+			setAccountName(info.account.displayName);
+			Entry[] entries = info.files.toArray(new Entry[info.files.size()]);
+			fillTable(entries);
+			long percentUsed = 100*(info.account.quotaNormal+info.account.quotaShared) / info.account.quota; 
+			getProgressBar().setValue((int)percentUsed);
+			double remaining = info.account.quota-info.account.quotaNormal-info.account.quotaShared;
+			String unit = "bytes";
+			if (remaining>1024) {
+				unit = "kB";
+				remaining = remaining/1024;
+				if (remaining>1024) {
+					unit = "MB";
+					remaining = remaining/1024;
 					if (remaining>1024) {
-						unit = "kB";
+						unit = "GB";
 						remaining = remaining/1024;
-						if (remaining>1024) {
-							unit = "MB";
-							remaining = remaining/1024;
-							if (remaining>1024) {
-								unit = "GB";
-								remaining = remaining/1024;
-							}
-						}
 					}
-					getProgressBar().setString(MessageFormat.format("{1}{0} free", unit, new DecimalFormat("0.0").format(remaining)));
-					getFileNameField().setEditable(true);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				} catch (ExecutionException e) {
-					throw new RuntimeException(e);
-				} catch (CancellationException e) {
-					// The task was cancelled
 				}
-				super.done();
 			}
-			
-		}).setVisible(true);
+			getProgressBar().setString(MessageFormat.format("{1}{0} free", unit, new DecimalFormat("0.0").format(remaining)));
+			getFileNameField().setEditable(true);
+			return true;
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		} catch (ExecutionException e) {
+			if (e.getCause() instanceof DropboxIOException) {
+				JOptionPane.showMessageDialog(owner, "Damned it failed. Seems like your not connected to the Internet", "Error", JOptionPane.ERROR_MESSAGE);
+			} else {
+				throw new RuntimeException(e);
+			}
+		} catch (CancellationException e) {
+			// The task was cancelled
+		}
+		return false;
 	}
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {

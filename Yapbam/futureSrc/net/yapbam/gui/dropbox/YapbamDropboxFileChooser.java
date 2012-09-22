@@ -12,14 +12,18 @@ import com.dropbox.client2.session.WebAuthSession;
 import net.astesana.dropbox.DropboxFileChooser;
 import net.astesana.dropbox.FileId;
 import net.yapbam.data.persistence.AbstractURIChooserPanel;
+import net.yapbam.data.persistence.URIChooser;
 import net.yapbam.gui.Preferences;
 
 @SuppressWarnings("serial")
 public class YapbamDropboxFileChooser extends DropboxFileChooser implements AbstractURIChooserPanel {
-	private static final String DROPBOX_ACCESS_KEY = "Dropbox.access.key";
-	private static final String DROPBOX_ACCESS_SECRET = "Dropbox.access.secret";
+	private static final String DROPBOX_ACCESS_KEY = "Dropbox.access.key"; //$NON-NLS-1$
+	private static final String DROPBOX_ACCESS_SECRET = "Dropbox.access.secret"; //$NON-NLS-1$
 	private DropboxAPI<? extends WebAuthSession> dropboxAPI;
+	
 	private URI selectedURI;
+	private boolean setUp;
+	private URIChooser chooser;
 
 	/**
 	 * Creates the panel.
@@ -36,13 +40,19 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 				firePropertyChange(SELECTED_URI_PROPERTY, old, selectedURI);
 			}
 		});
+		setConfirmAction(new Runnable() {
+			@Override
+			public void run() {
+				chooser.approveSelection();
+			}
+		});
 	}
 
 	@Override
 	protected String filter(Entry entry) {
 		String fileName = entry.fileName();
-		if (fileName.endsWith(".zip")) {
-			return fileName.substring(0, fileName.length()-".zip".length());
+		if (fileName.endsWith(".zip")) { //$NON-NLS-1$
+			return fileName.substring(0, fileName.length()-".zip".length()); //$NON-NLS-1$
 		} else {
 			return null;
 		}
@@ -81,5 +91,17 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	@Override
 	public URI getSelectedURI() {
 		return this.selectedURI;
+	}
+
+	@Override
+	public void setUp() {
+		if (!setUp) {
+			setUp = refresh();
+		}
+	}
+
+	@Override
+	public void setURIChooser(URIChooser chooser) {
+		this.chooser = chooser;
 	}
 }

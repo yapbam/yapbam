@@ -15,6 +15,7 @@ class URIChooserDialog extends AbstractDialog<URIChooser, URI> {
 
 	public URIChooserDialog(Window owner, String title, URIChooser panel) {
 		super(owner, title, panel);
+		panel.setDialog(this);
 	}
 
 	@Override
@@ -37,7 +38,6 @@ class URIChooserDialog extends AbstractDialog<URIChooser, URI> {
 
 	@Override
 	protected String getOkDisabledCause() {
-		System.out.println ("URIChooserDialog.getokDisabledCause is called : "+data.getSelectedURI()); //TODO
 		if (this.data.getSelectedURI()==null) return "This button is disabled because no file is selected";
 		return null;
 	}
