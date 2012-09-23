@@ -23,7 +23,7 @@ class DataReader {
 
 	boolean readData(Window owner, GlobalData data, URI uri) throws ExecutionException {
 		PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		uri = plugin.download(uri);
+		uri = plugin.synchronizeForOpening(uri);
 		String password = null;
 		try {
 			SerializationData info = Serializer.getSerializationData(uri);

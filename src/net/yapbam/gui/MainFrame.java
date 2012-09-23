@@ -305,8 +305,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 
 	private void updateWindowTitle() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
-		URI file = data.getURI();
-		if (file!=null) title = title + " - " + file; //$NON-NLS-1$
+		URI uri = data.getURI();
+		if (uri!=null) title = title + " - " + PersistenceManager.MANAGER.getDisplayable(uri); //$NON-NLS-1$
 		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
 		this.getJFrame().setTitle(title);
 	}

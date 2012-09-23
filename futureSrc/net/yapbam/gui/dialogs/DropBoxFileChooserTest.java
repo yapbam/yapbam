@@ -25,8 +25,7 @@ public class DropBoxFileChooserTest extends Application{
 			public void actionPerformed(ActionEvent e) {
 				FileId id = new YapbamDropboxFileChooser().showSaveDialog(button);
 				if (id!=null) {
-					System.out.println (id.toString());
-					System.out.println (id.getURI());
+					System.out.println (id.toURI());
 				}
 			}
 		});

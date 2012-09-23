@@ -35,6 +35,9 @@ public abstract class Dropbox {
 		} else {
 			Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_KEY, pair.key);
 			Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_SECRET, pair.secret);
+			if (dropboxAPI!=null && !dropboxAPI.getSession().getAccessTokenPair().equals(pair)) {
+				dropboxAPI.getSession().setAccessTokenPair(pair);
+			}
 		}
 	}
 }

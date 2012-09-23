@@ -27,7 +27,7 @@ public abstract class PersistencePlugin {
 	 */
 	public abstract String getScheme();
 
-	public URI download(URI uri) throws ExecutionException {
+	public URI synchronizeForOpening(URI uri) throws ExecutionException {
 		return uri; //TODO
 	}
 	
@@ -41,4 +41,14 @@ public abstract class PersistencePlugin {
 	 * @see #getScheme()
 	 */
 	public abstract AbstractURIChooserPanel buildChooser();
+
+	/** Gets displayable form of an URI.
+	 * <br>URI may contains secret informations (example: password). This method converts the URI to a string
+	 * that can be securely displayed on a screen. 
+	 * @param uri
+	 * @return a String. The default implementation returns uri.toString().
+	 */
+	public String getDisplayableName(URI uri) {
+		return uri.toString();
+	}
 }
