@@ -408,4 +408,8 @@ public abstract class DropboxFileChooser extends JPanel {
 		String name = getFileNameField().getText();
 		return name.length()==0?null:new FileId(getDropboxAPI().getSession().getAccessTokenPair(), info.account.displayName, name);
 	}
+	
+	protected DropboxInfo getInfo() {
+		return info;
+	}
 }

@@ -2,12 +2,10 @@ TODO list
 
 Améliorations en cours :
 - La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
+- Finir les TODO du panneau de sélection Dropbox
 	
 Code cleaning :
 Utiliser le framework AJLib pour créer l'application.
-
-Bugs :
-- Les info de backup du panneau de préférences ne sont pas prises en compte
 
 Features :
 * La possibilité de créer des raccourcis vers les filtres préférés.

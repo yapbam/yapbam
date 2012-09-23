@@ -56,8 +56,8 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	}
 
 	@Override
-	public String getTooltip() {
-		return "Select this tab to save/read data to/from Dropbox";
+	public String getTooltip(boolean save) {
+		return save?"Select this tab to save to your Dropbox account":"Select this tab to read data from your Dropbox account";
 	}
 
 	@Override
@@ -135,7 +135,6 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 
 	@Override
 	public boolean exist(URI selectedURI) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

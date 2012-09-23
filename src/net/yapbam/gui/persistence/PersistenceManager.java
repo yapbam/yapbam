@@ -7,16 +7,13 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.URIChooser;
+import net.astesana.ajlib.swing.dialog.urichooser.URIChooserDialog;
 import net.astesana.ajlib.swing.worker.DefaultWorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.WorkInProgressPanel;
@@ -43,7 +40,6 @@ public class PersistenceManager {
 	
 	private HashMap<String, PersistencePlugin> pluginsMap;
 	private List<String> pluginSchemes;
-	private URIChooser chooser;
 
 	private PersistenceManager() {
 		// Load the default persistence plugins
@@ -68,17 +64,6 @@ public class PersistenceManager {
 				}
 			}
 		}
-	}
-	
-	private URIChooser getURIChooser() {
-		if (chooser==null) {
-			AbstractURIChooserPanel[] panels = new AbstractURIChooserPanel[PersistenceManager.MANAGER.getPluginsNumber()];
-			for (int i = 0; i < panels.length; i++) {
-				panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
-			}
-			chooser = new URIChooser(panels);
-		}
-		return chooser;
 	}
 	
 	private void add(PersistencePlugin plugin) {
@@ -119,7 +104,7 @@ public class PersistenceManager {
 	public boolean save(Window owner, GlobalData data) {
 		URI file = data.getURI();
 		if (file==null) {
-			file = getFile(owner, data);
+			file = getFile(owner, data, true);
 		}
 		if (file==null) return false;
 		return saveTo(owner, data, file);
@@ -131,18 +116,25 @@ public class PersistenceManager {
 	 * @return true if the data was saved
 	 */
 	public boolean saveAs(Window owner, GlobalData data) {
-		URI file = getFile(owner, data);
+		URI file = getFile(owner, data, true);
 		if (file==null) return false;
 		return saveTo(owner, data, file);
 	}
 
-	private URI getFile(Window owner, GlobalData data) {
-		URI path = data.getURI();
-		String parent = path==null?null:new File(path).getParent();
-		JFileChooser chooser = new FileChooser(parent);
-		chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-		File result = chooser.showSaveDialog(owner)==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-		return result==null?null:result.toURI();
+	private URI getFile(Window owner, GlobalData data, boolean save) {
+		URIChooserDialog dialog = getURIChooserDialog(owner);
+		dialog.setSaveDialogType(save);
+		dialog.setSelectedURI(data.getURI());
+		dialog.setLocale(LocalizationData.getLocale());
+		return dialog.showDialog();
+	}
+	
+	private URIChooserDialog getURIChooserDialog(Window owner) {
+		AbstractURIChooserPanel[] panels = new AbstractURIChooserPanel[PersistenceManager.MANAGER.getPluginsNumber()];
+		for (int i = 0; i < panels.length; i++) {
+			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
+		}
+		return new URIChooserDialog(owner, "", panels);
 	}
 
 	private boolean saveTo(Window owner, GlobalData data, URI uri) {
@@ -224,10 +216,7 @@ public class PersistenceManager {
 	public void read(Window frame, GlobalData data, URI path, ErrorProcessor errProcessor) {
 		if (verify(frame, data)) {
 			if (path==null) {
-				String parent = data.getURI() == null ? null : new File(data.getURI()).getParent();
-				JFileChooser chooser = new FileChooser(parent);
-				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-				path = chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile().toURI() : null;
+				path = getFile(frame, data, false);
 			}
 			if (path != null) {
 				try {
