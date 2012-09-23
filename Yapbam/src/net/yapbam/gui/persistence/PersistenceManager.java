@@ -246,4 +246,8 @@ public class PersistenceManager {
 	public PersistencePlugin getPlugin(URI uri) {
 		return this.pluginsMap.get(uri.getScheme());
 	}
+
+	public String getDisplayable(URI uri) {
+		return getPlugin(uri).getDisplayableName(uri);
+	}
 }

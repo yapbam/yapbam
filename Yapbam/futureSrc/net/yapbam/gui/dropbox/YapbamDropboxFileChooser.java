@@ -38,7 +38,7 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 			public void propertyChange(PropertyChangeEvent evt) {
 				URI old = selectedURI;
 				FileId selectedFile = getSelectedFile();
-				selectedURI = selectedFile==null?null:selectedFile.getURI();
+				selectedURI = selectedFile==null?null:selectedFile.toURI();
 				firePropertyChange(SELECTED_URI_PROPERTY, old, selectedURI);
 			}
 		});

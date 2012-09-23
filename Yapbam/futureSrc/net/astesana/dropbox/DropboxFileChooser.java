@@ -372,12 +372,7 @@ public abstract class DropboxFileChooser extends JPanel {
 	 * @return a string that will be displayed in the files list, or null to ignore this entry
 	 */
 	protected String filter(Entry entry) {
-		String fileName = entry.fileName();
-		if (fileName.endsWith(".zip")) {
-			return fileName.substring(0, fileName.length()-".zip".length());
-		} else {
-			return null;
-		}
+		return entry.fileName();
 	}
 
 	/** This method is called after the user granted access to Dropbox.
