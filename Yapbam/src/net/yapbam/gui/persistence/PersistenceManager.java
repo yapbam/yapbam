@@ -242,4 +242,8 @@ public class PersistenceManager {
 	public PersistencePlugin getPlugin(int index) {
 		return this.pluginsMap.get(this.pluginSchemes.get(index));
 	}
+	
+	public PersistencePlugin getPlugin(URI uri) {
+		return this.pluginsMap.get(uri.getScheme());
+	}
 }

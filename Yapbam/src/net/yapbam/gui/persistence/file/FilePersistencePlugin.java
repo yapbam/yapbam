@@ -12,18 +12,6 @@ public class FilePersistencePlugin extends PersistencePlugin {
 	}
 
 	@Override
-	public void save() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public AbstractURIChooserPanel buildChooser() {
 		return new FileChooserPanel();
 	}
