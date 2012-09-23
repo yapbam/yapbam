@@ -1,7 +1,7 @@
-package net.astesana.dropbox;
+package net.yapbam.gui.dropbox;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.yapbam.gui.dropbox.YapbamDropboxFileChooser;
+import net.astesana.dropbox.FileId;
 import net.yapbam.gui.persistence.PersistencePlugin;
 
 public class DropboxPersistencePlugin extends PersistencePlugin {
@@ -24,7 +24,6 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 
 	@Override
 	public String getScheme() {
-		// TODO Auto-generated method stub
-		return null;
+		return FileId.SCHEME;
 	}
 }
