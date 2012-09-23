@@ -20,10 +20,10 @@ import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.Browser;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.persistence.PersistenceManager;
 
 import javax.swing.JSeparator;
 
