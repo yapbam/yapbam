@@ -132,4 +132,10 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	public void setSelectedURI(URI uri) {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public boolean exist(URI selectedURI) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

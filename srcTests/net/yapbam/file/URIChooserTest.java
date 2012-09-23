@@ -9,25 +9,26 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.URIChooser;
+import net.astesana.ajlib.swing.dialog.urichooser.URIChooserDialog;
 import net.astesana.ajlib.swing.framework.Application;
 import net.yapbam.gui.persistence.PersistenceManager;
 
 final class URIChooserTest extends Application {
 	@Override
 	protected Container buildMainPanel() {
-		JPanel result = new JPanel();
-		JButton button = new JButton("Open");
-		result.add(button);
 		AbstractURIChooserPanel[] panels = new AbstractURIChooserPanel[PersistenceManager.MANAGER.getPluginsNumber()];
 		for (int i = 0; i < panels.length; i++) {
 			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
 		}
-		final URIChooser uriChooser = new URIChooser(panels);
+		final URIChooserDialog uriChooser = new URIChooserDialog(getJFrame(),"Select an URI",panels);
+		JPanel result = new JPanel();
+		JButton button = new JButton("Open");
+		result.add(button);
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println (uriChooser.showOpenDialog(getJFrame()));
+				uriChooser.setSaveDialogType(false);
+				System.out.println (uriChooser.showDialog());
 			}
 		});
 		JButton saveButton = new JButton("Save");
@@ -35,8 +36,9 @@ final class URIChooserTest extends Application {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				uriChooser.setSelectedURI(new File("c:/users/Jean-Marc/Documents/Comptes.xml").toURI());
-				System.out.println (uriChooser.showSaveDialog(getJFrame()));
+				uriChooser.setSaveDialogType(true);
+				uriChooser.setSelectedURI(new File("c:/users/Jean-Marc/toto").toURI());
+				System.out.println (uriChooser.showDialog());
 			}
 		});
 		return result;
