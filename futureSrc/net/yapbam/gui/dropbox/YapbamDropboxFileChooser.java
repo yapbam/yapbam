@@ -52,7 +52,7 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	
 	@Override
 	public String getName() {
-		return "Dropbox";
+		return FileId.SCHEME;
 	}
 
 	@Override
@@ -121,5 +121,15 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 				}
 			});
 		}
+	}
+
+	@Override
+	public String getScheme() {
+		return FileId.SCHEME;
+	}
+	
+	@Override
+	public void setSelectedURI(URI uri) {
+		// TODO Auto-generated method stub
 	}
 }

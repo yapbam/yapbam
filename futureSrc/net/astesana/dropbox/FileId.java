@@ -8,6 +8,8 @@ import com.dropbox.client2.session.AccessTokenPair;
 
 /** A Dropbox fileId.*/
 public class FileId {
+	public static final String SCHEME = "Dropbox";
+
 	private AccessTokenPair tokens;
 	private String account;
 	private String path;
@@ -23,7 +25,8 @@ public class FileId {
 	private String toString(boolean fullData) {
 		//FIXME the strings may contains delimiters !!!
 		StringBuilder builder = new StringBuilder();
-		builder.append("yapbam://");
+		builder.append(SCHEME);
+		builder.append("://");
 		builder.append(URLEncoder.encode(account));
 		if (fullData) {
 			builder.append(":");

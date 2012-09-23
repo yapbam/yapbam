@@ -3,6 +3,7 @@ package net.yapbam.file;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -34,6 +35,7 @@ final class URIChooserTest extends Application {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				uriChooser.setSelectedURI(new File("c:/users/Jean-Marc/Documents/Comptes.xml").toURI());
 				System.out.println (uriChooser.showSaveDialog(getJFrame()));
 			}
 		});
