@@ -1,5 +1,8 @@
 package net.yapbam.gui.persistence;
 
+import java.net.URI;
+import java.util.concurrent.ExecutionException;
+
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 
 /** An abstract Yapbam persistence plugin.
@@ -24,8 +27,9 @@ public abstract class PersistencePlugin {
 	 */
 	public abstract String getScheme();
 
-	public abstract void save ();
-	public abstract void load ();
+	public URI download(URI uri) throws ExecutionException {
+		return uri; //TODO
+	}
 	
 	/** Builds an UI component that implements the uri chooser for this plugin.
 	 * <br>Be aware that compiler can't force the returned instance to be a java.awt.Component subclass, but

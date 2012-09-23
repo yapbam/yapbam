@@ -3,6 +3,9 @@ package net.yapbam.gui.dropbox;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -16,14 +19,11 @@ import com.dropbox.client2.session.WebAuthSession;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.dropbox.DropboxFileChooser;
 import net.astesana.dropbox.FileId;
-import net.yapbam.gui.Preferences;
 
 @SuppressWarnings("serial")
 public class YapbamDropboxFileChooser extends DropboxFileChooser implements AbstractURIChooserPanel {
-	private static final String DROPBOX_ACCESS_KEY = "Dropbox.access.key"; //$NON-NLS-1$
-	private static final String DROPBOX_ACCESS_SECRET = "Dropbox.access.secret"; //$NON-NLS-1$
-	private DropboxAPI<? extends WebAuthSession> dropboxAPI;
-	
+	private static final List<String> SCHEMES = Arrays.asList(new String[]{FileId.SCHEME});
+
 	private URI selectedURI;
 	private boolean setUp;
 
@@ -77,32 +77,20 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	
 	@Override
 	protected DropboxAPI<? extends WebAuthSession> getDropboxAPI() {
-		if (dropboxAPI==null) {
-			YapbamDropboxSession session = new YapbamDropboxSession();
-			String accessKey = Preferences.INSTANCE.getProperty(DROPBOX_ACCESS_KEY);
-			String accessSecret = Preferences.INSTANCE.getProperty(DROPBOX_ACCESS_SECRET);
-			if (accessKey!=null || accessSecret!=null) {
-				session.setAccessTokenPair(new AccessTokenPair(accessKey, accessSecret));
-			}
-			dropboxAPI = new DropboxAPI<YapbamDropboxSession>(session);
-		}
-		return dropboxAPI;
+		return Dropbox.getAPI();
 	}
 
 	@Override
 	protected boolean accessGranted(AccessTokenPair pair) {
 		if (pair!=null) {
-			Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_KEY, pair.key);
-			Preferences.INSTANCE.setProperty(DROPBOX_ACCESS_SECRET, pair.secret);
+			Dropbox.storeKeys(pair);
 		}
 		return super.accessGranted(pair);
 	}
 
 	@Override
 	protected void clearAccess() {
-		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_KEY);
-		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_SECRET);
-		dropboxAPI = null;
+		Dropbox.storeKeys(null);
 		this.setUp = false;
 	}
 	
@@ -124,8 +112,8 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	}
 
 	@Override
-	public String getScheme() {
-		return FileId.SCHEME;
+	public Collection<String> getSchemes() {
+		return SCHEMES;
 	}
 	
 	@Override
@@ -135,6 +123,6 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 
 	@Override
 	public boolean exist(URI selectedURI) {
-		return false;
+		return false; //TODO
 	}
 }

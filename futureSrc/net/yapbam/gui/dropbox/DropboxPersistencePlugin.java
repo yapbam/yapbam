@@ -9,18 +9,6 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 	public AbstractURIChooserPanel buildChooser() {
 		return new YapbamDropboxFileChooser();
 	}
-	
-	@Override
-	public void save() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public String getScheme() {
