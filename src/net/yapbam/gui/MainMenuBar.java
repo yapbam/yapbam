@@ -36,7 +36,6 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.URIChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
-import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
@@ -47,6 +46,7 @@ import net.yapbam.gui.dialogs.export.ImportDialog;
 import net.yapbam.gui.dialogs.export.ImportError;
 import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
+import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 import net.yapbam.util.Portable;
 

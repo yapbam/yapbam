@@ -4,10 +4,10 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.yapbam.data.persistence.PersistenceManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
+import net.yapbam.gui.persistence.PersistenceManager;
 
 @SuppressWarnings("serial")
 public class OpenAction extends AbstractAction {

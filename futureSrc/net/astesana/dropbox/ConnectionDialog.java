@@ -94,6 +94,4 @@ public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessToken
 		});
 		return panel;
 	}
-	
-	
 }

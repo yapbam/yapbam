@@ -4,15 +4,18 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
+
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
+import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.dropbox.DropboxFileChooser;
 import net.astesana.dropbox.FileId;
-import net.yapbam.data.persistence.AbstractURIChooserPanel;
-import net.yapbam.data.persistence.URIChooser;
 import net.yapbam.gui.Preferences;
 
 @SuppressWarnings("serial")
@@ -23,7 +26,6 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	
 	private URI selectedURI;
 	private boolean setUp;
-	private URIChooser chooser;
 
 	/**
 	 * Creates the panel.
@@ -43,9 +45,24 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 		setConfirmAction(new Runnable() {
 			@Override
 			public void run() {
-				chooser.approveSelection();
+				firePropertyChange(URI_APPROVED_PROPERTY, false, true);
 			}
 		});
+	}
+	
+	@Override
+	public String getName() {
+		return "Dropbox";
+	}
+
+	@Override
+	public String getTooltip() {
+		return "Select this tab to save/read data to/from Dropbox";
+	}
+
+	@Override
+	public Icon getIcon() {
+		return new ImageIcon(DropboxFileChooser.class.getResource("dropbox.png"));
 	}
 
 	@Override
@@ -86,6 +103,7 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_KEY);
 		Preferences.INSTANCE.removeProperty(DROPBOX_ACCESS_SECRET);
 		dropboxAPI = null;
+		this.setUp = false;
 	}
 	
 	@Override
@@ -96,12 +114,12 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	@Override
 	public void setUp() {
 		if (!setUp) {
-			setUp = refresh();
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					setUp = refresh();
+				}
+			});
 		}
-	}
-
-	@Override
-	public void setURIChooser(URIChooser chooser) {
-		this.chooser = chooser;
 	}
 }
