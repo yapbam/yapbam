@@ -22,7 +22,7 @@ import net.astesana.dropbox.FileId;
 
 @SuppressWarnings("serial")
 public class YapbamDropboxFileChooser extends DropboxFileChooser implements AbstractURIChooserPanel {
-	private static final List<String> SCHEMES = Arrays.asList(new String[]{FileId.SCHEME});
+	static final List<String> SCHEMES = Arrays.asList(new String[]{FileId.SCHEME});
 
 	private URI selectedURI;
 	private boolean setUp;
