@@ -18,10 +18,13 @@ import com.dropbox.client2.DropboxAPI.DropboxInputStream;
 import com.dropbox.client2.RESTUtility;
 import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.dropbox.FileId;
+import net.yapbam.data.GlobalData;
+import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistencePlugin;
 
 public class DropboxPersistencePlugin extends PersistencePlugin {
@@ -35,39 +38,34 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 		return YapbamDropboxFileChooser.SCHEMES;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.yapbam.gui.persistence.PersistencePlugin#synchronizeForOpening(java.net.URI)
-	 */
 	@Override
-	public URI synchronizeForOpening(URI uri) throws IOException {
+	protected void download(URI uri, File file) throws IOException {
+		DropboxInputStream dropboxStream;
+		try {
+			dropboxStream = Dropbox.getAPI().getFileStream(FileId.fromURI(uri).getPath(), null);
+			try {
+				extractFromZip(dropboxStream, file);
+			} finally {
+				dropboxStream.close();
+			}
+		} catch (DropboxException e) {
+			throw new IOException(e);
+		}
+	}
+	
+	@Override
+	public Long getRemoteDate(URI uri) throws IOException {
 		FileId id = FileId.fromURI(uri);
 		DropboxAPI<? extends WebAuthSession> api = Dropbox.getAPI();
 		api.getSession().setAccessTokenPair(id.getAccessTokenPair());
 		try {
 			Entry metadata = api.metadata(id.getPath(), 1, null, true, null);
-			long dateDropbox = RESTUtility.parseDate(metadata.modified).getTime();
-			File file = getLocalCacheFile(uri);
-			long dateFile = file.exists()?file.lastModified():0;
-			if (dateFile==dateDropbox) {
-				// The file date is identical to Dropbox version
-				System.out.println ("uptodate");
-				return file.toURI();
-			} else if (dateFile<dateDropbox) {
-				// The file is older than Dropbox version
-				// Download the Dropbox version
-				System.out.println ("download required");
-				file.getParentFile().mkdirs();
-				DropboxInputStream dropboxStream = api.getFileStream(id.getPath(), null);
-				try {
-					extractFromZip(dropboxStream, file);
-					file.setLastModified(dateDropbox);
-				} finally {
-					dropboxStream.close();
-				}
-				return file.toURI();
-			} else {
-				// The file is newer than Dropbox version
+			return RESTUtility.parseDate(metadata.modified).getTime();
+		} catch (DropboxServerException e) {
+			if (e.error==DropboxServerException._404_NOT_FOUND) {
 				return null;
+			} else {
+				throw new IOException(e);
 			}
 		} catch (DropboxException e) {
 			throw new IOException(e);
@@ -94,7 +92,8 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
     }
 	}
 	
-	public File getLocalCacheFile(URI uri) {
+	@Override
+	protected File getLocalCacheFile(URI uri) {
 		try {
 			FileId id = FileId.fromURI(uri);
 			String folder = URLEncoder.encode(id.getAccount(), CharEncoding.UTF_8);
@@ -120,18 +119,21 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 		builder.append(path);
 		return builder.toString();
 	}
-
+	
 	public static void main(String[] args) {
 		try {
-			DropboxPersistencePlugin plugin = new DropboxPersistencePlugin();
 			URI uri = new URI("Dropbox://Jean-Marc+Astesana:0vqjj9jznct586f-1mg71myi8q7z65v@dropbox.yapbam.net/Comptes.zip");
-			plugin.synchronizeForOpening(uri);
 			System.out.println ("URI: "+uri);
-			System.out.println ("Display name: "+plugin.getDisplayableName(uri));
-			System.out.println ("Local cache: "+plugin.getLocalCacheFile(uri));
+			PersistenceManager.MANAGER.read(null, new GlobalData(), uri, new PersistenceManager.ErrorProcessor() {
+				@Override
+				public boolean processError(Throwable e) {
+					e.printStackTrace();
+					return false;
+				}
+			});
+			System.out.println ("done");
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-}
+	}}

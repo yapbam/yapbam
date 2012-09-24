@@ -1,10 +1,10 @@
 package net.yapbam.gui.persistence;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.utilities.FileUtils;
@@ -31,10 +31,6 @@ public abstract class PersistencePlugin {
 	 * @return the scheme managed by the plugin
 	 */
 	public abstract Collection<String> getSchemes();
-
-	public URI synchronizeForOpening(URI uri) throws IOException {
-		return uri; //TODO
-	}
 	
 	/** Builds an UI component that implements the uri chooser for this plugin.
 	 * <br>Be aware that compiler can't force the returned instance to be a java.awt.Component subclass, but
@@ -50,7 +46,7 @@ public abstract class PersistencePlugin {
 	/** Gets displayable form of an URI.
 	 * <br>URI may contains secret informations (example: password). This method converts the URI to a string
 	 * that can be securely displayed on a screen. 
-	 * @param uri
+	 * @param uri The remote URI (The uri is guaranteed to has a scheme returned by getSchemes).
 	 * @return a String. The default implementation returns uri.toString().
 	 */
 	public String getDisplayableName(URI uri) {
@@ -65,5 +61,48 @@ public abstract class PersistencePlugin {
 		File file = new File(folder,"cache/"+getSchemes().iterator().next());
 		if (!file.isDirectory()) file.mkdirs();
 		return file;
+	}
+
+	/** Gets the local cache file.
+	 * @param uri The remote URI (The uri is guaranteed to has a scheme returned by getSchemes).
+	 * @return a File
+	 */
+	protected abstract File getLocalCacheFile(URI uri);
+	
+	/** Gets the remote uri modification date.
+	 * @param uri The remote URI (The uri is guaranteed to has a scheme returned by getSchemes).
+	 * @return the date in ms since 1/1/1970 GMT or null if the remote file doesn't exists
+	 */
+	public abstract Long getRemoteDate(URI uri) throws IOException;
+
+	/** Downloads the uri to a local file.
+	 * The default implementation does nothing
+	 * @param uri The uri to download (The uri is guaranteed to has a scheme returned by getSchemes).
+	 * @param file The file where to download
+	 * @throws IOException 
+	 */
+	protected void download(URI uri, File file) throws IOException {}
+	
+	URI synchronizeForOpening(URI uri) throws IOException {
+		Long dateDropbox = getRemoteDate(uri);
+		File file = getLocalCacheFile(uri);
+		if (dateDropbox==null && !file.exists()) throw new FileNotFoundException();
+		long dateFile = file.exists()?file.lastModified():0;
+		if (dateFile==dateDropbox) {
+			// The file date is identical to Dropbox version
+			return file.toURI();
+		} else if (dateFile<dateDropbox) {
+			// The file is older than Dropbox version
+			// Download the Dropbox version
+			System.out.println ("download required");
+			file.getParentFile().mkdirs();
+			//FIXME Do not download directly to the target file, it will be corrupted if copy fails !!!
+			download(uri, file);
+			file.setLastModified(dateDropbox);
+			return file.toURI();
+		} else {
+			// The file is newer than Dropbox version
+			return null;
+		}
 	}
 }

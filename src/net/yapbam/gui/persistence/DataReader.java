@@ -1,12 +1,14 @@
 package net.yapbam.gui.persistence;
 
 import java.awt.Dialog.ModalityType;
+import java.awt.Dimension;
 import java.awt.Window;
 import java.io.IOException;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
@@ -20,13 +22,46 @@ import net.yapbam.gui.dialogs.GetPasswordDialog;
 
 class DataReader {
 	final static DataReader INSTANCE = new DataReader();
-
-	boolean readData(Window owner, GlobalData data, URI uri) throws ExecutionException {
-		PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		String password = null;
+	
+	boolean readData(Window owner, GlobalData data, final URI uri) throws ExecutionException {
+		final PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
 		URI localURI = null;
+		Worker<URI, Void> synchroWorker = new Worker<URI, Void>() {
+			@Override
+			protected URI doInBackground() throws Exception {
+				return plugin.synchronizeForOpening(uri);
+			}
+		};
+		while (localURI==null) {
+			WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, "Synchronizing with ?", ModalityType.APPLICATION_MODAL, synchroWorker); //TODO
+			waitFrame.setSize(250, waitFrame.getSize().height);
+			waitFrame.setVisible(true);
+			if (synchroWorker.isCancelled()) {
+				//FIXME Ask for cancel opening or open with synchronizing
+				break; 
+			} else {
+				try {
+					localURI = synchroWorker.get();
+				} catch (InterruptedException e) {
+					throw new ExecutionException(e);
+				}
+				if (localURI==null) {
+					String message = "The cached data is newest than the Dropbox data";
+					Object[] options = {"upload newest Dropbox", "Revert to the Dropbox content", "Cancel"};
+					int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+							null, options, options[2]);
+					if (n==2) return false;
+					if (n==0) {
+						//FIXME
+					} else {
+						//FIXME
+					}
+				}
+			}
+		}
+		if (localURI==null) return false;
+		String password = null;
 		try {
-			localURI = plugin.synchronizeForOpening(uri);
 			//FIXME Test when the localURI is null (cache newer than source)
 			SerializationData info = Serializer.getSerializationData(localURI);
 			// Retrieving the file password
