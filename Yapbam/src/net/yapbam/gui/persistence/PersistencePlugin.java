@@ -1,9 +1,14 @@
 package net.yapbam.gui.persistence;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
+import net.astesana.ajlib.utilities.FileUtils;
+import net.yapbam.util.Portable;
 
 /** An abstract Yapbam persistence plugin.
  * <br>Yapbam data persistence model allows developers to implement plugins that allow the users to
@@ -25,20 +30,20 @@ public abstract class PersistencePlugin {
 	 * your own scheme. For example, Yapbam uses "Dropbox" scheme to save/read data to/from Dropbox.
 	 * @return the scheme managed by the plugin
 	 */
-	public abstract String getScheme();
+	public abstract Collection<String> getSchemes();
 
-	public URI synchronizeForOpening(URI uri) throws ExecutionException {
+	public URI synchronizeForOpening(URI uri) throws IOException {
 		return uri; //TODO
 	}
 	
 	/** Builds an UI component that implements the uri chooser for this plugin.
 	 * <br>Be aware that compiler can't force the returned instance to be a java.awt.Component subclass, but
 	 * this is mandatory.
-	 * <br>The getSelectedURI of the returned component must have the scheme returned by the getScheme method
+	 * <br>The getSelectedURI of the returned component must have one of the schemes returned by the getSchemes method
 	 * of this class.
 	 * @return a component
 	 * @see AbstractURIChooserPanel#getSelectedURI()
-	 * @see #getScheme()
+	 * @see #getSchemes()
 	 */
 	public abstract AbstractURIChooserPanel buildChooser();
 
@@ -50,5 +55,15 @@ public abstract class PersistencePlugin {
 	 */
 	public String getDisplayableName(URI uri) {
 		return uri.toString();
+	}
+	
+	/** Gets the local folder where the persistence plugins can save their cache file (if any is needed).
+	 * @return a File pointing on an already created folder
+	 */
+	protected File getCacheFolder() {
+		File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir"),"yapbam"); //$NON-NLS-1$
+		File file = new File(folder,"cache/"+getSchemes().iterator().next());
+		if (!file.isDirectory()) file.mkdirs();
+		return file;
 	}
 }

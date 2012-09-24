@@ -23,10 +23,12 @@ class DataReader {
 
 	boolean readData(Window owner, GlobalData data, URI uri) throws ExecutionException {
 		PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		uri = plugin.synchronizeForOpening(uri);
 		String password = null;
+		URI localURI = null;
 		try {
-			SerializationData info = Serializer.getSerializationData(uri);
+			localURI = plugin.synchronizeForOpening(uri);
+			//FIXME Test when the localURI is null (cache newer than source)
+			SerializationData info = Serializer.getSerializationData(localURI);
 			// Retrieving the file password
 			if (info.isPasswordRequired()) {
 				GetPasswordDialog dialog = new GetPasswordDialog(owner,
@@ -36,8 +38,8 @@ class DataReader {
 				dialog.setVisible(true);
 				password = dialog.getPassword();
 				while (true) {
-					if (password==null) uri = null; // The user cancels the read
-					if ((password==null) || Serializer.isPasswordOk(uri, password)) break; // If the user cancels or entered the right password ... go next step
+					if (password==null) localURI = null; // The user cancels the read
+					if ((password==null) || Serializer.isPasswordOk(localURI, password)) break; // If the user cancels or entered the right password ... go next step
 					dialog = new GetPasswordDialog(owner,
 							LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
 							UIManager.getIcon("OptionPane.warningIcon"), null); //$NON-NLS-1$
@@ -49,8 +51,8 @@ class DataReader {
 		} catch (IOException e) {
 			new ExecutionException(e);
 		}
-		if (uri==null) return false;
-		final BackgroundReader worker = new BackgroundReader(uri, password);
+		if (localURI==null) return false;
+		final BackgroundReader worker = new BackgroundReader(localURI, password);
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
@@ -62,6 +64,7 @@ class DataReader {
 					data.setEventsEnabled(false);
 					data.copy(redData);
 					data.setChanged(false);
+					data.setURI(uri);
 					data.setEventsEnabled(enabled);
 				} catch (InterruptedException e) {
 					throw new ExecutionException(e);

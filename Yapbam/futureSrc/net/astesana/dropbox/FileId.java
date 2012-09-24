@@ -1,9 +1,12 @@
 package net.astesana.dropbox;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+
+import org.apache.commons.codec.CharEncoding;
 
 import net.astesana.ajlib.utilities.StringUtils;
 
@@ -16,17 +19,12 @@ public class FileId {
 	private AccessTokenPair tokens;
 	private String account;
 	private String path;
-	private String rev;
 	
 	FileId (AccessTokenPair tokens, String account, String path) {
-		this(tokens, account, path, null);
-	}
-
-	FileId (AccessTokenPair tokens, String account, String path, String rev) {
 		this.path = path;
+		if	(!this.path.startsWith("/")) this.path = "/"+path;
 		this.tokens = tokens;
 		this.account = account;
-		this.rev = rev;
 	}
 	
 	public String toString() {
@@ -41,13 +39,13 @@ public class FileId {
 		builder.append(tokens.secret);
 		builder.append('@');
 		builder.append("dropbox.yapbam.net");
-		if (!path.startsWith("/")) builder.append('/');
-		builder.append(URLEncoder.encode(path));
-		if (rev!=null) {
-			builder.append('?');
-			builder.append("rev=");
-			builder.append(rev);
-		}
+		builder.append('/');
+		builder.append(URLEncoder.encode(path.substring(1)));
+//		if (rev!=null) {
+//			builder.append('?');
+//			builder.append("rev=");
+//			builder.append(rev);
+//		}
 		return builder.toString();
 	}
 	
@@ -60,19 +58,24 @@ public class FileId {
 	}
 	
 	public static FileId fromURI(URI uri) {
-		System.out.println ("uri: "+uri);
-		String path = URLDecoder.decode(uri.getPath());
-		String[] split = StringUtils.split(uri.getUserInfo(), ':');
-		String account = URLDecoder.decode(split[0]);
-		split = StringUtils.split(split[1], '-');
-		AccessTokenPair tokens = new AccessTokenPair(split[0], split[1]);
-		String query = uri.getQuery();
-		String rev = (query!=null && query.startsWith("rev=")) ? query.substring("rev=".length()): null;
+//		System.out.println ("uri: "+uri);
+		String path;
+		try {
+			path = "/"+URLDecoder.decode(uri.getPath().substring(1), CharEncoding.UTF_8);
+			String[] split = StringUtils.split(uri.getUserInfo(), ':');
+			String account = URLDecoder.decode(split[0], CharEncoding.UTF_8);
+			split = StringUtils.split(split[1], '-');
+			AccessTokenPair tokens = new AccessTokenPair(split[0], split[1]);
+//		String query = uri.getQuery();
+//		String rev = (query!=null && query.startsWith("rev=")) ? query.substring("rev=".length()): null;
 //		System.out.println ("account: "+account);
 //		System.out.println ("tokens pair: "+tokens);
 //		System.out.println ("path: "+path);
 //		System.out.println ("Revision: "+rev);
-		return new FileId(tokens, account, path, rev);
+			return new FileId(tokens, account, path);
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -96,10 +99,10 @@ public class FileId {
 		return path;
 	}
 
-	/**
-	 * @return the rev
-	 */
-	public String getRev() {
-		return rev;
-	}
+//	/**
+//	 * @return the rev
+//	 */
+//	public String getRev() {
+//		return rev;
+//	}
 }

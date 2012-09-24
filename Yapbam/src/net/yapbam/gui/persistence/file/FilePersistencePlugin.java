@@ -1,5 +1,7 @@
 package net.yapbam.gui.persistence.file;
 
+import java.util.Collection;
+
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.swing.dialog.urichooser.FileChooserPanel;
 import net.yapbam.gui.persistence.PersistencePlugin;
@@ -7,8 +9,8 @@ import net.yapbam.gui.persistence.PersistencePlugin;
 public class FilePersistencePlugin extends PersistencePlugin {
 
 	@Override
-	public String getScheme() {
-		return "file";
+	public Collection<String> getSchemes() {
+		return FileChooserPanel.SCHEMES;
 	}
 
 	@Override
