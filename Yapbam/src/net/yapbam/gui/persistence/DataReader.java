@@ -1,8 +1,8 @@
 package net.yapbam.gui.persistence;
 
 import java.awt.Dialog.ModalityType;
-import java.awt.Dimension;
 import java.awt.Window;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -25,44 +25,44 @@ class DataReader {
 	
 	boolean readData(Window owner, GlobalData data, final URI uri) throws ExecutionException {
 		final PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		URI localURI = null;
+		File localCacheFile = plugin.getLocalCacheFile(uri);
 		Worker<URI, Void> synchroWorker = new Worker<URI, Void>() {
 			@Override
 			protected URI doInBackground() throws Exception {
+				setPhase("Synchronizing with Dropbox", -1);
 				return plugin.synchronizeForOpening(uri);
 			}
 		};
-		while (localURI==null) {
-			WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, "Synchronizing with ?", ModalityType.APPLICATION_MODAL, synchroWorker); //TODO
-			waitFrame.setSize(250, waitFrame.getSize().height);
-			waitFrame.setVisible(true);
-			if (synchroWorker.isCancelled()) {
-				//FIXME Ask for cancel opening or open with synchronizing
-				break; 
-			} else {
-				try {
-					localURI = synchroWorker.get();
-				} catch (InterruptedException e) {
-					throw new ExecutionException(e);
-				}
-				if (localURI==null) {
-					String message = "The cached data is newest than the Dropbox data";
-					Object[] options = {"upload newest Dropbox", "Revert to the Dropbox content", "Cancel"};
-					int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-							null, options, options[2]);
-					if (n==2) return false;
-					if (n==0) {
-						//FIXME
-					} else {
-						//FIXME
-					}
+		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, "Synchronizing", ModalityType.APPLICATION_MODAL, synchroWorker);
+		waitFrame.setSize(250, waitFrame.getSize().height);
+		waitFrame.setVisible(true);
+		if (synchroWorker.isCancelled()) {
+			if (!plugin.getLocalCacheFile(uri).exists()) return false;
+			//FIXME Buttons are not localized
+			if (JOptionPane.showConfirmDialog(owner, "You cancelled to synchronization. Would you like to open the cached data ?", "Synchronization was cancelled", JOptionPane.YES_NO_OPTION)!=0) return false;
+		} else {
+			URI localURI; 
+			try {
+				localURI = synchroWorker.get();
+			} catch (InterruptedException e) {
+				throw new ExecutionException(e);
+			}
+			if (localURI==null) {
+				String message = "<html>The data stored on your computer is newer than the one on Dropbox.<br></html>";
+				Object[] options = {"upload computer data to Dropbox", "Revert to the Dropbox content", "Cancel"};
+				int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+						null, options, options[2]);
+				if (n==2) return false;
+				if (n==0) {
+					//FIXME upload();
+				} else {
+					//FIXME plugin.download(uri);
 				}
 			}
 		}
-		if (localURI==null) return false;
 		String password = null;
+		URI localURI = localCacheFile.toURI();
 		try {
-			//FIXME Test when the localURI is null (cache newer than source)
 			SerializationData info = Serializer.getSerializationData(localURI);
 			// Retrieving the file password
 			if (info.isPasswordRequired()) {
@@ -88,7 +88,7 @@ class DataReader {
 		}
 		if (localURI==null) return false;
 		final BackgroundReader worker = new BackgroundReader(localURI, password);
-		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
+		waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
 		if (!cancelled) {
