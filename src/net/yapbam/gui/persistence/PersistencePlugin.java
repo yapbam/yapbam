@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.utilities.FileUtils;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.util.Portable;
 
 /** An abstract Yapbam persistence plugin.
@@ -75,8 +76,8 @@ public abstract class PersistencePlugin {
 	 */
 	public abstract Long getRemoteDate(URI uri) throws IOException;
 
-	/** Downloads the uri to a local file.
-	 * The default implementation does nothing
+	/** Downloads the uri to a file.
+	 * <br>The default implementation does nothing
 	 * @param uri The uri to download (The uri is guaranteed to has a scheme returned by getSchemes).
 	 * @param file The file where to download
 	 * @throws IOException 
@@ -87,8 +88,9 @@ public abstract class PersistencePlugin {
 		Long dateDropbox = getRemoteDate(uri);
 		File file = getLocalCacheFile(uri);
 		if (dateDropbox==null && !file.exists()) throw new FileNotFoundException();
-		long dateFile = file.exists()?file.lastModified():0;
-		if (dateFile==dateDropbox) {
+		Long dateFile = file.exists()?file.lastModified():0L;
+		if (dateDropbox==null) dateDropbox = 0L;
+		if (dateFile == dateDropbox) {
 			// The file date is identical to Dropbox version
 			return file.toURI();
 		} else if (dateFile<dateDropbox) {

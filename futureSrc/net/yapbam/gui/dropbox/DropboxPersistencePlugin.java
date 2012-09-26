@@ -60,6 +60,7 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 		api.getSession().setAccessTokenPair(id.getAccessTokenPair());
 		try {
 			Entry metadata = api.metadata(id.getPath(), 1, null, true, null);
+			if (metadata.isDeleted) return null;
 			return RESTUtility.parseDate(metadata.modified).getTime();
 		} catch (DropboxServerException e) {
 			if (e.error==DropboxServerException._404_NOT_FOUND) {
