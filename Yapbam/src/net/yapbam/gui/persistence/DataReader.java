@@ -8,7 +8,6 @@ import java.net.URI;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
@@ -24,42 +23,8 @@ class DataReader {
 	final static DataReader INSTANCE = new DataReader();
 	
 	boolean readData(Window owner, GlobalData data, final URI uri) throws ExecutionException {
-		final PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		File localCacheFile = plugin.getLocalCacheFile(uri);
-		Worker<URI, Void> synchroWorker = new Worker<URI, Void>() {
-			@Override
-			protected URI doInBackground() throws Exception {
-				setPhase("Synchronizing with Dropbox", -1);
-				return plugin.synchronizeForOpening(uri);
-			}
-		};
-		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, "Synchronizing", ModalityType.APPLICATION_MODAL, synchroWorker);
-		waitFrame.setSize(250, waitFrame.getSize().height);
-		waitFrame.setVisible(true);
-		if (synchroWorker.isCancelled()) {
-			if (!plugin.getLocalCacheFile(uri).exists()) return false;
-			//FIXME Buttons are not localized
-			if (JOptionPane.showConfirmDialog(owner, "You cancelled to synchronization. Would you like to open the cached data ?", "Synchronization was cancelled", JOptionPane.YES_NO_OPTION)!=0) return false;
-		} else {
-			URI localURI; 
-			try {
-				localURI = synchroWorker.get();
-			} catch (InterruptedException e) {
-				throw new ExecutionException(e);
-			}
-			if (localURI==null) {
-				String message = "<html>The data stored on your computer is newer than the one on Dropbox.<br></html>";
-				Object[] options = {"upload computer data to Dropbox", "Revert to the Dropbox content", "Cancel"};
-				int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-						null, options, options[2]);
-				if (n==2) return false;
-				if (n==0) {
-					//FIXME upload();
-				} else {
-					//FIXME plugin.download(uri);
-				}
-			}
-		}
+		File localCacheFile = Synchronizer.INSTANCE.synchronize(owner, uri);
+		if (localCacheFile == null) return false;
 		String password = null;
 		URI localURI = localCacheFile.toURI();
 		try {
@@ -88,7 +53,7 @@ class DataReader {
 		}
 		if (localURI==null) return false;
 		final BackgroundReader worker = new BackgroundReader(localURI, password);
-		waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
+		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 		waitFrame.setVisible(true);
 		boolean cancelled = worker.isCancelled();
 		if (!cancelled) {
@@ -107,7 +72,7 @@ class DataReader {
 		}
 		return !cancelled;
 	}
-	
+
 	/** A worker (see AJLib library) that reads a GlobalData URI in background. 
 	 */
 	static class BackgroundReader extends Worker<GlobalData, Void> implements ProgressReport {
