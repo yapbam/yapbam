@@ -53,6 +53,14 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.persistence.PersistencePlugin#upload(java.io.File, java.net.URI)
+	 */
+	@Override
+	protected void upload(File file, URI uri) throws IOException {
+		//FIXME;
+	}
+
 	@Override
 	public Long getRemoteDate(URI uri) throws IOException {
 		FileId id = FileId.fromURI(uri);

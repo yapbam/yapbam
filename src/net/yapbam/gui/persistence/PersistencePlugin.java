@@ -1,14 +1,12 @@
 package net.yapbam.gui.persistence;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.utilities.FileUtils;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.util.Portable;
 
 /** An abstract Yapbam persistence plugin.
@@ -83,28 +81,12 @@ public abstract class PersistencePlugin {
 	 * @throws IOException 
 	 */
 	protected void download(URI uri, File file) throws IOException {}
-	
-	URI synchronizeForOpening(URI uri) throws IOException {
-		Long dateDropbox = getRemoteDate(uri);
-		File file = getLocalCacheFile(uri);
-		if (dateDropbox==null && !file.exists()) throw new FileNotFoundException();
-		Long dateFile = file.exists()?file.lastModified():0L;
-		if (dateDropbox==null) dateDropbox = 0L;
-		if (dateFile == dateDropbox) {
-			// The file date is identical to Dropbox version
-			return file.toURI();
-		} else if (dateFile<dateDropbox) {
-			// The file is older than Dropbox version
-			// Download the Dropbox version
-			System.out.println ("download required");
-			file.getParentFile().mkdirs();
-			//FIXME Do not download directly to the target file, it will be corrupted if copy fails !!!
-			download(uri, file);
-			file.setLastModified(dateDropbox);
-			return file.toURI();
-		} else {
-			// The file is newer than Dropbox version
-			return null;
-		}
-	}
+
+	/** Uploads a file to a destination uri.
+	 * <br>The default implementation does nothing
+	 * @param file The file to upload
+	 * @param uri The uri where to upload (The uri is guaranteed to has a scheme returned by getSchemes).
+	 * @throws IOException 
+	 */
+	protected void upload(File file, URI uri) throws IOException {}
 }
