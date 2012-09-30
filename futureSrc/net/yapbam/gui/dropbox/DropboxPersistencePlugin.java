@@ -1,6 +1,7 @@
 package net.yapbam.gui.dropbox;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,9 +26,9 @@ import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.dropbox.FileId;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.PersistencePlugin;
+import net.yapbam.gui.persistence.RemotePersistencePlugin;
 
-public class DropboxPersistencePlugin extends PersistencePlugin {
+public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	@Override
 	public AbstractURIChooserPanel buildChooser() {
 		return new YapbamDropboxFileChooser();
@@ -39,7 +40,7 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 	}
 
 	@Override
-	protected void download(URI uri, File file) throws IOException {
+	public void download(URI uri, File file) throws IOException {
 		DropboxInputStream dropboxStream;
 		try {
 			dropboxStream = Dropbox.getAPI().getFileStream(FileId.fromURI(uri).getPath(), null);
@@ -57,8 +58,15 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 	 * @see net.yapbam.gui.persistence.PersistencePlugin#upload(java.io.File, java.net.URI)
 	 */
 	@Override
-	protected void upload(File file, URI uri) throws IOException {
-		//FIXME;
+	public void upload(File file, URI uri) throws IOException {
+		FileInputStream stream = new FileInputStream(file);
+		try {
+			Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, file.length(), null);
+		} catch (DropboxException e) {
+			throw new IOException(e);
+		} finally {
+			stream.close();
+		}
 	}
 
 	@Override
@@ -102,7 +110,7 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 	}
 	
 	@Override
-	protected File getLocalCacheFile(URI uri) {
+	public File getLocalFile(URI uri) {
 		try {
 			FileId id = FileId.fromURI(uri);
 			String folder = URLEncoder.encode(id.getAccount(), CharEncoding.UTF_8);
@@ -129,6 +137,36 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 		return builder.toString();
 	}
 	
+	@Override
+	public String getRevision(URI uri) throws IOException {
+		FileId id = FileId.fromURI(uri);
+		DropboxAPI<? extends WebAuthSession> api = Dropbox.getAPI();
+		api.getSession().setAccessTokenPair(id.getAccessTokenPair());
+		try {
+			Entry metadata = api.metadata(id.getPath(), 1, null, true, null);
+			if (metadata.isDeleted) return null;
+			return metadata.rev;
+		} catch (DropboxServerException e) {
+			if (e.error==DropboxServerException._404_NOT_FOUND) {
+				return null;
+			} else {
+				throw new IOException(e);
+			}
+		} catch (DropboxException e) {
+			throw new IOException(e);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.persistence.RemotePersistencePlugin#getLocalRevision(java.net.URI)
+	 */
+	@Override
+	protected String getLocalRevision(URI uri) throws IOException {
+		if (!getLocalFile(uri).exists()) return null;
+		//FIXME
+		return null;
+	}
+
 	public static void main(String[] args) {
 		try {
 			URI uri = new URI("Dropbox://Jean-Marc+Astesana:0vqjj9jznct586f-1mg71myi8q7z65v@dropbox.yapbam.net/Comptes.zip");
@@ -145,4 +183,5 @@ public class DropboxPersistencePlugin extends PersistencePlugin {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}}
+	}
+}

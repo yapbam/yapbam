@@ -23,6 +23,7 @@ import net.astesana.dropbox.FileId;
 @SuppressWarnings("serial")
 public class YapbamDropboxFileChooser extends DropboxFileChooser implements AbstractURIChooserPanel {
 	static final List<String> SCHEMES = Arrays.asList(new String[]{FileId.SCHEME});
+	static final String ZIP_ENTENSION = ".zip"; //$NON-NLS-1$
 
 	private URI selectedURI;
 	private boolean setUp;
@@ -31,7 +32,7 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	 * Creates the panel.
 	 */
 	public YapbamDropboxFileChooser() {
-		super();
+		super(new YapbamFilesTableModel());
 		this.selectedURI = null;
 		this.addPropertyChangeListener(DropboxFileChooser.SELECTED_FILEID_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -66,10 +67,10 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	}
 
 	@Override
-	protected String filter(Entry entry) {
+	protected Entry filter(Entry entry) {
 		String fileName = entry.fileName();
-		if (fileName.endsWith(".zip")) { //$NON-NLS-1$
-			return fileName.substring(0, fileName.length()-".zip".length()); //$NON-NLS-1$
+		if (fileName.endsWith(ZIP_ENTENSION)) {
+			return entry;
 		} else {
 			return null;
 		}
@@ -116,6 +117,16 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 		return SCHEMES;
 	}
 	
+	/* (non-Javadoc)
+	 * @see net.astesana.dropbox.DropboxFileChooser#getSelectedFile()
+	 */
+	@Override
+	public FileId getSelectedFile() {
+		FileId selectedFile = super.getSelectedFile();
+		if (selectedFile!=null) selectedFile.setPath(selectedFile.getPath()+ZIP_ENTENSION);
+		return selectedFile;
+	}
+
 	@Override
 	public void setSelectedURI(URI uri) {
 		// TODO Auto-generated method stub
