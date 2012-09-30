@@ -28,9 +28,10 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 * <br>The default implementation does nothing
 	 * @param uri The uri to download (The uri is guaranteed to has a scheme returned by getSchemes).
 	 * @param file The file where to download
+	 * @param task The task that ask the download. Please make sure to report the progress and cancel the download if the task is cancelled.
 	 * @throws IOException 
 	 */
-	protected abstract void download(URI uri, File file) throws IOException;
+	protected abstract void download(URI uri, File file, Cancellable task) throws IOException;
 
 	/** Uploads a file to a destination uri.
 	 * <br>The default implementation does nothing
@@ -38,7 +39,7 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 * @param uri The uri where to upload (The uri is guaranteed to has a scheme returned by getSchemes).
 	 * @throws IOException 
 	 */
-	protected abstract void upload(File file, URI uri) throws IOException;
+	protected abstract void upload(File file, URI uri, Cancellable task) throws IOException;
 	
 	protected abstract String getRevision(URI uri) throws IOException;
 	
