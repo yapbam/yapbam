@@ -19,6 +19,7 @@ public class FileId {
 	private AccessTokenPair tokens;
 	private String account;
 	private String path;
+//	private String rev;
 	
 	FileId (AccessTokenPair tokens, String account, String path) {
 		this.path = path;
@@ -66,12 +67,12 @@ public class FileId {
 			String account = URLDecoder.decode(split[0], CharEncoding.UTF_8);
 			split = StringUtils.split(split[1], '-');
 			AccessTokenPair tokens = new AccessTokenPair(split[0], split[1]);
-//		String query = uri.getQuery();
-//		String rev = (query!=null && query.startsWith("rev=")) ? query.substring("rev=".length()): null;
-//		System.out.println ("account: "+account);
-//		System.out.println ("tokens pair: "+tokens);
-//		System.out.println ("path: "+path);
-//		System.out.println ("Revision: "+rev);
+//			String query = uri.getQuery();
+//			String rev = (query!=null && query.startsWith("rev=")) ? query.substring("rev=".length()): null;
+//			System.out.println ("account: "+account);
+//			System.out.println ("tokens pair: "+tokens);
+//			System.out.println ("path: "+path);
+//			System.out.println ("Revision: "+rev);
 			return new FileId(tokens, account, path);
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
@@ -97,6 +98,11 @@ public class FileId {
 	 */
 	public String getPath() {
 		return path;
+	}
+
+	/** Sets the path. */
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 //	/**

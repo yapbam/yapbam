@@ -23,10 +23,11 @@ class DataReader {
 	final static DataReader INSTANCE = new DataReader();
 	
 	boolean readData(Window owner, GlobalData data, final URI uri) throws ExecutionException {
-		File localCacheFile = Synchronizer.INSTANCE.synchronize(owner, uri);
-		if (localCacheFile == null) return false;
+		PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		File localFile = (plugin instanceof RemotePersistencePlugin) ? Synchronizer.INSTANCE.synchronize(owner, uri) : plugin.getLocalFile(uri);
+		if (localFile == null) return false;
 		String password = null;
-		URI localURI = localCacheFile.toURI();
+		URI localURI = localFile.toURI();
 		try {
 			SerializationData info = Serializer.getSerializationData(localURI);
 			// Retrieving the file password

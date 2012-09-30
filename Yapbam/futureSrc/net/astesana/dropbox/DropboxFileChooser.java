@@ -72,13 +72,18 @@ public abstract class DropboxFileChooser extends JPanel {
 	
 	private DropboxInfo info;
 	
-	/**
-	 * Create the panel.
-	 */
-	public DropboxFileChooser() {
+	public DropboxFileChooser(FilesTableModel model) {
+		this.filesModel = model;
 		setLayout(new BorderLayout(0, 0));
 		add(getNorthPanel(), BorderLayout.NORTH);
 		add(getCenterPanel(), BorderLayout.CENTER);
+	}
+	
+	/**
+	 * Creates the panel.
+	 */
+	public DropboxFileChooser() {
+		this(new FilesTableModel());
 	}
 	
 	public void setCancelAction(Runnable action) {
@@ -214,7 +219,6 @@ public abstract class DropboxFileChooser extends JPanel {
 	}
 	private JTable getFileList() {
 		if (fileList == null) {
-			filesModel = new FilesTableModel();
 			fileList = new JTable(filesModel);
 			fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			new JTableListener(getFileList(), null, new AbstractAction() {
@@ -361,18 +365,18 @@ public abstract class DropboxFileChooser extends JPanel {
 	private void fillTable(Entry[] entries) {
 		filesModel.clear();
 		for (Entry entry : entries) {
-			String name = filter(entry);
-			if (name!=null) filesModel.add(entry);
+			Entry filtered = filter(entry);
+			if (filtered!=null) filesModel.add(entry);
 		}
 	}
 
 	/** Filters an entry.
 	 * <br>By default, this method returns the entry path.
 	 * @param entry The entry available in the current Dropbox folder
-	 * @return a string that will be displayed in the files list, or null to ignore this entry
+	 * @return The entry that will be displayed in the files list, or null to ignore this entry
 	 */
-	protected String filter(Entry entry) {
-		return entry.fileName();
+	protected Entry filter(Entry entry) {
+		return entry;
 	}
 
 	/** This method is called after the user granted access to Dropbox.

@@ -26,24 +26,13 @@ public class Synchronizer {
 	
 	protected Synchronizer() {}
 
-	private enum SynchronizationState {
-		/** Remote data and local cache are synchronized. */
-		SYNCHRONIZED,
-		/** A local cache exists, but remote resource doesn't exist. */
-		REMOTE_NOT_FOUND,
-		/** The local cache is newer than remote data. */
-		LOCAL_IS_NEWER,
-//		/** The remote data is newer than local cache. */
-//		REMOTE_IS_NEWER
-	}
-	
 	public File synchronize(Window owner, final URI uri) throws ExecutionException {
-		final PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		File localCacheFile = plugin.getLocalCacheFile(uri);
+		final RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
+		File localCacheFile = plugin.getLocalFile(uri);
 		Worker<SynchronizationState, Void> synchroWorker = new Worker<SynchronizationState, Void>() {
 			@Override
 			protected SynchronizationState doInBackground() throws Exception {
-				setPhase("Synchronizing with Dropbox", -1);
+				setPhase("Synchronizing", -1);
 				return backgroundSynchronize(uri);
 			}
 		};
@@ -51,7 +40,7 @@ public class Synchronizer {
 		waitFrame.setSize(250, waitFrame.getSize().height);
 		waitFrame.setVisible(true);
 		if (synchroWorker.isCancelled()) {
-			if (!plugin.getLocalCacheFile(uri).exists()) localCacheFile = null;
+			if (!plugin.getLocalFile(uri).exists()) localCacheFile = null;
 			//FIXME Buttons are not localized
 			if (JOptionPane.showConfirmDialog(owner, "You cancelled to synchronization. Would you like to open the cached data ?", "Synchronization was cancelled", JOptionPane.YES_NO_OPTION)!=0) {
 				return null;
@@ -100,9 +89,10 @@ public class Synchronizer {
 	 * @throws IOException if an exception occurs while synchronizing
 	 */
 	private SynchronizationState backgroundSynchronize(URI uri) throws IOException {
-		PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		Long remoteDate = plugin.getRemoteDate(uri);
-		File file = plugin.getLocalCacheFile(uri);
+		String remoteRevision = plugin.getRevision(uri);
+		File file = plugin.getLocalFile(uri);
 		if (remoteDate==null && !file.exists()) throw new FileNotFoundException();
 		if (remoteDate==null) return SynchronizationState.REMOTE_NOT_FOUND;
 		Long dateFile = file.exists()?file.lastModified():0L;
@@ -122,9 +112,9 @@ public class Synchronizer {
 
 	private void download(URI uri) throws IOException {
 		//FIXME Do not download directly to the target file, it will be corrupted if copy fails !!!
-		PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		System.out.println ("downloading "+uri);
-		File file = plugin.getLocalCacheFile(uri);
+		File file = plugin.getLocalFile(uri);
 		file.getParentFile().mkdirs();
 		Long remoteDate = plugin.getRemoteDate(uri);
 		plugin.download(uri, file);
@@ -132,9 +122,9 @@ public class Synchronizer {
 	}
 
 	private void upload(URI uri) throws IOException {
-		PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		System.out.println ("uploading "+uri);
-		File file = plugin.getLocalCacheFile(uri);
+		File file = plugin.getLocalFile(uri);
 		plugin.upload(file, uri);
 		Long remoteDate = plugin.getRemoteDate(uri);
 		file.setLastModified(remoteDate);

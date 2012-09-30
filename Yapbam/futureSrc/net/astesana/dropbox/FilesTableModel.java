@@ -30,14 +30,6 @@ public class FilesTableModel extends AbstractTableModel {
 		return rows.get(rowIndex).fileName();
 	}
 
-//	/* (non-Javadoc)
-//	 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
-//	 */
-//	@Override
-//	public String getColumnName(int column) {
-//		return "";
-//	}
-
 	void clear() {
 		rows.clear();
 		fireTableDataChanged();
@@ -47,5 +39,9 @@ public class FilesTableModel extends AbstractTableModel {
 		int len = getRowCount();
 		rows.add(rentry);
 		fireTableRowsInserted(len, len);
+	}
+	
+	protected Entry getEntry(int row) {
+		return rows.get(row);
 	}
 }

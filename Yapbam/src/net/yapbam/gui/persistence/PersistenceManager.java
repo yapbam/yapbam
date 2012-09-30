@@ -230,7 +230,7 @@ public class PersistenceManager {
 					}
 					if (notProcessed) {
 						ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
-								.get("MainMenu.Open.Error.DialogContent"), new File(path))); //$NON-NLS-1$
+								.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path))); //$NON-NLS-1$
 					}
 				}
 			}
