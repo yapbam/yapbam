@@ -202,7 +202,13 @@ public class PersistenceManager {
 
 		@Override
 		protected Void doInBackground() throws Exception {
-			Serializer.write(data, uri, this);
+			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
+			File file = plugin.getLocalFile(uri);
+			Serializer.write(data, file, this);
+			if (plugin instanceof RemotePersistencePlugin) {
+				//FIXME Need to implement a synchronization process
+				((RemotePersistencePlugin)plugin).upload(file, uri);
+			}
 			return null;
 		}
 	}

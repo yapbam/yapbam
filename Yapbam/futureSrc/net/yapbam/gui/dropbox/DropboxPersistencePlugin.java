@@ -61,6 +61,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	public void upload(File file, URI uri) throws IOException {
 		FileInputStream stream = new FileInputStream(file);
 		try {
+			//FIXME Write in a zip file !!!!!!!!!!
 			Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, file.length(), null);
 		} catch (DropboxException e) {
 			throw new IOException(e);
