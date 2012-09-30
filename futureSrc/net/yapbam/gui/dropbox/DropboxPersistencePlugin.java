@@ -10,7 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.codec.CharEncoding;
 
@@ -25,10 +27,15 @@ import com.dropbox.client2.session.WebAuthSession;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.dropbox.FileId;
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.RemotePersistencePlugin;
 
 public class DropboxPersistencePlugin extends RemotePersistencePlugin {
+	private static final int WAIT_DELAY = 30;
+	private static final boolean SLOW_WRITING = Boolean.getBoolean("slowDataWriting"); //$NON-NLS-1$
+	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
+
 	@Override
 	public AbstractURIChooserPanel buildChooser() {
 		return new YapbamDropboxFileChooser();
@@ -40,12 +47,12 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	}
 
 	@Override
-	public void download(URI uri, File file) throws IOException {
+	public void download(URI uri, File file, Cancellable task) throws IOException {
 		DropboxInputStream dropboxStream;
 		try {
 			dropboxStream = Dropbox.getAPI().getFileStream(FileId.fromURI(uri).getPath(), null);
 			try {
-				extractFromZip(dropboxStream, file);
+				extractFromZip(dropboxStream, file, task);
 			} finally {
 				dropboxStream.close();
 			}
@@ -58,15 +65,54 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 * @see net.yapbam.gui.persistence.PersistencePlugin#upload(java.io.File, java.net.URI)
 	 */
 	@Override
-	public void upload(File file, URI uri) throws IOException {
-		FileInputStream stream = new FileInputStream(file);
+	public void upload(File file, URI uri, Cancellable task) throws IOException {
+		// Create the zip file
+		File zipFile = File.createTempFile(getClass().getName(), null);
 		try {
-			//FIXME Write in a zip file !!!!!!!!!!
-			Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, file.length(), null);
-		} catch (DropboxException e) {
-			throw new IOException(e);
+	    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+	    try {
+        FileInputStream in = new FileInputStream(file);
+        try {
+	        // Add ZIP entry to output stream.
+	        out.putNextEntry(new ZipEntry(file.getName()));
+	        // Transfer bytes from the file to the ZIP file
+	  	    byte[] buf = new byte[1024];
+	  	    int len;
+	        while ((len = in.read(buf)) > 0) {
+	            out.write(buf, 0, len);
+	    				if (SLOW_WRITING) {
+	    					try {
+	    						Thread.sleep(WAIT_DELAY);
+	    					} catch (InterruptedException e) {}
+	    				}
+	    				if (task.isCancelled()) {
+	    					//FIXME Should return some specific result ?
+	    					break;
+	    				}
+	        }
+	        // Complete the entry
+	        out.closeEntry();
+        } finally {
+	        in.close();
+        }
+	    } finally {
+		    // Complete the ZIP file
+		    out.close();
+	    }
+	    if (!task.isCancelled()) {
+				FileInputStream stream = new FileInputStream(zipFile);
+				try {
+					//FIXME For now ... I don't know how cancel the upload
+					//Maybe by using ChunkUpload
+					Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, zipFile.length(), null);
+				} catch (DropboxException e) {
+					throw new IOException(e);
+				} finally {
+					stream.close();
+				}
+	    }
 		} finally {
-			stream.close();
+			zipFile.delete();
 		}
 	}
 
@@ -90,7 +136,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		}
 	}
 	
-	private void extractFromZip(InputStream zipStream, File destFile) throws IOException {
+	private boolean extractFromZip(InputStream zipStream, File destFile, Cancellable task) throws IOException {
     // Open the zip file
     ZipInputStream in = new ZipInputStream(zipStream);
 
@@ -104,10 +150,18 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	    int len;
 	    while ((len = in.read(buf)) > 0) {
 	        out.write(buf, 0, len);
+  				if (SLOW_READING) {
+  					try {
+  						Thread.sleep(WAIT_DELAY);
+  					} catch (InterruptedException e) {}
+  				}
+  				if (task.isCancelled()) return false;
+  				//FIXME report progress
 	    }
     } finally {
     	out.close();
     }
+    return true;
 	}
 	
 	@Override

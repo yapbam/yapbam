@@ -25,17 +25,35 @@ public class Synchronizer {
 	// Maybe, this is just a developer perspective, far from what my gran'mother can understand ...
 	
 	protected Synchronizer() {}
+	
+	private class SynchroWorker extends Worker<SynchronizationState, Void> implements Cancellable {
+		private URI uri;
+		SynchroWorker(URI uri) {
+			this.uri = uri;
+		}
+		@Override
+		protected SynchronizationState doInBackground() throws Exception {
+			setPhase("Synchronizing", -1);
+			return backgroundSynchronize(uri, this);
+		}
+		@Override
+		public void cancel() {
+			super.cancel(false);
+		}
+		@Override
+		public void reportProgress(int progress) {
+			super.reportProgress(progress);
+		}
+		@Override
+		public void setPhaseLength(int length) {
+			super.setPhaseLength(length);
+		}
+	}
 
 	public File synchronize(Window owner, final URI uri) throws ExecutionException {
 		final RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		File localCacheFile = plugin.getLocalFile(uri);
-		Worker<SynchronizationState, Void> synchroWorker = new Worker<SynchronizationState, Void>() {
-			@Override
-			protected SynchronizationState doInBackground() throws Exception {
-				setPhase("Synchronizing", -1);
-				return backgroundSynchronize(uri);
-			}
-		};
+		Worker<SynchronizationState, Void> synchroWorker = new SynchroWorker(uri);
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, "Synchronizing", ModalityType.APPLICATION_MODAL, synchroWorker);
 		waitFrame.setSize(250, waitFrame.getSize().height);
 		waitFrame.setVisible(true);
@@ -88,7 +106,7 @@ public class Synchronizer {
 	 * @throws FileNotFoundException if neither the remote resource nor its cache file does exist 
 	 * @throws IOException if an exception occurs while synchronizing
 	 */
-	private SynchronizationState backgroundSynchronize(URI uri) throws IOException {
+	private SynchronizationState backgroundSynchronize(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		Long remoteDate = plugin.getRemoteDate(uri);
 		String remoteRevision = plugin.getRevision(uri);
@@ -102,7 +120,7 @@ public class Synchronizer {
 		} else if (dateFile.compareTo(remoteDate)<0) {
 			// The file is older than remote version
 			// Download the remote version
-			download(uri);
+			download(uri, task);
 			return SynchronizationState.SYNCHRONIZED;
 		} else {
 			// The file is newer than remote version
@@ -110,22 +128,22 @@ public class Synchronizer {
 		}
 	}
 
-	private void download(URI uri) throws IOException {
+	private void download(URI uri, Cancellable task) throws IOException {
 		//FIXME Do not download directly to the target file, it will be corrupted if copy fails !!!
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		System.out.println ("downloading "+uri);
 		File file = plugin.getLocalFile(uri);
 		file.getParentFile().mkdirs();
 		Long remoteDate = plugin.getRemoteDate(uri);
-		plugin.download(uri, file);
+		plugin.download(uri, file, task);
 		file.setLastModified(remoteDate);
 	}
 
-	private void upload(URI uri) throws IOException {
+	private void upload(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		System.out.println ("uploading "+uri);
 		File file = plugin.getLocalFile(uri);
-		plugin.upload(file, uri);
+		plugin.upload(file, uri, task);
 		Long remoteDate = plugin.getRemoteDate(uri);
 		file.setLastModified(remoteDate);
 	}
