@@ -47,12 +47,13 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	}
 
 	@Override
-	public void download(URI uri, File file, Cancellable task) throws IOException {
+	public boolean download(URI uri, File file, Cancellable task) throws IOException {
 		DropboxInputStream dropboxStream;
 		try {
+			task.setPhase("Connecting to Dropbox ...", -1);
 			dropboxStream = Dropbox.getAPI().getFileStream(FileId.fromURI(uri).getPath(), null);
 			try {
-				extractFromZip(dropboxStream, file, task);
+				return extractFromZip(dropboxStream, file, task);
 			} finally {
 				dropboxStream.close();
 			}
@@ -65,8 +66,9 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 * @see net.yapbam.gui.persistence.PersistencePlugin#upload(java.io.File, java.net.URI)
 	 */
 	@Override
-	public void upload(File file, URI uri, Cancellable task) throws IOException {
+	public boolean upload(File file, URI uri, Cancellable task) throws IOException {
 		// Create the zip file
+		task.setPhase("Preparing upload ...", 100);
 		File zipFile = File.createTempFile(getClass().getName(), null);
 		try {
 	    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
@@ -74,10 +76,14 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
         FileInputStream in = new FileInputStream(file);
         try {
 	        // Add ZIP entry to output stream.
-	        out.putNextEntry(new ZipEntry(file.getName()));
+	        ZipEntry zipEntry = new ZipEntry(file.getName());
+	  	    long totalSize = file.length();
+	        zipEntry.setSize(totalSize);
+					out.putNextEntry(zipEntry);
 	        // Transfer bytes from the file to the ZIP file
 	  	    byte[] buf = new byte[1024];
 	  	    int len;
+	  	    long current = 0;
 	        while ((len = in.read(buf)) > 0) {
 	            out.write(buf, 0, len);
 	    				if (SLOW_WRITING) {
@@ -86,9 +92,10 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	    					} catch (InterruptedException e) {}
 	    				}
 	    				if (task.isCancelled()) {
-	    					//FIXME Should return some specific result ?
-	    					break;
+	    					return false;
 	    				}
+	    				current += len;
+	    				task.reportProgress((int)(100*current/totalSize));
 	        }
 	        // Complete the entry
 	        out.closeEntry();
@@ -99,21 +106,22 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		    // Complete the ZIP file
 		    out.close();
 	    }
-	    if (!task.isCancelled()) {
-				FileInputStream stream = new FileInputStream(zipFile);
-				try {
-					//FIXME For now ... I don't know how cancel the upload
-					//Maybe by using ChunkUpload
-					Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, zipFile.length(), null);
-				} catch (DropboxException e) {
-					throw new IOException(e);
-				} finally {
-					stream.close();
-				}
-	    }
+	    if (task.isCancelled()) return false;
+			FileInputStream stream = new FileInputStream(zipFile);
+			try {
+				//FIXME For now ... I don't know how cancel the upload
+				//Maybe by using ChunkUpload
+		    task.setPhase("Uploading to Dropbox ...", -1);
+				Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, zipFile.length(), null);
+			} catch (DropboxException e) {
+				throw new IOException(e);
+			} finally {
+				stream.close();
+			}
 		} finally {
 			zipFile.delete();
 		}
+		return !task.isCancelled();
 	}
 
 	@Override
@@ -137,17 +145,22 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	}
 	
 	private boolean extractFromZip(InputStream zipStream, File destFile, Cancellable task) throws IOException {
+		
     // Open the zip file
     ZipInputStream in = new ZipInputStream(zipStream);
 
     // Get the first entry
-    in.getNextEntry();
+    ZipEntry nextEntry = in.getNextEntry();
+    long totalSize = nextEntry.getSize();
+    task.setPhase("Transferring data from Dropbox ...", 100);
+    
     // Open the output file
     OutputStream out = new FileOutputStream(destFile);
     try {
 	    // Transfer bytes from the ZIP file to the output file
 	    byte[] buf = new byte[1024];
 	    int len;
+	    long red = 0;
 	    while ((len = in.read(buf)) > 0) {
 	        out.write(buf, 0, len);
   				if (SLOW_READING) {
@@ -156,7 +169,9 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
   					} catch (InterruptedException e) {}
   				}
   				if (task.isCancelled()) return false;
-  				//FIXME report progress
+  				red += len;
+  				int progress = (int)(red*100/totalSize);
+					task.reportProgress(progress);
 	    }
     } finally {
     	out.close();

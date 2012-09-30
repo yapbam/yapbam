@@ -199,8 +199,8 @@ public class PersistenceManager {
 			super.reportProgress(progress);
 		}
 		@Override
-		public void setPhaseLength(int length) {
-			super.setPhaseLength(length);
+		public void setPhase(String phase, int length) {
+			super.setPhase(phase, length);
 		}
 	}
 

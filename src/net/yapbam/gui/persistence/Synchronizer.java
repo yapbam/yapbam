@@ -45,7 +45,7 @@ public class Synchronizer {
 			super.reportProgress(progress);
 		}
 		@Override
-		public void setPhaseLength(int length) {
+		public void setPhase(String phase, int length) {
 			super.setPhaseLength(length);
 		}
 	}
