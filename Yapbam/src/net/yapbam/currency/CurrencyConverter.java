@@ -26,6 +26,9 @@ import org.xml.sax.helpers.*;
 import java.text.*;
 import java.util.*;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+
 /**
  * CurrencyConverter provides an API for accessing the European Central Bank's
  * (ECB) foreign exchange rates. The published ECB rates contain exchange rates
@@ -327,13 +330,17 @@ public class CurrencyConverter {
 		DefaultHandler handler = new DefaultHandler() {
 			@Override
 			public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-				if (localName.equals("Cube")) { //$NON-NLS-1$
+				if (qName.equals("Cube")) { //$NON-NLS-1$
 					String date = attributes.getValue("time"); //$NON-NLS-1$
 					if (date != null) {
+						String[] ids = TimeZone.getAvailableIDs();
 						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z", Locale.US); //$NON-NLS-1$
 						try {
-							referenceDate = df.parse(date + " 14:15 CET"); //$NON-NLS-1$
+							// A previous version used CET as time zone. Unfortunately this time zone was broken in Android 2.x
+							// See http://code.google.com/p/android/issues/detail?id=14963
+							referenceDate = df.parse(date + " 13:15 GMT"); //$NON-NLS-1$
 						} catch (ParseException e) {
+							System.out.println (java.util.Arrays.asList(ids));
 							throw new SAXException("Cannot parse reference date: " + date); //$NON-NLS-1$
 						}
 					}
@@ -350,7 +357,7 @@ public class CurrencyConverter {
 			}
 		};
 		try {
-			XMLReader saxReader = XMLReaderFactory.createXMLReader();
+			XMLReader saxReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
 			saxReader.setContentHandler(handler);
 			saxReader.setErrorHandler(handler);
 			Reader input = cache.getReader();
@@ -360,6 +367,8 @@ public class CurrencyConverter {
 				input.close();
 			}
 		} catch (SAXException e) {
+			throw new ParseException(e.toString(), 0);
+		} catch (ParserConfigurationException e) {
 			throw new ParseException(e.toString(), 0);
 		}
 	}
