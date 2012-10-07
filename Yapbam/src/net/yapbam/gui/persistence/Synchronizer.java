@@ -109,7 +109,9 @@ public class Synchronizer {
 	private SynchronizationState backgroundSynchronize(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		Long remoteDate = plugin.getRemoteDate(uri);
-		String remoteRevision = plugin.getRevision(uri);
+		String remoteRevision = plugin.getRemoteRevision(uri);
+		String localRevision = plugin.getLocalBaseRevision(uri);
+System.out.println("remote rev: "+remoteRevision+", local rev:"+localRevision);
 		File file = plugin.getLocalFile(uri);
 		if (remoteDate==null && !file.exists()) throw new FileNotFoundException();
 		if (remoteDate==null) return SynchronizationState.REMOTE_NOT_FOUND;
@@ -135,8 +137,10 @@ public class Synchronizer {
 		File file = plugin.getLocalFile(uri);
 		file.getParentFile().mkdirs();
 		Long remoteDate = plugin.getRemoteDate(uri);
+		String revision = plugin.getRemoteRevision(uri);
 		plugin.download(uri, file, task);
 		file.setLastModified(remoteDate);
+		plugin.setLocalBaseRevision(uri, revision);
 	}
 
 	private void upload(URI uri, Cancellable task) throws IOException {

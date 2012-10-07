@@ -32,6 +32,8 @@ import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.RemotePersistencePlugin;
 
 public class DropboxPersistencePlugin extends RemotePersistencePlugin {
+	private static final String CACHE_SUFFIX = ".xml";
+	private static final String CACHE_PREFIX = "cache";
 	private static final int WAIT_DELAY = 30;
 	private static final boolean SLOW_WRITING = Boolean.getBoolean("slowDataWriting"); //$NON-NLS-1$
 	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
@@ -181,18 +183,66 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	
 	@Override
 	public File getLocalFile(URI uri) {
+		// Il y a une subtilité dans l'implémentation :
+		// On a besoin de mémoriser la révision de base du fichier de cache. Cette révision va être codée dans le nom du fichier.
+		// On va stocker ce fichier dans un répertoire de même nom que le path de l'URI. Le nom du fichier, lui, sera la révision
+		// sur laquelle il est basé.
 		try {
 			FileId id = FileId.fromURI(uri);
 			String folder = URLEncoder.encode(id.getAccount(), CharEncoding.UTF_8);
 			String fileName = URLEncoder.encode(id.getPath().substring(1), CharEncoding.UTF_8);
 			fileName = fileName.substring(0, fileName.length()-".zip".length());
-			File cacheDirectory = getCacheFolder();
-			return new File(cacheDirectory, folder+"/"+fileName);
+			File cacheDirectory = new File(getCacheFolder(uri.getScheme()), folder+"/"+fileName);
+			if (cacheDirectory.isFile()) {
+				// hey ... there's a file where it should be a folder !!!
+				// Cache is corrupted, try to repair it
+				cacheDirectory.delete();
+			}
+			if (!cacheDirectory.exists()) {
+				cacheDirectory.mkdirs();
+			}
+			String[] files = cacheDirectory.list();
+			// If there's no cache file, return the default cache file
+			if (files.length==0) return new File(CACHE_PREFIX+CACHE_SUFFIX);
+			// There's at least one file in the cache, return the most recent (delete others)
+			File result = null;
+			for (String f : files) {
+				File candidate = new File(cacheDirectory, f);
+				if (isValidFile(f) && ((result==null) || (candidate.lastModified()>result.lastModified()))) {
+					if (result!=null) result.delete();
+					result = candidate;
+				} else {
+					candidate.delete();
+				}
+			}
+			return result;
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
+	private boolean isValidFile(String fileName) {
+		return fileName.startsWith(CACHE_PREFIX) && fileName.endsWith(CACHE_SUFFIX);
+	}
+
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.persistence.RemotePersistencePlugin#getLocalRevision(java.net.URI)
+	 */
+	@Override
+	protected String getLocalBaseRevision(URI uri) throws IOException {
+		File file = getLocalFile(uri);
+		if (!file.exists()) return null;
+		String revision = file.getName().substring(CACHE_PREFIX.length());
+		revision = revision.substring(0, revision.length()-CACHE_SUFFIX.length());
+		return revision.length()==0?null:revision;
+	}
+
+	@Override
+	protected void setLocalBaseRevision(URI uri, String revision) {
+		File file = getLocalFile(uri);
+		file.renameTo(new File(file.getParent(), CACHE_PREFIX+revision+CACHE_SUFFIX));
+	}
+
 	/* (non-Javadoc)
 	 * @see net.yapbam.gui.persistence.PersistencePlugin#getDisplayableName(java.net.URI)
 	 */
@@ -208,7 +258,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	}
 	
 	@Override
-	public String getRevision(URI uri) throws IOException {
+	public String getRemoteRevision(URI uri) throws IOException {
 		FileId id = FileId.fromURI(uri);
 		DropboxAPI<? extends WebAuthSession> api = Dropbox.getAPI();
 		api.getSession().setAccessTokenPair(id.getAccessTokenPair());
@@ -227,16 +277,6 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see net.yapbam.gui.persistence.RemotePersistencePlugin#getLocalRevision(java.net.URI)
-	 */
-	@Override
-	protected String getLocalRevision(URI uri) throws IOException {
-		if (!getLocalFile(uri).exists()) return null;
-		//FIXME
-		return null;
-	}
-
 	public static void main(String[] args) {
 		try {
 			URI uri = new URI("Dropbox://Jean-Marc+Astesana:0vqjj9jznct586f-1mg71myi8q7z65v@dropbox.yapbam.net/Comptes.zip");

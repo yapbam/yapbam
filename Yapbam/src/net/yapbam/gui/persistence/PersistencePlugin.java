@@ -42,7 +42,7 @@ public abstract class PersistencePlugin {
 	/** Gets displayable form of an URI.
 	 * <br>URI may contains secret informations (example: password). This method converts the URI to a string
 	 * that can be securely displayed on a screen. 
-	 * @param uri The remote URI (The uri is guaranteed to has a scheme returned by getSchemes).
+	 * @param uri The remote URI (The uri is guaranteed to have one of the schemes returned by getSchemes).
 	 * @return a String. The default implementation returns uri.toString().
 	 */
 	public String getDisplayableName(URI uri) {
@@ -50,7 +50,7 @@ public abstract class PersistencePlugin {
 	}
 	
 	/** Gets the local cache file.
-	 * @param uri The remote URI (The uri is guaranteed to has a scheme returned by getSchemes).
+	 * @param uri The remote URI (The uri is guaranteed to have one of the schemes returned by getSchemes).
 	 * @return a File
 	 */
 	protected abstract File getLocalFile(URI uri);

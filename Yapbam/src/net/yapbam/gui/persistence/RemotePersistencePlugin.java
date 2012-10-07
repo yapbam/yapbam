@@ -11,7 +11,7 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	/** Gets the local folder where the persistence plugins can save their cache file (if any is needed).
 	 * @return a File pointing on an already created folder
 	 */
-	protected File getCacheFolder() {
+	protected File getCacheFolder(String scheme) {
 		File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir"),"yapbam"); //$NON-NLS-1$
 		File file = new File(folder,"cache/"+getSchemes().iterator().next());
 		if (!file.isDirectory()) file.mkdirs();
@@ -43,7 +43,22 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 */
 	protected abstract boolean upload(File file, URI uri, Cancellable task) throws IOException;
 	
-	protected abstract String getRevision(URI uri) throws IOException;
+	/** Gets the remote revision of the URI.
+	 * <br>This revision identifies the version of the remote source.
+	 * There's no need to have an order relation between revisions. 
+	 * @param uri The uri.
+	 * @return A String that identifies the revision on the remote source or null if the uri doesn't exists on the remote source.
+	 * @throws IOException
+	 */
+	protected abstract String getRemoteRevision(URI uri) throws IOException;
 	
-	protected abstract String getLocalRevision(URI uri) throws IOException;
+	/** Gets the revision on which the local cache of a remote URI is based.
+	 * <br>This revision is the remote one at last time local and remote copies were successfully synchronized. 
+	 * @param uri The uri.
+	 * @return A String that identifies the revision or null if the local cache doesn't exist or was never been synchronized with the remote source.
+	 * @throws IOException
+	 */
+	protected abstract String getLocalBaseRevision(URI uri) throws IOException;
+
+	protected abstract void setLocalBaseRevision(URI uri, String revision);
 }
