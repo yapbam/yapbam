@@ -63,4 +63,6 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	protected abstract void setLocalBaseRevision(URI uri, String revision);
 	
 	protected abstract boolean isLocalSynchronized(URI uri);
+
+	protected abstract File getLocalFileForWriting(URI uri);
 }
