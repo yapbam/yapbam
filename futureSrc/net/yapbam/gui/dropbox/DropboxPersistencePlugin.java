@@ -31,6 +31,7 @@ import net.yapbam.gui.persistence.RemotePersistencePlugin;
 public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	private static final String CACHE_SUFFIX = ".xml";
 	private static final String CACHE_PREFIX = "cache";
+	private static final String SYNCHRONIZED_CACHE_PREFIX = "sync";
 	private static final int WAIT_DELAY = 30;
 	private static final boolean SLOW_WRITING = Boolean.getBoolean("slowDataWriting"); //$NON-NLS-1$
 	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
@@ -67,7 +68,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	@Override
 	public boolean upload(File file, URI uri, Cancellable task) throws IOException {
 		// Create the zip file
-		task.setPhase("Preparing upload ...", 100);
+		if (task!=null) task.setPhase("Preparing upload ...", 100);
 		File zipFile = File.createTempFile(getClass().getName(), null);
 		try {
 	    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
@@ -90,11 +91,11 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	    						Thread.sleep(WAIT_DELAY);
 	    					} catch (InterruptedException e) {}
 	    				}
-	    				if (task.isCancelled()) {
-	    					return false;
+	    				if (task !=null) {
+		    				if (task.isCancelled())return false;
+		    				current += len;
+		    				task.reportProgress((int)(100*current/totalSize));
 	    				}
-	    				current += len;
-	    				task.reportProgress((int)(100*current/totalSize));
 	        }
 	        // Complete the entry
 	        out.closeEntry();
@@ -105,12 +106,12 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		    // Complete the ZIP file
 		    out.close();
 	    }
-	    if (task.isCancelled()) return false;
+	    if (task!=null && task.isCancelled()) return false;
 			FileInputStream stream = new FileInputStream(zipFile);
 			try {
 				//FIXME For now ... I don't know how cancel the upload
 				//Maybe by using ChunkUpload
-		    task.setPhase("Uploading to Dropbox ...", -1);
+		    if (task!=null) task.setPhase("Uploading to Dropbox ...", -1);
 				Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, zipFile.length(), null);
 			} catch (DropboxException e) {
 				throw new IOException(e);
@@ -120,7 +121,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		} finally {
 			zipFile.delete();
 		}
-		return !task.isCancelled();
+		return task==null || !task.isCancelled();
 	}
 
 //	@Override
@@ -220,7 +221,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	}
 	
 	private boolean isValidFile(String fileName) {
-		return fileName.startsWith(CACHE_PREFIX) && fileName.endsWith(CACHE_SUFFIX);
+		return (fileName.startsWith(SYNCHRONIZED_CACHE_PREFIX) || fileName.startsWith(CACHE_PREFIX)) && fileName.endsWith(CACHE_SUFFIX);
 	}
 
 	/* (non-Javadoc)
@@ -230,7 +231,8 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	protected String getLocalBaseRevision(URI uri) throws IOException {
 		File file = getLocalFile(uri);
 		if (!file.exists()) return null;
-		String revision = file.getName().substring(CACHE_PREFIX.length());
+		String name = file.getName();
+		String revision = name.substring(name.startsWith(CACHE_PREFIX) ? CACHE_PREFIX.length() : SYNCHRONIZED_CACHE_PREFIX.length());
 		revision = revision.substring(0, revision.length()-CACHE_SUFFIX.length());
 		return revision.length()==0?null:revision;
 	}
@@ -238,7 +240,23 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	@Override
 	protected void setLocalBaseRevision(URI uri, String revision) {
 		File file = getLocalFile(uri);
-		file.renameTo(new File(file.getParent(), CACHE_PREFIX+revision+CACHE_SUFFIX));
+		file.renameTo(new File(file.getParent(), SYNCHRONIZED_CACHE_PREFIX+revision+CACHE_SUFFIX));
+	}
+
+	
+	@Override
+	protected boolean isLocalSynchronized(URI uri) {
+		return getLocalFile(uri).getName().startsWith(SYNCHRONIZED_CACHE_PREFIX);
+	}
+
+	@Override
+	protected File getLocalFileForWriting(URI uri) {
+		File file = getLocalFile(uri);
+		if (file.getName().startsWith(SYNCHRONIZED_CACHE_PREFIX)) {
+			String name = file.getName().substring(SYNCHRONIZED_CACHE_PREFIX.length());
+			file = new File(file.getParent(), CACHE_PREFIX+name);
+		}
+		return file;
 	}
 
 	/* (non-Javadoc)
@@ -273,11 +291,5 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		} catch (DropboxException e) {
 			throw new IOException(e);
 		}
-	}
-	
-	@Override
-	protected boolean isLocalSynchronized(URI uri) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

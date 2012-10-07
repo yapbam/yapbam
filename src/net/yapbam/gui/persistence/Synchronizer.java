@@ -73,8 +73,8 @@ public class Synchronizer {
 				throw new ExecutionException(e);
 			}
 			if (state.equals(SynchronizationState.CONFLICT)) {
-				String message = "<html>The data stored on your computer is newer than the one on Dropbox.<br>What do you want to do ?</html>";
-				Object[] options = {"Upload computer data to Dropbox", "Revert to the Dropbox content", "Cancel"};
+				String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br>What do you want to do ?</html>";
+				Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", "Cancel"};
 				int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 						null, options, options[2]);
 				if (n==2) {

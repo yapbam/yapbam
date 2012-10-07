@@ -180,7 +180,8 @@ public class PersistenceManager {
 		@Override
 		protected Void doInBackground() throws Exception {
 			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-			File file = plugin.getLocalFile(uri);
+			boolean remote = plugin instanceof RemotePersistencePlugin;
+			File file = remote ? ((RemotePersistencePlugin)plugin).getLocalFileForWriting(uri) : plugin.getLocalFile(uri);
 			Serializer.write(data, file, this);
 			if (plugin instanceof RemotePersistencePlugin) {
 				//FIXME Need to implement a synchronization process
