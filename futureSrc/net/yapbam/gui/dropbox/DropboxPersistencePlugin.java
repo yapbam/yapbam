@@ -18,7 +18,6 @@ import org.apache.commons.codec.CharEncoding;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.DropboxInputStream;
-import com.dropbox.client2.RESTUtility;
 import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
@@ -26,9 +25,7 @@ import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.dropbox.FileId;
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.persistence.Cancellable;
-import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.RemotePersistencePlugin;
 
 public class DropboxPersistencePlugin extends RemotePersistencePlugin {
@@ -52,7 +49,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	public boolean download(URI uri, File file, Cancellable task) throws IOException {
 		DropboxInputStream dropboxStream;
 		try {
-			task.setPhase("Connecting to Dropbox ...", -1);
+			if (task!=null) task.setPhase("Connecting to Dropbox ...", -1);
 			dropboxStream = Dropbox.getAPI().getFileStream(FileId.fromURI(uri).getPath(), null);
 			try {
 				return extractFromZip(dropboxStream, file, task);
@@ -126,35 +123,34 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		return !task.isCancelled();
 	}
 
-	@Override
-	public Long getRemoteDate(URI uri) throws IOException {
-		FileId id = FileId.fromURI(uri);
-		DropboxAPI<? extends WebAuthSession> api = Dropbox.getAPI();
-		api.getSession().setAccessTokenPair(id.getAccessTokenPair());
-		try {
-			Entry metadata = api.metadata(id.getPath(), 1, null, true, null);
-			if (metadata.isDeleted) return null;
-			return RESTUtility.parseDate(metadata.modified).getTime();
-		} catch (DropboxServerException e) {
-			if (e.error==DropboxServerException._404_NOT_FOUND) {
-				return null;
-			} else {
-				throw new IOException(e);
-			}
-		} catch (DropboxException e) {
-			throw new IOException(e);
-		}
-	}
+//	@Override
+//	public Long getRemoteDate(URI uri) throws IOException {
+//		FileId id = FileId.fromURI(uri);
+//		DropboxAPI<? extends WebAuthSession> api = Dropbox.getAPI();
+//		api.getSession().setAccessTokenPair(id.getAccessTokenPair());
+//		try {
+//			Entry metadata = api.metadata(id.getPath(), 1, null, true, null);
+//			if (metadata.isDeleted) return null;
+//			return RESTUtility.parseDate(metadata.modified).getTime();
+//		} catch (DropboxServerException e) {
+//			if (e.error==DropboxServerException._404_NOT_FOUND) {
+//				return null;
+//			} else {
+//				throw new IOException(e);
+//			}
+//		} catch (DropboxException e) {
+//			throw new IOException(e);
+//		}
+//	}
 	
 	private boolean extractFromZip(InputStream zipStream, File destFile, Cancellable task) throws IOException {
-		
     // Open the zip file
     ZipInputStream in = new ZipInputStream(zipStream);
 
     // Get the first entry
     ZipEntry nextEntry = in.getNextEntry();
     long totalSize = nextEntry.getSize();
-    task.setPhase("Transferring data from Dropbox ...", 100);
+    if (task!=null) task.setPhase("Transferring data from Dropbox ...", 100);
     
     // Open the output file
     OutputStream out = new FileOutputStream(destFile);
@@ -170,10 +166,12 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
   						Thread.sleep(WAIT_DELAY);
   					} catch (InterruptedException e) {}
   				}
-  				if (task.isCancelled()) return false;
-  				red += len;
-  				int progress = (int)(red*100/totalSize);
-					task.reportProgress(progress);
+  				if (task!=null) {
+  					if (task.isCancelled()) return false;
+    				red += len;
+    				int progress = (int)(red*100/totalSize);
+  					task.reportProgress(progress);
+  				}
 	    }
     } finally {
     	out.close();
@@ -203,7 +201,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 			}
 			String[] files = cacheDirectory.list();
 			// If there's no cache file, return the default cache file
-			if (files.length==0) return new File(CACHE_PREFIX+CACHE_SUFFIX);
+			if (files.length==0) return new File(cacheDirectory, CACHE_PREFIX+CACHE_SUFFIX);
 			// There's at least one file in the cache, return the most recent (delete others)
 			File result = null;
 			for (String f : files) {
@@ -277,21 +275,9 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		}
 	}
 	
-	public static void main(String[] args) {
-		try {
-			URI uri = new URI("Dropbox://Jean-Marc+Astesana:0vqjj9jznct586f-1mg71myi8q7z65v@dropbox.yapbam.net/Comptes.zip");
-			System.out.println ("URI: "+uri);
-			PersistenceManager.MANAGER.read(null, new GlobalData(), uri, new PersistenceManager.ErrorProcessor() {
-				@Override
-				public boolean processError(Throwable e) {
-					e.printStackTrace();
-					return false;
-				}
-			});
-			System.out.println ("done");
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	@Override
+	protected boolean isLocalSynchronized(URI uri) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

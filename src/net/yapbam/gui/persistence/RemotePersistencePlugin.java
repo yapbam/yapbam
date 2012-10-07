@@ -22,13 +22,13 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 * @param uri The remote URI (The uri is guaranteed to has a scheme returned by getSchemes).
 	 * @return the date in ms since 1/1/1970 GMT or null if the remote file doesn't exists
 	 */
-	protected abstract Long getRemoteDate(URI uri) throws IOException;
+//	protected abstract Long getRemoteDate(URI uri) throws IOException;
 
 	/** Downloads the uri to a file.
 	 * <br>The default implementation does nothing
 	 * @param uri The uri to download (The uri is guaranteed to has a scheme returned by getSchemes).
 	 * @param file The file where to download
-	 * @param task The task that ask the download. Please make sure to report the progress and cancel the download if the task is cancelled.
+	 * @param task The task that ask the download or null if no cancellable task is provided. Please make sure to report the progress and cancel the download if the task is cancelled.
 	 * @return true if the upload is done, false if it was cancelled
 	 * @throws IOException 
 	 */
@@ -61,4 +61,6 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	protected abstract String getLocalBaseRevision(URI uri) throws IOException;
 
 	protected abstract void setLocalBaseRevision(URI uri, String revision);
+	
+	protected abstract boolean isLocalSynchronized(URI uri);
 }
