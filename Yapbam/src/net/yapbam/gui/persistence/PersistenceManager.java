@@ -186,7 +186,7 @@ public class PersistenceManager {
 				//FIXME Need to implement a synchronization process
 				RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;
 				rPlugin.upload(file, uri, this);
-				file.setLastModified(rPlugin.getRemoteDate(uri));
+				rPlugin.setLocalBaseRevision(uri, rPlugin.getRemoteRevision(uri));
 			}
 			return null;
 		}
