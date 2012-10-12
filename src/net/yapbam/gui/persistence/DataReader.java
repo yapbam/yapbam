@@ -91,7 +91,7 @@ class DataReader {
 		}
 		
 		@Override
-		protected GlobalData doInBackground() throws Exception {
+		protected GlobalData doProcessing() throws Exception {
 			return Serializer.read(uri, password, this);
 		}
 	

@@ -34,7 +34,7 @@ public class Synchronizer {
 			this.uri = uri;
 		}
 		@Override
-		protected SynchronizationState doInBackground() throws Exception {
+		protected SynchronizationState doProcessing() throws Exception {
 			setPhase("Synchronizing", -1);
 			return backgroundSynchronize(uri, this);
 		}
@@ -62,7 +62,7 @@ public class Synchronizer {
 		if (synchroWorker.isCancelled()) {
 			if (!plugin.getLocalFile(uri).exists()) localCacheFile = null;
 			//FIXME Buttons are not localized
-			if (JOptionPane.showConfirmDialog(owner, "You cancelled to synchronization. Would you like to open the cached data ?", "Synchronization was cancelled", JOptionPane.YES_NO_OPTION)!=0) {
+			if (JOptionPane.showConfirmDialog(owner, "You cancelled the synchronization. Would you like to open the cached data ?", "Synchronization was cancelled", JOptionPane.YES_NO_OPTION)!=0) {
 				return null;
 			}
 		} else {

@@ -40,7 +40,7 @@ final public class CurrencyConverterAction extends AbstractAction {
 		final Window owner = Utils.getOwnerWindow((Component) e.getSource());
 		final Worker<CurrencyConverter, Void> worker = new Worker<CurrencyConverter, Void>() {
 			@Override
-			protected CurrencyConverter doInBackground() throws Exception {
+			protected CurrencyConverter doProcessing() throws Exception {
 				File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
 				return new CurrencyConverter(Preferences.INSTANCE.getHttpProxy(), new FileCache(new File(folder, "ExchangeRates.xml"))); //$NON-NLS-1$
 			}
