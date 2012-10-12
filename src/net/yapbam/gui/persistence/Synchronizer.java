@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
@@ -28,30 +27,6 @@ public class Synchronizer {
 	
 	protected Synchronizer() {}
 	
-	private class SynchroWorker extends Worker<SynchronizationState, Void> implements Cancellable {
-		private URI uri;
-		SynchroWorker(URI uri) {
-			this.uri = uri;
-		}
-		@Override
-		protected SynchronizationState doProcessing() throws Exception {
-			setPhase("Synchronizing", -1);
-			return backgroundSynchronize(uri, this);
-		}
-		@Override
-		public void cancel() {
-			super.cancel(false);
-		}
-		@Override
-		public void reportProgress(int progress) {
-			super.reportProgress(progress);
-		}
-		@Override
-		public void setPhase(String phase, int length) {
-			super.setPhaseLength(length);
-		}
-	}
-
 	public File synchronize(Window owner, final URI uri) throws ExecutionException {
 		final RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		File localCacheFile = plugin.getLocalFile(uri);
@@ -108,12 +83,11 @@ public class Synchronizer {
 	 * @throws FileNotFoundException if neither the remote resource nor its cache file does exist 
 	 * @throws IOException if an exception occurs while synchronizing
 	 */
-	private SynchronizationState backgroundSynchronize(URI uri, Cancellable task) throws IOException {
+	static SynchronizationState backgroundSynchronize(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
-//		Long remoteDate = plugin.getRemoteDate(uri);
 		String remoteRevision = plugin.getRemoteRevision(uri);
 		String localRevision = plugin.getLocalBaseRevision(uri);
-System.out.println("remote rev: "+remoteRevision+", local rev:"+localRevision);
+//System.out.println("remote rev: "+remoteRevision+", local rev:"+localRevision);
 		File file = plugin.getLocalFile(uri);
 		if (remoteRevision==null) { // If remote uri doesn't exist
 			if (!file.exists()) throw new FileNotFoundException(); // The local cache doesn't exist
@@ -148,7 +122,7 @@ System.out.println("remote rev: "+remoteRevision+", local rev:"+localRevision);
 		}
 	}
 
-	private void download(URI uri, Cancellable task) throws IOException {
+	private static void download(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		System.out.println ("downloading "+uri);
 		File file = plugin.getLocalFile(uri);
@@ -168,7 +142,7 @@ System.out.println("remote rev: "+remoteRevision+", local rev:"+localRevision);
 		plugin.setLocalBaseRevision(uri, revision);
 	}
 
-	private void upload(URI uri, Cancellable task) throws IOException {
+	private static void upload(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		System.out.println ("uploading "+uri);
 		File file = plugin.getLocalFile(uri);
@@ -176,13 +150,13 @@ System.out.println("remote rev: "+remoteRevision+", local rev:"+localRevision);
 		plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));
 	}
 	
-	public static void main(String[] args) {
-		try {
-			URI uri = new URI("Dropbox://Jean-Marc+Astesana:0vqjj9jznct586f-1mg71myi8q7z65v@dropbox.yapbam.net/x.zip");
-			Synchronizer.INSTANCE.backgroundSynchronize(uri, null);
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			URI uri = new URI("Dropbox://Jean-Marc+Astesana:0vqjj9jznct586f-1mg71myi8q7z65v@dropbox.yapbam.net/x.zip");
+//			Synchronizer.INSTANCE.backgroundSynchronize(uri, null);
+//		} catch (Throwable e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 }
