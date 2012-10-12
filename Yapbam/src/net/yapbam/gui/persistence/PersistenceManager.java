@@ -178,7 +178,7 @@ public class PersistenceManager {
 		}
 
 		@Override
-		protected Void doInBackground() throws Exception {
+		protected Void doProcessing() throws Exception {
 			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
 			boolean remote = plugin instanceof RemotePersistencePlugin;
 			File file = remote ? ((RemotePersistencePlugin)plugin).getLocalFileForWriting(uri) : plugin.getLocalFile(uri);

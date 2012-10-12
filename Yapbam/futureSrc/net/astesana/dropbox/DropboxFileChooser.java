@@ -162,7 +162,7 @@ public abstract class DropboxFileChooser extends JPanel {
 		}
 		Worker<DropboxInfo, Void> worker = new Worker<DropboxInfo, Void>() {
 			@Override
-			protected DropboxInfo doInBackground() throws Exception {
+			protected DropboxInfo doProcessing() throws Exception {
 				setPhase("Connecting to Dropbox", -1);
 				DropboxInfo info = new DropboxInfo();
 				info.account = getDropboxAPI().accountInfo();
