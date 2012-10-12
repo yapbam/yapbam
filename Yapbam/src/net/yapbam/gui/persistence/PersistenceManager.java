@@ -220,7 +220,7 @@ public class PersistenceManager {
 			}
 			if (path != null) {
 				try {
-					DataReader.INSTANCE.readData(frame, data, path);
+					new DataReader(frame, data, path).readData();
 				} catch (ExecutionException exception) {
 					boolean notProcessed = true;
 					if (errProcessor!=null) {
