@@ -187,8 +187,8 @@ public class Account implements Serializable {
 
 	void setInitialBalance(double value) {
 		this.balanceData.updateBalance(this.initialBalance, false);
-		this.balanceData.updateBalance(this.initialBalance, true);
 		this.initialBalance = value;
+		this.balanceData.updateBalance(this.initialBalance, true);
 	}
 
 	/** Gets the alert threshold.
