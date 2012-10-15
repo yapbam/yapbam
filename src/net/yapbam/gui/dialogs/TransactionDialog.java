@@ -322,7 +322,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 
 	@Override
 	public Transaction getTransaction() {
-		return (Transaction) super.getResult();
+		return super.getResult();
 	}
 
 	@Override
