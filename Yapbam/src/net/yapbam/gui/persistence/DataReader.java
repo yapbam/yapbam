@@ -3,6 +3,7 @@ package net.yapbam.gui.persistence;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -237,7 +238,9 @@ class DataReader {
 			SynchronizationState syncState;
 			try {
 				syncState = Synchronizer.backgroundSynchronize(uri, this);
-			} catch (Throwable e) {
+			} catch (FileNotFoundException e) {
+				throw e;
+			} catch (Exception e) {
 				return new BasicReaderResult(State.EXCEPTION_WHILE_SYNC, null, e); 
 			}
 			if (this.isCancelled()) return null;
