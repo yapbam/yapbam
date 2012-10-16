@@ -214,7 +214,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 					candidate.delete();
 				}
 			}
-			return result;
+			return result!=null?result:new File(cacheDirectory, CACHE_PREFIX+CACHE_SUFFIX);
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
