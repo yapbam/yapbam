@@ -112,8 +112,9 @@ class DataReader {
 			JOptionPane.showMessageDialog(owner, "Sorry, unable to download the data", LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE);
 			return false;
 		} else {
-			//FIXME Buttons are not localized
-			if (JOptionPane.showConfirmDialog(owner, "Synchronization failed. Would you like to open the cached data ?", LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)!=0) {
+			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")}; 
+			if (JOptionPane.showOptionDialog(owner, "Synchronization failed. Would you like to open the cached data ?",
+					LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, 0)!=0) {
 				return false;
 			}
 			return readLocalFile(null);
@@ -122,7 +123,7 @@ class DataReader {
 	
 	private boolean doRemoteNotFound() {
 		String message = "<html>That file doesn't exist anymore on Dropbox.<br>.<br>What do you want to do ?</html>";
-		Object[] options = {"Upload computer data to Dropbox", "Delete data on the computer", "Cancel"};
+		Object[] options = {"Upload computer data to Dropbox", "Delete data on the computer", LocalizationData.get("GenericButton.cancel")};
 		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 				null, options, options[2]);
 		if (n==2) {
@@ -137,7 +138,7 @@ class DataReader {
 
 	private boolean doConflict() {
 		String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br>What do you want to do ?</html>";
-		Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", "Cancel"};
+		Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", LocalizationData.get("GenericButton.cancel")};
 		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 				null, options, options[2]);
 		if (n==2) {
@@ -152,8 +153,9 @@ class DataReader {
 
 	private boolean syncCancelled() throws ExecutionException {
 		if (!plugin.getLocalFile(uri).exists()) return false;
-		//FIXME Buttons are not localized
-		if (JOptionPane.showConfirmDialog(owner, "You cancelled the synchronization. Would you like to open the cached data ?", "Synchronization was cancelled", JOptionPane.YES_NO_OPTION)!=0) {
+		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")}; 
+		if (JOptionPane.showOptionDialog(owner, "You cancelled the synchronization. Would you like to open the cached data ?",
+				"Synchronization was cancelled", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0)!=0) {
 			return false;
 		}
 		return readLocalFile(null); 
