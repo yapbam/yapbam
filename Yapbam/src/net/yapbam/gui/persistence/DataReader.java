@@ -51,6 +51,9 @@ class DataReader {
 		try {
 			result = basicWorker.get();
 			if (result.getState().equals(State.EXCEPTION_WHILE_SYNC)) {
+				if (!(result.getException() instanceof IOException)){
+					result.getException().printStackTrace(); //TODO
+				}
 				// The synchronization failed => Ask the user what to do
 				return doSyncFailed();
 			} else if (result.getState().equals(State.FINISHED)) {
