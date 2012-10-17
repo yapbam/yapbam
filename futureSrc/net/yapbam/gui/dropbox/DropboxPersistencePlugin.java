@@ -50,7 +50,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	public boolean download(URI uri, File file, Cancellable task) throws IOException {
 		DropboxInputStream dropboxStream;
 		try {
-			if (task!=null) task.setPhase("Connecting to Dropbox ...", -1);
+			if (task!=null) task.setPhase("Downloading from Dropbox ...", -1);
 			dropboxStream = Dropbox.getAPI().getFileStream(FileId.fromURI(uri).getPath(), null);
 			try {
 				return extractFromZip(dropboxStream, file, task);
@@ -124,26 +124,6 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		return task==null || !task.isCancelled();
 	}
 
-//	@Override
-//	public Long getRemoteDate(URI uri) throws IOException {
-//		FileId id = FileId.fromURI(uri);
-//		DropboxAPI<? extends WebAuthSession> api = Dropbox.getAPI();
-//		api.getSession().setAccessTokenPair(id.getAccessTokenPair());
-//		try {
-//			Entry metadata = api.metadata(id.getPath(), 1, null, true, null);
-//			if (metadata.isDeleted) return null;
-//			return RESTUtility.parseDate(metadata.modified).getTime();
-//		} catch (DropboxServerException e) {
-//			if (e.error==DropboxServerException._404_NOT_FOUND) {
-//				return null;
-//			} else {
-//				throw new IOException(e);
-//			}
-//		} catch (DropboxException e) {
-//			throw new IOException(e);
-//		}
-//	}
-	
 	private boolean extractFromZip(InputStream zipStream, File destFile, Cancellable task) throws IOException {
     // Open the zip file
     ZipInputStream in = new ZipInputStream(zipStream);
@@ -151,7 +131,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
     // Get the first entry
     ZipEntry nextEntry = in.getNextEntry();
     long totalSize = nextEntry.getSize();
-    if (task!=null) task.setPhase("Transferring data from Dropbox ...", 100);
+    if (task!=null) task.setPhase("Transferring data from Dropbox ...", totalSize>0?100:-1);
     
     // Open the output file
     OutputStream out = new FileOutputStream(destFile);
@@ -169,9 +149,11 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
   				}
   				if (task!=null) {
   					if (task.isCancelled()) return false;
-    				red += len;
-    				int progress = (int)(red*100/totalSize);
-  					task.reportProgress(progress);
+  					if (totalSize>0) {
+	    				red += len;
+	    				int progress = (int)(red*100/totalSize);
+	  					task.reportProgress(progress);
+  					}
   				}
 	    }
     } finally {
