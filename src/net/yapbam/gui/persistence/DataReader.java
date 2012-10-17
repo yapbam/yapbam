@@ -20,6 +20,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.persistence.BasicReaderResult.State;
@@ -51,8 +52,8 @@ class DataReader {
 		try {
 			result = basicWorker.get();
 			if (result.getState().equals(State.EXCEPTION_WHILE_SYNC)) {
-				if (!(result.getException() instanceof IOException)){
-					result.getException().printStackTrace(); //TODO
+				if (!(result.getException() instanceof IOException)) {
+					ErrorManager.INSTANCE.log(owner, result.getException());
 				}
 				// The synchronization failed => Ask the user what to do
 				return doSyncFailed();

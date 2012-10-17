@@ -182,7 +182,7 @@ public class PersistenceManager {
 			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
 			boolean remote = plugin instanceof RemotePersistencePlugin;
 			File file = remote ? ((RemotePersistencePlugin)plugin).getLocalFileForWriting(uri) : plugin.getLocalFile(uri);
-			Serializer.write(data, file, this);
+			Serializer.write(data, file, false, this);
 			if (plugin instanceof RemotePersistencePlugin) {
 				//FIXME Need to implement a synchronization process
 				RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;

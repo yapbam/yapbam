@@ -10,6 +10,9 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import net.astesana.ajlib.utilities.FileUtils;
 import net.astesana.ajlib.utilities.TextMatcher;
@@ -38,6 +41,8 @@ public class Serializer {
 	private static final boolean SLOW_WRITING = Boolean.getBoolean("slowDataWriting"); //$NON-NLS-1$
 
 	private static final byte[] PASSWORD_ENCODED_FILE_HEADER;
+	private static final byte[] MAGIC_ZIP_BYTES = new byte[]{0x50, 0x4B, 0x03, 0x04};
+
 	private static final String EMPTY = ""; //$NON-NLS-1$
 	private static final String CDATA = "CDATA"; //$NON-NLS-1$
 	private static final String DATE_DELIM = "/"; //$NON-NLS-1$
@@ -132,14 +137,28 @@ public class Serializer {
 	private TransformerHandler hd;
 	private OutputStream os;
 	
-	public static void write(GlobalData data, File file, ProgressReport report) throws IOException {
+	public static void write(GlobalData data, File file, boolean zipped, ProgressReport report) throws IOException {
 		if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
 		// Proceed safely, it means not to erase the old version until the new version is written
 		// Everything here is pretty ugly.
 		//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
 		File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file; //$NON-NLS-1$ //$NON-NLS-2$
-		write (data, new FileOutputStream(writed), report);
-		report.setMax(-1);
+		OutputStream out = new FileOutputStream(writed);
+		try {
+			ZipEntry entry = null;
+			if (zipped) {
+				out = new ZipOutputStream(out);
+	      entry = new ZipEntry(file.getName());
+				((ZipOutputStream)out).putNextEntry(entry);
+			}
+			write (data, out, report);
+			if (out instanceof ZipOutputStream) {
+				((ZipOutputStream) out).closeEntry();
+			}
+		} finally {
+			out.close();
+		}
+		if (report!=null) report.setMax(-1);
 		if (!file.equals(writed)) {
 			// Ok, not so safe as I want since we could lost the file between deleting and renaming
 			// but I can't find a better way
@@ -152,13 +171,9 @@ public class Serializer {
 	}
 	
 	private static void write(GlobalData data, OutputStream os, ProgressReport report) throws IOException {
-		try {
-			Serializer serializer = new Serializer(data.getPassword(), os);
-			serializer.serialize(data, report);
-			serializer.closeDocument();
-		} finally {
-			os.close();
-		}
+		Serializer serializer = new Serializer(data.getPassword(), os);
+		serializer.serialize(data, report);
+		serializer.closeDocument();
 	}
 
 	/** Creates a new XML Serializer.
@@ -200,8 +215,6 @@ public class Serializer {
 			hd.endDocument();
 		} catch (SAXException e) {
 			throw new IOException(e);
-		} finally {
-			this.os.close();
 		}
 	}
 
@@ -216,7 +229,7 @@ public class Serializer {
 	public static GlobalData read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
 //		long start = System.currentTimeMillis();//TODO
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) { //$NON-NLS-1$ //$NON-NLS-2$
-			InputStream is = uri.toURL().openStream();
+			InputStream is = getUnzippedInputStream(uri);
 			try {
 				GlobalData redData = read(password, is, report);
 				redData.setURI(uri);
@@ -231,13 +244,32 @@ public class Serializer {
 //		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");//TODO
 	}
 	
+	private static InputStream getUnzippedInputStream(URI uri) throws IOException {
+		InputStream in = new BufferedInputStream(uri.toURL().openStream());
+		in.mark(MAGIC_ZIP_BYTES.length);
+		boolean isZipped = true;
+		for (int i = 0; i < MAGIC_ZIP_BYTES.length-1; i++) {
+			if (in.read()!=MAGIC_ZIP_BYTES[i]) {
+				isZipped = false;
+				break;
+			}
+		}
+		in.reset();
+		
+		if (isZipped) {
+			in = new ZipInputStream(in);
+	    ((ZipInputStream)in).getNextEntry();
+		}
+		return in;
+	}
+	
 	/** Tests whether a password is the right one for an uri.
 	 * @param uri The URI containing Yapbam data
 	 * @param password A password (null for no password)
 	 * @throws IOException If an I/O error occurred
 	 */
 	public static boolean isPasswordOk(URI uri, String password) throws IOException {
-		InputStream is = uri.toURL().openStream();
+		InputStream is = getUnzippedInputStream(uri);
 		try {
 			getDecryptedStream(password, is);
 			return true;
@@ -279,7 +311,7 @@ public class Serializer {
 	 * @throws IOException
 	 */
 	public static SerializationData getSerializationData(URI uri) throws IOException {
-		InputStream in = uri.toURL().openStream();
+		InputStream in = getUnzippedInputStream(uri);
 		try {
 			boolean isEncoded = true;
 			for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length-1; i++) {
