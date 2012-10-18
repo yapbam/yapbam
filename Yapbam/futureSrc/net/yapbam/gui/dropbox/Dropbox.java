@@ -3,26 +3,33 @@ package net.yapbam.gui.dropbox;
 import net.yapbam.gui.Preferences;
 
 import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
-public abstract class Dropbox {
+public class Dropbox extends DropboxAPI<WebAuthSession> {
 	private static final String DROPBOX_ACCESS_KEY = "Dropbox.access.key"; //$NON-NLS-1$
 	private static final String DROPBOX_ACCESS_SECRET = "Dropbox.access.secret"; //$NON-NLS-1$
 	
 	private static DropboxAPI<? extends WebAuthSession> dropboxAPI;
 
-	private Dropbox() {}
+	private Dropbox() {
+		super (getYapbamSession());
+	}
+
+	private static WebAuthSession getYapbamSession() {
+		YapbamDropboxSession session = new YapbamDropboxSession();
+		String accessKey = Preferences.INSTANCE.getProperty(DROPBOX_ACCESS_KEY);
+		String accessSecret = Preferences.INSTANCE.getProperty(DROPBOX_ACCESS_SECRET);
+		if (accessKey!=null || accessSecret!=null) {
+			session.setAccessTokenPair(new AccessTokenPair(accessKey, accessSecret));
+		}
+		return session;
+	}
 	
 	public static DropboxAPI<? extends WebAuthSession> getAPI() {
 		if (dropboxAPI==null) {
-			YapbamDropboxSession session = new YapbamDropboxSession();
-			String accessKey = Preferences.INSTANCE.getProperty(DROPBOX_ACCESS_KEY);
-			String accessSecret = Preferences.INSTANCE.getProperty(DROPBOX_ACCESS_SECRET);
-			if (accessKey!=null || accessSecret!=null) {
-				session.setAccessTokenPair(new AccessTokenPair(accessKey, accessSecret));
-			}
-			dropboxAPI = new DropboxAPI<YapbamDropboxSession>(session);
+			dropboxAPI = new Dropbox();
 		}
 		return dropboxAPI;
 	}
@@ -40,4 +47,15 @@ public abstract class Dropbox {
 			}
 		}
 	}
+
+	@Override
+	public com.dropbox.client2.DropboxAPI.Entry metadata(String path, int fileLimit, String hash, boolean list, String rev) throws DropboxException {
+		// TODO Auto-generated method stub
+		long start = System.currentTimeMillis();
+		DropboxAPI.Entry result = super.metadata(path, fileLimit, hash, list, rev);
+		System.out.println("metadata on "+path+" in "+(System.currentTimeMillis()-start)+"ms");
+		return result;
+	}
+	
+	
 }
