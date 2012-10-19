@@ -1,8 +1,6 @@
 package net.yapbam.gui.persistence;
 
-import java.awt.Dialog.ModalityType;
 import java.awt.Window;
-import java.io.File;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -14,17 +12,11 @@ import javax.swing.JOptionPane;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.swing.dialog.urichooser.URIChooserDialog;
-import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
-import net.astesana.ajlib.swing.worker.Worker;
-import net.astesana.ajlib.utilities.FileUtils;
 import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.ProgressReport;
-import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.file.FilePersistencePlugin;
-import net.yapbam.util.Portable;
 
 public class PersistenceManager {
 	public static PersistenceManager MANAGER = new PersistenceManager();
@@ -102,12 +94,12 @@ public class PersistenceManager {
 	 * @return true if the data was saved
 	 */
 	public boolean save(Window owner, GlobalData data) {
-		URI file = data.getURI();
-		if (file==null) {
-			file = getFile(owner, data, true);
+		URI uri = data.getURI();
+		if (uri==null) {
+			uri = getURI(owner, data, true);
 		}
-		if (file==null) return false;
-		return saveTo(owner, data, file);
+		if (uri==null) return false;
+		return saveTo(owner, data, uri);
 	}
 
 	/** Save the data associated with a main frame. Ask for the file where to save if needed.
@@ -116,12 +108,12 @@ public class PersistenceManager {
 	 * @return true if the data was saved
 	 */
 	public boolean saveAs(Window owner, GlobalData data) {
-		URI file = getFile(owner, data, true);
+		URI file = getURI(owner, data, true);
 		if (file==null) return false;
 		return saveTo(owner, data, file);
 	}
 
-	private URI getFile(Window owner, GlobalData data, boolean save) {
+	private URI getURI(Window owner, GlobalData data, boolean save) {
 		URIChooserDialog dialog = getURIChooserDialog(owner);
 		dialog.setSaveDialogType(save);
 		dialog.setSelectedURI(data.getURI());
@@ -138,74 +130,10 @@ public class PersistenceManager {
 	}
 
 	private boolean saveTo(Window owner, GlobalData data, URI uri) {
-		if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
-			Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
-			String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
-			int choice = JOptionPane.showOptionDialog(owner, message,	LocalizationData.get("Generic.warning"), //$NON-NLS-1$
-					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
-			if (choice==0) return false;
-		}
-		final Worker<Void, Void> worker = new BackgroundSaver(data, uri);
-		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker);
-		waitFrame.setVisible(true);
-		boolean cancelled = worker.isCancelled();
-		if (cancelled) return false;
-		try {
-			worker.get();
-			data.setURI(uri);
-			data.setChanged(false);
-		} catch (ExecutionException e) {
-			ErrorManager.INSTANCE.display(owner, e.getCause());
-			return false;
-		} catch (InterruptedException e) {
-		}
-		return true;
-	}
-	
-	private static class BackgroundSaver extends Worker<Void, Void> implements ProgressReport, Cancellable {
-		private GlobalData data;
-		private URI uri;
-
-		BackgroundSaver(GlobalData data, URI uri) {
-			this.data = data;
-			this.uri = uri;
-			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
-		}
-
-		@Override
-		public void setMax(int length) {
-			super.setPhase(getPhase(), length);
-		}
-
-		@Override
-		protected Void doProcessing() throws Exception {
-			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-			boolean remote = plugin instanceof RemotePersistencePlugin;
-			File file = remote ? ((RemotePersistencePlugin)plugin).getLocalFileForWriting(uri) : plugin.getLocalFile(uri);
-			Serializer.write(data, file, false, this);
-			if (plugin instanceof RemotePersistencePlugin) {
-				//FIXME Need to implement a synchronization process
-				RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;
-				rPlugin.upload(file, uri, this);
-				rPlugin.setLocalBaseRevision(uri, rPlugin.getRemoteRevision(uri));
-			}
-			return null;
-		}
-		@Override
-		public void cancel() {
-			super.cancel(false);
-		}
-		@Override
-		public void reportProgress(int progress) {
-			super.reportProgress(progress);
-		}
-		@Override
-		public void setPhase(String phase, int length) {
-			super.setPhase(phase, length);
-		}
+		return new DataWriter(owner, data, uri).save();
 	}
 
-	/** Reads the data contains at an URI.
+	/** Reads the data contained at an URI.
 	 * <br>This checks if data has unsaved content. If it has, it displays a message to ask the user if he wants to save
 	 * its modifications or not.
 	 * @param frame The parent frame for the dialogs
@@ -216,7 +144,7 @@ public class PersistenceManager {
 	public void read(Window frame, GlobalData data, URI path, ErrorProcessor errProcessor) {
 		if (verify(frame, data)) {
 			if (path==null) {
-				path = getFile(frame, data, false);
+				path = getURI(frame, data, false);
 			}
 			if (path != null) {
 				try {

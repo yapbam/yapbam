@@ -38,7 +38,7 @@ class DataReader {
 		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
 	}
 
-	private WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
+	static WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 		waitFrame.setSize(400, waitFrame.getSize().height);
 		Utils.centerWindow(waitFrame, owner);
