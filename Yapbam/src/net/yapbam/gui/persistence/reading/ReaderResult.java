@@ -1,25 +1,21 @@
-package net.yapbam.gui.persistence;
+package net.yapbam.gui.persistence.reading;
 
-class BasicReaderResult {
-	public enum State {
-		FINISHED,
-		REQUEST_USER,
-		NEED_PASSWORD,
-		EXCEPTION_WHILE_SYNC
-	}
-	
+import net.yapbam.gui.persistence.SynchronizationState;
+
+/** A Worker that tries to synchronize data and then read the local cache. */
+class ReaderResult {
 	private State state;
 	private SynchronizationState syncState;
 	private Throwable e;
 	
-	public BasicReaderResult(State state, SynchronizationState syncState, Throwable e) {
+	public ReaderResult(State state, SynchronizationState syncState, Throwable e) {
 		super();
 		this.state = state;
 		this.syncState = syncState;
 		this.e = e;
 	}
 
-	public BasicReaderResult(State state, SynchronizationState syncState) {
+	public ReaderResult(State state, SynchronizationState syncState) {
 		this(state, syncState, null);
 	}
 

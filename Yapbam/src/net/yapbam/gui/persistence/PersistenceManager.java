@@ -1,6 +1,7 @@
 package net.yapbam.gui.persistence;
 
 import java.awt.Window;
+import java.awt.Dialog.ModalityType;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -10,13 +11,18 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.swing.dialog.urichooser.URIChooserDialog;
+import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
+import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.file.FilePersistencePlugin;
+import net.yapbam.gui.persistence.reading.DataReader;
+import net.yapbam.gui.persistence.writing.DataWriter;
 
 public class PersistenceManager {
 	public static PersistenceManager MANAGER = new PersistenceManager();
@@ -54,6 +60,13 @@ public class PersistenceManager {
 				}
 			}
 		}
+	}
+	
+	public static WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
+		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
+		waitFrame.setSize(400, waitFrame.getSize().height);
+		Utils.centerWindow(waitFrame, owner);
+		return waitFrame;
 	}
 	
 	private void add(PersistencePlugin plugin) {

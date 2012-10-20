@@ -1,4 +1,4 @@
-package net.yapbam.gui.persistence;
+package net.yapbam.gui.persistence.writing;
 
 import java.awt.Window;
 import java.io.File;
@@ -17,23 +17,29 @@ import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.persistence.WriterResult.State;
+import net.yapbam.gui.persistence.Cancellable;
+import net.yapbam.gui.persistence.PersistenceManager;
+import net.yapbam.gui.persistence.PersistencePlugin;
+import net.yapbam.gui.persistence.RemotePersistencePlugin;
+import net.yapbam.gui.persistence.SynchronizationState;
+import net.yapbam.gui.persistence.Synchronizer;
+import net.yapbam.gui.persistence.writing.WriterResult.State;
 import net.yapbam.util.Portable;
 
-class DataWriter {
+public class DataWriter {
 	private Window owner;
 	private GlobalData data;
 	private URI uri;
 	private PersistencePlugin plugin;
 
-	DataWriter (Window owner, GlobalData data, URI uri) {
+	public DataWriter (Window owner, GlobalData data, URI uri) {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;
 		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
 	}
 
-	boolean save() {
+	public boolean save() {
 		if (uri.getScheme().equals("file") && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
 			Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
 			String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
@@ -42,7 +48,7 @@ class DataWriter {
 			if (choice==0) return false;
 		}
 		final Worker<WriterResult, Void> worker = new BackgroundSaver(data, uri);
-		WorkInProgressFrame waitFrame = DataReader.buildWaitDialog(owner, worker);
+		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		try {
 			WriterResult result = worker.get();

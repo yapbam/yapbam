@@ -21,7 +21,7 @@ public class FilePersistencePlugin extends PersistencePlugin {
 	}
 	
 	@Override
-	protected File getLocalFile(URI uri) {
+	public File getLocalFile(URI uri) {
 		return new File(uri);
 	}
 }

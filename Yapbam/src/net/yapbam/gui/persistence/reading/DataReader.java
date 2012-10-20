@@ -1,54 +1,46 @@
-package net.yapbam.gui.persistence;
+package net.yapbam.gui.persistence.reading;
 
-import java.awt.Dialog.ModalityType;
 import java.awt.Window;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
-import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
-import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
-import net.yapbam.gui.persistence.BasicReaderResult.State;
+import net.yapbam.gui.persistence.PersistenceManager;
+import net.yapbam.gui.persistence.PersistencePlugin;
+import net.yapbam.gui.persistence.SynchronizationState;
+import net.yapbam.gui.persistence.reading.SyncAndReadWorker.SynchronizeCommand;
 
-class DataReader {
+public class DataReader {
 	private Window owner;
 	private GlobalData data;
 	private URI uri;
 	private PersistencePlugin plugin;
 
-	DataReader (Window owner, GlobalData data, URI uri) {
+	public DataReader (Window owner, GlobalData data, URI uri) {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;
 		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
 	}
 
-	static WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
-		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
-		waitFrame.setSize(400, waitFrame.getSize().height);
-		Utils.centerWindow(waitFrame, owner);
-		return waitFrame;
+	public boolean readData() throws ExecutionException {
+		return doSyncAndRead(SynchronizeCommand.SYNCHRONIZE);
 	}
-	
-	boolean readData() throws ExecutionException {
-		final BasicReadWorker basicWorker = new BasicReadWorker(uri);
-		buildWaitDialog(owner, basicWorker).setVisible(true);
-		BasicReaderResult result;
+
+	private boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
+		SyncAndReadWorker basicWorker = new SyncAndReadWorker(uri, command);
+		PersistenceManager.buildWaitDialog(owner, basicWorker).setVisible(true);
+		ReaderResult result;
 		try {
 			result = basicWorker.get();
 			if (result.getState().equals(State.EXCEPTION_WHILE_SYNC)) {
@@ -125,34 +117,32 @@ class DataReader {
 		}
 	}
 	
-	private boolean doRemoteNotFound() {
-		String message = "<html>That file doesn't exist anymore on Dropbox.<br>.<br>What do you want to do ?</html>";
+	private boolean doRemoteNotFound() throws ExecutionException {
+		String message = "<html>That file doesn't exist anymore on Dropbox.<br><br>What do you want to do ?<br></html>";
 		Object[] options = {"Upload computer data to Dropbox", "Delete data on the computer", LocalizationData.get("GenericButton.cancel")};
 		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 				null, options, options[2]);
 		if (n==2) {
 		} else if (n==0) {
-			//FIXME upload();
-			return false;
+			return doSyncAndRead(SynchronizeCommand.UPLOAD);
 		} else {
 			plugin.getLocalFile(uri).delete();
 		}
 		return false;
 	}
 
-	private boolean doConflict() {
-		String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br>What do you want to do ?</html>";
+	private boolean doConflict() throws ExecutionException {
+		String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br><br>What do you want to do ?<br></html>";
 		Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", LocalizationData.get("GenericButton.cancel")};
 		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 				null, options, options[2]);
 		if (n==2) {
 			return false;
 		} else if (n==0) {
-			//FIXME upload();
+			return doSyncAndRead(SynchronizeCommand.UPLOAD);
 		} else {
-			//FIXME plugin.download(uri);
+			return doSyncAndRead(SynchronizeCommand.DOWNLOAD);
 		}
-		return false;
 	}
 
 	private boolean syncCancelled() throws ExecutionException {
@@ -178,8 +168,8 @@ class DataReader {
 				return doPasswordNeeded(localURI);
 			}
 		}
-		final BackgroundReader readWorker = new BackgroundReader(localURI, password);
-		buildWaitDialog(owner, readWorker).setVisible(true);
+		final OnlyReadWorker readWorker = new OnlyReadWorker(localURI, password);
+		PersistenceManager.buildWaitDialog(owner, readWorker).setVisible(true);
 		try {
 			GlobalData redData = readWorker.get();
 			copyToData(redData);
@@ -198,102 +188,5 @@ class DataReader {
 		data.setChanged(false);
 		data.setURI(uri);
 		data.setEventsEnabled(enabled);
-	}
-	
-	/** A worker (see AJLib library) that reads a GlobalData URI in background. 
-	 */
-	static class BackgroundReader extends Worker<GlobalData, Void> implements ProgressReport {
-		private URI uri;
-		private String password;
-	
-		/** Constructor.
-		 * @param uri The source URI (null to do nothing)
-		 * @param password The password to access to the source (null if no password is needed)
-		 */
-		public BackgroundReader (URI uri, String password) {
-			this.uri = uri;
-			this.password = password;
-			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), uri.getPath()),-1); //$NON-NLS-1$
-		}
-		
-		@Override
-		protected GlobalData doProcessing() throws Exception {
-			return Serializer.read(uri, password, this);
-		}
-	
-		@Override
-		public void setMax(int length) {
-			super.setPhase(getPhase(), length);
-		}
-	}
-	
-	static class BasicReadWorker extends Worker<BasicReaderResult, Void> implements Cancellable, ProgressReport {
-		private URI uri;
-		private GlobalData data;
-		private boolean isSynchronizing;
-		
-		BasicReadWorker(URI uri) {
-			this.uri = uri;
-			this.data = null;
-			this.isSynchronizing = true;
-		}
-		
-		@Override
-		protected BasicReaderResult doProcessing() throws Exception {
-			setPhase("Synchronizing", -1);
-			SynchronizationState syncState;
-			try {
-				syncState = Synchronizer.backgroundSynchronize(uri, this);
-			} catch (FileNotFoundException e) {
-				throw e;
-			} catch (Exception e) {
-				return new BasicReaderResult(State.EXCEPTION_WHILE_SYNC, null, e); 
-			}
-			if (this.isCancelled()) return null;
-			this.isSynchronizing = false;
-			if (syncState.equals(SynchronizationState.SYNCHRONIZED)) {
-				PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-				URI localURI = plugin.getLocalFile(uri).toURI();
-				SerializationData info = Serializer.getSerializationData(localURI);
-				// Retrieving the file password
-				if (info.isPasswordRequired()) {
-					return new BasicReaderResult(State.NEED_PASSWORD, syncState);
-				} else {
-					setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), plugin.getDisplayableName(uri)),-1); //$NON-NLS-1$
-					this.data = Serializer.read(localURI, null, this);
-					return new BasicReaderResult(State.FINISHED, syncState);
-				}
-			} else {
-				return new BasicReaderResult(State.REQUEST_USER, syncState);
-			}
-		}
-		@Override
-		public void cancel() {
-			super.cancel(false);
-		}
-		@Override
-		public void reportProgress(int progress) {
-			super.reportProgress(progress);
-		}
-		@Override
-		public void setPhase(String phase, int length) {
-			super.setPhase(phase, length);
-		}
-		@Override
-		public void setMax(int length) {
-			super.setPhase(getPhase(), length);
-		}
-		/**
-		 * @return the data
-		 */
-		public GlobalData getData() {
-			return data;
-		}
-		/**
-		 * @return the isSynchronizing
-		 */
-		public boolean isSynchronizing() {
-			return isSynchronizing;
-		}
 	}
 }

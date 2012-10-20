@@ -1,4 +1,6 @@
-package net.yapbam.gui.persistence;
+package net.yapbam.gui.persistence.writing;
+
+import net.yapbam.gui.persistence.SynchronizationState;
 
 class WriterResult {
 	public enum State {
