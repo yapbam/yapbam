@@ -53,5 +53,5 @@ public abstract class PersistencePlugin {
 	 * @param uri The remote URI (The uri is guaranteed to have one of the schemes returned by getSchemes).
 	 * @return a File
 	 */
-	protected abstract File getLocalFile(URI uri);
+	public abstract File getLocalFile(URI uri);
 }

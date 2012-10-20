@@ -66,7 +66,6 @@ public abstract class Synchronizer {
 
 	public static void backgroundDownload(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
-		System.out.println ("downloading "+uri);
 		File file = plugin.getLocalFile(uri);
 		file.getParentFile().mkdirs();
 		String revision = null;
@@ -86,7 +85,6 @@ public abstract class Synchronizer {
 
 	public static void backgroungUpload(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
-		System.out.println ("uploading "+uri);
 		File file = plugin.getLocalFile(uri);
 		plugin.upload(file, uri, task);
 		plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));

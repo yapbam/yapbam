@@ -180,7 +180,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	}
 
 	@Override
-	protected File getLocalFileForWriting(URI uri) {
+	public File getLocalFileForWriting(URI uri) {
 		File file = getLocalFile(uri);
 		if (file.getName().startsWith(SYNCHRONIZED_CACHE_PREFIX)) {
 			String name = file.getName().substring(SYNCHRONIZED_CACHE_PREFIX.length());
