@@ -3,7 +3,6 @@ package net.yapbam.gui.persistence.writing;
 import java.net.URI;
 
 import net.astesana.ajlib.swing.worker.Worker;
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
@@ -12,12 +11,10 @@ import net.yapbam.gui.persistence.Synchronizer;
 public class SynchronizeWorker extends Worker<SynchronizationState, Void> implements Cancellable {
 	private URI uri;
 	private SynchronizeCommand command;
-	private GlobalData data;
 	
-	SynchronizeWorker(URI uri, GlobalData data, SynchronizeCommand command) {
+	SynchronizeWorker(URI uri, SynchronizeCommand command) {
 		this.uri = uri;
 		this.command = command;
-		this.data = data;
 	}
 
 	@Override

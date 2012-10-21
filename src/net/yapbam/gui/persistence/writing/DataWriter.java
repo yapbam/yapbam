@@ -76,7 +76,7 @@ public class DataWriter {
 		return true;
 	}
 
-	private void doRemoteDeleted() {
+	private void doRemoteDeleted() throws ExecutionException {
 		String message = "<html>That file doesn't exist anymore on Dropbox.<br><br>What do you want to do ?<br></html>";
 		Object[] options = {"Upload computer data to Dropbox", "Delete data on the computer", LocalizationData.get("GenericButton.cancel")};
 		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
@@ -89,7 +89,7 @@ public class DataWriter {
 		}
 	}
 
-	private void doConflict() {
+	private void doConflict() throws ExecutionException {
 		String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br><br>What do you want to do ?<br></html>";
 		Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", LocalizationData.get("GenericButton.cancel")};
 		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
@@ -103,18 +103,13 @@ public class DataWriter {
 		}
 	}
 
-	private void doSync(SynchronizeCommand command) {
-		SynchronizeWorker worker = new SynchronizeWorker(uri, data, command);
+	private void doSync(SynchronizeCommand command) throws ExecutionException {
+		SynchronizeWorker worker = new SynchronizeWorker(uri, command);
 		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		if (command.equals(SynchronizeCommand.DOWNLOAD) && !worker.isCancelled()) {
 			data.clear();
-			try {
-				new DataReader(owner, data, uri).doSyncAndRead(SynchronizeCommand.NOTHING);
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			new DataReader(owner, data, uri).doSyncAndRead(SynchronizeCommand.NOTHING);
 		}
 	}
 }
