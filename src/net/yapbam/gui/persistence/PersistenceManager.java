@@ -131,6 +131,8 @@ public class PersistenceManager {
 		dialog.setSaveDialogType(save);
 		dialog.setSelectedURI(data.getURI());
 		dialog.setLocale(LocalizationData.getLocale());
+		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open");
+		dialog.setTitle(title);
 		return dialog.showDialog();
 	}
 	

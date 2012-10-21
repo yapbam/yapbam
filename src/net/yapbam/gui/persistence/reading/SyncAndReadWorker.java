@@ -14,6 +14,7 @@ import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistencePlugin;
 import net.yapbam.gui.persistence.SynchronizationState;
+import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.Synchronizer;
 
 class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellable, ProgressReport {
@@ -22,14 +23,6 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	private boolean isSynchronizing;
 	
 	private SynchronizeCommand command;
-	
-	/** A command that specifies what to do during synchronization phase. */
-	enum SynchronizeCommand {
-		SYNCHRONIZE,
-		UPLOAD,
-		DOWNLOAD,
-		NOTHING
-	}
 	
 	SyncAndReadWorker(URI uri, SynchronizeCommand command) {
 		this.uri = uri;
@@ -53,6 +46,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 					syncState = SynchronizationState.SYNCHRONIZED;
 				} else if (command.equals(SynchronizeCommand.DOWNLOAD)) {
 					setPhase("Downloading", -1);
+					Synchronizer.backgroundDownload(uri, this);
 					syncState = SynchronizationState.SYNCHRONIZED;
 				} else {
 					throw new IllegalArgumentException(command+" is unknown");

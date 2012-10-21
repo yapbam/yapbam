@@ -17,8 +17,9 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistencePlugin;
+import net.yapbam.gui.persistence.RemotePersistencePlugin;
 import net.yapbam.gui.persistence.SynchronizationState;
-import net.yapbam.gui.persistence.reading.SyncAndReadWorker.SynchronizeCommand;
+import net.yapbam.gui.persistence.SynchronizeCommand;
 
 public class DataReader {
 	private Window owner;
@@ -37,7 +38,7 @@ public class DataReader {
 		return doSyncAndRead(SynchronizeCommand.SYNCHRONIZE);
 	}
 
-	private boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
+	public boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
 		SyncAndReadWorker basicWorker = new SyncAndReadWorker(uri, command);
 		PersistenceManager.buildWaitDialog(owner, basicWorker).setVisible(true);
 		ReaderResult result;
@@ -60,6 +61,10 @@ public class DataReader {
 			if (basicWorker.isSynchronizing())	return syncCancelled(); // If the synchronization was cancelled
 			// If another phase was cancelled -> Cancel the whole read operation
 			return false;
+		} catch (ExecutionException e) {
+			// An error occurred while reading the cache file
+			if (!(plugin instanceof RemotePersistencePlugin)) throw e;
+			return doErrorOccurred();
 		}
 		File localFile = plugin.getLocalFile(uri);
 		if (basicWorker.isCancelled()) return false; // Anything but the synchronization was cancelled => Globally cancel
@@ -109,12 +114,22 @@ public class DataReader {
 			return false;
 		} else {
 			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")}; 
-			if (JOptionPane.showOptionDialog(owner, "Synchronization failed. Would you like to open the cached data ?",
+			if (JOptionPane.showOptionDialog(owner, "Synchronization failed. Would you like to open the cached data?",
 					LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, 0)!=0) {
 				return false;
 			}
 			return readLocalFile(null);
 		}
+	}
+	
+	private boolean doErrorOccurred() throws ExecutionException {
+		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")}; 
+		if (JOptionPane.showOptionDialog(owner, "<html>Sorry, unable to read the local data.<br>Maybe this data is corrupted<br><br>Do you want to try downloading it again?",
+				LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) {
+			return false;
+		}
+		plugin.getLocalFile(uri).delete();
+		return doSyncAndRead(SynchronizeCommand.DOWNLOAD);
 	}
 	
 	private boolean doRemoteNotFound() throws ExecutionException {
