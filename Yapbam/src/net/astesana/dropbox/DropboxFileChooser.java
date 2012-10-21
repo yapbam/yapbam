@@ -18,6 +18,7 @@ import java.awt.Window;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.List;
@@ -423,6 +424,17 @@ public abstract class DropboxFileChooser extends JPanel {
 	public FileId getSelectedFile() {
 		String name = getFileNameField().getText();
 		return name.length()==0?null:new FileId(getDropboxAPI().getSession().getAccessTokenPair(), info.account.displayName, name);
+	}
+	
+	public void setSelectedURI(URI uri) {
+		if (uri==null) {
+			getFileNameField().setText("");
+		} else {
+			//FIXME Be aware that getInfo may not have been set before this method is called, so, the following lines, if not commented, result in an error 
+//			FileId id = FileId.fromURI(uri);
+//			if (!getInfo().getAccount().displayName.equals(id.getAccount())) throw new IllegalArgumentException("invalid account"); //$NON-NLS-1$
+//			getFileNameField().setText(uri.getPath().substring(1));
+		}
 	}
 	
 	protected DropboxInfo getInfo() {

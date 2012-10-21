@@ -49,7 +49,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 					Synchronizer.backgroundDownload(uri, this);
 					syncState = SynchronizationState.SYNCHRONIZED;
 				} else {
-					throw new IllegalArgumentException(command+" is unknown");
+					throw new IllegalArgumentException(command+" is unknown"); //$NON-NLS-1$
 				}
 			} catch (FileNotFoundException e) {
 				throw e;
