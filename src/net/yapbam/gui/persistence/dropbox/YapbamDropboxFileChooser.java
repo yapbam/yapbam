@@ -124,11 +124,6 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	}
 
 	@Override
-	public void setSelectedURI(URI uri) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public boolean exist(URI uri) {
 		//TODO Verify that the local cache doesn't exists ?
 		FileId id = FileId.fromURI(uri);
