@@ -121,9 +121,9 @@ public class PersistenceManager {
 	 * @return true if the data was saved
 	 */
 	public boolean saveAs(Window owner, GlobalData data) {
-		URI file = getURI(owner, data, true);
-		if (file==null) return false;
-		return saveTo(owner, data, file);
+		URI uri = getURI(owner, data, true);
+		if (uri==null) return false;
+		return saveTo(owner, data, uri);
 	}
 
 	private URI getURI(Window owner, GlobalData data, boolean save) {
@@ -161,7 +161,7 @@ public class PersistenceManager {
 			}
 			if (path != null) {
 				try {
-					new DataReader(frame, data, path).readData();
+					new DataReader(frame, data, path).read();
 				} catch (ExecutionException exception) {
 					boolean notProcessed = true;
 					if (errProcessor!=null) {

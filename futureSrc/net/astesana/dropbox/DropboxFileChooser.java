@@ -140,9 +140,22 @@ public abstract class DropboxFileChooser extends JPanel {
 	}
 
 
-	private static class DropboxInfo {
+	public static class DropboxInfo {
 		Account account;
 		List<Entry> files;
+		
+		/**
+		 * @return the account
+		 */
+		public Account getAccount() {
+			return account;
+		}
+		/**
+		 * @return the files
+		 */
+		public List<Entry> getFiles() {
+			return files;
+		}
 	}
 	
 	protected abstract DropboxAPI<? extends WebAuthSession> getDropboxAPI();
@@ -199,7 +212,7 @@ public abstract class DropboxFileChooser extends JPanel {
 			throw new RuntimeException(e);
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof DropboxIOException) {
-				JOptionPane.showMessageDialog(owner, "Damned it failed. Seems like your not connected to the Internet", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(owner, "Damned it failed. Seems like you are not connected to the Internet", "Error", JOptionPane.ERROR_MESSAGE);
 			} else {
 				throw new RuntimeException(e);
 			}

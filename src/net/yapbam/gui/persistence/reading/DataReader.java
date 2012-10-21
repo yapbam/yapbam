@@ -33,7 +33,7 @@ public class DataReader {
 		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
 	}
 
-	public boolean readData() throws ExecutionException {
+	public boolean read() throws ExecutionException {
 		return doSyncAndRead(SynchronizeCommand.SYNCHRONIZE);
 	}
 

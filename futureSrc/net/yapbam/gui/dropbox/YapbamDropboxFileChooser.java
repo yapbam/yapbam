@@ -26,7 +26,6 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	static final String ZIP_ENTENSION = ".zip"; //$NON-NLS-1$
 
 	private URI selectedURI;
-	private boolean setUp;
 
 	/**
 	 * Creates the panel.
@@ -92,7 +91,6 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	@Override
 	protected void clearAccess() {
 		Dropbox.storeKeys(null);
-		this.setUp = false;
 	}
 	
 	@Override
@@ -102,14 +100,12 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 
 	@Override
 	public void setUp() {
-		if (!setUp) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					setUp = refresh();
-				}
-			});
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				refresh();
+			}
+		});
 	}
 
 	@Override
@@ -133,7 +129,15 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	}
 
 	@Override
-	public boolean exist(URI selectedURI) {
-		return false; //TODO
+	public boolean exist(URI uri) {
+		//TODO Verify that the local cache doesn't exists ?
+		FileId id = FileId.fromURI(uri);
+		if (!getInfo().getAccount().displayName.equals(id.getAccount())) throw new IllegalArgumentException("invalid account");
+		String path = id.getPath();
+		List<Entry> files = getInfo().getFiles();
+		for (Entry entry : files) {
+			if (entry.path.equals(path)) return true;
+		}
+		return false;
 	}
 }
