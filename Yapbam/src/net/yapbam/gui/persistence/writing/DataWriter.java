@@ -2,8 +2,8 @@ package net.yapbam.gui.persistence.writing;
 
 import java.awt.Window;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -13,30 +13,23 @@ import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.ProgressReport;
-import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.PersistencePlugin;
-import net.yapbam.gui.persistence.RemotePersistencePlugin;
 import net.yapbam.gui.persistence.SynchronizationState;
-import net.yapbam.gui.persistence.Synchronizer;
-import net.yapbam.gui.persistence.writing.WriterResult.State;
+import net.yapbam.gui.persistence.SynchronizeCommand;
+import net.yapbam.gui.persistence.reading.DataReader;
 import net.yapbam.util.Portable;
 
 public class DataWriter {
 	private Window owner;
 	private GlobalData data;
 	private URI uri;
-	private PersistencePlugin plugin;
 
 	public DataWriter (Window owner, GlobalData data, URI uri) {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;
-		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
 	}
 
 	public boolean save() {
@@ -47,78 +40,81 @@ public class DataWriter {
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 			if (choice==0) return false;
 		}
-		final Worker<WriterResult, Void> worker = new BackgroundSaver(data, uri);
+		final Worker<WriterResult, Void> worker = new SaveWorker(data, uri);
 		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		try {
 			WriterResult result = worker.get();
-			if (result==null) return false;
+			if (result==null) return false; // Saving to local cache was cancelled
 			data.setURI(uri);
 			data.setChanged(false);
+			if (result.getState().equals(WriterResult.State.EXCEPTION_WHILE_SYNC)) {
+				if (result.getException() instanceof IOException) {
+					// An io error occurred ... probably we're not connected to the Internet
+					// Do nothing
+				} else {
+					// Not an IO error => Log the error
+					ErrorManager.INSTANCE.log(owner, result.getException());
+				}
+			} else {
+				SynchronizationState state = result.getSyncState();
+				if (state.equals(SynchronizationState.REMOTE_DELETED)) {
+					doRemoteDeleted();
+				} else if (state.equals(SynchronizationState.CONFLICT)) {
+					doConflict();
+				}
+			}
 		} catch (ExecutionException e) {
 			// An exception occurred while saving to the cache
-			//FIXME Test what is the exception ?
-			ErrorManager.INSTANCE.display(owner, e.getCause());
+			ErrorManager.INSTANCE.log(owner, e.getCause());
 			return false;
 		} catch (CancellationException e) {
-			// The synchronization was cancelled 
+			// The synchronization was cancelled => Do nothing
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 		return true;
 	}
-	
-	private static class BackgroundSaver extends Worker<WriterResult, Void> implements ProgressReport, Cancellable {
-		private GlobalData data;
-		private URI uri;
 
-		BackgroundSaver(GlobalData data, URI uri) {
-			this.data = data;
-			this.uri = uri;
-			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
+	private void doRemoteDeleted() {
+		String message = "<html>That file doesn't exist anymore on Dropbox.<br><br>What do you want to do ?<br></html>";
+		Object[] options = {"Upload computer data to Dropbox", "Delete data on the computer", LocalizationData.get("GenericButton.cancel")};
+		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+				null, options, options[2]);
+		if (n==2) {
+		} else if (n==0) {
+			doSync(SynchronizeCommand.UPLOAD);
+		} else {
+			PersistenceManager.MANAGER.getPlugin(uri).getLocalFile(uri).delete();
 		}
+	}
 
-		@Override
-		public void setMax(int length) {
-			super.setPhase(getPhase(), length);
+	private void doConflict() {
+		String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br><br>What do you want to do ?<br></html>";
+		Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", LocalizationData.get("GenericButton.cancel")};
+		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+				null, options, options[2]);
+		if (n==2) {
+			// Cancel, do nothing
+		} else if (n==0) {
+			doSync(SynchronizeCommand.UPLOAD);
+		} else {
+			doSync(SynchronizeCommand.DOWNLOAD);
 		}
+	}
 
-		@Override
-		protected WriterResult doProcessing() throws Exception {
-			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
-			boolean remote = plugin instanceof RemotePersistencePlugin;
-			File file = remote ? ((RemotePersistencePlugin)plugin).getLocalFileForWriting(uri) : plugin.getLocalFile(uri);
-			Serializer.write(data, file, remote, this);
-			if (isCancelled()) return null;
-			if (plugin instanceof RemotePersistencePlugin) {
-//				// if cache file has a revision, mark it as not synchronized  
-//				if (((RemotePersistencePlugin)plugin).getLocalBaseRevision(uri) != null) {
-//					((RemotePersistencePlugin)plugin).setIsSynchronized(uri, false);
-//				}
-				try {
-					SynchronizationState state = Synchronizer.backgroundSynchronize(uri, this);
-					return new WriterResult(State.FINISHED, state);
-//					RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;
-//					rPlugin.upload(file, uri, this);
-//					rPlugin.setLocalBaseRevision(uri, rPlugin.getRemoteRevision(uri));
-				} catch (Throwable e) {
-					return new WriterResult(State.EXCEPTION_WHILE_SYNC, null);
-				}
+	private void doSync(SynchronizeCommand command) {
+		SynchronizeWorker worker = new SynchronizeWorker(uri, data, command);
+		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
+		waitFrame.setVisible(true);
+		if (command.equals(SynchronizeCommand.DOWNLOAD) && !worker.isCancelled()) {
+			data.clear();
+			try {
+				new DataReader(owner, data, uri).doSyncAndRead(SynchronizeCommand.NOTHING);
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			return null;
-		}
-		
-		@Override
-		public void cancel() {
-			super.cancel(false);
-		}
-		@Override
-		public void reportProgress(int progress) {
-			super.reportProgress(progress);
-		}
-		@Override
-		public void setPhase(String phase, int length) {
-			super.setPhase(phase, length);
 		}
 	}
 }

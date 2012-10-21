@@ -64,7 +64,7 @@ public abstract class Synchronizer {
 		}
 	}
 
-	public static void backgroundDownload(URI uri, Cancellable task) throws IOException {
+	public static boolean backgroundDownload(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		File file = plugin.getLocalFile(uri);
 		file.getParentFile().mkdirs();
@@ -72,21 +72,30 @@ public abstract class Synchronizer {
 		String downloadedRevision = "";
 		// We do not download directly to the target file, to prevent file from being corrupted if the copy fails
 		File tmpFile = new File(file.getParent(), file.getName()+".tmp");
-		while (!NullUtils.areEquals(revision, downloadedRevision)) {
+		boolean done = true;
+		while (done && !NullUtils.areEquals(revision, downloadedRevision)) {
 			// While the downloaded revision is not the last one on the server
 			downloadedRevision = plugin.getRemoteRevision(uri);
-			plugin.download(uri, tmpFile, task);
+			done = plugin.download(uri, tmpFile, task);
 			revision = plugin.getRemoteRevision(uri);
 		}
-		file.delete();
-		tmpFile.renameTo(file);
-		plugin.setLocalBaseRevision(uri, revision);
+		if (done) {
+			file.delete();
+			tmpFile.renameTo(file);
+			plugin.setLocalBaseRevision(uri, revision);
+		} else {
+			tmpFile.delete();
+		}
+		return done;
 	}
 
-	public static void backgroungUpload(URI uri, Cancellable task) throws IOException {
+	public static boolean backgroungUpload(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		File file = plugin.getLocalFile(uri);
-		plugin.upload(file, uri, task);
-		plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));
+		boolean done = plugin.upload(file, uri, task);
+		if (done) {
+			plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));
+		}
+		return done;
 	}
 }

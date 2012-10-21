@@ -19,10 +19,6 @@ class WriterResult {
 		this.e = e;
 	}
 
-	public WriterResult(State state, SynchronizationState syncState) {
-		this(state, syncState, null);
-	}
-
 	/**
 	 * @return the state
 	 */
