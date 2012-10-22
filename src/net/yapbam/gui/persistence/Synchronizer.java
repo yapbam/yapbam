@@ -69,9 +69,9 @@ public abstract class Synchronizer {
 		File file = plugin.getLocalFile(uri);
 		file.getParentFile().mkdirs();
 		String revision = null;
-		String downloadedRevision = "";
+		String downloadedRevision = ""; //$NON-NLS-1$
 		// We do not download directly to the target file, to prevent file from being corrupted if the copy fails
-		File tmpFile = new File(file.getParent(), file.getName()+".tmp");
+		File tmpFile = new File(file.getParent(), file.getName()+".tmp"); //$NON-NLS-1$
 		boolean done = true;
 		while (done && !NullUtils.areEquals(revision, downloadedRevision)) {
 			// While the downloaded revision is not the last one on the server

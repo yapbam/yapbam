@@ -57,7 +57,7 @@ public class PersistenceManager {
 						Class<? extends PersistencePlugin> pClass = (Class<? extends PersistencePlugin>) Class.forName(className);
 						add(pClass.newInstance());
 					} catch (Exception e) {
-						ErrorManager.INSTANCE.display(null, e, "Unable to load the persistence plugin "+className);
+						ErrorManager.INSTANCE.display(null, e, MessageFormat.format(LocalizationData.get("persitencePlugin.load.error"), className));
 					}
 				}
 			}
@@ -133,7 +133,7 @@ public class PersistenceManager {
 		dialog.setSaveDialogType(save);
 		dialog.setSelectedURI(data.getURI());
 		dialog.setLocale(LocalizationData.getLocale());
-		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open");
+		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open"); //$NON-NLS-1$ //$NON-NLS-2$
 		dialog.setTitle(title);
 		return dialog.showDialog();
 	}
@@ -143,7 +143,7 @@ public class PersistenceManager {
 		for (int i = 0; i < panels.length; i++) {
 			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
 		}
-		return new URIChooserDialog(owner, "", panels);
+		return new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
 	}
 
 	private boolean saveTo(Window owner, GlobalData data, URI uri) {

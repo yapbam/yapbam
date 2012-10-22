@@ -3,6 +3,7 @@ package net.yapbam.gui.persistence.writing;
 import java.net.URI;
 
 import net.astesana.ajlib.swing.worker.Worker;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
@@ -20,18 +21,18 @@ public class SynchronizeWorker extends Worker<SynchronizationState, Void> implem
 	@Override
 	protected SynchronizationState doProcessing() throws Exception {
 		if (command.equals(SynchronizeCommand.SYNCHRONIZE)) {
-			setPhase("Synchronizing", -1);
+			setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
 			return Synchronizer.backgroundSynchronize(uri, this);
 		} else if (command.equals(SynchronizeCommand.UPLOAD)) {
-			setPhase("Uploading", -1);
+			setPhase(LocalizationData.get("synchronization.uploading"), -1); //$NON-NLS-1$
 			Synchronizer.backgroungUpload(uri, this);
 			return SynchronizationState.SYNCHRONIZED;
 		} else if (command.equals(SynchronizeCommand.DOWNLOAD)) {
-			setPhase("Downloading", -1);
+			setPhase(LocalizationData.get("synchronization.downloading"), -1); //$NON-NLS-1$
 			Synchronizer.backgroundDownload(uri, this);
 			return SynchronizationState.SYNCHRONIZED;
 		} else {
-			throw new IllegalArgumentException(command+" is unknown");
+			throw new IllegalArgumentException(command+" is unknown"); //$NON-NLS-1$
 		}
 	}
 
