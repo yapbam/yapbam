@@ -32,6 +32,7 @@ public class DataReader {
 		this.data = data;
 		this.uri = uri;
 		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		if (this.plugin==null) throw new RuntimeException("Unsupported scheme: "+uri.getScheme());
 	}
 
 	public boolean read() throws ExecutionException {
