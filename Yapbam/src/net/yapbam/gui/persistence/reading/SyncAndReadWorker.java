@@ -38,14 +38,14 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 			this.isSynchronizing = true;
 			try {
 				if (command.equals(SynchronizeCommand.SYNCHRONIZE)) {
-					setPhase("Synchronizing", -1);
+					setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
 					syncState = Synchronizer.backgroundSynchronize(uri, this);
 				} else if (command.equals(SynchronizeCommand.UPLOAD)) {
-					setPhase("Uploading", -1);
+					setPhase(LocalizationData.get("synchronization.uploading"), -1); //$NON-NLS-1$
 					Synchronizer.backgroungUpload(uri, this);
 					syncState = SynchronizationState.SYNCHRONIZED;
 				} else if (command.equals(SynchronizeCommand.DOWNLOAD)) {
-					setPhase("Downloading", -1);
+					setPhase(LocalizationData.get("synchronization.downloading"), -1); //$NON-NLS-1$
 					Synchronizer.backgroundDownload(uri, this);
 					syncState = SynchronizationState.SYNCHRONIZED;
 				} else {

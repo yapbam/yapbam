@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -16,6 +17,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.PersistenceManager;
+import net.yapbam.gui.persistence.RemotePersistencePlugin;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.reading.DataReader;
@@ -77,9 +79,10 @@ public class DataWriter {
 	}
 
 	private void doRemoteDeleted() throws ExecutionException {
-		String message = "<html>That file doesn't exist anymore on Dropbox.<br><br>What do you want to do ?<br></html>";
-		Object[] options = {"Upload computer data to Dropbox", "Delete data on the computer", LocalizationData.get("GenericButton.cancel")};
-		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getDeletedMessage()); //$NON-NLS-1$
+		Object[] options = {plugin.getUploadActionMessage(), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")};  //$NON-NLS-1$//$NON-NLS-2$
+		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 		} else if (n==0) {
@@ -90,9 +93,10 @@ public class DataWriter {
 	}
 
 	private void doConflict() throws ExecutionException {
-		String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br><br>What do you want to do ?<br></html>";
-		Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", LocalizationData.get("GenericButton.cancel")};
-		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getConflictMessage()); //$NON-NLS-1$
+		Object[] options = {plugin.getUploadActionMessage(), plugin.getDownloadActionMessage(), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$
+		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 			// Cancel, do nothing

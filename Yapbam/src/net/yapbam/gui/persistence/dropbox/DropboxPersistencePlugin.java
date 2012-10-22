@@ -50,7 +50,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	    long totalSize = -1;
 	    if (task!=null) {
 	    	totalSize = Dropbox.getAPI().metadata(path, 0, null, false, null).bytes;
-	    	task.setPhase(LocalizationData.get("dropbox.synchronize.downloading"), totalSize>0?100:-1); //$NON-NLS-1$
+	    	task.setPhase(LocalizationData.get("dropbox.downloading"), totalSize>0?100:-1); //$NON-NLS-1$
 	    }
 			dropboxStream = Dropbox.getAPI().getFileStream(path, null);
 			try {
@@ -98,10 +98,10 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	public boolean upload(File file, URI uri, Cancellable task) throws IOException {
 		FileInputStream stream = new FileInputStream(file);
 		try {
-			//FIXME For now ... I don't know how cancel the upload
+			//FIXME For now ... I don't know how to cancel the upload
 			//Maybe by using ChunkUpload
 			long length = file.length();
-	    if (task!=null) task.setPhase(LocalizationData.get("dropbox.synchronize.uploading"), -1); //$NON-NLS-1$
+	    if (task!=null) task.setPhase(LocalizationData.get("dropbox.uploading"), -1); //$NON-NLS-1$
 			Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, length, null);
 		} catch (DropboxException e) {
 			throw new IOException(e);
@@ -228,7 +228,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 */
 	@Override
 	public String getConflictMessage() {
-		return "Both data stored on your computer and the one on Dropbox were modified.";
+		return LocalizationData.get("dropbox.conflict"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -236,8 +236,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 */
 	@Override
 	public String getDeletedMessage() {
-		// TODO Auto-generated method stub
-		return "That file doesn't exist anymore on Dropbox.";
+		return LocalizationData.get("dropbox.dropbox.remoteDeleted"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -245,7 +244,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 */
 	@Override
 	public String getUploadActionMessage() {
-		return "Upload computer data to Dropbox";
+		return LocalizationData.get("dropbox.upload.action"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -253,6 +252,6 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 */
 	@Override
 	public String getDownloadActionMessage() {
-		return "Download Dropbox data to computer";
+		return LocalizationData.get("dropbox.download.action"); //$NON-NLS-1$
 	}
 }

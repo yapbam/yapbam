@@ -12,8 +12,8 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 * @return a File pointing on an already created folder
 	 */
 	protected File getCacheFolder(String scheme) {
-		File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir"),"yapbam"); //$NON-NLS-1$
-		File file = new File(folder,"cache/"+getSchemes().iterator().next());
+		File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir"),"yapbam"); //$NON-NLS-1$ //$NON-NLS-2$
+		File file = new File(folder,"cache/"+getSchemes().iterator().next()); //$NON-NLS-1$
 		if (!file.isDirectory()) file.mkdirs();
 		return file;
 	}
