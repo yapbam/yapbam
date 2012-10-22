@@ -66,5 +66,8 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 
 	public abstract File getLocalFileForWriting(URI uri);
 
-//	protected abstract void setIsSynchronized(URI uri, boolean isSynchronized);
+	public abstract String getConflictMessage();
+	public abstract String getDownloadActionMessage();
+	public abstract String getUploadActionMessage();
+	public abstract String getDeletedMessage();
 }

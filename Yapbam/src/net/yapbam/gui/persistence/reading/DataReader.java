@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -32,7 +33,7 @@ public class DataReader {
 		this.data = data;
 		this.uri = uri;
 		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		if (this.plugin==null) throw new RuntimeException("Unsupported scheme: "+uri.getScheme());
+		if (this.plugin==null) throw new RuntimeException("Unsupported scheme: "+uri.getScheme()); //$NON-NLS-1$
 	}
 
 	public boolean read() throws ExecutionException {
@@ -111,11 +112,11 @@ public class DataReader {
 
 	private boolean doSyncFailed() throws ExecutionException {
 		if (!plugin.getLocalFile(uri).exists()) {
-			JOptionPane.showMessageDialog(owner, "Sorry, unable to download the data", LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-2$
+			JOptionPane.showMessageDialog(owner, LocalizationData.get("synchronization.downloadFailed"), LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1$//$NON-NLS-2$
 			return false;
 		} else {
 			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
-			if (JOptionPane.showOptionDialog(owner, "Synchronization failed. Would you like to open the cached data?",
+			if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.failed"), //$NON-NLS-1$
 					LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
 				return false;
 			}
@@ -125,7 +126,7 @@ public class DataReader {
 	
 	private boolean doErrorOccurred() throws ExecutionException {
 		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
-		if (JOptionPane.showOptionDialog(owner, "<html>Sorry, unable to read the local data.<br>Maybe this data is corrupted<br><br>Do you want to try downloading it again?",
+		if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cacheCorrupted"), //$NON-NLS-1$
 				LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
 			return false;
 		}
@@ -134,9 +135,10 @@ public class DataReader {
 	}
 	
 	private boolean doRemoteNotFound() throws ExecutionException {
-		String message = "<html>That file doesn't exist anymore on Dropbox.<br><br>What do you want to do ?<br></html>";
-		Object[] options = {"Upload computer data to Dropbox", "Delete data on the computer", LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-3$
-		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+		RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), rPlugin.getDeletedMessage()); //$NON-NLS-1$
+		Object[] options = {rPlugin.getUploadActionMessage(), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
+		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 		} else if (n==0) {
@@ -148,9 +150,10 @@ public class DataReader {
 	}
 
 	private boolean doConflict() throws ExecutionException {
-		String message = "<html>Both data stored on your computer and the one on Dropbox were modified.<br><br>What do you want to do ?<br></html>";
-		Object[] options = {"Upload computer data to Dropbox", "Download Dropbox data to computer", LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-3$
-		int n = JOptionPane.showOptionDialog(owner, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+		RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"),rPlugin.getConflictMessage()); //$NON-NLS-1$
+		Object[] options = {rPlugin.getUploadActionMessage(), rPlugin.getDownloadActionMessage(), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-1$
+		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 			return false;
@@ -164,8 +167,8 @@ public class DataReader {
 	private boolean syncCancelled() throws ExecutionException {
 		if (!plugin.getLocalFile(uri).exists()) return false;
 		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
-		if (JOptionPane.showOptionDialog(owner, "You cancelled the synchronization. Would you like to open the cached data ?",
-				"Synchronization was cancelled", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0)!=0) {
+		if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cancelled"), //$NON-NLS-1$
+				LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
 			return false;
 		}
 		return readLocalFile(null); 
