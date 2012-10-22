@@ -222,4 +222,37 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 			throw new IOException(e);
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.persistence.RemotePersistencePlugin#getConflictMessage()
+	 */
+	@Override
+	public String getConflictMessage() {
+		return "Both data stored on your computer and the one on Dropbox were modified.";
+	}
+
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.persistence.RemotePersistencePlugin#getDeletedMessage()
+	 */
+	@Override
+	public String getDeletedMessage() {
+		// TODO Auto-generated method stub
+		return "That file doesn't exist anymore on Dropbox.";
+	}
+
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.persistence.RemotePersistencePlugin#getUploadActionMessage()
+	 */
+	@Override
+	public String getUploadActionMessage() {
+		return "Upload computer data to Dropbox";
+	}
+
+	/* (non-Javadoc)
+	 * @see net.yapbam.gui.persistence.RemotePersistencePlugin#getDownloadActionMessage()
+	 */
+	@Override
+	public String getDownloadActionMessage() {
+		return "Download Dropbox data to computer";
+	}
 }
