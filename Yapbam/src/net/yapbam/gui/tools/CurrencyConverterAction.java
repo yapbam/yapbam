@@ -22,7 +22,6 @@ import net.astesana.ajlib.swing.worker.WorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.currency.CurrencyConverter;
-import net.yapbam.currency.FileCache;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.Preferences;
 import net.yapbam.util.Portable;

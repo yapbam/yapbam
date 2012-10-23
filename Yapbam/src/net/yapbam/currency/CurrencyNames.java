@@ -1,15 +1,16 @@
 package net.yapbam.currency;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import net.astesana.ajlib.utilities.NullUtils;
+import java.util.Properties;
 
 public class CurrencyNames {
-	private static final String BUNDLE_NAME = "net.yapbam.currency.currencyNames"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "/net/yapbam/currency/currencyNames"; //$NON-NLS-1$
 
-	private static ResourceBundle RESOURCE_BUNDLE;
+	private static Properties RESOURCE_BUNDLE;
 	private static Locale resourceBundleLocale;
 	private static boolean translatorMode;
 
@@ -22,7 +23,7 @@ public class CurrencyNames {
 			return key;
 		} else {
 			try {
-				return RESOURCE_BUNDLE.getString(key);
+				return (String) RESOURCE_BUNDLE.get(key);
 			} catch (MissingResourceException e) {
 				return key;
 			}
@@ -30,9 +31,28 @@ public class CurrencyNames {
 	}
 	
 	private static void reset() {
-		if (!NullUtils.areEquals(resourceBundleLocale, Locale.getDefault())) {
-			RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+		if (!Locale.getDefault().equals(resourceBundleLocale)) {
+			Properties properties = new Properties();
+			String lang = Locale.getDefault().getLanguage();
+//			String country = Locale.getDefault().getCountry();
+			String resourceSuffix = ".properties";
+			boolean ok = false;
+			try {
+				ok = tryLoading(properties, BUNDLE_NAME+resourceSuffix);
+				ok = tryLoading(properties, BUNDLE_NAME+"_"+lang+resourceSuffix) && ok;
+			} catch (IOException e) {
+				ok = false;
+			}
+			if (!ok) throw new MissingResourceException("", "", BUNDLE_NAME);
+			RESOURCE_BUNDLE = properties;
 			resourceBundleLocale = Locale.getDefault();
 		}
+	}
+	
+	private static boolean tryLoading(Properties properties, String name) throws IOException {
+		InputStream stream = CurrencyNames.class.getResourceAsStream(name);
+		if (stream==null) return false;
+		properties.load(new InputStreamReader(stream, "ISO8859-1"));
+		return true;
 	}
 }

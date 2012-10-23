@@ -16,7 +16,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.11.8"/>
+	<property name="yapbamVersion" value="0.12.0"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -50,6 +50,11 @@
 		<echo message="version=${yapbamVersion} (${TODAY})" file="src/net/yapbam/update/version.txt"/>
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
+		<unzip dest="releaseCompile">
+		    <fileset dir="${otherlibpath}">
+		        <include name="**/*.jar"/>
+		    </fileset>
+		</unzip>
 		<copy todir="releaseCompile">
 	    	<fileset dir="src" excludes="**/*.java"/>
 	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/plot/LocalizationBundl*.properties"/>
