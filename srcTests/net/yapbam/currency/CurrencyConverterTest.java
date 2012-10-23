@@ -3,6 +3,8 @@ package net.yapbam.currency;
 import java.io.File;
 import java.net.Proxy;
 
+import net.yapbam.gui.tools.FileCache;
+
 public class CurrencyConverterTest {
 	/**
 	 * @param args

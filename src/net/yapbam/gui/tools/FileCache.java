@@ -1,4 +1,4 @@
-package net.yapbam.currency;
+package net.yapbam.gui.tools;
 
 import java.io.File;
 import java.io.FileReader;
@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+
+import net.yapbam.currency.CurrencyConverter;
+import net.yapbam.currency.CurrencyConverter.Cache;
 
 public class FileCache implements CurrencyConverter.Cache {
 	private File cacheFile;
