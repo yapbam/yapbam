@@ -17,7 +17,7 @@ import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.common.FileId;
+import net.astesana.common.dropbox.FileId;
 import net.astesana.dropbox.DropboxFileChooser;
 import net.yapbam.gui.LocalizationData;
 
