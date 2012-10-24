@@ -7,7 +7,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.astesana.common.FileId;
+import net.astesana.common.dropbox.FileId;
 
 @SuppressWarnings("serial")
 public class DropboxFileChooserDialog extends AbstractDialog<DropboxFileChooser, FileId> {
