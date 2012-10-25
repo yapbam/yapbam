@@ -56,8 +56,9 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 				} catch (Exception e) {
 					return new WriterResult(State.EXCEPTION_WHILE_SYNC, null, e);
 				}
+			} else {
+				return new WriterResult(State.FINISHED, SynchronizationState.SYNCHRONIZED, null);
 			}
-			return null;
 		}
 		
 		@Override
