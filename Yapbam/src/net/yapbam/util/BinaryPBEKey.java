@@ -4,7 +4,11 @@ import java.security.spec.*;
 import java.util.*;
 import javax.crypto.*;
 
-class BinaryPBEKey implements SecretKey {
+/** A PBEWithMD5AndDES key that allows non ascii char in password.
+ * <br>This class is copied from a <a href="http://stackoverflow.com/questions/809590/how-can-i-decode-a-pkcs5-encrypted-pkcs8-private-key-in-java">stackoverflow question</a> 
+ */
+@SuppressWarnings("serial")
+public class BinaryPBEKey implements SecretKey {
 	private final byte[] key;
 
 	/**
@@ -13,7 +17,7 @@ class BinaryPBEKey implements SecretKey {
 	 * @param key
 	 *          The key.
 	 */
-	BinaryPBEKey(byte[] key) throws InvalidKeySpecException {
+	public BinaryPBEKey(byte[] key) throws InvalidKeySpecException {
 		if (key == null) {
 			this.key = new byte[0];
 		} else {
