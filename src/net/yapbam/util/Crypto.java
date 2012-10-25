@@ -16,11 +16,8 @@ import java.util.zip.InflaterInputStream;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -70,34 +67,6 @@ public final class Crypto {
 			throw new RuntimeException(e);
 		}
 	}
-/*
-	private static String generateKey() throws NoSuchAlgorithmException {
-		KeyGenerator kgen = KeyGenerator.getInstance("AES");
-		kgen.init(128); // 192 and 256 bits may not be available
-
-		// Generate the secret key specs.
-		SecretKey skey = kgen.generateKey();
-		byte[] raw = skey.getEncoded();
-		String key = asHex(raw);
-		return key;
-	}
-
-	public static void main(String[] args) throws Exception {
-//		String message = "Source forge is great";
-//		String encrypt = encrypt(key, message);
-//		System.out.println("encrypted string: " + encrypt);
-//		String original = decrypt(key, encrypt);
-//		System.out.println("Original string: "+original);
-		System.out.println(new String(Crypto.getDigest("Hello")));
-		System.out.println("--------------------");
-		System.out.println(new String(Crypto.getDigest("Hello")));
-		System.out.println("--------------------");
-		System.out.println(new String(Crypto.getDigest("This is a very long password")));
-		System.out.println("--------------------");
-		System.out.println(new String(Crypto.getDigest("azertyuiop")));
-		System.out.println("--------------------");
-		System.out.println(new String(Crypto.getDigest("blougiboulga")));
-	}*/
 	
 	private static final byte[] SALT = new byte[]{ (byte)0xc7, (byte)0x23, (byte)0xa5, (byte)0xfc, (byte)0x7e, (byte)0x38, (byte)0xee, (byte)0x09};
 	private static final PBEParameterSpec pbeParamSpec = new PBEParameterSpec(SALT, 16);
@@ -112,14 +81,21 @@ public final class Crypto {
 	 */
 	public static OutputStream getPasswordProtectedOutputStream (String password, OutputStream stream) throws IOException {
 		stream.write(getDigest(password));
-		PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
 		try {
-			SecretKeyFactory keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
-			SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
+			SecretKey pbeKey = new BinaryPBEKey(password.getBytes("UTF-8"));
 			Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
 			cipher.init(Cipher.ENCRYPT_MODE, pbeKey, pbeParamSpec);
-			stream = new CipherOutputStream(stream, cipher);
-			stream = new DeflaterOutputStream(stream);
+			CipherOutputStream cstream = new CipherOutputStream(stream, cipher);
+			stream = new DeflaterOutputStream(cstream) {
+				/* (non-Javadoc)
+				 * @see java.util.zip.DeflaterOutputStream#finish()
+				 */
+				@Override
+				public void finish() throws IOException {
+					super.finish();
+					((CipherOutputStream)out).finish();
+				}
+			};
 			return stream;
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
@@ -144,14 +120,9 @@ public final class Crypto {
 	 * @throws AccessControlException
 	 */
 	public static InputStream getPasswordProtectedInputStream (String password, InputStream stream) throws IOException, AccessControlException {
-		PBEKeySpec pbeKeySpec;
-		SecretKeyFactory keyFac;
-
 		verifyPassword(stream, password);
-		pbeKeySpec = new PBEKeySpec(password.toCharArray());
 		try {
-			keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
-			SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
+			SecretKey pbeKey = new BinaryPBEKey(password.getBytes("UTF-8"));
 			Cipher cipher = Cipher.getInstance("PBEWithMD5AndDES");
 			cipher.init(Cipher.DECRYPT_MODE, pbeKey, pbeParamSpec);
 			stream = new CipherInputStream(stream, cipher);

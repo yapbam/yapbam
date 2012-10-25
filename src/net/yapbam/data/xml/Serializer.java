@@ -183,7 +183,7 @@ public class Serializer {
 	 * @param password The password used to protect the stream (null if no password protection).
 	 * @param os The output stream on which to write the xml document
 	 * @throws IOException if something wrong happens
-	 * @see #closeDocument()
+	 * @see #closeDocument(String)
 	 */
 	public Serializer (String password, OutputStream os) throws IOException {
 		try {
