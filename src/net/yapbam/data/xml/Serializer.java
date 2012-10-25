@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.zip.DeflaterOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -173,7 +174,7 @@ public class Serializer {
 	private static void write(GlobalData data, OutputStream os, ProgressReport report) throws IOException {
 		Serializer serializer = new Serializer(data.getPassword(), os);
 		serializer.serialize(data, report);
-		serializer.closeDocument();
+		serializer.closeDocument(data.getPassword());
 	}
 
 	/** Creates a new XML Serializer.
@@ -210,9 +211,12 @@ public class Serializer {
 		}
 	}
 	
-	public void closeDocument() throws IOException {
+	public void closeDocument(String password) throws IOException {
 		try {
 			hd.endDocument();
+			if (password!=null) {
+				((DeflaterOutputStream)this.os).finish();
+			}
 		} catch (SAXException e) {
 			throw new IOException(e);
 		}

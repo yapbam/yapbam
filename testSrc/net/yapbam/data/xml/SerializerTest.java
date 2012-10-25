@@ -35,7 +35,7 @@ public class SerializerTest {
 		ByteArrayOutputStream os = new ByteArrayOutputStream(); 
 		Serializer serializer = new Serializer(data.getPassword(), os);
 		serializer.serialize(data, null);
-		serializer.closeDocument();
+		serializer.closeDocument(data.getPassword());
 		os.flush();
 		
 		ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());

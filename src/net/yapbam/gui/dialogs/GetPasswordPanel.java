@@ -103,6 +103,7 @@ public class GetPasswordPanel extends JPanel {
 	private JCheckBox getShowPassword() {
 		if (showPassword == null) {
 			showPassword = new JCheckBox();
+			showPassword.setFocusable(false);
 			showPassword.setText(LocalizationData.get("PreferencesDialog.Network.showPassword")); //$NON-NLS-1$
 			showPassword.setToolTipText(LocalizationData.get("PreferencesDialog.Network.showPassword.toolTip")); //$NON-NLS-1$
 			showPassword.addItemListener(new java.awt.event.ItemListener() {

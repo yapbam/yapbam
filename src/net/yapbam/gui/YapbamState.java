@@ -330,7 +330,7 @@ public class YapbamState {
 			} catch (SAXException e) {
 				throw new RuntimeException(e);
 			}
-			serializer.closeDocument();
+			serializer.closeDocument(password);
 			stream.flush();
 			String xmlContent = Base64.encodeBase64String(stream.toByteArray());
 			put(key, xmlContent);
