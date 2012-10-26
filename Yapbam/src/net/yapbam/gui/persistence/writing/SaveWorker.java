@@ -9,6 +9,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.persistence.CancelManager;
 import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistencePlugin;
@@ -20,10 +21,12 @@ import net.yapbam.gui.persistence.writing.WriterResult.State;
 class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, Cancellable {
 		private GlobalData data;
 		private URI uri;
+		private CancelManager cancelManager;
 
 		SaveWorker(GlobalData data, URI uri) {
 			this.data = data;
 			this.uri = uri;
+			this.cancelManager = new CancelManager(this);
 		}
 
 		@Override
@@ -63,15 +66,16 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 		}
 		
 		@Override
-		public void cancel() {
-			super.cancel(false);
-		}
-		@Override
 		public void reportProgress(int progress) {
 			super.reportProgress(progress);
 		}
 		@Override
 		public void setPhase(String phase, int length) {
 			super.setPhase(phase, length);
+		}
+
+		@Override
+		public void setCancelAction(Runnable action) {
+			this.cancelManager.setAction(action);
 		}
 	}
