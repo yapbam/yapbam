@@ -47,6 +47,7 @@ public class DataReader {
 		try {
 			result = basicWorker.get();
 			if (result.getState().equals(State.EXCEPTION_WHILE_SYNC)) {
+				result.getException().printStackTrace(); //TODO
 				if (!(result.getException() instanceof IOException)) {
 					ErrorManager.INSTANCE.log(owner, result.getException());
 				}

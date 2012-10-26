@@ -10,6 +10,7 @@ import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.persistence.CancelManager;
 import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistencePlugin;
@@ -23,12 +24,13 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	private boolean isSynchronizing;
 	
 	private SynchronizeCommand command;
+	private CancelManager cancelManager;
 	
 	SyncAndReadWorker(URI uri, SynchronizeCommand command) {
 		this.uri = uri;
 		this.data = null;
-		
 		this.command = command;
+		this.cancelManager = new CancelManager(this);
 	}
 	
 	@Override
@@ -77,10 +79,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 			return new ReaderResult(State.REQUEST_USER, syncState);
 		}
 	}
-	@Override
-	public void cancel() {
-		super.cancel(false);
-	}
+
 	@Override
 	public void reportProgress(int progress) {
 		super.reportProgress(progress);
@@ -104,5 +103,10 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	 */
 	public boolean isSynchronizing() {
 		return isSynchronizing;
+	}
+	
+	@Override
+	public void setCancelAction(Runnable action) {
+		this.cancelManager.setAction(action);
 	}
 }

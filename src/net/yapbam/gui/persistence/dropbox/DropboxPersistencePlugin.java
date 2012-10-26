@@ -16,7 +16,6 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.ChunkedUploader;
 import com.dropbox.client2.DropboxAPI.DropboxInputStream;
 import com.dropbox.client2.DropboxAPI.Entry;
-import com.dropbox.client2.ProgressListener;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
@@ -106,27 +105,33 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 /**/
 			String parentRev = getRemoteRevision(uri);
 			// This implementation uses ChunkUploader to allow the user to cancel the upload
-			// It has a major problem:
-			// 1 - It seems that each chunk requires a new connection to Dropbox. On some network configuration (with very slow proxy)
+			// It has a major trap:
+			// It seems that each chunk requires a new connection to Dropbox. On some network configuration (with very slow proxy)
 			//   this dramatically slows down the upload. We use a chunck size equals to the file size to prevent having such a problem.
 			//   For that reason, the task will never been informed of the upload progress.
 	    if (task!=null) task.setPhase(LocalizationData.get("dropbox.uploading"), -1); //$NON-NLS-1$
 	    final ChunkedUploader uploader = Dropbox.getAPI().getChunkedUploader(stream, length, (int)length);
-	    ProgressListener listener = new ProgressListener() {
+	    task.setCancelAction(new Runnable() {
 				@Override
-				public void onProgress(long arg0, long arg1) {
-					if (task!=null && task.isCancelled()) uploader.abort();
+				public void run() {
+					uploader.abort();
 				}
-			};
+	    });
 			try {
-				uploader.upload(listener);
+				if (!task.isCancelled()) uploader.upload();
 			} catch (DropboxPartialFileException e) {
 				// Upload was cancelled
 				return false;
+	    } finally {
+	    	task.setCancelAction(null);
+	    }
+			boolean result = !task.isCancelled();
+			if (result) {
+				uploader.abort();
+			} else {
+				uploader.finish(path, parentRev);
 			}
-			uploader.finish(path, parentRev);
-//System.out.println("Seems everything is ok");
-			return true;
+			return result;
 
 /**/
 /*
