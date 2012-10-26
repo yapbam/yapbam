@@ -13,9 +13,12 @@ import java.util.Collection;
 import org.apache.commons.codec.CharEncoding;
 
 import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.DropboxAPI.ChunkedUploader;
 import com.dropbox.client2.DropboxAPI.DropboxInputStream;
 import com.dropbox.client2.DropboxAPI.Entry;
+import com.dropbox.client2.ProgressListener;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.WebAuthSession;
 
@@ -95,20 +98,70 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 * @see net.yapbam.gui.persistence.PersistencePlugin#upload(java.io.File, java.net.URI)
 	 */
 	@Override
-	public boolean upload(File file, URI uri, Cancellable task) throws IOException {
+	public boolean upload(File file, URI uri, final Cancellable task) throws IOException {
 		FileInputStream stream = new FileInputStream(file);
 		try {
-			//FIXME For now ... I don't know how to cancel the upload
-			//Maybe by using ChunkUpload
 			long length = file.length();
+			String path = FileId.fromURI(uri).getPath();
+
+			// This implementation uses ChunkUploader to allow the user to cancel the upload
+			// It has a major problem:
+			// 1 - It seems that each chunk requires a new connection to Dropbox. On some network configuration (with very slow proxy)
+			//   this dramatically slows down the upload. We use a chunck size equals to the file size to prevent having such a problem.
+			//   For that reason, the task will never been informed of the upload progress.
 	    if (task!=null) task.setPhase(LocalizationData.get("dropbox.uploading"), -1); //$NON-NLS-1$
-			Dropbox.getAPI().putFileOverwrite(FileId.fromURI(uri).getPath(), stream, length, null);
+	    final ChunkedUploader uploader = Dropbox.getAPI().getChunkedUploader(stream, length, (int)length);
+	    ProgressListener listener = new ProgressListener() {
+				@Override
+				public void onProgress(long arg0, long arg1) {
+					if (task!=null && task.isCancelled()) uploader.abort();
+				}
+			};
+			try {
+				uploader.upload(listener);
+			} catch (DropboxPartialFileException e) {
+				// Upload was cancelled
+				return false;
+			}
+			uploader.finish(path, Dropbox.getAPI().metadata(path, 1, null, false, null).rev);
+			return true;
+
+/**/
+/*
+	    // Here is an implementation that do not use chunck upload
+			// Its major problems are:
+			// - It is not possible to cancel the upload before it is completed
+			// - When the upload is cancelled, the Dropbox file is reverted to its previous version but it's revision is incremented
+			//   This causes the synchronization process to consider the file has been modified after the upload
+			if (task!=null) task.setPhase(LocalizationData.get("dropbox.uploading"), -1); //$NON-NLS-1$
+			// As this implementation doesn't allow to cancel during the upload, we will remember what was the file state
+			Entry previous = null;
+			try {
+				previous = Dropbox.getAPI().metadata(path, 1, null, false, null);
+				if (previous.isDeleted) previous = null;
+			} catch (DropboxServerException e) {
+				if (e.error!=DropboxServerException._404_NOT_FOUND) {
+					throw e;
+				}
+			}
+			Dropbox.getAPI().putFileOverwrite(path, stream, length, null);
+			if (task.isCancelled()) {
+				// The upload was cancelled
+				if (previous==null) {
+					// The file do not existed before, delete it
+					Dropbox.getAPI().delete(path);
+				} else {
+					// Revert to the previous version
+					// Unfortunately, this not really revert to the previous state as it creates a new revision on Dropbox
+					Dropbox.getAPI().restore(path, previous.rev);
+				}
+			}
+/**/
 		} catch (DropboxException e) {
 			throw new IOException(e);
 		} finally {
 			stream.close();
 		}
-		return task==null || !task.isCancelled();
 	}
 
 	@Override

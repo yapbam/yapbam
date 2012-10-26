@@ -71,7 +71,9 @@ public class DataWriter {
 			ErrorManager.INSTANCE.log(owner, e.getCause());
 			return false;
 		} catch (CancellationException e) {
-			// The synchronization was cancelled => Do nothing
+			// The synchronization was cancelled => Mark the file as saved
+			data.setURI(uri);
+			data.setChanged(false);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}

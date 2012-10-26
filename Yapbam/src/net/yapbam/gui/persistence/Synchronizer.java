@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 
+import net.astesana.ajlib.utilities.LocalizationData;
 import net.astesana.ajlib.utilities.NullUtils;
 
 public abstract class Synchronizer {

@@ -51,6 +51,7 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 			}
 			if (plugin instanceof RemotePersistencePlugin) {
 				try {
+					setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
 					SynchronizationState state = Synchronizer.backgroundSynchronize(uri, this);
 					return new WriterResult(State.FINISHED, state, null);
 				} catch (Exception e) {
