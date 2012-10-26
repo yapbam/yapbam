@@ -54,6 +54,7 @@ public class DataWriter {
 				if (result.getException() instanceof IOException) {
 					// An io error occurred ... probably we're not connected to the Internet
 					// Do nothing
+					result.getException().getStackTrace();//TODO
 				} else {
 					// Not an IO error => Log the error
 					ErrorManager.INSTANCE.log(owner, result.getException());
