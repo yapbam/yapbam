@@ -103,7 +103,8 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		try {
 			long length = file.length();
 			String path = FileId.fromURI(uri).getPath();
-
+/**/
+			String parentRev = getRemoteRevision(uri);
 			// This implementation uses ChunkUploader to allow the user to cancel the upload
 			// It has a major problem:
 			// 1 - It seems that each chunk requires a new connection to Dropbox. On some network configuration (with very slow proxy)
@@ -123,7 +124,8 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 				// Upload was cancelled
 				return false;
 			}
-			uploader.finish(path, Dropbox.getAPI().metadata(path, 1, null, false, null).rev);
+			uploader.finish(path, parentRev);
+//System.out.println("Seems everything is ok");
 			return true;
 
 /**/
@@ -135,17 +137,9 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 			//   This causes the synchronization process to consider the file has been modified after the upload
 			if (task!=null) task.setPhase(LocalizationData.get("dropbox.uploading"), -1); //$NON-NLS-1$
 			// As this implementation doesn't allow to cancel during the upload, we will remember what was the file state
-			Entry previous = null;
-			try {
-				previous = Dropbox.getAPI().metadata(path, 1, null, false, null);
-				if (previous.isDeleted) previous = null;
-			} catch (DropboxServerException e) {
-				if (e.error!=DropboxServerException._404_NOT_FOUND) {
-					throw e;
-				}
-			}
+			String previous = getRemoteRevision(uri);
 			Dropbox.getAPI().putFileOverwrite(path, stream, length, null);
-			if (task.isCancelled()) {
+			if (task!=null && task.isCancelled()) {
 				// The upload was cancelled
 				if (previous==null) {
 					// The file do not existed before, delete it
@@ -153,9 +147,11 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 				} else {
 					// Revert to the previous version
 					// Unfortunately, this not really revert to the previous state as it creates a new revision on Dropbox
-					Dropbox.getAPI().restore(path, previous.rev);
+					Dropbox.getAPI().restore(path, previous);
 				}
+				return false;
 			}
+			return true;
 /**/
 		} catch (DropboxException e) {
 			throw new IOException(e);
