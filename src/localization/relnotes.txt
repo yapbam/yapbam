@@ -11,6 +11,7 @@ fix
 	When the initial balance of an account was changed in the "Administration" tab, the change was not reported in the "Accounts summary" tab nor in the alerts of the "Balance history" tab. 
 	Check number changes when editing a transaction was sometimes ignored.
 	Passwords containing accents were not supported.
+	In the account management panel, when the account list was sorted, the delete button could delete an account that was not the selected one.
 
 version	0.11.8 (09/18/2012)
 improvement
