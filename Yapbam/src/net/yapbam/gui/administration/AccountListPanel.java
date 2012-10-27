@@ -50,7 +50,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int selectedRow = getJTable().getSelectedRow();
+			int selectedRow = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			Account account = data.getAccount(selectedRow);
 			boolean confirmed = true;
 			int nb = account.getTransactionsNumber();

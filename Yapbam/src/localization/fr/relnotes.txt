@@ -11,6 +11,7 @@ fix
 	Quand le solde initial d'un compte était modifié dans l'onglet d'administration, le changement n'était pas reporté dans l'onglet "Bilan des comptes", ni dans les alertes de l'onglet "Historique du solde".
 	La modification du numéro de chèque lors de l'édition d'une opération n'était parfois pas prise en compte.
 	Les mots de passe contenant des accents n'étaient pas supportés.
+	Dans le panneau d'administration des comptes, lorsque la liste des comptes était triée, le bouton "supprimer" pouvait proposer la suppression d'un compte différent de celui sélectionné.
 
 version	0.11.8 (18/09/2012)
 improvement
