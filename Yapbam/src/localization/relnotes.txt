@@ -2,7 +2,6 @@ Next release	Known bug:	Known bugs:	Change:	Changes:	Bug fix:	Bug fixes:
 version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
-	When a transaction's description contains a < character, character following the < do not appear in the "transactions" tab. 
 	
 version	0.12.0 (10/30/2012)
 improvement
@@ -12,6 +11,7 @@ fix
 	Check number changes when editing a transaction was sometimes ignored.
 	Passwords containing accents were not supported.
 	In the account management panel, when the account list was sorted, the delete button could delete an account that was not the selected one.
+	When a transaction's description contained a < character, character following the < did not appear in the "transactions" tab. 
 
 version	0.11.8 (09/18/2012)
 improvement

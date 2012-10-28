@@ -2,7 +2,6 @@ Version en cours de développement	Bug connu :	Bugs connus :	Changement :	Change
 version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
-	Lorsqu'un libellé contient un <, les caractères suivant ce caractère n'apparaîssent pas dans l'onglet "opérations". 
 
 version	0.12.0 (30/09/2012)
 improvement
@@ -12,6 +11,7 @@ fix
 	La modification du numéro de chèque lors de l'édition d'une opération n'était parfois pas prise en compte.
 	Les mots de passe contenant des accents n'étaient pas supportés.
 	Dans le panneau d'administration des comptes, lorsque la liste des comptes était triée, le bouton "supprimer" pouvait proposer la suppression d'un compte différent de celui sélectionné.
+	Lorsqu'un libellé contenait un <, ce caractère est les suivant n'apparaîssaient pas dans l'onglet "opérations". 
 
 version	0.11.8 (18/09/2012)
 improvement

@@ -9,6 +9,8 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
@@ -84,17 +86,17 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		else if (columnIndex==2) return transaction.getDate();
 		else if (columnIndex==3) {
 			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(descriptionSettings.getDescription(transaction)); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(StringEscapeUtils.escapeHtml3(descriptionSettings.getDescription(transaction))); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription()); //$NON-NLS-1$
+					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(transaction.getSubTransaction(i).getDescription())); //$NON-NLS-1$
 				}
 				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append(LocalizationData.get("Transaction.14")); //$NON-NLS-1$ //$NON-NLS-2$
+					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(LocalizationData.get("Transaction.14"))); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
-				return "<html><body>"+descriptionSettings.getDescription(transaction)+"</body></html>";
+				return descriptionSettings.getDescription(transaction);
 			}
 		} else if (columnIndex==4) {
 			if (spread) {
@@ -113,17 +115,17 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 			}
 		} else if (columnIndex==5) {
 			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(getName(transaction.getCategory())); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(StringEscapeUtils.escapeHtml3(getName(transaction.getCategory()))); //$NON-NLS-1$
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getSubTransaction(i).getCategory())); //$NON-NLS-1$
+					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(getName(transaction.getSubTransaction(i).getCategory()))); //$NON-NLS-1$
 				}
 				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getCategory())); //$NON-NLS-1$
+					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(getName(transaction.getCategory()))); //$NON-NLS-1$
 				}
 				buf.append("</body></html>"); //$NON-NLS-1$
 				return buf.toString();
 			} else {
-				return "<html><body>"+getName(transaction.getCategory())+"</body></html>";
+				return getName(transaction.getCategory());
 			}
 		} else if (columnIndex==6) {
 			Mode mode = transaction.getMode();
@@ -135,7 +137,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		return null;
 	}
 	
-	private Object getName(Category category) {
+	private String getName(Category category) {
 		return category.equals(Category.UNDEFINED) ? "" : category.getName(); //$NON-NLS-1$
 	}
 	
