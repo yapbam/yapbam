@@ -1,11 +1,13 @@
 package net.yapbam.gui.persistence;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 
-import net.astesana.ajlib.utilities.LocalizationData;
 import net.astesana.ajlib.utilities.NullUtils;
 
 public abstract class Synchronizer {
@@ -75,9 +77,14 @@ public abstract class Synchronizer {
 		File tmpFile = new File(file.getParent(), file.getName()+".tmp"); //$NON-NLS-1$
 		boolean done = true;
 		while (done && !NullUtils.areEquals(revision, downloadedRevision)) {
-			// While the downloaded revision is not the last one on the server
+			// While the downloaded revision is not the last one on the server (maybe the remote file is updated while we download it)
 			downloadedRevision = plugin.getRemoteRevision(uri);
-			done = plugin.download(uri, tmpFile, task);
+			OutputStream out = new FileOutputStream(tmpFile);
+			try {
+				done = plugin.download(uri, out, task);
+			} finally {
+				out.close();
+			}
 			revision = plugin.getRemoteRevision(uri);
 		}
 		if (done) {
@@ -93,10 +100,16 @@ public abstract class Synchronizer {
 	public static boolean backgroungUpload(URI uri, Cancellable task) throws IOException {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		File file = plugin.getLocalFile(uri);
-		boolean done = plugin.upload(file, uri, task);
-		if (done) {
-			plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));
+		long length = file.length();
+		FileInputStream stream = new FileInputStream(file);
+		try {
+			boolean done = plugin.upload(stream, length, uri, task);
+			if (done) {
+				plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));
+			}
+			return done;
+		} finally {
+			stream.close();
 		}
-		return done;
 	}
 }
