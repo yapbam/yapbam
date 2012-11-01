@@ -26,6 +26,7 @@ public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessToken
 	private boolean connectionHasStarted;
 	private WebAuthInfo info;
 	private AccessTokenPair pair;
+	private JButton connectButton;
 
 	public ConnectionDialog(Window owner, WebAuthSession session) {
 		super(owner, LocalizationData.get("dropbox.Chooser.ConnectionDialog.title"), session); //$NON-NLS-1$
@@ -53,6 +54,9 @@ public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessToken
 		} catch (DropboxUnlinkedException e) {
 			// The user didn't grant the access to Dropbox
 			JOptionPane.showMessageDialog(this, LocalizationData.get("dropbox.Chooser.ConnectionDialog.accessNotGranted"), LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			connectionHasStarted = false;
+			getConnectButton().setEnabled(true);
+			updateOkButtonEnabled();
 			return;
 		} catch (DropboxException e) {
 			JOptionPane.showMessageDialog(this, LocalizationData.get("dropbox.Chooser.ConnectionDialog.unexpectedError"), LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
@@ -73,9 +77,7 @@ public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessToken
 	@Override
 	protected JPanel createButtonsPane() {
 		JPanel panel = new JPanel();
-		final JButton connectButton = new JButton(LocalizationData.get("dropbox.Chooser.ConnectionDialog.startButton")); //$NON-NLS-1$
-		panel.add(connectButton);
-		connectButton.setToolTipText(LocalizationData.get("dropbox.Chooser.ConnectionDialog.startButton.tooltip")); //$NON-NLS-1$
+		panel.add(getConnectButton());
 		panel.add(getOkButton());
 		panel.add(getCancelButton());
 		connectButton.addActionListener(new ActionListener() {
@@ -87,6 +89,7 @@ public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessToken
 					Browser.show(new URI(info.url), window, LocalizationData.get("dropbox.Chooser.ConnectionDialog.error.unableToLaunchBrowser.title")); //$NON-NLS-1$
 					connectionHasStarted = true;
 				} catch (Throwable e) {
+					e.printStackTrace();
 					JOptionPane.showMessageDialog(window, LocalizationData.get("dropbox.Chooser.ConnectionDialog.error.unableToLaunchBrowser.message"), LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1$//$NON-NLS-2$
 				}
 				connectButton.setEnabled(false);
@@ -94,5 +97,13 @@ public class ConnectionDialog extends AbstractDialog<WebAuthSession, AccessToken
 			}
 		});
 		return panel;
+	}
+	
+	private JButton getConnectButton() {
+		if (connectButton==null) {
+			connectButton = new JButton(LocalizationData.get("dropbox.Chooser.ConnectionDialog.startButton"));
+			connectButton.setToolTipText(LocalizationData.get("dropbox.Chooser.ConnectionDialog.startButton.tooltip")); //$NON-NLS-1$
+		}
+		return connectButton;
 	}
 }

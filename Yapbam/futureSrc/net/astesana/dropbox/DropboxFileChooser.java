@@ -28,8 +28,11 @@ import java.util.concurrent.ExecutionException;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Account;
 import com.dropbox.client2.DropboxAPI.Entry;
+import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxIOException;
+import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.dropbox.client2.session.AccessTokenPair;
+import com.dropbox.client2.session.Session;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.Utils;
@@ -166,11 +169,20 @@ public abstract class DropboxFileChooser extends JPanel {
 	
 	public boolean refresh() {
 		final Window owner = Utils.getOwnerWindow(this);
-		AccessTokenPair pair = getDropboxAPI().getSession().getAccessTokenPair();
-		while (!accessGranted(pair)) {
+		while (true) {
+			boolean accessGranted;
+			try {
+				accessGranted = isAccessGranted(getDropboxAPI());
+				if (accessGranted) break;
+			} catch (DropboxException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return false;
+			}
+			getDropboxAPI().getSession().unlink();
 			ConnectionDialog connectionDialog = new ConnectionDialog(owner, getDropboxAPI().getSession());
 			connectionDialog.setVisible(true);
-			pair = connectionDialog.getResult();
+			AccessTokenPair pair = connectionDialog.getResult();
 			if (pair==null) {
 				if (cancelAction!=null) cancelAction.run(); // Calls the cancel action if any is defined
 				return false; // And exit
@@ -218,6 +230,9 @@ public abstract class DropboxFileChooser extends JPanel {
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof DropboxIOException) {
 				JOptionPane.showMessageDialog(owner, LocalizationData.get("dropbox.Chooser.error.connectionFailed"), LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+			} else if (e.getCause() instanceof DropboxUnlinkedException) {
+				System.err.println ("Not linked !!!"); //FIXME
+				throw new RuntimeException(e);
 			} else {
 				throw new RuntimeException(e);
 			}
@@ -400,16 +415,26 @@ public abstract class DropboxFileChooser extends JPanel {
 	}
 
 	/** This method is called after the user granted access to Dropbox.
-	 * <br>By default, this method does nothing except returns true if the access token pair is not null and token are not null.
+	 * <br>By default, this method does nothing except returns true if the access was granted.
 	 * <br>By overriding this method, you could store the access keys in a key store. Be sure to return
 	 * true if the access was granted.
-	 * <br>The session could be retrieve by using getDropboxAPI().getSession().
-	 * @param accessTokenPair The access token pair or null 
+	 * <br>The access tokens could be retrieved by using getDropboxAPI().getSession().getAccessTokenPair()
+	 * @param api The api we want to test 
 	 * @return true if the access is granted.
+	 * @throws DropboxException 
 	 * @see #getDropboxAPI()
 	 */
-	protected boolean accessGranted(AccessTokenPair accessTokenPair) {
-		return accessTokenPair!=null && accessTokenPair.key!=null && accessTokenPair.secret!=null;
+	protected boolean isAccessGranted(DropboxAPI<? extends Session> api) throws DropboxException {
+		AccessTokenPair accessTokenPair = api.getSession().getAccessTokenPair();
+		boolean result = accessTokenPair!=null && accessTokenPair.key!=null && accessTokenPair.secret!=null;
+		if (result) {
+			try {
+				api.accountInfo();
+			} catch (DropboxUnlinkedException e) {
+				return false;
+			}
+		}
+		return result;
 	}
 	
 	private JScrollPane getScrollPane() {

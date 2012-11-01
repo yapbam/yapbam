@@ -13,7 +13,8 @@ import javax.swing.SwingUtilities;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
-import com.dropbox.client2.session.AccessTokenPair;
+import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.session.Session;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
@@ -81,11 +82,12 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	}
 
 	@Override
-	protected boolean accessGranted(AccessTokenPair pair) {
-		if (pair!=null) {
-			Dropbox.storeKeys(pair);
+	protected boolean isAccessGranted(DropboxAPI<? extends Session> api) throws DropboxException {
+		boolean result = super.isAccessGranted(api);
+		if (api.getSession().getAccessTokenPair()!=null) {
+			Dropbox.storeKeys(api.getSession().getAccessTokenPair());
 		}
-		return super.accessGranted(pair);
+		return result;
 	}
 
 	@Override
