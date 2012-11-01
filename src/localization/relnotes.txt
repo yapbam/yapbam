@@ -2,10 +2,10 @@ Next release	Known bug:	Known bugs:	Change:	Changes:	Bug fix:	Bug fixes:
 version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
-	
-version	0.12.0 (10/30/2012)
 improvement
-	Yapbam is able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
+	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
+	
+version	0.11.9 (01/11/2012)
 fix
 	When the initial balance of an account was changed in the "Administration" tab, the change was not reported in the "Accounts summary" tab nor in the alerts of the "Balance history" tab. 
 	Check number changes when editing a transaction was sometimes ignored.
