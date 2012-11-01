@@ -60,6 +60,15 @@ public class ReleaseNotesFormatter {
 	private void echoHead() throws IOException {
 		echo("<html>");
 		echo("<head>");
+		echoCSS();
+	  echo("</head>");
+	  echo("<body>");
+	}
+
+	/** Echoes the CSS used in the release notes. 
+	 * @throws IOException
+	 */
+	protected void echoCSS() throws IOException {
 		// Output the css styles
 	  echo("<style type=\"text/css\">");
 	  echo(".relnotes-version {");
@@ -79,8 +88,6 @@ public class ReleaseNotesFormatter {
 	  echo("h2 { font-size: 1.2em; }");
 	  echo ("ul { margin-top: 0px; }");
 	  echo("</style>");
-	  echo("</head>");
-	  echo("<body>");
 	}
 	
 	private void echoBottom() throws IOException {

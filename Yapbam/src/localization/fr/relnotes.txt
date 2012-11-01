@@ -11,7 +11,7 @@ fix
 	La modification du numéro de chèque lors de l'édition d'une opération n'était parfois pas prise en compte.
 	Les mots de passe contenant des accents n'étaient pas supportés.
 	Dans le panneau d'administration des comptes, lorsque la liste des comptes était triée, le bouton "supprimer" pouvait proposer la suppression d'un compte différent de celui sélectionné.
-	Lorsqu'un libellé contenait un <, ce caractère est les suivant n'apparaîssaient pas dans l'onglet "opérations". 
+	Lorsqu'un libellé contenait un &lt;, ce caractère et les suivants n'apparaîssaient pas dans l'onglet "opérations". 
 
 version	0.11.8 (18/09/2012)
 improvement
