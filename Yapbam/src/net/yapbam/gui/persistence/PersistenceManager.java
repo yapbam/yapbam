@@ -20,7 +20,6 @@ import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.persistence.dropbox.DropboxPersistencePlugin;
 import net.yapbam.gui.persistence.file.FilePersistencePlugin;
 import net.yapbam.gui.persistence.reading.DataReader;
 import net.yapbam.gui.persistence.writing.DataWriter;
@@ -44,7 +43,7 @@ public class PersistenceManager {
 		this.pluginSchemes = new ArrayList<String>();
 		
 		add(new FilePersistencePlugin());
-		add(new DropboxPersistencePlugin());
+//		add(new DropboxPersistencePlugin());
 		
 		// Load plugins under development
 		String testedPlugin = System.getProperty("testedPersistencePlugin.className"); //$NON-NLS-1$
