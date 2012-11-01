@@ -40,8 +40,8 @@ public class TipManager extends ArrayList<String> {
 		tip = MessageFormat.format(LocalizationData.get("Tip.9"), LocalizationData.get("MainFrame.Transactions")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.add(tip);
 
-		tip = LocalizationData.get("Tip.10"); //$NON-NLS-1$
-		this.add(tip);
+//		tip = LocalizationData.get("Tip.10"); //$NON-NLS-1$
+//		this.add(tip);
 }
 	
 	public int getRandom() {
