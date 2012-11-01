@@ -11,7 +11,7 @@ fix
 	Check number changes when editing a transaction was sometimes ignored.
 	Passwords containing accents were not supported.
 	In the account management panel, when the account list was sorted, the delete button could delete an account that was not the selected one.
-	When a transaction's description contained a < character, character following the < did not appear in the "transactions" tab. 
+	When a transaction's description contained a &lt; character, characters following the < did not appear in the "transactions" tab. 
 
 version	0.11.8 (09/18/2012)
 improvement
