@@ -173,7 +173,7 @@ public abstract class DropboxFileChooser extends JPanel {
 		final Window owner = Utils.getOwnerWindow(this);
 		while (true) {
 			try {
-				//FIXME This could be a long task ... so, it should be wrapped into a background worker.
+				//FIXME This could be a long task ... so, it should be wrapped into the background worker.
 				if (isAccessGranted(getDropboxAPI())) break;
 			} catch (DropboxException e) {
 				if (e.getCause() instanceof UnknownHostException) {
