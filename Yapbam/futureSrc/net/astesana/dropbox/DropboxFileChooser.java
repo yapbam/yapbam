@@ -18,7 +18,9 @@ import java.awt.Window;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.io.IOException;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.List;
@@ -170,13 +172,17 @@ public abstract class DropboxFileChooser extends JPanel {
 	public boolean refresh() {
 		final Window owner = Utils.getOwnerWindow(this);
 		while (true) {
-			boolean accessGranted;
 			try {
-				accessGranted = isAccessGranted(getDropboxAPI());
-				if (accessGranted) break;
-			} catch (DropboxException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				//FIXME This could be a long task ... so, it should be wrapped into a background worker.
+				if (isAccessGranted(getDropboxAPI())) break;
+			} catch (DropboxException e) {
+				if (e.getCause() instanceof UnknownHostException) {
+					System.out.println ("IOException: "+(e.getCause() instanceof IOException));
+					JOptionPane.showMessageDialog(owner, "Seems there's no Internet connection", LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-2$
+				} else {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return false;
 			}
 			getDropboxAPI().getSession().unlink();

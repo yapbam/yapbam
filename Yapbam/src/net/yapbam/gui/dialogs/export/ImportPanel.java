@@ -19,10 +19,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
@@ -214,7 +212,7 @@ public class ImportPanel extends JPanel {
 			first.setToolTipText(LocalizationData.get("ImportDialog.first.toolTip")); //$NON-NLS-1$
 			first.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setLine(0);
+					doSetLine(0);
 				}
 			});
 			first.setFocusable(false);
@@ -233,7 +231,7 @@ public class ImportPanel extends JPanel {
 			previous.setToolTipText(LocalizationData.get("ImportDialog.previous.toolTip")); //$NON-NLS-1$
 			previous.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setLine(currentLine-1);
+					doSetLine(currentLine-1);
 				}
 			});
 			previous.setFocusable(false);
@@ -252,7 +250,7 @@ public class ImportPanel extends JPanel {
 			next.setToolTipText(LocalizationData.get("ImportDialog.next.toolTip")); //$NON-NLS-1$
 			next.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setLine(currentLine+1);
+					doSetLine(currentLine+1);
 				}
 			});
 			next.setFocusable(false);
@@ -271,7 +269,7 @@ public class ImportPanel extends JPanel {
 			last.setToolTipText(LocalizationData.get("ImportDialog.last.toolTip")); //$NON-NLS-1$
 			last.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setLine(numberOfLines-1);
+					doSetLine(numberOfLines-1);
 				}
 			});
 			last.setFocusable(false);
@@ -361,11 +359,19 @@ public class ImportPanel extends JPanel {
 			separatorPanel.addPropertyChangeListener(SeparatorPanel.SEPARATOR_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					setLine(currentLine);
+					doSetLine(currentLine);
 				}
 			});
 		}
 		return separatorPanel;
+	}
+	
+	private void doSetLine(int line) {
+		try {
+			setLine(line);
+		} catch (IOException e) {
+			ImportDialog.doError(this, e);
+		}
 	}
 
 	/**
@@ -417,35 +423,36 @@ public class ImportPanel extends JPanel {
 		return jPanel2;
 	}
 
-	public void setFile(File file) {
+	public void setFile(File file) throws IOException {
 		this.file = file;
 		this.numberOfLines = 0;
+		BufferedReader reader = new BufferedReader(new FileReader(file));
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			try {
-				for (String line = reader.readLine(); line!=null; line=reader.readLine()) {
-					numberOfLines++;
-				}
-				if (this.numberOfLines==0) {
-					doError(LocalizationData.get("ImportDialog.error.emptyFile"));
-				} else {
-					setLine(0);
-				}
-			} catch (IOException e) {
-				doError(e);
-			} finally {
-				try {
-					reader.close();
-				} catch (IOException e) {}
+			for (String line = reader.readLine(); line!=null; line=reader.readLine()) {
+				numberOfLines++;
 			}
-		} catch (FileNotFoundException e) {
-			doError(e);
+			if (this.numberOfLines==0) {
+				throw new EmptyImportFileException();
+			}
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {}
 		}
 	}
 	
-	public void setLine (int i) {
-		if (i>=this.numberOfLines) throw new IllegalArgumentException("line ("+i+") must be less than "+this.numberOfLines);
-		this.currentLine = i;
+	public void setLine (int lineNumber) throws IOException {
+		if (lineNumber>=this.numberOfLines) throw new IllegalArgumentException("line ("+lineNumber+") must be less than "+this.numberOfLines);
+		String[] fields = getFields(lineNumber);
+		while (fields==null) {
+			// No such line in the file (it was probably edited by the user)
+			// Count the line numbers again
+			setFile(file);
+			// Select the last line of the file
+			lineNumber = this.numberOfLines - 1;
+			fields = getFields(lineNumber);
+		}
+		this.currentLine = lineNumber;
 		boolean first = this.currentLine==0;
 		getFirst().setSelected(first);
 		getFirst().setEnabled(!first);
@@ -454,7 +461,6 @@ public class ImportPanel extends JPanel {
 		getLast().setSelected(last);
 		getLast().setEnabled(!last);
 		getNext().setEnabled(!last);
-		String[] fields = getFields();
 		setFieldsCombo(fields);
 		ImportTableModel model = (ImportTableModel) getJTable().getModel();
 		model.setFields(fields);
@@ -467,37 +473,21 @@ public class ImportPanel extends JPanel {
 		}
 	}
 	
-	private String[] getFields() {
-		String[] result = new String[0];
+	private String[] getFields(int lineNumber) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(file));
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			try {
-				for (int i = 0; i < this.currentLine; i++) {
-					reader.readLine();
-				}
-				String line = reader.readLine();
-				result = StringUtils.split(line, separatorPanel.getSeparator());
-			} catch (IOException e) {
-				doError (e);
-			} finally {
-				try {
-					reader.close();
-				} catch (IOException e) {}
+			for (int i = 0; i < lineNumber; i++) {
+				reader.readLine();
 			}
-		} catch (FileNotFoundException e) {
-			doError(e);
+			String line = reader.readLine();
+			return (line==null) ? null : StringUtils.split(line, separatorPanel.getSeparator());
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {}
 		}
-		return result;
 	}
 		
-	private void doError(Throwable e) {
-		doError(MessageFormat.format(LocalizationData.get("ImportDialog.error.exception"), e.getMessage()));
-	}
-	
-	private void doError(String message) {
-		throw new BadImportFileException(message);
-	}
-
 	public void setData(GlobalData data) {
 		this.data = data;
 		accounts.removeAllItems();
