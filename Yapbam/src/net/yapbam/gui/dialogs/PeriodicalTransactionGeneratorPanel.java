@@ -228,6 +228,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 		}
 		return (Transaction[]) result.toArray(new Transaction[result.size()]);
 	}
+	
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
