@@ -5,6 +5,11 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
+version	0.11.10 (03/11/2012)
+fix
+	Un bug introduit par la version 0.11.9 : Quand on sélectionnait le menu "Fichier/Nouveau" et que les données courantes n'étaient pas sauvegardées, et qu'on choisissait de les sauvegarder dans le dialogue qui s'affichait, cela provoquait une erreur.
+	Lorsqu'on supprimait ou renommait le fichier importé entre sa sélection et la validation du dialogue, une erreur se produisait. Ça pouvait aussi être le cas quand on supprimait des lignes puis qu'on allait à la dernière ligne dans le dialogue d'import. 
+
 version	0.11.9 (01/11/2012)
 fix
 	Quand le solde initial d'un compte était modifié dans l'onglet d'administration, le changement n'était pas reporté dans l'onglet "Bilan des comptes", ni dans les alertes de l'onglet "Historique du solde".
