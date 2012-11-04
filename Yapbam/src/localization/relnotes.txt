@@ -5,7 +5,7 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
-version	0.11.10 (11/03/2012)
+version	0.11.10 (11/05/2012)
 fix
 	A bug introduced in the 0.11.9: When you selected the menu "File/New" and the current data was not saved and you choose to save the data in the dialog that appeared, an error occurred.
 	When you removed or renamed the file imported between its selection and the import dialog validation, an error occurred. It could also happen when you removed lines then select the last line in the import dialog.

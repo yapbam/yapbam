@@ -319,7 +319,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 						dialog.setVisible(true);
 						Importer importer = dialog.getResult();
 						if (importer!=null) {
-							if (PersistenceManager.MANAGER.verify(this.frame.getOwner(), this.frame.getData())) {
+							if (PersistenceManager.MANAGER.verify(this.frame, this.frame.getData())) {
 								if (!dialog.getAddToCurrentData()) {
 									data.clear();
 								}
