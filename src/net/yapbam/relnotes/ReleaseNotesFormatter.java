@@ -103,7 +103,7 @@ public class ReleaseNotesFormatter {
 		String line = reader.readLine();
 		if (line==null) throw new EOFException();
 		String[] fields = StringUtils.split(line, '\t');
-		if (fields.length<7) throw new EOFException();
+		if (fields.length<7) throw new EOFException(line);
 		this.next=fields[0];
 		this.knownSingular=fields[1];
 		this.knownPlural=fields[2];
