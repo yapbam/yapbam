@@ -34,12 +34,11 @@ public class CurrencyNames {
 		if (!Locale.getDefault().equals(resourceBundleLocale)) {
 			Properties properties = new Properties();
 			String lang = Locale.getDefault().getLanguage();
-//			String country = Locale.getDefault().getCountry();
 			String resourceSuffix = ".properties";
 			boolean ok = false;
 			try {
-				ok = tryLoading(properties, BUNDLE_NAME+resourceSuffix);
-				ok = tryLoading(properties, BUNDLE_NAME+"_"+lang+resourceSuffix) && ok;
+				ok = tryLoading(properties, BUNDLE_NAME+"_"+lang+resourceSuffix);
+				if (!ok) ok = tryLoading(properties, BUNDLE_NAME+resourceSuffix);
 			} catch (IOException e) {
 				ok = false;
 			}
