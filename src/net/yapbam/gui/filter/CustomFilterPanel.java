@@ -22,6 +22,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 
 import net.astesana.ajlib.utilities.NullUtils;
+import net.astesana.ajlib.utilities.TextMatcher;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
@@ -393,9 +394,13 @@ public class CustomFilterPanel extends JPanel {
 		filter.setCommentMatcher(getCommentPanel().getTextMatcher());
 		// Build the statement filter
 		mask = 0;
-		if (getChecked().isSelected()) mask += Filter.CHECKED;
+		TextMatcher statementFilter = null;
+		if (getChecked().isSelected()) {
+			mask += Filter.CHECKED;
+			statementFilter = getJPanel11().getTextMatcher();
+		}
 		if (getNotChecked().isSelected()) mask += Filter.NOT_CHECKED;
-		filter.setStatementFilter(mask, getJPanel11().getTextMatcher());
+		filter.setStatementFilter(mask, statementFilter);
 		// Build the number filter
 		filter.setNumberMatcher(this.getNumberPanel().getTextMatcher());
 		boolean result = filter.hasChanged();
