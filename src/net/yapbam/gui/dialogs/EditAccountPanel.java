@@ -120,7 +120,7 @@ public class EditAccountPanel extends JPanel {
 		getLowThresholdField().setVisible(true);
 		getLblHighThreshold().setVisible(true);
 		double high = account.getAlertThreshold().getMoreThreshold();
-		getHightThresholdField().setValue(high==AlertThreshold.NO.getMoreThreshold()?null:Double.POSITIVE_INFINITY);
+		getHightThresholdField().setValue(high==AlertThreshold.NO.getMoreThreshold()?null:high);
 		getHightThresholdField().setVisible(true);
 		updateOkDisabledCause();
 	}

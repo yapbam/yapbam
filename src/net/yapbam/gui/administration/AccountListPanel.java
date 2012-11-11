@@ -10,10 +10,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
-import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
@@ -34,7 +32,6 @@ import net.yapbam.gui.dialogs.EditAccountDialog;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
 import java.lang.Object;
 import java.text.MessageFormat;
 
@@ -82,8 +79,12 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			EditAccountDialog dialog = new EditAccountDialog(Utils.getOwnerWindow(getEditButton()), LocalizationData.get("AccountDialog.title.edit"), data); //$NON-NLS-1$
 			dialog.setAccountIndex(selectedRow);
 			dialog.setVisible(true);
-			if (dialog.getResult()!=null) {
-				System.out.println ("todo modify account "+data.getAccount(selectedRow).getName()); //FIXME
+			Account account = dialog.getResult();
+			if (account!=null) {
+				Account oldAccount = data.getAccount(selectedRow);
+				if (!account.getName().equals(oldAccount.getName())) data.setName(oldAccount, account.getName());
+				if (account.getInitialBalance()!=oldAccount.getInitialBalance()) data.setInitialBalance(oldAccount, account.getInitialBalance());
+				if (!account.getAlertThreshold().equals(oldAccount.getAlertThreshold())) data.setAlertThreshold(oldAccount, account.getAlertThreshold());
 			}
 		}
 	}
@@ -91,32 +92,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		JTable jTable = new JTable(getTableModel()) {
-			//Implement table cell tool tips.
-			@Override
-			public String getToolTipText(MouseEvent e) {
-				String tip;
-				int column = convertColumnIndexToModel(columnAtPoint(e.getPoint()));
-				if (column == 0) {
-					tip = LocalizationData.get("AccountManager.nameColumn.toolTip"); //$NON-NLS-1$
-				} else if (column == 1) {
-					tip = LocalizationData.get("AccountManager.balanceColumn.toolTip"); //$NON-NLS-1$
-				} else if (column == 2) {
-					tip = LocalizationData.get("AccountManager.alertThresholdLess.toolTip"); //$NON-NLS-1$
-				} else if (column == 3) {
-					tip = LocalizationData.get("AccountManager.alertThresholdMore.toolTip"); //$NON-NLS-1$
-				} else if (column == 4) {
-					tip = LocalizationData.get("AccountManager.transactionsNumber.toolTip"); //$NON-NLS-1$
-				} else if (column == 5) {
-					tip = LocalizationData.get("AccountManager.modesNumber.toolTip"); //$NON-NLS-1$
-				} else if (column == 6) {
-					tip = LocalizationData.get("AccountManager.checkbooksNumber.toolTip"); //$NON-NLS-1$
-				} else { // another column
-					tip = super.getToolTipText(e);
-				}
-				return tip;
-			}
-		};
+		JTable jTable = new JTable(getTableModel());
 		jTable.setDefaultRenderer(Double.class, new DefaultTableCellRenderer(){
 		    @Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -170,47 +146,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			else if (columnIndex==6) return account.getCheckbooksNumber();
 			return "?"; //$NON-NLS-1$
 		}
-
-		@Override
-		public void setValueAt(Object value, int row, int col) {
-			Account account = ((GlobalData)data).getAccount(row);
-			if (col==0) { // Account name
-				String name = ((String)value).trim();
-				String errorMessage = null;
-				if (name.length()==0) {
-					errorMessage = LocalizationData.get("AccountManager.error.message.empty"); //$NON-NLS-1$
-				} else {
-					Account matchAccount = ((GlobalData)data).getAccount(name);
-					if (matchAccount!=null) {
-						if (matchAccount==account) return;
-						errorMessage = MessageFormat.format(LocalizationData.get("AccountManager.error.message.alreadyUsed"), name); //$NON-NLS-1$
-					}
-				}
-				if (errorMessage!=null) {
-					JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(AccountListPanel.this),
-							errorMessage, LocalizationData.get("AccountManager.error.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
-					fireTableRowsUpdated(row, row);
-				} else {
-					((GlobalData)data).setName(account, (String)value);
-				}
-			} else if (col==1) { // Initial Balance
-				if (value!=null) {
-					double val = (Double)value;
-					((GlobalData)data).setInitialBalance(account, val);
-				}
-			} else if (col==2) { // Alert less threshold
-				AlertThreshold old = account.getAlertThreshold();
-				Double threshold = (Double) (value==null?Double.NEGATIVE_INFINITY:value);
-				((GlobalData)data).setAlertThreshold(account, new AlertThreshold(threshold, old.getMoreThreshold()));
-			} else if (col==3) { // Alert more threshold
-				AlertThreshold old = account.getAlertThreshold();
-				Double threshold = (Double) (value==null?Double.POSITIVE_INFINITY:value);
-				((GlobalData)data).setAlertThreshold(account, new AlertThreshold(old.getLessThreshold(), threshold));
-			} else { //Unexpected
-				throw new IllegalArgumentException();
-			}
-	    }
-
+		
 		@Override
 		public int getRowCount() {
 			return ((GlobalData)data).getAccountsNumber();
