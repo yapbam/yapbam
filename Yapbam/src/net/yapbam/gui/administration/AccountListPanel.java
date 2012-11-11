@@ -9,6 +9,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
@@ -29,6 +30,7 @@ import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
+import net.yapbam.gui.dialogs.EditAccountDialog;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -41,11 +43,9 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	
 	@SuppressWarnings("serial")
 	class DeleteAccountAction extends AbstractAction {
-		private GlobalData data;
-		DeleteAccountAction (GlobalData data) {
+		DeleteAccountAction () {
 			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("AccountManager.deleteAccount.toolTip")); //$NON-NLS-1$
-			this.data = data;
 		}
 	
 		@Override
@@ -65,6 +65,25 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			}
 			if (confirmed) {
 				data.remove(account);
+			}
+		}
+	}
+
+	@SuppressWarnings("serial")
+	class EditAccountAction extends AbstractAction {
+		EditAccountAction () {
+			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("AccountManager.editAccount.toolTip")); //$NON-NLS-1$
+		}
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int selectedRow = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
+			EditAccountDialog dialog = new EditAccountDialog(Utils.getOwnerWindow(getEditButton()), LocalizationData.get("AccountDialog.title.edit"), data); //$NON-NLS-1$
+			dialog.setAccountIndex(selectedRow);
+			dialog.setVisible(true);
+			if (dialog.getResult()!=null) {
+				System.out.println ("todo modify account "+data.getAccount(selectedRow).getName()); //FIXME
 			}
 		}
 	}
@@ -203,10 +222,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		}
 
 		@Override
-		public boolean isCellEditable(int rowIndex, int columnIndex) {
-			return columnIndex<4;
-		}
-		@Override
 		public void processEvent(DataEvent event) {
 			Account account = null;
 			if (event instanceof EverythingChangedEvent) {
@@ -256,11 +271,11 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	}
 	@Override
 	protected Action getEditButtonAction() {
-		return null;
+		return new EditAccountAction();
 	}
 	@Override
 	protected Action getDeleteButtonAction() {
-		return new DeleteAccountAction((GlobalData) data);
+		return new DeleteAccountAction();
 	}
 	@Override
 	protected Action getDuplicateButtonAction() {

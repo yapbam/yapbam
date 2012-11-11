@@ -11,7 +11,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AccountDialog;
+import net.yapbam.gui.dialogs.EditAccountDialog;
 
 public class NewTransferAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class NewTransferAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		while (data.getAccountsNumber()<2) {
 			// Need to create two accounts first
-			Account account = AccountDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
+			Account account = EditAccountDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
 			if (account == null) return;
 		}
 		TransferDialog dialog = new TransferDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$

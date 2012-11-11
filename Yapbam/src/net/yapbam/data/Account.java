@@ -17,33 +17,32 @@ public class Account implements Serializable {
 	private AlertThreshold alertThreshold;
 
 	/** Constructor.
-	 * This constructor creates a new account with one payment mode: Mode.UNDEFINED.
+	 * <br>This constructor creates a new account with the default alerts and one payment mode: Mode.UNDEFINED.
 	 * @param name The name of the account
 	 * @param initialBalance The initial balance of the account
 	 * @see Mode#UNDEFINED
+	 * @see AlertThreshold#DEFAULT
 	 */
 	public Account(String name, double initialBalance) {
+		this(name, initialBalance, AlertThreshold.DEFAULT);
+	}
+
+	/**
+	 * Constructor.
+	 * <br>This constructor creates a new account with one payment mode: Mode.UNDEFINED.
+	 * @param name The account's name
+	 * @param initialBalance The account's initial balance
+	 * @param alerts The alerts set on the account.
+	 */
+	public Account(String name, double initialBalance, AlertThreshold alerts) {
 		this.name = name;
 		this.initialBalance = initialBalance;
-		this.alertThreshold = AlertThreshold.DEFAULT;
+		this.alertThreshold = alerts;
 		this.modes = new ArrayList<Mode>();
 		this.checkbooks = new ArrayList<Checkbook>();
 		this.balanceData = new BalanceData();
 		this.balanceData.clear(initialBalance);
 		this.add(Mode.UNDEFINED);
-	}
-
-	/**
-	 * Constructor.
-	 * @param name The account's name
-	 * @param initialBalance The account's inital balance
-	 * @param modes The list of the account's avalailable payment modes.
-	 */
-	public Account(String name, double initialBalance, List<Mode> modes) {
-		this(name, initialBalance);
-		for (int i = 0; i < modes.size(); i++) {
-			this.add(modes.get(i));
-		}
 	}
 
 	/** Gets the account's name

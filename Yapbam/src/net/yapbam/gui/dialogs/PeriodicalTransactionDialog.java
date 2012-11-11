@@ -22,7 +22,7 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 		GlobalData globalData = data.getGlobalData();
 		if (globalData.getAccountsNumber()==0) {
 			//Need to create an account first
-			AccountDialog.open(globalData, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			EditAccountDialog.open(globalData, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (globalData.getAccountsNumber()==0) return null;
 		}
 		PeriodicalTransactionDialog dialog = new PeriodicalTransactionDialog(frame, data, transaction, edit);
