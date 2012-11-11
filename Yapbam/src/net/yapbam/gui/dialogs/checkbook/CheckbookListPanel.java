@@ -93,7 +93,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	private final class EditBookAction extends AbstractAction {
 		public EditBookAction() {
 			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
-			putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
