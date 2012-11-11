@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs;
 
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
@@ -62,7 +63,7 @@ public class AccountWidget extends AbstractSelector<Account, GlobalData> {
 	@Override
 	protected Account createNew() {
 		if (getParameters()!=null) {
-			return AccountDialog.open(getParameters(), AccountDialog.getOwnerWindow(this), null);
+			return EditAccountDialog.open(getParameters(), Utils.getOwnerWindow(this), null);
 		} else {
 			return null;
 		}

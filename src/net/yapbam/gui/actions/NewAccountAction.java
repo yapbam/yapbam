@@ -10,7 +10,7 @@ import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AccountDialog;
+import net.yapbam.gui.dialogs.EditAccountDialog;
 
 @SuppressWarnings("serial")
 public class NewAccountAction extends AbstractAction {
@@ -25,6 +25,6 @@ public class NewAccountAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
-		AccountDialog.open(data, owner, null);
+		EditAccountDialog.open(data, owner, null);
 	}
 }

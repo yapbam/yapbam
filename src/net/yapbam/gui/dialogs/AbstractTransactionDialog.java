@@ -347,7 +347,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 					if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
 				}
 			} else {
-				Account ac = AccountDialog.open(data.getGlobalData(), AbstractTransactionDialog.this, null);
+				Account ac = EditAccountDialog.open(data.getGlobalData(), AbstractTransactionDialog.this, null);
 				if (ac != null) {
 					accounts.addItem(ac.getName());
 					accounts.setSelectedIndex(accounts.getItemCount() - 1);

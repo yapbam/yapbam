@@ -56,7 +56,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		GlobalData globalData = data.getGlobalData();
 		if (globalData.getAccountsNumber() == 0) {
 			// Need to create an account first
-			AccountDialog.open(globalData, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			EditAccountDialog.open(globalData, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
 			if (globalData.getAccountsNumber() == 0) return null;
 		}
 		TransactionDialog dialog = new TransactionDialog(owner, data, transaction, edit);
