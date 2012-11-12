@@ -9,6 +9,7 @@ version	0.11.11 (11/11/2012)
 fix
 	Dans le filtre personnalisé, entrer une valeur dans le champ "Pointage" puis décocher la case "Opérations pointée" provoquait une erreur à la validation du dialogue.
 	Dans l'onglet d'administration des comptes, l'édition du solde initial et des niveaux d'alerte utilisait le '.' comme séparateur décimal.
+	Dans l'édition d'une opération périodique, changer la fréquence d'une opération mensuelle en journalière, puis, de nouveau, en mensuelle provoquait une erreur.
 
 version	0.11.10 (06/11/2012)
 fix

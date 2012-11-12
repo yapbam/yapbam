@@ -8,6 +8,7 @@ improvement
 version	0.11.11 (11/11/2012)
 fix
 	In the custom filter, enter a value in the "Checking" field and then uncheck "Checked transactions" caused an error while validating the dialog.
+	While editing a periodic transaction, change the frequency of a monthly transaction to daily, and switch back to monthly caused an error.
 
 version	0.11.10 (11/06/2012)
 fix
