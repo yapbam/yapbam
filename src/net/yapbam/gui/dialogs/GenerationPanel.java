@@ -225,7 +225,7 @@ public class GenerationPanel extends JPanel {
 		return kind;
 	}
 	
-	private void updateDateStepper() { //FIXME
+	private void updateDateStepper() {
 		DateStepper newStepper;
 		if (nb.getValue()==null) {
 			newStepper = null;
@@ -257,7 +257,7 @@ public class GenerationPanel extends JPanel {
 			if (!(s2 instanceof DayDateStepper)) return false;
 			return ((DayDateStepper)s1).equals((DayDateStepper)s2);
 		} else if (s1 instanceof MonthDateStepper) {
-			if (!(s2 instanceof DayDateStepper)) return false;
+			if (!(s2 instanceof MonthDateStepper)) return false;
 			return ((MonthDateStepper)s1).equals((MonthDateStepper)s2);
 		} else {
 			throw new IllegalArgumentException();
