@@ -1,5 +1,7 @@
 package net.yapbam.gui.statementview;
 
+import java.util.Date;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -24,7 +26,10 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 		StatementTableModel model = new StatementTableModel(this, new Transaction[0]);
 		this.setModel(model);
 		setAutoCreateRowSorter(true);
+		
 		setDefaultRenderer(Object.class, new CellRenderer());
+		setDefaultRenderer(Double.class, new CellRenderer());
+		setDefaultRenderer(Date.class, new CellRenderer());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		this.setRowSorter(new RowSorter<StatementTableModel>(model));
 		this.lastSelected = null;
