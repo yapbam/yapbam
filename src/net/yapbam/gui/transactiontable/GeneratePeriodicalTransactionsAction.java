@@ -11,7 +11,6 @@ import javax.swing.Icon;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -60,8 +59,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 			toolTip.append("<br>").append(MessageFormat.format(LocalizationData.get("MainMenu.Transactions.Periodical.disabled.tooltip.line2"), //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("PeriodicalTransactionManager.title"),LocalizationData.get("AdministrationPlugIn.title"))); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			Transaction[] transactions = data.getGlobalData().generateTransactionsFromPeriodicals(new Date());
-			if (transactions.length!=0) {
+			if (data.getGlobalData().hasPendingPeriodicalTransactions(new Date())) {
 				toolTip.append("<br>").append(LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")); //$NON-NLS-1$ //$NON-NLS-2$
 				icon = IconManager.ALERT;
 			}

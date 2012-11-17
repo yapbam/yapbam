@@ -498,32 +498,6 @@ public class GlobalData extends DefaultListenable {
 		this.add(updated.toArray(new PeriodicalTransaction[updated.size()]));
 	}
 	
-	/** Generate transactions from the periodical transactions until a date.
-	 * The transactions are not added to the global data and the periodical transactions
-	 * are not changed : their next date fields remains unchanged.
-	 * @param date Date until the transactions had to be generated (inclusive)
-	 * @return a transaction array.
-	 */
-	public Transaction[] generateTransactionsFromPeriodicals(Date date) {
-		List<Transaction> result = new ArrayList<Transaction>();
-		for (int i=0; i<getPeriodicalTransactionsNumber(); i++) {
-			PeriodicalTransaction p = getPeriodicalTransaction(i);
-			if (p.isEnabled() && (p.getNextDate().compareTo(date)<=0)) {
-				double amount = p.getAmount();
-				Mode mode = p.getMode();
-				DateStepper vdStepper = amount<0?mode.getExpenseVdc():mode.getReceiptVdc();
-				// Be aware that the date stepper may not be available anymore (if the mode is no more usable for this kind of transaction)
-				if (vdStepper==null) vdStepper = DateStepper.IMMEDIATE;
-				//Be aware, when the transaction has an "end date", and the date is after this "end date", tDate become null
-				for (Date tDate = p.getNextDate();((tDate!=null)&&(tDate.compareTo(date)<=0)/*&&(tDate.compareTo(p.getNextDateBuilder().getLastDate())<=0)*/);tDate=p.getNextDateBuilder().getNextStep(tDate)) {
-					result.add(new Transaction(tDate, null, p.getDescription(), p.getComment(), amount, p.getAccount(), mode, p.getCategory(),
-							vdStepper.getNextStep(tDate), null, Arrays.asList(p.getSubTransactions())));
-				}
-			}
-		}
-		return result.toArray(new Transaction[result.size()]);
-	}
-
 	private void setChanged() {
 		setChanged(true);
 	}
@@ -757,5 +731,17 @@ public class GlobalData extends DefaultListenable {
 		uri = src.uri;
 		this.fireEvent(new EverythingChangedEvent(this));
 		this.setChanged();
+	}
+
+	/** Tests whether there is periodical transactions with pending transactions at a date.
+	 * @param date The date to consider while looking for pending transactions
+	 * @return true if there is one or more pending transaction
+	 * @see PeriodicalTransaction#hasPendingTransactions(Date)
+	 */
+	public boolean hasPendingPeriodicalTransactions(Date date) {
+		for (int i = 0; i < getPeriodicalTransactionsNumber(); i++) {
+			if (getPeriodicalTransaction(i).hasPendingTransactions(date)) return true;
+		}
+		return false;
 	}
 }

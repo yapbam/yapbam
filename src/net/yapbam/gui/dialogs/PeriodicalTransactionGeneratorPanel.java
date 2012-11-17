@@ -27,6 +27,7 @@ import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JScrollPane;
@@ -171,6 +172,20 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	void restoreState() {
 		YapbamState.INSTANCE.restoreState(getJTable(), STATE_PROPERTIES_PREFIX);
 	}
+	
+	/** Generate transactions from the periodical transactions until a date.
+	 * The transactions are not added to the global data and the periodical transactions
+	 * are not changed : their next date fields remains unchanged.
+	 * @param date Date until the transactions had to be generated (inclusive)
+	 * @return a transaction array.
+	 */
+	private Transaction[] generateTransactionsFromPeriodicals(Date date) {
+		List<Transaction> result = null;
+		for (int i=0; i<data.getGlobalData().getPeriodicalTransactionsNumber(); i++) {
+			result = data.getGlobalData().getPeriodicalTransaction(i).generate(date, result);
+		}
+		return result.toArray(new Transaction[result.size()]);
+	}
 
 	private void updateTransactions() {
 		Date endDate = dateField.getDate();
@@ -180,7 +195,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			if (endDate==null) {
 				transactions = new Transaction[0];
 			} else {
-				transactions = data.getGlobalData().generateTransactionsFromPeriodicals(endDate);
+				transactions = generateTransactionsFromPeriodicals(endDate);
 			}
 			String message;
 			if (endDate==null) {

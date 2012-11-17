@@ -1,6 +1,7 @@
 package net.yapbam.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,6 @@ import net.yapbam.util.DateUtils;
 /** A periodical transaction.
  * <br>A periodical transaction is a transaction that occurs at constant interval.
  * A perfect sample is the monthly Internet connection fee.
- * @see GlobalData#generateTransactionsFromPeriodicals(Date)
  */
 public class PeriodicalTransaction extends AbstractTransaction {
 
@@ -48,7 +48,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	}
 	
 	/** Tests whether this periodical transaction is enabled or not.
-	 * A disabled peridical transaction can't generate any "real" transaction.
+	 * A disabled periodical transaction can't generate any "real" transaction.
 	 * @return true if this periodical transaction is enabled
 	 */
 	public boolean isEnabled() {
@@ -89,5 +89,37 @@ public class PeriodicalTransaction extends AbstractTransaction {
 		} else {
 			return null;
 		}
+	}
+	
+	/** Generate transactions from the periodical transactions until a date.
+	 * <br>The transactions are not added to the global data and this periodical transaction
+	 * is not changed : its next date field remains unchanged.
+	 * @param date Date until the transactions had to be generated (inclusive)
+	 * @param result an array where to put the transactions or null to return a new list
+	 * @return a transaction list (the one passed as second argument).
+	 */
+	public List<Transaction> generate(Date date, List<Transaction> result) {
+		if (result==null) result = new ArrayList<Transaction>();
+		if (hasPendingTransactions(date)) {
+			double amount = getAmount();
+			Mode mode = getMode();
+			DateStepper vdStepper = amount<0?mode.getExpenseVdc():mode.getReceiptVdc();
+			// Be aware that the date stepper may not be available anymore (if the mode is no more usable for this kind of transaction)
+			if (vdStepper==null) vdStepper = DateStepper.IMMEDIATE;
+			//Be aware, when the transaction has an "end date", and the date is after this "end date", tDate become null
+			for (Date tDate = getNextDate();((tDate!=null)&&(tDate.compareTo(date)<=0));tDate=getNextDateBuilder().getNextStep(tDate)) {
+				result.add(new Transaction(tDate, null, getDescription(), getComment(), amount, getAccount(), mode, getCategory(),
+						vdStepper.getNextStep(tDate), null, Arrays.asList(getSubTransactions())));
+			}
+		}
+		return result;
+	}
+
+	/** Tests whether this periodical transaction has transactions pending at at fixed date.
+	 * @param date The date to consider.
+	 * @return true if there is pending transactions
+	 */
+	public boolean hasPendingTransactions(Date date) {
+		return isEnabled() && (getNextDate().compareTo(date)<=0);
 	}
 }
