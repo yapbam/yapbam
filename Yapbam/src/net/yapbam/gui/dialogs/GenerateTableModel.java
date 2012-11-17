@@ -36,7 +36,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 		// the periodical transaction that is postponed, not the transaction. So we need to ensure that all transactions
 		// after a postponed transaction and from the same periodical transaction are postponed to.
 		// Probably not so easy to design an understandable interface.
-		return 5;
+		return 6;
 	}
 
 	@Override

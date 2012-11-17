@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JTable.PrintMode;
 
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -86,13 +85,13 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		
 	private void testAlert() {
 		//TODO Preferences may say if we want alert on all data, or just on filtered data.
-		Transaction[] transactions = data.getGlobalData().generateTransactionsFromPeriodicals(new Date());
 		String tooltip;
 		tooltip = LocalizationData.get("MainFrame.Transactions.toolTip"); //$NON-NLS-1$
-		if (transactions.length!=0) {
+		boolean hasPendingPeriodicalTransactions = data.getGlobalData().hasPendingPeriodicalTransactions(new Date());
+		if (hasPendingPeriodicalTransactions) {
 			tooltip = "<html>"+tooltip+"<br>"+LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
-		setPanelIcon((transactions.length>0?IconManager.ALERT:null));
+		setPanelIcon(hasPendingPeriodicalTransactions?IconManager.ALERT:null);
 		setPanelToolTip(tooltip);
 	}
 
