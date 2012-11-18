@@ -34,11 +34,11 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 				public void processEvent(DataEvent event) {
 					if ((event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionsRemovedEvent) ||
 							(event instanceof PeriodicalTransactionsAddedEvent)) {
-				        refreshEnabled(false);
+				        refreshEnabled();
 					}
 				}
 			});
-			refreshEnabled(true);
+			refreshEnabled();
 		}
 	}
 		
@@ -47,7 +47,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 		new GeneratePeriodicalTransactionsDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), data).setVisible(true);
 	}
 
-	private void refreshEnabled(boolean forced) {
+	private void refreshEnabled() {
 		boolean enabled = data.getGlobalData().getPeriodicalTransactionsNumber()!=0;
 		setEnabled(enabled);
 		StringBuilder toolTip = new StringBuilder();
