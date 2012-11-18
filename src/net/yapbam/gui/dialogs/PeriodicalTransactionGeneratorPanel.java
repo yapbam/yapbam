@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
@@ -17,7 +18,6 @@ import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.util.JTableListener;
-import net.yapbam.util.DateUtils;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -27,7 +27,6 @@ import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JScrollPane;
@@ -41,7 +40,6 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;
 	private DateWidget dateField = null;
-	private Date lastDate;
 	private JLabel summary = null;
 	private JScrollPane jScrollPane = null;
 	private JTable jTable = null;
@@ -141,7 +139,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
-			tableModel = new GenerateTableModel();
+			tableModel = new GenerateTableModel(data.getGlobalData());
 			jTable = new JTable(tableModel);
 			jTable.setDefaultRenderer(Date.class, new DateRenderer());
 			jTable.setDefaultRenderer(double[].class, new AmountRenderer());
@@ -173,50 +171,32 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 		YapbamState.INSTANCE.restoreState(getJTable(), STATE_PROPERTIES_PREFIX);
 	}
 	
-	/** Generate transactions from the periodical transactions until a date.
-	 * The transactions are not added to the global data and the periodical transactions
-	 * are not changed : their next date fields remains unchanged.
-	 * @param date Date until the transactions had to be generated (inclusive)
-	 * @return a transaction array.
-	 */
-	private Transaction[] generateTransactionsFromPeriodicals(Date date) {
-		List<Transaction> result = null;
-		for (int i=0; i<data.getGlobalData().getPeriodicalTransactionsNumber(); i++) {
-			result = data.getGlobalData().getPeriodicalTransaction(i).generate(date, result);
-		}
-		return result.toArray(new Transaction[result.size()]);
-	}
-
 	private void updateTransactions() {
 		Date endDate = dateField.getDate();
-		boolean change = DateUtils.dateToInteger(endDate)!=DateUtils.dateToInteger(lastDate);
-		Transaction[] transactions;
+		Date lastDate = this.tableModel.getDate();
+		boolean change = NullUtils.areEquals(endDate, lastDate);
 		if (change) {
-			if (endDate==null) {
-				transactions = new Transaction[0];
-			} else {
-				transactions = generateTransactionsFromPeriodicals(endDate);
-			}
-			String message;
-			if (endDate==null) {
-				message = " "; //$NON-NLS-1$
-			} else {
-				double debts = 0;
-				double receipts = 0;
-				for (int i=0; i<transactions.length; i++) {
-					if (transactions[i].getAmount()>0) {
-						receipts += transactions[i].getAmount();
-					} else {
-						debts += transactions[i].getAmount();
+			change = this.tableModel.setDate(endDate);
+			if (change) {
+				Transaction[] transactions = this.tableModel.getTransactions();
+				String message;
+				if (endDate==null) {
+					message = " "; //$NON-NLS-1$
+				} else {
+					double debts = 0;
+					double receipts = 0;
+					for (int i=0; i<transactions.length; i++) {
+						if (transactions[i].getAmount()>0) {
+							receipts += transactions[i].getAmount();
+						} else {
+							debts += transactions[i].getAmount();
+						}
 					}
+					message = MessageFormat.format(LocalizationData.get("GeneratePeriodicalTransactionsDialog.summary"), transactions.length, //$NON-NLS-1$
+							LocalizationData.getCurrencyInstance().format(receipts), LocalizationData.getCurrencyInstance().format(-debts),
+							LocalizationData.getCurrencyInstance().format(receipts+debts));
 				}
-				message = MessageFormat.format(LocalizationData.get("GeneratePeriodicalTransactionsDialog.summary"), transactions.length, //$NON-NLS-1$
-						LocalizationData.getCurrencyInstance().format(receipts), LocalizationData.getCurrencyInstance().format(-debts),
-						LocalizationData.getCurrencyInstance().format(receipts+debts));
-			}
-			summary.setText(message);
-			if (transactions.length!=tableModel.getTransactions().length) {
-				tableModel.setTransactions(transactions);
+				summary.setText(message);
 			}
 			Date old = lastDate;
 			lastDate=endDate;

@@ -1,10 +1,13 @@
 package net.yapbam.gui.dialogs;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.SwingConstants;
 
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.AbstractTransaction;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.DescriptionSettings;
@@ -18,13 +21,19 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	private static final int AMOUNT_INDEX = 3;
 	private static final int CANCELLED_INDEX = 4;
 	private static final int POSTPONED_INDEX = 5;
+	
+	private GlobalData data;
+	private Date date; 
 	private Transaction[] transactions;
 	private boolean[] cancelled;
 	private boolean[] postponed;
 	
-	GenerateTableModel() {
+	GenerateTableModel(GlobalData data) {
+		this.data = data;
+		this.date = null;
 		this.transactions = new Transaction[0];
 		this.cancelled = new boolean[0];
+		this.postponed = new boolean[0];
 	}
 
 	@Override
@@ -82,7 +91,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 		throw new IllegalArgumentException();
 	}
 
-	public void setTransactions(Transaction[] transactions) {
+	private void setTransactions(Transaction[] transactions) {
 		this.transactions = transactions;
 		this.cancelled = new boolean[transactions.length];
 		this.postponed = new boolean[transactions.length];
@@ -132,5 +141,45 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	@Override
 	protected AbstractTransaction getTransaction(int rowIndex) {
 		return this.transactions[rowIndex];
+	}
+	
+	/** Sets the date.
+	 * @param date The new date
+	 * @return true if the date change adds or removes transactions to the transaction list
+	 */
+	public boolean setDate(Date date) {
+		if (NullUtils.areEquals(date, this.date)) return false;
+		//TODO Here is a simplified version of the generation
+		// As transaction can be edited after this method is called, we should not change transactions that were already there before
+		// the date change (or modification would be lost).
+		// We also need to take in account that some transactions may be postponed
+		// The best way to have a user friendly behavior seems to be to never forget a generated transaction. When the date is set to null,
+		// or changed to a previous date, we should keep the previous transactions, but simply mark them "not used".
+		// To achieve that, we will sort the transaction by date and remember how much transactions are available accordingly with the new date. 
+		this.date = date;
+		if (date==null) {
+			setTransactions (new Transaction[0]);
+		} else {
+			setTransactions (generateTransactionsFromPeriodicals());
+		}
+		//TODO end
+		return true;
+	}
+	
+	/** Generate transactions from the periodical transactions until a date.
+	 * The transactions are not added to the global data and the periodical transactions
+	 * are not changed : their next date fields remains unchanged.
+	 * @return a transaction array.
+	 */
+	private Transaction[] generateTransactionsFromPeriodicals() {
+		List<Transaction> result = null;
+		for (int i=0; i<data.getPeriodicalTransactionsNumber(); i++) {
+			result = data.getPeriodicalTransaction(i).generate(date, result);
+		}
+		return result.toArray(new Transaction[result.size()]);
+	}
+
+	public Date getDate() {
+		return this.date;
 	}
 }
