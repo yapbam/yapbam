@@ -5,10 +5,12 @@ import java.awt.GridBagConstraints;
 import java.awt.Window;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.*;
 
 import net.yapbam.data.*;
+import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
@@ -95,8 +97,11 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause(); 
 		if ((disabledCause!=null) || (generationPanel==null) || !generationPanel.isActivated()) return disabledCause;
-		if (generationPanel.getNextDate()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
-		if (generationPanel.getDateStepper()==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper"); //$NON-NLS-1$
+		Date nextDate = generationPanel.getNextDate();
+		if (nextDate==null) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
+		DateStepper dateStepper = generationPanel.getDateStepper();
+		if (dateStepper==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper"); //$NON-NLS-1$
+		if ((dateStepper.getLastDate()!=null) && (dateStepper.getLastDate().compareTo(nextDate)<0)) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDateAfterEnd"); //$NON-NLS-1$
 		return null;
 	}
 }

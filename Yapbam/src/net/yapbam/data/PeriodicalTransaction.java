@@ -13,16 +13,9 @@ import net.yapbam.util.DateUtils;
  * A perfect sample is the monthly Internet connection fee.
  */
 public class PeriodicalTransaction extends AbstractTransaction {
-
 	private int nextDate;
 	private boolean enabled;
 	private DateStepper nextDateBuilder;
-
-	@Deprecated
-	public PeriodicalTransaction(String description, double amount, Account account, Mode mode, Category category, List<SubTransaction> subTransactions,
-			Date nextDate, boolean enabled, DateStepper nextDateBuilder) {
-		this(description, null, amount, account, mode, category, subTransactions, nextDate, enabled, nextDateBuilder);
-	}
 
 	/** Constructor
 	 * @param description The transaction's description
@@ -32,23 +25,30 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	 * @param mode The transaction's payment mode
 	 * @param category The transaction's category
 	 * @param subTransactions The transaction's subtransactions 
-	 * @param nextDate The transaction's next date or null if no next date is forcasted
+	 * @param nextDate The transaction's next date or null if no next date is forecasted
 	 * @param enabled true if the transaction is active (transactions have to be generated), false if the transaction is suspended.
-	 * Please note that if the <b>nextDate</b> argument is null, this argument is ignored and the transaction is suspended.
+	 * Please note that if the <b>nextDate</b> argument is null or is after the date stepper's lastDate, this argument is ignored and
+	 * the transaction is disabled.
 	 * @param nextDateBuilder The DateStepper that will compute the next generation date.
+	 * @throws IllegalArgumentException if nextDate is after nextDateBuilder's end date
 	 */
 	public PeriodicalTransaction(String description, String comment, double amount,
 			Account account, Mode mode, Category category,
 			List<SubTransaction> subTransactions, Date nextDate,
 			boolean enabled, DateStepper nextDateBuilder) {
 		super(description, comment, amount, account, mode, category, subTransactions);
+		if (enabled && (nextDate==null)) throw new IllegalArgumentException("Next date is Null and enabled is true"); //$NON-NLS-1$
 		this.nextDate = DateUtils.dateToInteger(nextDate);
-		this.enabled = enabled && (nextDate!=null);
+		Date last = nextDateBuilder.getLastDate();
+		if ((last!=null) && (DateUtils.dateToInteger(last)<this.nextDate)) throw new IllegalArgumentException("Next date is after End date"); //$NON-NLS-1$
 		this.nextDateBuilder = nextDateBuilder;
+		this.enabled =  enabled;
 	}
 	
 	/** Tests whether this periodical transaction is enabled or not.
-	 * A disabled periodical transaction can't generate any "real" transaction.
+	 * <br>A disabled periodical transaction can't generate any "real" transaction.
+	 * <br>This means an enabled periodical transaction has a "next" date that is before its end date
+	 * (and, of course was created with an enabled argument set to true). 
 	 * @return true if this periodical transaction is enabled
 	 */
 	public boolean isEnabled() {
@@ -56,7 +56,8 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	}
 	
 	/** Gets the date of the next transaction to be generated.
-	 * @return a date or null if the periodical transaction expired.
+	 * <br>Be aware that this date could be non null if this periodical transaction is not activated.
+	 * @return a date or null if no transaction is forecasted
 	 * @see GlobalData#setPeriodicalTransactionNextDate(PeriodicalTransaction[], Date)
 	 */
 	public Date getNextDate() {
@@ -115,11 +116,12 @@ public class PeriodicalTransaction extends AbstractTransaction {
 		return result;
 	}
 
-	/** Tests whether this periodical transaction has transactions pending at at fixed date.
+	/** Tests whether this periodical transaction has transactions pending with dates before a fixed date.
+	 * <br>There's pending transactions if this is enabled and the next date is before the date passed in date argument. 
 	 * @param date The date to consider.
 	 * @return true if there is pending transactions
 	 */
 	public boolean hasPendingTransactions(Date date) {
-		return isEnabled() && (getNextDate().compareTo(date)<=0);
+		return isEnabled() && (DateUtils.dateToInteger(date)>=this.nextDate);
 	}
 }
