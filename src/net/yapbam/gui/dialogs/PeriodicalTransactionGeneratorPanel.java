@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -147,7 +148,17 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JTable getJTable() {
 		if (jTable == null) {
 			tableModel = new GenerateTableModel(data.getGlobalData());
-			jTable = new JTable(tableModel);
+			jTable = new JTable(tableModel) {
+				/* (non-Javadoc)
+				 * @see javax.swing.JTable#getPreferredScrollableViewportSize()
+				 */
+				@Override
+				public Dimension getPreferredScrollableViewportSize() {
+					Dimension size = super.getPreferredScrollableViewportSize();
+					size.width = getPreferredSize().width;
+					return size;
+				}
+			};
 			jTable.setDefaultRenderer(Date.class, new DateRenderer());
 			jTable.setDefaultRenderer(double[].class, new AmountRenderer());
 			jTable.setDefaultRenderer(Boolean.class, new BooleanRenderer());
@@ -172,10 +183,28 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	
 	void saveState() {
 		YapbamState.INSTANCE.saveState(getJTable(), STATE_PROPERTIES_PREFIX);
+//		System.out.println("-----------");
+//		System.out.println ("table width: "+getJTable().getSize().width);
+//		System.out.println ("scrollpane width: "+getJScrollPane().getWidth());
+//		int pwidth = 0;
+//		int width = 0;
+//		for (int i=0;i<getJTable().getColumnCount();i++) {
+//			width += getJTable().getColumnModel().getColumn(i).getWidth();
+//			pwidth += getJTable().getColumnModel().getColumn(i).getPreferredWidth();
+//		}
+//		System.out.println ("Saved width: "+width+". Preferred: "+pwidth);
+//		System.out.println("-----------");
 	}
 	
 	void restoreState() {
 		YapbamState.INSTANCE.restoreState(getJTable(), STATE_PROPERTIES_PREFIX);
+//		int width = 0;
+//		for (int i=0;i<getJTable().getColumnCount();i++) {
+//			width += getJTable().getColumnModel().getColumn(i).getPreferredWidth();
+//		}
+//		System.out.println("-----------");
+//		System.out.println ("Restored width: "+width);
+//		System.out.println("-----------");
 	}
 	
 	private void updateTransactions() {
