@@ -112,7 +112,6 @@ public class ImportPanel extends JPanel {
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.gridwidth = 0;
 		gridBagConstraints.gridx = 0;
-		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getSeparatorPanel(), gridBagConstraints22);
 		this.add(getJScrollPane(), gridBagConstraints);
