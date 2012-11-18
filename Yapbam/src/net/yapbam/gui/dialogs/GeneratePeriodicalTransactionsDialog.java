@@ -22,6 +22,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 
 	public GeneratePeriodicalTransactionsDialog(Window owner, FilteredData data) {
 		super(owner, LocalizationData.get("GeneratePeriodicalTransactionsDialog.title"), data); //$NON-NLS-1$
+		this.setResizable(true);
 	}
 
 	@Override
@@ -67,6 +68,4 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 		}
 		super.setVisible(visible);
 	}
-	
-	
 }
