@@ -95,6 +95,7 @@ public class AccountsSummaryPanel extends JPanel {
 				return super.getValueAt(row, column);
 			}
 			// We deal with the total line
+			column = convertColumnIndexToModel(column);
 			if (column == 0) return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 			double result = 0.0;
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
