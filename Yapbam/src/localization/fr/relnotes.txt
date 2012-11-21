@@ -10,7 +10,8 @@ fix
 	Il était possible de créer une opération périodique avec une date de prochaine opération postérieure à la date de fin de l'opération périodique.
 	Lorsqu'on changeait l'ordre des colonnes de l'onglet "Bilan des comptes", la ligne "Total" restait figée. 
 improvement
-	Le dialogue de génération des opérations périodiques est maintenant redimensionnable. 
+	Le dialogue de génération des opérations périodiques est maintenant redimensionnable.
+	La table "Opérations" de l'onglet "Historique du solde" peut à présent être triée dans de l'opération la plus récente vers la plus ancienne.  
 
 version	0.11.11 (17/11/2012)
 fix
