@@ -1,10 +1,12 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableRowSorter;
 
 import net.astesana.ajlib.swing.table.JTableSelector;
 import net.yapbam.data.FilteredData;
@@ -21,8 +23,10 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 	public BalanceHistoryTable(FilteredData data) {
 		super();
 		this.data = data;
-		this.setModel(new BalanceHistoryModel(data.getBalanceData()));
+		BalanceHistoryModel model = new BalanceHistoryModel(data.getBalanceData());
+		this.setModel(model);
 		setDefaultRenderer(Object.class, new CellRenderer());
+		setDefaultRenderer(Date.class, new CellRenderer());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.lastSelected = new Transaction[0];
 		getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -37,6 +41,12 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 				}
 			}
 		});
+		TableRowSorter<BalanceHistoryModel> sorter = new TableRowSorter<BalanceHistoryModel>(model);
+		for (int i = 0; i < model.getColumnCount(); i++) {
+			sorter.setSortable(i, i==BalanceHistoryModel.VALUE_DATE_COLUMN);
+			//TODO Could be cool to allow sorting on transaction date ...
+		}
+		setRowSorter(sorter);
 	}
 
 	public Transaction[] getSelectedTransactions() {

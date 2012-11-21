@@ -14,6 +14,9 @@ import net.yapbam.gui.transactiontable.DescriptionSettings;
 /** The transaction's table model. */
 final class BalanceHistoryModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
+
+	static final int VALUE_DATE_COLUMN = 7;
+	
 	private BalanceData data;
 	private DescriptionSettings descriptionSettings;
 
@@ -29,6 +32,15 @@ final class BalanceHistoryModel extends AbstractTableModel {
 			}
 		});
 	}
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
+	 */
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		if (columnIndex==VALUE_DATE_COLUMN) return Date.class;
+		return super.getColumnClass(columnIndex);
+	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -40,7 +52,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		if (columnIndex==4) return transaction.getCategory().getName();
 		if (columnIndex==5) return transaction.getMode().getName();
 		if (columnIndex==6) return transaction.getNumber();
-		if (columnIndex==7) return transaction.getValueDate();
+		if (columnIndex==VALUE_DATE_COLUMN) return transaction.getValueDate();
 		if (columnIndex==8) return transaction.getStatement();
 		if (columnIndex==9) return getRemaining(rowIndex);
 		if (columnIndex==10) return transaction.getComment();
