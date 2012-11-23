@@ -8,11 +8,13 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
@@ -31,11 +33,34 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.JButton;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class PeriodicalTransactionGeneratorPanel extends JPanel {
+	@SuppressWarnings("serial")
+	private final class EditTransactionAction extends AbstractAction {
+		public EditTransactionAction() {
+			super(LocalizationData.get("MainMenu.Transactions.Edit"), IconManager.EDIT_TRANSACTION); //$NON-NLS-1$
+			putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Edit.ToolTip")); //$NON-NLS-1$
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (jTable.getSelectedRowCount()==0) return; 
+			int row = jTable.convertRowIndexToModel(jTable.getSelectedRow());
+			Transaction transaction = (Transaction) tableModel.getTransaction(row);
+			transaction = TransactionDialog.open(data, AbstractDialog.getOwnerWindow(jTable), transaction, true, false, false);
+			if (transaction!=null) {
+				tableModel.setTransaction(row, transaction);
+			}
+		}
+	}
+
 	private static final String STATE_PROPERTIES_PREFIX = "net.yapbam.ihm.dialogs.PeriodicalGeneratorPanel.table."; //$NON-NLS-1$
 	
 	private static final long serialVersionUID = 1L;
@@ -48,6 +73,10 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private GenerateTableModel tableModel;
 
 	private FilteredData data;
+
+	private EditTransactionAction editAction;
+	private JPanel panel;
+	private JButton editButton;
 
 	/**
 	 * This is the default constructor
@@ -65,6 +94,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.add(getJPanel(), BorderLayout.NORTH);
 		this.add(getJScrollPane(), BorderLayout.CENTER);
+		add(getPanel(), BorderLayout.SOUTH);
 		this.updateTransactions();
 	}
 
@@ -164,21 +194,29 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			jTable.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			jTable.setRowSorter(new RowSorter<GenerateTableModel>(tableModel));
 			YapbamState.INSTANCE.restoreState(jTable, STATE_PROPERTIES_PREFIX);
-			//TODO It would be better to have a popup indicating that the transactions listed can be edited
-			new JTableListener(jTable, null, new AbstractAction() {
+			
+			getEditAction().setEnabled(false);
+			new JTableListener(jTable, new Action[]{getEditAction()}, getEditAction());
+			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {
-					int row = jTable.convertRowIndexToModel(jTable.getSelectedRow());
-					Transaction transaction = (Transaction) tableModel.getTransaction(row);
-					transaction = TransactionDialog.open(data, AbstractDialog.getOwnerWindow(jTable), transaction, true, false, false);
-					if (transaction!=null) {
-						tableModel.setTransaction(row, transaction);
+				public void valueChanged(ListSelectionEvent e) {
+					if (!e.getValueIsAdjusting()) {
+						editAction.setEnabled(jTable.getSelectedRowCount()>0);
 					}
 				}
 			});
+
 		}
 		return jTable;
+	}
+	
+	private Action getEditAction() {
+		if (editAction==null) {
+			editAction = new EditTransactionAction();
+		}
+		return editAction;
 	}
 	
 	void saveState() {
@@ -262,5 +300,19 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			if (isValid(i)) result.add((Transaction) tableModel.getTransaction(i));
 		}
 		return (Transaction[]) result.toArray(new Transaction[result.size()]);
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setLayout(new BorderLayout(0, 0));
+			panel.add(getEditButton(), BorderLayout.WEST);
+		}
+		return panel;
+	}
+	private JButton getEditButton() {
+		if (editButton == null) {
+			editButton = new JButton(getEditAction());
+		}
+		return editButton;
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
