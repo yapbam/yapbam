@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.ListSelectionModel;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
@@ -41,7 +42,33 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 				}
 			}
 		});
-		TableRowSorter<BalanceHistoryModel> sorter = new TableRowSorter<BalanceHistoryModel>(model);
+		TableRowSorter<BalanceHistoryModel> sorter = new TableRowSorter<BalanceHistoryModel>(model) {
+			// As the sort can only occurred on one column, instead of sorting the rows, we will just override the convertRowIndexToModel
+			// It enough to have the illusion the table is sorted and faster than a "real" sort.
+			// Moreover, if we had to sort, we should have been very careful, because sorting on the value date value leads to
+			// wrong order (the sort have to take care of the remaining balance).
+			/* (non-Javadoc)
+			 * @see javax.swing.DefaultRowSorter#convertRowIndexToModel(int)
+			 */
+			@Override
+			public int convertRowIndexToModel(int index) {
+				if (getSortKeys().size()==0 || getSortKeys().get(0).getSortOrder().equals(SortOrder.DESCENDING)) {
+					// Use the reverse
+					return getModel().getRowCount()-1-index;
+				} else {
+					// Use the native sort
+					return index;
+				}
+			}
+
+			/* (non-Javadoc)
+			 * @see javax.swing.DefaultRowSorter#sort()
+			 */
+			@Override
+			public void sort() {
+				// The model doesn't need to be sorted, we just have to know if the order is the model one or not
+			}
+		};
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			sorter.setSortable(i, i==BalanceHistoryModel.VALUE_DATE_COLUMN);
 			//TODO Could be cool to allow sorting on transaction date ...
