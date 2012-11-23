@@ -5,12 +5,12 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
-version	0.11.12 (24/11/2012)
+version	0.12.0 (24/11/2012)
 fix
 	Il était possible de créer une opération périodique avec une date de prochaine opération postérieure à la date de fin de l'opération périodique.
 	Lorsqu'on changeait l'ordre des colonnes de l'onglet "Bilan des comptes", la ligne "Total" restait figée. 
 improvement
-	Le dialogue de génération des opérations périodiques est maintenant redimensionnable.
+	Le dialogue de génération des opérations périodiques est maintenant redimensionnable. On peut la trier, et un bouton permet d'éditer l'opération sélectionnée.
 	La table "Opérations" de l'onglet "Historique du solde" peut à présent être triée dans de l'opération la plus récente vers la plus ancienne.  
 
 version	0.11.11 (17/11/2012)
