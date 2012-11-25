@@ -543,7 +543,8 @@ public class GlobalData extends DefaultListenable {
 		String old = account.getName();
 		if (!old.equals(value)) {
 			// Check that this account name is not already used
-			if (getAccount(value) != null) throw new IllegalArgumentException("Account name already exists"); //$NON-NLS-1$
+			Account accountByName = getAccount(value);
+			if ((accountByName != null) && (accountByName!=account)) throw new IllegalArgumentException("Account name already exists"); //$NON-NLS-1$
 			account.setName(value);
 			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.NAME, account, old,value));
 			this.setChanged();
