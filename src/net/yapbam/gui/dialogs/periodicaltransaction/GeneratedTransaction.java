@@ -45,7 +45,7 @@ class GeneratedTransaction {
 	/**
 	 * @param cancelled the cancelled to set
 	 */
-	public void setCancelled(boolean cancelled) {
+	void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
 	}
 

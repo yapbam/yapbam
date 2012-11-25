@@ -14,7 +14,6 @@ import net.yapbam.data.Transaction;
 public class Generator {
 	private ExtendedPeriodicalTransaction[] pTransactions;
 	private List<GeneratedTransaction> transactions;
-	private int transactionNumber;
 	private Date date;
 
 	/** Constructor.
@@ -26,26 +25,22 @@ public class Generator {
 			this.pTransactions[i] = new ExtendedPeriodicalTransaction(data.getPeriodicalTransaction(i));
 		}
 		this.transactions = new ArrayList<GeneratedTransaction>();
-		this.transactionNumber = 0;
 		this.date = null;
 	}
 	
 	public int getNbTransactions() {
-		return transactionNumber;
+		return transactions.size();
 	}
 	
 	public Transaction getTransaction(int index) {
-		if (index>=transactionNumber) throw new IndexOutOfBoundsException();
 		return transactions.get(index).getTransaction();
 	}
 
 	public boolean isCancelled(int index) {
-		if (index>=transactionNumber) throw new IndexOutOfBoundsException();
 		return transactions.get(index).isCancelled();
 	}
 
 	public boolean isPostponed(int index) {
-		if (index>=transactionNumber) throw new IndexOutOfBoundsException();
 		return transactions.get(index).isPostponed();
 	}
 
@@ -70,34 +65,25 @@ public class Generator {
 		// or changed to a previous date, we should keep the previous transactions, but simply mark them "not used".
 		// To achieve that, we will sort the transaction by date and remember how much transactions are available accordingly with the new date. 
 		this.date = date;
+		this.transactions.clear();
 		if (date==null) {
-			this.transactionNumber=0;
 		} else {
-			this.transactions.clear();
 			for (int i=0; i<pTransactions.length; i++) {
-				List<Transaction> generated = pTransactions[i].getPeriodicalTransaction().generate(date, null);
-				for (Transaction t : generated) {
-					this.transactions.add(new GeneratedTransaction(t, pTransactions[i], t.getDate()));
-				}
+				this.transactions.addAll(pTransactions[i].getTransactions(date));
 			}
-			this.transactionNumber=this.transactions.size();
 		}
-		//TODO end
 		return true;
 	}
 
 	public void setTransaction(int index, Transaction transaction) {
-		if (index>=transactionNumber) throw new IndexOutOfBoundsException();
 		this.transactions.get(index).setTransaction(transaction);
 	}
 
 	public void setCancelled(int index, boolean cancelled) {
-		if (index>=transactionNumber) throw new IndexOutOfBoundsException();
 		this.transactions.get(index).setCancelled(cancelled);
 	}
 
 	public void setPostponed(int index, boolean postponed) {
-		if (index>=transactionNumber) throw new IndexOutOfBoundsException();
 		GeneratedTransaction t = this.transactions.get(index);
 		Date pDate = t.getSource().getPosponedDate();
 		Date tDate = t.getDate();
