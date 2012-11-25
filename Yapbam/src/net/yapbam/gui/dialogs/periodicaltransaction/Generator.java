@@ -87,12 +87,12 @@ public class Generator {
 		GeneratedTransaction t = this.transactions.get(index);
 		Date pDate = t.getSource().getPosponedDate();
 		Date tDate = t.getDate();
-		//TODO
 		if (postponed) {
 			// Set to postponed
-			
+			t.getSource().setPosponedDate(tDate);
 		} else {
 			// Set to not postponed
+			//TODO
 		}
 	}
 }
