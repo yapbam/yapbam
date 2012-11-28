@@ -89,7 +89,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 		try {
 			String path = FileId.fromURI(uri).getPath();
 	    if (task!=null) task.setPhase(LocalizationData.get("dropbox.uploading"), -1); //$NON-NLS-1$
-/*
+
 			// This implementation uses ChunkedUploader to allow the user to cancel the upload
 			// It has a major trap:
 			// It seems that each chunk requires a new connection to Dropbox. On some network configuration (with very slow proxy)
@@ -134,8 +134,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 			}
 			return result;
 
-*/
-/**/
+/*
 	    // Here is an implementation that do not use chunckedUploader
 			// Its major problems are:
 			// - It is not possible to cancel the upload before it is completed
