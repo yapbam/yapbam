@@ -10,6 +10,7 @@ fix
 	Il était possible de créer une opération périodique avec une date de prochaine opération postérieure à la date de fin de l'opération périodique.
 	Lorsqu'on changeait l'ordre des colonnes de l'onglet "Bilan des comptes", la ligne "Total" restait figée.
 	Changer la casse d'une lettre dans le nom d'un compte provoquait une erreur.
+	La sauvegarde du filtre à la fermeture de Yapbam provoquait une erreur si le filtre comportait une restriction sur le numéro ou le relevé, mais pas sur le libellé d'opération.
 improvement
 	Le dialogue de génération des opérations périodiques est maintenant redimensionnable. On peut la trier, et un bouton permet d'éditer l'opération sélectionnée.
 	La table "Opérations" de l'onglet "Historique du solde" peut à présent être triée dans de l'opération la plus récente vers la plus ancienne.  
