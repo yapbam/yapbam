@@ -9,7 +9,8 @@ version	0.12.0 (11/24/2012)
 fix
 	It was possible to create a periodical transaction with a next transaction's date after the end date of the periodical transaction.
 	When changing the order of columns in the tab "Account Summary", the "Total" row remained frozen.
-	Changing the case of a letter in an account's name caused an error. 
+	Changing the case of a letter in an account's name caused an error.
+	Closing Yapbam caused an error when the filter had a restriction on the number or statement, but not on the description of transactions.
 improvement
 	The periodical transactions generation dialog is now resizable. It can be sorted, and a button edits the selected transaction.
 	The "Transactions" table of the "Balance History" tab can now be sorted from the newest transaction to the oldest.

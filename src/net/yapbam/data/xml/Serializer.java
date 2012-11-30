@@ -428,8 +428,8 @@ public class Serializer {
 		hd.startElement(EMPTY, EMPTY, FILTER_TAG, atts);
 		if (filter.getDescriptionMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_DESCRIPTION_ID);
 		if (filter.getCommentMatcher()!=null) serialize(filter.getCommentMatcher(), FILTER_COMMENT_ID);
-		if (filter.getNumberMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_NUMBER_ID);
-		if (filter.getStatementMatcher()!=null) serialize(filter.getDescriptionMatcher(), FILTER_STATEMENT_ID);
+		if (filter.getNumberMatcher()!=null) serialize(filter.getNumberMatcher(), FILTER_NUMBER_ID);
+		if (filter.getStatementMatcher()!=null) serialize(filter.getStatementMatcher(), FILTER_STATEMENT_ID);
 		hd.endElement(EMPTY,EMPTY,FILTER_TAG);
 	}
 
