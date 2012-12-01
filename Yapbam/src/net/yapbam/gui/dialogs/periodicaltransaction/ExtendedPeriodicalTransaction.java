@@ -9,7 +9,7 @@ import net.yapbam.data.Transaction;
 
 class ExtendedPeriodicalTransaction {
 	private PeriodicalTransaction transaction;
-	private Date posponedDate;
+	private Date postponedDate;
 	private Date generationDate;
 	private List<GeneratedTransaction> transactions;
 	
@@ -19,7 +19,7 @@ class ExtendedPeriodicalTransaction {
 	 */
 	ExtendedPeriodicalTransaction(PeriodicalTransaction transaction) {
 		this.transaction = transaction;
-		this.posponedDate = null;
+		this.postponedDate = null;
 		this.generationDate = null;
 		this.transactions = new ArrayList<GeneratedTransaction>();
 	}
@@ -35,18 +35,21 @@ class ExtendedPeriodicalTransaction {
 	 * @return the posponedDate
 	 */
 	public Date getPosponedDate() {
-		return posponedDate;
+		return postponedDate;
 	}
 
 	/**
-	 * @param posponedDate the posponedDate to set
+	 * @param postponedDate the posponedDate to set
 	 */
-	public void setPosponedDate(Date posponedDate) {
-		this.posponedDate = posponedDate;
+	public void setPosponedDate(Date postponedDate) {
+		this.postponedDate = postponedDate;
 	}
 	
 	public List<GeneratedTransaction> getTransactions(Date date) {
+		// If date is null, no transactions are generated
 		if (date==null) return new ArrayList<GeneratedTransaction>();
+		// Do not generate transactions that are after the postponed date
+		if ((postponedDate!=null) && postponedDate.compareTo(date)<0) date = postponedDate;
 		if (generationDate==null || generationDate.compareTo(date)<0) {
 			// Some transactions needs to be generated
 			List<Transaction> generated = getPeriodicalTransaction().generate(date, null);

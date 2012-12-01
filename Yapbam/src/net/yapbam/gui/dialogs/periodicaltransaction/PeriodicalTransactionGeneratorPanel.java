@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.periodicaltransaction;
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -10,18 +10,19 @@ import java.awt.GridBagConstraints;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.dialogs.TransactionDialog;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.util.JTableListener;
+import net.yapbam.util.DateUtils;
 
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -40,6 +41,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	@SuppressWarnings("serial")
@@ -85,6 +88,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 		super();
 		this.data = data;
 		initialize();
+		getDateField().setDate(DateUtils.getMidnight(new Date()));
 	}
 
 	/**
@@ -143,12 +147,14 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private DateWidget getDateField() {
 		if (dateField == null) {
 			dateField = new DateWidget();
+			dateField.setDate(null);
 			dateField.setColumns(6);
 			dateField.setToolTipText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate.toolTip")); //$NON-NLS-1$
 			dateField.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					updateTransactions();
+					tableModel.setDate(dateField.getDate());
+					firePropertyChange("endDate", evt.getOldValue(), evt.getNewValue()); //$NON-NLS-1$
 				}
 			});
 		}
@@ -207,7 +213,12 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 					}
 				}
 			});
-
+			tableModel.addTableModelListener(new TableModelListener() {
+				@Override
+				public void tableChanged(TableModelEvent e) {
+					updateTransactions();
+				}
+			});
 		}
 		return jTable;
 	}
@@ -221,61 +232,32 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	
 	void saveState() {
 		YapbamState.INSTANCE.saveState(getJTable(), STATE_PROPERTIES_PREFIX);
-//		System.out.println("-----------");
-//		System.out.println ("table width: "+getJTable().getSize().width);
-//		System.out.println ("scrollpane width: "+getJScrollPane().getWidth());
-//		int pwidth = 0;
-//		int width = 0;
-//		for (int i=0;i<getJTable().getColumnCount();i++) {
-//			width += getJTable().getColumnModel().getColumn(i).getWidth();
-//			pwidth += getJTable().getColumnModel().getColumn(i).getPreferredWidth();
-//		}
-//		System.out.println ("Saved width: "+width+". Preferred: "+pwidth);
-//		System.out.println("-----------");
 	}
 	
 	void restoreState() {
 		YapbamState.INSTANCE.restoreState(getJTable(), STATE_PROPERTIES_PREFIX);
-//		int width = 0;
-//		for (int i=0;i<getJTable().getColumnCount();i++) {
-//			width += getJTable().getColumnModel().getColumn(i).getPreferredWidth();
-//		}
-//		System.out.println("-----------");
-//		System.out.println ("Restored width: "+width);
-//		System.out.println("-----------");
 	}
 	
 	private void updateTransactions() {
-		Date endDate = dateField.getDate();
-		Date lastDate = this.tableModel.getDate();
-		boolean change = !NullUtils.areEquals(endDate, lastDate);
-		if (change) {
-			change = this.tableModel.setDate(endDate);
-			if (change) {
-				String message;
-				if (endDate==null) {
-					message = " "; //$NON-NLS-1$
+		String message;
+		if (getDateField().getDate()==null) {
+			message = " "; //$NON-NLS-1$
+		} else {
+			double debts = 0;
+			double receipts = 0;
+			for (int i=0; i<this.tableModel.getRowCount(); i++) {
+				AbstractTransaction transaction = this.tableModel.getTransaction(i);
+				if (transaction.getAmount()>0) {
+					receipts += transaction.getAmount();
 				} else {
-					double debts = 0;
-					double receipts = 0;
-					for (int i=0; i<this.tableModel.getRowCount(); i++) {
-						AbstractTransaction transaction = this.tableModel.getTransaction(i);
-						if (transaction.getAmount()>0) {
-							receipts += transaction.getAmount();
-						} else {
-							debts += transaction.getAmount();
-						}
-					}
-					message = MessageFormat.format(LocalizationData.get("GeneratePeriodicalTransactionsDialog.summary"), this.tableModel.getRowCount(), //$NON-NLS-1$
-							LocalizationData.getCurrencyInstance().format(receipts), LocalizationData.getCurrencyInstance().format(-debts),
-							LocalizationData.getCurrencyInstance().format(receipts+debts));
+					debts += transaction.getAmount();
 				}
-				summary.setText(message);
 			}
-			Date old = lastDate;
-			lastDate=endDate;
-			this.firePropertyChange("endDate", old, lastDate); //$NON-NLS-1$
+			message = MessageFormat.format(LocalizationData.get("GeneratePeriodicalTransactionsDialog.summary"), this.tableModel.getRowCount(), //$NON-NLS-1$
+					LocalizationData.getCurrencyInstance().format(receipts), LocalizationData.getCurrencyInstance().format(-debts),
+					LocalizationData.getCurrencyInstance().format(receipts+debts));
 		}
+		summary.setText(message);
 	}
 
 	Transaction[] getTransactions() {

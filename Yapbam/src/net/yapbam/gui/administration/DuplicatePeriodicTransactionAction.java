@@ -8,7 +8,7 @@ import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.AbstractTransactionDialog;
-import net.yapbam.gui.dialogs.PeriodicalTransactionDialog;
+import net.yapbam.gui.dialogs.periodicaltransaction.PeriodicalTransactionDialog;
 
 @SuppressWarnings("serial")
 public class DuplicatePeriodicTransactionAction extends AbstractAction {

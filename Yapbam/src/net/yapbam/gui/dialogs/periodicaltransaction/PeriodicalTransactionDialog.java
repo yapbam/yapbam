@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.periodicaltransaction;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -12,6 +12,9 @@ import javax.swing.*;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.dialogs.AbstractTransactionDialog;
+import net.yapbam.gui.dialogs.EditAccountDialog;
+import net.yapbam.gui.dialogs.GenerationPanel;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 /** This dialog allows to create or edit a transaction */
