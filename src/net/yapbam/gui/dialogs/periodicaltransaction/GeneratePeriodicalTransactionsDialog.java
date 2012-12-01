@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.periodicaltransaction;
 
 import java.awt.Window;
 import java.util.Arrays;

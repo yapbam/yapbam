@@ -5,9 +5,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
-version	0.12.0 (24/11/2012)
+version	0.12.0 (02/12/2012)
 fix
 	Il était possible de créer une opération périodique avec une date de prochaine opération postérieure à la date de fin de l'opération périodique.
+	Lorsqu'on annulait une opération dans la génération des opérations périodiques, on qu'on en modifiait le montant, le récapitulatif des montants générés (ligne au dessous de la liste des opérations générées) n'était pas mis à jour.
 	Lorsqu'on changeait l'ordre des colonnes de l'onglet "Bilan des comptes", la ligne "Total" restait figée.
 	Changer la casse d'une lettre dans le nom d'un compte provoquait une erreur.
 	La sauvegarde du filtre à la fermeture de Yapbam provoquait une erreur si le filtre comportait une restriction sur le numéro ou le relevé, mais pas sur le libellé d'opération.

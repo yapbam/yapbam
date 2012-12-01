@@ -101,15 +101,16 @@ public abstract class Synchronizer {
 		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
 		File file = plugin.getLocalFile(uri);
 		long length = file.length();
+		boolean done = false;
 		FileInputStream stream = new FileInputStream(file);
 		try {
-			boolean done = plugin.upload(stream, length, uri, task);
-			if (done) {
-				plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));
-			}
-			return done;
+			done = plugin.upload(stream, length, uri, task);
 		} finally {
 			stream.close();
 		}
+		if (done) {
+			plugin.setLocalBaseRevision(uri, plugin.getRemoteRevision(uri));
+		}
+		return done;
 	}
 }

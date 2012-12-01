@@ -57,22 +57,25 @@ public class Generator {
 	 */
 	public boolean setDate(Date date) {
 		if (NullUtils.areEquals(date, this.date)) return false;
-		//TODO Here is a simplified version of the generation
 		// As transactions can be edited after this method is called, we should not change transactions that were already there before
 		// the date change (or modifications would be lost).
 		// We also need to consider that some transactions may be postponed
 		// The best way to have a user friendly behavior seems to be to never forget a generated transaction. When the date is set to null,
 		// or changed to a previous date, we should keep the previous transactions, but simply mark them "not used".
-		// To achieve that, we will sort the transaction by date and remember how much transactions are available accordingly with the new date. 
+		// To achieve that, ExtendedPeriodicalTransaction remembers all the transactions it generated/edited. 
 		this.date = date;
+		refreshTransactions();
+		return true;
+	}
+
+	private void refreshTransactions() {
 		this.transactions.clear();
-		if (date==null) {
+		if (this.date==null) {
 		} else {
 			for (int i=0; i<pTransactions.length; i++) {
-				this.transactions.addAll(pTransactions[i].getTransactions(date));
+				this.transactions.addAll(pTransactions[i].getTransactions(this.date));
 			}
 		}
-		return true;
 	}
 
 	public void setTransaction(int index, Transaction transaction) {
@@ -85,14 +88,14 @@ public class Generator {
 
 	public void setPostponed(int index, boolean postponed) {
 		GeneratedTransaction t = this.transactions.get(index);
-		Date pDate = t.getSource().getPosponedDate();
 		Date tDate = t.getDate();
 		if (postponed) {
 			// Set to postponed
 			t.getSource().setPosponedDate(tDate);
 		} else {
 			// Set to not postponed
-			//TODO
+			t.getSource().setPosponedDate(null);
 		}
+		refreshTransactions();
 	}
 }

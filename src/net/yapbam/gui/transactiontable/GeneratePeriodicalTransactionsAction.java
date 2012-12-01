@@ -18,7 +18,7 @@ import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
 import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.GeneratePeriodicalTransactionsDialog;
+import net.yapbam.gui.dialogs.periodicaltransaction.GeneratePeriodicalTransactionsDialog;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsAction extends AbstractAction {

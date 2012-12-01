@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs;
+package net.yapbam.gui.dialogs.periodicaltransaction;
 
 import java.util.Date;
 
@@ -9,7 +9,6 @@ import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.periodicaltransaction.Generator;
 import net.yapbam.gui.transactiontable.DescriptionSettings;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 
@@ -30,13 +29,6 @@ class GenerateTableModel extends GenericTransactionTableModel {
 
 	@Override
 	public int getColumnCount() {
-		//TODO
-		// A postponed column is scheduled, but it need some rewrite in PeriodicalTransactionGeneratorPanel
-		// For now, we will hide the "postponed" column
-		// The problem is due to the periodical transaction concept. When a transaction is postponed, it is 
-		// the periodical transaction that is postponed, not the transaction. So we need to ensure that all transactions
-		// after a postponed transaction and from the same periodical transaction are postponed to.
-		// Probably not so easy to design an understandable interface.
 		return 6;
 	}
 

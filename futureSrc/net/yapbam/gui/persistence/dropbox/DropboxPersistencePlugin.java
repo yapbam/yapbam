@@ -108,7 +108,6 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 				int retryCounter = 0;
 				while (!uploader.isComplete()) {
 					try {
-						System.out.println ("Trying to upload ...");
 						uploader.upload();
 					} catch (DropboxException e) {
 						if (retryCounter > 5) throw e; // Give up after a while.

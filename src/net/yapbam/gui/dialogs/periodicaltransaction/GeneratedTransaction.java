@@ -35,7 +35,7 @@ class GeneratedTransaction {
 	
 	public boolean isPostponed() {
 		Date pDate = getSource().getPosponedDate();
-		return pDate==null?false:(pDate.compareTo(date)>=0);
+		return pDate==null?false:(pDate.compareTo(date)<=0);
 	}
 
 	public Date getDate() {
