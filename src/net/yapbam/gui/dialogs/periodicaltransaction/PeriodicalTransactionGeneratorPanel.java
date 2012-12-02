@@ -45,6 +45,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 public class PeriodicalTransactionGeneratorPanel extends JPanel {
+	static final String HAS_IMPACT_PROPERTY = "hasImpact";
+	
 	@SuppressWarnings("serial")
 	private final class EditTransactionAction extends AbstractAction {
 		public EditTransactionAction() {
@@ -76,6 +78,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private GenerateTableModel tableModel;
 
 	private FilteredData data;
+	private boolean hasImpact;
 
 	private EditTransactionAction editAction;
 	private JPanel panel;
@@ -87,6 +90,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	public PeriodicalTransactionGeneratorPanel(FilteredData data) {
 		super();
 		this.data = data;
+		this.hasImpact = false;
 		initialize();
 		getDateField().setDate(DateUtils.getMidnight(new Date()));
 	}
@@ -154,7 +158,6 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					tableModel.setDate(dateField.getDate());
-					firePropertyChange("endDate", evt.getOldValue(), evt.getNewValue()); //$NON-NLS-1$
 				}
 			});
 		}
@@ -201,7 +204,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jTable.setRowSorter(new RowSorter<GenerateTableModel>(tableModel));
-			YapbamState.INSTANCE.restoreState(jTable, STATE_PROPERTIES_PREFIX);
+			restoreState();
 			
 			getEditAction().setEnabled(false);
 			new JTableListener(jTable, new Action[]{getEditAction()}, getEditAction());
@@ -258,14 +261,22 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 					LocalizationData.getCurrencyInstance().format(receipts+debts));
 		}
 		summary.setText(message);
+		updateHasImpact();
 	}
-
-	Transaction[] getTransactions() {
-		Transaction[] result = new Transaction[this.tableModel.getRowCount()];
-		for (int i = 0; i < result.length; i++) {
-			result[i] = (Transaction) this.tableModel.getTransaction(i);
+	
+	private void updateHasImpact() {
+		if (tableModel.hasImpact()!=hasImpact) {
+			hasImpact = !hasImpact;
+			firePropertyChange(HAS_IMPACT_PROPERTY, !hasImpact, hasImpact);
 		}
-		return result;
+	}
+	
+	/** Tests whether the actual user selection has an impact on the data.
+	 * <br>An impact means there is some periodical transactions's "next date" that will be changed.  
+	 * @return true if there is an impact
+	 */
+	boolean hasImpact() {
+		return hasImpact;
 	}
 
 	public boolean isValid(int i) {
@@ -283,6 +294,15 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 		}
 		return (Transaction[]) result.toArray(new Transaction[result.size()]);
 	}
+	
+	/** Gets the postponed date of a periodical transaction.
+	 * @param indexPeriodical The index of the periodical transaction in the global data.
+	 * @return The postponed date, or null if the transaction is not postponed
+	 */
+	public Date getPostponedDate(int indexPeriodical) {
+		return tableModel.getPostponedDate(indexPeriodical);
+	}
+
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();

@@ -78,14 +78,26 @@ public class Generator {
 		}
 	}
 
+	/** Updates a transaction.
+	 * @param index The transaction index
+	 * @param transaction The updated transaction
+	 */
 	public void setTransaction(int index, Transaction transaction) {
 		this.transactions.get(index).setTransaction(transaction);
 	}
 
+	/** Marks a transaction as cancelled or not.
+	 * @param index The transaction index.
+	 * @param cancelled true to mark the transaction cancelled
+	 */
 	public void setCancelled(int index, boolean cancelled) {
 		this.transactions.get(index).setCancelled(cancelled);
 	}
 
+	/** Marks a transaction as postponed or not.
+	 * @param index The transaction index.
+	 * @param postponed true to mark the transaction postponed
+	 */
 	public void setPostponed(int index, boolean postponed) {
 		GeneratedTransaction t = this.transactions.get(index);
 		Date tDate = t.getDate();
@@ -97,5 +109,13 @@ public class Generator {
 			t.getSource().setPosponedDate(null);
 		}
 		refreshTransactions();
+	}
+	
+	/** Gets the postponed date of a periodical transaction.
+	 * @param indexPeriodical The index of the periodical transaction in the global data.
+	 * @return The postponed date, or null if the transaction is not postponed
+	 */
+	public Date getPostponedDate(int indexPeriodical) {
+		return pTransactions[indexPeriodical].getPosponedDate();
 	}
 }

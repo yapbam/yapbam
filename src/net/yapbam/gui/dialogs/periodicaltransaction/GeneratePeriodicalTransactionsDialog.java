@@ -15,6 +15,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingOptions;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
+import net.yapbam.util.DateUtils;
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<FilteredData, Void> {
@@ -28,6 +29,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 
 	@Override
 	protected Void buildResult() {
+		// Add the generated transactions
 		Transaction[] transactions = panel.getValidTransactions();
 		EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
 		if (editingOptions.isAutoFillStatement()) {
@@ -40,23 +42,32 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 		}
 		GlobalData globalData = data.getGlobalData();
 		globalData.add(transactions);
+		// Update the next date of periodical transactions
 		PeriodicalTransaction[] wholeTransactions = new PeriodicalTransaction[globalData.getPeriodicalTransactionsNumber()];
-		for (int i = 0; i < wholeTransactions.length; i++) wholeTransactions[i] = globalData.getPeriodicalTransaction(i);
-		globalData.setPeriodicalTransactionNextDate(wholeTransactions, panel.getDate());
+		Date[] dates = new Date[wholeTransactions.length];
+		for (int i = 0; i < wholeTransactions.length; i++) {
+			wholeTransactions[i] = globalData.getPeriodicalTransaction(i);
+			dates[i] = panel.getDate();
+			Date pDate = panel.getPostponedDate(i);
+			if (pDate!=null) {
+				dates[i] = DateUtils.integerToDate(DateUtils.dateToInteger(pDate)-1);
+			}
+		}
+		globalData.setPeriodicalTransactionNextDate(wholeTransactions, dates);
 		return null;
 	}
 
 	@Override
 	protected JPanel createCenterPane() {
 		panel = new PeriodicalTransactionGeneratorPanel(data);
-		panel.addPropertyChangeListener(new AutoUpdateOkButtonPropertyListener(this));
+		panel.addPropertyChangeListener(PeriodicalTransactionGeneratorPanel.HAS_IMPACT_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		return panel;
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
 		if (panel.getDate()==null) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.date"); //$NON-NLS-1$
-		if (panel.getTransactions().length==0) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.noTransaction"); //$NON-NLS-1$
+		if (!panel.hasImpact()) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.noTransaction"); //$NON-NLS-1$
 		return null;
 	}
 

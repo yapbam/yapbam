@@ -472,13 +472,15 @@ public class GlobalData extends DefaultListenable {
 
 	/** Increments some periodical transactions next date until it becomes greater than a date.
 	 * If some periodical transactions have no next date, they are ignored. 
-	 * @param transactions the periodical transaction to update
-	 * @param date the limit date the periodical transaction have to pass
+	 * @param transactions the periodical transactions to update
+	 * @param dates the limit dates each periodical transaction have to pass
 	 */
-	public void setPeriodicalTransactionNextDate(PeriodicalTransaction[] transactions, Date date) {
+	public void setPeriodicalTransactionNextDate(PeriodicalTransaction[] transactions, Date[] dates) {
 		Collection<PeriodicalTransaction> removed = new ArrayList<PeriodicalTransaction>(transactions.length);
 		Collection<PeriodicalTransaction> updated = new ArrayList<PeriodicalTransaction>(transactions.length);
-		for (PeriodicalTransaction pt : transactions) {
+		for (int i = 0; i < dates.length; i++) {
+			PeriodicalTransaction pt = transactions[i];
+			Date date = dates[i];
 			Date nextDate = pt.getNextDate();
 			if (nextDate!=null) {
 				DateStepper ds = pt.getNextDateBuilder();
