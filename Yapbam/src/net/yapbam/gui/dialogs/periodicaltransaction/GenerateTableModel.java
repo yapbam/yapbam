@@ -84,6 +84,14 @@ class GenerateTableModel extends GenericTransactionTableModel {
 		return !(this.generator.isCancelled(rowIndex) || this.generator.isPostponed(rowIndex));
 	}
 
+	/** Tests whether a transaction is postponed.
+	 * @param rowIndex The transaction's index in the model
+	 * @return true if the transaction is postponed
+	 */
+	public boolean isPostponed(int rowIndex) {
+		return this.generator.isPostponed(rowIndex);
+	}
+
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return columnIndex==CANCELLED_INDEX || columnIndex==POSTPONED_INDEX;
@@ -125,5 +133,26 @@ class GenerateTableModel extends GenericTransactionTableModel {
 
 	public Date getDate() {
 		return this.generator.getDate();
+	}
+
+	/** Tests whether the actual user selection has an impact on the data.
+	 * <br>An impact means there is some periodical transactions's "next date" that will be changed.  
+	 * @return true if there is an impact
+	 */
+	boolean hasImpact() {
+		int nb = getRowCount();
+		if (nb==0) return false;
+		for (int i = 0; i < nb; i++) {
+			if (!generator.isPostponed(i)) return true;
+		}
+		return false;
+	}
+
+	/** Gets the postponed date of a periodical transaction.
+	 * @param indexPeriodical The index of the periodical transaction in the global data.
+	 * @return The postponed date, or null if the transaction is not postponed
+	 */
+	Date getPostponedDate(int indexPeriodical) {
+		return generator.getPostponedDate(indexPeriodical);
 	}
 }
