@@ -5,6 +5,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
+version	0.12.1 (03/12/2012)
+fix
+	Un bug introduit dans la version 0.12.0 : Quand une opération périodique atteignait sa date de fin, cela provoquait une erreur.
+
 version	0.12.0 (02/12/2012)
 fix
 	Il était possible de créer une opération périodique avec une date de prochaine opération postérieure à la date de fin de l'opération périodique.
