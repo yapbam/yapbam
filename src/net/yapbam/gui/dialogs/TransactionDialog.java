@@ -16,7 +16,6 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
-import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
@@ -24,6 +23,7 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.widget.CurrencyWidget;
 
 /** This dialog allows to create or edit a transaction */
 public class TransactionDialog extends AbstractTransactionDialog<Transaction> {

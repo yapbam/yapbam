@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.CurrencyWidget;
 
 import java.awt.Color;
 import java.awt.Font;

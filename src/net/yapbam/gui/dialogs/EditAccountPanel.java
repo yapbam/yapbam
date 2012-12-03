@@ -9,13 +9,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
-import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.CurrencyWidget;
 
 @SuppressWarnings("serial")
 public class EditAccountPanel extends JPanel {
