@@ -18,7 +18,6 @@ import java.util.List;
 import javax.swing.*;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.swing.widget.ComboBox;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.utilities.NullUtils;
@@ -29,6 +28,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.CurrencyWidget;
 
 /** This dialog allows to create or edit a transaction */
 public abstract class AbstractTransactionDialog<V> extends AbstractDialog<FilteredData, V> {

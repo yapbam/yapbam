@@ -7,7 +7,6 @@ import java.awt.Insets;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.gui.LocalizationData;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import net.yapbam.gui.dialogs.SubtransactionListPanel;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import net.yapbam.gui.widget.CurrencyWidget;
 
 public class TransferPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

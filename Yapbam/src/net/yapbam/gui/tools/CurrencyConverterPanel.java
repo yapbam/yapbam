@@ -15,11 +15,11 @@ import java.util.Currency;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.RowSorter;
-import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.CurrencyWidget;
 
 import javax.swing.JLabel;
 import java.awt.Insets;

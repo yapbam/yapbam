@@ -9,8 +9,8 @@ import javax.swing.JDialog;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import net.astesana.ajlib.swing.widget.CurrencyWidget;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
+import net.yapbam.gui.widget.CurrencyWidget;
 
 public class WidgetTest {
 	private PropertyChangeSpy listener = new PropertyChangeSpy();
