@@ -493,7 +493,7 @@ public class GlobalData extends DefaultListenable {
 				}
 				removed.add(pt);
 				updated.add(new PeriodicalTransaction(pt.getDescription(), pt.getComment(), pt.getAmount(), pt.getAccount(), pt.getMode(),
-						pt.getCategory(), Arrays.asList(pt.getSubTransactions()), nextDate, pt.isEnabled(), ds));
+						pt.getCategory(), Arrays.asList(pt.getSubTransactions()), nextDate, pt.isEnabled() && (nextDate!=null), ds));
 			}
 		}
 		this.remove(removed.toArray(new PeriodicalTransaction[removed.size()]));
