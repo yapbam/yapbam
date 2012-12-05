@@ -1,15 +1,18 @@
 package net.yapbam.gui.widget;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Locale;
 
-import net.astesana.ajlib.utilities.LocalizationData;
 import net.astesana.javaluator.BracketPair;
 import net.astesana.javaluator.DoubleEvaluator;
 import net.astesana.javaluator.Parameters;
+import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 public class CurrencyWidget extends net.astesana.ajlib.swing.widget.CurrencyWidget {
 	private static final DoubleEvaluator EVALUATOR = new Evaluator();
+	private static final DecimalFormat US_FORMAT = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
 	
 	private static class Evaluator extends DoubleEvaluator {
 		Evaluator() {
@@ -29,8 +32,10 @@ public class CurrencyWidget extends net.astesana.ajlib.swing.widget.CurrencyWidg
 
 		@Override
 		protected Double toValue(String literal, Object evaluationContext) {
-			//TODO
-			return super.toValue(literal, evaluationContext);
+			CurrencyWidget widget = (CurrencyWidget)evaluationContext;
+			Number result = widget.parseLiteral(literal);
+			if (result==null) throw new IllegalArgumentException();
+			return result.doubleValue();
 		}
 	}
 
@@ -39,20 +44,29 @@ public class CurrencyWidget extends net.astesana.ajlib.swing.widget.CurrencyWidg
 	}
 
 	public CurrencyWidget() {
-		this(LocalizationData.DEFAULT.getLocale());
+		this(LocalizationData.getLocale());
 	}
 
 	@Override
 	protected Number parseValue(String text) {
-		Number result = super.parseValue(text);
+		// Try to parse the string as a literal
+		Number result = parseLiteral(text);
 		if (result==null) {
 			// Maybe its a formula
 			try {
-System.out.println ("evaluate expression");
-				result = EVALUATOR.evaluate(text);
+				result = EVALUATOR.evaluate(text, this);
 			} catch (IllegalArgumentException e) {
 				// The expression is invalid
 			}
+		}
+		return result;
+	}
+
+	private Number parseLiteral(String text) {
+		Number result = super.parseValue(text);
+		if (result==null) {
+			// Maybe its an us formatted number
+			result = safeParse(US_FORMAT, text);
 		}
 		return result;
 	}
