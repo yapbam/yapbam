@@ -20,5 +20,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/A-JLib"/>
 	<classpathentry kind="var" path="COMMONS-CODEC"/>
 	<classpathentry kind="var" path="COMMONS-LANG"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Javaluator"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
