@@ -1,35 +1,39 @@
 package net.yapbam.gui.tools.calculator;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 import java.awt.GridBagConstraints;
-import javax.swing.JButton;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
 public class CalculatorPanel extends JPanel {
 	private JTextField result;
-	private JButton openBracket;
-	private JButton closeBracket;
-	private JButton btn7;
-	private JButton btn6;
-	private JButton btn5;
-	private JButton btn4;
-	private JButton btn3;
-	private JButton btn2;
-	private JButton btn8;
-	private JButton btn9;
-	private JButton btn1;
-	private JButton btn0;
-	private JButton btnDecimal;
-	private JButton btnPlus;
-	private JButton btnMinus;
-	private JButton btnMultiply;
-	private JButton btnDivide;
-	private JButton btnErase;
-	private JButton btnEquals;
-	private JButton btnClear;
+	private CalculatorButton openBracket;
+	private CalculatorButton closeBracket;
+	private CalculatorButton btn7;
+	private CalculatorButton btn6;
+	private CalculatorButton btn5;
+	private CalculatorButton btn4;
+	private CalculatorButton btn3;
+	private CalculatorButton btn2;
+	private CalculatorButton btn8;
+	private CalculatorButton btn9;
+	private CalculatorButton btn1;
+	private CalculatorButton btn0;
+	private CalculatorButton btnDecimal;
+	private CalculatorButton btnPlus;
+	private CalculatorButton btnMinus;
+	private CalculatorButton btnMultiply;
+	private CalculatorButton btnDivide;
+	private CalculatorButton btnErase;
+	private CalculatorButton btnEquals;
+	private CalculatorButton btnClear;
 
 	/**
 	 * Create the panel.
@@ -175,6 +179,18 @@ public class CalculatorPanel extends JPanel {
 		gbc_btnEquals.gridy = 3;
 		add(getBtnEquals(), gbc_btnEquals);
 
+		this.addKeyListener(new KeyAdapter() {
+			/* (non-Javadoc)
+			 * @see java.awt.event.KeyAdapter#keyTyped(java.awt.event.KeyEvent)
+			 */
+			@Override
+			public void keyTyped(KeyEvent e) {
+				doChar(e.getKeyChar());
+				super.keyTyped(e);
+			}
+		});
+		this.setFocusable(true);
+		this.requestFocus();
 	}
 
 	private JTextField getResult() {
@@ -182,127 +198,150 @@ public class CalculatorPanel extends JPanel {
 			result = new JTextField();
 			result.setEditable(false);
 			result.setColumns(10);
+			result.setFocusable(false);
 		}
 		return result;
 	}
-	private JButton getOpenBracket() {
+	private CalculatorButton getOpenBracket() {
 		if (openBracket == null) {
-			openBracket = new JButton("(");
+			openBracket = new CalculatorButton("(");
 		}
 		return openBracket;
 	}
-	private JButton getCloseBracket() {
+	private CalculatorButton getCloseBracket() {
 		if (closeBracket == null) {
-			closeBracket = new JButton(")");
+			closeBracket = new CalculatorButton(")");
 		}
 		return closeBracket;
 	}
-	private JButton getBtn7() {
+	private CalculatorButton getBtn7() {
 		if (btn7 == null) {
-			btn7 = new JButton("7");
+			btn7 = new CalculatorButton("7");
+			btn7.setFocusable(false);
 		}
 		return btn7;
 	}
-	private JButton getBtn6() {
+	private CalculatorButton getBtn6() {
 		if (btn6 == null) {
-			btn6 = new JButton("6");
+			btn6 = new CalculatorButton("6");
 		}
 		return btn6;
 	}
-	private JButton getBtn5() {
+	private CalculatorButton getBtn5() {
 		if (btn5 == null) {
-			btn5 = new JButton("5");
+			btn5 = new CalculatorButton("5");
 		}
 		return btn5;
 	}
-	private JButton getBtn4() {
+	private CalculatorButton getBtn4() {
 		if (btn4 == null) {
-			btn4 = new JButton("4");
+			btn4 = new CalculatorButton("4");
 		}
 		return btn4;
 	}
-	private JButton getBtn3() {
+	private CalculatorButton getBtn3() {
 		if (btn3 == null) {
-			btn3 = new JButton("3");
+			btn3 = new CalculatorButton("3");
 		}
 		return btn3;
 	}
-	private JButton getBtn2() {
+	private CalculatorButton getBtn2() {
 		if (btn2 == null) {
-			btn2 = new JButton("2");
+			btn2 = new CalculatorButton("2");
 		}
 		return btn2;
 	}
-	private JButton getBtn8() {
+	private CalculatorButton getBtn8() {
 		if (btn8 == null) {
-			btn8 = new JButton("8");
+			btn8 = new CalculatorButton("8");
 		}
 		return btn8;
 	}
-	private JButton getBtn9() {
+	private CalculatorButton getBtn9() {
 		if (btn9 == null) {
-			btn9 = new JButton("9");
+			btn9 = new CalculatorButton("9");
 		}
 		return btn9;
 	}
-	private JButton getBtn1() {
+	private CalculatorButton getBtn1() {
 		if (btn1 == null) {
-			btn1 = new JButton("1");
+			btn1 = new CalculatorButton("1");
 		}
 		return btn1;
 	}
-	private JButton getBtn0() {
+	private CalculatorButton getBtn0() {
 		if (btn0 == null) {
-			btn0 = new JButton("0");
+			btn0 = new CalculatorButton("0");
 		}
 		return btn0;
 	}
-	private JButton getBtnDecimal() {
+	private CalculatorButton getBtnDecimal() {
 		if (btnDecimal == null) {
-			btnDecimal = new JButton(".");
+			btnDecimal = new CalculatorButton(".");
 		}
 		return btnDecimal;
 	}
-	private JButton getBtnPlus() {
+	private CalculatorButton getBtnPlus() {
 		if (btnPlus == null) {
-			btnPlus = new JButton("+");
+			btnPlus = new CalculatorButton("+");
 		}
 		return btnPlus;
 	}
-	private JButton getBtnMinus() {
+	private CalculatorButton getBtnMinus() {
 		if (btnMinus == null) {
-			btnMinus = new JButton("-");
+			btnMinus = new CalculatorButton("-");
 		}
 		return btnMinus;
 	}
-	private JButton getBtnMultiply() {
+	private CalculatorButton getBtnMultiply() {
 		if (btnMultiply == null) {
-			btnMultiply = new JButton("*");
+			btnMultiply = new CalculatorButton("*");
 		}
 		return btnMultiply;
 	}
-	private JButton getBtnDivide() {
+	private CalculatorButton getBtnDivide() {
 		if (btnDivide == null) {
-			btnDivide = new JButton("/");
+			btnDivide = new CalculatorButton("/");
 		}
 		return btnDivide;
 	}
-	private JButton getBtnErase() {
+	private CalculatorButton getBtnErase() {
 		if (btnErase == null) {
-			btnErase = new JButton("<-");
+			btnErase = new CalculatorButton("<-");
 		}
 		return btnErase;
 	}
-	private JButton getBtnEquals() {
+	private CalculatorButton getBtnEquals() {
 		if (btnEquals == null) {
-			btnEquals = new JButton("=");
+			btnEquals = new CalculatorButton("=");
 		}
 		return btnEquals;
 	}
-	private JButton getBtnClear() {
+	private CalculatorButton getBtnClear() {
 		if (btnClear == null) {
-			btnClear = new JButton("C");
+			btnClear = new CalculatorButton("C");
 		}
 		return btnClear;
 	}
+	
+	private void doChar(char character) {
+		System.out.println("doChar('"+character+"')");
+	}
+
+	private class CalculatorButton extends JButton {
+		private char character;
+		
+		public CalculatorButton(String name) {
+			super(name);
+			if (name.length()>0) character = name.charAt(0);
+			setFocusable(false);
+			addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					doChar(character);
+				}
+			});
+		}
+	}
+
 }
