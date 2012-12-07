@@ -4,6 +4,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
+
+import net.astesana.javaluator.DoubleEvaluator;
+
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -34,11 +38,55 @@ public class CalculatorPanel extends JPanel {
 	private CalculatorButton btnErase;
 	private CalculatorButton btnEquals;
 	private CalculatorButton btnClear;
+	
+	private StringBuilder formula;
+	private Double value;
+	private DoubleEvaluator evaluator;
+	private Color validColor; 
+	private Color invalidColor; 
+	
+	private void doChar(char character) {
+		System.out.println("doChar('"+character+"') : "+(int)character);
+		if ((character>='0') && (character<='9')) {
+			// digit
+			formula.append(character);
+		} else if (character==getBtnDecimal().character) {
+			// decimal point
+			formula.append(character);
+		} else if ((character=='+') || (character=='-') || (character=='*') || (character=='/') || (character=='(') || (character==')')) {
+			// Operator
+			formula.append(character);
+		} else if ((character==(char)8) || (character==(char)127)) {
+			// Delete last char
+			if (formula.length()>0) formula.delete(formula.length()-1, formula.length());
+		} else if (Character.toUpperCase(character)=='C') {
+			// Clear
+			formula.delete(0, formula.length());
+		} else if ((character=='=') || (character==(char)10)) {
+			// Evaluate the expression
+			if (this.value!=null) {
+				formula.delete(0, formula.length());
+				formula.append(Double.toString(this.value));
+			}
+		}
+		try {
+			value = evaluator.evaluate(formula.toString());
+		} catch (IllegalArgumentException e) {
+			value = null;
+		}
+		getResult().setForeground(value==null?this.invalidColor:this.validColor);
+		getResult().setText(formula.toString());
+	}
 
 	/**
 	 * Create the panel.
 	 */
 	public CalculatorPanel() {
+		this.evaluator = new DoubleEvaluator();
+		this.formula = new StringBuilder();
+		this.validColor = getResult().getForeground();
+		this.invalidColor = validColor.brighter();
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_result = new GridBagConstraints();
@@ -197,8 +245,8 @@ public class CalculatorPanel extends JPanel {
 		if (result == null) {
 			result = new JTextField();
 			result.setEditable(false);
-			result.setColumns(10);
 			result.setFocusable(false);
+			result.setHorizontalAlignment(JTextField.RIGHT);
 		}
 		return result;
 	}
@@ -308,6 +356,7 @@ public class CalculatorPanel extends JPanel {
 	private CalculatorButton getBtnErase() {
 		if (btnErase == null) {
 			btnErase = new CalculatorButton("<-");
+			btnErase.character=(char)8;
 		}
 		return btnErase;
 	}
@@ -324,10 +373,6 @@ public class CalculatorPanel extends JPanel {
 		return btnClear;
 	}
 	
-	private void doChar(char character) {
-		System.out.println("doChar('"+character+"')");
-	}
-
 	private class CalculatorButton extends JButton {
 		private char character;
 		
@@ -343,5 +388,4 @@ public class CalculatorPanel extends JPanel {
 			});
 		}
 	}
-
 }
