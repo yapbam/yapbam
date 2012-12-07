@@ -14,8 +14,9 @@ public class ToolsPlugIn extends AbstractPlugIn {
 	@Override
 	public JMenu[] getPlugInMenu() {
 		JMenu jmenu = new JMenu(Messages.getString("ToolsPlugIn.menu.title")); //$NON-NLS-1$
-        jmenu.setToolTipText(Messages.getString("ToolsPlugIn.menu.toolTip")); //$NON-NLS-1$
+		jmenu.setToolTipText(Messages.getString("ToolsPlugIn.menu.toolTip")); //$NON-NLS-1$
 		jmenu.add(new JMenuItem(new CurrencyConverterAction()));
+		jmenu.add(new JMenuItem(new CalculatorAction()));
 		return new JMenu[]{jmenu};
 	}
 }
