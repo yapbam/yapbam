@@ -39,7 +39,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 		super(description, comment, amount, account, mode, category, subTransactions);
 		if (enabled && (nextDate==null)) throw new IllegalArgumentException("Next date is Null and enabled is true"); //$NON-NLS-1$
 		this.nextDate = DateUtils.dateToInteger(nextDate);
-		Date last = nextDateBuilder.getLastDate();
+		Date last = nextDateBuilder==null ? null : nextDateBuilder.getLastDate();
 		if ((last!=null) && (DateUtils.dateToInteger(last)<this.nextDate)) throw new IllegalArgumentException("Next date is after End date"); //$NON-NLS-1$
 		this.nextDateBuilder = nextDateBuilder;
 		this.enabled =  enabled;
@@ -58,7 +58,7 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	/** Gets the date of the next transaction to be generated.
 	 * <br>Be aware that this date could be non null if this periodical transaction is not activated.
 	 * @return a date or null if no transaction is forecasted
-	 * @see GlobalData#setPeriodicalTransactionNextDate(PeriodicalTransaction[], Date)
+	 * @see GlobalData#setPeriodicalTransactionNextDate(PeriodicalTransaction[], Date[])
 	 */
 	public Date getNextDate() {
 		return DateUtils.integerToDate(nextDate);

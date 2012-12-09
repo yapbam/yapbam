@@ -16,7 +16,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.12.1"/>
+	<property name="yapbamVersion" value="0.13.0"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -63,10 +63,10 @@
 	    	<fileset dir="${jcommonpath}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
 	    	<fileset dir="${ajlibpath}" includes="**/*.properties"/>
 	    	<fileset dir="${ajlibpath}" includes="**/*.png"/>
-	    			</copy>
+		</copy>
 		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
-		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath};${ajlibpath};${commonslangpath}" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath};${ajlibpath};${commonslangpath};${javaluatorpath}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>

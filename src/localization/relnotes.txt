@@ -2,8 +2,16 @@ Next release	Known bug:	Known bugs:	Change:	Changes:	Bug fix:	Bug fixes:
 version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
+	When editing a subtransaction, selecting a predefined label sets the amount to 0.
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
+
+version	0.13.0 (12/09/2012)
+improvement
+	Adds a calculator in the "Tools" menu.
+	It is now possible to enter a formula in the amount fields (example 3*45 instead of 135).
+fix
+	The menu "Transactions/Convert to periodical transaction" caused an error.
 
 version	0.12.1 (12/03/2012)
 fix
@@ -77,7 +85,7 @@ improvement
 	In the currency converter:<ul><li>the currency names and codes are now in separate columns.</li><li>Currency table can be sorted, by default it is sorted, as well as the menus in the order of names of currencies.</li><li>The target currency can be selected by clicking its row in the table.</li></ul>
 fix
 	In the currency converter, conversion rates were not displayed in the decimal format of the country (eg, in France, the point was used as decimal separator).
-	In the "Account statements" tab, the optionnal sort order of "Debt" and "Receipt" columns was alphabetical instead of numerical. 
+	In the "Account statements" tab, the optional sort order of "Debt" and "Receipt" columns was alphabetical instead of numerical. 
 	Bugs introduced in 0.11.2:<ul><li>Opening a file protected by password, then clicking on "Cancel" in the password dialog, resulted in an error.</li><li>Reading a file that contained no transactions resulted in an error.</li><li>Under Linux, wait dialogs were systematically and briefly displayed in the corner of the screen while reading or writing data or while accessing the Internet</li></ul>
 
 version	0.11.2 (05/28/2012)
