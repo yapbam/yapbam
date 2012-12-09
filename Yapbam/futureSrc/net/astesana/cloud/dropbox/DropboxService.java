@@ -17,5 +17,4 @@ public class DropboxService extends Service<DropboxAccount> {
 			return null;
 		}
 	}
-
 }

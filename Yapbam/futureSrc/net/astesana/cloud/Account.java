@@ -17,9 +17,9 @@ import org.apache.commons.codec.CharEncoding;
  */
 public abstract class Account<T> {
 	private File root;
-	private T connectionData;
+	protected T connectionData;
 	
-	public Account(File file) throws IOException {
+	protected Account(File file) throws IOException {
 		if (!file.isDirectory()) throw new IllegalArgumentException();
 		this.root = file;
 		FileInputStream stream = new FileInputStream(new File(this.root, ".info"));
@@ -30,7 +30,7 @@ public abstract class Account<T> {
 		}
 	}
 	
-	public Account(Service<? extends Account<T>> service, String name, T connectionData) throws IOException {
+	protected Account(Service<? extends Account<T>> service, String name, T connectionData) throws IOException {
 		this.connectionData = connectionData;
 		try {
 			this.root = new File(service.getCacheRoot(), URLEncoder.encode(name, CharEncoding.UTF_8));
