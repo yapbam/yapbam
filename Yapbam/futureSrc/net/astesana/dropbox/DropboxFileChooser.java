@@ -42,6 +42,7 @@ import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.common.dropbox.FileId;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableListener;
 
@@ -57,6 +58,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JComboBox;
 
 @SuppressWarnings("serial")
 public abstract class DropboxFileChooser extends JPanel {
@@ -79,6 +81,9 @@ public abstract class DropboxFileChooser extends JPanel {
 	private Runnable confirmAction;
 	
 	private DropboxInfo info;
+	private JPanel panel;
+	private JComboBox accounts;
+	private JButton btnNewAccount;
 	
 	public DropboxFileChooser(FilesTableModel model) {
 		this.filesModel = model;
@@ -323,7 +328,7 @@ public abstract class DropboxFileChooser extends JPanel {
 	private JLabel getLblAccount() {
 		if (lblAccount == null) {
 			lblAccount = new JLabel(MessageFormat.format(LocalizationData.get("dropbox.Chooser.account"), "")); //$NON-NLS-1$ //$NON-NLS-2$
-			lblAccount.setPreferredSize(new Dimension(300, lblAccount.getPreferredSize().height));
+//			lblAccount.setPreferredSize(new Dimension(300, lblAccount.getPreferredSize().height));
 		}
 		return lblAccount;
 	}
@@ -354,14 +359,13 @@ public abstract class DropboxFileChooser extends JPanel {
 			northPanel = new JPanel();
 			GridBagLayout gbl_northPanel = new GridBagLayout();
 			northPanel.setLayout(gbl_northPanel);
-			GridBagConstraints gbc_lblAccount = new GridBagConstraints();
-			gbc_lblAccount.weightx = 1.0;
-			gbc_lblAccount.fill = GridBagConstraints.HORIZONTAL;
-			gbc_lblAccount.anchor = GridBagConstraints.WEST;
-			gbc_lblAccount.insets = new Insets(0, 5, 5, 5);
-			gbc_lblAccount.gridx = 0;
-			gbc_lblAccount.gridy = 0;
-			northPanel.add(getLblAccount(), gbc_lblAccount);
+			GridBagConstraints gbc_panel = new GridBagConstraints();
+			gbc_panel.weightx = 1.0;
+			gbc_panel.fill = GridBagConstraints.BOTH;
+			gbc_panel.insets = new Insets(0, 0, 5, 5);
+			gbc_panel.gridx = 0;
+			gbc_panel.gridy = 0;
+			northPanel.add(getPanel(), gbc_panel);
 			GridBagConstraints gbc_refreshButton = new GridBagConstraints();
 			gbc_refreshButton.gridheight = 0;
 			gbc_refreshButton.insets = new Insets(0, 0, 0, 5);
@@ -375,7 +379,7 @@ public abstract class DropboxFileChooser extends JPanel {
 			northPanel.add(getDisconnectButton(), gbc_disconnectButton);
 			GridBagConstraints gbc_progressBar = new GridBagConstraints();
 			gbc_progressBar.fill = GridBagConstraints.HORIZONTAL;
-			gbc_progressBar.insets = new Insets(0, 5, 0, 5);
+			gbc_progressBar.insets = new Insets(0, 0, 0, 5);
 			gbc_progressBar.gridx = 0;
 			gbc_progressBar.gridy = 1;
 			northPanel.add(getProgressBar(), gbc_progressBar);
@@ -472,5 +476,46 @@ public abstract class DropboxFileChooser extends JPanel {
 	
 	protected DropboxInfo getInfo() {
 		return info;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			GridBagLayout gbl_panel = new GridBagLayout();
+			panel.setLayout(gbl_panel);
+			GridBagConstraints gbc_lblAccount = new GridBagConstraints();
+			gbc_lblAccount.fill = GridBagConstraints.BOTH;
+			gbc_lblAccount.insets = new Insets(0, 0, 5, 0);
+			gbc_lblAccount.anchor = GridBagConstraints.EAST;
+			gbc_lblAccount.gridx = 0;
+			gbc_lblAccount.gridy = 0;
+			panel.add(getLblAccount(), gbc_lblAccount);
+			GridBagConstraints gbc_accounts = new GridBagConstraints();
+			gbc_accounts.weightx = 1.0;
+			gbc_accounts.insets = new Insets(0, 0, 5, 0);
+			gbc_accounts.fill = GridBagConstraints.BOTH;
+			gbc_accounts.gridx = 1;
+			gbc_accounts.gridy = 0;
+			panel.add(getAccounts(), gbc_accounts);
+			GridBagConstraints gbc_btnNewAccount = new GridBagConstraints();
+			gbc_btnNewAccount.insets = new Insets(0, 0, 5, 0);
+			gbc_btnNewAccount.gridx = 2;
+			gbc_btnNewAccount.gridy = 0;
+			panel.add(getBtnNewAccount(), gbc_btnNewAccount);
+		}
+		return panel;
+	}
+	private JComboBox getAccounts() {
+		if (accounts == null) {
+			accounts = new JComboBox();
+		}
+		return accounts;
+	}
+	private JButton getBtnNewAccount() {
+		if (btnNewAccount == null) {
+			btnNewAccount = new JButton(IconManager.NEW);
+			int height = getAccounts().getPreferredSize().height;
+			btnNewAccount.setPreferredSize(new Dimension(height, height));
+		}
+		return btnNewAccount;
 	}
 }
