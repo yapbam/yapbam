@@ -2,8 +2,16 @@ Version en cours de développement	Bug connu :	Bugs connus :	Changement :	Change
 version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
+	Lors de l'édition d'une sous opération, la sélection d'un libellé prédéfini remet le montant de la sous-opération à 0.
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
+
+version	0.13.0 (09/12/2012)
+improvement
+	Ajout d'une calculatrice dans le menu "Outils".
+	On peut à présent saisir une formule dans les champs de montant (exemple 3*45 au lieu de 135).
+fix
+	Le menu "Opérations/Convertir en opération périodique" provoquait une erreur.
 
 version	0.12.1 (03/12/2012)
 fix

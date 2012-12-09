@@ -1,7 +1,9 @@
 package net.yapbam.gui.tools.calculator;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 
@@ -14,9 +16,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Locale;
 
 @SuppressWarnings("serial")
 public class CalculatorPanel extends JPanel {
+	private static final char POINT = '.';
+	
 	private JTextField result;
 	private CalculatorButton openBracket;
 	private CalculatorButton closeBracket;
@@ -39,18 +48,127 @@ public class CalculatorPanel extends JPanel {
 	private CalculatorButton btnEquals;
 	private CalculatorButton btnClear;
 	
+	private HashMap<Character, JButton> map;
+	private char decimalSeparator;
 	private StringBuilder formula;
 	private Double value;
 	private DoubleEvaluator evaluator;
 	private Color validColor; 
 	private Color invalidColor; 
 	
+	/**
+	 * Creates the panel with the default locale.
+	 */
+	public CalculatorPanel() {
+		this(Locale.getDefault());
+	}
+
+	/**
+	 * Creates the panel.
+	 * @param locale the locale
+	 */
+	public CalculatorPanel(Locale locale) {
+		this.evaluator = new DoubleEvaluator();
+		this.formula = new StringBuilder();
+		this.validColor = getResult().getForeground();
+		this.invalidColor = halfContrast(validColor, getResult().getBackground());
+		
+		// Initialize stuff to be able to simulate click on button while pressing keys
+		initCharToButton();
+		// Init GUI
+		this.initialize();
+		// Set the locale
+		setLocale(locale);
+		// Set the point as an equivalent to the decimal separator
+		setPointIsADecimalSeparator(true);
+	}
+	
+	private Color halfContrast(Color c1, Color c2) {
+		return new Color((c1.getRed()+c2.getRed())/2, (c1.getGreen()+c2.getGreen())/2, (c1.getBlue()+c2.getBlue())/2);
+	}
+	
+	/* Sets the calculator locale.
+	 * <br>The decimal character depends on the locale.
+	 * @see java.awt.Component#setLocale(java.util.Locale)
+	 */
+	@Override
+	public void setLocale(Locale locale) {
+		this.map.remove(decimalSeparator);
+		this.decimalSeparator = ((DecimalFormat)NumberFormat.getNumberInstance(locale)).getDecimalFormatSymbols().getDecimalSeparator();
+		this.map.put(decimalSeparator, getBtnDecimal());
+		getBtnDecimal().setText(new String(new char[]{decimalSeparator}));
+		super.setLocale(locale);
+	}
+	
+	/** Sets the point as always equivalent to a decimal separator. 
+	 * <br>Some countries do not have the point as decimal separator, but their numerical keyboard has.
+	 * By default, this panel considers the point as a decimal separator. For instance, in France, this
+	 * results in having the ',' and the '.' keys outputting a decimal separator ','.
+	 * <br>You may set always to false in order to change this behavior
+	 * @param always false to only accept the locale decimal separator.
+	 * @see #setLocale(Locale)
+	 */
+	public void setPointIsADecimalSeparator(boolean always) {
+		if (decimalSeparator!=POINT) {
+			if (always) {
+				this.map.put(POINT, getBtnDecimal());
+			} else {
+				this.map.remove(POINT);
+			}
+		}
+	}
+
+	private void initCharToButton() {
+		this.addKeyListener(new KeyAdapter() {
+			/* (non-Javadoc)
+			 * @see java.awt.event.KeyAdapter#keyTyped(java.awt.event.KeyEvent)
+			 */
+			@Override
+			public void keyTyped(KeyEvent e) {
+				int modifiers = e.getModifiers();
+				if ((modifiers&~KeyEvent.SHIFT_MASK)==0) {
+					JButton btn = map.get(Character.toUpperCase(e.getKeyChar()));
+					if (btn!=null) {
+						btn.doClick();
+//					} else {
+//						System.out.println ((int)e.getKeyChar()+" ("+e.getModifiers()+")");
+					}
+				}
+				super.keyTyped(e);
+			}
+		});
+		this.setFocusable(true);
+		// Initialize the character to button map 		
+		this.map = new HashMap<Character, JButton>();
+		map.put('0', getBtn0());
+		map.put('1', getBtn1());
+		map.put('2', getBtn2());
+		map.put('3', getBtn3());
+		map.put('4', getBtn4());
+		map.put('5', getBtn5());
+		map.put('6', getBtn6());
+		map.put('7', getBtn7());
+		map.put('8', getBtn8());
+		map.put('9', getBtn9());
+		map.put('(', getOpenBracket());
+		map.put(')', getCloseBracket());
+		map.put('C', getBtnClear());
+		map.put((char) 8, getBtnErase());
+		map.put((char) 127, getBtnErase());
+		map.put('=', getBtnEquals());
+		map.put((char) 10, getBtnEquals());
+		map.put('+', getBtnPlus());
+		map.put('-', getBtnMinus());
+		map.put('/', getBtnDivide());
+		map.put('*', getBtnMultiply());
+		// The decimal point is added in the map by setLocale
+	}
+
 	private void doChar(char character) {
-		System.out.println("doChar('"+character+"') : "+(int)character);
 		if ((character>='0') && (character<='9')) {
 			// digit
 			formula.append(character);
-		} else if (character==getBtnDecimal().character) {
+		} else if (character==decimalSeparator) {
 			// decimal point
 			formula.append(character);
 		} else if ((character=='+') || (character=='-') || (character=='*') || (character=='/') || (character=='(') || (character==')')) {
@@ -70,23 +188,18 @@ public class CalculatorPanel extends JPanel {
 			}
 		}
 		try {
-			value = evaluator.evaluate(formula.toString());
+			// Evaluator expects point as decimal separator
+			String evaluatedString = formula.toString().replace(decimalSeparator, POINT); 
+			value = evaluator.evaluate(evaluatedString);
 		} catch (IllegalArgumentException e) {
 			value = null;
 		}
 		getResult().setForeground(value==null?this.invalidColor:this.validColor);
-		getResult().setText(formula.toString());
+		getBtnEquals().setEnabled(value!=null);
+		getResult().setText(formula.toString().replace(POINT, decimalSeparator));
 	}
 
-	/**
-	 * Create the panel.
-	 */
-	public CalculatorPanel() {
-		this.evaluator = new DoubleEvaluator();
-		this.formula = new StringBuilder();
-		this.validColor = getResult().getForeground();
-		this.invalidColor = validColor.brighter();
-		
+	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_result = new GridBagConstraints();
@@ -226,19 +339,6 @@ public class CalculatorPanel extends JPanel {
 		gbc_btnEquals.gridx = 4;
 		gbc_btnEquals.gridy = 3;
 		add(getBtnEquals(), gbc_btnEquals);
-
-		this.addKeyListener(new KeyAdapter() {
-			/* (non-Javadoc)
-			 * @see java.awt.event.KeyAdapter#keyTyped(java.awt.event.KeyEvent)
-			 */
-			@Override
-			public void keyTyped(KeyEvent e) {
-				doChar(e.getKeyChar());
-				super.keyTyped(e);
-			}
-		});
-		this.setFocusable(true);
-		this.requestFocus();
 	}
 
 	private JTextField getResult() {
@@ -355,7 +455,12 @@ public class CalculatorPanel extends JPanel {
 	}
 	private CalculatorButton getBtnErase() {
 		if (btnErase == null) {
-			btnErase = new CalculatorButton("<-");
+			btnErase = new CalculatorButton("<");
+	    URL imgURL = getClass().getResource("backspace.png");
+	    if (imgURL != null) {
+				btnErase.setText("");
+				btnErase.setIcon(new ImageIcon(imgURL));
+	    }
 			btnErase.character=(char)8;
 		}
 		return btnErase;
@@ -377,8 +482,8 @@ public class CalculatorPanel extends JPanel {
 		private char character;
 		
 		public CalculatorButton(String name) {
-			super(name);
-			if (name.length()>0) character = name.charAt(0);
+			super();
+			setText(name);
 			setFocusable(false);
 			addActionListener(new ActionListener() {
 				@Override
@@ -386,6 +491,15 @@ public class CalculatorPanel extends JPanel {
 					doChar(character);
 				}
 			});
+		}
+
+		/* (non-Javadoc)
+		 * @see javax.swing.AbstractButton#setText(java.lang.String)
+		 */
+		@Override
+		public void setText(String text) {
+			if (text.length()>0) character = text.charAt(0);
+			super.setText(text);
 		}
 	}
 }
