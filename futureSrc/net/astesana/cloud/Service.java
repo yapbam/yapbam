@@ -51,10 +51,6 @@ public abstract class Service <T extends Account<? extends Object>>{
 		}
 	}
 	
-//	public void createAccount(String name, V connectionData) {
-//		
-//	}
-//
 	File getCacheRoot() {
 		return root;
 	}
