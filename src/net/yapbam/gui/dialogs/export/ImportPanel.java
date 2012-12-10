@@ -150,7 +150,7 @@ public class ImportPanel extends JPanel {
 					return new JTableHeader(columnModel) {
 						@Override
 						public String getToolTipText(MouseEvent e) {
-							String tip = null;
+							String tip;
 							java.awt.Point p = e.getPoint();
 							int index = columnModel.getColumnIndexAtX(p.x);
 							int realIndex = columnModel.getColumn(index).getModelIndex();
@@ -158,6 +158,10 @@ public class ImportPanel extends JPanel {
 								tip = LocalizationData.get("ImportDialog.linkedTo.toolTip"); //$NON-NLS-1$
 							} else if (realIndex == 2) {
 								tip = LocalizationData.get("ImportDialog.importedFields.toolTip"); //$NON-NLS-1$
+							} else {
+								// This method should not return null (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4805978)
+								// I don't now what could be a good tip for the first column ... column name will do the job. 
+								tip = jTable.getColumnName(0);
 							}
 							return tip;
 						}

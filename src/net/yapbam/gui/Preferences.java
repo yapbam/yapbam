@@ -121,8 +121,13 @@ public class Preferences {
 	
 	private void setToDefault() {
 		this.properties.clear();
-		this.properties.put(LANGUAGE, LANGUAGE_DEFAULT_VALUE);
-		this.properties.put(COUNTRY, COUNTRY_DEFAULT_VALUE);
+		put(LANGUAGE, LANGUAGE_DEFAULT_VALUE);
+		put(COUNTRY, COUNTRY_DEFAULT_VALUE);
+	}
+	
+	private void put(String key, String value) {
+		PreferencesUtils.verifyPreferencesCompliance(key, value);
+		this.properties.put(key, value);
 	}
 	
 	/** Gets whether it is the first time Yapbam is launched on this machine or not.
@@ -199,8 +204,8 @@ public class Preferences {
 	}
 	
 	public void setLocale(Locale locale, boolean defaultCountry, boolean defaultLanguage) {
-		this.properties.put(LANGUAGE, defaultLanguage?LANGUAGE_DEFAULT_VALUE:locale.getLanguage());
-		this.properties.put(COUNTRY, defaultCountry?COUNTRY_DEFAULT_VALUE:locale.getCountry());
+		put(LANGUAGE, defaultLanguage?LANGUAGE_DEFAULT_VALUE:locale.getLanguage());
+		put(COUNTRY, defaultCountry?COUNTRY_DEFAULT_VALUE:locale.getCountry());
 	}
 	
 	/** Gets the preferred look and feel.
@@ -232,7 +237,7 @@ public class Preferences {
 	}
 
 	public void setLookAndFeel(String lookAndFeelName) {
-		this.properties.put(LOOK_AND_FEEL, lookAndFeelName);
+		put(LOOK_AND_FEEL, lookAndFeelName);
 	}
 	
 	public String getHttpProxyHost() {
@@ -283,13 +288,13 @@ public class Preferences {
 			this.properties.remove(PROXY);
 			user = null;
 		} else {
-			this.properties.put(PROXY, proxyHost + ":" + proxyPort); //$NON-NLS-1$
+			put(PROXY, proxyHost + ":" + proxyPort); //$NON-NLS-1$
 		}
 		if (user == null) {
 			Authenticator.setDefault(null);
 			this.properties.remove(PROXY_AUTHENTICATION);
 		} else {
-			this.properties.setProperty(PROXY_AUTHENTICATION, Crypto.encrypt(KEY, user + ":" + password)); //$NON-NLS-1$
+			put(PROXY_AUTHENTICATION, Crypto.encrypt(KEY, user + ":" + password)); //$NON-NLS-1$
 			setAuthentication();
 		}
 	}
