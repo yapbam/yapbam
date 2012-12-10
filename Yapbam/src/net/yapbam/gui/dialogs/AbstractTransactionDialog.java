@@ -14,6 +14,7 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import javax.swing.*;
 
@@ -401,6 +402,10 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	@Override
 	public void setVisible(boolean visible) {
 		String prefix = this.getClass().getCanonicalName();
+		int max = Preferences.MAX_KEY_LENGTH-15;
+		if (prefix.length()>max) {
+			prefix = prefix.substring(prefix.length()-max);
+		}
 		if (visible) {
 			subtransactionsPanel.restoreState(prefix);
 		} else {

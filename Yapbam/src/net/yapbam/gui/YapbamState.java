@@ -170,7 +170,7 @@ public class YapbamState {
 			}
 		}
 		if (buf.length()>0) {
-			properties.put(prefix+COLUMN_SORTER, buf.toString());
+			put(prefix+COLUMN_SORTER, buf.toString());
 		} else {
 			properties.remove(prefix+COLUMN_SORTER);
 		}
@@ -183,23 +183,23 @@ public class YapbamState {
 				TableColumn column = xModel.getColumn(viewIndex, false);
 				int modelIndex = column.getModelIndex();
 				// Save the column width
-				properties.put(prefix+COLUMN_WIDTH+modelIndex, Integer.toString(column.getWidth()));
+				put(prefix+COLUMN_WIDTH+modelIndex, Integer.toString(column.getWidth()));
 				// Save the column order (if two or more columns were inverted)
-				properties.put(prefix+COLUMN_INDEX+viewIndex, Integer.toString(modelIndex));
+				put(prefix+COLUMN_INDEX+viewIndex, Integer.toString(modelIndex));
 				String key = prefix+COLUMN_HIDDEN+modelIndex;
-				properties.put(key, Boolean.valueOf(!xModel.isColumnVisible(column)).toString());
+				put(key, Boolean.valueOf(!xModel.isColumnVisible(column)).toString());
 			}
 		} else {
 			for (int viewIndex = 0; viewIndex < model.getColumnCount(); viewIndex++) {
 				int modelIndex = table.convertColumnIndexToModel(viewIndex);
 				// Save the column width
-				properties.put(prefix+COLUMN_WIDTH+modelIndex, Integer.toString(model.getColumn(viewIndex).getWidth()));
+				put(prefix+COLUMN_WIDTH+modelIndex, Integer.toString(model.getColumn(viewIndex).getWidth()));
 				// Save the column order (if two or more columns were inverted)
-				properties.put(prefix+COLUMN_INDEX+viewIndex, Integer.toString(modelIndex));
+				put(prefix+COLUMN_INDEX+viewIndex, Integer.toString(modelIndex));
 			}
 		}
-//		properties.put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
-//		YapbamState.put(prefix+SCROLL_POSITION, table.getVisibleRect());
+//		put(prefix+SELECTED_ROW, Integer.toString(table.getSelectedRow()));
+//		put(prefix+SCROLL_POSITION, table.getVisibleRect());
 	}
 	
 	public void saveState(TabbedPane tabbedPane, String prefix) {
@@ -240,6 +240,9 @@ public class YapbamState {
 	 * @see PreferencesUtils#verifyPreferencesCompliance(String, String)
 	 */
 	public void put(String key, String value) {
+		if (key.startsWith("net.yapbam.gui.dialogs.periodicaltransaction.PeriodicalTransactionDialog")) {
+			System.out.println ("stopped here");
+		}
 		PreferencesUtils.verifyPreferencesCompliance(key, value);
 		properties.put(key, value);
 	}
@@ -251,11 +254,11 @@ public class YapbamState {
 	}
 	
 	public void put (String key, Date date) {
-		properties.put(key, Integer.toString(DateUtils.dateToInteger(date)));
+		put(key, Integer.toString(DateUtils.dateToInteger(date)));
 	}
 	
 	public void put(String key, Rectangle value) {
-		properties.put(key, value.x+","+value.y+","+value.width+","+value.height); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		put(key, value.x+","+value.y+","+value.width+","+value.height); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	public Rectangle getRectangle(String key) {
@@ -335,7 +338,7 @@ public class YapbamState {
 			String xmlContent = Base64.encodeBase64String(stream.toByteArray());
 			put(key, xmlContent);
 		} catch (IOException e) {
-				throw new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
 	}
 

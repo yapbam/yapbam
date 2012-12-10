@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
+version	0.13.1 (10/12/2012)
+fix
+	Lorsque Yapbam était installé dans un dossier vérouillé en écriture, ou installé à un emplacement protégé par l'<a href="http://fr.wikipedia.org/wiki/User_Account_Control">UAC de Windows</a>, comme le dossier "Program files", et qu'une opération périodique avait été éditée, une erreur survenait à la fermeture de l'application.
+
 version	0.13.0 (09/12/2012)
 improvement
 	Ajout d'une calculatrice dans le menu "Outils".
