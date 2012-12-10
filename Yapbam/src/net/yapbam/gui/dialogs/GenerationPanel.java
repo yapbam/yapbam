@@ -161,6 +161,10 @@ public class GenerationPanel extends JPanel {
 		return currentNextDate;
 	}
 	
+	public boolean getNextDateIsValid() {
+		return getDate().isContentValid();
+	}
+	
 	public void setNextDate(Date next) {
 		if (!areEquals(next, currentNextDate)) {
 			Object old = currentNextDate;
@@ -407,4 +411,7 @@ public class GenerationPanel extends JPanel {
 		return lastDate;
 	}
 
+	public boolean getLastDateIsValid() {
+		return getLastDate().isContentValid();
+	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"

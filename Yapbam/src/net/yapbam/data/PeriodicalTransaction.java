@@ -32,10 +32,8 @@ public class PeriodicalTransaction extends AbstractTransaction {
 	 * @param nextDateBuilder The DateStepper that will compute the next generation date.
 	 * @throws IllegalArgumentException if nextDate is after nextDateBuilder's end date
 	 */
-	public PeriodicalTransaction(String description, String comment, double amount,
-			Account account, Mode mode, Category category,
-			List<SubTransaction> subTransactions, Date nextDate,
-			boolean enabled, DateStepper nextDateBuilder) {
+	public PeriodicalTransaction(String description, String comment, double amount, Account account, Mode mode, Category category,
+			List<SubTransaction> subTransactions, Date nextDate, boolean enabled, DateStepper nextDateBuilder) {
 		super(description, comment, amount, account, mode, category, subTransactions);
 		if (enabled && (nextDate==null)) throw new IllegalArgumentException("Next date is Null and enabled is true"); //$NON-NLS-1$
 		this.nextDate = DateUtils.dateToInteger(nextDate);

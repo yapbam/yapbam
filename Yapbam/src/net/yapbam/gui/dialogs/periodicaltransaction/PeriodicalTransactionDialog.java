@@ -99,12 +99,14 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 	@Override
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause(); 
-		if ((disabledCause!=null) || (generationPanel==null) || !generationPanel.isActivated()) return disabledCause;
+		if ((disabledCause!=null) || (generationPanel==null)) return disabledCause;
+		if (!generationPanel.getNextDateIsValid()) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
 		Date nextDate = generationPanel.getNextDate();
-		if (nextDate==null) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
+		if ((nextDate==null) && generationPanel.isActivated()) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
 		DateStepper dateStepper = generationPanel.getDateStepper();
 		if (dateStepper==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper"); //$NON-NLS-1$
-		if ((dateStepper.getLastDate()!=null) && (dateStepper.getLastDate().compareTo(nextDate)<0)) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDateAfterEnd"); //$NON-NLS-1$
+		if (!generationPanel.getLastDateIsValid()) return LocalizationData.get("PeriodicalTransactionDialog.error.endDate"); //$NON-NLS-1$
+		if ((dateStepper.getLastDate()!=null) && (nextDate!=null) && (dateStepper.getLastDate().compareTo(nextDate)<0)) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDateAfterEnd"); //$NON-NLS-1$
 		return null;
 	}
 }

@@ -9,6 +9,7 @@ improvement
 version	0.13.1 (10/12/2012)
 fix
 	Lorsque Yapbam était installé dans un dossier vérouillé en écriture, ou installé à un emplacement protégé par l'<a href="http://fr.wikipedia.org/wiki/User_Account_Control">UAC de Windows</a>, comme le dossier "Program files", et qu'une opération périodique avait été éditée, une erreur survenait à la fermeture de l'application.
+	Dans l'édition des opérations périodique, on pouvait valider une opération non activée avec une date de fin antérieure à la prochaine échéance, ce qui provoquait une erreur.  
 
 version	0.13.0 (09/12/2012)
 improvement
