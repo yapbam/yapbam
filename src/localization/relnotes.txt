@@ -6,11 +6,12 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
-version	0.13.1 (12/10/2012)
+version	0.13.1 (11/12/2012)
 fix
 	When Yapbam was installed in a write protected folder or in a folder protected by <a href="http://en.wikipedia.org/wiki/User_Account_Control">Windows UAC windows</a>, and a periodic transaction was edited, quitting Yapbam caused an error.
 	When editing periodical transaction, it was possible to validate a not activated transaction with an end date before the next deadline. This caused an error.
-
+	Rounding errors in the calculator.
+	
 version	0.13.0 (12/09/2012)
 improvement
 	Adds a calculator in the "Tools" menu.
