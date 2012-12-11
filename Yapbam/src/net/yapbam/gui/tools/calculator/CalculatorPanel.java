@@ -7,6 +7,9 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 
+import net.astesana.javaluator.BracketPair;
+import net.astesana.javaluator.DoubleEvaluator;
+
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -24,9 +27,17 @@ import java.util.Locale;
 
 @SuppressWarnings("serial")
 public class CalculatorPanel extends JPanel {
+	private static final char CLEAR = 'C';
+	private static final char EQUAL = '=';
+	private static final Character PLUS = DoubleEvaluator.PLUS.getSymbol().charAt(0);
+	private static final Character MINUS = DoubleEvaluator.MINUS.getSymbol().charAt(0);
+	private static final Character MULTIPLY = DoubleEvaluator.MULTIPLY.getSymbol().charAt(0);
+	private static final Character DIVIDE = DoubleEvaluator.DIVIDE.getSymbol().charAt(0);
+	private static final Character OPEN = BracketPair.PARENTHESES.getOpen().charAt(0);
+	private static final Character CLOSE = BracketPair.PARENTHESES.getClose().charAt(0);
 	private static final char POINT = '.';
 
-	private static final int PRECISION = 10;
+	private static final int PRECISION = 20;
 
 	private JTextField result;
 	private CalculatorButton openBracket;
@@ -57,7 +68,8 @@ public class CalculatorPanel extends JPanel {
 	private BigDecimal value;
 	private BigDecimalEvaluator evaluator;
 	private Color validColor; 
-	private Color invalidColor; 
+	private Color invalidColor;
+	private boolean formulaIsResult;
 	
 	/**
 	 * Creates the panel with the default locale.
@@ -76,6 +88,7 @@ public class CalculatorPanel extends JPanel {
 		this.internalFormula = new StringBuilder();
 		this.validColor = getResult().getForeground();
 		this.invalidColor = halfContrast(validColor, getResult().getBackground());
+		this.formulaIsResult = false;
 		
 		// Initialize stuff to be able to simulate click on button while pressing keys
 		initCharToButton();
@@ -154,27 +167,30 @@ public class CalculatorPanel extends JPanel {
 		map.put('7', getBtn7());
 		map.put('8', getBtn8());
 		map.put('9', getBtn9());
-		map.put('(', getOpenBracket());
-		map.put(')', getCloseBracket());
-		map.put('C', getBtnClear());
+		map.put(OPEN, getOpenBracket());
+		map.put(CLOSE, getCloseBracket());
+		map.put(CLEAR, getBtnClear());
 		map.put((char) 8, getBtnErase());
 		map.put((char) 127, getBtnErase());
-		map.put('=', getBtnEquals());
+		map.put(EQUAL, getBtnEquals());
 		map.put((char) 10, getBtnEquals());
-		map.put('+', getBtnPlus());
-		map.put('-', getBtnMinus());
-		map.put('/', getBtnDivide());
-		map.put('*', getBtnMultiply());
+		map.put(PLUS, getBtnPlus());
+		map.put(MINUS, getBtnMinus());
+		map.put(DIVIDE, getBtnDivide());
+		map.put(MULTIPLY, getBtnMultiply());
 		// The decimal point is added in the map by setLocale
 	}
 
 	private void doChar(char character) {
+		if (character==(char)10) character = EQUAL; // Return is equivalent to =
 		if ((character>='0') && (character<='9')) {
 			// digit
+			if (formulaIsResult) erase();
 			add(character);
 		} else if (character==decimalSeparator) {
+			if (formulaIsResult) erase();
 			add(character);
-		} else if ((character=='+') || (character=='-') || (character=='*') || (character=='/') || (character=='(') || (character==')')) {
+		} else if ((character==PLUS) || (character==MINUS) || (character==MULTIPLY) || (character==DIVIDE) || (character==OPEN) || (character==CLOSE)) {
 			add(character);
 		} else if ((character==(char)8) || (character==(char)127)) {
 			// Delete last char
@@ -185,11 +201,10 @@ public class CalculatorPanel extends JPanel {
 				internalFormula.delete(0, internalFormula.length());
 				internalFormula.append(formula);
 			}
-		} else if (Character.toUpperCase(character)=='C') {
+		} else if (Character.toUpperCase(character)==CLEAR) {
 			// Clear
-			internalFormula.delete(0, internalFormula.length());
-			formula.delete(0, formula.length());
-		} else if ((character=='=') || (character==(char)10)) {
+			erase();
+		} else if (character==EQUAL) {
 			// Evaluate the expression
 			if (this.value!=null) {
 				formula.delete(0, formula.length());
@@ -208,9 +223,15 @@ public class CalculatorPanel extends JPanel {
 		} catch (IllegalArgumentException e) {
 			value = null;
 		}
+		formulaIsResult = (this.value!=null) && (character==EQUAL);
 		getResult().setForeground(value==null?this.invalidColor:this.validColor);
 		getBtnEquals().setEnabled(value!=null);
 		getResult().setText(formula.toString().replace(POINT, decimalSeparator));
+	}
+
+	private void erase() {
+		internalFormula.delete(0, internalFormula.length());
+		formula.delete(0, formula.length());
 	}
 
 	private void add(char character) {
@@ -371,110 +392,110 @@ public class CalculatorPanel extends JPanel {
 	}
 	private CalculatorButton getOpenBracket() {
 		if (openBracket == null) {
-			openBracket = new CalculatorButton("(");
+			openBracket = new CalculatorButton(OPEN);
 		}
 		return openBracket;
 	}
 	private CalculatorButton getCloseBracket() {
 		if (closeBracket == null) {
-			closeBracket = new CalculatorButton(")");
+			closeBracket = new CalculatorButton(CLOSE);
 		}
 		return closeBracket;
 	}
 	private CalculatorButton getBtn7() {
 		if (btn7 == null) {
-			btn7 = new CalculatorButton("7");
+			btn7 = new CalculatorButton('7');
 			btn7.setFocusable(false);
 		}
 		return btn7;
 	}
 	private CalculatorButton getBtn6() {
 		if (btn6 == null) {
-			btn6 = new CalculatorButton("6");
+			btn6 = new CalculatorButton('6');
 		}
 		return btn6;
 	}
 	private CalculatorButton getBtn5() {
 		if (btn5 == null) {
-			btn5 = new CalculatorButton("5");
+			btn5 = new CalculatorButton('5');
 		}
 		return btn5;
 	}
 	private CalculatorButton getBtn4() {
 		if (btn4 == null) {
-			btn4 = new CalculatorButton("4");
+			btn4 = new CalculatorButton('4');
 		}
 		return btn4;
 	}
 	private CalculatorButton getBtn3() {
 		if (btn3 == null) {
-			btn3 = new CalculatorButton("3");
+			btn3 = new CalculatorButton('3');
 		}
 		return btn3;
 	}
 	private CalculatorButton getBtn2() {
 		if (btn2 == null) {
-			btn2 = new CalculatorButton("2");
+			btn2 = new CalculatorButton('2');
 		}
 		return btn2;
 	}
 	private CalculatorButton getBtn8() {
 		if (btn8 == null) {
-			btn8 = new CalculatorButton("8");
+			btn8 = new CalculatorButton('8');
 		}
 		return btn8;
 	}
 	private CalculatorButton getBtn9() {
 		if (btn9 == null) {
-			btn9 = new CalculatorButton("9");
+			btn9 = new CalculatorButton('9');
 		}
 		return btn9;
 	}
 	private CalculatorButton getBtn1() {
 		if (btn1 == null) {
-			btn1 = new CalculatorButton("1");
+			btn1 = new CalculatorButton('1');
 		}
 		return btn1;
 	}
 	private CalculatorButton getBtn0() {
 		if (btn0 == null) {
-			btn0 = new CalculatorButton("0");
+			btn0 = new CalculatorButton('0');
 		}
 		return btn0;
 	}
 	private CalculatorButton getBtnDecimal() {
 		if (btnDecimal == null) {
-			btnDecimal = new CalculatorButton(".");
+			btnDecimal = new CalculatorButton(POINT);
 		}
 		return btnDecimal;
 	}
 	private CalculatorButton getBtnPlus() {
 		if (btnPlus == null) {
-			btnPlus = new CalculatorButton("+");
+			btnPlus = new CalculatorButton(PLUS);
 		}
 		return btnPlus;
 	}
 	private CalculatorButton getBtnMinus() {
 		if (btnMinus == null) {
-			btnMinus = new CalculatorButton("-");
+			btnMinus = new CalculatorButton(MINUS);
 		}
 		return btnMinus;
 	}
 	private CalculatorButton getBtnMultiply() {
 		if (btnMultiply == null) {
-			btnMultiply = new CalculatorButton("*");
+			btnMultiply = new CalculatorButton(MULTIPLY);
 		}
 		return btnMultiply;
 	}
 	private CalculatorButton getBtnDivide() {
 		if (btnDivide == null) {
-			btnDivide = new CalculatorButton("/");
+			btnDivide = new CalculatorButton(DIVIDE);
 		}
 		return btnDivide;
 	}
 	private CalculatorButton getBtnErase() {
 		if (btnErase == null) {
-			btnErase = new CalculatorButton("<");
+			btnErase = new CalculatorButton('<');
 	    URL imgURL = getClass().getResource("backspace.png");
 	    if (imgURL != null) {
 				btnErase.setText("");
@@ -486,13 +507,13 @@ public class CalculatorPanel extends JPanel {
 	}
 	private CalculatorButton getBtnEquals() {
 		if (btnEquals == null) {
-			btnEquals = new CalculatorButton("=");
+			btnEquals = new CalculatorButton(EQUAL);
 		}
 		return btnEquals;
 	}
 	private CalculatorButton getBtnClear() {
 		if (btnClear == null) {
-			btnClear = new CalculatorButton("C");
+			btnClear = new CalculatorButton(CLEAR);
 		}
 		return btnClear;
 	}
@@ -500,9 +521,9 @@ public class CalculatorPanel extends JPanel {
 	private class CalculatorButton extends JButton {
 		private char character;
 		
-		public CalculatorButton(String name) {
+		public CalculatorButton(char name) {
 			super();
-			setText(name);
+			setText(new String(new char[]{name}));
 			setFocusable(false);
 			addActionListener(new ActionListener() {
 				@Override

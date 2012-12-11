@@ -59,9 +59,6 @@ public class BigDecimalEvaluator extends AbstractEvaluator<BigDecimal> {
 				return ope1.divide(ope2, mathContext);
 			}
 		}
-		// TODO Auto-generated method stub
 		return super.evaluate(operator, operands, evaluationContext);
 	}
-	
-	
 }
