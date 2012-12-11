@@ -7,8 +7,6 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 
-import net.astesana.javaluator.DoubleEvaluator;
-
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -16,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -25,7 +25,9 @@ import java.util.Locale;
 @SuppressWarnings("serial")
 public class CalculatorPanel extends JPanel {
 	private static final char POINT = '.';
-	
+
+	private static final int PRECISION = 10;
+
 	private JTextField result;
 	private CalculatorButton openBracket;
 	private CalculatorButton closeBracket;
@@ -51,8 +53,9 @@ public class CalculatorPanel extends JPanel {
 	private HashMap<Character, JButton> map;
 	private char decimalSeparator;
 	private StringBuilder formula;
-	private Double value;
-	private DoubleEvaluator evaluator;
+	private StringBuilder internalFormula;
+	private BigDecimal value;
+	private BigDecimalEvaluator evaluator;
 	private Color validColor; 
 	private Color invalidColor; 
 	
@@ -68,8 +71,9 @@ public class CalculatorPanel extends JPanel {
 	 * @param locale the locale
 	 */
 	public CalculatorPanel(Locale locale) {
-		this.evaluator = new DoubleEvaluator();
+		this.evaluator = new BigDecimalEvaluator(new MathContext(PRECISION+3));
 		this.formula = new StringBuilder();
+		this.internalFormula = new StringBuilder();
 		this.validColor = getResult().getForeground();
 		this.invalidColor = halfContrast(validColor, getResult().getBackground());
 		
@@ -167,29 +171,39 @@ public class CalculatorPanel extends JPanel {
 	private void doChar(char character) {
 		if ((character>='0') && (character<='9')) {
 			// digit
-			formula.append(character);
+			add(character);
 		} else if (character==decimalSeparator) {
-			// decimal point
-			formula.append(character);
+			add(character);
 		} else if ((character=='+') || (character=='-') || (character=='*') || (character=='/') || (character=='(') || (character==')')) {
-			// Operator
-			formula.append(character);
+			add(character);
 		} else if ((character==(char)8) || (character==(char)127)) {
 			// Delete last char
-			if (formula.length()>0) formula.delete(formula.length()-1, formula.length());
+			if (formula.length()>0) {
+				formula.delete(formula.length()-1, formula.length());
+				// The internal formula should be replaced by a strict copy of the displayed formula.
+				// If we do not do that, the sequence 1 / 3 = <- will result in having 0.3333 displayed and 0.333333333 internally
+				internalFormula.delete(0, internalFormula.length());
+				internalFormula.append(formula);
+			}
 		} else if (Character.toUpperCase(character)=='C') {
 			// Clear
+			internalFormula.delete(0, internalFormula.length());
 			formula.delete(0, formula.length());
 		} else if ((character=='=') || (character==(char)10)) {
 			// Evaluate the expression
 			if (this.value!=null) {
 				formula.delete(0, formula.length());
-				formula.append(Double.toString(this.value));
+				internalFormula.delete(0, internalFormula.length());
+				internalFormula.append(this.value.toString());
+				DecimalFormat format = (DecimalFormat) NumberFormat.getInstance();
+				format.setMinimumFractionDigits(0);
+				format.setMaximumFractionDigits(PRECISION);
+				formula.append(format.format(this.value));
 			}
 		}
 		try {
 			// Evaluator expects point as decimal separator
-			String evaluatedString = formula.toString().replace(decimalSeparator, POINT); 
+			String evaluatedString = internalFormula.toString().replace(decimalSeparator, POINT); 
 			value = evaluator.evaluate(evaluatedString);
 		} catch (IllegalArgumentException e) {
 			value = null;
@@ -197,6 +211,11 @@ public class CalculatorPanel extends JPanel {
 		getResult().setForeground(value==null?this.invalidColor:this.validColor);
 		getBtnEquals().setEnabled(value!=null);
 		getResult().setText(formula.toString().replace(POINT, decimalSeparator));
+	}
+
+	private void add(char character) {
+		formula.append(character);
+		internalFormula.append(character);
 	}
 
 	private void initialize() {
