@@ -14,9 +14,12 @@ public abstract class Service <T extends Account<? extends Object>>{
 	private Collection<T> accounts;
 
 	/** Constructor.
-	 * @param root The root folder of the service (the place where all accounts are cached).
+	 * @param root The root folder of the service (the place where all accounts are cached).<br>
+	 * If the folder doesn't exists, it is created.
+	 * @throws IllegalArgumentException if it is not possible to create the folder (or root is a file, not a folder)  
 	 */
 	protected Service(File root) {
+		if (!root.exists()) root.mkdirs();
 		if (!root.isDirectory()) throw new IllegalArgumentException();
 		this.root = root;
 		refreshAccounts();
@@ -27,7 +30,7 @@ public abstract class Service <T extends Account<? extends Object>>{
 	 * only have to call the account's constructor with a File argument and catch possible exceptions. 
 	 * @param folder The folder where the account is cached
 	 * @return An account, or null if the folder doesn't not contain a valid account.
-	 * @see Account#Account(File)
+	 * @see Account#Account(Service, File)
 	 */
 	protected abstract T buildAccount(File folder);
 	
