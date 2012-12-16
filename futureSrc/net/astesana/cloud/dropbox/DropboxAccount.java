@@ -1,13 +1,8 @@
 package net.astesana.cloud.dropbox;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +10,6 @@ import java.util.List;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.cloud.Account;
@@ -23,7 +17,7 @@ import net.astesana.cloud.Entry;
 import net.astesana.cloud.exceptions.UnreachableHostException;
 import net.yapbam.gui.persistence.Cancellable;
 
-public class DropboxAccount extends Account<AccessTokenPair> {
+public class DropboxAccount extends Account {
 	private long quota;
 	private long used;
 
@@ -33,28 +27,10 @@ public class DropboxAccount extends Account<AccessTokenPair> {
 		this.used = -1;
 	}
 	
-	public DropboxAccount(DropboxService service, String id, String name, AccessTokenPair connectionData) throws IOException {
+	public DropboxAccount(DropboxService service, String id, String name, Serializable connectionData) throws IOException {
 		super(service, id, name, connectionData);
 		this.quota = -1;
 		this.used = -1;
-	}
-
-	@Override
-	protected void serializeConnectionData(OutputStream stream) throws IOException {
-		AccessTokenPair pair = getConnectionData();
-		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(stream));
-		out.write(pair.key);
-		out.newLine();
-		out.write(pair.secret);
-		out.flush();
-	}
-
-	@Override
-	protected void deserializeConnectionData(InputStream stream) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(stream));
-		String key = in.readLine();
-		String secret = in.readLine();
-		this.connectionData = new AccessTokenPair(key, secret);
 	}
 	
 	/* (non-Javadoc)

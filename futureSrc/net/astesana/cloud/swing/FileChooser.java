@@ -80,9 +80,9 @@ public abstract class FileChooser extends JPanel {
 	private ComboBox accountsCombo;
 	private JButton btnNewAccount;
 	private JButton deleteButton;
-	private Service<? extends Account<? extends Object>> service;
+	private Service<? extends Account> service;
 	
-	public FileChooser(Service<? extends Account<? extends Object>> service) {
+	public FileChooser(Service<? extends Account> service) {
 		this.service = service;
 		this.filesModel = new FilesTableModel();
 		setLayout(new BorderLayout(0, 0));
@@ -464,12 +464,12 @@ public abstract class FileChooser extends JPanel {
 			accountsCombo.setRenderer(new BasicComboBoxRenderer(){
 				@Override
 				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-					if (value!=null) value = ((Account<? extends Object>)value).getDisplayName();
+					if (value!=null) value = ((Account)value).getDisplayName();
 					return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				}
 			});
-			Collection<? extends Account<? extends Object>> accounts = getService().getAccounts();
-			for (Account<? extends Object> account : accounts) {
+			Collection<? extends Account> accounts = getService().getAccounts();
+			for (Account account : accounts) {
 				accountsCombo.addItem(account);
 			}
 			accountsCombo.addActionListener(new ActionListener() {
@@ -492,7 +492,7 @@ public abstract class FileChooser extends JPanel {
 			btnNewAccount.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Account<? extends Object> account = createNewAccount();
+					Account account = createNewAccount();
 					if (account!=null) {
 						for (int i = 0; i < getAccountsCombo().getItemCount(); i++) {
 							if (((Account)getAccountsCombo().getItemAt(i)).getDisplayName().equals(account.getDisplayName())) {
@@ -531,9 +531,9 @@ public abstract class FileChooser extends JPanel {
 		return deleteButton;
 	}
 
-	protected abstract Account<? extends Object> createNewAccount();
+	protected abstract Account createNewAccount();
 
-	protected Service<? extends Account<? extends Object>> getService() {
+	protected Service<? extends Account> getService() {
 		return service;
 	}
 }

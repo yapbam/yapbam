@@ -18,7 +18,7 @@ public class DropboxFileChooser extends FileChooser {
 	}
 
 	@Override
-	protected Account<? extends Object> createNewAccount() {
+	protected Account createNewAccount() {
 		ConnectionDialog connectionDialog = new ConnectionDialog(Utils.getOwnerWindow(this), ((DropboxService)getService()).getDropboxAPI());
 		connectionDialog.setVisible(true);
 		AccessTokenPair pair = connectionDialog.getResult();

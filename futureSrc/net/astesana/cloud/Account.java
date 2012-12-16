@@ -1,17 +1,13 @@
 package net.astesana.cloud;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,29 +20,29 @@ import org.apache.commons.codec.CharEncoding;
 /** An account in the Cloud, cached in a local folder.
  * @see Service
  */
-public abstract class Account<T> {
+public abstract class Account {
 	private static final String INFO_FILENAME = ".info";
 	private File root;
-	Service<? extends Account<T>> service;
+	Service<? extends Account> service;
 	private String displayName;
-	protected T connectionData;
+	protected Serializable connectionData;
 	
-	protected Account(Service<? extends Account<T>> service, File file) throws IOException {
+	protected Account(Service<? extends Account> service, File file) throws IOException {
 		if (!file.isDirectory()) throw new IllegalArgumentException();
 		this.root = file;
-		FileInputStream stream = new FileInputStream(new File(this.root, INFO_FILENAME));
+		ObjectInputStream stream = new ObjectInputStream(new FileInputStream(new File(this.root, INFO_FILENAME)));
 		try {
-			BufferedReader b = new BufferedReader(new InputStreamReader(stream));
-			String line = b.readLine(); //FIXME This reads all the file. deserializeConnectionData has no more characters in the stream
-			this.displayName = URLDecoder.decode(line, CharEncoding.UTF_8);
-			deserializeConnectionData(stream);
+			this.displayName = (String) stream.readObject();
+			this.connectionData = (Serializable) stream.readObject();
+		} catch (ClassNotFoundException e) {
+			throw new IOException(e);
 		} finally {
 			stream.close();
 		}
 		this.service = service;
 	}
 	
-	protected Account(Service<? extends Account<T>> service, String id, String displayName, T connectionData) throws IOException {
+	protected Account(Service<? extends Account> service, String id, String displayName, Serializable connectionData) throws IOException {
 		this.service = service;
 		this.displayName = displayName;
 		this.connectionData = connectionData;
@@ -56,11 +52,10 @@ public abstract class Account<T> {
 			this.root.mkdirs();
 			if (!this.root.isDirectory()) throw new IOException();
 			File connectionDataFile = new File(this.root, INFO_FILENAME);
-			FileOutputStream stream = new FileOutputStream(connectionDataFile);
+			ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(connectionDataFile));
 			try {
-				BufferedWriter b = new BufferedWriter(new OutputStreamWriter(stream));
-				b.write(URLEncoder.encode(displayName, CharEncoding.UTF_8)); b.newLine(); b.flush();
-				serializeConnectionData(stream);
+				stream.writeObject(this.displayName);
+				stream.writeObject(this.connectionData);
 			} finally {
 				stream.close();
 			}
@@ -69,21 +64,23 @@ public abstract class Account<T> {
 		}
 	}
 	
+	/** Gets this account's display name.
+	 * @return a String
+	 */
 	public String getDisplayName() {
 		return displayName;
 	}
 
-	public Service<? extends Account<T>> getService() {
+	/** Gets the service that hosted this account. 
+	 * @return A service
+	 */
+	public Service<? extends Account> getService() {
 		return this.service;
 	}
 	
-	public T getConnectionData() {
+	public Serializable getConnectionData() {
 		return this.connectionData;
 	}
-
-	protected abstract void serializeConnectionData(OutputStream stream) throws IOException;
-
-	protected abstract void deserializeConnectionData(InputStream stream) throws IOException;
 
 	public abstract Collection<Entry> getRemoteFiles(Cancellable task) throws UnreachableHostException;
 
@@ -109,7 +106,8 @@ public abstract class Account<T> {
 		return -1;
 	}
 	
-
+	/** Deletes the local data about this account.
+	 */
 	public void delete() {
 		delete (this.root);
 	}
