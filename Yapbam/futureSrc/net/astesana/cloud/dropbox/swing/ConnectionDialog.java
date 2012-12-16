@@ -89,6 +89,7 @@ public class ConnectionDialog extends AbstractDialog<DropboxAPI<? extends WebAut
 			public void actionPerformed(ActionEvent event) {
 				Window window = Utils.getOwnerWindow(connectButton);
 				try {
+					data.getSession().unlink();
 					info = data.getSession().getAuthInfo();
 					Browser.show(new URI(info.url), window, LocalizationData.get("dropbox.Chooser.ConnectionDialog.error.unableToLaunchBrowser.title")); //$NON-NLS-1$
 					connectionHasStarted = true;

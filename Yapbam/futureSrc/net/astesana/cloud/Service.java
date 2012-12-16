@@ -9,7 +9,7 @@ import java.util.Collection;
  * @author Jean-Marc Astesana
  * Licence GPL v3
  */
-public abstract class Service <T extends Account<? extends Object>>{
+public abstract class Service <T extends Account>{
 	private File root;
 	private Collection<T> accounts;
 
