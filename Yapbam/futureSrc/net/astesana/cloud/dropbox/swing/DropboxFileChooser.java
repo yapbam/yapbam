@@ -9,6 +9,7 @@ import net.astesana.cloud.Account;
 import net.astesana.cloud.dropbox.DropboxAccount;
 import net.astesana.cloud.dropbox.DropboxService;
 import net.astesana.cloud.swing.FileChooser;
+import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 public class DropboxFileChooser extends FileChooser {
@@ -30,5 +31,9 @@ public class DropboxFileChooser extends FileChooser {
 			//FIXME Alert the user something went wrong
 			return null;
 		}
+	}
+	
+	protected String getRemoteConnectingWording() {
+		return LocalizationData.get("dropbox.Chooser.connecting");
 	}
 }

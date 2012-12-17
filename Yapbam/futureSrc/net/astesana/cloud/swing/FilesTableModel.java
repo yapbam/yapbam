@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.dropbox.client2.DropboxAPI.Entry;
+import net.astesana.cloud.Entry;
 
 @SuppressWarnings("serial")
 public class FilesTableModel extends AbstractTableModel {
@@ -27,7 +27,7 @@ public class FilesTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return rows.get(rowIndex).fileName();
+		return rows.get(rowIndex).getDisplayName();
 	}
 
 	void clear() {
