@@ -34,6 +34,7 @@ import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.cloud.Account;
+import net.astesana.cloud.Entry;
 import net.astesana.cloud.Service;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -143,10 +144,7 @@ public abstract class FileChooser extends JPanel {
 		return dialog.getResult();
 	}
 
-	public boolean refresh() {
-		System.out.println ("refresh");
-		return true;
-//		final Window owner = Utils.getOwnerWindow(this);
+	public void refresh() {
 //		while (true) {
 //			try {
 //				//FIXME This could be a long task ... so, it should be wrapped into the background worker.
@@ -170,46 +168,25 @@ public abstract class FileChooser extends JPanel {
 //				return false; // And exit
 //			}
 //		}
-//		Worker<DropboxInfo, Void> worker = new Worker<DropboxInfo, Void>() {
-//			@Override
-//			protected DropboxInfo doProcessing() throws Exception {
-//				setPhase(LocalizationData.get("dropbox.Chooser.connecting"), -1); //$NON-NLS-1$
-//				DropboxInfo info = new DropboxInfo();
-//				info.account = getDropboxAPI().accountInfo();
-//				info.files = getDropboxAPI().metadata("", 0, null, true, null).contents; //$NON-NLS-1$
-//				return info;
-//			}
-//		};
-//		WorkInProgressFrame frame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker);
-//		frame.setSize(300, frame.getSize().height);
-//		frame.setVisible(true); //$NON-NLS-1$
-//		try {
-//			info = worker.get();
-//			setAccountName(info.account.displayName);
-//			Entry[] entries = info.files.toArray(new Entry[info.files.size()]);
-//			fillTable(entries);
-//			long percentUsed = 100*(info.account.quotaNormal+info.account.quotaShared) / info.account.quota; 
-//			getProgressBar().setValue((int)percentUsed);
-//			double remaining = info.account.quota-info.account.quotaNormal-info.account.quotaShared;
-//			String unit = LocalizationData.get("Generic.data.unit.bytes"); //$NON-NLS-1$
-//			if (remaining>1024) {
-//				unit = LocalizationData.get("Generic.data.unit.kBytes"); //$NON-NLS-1$
-//				remaining = remaining/1024;
-//				if (remaining>1024) {
-//					unit = LocalizationData.get("Generic.data.unit.MBytes"); //$NON-NLS-1$
-//					remaining = remaining/1024;
-//					if (remaining>1024) {
-//						unit = LocalizationData.get("Generic.data.unit.GBytes"); //$NON-NLS-1$
-//						remaining = remaining/1024;
-//					}
-//				}
-//			}
-//			getProgressBar().setString(MessageFormat.format(LocalizationData.get("dropbox.Chooser.freeSpace"), new DecimalFormat("0.0").format(remaining), unit));  //$NON-NLS-1$//$NON-NLS-2$
-//			getFileNameField().setEditable(true);
-//			return true;
-//		} catch (InterruptedException e) {
-//			throw new RuntimeException(e);
-//		} catch (ExecutionException e) {
+		System.out.println ("refresh");
+		
+		Account account = (Account) getAccountsCombo().getSelectedItem();
+		RemoteFileListWorker worker = new RemoteFileListWorker(account);
+		worker.setPhase(getRemoteConnectingWording(), -1); //$NON-NLS-1$
+		final Window owner = Utils.getOwnerWindow(this);
+		WorkInProgressFrame frame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker);
+		frame.setSize(300, frame.getSize().height);
+		Utils.centerWindow(frame, owner);
+		frame.setVisible(true); //$NON-NLS-1$
+		try {
+			Collection<Entry> entries = worker.get();
+			fillTable(entries);
+			getFileNameField().setEditable(true);
+			setQuota(account);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		} catch (ExecutionException e) {
+			//FIXME
 //			if (e.getCause() instanceof DropboxIOException) {
 //				JOptionPane.showMessageDialog(owner, LocalizationData.get("dropbox.Chooser.error.connectionFailed"), LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 //			} else if (e.getCause() instanceof DropboxUnlinkedException) {
@@ -218,10 +195,36 @@ public abstract class FileChooser extends JPanel {
 //			} else {
 //				throw new RuntimeException(e);
 //			}
-//		} catch (CancellationException e) {
-//			// The task was cancelled
-//		}
-//		return false;
+		} catch (CancellationException e) {
+			// The task was cancelled
+			System.out.println ("Cancelled");//FIXME
+			setQuota(null);
+		}
+	}
+
+	private void setQuota(Account account) {
+		if ((account!=null) && (account.getQuota()>0)) {
+			long percentUsed = 100*(account.getUsed()) / account.getQuota(); 
+			getProgressBar().setValue((int)percentUsed);
+			double remaining = account.getQuota()-account.getUsed();
+			String unit = LocalizationData.get("Generic.data.unit.bytes"); //$NON-NLS-1$
+			if (remaining>1024) {
+				unit = LocalizationData.get("Generic.data.unit.kBytes"); //$NON-NLS-1$
+				remaining = remaining/1024;
+				if (remaining>1024) {
+					unit = LocalizationData.get("Generic.data.unit.MBytes"); //$NON-NLS-1$
+					remaining = remaining/1024;
+					if (remaining>1024) {
+						unit = LocalizationData.get("Generic.data.unit.GBytes"); //$NON-NLS-1$
+						remaining = remaining/1024;
+					}
+				}
+			}
+			getProgressBar().setString(MessageFormat.format(LocalizationData.get("dropbox.Chooser.freeSpace"), new DecimalFormat("0.0").format(remaining), unit));  //$NON-NLS-1$//$NON-NLS-2$
+			getProgressBar().setVisible(true);
+		} else {
+			getProgressBar().setVisible(false);
+		}
 	}
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {
@@ -303,9 +306,9 @@ public abstract class FileChooser extends JPanel {
 		}
 		return lblAccount;
 	}
-	private void setAccountName(String name) {
-		getLblAccount().setText(MessageFormat.format(LocalizationData.get("dropbox.Chooser.account"), name)); //$NON-NLS-1$
-	}
+//	private void setAccountName(String name) {
+//		getLblAccount().setText(MessageFormat.format(LocalizationData.get("dropbox.Chooser.account"), name)); //$NON-NLS-1$
+//	}
 	private JPanel getNorthPanel() {
 		if (northPanel == null) {
 			northPanel = new JPanel();
@@ -355,22 +358,22 @@ public abstract class FileChooser extends JPanel {
 		return progressBar;
 	}
 
-//	private void fillTable(Entry[] entries) {
-//		filesModel.clear();
-//		for (Entry entry : entries) {
-//			Entry filtered = filter(entry);
-//			if (filtered!=null) filesModel.add(entry);
-//		}
-//	}
+	private void fillTable(Collection<Entry> entries) {
+		filesModel.clear();
+		for (Entry entry : entries) {
+			Entry filtered = filter(entry);
+			if (filtered!=null) filesModel.add(entry);
+		}
+	}
 
 	/** Filters an entry.
 	 * <br>By default, this method returns the entry path.
 	 * @param entry The entry available in the current Dropbox folder
 	 * @return The entry that will be displayed in the files list, or null to ignore this entry
 	 */
-//	protected Entry filter(Entry entry) {
-//		return entry;
-//	}
+	protected Entry filter(Entry entry) {
+		return entry;
+	}
 
 	/** This method is called after the user granted access to Dropbox.
 	 * <br>By default, this method does nothing except returns true if the access was granted.
@@ -535,5 +538,9 @@ public abstract class FileChooser extends JPanel {
 
 	protected Service<? extends Account> getService() {
 		return service;
+	}
+
+	protected String getRemoteConnectingWording() {
+		return "Connecting to remote host ...";
 	}
 }
