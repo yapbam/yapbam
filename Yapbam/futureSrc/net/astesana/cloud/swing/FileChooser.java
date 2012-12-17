@@ -117,7 +117,6 @@ public abstract class FileChooser extends JPanel {
 		Window owner = Utils.getOwnerWindow(parent);
 		final FileChooserDialog dialog = new FileChooserDialog(owner, title, this);
 		dialog.addWindowListener(new WindowAdapter() {
-
 			/* (non-Javadoc)
 			 * @see java.awt.event.WindowAdapter#windowOpened(java.awt.event.WindowEvent)
 			 */
@@ -197,7 +196,6 @@ public abstract class FileChooser extends JPanel {
 //			}
 		} catch (CancellationException e) {
 			// The task was cancelled
-			System.out.println ("Cancelled");//FIXME
 			setQuota(null);
 		}
 	}
@@ -226,6 +224,7 @@ public abstract class FileChooser extends JPanel {
 			getProgressBar().setVisible(false);
 		}
 	}
+	
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
@@ -280,6 +279,7 @@ public abstract class FileChooser extends JPanel {
 			fileNameField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {	
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
+					int pos = fileNameField.getCaretPosition();
 					int index = -1;
 					for (int rowIndex=0;rowIndex<filesModel.getRowCount();rowIndex++) {
 						if (filesModel.getValueAt(rowIndex, 0).equals(evt.getNewValue())) {
@@ -294,6 +294,8 @@ public abstract class FileChooser extends JPanel {
 						selectionModel.setSelectionInterval(index, index);
 					}
 					firePropertyChange(SELECTED_FILEID_PROPERTY, evt.getOldValue(), evt.getNewValue());
+					pos = Math.min(pos, fileNameField.getText().length());
+					fileNameField.setCaretPosition(pos);
 				}
 			});
 		}
@@ -302,7 +304,6 @@ public abstract class FileChooser extends JPanel {
 	private JLabel getLblAccount() {
 		if (lblAccount == null) {
 			lblAccount = new JLabel(MessageFormat.format(LocalizationData.get("dropbox.Chooser.account"), "")); //$NON-NLS-1$ //$NON-NLS-2$
-//			lblAccount.setPreferredSize(new Dimension(300, lblAccount.getPreferredSize().height));
 		}
 		return lblAccount;
 	}
