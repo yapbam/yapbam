@@ -17,13 +17,23 @@ public class Test extends Application {
 	@Override
 	protected Container buildMainPanel() {
 		JPanel panel = new JPanel();
+//		final FileChooser fileChooser = new DropboxFileChooser(new DropboxService(new File("Data/cache/test")));
 		final JButton btn = new JButton("Open");
 		panel.add(btn);
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FileChooser fileChooser = new DropboxFileChooser(new DropboxService(new File("Data/cache/test")));
-				fileChooser.showOpenDialog(btn, "test");
+				fileChooser.showOpenDialog(btn, "Open");
+			}
+		});
+		final JButton btnSave = new JButton("Save");
+		panel.add(btnSave);
+		btnSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileChooser fileChooser = new DropboxFileChooser(new DropboxService(new File("Data/cache/test")));
+				fileChooser.showSaveDialog(btnSave, "Save");
 			}
 		});
 		return panel;

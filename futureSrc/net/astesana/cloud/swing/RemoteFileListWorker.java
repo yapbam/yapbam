@@ -21,7 +21,7 @@ final class RemoteFileListWorker extends Worker<Collection<Entry>, Void> impleme
 			TreeSet<Entry> result = new TreeSet<Entry>(local);
 			Collection<Entry> remote = account.getRemoteFiles(this);
 			result.addAll(remote);
-			return local;
+			return result;
 		}
 
 		/* (non-Javadoc)

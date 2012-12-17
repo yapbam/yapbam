@@ -317,19 +317,18 @@ public abstract class FileChooser extends JPanel {
 			GridBagConstraints gbc_panel = new GridBagConstraints();
 			gbc_panel.weightx = 1.0;
 			gbc_panel.fill = GridBagConstraints.BOTH;
-			gbc_panel.insets = new Insets(0, 0, 5, 5);
+			gbc_panel.insets = new Insets(0, 0, 0, 5);
 			gbc_panel.gridx = 0;
 			gbc_panel.gridy = 0;
 			northPanel.add(getPanel(), gbc_panel);
 			GridBagConstraints gbc_refreshButton = new GridBagConstraints();
 			gbc_refreshButton.gridheight = 0;
-			gbc_refreshButton.insets = new Insets(0, 0, 0, 5);
 			gbc_refreshButton.gridx = 1;
 			gbc_refreshButton.gridy = 0;
 			northPanel.add(getRefreshButton(), gbc_refreshButton);
 			GridBagConstraints gbc_progressBar = new GridBagConstraints();
 			gbc_progressBar.fill = GridBagConstraints.HORIZONTAL;
-			gbc_progressBar.insets = new Insets(0, 0, 0, 5);
+			gbc_progressBar.insets = new Insets(5, 0, 5, 5);
 			gbc_progressBar.gridx = 0;
 			gbc_progressBar.gridy = 1;
 			northPanel.add(getProgressBar(), gbc_progressBar);
@@ -353,7 +352,7 @@ public abstract class FileChooser extends JPanel {
 		if (progressBar == null) {
 			progressBar = new JProgressBar();
 			progressBar.setStringPainted(true);
-			progressBar.setString(""); //$NON-NLS-1$
+			progressBar.setVisible(false);
 		}
 		return progressBar;
 	}
@@ -436,25 +435,23 @@ public abstract class FileChooser extends JPanel {
 			panel.setLayout(gbl_panel);
 			GridBagConstraints gbc_lblAccount = new GridBagConstraints();
 			gbc_lblAccount.fill = GridBagConstraints.BOTH;
-			gbc_lblAccount.insets = new Insets(0, 0, 5, 5);
+			gbc_lblAccount.insets = new Insets(0, 0, 0, 5);
 			gbc_lblAccount.anchor = GridBagConstraints.EAST;
 			gbc_lblAccount.gridx = 0;
 			gbc_lblAccount.gridy = 0;
 			panel.add(getLblAccount(), gbc_lblAccount);
 			GridBagConstraints gbc_accountsCombo = new GridBagConstraints();
 			gbc_accountsCombo.weightx = 1.0;
-			gbc_accountsCombo.insets = new Insets(0, 0, 5, 0);
 			gbc_accountsCombo.fill = GridBagConstraints.BOTH;
 			gbc_accountsCombo.gridx = 1;
 			gbc_accountsCombo.gridy = 0;
 			panel.add(getAccountsCombo(), gbc_accountsCombo);
 			GridBagConstraints gbc_btnNewAccount = new GridBagConstraints();
-			gbc_btnNewAccount.insets = new Insets(0, 0, 5, 0);
 			gbc_btnNewAccount.gridx = 2;
 			gbc_btnNewAccount.gridy = 0;
 			panel.add(getBtnNewAccount(), gbc_btnNewAccount);
 			GridBagConstraints gbc_deleteButton = new GridBagConstraints();
-			gbc_deleteButton.insets = new Insets(0, 0, 5, 5);
+			gbc_deleteButton.insets = new Insets(0, 0, 0, 5);
 			gbc_deleteButton.gridx = 3;
 			gbc_deleteButton.gridy = 0;
 			panel.add(getDeleteButton(), gbc_deleteButton);
