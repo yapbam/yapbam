@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -131,4 +132,6 @@ public abstract class Account {
 		}
 		return result;
 	}
+
+	public abstract URI getURI(String path);
 }

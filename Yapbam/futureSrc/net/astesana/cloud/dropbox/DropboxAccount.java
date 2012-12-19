@@ -3,6 +3,7 @@ package net.astesana.cloud.dropbox;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,11 +11,13 @@ import java.util.List;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.cloud.Account;
 import net.astesana.cloud.Entry;
 import net.astesana.cloud.exceptions.UnreachableHostException;
+import net.astesana.common.dropbox.FileId;
 import net.yapbam.gui.persistence.Cancellable;
 
 public class DropboxAccount extends Account {
@@ -76,5 +79,10 @@ public class DropboxAccount extends Account {
 				throw new RuntimeException(cause);
 			}
 		}
+	}
+
+	@Override
+	public URI getURI(String path) {
+		return new FileId((AccessTokenPair)getConnectionData(), getDisplayName(), path).toURI();
 	}
 }
