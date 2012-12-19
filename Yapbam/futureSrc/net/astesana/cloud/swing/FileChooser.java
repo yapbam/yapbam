@@ -84,6 +84,8 @@ public abstract class FileChooser extends JPanel {
 	private JButton deleteButton;
 	private Service<? extends Account> service;
 	
+	private URI selectedURI;
+	
 	public FileChooser(Service<? extends Account> service) {
 		this.service = service;
 		this.filesModel = new FilesTableModel();
@@ -130,7 +132,6 @@ public abstract class FileChooser extends JPanel {
 			 */
 			@Override
 			public void windowOpened(WindowEvent e) {
-				// FIXME Memory leak (listener is not removed from the panel listeners when the dialog closes).
 				FileChooser.this.addPropertyChangeListener(SELECTED_URI_PROPERTY, listener);
 				refresh();
 				super.windowOpened(e);
@@ -164,31 +165,6 @@ public abstract class FileChooser extends JPanel {
 	}
 
 	public void refresh() {
-//		while (true) {
-//			try {
-//				//FIXME This could be a long task ... so, it should be wrapped into the background worker.
-//				if (isAccessGranted(getDropboxAPI())) break;
-//			} catch (DropboxException e) {
-//				if (e.getCause() instanceof UnknownHostException) {
-//					System.out.println ("IOException: "+(e.getCause() instanceof IOException));
-//					JOptionPane.showMessageDialog(owner, "Seems there's no Internet connection", LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-2$
-//				} else {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				return false;
-//			}
-//			getDropboxAPI().getSession().unlink();
-//			ConnectionDialog connectionDialog = new ConnectionDialog(owner, getDropboxAPI().getSession());
-//			connectionDialog.setVisible(true);
-//			AccessTokenPair pair = connectionDialog.getResult();
-//			if (pair==null) {
-//				if (cancelAction!=null) cancelAction.run(); // Calls the cancel action if any is defined
-//				return false; // And exit
-//			}
-//		}
-		System.out.println ("refresh");
-		
 		Account account = (Account) getAccountsCombo().getSelectedItem();
 		RemoteFileListWorker worker = new RemoteFileListWorker(account);
 		worker.setPhase(getRemoteConnectingWording(), -1); //$NON-NLS-1$
@@ -209,7 +185,7 @@ public abstract class FileChooser extends JPanel {
 //			if (e.getCause() instanceof DropboxIOException) {
 //				JOptionPane.showMessageDialog(owner, LocalizationData.get("dropbox.Chooser.error.connectionFailed"), LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 //			} else if (e.getCause() instanceof DropboxUnlinkedException) {
-//				System.err.println ("Not linked !!!"); //FIXME
+//				System.err.println ("Not linked !!!");
 //				throw new RuntimeException(e);
 //			} else {
 				throw new RuntimeException(e);
@@ -313,7 +289,11 @@ public abstract class FileChooser extends JPanel {
 					} else {
 						selectionModel.setSelectionInterval(index, index);
 					}
-					firePropertyChange(SELECTED_URI_PROPERTY, evt.getOldValue(), getSelectedURI());
+					URI old = selectedURI;
+					String name = getFileNameField().getText();
+					Account account = (Account) getAccountsCombo().getSelectedItem();
+					selectedURI = ((account==null) || (name.length()==0))?null:account.getURI(name);
+					firePropertyChange(SELECTED_URI_PROPERTY, old, getSelectedURI());
 					pos = Math.min(pos, fileNameField.getText().length());
 					fileNameField.setCaretPosition(pos);
 				}
@@ -321,15 +301,14 @@ public abstract class FileChooser extends JPanel {
 		}
 		return fileNameField;
 	}
+	
 	private JLabel getLblAccount() {
 		if (lblAccount == null) {
 			lblAccount = new JLabel(MessageFormat.format(LocalizationData.get("dropbox.Chooser.account"), "")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return lblAccount;
 	}
-//	private void setAccountName(String name) {
-//		getLblAccount().setText(MessageFormat.format(LocalizationData.get("dropbox.Chooser.account"), name)); //$NON-NLS-1$
-//	}
+
 	private JPanel getNorthPanel() {
 		if (northPanel == null) {
 			northPanel = new JPanel();
@@ -430,9 +409,7 @@ public abstract class FileChooser extends JPanel {
 	}
 
 	public URI getSelectedURI() {
-		String name = getFileNameField().getText();
-		Account account = (Account) getAccountsCombo().getSelectedItem();
-		return ((account==null) || (name==null))?null:account.getURI(name);
+		return selectedURI;
 	}
 	
 	public void setSelectedURI(URI uri) {
@@ -444,6 +421,7 @@ public abstract class FileChooser extends JPanel {
 //			if (!getInfo().getAccount().displayName.equals(id.getAccount())) throw new IllegalArgumentException("invalid account"); //$NON-NLS-1$
 //			getFileNameField().setText(uri.getPath().substring(1));
 		}
+		selectedURI = uri;
 	}
 	
 //	protected DropboxInfo getInfo() {
@@ -544,7 +522,6 @@ public abstract class FileChooser extends JPanel {
 						Account account = (Account) getAccountsCombo().getSelectedItem();
 						getAccountsCombo().removeItemAt(getAccountsCombo().getSelectedIndex());
 						account.delete();
-						System.out.println ("Delete account "+getAccountsCombo().getSelectedItem()); //TODO
 					}
 				}
 			});
