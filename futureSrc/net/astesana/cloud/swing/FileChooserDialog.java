@@ -17,7 +17,7 @@ public class FileChooserDialog extends AbstractDialog<FileChooser, Object> {
 
 	@Override
 	protected JPanel createCenterPane() {
-		this.data.addPropertyChangeListener(FileChooser.SELECTED_FILEID_PROPERTY, new PropertyChangeListener() {
+		this.data.addPropertyChangeListener(FileChooser.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateOkButtonEnabled();
@@ -28,12 +28,12 @@ public class FileChooserDialog extends AbstractDialog<FileChooser, Object> {
 
 	@Override
 	protected Object buildResult() { //TODO
-		return this.data.getSelectedFile();
+		return this.data.getSelectedURI();
 	}
 
 	@Override
 	protected String getOkDisabledCause() {
-		return this.data.getSelectedFile()==null?"Please select a file":null; //LOCAL
+		return this.data.getSelectedURI()==null?"Please select a file":null; //LOCAL
 	}
 
 	/* (non-Javadoc)

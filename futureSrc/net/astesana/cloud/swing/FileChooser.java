@@ -30,6 +30,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import net.astesana.ajlib.swing.Utils;
+import net.astesana.ajlib.swing.dialog.urichooser.FileChooserPanel;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
@@ -60,7 +61,7 @@ import net.astesana.ajlib.swing.widget.ComboBox;
 
 @SuppressWarnings("serial")
 public abstract class FileChooser extends JPanel {
-	public static final String SELECTED_FILEID_PROPERTY = "selectedIds"; //$NON-NLS-1$
+	public static final String SELECTED_URI_PROPERTY = "selectedUri"; //$NON-NLS-1$
 	private JPanel centerPanel;
 	private JTable fileList;
 	private JPanel filePanel;
@@ -99,12 +100,12 @@ public abstract class FileChooser extends JPanel {
 		this.confirmAction = action;
 	}
 	
-	public Object showOpenDialog(Component parent, String title) { //TODO
+	public Object showOpenDialog(Component parent, String title) {
 		setDialogType(false);
 		return showDialog(parent, title);
 	}
 	
-	public Object showSaveDialog(Component parent, String title) { //TODO
+	public Object showSaveDialog(Component parent, String title) {
 		setDialogType(true);
 		return showDialog(parent, title);
 	}
@@ -116,13 +117,32 @@ public abstract class FileChooser extends JPanel {
 	public Object showDialog(Component parent, String title) {
 		Window owner = Utils.getOwnerWindow(parent);
 		final FileChooserDialog dialog = new FileChooserDialog(owner, title, this);
+		final PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				System.out.println ("Selected changed from "+evt.getOldValue()+" to "+evt.getNewValue()); //TODO
+				dialog.updateOkButtonEnabled();
+			}
+		};
 		dialog.addWindowListener(new WindowAdapter() {
 			/* (non-Javadoc)
 			 * @see java.awt.event.WindowAdapter#windowOpened(java.awt.event.WindowEvent)
 			 */
 			@Override
 			public void windowOpened(WindowEvent e) {
-				refresh(); //TODO
+				// FIXME Memory leak (listener is not removed from the panel listeners when the dialog closes).
+				FileChooser.this.addPropertyChangeListener(SELECTED_URI_PROPERTY, listener);
+				refresh();
+				super.windowOpened(e);
+			}
+
+			/* (non-Javadoc)
+			 * @see java.awt.event.WindowAdapter#windowClosed(java.awt.event.WindowEvent)
+			 */
+			@Override
+			public void windowClosed(WindowEvent e) {
+				FileChooser.this.removePropertyChangeListener(SELECTED_URI_PROPERTY, listener);
+				super.windowClosed(e);
 			}
 		});
 		this.setCancelAction(new Runnable() {
@@ -192,7 +212,7 @@ public abstract class FileChooser extends JPanel {
 //				System.err.println ("Not linked !!!"); //FIXME
 //				throw new RuntimeException(e);
 //			} else {
-//				throw new RuntimeException(e);
+				throw new RuntimeException(e);
 //			}
 		} catch (CancellationException e) {
 			// The task was cancelled
@@ -293,7 +313,7 @@ public abstract class FileChooser extends JPanel {
 					} else {
 						selectionModel.setSelectionInterval(index, index);
 					}
-					firePropertyChange(SELECTED_FILEID_PROPERTY, evt.getOldValue(), evt.getNewValue());
+					firePropertyChange(SELECTED_URI_PROPERTY, evt.getOldValue(), getSelectedURI());
 					pos = Math.min(pos, fileNameField.getText().length());
 					fileNameField.setCaretPosition(pos);
 				}
@@ -409,10 +429,10 @@ public abstract class FileChooser extends JPanel {
 		return scrollPane;
 	}
 
-	public Object getSelectedFile() { //TODO
+	public URI getSelectedURI() {
 		String name = getFileNameField().getText();
-//		return name.length()==0?null:new FileId(getDropboxAPI().getSession().getAccessTokenPair(), info.account.displayName, name);
-		return null;
+		Account account = (Account) getAccountsCombo().getSelectedItem();
+		return ((account==null) || (name==null))?null:account.getURI(name);
 	}
 	
 	public void setSelectedURI(URI uri) {
