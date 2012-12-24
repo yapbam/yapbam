@@ -61,5 +61,15 @@ public abstract class Service <T extends Account>{
 
 	public abstract Collection<String> getSchemes();
 
-	public abstract boolean exists(URI uri);
+	/** Gets the entry related to a remote path.
+	 * <br>This method can be used by the account instances in their getRemoteFiles method in order to filter files.
+	 * <br>By default, this method returns an entry with a display name equals to path.
+	 * @param path The remote path
+	 * @return an entry or null if the entry should be ignored
+	 */
+	public Entry filterRemote(String path) {
+		return new Entry(path);
+	}
+
+	public abstract URI getURI(Account account, String displayName);
 }

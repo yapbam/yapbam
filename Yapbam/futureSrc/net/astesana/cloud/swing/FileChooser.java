@@ -93,6 +93,12 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 		setLayout(new BorderLayout(0, 0));
 		add(getNorthPanel(), BorderLayout.NORTH);
 		add(getCenterPanel(), BorderLayout.CENTER);
+		setConfirmAction(new Runnable() {
+			@Override
+			public void run() {
+				firePropertyChange(URI_APPROVED_PROPERTY, false, true);
+			}
+		});
 	}
 	
 	public void setCancelAction(Runnable action) {
@@ -293,7 +299,7 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 					URI old = selectedURI;
 					String name = getFileNameField().getText();
 					Account account = (Account) getAccountsCombo().getSelectedItem();
-					selectedURI = ((account==null) || (name.length()==0))?null:account.getURI(name);
+					selectedURI = ((account==null) || (name.length()==0))?null:service.getURI(account, name);
 					firePropertyChange(SELECTED_URI_PROPERTY, old, getSelectedURI());
 					pos = Math.min(pos, fileNameField.getText().length());
 					fileNameField.setCaretPosition(pos);
@@ -375,29 +381,6 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 	protected Entry filter(Entry entry) {
 		return entry;
 	}
-
-	/** This method is called after the user granted access to Dropbox.
-	 * <br>By default, this method does nothing except returns true if the access was granted.
-	 * <br>By overriding this method, you could store the access keys in a key store. Be sure to return
-	 * true if the access was granted.
-	 * <br>The access tokens could be retrieved by using getDropboxAPI().getSession().getAccessTokenPair()
-	 * @param api The api we want to test 
-	 * @return true if the access is granted.
-	 * @throws DropboxException 
-	 * @see #getDropboxAPI()
-	 */
-//	protected boolean isAccessGranted(DropboxAPI<? extends Session> api) throws DropboxException {
-//		AccessTokenPair accessTokenPair = api.getSession().getAccessTokenPair();
-//		boolean result = accessTokenPair!=null && accessTokenPair.key!=null && accessTokenPair.secret!=null;
-//		if (result) {
-//			try {
-//				api.accountInfo();
-//			} catch (DropboxUnlinkedException e) {
-//				return false;
-//			}
-//		}
-//		return result;
-//	}
 	
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
@@ -566,7 +549,8 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 	 * @see net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel#exist(java.net.URI)
 	 */
 	@Override
-	public boolean exist(URI uri) {
-		return service.exists(uri);
+	public boolean isSelectedExist() {
+		// If the selectedFile exists, it is selected in the file list as there's a listener on the file name field
+		return getFileList().getSelectedRow()>=0;
 	}
 }

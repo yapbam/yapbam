@@ -126,9 +126,9 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 	}
 
 	@Override
-	public boolean exist(URI uri) {
+	public boolean isSelectedExist() {
 		//TODO Verify that the local cache doesn't exists ?
-		FileId id = FileId.fromURI(uri);
+		FileId id = FileId.fromURI(getSelectedURI());
 		if (!getInfo().getAccount().displayName.equals(id.getAccount())) throw new IllegalArgumentException("invalid account"); //$NON-NLS-1$
 		String path = id.getPath();
 		List<Entry> files = getInfo().getFiles();

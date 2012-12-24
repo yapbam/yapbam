@@ -25,8 +25,8 @@ public abstract class LocalizationData {
 		Locale locale = Preferences.safeGetLocale(); // Be aware that Preferences.INSTANCE may not be initialized (if its instantiation failed)
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
 		Locale.setDefault(locale);
-		ResourceBundle bundle = ResourceBundle.getBundle("Resources", locale); //$NON-NLS-1$
-		locData = new net.astesana.ajlib.utilities.LocalizationData(bundle);
+		locData = new net.astesana.ajlib.utilities.LocalizationData(net.astesana.ajlib.utilities.LocalizationData.getDefaultBundle(locale));
+		locData.add(ResourceBundle.getBundle("Resources", locale)); //$NON-NLS-1$
 		locData.setTranslatorMode(Preferences.safeIsTranslatorMode());
 		Application.LOCALIZATION = locData;
 	}

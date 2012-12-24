@@ -9,9 +9,11 @@ import com.dropbox.client2.session.AccessTokenPair;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.cloud.Account;
+import net.astesana.cloud.Entry;
 import net.astesana.cloud.dropbox.DropboxAccount;
 import net.astesana.cloud.dropbox.DropboxService;
 import net.astesana.cloud.swing.FileChooser;
+import net.yapbam.gui.persistence.dropbox.DropboxPersistencePlugin;
 
 @SuppressWarnings("serial")
 public class DropboxFileChooser extends FileChooser {
