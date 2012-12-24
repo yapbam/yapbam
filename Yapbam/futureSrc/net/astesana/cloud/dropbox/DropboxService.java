@@ -1,16 +1,24 @@
 package net.astesana.cloud.dropbox;
 
 import java.io.File;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.cloud.Service;
-import net.yapbam.gui.persistence.dropbox.Dropbox;
 
 public class DropboxService extends Service<DropboxAccount> {
-	public DropboxService(File root) {
+	static final Collection<String> SCHEMES = Collections.unmodifiableCollection(Arrays.asList(new String[]{FileId.SCHEME}));
+	
+	private DropboxAPI<? extends WebAuthSession> api;
+
+	public DropboxService(File root, DropboxAPI<? extends WebAuthSession> api) {
 		super(root);
+		this.api = api;
 	}
 
 	@Override
@@ -23,6 +31,17 @@ public class DropboxService extends Service<DropboxAccount> {
 	}
 
 	public DropboxAPI<? extends WebAuthSession> getDropboxAPI() {
-		return Dropbox.getAPI();
+		return this.api;
+	}
+
+	@Override
+	public Collection<String> getSchemes() {
+		return SCHEMES;
+	}
+
+	@Override
+	public boolean exists(URI uri) {
+		// FIXME Auto-generated method stub
+		return false;
 	}
 }

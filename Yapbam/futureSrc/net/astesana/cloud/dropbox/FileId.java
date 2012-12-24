@@ -1,4 +1,4 @@
-package net.astesana.common.dropbox;
+package net.astesana.cloud.dropbox;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;

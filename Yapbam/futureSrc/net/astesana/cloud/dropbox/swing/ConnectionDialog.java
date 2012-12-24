@@ -25,6 +25,7 @@ import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 public class ConnectionDialog extends AbstractDialog<DropboxAPI<? extends WebAuthSession>, AccessTokenPair> {
+	//FIXME Remove Links to Yapbam classes
 	private boolean connectionHasStarted;
 	private WebAuthInfo info;
 	private AccessTokenPair pair;

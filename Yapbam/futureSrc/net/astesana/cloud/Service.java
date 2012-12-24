@@ -1,6 +1,7 @@
 package net.astesana.cloud;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -57,4 +58,8 @@ public abstract class Service <T extends Account>{
 	File getCacheRoot() {
 		return root;
 	}
+
+	public abstract Collection<String> getSchemes();
+
+	public abstract boolean exists(URI uri);
 }

@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -30,6 +31,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import net.astesana.ajlib.swing.Utils;
+import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.swing.dialog.urichooser.FileChooserPanel;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
@@ -60,8 +62,7 @@ import javax.swing.JComboBox;
 import net.astesana.ajlib.swing.widget.ComboBox;
 
 @SuppressWarnings("serial")
-public abstract class FileChooser extends JPanel {
-	public static final String SELECTED_URI_PROPERTY = "selectedUri"; //$NON-NLS-1$
+public abstract class FileChooser extends JPanel implements AbstractURIChooserPanel {
 	private JPanel centerPanel;
 	private JTable fileList;
 	private JPanel filePanel;
@@ -102,12 +103,12 @@ public abstract class FileChooser extends JPanel {
 		this.confirmAction = action;
 	}
 	
-	public Object showOpenDialog(Component parent, String title) {
+	public URI showOpenDialog(Component parent, String title) {
 		setDialogType(false);
 		return showDialog(parent, title);
 	}
 	
-	public Object showSaveDialog(Component parent, String title) {
+	public URI showSaveDialog(Component parent, String title) {
 		setDialogType(true);
 		return showDialog(parent, title);
 	}
@@ -116,7 +117,7 @@ public abstract class FileChooser extends JPanel {
 		this.getFilePanel().setVisible(save);
 	}
 
-	public Object showDialog(Component parent, String title) {
+	public URI showDialog(Component parent, String title) {
 		Window owner = Utils.getOwnerWindow(parent);
 		final FileChooserDialog dialog = new FileChooserDialog(owner, title, this);
 		final PropertyChangeListener listener = new PropertyChangeListener() {
@@ -337,7 +338,8 @@ public abstract class FileChooser extends JPanel {
 	}
 	private JButton getRefreshButton() {
 		if (refreshButton == null) {
-			refreshButton = new JButton(LocalizationData.get("dropbox.Chooser.refresh"), new ImageIcon(getClass().getResource("/net/astesana/dropbox/synchronize.png")));  //$NON-NLS-1$//$NON-NLS-2$
+			ImageIcon icon = new ImageIcon(FileChooser.class.getResource("synchronize.png"));
+			refreshButton = new JButton(LocalizationData.get("dropbox.Chooser.refresh"), icon);  //$NON-NLS-1$//$NON-NLS-2$
 			refreshButton.setToolTipText(LocalizationData.get("dropbox.Chooser.refresh.tooltip")); //$NON-NLS-1$
 			refreshButton.setEnabled(getAccountsCombo().getItemCount()!=0);
 			refreshButton.addActionListener(new ActionListener() {
@@ -531,11 +533,40 @@ public abstract class FileChooser extends JPanel {
 
 	protected abstract Account createNewAccount();
 
-	protected Service<? extends Account> getService() {
+	public Service<? extends Account> getService() {
 		return service;
 	}
 
 	protected String getRemoteConnectingWording() {
 		return "Connecting to remote host ...";
+	}
+
+	/* (non-Javadoc)
+	 * @see net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel#getSchemes()
+	 */
+	@Override
+	public Collection<String> getSchemes() {
+		return service.getSchemes();
+	}
+
+	/* (non-Javadoc)
+	 * @see net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel#setUp()
+	 */
+	@Override
+	public void setUp() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				refresh();
+			}
+		});
+	}
+
+	/* (non-Javadoc)
+	 * @see net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel#exist(java.net.URI)
+	 */
+	@Override
+	public boolean exist(URI uri) {
+		return service.exists(uri);
 	}
 }
