@@ -18,7 +18,7 @@ import com.dropbox.client2.session.Session;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.common.dropbox.FileId;
+import net.astesana.cloud.dropbox.FileId;
 import net.astesana.dropbox.DropboxFileChooser;
 import net.yapbam.gui.LocalizationData;
 
@@ -63,7 +63,7 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(DropboxFileChooser.class.getResource("dropbox.png")); //$NON-NLS-1$
+		return new ImageIcon(net.astesana.cloud.dropbox.swing.DropboxFileChooser.class.getResource("dropbox.png")); //$NON-NLS-1$
 	}
 
 	@Override

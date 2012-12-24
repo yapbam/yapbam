@@ -1,4 +1,4 @@
-package net.astesana.common.dropbox;
+package net.astesana.cloud.dropbox;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

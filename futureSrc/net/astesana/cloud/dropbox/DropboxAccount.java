@@ -17,7 +17,6 @@ import com.dropbox.client2.session.WebAuthSession;
 import net.astesana.cloud.Account;
 import net.astesana.cloud.Entry;
 import net.astesana.cloud.exceptions.UnreachableHostException;
-import net.astesana.common.dropbox.FileId;
 import net.yapbam.gui.persistence.Cancellable;
 
 public class DropboxAccount extends Account {

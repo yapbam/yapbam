@@ -3,13 +3,14 @@ package net.astesana.cloud.swing;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URI;
 
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class FileChooserDialog extends AbstractDialog<FileChooser, Object> {
+public class FileChooserDialog extends AbstractDialog<FileChooser, URI> {
 
 	public FileChooserDialog(Window owner, String title, FileChooser panel) {
 		super(owner, title, panel);
@@ -27,7 +28,7 @@ public class FileChooserDialog extends AbstractDialog<FileChooser, Object> {
 	}
 
 	@Override
-	protected Object buildResult() { //TODO
+	protected URI buildResult() {
 		return this.data.getSelectedURI();
 	}
 

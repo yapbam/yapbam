@@ -20,7 +20,7 @@ import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.common.dropbox.FileId;
+import net.astesana.cloud.dropbox.FileId;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.RemotePersistencePlugin;
