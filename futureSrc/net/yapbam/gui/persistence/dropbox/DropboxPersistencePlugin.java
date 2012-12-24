@@ -20,6 +20,7 @@ import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
+import net.astesana.cloud.dropbox.DropboxService;
 import net.astesana.cloud.dropbox.FileId;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.Cancellable;
@@ -29,8 +30,11 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	private static final int WAIT_DELAY = 30;
 	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
 
+	private DropboxService service;
+
 	@Override
 	public AbstractURIChooserPanel buildChooser() {
+//		this.service = new DropboxService(root, Dropbox.getAPI());
 		return new YapbamDropboxFileChooser();
 	}
 

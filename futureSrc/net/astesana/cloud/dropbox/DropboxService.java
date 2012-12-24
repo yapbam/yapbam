@@ -7,8 +7,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.WebAuthSession;
 
+import net.astesana.cloud.Account;
 import net.astesana.cloud.Service;
 
 public class DropboxService extends Service<DropboxAccount> {
@@ -40,8 +42,7 @@ public class DropboxService extends Service<DropboxAccount> {
 	}
 
 	@Override
-	public boolean exists(URI uri) {
-		// FIXME Auto-generated method stub
-		return false;
+	public URI getURI(Account account, String displayName) {
+		return new FileId((AccessTokenPair) account.getConnectionData(), account.getId(), displayName).toURI();
 	}
 }

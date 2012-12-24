@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,11 +26,17 @@ public abstract class Account {
 	private File root;
 	Service<? extends Account> service;
 	private String displayName;
+	private String id;
 	protected Serializable connectionData;
 	
 	protected Account(Service<? extends Account> service, File file) throws IOException {
 		if (!file.isDirectory()) throw new IllegalArgumentException();
 		this.root = file;
+		try {
+			this.id = URLDecoder.decode(file.getName(), CharEncoding.UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			throw new UnsupportedEncodingException();
+		}
 		ObjectInputStream stream = new ObjectInputStream(new FileInputStream(new File(this.root, INFO_FILENAME)));
 		try {
 			this.displayName = (String) stream.readObject();
@@ -45,6 +51,7 @@ public abstract class Account {
 	
 	protected Account(Service<? extends Account> service, String id, String displayName, Serializable connectionData) throws IOException {
 		this.service = service;
+		this.id = id;
 		this.displayName = displayName;
 		this.connectionData = connectionData;
 		try {
@@ -70,6 +77,13 @@ public abstract class Account {
 	 */
 	public String getDisplayName() {
 		return displayName;
+	}
+	
+	/** Gets the unique account id.
+	 * @return a String
+	 */
+	public String getId() {
+		return this.id;
 	}
 
 	/** Gets the service that hosted this account. 
@@ -132,6 +146,4 @@ public abstract class Account {
 		}
 		return result;
 	}
-
-	public abstract URI getURI(String path);
 }

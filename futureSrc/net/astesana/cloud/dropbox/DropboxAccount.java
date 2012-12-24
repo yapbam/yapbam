@@ -65,7 +65,10 @@ public class DropboxAccount extends Account {
 			List<com.dropbox.client2.DropboxAPI.Entry> contents = api.metadata("", 0, null, true, null).contents; //$NON-NLS-1$
 			Collection<Entry> result = new ArrayList<Entry>();
 			for (com.dropbox.client2.DropboxAPI.Entry entry : contents) {
-				if (!entry.isDeleted) result.add(new Entry(entry.fileName()));
+				if (!entry.isDeleted) {
+					Entry localEntry = getService().filterRemote(entry.fileName());
+					if (localEntry!=null) result.add(localEntry);
+				}
 			}
 			return result;
 		} catch (DropboxException e) {
@@ -78,10 +81,5 @@ public class DropboxAccount extends Account {
 				throw new RuntimeException(cause);
 			}
 		}
-	}
-
-	@Override
-	public URI getURI(String path) {
-		return new FileId((AccessTokenPair)getConnectionData(), getDisplayName(), path).toURI();
 	}
 }

@@ -41,7 +41,7 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.astesana.common.dropbox.FileId;
+import net.astesana.cloud.dropbox.FileId;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableListener;
@@ -84,6 +84,7 @@ public abstract class DropboxFileChooser extends JPanel {
 	private JPanel panel;
 	private JComboBox accounts;
 	private JButton btnNewAccount;
+	private JButton deleteButton;
 	
 	public DropboxFileChooser(FilesTableModel model) {
 		this.filesModel = model;
@@ -388,7 +389,7 @@ public abstract class DropboxFileChooser extends JPanel {
 	}
 	private JButton getRefreshButton() {
 		if (refreshButton == null) {
-			refreshButton = new JButton(LocalizationData.get("dropbox.Chooser.refresh"), new ImageIcon(getClass().getResource("/net/astesana/dropbox/synchronize.png")));  //$NON-NLS-1$//$NON-NLS-2$
+			refreshButton = new JButton(LocalizationData.get("dropbox.Chooser.refresh"), new ImageIcon(getClass().getResource("/net/astesana/cloud/swing/synchronize.png")));  //$NON-NLS-1$//$NON-NLS-2$
 			refreshButton.setToolTipText(LocalizationData.get("dropbox.Chooser.refresh.tooltip")); //$NON-NLS-1$
 			refreshButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -484,7 +485,7 @@ public abstract class DropboxFileChooser extends JPanel {
 			panel.setLayout(gbl_panel);
 			GridBagConstraints gbc_lblAccount = new GridBagConstraints();
 			gbc_lblAccount.fill = GridBagConstraints.BOTH;
-			gbc_lblAccount.insets = new Insets(0, 0, 5, 0);
+			gbc_lblAccount.insets = new Insets(0, 0, 5, 5);
 			gbc_lblAccount.anchor = GridBagConstraints.EAST;
 			gbc_lblAccount.gridx = 0;
 			gbc_lblAccount.gridy = 0;
@@ -501,6 +502,11 @@ public abstract class DropboxFileChooser extends JPanel {
 			gbc_btnNewAccount.gridx = 2;
 			gbc_btnNewAccount.gridy = 0;
 			panel.add(getBtnNewAccount(), gbc_btnNewAccount);
+			GridBagConstraints gbc_deleteButton = new GridBagConstraints();
+			gbc_deleteButton.insets = new Insets(0, 0, 5, 5);
+			gbc_deleteButton.gridx = 3;
+			gbc_deleteButton.gridy = 0;
+			panel.add(getDeleteButton(), gbc_deleteButton);
 		}
 		return panel;
 	}
@@ -517,5 +523,15 @@ public abstract class DropboxFileChooser extends JPanel {
 			btnNewAccount.setPreferredSize(new Dimension(height, height));
 		}
 		return btnNewAccount;
+	}
+	private JButton getDeleteButton() {
+		if (deleteButton == null) {
+			deleteButton = new JButton(IconManager.DELETE);
+			deleteButton.setEnabled(false);
+			deleteButton.setToolTipText("Deletes the current account");
+			int height = getAccounts().getPreferredSize().height;
+			deleteButton.setPreferredSize(new Dimension(height, height));
+		}
+		return deleteButton;
 	}
 }
