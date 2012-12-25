@@ -49,8 +49,6 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
@@ -58,11 +56,14 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JComboBox;
 import net.astesana.ajlib.swing.widget.ComboBox;
 
 @SuppressWarnings("serial")
 public abstract class FileChooser extends JPanel implements AbstractURIChooserPanel {
+	//FIXME Class name to CloudURIChooser
+	//FIXME URI_APPROVED_PROPERTY seems not to be listened
+	//FIXME SELECTED_URI_PROPERTY listeners seems not to be removed when closing dialogs
+	
 	private JPanel centerPanel;
 	private JTable fileList;
 	private JPanel filePanel;
@@ -76,8 +77,7 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 	private FilesTableModel filesModel;
 	private JScrollPane scrollPane;
 	
-	private Runnable cancelAction;
-	private Runnable confirmAction;
+//	private Runnable confirmAction;
 	
 	private JPanel panel;
 	private ComboBox accountsCombo;
@@ -93,21 +93,17 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 		setLayout(new BorderLayout(0, 0));
 		add(getNorthPanel(), BorderLayout.NORTH);
 		add(getCenterPanel(), BorderLayout.CENTER);
-		setConfirmAction(new Runnable() {
-			@Override
-			public void run() {
-				firePropertyChange(URI_APPROVED_PROPERTY, false, true);
-			}
-		});
+//		setConfirmAction(new Runnable() {
+//			@Override
+//			public void run() {
+//				firePropertyChange(URI_APPROVED_PROPERTY, false, true);
+//			}
+//		});
 	}
 	
-	public void setCancelAction(Runnable action) {
-		this.cancelAction = action;
-	}
-	
-	public void setConfirmAction(Runnable action) {
-		this.confirmAction = action;
-	}
+//	public void setConfirmAction(Runnable action) {
+//		this.confirmAction = action;
+//	}
 	
 	public URI showOpenDialog(Component parent, String title) {
 		setDialogType(false);
@@ -153,21 +149,14 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 				super.windowClosed(e);
 			}
 		});
-		this.setCancelAction(new Runnable() {
-			@Override
-			public void run() {
-				dialog.cancel();
-			}
-		});
-		this.setConfirmAction(new Runnable() {
-			@Override
-			public void run() {
-				dialog.confirm();
-			}
-		});
+//		this.setConfirmAction(new Runnable() {
+//			@Override
+//			public void run() {
+//				dialog.confirm();
+//			}
+//		});
 		dialog.setVisible(true);
-		this.setCancelAction(null);
-		this.setConfirmAction(null);
+//		this.setConfirmAction(null);
 		return dialog.getResult();
 	}
 
@@ -244,7 +233,7 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 			new JTableListener(getFileList(), null, new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (confirmAction!=null) confirmAction.run();
+					firePropertyChange(URI_APPROVED_PROPERTY, false, true);
 				}
 			});
 			fileList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
