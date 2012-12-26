@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.URIChooserDialog;
+import net.astesana.ajlib.swing.dialog.urichooser.MultipleURIChooserDialog;
 import net.astesana.ajlib.swing.framework.Application;
 import net.yapbam.gui.persistence.PersistenceManager;
 
@@ -20,7 +20,7 @@ final class URIChooserTest extends Application {
 		for (int i = 0; i < panels.length; i++) {
 			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
 		}
-		final URIChooserDialog uriChooser = new URIChooserDialog(getJFrame(),"Select an URI",panels);
+		final MultipleURIChooserDialog uriChooser = new MultipleURIChooserDialog(getJFrame(),"Select an URI",panels);
 		JPanel result = new JPanel();
 		JButton button = new JButton("Open");
 		result.add(button);

@@ -63,7 +63,7 @@ public class YapbamDropboxFileChooser extends DropboxFileChooser implements Abst
 
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(net.astesana.cloud.dropbox.swing.DropboxFileChooser.class.getResource("dropbox.png")); //$NON-NLS-1$
+		return new ImageIcon(net.astesana.cloud.dropbox.swing.DropboxURIChooser.class.getResource("dropbox.png")); //$NON-NLS-1$
 	}
 
 	@Override

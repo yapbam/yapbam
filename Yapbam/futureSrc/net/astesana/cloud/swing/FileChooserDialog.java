@@ -10,15 +10,15 @@ import javax.swing.JPanel;
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class FileChooserDialog extends AbstractDialog<FileChooser, URI> {
+public class FileChooserDialog extends AbstractDialog<URIChooser, URI> {
 
-	public FileChooserDialog(Window owner, String title, FileChooser panel) {
+	public FileChooserDialog(Window owner, String title, URIChooser panel) {
 		super(owner, title, panel);
 	}
 
 	@Override
 	protected JPanel createCenterPane() {
-		this.data.addPropertyChangeListener(FileChooser.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
+		this.data.addPropertyChangeListener(URIChooser.SELECTED_URI_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				updateOkButtonEnabled();

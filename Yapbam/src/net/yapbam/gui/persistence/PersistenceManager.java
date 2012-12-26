@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.URIChooserDialog;
+import net.astesana.ajlib.swing.dialog.urichooser.MultipleURIChooserDialog;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.StringUtils;
@@ -128,7 +128,7 @@ public class PersistenceManager {
 	}
 
 	private URI getURI(Window owner, GlobalData data, boolean save) {
-		URIChooserDialog dialog = getURIChooserDialog(owner);
+		MultipleURIChooserDialog dialog = getURIChooserDialog(owner);
 		dialog.setSaveDialogType(save);
 		dialog.setSelectedURI(data.getURI());
 		dialog.setLocale(LocalizationData.getLocale());
@@ -137,12 +137,12 @@ public class PersistenceManager {
 		return dialog.showDialog();
 	}
 	
-	private URIChooserDialog getURIChooserDialog(Window owner) {
+	private MultipleURIChooserDialog getURIChooserDialog(Window owner) {
 		AbstractURIChooserPanel[] panels = new AbstractURIChooserPanel[PersistenceManager.MANAGER.getPluginsNumber()];
 		for (int i = 0; i < panels.length; i++) {
 			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
 		}
-		return new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
+		return new MultipleURIChooserDialog(owner, "", panels); //$NON-NLS-1$
 	}
 
 	private boolean saveTo(Window owner, GlobalData data, URI uri) {

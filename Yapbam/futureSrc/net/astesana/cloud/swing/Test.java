@@ -12,12 +12,12 @@ import javax.swing.JPanel;
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.swing.dialog.urichooser.FileChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.URIChooserDialog;
+import net.astesana.ajlib.swing.dialog.urichooser.MultipleURIChooserDialog;
 import net.astesana.ajlib.swing.framework.Application;
 import net.astesana.cloud.Account;
 import net.astesana.cloud.Entry;
 import net.astesana.cloud.dropbox.DropboxService;
-import net.astesana.cloud.dropbox.swing.DropboxFileChooser;
+import net.astesana.cloud.dropbox.swing.DropboxURIChooser;
 import net.yapbam.gui.persistence.dropbox.Dropbox;
 
 public class Test extends Application {
@@ -37,14 +37,14 @@ public class Test extends Application {
 				return super.getURI(account, displayName+".zip");
 			}
 		};
-		final FileChooser dbChooser = new DropboxFileChooser(service);
+		final AbstractURIChooserPanel dbChooser = new DropboxURIChooser(service);
+		final AbstractURIChooserPanel fileChooser = new FileChooserPanel();
 		final JButton btn = new JButton("Open");
 		panel.add(btn);
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AbstractURIChooserPanel fileChooser = new FileChooserPanel();
-				URIChooserDialog dialog = new URIChooserDialog(Utils.getOwnerWindow(btn), "Open", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
+				MultipleURIChooserDialog dialog = new MultipleURIChooserDialog(Utils.getOwnerWindow(btn), "Open", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
 				dialog.setSaveDialogType(false);
 				dialog.setVisible(true);
 				System.out.println (dialog.getResult());
@@ -56,8 +56,7 @@ public class Test extends Application {
 		btnSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AbstractURIChooserPanel fileChooser = new FileChooserPanel();
-				URIChooserDialog dialog = new URIChooserDialog(Utils.getOwnerWindow(btn), "Save", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
+				MultipleURIChooserDialog dialog = new MultipleURIChooserDialog(Utils.getOwnerWindow(btn), "Save", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
 				dialog.setSaveDialogType(true);
 				dialog.setVisible(true);
 				System.out.println (dialog.getResult());
@@ -69,7 +68,7 @@ public class Test extends Application {
 		btnOnly.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println (dbChooser.showOpenDialog(Utils.getOwnerWindow(btn), "Open Dropbox"));
+				System.out.println (((DropboxURIChooser)dbChooser).showOpenDialog(Utils.getOwnerWindow(btn), "Open Dropbox"));
 			}
 		});
 

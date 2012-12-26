@@ -12,13 +12,13 @@ import net.astesana.cloud.Account;
 import net.astesana.cloud.Entry;
 import net.astesana.cloud.dropbox.DropboxAccount;
 import net.astesana.cloud.dropbox.DropboxService;
-import net.astesana.cloud.swing.FileChooser;
+import net.astesana.cloud.swing.URIChooser;
 import net.yapbam.gui.persistence.dropbox.DropboxPersistencePlugin;
 
 @SuppressWarnings("serial")
-public class DropboxFileChooser extends FileChooser {
+public class DropboxURIChooser extends URIChooser {
 
-	public DropboxFileChooser(DropboxService service) {
+	public DropboxURIChooser(DropboxService service) {
 		super(service);
 	}
 
@@ -48,7 +48,7 @@ public class DropboxFileChooser extends FileChooser {
 
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(DropboxFileChooser.class.getResource("dropbox.png"));
+		return new ImageIcon(DropboxURIChooser.class.getResource("dropbox.png"));
 	}
 	
 	@Override
