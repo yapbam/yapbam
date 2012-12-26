@@ -59,10 +59,9 @@ import javax.swing.JScrollPane;
 import net.astesana.ajlib.swing.widget.ComboBox;
 
 @SuppressWarnings("serial")
-public abstract class FileChooser extends JPanel implements AbstractURIChooserPanel {
-	//FIXME Class name to CloudURIChooser
-	//FIXME URI_APPROVED_PROPERTY seems not to be listened
+public abstract class URIChooser extends JPanel implements AbstractURIChooserPanel {
 	//FIXME SELECTED_URI_PROPERTY listeners seems not to be removed when closing dialogs
+	//FIXME FileChooserDialog is probably not usefull (redundant with AJLib URIChooserDialog)
 	
 	private JPanel centerPanel;
 	private JTable fileList;
@@ -77,8 +76,6 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 	private FilesTableModel filesModel;
 	private JScrollPane scrollPane;
 	
-//	private Runnable confirmAction;
-	
 	private JPanel panel;
 	private ComboBox accountsCombo;
 	private JButton btnNewAccount;
@@ -87,23 +84,13 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 	
 	private URI selectedURI;
 	
-	public FileChooser(Service<? extends Account> service) {
+	public URIChooser(Service<? extends Account> service) {
 		this.service = service;
 		this.filesModel = new FilesTableModel();
 		setLayout(new BorderLayout(0, 0));
 		add(getNorthPanel(), BorderLayout.NORTH);
 		add(getCenterPanel(), BorderLayout.CENTER);
-//		setConfirmAction(new Runnable() {
-//			@Override
-//			public void run() {
-//				firePropertyChange(URI_APPROVED_PROPERTY, false, true);
-//			}
-//		});
 	}
-	
-//	public void setConfirmAction(Runnable action) {
-//		this.confirmAction = action;
-//	}
 	
 	public URI showOpenDialog(Component parent, String title) {
 		setDialogType(false);
@@ -135,7 +122,7 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 			 */
 			@Override
 			public void windowOpened(WindowEvent e) {
-				FileChooser.this.addPropertyChangeListener(SELECTED_URI_PROPERTY, listener);
+				URIChooser.this.addPropertyChangeListener(SELECTED_URI_PROPERTY, listener);
 				refresh();
 				super.windowOpened(e);
 			}
@@ -145,18 +132,11 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 			 */
 			@Override
 			public void windowClosed(WindowEvent e) {
-				FileChooser.this.removePropertyChangeListener(SELECTED_URI_PROPERTY, listener);
+				URIChooser.this.removePropertyChangeListener(SELECTED_URI_PROPERTY, listener);
 				super.windowClosed(e);
 			}
 		});
-//		this.setConfirmAction(new Runnable() {
-//			@Override
-//			public void run() {
-//				dialog.confirm();
-//			}
-//		});
 		dialog.setVisible(true);
-//		this.setConfirmAction(null);
 		return dialog.getResult();
 	}
 
@@ -233,7 +213,7 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 			new JTableListener(getFileList(), null, new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					firePropertyChange(URI_APPROVED_PROPERTY, false, true);
+					URIChooser.this.firePropertyChange(URI_APPROVED_PROPERTY, false, true);
 				}
 			});
 			fileList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -333,7 +313,7 @@ public abstract class FileChooser extends JPanel implements AbstractURIChooserPa
 	}
 	private JButton getRefreshButton() {
 		if (refreshButton == null) {
-			ImageIcon icon = new ImageIcon(FileChooser.class.getResource("synchronize.png"));
+			ImageIcon icon = new ImageIcon(URIChooser.class.getResource("synchronize.png"));
 			refreshButton = new JButton(LocalizationData.get("dropbox.Chooser.refresh"), icon);  //$NON-NLS-1$//$NON-NLS-2$
 			refreshButton.setToolTipText(LocalizationData.get("dropbox.Chooser.refresh.tooltip")); //$NON-NLS-1$
 			refreshButton.setEnabled(getAccountsCombo().getItemCount()!=0);
