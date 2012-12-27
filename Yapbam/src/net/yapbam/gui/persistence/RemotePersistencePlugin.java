@@ -19,7 +19,7 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 */
 	protected File getCacheFolder(String scheme) {
 		File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir"),"yapbam"); //$NON-NLS-1$ //$NON-NLS-2$
-		File file = new File(folder,"cache/"+getSchemes().iterator().next()); //$NON-NLS-1$
+		File file = new File(folder,"cache/"+scheme); //$NON-NLS-1$
 		if (!file.isDirectory()) file.mkdirs();
 		return file;
 	}

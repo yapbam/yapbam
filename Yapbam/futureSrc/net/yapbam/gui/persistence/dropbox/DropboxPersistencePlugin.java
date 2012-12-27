@@ -7,9 +7,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
 import org.apache.commons.codec.CharEncoding;
 
@@ -53,12 +50,11 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 			}
 		};
 		return new DropboxURIChooser(this.service);
-		//return new YapbamDropboxFileChooser();
 	}
 
 	@Override
-	public Collection<String> getSchemes() {
-		return Collections.unmodifiableCollection(Arrays.asList(new String[]{service.getScheme()}));
+	public String getScheme() {
+		return DropboxService.URI_SCHEME;
 	}
 
 	@Override

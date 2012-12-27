@@ -72,10 +72,8 @@ public class PersistenceManager {
 	
 	private void add(PersistencePlugin plugin) {
 		// TODO Check there's no duplicated schemes in persistence plugins. 
-		for (String scheme : plugin.getSchemes()) {
-			pluginsMap.put(scheme, plugin);
-		}
-		pluginSchemes.addAll(plugin.getSchemes());
+		pluginsMap.put(plugin.getScheme(), plugin);
+		pluginSchemes.add(plugin.getScheme());
 	}
 
 	/** This method gives a last chance to save unsaved data.

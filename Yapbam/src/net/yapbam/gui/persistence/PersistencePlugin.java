@@ -2,7 +2,6 @@ package net.yapbam.gui.persistence;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Collection;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 
@@ -26,16 +25,16 @@ public abstract class PersistencePlugin {
 	 * your own scheme. For example, Yapbam uses "Dropbox" scheme to save/read data to/from Dropbox.
 	 * @return the scheme managed by the plugin
 	 */
-	public abstract Collection<String> getSchemes();
+	public abstract String getScheme();
 	
 	/** Builds an UI component that implements the uri chooser for this plugin.
 	 * <br>Be aware that compiler can't force the returned instance to be a java.awt.Component subclass, but
 	 * this is mandatory.
-	 * <br>The getSelectedURI of the returned component must have one of the schemes returned by the getSchemes method
+	 * <br>The getSelectedURI of the returned component must have the same scheme returned by the getScheme method
 	 * of this class.
 	 * @return a component
 	 * @see AbstractURIChooserPanel#getSelectedURI()
-	 * @see #getSchemes()
+	 * @see #getScheme()
 	 */
 	public abstract AbstractURIChooserPanel buildChooser();
 
