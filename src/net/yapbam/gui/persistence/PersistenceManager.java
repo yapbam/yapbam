@@ -129,9 +129,9 @@ public class PersistenceManager {
 
 	private URI getURI(Window owner, GlobalData data, boolean save) {
 		MultipleURIChooserDialog dialog = getURIChooserDialog(owner);
+		dialog.setLocale(LocalizationData.getLocale());
 		dialog.setSaveDialog(save);
 		dialog.setSelectedURI(data.getURI());
-		dialog.setLocale(LocalizationData.getLocale());
 		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open"); //$NON-NLS-1$ //$NON-NLS-2$
 		dialog.setTitle(title);
 		return dialog.showDialog();

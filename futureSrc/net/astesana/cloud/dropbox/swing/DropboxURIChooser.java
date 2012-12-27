@@ -9,11 +9,9 @@ import com.dropbox.client2.session.AccessTokenPair;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.cloud.Account;
-import net.astesana.cloud.Entry;
-import net.astesana.cloud.dropbox.DropboxAccount;
 import net.astesana.cloud.dropbox.DropboxService;
 import net.astesana.cloud.swing.URIChooser;
-import net.yapbam.gui.persistence.dropbox.DropboxPersistencePlugin;
+import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 public class DropboxURIChooser extends URIChooser {
@@ -30,7 +28,7 @@ public class DropboxURIChooser extends URIChooser {
 		if (pair==null) return null;
 		try {
 			com.dropbox.client2.DropboxAPI.Account accountInfo = connectionDialog.getAccountInfo();
-			return new DropboxAccount((DropboxService) getService(), Long.toString(accountInfo.uid), accountInfo.displayName, pair);
+			return new Account(getService(), Long.toString(accountInfo.uid), accountInfo.displayName, pair, accountInfo.quota, accountInfo.quotaNormal+accountInfo.quotaShared);
 		} catch (IOException e) {
 			//FIXME Alert the user something went wrong
 			return null;
@@ -42,8 +40,8 @@ public class DropboxURIChooser extends URIChooser {
 	}
 
 	@Override
-	public String getTooltip(boolean save) {
-		return save?"Select this tab to save to your Dropbox account":"Select this tab to read data from your Dropbox account";
+	public String getTooltip(boolean save) { //FIXME
+		return save?LocalizationData.get("dropbox.Chooser.save.tabTooltip"):LocalizationData.get("dropbox.Chooser.read.tabTooltip"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

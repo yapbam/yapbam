@@ -2,9 +2,11 @@ package net.astesana.cloud;
 
 public class Entry implements Comparable<Entry> {
 	private String displayName;
+	private Account account;
 	
-	public Entry(String name) {
-		this.displayName = name;
+	public Entry(Account account, String displayName) {
+		this.displayName = displayName;
+		this.account = account;
 	}
 
 	/**
