@@ -1,4 +1,4 @@
-package net.yapbam.gui.util;
+package net.yapbam.dialogs;
 
 import java.awt.Dialog;
 import java.awt.Window;

@@ -10,7 +10,6 @@ import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JCheckBox;
 
-import net.yapbam.gui.util.DialogUtils;
 
 public class DialogSpy extends JFrame {
 	private static final long serialVersionUID = 1L;
