@@ -20,23 +20,18 @@ import java.awt.Window;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.io.IOException;
 import java.net.URI;
-import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.FileChooserPanel;
 import net.astesana.ajlib.swing.dialog.urichooser.MultipleURIChooserDialog;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
-import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.cloud.Account;
 import net.astesana.cloud.Entry;
 import net.astesana.cloud.Service;
@@ -50,8 +45,6 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -61,9 +54,6 @@ import net.astesana.ajlib.swing.widget.ComboBox;
 
 @SuppressWarnings("serial")
 public abstract class URIChooser extends JPanel implements AbstractURIChooserPanel {
-	//FIXME SELECTED_URI_PROPERTY listeners seems not to be removed when closing dialogs
-	//FIXME FileChooserDialog is probably not usefull (redundant with AJLib URIChooserDialog)
-	
 	private JPanel centerPanel;
 	private JTable fileList;
 	private JPanel filePanel;
@@ -81,12 +71,14 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 	private ComboBox accountsCombo;
 	private JButton btnNewAccount;
 	private JButton deleteButton;
-	private Service<? extends Account> service;
+	private Service service;
+	private String initedAccountId;
 	
 	private URI selectedURI;
 	
-	public URIChooser(Service<? extends Account> service) {
+	public URIChooser(Service service) {
 		this.service = service;
+		this.initedAccountId = null;
 		this.filesModel = new FilesTableModel();
 		setLayout(new BorderLayout(0, 0));
 		add(getNorthPanel(), BorderLayout.NORTH);
@@ -114,35 +106,38 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 		return dialog.showDialog();
 	}
 
-	public void refresh() {
+	public void refresh(boolean force) {
 		Account account = (Account) getAccountsCombo().getSelectedItem();
-		RemoteFileListWorker worker = new RemoteFileListWorker(account);
-		worker.setPhase(getRemoteConnectingWording(), -1); //$NON-NLS-1$
-		final Window owner = Utils.getOwnerWindow(this);
-		WorkInProgressFrame frame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker);
-		frame.setSize(300, frame.getSize().height);
-		Utils.centerWindow(frame, owner);
-		frame.setVisible(true); //$NON-NLS-1$
-		try {
-			Collection<Entry> entries = worker.get();
-			fillTable(entries);
-			getFileNameField().setEditable(true);
-			setQuota(account);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		} catch (ExecutionException e) {
-			//FIXME
-//			if (e.getCause() instanceof DropboxIOException) {
-//				JOptionPane.showMessageDialog(owner, LocalizationData.get("dropbox.Chooser.error.connectionFailed"), LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
-//			} else if (e.getCause() instanceof DropboxUnlinkedException) {
-//				System.err.println ("Not linked !!!");
-//				throw new RuntimeException(e);
-//			} else {
+		if (force || ((account!=null) && !account.getId().equals(initedAccountId))) {
+			initedAccountId = account.getId();
+			RemoteFileListWorker worker = new RemoteFileListWorker(account);
+			worker.setPhase(getRemoteConnectingWording(), -1); //$NON-NLS-1$
+			final Window owner = Utils.getOwnerWindow(this);
+			WorkInProgressFrame frame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker);
+			frame.setSize(300, frame.getSize().height);
+			Utils.centerWindow(frame, owner);
+			frame.setVisible(true); //$NON-NLS-1$
+			try {
+				Collection<Entry> entries = worker.get();
+				fillTable(entries);
+				getFileNameField().setEditable(true);
+				setQuota(account);
+			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
-//			}
-		} catch (CancellationException e) {
-			// The task was cancelled
-			setQuota(null);
+			} catch (ExecutionException e) {
+				//FIXME
+	//			if (e.getCause() instanceof DropboxIOException) {
+	//				JOptionPane.showMessageDialog(owner, LocalizationData.get("dropbox.Chooser.error.connectionFailed"), LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+	//			} else if (e.getCause() instanceof DropboxUnlinkedException) {
+	//				System.err.println ("Not linked !!!");
+	//				throw new RuntimeException(e);
+	//			} else {
+					throw new RuntimeException(e);
+	//			}
+			} catch (CancellationException e) {
+				// The task was cancelled
+				setQuota(null);
+			}
 		}
 	}
 
@@ -242,7 +237,7 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 					URI old = selectedURI;
 					String name = getFileNameField().getText();
 					Account account = (Account) getAccountsCombo().getSelectedItem();
-					selectedURI = ((account==null) || (name.length()==0))?null:service.getURI(account, name);
+					selectedURI = ((account==null) || (name.length()==0))?null:getService().getURI(account, name);
 					firePropertyChange(SELECTED_URI_PROPERTY, old, getSelectedURI());
 					pos = Math.min(pos, fileNameField.getText().length());
 					fileNameField.setCaretPosition(pos);
@@ -293,7 +288,7 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 			refreshButton.setEnabled(getAccountsCombo().getItemCount()!=0);
 			refreshButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					refresh();
+					refresh(true);
 				}
 			});
 		}
@@ -344,7 +339,9 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 		if (uri==null) {
 			getFileNameField().setText("");
 		} else {
-			//FIXME Be aware that getInfo may not have been set before this method is called, so, the following lines, if not commented, result in an error 
+			//FIXME
+			Entry entry = service.getEntry(uri);
+			System.out.println (entry+" is selected");
 //			FileId id = FileId.fromURI(uri);
 //			if (!getInfo().getAccount().displayName.equals(id.getAccount())) throw new IllegalArgumentException("invalid account"); //$NON-NLS-1$
 //			getFileNameField().setText(uri.getPath().substring(1));
@@ -352,9 +349,6 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 		selectedURI = uri;
 	}
 	
-//	protected DropboxInfo getInfo() {
-//		return info;
-//	}
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -395,7 +389,7 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 					return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				}
 			});
-			Collection<? extends Account> accounts = getService().getAccounts();
+			Collection<Account> accounts = getService().getAccounts();
 			for (Account account : accounts) {
 				accountsCombo.addItem(account);
 			}
@@ -405,7 +399,7 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 					boolean oneIsSelected = getAccountsCombo().getSelectedIndex()>=0;
 					getDeleteButton().setEnabled(oneIsSelected);
 					getRefreshButton().setEnabled(oneIsSelected);
-					refresh();
+					refresh(false);
 				}
 			});
 		}
@@ -459,20 +453,20 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 
 	protected abstract Account createNewAccount();
 
-	public Service<? extends Account> getService() {
+	public Service getService() {
 		return service;
 	}
 
 	protected String getRemoteConnectingWording() {
-		return "Connecting to remote host ...";
+		return "Connecting to remote host ..."; //LOCAL
 	}
 
 	/* (non-Javadoc)
 	 * @see net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel#getSchemes()
 	 */
 	@Override
-	public Collection<String> getSchemes() {
-		return service.getSchemes();
+	public String getScheme() {
+		return service.getScheme();
 	}
 
 	/* (non-Javadoc)
@@ -483,7 +477,7 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				refresh();
+				refresh(false);
 			}
 		});
 	}

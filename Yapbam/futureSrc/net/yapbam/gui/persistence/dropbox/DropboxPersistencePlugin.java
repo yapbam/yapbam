@@ -1,12 +1,15 @@
 package net.yapbam.gui.persistence.dropbox;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.commons.codec.CharEncoding;
 
@@ -20,8 +23,10 @@ import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.WebAuthSession;
 
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
+import net.astesana.cloud.Account;
 import net.astesana.cloud.dropbox.DropboxService;
 import net.astesana.cloud.dropbox.FileId;
+import net.astesana.cloud.dropbox.swing.DropboxURIChooser;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.RemotePersistencePlugin;
@@ -34,13 +39,26 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 
 	@Override
 	public AbstractURIChooserPanel buildChooser() {
-//		this.service = new DropboxService(root, Dropbox.getAPI());
-		return new YapbamDropboxFileChooser();
+		File root = getCacheFolder("Dropbox"); 
+		this.service = new DropboxService(root, Dropbox.getAPI()) {
+			@Override
+			public net.astesana.cloud.Entry filterRemote(Account account, String path) {
+				if (!path.endsWith(".zip")) return null;
+				path = path.substring(0, path.length()-".zip".length());
+				return super.filterRemote(account, path);
+			}
+			@Override
+			public URI getURI(Account account, String displayName) {
+				return super.getURI(account, displayName+".zip");
+			}
+		};
+		return new DropboxURIChooser(this.service);
+		//return new YapbamDropboxFileChooser();
 	}
 
 	@Override
 	public Collection<String> getSchemes() {
-		return YapbamDropboxFileChooser.SCHEMES;
+		return Collections.unmodifiableCollection(Arrays.asList(new String[]{service.getScheme()}));
 	}
 
 	@Override

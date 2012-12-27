@@ -1,13 +1,10 @@
 package net.astesana.cloud.swing;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -24,16 +21,17 @@ import net.astesana.cloud.dropbox.swing.DropboxURIChooser;
 import net.yapbam.gui.persistence.dropbox.Dropbox;
 
 public class Test extends Application {
+	private URI lastSelected = null;
 
 	@Override
 	protected Container buildMainPanel() {
 		JPanel panel = new JPanel();
-		DropboxService service = new DropboxService(new File("Data/cache/test"), Dropbox.getAPI()) {
+		final DropboxService service = new DropboxService(new File("Data/cache/test"), Dropbox.getAPI()) {
 			@Override
-			public Entry filterRemote(String path) {
+			public Entry filterRemote(Account account, String path) {
 				if (!path.endsWith(".zip")) return null;
 				path = path.substring(0, path.length()-".zip".length());
-				return super.filterRemote(path);
+				return super.filterRemote(account, path);
 			}
 			@Override
 			public URI getURI(Account account, String displayName) {
@@ -48,7 +46,9 @@ public class Test extends Application {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MultipleURIChooserDialog dialog = new MultipleURIChooserDialog(Utils.getOwnerWindow(btn), "Open", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
-				System.out.println (dialog.showDialog());
+				dialog.setSelectedURI(lastSelected);
+				lastSelected = dialog.showDialog();
+				System.out.println (lastSelected);
 			}
 		});
 		
@@ -59,7 +59,9 @@ public class Test extends Application {
 			public void actionPerformed(ActionEvent e) {
 				MultipleURIChooserDialog dialog = new MultipleURIChooserDialog(Utils.getOwnerWindow(btn), "Save", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
 				dialog.setSaveDialog(true);
-				System.out.println (dialog.showDialog());
+				dialog.setSelectedURI(lastSelected);
+				lastSelected = dialog.showDialog();
+				System.out.println (lastSelected);
 			}
 		});
 		
@@ -68,7 +70,9 @@ public class Test extends Application {
 		btnOnly.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println (((DropboxURIChooser)dbChooser).showOpenDialog(Utils.getOwnerWindow(btn), "Open Dropbox"));
+				dbChooser.setSelectedURI(lastSelected);
+				lastSelected = (new DropboxURIChooser(service)).showOpenDialog(Utils.getOwnerWindow(btn), "Open Dropbox");
+				System.out.println (lastSelected);
 			}
 		});
 

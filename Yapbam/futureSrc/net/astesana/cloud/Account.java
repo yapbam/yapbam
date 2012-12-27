@@ -21,15 +21,17 @@ import org.apache.commons.codec.CharEncoding;
 /** An account in the Cloud, cached in a local folder.
  * @see Service
  */
-public abstract class Account {
+public class Account {
 	private static final String INFO_FILENAME = ".info";
 	private File root;
-	Service<? extends Account> service;
+	Service service;
 	private String displayName;
 	private String id;
 	protected Serializable connectionData;
+	protected long quota;
+	protected long used;
 	
-	protected Account(Service<? extends Account> service, File file) throws IOException {
+	protected Account(Service service, File file) throws IOException {
 		if (!file.isDirectory()) throw new IllegalArgumentException();
 		this.root = file;
 		try {
@@ -47,13 +49,17 @@ public abstract class Account {
 			stream.close();
 		}
 		this.service = service;
+		this.quota = -1;
+		this.used = -1;
 	}
 	
-	protected Account(Service<? extends Account> service, String id, String displayName, Serializable connectionData) throws IOException {
+	public Account(Service service, String id, String displayName, Serializable connectionData, long quota, long used) throws IOException {
 		this.service = service;
 		this.id = id;
 		this.displayName = displayName;
 		this.connectionData = connectionData;
+		this.quota = quota;
+		this.used = used;
 		try {
 			this.root = new File(service.getCacheRoot(), URLEncoder.encode(id, CharEncoding.UTF_8));
 			if (this.root.isFile()) this.root.delete();
@@ -89,7 +95,7 @@ public abstract class Account {
 	/** Gets the service that hosted this account. 
 	 * @return A service
 	 */
-	public Service<? extends Account> getService() {
+	public Service getService() {
 		return this.service;
 	}
 	
@@ -97,28 +103,26 @@ public abstract class Account {
 		return this.connectionData;
 	}
 
-	public abstract Collection<Entry> getRemoteFiles(Cancellable task) throws UnreachableHostException;
+//	public abstract Collection<Entry> getRemoteFiles(Cancellable task) throws UnreachableHostException;
 
 	/** Gets the account quota in bytes.
-	 * <br>By default, this method return -1.
 	 * <br>Please note that this method should return quickly. This means, it should not connect with the server
-	 * in order to have the information. We recommend to return a negative number until the remote data is initialized
+	 * in order to have the information. This method should return a negative number until the remote data is initialized
 	 * by getRemoteFiles.
 	 * @return The quota in bytes or a negative number if the service is not able to give this information
 	 */
 	public long getQuota() {
-		return -1;
+		return quota;
 	}
-	
+
 	/** Gets the size used in bytes.
-	 * <br>By default, this method return -1.
 	 * <br>Please note that this method should return quickly. This means, it should not connect with the server
-	 * in order to have the information. We recommend to return a negative number until the remote data is initialized
+	 * in order to have the information. This method should return a negative number until the remote data is initialized
 	 * by getRemoteFiles.
 	 * @return The used size in bytes or a negative number if the service is not able to give this information
 	 */
 	public long getUsed() {
-		return -1;
+		return used;
 	}
 	
 	/** Deletes the local data about this account.
@@ -141,9 +145,14 @@ public abstract class Account {
 		Collection<Entry> result = new ArrayList<Entry>();
 		for (File file : this.root.listFiles()) {
 			if (file.isDirectory()) {
-				result.add(new Entry(file.getName()));
+				result.add(new Entry(this, file.getName()));
 			}
 		}
 		return result;
 	}
+	
+	public Collection<Entry> getRemoteFiles(Cancellable task) throws UnreachableHostException {
+		return this.service.getRemoteFiles(this, task);
+	}
+
 }
