@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutionException;
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
 import net.astesana.ajlib.swing.dialog.urichooser.FileChooserPanel;
+import net.astesana.ajlib.swing.dialog.urichooser.MultipleURIChooserDialog;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
@@ -92,6 +93,10 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 		add(getCenterPanel(), BorderLayout.CENTER);
 	}
 	
+	public void setDialogType(boolean save) {
+		this.getFilePanel().setVisible(save);
+	}
+
 	public URI showOpenDialog(Component parent, String title) {
 		setDialogType(false);
 		return showDialog(parent, title);
@@ -102,42 +107,11 @@ public abstract class URIChooser extends JPanel implements AbstractURIChooserPan
 		return showDialog(parent, title);
 	}
 	
-	public void setDialogType(boolean save) {
-		this.getFilePanel().setVisible(save);
-	}
-
 	public URI showDialog(Component parent, String title) {
 		Window owner = Utils.getOwnerWindow(parent);
-		final FileChooserDialog dialog = new FileChooserDialog(owner, title, this);
-		final PropertyChangeListener listener = new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				System.out.println ("Selected changed from "+evt.getOldValue()+" to "+evt.getNewValue()); //TODO
-				dialog.updateOkButtonEnabled();
-			}
-		};
-		dialog.addWindowListener(new WindowAdapter() {
-			/* (non-Javadoc)
-			 * @see java.awt.event.WindowAdapter#windowOpened(java.awt.event.WindowEvent)
-			 */
-			@Override
-			public void windowOpened(WindowEvent e) {
-				URIChooser.this.addPropertyChangeListener(SELECTED_URI_PROPERTY, listener);
-				refresh();
-				super.windowOpened(e);
-			}
-
-			/* (non-Javadoc)
-			 * @see java.awt.event.WindowAdapter#windowClosed(java.awt.event.WindowEvent)
-			 */
-			@Override
-			public void windowClosed(WindowEvent e) {
-				URIChooser.this.removePropertyChangeListener(SELECTED_URI_PROPERTY, listener);
-				super.windowClosed(e);
-			}
-		});
-		dialog.setVisible(true);
-		return dialog.getResult();
+		MultipleURIChooserDialog dialog = new MultipleURIChooserDialog(owner, title, new AbstractURIChooserPanel[]{this});
+		dialog.setSaveDialog(this.getFilePanel().isVisible());
+		return dialog.showDialog();
 	}
 
 	public void refresh() {

@@ -1,10 +1,13 @@
 package net.astesana.cloud.swing;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -45,9 +48,7 @@ public class Test extends Application {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MultipleURIChooserDialog dialog = new MultipleURIChooserDialog(Utils.getOwnerWindow(btn), "Open", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
-				dialog.setSaveDialogType(false);
-				dialog.setVisible(true);
-				System.out.println (dialog.getResult());
+				System.out.println (dialog.showDialog());
 			}
 		});
 		
@@ -57,9 +58,8 @@ public class Test extends Application {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MultipleURIChooserDialog dialog = new MultipleURIChooserDialog(Utils.getOwnerWindow(btn), "Save", new AbstractURIChooserPanel[]{fileChooser,dbChooser});
-				dialog.setSaveDialogType(true);
-				dialog.setVisible(true);
-				System.out.println (dialog.getResult());
+				dialog.setSaveDialog(true);
+				System.out.println (dialog.showDialog());
 			}
 		});
 		
@@ -81,5 +81,4 @@ public class Test extends Application {
 	public static void main(String[] args) {
 		new Test().launch();
 	}
-
 }

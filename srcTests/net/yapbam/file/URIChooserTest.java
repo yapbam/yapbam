@@ -27,7 +27,7 @@ final class URIChooserTest extends Application {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				uriChooser.setSaveDialogType(false);
+				uriChooser.setSaveDialog(false);
 				System.out.println (uriChooser.showDialog());
 			}
 		});
@@ -36,7 +36,7 @@ final class URIChooserTest extends Application {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				uriChooser.setSaveDialogType(true);
+				uriChooser.setSaveDialog(true);
 				uriChooser.setSelectedURI(new File("c:/users/Jean-Marc/toto").toURI());
 				System.out.println (uriChooser.showDialog());
 			}
