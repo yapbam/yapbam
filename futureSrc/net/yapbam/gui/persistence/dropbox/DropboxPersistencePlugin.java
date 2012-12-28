@@ -18,14 +18,13 @@ import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.WebAuthSession;
+import com.fathzer.soft.jclop.Account;
+import com.fathzer.soft.jclop.Cancellable;
+import com.fathzer.soft.jclop.dropbox.DropboxService;
+import com.fathzer.soft.jclop.dropbox.swing.DropboxURIChooser;
+import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
 
-import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.cloud.Account;
-import net.astesana.cloud.dropbox.DropboxService;
-import net.astesana.cloud.dropbox.FileId;
-import net.astesana.cloud.dropbox.swing.DropboxURIChooser;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.RemotePersistencePlugin;
 
 public class DropboxPersistencePlugin extends RemotePersistencePlugin {
@@ -33,22 +32,14 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	private static final boolean SLOW_READING = Boolean.getBoolean("slowDataReading"); //$NON-NLS-1$
 
 	private DropboxService service;
+	
+	public DropboxPersistencePlugin() {
+		File root = getCacheFolder("Dropbox"); 
+		this.service = new DropboxService(root, Dropbox.getAPI());
+	}
 
 	@Override
 	public AbstractURIChooserPanel buildChooser() {
-		File root = getCacheFolder("Dropbox"); 
-		this.service = new DropboxService(root, Dropbox.getAPI()) {
-			@Override
-			public net.astesana.cloud.Entry filterRemote(Account account, String path) {
-				if (!path.endsWith(".zip")) return null;
-				path = path.substring(0, path.length()-".zip".length());
-				return super.filterRemote(account, path);
-			}
-			@Override
-			public URI getURI(Account account, String displayName) {
-				return super.getURI(account, displayName+".zip");
-			}
-		};
 		return new DropboxURIChooser(this.service);
 	}
 
@@ -210,6 +201,9 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	
 	@Override
 	public String getRemoteRevision(URI uri) throws IOException {
+		com.fathzer.soft.jclop.Entry entry = service.getEntry(uri);
+		Account account = entry.getAccount();
+		
 		FileId id = FileId.fromURI(uri);
 		DropboxAPI<? extends WebAuthSession> api = Dropbox.getAPI();
 		api.getSession().setAccessTokenPair(id.getAccessTokenPair());

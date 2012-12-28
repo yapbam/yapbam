@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.text.MessageFormat;
 
+import com.fathzer.soft.jclop.Cancellable;
+
 import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
@@ -11,7 +13,6 @@ import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
-import net.yapbam.gui.persistence.Cancellable;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistencePlugin;
 import net.yapbam.gui.persistence.SynchronizationState;

@@ -3,11 +3,11 @@ package net.yapbam.gui.persistence.dropbox;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import net.astesana.cloud.dropbox.AuthenticatedProxiedSession;
 import net.yapbam.gui.Preferences;
 
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session;
+import com.fathzer.soft.jclop.dropbox.AuthenticatedProxiedSession;
 
 /** Yapbam <-> Dropbox session.
  */

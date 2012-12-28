@@ -15,8 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.astesana.ajlib.swing.table.JTableListener;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.util.JTableListener;
 
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		if (editButtonAction!=null) actions.add(editButtonAction);
 		if (duplicateButtonAction!=null) actions.add(duplicateButtonAction);
 		if (deleteButtonAction!=null) actions.add(deleteButtonAction);
-		new JTableListener(jTable, actions.toArray(new Action[actions.size()]), editButtonAction);
+		jTable.addMouseListener(new JTableListener(actions.toArray(new Action[actions.size()]), editButtonAction));
 		jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {

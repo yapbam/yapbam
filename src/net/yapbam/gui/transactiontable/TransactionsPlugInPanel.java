@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import net.astesana.ajlib.swing.table.JTableListener;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
@@ -24,7 +25,6 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.actions.NewTransactionAction;
-import net.yapbam.gui.util.JTableListener;
 import net.yapbam.gui.widget.JLabelMenu;
 
 public class TransactionsPlugInPanel extends JPanel {
@@ -47,8 +47,8 @@ public class TransactionsPlugInPanel extends JPanel {
 		EditTransactionAction editTransactionAction = new EditTransactionAction(transactionTable);
 		DuplicateTransactionAction duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
 		DeleteTransactionAction deleteTransactionAction = new DeleteTransactionAction(transactionTable);
-		new JTableListener(transactionTable, new Action[] { editTransactionAction, duplicateTransactionAction,
-				deleteTransactionAction, null, new ConvertToPeriodicalTransactionAction(transactionTable) }, editTransactionAction);
+		transactionTable.addMouseListener(new JTableListener(new Action[] { editTransactionAction, duplicateTransactionAction,
+				deleteTransactionAction, null, new ConvertToPeriodicalTransactionAction(transactionTable) }, editTransactionAction));
        
 		final JButton newTransactionButton = new JButton(new NewTransactionAction(data, transactionTable,false));
 		newTransactionButton.setText(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$

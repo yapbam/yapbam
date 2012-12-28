@@ -3,8 +3,9 @@ package net.yapbam.gui.persistence.file;
 import java.io.File;
 import java.net.URI;
 
-import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.FileChooserPanel;
+import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
+import com.fathzer.soft.jclop.swing.FileChooserPanel;
+
 import net.yapbam.gui.persistence.PersistencePlugin;
 
 public class FilePersistencePlugin extends PersistencePlugin {
