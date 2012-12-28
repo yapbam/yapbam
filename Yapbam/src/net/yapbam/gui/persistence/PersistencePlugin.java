@@ -3,11 +3,11 @@ package net.yapbam.gui.persistence;
 import java.io.File;
 import java.net.URI;
 
-import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
+import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
 
-/** An abstract Yapbam persistence plugin.
+/** An abstract persistence plugin.
  * <br>Yapbam data persistence model allows developers to implement plugins that allow the users to
- * save/read their data in various locations (computer's disks, ftp server, Dropbox, etc ...).
+ * save/read their data in various locations (computer's disks, ftp server, Cloud services, etc ...).
  * <br>A plugin implements the save/read to a particular destination.
  * For example, the FilePersistencePlugin implements saving/reading to/from the computer's disks.
  * <br><br>
@@ -41,15 +41,15 @@ public abstract class PersistencePlugin {
 	/** Gets displayable form of an URI.
 	 * <br>URI may contains secret informations (example: password). This method converts the URI to a string
 	 * that can be securely displayed on a screen. 
-	 * @param uri The remote URI (The uri is guaranteed to have one of the schemes returned by getSchemes).
+	 * @param uri The remote URI (The uri is guaranteed to have the scheme returned by getScheme).
 	 * @return a String. The default implementation returns uri.toString().
 	 */
 	public String getDisplayableName(URI uri) {
 		return uri.toString();
 	}
 	
-	/** Gets the local cache file.
-	 * @param uri The remote URI (The uri is guaranteed to have one of the schemes returned by getSchemes).
+	/** Gets the local file attached to an URI.
+	 * @param uri The URI (The uri is guaranteed to have the scheme returned by getScheme).
 	 * @return a File
 	 */
 	public abstract File getLocalFile(URI uri);

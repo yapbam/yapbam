@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import net.astesana.ajlib.swing.Browser;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.util.Portable;
 

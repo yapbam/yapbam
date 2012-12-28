@@ -9,9 +9,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="JCommon"/>
 	<classpathentry kind="var" path="JFreeChart" sourcepath="/JFreeChartSrc"/>
-	<classpathentry kind="var" path="COMMONS-LOGGING"/>
 	<classpathentry kind="var" path="COMMONS-NET"/>
-	<classpathentry kind="var" path="DROPBOX"/>
 	<classpathentry kind="var" path="HTTP-CLIENT"/>
 	<classpathentry kind="var" path="HTTP-CORE"/>
 	<classpathentry kind="var" path="HTTP-MIME"/>
@@ -21,5 +19,9 @@
 	<classpathentry kind="var" path="COMMONS-CODEC"/>
 	<classpathentry kind="var" path="COMMONS-LANG"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Javaluator"/>
+	<classpathentry kind="var" path="COMMONS-LOGGING"/>
+	<classpathentry kind="var" path="DROPBOX/lib/dropbox-java-sdk-1.5.3.jar" sourcepath="/DROPBOX/src/main/java"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JClop"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JClop-Dropbox"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

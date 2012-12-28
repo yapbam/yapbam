@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.table.JTableListener;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.data.AbstractTransaction;
@@ -21,7 +22,6 @@ import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
-import net.yapbam.gui.util.JTableListener;
 import net.yapbam.util.DateUtils;
 
 import java.awt.Insets;
@@ -207,7 +207,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			restoreState();
 			
 			getEditAction().setEnabled(false);
-			new JTableListener(jTable, new Action[]{getEditAction()}, getEditAction());
+			jTable.addMouseListener(new JTableListener(new Action[]{getEditAction()}, getEditAction()));
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {

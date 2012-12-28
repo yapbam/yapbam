@@ -8,8 +8,9 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.dialog.urichooser.AbstractURIChooserPanel;
-import net.astesana.ajlib.swing.dialog.urichooser.MultipleURIChooserDialog;
+import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
+import com.fathzer.soft.jclop.swing.MultipleURIChooserDialog;
+
 import net.astesana.ajlib.swing.framework.Application;
 import net.yapbam.gui.persistence.PersistenceManager;
 

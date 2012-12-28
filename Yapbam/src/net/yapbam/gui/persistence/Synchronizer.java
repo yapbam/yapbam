@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 
+import com.fathzer.soft.jclop.Cancellable;
+
 import net.astesana.ajlib.utilities.NullUtils;
 
 public abstract class Synchronizer {

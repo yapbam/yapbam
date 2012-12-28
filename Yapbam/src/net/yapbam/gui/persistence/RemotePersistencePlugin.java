@@ -6,9 +6,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
+import com.fathzer.soft.jclop.Cancellable;
+
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.util.Portable;
 
+/** An abstract persistence plugin that stores the data on a remote host (ftp, cloud service, etc ...).
+ * <br>Please note that subclasses must have a default constructor.
+ * @author Jean-Marc Astesana
+ * <BR>License : GPL v3
+ */
 public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	public static final String ZIP_ENTENSION = ".zip"; //$NON-NLS-1$
 	private static final String CACHE_PREFIX = "cache"; //$NON-NLS-1$

@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
+import net.astesana.ajlib.swing.table.JTableListener;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
@@ -27,7 +28,6 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.util.JTableListener;
 import net.yapbam.util.DateUtils;
 
 import javax.swing.Action;
@@ -36,7 +36,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import java.awt.Insets;
 import javax.swing.JTable.PrintMode;
 
@@ -239,7 +238,7 @@ public class StatementViewPanel extends JPanel {
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
 			Action checkAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
-			new MyListener(transactionsTable, new Action[]{edit, duplicate, delete}, edit, checkAction);
+			transactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, checkAction));
 		}
 		return transactionsTable;
 	}
@@ -251,7 +250,7 @@ public class StatementViewPanel extends JPanel {
 			Action delete = new DeleteTransactionAction(uncheckedTransactionsTable);
 			Action duplicate = new DuplicateTransactionAction(uncheckedTransactionsTable);
 			checkAction = new CheckTransactionAction(this, uncheckedTransactionsTable, getTransactionsTable(), true);
-			new MyListener(uncheckedTransactionsTable, new Action[]{edit, duplicate, delete}, edit, checkAction);
+			uncheckedTransactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, checkAction));
 		}
 		return uncheckedTransactionsTable;
 	}
@@ -272,8 +271,8 @@ public class StatementViewPanel extends JPanel {
 	
 	private static class MyListener extends JTableListener {
 		private Action checkAction;
-		public MyListener(JTable jTable, Action[] actions, Action defaultAction, Action checkAction) {
-			super(jTable, actions, defaultAction);
+		public MyListener(Action[] actions, Action defaultAction, Action checkAction) {
+			super(actions, defaultAction);
 			this.checkAction = checkAction;
 		}
 
