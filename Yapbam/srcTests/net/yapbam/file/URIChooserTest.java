@@ -8,8 +8,8 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
-import com.fathzer.soft.jclop.swing.MultipleURIChooserDialog;
+import com.fathzer.soft.jclop.swing.URIChooser;
+import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
 import net.astesana.ajlib.swing.framework.Application;
 import net.yapbam.gui.persistence.PersistenceManager;
@@ -17,11 +17,11 @@ import net.yapbam.gui.persistence.PersistenceManager;
 final class URIChooserTest extends Application {
 	@Override
 	protected Container buildMainPanel() {
-		AbstractURIChooserPanel[] panels = new AbstractURIChooserPanel[PersistenceManager.MANAGER.getPluginsNumber()];
+		URIChooser[] panels = new URIChooser[PersistenceManager.MANAGER.getPluginsNumber()];
 		for (int i = 0; i < panels.length; i++) {
 			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
 		}
-		final MultipleURIChooserDialog uriChooser = new MultipleURIChooserDialog(getJFrame(),"Select an URI",panels);
+		final URIChooserDialog uriChooser = new URIChooserDialog(getJFrame(),"Select an URI",panels);
 		JPanel result = new JPanel();
 		JButton button = new JButton("Open");
 		result.add(button);

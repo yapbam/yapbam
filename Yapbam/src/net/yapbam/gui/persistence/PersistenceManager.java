@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
-import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
-import com.fathzer.soft.jclop.swing.MultipleURIChooserDialog;
+import com.fathzer.soft.jclop.swing.URIChooser;
+import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
@@ -127,7 +127,7 @@ public class PersistenceManager {
 	}
 
 	private URI getURI(Window owner, GlobalData data, boolean save) {
-		MultipleURIChooserDialog dialog = getURIChooserDialog(owner);
+		URIChooserDialog dialog = getURIChooserDialog(owner);
 		dialog.setLocale(LocalizationData.getLocale());
 		dialog.setSaveDialog(save);
 		dialog.setSelectedURI(data.getURI());
@@ -136,12 +136,12 @@ public class PersistenceManager {
 		return dialog.showDialog();
 	}
 	
-	private MultipleURIChooserDialog getURIChooserDialog(Window owner) {
-		AbstractURIChooserPanel[] panels = new AbstractURIChooserPanel[PersistenceManager.MANAGER.getPluginsNumber()];
+	private URIChooserDialog getURIChooserDialog(Window owner) {
+		URIChooser[] panels = new URIChooser[PersistenceManager.MANAGER.getPluginsNumber()];
 		for (int i = 0; i < panels.length; i++) {
 			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
 		}
-		return new MultipleURIChooserDialog(owner, "", panels); //$NON-NLS-1$
+		return new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
 	}
 
 	private boolean saveTo(Window owner, GlobalData data, URI uri) {
