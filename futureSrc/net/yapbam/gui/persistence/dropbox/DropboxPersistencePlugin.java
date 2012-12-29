@@ -22,7 +22,7 @@ import com.fathzer.soft.jclop.Account;
 import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.dropbox.DropboxService;
 import com.fathzer.soft.jclop.dropbox.swing.DropboxURIChooser;
-import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
+import com.fathzer.soft.jclop.swing.URIChooser;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.RemotePersistencePlugin;
@@ -39,7 +39,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	}
 
 	@Override
-	public AbstractURIChooserPanel buildChooser() {
+	public URIChooser buildChooser() {
 		return new DropboxURIChooser(this.service);
 	}
 

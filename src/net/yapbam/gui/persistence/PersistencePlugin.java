@@ -3,7 +3,7 @@ package net.yapbam.gui.persistence;
 import java.io.File;
 import java.net.URI;
 
-import com.fathzer.soft.jclop.swing.AbstractURIChooserPanel;
+import com.fathzer.soft.jclop.swing.URIChooser;
 
 /** An abstract persistence plugin.
  * <br>Yapbam data persistence model allows developers to implement plugins that allow the users to
@@ -33,10 +33,10 @@ public abstract class PersistencePlugin {
 	 * <br>The getSelectedURI of the returned component must have the same scheme returned by the getScheme method
 	 * of this class.
 	 * @return a component
-	 * @see AbstractURIChooserPanel#getSelectedURI()
+	 * @see URIChooser#getSelectedURI()
 	 * @see #getScheme()
 	 */
-	public abstract AbstractURIChooserPanel buildChooser();
+	public abstract URIChooser buildChooser();
 
 	/** Gets displayable form of an URI.
 	 * <br>URI may contains secret informations (example: password). This method converts the URI to a string
