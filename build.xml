@@ -111,12 +111,14 @@
 		<copy todir="${classicRelease}/Other/help">
 	    	<fileset dir="helpPages/portable/Other/help" includes="**/*.*"/>
 		</copy>
-		<!-- Copy windows launcher -->
-		<copy file="yapbam.exe" todir="${classicRelease}"/>
-		<!-- Copy Linux launcher -->
-		<copy file="yapbam.sh" todir="${classicRelease}"/>
-		<!-- Build the zip file -->		
-		<zip basedir="${classicRelease}" destfile="yapbam-${yapbamVersion}.zip"/>
+		<!-- Build the zip file -->
+		<zip destfile="yapbam-${yapbamVersion}.zip">
+			<zipfileset dir="${classicRelease}"/>
+			<!-- Copy Linux launcher with the right permissions -->
+			<zipfileset file="yapbam.sh" filemode="755"/>
+			<!-- Copy windows launcher -->
+			<zipfileset file="yapbam.exe"/>
+		</zip>
 		<!-- Computes the checksum of the file -->
 		<checksum file="yapbam-${yapbamVersion}.zip" property="zip.checksum"/>
 		<echo message="Zip checksum=${zip.checksum}"/>
