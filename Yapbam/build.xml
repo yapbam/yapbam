@@ -16,7 +16,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.13.2"/>
+	<property name="yapbamVersion" value="0.13.3"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -63,10 +63,12 @@
 	    	<fileset dir="${jcommonpath}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
 	    	<fileset dir="${ajlibpath}" includes="**/*.properties"/>
 	    	<fileset dir="${ajlibpath}" includes="**/*.png"/>
+	    	<fileset dir="${jcloppath}" includes="**/*.properties"/>
+	    	<fileset dir="${jcloppath}" includes="**/*.png"/>
 		</copy>
 		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
-		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath};${ajlibpath};${commonslangpath};${javaluatorpath}" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath};${ajlibpath};${commonslangpath};${javaluatorpath};${jcloppath}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>
@@ -117,7 +119,7 @@
 			<!-- Copy Linux launcher with the right permissions -->
 			<zipfileset file="yapbam.sh" filemode="755"/>
 			<!-- Copy windows launcher -->
-			<zipfileset file="yapbam.exe"/>
+			<zipfileset file="Yapbam.exe"/>
 		</zip>
 		<!-- Computes the checksum of the file -->
 		<checksum file="yapbam-${yapbamVersion}.zip" property="zip.checksum"/>
