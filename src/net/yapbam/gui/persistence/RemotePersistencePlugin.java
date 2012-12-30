@@ -32,7 +32,6 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	}
 
 	/** Downloads the uri to a file.
-	 * <br>The default implementation does nothing
 	 * @param uri The uri to download (The uri is guaranteed to has a scheme returned by getSchemes).
 	 * @param out The stream where to download
 	 * @param task The task that ask the download or null if no cancellable task is provided. Please make sure to report the progress and cancel the download if the task is cancelled.
@@ -99,8 +98,7 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 		// On a besoin de mémoriser la révision de base du fichier de cache. Cette révision va être codée dans le nom du fichier.
 		// On va stocker ce fichier dans un répertoire de même nom que le path de l'URI. Le nom du fichier, lui, sera la révision
 		// sur laquelle il est basé.
-		String path = getLocalPath(uri);
-		String fileName = path.substring(0, path.length()-ZIP_ENTENSION.length());
+		String fileName = getLocalPath(uri);
 		File cacheDirectory = new File(getCacheFolder(uri.getScheme()), fileName); //$NON-NLS-1$
 		if (cacheDirectory.isFile()) {
 			// hey ... there's a file where it should be a folder !!!
