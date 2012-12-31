@@ -231,8 +231,9 @@ class GlobalDataHandler extends DefaultHandler {
 			boolean enabled = Boolean.parseBoolean(attributes.get(Serializer.ENABLED_ATTRIBUTE));
 			// In previous Yapbam versions, next date could be after end date. Now, it would launch an IllegalArgumentException
 			if (nextDate!=null) {
-				if ((stepper.getLastDate()!=null) && (stepper.getLastDate().compareTo(nextDate)<0)) {
-					nextDate = null;
+				if ((stepper!=null) && (stepper.getLastDate()!=null) && (stepper.getLastDate().compareTo(nextDate)<0)) {
+					// If next date is after end
+					nextDate = null; // Set the next date to "no next date"
 				}
 			}
 			// In previous Yapbam versions, next date could also be null on enabled periodical transactions
