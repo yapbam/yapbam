@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 import net.astesana.ajlib.swing.framework.Application;
 import net.yapbam.data.GlobalData;
@@ -25,9 +24,11 @@ public abstract class LocalizationData {
 		Locale locale = Preferences.safeGetLocale(); // Be aware that Preferences.INSTANCE may not be initialized (if its instantiation failed)
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
 		Locale.setDefault(locale);
-		locData = new net.astesana.ajlib.utilities.LocalizationData(net.astesana.ajlib.utilities.LocalizationData.getDefaultBundle(locale));
-		locData.add(ResourceBundle.getBundle("Resources", locale)); //$NON-NLS-1$
+		locData = new net.astesana.ajlib.utilities.LocalizationData(net.astesana.ajlib.utilities.LocalizationData.DEFAULT_BUNDLE_NAME);
+		locData.add("Resources"); //$NON-NLS-1$
 		locData.setTranslatorMode(Preferences.safeIsTranslatorMode());
+//		com.fathzer.soft.jclop.swing.MessagesPack.INSTANCE=locData;
+//		com.fathzer.soft.jclop.dropbox.swing.MessagesPack.INSTANCE=locData;
 		Application.LOCALIZATION = locData;
 	}
 	
@@ -36,7 +37,8 @@ public abstract class LocalizationData {
 	}
 	
 	public static char getChar(String key) {
-		return locData.getChar(key);
+		return locData.getString(key).charAt(0);
+
 	}
 
 	public static Locale getLocale() {

@@ -35,7 +35,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 
 	@Override
 	public boolean download(URI uri, OutputStream out, Cancellable task) throws IOException {
-		return this.service.download(this.service.getEntry(uri), out, task);
+		return this.service.download(this.service.getEntry(uri), out, task, LocalizationData.getLocale());
 	}
 	
 	/* (non-Javadoc)
@@ -43,7 +43,7 @@ public class DropboxPersistencePlugin extends RemotePersistencePlugin {
 	 */
 	@Override
 	public boolean upload(InputStream stream, long length, URI uri, final Cancellable task) throws IOException {
-		return this.service.upload(stream, length, service.getEntry(uri), task);
+		return this.service.upload(stream, length, service.getEntry(uri), task, LocalizationData.getLocale());
 	}
 
 	@Override
