@@ -1,5 +1,8 @@
 TODO list
 
+Question à cent sous :
+Depuis la 0.12.0 on ne plus plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
+
 Améliorations en cours :
 - La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
 - Finir les TODO du panneau de sélection Dropbox
