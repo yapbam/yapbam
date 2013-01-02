@@ -22,13 +22,13 @@ public class BasicHTMLDialog extends AbstractDialog<Object[], Void> {
 
 		public Icon getIcon() {
 			if (this.equals(INFO)) {
-				return UIManager.getIcon("OptionPane.informationIcon");
+				return UIManager.getIcon("OptionPane.informationIcon"); //$NON-NLS-1$
 			} else if (this.equals(ERROR)) {
-				return UIManager.getIcon("OptionPane.errorIcon");
+				return UIManager.getIcon("OptionPane.errorIcon"); //$NON-NLS-1$
 			} else if (this.equals(QUESTION)) {
-				return UIManager.getIcon("OptionPane.questionIcon");
+				return UIManager.getIcon("OptionPane.questionIcon"); //$NON-NLS-1$
 			} else if (this.equals(WARNING)) {
-				return UIManager.getIcon("OptionPane.warningIcon");
+				return UIManager.getIcon("OptionPane.warningIcon"); //$NON-NLS-1$
 			}
 			return null;
 		}
@@ -68,11 +68,6 @@ public class BasicHTMLDialog extends AbstractDialog<Object[], Void> {
 		return panel;
 	}
 
-	@Override
-	protected String getOkDisabledCause() {
-		return null;
-	}
-	
 	public void setContentType(String contentType) {
 		((HTMLPane)panel.getCenterComponent()).setContentType(contentType);
 	}
