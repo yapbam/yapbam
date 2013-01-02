@@ -32,7 +32,7 @@ public abstract class LocalizationData {
 		locData.add("Resources"); //$NON-NLS-1$
 		locData.setTranslatorMode(Preferences.safeIsTranslatorMode());
 		com.fathzer.soft.jclop.swing.MessagePack.INSTANCE=locData;
-		com.fathzer.soft.jclop.dropbox.swing.MessagePack.INSTANCE=locData;
+//		com.fathzer.soft.jclop.dropbox.swing.MessagePack.INSTANCE=locData;
 		Application.LOCALIZATION = locData;
 	}
 	
