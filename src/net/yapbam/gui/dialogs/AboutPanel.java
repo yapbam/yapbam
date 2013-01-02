@@ -96,7 +96,7 @@ public class AboutPanel extends AbstractTitledPanel<Void> {
 	}
 
 	@Override
-	protected JComponent getCenterComponent() {
+	public JComponent getCenterComponent() {
 		return getJTabbedPane();
 	}
 

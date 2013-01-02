@@ -34,10 +34,10 @@ public class BasicHTMLDialog extends AbstractDialog<Object[], Void> {
 		}
 	}
 	
-	private AbstractTitledPanel<String> panel;
+	private AbstractTitledPanel<Void> panel;
 	
-	public BasicHTMLDialog(Window owner, String title, String header, Type type, String content) {
-		super(owner, title, new Object[]{header, type==null?null:type.getIcon(), content});
+	public BasicHTMLDialog(Window owner, String title, String header, Type type) {
+		super(owner, title, new Object[]{header, type==null?null:type.getIcon()});
 		getCancelButton().setVisible(false);
 		getOkButton().setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
 		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
@@ -52,12 +52,15 @@ public class BasicHTMLDialog extends AbstractDialog<Object[], Void> {
 	@Override
 	protected JPanel createCenterPane() {
 		if (panel==null) {
-			panel = new AbstractTitledPanel<String>((String)data[0], (Icon)data[1], (String)data[2]) {
+			panel = new AbstractTitledPanel<Void>((String)data[0], (Icon)data[1], null) {
+				private HTMLPane htmlPane;
 				@Override
-				protected JComponent getCenterComponent() {
-					HTMLPane htmlPane = new HTMLPane(this.data);
-					htmlPane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
-					htmlPane.setFocusable(false);
+				public JComponent getCenterComponent() {
+					if (htmlPane==null) {
+						htmlPane = new HTMLPane();
+						htmlPane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
+						htmlPane.setFocusable(false);
+					}
 					return htmlPane;
 				}
 			};
@@ -68,5 +71,13 @@ public class BasicHTMLDialog extends AbstractDialog<Object[], Void> {
 	@Override
 	protected String getOkDisabledCause() {
 		return null;
+	}
+	
+	public void setContentType(String contentType) {
+		((HTMLPane)panel.getCenterComponent()).setContentType(contentType);
+	}
+	
+	public void setContent(String content) {
+		((HTMLPane)panel.getCenterComponent()).setContent(content);
 	}
 }
