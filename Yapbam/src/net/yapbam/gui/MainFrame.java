@@ -105,7 +105,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				if (!Preferences.INSTANCE.isFirstRun()) {
 					String importantNews = buildNews();
 					if (importantNews.length()>0) {
-						new BasicHTMLDialog(frame.getJFrame(), LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), Type.INFO, importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+						BasicHTMLDialog dialog = new BasicHTMLDialog(frame.getJFrame(), LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), Type.INFO);
+						dialog.setContent(importantNews);
+						dialog.setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 			}

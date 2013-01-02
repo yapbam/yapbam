@@ -178,8 +178,11 @@ public class PersistenceManager {
 						exception.getCause().printStackTrace(new PrintStream(out));
 						String trace = out.toString();
 						trace = trace.replace("\t", "  "); //$NON-NLS-1$ //$NON-NLS-2$
+						//Next line is html version ... bad idea as html is not easy to copy/paste in an email
+						//trace = "<html>"+trace.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 						BasicHTMLDialog dialog = new BasicHTMLDialog(frame, LocalizationData.get("ErrorManager.title"), MessageFormat.format(LocalizationData //$NON-NLS-1$
-								.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path)), Type.ERROR, trace); //$NON-NLS-1$
+								.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path)), Type.ERROR); //$NON-NLS-1$
+						dialog.setContent(trace);
 						dialog.setVisible(true);
 					}
 				}
