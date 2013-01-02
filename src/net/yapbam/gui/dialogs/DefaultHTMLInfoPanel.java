@@ -1,6 +1,8 @@
 package net.yapbam.gui.dialogs;
 
+import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 
 import net.astesana.ajlib.swing.widget.HTMLPane;
 
@@ -36,5 +38,10 @@ public class DefaultHTMLInfoPanel extends AbstractInfoPanel {
 	@Override
 	protected JComponent getCenterComponent() {
 		return getHTMLPane();
+	}
+
+	@Override
+	public Icon getIcon() {
+		return UIManager.getIcon("OptionPane.informationIcon"); //$NON-NLS-1$
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"

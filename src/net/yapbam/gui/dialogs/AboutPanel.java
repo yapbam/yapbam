@@ -1,6 +1,8 @@
 package net.yapbam.gui.dialogs;
 
+import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.HTMLPane;
@@ -109,6 +111,11 @@ public class AboutPanel extends AbstractInfoPanel {
 			aboutPane = new HTMLPane(LocalizationData.getURL("contributors.html")); //$NON-NLS-1$
 		}
 		return aboutPane;
+	}
+
+	@Override
+	public Icon getIcon() {
+		return UIManager.getIcon("OptionPane.informationIcon"); //$NON-NLS-1$
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
