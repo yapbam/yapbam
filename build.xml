@@ -3,14 +3,15 @@
 	<!--======================================  README ================================================>
 	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
 	| jfreechartpath properties in the customPaths.properties file used in the line below.             |
-	| These properties have to reference the apache commonsnet, jfreeChart, JCommon and A-JLib sources.|
+	| These properties have to reference the apache commonsnet, jfreeChart, JCommon, A-JLib,           |
+	| Javaluator and JClop sources.|
 	| These sources are available at http://commons.apache.org/net/, http://www.jfree.org and          |
 	| http://sourceforge.net/projects/ajlib/                                                           |
 	| Here is a sample of what this file could contain :                                               |
 	| ajlibpath=C:/username/externalLibs/AJLib                                                         |
 	| commonsnetpath=C:/username/externalLibs/commonsNet                                               |
 	| jcommonpath=C:/username/externalLibs/jCommon                                                     |
-	| jfreechartpath=C:/username/externalLibs/jFreeChart                                               |
+	| jfreechartpath=C:/username/externalLibs/jFreeChart ...                                           |
 	| This file may also contains a pointer to PortableApps.comInstaller.exe (in the variable          |
 	| portableappsinstallerpath).                                                                      |
 	<================================================================================================-->
