@@ -1,10 +1,10 @@
 package net.yapbam.gui.dialogs;
 
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
 import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.widget.AbstractTitledPanel;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
@@ -25,7 +25,7 @@ import javax.swing.JTabbedPane;
 import net.yapbam.relnotes.ReleaseNotesFormatter;
 import net.yapbam.update.VersionManager;
 
-public class AboutPanel extends AbstractInfoPanel {
+public class AboutPanel extends AbstractTitledPanel<Void> {
 	private static final Dimension PREFERED_HTML_PANE_SIZE = new Dimension(640,480);  //  @jve:decl-index=0:
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane jTabbedPane = null;
@@ -36,8 +36,7 @@ public class AboutPanel extends AbstractInfoPanel {
 	 * This is the default constructor
 	 */
 	public AboutPanel() {
-		super(null);
-		this.setHeaderMessage(MessageFormat.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion())); //$NON-NLS-1$ //$NON-NLS-2$
+		super(MessageFormat.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion()), UIManager.getIcon("OptionPane.informationIcon"), null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
@@ -112,10 +111,4 @@ public class AboutPanel extends AbstractInfoPanel {
 		}
 		return aboutPane;
 	}
-
-	@Override
-	public Icon getIcon() {
-		return UIManager.getIcon("OptionPane.informationIcon"); //$NON-NLS-1$
-	}
-
 }  //  @jve:decl-index=0:visual-constraint="10,10"

@@ -20,7 +20,8 @@ import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
+import net.yapbam.gui.dialogs.BasicHTMLDialog;
+import net.yapbam.gui.dialogs.BasicHTMLDialog.Type;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.welcome.WelcomeDialog;
@@ -104,7 +105,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				if (!Preferences.INSTANCE.isFirstRun()) {
 					String importantNews = buildNews();
 					if (importantNews.length()>0) {
-						new DefaultHTMLInfoDialog(frame.getJFrame(), LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+						new BasicHTMLDialog(frame.getJFrame(), LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), Type.INFO, importantNews).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 			}
