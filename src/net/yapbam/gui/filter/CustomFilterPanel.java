@@ -583,7 +583,7 @@ public class CustomFilterPanel extends JPanel {
 		if (valueDatePanel == null) {
 			valueDatePanel = new DateFilterPanel(DateFilterPanel.VALUE_DATE);
 			valueDatePanel.addPropertyChangeListener(DateFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, inconsistencyListener);
-			valueDatePanel.setDates(filter.getDateFrom(), filter.getDateTo());
+			valueDatePanel.setDates(filter.getValueDateFrom(), filter.getValueDateTo());
 		}
 		return valueDatePanel;
 	}

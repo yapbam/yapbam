@@ -7,6 +7,7 @@ improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 fix
 	Les versions avant la 0.12.0 permettaient de créer des opérations périodiques sans information sur la périodicité; C'était une anomalie. Les versions suivantes de Yapbam ne permettaient plus de relire les fichiers contenant de telles opérations, ce qui était ... une catastrophe.
+	Le dialogue "Filtre personnalisé" n'était pas correctement initialisé quand un filtre sur la date de valeur était préalablement fixé.
 
 version	0.13.2 (22/12/2012)
 fix
