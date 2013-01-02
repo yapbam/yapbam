@@ -2,6 +2,8 @@ package net.yapbam.gui.persistence;
 
 import java.awt.Window;
 import java.awt.Dialog.ModalityType;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -9,7 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
@@ -21,6 +26,8 @@ import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.dialogs.DefaultHTMLInfoDialog;
+import net.yapbam.gui.dialogs.DefaultHTMLInfoPanel;
 import net.yapbam.gui.persistence.file.FilePersistencePlugin;
 import net.yapbam.gui.persistence.reading.DataReader;
 import net.yapbam.gui.persistence.writing.DataWriter;
@@ -57,7 +64,7 @@ public class PersistenceManager {
 						Class<? extends PersistencePlugin> pClass = (Class<? extends PersistencePlugin>) Class.forName(className);
 						add(pClass.newInstance());
 					} catch (Exception e) {
-						ErrorManager.INSTANCE.display(null, e, MessageFormat.format(LocalizationData.get("persitencePlugin.load.error"), className));
+						ErrorManager.INSTANCE.display(null, e, MessageFormat.format(LocalizationData.get("persitencePlugin.load.error"), className)); //$NON-NLS-1$
 					}
 				}
 			}
@@ -170,8 +177,23 @@ public class PersistenceManager {
 						notProcessed = !errProcessor.processError(exception.getCause());
 					}
 					if (notProcessed) {
-						ErrorManager.INSTANCE.display(frame, exception.getCause(), MessageFormat.format(LocalizationData
-								.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path))); //$NON-NLS-1$
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						exception.getCause().printStackTrace(new PrintStream(out));
+						String trace = "<html>"+out.toString().replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+						@SuppressWarnings("serial")
+						DefaultHTMLInfoDialog dialog = new DefaultHTMLInfoDialog(frame, LocalizationData.get("ErrorManager.title"), MessageFormat.format(LocalizationData //$NON-NLS-1$
+								.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path)), trace) { //$NON-NLS-1$
+									@Override
+									protected JPanel createCenterPane() {
+										DefaultHTMLInfoPanel result = new DefaultHTMLInfoPanel(data[0], data[1]) {
+											public Icon getIcon() {
+												return UIManager.getIcon("OptionPane.errorIcon"); //$NON-NLS-1$
+											}
+										};
+										return result;
+									}
+						};
+						dialog.setVisible(true);
 					}
 				}
 			}

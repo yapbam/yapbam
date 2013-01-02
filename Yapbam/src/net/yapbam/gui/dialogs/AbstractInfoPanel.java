@@ -2,9 +2,9 @@ package net.yapbam.gui.dialogs;
 
 import java.awt.GridBagLayout;
 
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -78,10 +78,12 @@ public abstract class AbstractInfoPanel extends JPanel {
 	private JLabel getIconLabel() {
 		if (iconLabel == null) {
 			iconLabel = new JLabel();
-			iconLabel.setIcon(UIManager.getIcon("OptionPane.informationIcon")); //$NON-NLS-1$
+			iconLabel.setIcon(getIcon());
 		}
 		return iconLabel;
 	}
+	
+	public abstract Icon getIcon();
 
 	/**
 	 * This method initializes the center Component	
