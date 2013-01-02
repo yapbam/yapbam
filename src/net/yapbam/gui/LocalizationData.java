@@ -6,6 +6,8 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
+import javax.swing.JComponent;
+
 import net.astesana.ajlib.swing.framework.Application;
 import net.yapbam.data.GlobalData;
 
@@ -24,11 +26,13 @@ public abstract class LocalizationData {
 		Locale locale = Preferences.safeGetLocale(); // Be aware that Preferences.INSTANCE may not be initialized (if its instantiation failed)
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
 		Locale.setDefault(locale);
+		// Be aware that the swing components not take their locale from Locale.getDefault, but from JComponent.getDefaultLocale.
+		JComponent.setDefaultLocale(locale);
 		locData = new net.astesana.ajlib.utilities.LocalizationData(net.astesana.ajlib.utilities.LocalizationData.DEFAULT_BUNDLE_NAME);
 		locData.add("Resources"); //$NON-NLS-1$
 		locData.setTranslatorMode(Preferences.safeIsTranslatorMode());
 		com.fathzer.soft.jclop.swing.MessagePack.INSTANCE=locData;
-//		com.fathzer.soft.jclop.dropbox.swing.MessagesPack.INSTANCE=locData;
+		com.fathzer.soft.jclop.dropbox.swing.MessagePack.INSTANCE=locData;
 		Application.LOCALIZATION = locData;
 	}
 	
