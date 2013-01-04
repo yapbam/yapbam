@@ -138,12 +138,21 @@ public class Serializer {
 	private TransformerHandler hd;
 	private OutputStream os;
 	
+	/** Saves the data in a file.
+	 * @param data The data to save
+	 * @param file The file where to save the data
+	 * @param zipped true if the data should be wrapped in a zip container
+	 * @param report a progress report
+	 * @throws FileNotFoundException is file is not available for writing
+	 * @throws IOException if something goes wrong while writing
+	 */
 	public static void write(GlobalData data, File file, boolean zipped, ProgressReport report) throws IOException {
 		if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
 		// Proceed safely, it means not to erase the old version until the new version is written
 		// Everything here is pretty ugly.
 		//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
-		File writed = file.exists()?File.createTempFile("yapbam", "cpt"):file; //$NON-NLS-1$ //$NON-NLS-2$
+		if (!FileUtils.isWritable(file)) throw new FileNotFoundException();
+		File writed = file.exists()?getSafeTmpFile("yapbam", null, file.getParentFile()):file; //$NON-NLS-1$
 		OutputStream out = new FileOutputStream(writed);
 		try {
 			ZipEntry entry = null;
@@ -165,10 +174,20 @@ public class Serializer {
 			// but I can't find a better way
 			if (!file.delete()) {
 				writed.delete();
-				throw new IOException(MessageFormat.format("Unable to delete previous version of {0}",file)); //LOCAL
+				throw new FileNotFoundException();
 			}
 			FileUtils.move(writed, file);
 		}
+	}
+	
+	private static File getSafeTmpFile(String prefix, String suffix, File directory) throws IOException {
+		File result;
+		try {
+			result = File.createTempFile(prefix, suffix, directory);
+		} catch (IOException e) {
+			result = File.createTempFile(prefix, suffix);
+		}
+		return result;
 	}
 	
 	private static void write(GlobalData data, OutputStream os, ProgressReport report) throws IOException {
