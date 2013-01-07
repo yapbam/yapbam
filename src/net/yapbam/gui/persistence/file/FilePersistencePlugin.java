@@ -1,11 +1,13 @@
 package net.yapbam.gui.persistence.file;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.FileChooserPanel;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.persistence.PersistencePlugin;
 
 public class FilePersistencePlugin extends PersistencePlugin {
@@ -21,6 +23,11 @@ public class FilePersistencePlugin extends PersistencePlugin {
 	
 	@Override
 	public File getLocalFile(URI uri) {
-		return new File(uri);
+		File file = new File(uri);
+		try {
+			return FileUtils.getCanonical(file);
+		} catch (IOException e) {
+			return file;
+		}
 	}
 }

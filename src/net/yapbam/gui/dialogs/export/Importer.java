@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
@@ -53,7 +54,7 @@ public class Importer {
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = new BufferedReader(new FileReader(FileUtils.getCanonical(file)));
 			try {
 				int lineNumber = 0;
 				for (int i=0;i<parameters.getIgnoredLeadingLines();i++) {
