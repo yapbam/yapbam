@@ -1,11 +1,14 @@
 TODO list
 
+Bug :
+- Tester l'export dans un raccourci
+- Tester le comportement sur des fichiers vérouillés en écriture (export et svg standard)
+
 Question à cent sous :
 Depuis la 0.12.0 on ne plus plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
 
 Améliorations en cours :
 - La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
-- Finir les TODO du panneau de sélection Dropbox
 	
 Code cleaning :
 Utiliser le framework AJLib pour créer l'application.

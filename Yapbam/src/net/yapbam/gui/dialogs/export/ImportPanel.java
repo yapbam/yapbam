@@ -19,12 +19,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.Account;
@@ -61,6 +63,7 @@ public class ImportPanel extends JPanel {
 	private JComboBox fieldsCombo;
 	private String invalidityCause;  //  @jve:decl-index=0:
 	private JLabel jLabel = null;
+	private File canonicalFile;
 	
 	/**
 	 * This is the default constructor
@@ -428,8 +431,13 @@ public class ImportPanel extends JPanel {
 
 	public void setFile(File file) throws IOException {
 		this.file = file;
+		this.canonicalFile = FileUtils.getCanonical(file);
 		this.numberOfLines = 0;
-		BufferedReader reader = new BufferedReader(new FileReader(file));
+		countFileLines();
+	}
+
+	private void countFileLines() throws FileNotFoundException, IOException, EmptyImportFileException {
+		BufferedReader reader = new BufferedReader(new FileReader(canonicalFile));
 		try {
 			for (String line = reader.readLine(); line!=null; line=reader.readLine()) {
 				numberOfLines++;
@@ -450,7 +458,7 @@ public class ImportPanel extends JPanel {
 		while (fields==null) {
 			// No such line in the file (it was probably edited by the user)
 			// Count the line numbers again
-			setFile(file);
+			countFileLines();
 			// Select the last line of the file
 			lineNumber = this.numberOfLines - 1;
 			fields = getFields(lineNumber);
@@ -477,7 +485,7 @@ public class ImportPanel extends JPanel {
 	}
 	
 	private String[] getFields(int lineNumber) throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(file));
+		BufferedReader reader = new BufferedReader(new FileReader(canonicalFile));
 		try {
 			for (int i = 0; i < lineNumber; i++) {
 				reader.readLine();
