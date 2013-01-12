@@ -30,7 +30,7 @@ public class CalculatorAction extends AbstractAction {
 			frame.setContentPane(new CalculatorPanel());
 			frame.pack();
 			frame.setResizable(false);
-			Utils.centerWindow(frame, owner);
+			frame.setLocationRelativeTo(owner);
 			owner.addWindowListener(new WindowAdapter() {
 				/* (non-Javadoc)
 				 * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
