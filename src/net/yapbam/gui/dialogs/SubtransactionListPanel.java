@@ -51,9 +51,11 @@ public class SubtransactionListPanel extends JPanel {
 	private JCheckBox addToTransaction;
 	private double sum;
 	private JLabel sumLabel;
+	private GlobalData data;
 
-	public SubtransactionListPanel(final GlobalData data) {
+	public SubtransactionListPanel(GlobalData data) {
 		super(new BorderLayout());
+		this.data = data;
 		this.sum = 0;
 		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), LocalizationData.get("TransactionDialog.SubPanel.title"))); //$NON-NLS-1$
 		
@@ -94,7 +96,7 @@ public class SubtransactionListPanel extends JPanel {
 					Point p = e.getPoint();
 					int row = table.rowAtPoint(p);
 					if (row >= 0) {
-						editSelected(data);
+						editSelected(SubtransactionListPanel.this.data);
 					}
 				}
 			}
@@ -133,7 +135,7 @@ public class SubtransactionListPanel extends JPanel {
 		newSubTransactionButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				create(data);
+				create(SubtransactionListPanel.this.data);
 			}
 		});
 		delete = new JButton(LocalizationData.get("TransactionDialog.SubPanel.delete")); //$NON-NLS-1$
@@ -151,7 +153,7 @@ public class SubtransactionListPanel extends JPanel {
 		edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				editSelected(data);
+				editSelected(SubtransactionListPanel.this.data);
 			}
 		});
 		buttonsPanel.add(newSubTransactionButton);

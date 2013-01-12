@@ -39,7 +39,7 @@ public class TransferPanel extends JPanel {
 	private DateWidget dateField;
 	private JLabel amountLabel;
 	private CurrencyWidget amountField;
-	private JPanel panel;
+	private JPanel mainPanel;
 	private CategoryWidget categoryWidget;
 
 	private GlobalData data;
@@ -79,15 +79,15 @@ public class TransferPanel extends JPanel {
 		gbc_subTransactionsPanel.gridx = 0;
 		gbc_subTransactionsPanel.gridy = 2;
 		add(getSubTransactionsPanel(), gbc_subTransactionsPanel);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.insets = new Insets(0, 0, 5, 0);
-		gbc_panel.gridwidth = 0;
-		gbc_panel.weighty = 1.0;
-		gbc_panel.weightx = 1.0;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 1;
-		add(getPanel(), gbc_panel);
+		GridBagConstraints gbc_mainPanel = new GridBagConstraints();
+		gbc_mainPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_mainPanel.gridwidth = 0;
+		gbc_mainPanel.weighty = 1.0;
+		gbc_mainPanel.weightx = 1.0;
+		gbc_mainPanel.fill = GridBagConstraints.BOTH;
+		gbc_mainPanel.gridx = 0;
+		gbc_mainPanel.gridy = 1;
+		add(getMainPanel(), gbc_mainPanel);
 	}
 
 	private JPanel getUpperPane() {
@@ -193,14 +193,14 @@ public class TransferPanel extends JPanel {
 		}
 		return amountField;
 	}
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setLayout(new GridLayout(0, 2, 0, 0));
-			panel.add(getFromPane());
-			panel.add(getToPane());
+	private JPanel getMainPanel() {
+		if (mainPanel == null) {
+			mainPanel = new JPanel();
+			mainPanel.setLayout(new GridLayout(0, 2, 0, 0));
+			mainPanel.add(getFromPane());
+			mainPanel.add(getToPane());
 		}
-		return panel;
+		return mainPanel;
 	}
 	private CategoryWidget getCategoryWidget() {
 		if (categoryWidget == null) {

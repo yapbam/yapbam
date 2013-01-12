@@ -34,5 +34,4 @@ public class TransferDialog extends AbstractDialog<GlobalData, Transaction[]> {
 	protected String getOkDisabledCause() {
 		return transferPanel.getOkDisabledCause();
 	}
-
 }

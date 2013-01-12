@@ -3,11 +3,6 @@ package net.yapbam.gui.dialogs;
 import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.event.AccountAddedEvent;
-import net.yapbam.data.event.AccountPropertyChangedEvent;
-import net.yapbam.data.event.AccountRemovedEvent;
-import net.yapbam.data.event.DataEvent;
-import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AbstractSelector;
 
@@ -17,18 +12,6 @@ public class AccountWidget extends AbstractSelector<Account, GlobalData> {
 	
 	public AccountWidget(GlobalData data) {
 		super(data);
-		if (data!=null) {
-			data.addListener(new DataListener() {
-				@Override
-				public void processEvent(DataEvent event) {
-					if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent)) {
-						refresh();
-					} else if ((event instanceof AccountPropertyChangedEvent) && ((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)) {
-						refresh();
-					}
-				}
-			});
-		}
 	}
 	
 	@Override
