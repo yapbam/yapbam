@@ -71,7 +71,7 @@ public class PersistenceManager {
 	public static WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 		waitFrame.setSize(400, waitFrame.getSize().height);
-		Utils.centerWindow(waitFrame, owner);
+		waitFrame.setLocationRelativeTo(owner);
 		return waitFrame;
 	}
 	

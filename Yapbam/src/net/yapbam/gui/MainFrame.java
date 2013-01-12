@@ -316,6 +316,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	
 	public void restart() {
 		//FIXME MemoryLeak : We would need to remove the obsoletes listeners (from the closing window) ... but don't know how to do that efficiently
+		//I think simply disposing the window is not enough (it has listeners on GlobalData). Should be investigated
 		this.isRestarting = true;
 		final Object[] restartData = new Object[this.plugins.length];
 		for (int i = 0; i < restartData.length; i++) {
