@@ -16,7 +16,6 @@ import javax.swing.JOptionPane;
 import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
-import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.StringUtils;

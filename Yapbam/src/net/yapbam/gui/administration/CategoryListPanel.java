@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.CharWidget;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
@@ -93,7 +93,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 				}
 			}
 			if (errorMessage!=null) {
-				JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(CategoryListPanel.this),
+				JOptionPane.showMessageDialog(Utils.getOwnerWindow(CategoryListPanel.this),
 						errorMessage, LocalizationData.get("CategoryManager.error.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
 				fireTableRowsUpdated(row, row);
 			} else {
@@ -187,7 +187,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			CategoryDialog.open((GlobalData)data, AbstractDialog.getOwnerWindow(CategoryListPanel.this), null);
+			CategoryDialog.open((GlobalData)data, Utils.getOwnerWindow(CategoryListPanel.this), null);
 		}
 	}
 

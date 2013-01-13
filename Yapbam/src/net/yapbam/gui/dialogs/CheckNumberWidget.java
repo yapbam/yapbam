@@ -5,7 +5,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
@@ -99,7 +99,7 @@ public class CheckNumberWidget extends JPanel {
 			newButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Checkbook book = CheckbookDialog.open(data, account, AbstractDialog.getOwnerWindow(newButton));
+					Checkbook book = CheckbookDialog.open(data, account, Utils.getOwnerWindow(newButton));
 					if (book != null) {
 						numbers.addItem(book.getFullNumber(book.getNext()));
 						numbers.setSelectedIndex(numbers.getItemCount() - 1);

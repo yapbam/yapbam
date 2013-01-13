@@ -32,7 +32,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.swing.table.RowHeaderRenderer;
 import net.astesana.ajlib.swing.table.Table;
@@ -209,7 +208,7 @@ public class BudgetViewPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					JFileChooser chooser = new FileChooser();
 					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-					File result = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
+					File result = chooser.showSaveDialog(Utils.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {
 						try {
 							String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$

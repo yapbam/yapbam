@@ -9,7 +9,7 @@ import javax.swing.JTable.PrintMode;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.utilities.CSVExporter;
 import net.yapbam.data.FilteredData;
@@ -95,7 +95,7 @@ public class BalanceHistoryTablePane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new FileChooser();
 				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-				File file = chooser.showSaveDialog(AbstractDialog.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
+				File file = chooser.showSaveDialog(Utils.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 				if (file!=null) {
 					try {
 						table.export(file, new DefaultExporter(LocalizationData.getLocale()));

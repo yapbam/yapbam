@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -25,7 +25,7 @@ public class EditPeriodicalTransactionAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		PeriodicalTransaction transaction = table.getSelectedTransaction();
 		if (transaction != null) {
-			PeriodicalTransactionDialog.open(table.getFilteredData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transaction, true);
+			PeriodicalTransactionDialog.open(table.getFilteredData(), Utils.getOwnerWindow((Component) e.getSource()), transaction, true);
 		}
 	}
 }

@@ -25,6 +25,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import net.astesana.ajlib.swing.dialog.FileChooser;
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
@@ -349,6 +350,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 					if (file!=null) {
 						try {
+							file = FileUtils.getCanonical(file);
 							exporter.exportFile(file, frame.getFilteredData());
 							JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 						} catch (IOException e1) {

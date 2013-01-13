@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -23,7 +23,7 @@ public class EditTransactionAction extends AbstractTransactionAction {
 	public void actionPerformed(ActionEvent e) {
 		Transaction[] transactions = selector.getSelectedTransactions();
 		if (transactions.length==1) {
-			Transaction transaction = TransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component) e.getSource()), transactions[0], true, true, false);
+			Transaction transaction = TransactionDialog.open(selector.getFilteredData(), Utils.getOwnerWindow((Component) e.getSource()), transactions[0], true, true, false);
 			if (transaction!=null) {
 				selector.setSelectedTransactions(new Transaction[]{transaction});
 			}

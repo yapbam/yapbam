@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -28,7 +27,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
@@ -202,10 +201,6 @@ public class SubtransactionListPanel extends JPanel {
 		return this.addToTransaction.isSelected();
 	}
 	
-	private Window getWindow() {
-		return AbstractDialog.getOwnerWindow(this);
-	}
-
 	private void editSelected(final GlobalData data) {
 		int index = table.getSelectedRow();
 		if (index>=0) {
@@ -213,7 +208,7 @@ public class SubtransactionListPanel extends JPanel {
 			// It is called when the user double-click on a row. If the ctrl key is down while clicking,
 			// the first click selects the row, the second erases the selection it !
 			SubTransaction old = tableModel.get(index);
-			SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, old);
+			SubTransactionDialog dialog = new SubTransactionDialog(Utils.getOwnerWindow(this), data, old);
 			setPredefinedDescriptions(dialog);
 			if (this.updater!=null) dialog.setPredefinedUpdater(updater);
 			dialog.setVisible(true);
@@ -239,7 +234,7 @@ public class SubtransactionListPanel extends JPanel {
 	}
 
 	private void create(final GlobalData data) {
-		SubTransactionDialog dialog = new SubTransactionDialog(getWindow(), data, null);
+		SubTransactionDialog dialog = new SubTransactionDialog(Utils.getOwnerWindow(this), data, null);
 		setPredefinedDescriptions(dialog);
 		if (this.updater!=null) dialog.setPredefinedUpdater(updater);
 		dialog.setVisible(true);

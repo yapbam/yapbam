@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -31,8 +31,7 @@ public class DeleteTransactionAction extends AbstractTransactionAction {
 		Transaction transaction = selector.getSelectedTransactions()[0];
 		EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
 		if (editingOptions.isAlertOnModifyChecked() && (transaction.getStatement() != null)) {
-			AlertDialog alert = new AlertDialog(
-					AbstractDialog.getOwnerWindow((Component) e.getSource()),
+			AlertDialog alert = new AlertDialog(Utils.getOwnerWindow((Component) e.getSource()),
 					LocalizationData.get("DeleteCheckedTransactionAlert.title"), LocalizationData.get("DeleteCheckedTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			alert.setVisible(true);
 			if (alert.getResult() == null) return;
@@ -41,7 +40,7 @@ public class DeleteTransactionAction extends AbstractTransactionAction {
 				Preferences.INSTANCE.setEditingOptions(editingOptions);
 			}
 		} else if (editingOptions.isAlertOnDelete()) {
-			AlertDialog alert = new AlertDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()),
+			AlertDialog alert = new AlertDialog(Utils.getOwnerWindow((Component) e.getSource()),
 					LocalizationData.get("DeleteTransactionAlert.title"), LocalizationData.get("DeleteTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			alert.setVisible(true);
 			if (alert.getResult() == null) return;

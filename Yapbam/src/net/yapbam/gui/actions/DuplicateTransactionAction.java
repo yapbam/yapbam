@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -21,7 +21,7 @@ public class DuplicateTransactionAction extends AbstractTransactionAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		TransactionDialog dialog = new TransactionDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), selector.getFilteredData(),
+		TransactionDialog dialog = new TransactionDialog(Utils.getOwnerWindow((Component) e.getSource()), selector.getFilteredData(),
 				selector.getSelectedTransactions()[0], false);
 		if (Preferences.INSTANCE.getEditingOptions().isDuplicateTransactionDateToCurrent()) dialog.setTransactionDate(new Date());
 		dialog.setStatement(null);

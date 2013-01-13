@@ -12,7 +12,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
@@ -141,7 +141,7 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
+			ModeDialog dialog = new ModeDialog(Utils.getOwnerWindow((Component)e.getSource()), account);
 			dialog.setVisible(true);
 			Mode mode = dialog.getResult();
 			if (mode!=null) {
@@ -158,7 +158,7 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 		public void actionPerformed(ActionEvent e) {
 			int row = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			Mode old = account.getMode(row+1);
-			ModeDialog dialog = new ModeDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
+			ModeDialog dialog = new ModeDialog(Utils.getOwnerWindow((Component)e.getSource()), account);
 			dialog.setContent(old);
 			dialog.setVisible(true);
 			Mode mode = dialog.getResult();
