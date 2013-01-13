@@ -35,6 +35,7 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.swing.table.RowHeaderRenderer;
 import net.astesana.ajlib.swing.table.Table;
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
@@ -211,6 +212,7 @@ public class BudgetViewPanel extends JPanel {
 					File result = chooser.showSaveDialog(Utils.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 					if (result!=null) {
 						try {
+							result = FileUtils.getCanonical(result);
 							String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
 							String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
 							budget.export(result, '\t', LocalizationData.getLocale(), sumLineName, sumColumnName);

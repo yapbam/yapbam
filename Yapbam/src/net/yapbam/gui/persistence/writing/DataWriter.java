@@ -2,6 +2,7 @@ package net.yapbam.gui.persistence.writing;
 
 import java.awt.Window;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -69,7 +70,11 @@ public class DataWriter {
 			}
 		} catch (ExecutionException e) {
 			// An exception occurred while saving to the cache
-			ErrorManager.INSTANCE.log(owner, e.getCause());
+			if (e.getCause() instanceof FileNotFoundException) {
+				JOptionPane.showMessageDialog(owner, LocalizationData.get("saveDialog.fileNotWritable"), LocalizationData.get("Generic.error"), JOptionPane.ERROR_MESSAGE);
+			} else {
+				ErrorManager.INSTANCE.log(owner, e.getCause());
+			}
 			return false;
 		} catch (CancellationException e) {
 			// The synchronization was cancelled => Mark the file as saved

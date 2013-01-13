@@ -439,7 +439,12 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				@Override
 				public boolean processError(Throwable e) {
 					if (restore && (e instanceof FileNotFoundException)) {
-						ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),finalURI)); //$NON-NLS-1$
+						if (finalURI.getScheme().equals("file") && (new File(finalURI).exists())) {
+							// The file exist, but it is read protected
+							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotReadable"),finalURI)); //$NON-NLS-1$
+						} else {
+							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),finalURI)); //$NON-NLS-1$
+						}
 					} else if (e instanceof IOException) {
 						if (restore) {
 							ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),finalURI)); //$NON-NLS-1$

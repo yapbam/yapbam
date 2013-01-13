@@ -8,7 +8,9 @@ improvement
 
 version	0.13.4 (13/01/2013)
 fix
-	Problèmes de gestion mémoire pouvant entrainer des lenteur, et des erreurs, dans les cas extrêmes. 
+	Problèmes de gestion mémoire pouvant entrainer des lenteurs, et des erreurs, dans les cas extrêmes. 
+	Tenter de lire ou d'écriture un fichier protégé causait une erreur.
+	Régression : Quand, dans un dialogue de sélection de fichier, vous sélectionniez un raccourci (lien symbolique), Yapbam ne suivait pas le lien pour lire (ou sauver vers) la cible du lien, mais lisait/sauvait directement dans le fichier raccourci. 
 
 version	0.13.3 (02/01/2013)
 fix

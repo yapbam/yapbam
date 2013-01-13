@@ -11,6 +11,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
+import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.widget.JLabelMenu;
 
 /** A JTable that allows columns to be hidden.
@@ -111,6 +112,7 @@ public class FriendlyTable extends JTable {
 	 * @see ExportFormat
 	 */
 	public void export(File file, ExportFormat format) throws IOException {
+		file = FileUtils.getCanonical(file);
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
 		try {
 			boolean first = true;
