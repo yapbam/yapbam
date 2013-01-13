@@ -42,7 +42,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	 * @param owner The owner window of the this dialog. 
 	 * @param auto true if the dialog is created by an automated task, false, if it is the result of a user action.
 	 */
-	public CheckUpdateDialog(Window owner, boolean auto) {
+	CheckUpdateDialog(Window owner, boolean auto) {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
 		this.auto = auto;
 		if (auto) setDelay(Long.MAX_VALUE);
@@ -69,6 +69,12 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		return new UpdateSwingWorker(getOwner());
 	}
 	
+	public static void check(Window owner, boolean auto) {
+		CheckUpdateDialog dialog = new CheckUpdateDialog(owner, auto);
+		dialog.setVisible(true);
+		dialog.dispose(); //TODO This should be useless ... but it seems there's a bug in LongTaskDialog that don't release the dialog once the task has ended
+	}
+
 	// A SwingWorker that performs the update availability check
 	class UpdateSwingWorker extends SwingWorker<UpdateInformation, Void> {
 		private static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck"; //$NON-NLS-1$

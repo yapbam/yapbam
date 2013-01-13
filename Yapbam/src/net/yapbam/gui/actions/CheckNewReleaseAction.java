@@ -33,7 +33,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new CheckUpdateDialog(owner, false).setVisible(true);
+		CheckUpdateDialog.check(owner, false);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 		if (days >= 0) { // If auto-check is on
 			Date last = YapbamState.INSTANCE.getDate(LAST_UPDATE_CHECK_KEY);
 			if (DateUtils.dateToInteger(new Date()) - DateUtils.dateToInteger(last) >= days) {
-				new CheckUpdateDialog(owner, true).setVisible(true);
+				CheckUpdateDialog.check(owner, true);
 			}
 		}
 	}
