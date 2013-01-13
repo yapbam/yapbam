@@ -8,7 +8,9 @@ improvement
 
 version	0.13.4 (01/13/2013)
 fix
-	Memory management problems that can result in slowing down Yapbam and errors in extreme cases. 
+	Memory management problems that can result in slowing down Yapbam and errors in extreme cases.
+	Trying to read or write protected files caused errors.
+	Regression: When selecting a shortcut (symbolic link) in a file selection dialog, Yapbam did not follow the link to read/save the target file, but directly read/saved the shortcut file. 
 
 version	0.13.3 (01/02/2013)
 fix
