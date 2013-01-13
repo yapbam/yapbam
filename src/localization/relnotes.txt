@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
+version	0.13.4 (01/13/2013)
+fix
+	Memory management problems that can result in slowing down Yapbam and errors in extreme cases. 
+
 version	0.13.3 (01/02/2013)
 fix
 	Versions before 0.12.0 allowed to create recurring transactions without information on the periodicity. It was an anomaly. The following versions of Yapbam no longer allowed to read files containing such operations, which was ... a disaster.
