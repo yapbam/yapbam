@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
@@ -29,10 +29,10 @@ public class NewTransferAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		while (data.getAccountsNumber()<2) {
 			// Need to create two accounts first
-			Account account = EditAccountDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
+			Account account = EditAccountDialog.open(data, Utils.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
 			if (account == null) return;
 		}
-		TransferDialog dialog = new TransferDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
+		TransferDialog dialog = new TransferDialog(Utils.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
 		dialog.setVisible(true);
 		Transaction[] transactions = dialog.getResult();
 		if (transactions!=null) {

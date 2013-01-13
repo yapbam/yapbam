@@ -3,7 +3,7 @@ package net.yapbam.gui.dialogs;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.widget.AbstractTitledPanel;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.yapbam.gui.ErrorManager;
@@ -52,7 +52,7 @@ public class AboutPanel extends AbstractTitledPanel<Void> {
 				jTabbedPane.addTab(LocalizationData.get("AboutDialog.RelNotes.TabName"), null, getRelnotesPane(), null); //$NON-NLS-1$
 				jTabbedPane.addTab(LocalizationData.get("AboutDialog.Contributors.TabName"), null, getAboutPane(), null); //$NON-NLS-1$
 			} catch (IOException e) {
-				ErrorManager.INSTANCE.log(AbstractDialog.getOwnerWindow(this), e);
+				ErrorManager.INSTANCE.log(Utils.getOwnerWindow(this), e);
 			}
 		}
 		return jTabbedPane;

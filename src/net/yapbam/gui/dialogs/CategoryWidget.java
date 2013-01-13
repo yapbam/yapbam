@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs;
 
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 
@@ -52,7 +53,7 @@ public class CategoryWidget extends AbstractSelector<Category, GlobalData> {
 	@Override
 	protected Category createNew() {
 		if (getParameters()!=null) {
-			return CategoryDialog.open(getParameters(), CategoryDialog.getOwnerWindow(this), null);
+			return CategoryDialog.open(getParameters(), Utils.getOwnerWindow(this), null);
 		} else {
 			return null;
 		}

@@ -7,7 +7,7 @@ import javax.swing.AbstractAction;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.dialogs.AbstractTransactionDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.gui.dialogs.periodicaltransaction.PeriodicalTransactionDialog;
 
 @SuppressWarnings("serial")
@@ -23,7 +23,7 @@ public class DuplicatePeriodicTransactionAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		PeriodicalTransactionDialog.open(table.getFilteredData(),AbstractTransactionDialog.getOwnerWindow(table),
+		PeriodicalTransactionDialog.open(table.getFilteredData(),Utils.getOwnerWindow(table),
 				(PeriodicalTransaction) table.getSelectedTransaction().clone(), false);
 	}
 }

@@ -17,7 +17,6 @@ import javax.swing.UIManager;
 
 import net.astesana.ajlib.swing.Browser;
 import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
 import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
@@ -141,7 +140,7 @@ public class WelcomePanel extends JPanel {
 					public boolean processError(Throwable e) {
 						String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
 								file.getAbsolutePath());
-						JOptionPane.showMessageDialog(AbstractDialog.getOwnerWindow(WelcomePanel.this), message,
+						JOptionPane.showMessageDialog(Utils.getOwnerWindow(WelcomePanel.this), message,
 								LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 						btnOpenSampleData.setEnabled(false);
 						return true;

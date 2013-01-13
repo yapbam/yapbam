@@ -6,7 +6,6 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.AccessControlException;
-import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;

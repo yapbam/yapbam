@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
@@ -42,12 +42,12 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 						// A checkbook just finished, ask what to do
 						String message = MessageFormat.format(LocalizationData.get("checkbookDialog.finished.message"),old.getFullNumber(old.getFirst()),old.getFullNumber(old.getLast())); //$NON-NLS-1$
 						String[] options = new String[]{LocalizationData.get("GenericButton.ignore"),LocalizationData.get("checkbookDialog.finished.delete"),LocalizationData.get("checkbookDialog.finished.createNew"),LocalizationData.get("checkbookDialog.finished.DeleteAndCreateNew")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-						int choice = JOptionPane.showOptionDialog(AbstractDialog.getOwnerWindow(CheckbookListPanel.this), message, LocalizationData.get("checkbookDialog.finished.title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[3]);  //$NON-NLS-1$
+						int choice = JOptionPane.showOptionDialog(Utils.getOwnerWindow(CheckbookListPanel.this), message, LocalizationData.get("checkbookDialog.finished.title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[3]);  //$NON-NLS-1$
 						if ((choice==1) || (choice==3)) {
 							CheckbookListPanel.this.data.remove(checkbookChangedEvt.getAccount(), checkbookChangedEvt.getNewCheckbook());
 						}
 						if (choice > 1) {
-							createBook(AbstractDialog.getOwnerWindow(CheckbookListPanel.this), checkbookChangedEvt.getAccount());
+							createBook(Utils.getOwnerWindow(CheckbookListPanel.this), checkbookChangedEvt.getAccount());
 						}
 					}
 				}
@@ -87,7 +87,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			createBook(AbstractDialog.getOwnerWindow((Component)e.getSource()), account);
+			createBook(Utils.getOwnerWindow((Component)e.getSource()), account);
 		}
 	}
 	private final class EditBookAction extends AbstractAction {
@@ -99,7 +99,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		public void actionPerformed(ActionEvent e) {
 			int row = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
 			Checkbook old = account.getCheckbook(row);
-			CheckbookDialog dialog = new CheckbookDialog(AbstractDialog.getOwnerWindow((Component)e.getSource()));
+			CheckbookDialog dialog = new CheckbookDialog(Utils.getOwnerWindow((Component)e.getSource()));
 			dialog.setContent(old);
 			dialog.setVisible(true);
 			Checkbook checkbook = dialog.getResult();

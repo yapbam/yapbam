@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CustomFilterDialog;
@@ -23,7 +23,7 @@ public class CustomFilterAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Window owner = e.getSource() instanceof Component ?AbstractDialog.getOwnerWindow((Component) e.getSource()):null;
+		Window owner = e.getSource() instanceof Component ?Utils.getOwnerWindow((Component) e.getSource()):null;
 		CustomFilterDialog dialog = new CustomFilterDialog(owner, data);
 		dialog.setVisible(true);
 		Boolean result = dialog.getResult();

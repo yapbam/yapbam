@@ -7,7 +7,7 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.JTableListener;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.astesana.ajlib.swing.widget.date.DateWidget;
@@ -59,7 +59,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			if (jTable.getSelectedRowCount()==0) return; 
 			int row = jTable.convertRowIndexToModel(jTable.getSelectedRow());
 			Transaction transaction = (Transaction) tableModel.getTransaction(row);
-			transaction = TransactionDialog.open(data, AbstractDialog.getOwnerWindow(jTable), transaction, true, false, false);
+			transaction = TransactionDialog.open(data, Utils.getOwnerWindow(jTable), transaction, true, false, false);
 			if (transaction!=null) {
 				tableModel.setTransaction(row, transaction);
 			}

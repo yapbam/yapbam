@@ -9,7 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -44,7 +44,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 		
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new GeneratePeriodicalTransactionsDialog(AbstractDialog.getOwnerWindow((Component) e.getSource()), data).setVisible(true);
+		new GeneratePeriodicalTransactionsDialog(Utils.getOwnerWindow((Component) e.getSource()), data).setVisible(true);
 	}
 
 	private void refreshEnabled() {

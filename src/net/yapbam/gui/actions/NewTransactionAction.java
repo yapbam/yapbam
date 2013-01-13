@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
@@ -35,7 +35,7 @@ public class NewTransactionAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Transaction transaction = TransactionDialog.open(data, AbstractDialog.getOwnerWindow((Component) e.getSource()), null, false, true, this.massMode);
+		Transaction transaction = TransactionDialog.open(data, Utils.getOwnerWindow((Component) e.getSource()), null, false, true, this.massMode);
 		if (transaction!=null) this.selector.setSelectedTransactions(new Transaction[]{transaction});
 	}
 }

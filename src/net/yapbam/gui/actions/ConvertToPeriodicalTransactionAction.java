@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
@@ -29,6 +29,6 @@ public class ConvertToPeriodicalTransactionAction extends AbstractTransactionAct
 		}
 		PeriodicalTransaction model = new PeriodicalTransaction(transaction.getDescription(), transaction.getComment(), transaction.getAmount(),
 				transaction.getAccount(), transaction.getMode(), transaction.getCategory(), list, null, false, null);
-		PeriodicalTransactionDialog.open(selector.getFilteredData(), AbstractDialog.getOwnerWindow((Component)e.getSource()), model, false);
+		PeriodicalTransactionDialog.open(selector.getFilteredData(), Utils.getOwnerWindow((Component)e.getSource()), model, false);
 	}
 }

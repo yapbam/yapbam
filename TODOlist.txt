@@ -1,11 +1,11 @@
 TODO list
 
 Bug :
-- Tester l'export dans un raccourci
+- Tester l'export (autre que file/export) dans un raccourci
 - Tester le comportement sur des fichiers vérouillés en écriture (export et svg standard)
 
 Question à cent sous :
-Depuis la 0.12.0 on ne plus plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
+Depuis la 0.12.0 on ne peut plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
 
 Améliorations en cours :
 - La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
