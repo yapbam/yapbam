@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
+version	0.13.5 (14/01/2013)
+fix
+	Le dialog de sélection de fichier pouvait causer des erreur quand l'une des apparences "Windows", "Windows classic" ou "CDE Motif" était active.
+
 version	0.13.4 (13/01/2013)
 fix
 	Problèmes de gestion mémoire pouvant entrainer des lenteurs, et des erreurs, dans les cas extrêmes. 
