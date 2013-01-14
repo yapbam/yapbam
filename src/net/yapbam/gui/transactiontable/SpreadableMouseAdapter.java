@@ -12,8 +12,12 @@ public class SpreadableMouseAdapter extends MouseAdapter {
 	public void mousePressed(MouseEvent e) {
 		JTable table = (JTable) e.getSource(); 
 		Point p = e.getPoint();
-		int column = table.convertColumnIndexToModel(table.columnAtPoint(p));
+		int viewColumn = table.columnAtPoint(p);
 		int viewRow = table.rowAtPoint(p);
+		// For a unknown reason, the point is sometime out of the table
+		// We will trap this case in order to prevent having an exception when converting the view indexes to model ones.
+		if (viewColumn<0 || viewRow<0) return;
+		int column = table.convertColumnIndexToModel(viewColumn);
 		int row = table.convertRowIndexToModel(viewRow);
 		SpreadableTableModel model = (SpreadableTableModel) table.getModel();
 		if ((column == model.getSpreadColumnNumber()) && (row >= 0) && model.isSpreadable(row)) {
