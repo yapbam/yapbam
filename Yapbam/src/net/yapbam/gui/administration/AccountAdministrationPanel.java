@@ -86,7 +86,6 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 		gridBagConstraints3.weighty = 1.0D;
 		gridBagConstraints3.weightx = 1.0D;
 		gridBagConstraints3.gridy = 1;
-		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getAccountListPanel(), gridBagConstraints);
 		this.add(getModeListPanel(), gridBagConstraints1);

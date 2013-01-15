@@ -29,6 +29,7 @@ class GlobalDataHandler extends DefaultHandler {
 	private int currentProgress;
 	
 	private Collection<Transaction> transactions;
+	private String lastCData;
 
 	GlobalDataHandler(ProgressReport report) {
 		super();
@@ -180,7 +181,11 @@ class GlobalDataHandler extends DefaultHandler {
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
 			this.data.add(this.transactions.toArray(new Transaction[this.transactions.size()]));
 		} else if (qName.equals(Serializer.ACCOUNT_TAG)) {
-			this.tempData.pop(); // remove the tag we added in the stack
+			Account account = (Account) this.tempData.pop(); // remove the tag we added in the stack
+			if (lastCData!=null) {
+				this.data.setComment(account, lastCData);
+				lastCData=null;
+			}
 		} else if (qName.equals(Serializer.CATEGORY_TAG)) {
 		} else if (qName.equals(Serializer.MODE_TAG)) {
 			DateStepper[] vdcs = (DateStepper[]) this.tempData.pop();
@@ -250,10 +255,7 @@ class GlobalDataHandler extends DefaultHandler {
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		String str = new String(ch, start, length);
-		str = str.trim();
-		if (str.length()!=0) {
-			System.err.println ("strange, characters is called : "+str); //$NON-NLS-1$
-		}
+		this.lastCData = str.trim();
 	}
 
 	@Override

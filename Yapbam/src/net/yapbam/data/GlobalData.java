@@ -579,6 +579,15 @@ public class GlobalData extends DefaultListenable {
 			this.setChanged();
 		}
 	}
+	
+	public void setComment (Account account, String comment) {
+		String old = account.getComment();
+		if (!NullUtils.areEquals(old, comment)) {
+			account.setComment(comment);
+			this.fireEvent(new AccountPropertyChangedEvent(this, AccountPropertyChangedEvent.COMMENT, account, old, comment));
+			this.setChanged();
+		}
+	}
 
 	class CategoryUpdater extends AbstractTransactionUpdater {
 		private Category oldCategory;

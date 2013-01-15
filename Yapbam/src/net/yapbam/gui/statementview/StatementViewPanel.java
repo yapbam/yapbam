@@ -28,6 +28,7 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
 
 import javax.swing.Action;

@@ -2,6 +2,8 @@ package net.yapbam.gui.dialogs;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -16,6 +18,8 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CurrencyWidget;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class EditAccountPanel extends JPanel {
@@ -36,6 +40,9 @@ public class EditAccountPanel extends JPanel {
 	private JLabel message;
 
 	private PropertyChangeListener listener;
+	private JScrollPane notePane;
+	private JTextArea noteField;
+	private JLabel lblNotes;
 
 	/**
 	 * Create the panel.
@@ -98,15 +105,28 @@ public class EditAccountPanel extends JPanel {
 		add(getLowThresholdField(), gbc_lowThresholdField);
 		GridBagConstraints gbc_lblHighThreshold = new GridBagConstraints();
 		gbc_lblHighThreshold.anchor = GridBagConstraints.WEST;
-		gbc_lblHighThreshold.insets = new Insets(0, 0, 0, 5);
+		gbc_lblHighThreshold.insets = new Insets(0, 0, 5, 5);
 		gbc_lblHighThreshold.gridx = 0;
 		gbc_lblHighThreshold.gridy = 4;
 		add(getLblHighThreshold(), gbc_lblHighThreshold);
 		GridBagConstraints gbc_hightThresholdField = new GridBagConstraints();
+		gbc_hightThresholdField.insets = new Insets(0, 0, 5, 0);
 		gbc_hightThresholdField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_hightThresholdField.gridx = 1;
 		gbc_hightThresholdField.gridy = 4;
 		add(getHightThresholdField(), gbc_hightThresholdField);
+		GridBagConstraints gbc_lblNotes = new GridBagConstraints();
+		gbc_lblNotes.gridwidth = 0;
+		gbc_lblNotes.anchor = GridBagConstraints.WEST;
+		gbc_lblNotes.gridx = 0;
+		gbc_lblNotes.gridy = 5;
+		add(getLblNotes(), gbc_lblNotes);
+		GridBagConstraints gbc_notePane = new GridBagConstraints();
+		gbc_notePane.gridwidth = 0;
+		gbc_notePane.fill = GridBagConstraints.BOTH;
+		gbc_notePane.gridx = 0;
+		gbc_notePane.gridy = 6;
+		add(getNotePane(), gbc_notePane);
 	}
 	
 	void setAccount(int accountIndex) {
@@ -122,6 +142,9 @@ public class EditAccountPanel extends JPanel {
 		double high = account.getAlertThreshold().getMoreThreshold();
 		getHightThresholdField().setValue(high==AlertThreshold.NO.getMoreThreshold()?null:high);
 		getHightThresholdField().setVisible(true);
+		getLblNotes().setVisible(true);
+		getNotePane().setVisible(true);
+		getNoteField().setText(account.getComment()==null?"":account.getComment());
 		updateOkDisabledCause();
 	}
 	
@@ -259,7 +282,7 @@ public class EditAccountPanel extends JPanel {
 	
 	Account getAccount() {
 		if (this.okDisabledCause!=null) return null;
-		return new Account(this.getNameField().getText().trim(), getInitBalanceField().getValue(), getAlerts());
+		return new Account(this.getNameField().getText().trim(), getInitBalanceField().getValue(), getAlerts(), getNoteField().getText());
 	}
 	
 	private boolean isNameOk(String name) {
@@ -271,5 +294,29 @@ public class EditAccountPanel extends JPanel {
 			if ((i!=accountIndex) && name.equalsIgnoreCase(data.getAccount(i).getName().trim())) return false;
 		}
 		return true;
+	}
+	private JScrollPane getNotePane() {
+		if (notePane == null) {
+			notePane = new JScrollPane(getNoteField());
+			notePane.setPreferredSize(new Dimension(100, 200));
+			notePane.setVisible(false);
+		}
+		return notePane;
+	}
+	private JTextArea getNoteField() {
+		if (noteField == null) {
+			noteField = new JTextArea();
+			noteField.setToolTipText(LocalizationData.get("AccountDialog.notes.tooltip")); //$NON-NLS-1$
+			noteField.setLineWrap(true);
+			noteField.setWrapStyleWord(true);
+		}
+		return noteField;
+	}
+	private JLabel getLblNotes() {
+		if (lblNotes == null) {
+			lblNotes = new JLabel(LocalizationData.get("AccountDialog.notes")); //$NON-NLS-1$
+			lblNotes.setVisible(false);
+		}
+		return lblNotes;
 	}
 }

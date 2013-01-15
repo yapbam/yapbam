@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  */
 @SuppressWarnings("serial")
 public class JImage extends JComponent {
-	// Set up contraints so that the user supplied component and the
+	// Set up constraints so that the user supplied component and the
 	// background image label overlap and resize identically
 	private static GridBagConstraints gbc;
 
