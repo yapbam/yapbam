@@ -15,6 +15,7 @@ public class Account implements Serializable {
 	private int transactionNumber;
 	private BalanceData balanceData;
 	private AlertThreshold alertThreshold;
+	private String comment;
 
 	/** Constructor.
 	 * <br>This constructor creates a new account with the default alerts and one payment mode: Mode.UNDEFINED.
@@ -35,6 +36,10 @@ public class Account implements Serializable {
 	 * @param alerts The alerts set on the account.
 	 */
 	public Account(String name, double initialBalance, AlertThreshold alerts) {
+		this(name, initialBalance, alerts, null);
+	}
+
+	public Account(String name, double initialBalance, AlertThreshold alerts, String comment) {
 		this.name = name;
 		this.initialBalance = initialBalance;
 		this.alertThreshold = alerts;
@@ -43,6 +48,7 @@ public class Account implements Serializable {
 		this.balanceData = new BalanceData();
 		this.balanceData.clear(initialBalance);
 		this.add(Mode.UNDEFINED);
+		this.setComment(comment);
 	}
 
 	/** Gets the account's name
@@ -206,5 +212,20 @@ public class Account implements Serializable {
 	 */
 	public BalanceData getBalanceData() {
 		return this.balanceData;
+	}
+	
+	/** Gets this account's comment.
+	 * @return a String or null if no comment is attached to this account
+	 */
+	public String getComment() {
+		return this.comment;
+	}
+	
+	void setComment(String comment) {
+		this.comment = comment;
+		if (this.comment!=null) {
+			this.comment = this.comment.trim();
+			if (this.comment.length()==0) this.comment = null;
+		}
 	}
 }

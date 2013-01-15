@@ -6,21 +6,33 @@ import java.awt.Component;
 import java.awt.Font;
 
 import net.astesana.ajlib.swing.table.RowSorter;
+import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.statementview.CellRenderer;
+import net.yapbam.gui.util.SplitPane;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JLabel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class AccountsSummaryPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JScrollPane jScrollPane = null;
+	private JScrollPane tablePanel = null;
 	private JTable table = null;
 	private AccountsSummaryTableModel model;
+	private SplitPane splitPane;
 	
 	private GlobalData data;
+	private JScrollPane notePane;
+	private JTextArea notesField;
+	private JPanel bottomPanel;
+	private JLabel lblNotesLabel;
 	
 	/**
 	 * This is the default constructor
@@ -43,22 +55,30 @@ public class AccountsSummaryPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
 		this.setLayout(new BorderLayout());
-		this.add(getJScrollPane(), BorderLayout.CENTER);
+		add(getSplitPane(), BorderLayout.CENTER);
 	}
 	
+	private SplitPane getSplitPane() {
+		if (splitPane == null) {
+			splitPane = new SplitPane(JSplitPane.VERTICAL_SPLIT, true);
+			splitPane.setTopComponent(getTablePanel());
+			splitPane.setBottomComponent(getBottomPanel());
+			splitPane.setDividerVisible(false);
+		}
+		return splitPane;
+	}
+
 	/**
 	 * This method initializes jScrollPane	
 	 * 	
 	 * @return javax.swing.JScrollPane	
 	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getTable());
+	private JScrollPane getTablePanel() {
+		if (tablePanel == null) {
+			tablePanel = new JScrollPane(getTable());
 		}
-		return jScrollPane;
+		return tablePanel;
 	}
 
 	/**
@@ -75,10 +95,61 @@ public class AccountsSummaryPanel extends JPanel {
 			table.setDefaultRenderer(Object.class, new MyRenderer());
 			table.setDefaultRenderer(Double.class, new MyRenderer());
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					if (!e.getValueIsAdjusting()) {
+						int selected = table.getSelectedRow();
+						boolean accountIsSelected = (selected>=0) && (selected<data.getAccountsNumber());
+						if (accountIsSelected) {
+							Account account = data.getAccount(table.convertRowIndexToModel(selected));
+							if (!getSplitPane().isDividerVisible()) getSplitPane().setDividerLocation(0.5);
+							getNotesField().setText(account.getComment()==null?"":account.getComment());
+						}
+						getSplitPane().setDividerVisible(accountIsSelected);
+						getBottomPanel().setVisible(accountIsSelected);
+					}
+				}
+			});
 		}
 		return table;
 	}
 	
+	private JPanel getBottomPanel() {
+		if (bottomPanel == null) {
+			bottomPanel = new JPanel(new BorderLayout());
+			bottomPanel.add(getNotePane());
+			bottomPanel.add(getLblNotesLabel(), BorderLayout.NORTH);
+			bottomPanel.setVisible(false);
+		}
+		return bottomPanel;
+	}
+
+	private JLabel getLblNotesLabel() {
+		if (lblNotesLabel == null) {
+			lblNotesLabel = new JLabel(LocalizationData.get("AccountDialog.notes"));
+		}
+		return lblNotesLabel;
+	}
+
+	private JScrollPane getNotePane() {
+		if (notePane == null) {
+			notePane = new JScrollPane(getNotesField());
+		}
+		return notePane;
+	}
+
+	private JTextArea getNotesField() {
+		if (notesField == null) {
+			notesField = new JTextArea();
+			notesField.setEditable(false);
+			notesField.setToolTipText(LocalizationData.get("AccountDialog.notes.tooltip")); //$NON-NLS-1$
+			notesField.setLineWrap(true);
+			notesField.setWrapStyleWord(true);
+		}
+		return notesField;
+	}
+
 	@SuppressWarnings("serial")
 	private class TotalTable extends JTable {
 		@Override

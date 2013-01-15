@@ -1,4 +1,4 @@
-package net.yapbam.gui.statementview;
+package net.yapbam.gui.util;
 
 import java.awt.Component;
 
@@ -8,6 +8,8 @@ public class SplitPane extends JSplitPane {
 	private static final long serialVersionUID = 1L;
 
 	private int defaultDividerSize;
+//	private double lastDividerLocation; //TODO Restore the divider location after it has been made invisible and visible again
+	//Not very easy because a lot of things influence the divider location.
 
 	public SplitPane() {
 		this(JSplitPane.HORIZONTAL_SPLIT);
@@ -31,6 +33,7 @@ public class SplitPane extends JSplitPane {
 	}
 
 	public void setDividerVisible(boolean visible) {
+		if (visible==isDividerVisible()) return;
 		setDividerSize(visible ? defaultDividerSize : 0);
 	}
 	

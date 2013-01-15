@@ -501,6 +501,12 @@ public class Serializer {
 		}
 		
 		hd.startElement(EMPTY,EMPTY,ACCOUNT_TAG,atts);
+		String comment = account.getComment();
+		if (comment!=null) {
+			hd.startCDATA();
+			hd.characters(comment.toCharArray(), 0, comment.length());
+			hd.endCDATA();
+		}
 		for (int i = 0; i < account.getModesNumber(); i++) {
 			Mode mode = account.getMode(i);
 			if (!mode.equals(Mode.UNDEFINED)) serialize(mode);

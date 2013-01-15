@@ -6,6 +6,7 @@ public class AccountPropertyChangedEvent extends DataEvent {
 	public static final String NAME = "name"; //$NON-NLS-1$
 	public static final String INITIAL_BALANCE = "initialBalance"; //$NON-NLS-1$
 	public static final String ALERT_THRESHOLD = "alertThreshold"; //$NON-NLS-1$
+	public static final String COMMENT = "comment"; //$NON-NLS-1$
 	
 	private Account account;
 	private String property;
@@ -35,5 +36,4 @@ public class AccountPropertyChangedEvent extends DataEvent {
 	public Object getNewValue() {
 		return newValue;
 	}
-
 }
