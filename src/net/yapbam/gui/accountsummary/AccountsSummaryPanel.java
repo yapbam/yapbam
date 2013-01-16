@@ -195,6 +195,7 @@ public class AccountsSummaryPanel extends JPanel {
 			int style = font.getStyle();
 			if (row==rowCount) {
 				style = style | Font.BOLD;
+				isSelected = false;
 			} else {
 				int mask = Integer.MIN_VALUE & (~Font.BOLD);
 				style = style & mask;
