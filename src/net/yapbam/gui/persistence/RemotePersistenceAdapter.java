@@ -6,17 +6,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
-import net.yapbam.gui.LocalizationData;
-
 import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
+import com.fathzer.soft.jclop.swing.MessagePack;
 
 /** An abstract persistence plugin that stores the data on a remote host (ftp, cloud service, etc ...).
  * <br>Please note that subclasses must have a default constructor.
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
-public abstract class RemotePersistencePlugin extends PersistencePlugin {
+public abstract class RemotePersistenceAdapter extends PersistenceAdapter {
 	public static final String ZIP_ENTENSION = ".zip"; //$NON-NLS-1$
 	
 	private Service service;
@@ -24,8 +23,12 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	/** Constructor.
 	 * @param service The service on which is based the plugin
 	 */
-	protected RemotePersistencePlugin(Service service) {
+	protected RemotePersistenceAdapter(Service service) {
 		this.service = service;
+	}
+	
+	public Service getService() {
+		return this.service;
 	}
 	
 	@Override
@@ -41,7 +44,7 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 * @throws IOException 
 	 */
 	public boolean download(URI uri, OutputStream out, Cancellable task) throws IOException {
-		return this.service.download(this.service.getEntry(uri), out, task, LocalizationData.getLocale());
+		return this.service.download(this.service.getEntry(uri), out, task, getLocale());
 	}
 
 	/** Uploads a file to a destination uri.
@@ -53,7 +56,7 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 	 * @throws IOException 
 	 */
 	public boolean upload(InputStream in, long length, URI uri, final Cancellable task) throws IOException {
-		return this.service.upload(in, length, service.getEntry(uri), task, LocalizationData.getLocale());
+		return this.service.upload(in, length, service.getEntry(uri), task, getLocale());
 	}
 	
 	/** Gets the remote revision of the URI.
@@ -102,8 +105,19 @@ public abstract class RemotePersistencePlugin extends PersistencePlugin {
 		return service.getDisplayable(uri);
 	}
 
-	public abstract String getConflictMessage();
-	public abstract String getDownloadActionMessage();
-	public abstract String getUploadActionMessage();
-	public abstract String getDeletedMessage();
+	public String getConflictMessage() {
+		return this.service.getMessage(MessagePack.CONFLICT_MESSAGE, getLocale());
+	}
+	
+	public String getRemoteMissingMessage() {
+		return this.service.getMessage(MessagePack.REMOTE_MISSING_MESSAGE, getLocale());
+	}
+
+	public String getDownloadActionMessage() {
+		return this.service.getMessage(MessagePack.DOWNLOAD_ACTION, getLocale());
+	}
+	
+	public String getUploadActionMessage() {
+		return this.service.getMessage(MessagePack.UPLOAD_ACTION, getLocale());
+	}
 }

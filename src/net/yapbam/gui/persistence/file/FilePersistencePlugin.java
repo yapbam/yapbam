@@ -8,9 +8,9 @@ import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.FileChooserPanel;
 
 import net.astesana.ajlib.utilities.FileUtils;
-import net.yapbam.gui.persistence.PersistencePlugin;
+import net.yapbam.gui.persistence.PersistenceAdapter;
 
-public class FilePersistencePlugin extends PersistencePlugin {
+public class FilePersistencePlugin extends PersistenceAdapter {
 	@Override
 	public String getScheme() {
 		return FileChooserPanel.SCHEME;

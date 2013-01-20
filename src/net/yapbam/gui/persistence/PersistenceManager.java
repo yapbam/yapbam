@@ -38,12 +38,12 @@ public class PersistenceManager {
 		public abstract boolean processError(Throwable e);
 	}
 	
-	private HashMap<String, PersistencePlugin> pluginsMap;
+	private HashMap<String, PersistenceAdapter> pluginsMap;
 	private List<String> pluginSchemes;
 
 	private PersistenceManager() {
 		// Load the default persistence plugins
-		this.pluginsMap = new HashMap<String, PersistencePlugin>();
+		this.pluginsMap = new HashMap<String, PersistenceAdapter>();
 		this.pluginSchemes = new ArrayList<String>();
 		
 		add(new FilePersistencePlugin());
@@ -57,7 +57,7 @@ public class PersistenceManager {
 				if (className.length()!=0) {
 					try {
 						@SuppressWarnings("unchecked")
-						Class<? extends PersistencePlugin> pClass = (Class<? extends PersistencePlugin>) Class.forName(className);
+						Class<? extends PersistenceAdapter> pClass = (Class<? extends PersistenceAdapter>) Class.forName(className);
 						add(pClass.newInstance());
 					} catch (Exception e) {
 						ErrorManager.INSTANCE.display(null, e, MessageFormat.format(LocalizationData.get("persitencePlugin.load.error"), className)); //$NON-NLS-1$
@@ -74,7 +74,7 @@ public class PersistenceManager {
 		return waitFrame;
 	}
 	
-	private void add(PersistencePlugin plugin) {
+	private void add(PersistenceAdapter plugin) {
 		// TODO Check there's no duplicated schemes in persistence plugins. 
 		pluginsMap.put(plugin.getScheme(), plugin);
 		pluginSchemes.add(plugin.getScheme());
@@ -193,11 +193,11 @@ public class PersistenceManager {
 		return this.pluginSchemes.size();
 	}
 
-	public PersistencePlugin getPlugin(int index) {
+	public PersistenceAdapter getPlugin(int index) {
 		return this.pluginsMap.get(this.pluginSchemes.get(index));
 	}
 	
-	public PersistencePlugin getPlugin(URI uri) {
+	public PersistenceAdapter getPlugin(URI uri) {
 		return this.pluginsMap.get(uri.getScheme());
 	}
 

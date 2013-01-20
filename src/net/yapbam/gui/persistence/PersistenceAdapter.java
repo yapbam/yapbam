@@ -2,27 +2,33 @@ package net.yapbam.gui.persistence;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Locale;
 
 import com.fathzer.soft.jclop.swing.URIChooser;
 
 /** An abstract persistence plugin.
- * <br>Yapbam data persistence model allows developers to implement plugins that allow the users to
+ * <br>JClop data persistence model allows developers to implement plugins that allow the users to
  * save/read their data in various locations (computer's disks, ftp server, Cloud services, etc ...).
- * <br>A plugin implements the save/read to a particular destination.
+ * <br>An adapter implements the save/read to a particular destination.
  * For example, the FilePersistencePlugin implements saving/reading to/from the computer's disks.
- * <br><br>
- * Please note that subclasses must have a default constructor.
+ * <br>Actually, using remote destinations to store data requires to implement (or reuse existing) RemotePersistenceAdapter.
+ * This class is only there to fit the "local storage" in the same concepts as the remote storage.
+ * You'll probably never have to implement a subclass of this class. 
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
-public abstract class PersistencePlugin {
+public abstract class PersistenceAdapter {
+	private Locale locale;
+
 	/** Constructor. */
-	protected PersistencePlugin() {}
+	protected PersistenceAdapter() {
+		this.locale = Locale.getDefault();
+	}
 	
 	/** Gets the scheme managed by this plugin.
-	 * <br>Each plugin is identified by the scheme (file, ftp, etc ..) it manages. Please note that
+	 * <br>Each adapter is identified by the scheme (file, ftp, etc ..) it manages. Please note that
 	 * the developer is not limited to standard scheme (file, ftp, http, ...). You're free to define
-	 * your own scheme. For example, Yapbam uses "Dropbox" scheme to save/read data to/from Dropbox.
+	 * your own scheme. For example, we use "Dropbox" scheme to save/read data to/from Dropbox.
 	 * @return the scheme managed by the plugin
 	 */
 	public abstract String getScheme();
@@ -53,4 +59,12 @@ public abstract class PersistencePlugin {
 	 * @return a File
 	 */
 	public abstract File getLocalFile(URI uri);
+	
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+	
+	public Locale getLocale() {
+		return this.locale;
+	}
 }
