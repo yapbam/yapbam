@@ -14,7 +14,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistenceAdapter;
-import net.yapbam.gui.persistence.RemotePersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.Synchronizer;
 import net.yapbam.gui.persistence.writing.WriterResult.State;
@@ -39,9 +38,9 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 		protected WriterResult doProcessing() throws Exception {
 			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
 			PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
-			boolean remote = plugin instanceof RemotePersistenceAdapter;
+			boolean remote = plugin.getService()!=null;
 			File previousFile = plugin.getLocalFile(uri);
-			File file = remote ? ((RemotePersistenceAdapter)plugin).getLocalFileForWriting(uri) : plugin.getLocalFile(uri);
+			File file = remote ? plugin.getService().getLocalFileForWriting(uri) : plugin.getLocalFile(uri);
 			Boolean deleteOnCancelled = !file.exists();
 			Serializer.write(data, file, remote, this);
 			if (isCancelled()) {
@@ -53,7 +52,7 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 					previousFile.delete();
 				}
 			}
-			if (plugin instanceof RemotePersistenceAdapter) {
+			if (remote) {
 				try {
 					setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
 					SynchronizationState state = Synchronizer.backgroundSynchronize(uri, this);

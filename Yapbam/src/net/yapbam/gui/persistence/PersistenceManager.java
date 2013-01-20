@@ -24,7 +24,7 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
 import net.yapbam.gui.dialogs.BasicHTMLDialog.Type;
-import net.yapbam.gui.persistence.file.FilePersistencePlugin;
+import net.yapbam.gui.persistence.file.FilePersistenceAdapter;
 import net.yapbam.gui.persistence.reading.DataReader;
 import net.yapbam.gui.persistence.writing.DataWriter;
 
@@ -46,7 +46,7 @@ public class PersistenceManager {
 		this.pluginsMap = new HashMap<String, PersistenceAdapter>();
 		this.pluginSchemes = new ArrayList<String>();
 		
-		add(new FilePersistencePlugin());
+		add(new FilePersistenceAdapter());
 //		add(new DropboxPersistencePlugin());
 		
 		// Load plugins under development

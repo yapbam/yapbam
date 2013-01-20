@@ -11,14 +11,16 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import com.fathzer.soft.jclop.swing.MessagePack;
+
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.RemotePersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.reading.DataReader;
@@ -87,24 +89,23 @@ public class DataWriter {
 	}
 
 	private void doRemoteDeleted() throws ExecutionException {
-		RemotePersistenceAdapter plugin = (RemotePersistenceAdapter) PersistenceManager.MANAGER.getPlugin(uri);
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getRemoteMissingMessage()); //$NON-NLS-1$
-		Object[] options = {plugin.getUploadActionMessage(), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")};  //$NON-NLS-1$//$NON-NLS-2$
+		PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")};  //$NON-NLS-1$//$NON-NLS-2$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 		} else if (n==0) {
 			doSync(SynchronizeCommand.UPLOAD);
 		} else {
-			//FIXME Should call the service to delete the local cache folder
-			PersistenceManager.MANAGER.getPlugin(uri).getLocalFile(uri).delete();
+			PersistenceManager.MANAGER.getPlugin(uri).getService().deleteLocal(uri);
 		}
 	}
 
 	private void doConflict() throws ExecutionException {
-		RemotePersistenceAdapter plugin = (RemotePersistenceAdapter) PersistenceManager.MANAGER.getPlugin(uri);
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getConflictMessage()); //$NON-NLS-1$
-		Object[] options = {plugin.getUploadActionMessage(), plugin.getDownloadActionMessage(), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$
+		PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), plugin.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {

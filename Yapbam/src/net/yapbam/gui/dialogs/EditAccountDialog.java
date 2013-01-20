@@ -54,7 +54,10 @@ public class EditAccountDialog extends AbstractDialog<GlobalData, Account> {
 	 */
 	public static Account open(GlobalData data, Window owner, String message) {
 		EditAccountDialog dialog = new EditAccountDialog(owner, LocalizationData.get("AccountDialog.title.new"), data);
-		if (message!=null) dialog.setMessage(message);
+		if (message!=null) {
+			dialog.setMessage(message);
+			dialog.setLocationRelativeTo(owner);
+		}
 		dialog.setVisible(true);
 		Account newAccount = dialog.getResult();
 		if (newAccount!=null) {

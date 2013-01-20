@@ -11,6 +11,8 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import com.fathzer.soft.jclop.swing.MessagePack;
+
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
@@ -18,7 +20,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistenceAdapter;
-import net.yapbam.gui.persistence.RemotePersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 
@@ -65,8 +66,8 @@ public class DataReader {
 			return false;
 		} catch (ExecutionException e) {
 			// An error occurred while reading the cache file
-			if (!(plugin instanceof RemotePersistenceAdapter)) throw e;
-			return doErrorOccurred();
+			if (plugin.getService()==null) throw e; // If not a remote service, directly throw the exception
+			return doErrorOccurred(e);
 		}
 		File localFile = plugin.getLocalFile(uri);
 		if (basicWorker.isCancelled()) return false; // Anything but the synchronization was cancelled => Globally cancel
@@ -124,7 +125,7 @@ public class DataReader {
 		}
 	}
 	
-	private boolean doErrorOccurred() throws ExecutionException {
+	private boolean doErrorOccurred(ExecutionException e) throws ExecutionException {
 		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
 		if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cacheCorrupted"), //$NON-NLS-1$
 				LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
@@ -135,25 +136,22 @@ public class DataReader {
 	}
 	
 	private boolean doRemoteNotFound() throws ExecutionException {
-		RemotePersistenceAdapter rPlugin = (RemotePersistenceAdapter)plugin;
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), rPlugin.getRemoteMissingMessage()); //$NON-NLS-1$
-		Object[] options = {rPlugin.getUploadActionMessage(), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 		} else if (n==0) {
 			return doSyncAndRead(SynchronizeCommand.UPLOAD);
 		} else {
-			//FIXME ... should call the service to delete the file folder
-			plugin.getLocalFile(uri).delete();
+			plugin.getService().deleteLocal(uri);
 		}
 		return false;
 	}
 
 	private boolean doConflict() throws ExecutionException {
-		RemotePersistenceAdapter rPlugin = (RemotePersistenceAdapter)plugin;
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"),rPlugin.getConflictMessage()); //$NON-NLS-1$
-		Object[] options = {rPlugin.getUploadActionMessage(), rPlugin.getDownloadActionMessage(), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-1$
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"),plugin.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), plugin.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-1$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
