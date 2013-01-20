@@ -14,7 +14,7 @@ import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
 import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.PersistencePlugin;
+import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.Synchronizer;
@@ -65,7 +65,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 		}
 		this.isSynchronizing = false;
 		if (syncState.equals(SynchronizationState.SYNCHRONIZED)) {
-			PersistencePlugin plugin = PersistenceManager.MANAGER.getPlugin(uri);
+			PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
 			URI localURI = plugin.getLocalFile(uri).toURI();
 			SerializationData info = Serializer.getSerializationData(localURI);
 			// Retrieving the file password

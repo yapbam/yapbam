@@ -24,9 +24,9 @@ public abstract class Synchronizer {
 	 * @throws IOException if an exception occurs while synchronizing
 	 */
 	public static SynchronizationState backgroundSynchronize(URI uri, Cancellable task) throws IOException {
-		PersistencePlugin p = PersistenceManager.MANAGER.getPlugin(uri);
-		if (p instanceof RemotePersistencePlugin) {
-			RemotePersistencePlugin plugin = (RemotePersistencePlugin) p;
+		PersistenceAdapter p = PersistenceManager.MANAGER.getPlugin(uri);
+		if (p instanceof RemotePersistenceAdapter) {
+			RemotePersistenceAdapter plugin = (RemotePersistenceAdapter) p;
 			String remoteRevision = plugin.getRemoteRevision(uri);
 			String localRevision = plugin.getLocalBaseRevision(uri);
 	//System.out.println("remote rev: "+remoteRevision+", local rev:"+localRevision);
@@ -70,7 +70,7 @@ public abstract class Synchronizer {
 	}
 
 	public static boolean backgroundDownload(URI uri, Cancellable task) throws IOException {
-		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
+		RemotePersistenceAdapter plugin = (RemotePersistenceAdapter) PersistenceManager.MANAGER.getPlugin(uri);
 		File file = plugin.getLocalFile(uri);
 		file.getParentFile().mkdirs();
 		String revision = null;
@@ -100,7 +100,7 @@ public abstract class Synchronizer {
 	}
 
 	public static boolean backgroungUpload(URI uri, Cancellable task) throws IOException {
-		RemotePersistencePlugin plugin = (RemotePersistencePlugin) PersistenceManager.MANAGER.getPlugin(uri);
+		RemotePersistenceAdapter plugin = (RemotePersistenceAdapter) PersistenceManager.MANAGER.getPlugin(uri);
 		File file = plugin.getLocalFile(uri);
 		long length = file.length();
 		boolean done = false;

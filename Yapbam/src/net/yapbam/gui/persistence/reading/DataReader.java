@@ -17,8 +17,8 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.PersistencePlugin;
-import net.yapbam.gui.persistence.RemotePersistencePlugin;
+import net.yapbam.gui.persistence.PersistenceAdapter;
+import net.yapbam.gui.persistence.RemotePersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 
@@ -26,7 +26,7 @@ public class DataReader {
 	private Window owner;
 	private GlobalData data;
 	private URI uri;
-	private PersistencePlugin plugin;
+	private PersistenceAdapter plugin;
 
 	public DataReader (Window owner, GlobalData data, URI uri) {
 		this.owner = owner;
@@ -65,7 +65,7 @@ public class DataReader {
 			return false;
 		} catch (ExecutionException e) {
 			// An error occurred while reading the cache file
-			if (!(plugin instanceof RemotePersistencePlugin)) throw e;
+			if (!(plugin instanceof RemotePersistenceAdapter)) throw e;
 			return doErrorOccurred();
 		}
 		File localFile = plugin.getLocalFile(uri);
@@ -135,8 +135,8 @@ public class DataReader {
 	}
 	
 	private boolean doRemoteNotFound() throws ExecutionException {
-		RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), rPlugin.getDeletedMessage()); //$NON-NLS-1$
+		RemotePersistenceAdapter rPlugin = (RemotePersistenceAdapter)plugin;
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), rPlugin.getRemoteMissingMessage()); //$NON-NLS-1$
 		Object[] options = {rPlugin.getUploadActionMessage(), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
@@ -144,13 +144,14 @@ public class DataReader {
 		} else if (n==0) {
 			return doSyncAndRead(SynchronizeCommand.UPLOAD);
 		} else {
+			//FIXME ... should call the service to delete the file folder
 			plugin.getLocalFile(uri).delete();
 		}
 		return false;
 	}
 
 	private boolean doConflict() throws ExecutionException {
-		RemotePersistencePlugin rPlugin = (RemotePersistencePlugin)plugin;
+		RemotePersistenceAdapter rPlugin = (RemotePersistenceAdapter)plugin;
 		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"),rPlugin.getConflictMessage()); //$NON-NLS-1$
 		Object[] options = {rPlugin.getUploadActionMessage(), rPlugin.getDownloadActionMessage(), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-1$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
