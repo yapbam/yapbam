@@ -10,7 +10,11 @@ import com.fathzer.soft.jclop.swing.FileChooserPanel;
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.persistence.PersistenceAdapter;
 
-public class FilePersistencePlugin extends PersistenceAdapter {
+public class FilePersistenceAdapter extends PersistenceAdapter {
+	public FilePersistenceAdapter() {
+		super(null);
+	}
+
 	@Override
 	public String getScheme() {
 		return FileChooserPanel.SCHEME;
