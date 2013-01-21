@@ -3,8 +3,11 @@ package net.yapbam.gui.persistence.reading;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.text.MessageFormat;
+import java.util.Locale;
 
 import com.fathzer.soft.jclop.Cancellable;
+import com.fathzer.soft.jclop.Service;
+import com.fathzer.soft.jclop.SynchronizationState;
 
 import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.data.GlobalData;
@@ -13,11 +16,7 @@ import net.yapbam.data.xml.Serializer;
 import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
-import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.PersistenceAdapter;
-import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
-import net.yapbam.gui.persistence.Synchronizer;
 
 class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellable, ProgressReport {
 	private URI uri;
@@ -26,11 +25,15 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	
 	private SynchronizeCommand command;
 	private CancelManager cancelManager;
+	private Service service;
+	private Locale locale;
 	
-	SyncAndReadWorker(URI uri, SynchronizeCommand command) {
+	SyncAndReadWorker(Service service, URI uri, SynchronizeCommand command) {
+		this.service = service;
 		this.uri = uri;
 		this.data = null;
 		this.command = command;
+		this.locale = LocalizationData.getLocale();
 		this.cancelManager = new CancelManager(this);
 	}
 	
@@ -42,14 +45,14 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 			try {
 				if (command.equals(SynchronizeCommand.SYNCHRONIZE)) {
 					setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
-					syncState = Synchronizer.backgroundSynchronize(uri, this);
+					syncState = service.synchronize(uri, this, locale);
 				} else if (command.equals(SynchronizeCommand.UPLOAD)) {
 					setPhase(LocalizationData.get("synchronization.uploading"), -1); //$NON-NLS-1$
-					Synchronizer.backgroungUpload(uri, this);
+					service.upload(uri, this, locale);
 					syncState = SynchronizationState.SYNCHRONIZED;
 				} else if (command.equals(SynchronizeCommand.DOWNLOAD)) {
 					setPhase(LocalizationData.get("synchronization.downloading"), -1); //$NON-NLS-1$
-					Synchronizer.backgroundDownload(uri, this);
+					service.download(uri, this, locale);
 					syncState = SynchronizationState.SYNCHRONIZED;
 				} else {
 					throw new IllegalArgumentException(command+" is unknown"); //$NON-NLS-1$
@@ -65,14 +68,13 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 		}
 		this.isSynchronizing = false;
 		if (syncState.equals(SynchronizationState.SYNCHRONIZED)) {
-			PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
-			URI localURI = plugin.getLocalFile(uri).toURI();
+			URI localURI = service.getLocalFile(uri).toURI();
 			SerializationData info = Serializer.getSerializationData(localURI);
 			// Retrieving the file password
 			if (info.isPasswordRequired()) {
 				return new ReaderResult(State.NEED_PASSWORD, syncState);
 			} else {
-				setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), plugin.getDisplayableName(uri)),-1); //$NON-NLS-1$
+				setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), service.getDisplayable(uri)),-1); //$NON-NLS-1$
 				this.data = Serializer.read(localURI, null, this);
 				return new ReaderResult(State.FINISHED, syncState);
 			}

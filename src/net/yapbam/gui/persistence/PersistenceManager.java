@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
@@ -177,9 +178,10 @@ public class PersistenceManager {
 					if (errProcessor!=null) {
 						notProcessed = !errProcessor.processError(exception);
 					}
+					Service service = getPlugin(path).getService();
+					String displayedURI = service.getDisplayable(path);
 					if (notProcessed) {
-						String displayedURI = PersistenceManager.MANAGER.getDisplayable(path);
-						File file = getPlugin(path).getService().getLocalFile(path);
+						File file = service.getLocalFile(path);
 						if (exception instanceof FileNotFoundException) {
 							if (file.exists()) {
 								// The file exist, but it is read protected
@@ -200,7 +202,7 @@ public class PersistenceManager {
 							//Next line is html version ... bad idea as html is not easy to copy/paste in an email
 							//trace = "<html>"+trace.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 							BasicHTMLDialog dialog = new BasicHTMLDialog(frame, LocalizationData.get("ErrorManager.title"), MessageFormat.format(LocalizationData //$NON-NLS-1$
-									.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path)), Type.ERROR); //$NON-NLS-1$
+									.get("MainMenu.Open.Error.DialogContent"), displayedURI), Type.ERROR); //$NON-NLS-1$
 							dialog.setContent(trace);
 							dialog.setVisible(true);
 						} else if (exception instanceof UnsupportedSchemeException) {
@@ -224,9 +226,5 @@ public class PersistenceManager {
 	
 	public PersistenceAdapter getPlugin(URI uri) {
 		return this.pluginsMap.get(uri.getScheme());
-	}
-
-	public String getDisplayable(URI uri) {
-		return getPlugin(uri).getDisplayableName(uri);
 	}
 }

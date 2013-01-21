@@ -1,6 +1,6 @@
 package net.yapbam.gui.persistence.writing;
 
-import net.yapbam.gui.persistence.SynchronizationState;
+import com.fathzer.soft.jclop.SynchronizationState;
 
 class WriterResult {
 	public enum State {

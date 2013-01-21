@@ -4,7 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Locale;
 
-import com.fathzer.soft.jclop.CloudService;
+import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.swing.URIChooser;
 
 /** An abstract persistence adapter.
@@ -17,21 +17,21 @@ import com.fathzer.soft.jclop.swing.URIChooser;
  */
 public abstract class PersistenceAdapter {
 	private Locale locale;
-	private CloudService service;
+	private Service service;
 
 	/** Constructor.
 	 * @param service The remote service, or null if the adapter is not a remote one.
 	 * <br>Actually, the only  case where service is null, is saving/reading to the local disk.
 	 */
-	protected PersistenceAdapter(CloudService service) {
+	protected PersistenceAdapter(Service service) {
 		this.service = service;
 		this.locale = Locale.getDefault();
 	}
 	
-	/** Gets this adapter remote service. 
+	/** Gets this adapter persistence service. 
 	 * @return a service or null if the adapter is not based on a remote service (for example saving/reading to local disk)
 	 */
-	public CloudService getService() {
+	public Service getService() {
 		return this.service;
 	}
 	
@@ -56,16 +56,6 @@ public abstract class PersistenceAdapter {
 	 */
 	public abstract URIChooser buildChooser();
 
-	/** Gets displayable form of an URI.
-	 * <br>URI may contains secret informations (example: password). This method converts the URI to a string
-	 * that can be securely displayed on a screen. 
-	 * @param uri The remote URI (The uri is guaranteed to have the scheme returned by getScheme).
-	 * @return a String. The default implementation returns uri.toString().
-	 */
-	public String getDisplayableName(URI uri) {
-		return service==null?uri.toString():service.getDisplayable(uri);
-	}
-	
 	/** Gets the local file attached to an URI.
 	 * @param uri The URI (The uri is guaranteed to have the scheme returned by getScheme).
 	 * @return a File

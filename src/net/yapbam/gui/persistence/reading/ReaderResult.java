@@ -1,6 +1,6 @@
 package net.yapbam.gui.persistence.reading;
 
-import net.yapbam.gui.persistence.SynchronizationState;
+import com.fathzer.soft.jclop.SynchronizationState;
 
 /** A Worker that tries to synchronize data and then read the local cache. */
 class ReaderResult {

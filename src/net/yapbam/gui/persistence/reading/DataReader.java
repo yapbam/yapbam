@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.swing.MessagePack;
 
 import net.yapbam.data.GlobalData;
@@ -21,7 +22,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistenceAdapter;
-import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.UnsupportedSchemeException;
 
@@ -44,7 +44,7 @@ public class DataReader {
 
 	public boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
 		if (this.plugin==null) throw new ExecutionException(new UnsupportedSchemeException(uri));
-		SyncAndReadWorker basicWorker = new SyncAndReadWorker(uri, command);
+		SyncAndReadWorker basicWorker = new SyncAndReadWorker(plugin.getService(), uri, command);
 		PersistenceManager.buildWaitDialog(owner, basicWorker).setVisible(true);
 		ReaderResult result;
 		try {

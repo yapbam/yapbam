@@ -1,24 +1,29 @@
 package net.yapbam.gui.persistence.writing;
 
 import java.net.URI;
+import java.util.Locale;
 
 import com.fathzer.soft.jclop.Cancellable;
+import com.fathzer.soft.jclop.Service;
+import com.fathzer.soft.jclop.SynchronizationState;
 
 import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
-import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
-import net.yapbam.gui.persistence.Synchronizer;
 
 public class SynchronizeWorker extends Worker<SynchronizationState, Void> implements Cancellable {
 	private URI uri;
 	private SynchronizeCommand command;
 	private CancelManager cancelManager;
+	private Locale locale;
+	private Service service;
 
-	SynchronizeWorker(URI uri, SynchronizeCommand command) {
+	SynchronizeWorker(Service service, URI uri, SynchronizeCommand command, Locale locale) {
+		this.service = service;
 		this.uri = uri;
 		this.command = command;
+		this.locale = locale;
 		this.cancelManager = new CancelManager(this);
 	}
 
@@ -26,14 +31,14 @@ public class SynchronizeWorker extends Worker<SynchronizationState, Void> implem
 	protected SynchronizationState doProcessing() throws Exception {
 		if (command.equals(SynchronizeCommand.SYNCHRONIZE)) {
 			setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
-			return Synchronizer.backgroundSynchronize(uri, this);
+			return service.synchronize(uri, this, locale);
 		} else if (command.equals(SynchronizeCommand.UPLOAD)) {
 			setPhase(LocalizationData.get("synchronization.uploading"), -1); //$NON-NLS-1$
-			Synchronizer.backgroungUpload(uri, this);
+			service.upload(uri, this, locale);
 			return SynchronizationState.SYNCHRONIZED;
 		} else if (command.equals(SynchronizeCommand.DOWNLOAD)) {
 			setPhase(LocalizationData.get("synchronization.downloading"), -1); //$NON-NLS-1$
-			Synchronizer.backgroundDownload(uri, this);
+			service.download(uri, this, locale);
 			return SynchronizationState.SYNCHRONIZED;
 		} else {
 			throw new IllegalArgumentException(command+" is unknown"); //$NON-NLS-1$
