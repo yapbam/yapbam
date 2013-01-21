@@ -2,6 +2,7 @@ package net.yapbam.gui.persistence.reading;
 
 import java.awt.Window;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -22,6 +23,7 @@ import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
+import net.yapbam.gui.persistence.UnsupportedSchemeException;
 
 public class DataReader {
 	private Window owner;
@@ -34,7 +36,6 @@ public class DataReader {
 		this.data = data;
 		this.uri = uri;
 		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
-		if (this.plugin==null) throw new RuntimeException("Unsupported scheme: "+uri.getScheme()); //$NON-NLS-1$
 	}
 
 	public boolean read() throws ExecutionException {
@@ -42,6 +43,7 @@ public class DataReader {
 	}
 
 	public boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
+		if (this.plugin==null) throw new ExecutionException(new UnsupportedSchemeException(uri));
 		SyncAndReadWorker basicWorker = new SyncAndReadWorker(uri, command);
 		PersistenceManager.buildWaitDialog(owner, basicWorker).setVisible(true);
 		ReaderResult result;
@@ -66,7 +68,7 @@ public class DataReader {
 			return false;
 		} catch (ExecutionException e) {
 			// An error occurred while reading the cache file
-			if (plugin.getService()==null) throw e; // If not a remote service, directly throw the exception
+			if (plugin.getService()==null || (e.getCause() instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
 			return doErrorOccurred(e);
 		}
 		File localFile = plugin.getLocalFile(uri);

@@ -3,6 +3,9 @@ package net.yapbam.gui.persistence;
 import java.awt.Window;
 import java.awt.Dialog.ModalityType;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -160,6 +163,7 @@ public class PersistenceManager {
 	 * @param errProcessor An ErrorManager that will be used if the read fails or null to display the standard error message. 
 	 */
 	public void read(Window frame, GlobalData data, URI path, ErrorProcessor errProcessor) {
+		//TODO Why not simply throw IOException and UnsupportedSchemeException ?
 		if (verify(frame, data)) {
 			if (path==null) {
 				path = getURI(frame, data, false);
@@ -167,22 +171,43 @@ public class PersistenceManager {
 			if (path != null) {
 				try {
 					new DataReader(frame, data, path).read();
-				} catch (ExecutionException exception) {
+				} catch (ExecutionException e) {
+					Throwable exception = e.getCause();
 					boolean notProcessed = true;
 					if (errProcessor!=null) {
-						notProcessed = !errProcessor.processError(exception.getCause());
+						notProcessed = !errProcessor.processError(exception);
 					}
 					if (notProcessed) {
-						ByteArrayOutputStream out = new ByteArrayOutputStream();
-						exception.getCause().printStackTrace(new PrintStream(out));
-						String trace = out.toString();
-						trace = trace.replace("\t", "  "); //$NON-NLS-1$ //$NON-NLS-2$
-						//Next line is html version ... bad idea as html is not easy to copy/paste in an email
-						//trace = "<html>"+trace.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-						BasicHTMLDialog dialog = new BasicHTMLDialog(frame, LocalizationData.get("ErrorManager.title"), MessageFormat.format(LocalizationData //$NON-NLS-1$
-								.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path)), Type.ERROR); //$NON-NLS-1$
-						dialog.setContent(trace);
-						dialog.setVisible(true);
+						String displayedURI = PersistenceManager.MANAGER.getDisplayable(path);
+						File file = getPlugin(path).getService().getLocalFile(path);
+						if (exception instanceof FileNotFoundException) {
+							if (file.exists()) {
+								// The file exist, but it is read protected
+								if (path.getScheme().equals("file")) {
+									ErrorManager.INSTANCE.display(frame, null, MessageFormat.format(LocalizationData.get("openDialog.fileNotReadable"),displayedURI)); //$NON-NLS-1$
+								} else {
+									ErrorManager.INSTANCE.display(frame, null,  MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
+								}
+							} else {
+								//TODO
+								throw new RuntimeException(exception);
+							}
+						} else if (exception instanceof IOException) {
+							ByteArrayOutputStream out = new ByteArrayOutputStream();
+							exception.printStackTrace(new PrintStream(out));
+							String trace = out.toString();
+							trace = trace.replace("\t", "  "); //$NON-NLS-1$ //$NON-NLS-2$
+							//Next line is html version ... bad idea as html is not easy to copy/paste in an email
+							//trace = "<html>"+trace.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+							BasicHTMLDialog dialog = new BasicHTMLDialog(frame, LocalizationData.get("ErrorManager.title"), MessageFormat.format(LocalizationData //$NON-NLS-1$
+									.get("MainMenu.Open.Error.DialogContent"), getPlugin(path).getDisplayableName(path)), Type.ERROR); //$NON-NLS-1$
+							dialog.setContent(trace);
+							dialog.setVisible(true);
+						} else if (exception instanceof UnsupportedSchemeException) {
+							// The scheme is no more supported, simply ignore the error
+						} else {
+							ErrorManager.INSTANCE.log(frame, exception);
+						}
 					}
 				}
 			}

@@ -22,6 +22,7 @@ import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
 import net.yapbam.gui.persistence.PersistenceManager;
+import net.yapbam.gui.persistence.UnsupportedSchemeException;
 import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.gui.widget.TabbedPane;
@@ -437,21 +438,29 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			PersistenceManager.MANAGER.read(getJFrame(), getData(), uri, new PersistenceManager.ErrorProcessor() {
 				@Override
 				public boolean processError(Throwable e) {
-					if (restore && (e instanceof FileNotFoundException)) {
-						if (finalURI.getScheme().equals("file") && (new File(finalURI).exists())) {
+					String displayedURI = PersistenceManager.MANAGER.getDisplayable(finalURI);
+					File file = PersistenceManager.MANAGER.getPlugin(finalURI).getService().getLocalFile(finalURI);
+					if (e instanceof FileNotFoundException) {
+						if (file.exists()) {
 							// The file exist, but it is read protected
-							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotReadable"),finalURI)); //$NON-NLS-1$
+							if (finalURI.getScheme().equals("file")) {
+								ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotReadable"),displayedURI)); //$NON-NLS-1$
+							} else {
+								ErrorManager.INSTANCE.display(getJFrame(), null,  MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
+							}
 						} else {
-							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),finalURI)); //$NON-NLS-1$
+							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),displayedURI)); //$NON-NLS-1$
 						}
 					} else if (e instanceof IOException) {
 						if (restore) {
-							ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),finalURI)); //$NON-NLS-1$
+							ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),displayedURI)); //$NON-NLS-1$
 						} else {
 							ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
 						}
+					} else if (e instanceof UnsupportedSchemeException) {
+						// The scheme is no more supported, simply ignore the error
 					} else {
-						ErrorManager.INSTANCE.log(getJFrame(), e);
+						return false; // Let the standard error processor do its job
 					}
 					return true;
 				}
