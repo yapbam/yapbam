@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.swing.MessagePack;
 
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
@@ -21,7 +22,6 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.SynchronizationState;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.reading.DataReader;
 import net.yapbam.util.Portable;
@@ -45,7 +45,7 @@ public class DataWriter {
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 			if (choice==0) return false;
 		}
-		final Worker<WriterResult, Void> worker = new SaveWorker(data, uri);
+		final Worker<WriterResult, Void> worker = new SaveWorker(PersistenceManager.MANAGER.getPlugin(uri).getService(),data, uri);
 		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		try {
@@ -118,7 +118,7 @@ public class DataWriter {
 	}
 
 	private void doSync(SynchronizeCommand command) throws ExecutionException {
-		SynchronizeWorker worker = new SynchronizeWorker(uri, command);
+		SynchronizeWorker worker = new SynchronizeWorker(PersistenceManager.MANAGER.getPlugin(uri).getService(), uri, command, LocalizationData.getLocale());
 		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		if (command.equals(SynchronizeCommand.DOWNLOAD) && !worker.isCancelled()) {

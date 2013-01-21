@@ -5,6 +5,8 @@ import java.net.URI;
 import java.text.MessageFormat;
 
 import com.fathzer.soft.jclop.Cancellable;
+import com.fathzer.soft.jclop.Service;
+import com.fathzer.soft.jclop.SynchronizationState;
 
 import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.data.GlobalData;
@@ -12,18 +14,16 @@ import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
-import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.PersistenceAdapter;
-import net.yapbam.gui.persistence.SynchronizationState;
-import net.yapbam.gui.persistence.Synchronizer;
 import net.yapbam.gui.persistence.writing.WriterResult.State;
 
 class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, Cancellable {
+		private Service service;
 		private GlobalData data;
 		private URI uri;
 		private CancelManager cancelManager;
 
-		SaveWorker(GlobalData data, URI uri) {
+		SaveWorker(Service service, GlobalData data, URI uri) {
+			this.service = service;
 			this.data = data;
 			this.uri = uri;
 			this.cancelManager = new CancelManager(this);
@@ -37,12 +37,10 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 		@Override
 		protected WriterResult doProcessing() throws Exception {
 			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
-			PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
-			boolean remote = plugin.getService()!=null;
-			File previousFile = plugin.getLocalFile(uri);
-			File file = remote ? plugin.getService().getLocalFileForWriting(uri) : plugin.getLocalFile(uri);
+			File previousFile = service.getLocalFile(uri);
+			File file = service.getLocalFileForWriting(uri);
 			Boolean deleteOnCancelled = !file.exists();
-			Serializer.write(data, file, remote, this);
+			Serializer.write(data, file, !service.isLocal(), this);
 			if (isCancelled()) {
 				if (deleteOnCancelled) file.delete();
 				return null;
@@ -52,16 +50,16 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 					previousFile.delete();
 				}
 			}
-			if (remote) {
+			if (service.isLocal()) {
+				return new WriterResult(State.FINISHED, SynchronizationState.SYNCHRONIZED, null);
+			} else {
 				try {
 					setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
-					SynchronizationState state = Synchronizer.backgroundSynchronize(uri, this);
+					SynchronizationState state = service.synchronize(uri, this, LocalizationData.getLocale());
 					return new WriterResult(State.FINISHED, state, null);
 				} catch (Exception e) {
 					return new WriterResult(State.EXCEPTION_WHILE_SYNC, null, e);
 				}
-			} else {
-				return new WriterResult(State.FINISHED, SynchronizationState.SYNCHRONIZED, null);
 			}
 		}
 		

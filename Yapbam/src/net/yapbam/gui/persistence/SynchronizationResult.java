@@ -1,5 +1,7 @@
 package net.yapbam.gui.persistence;
 
+import com.fathzer.soft.jclop.SynchronizationState;
+
 public class SynchronizationResult {
 	private SynchronizationState state;
 	private String remoteRevision;

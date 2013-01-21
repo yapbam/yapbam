@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import com.fathzer.soft.jclop.Service;
+
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
@@ -309,7 +311,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	private void updateWindowTitle() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
 		URI uri = data.getURI();
-		if (uri!=null) title = title + " - " + PersistenceManager.MANAGER.getDisplayable(uri); //$NON-NLS-1$
+		if (uri!=null) title = title + " - " + PersistenceManager.MANAGER.getPlugin(uri).getService().getDisplayable(uri); //$NON-NLS-1$
 		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
 		this.getJFrame().setTitle(title);
 	}
@@ -438,8 +440,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			PersistenceManager.MANAGER.read(getJFrame(), getData(), uri, new PersistenceManager.ErrorProcessor() {
 				@Override
 				public boolean processError(Throwable e) {
-					String displayedURI = PersistenceManager.MANAGER.getDisplayable(finalURI);
-					File file = PersistenceManager.MANAGER.getPlugin(finalURI).getService().getLocalFile(finalURI);
+					Service service = PersistenceManager.MANAGER.getPlugin(finalURI).getService();
+					String displayedURI = service.getDisplayable(finalURI);
+					File file = service.getLocalFile(finalURI);
 					if (e instanceof FileNotFoundException) {
 						if (file.exists()) {
 							// The file exist, but it is read protected
