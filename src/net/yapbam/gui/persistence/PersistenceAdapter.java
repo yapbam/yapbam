@@ -4,7 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Locale;
 
-import com.fathzer.soft.jclop.Service;
+import com.fathzer.soft.jclop.CloudService;
 import com.fathzer.soft.jclop.swing.URIChooser;
 
 /** An abstract persistence adapter.
@@ -17,13 +17,13 @@ import com.fathzer.soft.jclop.swing.URIChooser;
  */
 public abstract class PersistenceAdapter {
 	private Locale locale;
-	private Service service;
+	private CloudService service;
 
 	/** Constructor.
 	 * @param service The remote service, or null if the adapter is not a remote one.
 	 * <br>Actually, the only  case where service is null, is saving/reading to the local disk.
 	 */
-	protected PersistenceAdapter(Service service) {
+	protected PersistenceAdapter(CloudService service) {
 		this.service = service;
 		this.locale = Locale.getDefault();
 	}
@@ -31,7 +31,7 @@ public abstract class PersistenceAdapter {
 	/** Gets this adapter remote service. 
 	 * @return a service or null if the adapter is not based on a remote service (for example saving/reading to local disk)
 	 */
-	public Service getService() {
+	public CloudService getService() {
 		return this.service;
 	}
 	

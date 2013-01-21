@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.net.URI;
 
 import com.fathzer.soft.jclop.Cancellable;
-import com.fathzer.soft.jclop.Service;
+import com.fathzer.soft.jclop.CloudService;
 
 import net.astesana.ajlib.utilities.NullUtils;
 
@@ -26,7 +26,7 @@ public abstract class Synchronizer {
 	 */
 	public static SynchronizationState backgroundSynchronize(URI uri, Cancellable task) throws IOException {
 		PersistenceAdapter p = PersistenceManager.MANAGER.getPlugin(uri);
-		Service service = p.getService();
+		CloudService service = p.getService();
 		if (service!=null) {
 			String remoteRevision = service.getRemoteRevision(uri);
 			String localRevision = service.getLocalRevision(uri);
