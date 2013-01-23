@@ -9,9 +9,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import java.awt.Font;
-import java.awt.Color;
-
 import javax.swing.JCheckBox;
 import java.awt.Insets;
 import java.awt.event.ItemListener;
@@ -156,7 +153,7 @@ public class CustomFilterPanel extends JPanel {
 			gridBagConstraints14.weightx = 1.0;
 			accountPanel = new JPanel();
 			accountPanel.setLayout(new GridBagLayout());
-			accountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.account"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+			accountPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.account"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 			accountPanel.add(getJScrollPane(), gridBagConstraints14);
 		}
 		return accountPanel;
@@ -240,7 +237,7 @@ public class CustomFilterPanel extends JPanel {
 			gridBagConstraints1.weightx = 1.0;
 			categoryPanel = new JPanel();
 			categoryPanel.setLayout(new GridBagLayout());
-			categoryPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.category"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+			categoryPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.category"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 			categoryPanel.add(getJScrollPane1(), gridBagConstraints1);
 		}
 		return categoryPanel;
@@ -519,7 +516,7 @@ public class CustomFilterPanel extends JPanel {
 			gridBagConstraints26.gridy = 0;
 			statementPanel = new JPanel();
 			statementPanel.setLayout(new GridBagLayout());
-			statementPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("CustomFilterPanel.check"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));  //$NON-NLS-1$//$NON-NLS-2$
+			statementPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("CustomFilterPanel.check"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 			statementPanel.add(getChecked(), gridBagConstraints26);
 			statementPanel.add(getNotChecked(), gridBagConstraints27);
 			statementPanel.add(getJPanel11(), gridBagConstraints6);
@@ -655,7 +652,7 @@ public class CustomFilterPanel extends JPanel {
 			gridBagConstraints37.gridx = 0;
 			modePanel = new JPanel();
 			modePanel.setLayout(new GridBagLayout());
-			modePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.mode"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+			modePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.mode"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 			modePanel.add(getJScrollPane2(), gridBagConstraints37);
 		}
 		return modePanel;

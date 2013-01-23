@@ -7,9 +7,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import java.awt.Font;
-import java.awt.Color;
-
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import java.text.MessageFormat;
@@ -154,7 +151,7 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints.gridy = 0;
 			countryPanel = new JPanel();
 			countryPanel.setLayout(new GridBagLayout());
-			countryPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.country"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+			countryPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.country"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 			countryPanel.add(getDefaultCButton(), gridBagConstraints);
 			countryPanel.add(getCustomButton(), gridBagConstraints1);
 			ButtonGroup group = new ButtonGroup();
@@ -216,7 +213,7 @@ public class LocalizationPanel extends PreferencePanel {
 			gridBagConstraints3.gridy = 1;
 			languagePanel = new JPanel();
 			languagePanel.setLayout(new GridBagLayout());
-			languagePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.language"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ //$NON-NLS-2$
+			languagePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.language"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 			languagePanel.add(getDefaultLButton(), gridBagConstraints3);
 			languagePanel.add(getFrenchButton(), gridBagConstraints4);
 			languagePanel.add(getEnglishButton(), gridBagConstraints5);

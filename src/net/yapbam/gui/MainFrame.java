@@ -335,7 +335,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		});
 	}
 	
-	public static void setLookAndFeel() {//DONE
+	public static void setLookAndFeel() {
 		try {
 			String lookAndFeelName = Preferences.INSTANCE.getLookAndFeel();
 			LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
@@ -351,6 +351,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			UIManager.setLookAndFeel(lookAndFeelClass);
 			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
 		} catch (Exception e) {}
+//TODO	UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.BOLD, 24));
 	}
 
 	private void saveState() {
