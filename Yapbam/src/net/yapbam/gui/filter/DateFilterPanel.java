@@ -1,7 +1,5 @@
 package net.yapbam.gui.filter;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -82,7 +80,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 		super();
 		this.wordings = wordings;
 		setLayout(new GridBagLayout());
-		setBorder(BorderFactory.createTitledBorder(null, wordings.title, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$ 
+		setBorder(BorderFactory.createTitledBorder(null, wordings.title, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$ 
 		GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
 		gridBagConstraints25.gridx = 3;
 		gridBagConstraints25.gridheight = 3;

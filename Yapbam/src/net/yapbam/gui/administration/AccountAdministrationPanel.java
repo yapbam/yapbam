@@ -16,9 +16,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import java.awt.Font;
-import java.awt.Color;
-
 import net.yapbam.gui.dialogs.checkbook.CheckbookListPanel;
 
 import java.awt.Insets;
@@ -112,7 +109,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	private AdministrationModeListPanel getModeListPanel() {
 		if (modeListPanel == null) {
 			modeListPanel = new AdministrationModeListPanel(data);
-			modeListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("AccountDialog.modes.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$
+			modeListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("AccountDialog.modes.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 		}
 		return modeListPanel;
 	}
@@ -153,7 +150,7 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 	private CheckbookListPanel getCheckbookListPanel() {
 		if (checkbookListPanel == null) {
 			checkbookListPanel = new CheckbookListPanel(data);
-			checkbookListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("checkbookDialog.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$
+			checkbookListPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("checkbookDialog.border.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 		}
 		return checkbookListPanel;
 	}
