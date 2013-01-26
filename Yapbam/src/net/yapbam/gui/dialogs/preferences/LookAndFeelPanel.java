@@ -3,6 +3,7 @@ package net.yapbam.gui.dialogs.preferences;
 import java.util.ArrayList;
 
 import net.yapbam.gui.CompoundPreferencePanel;
+import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.PreferencePanel;
@@ -20,11 +21,19 @@ public class LookAndFeelPanel extends CompoundPreferencePanel {
 
 	private static PreferencePanel[] getSubPanels(MainFrame frame) {
 		ArrayList<PreferencePanel> lfPanels = new ArrayList<PreferencePanel>();
-		lfPanels.add(new ThemePanel());
+		try {
+			lfPanels.add(new ThemePanel());
+		} catch (Throwable e) {
+			ErrorManager.INSTANCE.log(frame, e);
+		}
 		
 		for (int i=0 ; i<frame.getPlugInsNumber(); i++) {
-			PreferencePanel preferencePanel = frame.getPlugIn(i).getLFPreferencePanel();
-			if (preferencePanel!=null) lfPanels.add(preferencePanel) ;
+			try {
+				PreferencePanel preferencePanel = frame.getPlugIn(i).getLFPreferencePanel();
+				if (preferencePanel!=null) lfPanels.add(preferencePanel);
+			} catch (Throwable e) {
+				ErrorManager.INSTANCE.log(frame, e);
+			}
 		}
 		return lfPanels.toArray(new PreferencePanel[lfPanels.size()]);
 	}

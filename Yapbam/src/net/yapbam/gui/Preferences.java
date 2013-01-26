@@ -639,4 +639,19 @@ public class Preferences {
 	public boolean isPortable() {
 		return portable;
 	}
+
+	public int getLookAndFeelDefaultFontSize() {
+		// TODO Auto-generated method stub
+		return 12; //FIXME
+	}
+
+	public float getLookAndFeelFontSizeRatio() {
+		// TODO Auto-generated method stub
+		return 1f;
+	}
+
+	public void setLookAndFeelFontSizeRatio(float f) {
+		// TODO Auto-generated method stub
+		System.out.println ("size set to "+f);
+	}
 }

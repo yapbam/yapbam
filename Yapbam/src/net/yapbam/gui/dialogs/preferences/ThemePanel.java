@@ -1,7 +1,9 @@
 package net.yapbam.gui.dialogs.preferences;
 
+import java.awt.Font;
 import java.awt.GridBagLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
@@ -16,11 +18,22 @@ import javax.swing.JLabel;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import javax.swing.JSlider;
+import java.awt.Insets;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ThemePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 
 	private String selectedLookAndFeel;
+	private JSlider fontSlider;
+	private JPanel fontPanel;
+	private JLabel textSampleLabel;
+	private JPanel LAFPanel;
 
 	/**
 	 * This is the default constructor
@@ -62,35 +75,22 @@ public class ThemePanel extends PreferencePanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setLayout(new GridBagLayout());
-
-		String current = UIManager.getLookAndFeel().getClass().getName();
-
-		LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
-		ButtonGroup group = new ButtonGroup();
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.anchor = GridBagConstraints.NORTHWEST;
-		for (int i = 0; i < lfs.length; i++) {
-			String name = lfs[i].getName();
-			JRadioButton button = new JRadioButton(name);
-			if (lfs[i].getClassName().equals(current)) {
-				button.setSelected(true);
-				selectedLookAndFeel = lfs[i].getName();
-			}
-			button.addItemListener(new LFAction(lfs[i].getName()));
-			group.add(button);
-			c.gridy = i;
-			this.add(button, c);
-		}
-
-		GridBagConstraints c2 = new GridBagConstraints();
-		c2.gridx = 0;
-		c2.weighty = 1.0D;
-		c2.weightx = 1.0D;
-		c2.gridy = lfs.length;
-		c2.anchor = GridBagConstraints.NORTHWEST;
-		this.add(new JLabel(), c2);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		this.setLayout(gridBagLayout);
+		GridBagConstraints gbc_LAFPanel = new GridBagConstraints();
+		gbc_LAFPanel.anchor = GridBagConstraints.WEST;
+		gbc_LAFPanel.insets = new Insets(10, 0, 0, 5);
+		gbc_LAFPanel.gridx = 0;
+		gbc_LAFPanel.gridy = 0;
+		add(getLAFPanel(), gbc_LAFPanel);
+		GridBagConstraints gbc_fontPanel = new GridBagConstraints();
+		gbc_fontPanel.weightx = 1.0;
+		gbc_fontPanel.anchor = GridBagConstraints.NORTHWEST;
+		gbc_fontPanel.weighty = 1.0;
+		gbc_fontPanel.insets = new Insets(10, 0, 5, 0);
+		gbc_fontPanel.gridx = 0;
+		gbc_fontPanel.gridy = 1;
+		add(getFontPanel(), gbc_fontPanel);
 	}
 
 	public String getSelectedLookAndFeel() {
@@ -99,18 +99,108 @@ public class ThemePanel extends PreferencePanel {
 
 	@Override
 	public String getTitle() {
-		return LocalizationData.get("PreferencesDialog.Theme.title");
+		return LocalizationData.get("PreferencesDialog.Theme.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		return LocalizationData.get("PreferencesDialog.Theme.toolTip");
+		return LocalizationData.get("PreferencesDialog.Theme.toolTip"); //$NON-NLS-1$
 	}
 
 	@Override
 	public boolean updatePreferences() {
-		boolean result = !selectedLookAndFeel.equals(Preferences.INSTANCE.getLookAndFeel());
-		if (result) Preferences.INSTANCE.setLookAndFeel(selectedLookAndFeel);
-		return result;
+		boolean lfChanged = !selectedLookAndFeel.equals(Preferences.INSTANCE.getLookAndFeel());
+		if (lfChanged) Preferences.INSTANCE.setLookAndFeel(selectedLookAndFeel);
+		
+		int defaultSize = Preferences.INSTANCE.getLookAndFeelDefaultFontSize();
+		int old = (int) (defaultSize*Preferences.INSTANCE.getLookAndFeelFontSizeRatio());
+		int current = getFontSlider().getValue();
+		boolean fontChanged = (old!=current);
+		if (fontChanged) Preferences.INSTANCE.setLookAndFeelFontSizeRatio((float)current/defaultSize);
+
+		return lfChanged || fontChanged;
+	}
+	private JSlider getFontSlider() {
+		if (fontSlider == null) {
+			final int defaultSize = Preferences.INSTANCE.getLookAndFeelDefaultFontSize();
+			int min = (int) (defaultSize*.75);
+			int max = 2*defaultSize;
+			final Font defaultFont = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
+			int current = defaultFont.getSize();
+			if (current<min) {
+				current = min;
+			} else if (current>max) {
+				current = max;
+			}
+			fontSlider = new JSlider(min, max, current);
+			fontSlider.setMajorTickSpacing(5);
+			fontSlider.setMinorTickSpacing(1);
+			fontSlider.setPaintLabels(true);
+			fontSlider.setPaintTicks(true);
+			fontSlider.addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					if (!fontSlider.getValueIsAdjusting()) {
+						getTextSampleLabel().setFont(defaultFont.deriveFont((float)fontSlider.getValue()));
+					}
+				}
+			});
+		}
+		return fontSlider;
+	}
+	private JPanel getFontPanel() {
+		if (fontPanel == null) {
+			fontPanel = new JPanel();
+			fontPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Theme.fontSize") //$NON-NLS-1$
+					, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+			GridBagLayout gbl_fontPanel = new GridBagLayout();
+			fontPanel.setLayout(gbl_fontPanel);
+			GridBagConstraints gbc_fontSlider = new GridBagConstraints();
+			gbc_fontSlider.insets = new Insets(0, 0, 5, 0);
+			gbc_fontSlider.weighty = 1.0;
+			gbc_fontSlider.weightx = 1.0;
+			gbc_fontSlider.fill = GridBagConstraints.HORIZONTAL;
+			gbc_fontSlider.anchor = GridBagConstraints.NORTHWEST;
+			gbc_fontSlider.gridx = 0;
+			gbc_fontSlider.gridy = 0;
+			fontPanel.add(getFontSlider(), gbc_fontSlider);
+			GridBagConstraints gbc_textSampleLabel = new GridBagConstraints();
+			gbc_textSampleLabel.anchor = GridBagConstraints.WEST;
+			gbc_textSampleLabel.gridx = 0;
+			gbc_textSampleLabel.gridy = 1;
+			fontPanel.add(getTextSampleLabel(), gbc_textSampleLabel);
+		}
+		return fontPanel;
+	}
+	private JLabel getTextSampleLabel() {
+		if (textSampleLabel == null) {
+			textSampleLabel = new JLabel(LocalizationData.get("PreferencesDialog.Theme.textSample")); //$NON-NLS-1$
+		}
+		return textSampleLabel;
+	}
+	private JPanel getLAFPanel() {
+		if (LAFPanel == null) {
+			LAFPanel = new JPanel();
+			LAFPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Theme.theme") //$NON-NLS-1$
+					, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+			String current = UIManager.getLookAndFeel().getClass().getName();
+
+			LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
+			LAFPanel.setLayout(new GridLayout(lfs.length, 1));
+
+			ButtonGroup group = new ButtonGroup();
+			for (int i = 0; i < lfs.length; i++) {
+				String name = lfs[i].getName();
+				JRadioButton button = new JRadioButton(name);
+				if (lfs[i].getClassName().equals(current)) {
+					button.setSelected(true);
+					selectedLookAndFeel = lfs[i].getName();
+				}
+				button.addItemListener(new LFAction(lfs[i].getName()));
+				group.add(button);
+				LAFPanel.add(button, i);
+			}
+		}
+		return LAFPanel;
 	}
 }
