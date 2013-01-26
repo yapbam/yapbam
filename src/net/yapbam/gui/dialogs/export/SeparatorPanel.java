@@ -10,8 +10,6 @@ import javax.swing.border.TitledBorder;
 import net.astesana.ajlib.swing.widget.CharWidget;
 import net.yapbam.gui.LocalizationData;
 
-import java.awt.Font;
-import java.awt.Color;
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -60,7 +58,7 @@ public class SeparatorPanel extends JPanel {
 		gridBagConstraints.gridy = 0;
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("ExportDialog.columnSeparator") //$NON-NLS-1$
-				, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51))); //$NON-NLS-1$
+				, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
 		this.setSize(new Dimension(196, 86));
 		this.add(getDefaultSeparatorButton(), gridBagConstraints);
 		this.add(getCustomSeparatorButton(), gridBagConstraints1);
