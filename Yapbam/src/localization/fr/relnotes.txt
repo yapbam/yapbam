@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
+version	0.13.7 (??/01/2013)
+fix
+	Dans l'onglet "Budget", quand on sélectionnait le total d'une ligne dont une colonne était déjà sélectionnée, le bouton "Filtre" n'était pas grisé. Cliquer sur celui-ci provoquait alors une erreur.
+
 version	0.13.6 (15/01/2013)
 fix
 	Le dialog de sélection de fichier pouvait causer des erreur quand l'une des apparences "Windows", "Windows classic" ou "CDE Motif" était active.

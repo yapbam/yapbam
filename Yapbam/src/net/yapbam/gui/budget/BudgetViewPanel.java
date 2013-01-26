@@ -251,11 +251,19 @@ public class BudgetViewPanel extends JPanel {
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					int[] rows = getJTable().getSelectedRows();
-					int[] columns = getJTable().getSelectedColumns();
-					int[] fRows = filterSelected(rows, budget.getCategoriesSize());
-					int[] fColumns = filterSelected(columns, budget.getDatesSize());
-					getFilter().setEnabled((fRows.length>0) && (fColumns.length>0));
+					if (!e.getValueIsAdjusting()) {
+						selectionChanged();
+					}
+				}
+			});
+			// If we do not register with column selection model, the listener on the table selection model receive no event
+			// when the user selects a new column in the already selected row (strange, but true !!!)
+			jTable.getColumnModel().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					if (!e.getValueIsAdjusting()) {
+						selectionChanged();
+					}
 				}
 			});
 			budgetTable.getRowJTable().setDefaultRenderer(Object.class, new HeaderRenderer(false));
@@ -426,5 +434,13 @@ public class BudgetViewPanel extends JPanel {
 			});
 		}
 		return groupSubCategories;
+	}
+
+	private void selectionChanged() {
+		int[] rows = getJTable().getSelectedRows();
+		int[] columns = getJTable().getSelectedColumns();
+		int[] fRows = filterSelected(rows, budget.getCategoriesSize());
+		int[] fColumns = filterSelected(columns, budget.getDatesSize());
+		getFilter().setEnabled((fRows.length>0) && (fColumns.length>0));
 	}
 }
