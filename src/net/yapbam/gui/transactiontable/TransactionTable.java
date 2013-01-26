@@ -56,7 +56,6 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 				}
 			}
 		});
-//		this.setRowHeight(this.getRowHeight()*2); //FIXME
 	}
 
 	@Override

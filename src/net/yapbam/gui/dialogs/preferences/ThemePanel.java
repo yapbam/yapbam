@@ -22,7 +22,6 @@ import javax.swing.JSlider;
 import java.awt.Insets;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -169,8 +168,7 @@ public class ThemePanel extends PreferencePanel {
 	private JPanel getFontPanel() {
 		if (fontPanel == null) {
 			fontPanel = new JPanel();
-			fontPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Theme.fontSize") //$NON-NLS-1$
-					, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+			fontPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.fontSize"))); //$NON-NLS-1$
 			GridBagLayout gbl_fontPanel = new GridBagLayout();
 			fontPanel.setLayout(gbl_fontPanel);
 			GridBagConstraints gbc_fontSlider = new GridBagConstraints();
@@ -199,8 +197,7 @@ public class ThemePanel extends PreferencePanel {
 	private JPanel getLAFPanel() {
 		if (LAFPanel == null) {
 			LAFPanel = new JPanel();
-			LAFPanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Theme.theme") //$NON-NLS-1$
-					, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+			LAFPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.theme"))); //$NON-NLS-1$
 			String current = UIManager.getLookAndFeel().getClass().getName();
 
 			LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();

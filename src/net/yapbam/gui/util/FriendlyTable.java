@@ -12,6 +12,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import net.astesana.ajlib.utilities.FileUtils;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.widget.JLabelMenu;
 
 /** A JTable that allows columns to be hidden.
@@ -25,6 +26,7 @@ public class FriendlyTable extends JTable {
 	public FriendlyTable() {
 		super();
 		this.setColumnModel(new XTableColumnModel());
+		setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*getRowHeight()));
 	}
 
 	/**

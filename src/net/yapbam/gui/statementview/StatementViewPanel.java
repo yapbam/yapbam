@@ -24,6 +24,7 @@ import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
@@ -362,7 +363,9 @@ public class StatementViewPanel extends JPanel {
 			gbc_label.anchor = GridBagConstraints.WEST;
 			gbc_label.gridx = 0;
 			gbc_label.gridy = 0;
-			label.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
+			Font font = label.getFont();
+			font = font.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*font.getSize());
+			label.setFont(font);
 			panel.add(label, gbc_label);
 
 			GridBagConstraints gbc_notCheckedColumns = new GridBagConstraints();
