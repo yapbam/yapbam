@@ -16,6 +16,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.transactiontable.ColoredModel;
 import net.yapbam.gui.util.JTableUtils;
 import java.awt.Insets;
@@ -190,11 +191,12 @@ public class ImportErrorPanel extends JPanel {
 			jTable.setIntercellSpacing(new Dimension(4, jTable.getIntercellSpacing().height));
 			jTable.setDefaultRenderer(Object.class, new ObjectRenderer());
 			JTableUtils.initColumnSizes(jTable, 200);
+			jTable.setFillsViewportHeight(true);
+			jTable.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*jTable.getRowHeight()));
 			Dimension preferredSize = getJTable().getPreferredSize();
 			preferredSize.width = Math.min(preferredSize.width, 1024);
-			preferredSize.height = Math.min(preferredSize.height, 600);
+			preferredSize.height = Math.min(jTable.getRowHeight()*10, 600);
 			jTable.setPreferredScrollableViewportSize(preferredSize);
-			jTable.setFillsViewportHeight(true);
 		}
 		return jTable;
 	}

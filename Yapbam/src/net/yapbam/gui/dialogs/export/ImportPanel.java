@@ -34,6 +34,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.util.JTableUtils;
 
 import javax.swing.JLabel;
@@ -175,6 +176,7 @@ public class ImportPanel extends JPanel {
 			jTable.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
 			JTableUtils.initColumnSizes(jTable, Integer.MAX_VALUE);
 			jTable.setPreferredScrollableViewportSize(getJTable().getPreferredSize());
+			jTable.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*jTable.getRowHeight()));
 
 			fieldsCombo = new JComboBox();
 			TableColumn importedColumns = jTable.getColumnModel().getColumn(2);

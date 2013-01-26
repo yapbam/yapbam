@@ -43,6 +43,8 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
+
 import javax.swing.JCheckBox;
 
 public class BudgetViewPanel extends JPanel {
@@ -267,6 +269,7 @@ public class BudgetViewPanel extends JPanel {
 				}
 			});
 			budgetTable.getRowJTable().setDefaultRenderer(Object.class, new HeaderRenderer(false));
+			budgetTable.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*budgetTable.getRowHeight()));
 		}
 		return budgetTable;
 	}
