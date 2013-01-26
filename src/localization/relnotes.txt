@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
+version	0.13.7 (01/??/2013)
+fix
+	In the "Budget" tab, selecting the total cell of an already selected line didn't grayed out the "Filter" button. Click on it caused an error.
+
 version	0.13.6 (01/15/2013)
 fix
 	File selector dialog could hang when using "Windows", "Windows classic" and "CDE Motif" appearences.
