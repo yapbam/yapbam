@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 
 import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
@@ -33,6 +34,8 @@ public class BalancePanel extends JPanel {
 	private JLabel warningLabel;
 
 	private String editedStatement;
+
+	private Font bigFont;
 
 	/**
 	 * Create the panel.
@@ -60,10 +63,12 @@ public class BalancePanel extends JPanel {
 		gridBagConstraints4.gridy = 1;
 		startBalance = new JLabel();
 		startBalance.setHorizontalTextPosition(SwingConstants.LEADING);
-		startBalance.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
+		this.bigFont = startBalance.getFont();
+		this.bigFont = this.bigFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*this.bigFont.getSize());
+		startBalance.setFont(this.bigFont);
 		endBalance = new JLabel();
 		endBalance.setHorizontalAlignment(SwingConstants.RIGHT);
-		endBalance.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
+		endBalance.setFont(this.bigFont);
 		
 		panel = new JPanel();
 		panel.setOpaque(false);
@@ -82,7 +87,7 @@ public class BalancePanel extends JPanel {
 		panel.add(getLabelStatement(), gbc_labelStatement);
 		
 		statementField = new TextWidget(8);
-		statementField.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+		statementField.setFont(this.bigFont);
 		statementField.setMinimumSize(statementField.getPreferredSize());
 		statementField.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_statementField = new GridBagConstraints();
@@ -141,7 +146,7 @@ public class BalancePanel extends JPanel {
 		if (labelStatement == null) {
 			labelStatement = new JLabel(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 			labelStatement.setForeground(Color.RED);
-			labelStatement.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
+			labelStatement.setFont(this.bigFont);
 		}
 		return labelStatement;
 	}

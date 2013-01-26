@@ -10,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
-import java.awt.Font;
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
@@ -145,7 +144,9 @@ public class ProxyPanel extends PreferencePanel {
 		getUserField().setEnabled(enabled);
 		getPasswordField().setEnabled(enabled);
 		Color color = enabled?Color.BLACK:Color.GRAY;
-		getAuthenticationPanel().setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Network.authentication"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), color)); //$NON-NLS-1$ //$NON-NLS-2$
+		TitledBorder border = BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Network.authentication"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color);
+		
+		getAuthenticationPanel().setBorder(border); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
