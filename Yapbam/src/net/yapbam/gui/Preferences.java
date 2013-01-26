@@ -1,5 +1,6 @@
 package net.yapbam.gui;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -238,6 +239,10 @@ public class Preferences {
 
 	public void setLookAndFeel(String lookAndFeelName) {
 		put(LOOK_AND_FEEL, lookAndFeelName);
+	}
+	
+	public boolean isLookAndFeelSupportFontSize(String name) {
+		return "Nimbus".equals(name);
 	}
 	
 	public String getHttpProxyHost() {
@@ -640,18 +645,35 @@ public class Preferences {
 		return portable;
 	}
 
-	public int getLookAndFeelDefaultFontSize() {
-		// TODO Auto-generated method stub
-		return 12; //FIXME
+	private Font defaultFont;
+	/** Gets the default font.
+	 * @return a Font or null if the current L&F not have a default font (I think only Nimbus supports this).
+	 */
+	public Font getDefaultFont() {
+		if (defaultFont==null) {
+			defaultFont = (Font)UIManager.getDefaults().getFont("defaultFont");
+		}
+		return defaultFont;
 	}
 
-	public float getLookAndFeelFontSizeRatio() {
-		// TODO Auto-generated method stub
-		return 1f;
+	private float getFloat(String key, float defaultValue) {
+		try {
+			String property = this.properties.getProperty(key);
+			return property==null?defaultValue:Float.parseFloat(property);
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+	private void setFloat(String key, float value) {
+		Preferences pref = Preferences.INSTANCE;
+		pref.setProperty(key, Float.toString(value));
 	}
 
-	public void setLookAndFeelFontSizeRatio(float f) {
-		// TODO Auto-generated method stub
-		System.out.println ("size set to "+f);
+	public float getFontSizeRatio() {
+		return getFloat("Font.sizeRatio",1.0f);
+	}
+
+	public void setFontSizeRatio(float f) {
+		setFloat("Font.sizeRatio", f);
 	}
 }

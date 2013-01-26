@@ -67,6 +67,7 @@ public class ThemePanel extends PreferencePanel {
 				 * 	ex.printStackTrace();
 				 * }
 				 */
+				refreshFontSlider();
 			}
 		}
 	}
@@ -93,6 +94,12 @@ public class ThemePanel extends PreferencePanel {
 		add(getFontPanel(), gbc_fontPanel);
 	}
 
+	public void refreshFontSlider() {
+		boolean enabled = Preferences.INSTANCE.isLookAndFeelSupportFontSize(selectedLookAndFeel);
+		getFontSlider().setEnabled(enabled);
+		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+(enabled?"enabled":"disabled")));
+	}
+
 	public String getSelectedLookAndFeel() {
 		return selectedLookAndFeel;
 	}
@@ -112,21 +119,22 @@ public class ThemePanel extends PreferencePanel {
 		boolean lfChanged = !selectedLookAndFeel.equals(Preferences.INSTANCE.getLookAndFeel());
 		if (lfChanged) Preferences.INSTANCE.setLookAndFeel(selectedLookAndFeel);
 		
-		int defaultSize = Preferences.INSTANCE.getLookAndFeelDefaultFontSize();
-		int old = (int) (defaultSize*Preferences.INSTANCE.getLookAndFeelFontSizeRatio());
+		int defaultSize = getDefaultFont().getSize();
+		int old = (int) (defaultSize*Preferences.INSTANCE.getFontSizeRatio());
 		int current = getFontSlider().getValue();
 		boolean fontChanged = (old!=current);
-		if (fontChanged) Preferences.INSTANCE.setLookAndFeelFontSizeRatio((float)current/defaultSize);
+		if (fontChanged) Preferences.INSTANCE.setFontSizeRatio((float)current/defaultSize);
 
 		return lfChanged || fontChanged;
 	}
 	private JSlider getFontSlider() {
 		if (fontSlider == null) {
-			final int defaultSize = Preferences.INSTANCE.getLookAndFeelDefaultFontSize();
+			Font dummy = getDefaultFont();
+			final Font defaultFont = dummy;
+			final int defaultSize = defaultFont.getSize();
 			int min = (int) (defaultSize*.75);
 			int max = 2*defaultSize;
-			final Font defaultFont = (Font)UIManager.getLookAndFeelDefaults().get("defaultFont");
-			int current = defaultFont.getSize();
+			int current = getTextSampleLabel().getFont().getSize();
 			if (current<min) {
 				current = min;
 			} else if (current>max) {
@@ -137,6 +145,7 @@ public class ThemePanel extends PreferencePanel {
 			fontSlider.setMinorTickSpacing(1);
 			fontSlider.setPaintLabels(true);
 			fontSlider.setPaintTicks(true);
+			refreshFontSlider();
 			fontSlider.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
@@ -147,6 +156,15 @@ public class ThemePanel extends PreferencePanel {
 			});
 		}
 		return fontSlider;
+	}
+
+	private Font getDefaultFont() {
+		//Some L&F not support "defaultFont" -> we use the JLabel default font instead
+		Font dummy = Preferences.INSTANCE.getDefaultFont();
+		if (dummy==null) {
+			dummy = getTextSampleLabel().getFont();
+		}
+		return dummy;
 	}
 	private JPanel getFontPanel() {
 		if (fontPanel == null) {

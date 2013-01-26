@@ -351,7 +351,20 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			UIManager.setLookAndFeel(lookAndFeelClass);
 			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
 		} catch (Exception e) {}
-//TODO	UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("Arial", Font.BOLD, 24));
+		try {
+			Font current = UIManager.getLookAndFeelDefaults().getFont("defaultFont");
+			if (current!=null) {
+				// If current == null, there's no generic value for font in look and feel
+				// In such a case, we ignore the setting
+				Font defaultFont = Preferences.INSTANCE.getDefaultFont();
+				Font requiredFont = defaultFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*defaultFont.getSize());
+				if (current.getSize()!=requiredFont.getSize()) {
+					UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont);
+				}
+			}
+		} catch (Throwable e) {
+			ErrorManager.INSTANCE.log(null, e);
+		}
 	}
 
 	private void saveState() {
