@@ -9,6 +9,7 @@ import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.SplitPane;
 
@@ -111,6 +112,7 @@ public class AccountsSummaryPanel extends JPanel {
 					}
 				}
 			});
+			table.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*table.getRowHeight()));
 		}
 		return table;
 	}

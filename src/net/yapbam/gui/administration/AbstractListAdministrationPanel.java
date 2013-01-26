@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.astesana.ajlib.swing.table.JTableListener;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 
 import java.awt.Insets;
@@ -101,6 +102,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		if (jTable == null) {
 			jTable = instantiateJTable();
 			jTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			jTable.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*jTable.getRowHeight()));
 		}
 		return jTable;
 	}
