@@ -19,6 +19,7 @@ import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.widget.CurrencyWidget;
 
 import javax.swing.JLabel;
@@ -296,6 +297,7 @@ public class CurrencyConverterPanel extends JPanel {
 		if (jTable == null) {
 			tableModel = new CurrencyTableModel(this.converter, this.codes);
 			jTable = new JTable(tableModel);
+			jTable.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*jTable.getRowHeight()));
 			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 			getJTable().setDefaultRenderer(Double.class, new ConversionRateRenderer());
 			Utils.packColumns(jTable, 2);

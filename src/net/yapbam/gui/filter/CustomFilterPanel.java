@@ -96,6 +96,8 @@ public class CustomFilterPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		this.setLayout(gridBagLayout);
 		GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
 		gridBagConstraints28.insets = new Insets(0, 0, 5, 5);
 		gridBagConstraints28.gridx = 0;
@@ -116,9 +118,6 @@ public class CustomFilterPanel extends JPanel {
 		gridBagConstraints.weighty = 0.0D;
 		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.gridy = 0;
-		this.setSize(800, 700);
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		this.setLayout(gridBagLayout);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridheight = 0;
 		gbc_panel.gridwidth = 2;

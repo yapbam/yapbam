@@ -266,7 +266,7 @@ public class CalculatorPanel extends JPanel {
 		gbc_closeBracket.gridy = 1;
 		add(getCloseBracket(), gbc_closeBracket);
 		GridBagConstraints gbc_btnErase = new GridBagConstraints();
-		gbc_btnErase.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnErase.fill = GridBagConstraints.BOTH;
 		gbc_btnErase.gridwidth = 2;
 		gbc_btnErase.insets = new Insets(0, 0, 5, 5);
 		gbc_btnErase.gridx = 2;

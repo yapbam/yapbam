@@ -26,6 +26,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class ThemePanel extends PreferencePanel {
+	private static final float MAX_RATIO = 2.5f;
+	private static final float MIN_RATIO = 0.75f;
+
 	private static final long serialVersionUID = 1L;
 
 	private String selectedLookAndFeel;
@@ -131,8 +134,8 @@ public class ThemePanel extends PreferencePanel {
 			Font dummy = getDefaultFont();
 			final Font defaultFont = dummy;
 			final int defaultSize = defaultFont.getSize();
-			int min = (int) (defaultSize*.75);
-			int max = 2*defaultSize;
+			int min = (int) (defaultSize*MIN_RATIO);
+			int max = (int) (MAX_RATIO*defaultSize);
 			int current = getTextSampleLabel().getFont().getSize();
 			if (current<min) {
 				current = min;
