@@ -306,7 +306,7 @@ public class BudgetViewPanel extends JPanel {
 							theFilter.setValidCategories(categories);
 						}
 					}
-					//FIXME Unable to select discontinuous time interval in the filter
+					//TODO Unable to select discontinuous time interval in the filter
 					int[] selectedColumns = filterSelected(getJTable().getSelectedColumns(), budget.getDatesSize());
 					if (selectedColumns.length!=budget.getDatesSize()) {
 						Date from = budget.getDate(selectedColumns[0]);
