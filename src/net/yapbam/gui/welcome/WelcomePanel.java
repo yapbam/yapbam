@@ -96,10 +96,6 @@ public class WelcomePanel extends JPanel {
 		gbc_bottomPanel.gridy = 3;
 		add(bottomPanel, gbc_bottomPanel);
 		GridBagLayout gbl_bottomPanel = new GridBagLayout();
-		gbl_bottomPanel.columnWidths = new int[]{0, 0};
-		gbl_bottomPanel.rowHeights = new int[]{0, 0};
-		gbl_bottomPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_bottomPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		bottomPanel.setLayout(gbl_bottomPanel);
 		bottomPanel.setOpaque(false);
 		
@@ -119,16 +115,14 @@ public class WelcomePanel extends JPanel {
 		shortcutsPanel.setOpaque(false);
 		shortcutsPanel.setBorder(new TitledBorder(null, LocalizationData.get("Welcome.shorcuts.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
 		GridBagConstraints gbc_shortcutsPanel = new GridBagConstraints();
+		gbc_shortcutsPanel.anchor = GridBagConstraints.NORTH;
+		gbc_shortcutsPanel.weighty = 1.0;
 		gbc_shortcutsPanel.insets = new Insets(0, 0, 5, 5);
-		gbc_shortcutsPanel.fill = GridBagConstraints.BOTH;
+		gbc_shortcutsPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_shortcutsPanel.gridx = 0;
 		gbc_shortcutsPanel.gridy = 2;
 		add(shortcutsPanel, gbc_shortcutsPanel);
 		GridBagLayout gbl_shortcutsPanel = new GridBagLayout();
-		gbl_shortcutsPanel.columnWidths = new int[]{0, 0};
-		gbl_shortcutsPanel.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_shortcutsPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_shortcutsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		shortcutsPanel.setLayout(gbl_shortcutsPanel);
 		
 		final File file = new File(getURI("sampleFile")); //$NON-NLS-1$
@@ -152,6 +146,7 @@ public class WelcomePanel extends JPanel {
 		btnOpenSampleData.setHorizontalAlignment(SwingConstants.LEFT);
 		btnOpenSampleData.setToolTipText(LocalizationData.get("Welcome.sampleData.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_btnOpenSampleData = new GridBagConstraints();
+		gbc_btnOpenSampleData.anchor = GridBagConstraints.NORTH;
 		gbc_btnOpenSampleData.insets = new Insets(0, 0, 5, 0);
 		gbc_btnOpenSampleData.weightx = 1.0;
 		gbc_btnOpenSampleData.fill = GridBagConstraints.HORIZONTAL;
@@ -178,13 +173,15 @@ public class WelcomePanel extends JPanel {
 		faq.setHorizontalAlignment(SwingConstants.LEFT);
 		faq.setToolTipText(LocalizationData.get("Welcome.faq.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbc_faq = new GridBagConstraints();
+		gbc_faq.anchor = GridBagConstraints.NORTH;
+		gbc_faq.weighty = 1.0;
 		gbc_faq.fill = GridBagConstraints.HORIZONTAL;
 		gbc_faq.gridx = 0;
 		gbc_faq.gridy = 2;
 		shortcutsPanel.add(faq, gbc_faq);
 		
 		JPanel tipsPanel = new JPanel();
-		tipsPanel.setBorder(new TitledBorder(null, LocalizationData.get("Welcome.tip.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
+		tipsPanel.setBorder(new TitledBorder(LocalizationData.get("Welcome.tip.title"))); //$NON-NLS-1$
 		GridBagConstraints gbc_tipsPanel = new GridBagConstraints();
 		gbc_tipsPanel.weighty = 1.0;
 		gbc_tipsPanel.weightx = 1.0;
@@ -194,16 +191,13 @@ public class WelcomePanel extends JPanel {
 		gbc_tipsPanel.gridy = 2;
 		add(tipsPanel, gbc_tipsPanel);
 		GridBagLayout gbl_tipsPanel = new GridBagLayout();
-		gbl_tipsPanel.columnWidths = new int[]{68, 0};
-		gbl_tipsPanel.rowHeights = new int[]{16, 0, 0};
-		gbl_tipsPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_tipsPanel.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		tipsPanel.setLayout(gbl_tipsPanel);
 		tipsPanel.setOpaque(false);
 		
 		tipPane = new HTMLPane();
-		tipPane.setPreferredSize(new Dimension(300,200));
+		tipPane.setPreferredSize(new Dimension(300,200)); //FIXME
 		GridBagConstraints gbc_tipPane = new GridBagConstraints();
+		gbc_tipPane.weighty = 1.0;
 		gbc_tipPane.weightx = 1.0;
 		gbc_tipPane.insets = new Insets(0, 0, 5, 0);
 		gbc_tipPane.fill = GridBagConstraints.BOTH;
@@ -218,10 +212,6 @@ public class WelcomePanel extends JPanel {
 		gbc_tipSelectionPanel.gridy = 1;
 		tipsPanel.add(tipSelectionPanel, gbc_tipSelectionPanel);
 		GridBagLayout gbl_tipSelectionPanel = new GridBagLayout();
-		gbl_tipSelectionPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_tipSelectionPanel.rowHeights = new int[]{0, 0};
-		gbl_tipSelectionPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_tipSelectionPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		tipSelectionPanel.setLayout(gbl_tipSelectionPanel);
 		tipSelectionPanel.setOpaque(false);
 		
