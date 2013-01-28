@@ -22,6 +22,7 @@ import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.persistence.PersistenceManager;
 
 import javax.swing.JSeparator;
@@ -36,6 +37,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
+import java.awt.BorderLayout;
 
 @SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
@@ -190,27 +192,16 @@ public class WelcomePanel extends JPanel {
 		gbc_tipsPanel.gridx = 1;
 		gbc_tipsPanel.gridy = 2;
 		add(tipsPanel, gbc_tipsPanel);
-		GridBagLayout gbl_tipsPanel = new GridBagLayout();
-		tipsPanel.setLayout(gbl_tipsPanel);
 		tipsPanel.setOpaque(false);
+		tipsPanel.setLayout(new BorderLayout(0, 0));
 		
 		tipPane = new HTMLPane();
-		tipPane.setPreferredSize(new Dimension(300,200)); //FIXME
-		GridBagConstraints gbc_tipPane = new GridBagConstraints();
-		gbc_tipPane.weighty = 1.0;
-		gbc_tipPane.weightx = 1.0;
-		gbc_tipPane.insets = new Insets(0, 0, 5, 0);
-		gbc_tipPane.fill = GridBagConstraints.BOTH;
-		gbc_tipPane.gridx = 0;
-		gbc_tipPane.gridy = 0;
-		tipsPanel.add(tipPane, gbc_tipPane);
+		float ratio = Preferences.INSTANCE.getFontSizeRatio(); 
+		tipPane.setPreferredSize(new Dimension((int)(300*ratio), (int)(200*ratio)));
+		tipsPanel.add(tipPane, BorderLayout.CENTER);
 		
 		JPanel tipSelectionPanel = new JPanel();
-		GridBagConstraints gbc_tipSelectionPanel = new GridBagConstraints();
-		gbc_tipSelectionPanel.fill = GridBagConstraints.VERTICAL;
-		gbc_tipSelectionPanel.gridx = 0;
-		gbc_tipSelectionPanel.gridy = 1;
-		tipsPanel.add(tipSelectionPanel, gbc_tipSelectionPanel);
+		tipsPanel.add(tipSelectionPanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_tipSelectionPanel = new GridBagLayout();
 		tipSelectionPanel.setLayout(gbl_tipSelectionPanel);
 		tipSelectionPanel.setOpaque(false);
@@ -237,6 +228,7 @@ public class WelcomePanel extends JPanel {
 		GridBagConstraints gbc_tipNumber = new GridBagConstraints();
 		gbc_tipNumber.gridx = 3;
 		gbc_tipNumber.gridy = 0;
+		gbc_tipNumber.fill = GridBagConstraints.VERTICAL;
 		tipSelectionPanel.add(tipNumber, gbc_tipNumber);
 		tipNumber.setColumns(2);
 		tipNumber.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
@@ -262,6 +254,7 @@ public class WelcomePanel extends JPanel {
 		nextTip.setToolTipText(LocalizationData.get("Welcome.nextTip.tooltip")); //$NON-NLS-1$
 		nextTip.setIcon(IconManager.NEXT);
 		GridBagConstraints gbc_nextTip = new GridBagConstraints();
+		gbc_nextTip.fill = GridBagConstraints.VERTICAL;
 		gbc_nextTip.insets = new Insets(0, 0, 0, 5);
 		gbc_nextTip.gridx = 5;
 		gbc_nextTip.gridy = 0;
@@ -277,6 +270,7 @@ public class WelcomePanel extends JPanel {
 		lastTip.setToolTipText(LocalizationData.get("Welcome.lastTip.tooltip")); //$NON-NLS-1$
 		lastTip.setIcon(IconManager.LAST);
 		GridBagConstraints gbc_lastTip = new GridBagConstraints();
+		gbc_lastTip.fill = GridBagConstraints.VERTICAL;
 		gbc_lastTip.gridx = 6;
 		gbc_lastTip.gridy = 0;
 		setTipSelectionButtonSize(lastTip);
@@ -291,6 +285,7 @@ public class WelcomePanel extends JPanel {
 		previousTip.setToolTipText(LocalizationData.get("Welcome.previousTip.tooltip")); //$NON-NLS-1$
 		previousTip.setIcon(IconManager.PREVIOUS);
 		GridBagConstraints gbc_previousTip = new GridBagConstraints();
+		gbc_previousTip.fill = GridBagConstraints.VERTICAL;
 		gbc_previousTip.insets = new Insets(0, 0, 0, 5);
 		gbc_previousTip.gridx = 2;
 		gbc_previousTip.gridy = 0;
@@ -350,7 +345,6 @@ public class WelcomePanel extends JPanel {
 			nextTip.setEnabled(index!=tips.size()-1);
 			lastTip.setEnabled(index!=tips.size()-1);
 			tipNumber.setText(Integer.toString(index+1));
-//		AbstractDialog.getOwnerWindow(this).pack();
 		}
 	}
 }

@@ -11,6 +11,7 @@ import net.astesana.javaluator.BracketPair;
 import net.astesana.javaluator.DoubleEvaluator;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -204,16 +205,28 @@ public class CalculatorPanel extends JPanel {
 		} else if (Character.toUpperCase(character)==CLEAR) {
 			// Clear
 			erase();
+			throw new IllegalArgumentException(); //TODO
 		} else if (character==EQUAL) {
 			// Evaluate the expression
 			if (this.value!=null) {
-				formula.delete(0, formula.length());
+				//The calculator try to evaluate the expression each time a key is pressed
+				//So, this.value contains the result of the evaluation (or null if the expression is wrong)
 				internalFormula.delete(0, internalFormula.length());
 				internalFormula.append(this.value.toString());
+				formula.delete(0, formula.length());
 				DecimalFormat format = (DecimalFormat) NumberFormat.getInstance();
 				format.setMinimumFractionDigits(0);
-				format.setMaximumFractionDigits(PRECISION);
-				formula.append(format.format(this.value));
+				// Searching for the right precision in order to not have the result bigger than the field
+				int availableWidth = getResult().getSize().width - getResult().getInsets().left - getResult().getInsets().right;
+				FontMetrics fontMetrics = getResult().getFontMetrics(getResult().getFont());
+				for (int precision=0; precision<PRECISION; precision++) {
+					format.setMaximumFractionDigits(precision);
+					if (fontMetrics.stringWidth(format.format(this.value))>availableWidth) {
+						if (precision>0) format.setMaximumFractionDigits(precision-1);
+						break;
+					}
+				}
+				formula.append(format.format(this.value).replace(POINT, decimalSeparator));
 			}
 		}
 		try {
@@ -226,7 +239,7 @@ public class CalculatorPanel extends JPanel {
 		formulaIsResult = (this.value!=null) && (character==EQUAL);
 		getResult().setForeground(value==null?this.invalidColor:this.validColor);
 		getBtnEquals().setEnabled(value!=null);
-		getResult().setText(formula.toString().replace(POINT, decimalSeparator));
+		getResult().setText(formula.toString());
 	}
 
 	private void erase() {

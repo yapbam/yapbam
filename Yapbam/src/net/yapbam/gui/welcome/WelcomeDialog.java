@@ -20,9 +20,9 @@ public class WelcomeDialog extends AbstractDialog<GlobalData, Void> {
 		getOkButton().setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
 		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
 		getCancelButton().setVisible(false);
-		this.setResizable(true);
-		this.pack();
-		this.setMinimumSize(getSize());
+//		this.setResizable(true);
+//		this.pack();
+//		this.setMinimumSize(getSize());
 	}
 
 	@Override
