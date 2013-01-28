@@ -454,6 +454,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			PersistenceManager.MANAGER.read(getJFrame(), getData(), uri, new PersistenceManager.ErrorProcessor() {
 				@Override
 				public boolean processError(Throwable e) {
+					if (e instanceof UnsupportedSchemeException) return true; // The scheme is no more supported, simply ignore the error
 					Service service = PersistenceManager.MANAGER.getPlugin(finalURI).getService();
 					String displayedURI = service.getDisplayable(finalURI);
 					File file = service.getLocalFile(finalURI);
@@ -474,8 +475,6 @@ public class MainFrame extends JFrame implements YapbamInstance {
 						} else {
 							ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
 						}
-					} else if (e instanceof UnsupportedSchemeException) {
-						// The scheme is no more supported, simply ignore the error
 					} else {
 						return false; // Let the standard error processor do its job
 					}

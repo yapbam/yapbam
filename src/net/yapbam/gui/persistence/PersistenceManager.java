@@ -178,11 +178,12 @@ public class PersistenceManager {
 					if (errProcessor!=null) {
 						notProcessed = !errProcessor.processError(exception);
 					}
-					Service service = getPlugin(path).getService();
-					String displayedURI = service.getDisplayable(path);
 					if (notProcessed) {
-						File file = service.getLocalFile(path);
+						PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(path);
+						Service service = plugin==null?null:plugin.getService();
+						String displayedURI = service==null?path.toString():service.getDisplayable(path);
 						if (exception instanceof FileNotFoundException) {
+							File file = service.getLocalFile(path);
 							if (file.exists()) {
 								// The file exist, but it is read protected
 								if (path.getScheme().equals("file")) {
