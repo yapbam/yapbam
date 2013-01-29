@@ -205,7 +205,6 @@ public class CalculatorPanel extends JPanel {
 		} else if (Character.toUpperCase(character)==CLEAR) {
 			// Clear
 			erase();
-//			throw new IllegalArgumentException(); //TODO
 		} else if (character==EQUAL) {
 			// Evaluate the expression
 			if (this.value!=null) {

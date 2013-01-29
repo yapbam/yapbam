@@ -6,6 +6,7 @@ Relatif au "big fonts" :
 	Boutons de sélection des mois dans le panneau des dates
 	Icones qui restent petites
 	Historique du solde
+	List des fichiers de Dropbox
 
 Question à cent sous :
 Depuis la 0.12.0 on ne peut plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
