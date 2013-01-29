@@ -3,6 +3,8 @@ package net.yapbam.gui.dialogs;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
+
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.text.MessageFormat;
@@ -14,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.yapbam.gui.LocalizationData;
 
 public class ErrorPanel extends JPanel {
@@ -48,7 +51,7 @@ public class ErrorPanel extends JPanel {
 		panel.add(icon, gbc_icon);
 		icon.setIcon(getIcon());
 		
-		JLabel label = new JLabel(getMessage());
+		Component label = hasExtendedMessage() ? new HTMLPane(getMessage()) : new JLabel(getMessage());
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.insets = new Insets(0, 10, 0, 0);
 		gbc_label.anchor = GridBagConstraints.WEST;
@@ -83,11 +86,15 @@ public class ErrorPanel extends JPanel {
 	
 	protected String getMessage() {
 		String message = LocalizationData.get("ErrorManager.sendReport.message"); //$NON-NLS-1$
-		if (LocalizationData.getLocale().getLanguage().equals("fr")) { //$NON-NLS-1$
+		if (hasExtendedMessage()) { //$NON-NLS-1$
 			String mailMessage = MessageFormat.format("<br><br>Vous pouvez également nous envoyer un mail à l''adresse <b>bug@yapbam.net</b> en nous indiquant ce que vous tentiez de faire lorsque ce bug est survenu et, si possible, comment le reproduire.<br>Merci de mentionner la référence suivante dans le titre du mail : {0}", new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss-Z").format(new Date()))+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			message = message.replace("</html>", mailMessage); //$NON-NLS-1$
 		}
 		return message;
+	}
+
+	private boolean hasExtendedMessage() {
+		return LocalizationData.getLocale().getLanguage().equals("fr");
 	}
 
 	public boolean isDontAskMeSelected() {
