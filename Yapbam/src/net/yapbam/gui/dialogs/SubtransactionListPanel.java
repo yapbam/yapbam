@@ -33,7 +33,6 @@ import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
@@ -72,9 +71,8 @@ public class SubtransactionListPanel extends JPanel {
 		this.add(pane, BorderLayout.NORTH);
 		
 		tableModel = new SubTransactionsTableModel();
-		table = new JTable(tableModel);
+		table = new net.astesana.ajlib.swing.table.JTable(tableModel);
 		table.setRowSorter(new RowSorter<TableModel>(tableModel));
-		table.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*table.getRowHeight()));
 		ListSelectionModel selModel = table.getSelectionModel();
 		selModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		selModel.addListSelectionListener(new ListSelectionListener() {

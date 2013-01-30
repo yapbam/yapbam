@@ -72,7 +72,7 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 	
 	@Override
 	protected JTable instantiateJTable() {
-		JTable table = new JTable(getTableModel());
+		JTable table = new net.astesana.ajlib.swing.table.JTable(getTableModel());
 		// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
 		table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
 		return table;

@@ -22,7 +22,6 @@ import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 import net.yapbam.gui.persistence.PersistenceManager;
 
 import javax.swing.JSeparator;
@@ -196,8 +195,7 @@ public class WelcomePanel extends JPanel {
 		tipsPanel.setLayout(new BorderLayout(0, 0));
 		
 		tipPane = new HTMLPane();
-		float ratio = Preferences.INSTANCE.getFontSizeRatio(); 
-		tipPane.setPreferredSize(new Dimension((int)(300*ratio), (int)(200*ratio)));
+		tipPane.setPreferredSize(new Dimension(300*getFont().getSize()/12, 200*getFont().getSize()/12));
 		tipsPanel.add(tipPane, BorderLayout.CENTER);
 		
 		JPanel tipSelectionPanel = new JPanel();

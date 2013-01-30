@@ -5,16 +5,15 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 
+import net.astesana.ajlib.swing.table.JTable;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.SplitPane;
 
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -112,7 +111,6 @@ public class AccountsSummaryPanel extends JPanel {
 					}
 				}
 			});
-			table.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*table.getRowHeight()));
 		}
 		return table;
 	}
@@ -191,7 +189,7 @@ public class AccountsSummaryPanel extends JPanel {
 	private class MyRenderer extends CellRenderer {
 		private static final long serialVersionUID = 1L;
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		public Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			int rowCount = table.getModel().getRowCount();
 			Font font = super.getFont();
 			int style = font.getStyle();

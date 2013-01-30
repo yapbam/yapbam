@@ -94,7 +94,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		JTable jTable = new JTable(getTableModel());
+		JTable jTable = new net.astesana.ajlib.swing.table.JTable(getTableModel());
 		jTable.setDefaultRenderer(Double.class, new DefaultTableCellRenderer(){
 		    @Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,

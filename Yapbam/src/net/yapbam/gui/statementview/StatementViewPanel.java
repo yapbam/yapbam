@@ -24,7 +24,6 @@ import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
@@ -364,7 +363,7 @@ public class StatementViewPanel extends JPanel {
 			gbc_label.gridx = 0;
 			gbc_label.gridy = 0;
 			Font font = label.getFont();
-			font = font.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*font.getSize());
+			font = label.getFont().deriveFont(14*label.getFont().getSize()/12);
 			label.setFont(font);
 			panel.add(label, gbc_label);
 

@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 
 import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
@@ -63,8 +62,7 @@ public class BalancePanel extends JPanel {
 		gridBagConstraints4.gridy = 1;
 		startBalance = new JLabel();
 		startBalance.setHorizontalTextPosition(SwingConstants.LEADING);
-		this.bigFont = startBalance.getFont();
-		this.bigFont = this.bigFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*this.bigFont.getSize());
+		this.bigFont = startBalance.getFont().deriveFont((float)14*startBalance.getFont().getSize()/12);
 		startBalance.setFont(this.bigFont);
 		endBalance = new JLabel();
 		endBalance.setHorizontalAlignment(SwingConstants.RIGHT);

@@ -123,7 +123,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	
 	@Override
 	protected JTable instantiateJTable() {
-		return new JTable(getTableModel());
+		return new net.astesana.ajlib.swing.table.JTable(getTableModel());
 	}
 	
 	protected TableModel getTableModel() {
