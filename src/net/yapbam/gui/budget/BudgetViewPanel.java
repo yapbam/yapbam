@@ -9,6 +9,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import java.awt.GridBagConstraints;
@@ -24,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -43,7 +43,6 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.Preferences;
 
 import javax.swing.JCheckBox;
 
@@ -243,13 +242,13 @@ public class BudgetViewPanel extends JPanel {
 					Utils.packColumns(getJTable(), 2);
 				}
 			});
-			budgetTable.setModel(model);
 			JTable jTable = budgetTable.getJTable();
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			jTable.getTableHeader().setReorderingAllowed(false);
 			jTable.getTableHeader().setDefaultRenderer(new HeaderRenderer(true));
 			jTable.setCellSelectionEnabled(true);
 			jTable.setDefaultRenderer(Object.class, new CellRenderer());
+			budgetTable.setModel(model);
 			jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -269,7 +268,6 @@ public class BudgetViewPanel extends JPanel {
 				}
 			});
 			budgetTable.getRowJTable().setDefaultRenderer(Object.class, new HeaderRenderer(false));
-			budgetTable.setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*budgetTable.getRowHeight()));
 		}
 		return budgetTable;
 	}

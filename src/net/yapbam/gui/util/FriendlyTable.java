@@ -9,10 +9,9 @@ import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTable;
 
+import net.astesana.ajlib.swing.table.JTable;
 import net.astesana.ajlib.utilities.FileUtils;
-import net.yapbam.gui.Preferences;
 import net.yapbam.gui.widget.JLabelMenu;
 
 /** A JTable that allows columns to be hidden.
@@ -26,7 +25,6 @@ public class FriendlyTable extends JTable {
 	public FriendlyTable() {
 		super();
 		this.setColumnModel(new XTableColumnModel());
-		setRowHeight((int) (Preferences.INSTANCE.getFontSizeRatio()*getRowHeight()));
 	}
 
 	/**

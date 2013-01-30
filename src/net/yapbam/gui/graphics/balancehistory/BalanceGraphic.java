@@ -29,7 +29,6 @@ import net.yapbam.gui.LocalizationData;
 
 class BalanceGraphic extends JPanel implements Scrollable {
 	static final String SELECTED_DATE_PROPERTY = "selectedDate";
-	private static final int PIXEL_PER_DAY = 3;
 	private static final long serialVersionUID = 1L;
 	private static final int X_OFFSET = 0;
 	private static final Color POSITIVE = new Color (127,255,127);
@@ -40,6 +39,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	private Date startDate;
 	private Date endDate;
 	private YAxis yAxis;
+	private int pixelPerDay = 3;
 
 	private Date selectedDate;
 
@@ -58,6 +58,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		this.addMouseListener(listener);
 		this.addMouseMotionListener(listener);
 		this.setAutoscrolls(true);
+		pixelPerDay = 3*getFont().getSize()/12;
 	}
 	
 	private void restoreHistory() {
@@ -174,7 +175,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 
 		// Draw the selected date line
-		int stroke = 4;
+		int stroke = pixelPerDay+1;
 		int x = getX(this.selectedDate) + stroke / 2;
 		if ((x >= 0) && (x <= size.width)) {
 			Stroke oldStroke = g2.getStroke();
@@ -244,7 +245,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	private void setLinePosition(double x) {
-		int day = ((int)x-X_OFFSET)/PIXEL_PER_DAY;
+		int day = ((int)x-X_OFFSET)/pixelPerDay;
 		// The following line introduce a bug when there's a summer/winter time change, because theses days doesn't
 		// have 24 hours. So, we will use a gregorianCalendar and add the amount of days to it.
 		// long time = this.getStartDate().getTime()+3600000*24*day;
@@ -267,11 +268,11 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	int getX(Date date) {
-		return X_OFFSET + (int) ((date.getTime()-getStartDate().getTime())/(3600000*24)*PIXEL_PER_DAY);
+		return X_OFFSET + (int) ((date.getTime()-getStartDate().getTime())/(3600000*24)*pixelPerDay);
 	}
 	
 	private long xToTime(int x) {
-		return ((long)(x-X_OFFSET))*3600000*24/PIXEL_PER_DAY + getStartDate().getTime();
+		return ((long)(x-X_OFFSET))*3600000*24/pixelPerDay + getStartDate().getTime();
 	}
 
 	private Point[] convert() {
@@ -328,7 +329,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		// - otherwise, the preferred end date
 		Date end = NullUtils.compareTo(this.getPreferredEndDate(), this.getEndDate(), false)<0?this.getPreferredEndDate():this.getEndDate();
 		long days = 1 + (end.getTime() - this.getStartDate().getTime()) / 24 / 3600000;
-		int pixels = (int) (days * PIXEL_PER_DAY);
+		int pixels = (int) (days * pixelPerDay);
 		int width = Math.max(pixels, parentSize.width);
 		return new Dimension(width, parentSize.height);
 	}
@@ -350,7 +351,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return PIXEL_PER_DAY; // Increments by one day
+		return pixelPerDay; // Increments by one day
 	}
 
 	/** Sets the preferred end date of this graphic.

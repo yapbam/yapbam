@@ -44,7 +44,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		return new JTable(getTableModel()) {
+		return new net.astesana.ajlib.swing.table.JTable(getTableModel()) {
 			// Implement table cell tool tips.
 			@Override
 			public String getToolTipText(MouseEvent e) {

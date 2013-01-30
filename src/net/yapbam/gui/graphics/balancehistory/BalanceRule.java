@@ -42,30 +42,30 @@ class BalanceRule extends JComponent {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-    	Graphics2D g2 = (Graphics2D) g;
-    	
-    	g2.setColor(Color.WHITE);
-        Stroke oldStroke = g2.getStroke();
-        
-        Dimension size = getSize();
-		g2.fillRect(0, 0, size.width, size.height-1);
-    	g2.setColor(Color.BLACK);
-		g2.drawLine(0, size.height-1, size.width, size.height-1);
-        
-        g2.setStroke(new BasicStroke(3));
-        int y0 = this.yAxis.getY(0);
+		Graphics2D g2 = (Graphics2D) g;
+
+		g2.setColor(Color.WHITE);
+		Stroke oldStroke = g2.getStroke();
+
+		Dimension size = getSize();
+		g2.fillRect(0, 0, size.width, size.height - 1);
+		g2.setColor(Color.BLACK);
+		g2.drawLine(0, size.height - 1, size.width, size.height - 1);
+
+		g2.setStroke(new BasicStroke(3));
+		int y0 = this.yAxis.getY(0);
 		g2.drawLine(0, y0, size.width, y0); // x axis
 
-		g2.drawLine(size.width-1, 0, size.width-1, size.height); // y axis
-    	g2.setStroke(oldStroke);
-    	
-    	FontMetrics fontMetrics = this.getFontMetrics(this.getFont());
-    	for (Iterator<Graduation> iterator = this.yAxis.getYGraduations(); iterator.hasNext();) {
+		g2.drawLine(size.width - 1, 0, size.width - 1, size.height); // y axis
+		g2.setStroke(oldStroke);
+
+		FontMetrics fontMetrics = this.getFontMetrics(this.getFont());
+		for (Iterator<Graduation> iterator = this.yAxis.getYGraduations(); iterator.hasNext();) {
 			Graduation graduation = iterator.next();
-			g2.drawLine(size.width-5, graduation.getPosition(), size.width, graduation.getPosition());
+			g2.drawLine(size.width - 5, graduation.getPosition(), size.width, graduation.getPosition());
 			String text = LocalizationData.getCurrencyInstance().format(graduation.getValue());
 			int textWidth = fontMetrics.stringWidth(text);
-			g2.drawString(text, size.width-10-textWidth, graduation.getPosition()+fontMetrics.getAscent()/2);			
+			g2.drawString(text, size.width - 10 - textWidth, graduation.getPosition() + fontMetrics.getAscent() / 2);
 		}
 	}
 
