@@ -6,11 +6,13 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
-version	0.13.7 (01/02/2013)
+version	0.14.0 (01/02/2013)
 improvement
 	La taille des caractères est désormais modifiable (uniquement avec l'apparence "Nimbus").
+	Ajout d'un rubrique "notes" dans les comptes, visible dans l'onglet "Bilan des comptes".
 fix
 	Dans l'onglet "Budget", quand on sélectionnait le total d'une ligne dont une colonne était déjà sélectionnée, le bouton "Filtre" n'était pas grisé. Cliquer sur celui-ci provoquait alors une erreur.
+	Une erreur survenait quand on choisisait le menu "Fichier/Nouveau" pendant l'édition d'une catégorie dans l'onglet "Administration/Catégories".
 
 version	0.13.6 (15/01/2013)
 fix

@@ -6,11 +6,13 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
-version	0.13.7 (02/01/2013)
+version	0.14.0 (02/01/2013)
 improvement
 	Yapbam font size is now editable (only with "Nimbus" look and feel).
+	Adding a field "Notes" in the accounts, visible in the "Accounts summary" tab.
 fix
 	In the "Budget" tab, selecting the total cell of an already selected line didn't grayed out the "Filter" button. Click on it caused an error.
+	An error occurred when we chose the menu "File/New" while editing a category in the "Administration/Categories" tab.
 
 version	0.13.6 (01/15/2013)
 fix

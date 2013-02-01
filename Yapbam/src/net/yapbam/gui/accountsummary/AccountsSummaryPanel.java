@@ -5,11 +5,15 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.JTable;
 import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.IconManager.Name;
+import net.yapbam.gui.dialogs.EditAccountDialog;
 import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.SplitPane;
 
@@ -20,6 +24,11 @@ import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.GridBagLayout;
+import javax.swing.JButton;
+import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AccountsSummaryPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -33,6 +42,8 @@ public class AccountsSummaryPanel extends JPanel {
 	private JTextArea notesField;
 	private JPanel bottomPanel;
 	private JLabel lblNotesLabel;
+	private JPanel editPanel;
+	private JButton editButton;
 	
 	/**
 	 * This is the default constructor
@@ -99,15 +110,13 @@ public class AccountsSummaryPanel extends JPanel {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					if (!e.getValueIsAdjusting()) {
-						int selected = table.getSelectedRow();
-						boolean accountIsSelected = (selected>=0) && (selected<data.getAccountsNumber());
-						if (accountIsSelected) {
-							Account account = data.getAccount(table.convertRowIndexToModel(selected));
+						Account account = getSelectedAccount();
+						if (account!=null) {
 							if (!getSplitPane().isDividerVisible()) getSplitPane().setDividerLocation(0.5);
 							getNotesField().setText(account.getComment()==null?"":account.getComment());
 						}
-						getSplitPane().setDividerVisible(accountIsSelected);
-						getBottomPanel().setVisible(accountIsSelected);
+						getSplitPane().setDividerVisible(account!=null);
+						getBottomPanel().setVisible(account!=null);
 					}
 				}
 			});
@@ -115,11 +124,18 @@ public class AccountsSummaryPanel extends JPanel {
 		return table;
 	}
 	
+	private Account getSelectedAccount() {
+		int selected = table.getSelectedRow();
+		boolean accountIsSelected = (selected>=0) && (selected<data.getAccountsNumber());
+		return accountIsSelected ? data.getAccount(table.convertRowIndexToModel(selected)) : null;
+	}
+	
 	private JPanel getBottomPanel() {
 		if (bottomPanel == null) {
 			bottomPanel = new JPanel(new BorderLayout());
 			bottomPanel.add(getNotePane());
 			bottomPanel.add(getLblNotesLabel(), BorderLayout.NORTH);
+			bottomPanel.add(getEditPanel(), BorderLayout.SOUTH);
 			bottomPanel.setVisible(false);
 		}
 		return bottomPanel;
@@ -143,7 +159,6 @@ public class AccountsSummaryPanel extends JPanel {
 		if (notesField == null) {
 			notesField = new JTextArea();
 			notesField.setEditable(false);
-			notesField.setToolTipText(LocalizationData.get("AccountDialog.notes.tooltip")); //$NON-NLS-1$
 			notesField.setLineWrap(true);
 			notesField.setWrapStyleWord(true);
 		}
@@ -203,5 +218,37 @@ public class AccountsSummaryPanel extends JPanel {
 			super.setFont(font.deriveFont(style, font.getSize2D()));
 			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		}
+	}
+	private JPanel getEditPanel() {
+		if (editPanel == null) {
+			editPanel = new JPanel();
+			GridBagLayout gbl_editPanel = new GridBagLayout();
+			editPanel.setLayout(gbl_editPanel);
+			GridBagConstraints gbc_editButton = new GridBagConstraints();
+			gbc_editButton.anchor = GridBagConstraints.WEST;
+			gbc_editButton.weightx = 1.0;
+			gbc_editButton.gridx = 0;
+			gbc_editButton.gridy = 0;
+			editPanel.add(getEditButton(), gbc_editButton);
+		}
+		return editPanel;
+	}
+	private JButton getEditButton() {
+		if (editButton == null) {
+			editButton = new JButton(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT_ACCOUNT));
+			editButton.setToolTipText(LocalizationData.get("AccountManager.editAccount.toolTip"));
+			editButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Account account = getSelectedAccount();
+					if (account!=null) {
+						EditAccountDialog.edit(data, Utils.getOwnerWindow(getEditButton()), account);
+						int index = getTable().convertRowIndexToView(data.indexOf(account));
+						getTable().getSelectionModel().setSelectionInterval(index, index);
+					}
+				}
+			});
+		}
+		return editButton;
 	}
 }

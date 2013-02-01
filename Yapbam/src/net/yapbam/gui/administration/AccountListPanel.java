@@ -77,18 +77,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int selectedRow = getJTable().convertRowIndexToModel(getJTable().getSelectedRow());
-			EditAccountDialog dialog = new EditAccountDialog(Utils.getOwnerWindow(getEditButton()), LocalizationData.get("AccountDialog.title.edit"), data); //$NON-NLS-1$
-			dialog.setAccountIndex(selectedRow);
-			dialog.setLocationRelativeTo(Utils.getOwnerWindow(getEditButton()));
-			dialog.setVisible(true);
-			Account account = dialog.getResult();
-			if (account!=null) {
-				Account oldAccount = data.getAccount(selectedRow);
-				if (!account.getName().equals(oldAccount.getName())) data.setName(oldAccount, account.getName());
-				if (account.getInitialBalance()!=oldAccount.getInitialBalance()) data.setInitialBalance(oldAccount, account.getInitialBalance());
-				if (!account.getAlertThreshold().equals(oldAccount.getAlertThreshold())) data.setAlertThreshold(oldAccount, account.getAlertThreshold());
-				data.setComment(oldAccount, account.getComment());
-			}
+			EditAccountDialog.edit(data, Utils.getOwnerWindow(getEditButton()), data.getAccount(selectedRow));
 		}
 	}
 

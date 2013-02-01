@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -45,13 +47,20 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		return new net.astesana.ajlib.swing.table.JTable(getTableModel()) {
+		JTable table = new net.astesana.ajlib.swing.table.JTable(getTableModel()) {
 			// Implement table cell tool tips.
 			@Override
 			public String getToolTipText(MouseEvent e) {
 				return LocalizationData.get("CategoryManager.nameColumn.toolTip"); //$NON-NLS-1$;
 			}
 		};
+		table.getModel().addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (getJTable().isEditing()) getJTable().getCellEditor().cancelCellEditing();
+			}
+		});
+		return table;
 	}
 
 	private TableModel getTableModel() {
