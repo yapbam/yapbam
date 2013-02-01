@@ -337,8 +337,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	}
 	
 	public static void setLookAndFeel() {
+		String lookAndFeelName = Preferences.INSTANCE.getLookAndFeel();
 		try {
-			String lookAndFeelName = Preferences.INSTANCE.getLookAndFeel();
 			LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
 			String lookAndFeelClass = UIManager.getSystemLookAndFeelClassName();
 			for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
@@ -353,20 +353,20 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
 		} catch (Exception e) {}
 		try {
-			Font current = UIManager.getLookAndFeelDefaults().getFont("defaultFont");
 			int iconSize = 16; // This is the default icon size
-			if (current==null) {
-				// If current == null, there's no generic value for font in look and feel
+			if (!lookAndFeelName.equalsIgnoreCase("Nimbus")) {
+				// If LAF is not Nimbus, there's no generic value for font in look and feel
 				// In such a case, we ignore the setting
 			} else {
+				Font current = UIManager.getLookAndFeelDefaults().getFont("defaultFont");
 				Font defaultFont = Preferences.INSTANCE.getDefaultFont();
 				Font requiredFont = defaultFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*defaultFont.getSize());
 				if (current.getSize()!=requiredFont.getSize()) {
 					UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont);
 				}
 				iconSize = 16*requiredFont.getSize()/12;
-				IconManager.reset(iconSize);
 			}
+			IconManager.reset(iconSize);
 		} catch (Throwable e) {
 			ErrorManager.INSTANCE.log(null, e);
 		}

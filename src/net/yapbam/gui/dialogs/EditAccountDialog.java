@@ -65,4 +65,18 @@ public class EditAccountDialog extends AbstractDialog<GlobalData, Account> {
 		}
 		return newAccount;
 	}
+	
+	public static void edit(GlobalData data, Window owner, Account account) {
+		EditAccountDialog dialog = new EditAccountDialog(owner, LocalizationData.get("AccountDialog.title.edit"), data); //$NON-NLS-1$
+		dialog.setAccountIndex(data.indexOf(account));
+		dialog.setLocationRelativeTo(dialog.getOwner());
+		dialog.setVisible(true);
+		Account result = dialog.getResult();
+		if (result!=null) {
+			if (!result.getName().equals(account.getName())) data.setName(account, result.getName());
+			if (result.getInitialBalance()!=account.getInitialBalance()) data.setInitialBalance(account, result.getInitialBalance());
+			if (!result.getAlertThreshold().equals(account.getAlertThreshold())) data.setAlertThreshold(account, result.getAlertThreshold());
+			data.setComment(account, result.getComment());
+		}
+	}
 }
