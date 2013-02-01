@@ -1,11 +1,8 @@
 package net.yapbam.gui;
 
-import java.awt.Image;
-import java.net.URL;
 import java.util.HashMap;
-
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import net.astesana.ajlib.swing.Utils;
 
 public abstract class IconManager {
 	public enum Name {
@@ -83,19 +80,6 @@ public abstract class IconManager {
 	}
 	
 	private static Icon create(String path, int size) {
-    URL imgURL = IconManager.class.getResource(path);
-    if (imgURL != null) {
-        ImageIcon imageIcon = new ImageIcon(imgURL);
-    		Image img = imageIcon.getImage();
-    		int DEFAULT_SIZE = 16;
-    		if (size!=DEFAULT_SIZE) {
-    		  Image newimg = img.getScaledInstance(16*size/DEFAULT_SIZE, 16*size/DEFAULT_SIZE, java.awt.Image.SCALE_SMOOTH);
-    		  imageIcon = new ImageIcon(newimg);
-    		}
-				return imageIcon;
-    } else {
-        System.err.println("Couldn't find file: " + path); //TODO Add to log
-        return null;
-    }
+		return Utils.createIcon(IconManager.class.getResource(path), size);
 	}
 }
