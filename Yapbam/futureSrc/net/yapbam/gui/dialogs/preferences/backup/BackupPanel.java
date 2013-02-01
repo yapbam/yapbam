@@ -5,6 +5,7 @@ import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
@@ -182,7 +183,7 @@ public class BackupPanel extends PreferencePanel {
 		if (helpChckbxBackup == null) {
 			helpChckbxBackup = new JLabel();
 			helpChckbxBackup.setToolTipText(LocalizationData.get("Backup.preference.helpButton.toolTip")); //$NON-NLS-1$
-			helpChckbxBackup.setIcon(IconManager.HELP);
+			helpChckbxBackup.setIcon(IconManager.get(Name.HELP));
 			helpChckbxBackup.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {

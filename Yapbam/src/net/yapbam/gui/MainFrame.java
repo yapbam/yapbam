@@ -354,14 +354,18 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		} catch (Exception e) {}
 		try {
 			Font current = UIManager.getLookAndFeelDefaults().getFont("defaultFont");
-			if (current!=null) {
+			int iconSize = 16; // This is the default icon size
+			if (current==null) {
 				// If current == null, there's no generic value for font in look and feel
 				// In such a case, we ignore the setting
+			} else {
 				Font defaultFont = Preferences.INSTANCE.getDefaultFont();
 				Font requiredFont = defaultFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*defaultFont.getSize());
 				if (current.getSize()!=requiredFont.getSize()) {
 					UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont);
 				}
+				iconSize = 16*requiredFont.getSize()/12;
+				IconManager.reset(iconSize);
 			}
 		} catch (Throwable e) {
 			ErrorManager.INSTANCE.log(null, e);

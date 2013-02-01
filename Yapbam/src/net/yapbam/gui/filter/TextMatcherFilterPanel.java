@@ -14,6 +14,7 @@ import net.astesana.ajlib.utilities.TextMatcher;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 import java.awt.GridBagConstraints;
@@ -175,7 +176,7 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 			jPanel1.setLayout(new GridBagLayout());
 			JLabel regexpHelp = new JLabel();
 			regexpHelp.setToolTipText(LocalizationData.get("CustomFilterPanel.regexprHelp.toolTip")); //$NON-NLS-1$
-			regexpHelp.setIcon(IconManager.HELP);
+			regexpHelp.setIcon(IconManager.get(Name.HELP));
 			regexpHelp.addMouseListener(new RegexprListener());
 			jPanel1.add(regexpHelp, gridBagConstraints32);
 			jPanel1.add(getDescriptionEqualsTo(), gridBagConstraints34);

@@ -17,6 +17,7 @@ import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
 import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.periodicaltransaction.GeneratePeriodicalTransactionsDialog;
 
@@ -61,7 +62,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 		} else {
 			if (data.getGlobalData().hasPendingPeriodicalTransactions(new Date())) {
 				toolTip.append("<br>").append(LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")); //$NON-NLS-1$ //$NON-NLS-2$
-				icon = IconManager.ALERT;
+				icon = IconManager.get(Name.ALERT);
 			}
 		}
 		toolTip.append("</html>"); //$NON-NLS-1$

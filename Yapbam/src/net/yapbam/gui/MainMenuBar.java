@@ -37,6 +37,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.URIChangedEvent;
 import net.yapbam.data.event.NeedToBeSavedChangedEvent;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
@@ -83,7 +84,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.add(menu);
 	
 		this.menuItemNew = new JMenuItem(LocalizationData.get("MainMenu.NewFile"), LocalizationData.getChar("MainMenu.NewFile.Mnemonic")); //$NON-NLS-1$ //$NON-NLS-2$
-		this.menuItemNew.setIcon(IconManager.NEW_FILE);
+		this.menuItemNew.setIcon(IconManager.get(Name.NEW_FILE));
 		this.menuItemNew.setToolTipText(LocalizationData.get("MainMenu.NewFile.ToolTip")); //$NON-NLS-1$
 		this.menuItemNew.addActionListener(this);
 		menu.add(this.menuItemNew);
@@ -100,7 +101,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.menuItemSaveAs.setMnemonic(LocalizationData.getChar("MainMenu.SaveAs.Mnemonic")); //$NON-NLS-1$
 		this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
 		menu.add(this.menuItemSaveAs);
-		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.LOCK); //$NON-NLS-1$;
+		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.get(Name.LOCK)); //$NON-NLS-1$;
 		this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
 		this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
 		this.menuItemProtect.addActionListener(this);
@@ -109,12 +110,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
 		menu.addSeparator();
 
-		this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.IMPORT); //$NON-NLS-1$
+		this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.get(Name.IMPORT)); //$NON-NLS-1$
 		this.menuItemImport.setMnemonic(LocalizationData.getChar("MainMenu.Import.Mnemonic")); //$NON-NLS-1$
 		this.menuItemImport.setToolTipText(LocalizationData.get("MainMenu.Import.ToolTip")); //$NON-NLS-1$
 		this.menuItemImport.addActionListener(this);
 		menu.add(this.menuItemImport);
-		this.menuItemExport = new JMenuItem(LocalizationData.get("MainMenu.Export"), IconManager.EXPORT); //$NON-NLS-1$
+		this.menuItemExport = new JMenuItem(LocalizationData.get("MainMenu.Export"), IconManager.get(Name.EXPORT)); //$NON-NLS-1$
 		this.menuItemExport.setMnemonic(LocalizationData.getChar("MainMenu.Export.Mnemonic")); //$NON-NLS-1$
 		this.menuItemExport.setToolTipText(LocalizationData.get("MainMenu.Export.ToolTip")); //$NON-NLS-1$
 		this.menuItemExport.addActionListener(this);
@@ -123,7 +124,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		insertPluginMenuItems(menu, AbstractPlugIn.IMPORT_EXPORT_PART);
 
 		menu.addSeparator();
-		this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.PRINT); //$NON-NLS-1$
+		this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.get(Name.PRINT)); //$NON-NLS-1$
 		this.menuItemPrint.setMnemonic(LocalizationData.getChar("MainMenu.Print.Mnemonic")); //$NON-NLS-1$
 		this.menuItemPrint.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenuBar.Print.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
 		this.menuItemPrint.setToolTipText(LocalizationData.get("MainMenuBar.Print.ToolTip")); //$NON-NLS-1$

@@ -16,6 +16,8 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
+
 import java.awt.Color;
 
 public class FilterView extends JPanel {
@@ -37,7 +39,7 @@ public class FilterView extends JPanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
-		btnOpen = new JLabel(IconManager.DEPLOY);
+		btnOpen = new JLabel(IconManager.get(Name.DEPLOY));
 		btnOpen.setToolTipText("Click here to display the current filter");
 		GridBagConstraints gbc_btnOpen = new GridBagConstraints();
 		gbc_btnOpen.gridheight = 0;
@@ -120,7 +122,7 @@ public class FilterView extends JPanel {
 	private void internalSetDeployed(boolean deploy) {
 		elementsPane.setBorder(deploy?new TitledBorder(null, "Filters", TitledBorder.LEADING, TitledBorder.TOP, null, null):null);
 		lblFilter.setVisible(!deploy);
-		btnOpen.setIcon(deploy?IconManager.UNDEPLOY:IconManager.DEPLOY);
+		btnOpen.setIcon(IconManager.get(deploy?Name.UNDEPLOY:Name.DEPLOY));
 		elementsPane.setVisible(deploy);
 		this.deployed = deploy;
 	}

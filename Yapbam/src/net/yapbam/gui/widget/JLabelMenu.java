@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 
 /** This abstract class implements a popupmenu that pops up when the user clicks
  * on a label.
@@ -21,7 +22,7 @@ import net.yapbam.gui.IconManager;
 public abstract class JLabelMenu extends JLabel{
 
 	public JLabelMenu(String text) {
-		super(text, IconManager.SPREAD, SwingConstants.LEFT);
+		super(text, IconManager.get(Name.SPREAD), SwingConstants.LEFT);
 		this.setHorizontalTextPosition(SwingConstants.LEADING);
 		this.addMouseListener(new MouseAdapter() {
 			@Override

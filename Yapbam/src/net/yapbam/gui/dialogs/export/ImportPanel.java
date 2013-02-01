@@ -33,6 +33,7 @@ import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
 
@@ -79,7 +80,7 @@ public class ImportPanel extends JPanel {
 	private void initialize() {
 		jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("ImportDialog.help")); //$NON-NLS-1$
-		jLabel.setIcon(IconManager.HELP);
+		jLabel.setIcon(IconManager.get(Name.HELP));
 		jLabel.setToolTipText(LocalizationData.get("ImportDialog.help.toolTip")); //$NON-NLS-1$
 		jLabel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -214,7 +215,7 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getFirst() {
 		if (first == null) {
-			first = new JButton(IconManager.TOP);
+			first = new JButton(IconManager.get(Name.TOP));
 			first.setToolTipText(LocalizationData.get("ImportDialog.first.toolTip")); //$NON-NLS-1$
 			first.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -233,7 +234,7 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getPrevious() {
 		if (previous == null) {
-			previous = new JButton(IconManager.UP);
+			previous = new JButton(IconManager.get(Name.UP));
 			previous.setToolTipText(LocalizationData.get("ImportDialog.previous.toolTip")); //$NON-NLS-1$
 			previous.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -252,7 +253,7 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getNext() {
 		if (next == null) {
-			next = new JButton(IconManager.DOWN);
+			next = new JButton(IconManager.get(Name.DOWN));
 			next.setToolTipText(LocalizationData.get("ImportDialog.next.toolTip")); //$NON-NLS-1$
 			next.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -271,7 +272,7 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getLast() {
 		if (last == null) {
-			last = new JButton(IconManager.BOTTOM);
+			last = new JButton(IconManager.get(Name.BOTTOM));
 			last.setToolTipText(LocalizationData.get("ImportDialog.last.toolTip")); //$NON-NLS-1$
 			last.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {

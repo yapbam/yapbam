@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.AbstractTransactionAction;
 import net.yapbam.gui.actions.TransactionSelector;
@@ -31,7 +32,7 @@ public class CheckTransactionAction extends AbstractTransactionAction {
 	
 	public CheckTransactionAction (StatementViewPanel statementViewPanel, TransactionSelector selector, TransactionSelector destSelector, boolean check) {
 		super(selector, check?LocalizationData.get("MainMenu.Transactions.Check"):LocalizationData.get("MainMenu.Transactions.Uncheck"), //$NON-NLS-1$ //$NON-NLS-2$);
-				check?IconManager.CHECK_TRANSACTION:IconManager.UNCHECK_TRANSACTION,
+				IconManager.get(check?Name.CHECK_TRANSACTION:Name.UNCHECK_TRANSACTION),
 				check?LocalizationData.get("MainMenu.Transactions.Check.ToolTip"):LocalizationData.get("MainMenu.Transactions.Uncheck.ToolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 		if (check) putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Check.Mnemonic")); //$NON-NLS-1$
 		this.tPanel = statementViewPanel;

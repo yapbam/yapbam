@@ -8,6 +8,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 
 import org.jfree.ui.DateChooserPanel;
 
@@ -41,7 +42,7 @@ public class FilterElementView extends JPanel {
 		
 		final JPopupMenu popup = new JPopupMenu();
 
-		final JLabel button = new JLabel(IconManager.SPREADABLE);
+		final JLabel button = new JLabel(IconManager.get(Name.SPREADABLE));
 		GridBagConstraints gbc_button = new GridBagConstraints();
 		gbc_button.anchor = GridBagConstraints.WEST;
 		gbc_button.fill = GridBagConstraints.NONE;

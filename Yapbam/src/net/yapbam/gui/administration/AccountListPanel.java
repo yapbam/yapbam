@@ -26,6 +26,7 @@ import net.yapbam.data.event.ModeRemovedEvent;
 import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
 import net.yapbam.gui.dialogs.EditAccountDialog;
@@ -41,7 +42,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	@SuppressWarnings("serial")
 	class DeleteAccountAction extends AbstractAction {
 		DeleteAccountAction () {
-			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.delete"), IconManager.get(Name.DELETE_ACCOUNT)); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("AccountManager.deleteAccount.toolTip")); //$NON-NLS-1$
 		}
 	
@@ -69,7 +70,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	@SuppressWarnings("serial")
 	class EditAccountAction extends AbstractAction {
 		EditAccountAction () {
-			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT_ACCOUNT)); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("AccountManager.editAccount.toolTip")); //$NON-NLS-1$
 		}
 	

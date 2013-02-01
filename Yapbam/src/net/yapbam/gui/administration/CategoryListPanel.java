@@ -22,6 +22,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.SubCategorySeparatorChangedEvent;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryDialog;
 
@@ -154,7 +155,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@SuppressWarnings("serial")
 	private final class DeleteAction extends AbstractAction {
 		DeleteAction () {
-			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.delete"), IconManager.get(Name.DELETE_CATEGORY)); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("CategoryManager.delete.toolTip")); //$NON-NLS-1$
 		}
 		@Override
@@ -182,7 +183,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@SuppressWarnings("serial")
 	private final class NewAction extends AbstractAction {
 		public NewAction() {
-			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_CATEGORY); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.new"), IconManager.get(Name.NEW_CATEGORY)); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("CategoryManager.new.toolTip")); //$NON-NLS-1$
 		}
 		@Override

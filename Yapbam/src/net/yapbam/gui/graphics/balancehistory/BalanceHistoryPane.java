@@ -19,6 +19,7 @@ import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.CompoundTransactionSelector;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.widget.TabbedPane;
@@ -126,7 +127,7 @@ public class BalanceHistoryPane extends JPanel {
 			Date old = firstAlert;
 			firstAlert = first;
 			int index = tabbedPane.getIndexOf(0);
-			tabbedPane.setIconAt(index, first!=null?IconManager.ALERT:null);
+			tabbedPane.setIconAt(index, first!=null?IconManager.get(Name.ALERT):null);
 			String tooltip;
 			tooltip = LocalizationData.get("BalanceHistory.graph.toolTip"); //$NON-NLS-1$
 			if (first!=null) {

@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 
 import java.awt.GridBagConstraints;
@@ -106,7 +107,7 @@ public class BalancePanel extends JPanel {
 			}
 		});
 		
-		warningLabel = new JLabel(IconManager.ALERT);
+		warningLabel = new JLabel(IconManager.get(Name.ALERT));
 		warningLabel.setText(LocalizationData.get("CheckModePanel.notLast.message")); //$NON-NLS-1$
 		warningLabel.setForeground(Color.RED);
 		GridBagConstraints gbc_warningLabel = new GridBagConstraints();

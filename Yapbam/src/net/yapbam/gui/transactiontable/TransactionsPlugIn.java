@@ -15,6 +15,7 @@ import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
 import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.YapbamState;
@@ -91,7 +92,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		if (hasPendingPeriodicalTransactions) {
 			tooltip = "<html>"+tooltip+"<br>"+LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
-		setPanelIcon(hasPendingPeriodicalTransactions?IconManager.ALERT:null);
+		setPanelIcon(hasPendingPeriodicalTransactions?IconManager.get(Name.ALERT):null);
 		setPanelToolTip(tooltip);
 	}
 
