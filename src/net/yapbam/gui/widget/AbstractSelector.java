@@ -3,6 +3,7 @@ package net.yapbam.gui.widget;
 import javax.swing.Icon;
 
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 
 /** An abstract widget composed of an optional label, a combo box and a new button.
  * <br>It is typically used to select a value in a list of possible values.
@@ -24,6 +25,6 @@ public abstract class AbstractSelector<T,V> extends net.astesana.ajlib.swing.wid
 	
 	@Override
 	protected Icon getNewButtonIcon() {
-		return IconManager.NEW_ACCOUNT;
+		return IconManager.get(Name.NEW);
 	}
 }

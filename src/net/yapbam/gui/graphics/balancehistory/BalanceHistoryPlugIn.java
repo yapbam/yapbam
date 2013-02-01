@@ -13,6 +13,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.TransactionSelector;
 
 public class BalanceHistoryPlugIn extends AbstractPlugIn {
@@ -28,7 +29,7 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				Date first = (Date) evt.getNewValue();
-				setPanelIcon((first!=null?IconManager.ALERT:null));
+				setPanelIcon((first!=null?IconManager.get(Name.ALERT):null));
 				String tooltip;
 				tooltip = LocalizationData.get("BalanceHistory.toolTip"); //$NON-NLS-1$
 				if (first!=null) {

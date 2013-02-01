@@ -15,6 +15,7 @@ import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.dialogs.TransactionDialog;
@@ -50,7 +51,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private final class EditTransactionAction extends AbstractAction {
 		public EditTransactionAction() {
-			super(LocalizationData.get("MainMenu.Transactions.Edit"), IconManager.EDIT_TRANSACTION); //$NON-NLS-1$
+			super(LocalizationData.get("MainMenu.Transactions.Edit"), IconManager.get(Name.EDIT_TRANSACTION)); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.Edit.ToolTip")); //$NON-NLS-1$
 		}
 		

@@ -26,6 +26,7 @@ import net.yapbam.data.event.ModePropertyChangedEvent;
 import net.yapbam.data.event.ModeRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.dialogs.AbstractModeListModel;
 import net.yapbam.gui.dialogs.ModeDialog;
 import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
@@ -135,7 +136,7 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 	
 	class NewModeAction extends AbstractAction {
 		public NewModeAction() {
-			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.new"), IconManager.get(Name.NEW_MODE)); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.New.tooltip")); //$NON-NLS-1$
 	        setEnabled(false);
 		}
@@ -151,7 +152,7 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 	}
 	class EditModeAction extends AbstractAction {
 		public EditModeAction() {
-			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT_MODE)); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
@@ -169,7 +170,7 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 	}
 	class DeleteModeAction extends AbstractAction {			
 		public DeleteModeAction() {
-			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.delete"), IconManager.get(Name.DELETE_MODE)); //$NON-NLS-1$
 	        putValue(SHORT_DESCRIPTION, LocalizationData.get("ModeDialog.Delete.tooltip")); //$NON-NLS-1$
 		}
 		

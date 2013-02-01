@@ -10,6 +10,7 @@ import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.TransactionDialog;
 
@@ -25,7 +26,7 @@ public class NewTransactionAction extends AbstractAction {
 	 * @param massMode true to select mass modification
 	 */
 	public NewTransactionAction(FilteredData data, TransactionSelector selector, boolean massMode) {
-		super(LocalizationData.get("MainMenu.Transactions.New"), massMode?IconManager.NEW_BULK_TRANSACTION:IconManager.NEW_TRANSACTION); //$NON-NLS-1$
+		super(LocalizationData.get("MainMenu.Transactions.New"), IconManager.get(massMode?Name.NEW_BULK_TRANSACTION:Name.NEW_TRANSACTION)); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION, LocalizationData.get("MainMenu.Transactions.New.ToolTip")); //$NON-NLS-1$
 		putValue(Action.MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.New.Mnemonic")); //$NON-NLS-1$
 		this.data = data;

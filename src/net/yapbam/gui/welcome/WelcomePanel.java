@@ -21,6 +21,7 @@ import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.PersistenceManager;
 
@@ -211,7 +212,7 @@ public class WelcomePanel extends JPanel {
 			}
 		});
 		firstTip.setToolTipText(LocalizationData.get("Welcome.firstTip.tooltip")); //$NON-NLS-1$
-		firstTip.setIcon(IconManager.FIRST);
+		firstTip.setIcon(IconManager.get(Name.FIRST));
 		GridBagConstraints gbc_firstTip = new GridBagConstraints();
 		gbc_firstTip.insets = new Insets(0, 0, 0, 5);
 		gbc_firstTip.weighty = 1.0;
@@ -250,7 +251,7 @@ public class WelcomePanel extends JPanel {
 			}
 		});
 		nextTip.setToolTipText(LocalizationData.get("Welcome.nextTip.tooltip")); //$NON-NLS-1$
-		nextTip.setIcon(IconManager.NEXT);
+		nextTip.setIcon(IconManager.get(Name.NEXT));
 		GridBagConstraints gbc_nextTip = new GridBagConstraints();
 		gbc_nextTip.fill = GridBagConstraints.VERTICAL;
 		gbc_nextTip.insets = new Insets(0, 0, 0, 5);
@@ -266,7 +267,7 @@ public class WelcomePanel extends JPanel {
 			}
 		});
 		lastTip.setToolTipText(LocalizationData.get("Welcome.lastTip.tooltip")); //$NON-NLS-1$
-		lastTip.setIcon(IconManager.LAST);
+		lastTip.setIcon(IconManager.get(Name.LAST));
 		GridBagConstraints gbc_lastTip = new GridBagConstraints();
 		gbc_lastTip.fill = GridBagConstraints.VERTICAL;
 		gbc_lastTip.gridx = 6;
@@ -281,7 +282,7 @@ public class WelcomePanel extends JPanel {
 			}
 		});
 		previousTip.setToolTipText(LocalizationData.get("Welcome.previousTip.tooltip")); //$NON-NLS-1$
-		previousTip.setIcon(IconManager.PREVIOUS);
+		previousTip.setIcon(IconManager.get(Name.PREVIOUS));
 		GridBagConstraints gbc_previousTip = new GridBagConstraints();
 		gbc_previousTip.fill = GridBagConstraints.VERTICAL;
 		gbc_previousTip.insets = new Insets(0, 0, 0, 5);

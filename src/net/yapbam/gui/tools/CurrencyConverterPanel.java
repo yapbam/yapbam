@@ -18,6 +18,7 @@ import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.CurrencyWidget;
 
@@ -74,7 +75,7 @@ public class CurrencyConverterPanel extends JPanel {
 			}
 			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
 			this.title.setText(title);
-			if (!this.converter.isNetworkSynchronized()) this.title.setIcon(IconManager.ALERT);
+			if (!this.converter.isNetworkSynchronized()) this.title.setIcon(IconManager.get(Name.ALERT));
 		}
 	}
 

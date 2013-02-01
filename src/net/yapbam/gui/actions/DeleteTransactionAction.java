@@ -8,6 +8,7 @@ import javax.swing.Action;
 import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.AlertDialog;
@@ -21,7 +22,7 @@ import net.yapbam.gui.preferences.EditingOptions;
 @SuppressWarnings("serial")
 public class DeleteTransactionAction extends AbstractTransactionAction {
 	public DeleteTransactionAction(TransactionSelector selector) {
-		super(selector, LocalizationData.get("MainMenu.Transactions.Delete"), IconManager.DELETE_TRANSACTION, //$NON-NLS-1$
+		super(selector, LocalizationData.get("MainMenu.Transactions.Delete"), IconManager.get(Name.DELETE_TRANSACTION), //$NON-NLS-1$
 				LocalizationData.get("MainMenu.Transactions.Delete.ToolTip")); //$NON-NLS-1$
 		putValue(Action.MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Delete.Mnemonic")); //$NON-NLS-1$
 	}

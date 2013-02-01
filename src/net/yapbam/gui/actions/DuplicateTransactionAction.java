@@ -7,6 +7,7 @@ import java.util.Date;
 import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.TransactionDialog;
@@ -14,7 +15,7 @@ import net.yapbam.gui.dialogs.TransactionDialog;
 @SuppressWarnings("serial")
 public class DuplicateTransactionAction extends AbstractTransactionAction {
 	public DuplicateTransactionAction(TransactionSelector selector) {
-		super(selector, LocalizationData.get("MainMenu.Transactions.Duplicate"), IconManager.DUPLICATE_TRANSACTION, //$NON-NLS-1$
+		super(selector, LocalizationData.get("MainMenu.Transactions.Duplicate"), IconManager.get(Name.DUPLICATE_TRANSACTION), //$NON-NLS-1$
 				LocalizationData.get("MainMenu.Transactions.Duplicate.ToolTip")); //$NON-NLS-1$
 		putValue(MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Duplicate.Mnemonic")); //$NON-NLS-1$
 	}

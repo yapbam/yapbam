@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.text.MessageFormat;
@@ -51,7 +52,13 @@ public class ErrorPanel extends JPanel {
 		panel.add(icon, gbc_icon);
 		icon.setIcon(getIcon());
 		
-		Component label = hasExtendedMessage() ? new HTMLPane(getMessage()) : new JLabel(getMessage());
+		Component label;
+		if (hasExtendedMessage()) {
+			label = new HTMLPane(getMessage());
+			label.setPreferredSize(new Dimension(400*getFont().getSize()/12,220*getFont().getSize()/12));
+		} else {
+			label = new JLabel(getMessage());
+		}
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.insets = new Insets(0, 10, 0, 0);
 		gbc_label.anchor = GridBagConstraints.WEST;

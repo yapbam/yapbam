@@ -22,6 +22,7 @@ import net.yapbam.data.event.CheckbookPropertyChangedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
 
@@ -81,7 +82,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 
 	private final class NewCheckbookAction extends AbstractAction {
 		public NewCheckbookAction() {
-			super(LocalizationData.get("GenericButton.new"), IconManager.NEW_MODE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.new"), IconManager.get(Name.NEW)); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.New.tooltip")); //$NON-NLS-1$
 			setEnabled(false);
 		}
@@ -92,7 +93,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	}
 	private final class EditBookAction extends AbstractAction {
 		public EditBookAction() {
-			super(LocalizationData.get("GenericButton.edit"), IconManager.EDIT_MODE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT)); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Edit.tooltip")); //$NON-NLS-1$
 		}
 		@Override
@@ -110,7 +111,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	}
 	private final class DeleteBookAction extends AbstractAction {			
 		public DeleteBookAction() {
-			super(LocalizationData.get("GenericButton.delete"), IconManager.DELETE_MODE); //$NON-NLS-1$
+			super(LocalizationData.get("GenericButton.delete"), IconManager.get(Name.DELETE)); //$NON-NLS-1$
 			putValue(SHORT_DESCRIPTION, LocalizationData.get("checkbookDialog.Delete.tooltip")); //$NON-NLS-1$
 		}
 		

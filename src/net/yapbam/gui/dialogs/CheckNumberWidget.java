@@ -11,6 +11,7 @@ import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.checkbook.CheckbookDialog;
 
@@ -93,7 +94,7 @@ public class CheckNumberWidget extends JPanel {
 		if (newButton == null) {
 			newButton = new JButton();
 			newButton.setEnabled(false);
-			newButton.setIcon(IconManager.NEW_CATEGORY);
+			newButton.setIcon(IconManager.get(Name.NEW));
 			newButton.setFocusable(false);
 			newButton.setToolTipText(LocalizationData.get("TransactionDialog.checkbook.new.tooltip")); //$NON-NLS-1$
 			newButton.addActionListener(new ActionListener() {

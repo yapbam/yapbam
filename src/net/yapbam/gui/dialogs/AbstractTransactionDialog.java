@@ -26,6 +26,7 @@ import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
@@ -155,7 +156,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		AccountsListener accountListener = new AccountsListener();
 		accounts.addActionListener(accountListener);
 		accounts.setToolTipText(LocalizationData.get("TransactionDialog.account.tooltip")); //$NON-NLS-1$
-		JButton newAccount = new JButton(IconManager.NEW_ACCOUNT);
+		JButton newAccount = new JButton(IconManager.get(Name.NEW_ACCOUNT));
 		newAccount.setFocusable(false);
 		newAccount.addActionListener(accountListener);
 		newAccount.setToolTipText(LocalizationData.get("TransactionDialog.account.new.tooltip")); //$NON-NLS-1$
@@ -220,7 +221,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		modes.addActionListener(modeListener);
 		modes.setToolTipText(LocalizationData.get("TransactionDialog.mode.tooltip")); //$NON-NLS-1$
 		c.gridx = 1; c.weightx = 1.0; c.fill = GridBagConstraints.HORIZONTAL;
-		JButton newMode = new JButton(IconManager.NEW_MODE);
+		JButton newMode = new JButton(IconManager.get(Name.NEW_MODE));
 		newMode.setFocusable(false);
 		newMode.addActionListener(modeListener);
 		newMode.setToolTipText(LocalizationData.get("TransactionDialog.mode.new.tooltip")); //$NON-NLS-1$
