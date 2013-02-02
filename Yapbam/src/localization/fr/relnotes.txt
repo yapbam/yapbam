@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
+version	0.14.1 (??/02/2013)
+fix
+	Taper une virgule comme premier caractère d'un champ de saisi de montant provoquait une erreur. 
+
 version	0.14.0 (01/02/2013)
 improvement
 	La taille des caractères est désormais modifiable (uniquement avec l'apparence "Nimbus").

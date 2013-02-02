@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
+version	0.14.1 (02/??/2013)
+fix
+	Type a comma as the first character of an amount input field caused an error.
+
 version	0.14.0 (02/01/2013)
 improvement
 	Yapbam font size is now editable (only with "Nimbus" look and feel).
