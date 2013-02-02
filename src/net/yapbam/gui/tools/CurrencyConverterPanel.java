@@ -20,6 +20,7 @@ import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CurrencyWidget;
 
 import javax.swing.JLabel;
@@ -30,6 +31,9 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class CurrencyConverterPanel extends JPanel {
 
@@ -47,6 +51,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private JScrollPane jScrollPane = null;
 	private JTable jTable = null;
 	private CurrencyTableModel tableModel;
+	private JButton swapButton;
 	
 	/**
 	 * This is the default constructor
@@ -88,8 +93,8 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints12.weighty = 1.0;
 		gridBagConstraints12.gridwidth = 0;
 		gridBagConstraints12.gridx = 0;
-		gridBagConstraints12.gridy = 3;
-		gridBagConstraints12.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints12.gridy = 4;
+		gridBagConstraints12.insets = new Insets(5, 5, 0, 0);
 		gridBagConstraints12.weightx = 1.0;
 		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 		gridBagConstraints6.gridx = 0;
@@ -98,13 +103,12 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints6.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints6.gridwidth = 0;
 		gridBagConstraints6.gridy = 2;
-		getErrField();
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
 		gridBagConstraints4.gridy = 0;
 		gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints4.anchor = GridBagConstraints.WEST;
-		gridBagConstraints4.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints4.insets = new Insets(5, 5, 5, 0);
 		gridBagConstraints4.gridwidth = GridBagConstraints.REMAINDER;
 		title = new JLabel();
 		title.setText(""); //$NON-NLS-1$
@@ -130,7 +134,7 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints1.gridy = 1;
 		gridBagConstraints1.weightx = 0.0D;
-		gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
+		gridBagConstraints1.insets = new Insets(5, 5, 5, 0);
 		gridBagConstraints1.gridx = 4;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
@@ -148,7 +152,6 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints2.weightx = 0.0D;
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridx = 1;
-		this.setSize(1000, 400);
 		this.setLayout(new GridBagLayout());
 		this.add(getCurrency1(), gridBagConstraints2);
 		this.add(getCurrency2(), gridBagConstraints1);
@@ -156,7 +159,12 @@ public class CurrencyConverterPanel extends JPanel {
 		this.add(getAmount2(), gridBagConstraints21);
 		this.add(jLabel, gridBagConstraints31);
 		this.add(title, gridBagConstraints4);
-		this.add(errField, gridBagConstraints6);
+		this.add(getErrField(), gridBagConstraints6);
+		GridBagConstraints gbc_swapButton = new GridBagConstraints();
+		gbc_swapButton.gridwidth = 0;
+		gbc_swapButton.gridx = 0;
+		gbc_swapButton.gridy = 2;
+		add(getSwapButton(), gbc_swapButton);
 		this.add(getJScrollPane(), gridBagConstraints12);
 	}
 
@@ -241,6 +249,7 @@ public class CurrencyConverterPanel extends JPanel {
 			amount1.setColumns(10);
 			amount1.setToolTipText(Messages.getString("CurrencyConverterPanel.amount.toolTip")); //$NON-NLS-1$
 			amount1.setValue(0.0);
+			amount1.addFocusListener(AutoSelectFocusListener.INSTANCE);
 			amount1.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -316,5 +325,20 @@ public class CurrencyConverterPanel extends JPanel {
 			});
 		}
 		return jTable;
+	}
+	private JButton getSwapButton() {
+		if (swapButton == null) {
+			swapButton = new JButton(Utils.createIcon(getClass().getResource("swap.png"), ((float)getFont().getSize())/32f)); //$NON-NLS-1$
+			swapButton.setFocusable(false);
+			swapButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int old1 = getCurrency1().getSelectedIndex();
+					getCurrency1().setSelectedIndex(getCurrency2().getSelectedIndex());
+					getCurrency2().setSelectedIndex(old1);
+				}
+			});
+			swapButton.setToolTipText(Messages.getString("CurrencyConverterPanel.swapButton.toolTipText")); //$NON-NLS-1$
+		}
+		return swapButton;
 	}
 }
