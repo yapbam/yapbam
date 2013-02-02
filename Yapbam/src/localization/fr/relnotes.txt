@@ -7,6 +7,8 @@ improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
 version	0.14.1 (??/02/2013)
+improvement
+	Ajout d'un bouton permettant de permuter les devises dans le convertisseur de devises. 
 fix
 	Taper une virgule comme premier caractère d'un champ de saisi de montant provoquait une erreur. 
 

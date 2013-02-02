@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -362,6 +363,8 @@ public class YapbamState {
 					decryptedStream.close();
 				}
 				return handler.getFilter();
+			} catch (AccessControlException e) {
+				// The password is not compatible with the saved filter. Simply ignore filter.
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

@@ -7,6 +7,8 @@ improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
 version	0.14.1 (02/??/2013)
+improvement
+	Adds a button to swap the currencies in the currency converter.
 fix
 	Type a comma as the first character of an amount input field caused an error.
 
