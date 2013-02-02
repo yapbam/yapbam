@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.net.URL;
@@ -71,6 +72,7 @@ public class CalculatorPanel extends JPanel {
 	private Color validColor; 
 	private Color invalidColor;
 	private boolean formulaIsResult;
+	private KeyAdapter keyListener;
 	
 	/**
 	 * Creates the panel with the default locale.
@@ -137,24 +139,7 @@ public class CalculatorPanel extends JPanel {
 	}
 
 	private void initCharToButton() {
-		this.addKeyListener(new KeyAdapter() {
-			/* (non-Javadoc)
-			 * @see java.awt.event.KeyAdapter#keyTyped(java.awt.event.KeyEvent)
-			 */
-			@Override
-			public void keyTyped(KeyEvent e) {
-				int modifiers = e.getModifiers();
-				if ((modifiers&~KeyEvent.SHIFT_MASK)==0) {
-					JButton btn = map.get(Character.toUpperCase(e.getKeyChar()));
-					if (btn!=null) {
-						btn.doClick();
-//					} else {
-//						System.out.println ((int)e.getKeyChar()+" ("+e.getModifiers()+")");
-					}
-				}
-				super.keyTyped(e);
-			}
-		});
+		this.addKeyListener(getKeyListener());
 		this.setFocusable(true);
 		// Initialize the character to button map 		
 		this.map = new HashMap<Character, JButton>();
@@ -180,6 +165,30 @@ public class CalculatorPanel extends JPanel {
 		map.put(DIVIDE, getBtnDivide());
 		map.put(MULTIPLY, getBtnMultiply());
 		// The decimal point is added in the map by setLocale
+	}
+
+	private KeyListener getKeyListener() {
+		if (keyListener==null) {
+			keyListener = new KeyAdapter() {
+				/* (non-Javadoc)
+				 * @see java.awt.event.KeyAdapter#keyTyped(java.awt.event.KeyEvent)
+				 */
+				@Override
+				public void keyTyped(KeyEvent e) {
+					int modifiers = e.getModifiers();
+					if ((modifiers&~KeyEvent.SHIFT_MASK)==0) {
+						JButton btn = map.get(Character.toUpperCase(e.getKeyChar()));
+						if (btn!=null) {
+							btn.doClick();
+	//					} else {
+	//						System.out.println ((int)e.getKeyChar()+" ("+e.getModifiers()+")");
+						}
+					}
+					super.keyTyped(e);
+				}
+			};
+		}
+		return keyListener;
 	}
 
 	private void doChar(char character) {
@@ -397,8 +406,8 @@ public class CalculatorPanel extends JPanel {
 		if (result == null) {
 			result = new JTextField();
 			result.setEditable(false);
-			result.setFocusable(false);
 			result.setHorizontalAlignment(JTextField.RIGHT);
+			result.addKeyListener(getKeyListener());
 		}
 		return result;
 	}
