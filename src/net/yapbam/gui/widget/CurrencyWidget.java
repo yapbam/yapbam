@@ -27,6 +27,7 @@ public class CurrencyWidget extends net.astesana.ajlib.swing.widget.CurrencyWidg
 			params.add(DoubleEvaluator.PLUS);
 			params.add(DoubleEvaluator.MINUS);
 			params.add(DoubleEvaluator.NEGATE);
+			params.setFunctionArgumentSeparator(';');
 			return params;
 		}
 
