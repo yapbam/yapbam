@@ -312,7 +312,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	private void updateWindowTitle() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
 		URI uri = data.getURI();
-		if (uri!=null) title = title + " - " + PersistenceManager.MANAGER.getPlugin(uri).getService().getDisplayable(uri); //$NON-NLS-1$
+		if (uri!=null) title = title + " - " + PersistenceManager.MANAGER.getAdpater(uri).getService().getDisplayable(uri); //$NON-NLS-1$
 		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
 		this.getJFrame().setTitle(title);
 	}
@@ -460,7 +460,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				@Override
 				public boolean processError(Throwable e) {
 					if (e instanceof UnsupportedSchemeException) return true; // The scheme is no more supported, simply ignore the error
-					Service service = PersistenceManager.MANAGER.getPlugin(finalURI).getService();
+					Service service = PersistenceManager.MANAGER.getAdpater(finalURI).getService();
 					String displayedURI = service.getDisplayable(finalURI);
 					File file = service.getLocalFile(finalURI);
 					if (e instanceof FileNotFoundException) {

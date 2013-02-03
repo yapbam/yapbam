@@ -35,7 +35,7 @@ public class DataReader {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;
-		this.plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		this.plugin = PersistenceManager.MANAGER.getAdpater(uri);
 	}
 
 	public boolean read() throws ExecutionException {
@@ -176,7 +176,7 @@ public class DataReader {
 	}
 	
 	private boolean readLocalFile(String password) throws ExecutionException {
-		URI localURI = PersistenceManager.MANAGER.getPlugin(uri).getLocalFile(uri).toURI();
+		URI localURI = PersistenceManager.MANAGER.getAdpater(uri).getLocalFile(uri).toURI();
 		if (password==null) {
 			boolean passwordRequired;
 			try {

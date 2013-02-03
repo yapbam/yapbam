@@ -6,12 +6,13 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
-version	0.14.1 (??/02/2013)
+version	0.14.1 (03/02/2013)
 improvement
 	Ajout d'un bouton permettant de permuter les devises dans le convertisseur de devises.
 	Dans la calculatrice, le résultat est à présent sélectionnable et peut être copié avec le raccourci standard (<ctrl-C> sous Windows).
 fix
-	Taper une virgule comme premier caractère d'un champ de saisi de montant provoquait une erreur. 
+	Taper une virgule comme premier caractère d'un champ de saisie de montant provoquait une erreur.
+	Les notes sur un comptes étaient, dans certains cas, ignorées lors de la lecture du fichier de données.
 
 version	0.14.0 (01/02/2013)
 improvement
@@ -23,11 +24,11 @@ fix
 
 version	0.13.6 (15/01/2013)
 fix
-	Le dialog de sélection de fichier pouvait causer des erreur quand l'une des apparences "Windows", "Windows classic" ou "CDE Motif" était active.
+	Le dialog de sélection de fichier pouvait causer des erreurs quand l'une des apparences "Windows", "Windows classic" ou "CDE Motif" était active.
 
 version	0.13.4 (13/01/2013)
 fix
-	Problèmes de gestion mémoire pouvant entrainer des lenteurs, et des erreurs, dans les cas extrêmes. 
+	Problèmes de gestion mémoire pouvant entrainer des lenteurs, et, dans les cas extrêmes, des erreurs. 
 	Tenter de lire ou d'écriture un fichier protégé causait une erreur.
 	Régression : Quand, dans un dialogue de sélection de fichier, vous sélectionniez un raccourci (lien symbolique), Yapbam ne suivait pas le lien pour lire (ou sauver vers) la cible du lien, mais lisait/sauvait directement dans le fichier raccourci. 
 
