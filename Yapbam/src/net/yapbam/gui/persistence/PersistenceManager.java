@@ -42,22 +42,22 @@ public class PersistenceManager {
 		public abstract boolean processError(Throwable e);
 	}
 	
-	private HashMap<String, PersistenceAdapter> pluginsMap;
-	private List<String> pluginSchemes;
+	private HashMap<String, PersistenceAdapter> adaptersMap;
+	private List<String> schemes;
 
 	private PersistenceManager() {
-		// Load the default persistence plugins
-		this.pluginsMap = new HashMap<String, PersistenceAdapter>();
-		this.pluginSchemes = new ArrayList<String>();
+		// Load the default persistence adapters
+		this.adaptersMap = new HashMap<String, PersistenceAdapter>();
+		this.schemes = new ArrayList<String>();
 		
 		add(new FilePersistenceAdapter());
-//		add(new DropboxPersistencePlugin());
+//		add(new DropboxPersistenceAdapter());
 		
-		// Load plugins under development
-		String testedPlugin = System.getProperty("testedPersistencePlugin.className"); //$NON-NLS-1$
-		if (testedPlugin!=null) {
-			String[] testedPlugins = StringUtils.split(testedPlugin, ',');
-			for (String className : testedPlugins) {
+		// Load adapters under development
+		String testedAdapter = System.getProperty("testedPersistenceAdapter.className"); //$NON-NLS-1$
+		if (testedAdapter!=null) {
+			String[] testedAdapters = StringUtils.split(testedAdapter, ',');
+			for (String className : testedAdapters) {
 				if (className.length()!=0) {
 					try {
 						@SuppressWarnings("unchecked")
@@ -78,10 +78,13 @@ public class PersistenceManager {
 		return waitFrame;
 	}
 	
-	private void add(PersistenceAdapter plugin) {
-		// TODO Check there's no duplicated schemes in persistence plugins. 
-		pluginsMap.put(plugin.getScheme(), plugin);
-		pluginSchemes.add(plugin.getScheme());
+	private void add(PersistenceAdapter adapter) {
+		String scheme = adapter.getService().getScheme();
+		if (adaptersMap.containsKey(scheme)) {
+			throw new IllegalArgumentException(MessageFormat.format("Can't have two adapters for the same scheme ({0})",scheme));
+		}
+		adaptersMap.put(scheme, adapter);
+		schemes.add(scheme);
 	}
 
 	/** This method gives a last chance to save unsaved data.
@@ -144,9 +147,9 @@ public class PersistenceManager {
 	}
 	
 	private URIChooserDialog getURIChooserDialog(Window owner) {
-		URIChooser[] panels = new URIChooser[PersistenceManager.MANAGER.getPluginsNumber()];
+		URIChooser[] panels = new URIChooser[PersistenceManager.MANAGER.getAdaptersNumber()];
 		for (int i = 0; i < panels.length; i++) {
-			panels[i] = PersistenceManager.MANAGER.getPlugin(i).buildChooser();
+			panels[i] = PersistenceManager.MANAGER.getAdapter(i).buildChooser();
 		}
 		return new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
 	}
@@ -179,8 +182,8 @@ public class PersistenceManager {
 						notProcessed = !errProcessor.processError(exception);
 					}
 					if (notProcessed) {
-						PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(path);
-						Service service = plugin==null?null:plugin.getService();
+						PersistenceAdapter adapter = PersistenceManager.MANAGER.getAdpater(path);
+						Service service = adapter==null?null:adapter.getService();
 						String displayedURI = service==null?path.toString():service.getDisplayable(path);
 						if (exception instanceof FileNotFoundException) {
 							File file = service.getLocalFile(path);
@@ -217,15 +220,15 @@ public class PersistenceManager {
 		}
 	}
 
-	public int getPluginsNumber() {
-		return this.pluginSchemes.size();
+	private int getAdaptersNumber() {
+		return this.schemes.size();
 	}
 
-	public PersistenceAdapter getPlugin(int index) {
-		return this.pluginsMap.get(this.pluginSchemes.get(index));
+	private PersistenceAdapter getAdapter(int index) {
+		return this.adaptersMap.get(this.schemes.get(index));
 	}
 	
-	public PersistenceAdapter getPlugin(URI uri) {
-		return this.pluginsMap.get(uri.getScheme());
+	public PersistenceAdapter getAdpater(URI uri) {
+		return this.adaptersMap.get(uri.getScheme());
 	}
 }

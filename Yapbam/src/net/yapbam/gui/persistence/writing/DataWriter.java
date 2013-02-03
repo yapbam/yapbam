@@ -45,7 +45,7 @@ public class DataWriter {
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 			if (choice==0) return false;
 		}
-		final Worker<WriterResult, Void> worker = new SaveWorker(PersistenceManager.MANAGER.getPlugin(uri).getService(),data, uri);
+		final Worker<WriterResult, Void> worker = new SaveWorker(PersistenceManager.MANAGER.getAdpater(uri).getService(),data, uri);
 		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		try {
@@ -89,7 +89,7 @@ public class DataWriter {
 	}
 
 	private void doRemoteDeleted() throws ExecutionException {
-		PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		PersistenceAdapter plugin = PersistenceManager.MANAGER.getAdpater(uri);
 		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
 		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")};  //$NON-NLS-1$//$NON-NLS-2$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
@@ -98,12 +98,12 @@ public class DataWriter {
 		} else if (n==0) {
 			doSync(SynchronizeCommand.UPLOAD);
 		} else {
-			PersistenceManager.MANAGER.getPlugin(uri).getService().deleteLocal(uri);
+			PersistenceManager.MANAGER.getAdpater(uri).getService().deleteLocal(uri);
 		}
 	}
 
 	private void doConflict() throws ExecutionException {
-		PersistenceAdapter plugin = PersistenceManager.MANAGER.getPlugin(uri);
+		PersistenceAdapter plugin = PersistenceManager.MANAGER.getAdpater(uri);
 		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
 		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), plugin.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
@@ -118,7 +118,7 @@ public class DataWriter {
 	}
 
 	private void doSync(SynchronizeCommand command) throws ExecutionException {
-		SynchronizeWorker worker = new SynchronizeWorker(PersistenceManager.MANAGER.getPlugin(uri).getService(), uri, command, LocalizationData.getLocale());
+		SynchronizeWorker worker = new SynchronizeWorker(PersistenceManager.MANAGER.getAdpater(uri).getService(), uri, command, LocalizationData.getLocale());
 		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		if (command.equals(SynchronizeCommand.DOWNLOAD) && !worker.isCancelled()) {

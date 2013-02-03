@@ -29,7 +29,8 @@ class GlobalDataHandler extends DefaultHandler {
 	private int currentProgress;
 	
 	private Collection<Transaction> transactions;
-	private String lastCData;
+	private HashMap<String,String> tagToCData;
+	private String currentTag;
 
 	GlobalDataHandler(ProgressReport report) {
 		super();
@@ -37,6 +38,7 @@ class GlobalDataHandler extends DefaultHandler {
 		this.data = new GlobalData();
 		this.tempData = new Stack<Object>();
 		this.transactions = new ArrayList<Transaction>();
+		this.tagToCData = new HashMap<String, String>();
 		if (report!=null) report.setMax(-1);
 	}
 	
@@ -53,6 +55,7 @@ class GlobalDataHandler extends DefaultHandler {
 		if ((report!=null) && report.isCancelled()) {
 			throw new SAXException(PARSING_WAS_CANCELLED);
 		}
+		this.currentTag = qName;
 		if (qName.equals(Serializer.GLOBAL_DATA_TAG)) {
 			try {
 				if (SLOW_READING) Thread.sleep(1000);
@@ -182,9 +185,10 @@ class GlobalDataHandler extends DefaultHandler {
 			this.data.add(this.transactions.toArray(new Transaction[this.transactions.size()]));
 		} else if (qName.equals(Serializer.ACCOUNT_TAG)) {
 			Account account = (Account) this.tempData.pop(); // remove the tag we added in the stack
+			String lastCData = this.tagToCData.get(qName);
 			if (lastCData!=null) {
 				this.data.setComment(account, lastCData);
-				lastCData=null;
+				this.tagToCData.remove(qName);
 			}
 		} else if (qName.equals(Serializer.CATEGORY_TAG)) {
 		} else if (qName.equals(Serializer.MODE_TAG)) {
@@ -254,8 +258,10 @@ class GlobalDataHandler extends DefaultHandler {
 
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		String str = new String(ch, start, length);
-		this.lastCData = str.trim();
+		String str = new String(ch, start, length).trim();
+		if (str.length()>0) {
+			this.tagToCData.put(currentTag, str);
+		}
 	}
 
 	@Override

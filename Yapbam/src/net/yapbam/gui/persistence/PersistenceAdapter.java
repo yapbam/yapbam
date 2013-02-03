@@ -35,16 +35,6 @@ public abstract class PersistenceAdapter {
 		return this.service;
 	}
 	
-	/** Gets the scheme managed by this adapter.
-	 * <br>Each adapter is identified by the scheme (file, ftp, etc ..) it manages. Please note that
-	 * the developer is not limited to standard scheme (file, ftp, http, ...). You're free to define
-	 * your own scheme. For example, we use "Dropbox" scheme to save/read data to/from Dropbox.
-	 * @return the scheme managed by the plugin (by default, return the service's scheme).
-	 */
-	public String getScheme() {
-		return this.service.getScheme();
-	}
-	
 	/** Builds an UI component that implements the uri chooser for this adapter.
 	 * <br>Be aware that compiler can't force the returned instance to be a java.awt.Component subclass, but
 	 * this is mandatory.
@@ -52,7 +42,6 @@ public abstract class PersistenceAdapter {
 	 * of this class.
 	 * @return a component
 	 * @see URIChooser#getSelectedURI()
-	 * @see #getScheme()
 	 */
 	public abstract URIChooser buildChooser();
 
@@ -60,7 +49,7 @@ public abstract class PersistenceAdapter {
 	 * @param uri The URI (The uri is guaranteed to have the scheme returned by getScheme).
 	 * @return a File
 	 */
-	public File getLocalFile(URI uri) {
+	public final File getLocalFile(URI uri) {
 		return service.getLocalFile(uri);
 	}
 	
@@ -72,7 +61,7 @@ public abstract class PersistenceAdapter {
 		return this.locale;
 	}
 	
-	public String getMessage(String key) {
+	public final String getMessage(String key) {
 		return this.service.getMessage(key, getLocale());
 	}
 }
