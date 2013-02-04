@@ -56,7 +56,7 @@ public class DataWriter {
 			WriterResult result = worker.get();
 			if (result==null) return false; // Saving to local cache was cancelled
 			data.setURI(uri);
-			data.setChanged(false);
+			data.setUnchanged();
 			if (result.getState().equals(WriterResult.State.EXCEPTION_WHILE_SYNC)) {
 				if (result.getException() instanceof IOException) {
 					// An io error occurred ... probably we're not connected to the Internet
@@ -85,7 +85,7 @@ public class DataWriter {
 		} catch (CancellationException e) {
 			// The synchronization was cancelled => Mark the file as saved
 			data.setURI(uri);
-			data.setChanged(false);
+			data.setUnchanged();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
@@ -124,7 +124,7 @@ public class DataWriter {
 		WorkInProgressFrame waitFrame = manager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		if (command.equals(SynchronizeCommand.DOWNLOAD) && !worker.isCancelled()) {
-			//TODO Strange seems like we clear the data before having red it
+			//TODO Strange seems like we clear the data before having read them
 			// This could results in having the data cleared if the user cancels the download !!!
 			data.clear();
 			new DataReader(manager, owner, data, uri).doSyncAndRead(SynchronizeCommand.NOTHING);
