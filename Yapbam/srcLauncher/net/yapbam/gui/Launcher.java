@@ -26,10 +26,6 @@ public class Launcher {
 //		}
 		
 		String current = System.getProperty("java.specification.version");
-		if ("1.7".equals(current)) {
-			// Workaround of a bug in swing
-			System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-		}
 		if (Float.parseFloat(current)<Float.parseFloat(REQUIRED_JAVA_VERSION)) {
 			String message = "Your current java version is "+current+
 					"\nYapbam requires Java "+REQUIRED_JAVA_VERSION+" or more.\nPlease have a look at http://java.sun.com";
