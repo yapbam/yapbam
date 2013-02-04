@@ -17,11 +17,10 @@ import com.fathzer.soft.jclop.swing.MessagePack;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.astesana.ajlib.utilities.FileUtils;
-import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.PersistenceAdapter;
-import net.yapbam.gui.persistence.PersistenceDataAdapter;
+import net.yapbam.gui.persistence.DataWrapper;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.reading.DataReader;
@@ -29,12 +28,12 @@ import net.yapbam.util.Portable;
 
 public class DataWriter {
 	private Window owner;
-	private PersistenceDataAdapter<?> data;
+	private DataWrapper<?> data;
 	private URI uri;
 	private PersistenceAdapter adapter;
 	private PersistenceManager manager;
 
-	public DataWriter (PersistenceManager manager, Window owner, PersistenceDataAdapter<?> data, URI uri) {
+	public DataWriter (PersistenceManager manager, Window owner, DataWrapper<?> data, URI uri) {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;

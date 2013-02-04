@@ -11,17 +11,17 @@ import com.fathzer.soft.jclop.SynchronizationState;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
-import net.yapbam.gui.persistence.PersistenceDataAdapter;
+import net.yapbam.gui.persistence.DataWrapper;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.writing.WriterResult.State;
 
 class SaveWorker extends Worker<WriterResult, Void> implements Cancellable {
 		private PersistenceManager manager;
-		private PersistenceDataAdapter<?> data;
+		private DataWrapper<?> data;
 		private URI uri;
 		private CancelManager cancelManager;
 
-		SaveWorker(PersistenceManager manager, PersistenceDataAdapter<?> data, URI uri) {
+		SaveWorker(PersistenceManager manager, DataWrapper<?> data, URI uri) {
 			this.manager = manager;
 			this.data = data;
 			this.uri = uri;

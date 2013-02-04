@@ -13,13 +13,13 @@ import com.fathzer.soft.jclop.SynchronizationState;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
-import net.yapbam.gui.persistence.PersistenceDataAdapter;
+import net.yapbam.gui.persistence.DataWrapper;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 
 class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellable {
 	private URI uri;
 	private Object data;
-	private PersistenceDataAdapter<?> dataAdapter;
+	private DataWrapper<?> dataAdapter;
 	private boolean isSynchronizing;
 	
 	private SynchronizeCommand command;
@@ -27,7 +27,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	private Service service;
 	private Locale locale;
 	
-	SyncAndReadWorker(Service service, PersistenceDataAdapter<?> dataAdapter, URI uri, SynchronizeCommand command) {
+	SyncAndReadWorker(Service service, DataWrapper<?> dataAdapter, URI uri, SynchronizeCommand command) {
 		this.service = service;
 		this.dataAdapter = dataAdapter;
 		this.uri = uri;

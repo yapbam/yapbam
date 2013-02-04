@@ -19,7 +19,7 @@ import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
-import net.yapbam.gui.persistence.PersistenceDataAdapter;
+import net.yapbam.gui.persistence.DataWrapper;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizeCommand;
@@ -27,12 +27,12 @@ import net.yapbam.gui.persistence.UnsupportedSchemeException;
 
 public class DataReader {
 	private Window owner;
-	private PersistenceDataAdapter<?> data;
+	private DataWrapper<?> data;
 	private URI uri;
 	private PersistenceAdapter adapter;
 	private PersistenceManager manager;
 
-	public DataReader (PersistenceManager manager, Window owner, PersistenceDataAdapter<?> data, URI uri) {
+	public DataReader (PersistenceManager manager, Window owner, DataWrapper<?> data, URI uri) {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;
@@ -46,7 +46,7 @@ public class DataReader {
 
 	public boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
 		if (this.adapter==null) throw new ExecutionException(new UnsupportedSchemeException(uri));
-		SyncAndReadWorker basicWorker = new SyncAndReadWorker(adapter.getService(), uri, command);
+		SyncAndReadWorker basicWorker = new SyncAndReadWorker(adapter.getService(), data, uri, command);
 		manager.buildWaitDialog(owner, basicWorker).setVisible(true);
 		ReaderResult result;
 		try {
@@ -59,7 +59,7 @@ public class DataReader {
 				return doSyncFailed();
 			} else if (result.getState().equals(State.FINISHED)) {
 				// Data was synchronized and red
-				copyToData(basicWorker.getData());
+				data.commit(uri, basicWorker.getData());
 				return true;
 			}
 		} catch (InterruptedException e) {
@@ -193,22 +193,12 @@ public class DataReader {
 		final OnlyReadWorker readWorker = new OnlyReadWorker(localURI, password);
 		manager.buildWaitDialog(owner, readWorker).setVisible(true);
 		try {
-			Object redData = readWorker.get();
-			copyToData(redData);
+			data.commit(uri, readWorker.get());
 			return true;
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		} catch (CancellationException e) {
 			return false;
 		}
-	}
-
-	private void copyToData(GlobalData redData) {
-		boolean enabled = data.isEventsEnabled();
-		data.setEventsEnabled(false);
-		data.copy(redData);
-		data.setChanged(false);
-		data.setURI(uri);
-		data.setEventsEnabled(enabled);
 	}
 }
