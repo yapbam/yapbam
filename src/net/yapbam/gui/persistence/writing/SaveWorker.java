@@ -9,38 +9,33 @@ import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.SynchronizationState;
 
 import net.astesana.ajlib.swing.worker.Worker;
-import net.yapbam.data.GlobalData;
-import net.yapbam.data.ProgressReport;
-import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
+import net.yapbam.gui.persistence.PersistenceDataAdapter;
+import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.writing.WriterResult.State;
 
-class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, Cancellable {
-		private Service service;
-		private GlobalData data;
+class SaveWorker extends Worker<WriterResult, Void> implements Cancellable {
+		private PersistenceManager manager;
+		private PersistenceDataAdapter<?> data;
 		private URI uri;
 		private CancelManager cancelManager;
 
-		SaveWorker(Service service, GlobalData data, URI uri) {
-			this.service = service;
+		SaveWorker(PersistenceManager manager, PersistenceDataAdapter<?> data, URI uri) {
+			this.manager = manager;
 			this.data = data;
 			this.uri = uri;
 			this.cancelManager = new CancelManager(this);
 		}
 
 		@Override
-		public void setMax(int length) {
-			super.setPhase(getPhase(), length);
-		}
-
-		@Override
 		protected WriterResult doProcessing() throws Exception {
 			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
+			Service service = manager.getAdapter(uri).getService();
 			File previousFile = service.getLocalFile(uri);
 			File file = service.getLocalFileForWriting(uri);
 			Boolean deleteOnCancelled = !file.exists();
-			Serializer.write(data, file, !service.isLocal(), this);
+			data.serialize(file, service, this);
 			if (isCancelled()) {
 				if (deleteOnCancelled) file.delete();
 				return null;
@@ -75,5 +70,10 @@ class SaveWorker extends Worker<WriterResult, Void> implements ProgressReport, C
 		@Override
 		public void setCancelAction(Runnable action) {
 			this.cancelManager.setAction(action);
+		}
+
+		@Override
+		public void setMax(int max) {
+			super.setPhaseLength(max);
 		}
 	}

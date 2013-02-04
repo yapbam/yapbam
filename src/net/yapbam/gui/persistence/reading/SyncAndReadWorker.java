@@ -1,5 +1,6 @@
 package net.yapbam.gui.persistence.reading;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -10,17 +11,15 @@ import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.SynchronizationState;
 
 import net.astesana.ajlib.swing.worker.Worker;
-import net.yapbam.data.GlobalData;
-import net.yapbam.data.ProgressReport;
-import net.yapbam.data.xml.Serializer;
-import net.yapbam.data.xml.Serializer.SerializationData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
+import net.yapbam.gui.persistence.PersistenceDataAdapter;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 
-class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellable, ProgressReport {
+class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellable {
 	private URI uri;
-	private GlobalData data;
+	private Object data;
+	private PersistenceDataAdapter<?> dataAdapter;
 	private boolean isSynchronizing;
 	
 	private SynchronizeCommand command;
@@ -28,8 +27,9 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	private Service service;
 	private Locale locale;
 	
-	SyncAndReadWorker(Service service, URI uri, SynchronizeCommand command) {
+	SyncAndReadWorker(Service service, PersistenceDataAdapter<?> dataAdapter, URI uri, SynchronizeCommand command) {
 		this.service = service;
+		this.dataAdapter = dataAdapter;
 		this.uri = uri;
 		this.data = null;
 		this.command = command;
@@ -68,14 +68,14 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 		}
 		this.isSynchronizing = false;
 		if (syncState.equals(SynchronizationState.SYNCHRONIZED)) {
-			URI localURI = service.getLocalFile(uri).toURI();
-			SerializationData info = Serializer.getSerializationData(localURI);
+			File localURI = service.getLocalFile(uri);
+			boolean passwordRequired = dataAdapter.needPassword(localURI);
 			// Retrieving the file password
-			if (info.isPasswordRequired()) {
+			if (passwordRequired) {
 				return new ReaderResult(State.NEED_PASSWORD, syncState);
 			} else {
 				setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), service.getDisplayable(uri)),-1); //$NON-NLS-1$
-				this.data = Serializer.read(localURI, null, this);
+				this.data = dataAdapter.deserialize(localURI, null, service, this);
 				return new ReaderResult(State.FINISHED, syncState);
 			}
 		} else {
@@ -98,7 +98,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	/**
 	 * @return the data
 	 */
-	public GlobalData getData() {
+	public Object getData() {
 		return data;
 	}
 	/**

@@ -16,24 +16,23 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
 import net.yapbam.gui.dialogs.BasicHTMLDialog.Type;
-import net.yapbam.gui.persistence.file.FilePersistenceAdapter;
 import net.yapbam.gui.persistence.reading.DataReader;
 import net.yapbam.gui.persistence.writing.DataWriter;
 
-public class PersistenceManager {
-	public static PersistenceManager MANAGER = new PersistenceManager();
+public abstract class PersistenceManager {
 	public interface ErrorProcessor {
 		/** Process an error.
 		 * @param e The error to be processed
@@ -45,46 +44,31 @@ public class PersistenceManager {
 	private HashMap<String, PersistenceAdapter> adaptersMap;
 	private List<String> schemes;
 
-	private PersistenceManager() {
+	public PersistenceManager() {
 		// Load the default persistence adapters
 		this.adaptersMap = new HashMap<String, PersistenceAdapter>();
 		this.schemes = new ArrayList<String>();
-		
-		add(new FilePersistenceAdapter());
-//		add(new DropboxPersistenceAdapter());
-		
-		// Load adapters under development
-		String testedAdapter = System.getProperty("testedPersistenceAdapter.className"); //$NON-NLS-1$
-		if (testedAdapter!=null) {
-			String[] testedAdapters = StringUtils.split(testedAdapter, ',');
-			for (String className : testedAdapters) {
-				if (className.length()!=0) {
-					try {
-						@SuppressWarnings("unchecked")
-						Class<? extends PersistenceAdapter> pClass = (Class<? extends PersistenceAdapter>) Class.forName(className);
-						add(pClass.newInstance());
-					} catch (Exception e) {
-						ErrorManager.INSTANCE.display(null, e, MessageFormat.format(LocalizationData.get("persitencePlugin.load.error"), className)); //$NON-NLS-1$
-					}
-				}
-			}
-		}
 	}
 	
-	public static WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
+	/** Adds an adapter.
+	 * @param adapter The adapter to add.
+	 * @throws IllegalArgumentException if the scheme of the adapter's service is already know by this adapter
+	 * @see PersistenceAdapter#getService()
+	 */
+	public void add(PersistenceAdapter adapter) {
+		String scheme = adapter.getService().getScheme();
+		if (adaptersMap.containsKey(scheme)) {
+			throw new IllegalArgumentException(MessageFormat.format("Can''t have two adapters for {0} scheme",scheme));
+		}
+		adaptersMap.put(scheme, adapter);
+		schemes.add(scheme);
+	}
+	
+	public WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
 		waitFrame.setSize(400, waitFrame.getSize().height);
 		waitFrame.setLocationRelativeTo(owner);
 		return waitFrame;
-	}
-	
-	private void add(PersistenceAdapter adapter) {
-		String scheme = adapter.getService().getScheme();
-		if (adaptersMap.containsKey(scheme)) {
-			throw new IllegalArgumentException(MessageFormat.format("Can't have two adapters for the same scheme ({0})",scheme));
-		}
-		adaptersMap.put(scheme, adapter);
-		schemes.add(scheme);
 	}
 
 	/** This method gives a last chance to save unsaved data.
@@ -92,8 +76,8 @@ public class PersistenceManager {
 	 * @param data The data to save
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
-	public boolean verify(Window owner, GlobalData data) {
-		if (data.somethingHasChanged()) { // Some modifications has not been saved
+	public boolean verify(Window owner, PersistenceDataAdapter<?> data) {
+		if (data.hasChanged()) { // Some modifications has not been saved
 			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			int n = JOptionPane.showOptionDialog(owner,
 				    LocalizationData.get("NotSavedDialog.message"), //$NON-NLS-1$
@@ -110,16 +94,16 @@ public class PersistenceManager {
 		}
 		return true;
 	}
-
+	
 	/** Save the data associated with a main frame. Ask for the file where to save if needed.
 	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
 	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	public boolean save(Window owner, GlobalData data) {
+	public boolean save(Window owner, PersistenceDataAdapter<?> data) {
 		URI uri = data.getURI();
 		if (uri==null) {
-			uri = getURI(owner, data, true);
+			uri = getURI(owner, uri, true);
 		}
 		if (uri==null) return false;
 		return saveTo(owner, data, uri);
@@ -130,32 +114,32 @@ public class PersistenceManager {
 	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	public boolean saveAs(Window owner, GlobalData data) {
-		URI uri = getURI(owner, data, true);
+	public boolean saveAs(Window owner, PersistenceDataAdapter<?> data) {
+		URI uri = getURI(owner, data.getURI(), true);
 		if (uri==null) return false;
 		return saveTo(owner, data, uri);
 	}
 
-	private URI getURI(Window owner, GlobalData data, boolean save) {
+	private URI getURI(Window owner, URI uri, boolean save) {
 		URIChooserDialog dialog = getURIChooserDialog(owner);
 		dialog.setLocale(LocalizationData.getLocale());
 		dialog.setSaveDialog(save);
-		dialog.setSelectedURI(data.getURI());
+		dialog.setSelectedURI(uri);
 		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open"); //$NON-NLS-1$ //$NON-NLS-2$
 		dialog.setTitle(title);
 		return dialog.showDialog();
 	}
 	
 	private URIChooserDialog getURIChooserDialog(Window owner) {
-		URIChooser[] panels = new URIChooser[PersistenceManager.MANAGER.getAdaptersNumber()];
+		URIChooser[] panels = new URIChooser[getAdaptersNumber()];
 		for (int i = 0; i < panels.length; i++) {
-			panels[i] = PersistenceManager.MANAGER.getAdapter(i).buildChooser();
+			panels[i] = getAdapter(i).buildChooser();
 		}
 		return new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
 	}
 
-	private boolean saveTo(Window owner, GlobalData data, URI uri) {
-		return new DataWriter(owner, data, uri).save();
+	private boolean saveTo(Window owner, PersistenceDataAdapter<?> data, URI uri) {
+		return new DataWriter(this, owner, data, uri).save();
 	}
 
 	/** Reads the data contained at an URI.
@@ -166,15 +150,14 @@ public class PersistenceManager {
 	 * @param path the path to read or null to choose this path in a dialog.
 	 * @param errProcessor An ErrorManager that will be used if the read fails or null to display the standard error message. 
 	 */
-	public void read(Window frame, GlobalData data, URI path, ErrorProcessor errProcessor) {
-		//TODO Why not simply throw IOException and UnsupportedSchemeException ?
+	public void read(Window frame, PersistenceDataAdapter<?> data, URI path, ErrorProcessor errProcessor) {
 		if (verify(frame, data)) {
 			if (path==null) {
-				path = getURI(frame, data, false);
+				path = getURI(frame, data.getURI(), false);
 			}
 			if (path != null) {
 				try {
-					new DataReader(frame, data, path).read();
+					new DataReader(this, frame, data, path).read();
 				} catch (ExecutionException e) {
 					Throwable exception = e.getCause();
 					boolean notProcessed = true;
@@ -182,7 +165,7 @@ public class PersistenceManager {
 						notProcessed = !errProcessor.processError(exception);
 					}
 					if (notProcessed) {
-						PersistenceAdapter adapter = PersistenceManager.MANAGER.getAdpater(path);
+						PersistenceAdapter adapter = getAdapter(path);
 						Service service = adapter==null?null:adapter.getService();
 						String displayedURI = service==null?path.toString():service.getDisplayable(path);
 						if (exception instanceof FileNotFoundException) {
@@ -195,7 +178,7 @@ public class PersistenceManager {
 									ErrorManager.INSTANCE.display(frame, null,  MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
 								}
 							} else {
-								//TODO
+								//FIXME
 								throw new RuntimeException(exception);
 							}
 						} else if (exception instanceof IOException) {
@@ -228,7 +211,7 @@ public class PersistenceManager {
 		return this.adaptersMap.get(this.schemes.get(index));
 	}
 	
-	public PersistenceAdapter getAdpater(URI uri) {
+	public PersistenceAdapter getAdapter(URI uri) {
 		return this.adaptersMap.get(uri.getScheme());
 	}
 }

@@ -15,11 +15,11 @@ import javax.swing.UIManager;
 import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.swing.MessagePack;
 
-import net.yapbam.data.GlobalData;
 import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
+import net.yapbam.gui.persistence.PersistenceDataAdapter;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizeCommand;
@@ -27,15 +27,17 @@ import net.yapbam.gui.persistence.UnsupportedSchemeException;
 
 public class DataReader {
 	private Window owner;
-	private GlobalData data;
+	private PersistenceDataAdapter<?> data;
 	private URI uri;
-	private PersistenceAdapter plugin;
+	private PersistenceAdapter adapter;
+	private PersistenceManager manager;
 
-	public DataReader (Window owner, GlobalData data, URI uri) {
+	public DataReader (PersistenceManager manager, Window owner, PersistenceDataAdapter<?> data, URI uri) {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;
-		this.plugin = PersistenceManager.MANAGER.getAdpater(uri);
+		this.manager = manager;
+		this.adapter = manager.getAdapter(uri);
 	}
 
 	public boolean read() throws ExecutionException {
@@ -43,9 +45,9 @@ public class DataReader {
 	}
 
 	public boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
-		if (this.plugin==null) throw new ExecutionException(new UnsupportedSchemeException(uri));
-		SyncAndReadWorker basicWorker = new SyncAndReadWorker(plugin.getService(), uri, command);
-		PersistenceManager.buildWaitDialog(owner, basicWorker).setVisible(true);
+		if (this.adapter==null) throw new ExecutionException(new UnsupportedSchemeException(uri));
+		SyncAndReadWorker basicWorker = new SyncAndReadWorker(adapter.getService(), uri, command);
+		manager.buildWaitDialog(owner, basicWorker).setVisible(true);
 		ReaderResult result;
 		try {
 			result = basicWorker.get();
@@ -68,10 +70,10 @@ public class DataReader {
 			return false;
 		} catch (ExecutionException e) {
 			// An error occurred while reading the cache file
-			if (plugin.getService()==null || (e.getCause() instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
+			if (adapter.getService()==null || (e.getCause() instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
 			return doErrorOccurred(e);
 		}
-		File localFile = plugin.getLocalFile(uri);
+		File localFile = adapter.getLocalFile(uri);
 		if (basicWorker.isCancelled()) return false; // Anything but the synchronization was cancelled => Globally cancel
 		SynchronizationState state = result.getSyncState();
 		if (state.equals(SynchronizationState.CONFLICT)) { // There's a conflict between remote resource a local cache
@@ -114,7 +116,7 @@ public class DataReader {
 	}
 
 	private boolean doSyncFailed() throws ExecutionException {
-		if (!plugin.getLocalFile(uri).exists()) {
+		if (!adapter.getLocalFile(uri).exists()) {
 			JOptionPane.showMessageDialog(owner, LocalizationData.get("synchronization.downloadFailed"), LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1$//$NON-NLS-2$
 			return false;
 		} else {
@@ -133,27 +135,27 @@ public class DataReader {
 				LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
 			return false;
 		}
-		plugin.getLocalFile(uri).delete();
+		adapter.getLocalFile(uri).delete();
 		return doSyncAndRead(SynchronizeCommand.DOWNLOAD);
 	}
 	
 	private boolean doRemoteNotFound() throws ExecutionException {
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
-		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), adapter.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {adapter.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 		} else if (n==0) {
 			return doSyncAndRead(SynchronizeCommand.UPLOAD);
 		} else {
-			plugin.getService().deleteLocal(uri);
+			adapter.getService().deleteLocal(uri);
 		}
 		return false;
 	}
 
 	private boolean doConflict() throws ExecutionException {
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"),plugin.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
-		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), plugin.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-1$
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"),adapter.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {adapter.getMessage(MessagePack.UPLOAD_ACTION), adapter.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-1$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
@@ -166,7 +168,7 @@ public class DataReader {
 	}
 
 	private boolean syncCancelled() throws ExecutionException {
-		if (!plugin.getLocalFile(uri).exists()) return false;
+		if (!adapter.getLocalFile(uri).exists()) return false;
 		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
 		if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cancelled"), //$NON-NLS-1$
 				LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
@@ -176,7 +178,7 @@ public class DataReader {
 	}
 	
 	private boolean readLocalFile(String password) throws ExecutionException {
-		URI localURI = PersistenceManager.MANAGER.getAdpater(uri).getLocalFile(uri).toURI();
+		URI localURI = adapter.getLocalFile(uri).toURI();
 		if (password==null) {
 			boolean passwordRequired;
 			try {
@@ -189,9 +191,9 @@ public class DataReader {
 			}
 		}
 		final OnlyReadWorker readWorker = new OnlyReadWorker(localURI, password);
-		PersistenceManager.buildWaitDialog(owner, readWorker).setVisible(true);
+		manager.buildWaitDialog(owner, readWorker).setVisible(true);
 		try {
-			GlobalData redData = readWorker.get();
+			Object redData = readWorker.get();
 			copyToData(redData);
 			return true;
 		} catch (InterruptedException e) {

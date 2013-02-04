@@ -24,6 +24,7 @@ public class SerializerTest {
 		data.add(account);
 		account = new Account("titi", -10.0);
 		data.add(account);
+		data.setComment(account, "Un commentaire avec plusieurs ligne\nEt des caractères accentués.");
 		
 		testInstance(data);
 		
@@ -54,6 +55,7 @@ public class SerializerTest {
 			Account oAccount = other.getAccount(account.getName());
 			assertNotNull(oAccount);
 			assertEquals(account.getInitialBalance(), oAccount.getInitialBalance(), doubleAccuracy);
+			assertEquals(account.getComment(), oAccount.getComment());
 
 			assertEquals(account.getModesNumber(), oAccount.getModesNumber());
 			//TODO Test if modes are the same

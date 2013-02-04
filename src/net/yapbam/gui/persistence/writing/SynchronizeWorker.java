@@ -58,4 +58,9 @@ public class SynchronizeWorker extends Worker<SynchronizationState, Void> implem
 	public void setCancelAction(Runnable action) {
 		this.cancelManager.setAction(action);
 	}
+
+	@Override
+	public void setMax(int max) {
+		super.setPhaseLength(max);
+	}
 }
