@@ -21,6 +21,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.PersistenceAdapter;
+import net.yapbam.gui.persistence.PersistenceDataAdapter;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.reading.DataReader;
@@ -28,13 +29,17 @@ import net.yapbam.util.Portable;
 
 public class DataWriter {
 	private Window owner;
-	private GlobalData data;
+	private PersistenceDataAdapter<?> data;
 	private URI uri;
+	private PersistenceAdapter adapter;
+	private PersistenceManager manager;
 
-	public DataWriter (Window owner, GlobalData data, URI uri) {
+	public DataWriter (PersistenceManager manager, Window owner, PersistenceDataAdapter<?> data, URI uri) {
 		this.owner = owner;
 		this.data = data;
 		this.uri = uri;
+		this.manager = manager;
+		this.adapter = manager.getAdapter(uri);
 	}
 
 	public boolean save() {
@@ -45,8 +50,8 @@ public class DataWriter {
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
 			if (choice==0) return false;
 		}
-		final Worker<WriterResult, Void> worker = new SaveWorker(PersistenceManager.MANAGER.getAdpater(uri).getService(),data, uri);
-		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
+		final Worker<WriterResult, Void> worker = new SaveWorker(manager,data, uri);
+		WorkInProgressFrame waitFrame = manager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		try {
 			WriterResult result = worker.get();
@@ -89,23 +94,21 @@ public class DataWriter {
 	}
 
 	private void doRemoteDeleted() throws ExecutionException {
-		PersistenceAdapter plugin = PersistenceManager.MANAGER.getAdpater(uri);
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
-		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")};  //$NON-NLS-1$//$NON-NLS-2$
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), adapter.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {adapter.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")};  //$NON-NLS-1$//$NON-NLS-2$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
 		} else if (n==0) {
 			doSync(SynchronizeCommand.UPLOAD);
 		} else {
-			PersistenceManager.MANAGER.getAdpater(uri).getService().deleteLocal(uri);
+			adapter.getService().deleteLocal(uri);
 		}
 	}
 
 	private void doConflict() throws ExecutionException {
-		PersistenceAdapter plugin = PersistenceManager.MANAGER.getAdpater(uri);
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), plugin.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
-		Object[] options = {plugin.getMessage(MessagePack.UPLOAD_ACTION), plugin.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$
+		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), adapter.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
+		Object[] options = {adapter.getMessage(MessagePack.UPLOAD_ACTION), adapter.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
 		if (n==2) {
@@ -118,12 +121,14 @@ public class DataWriter {
 	}
 
 	private void doSync(SynchronizeCommand command) throws ExecutionException {
-		SynchronizeWorker worker = new SynchronizeWorker(PersistenceManager.MANAGER.getAdpater(uri).getService(), uri, command, LocalizationData.getLocale());
-		WorkInProgressFrame waitFrame = PersistenceManager.buildWaitDialog(owner, worker);
+		SynchronizeWorker worker = new SynchronizeWorker(adapter.getService(), uri, command, LocalizationData.getLocale());
+		WorkInProgressFrame waitFrame = manager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		if (command.equals(SynchronizeCommand.DOWNLOAD) && !worker.isCancelled()) {
+			//TODO Strange seems like we clear the data before having red it
+			// This could results in having the data cleared if the user cancels the download !!!
 			data.clear();
-			new DataReader(owner, data, uri).doSyncAndRead(SynchronizeCommand.NOTHING);
+			new DataReader(manager, owner, data, uri).doSyncAndRead(SynchronizeCommand.NOTHING);
 		}
 	}
 }

@@ -25,6 +25,7 @@ import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.UnsupportedSchemeException;
+import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.gui.widget.TabbedPane;
@@ -186,7 +187,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					MainFrame.this.saveState();
 					super.windowClosing(event);
 					event.getWindow().dispose();
-				} else if (PersistenceManager.MANAGER.verify(getJFrame(), getData())) {
+				} else if (YapbamPersistenceManager.MANAGER.verify(getJFrame(), getData())) {
 					// Be aware, you can think that it's a good idea to write the following line before the if/then/else block.
 					// But it's not, it would lead to the state not remember which file was last saved in the following scenario:
 					// Create a new file, then add a transaction, click the close window -> The save/ignore/cancel dialog appears
@@ -312,7 +313,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	private void updateWindowTitle() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
 		URI uri = data.getURI();
-		if (uri!=null) title = title + " - " + PersistenceManager.MANAGER.getAdpater(uri).getService().getDisplayable(uri); //$NON-NLS-1$
+		if (uri!=null) title = title + " - " + YapbamPersistenceManager.MANAGER.getAdapter(uri).getService().getDisplayable(uri); //$NON-NLS-1$
 		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
 		this.getJFrame().setTitle(title);
 	}
@@ -456,11 +457,11 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		final boolean restore = (path == null);
 		if (uri!=null) {
 			final URI finalURI = uri; // Just to be able to use it in the ErrorManager.
-			PersistenceManager.MANAGER.read(getJFrame(), getData(), uri, new PersistenceManager.ErrorProcessor() {
+			YapbamPersistenceManager.MANAGER.read(getJFrame(), getData(), uri, new PersistenceManager.ErrorProcessor() {
 				@Override
 				public boolean processError(Throwable e) {
 					if (e instanceof UnsupportedSchemeException) return true; // The scheme is no more supported, simply ignore the error
-					Service service = PersistenceManager.MANAGER.getAdpater(finalURI).getService();
+					Service service = YapbamPersistenceManager.MANAGER.getAdapter(finalURI).getService();
 					String displayedURI = service.getDisplayable(finalURI);
 					File file = service.getLocalFile(finalURI);
 					if (e instanceof FileNotFoundException) {

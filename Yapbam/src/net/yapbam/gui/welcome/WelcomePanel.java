@@ -23,7 +23,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.persistence.PersistenceManager;
+import net.yapbam.gui.persistence.YapbamPersistenceManager;
 
 import javax.swing.JSeparator;
 
@@ -131,8 +131,8 @@ public class WelcomePanel extends JPanel {
 		final JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				PersistenceManager.MANAGER.read(Utils.getOwnerWindow(WelcomePanel.this), WelcomePanel.this.data,
-						file.toURI(), new PersistenceManager.ErrorProcessor() {
+				YapbamPersistenceManager.MANAGER.read(Utils.getOwnerWindow(WelcomePanel.this), WelcomePanel.this.data,
+						file.toURI(), new YapbamPersistenceManager.ErrorProcessor() {
 					public boolean processError(Throwable e) {
 						String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
 								file.getAbsolutePath());

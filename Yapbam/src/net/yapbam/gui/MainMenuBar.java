@@ -47,7 +47,7 @@ import net.yapbam.gui.dialogs.export.ImportDialog;
 import net.yapbam.gui.dialogs.export.ImportError;
 import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
-import net.yapbam.gui.persistence.PersistenceManager;
+import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 import net.yapbam.util.Portable;
 
@@ -292,7 +292,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		} else {
 			GlobalData data = this.frame.getData();
 			if (source.equals(this.menuItemNew)) {
-				if (PersistenceManager.MANAGER.verify(this.frame, this.frame.getData())) {
+				if (YapbamPersistenceManager.MANAGER.verify(this.frame, this.frame.getData())) {
 					data.clear();
 				}
 			} else if (source.equals(this.menuItemProtect)) {
@@ -321,7 +321,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 						dialog.setVisible(true);
 						Importer importer = dialog.getResult();
 						if (importer!=null) {
-							if (PersistenceManager.MANAGER.verify(this.frame, this.frame.getData())) {
+							if (YapbamPersistenceManager.MANAGER.verify(this.frame, this.frame.getData())) {
 								if (!dialog.getAddToCurrentData()) {
 									data.clear();
 								}
