@@ -1,15 +1,8 @@
 package net.yapbam.gui.persistence;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
 
-import com.fathzer.soft.jclop.Cancellable;
-import com.fathzer.soft.jclop.Service;
-
 import net.astesana.ajlib.utilities.StringUtils;
-import net.yapbam.data.GlobalData;
-import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 

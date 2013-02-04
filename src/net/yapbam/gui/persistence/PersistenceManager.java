@@ -16,15 +16,12 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
-import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.yapbam.data.GlobalData;
-import net.yapbam.data.xml.Serializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
@@ -76,7 +73,7 @@ public abstract class PersistenceManager {
 	 * @param data The data to save
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
-	public boolean verify(Window owner, PersistenceDataAdapter<?> data) {
+	public boolean verify(Window owner, DataWrapper<?> data) {
 		if (data.hasChanged()) { // Some modifications has not been saved
 			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			int n = JOptionPane.showOptionDialog(owner,
@@ -100,7 +97,7 @@ public abstract class PersistenceManager {
 	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	public boolean save(Window owner, PersistenceDataAdapter<?> data) {
+	public boolean save(Window owner, DataWrapper<?> data) {
 		URI uri = data.getURI();
 		if (uri==null) {
 			uri = getURI(owner, uri, true);
@@ -114,7 +111,7 @@ public abstract class PersistenceManager {
 	 * @param data The data to save
 	 * @return true if the data was saved
 	 */
-	public boolean saveAs(Window owner, PersistenceDataAdapter<?> data) {
+	public boolean saveAs(Window owner, DataWrapper<?> data) {
 		URI uri = getURI(owner, data.getURI(), true);
 		if (uri==null) return false;
 		return saveTo(owner, data, uri);
@@ -138,7 +135,7 @@ public abstract class PersistenceManager {
 		return new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
 	}
 
-	private boolean saveTo(Window owner, PersistenceDataAdapter<?> data, URI uri) {
+	private boolean saveTo(Window owner, DataWrapper<?> data, URI uri) {
 		return new DataWriter(this, owner, data, uri).save();
 	}
 
@@ -150,7 +147,7 @@ public abstract class PersistenceManager {
 	 * @param path the path to read or null to choose this path in a dialog.
 	 * @param errProcessor An ErrorManager that will be used if the read fails or null to display the standard error message. 
 	 */
-	public void read(Window frame, PersistenceDataAdapter<?> data, URI path, ErrorProcessor errProcessor) {
+	public void read(Window frame, DataWrapper<?> data, URI path, ErrorProcessor errProcessor) {
 		if (verify(frame, data)) {
 			if (path==null) {
 				path = getURI(frame, data.getURI(), false);

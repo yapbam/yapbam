@@ -7,11 +7,11 @@ import java.net.URI;
 import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
 
-public abstract class PersistenceDataAdapter<T> {
+public abstract class DataWrapper<T> {
 	//TODO Rename to DataWrapper
 	protected T data;
 
-	protected PersistenceDataAdapter (T data) {
+	protected DataWrapper (T data) {
 		this.data = data;
 	}
 	
@@ -32,4 +32,6 @@ public abstract class PersistenceDataAdapter<T> {
 	public abstract void clear();
 
 	public abstract boolean needPassword(File file) throws IOException;
+
+	public abstract void commit(URI uri, Object object);
 }

@@ -8,6 +8,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
+import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 
 @SuppressWarnings("serial")
@@ -22,6 +23,6 @@ public class SaveAsAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		YapbamPersistenceManager.MANAGER.saveAs(frame, frame.getData());
+		YapbamPersistenceManager.MANAGER.saveAs(frame, new YapbamDataWrapper(frame.getData()));
 	}
 }
