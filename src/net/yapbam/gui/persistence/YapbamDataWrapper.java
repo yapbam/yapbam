@@ -16,13 +16,13 @@ public class YapbamDataWrapper extends DataWrapper<GlobalData> {
 	}
 
 	@Override
-	public boolean hasChanged() {
+	public boolean isChanged() {
 		return data.somethingHasChanged();
 	}
 
 	@Override
-	public void setChanged(boolean changed) {
-		data.setChanged(changed);
+	public void setUnchanged() {
+		data.setChanged(false);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class YapbamDataWrapper extends DataWrapper<GlobalData> {
 	}
 
 	@Override
-	public Object deserialize(File file, String password, Service service, Cancellable cancellable) throws IOException {
+	public GlobalData deserialize(File file, String password, Service service, Cancellable cancellable) throws IOException {
 		return Serializer.read(file.toURI(), password, new ProgressReportAdapter(cancellable));
 	}
 
