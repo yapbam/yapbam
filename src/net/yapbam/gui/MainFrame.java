@@ -63,6 +63,13 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	}
 
 	public static void main(final String[] args) {
+		// Workaround of a bug in swing with Java 1.7
+		// Should absolutely be the first thing called in the program !!!
+		String current = System.getProperty("java.specification.version");
+		if ("1.7".equals(current)) {
+			System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+		}
+
 		// Remove obsolete files from previous installations
 		FolderCleaner.clean();
 		// Set the look and feel

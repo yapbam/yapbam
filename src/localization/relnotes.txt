@@ -6,11 +6,11 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
-version	0.14.2 (02/??/2013)
+version	0.14.2 (02/04/2013)
 fix
-	Workaround for a Java bug that caused an error under Java 1.7.03 when opening the dialog for creating periodic transaction.
+	Workaround for a Java bug that caused an error under Java 1.7.0_13 when opening the dialog for creating periodic transaction.
 
-version	0.14.1 (02/??/2013)
+version	0.14.1 (02/03/2013)
 improvement
 	Adds a button to swap the currencies in the currency converter.
 	In the calculator, the result is now selectable and can be copied with the standard shortcut (Windows <CTRL-C>).
