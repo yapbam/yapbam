@@ -6,6 +6,10 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
+version	0.14.3 (02/??/2013)
+fix
+	In the creation/edition of checkbook dialog, use the up arrow to increment the check numbers caused an error.
+
 version	0.14.2 (02/04/2013)
 fix
 	Workaround for a Java bug that caused an error under Java 1.7.0_13 when opening the dialog for creating periodic transaction.
