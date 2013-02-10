@@ -22,7 +22,6 @@ import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
 import net.yapbam.gui.dialogs.BasicHTMLDialog.Type;
@@ -168,12 +167,14 @@ public abstract class PersistenceManager {
 						if (exception instanceof FileNotFoundException) {
 							File file = service.getLocalFile(path);
 							if (file.exists()) {
+								String message;
 								// The file exist, but it is read protected
 								if (path.getScheme().equals("file")) {
-									ErrorManager.INSTANCE.display(frame, null, MessageFormat.format(LocalizationData.get("openDialog.fileNotReadable"),displayedURI)); //$NON-NLS-1$
+									message = MessageFormat.format(LocalizationData.get("openDialog.fileNotReadable"),displayedURI); //$NON-NLS-1$
 								} else {
-									ErrorManager.INSTANCE.display(frame, null,  MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
+									message = MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file); //$NON-NLS-1$
 								}
+								JOptionPane.showMessageDialog(frame, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 							} else {
 								//FIXME
 								throw new RuntimeException(exception);
@@ -192,7 +193,7 @@ public abstract class PersistenceManager {
 						} else if (exception instanceof UnsupportedSchemeException) {
 							// The scheme is no more supported, simply ignore the error
 						} else {
-							ErrorManager.INSTANCE.log(frame, exception);
+							throw new RuntimeException(exception);
 						}
 					}
 				}
