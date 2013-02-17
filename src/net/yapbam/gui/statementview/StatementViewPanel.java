@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
+import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.JTableListener;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
@@ -49,6 +50,11 @@ import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.JSplitPane;
 import javax.swing.border.Border;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -78,6 +84,9 @@ public class StatementViewPanel extends JPanel {
 	private JPanel notCheckedPanel;
 	private ChangeValueDatePanel changeValueDatePanel;
 	private JLabel summaryLabel;
+	private JButton btnRename;
+	private JPanel northPanel;
+	private JPanel panel_1;
 	
 	static {
 		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
@@ -100,38 +109,9 @@ public class StatementViewPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		setLayout(gridBagLayout);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.weightx = 1.0;
-		gbc_panel.anchor = GridBagConstraints.NORTH;
-		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panel.insets = new Insets(0, 0, 5, 0);
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.insets = new Insets(0, 5, 0, 5);
-		gridBagConstraints.weightx = 1.0;
-		add(getStatementSelectionPanel(), gridBagConstraints);
-		GridBagConstraints gbc_checkModeChkbx = new GridBagConstraints();
-		gbc_checkModeChkbx.insets = new Insets(0, 0, 0, 5);
-		gbc_checkModeChkbx.weightx = 1.0;
-		gbc_checkModeChkbx.anchor = GridBagConstraints.EAST;
-		gbc_checkModeChkbx.gridx = 1;
-		gbc_checkModeChkbx.gridy = 0;
-		add(getCheckModeChkbx(), gbc_checkModeChkbx);
-		GridBagConstraints gbc_splitPane = new GridBagConstraints();
-		gbc_splitPane.weighty = 1.0;
-		gbc_splitPane.fill = GridBagConstraints.BOTH;
-		gbc_splitPane.gridwidth = 0;
-		gbc_splitPane.gridx = 0;
-		gbc_splitPane.gridy = 1;
-		add(getSplitPane(), gbc_splitPane);
+		setLayout(new BorderLayout(0, 0));
+		add(getNorthPanel(), BorderLayout.NORTH);
+		add(getSplitPane());
 	}
 
 	private StatementSelectionPanel getStatementSelectionPanel() {
@@ -448,6 +428,7 @@ public class StatementViewPanel extends JPanel {
 		
 		// Show/hide the check mode widget
 		getCheckModeChkbx().setVisible(checkModeAvailable);
+		getBtnRename().setVisible(statementSelected && (statement.getId()!=null));
 		
 		// Show hide the widgets of the check mode
 		getNotCheckedPanel().setVisible(checkMode);
@@ -544,5 +525,54 @@ public class StatementViewPanel extends JPanel {
 
 	public boolean isCheckMode() {
 		return getCheckModeChkbx().isSelected();
+	}
+	private JButton getBtnRename() {
+		if (btnRename == null) {
+			btnRename = new JButton(LocalizationData.get("StatementDialog.button.name"));
+			btnRename.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					StatementRenameDialog dialog = new StatementRenameDialog(Utils.getOwnerWindow(btnRename), data.getGlobalData());
+					dialog.setVisible(true);
+					String result = dialog.getResult();
+					if ((result!=null) && (!result.equals(getStatementSelectionPanel().getSelectedStatement().getId()))) {
+						//TODO Alerter en cas de fusion avec autre relevé
+						System.out.println ("To be done");
+					}
+				}
+			});
+			btnRename.setToolTipText(LocalizationData.get("StatementDialog.button.tooltip"));
+		}
+		return btnRename;
+	}
+	private JPanel getNorthPanel() {
+		if (northPanel == null) {
+			northPanel = new JPanel();
+			GridBagLayout gbl_northPanel = new GridBagLayout();
+			northPanel.setLayout(gbl_northPanel);
+			GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+			gbc_panel_1.anchor = GridBagConstraints.WEST;
+			gbc_panel_1.weightx = 1.0;
+			gbc_panel_1.fill = GridBagConstraints.VERTICAL;
+			gbc_panel_1.gridx = 1;
+			gbc_panel_1.gridy = 0;
+			northPanel.add(getPanel_1(), gbc_panel_1);
+			GridBagConstraints gbc_checkModeChkbx = new GridBagConstraints();
+			gbc_checkModeChkbx.insets = new Insets(0, 0, 0, 5);
+			gbc_checkModeChkbx.weightx = 1.0;
+			gbc_checkModeChkbx.anchor = GridBagConstraints.EAST;
+			gbc_checkModeChkbx.gridx = 2;
+			gbc_checkModeChkbx.gridy = 0;
+			northPanel.add(getCheckModeChkbx(), gbc_checkModeChkbx);
+		}
+		return northPanel;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			panel_1.add(getStatementSelectionPanel());
+			panel_1.add(getBtnRename());
+		}
+		return panel_1;
 	}
 }

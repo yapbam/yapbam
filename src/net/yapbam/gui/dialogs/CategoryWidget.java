@@ -53,7 +53,7 @@ public class CategoryWidget extends AbstractSelector<Category, GlobalData> {
 	@Override
 	protected Category createNew() {
 		if (getParameters()!=null) {
-			return CategoryDialog.open(getParameters(), Utils.getOwnerWindow(this), null);
+			return CategoryDialog.open(Utils.getOwnerWindow(this), getParameters());
 		} else {
 			return null;
 		}
