@@ -197,7 +197,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			CategoryDialog.open((GlobalData)data, Utils.getOwnerWindow(CategoryListPanel.this), null);
+			CategoryDialog.open(Utils.getOwnerWindow(CategoryListPanel.this), (GlobalData)data);
 		}
 	}
 

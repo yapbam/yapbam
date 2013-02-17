@@ -140,28 +140,27 @@ public class StatementSelectionPanel extends JPanel {
 		gbc_checkModePanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_checkModePanel.gridy = 0;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+		gridBagConstraints3.insets = new Insets(0, 10, 0, 5);
 		gridBagConstraints3.gridx = 2;
-		gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints3.gridy = 0;
 		JLabel jLabel1 = new JLabel();
 		jLabel1.setText(LocalizationData.get("TransactionDialog.statement")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.insets = new Insets(0, 0, 0, 5);
 		gridBagConstraints2.gridx = 0;
-		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridy = 0;
 		JLabel jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.gridx = 3;
 		gridBagConstraints.gridy = 0;
-		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints.weightx = 0.0D;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints1.insets = new Insets(0, 0, 0, 5);
+		gridBagConstraints1.fill = GridBagConstraints.BOTH;
 		gridBagConstraints1.gridx = 1;
 		gridBagConstraints1.gridy = 0;
-		gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints1.anchor = GridBagConstraints.WEST;
 		gridBagConstraints1.weightx = 0.0D;
 		add(jLabel, gridBagConstraints2);
