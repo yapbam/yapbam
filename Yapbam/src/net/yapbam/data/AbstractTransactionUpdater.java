@@ -5,19 +5,19 @@ import java.util.ArrayList;
 /**
  * This utility class is use to make mass modification on transactions and PeriodicalTransactions.
  */
-abstract class AbstractTransactionUpdater {
-	GlobalData data;
+public abstract class AbstractTransactionUpdater {
+	protected GlobalData data;
 	
 	/** Constructor.
 	 * @param data the global data onto make the mass modification.
 	 */
-	AbstractTransactionUpdater (GlobalData data) {
+	protected AbstractTransactionUpdater (GlobalData data) {
 		this.data = data;
 	}
 	
 	/** Performs the mass modification.
 	 */
-	void doIt() {
+	public final void doIt() {
 		// For performance concerns, we will remove all transactions that needed to be updated and then
 		// add all their modified instantiations
 		// First we build list of removed transactions and added ones.
@@ -48,13 +48,20 @@ abstract class AbstractTransactionUpdater {
 	}
 	
 	/** Gets the changed view of a transaction.
+	 * <br>By default, this method returns null. 
 	 * @param transaction The transaction to be modified.
 	 * @return the modified transaction or null if the transaction may remain unchanged.
 	 */
-	abstract Transaction change(Transaction transaction);
+	protected Transaction change(Transaction transaction) {
+		return null;
+	}
+	
 	/** Gets the changed view of a periodical transaction.
+	 * <br>By default, this method returns null. 
 	 * @param transaction The periodical transaction to be modified.
 	 * @return the modified periodical transaction or null if it may remain unchanged.
 	 */
-	abstract PeriodicalTransaction change(PeriodicalTransaction transaction);
+	protected PeriodicalTransaction change(PeriodicalTransaction transaction) {
+		return null;
+	}
 }

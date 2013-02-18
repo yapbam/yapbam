@@ -15,7 +15,7 @@ public class StatementRenameDialog extends BasicInputDialog<GlobalData, String> 
 	
 	@Override
 	protected String getLabel() {
-		return LocalizationData.get("StatementDialog.label"); //$NON-NLS-1$
+		return LocalizationData.get("TransactionDialog.statement"); //$NON-NLS-1$
 	}
 
 	@Override

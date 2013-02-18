@@ -600,12 +600,12 @@ public class GlobalData extends DefaultListenable {
 		}
 		
 		@Override
-		Transaction change(Transaction t) {
+		protected Transaction change(Transaction t) {
 			return t.change(oldCategory, newCategory);
 		}
 
 		@Override
-		PeriodicalTransaction change(PeriodicalTransaction t) {
+		protected PeriodicalTransaction change(PeriodicalTransaction t) {
 			return t.change(oldCategory, newCategory);
 		}
 	}
@@ -658,12 +658,12 @@ public class GlobalData extends DefaultListenable {
 		}
 		
 		@Override
-		Transaction change(Transaction t) {
+		protected Transaction change(Transaction t) {
 			return t.change(account, oldMode, newMode);
 		}
 
 		@Override
-		PeriodicalTransaction change(PeriodicalTransaction t) {
+		protected PeriodicalTransaction change(PeriodicalTransaction t) {
 			return t.change(account, oldMode, newMode);
 		}
 	}
