@@ -239,6 +239,10 @@ public class StatementSelectionPanel extends JPanel {
 		Statement statement = statements[statements.length-1-getStatementMenu().getSelectedIndex()];
 		return statement;
 	}
+	
+	public void select (String statementId) {
+		getStatementMenu().setSelectedItem(statementId);
+	}
 
 	public Statement getStatement(String statementId) {
 		if (statements==null) return null;

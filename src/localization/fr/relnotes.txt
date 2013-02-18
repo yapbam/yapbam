@@ -7,6 +7,8 @@ improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
 version	0.14.3 (??/02/2013)
+improvement
+	Adds a button to rename the statements in the "Account Statements" tab.
 fix
 	Dans le dialogue de création/modification de chéquier, utiliser la flêche haute pour incrémenter les numéros des chèques provoquait une erreur. 
 	

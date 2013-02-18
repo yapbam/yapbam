@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.Window;
 
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
@@ -12,6 +13,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -21,8 +23,10 @@ import javax.swing.JLabel;
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.table.JTableListener;
 import net.astesana.ajlib.utilities.NullUtils;
+import net.yapbam.data.AbstractTransactionUpdater;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.DeleteTransactionAction;
@@ -36,6 +40,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import java.awt.Insets;
@@ -531,12 +536,38 @@ public class StatementViewPanel extends JPanel {
 			btnRename = new JButton(LocalizationData.get("StatementDialog.button.name"));
 			btnRename.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					StatementRenameDialog dialog = new StatementRenameDialog(Utils.getOwnerWindow(btnRename), data.getGlobalData());
+					GlobalData gData = data.getGlobalData();
+					Window owner = Utils.getOwnerWindow(btnRename);
+					StatementRenameDialog dialog = new StatementRenameDialog(owner, gData);
 					dialog.setVisible(true);
-					String result = dialog.getResult();
-					if ((result!=null) && (!result.equals(getStatementSelectionPanel().getSelectedStatement().getId()))) {
-						//TODO Alerter en cas de fusion avec autre relevé
-						System.out.println ("To be done");
+					final String result = dialog.getResult();
+					final String current = getStatementSelectionPanel().getSelectedStatement().getId();
+					if ((result!=null) && (!result.equals(current))) {
+						for (int i = 0; i < gData.getTransactionsNumber(); i++) {
+							if (result.equals(gData.getTransaction(i).getStatement())) {
+								String message = MessageFormat.format(LocalizationData.get("StatementDialog.existing.message"), result, current);
+								int choice = JOptionPane.showConfirmDialog(owner, message,
+										LocalizationData.get("StatementDialog.existing.title"),  JOptionPane.OK_CANCEL_OPTION,  JOptionPane.WARNING_MESSAGE);
+								if (choice==2) return;
+								break;
+							}
+						}
+						AbstractTransactionUpdater updater = new AbstractTransactionUpdater(gData) {
+							/* (non-Javadoc)
+							 * @see net.yapbam.data.AbstractTransactionUpdater#change(net.yapbam.data.Transaction)
+							 */
+							@Override
+							protected Transaction change(Transaction t) {
+								if (current.equals(t.getStatement())) {
+									return new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getComment(), t.getAmount(),
+											t.getAccount(), t.getMode(), t.getCategory(), t.getValueDate(), result, Arrays.asList(t.getSubTransactions()));
+								} else {
+									return null;
+								}
+							}
+						};
+						updater.doIt();
+						getStatementSelectionPanel().select(result);
 					}
 				}
 			});
