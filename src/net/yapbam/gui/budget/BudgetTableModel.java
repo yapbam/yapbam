@@ -93,7 +93,12 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 	}
 
 	@Override
-	public String getRowName(int rowIndex) {
+	public int getTitlesColumnCount() {
+		return 1;
+	}
+
+	@Override
+	public String getRowTitle(int rowIndex, int columnIndex) {
 		if (rowIndex==budget.getCategoriesSize()) {
 			return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 		} else {
