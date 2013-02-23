@@ -65,9 +65,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	public static void main(final String[] args) {
 		// Workaround of a bug in swing with Java 1.7
 		// Should absolutely be the first thing called in the program !!!
-		String current = System.getProperty("java.specification.version");
-		if ("1.7".equals(current)) {
-			System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+		String current = System.getProperty("java.specification.version"); //$NON-NLS-1$
+		if ("1.7".equals(current)) { //$NON-NLS-1$
+			System.setProperty("java.util.Arrays.useLegacyMergeSort", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		// Remove obsolete files from previous installations
@@ -116,7 +116,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				if (!Preferences.INSTANCE.isFirstRun()) {
 					String importantNews = buildNews();
 					if (importantNews.length()>0) {
-						BasicHTMLDialog dialog = new BasicHTMLDialog(frame.getJFrame(), LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), BasicHTMLDialog.Type.INFO);
+						BasicHTMLDialog dialog = new BasicHTMLDialog(frame.getJFrame(), LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), BasicHTMLDialog.Type.INFO); //$NON-NLS-1$ //$NON-NLS-2$
 						dialog.setContent(importantNews);
 						dialog.setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 					}
@@ -363,15 +363,15 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		} catch (Exception e) {}
 		try {
 			int iconSize = 16; // This is the default icon size
-			if (!lookAndFeelName.equalsIgnoreCase("Nimbus")) {
+			if (!lookAndFeelName.equalsIgnoreCase("Nimbus")) { //$NON-NLS-1$
 				// If LAF is not Nimbus, there's no generic value for font in look and feel
 				// In such a case, we ignore the setting
 			} else {
-				Font current = UIManager.getLookAndFeelDefaults().getFont("defaultFont");
+				Font current = UIManager.getLookAndFeelDefaults().getFont("defaultFont"); //$NON-NLS-1$
 				Font defaultFont = Preferences.INSTANCE.getDefaultFont();
 				Font requiredFont = defaultFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*defaultFont.getSize());
 				if (current.getSize()!=requiredFont.getSize()) {
-					UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont);
+					UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont); //$NON-NLS-1$
 				}
 				iconSize = 16*requiredFont.getSize()/12;
 			}
@@ -475,7 +475,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					if (e instanceof FileNotFoundException) {
 						if (file.exists()) {
 							// The file exist, but it is read protected
-							if (finalURI.getScheme().equals("file")) {
+							if (finalURI.getScheme().equals("file")) { //$NON-NLS-1$
 								ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotReadable"),displayedURI)); //$NON-NLS-1$
 							} else {
 								ErrorManager.INSTANCE.display(getJFrame(), null,  MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
@@ -501,7 +501,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					if (filter!=null) getFilteredData().setFilter(filter);
 				} catch (Exception e) {
 					ErrorManager.INSTANCE.log(getJFrame(), e);
-					ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadLastFilterError")); //$NON-NLS-1$					
+					JOptionPane.showMessageDialog(getJFrame(), LocalizationData.get("MainFrame.ReadLastFilterError"), LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$	
 				}
 			}
 		}
