@@ -311,18 +311,33 @@ public class Serializer {
 
 	/** Gets a stream to read in an encrypted stream.
 	 * @param password The password used for the encryption, or null if stream is not encrypted.
-	 * @param stream The encrypted (or not if password is null) stream.
-	 * @return A new stream that automatically decrypt the original stream.
+	 * @param stream The encrypted (or not) stream.
+	 * @return A new stream that automatically decodes the original stream.
 	 * @throws IOException
+	 * @throws AccessControlException if the password not matches with the stream
 	 */
 	public static InputStream getDecryptedStream(String password, InputStream stream) throws IOException, AccessControlException {
+		// Verify if the stream is encrypted or not
+		if (!stream.markSupported()) {
+			// Ensure that we will be able to reset the stream after verifying that the stream is not encrypted
+			stream = new BufferedInputStream(stream);
+		}
+		stream.mark(PASSWORD_ENCODED_FILE_HEADER.length);
+		boolean encoded = getSerializationData(stream).isPasswordRequired;
+		stream.reset(); // Reset the stream (getSerializationData doesn't guarantee the position of the stream)
 		if (password!=null) {
-			// Pass the header
-			for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
-				stream.read();
+			// A password is provided
+			if (!encoded) {
+				// password is provided but stream is not encoded
+				throw new AccessControlException("Stream is not encoded"); //$NON-NLS-1$
 			}
-			// Create the decoder input stream
+			// Pass the header
+			for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) stream.read();
+			// Create the decoded input stream
 			stream = Crypto.getPasswordProtectedInputStream(password, stream);
+		} else {
+			// Stream should be not encoded
+			if (encoded) throw new AccessControlException("Stream is encoded but password is null"); //$NON-NLS-1$
 		}
 		return stream;
 	}
@@ -335,17 +350,27 @@ public class Serializer {
 	public static SerializationData getSerializationData(URI uri) throws IOException {
 		InputStream in = getUnzippedInputStream(uri);
 		try {
-			boolean isEncoded = true;
-			for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length-1; i++) {
-				if (in.read()!=PASSWORD_ENCODED_FILE_HEADER[i]) {
-					isEncoded = false;
-					break;
-				}
-			}
-			return new SerializationData(isEncoded);
+			return getSerializationData(in);
 		} finally {
 			in.close();
 		}
+	}
+
+	/** Gets the data about a stream (what is its version, is it encoded or not, etc...).
+	 * <br>This method leaves the stream with a non determinate number of red bytes. 
+	 * @param in the stream.
+	 * @return A SerializationData instance
+	 * @throws IOException
+	 */
+	private static SerializationData getSerializationData(InputStream in) throws IOException {
+		boolean isEncoded = true;
+		for (int i = 0; i < PASSWORD_ENCODED_FILE_HEADER.length; i++) {
+			if (in.read()!=PASSWORD_ENCODED_FILE_HEADER[i]) {
+				isEncoded = false;
+				break;
+			}
+		}
+		return new SerializationData(isEncoded);
 	}
 	
 	public static class SerializationData {

@@ -6,12 +6,13 @@ known
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
 
-version	0.14.3 (??/02/2013)
+version	0.14.3 (24/02/2013)
 improvement
-	Adds a button to rename the statements in the "Account Statements" tab.
+	Ajoute un bouton pour renommer les relevés de comptes dans l'onglet "Relevés de compte".
 fix
-	Dans le dialogue de création/modification de chéquier, utiliser la flêche haute pour incrémenter les numéros des chèques provoquait une erreur. 
-	
+	Dans le dialogue de création/modification de chéquier, utiliser la flêche haute pour incrémenter les numéros des chèques provoquait une erreur.
+	While launching the application, if the last opened file was protected with password, click on "Cancel" in the dialog asking for the password caused an error.
+		
 version	0.14.2 (04/02/2013)
 fix
 	Contournement d'un bug de Java qui provoquait une erreur avec Java 1.7.0_13 lors de l'ouverture du dialogue de création d'opération périodique.
