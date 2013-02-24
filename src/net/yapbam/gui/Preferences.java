@@ -34,6 +34,7 @@ import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.gui.preferences.BackupOptions;
 import net.yapbam.gui.preferences.EditingOptions;
 import net.yapbam.gui.preferences.StartStateOptions;
+import net.yapbam.gui.recent.RecentFilesPlugin;
 import net.yapbam.gui.statementview.StatementViewPlugin;
 import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
@@ -379,6 +380,7 @@ public class Preferences {
 		plugins.add(new PlugInContainer(ToolsPlugIn.class));
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
 		plugins.add(new PlugInContainer(TransferPlugin.class));
+		plugins.add(new PlugInContainer(RecentFilesPlugin.class));
 
 		// Load additionnal plugins
 		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$

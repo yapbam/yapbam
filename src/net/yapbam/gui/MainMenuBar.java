@@ -102,13 +102,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.menuItemSaveAs.setMnemonic(LocalizationData.getChar("MainMenu.SaveAs.Mnemonic")); //$NON-NLS-1$
 		this.menuItemSaveAs.setEnabled(!frame.getData().isEmpty());
 		menu.add(this.menuItemSaveAs);
+		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
+		menu.addSeparator();
 		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.get(Name.LOCK)); //$NON-NLS-1$;
 		this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
 		this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
 		this.menuItemProtect.addActionListener(this);
 		this.menuItemProtect.setEnabled(frame.getData().getURI() != null);
 		menu.add(this.menuItemProtect);
-		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
 		menu.addSeparator();
 
 		this.menuItemImport = new JMenuItem(LocalizationData.get("MainMenu.Import"), IconManager.get(Name.IMPORT)); //$NON-NLS-1$
