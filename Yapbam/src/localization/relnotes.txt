@@ -11,6 +11,7 @@ improvement
 	Adds a button to rename the statements in the "Account Statements" tab.
 fix
 	In the creation/edition of checkbook dialog, use the up arrow to increment the check numbers caused an error.
+	While launching the application, if the last opened file was protected with password, click on "Cancel" in the dialog asking for the password caused an error.
 
 version	0.14.2 (02/04/2013)
 fix
