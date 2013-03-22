@@ -5,8 +5,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTable.PrintMode;
+import javax.swing.table.TableColumn;
 
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -61,6 +64,18 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		transactionTable.scrollToLastLine();
 		Serializable restoredSelected = YapbamState.INSTANCE.restore(BALANCE_REF);
 		if ((restoredSelected!=null) && (restoredSelected!=BalanceReportPanel.Selection.NONE)) panel.getBalanceReportPanel().setSelected((Selection) restoredSelected);
+		// transactionTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN); //TODO This mode seems better than the default one, but should be done for all tables or none !
+		int columIndex = transactionTable.convertColumnIndexToView(0);
+		if (columIndex!=0) { // If the open/close subtransactions column is not the first one
+			transactionTable.moveColumn(columIndex, 0);
+			//TODO Prevent the column from being moved
+		}
+		// The following lines prevent the open/close subtransactions column from having a size different from the default one
+		int width = Utils.packColumn(transactionTable, 0, 2); //FIXME this method does not return the same value when column is not the first one ! (Probably a bug in AJLib) 
+		TableColumn firstColumn = transactionTable.getColumnModel().getColumn(0);
+		firstColumn.setMinWidth(width);
+		firstColumn.setMaxWidth(width);
+		firstColumn.setResizable(false);
 	}
 
 	@Override

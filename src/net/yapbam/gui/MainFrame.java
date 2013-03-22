@@ -369,11 +369,13 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			} else {
 				Font current = UIManager.getLookAndFeelDefaults().getFont("defaultFont"); //$NON-NLS-1$
 				Font defaultFont = Preferences.INSTANCE.getDefaultFont();
-				Font requiredFont = defaultFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*defaultFont.getSize());
-				if (current.getSize()!=requiredFont.getSize()) {
-					UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont); //$NON-NLS-1$
+				if (defaultFont!=null) {
+					Font requiredFont = defaultFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*defaultFont.getSize());
+					if (current.getSize()!=requiredFont.getSize()) {
+						UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont); //$NON-NLS-1$
+					}
+					iconSize = 16*requiredFont.getSize()/12;
 				}
-				iconSize = 16*requiredFont.getSize()/12;
 			}
 			IconManager.reset(iconSize);
 		} catch (Throwable e) {

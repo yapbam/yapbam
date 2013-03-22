@@ -35,15 +35,15 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof URIChangedEvent) {
-					testURI();
+					updateMenu();
 				} else if (event instanceof EverythingChangedEvent) {
-					testURI();
+					updateMenu();
 				}
 			}
 		});
 	}
 
-	private void testURI() {
+	private void updateMenu() {
 		URI currentUri = data.getURI();
 		if ((currentUri!=null) && !currentUri.equals(lastURI)) {
 			// Put the uri at the top of the list
@@ -63,7 +63,7 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 				empty = false;
 			}
 		}
-		menu.setEnabled (!empty);
+		menu.setEnabled(!empty);
 	}
 
 	private int getSizeLimit() {
@@ -100,6 +100,9 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 	@Override
 	public void restoreState() {
 		ArrayList<URI> obj = (ArrayList<URI>) YapbamState.INSTANCE.restore(getStateKey());
-		if (obj!=null) latest = obj;
+		if (obj!=null) {
+			latest = obj;
+			updateMenu();
+		}
 	}
 }
