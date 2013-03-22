@@ -6,6 +6,12 @@ known
 improvement
 	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 
+version	0.14.4 (03/24/2013)
+fix
+	The menu "File / Recent Files" was disabled at Yapbam launch when no file was open.
+improvement
+	In the "Transactions" tab, column "S/T", which can display or hide the sub-transactions, now has a fixed size and is always at left.
+
 version	0.14.3 (02/24/2013)
 improvement
 	Adds a button to rename the statements in the "Account Statements" tab.
