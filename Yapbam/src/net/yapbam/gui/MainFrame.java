@@ -184,6 +184,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		//Create and set up the window.
 		super();
 		
+//		System.out.println (System.getProperty("java.version")); //SEEYOU
 		this.getJFrame().setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("yapbam_16.png"))); //$NON-NLS-1$
 		this.getJFrame().setMinimumSize(new Dimension(800,400));
 

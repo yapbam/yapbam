@@ -9,8 +9,9 @@ improvement
 version	0.14.4 (24/03/2013)
 fix
 	Le menu "Fichier/Fichiers récents" était systématiquement inactif au lancement de Yapbam quand aucun fichier n'était ouvert.
+	Certaines traductions en allemand ou portuguais étaient erronées. 
 improvement
-	Dans l'onglet "Opérations", la colonne "S/O", qui permet d'afficher ou de masquer les sous-opération, a maintenant une taille fixe et est systématiquement à gauche.
+	Dans l'onglet "Opérations", la colonne "S/O", qui permet d'afficher ou de masquer les sous-opération, a maintenant une taille fixe.
 
 version	0.14.3 (24/02/2013)
 improvement
@@ -30,7 +31,7 @@ improvement
 	Dans la calculatrice, le résultat est à présent sélectionnable et peut être copié avec le raccourci standard (<ctrl-C> sous Windows).
 fix
 	Taper une virgule comme premier caractère d'un champ de saisie de montant provoquait une erreur.
-	Les notes sur un comptes étaient, dans certains cas, ignorées lors de la lecture du fichier de données.
+	Les notes sur un compte étaient, dans certains cas, ignorées lors de la lecture du fichier de données.
 
 version	0.14.0 (01/02/2013)
 improvement
