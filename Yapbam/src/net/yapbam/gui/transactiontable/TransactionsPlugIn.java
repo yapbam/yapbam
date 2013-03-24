@@ -67,14 +67,16 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		int columIndex = transactionTable.convertColumnIndexToView(0);
 		// The following lines prevent the open/close subtransactions column from having a size different from the default one
 		int width = Utils.packColumn(transactionTable, 0, 2);
-		TableColumn firstColumn = transactionTable.getColumnModel().getColumn(columIndex);
-		firstColumn.setMinWidth(width);
-		firstColumn.setMaxWidth(width);
-		firstColumn.setResizable(false);
-//		if (columIndex!=0) { // If the open/close subtransactions column is not the first one
-//			transactionTable.moveColumn(columIndex, 0);
-//			//TODO Prevent the column from being moved (unfortunatly, this seems not easy at all, see http://stackoverflow.com/questions/1155137/how-to-keep-a-single-column-from-being-reordered-in-a-jtable/ Kleopatra's answer).
-//		}
+		if (width>0) { // If column is visible
+			TableColumn firstColumn = transactionTable.getColumnModel().getColumn(columIndex);
+			firstColumn.setMinWidth(width);
+			firstColumn.setMaxWidth(width);
+			firstColumn.setResizable(false);
+	//		if (columIndex!=0) { // If the open/close subtransactions column is not the first one
+	//			transactionTable.moveColumn(columIndex, 0);
+	//			//TODO Prevent the column from being moved (unfortunatly, this seems not easy at all, see http://stackoverflow.com/questions/1155137/how-to-keep-a-single-column-from-being-reordered-in-a-jtable/ Kleopatra's answer).
+	//		}
+		}
 	}
 
 	@Override
