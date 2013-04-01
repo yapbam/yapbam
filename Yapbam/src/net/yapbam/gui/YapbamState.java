@@ -31,7 +31,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.net.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.SAXException;
 
 import net.astesana.ajlib.utilities.FileUtils;

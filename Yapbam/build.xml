@@ -17,7 +17,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.14.5"/>
+	<property name="yapbamVersion" value="0.15.0"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -58,18 +58,26 @@
 		</unzip-->
 		<copy todir="releaseCompile">
 	    	<fileset dir="src" excludes="**/*.java"/>
-	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/plot/LocalizationBundl*.properties"/>
-	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/LocalizationBundl*.properties"/>
-	    	<fileset dir="${jfreechartpath}" includes="org/jfree/chart/editor/LocalizationBundl*.properties"/>
-	    	<fileset dir="${jcommonpath}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
-	    	<fileset dir="${ajlibpath}" includes="**/*.properties"/>
-	    	<fileset dir="${ajlibpath}" includes="**/*.png"/>
-	    	<fileset dir="${jcloppath}" includes="**/*.properties"/>
-	    	<fileset dir="${jcloppath}" includes="**/*.png"/>
+	    	<fileset dir="${jfreechart.path}" includes="org/jfree/chart/plot/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jfreechart.path}" includes="org/jfree/chart/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jfreechart.path}" includes="org/jfree/chart/editor/LocalizationBundl*.properties"/>
+	    	<fileset dir="${jcommon.path}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
+	    	<fileset dir="${ajlib.path}" includes="**/*.properties"/>
+	    	<fileset dir="${ajlib.path}" includes="**/*.png"/>
+	    	<fileset dir="${jclop.path}" includes="**/*.properties"/>
+	    	<fileset dir="${jclop.path}" includes="**/*.png"/>
+	    	<fileset dir="${jclop-dropbox.path}" includes="**/*.properties"/>
+	    	<fileset dir="${jclop-dropbox.path}" includes="**/*.png"/>
 		</copy>
-		<javac srcdir="${jfreechartpath}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
-		<javac srcdir="${jcommonpath}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
-		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechartpath};${jcommonpath};${commonsnetpath};${ajlibpath};${commonslangpath};${javaluatorpath};${jcloppath};${jclop-dropboxpath}" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="${jfreechart.path}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="${jcommon.path}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<!-- Be aware that commons logging reference some classes by reflection, so, adding it to srcDir while compiling
+			src is not enough. As some sources in common logging refers to external libray, we will only compile the classes
+			we need (they do not need external libraries. -->
+		<echo>logging</echo>
+		<javac srcdir="${apache.commons.logging.path}" includes="org/apache/commons/logging/impl/LogFactoryImpl.java,org/apache/commons/logging/impl/SimpleLog.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<echo>end logging</echo>
+		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechart.path};${jcommon.path};${ajlib.path};${apache.commons.lang.path};${javaluator.path};${jclop.path};${jclop-dropbox.path};${dropbox.path};${apache.commons.codec.path};${apache.http.client.path};${apache.http.core.path};${jsonsimple.path};${apache.commons.logging.path}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>

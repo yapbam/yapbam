@@ -6,6 +6,7 @@ import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 
+import net.yapbam.gui.persistence.dropbox.YapbamDropboxPersistenceAdapter;
 import net.yapbam.gui.persistence.file.FilePersistenceAdapter;
 
 public class YapbamPersistenceManager extends PersistenceManager {
@@ -14,7 +15,7 @@ public class YapbamPersistenceManager extends PersistenceManager {
 	private YapbamPersistenceManager() {
 		super();
 		add(new FilePersistenceAdapter());
-//		add(new DropboxPersistenceAdapter());
+		add(new YapbamDropboxPersistenceAdapter());
 		
 		// Load adapters under development
 		String testedAdapter = System.getProperty("testedPersistenceAdapter.className"); //$NON-NLS-1$

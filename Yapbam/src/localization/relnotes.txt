@@ -11,7 +11,7 @@ fix
 	The menu "File / Recent Files" was disabled at Yapbam launch when no file was open.
 	Some Portuguese and German translations were wrong.
 improvement
-	In the "Transactions" tab, column "S/T", which can display or hide the sub-transactions, now has a fixed size.
+	In the "Transactions" tab, column "S/T", which displays or hide the sub-transactions, now has a fixed size.
 
 version	0.14.3 (02/24/2013)
 improvement
