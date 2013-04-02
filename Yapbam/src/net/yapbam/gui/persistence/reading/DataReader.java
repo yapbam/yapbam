@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import com.fathzer.soft.jclop.SynchronizationState;
+import com.fathzer.soft.jclop.UnreachableHostException;
 import com.fathzer.soft.jclop.swing.MessagePack;
 
 import net.yapbam.data.xml.Serializer;
@@ -56,7 +57,7 @@ public class DataReader {
 					ErrorManager.INSTANCE.log(owner, result.getException());
 				}
 				// The synchronization failed => Ask the user what to do
-				return doSyncFailed();
+				return doSyncFailed(result.getException());
 			} else if (result.getState().equals(State.FINISHED)) {
 				// Data was synchronized and red
 				data.commit(uri, basicWorker.getData());
@@ -115,11 +116,15 @@ public class DataReader {
 		return readLocalFile(password);
 	}
 
-	private boolean doSyncFailed() throws ExecutionException {
+	private boolean doSyncFailed(Throwable throwable) throws ExecutionException {
+		boolean internetIsDown = throwable instanceof UnreachableHostException;
 		if (!adapter.getLocalFile(uri).exists()) {
-			JOptionPane.showMessageDialog(owner, LocalizationData.get("synchronization.downloadFailed"), LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1$//$NON-NLS-2$
+			String message = LocalizationData.get("synchronization.downloadFailed");
+			if (internetIsDown) message = "<html>"+removeHtml(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+removeHtml(message)+"</html>";
+			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), internetIsDown?JOptionPane.WARNING_MESSAGE:JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1
 			return false;
 		} else {
+			//TODO be more precise in the next messages?
 			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
 			if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.failed"), //$NON-NLS-1$
 					LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
@@ -129,6 +134,10 @@ public class DataReader {
 		}
 	}
 	
+	private String removeHtml(String message) {
+		return message; //TODO
+	}
+
 	private boolean doErrorOccurred(ExecutionException e) throws ExecutionException {
 		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
 		if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cacheCorrupted"), //$NON-NLS-1$
