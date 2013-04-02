@@ -6,14 +6,11 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.Authenticator;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +28,6 @@ import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
-import net.yapbam.gui.preferences.BackupOptions;
 import net.yapbam.gui.preferences.EditingOptions;
 import net.yapbam.gui.preferences.StartStateOptions;
 import net.yapbam.gui.recent.RecentFilesPlugin;
@@ -77,12 +73,6 @@ public class Preferences {
 	private static final String COLUMNS_WIDTH = "columnsWidth"; //$NON-NLS-1$
 	private static final String COLUMNS_ORDER = "columnsOrder"; //$NON-NLS-1$
 	private static final String HIDDEN_COLUMNS = "hiddenColumns"; //$NON-NLS-1$
-	private static final String PREF_BACKUP_PREFIX = "backup.";
-	private static final String ENABLED = "enabled";
-	private static final String COMPRESSED = "compressed";
-	private static final String SPACE_LIMIT = "spaceLimit";
-	private static final String URi = "uri";
-	private static final String FTP_ACCOUNT = "ftpAccount";
 	
 	/** The Preference instance.
 	 * This class is a singleton. All preferences can be accessed through this constant.
@@ -571,7 +561,14 @@ public class Preferences {
 		}
 		return this.startStateOptions;
 	}
-	
+/* Obsolete	
+	private static final String PREF_BACKUP_PREFIX = "backup.";
+	private static final String ENABLED = "enabled";
+	private static final String COMPRESSED = "compressed";
+	private static final String SPACE_LIMIT = "spaceLimit";
+	private static final String URi = "uri";
+	private static final String FTP_ACCOUNT = "ftpAccount";
+
 	private BackupOptions backupOptions;
 	public void setBackupOptions(BackupOptions options) {
 		this.backupOptions = options;
@@ -627,7 +624,7 @@ public class Preferences {
 		}
 		return this.backupOptions;
 	}
-
+*/
 	/** Tests whether Preferences is able to save preferences at this time.
 	 * <br>It is not during the instantiation of the preferences singleton.
 	 * So, code executing during this instantiation should not refer to Preferences.INSTANCE
