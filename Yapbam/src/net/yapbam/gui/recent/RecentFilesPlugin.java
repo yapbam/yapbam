@@ -59,7 +59,7 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 		boolean empty = true;
 		for (URI uri : latest) {
 			if (!uri.equals(currentUri)) {
-				menu.add(new JMenuItem(new RecentFileAction(uri, data)));
+				menu.add(new JMenuItem(new RecentFileAction(this, uri, data)));
 				empty = false;
 			}
 		}
@@ -104,5 +104,10 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 			latest = obj;
 			updateMenu();
 		}
+	}
+
+	public void remove(URI uri) {
+		latest.remove(uri);
+		updateMenu();
 	}
 }
