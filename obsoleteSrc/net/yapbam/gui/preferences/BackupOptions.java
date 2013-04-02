@@ -1,4 +1,4 @@
-package net.yapbam.gui.preferences;
+package net.yapbam.gui.dialogs.preferences;
 
 import java.math.BigInteger;
 import java.net.URI;

@@ -106,6 +106,9 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					} else {
 						// If we've got the update information
 						YapbamState.INSTANCE.put(LAST_UPDATE_CHECK_KEY, new Date());
+						// Using a tray icon was an idea I had to alert the user in case of update availability
+						// Unfortunately, as far as I understood the java tray icon implementation, user can disable 
+						// java tray icons in a windows configuration panel. So it's safer to use a dialog.
 						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // If there's an update
 							if (isUpdateInstallable(update)) {
 								CheckUpdateDialog.this.setVisible(false);
