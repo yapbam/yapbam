@@ -25,6 +25,7 @@ import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.gui.persistence.SynchronizeCommand;
 import net.yapbam.gui.persistence.UnsupportedSchemeException;
+import net.yapbam.util.HtmlUtils;
 
 public class DataReader {
 	private Window owner;
@@ -120,7 +121,7 @@ public class DataReader {
 		boolean internetIsDown = throwable instanceof UnreachableHostException;
 		if (!adapter.getLocalFile(uri).exists()) {
 			String message = LocalizationData.get("synchronization.downloadFailed");
-			if (internetIsDown) message = "<html>"+removeHtml(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+removeHtml(message)+"</html>";
+			if (internetIsDown) message = "<html>"+HtmlUtils.removeHtmlTags(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+HtmlUtils.removeHtmlTags(message)+"</html>";
 			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), internetIsDown?JOptionPane.WARNING_MESSAGE:JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1
 			return false;
 		} else {
@@ -132,10 +133,6 @@ public class DataReader {
 			}
 			return readLocalFile(null);
 		}
-	}
-	
-	private String removeHtml(String message) {
-		return message; //TODO
 	}
 
 	private boolean doErrorOccurred(ExecutionException e) throws ExecutionException {
