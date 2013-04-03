@@ -96,11 +96,17 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 				if (!isCancelled()) {
 					UpdateInformation update = get();
 					CheckUpdateDialog.this.setVisible(false);
-					if (update.getHttpErrorCode()!=HttpURLConnection.HTTP_OK) { // Connection error
+					int code = update.getHttpErrorCode();
+					if (code!=HttpURLConnection.HTTP_OK) { // Connection error
 						// If an error occured while getting the update information
 						if (!auto) {
-							String pattern = LocalizationData.get("MainMenu.CheckUpdate.HttpError"); //$NON-NLS-1$
-							String message = MessageFormat.format(pattern, update.getHttpErrorCode(), VersionManager.YABAM_HOME_URL);
+							String message;
+							if (code==HttpURLConnection.HTTP_PROXY_AUTH) {
+								message = LocalizationData.get("MainMenu.CheckUpdate.ProxyAuthError"); //$NON-NLS-1$
+							} else {
+								String pattern = LocalizationData.get("MainMenu.CheckUpdate.HttpError"); //$NON-NLS-1$
+								message = MessageFormat.format(pattern, code, VersionManager.YABAM_HOME_URL);
+							}
 							JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE);	//$NON-NLS-1$
 						}
 					} else {
