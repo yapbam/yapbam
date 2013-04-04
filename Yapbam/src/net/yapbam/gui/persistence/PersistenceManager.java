@@ -117,23 +117,20 @@ public abstract class PersistenceManager {
 	}
 
 	private URI getURI(Window owner, URI uri, boolean save) {
-		URIChooserDialog dialog = getURIChooserDialog(owner);
+		URIChooser[] panels = new URIChooser[getAdaptersNumber()];
+		for (int i = 0; i < panels.length; i++) {
+			panels[i] = getAdapter(i).buildChooser();
+		}
+		URIChooserDialog dialog = new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
 		dialog.setLocale(LocalizationData.getLocale());
 		dialog.setSaveDialog(save);
 		dialog.setSelectedURI(uri);
 		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open"); //$NON-NLS-1$ //$NON-NLS-2$
 		dialog.setTitle(title);
+		dialog.pack();
 		return dialog.showDialog();
 	}
 	
-	private URIChooserDialog getURIChooserDialog(Window owner) {
-		URIChooser[] panels = new URIChooser[getAdaptersNumber()];
-		for (int i = 0; i < panels.length; i++) {
-			panels[i] = getAdapter(i).buildChooser();
-		}
-		return new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
-	}
-
 	private boolean saveTo(Window owner, DataWrapper<?> data, URI uri) {
 		return new DataWriter(this, owner, data, uri).save();
 	}
