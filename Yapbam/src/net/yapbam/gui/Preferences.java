@@ -86,10 +86,8 @@ public class Preferences {
 	private Properties properties;
 	private boolean firstRun;
 	private boolean translatorMode;
-	private boolean portable;
 
 	private Preferences() {
-		this.portable = FileUtils.isWritable(Portable.getLaunchDirectory());
 		this.properties = new Properties();
 		
 		try {
@@ -130,7 +128,7 @@ public class Preferences {
 	}
 
 	private void load() throws IOException {
-		if (this.portable) {
+		if (Portable.isPortable()) {
 			this.firstRun = !getFile().exists();
 			if (!firstRun) {
 				FileInputStream inStream = new FileInputStream(getFile());
@@ -148,7 +146,7 @@ public class Preferences {
 	}
 
 	public void save() throws IOException {
-		if (this.portable) {
+		if (Portable.isPortable()) {
 			File file = getFile();
 			file.getParentFile().mkdirs();
 			FileOutputStream out = FileUtils.getHiddenCompliantStream(file);
@@ -632,16 +630,6 @@ public class Preferences {
 	 */
 	public static boolean canSave() {
 		return INSTANCE!=null;
-	}
-
-	/** Tests whether the application is portable.
-	 * <br>If it is, the preferences are saved in the execution directory. If not, they are stored using the java.util.prefs utilities.
-	 * <br>Note : A I'm really found of the "portable application concept", the application is declared portable as soon as it is able
-	 * to write in its installation directory.  
-	 * @return true if the application is portable
-	 */
-	public boolean isPortable() {
-		return portable;
 	}
 
 	private Font defaultFont;

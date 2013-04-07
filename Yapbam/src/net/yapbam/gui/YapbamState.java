@@ -63,7 +63,7 @@ public class YapbamState {
 	protected YapbamState() {
 		this.properties = new Properties();
 		try {
-			if (Preferences.INSTANCE.isPortable()) {
+			if (Portable.isPortable()) {
 				FileInputStream inStream = new FileInputStream(getFile());
 				try {
 					properties.load(inStream);
@@ -271,7 +271,7 @@ public class YapbamState {
 	}
 
 	public void toDisk() throws IOException {
-		if (Preferences.INSTANCE.isPortable()) {
+		if (Portable.isPortable()) {
 			FileOutputStream stream = FileUtils.getHiddenCompliantStream(getFile());
 			try {
 				properties.store(stream, "Yapbam startup state"); //$NON-NLS-1$

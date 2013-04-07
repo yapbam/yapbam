@@ -20,7 +20,6 @@ import net.astesana.ajlib.swing.worker.DefaultWorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.WorkInProgressPanel;
 import net.astesana.ajlib.swing.worker.Worker;
-import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.Preferences;
@@ -40,8 +39,7 @@ final public class CurrencyConverterAction extends AbstractAction {
 		final Worker<CurrencyConverter, Void> worker = new Worker<CurrencyConverter, Void>() {
 			@Override
 			protected CurrencyConverter doProcessing() throws Exception {
-				File folder = FileUtils.isWritable(Portable.getDataDirectory()) ? Portable.getDataDirectory() : new File(System.getProperty("java.io.tmpdir")); //$NON-NLS-1$
-				return new CurrencyConverter(Preferences.INSTANCE.getHttpProxy(), new FileCache(new File(folder, "ExchangeRates.xml"))); //$NON-NLS-1$
+				return new CurrencyConverter(Preferences.INSTANCE.getHttpProxy(), new FileCache(new File(Portable.getDataDirectory(), "ExchangeRates.xml"))); //$NON-NLS-1$
 			}
 		};
 		final WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), ModalityType.APPLICATION_MODAL, worker) { //$NON-NLS-1$

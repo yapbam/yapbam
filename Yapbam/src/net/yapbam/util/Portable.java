@@ -2,6 +2,8 @@ package net.yapbam.util;
 
 import java.io.File;
 
+import net.astesana.ajlib.utilities.FileUtils;
+
 /** That class provides utilities that help to implement a portable application (with no installation)
  * in the portable apps format.
  * @see <a href="http://portableapps.com/development/portableapps.com_format">Portable apps format</a>
@@ -9,7 +11,51 @@ import java.io.File;
  * <BR>License : GPL v3
  */   
 public final class Portable {
+	private static final String APPLICATION_NAME = "yapbam"; 
+	private static final boolean IS_PORTABLE;
+	private static final File DATA_DIRECTORY;
+	private static boolean DATA_IS_TEMPORARY = false;
+
+	static {
+		File file = getLaunchDirectory();
+		IS_PORTABLE = FileUtils.isWritable(file);
+		if (IS_PORTABLE) {
+			file = new File(file, "Data");
+		} else {
+			String path = System.getenv("APPDATA"); // Check window app data variable
+			if (path==null) path = System.getenv("USERPROFILE"); // Check windows user profile variable
+			if (path==null) path = System.getProperty("user.home"); // Check the user home directory
+			if ((path!=null) && FileUtils.isWritable(new File(path))) {
+				// If user data directory or user directory is ok. Use this one
+				file = new File (path, "."+APPLICATION_NAME);
+			} else {
+				path = System.getProperty("java.io.tmpdir");
+				if ((path!=null) && FileUtils.isWritable(new File(path))) {
+					// If tmp directory or user directory is ok. Use this one
+					file = new File (path, "."+APPLICATION_NAME);
+					DATA_IS_TEMPORARY = true;
+				} else {
+					file = null;
+				}
+			}
+		}
+		DATA_DIRECTORY = file;
+//TODO		
+//		System.out.println ("Launch directory : "+getLaunchDirectory());
+//		System.out.println ("Jar directory : "+getJarDirectory());
+//		System.out.println ("Data directory : "+getDataDirectory());
+	}
+	
 	private Portable() {}
+	
+	/** Tests whether this application is portable or not.
+	 * <br>An application is supposed to be be portable if it is able to write in its launch directory.
+	 * If not, it is impossible for the application to store its preferences (for example) in a portable way.
+	 * @return a boolean, true if the application is portable
+	 */
+	public static boolean isPortable() {
+		return IS_PORTABLE;
+	}
 	
 	/** Gets the directory where the application was launched.
 	 * @return the directory from where the application is executed.
@@ -19,12 +65,12 @@ public final class Portable {
 	}
 	
 	/** Gets the applications's data directory.
-	 * @return a directory where typically the portable application can store its preference data.
+	 * <br>Be aware that if the application is not portable (for example, installed in "C:/program files") this
+	 * directory is probably not the better place to save preferences. In such a case, the standard solution is to use java.util.Preferences. 
+	 * @return a directory where typically the portable application can store its data or null if there's nowhere where the application can write.
 	 */
 	public static File getDataDirectory() {
-		File file = getLaunchDirectory();
-		file = new File(file,"Data");
-		return file;
+		return DATA_DIRECTORY;
 	}
 	
 	/** Gets the applications's help directory.
@@ -39,13 +85,18 @@ public final class Portable {
 		return file;
 	}
 
+	/** Gets the directory where updates are temporarily stored, before to be applied.
+	 * @return a directory
+	 */
 	public static File getUpdateFileDirectory() {
 		return new File(getDataDirectory(),"update");
 	}
-
-	public static File getBackupDirectory() {
-		File file = getDataDirectory();
-		file = new File(file,"Backup");
-		return file;
+	
+	/** Gets the directory where patches are installed.
+	 * @return a directory or null if not such directory is available
+	 */
+	public static File getJarDirectory() {
+		if (IS_PORTABLE) return new File(getLaunchDirectory(), "App");
+		return DATA_IS_TEMPORARY ? null : new File(getDataDirectory(), "patches");
 	}
 }

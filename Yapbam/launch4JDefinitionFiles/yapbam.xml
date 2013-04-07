@@ -1,7 +1,7 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>.\App\program.jar</jar>
+  <jar>.\App\yapbam.jar</jar>
   <outfile>C:\Users\Jean-Marc\workspace\Yapbam\Yapbam.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
