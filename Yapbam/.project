@@ -16,16 +16,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Comptes.xml</name>
-			<type>1</type>
-			<location>C:/Users/Jean-Marc/Documents/Comptes.xml</location>
-		</link>
-		<link>
-			<name>fromML</name>
-			<type>2</type>
-			<location>C:/Users/Jean-Marc/Desktop/fromML</location>
-		</link>
-	</linkedResources>
 </projectDescription>
