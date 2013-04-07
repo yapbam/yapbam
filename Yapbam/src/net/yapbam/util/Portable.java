@@ -18,7 +18,7 @@ public final class Portable {
 
 	static {
 		File file = getLaunchDirectory();
-		IS_PORTABLE = FileUtils.isWritable(file);
+		IS_PORTABLE = /*false; //TODO*/FileUtils.isWritable(file);
 		if (IS_PORTABLE) {
 			file = new File(file, "Data");
 		} else {
