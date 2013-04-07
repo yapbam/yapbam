@@ -100,11 +100,12 @@ class FolderCleaner {
 	}
 	
 	private static boolean needToClean() {
-		// Yes if we never ran the 0.7.2 for the first time => There's no preferences in the data directory ?
+		// If we never ran the 0.7.2 for the first time => There's no preferences in the data directory ?
 		// Danger, if we call the Preferences.getFile() method here to identify where should be the preference
 		// file, it will initialize Preferences.INSTANCE and its firstRun attribute.
 		// It would leads to think that it's the first Yapbam run ... but it's not if the yapbam pref file is
 		// simply at the wrong place.
+		if (!Portable.isPortable()) return false;
 		File prefFile = new File(Portable.getDataDirectory(), ".yapbampref");
 		return !prefFile.exists();
 	}

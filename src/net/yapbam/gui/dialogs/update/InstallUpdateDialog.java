@@ -82,12 +82,6 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 					FileUtils.deleteDirectory(destinationFolder);
 					// create it again
 					destinationFolder.mkdirs();
-					// Store the checksum in a file in order to be able to verify the file checksum, when the application
-					// will restart ... not useful
-//					BufferedWriter out = new BufferedWriter(new FileWriter(new File(destinationFolder, "checksum.txt")));
-//					out.write(data.getAutoUpdateCheckSum());
-//					out.flush();
-//					out.close();
 					
 					// Download the files
 					boolean ok = false;
