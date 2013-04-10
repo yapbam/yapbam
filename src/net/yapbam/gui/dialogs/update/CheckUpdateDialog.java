@@ -37,14 +37,17 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	private static final boolean SLOW_UPDATE_CHECKING = Boolean.getBoolean("SlowUpdateChecking");
 
 	private boolean auto;
+	private boolean forced;
 
 	/** Constructor.
 	 * @param owner The owner window of the this dialog. 
 	 * @param auto true if the dialog is created by an automated task, false, if it is the result of a user action.
+	 * @param forced true if the dialog is created because the release is very old, despite of user's preferences
 	 */
-	CheckUpdateDialog(Window owner, boolean auto) {
+	CheckUpdateDialog(Window owner, boolean auto, boolean forced) {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
 		this.auto = auto;
+		this.forced = forced;
 		if (auto) setDelay(Long.MAX_VALUE);
 		getCancelButton().setToolTipText(LocalizationData.get("MainMenu.CheckUpdate.Dialog.cancel.tooltip")); //$NON-NLS-1$
 	}
@@ -69,8 +72,8 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		return new UpdateSwingWorker(getOwner());
 	}
 	
-	public static void check(Window owner, boolean auto) {
-		CheckUpdateDialog dialog = new CheckUpdateDialog(owner, auto);
+	public static void check(Window owner, boolean auto, boolean forced) {
+		CheckUpdateDialog dialog = new CheckUpdateDialog(owner, auto, forced);
 		dialog.setVisible(true);
 		dialog.dispose(); //TODO This should be useless ... but it seems there's a bug in LongTaskDialog that don't release the dialog once the task has ended
 	}
@@ -98,7 +101,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					CheckUpdateDialog.this.setVisible(false);
 					int code = update.getHttpErrorCode();
 					if (code!=HttpURLConnection.HTTP_OK) { // Connection error
-						// If an error occured while getting the update information
+						// If an error occurred while getting the update information
 						if (!auto) {
 							String message;
 							if (code==HttpURLConnection.HTTP_PROXY_AUTH) {
@@ -150,6 +153,8 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		 */
 		private boolean isUpdateInstallable(UpdateInformation update) {
 			//TODO Use a HTMLPane in order to be able to display a the relnotes
+//FIXME Display a specific message if the update check is forced
+//FIXME Patch the right place
 			File launchDirectory = Portable.getLaunchDirectory();
 			boolean canWrite = FileUtils.isWritable(launchDirectory);
 			if (auto && Preferences.INSTANCE.getAutoUpdateInstall() && canWrite) return true;

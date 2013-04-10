@@ -2,7 +2,6 @@ TODO list
 
 Bug :
 	Changer la font size et le thème ne marche pas (la font size est ignorée).
-	Quand la connexion Internet est coupée, la fenêtre "Ouvrir" de Dropbox n'affiche pas les comptes en cache. => Ben si !!!
 
 Question à cent sous :
 Depuis la 0.12.0 on ne peut plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
