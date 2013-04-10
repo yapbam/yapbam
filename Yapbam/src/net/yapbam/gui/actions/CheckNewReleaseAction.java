@@ -11,6 +11,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.dialogs.update.CheckUpdateDialog;
+import net.yapbam.update.VersionManager;
 import net.yapbam.util.DateUtils;
 
 /** This class is in charge of checking for Yapbam updates over the Internet */
@@ -33,7 +34,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		CheckUpdateDialog.check(owner, false);
+		CheckUpdateDialog.check(owner, false, false);
 	}
 
 	/**
@@ -51,12 +52,14 @@ public class CheckNewReleaseAction extends AbstractAction {
 							new String[] { LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no") }, LocalizationData.get("GenericButton.yes")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			Preferences.INSTANCE.setAutoUpdate(-option, false);
 		}
+		int lastCheck = DateUtils.dateToInteger(YapbamState.INSTANCE.getDate(LAST_UPDATE_CHECK_KEY));
+		int releaseDate = DateUtils.dateToInteger(VersionManager.getVersion().getReleaseDate());
+		int today = DateUtils.dateToInteger(new Date());
 		int days = Preferences.INSTANCE.getAutoUpdatePeriod();
-		if (days >= 0) { // If auto-check is on
-			Date last = YapbamState.INSTANCE.getDate(LAST_UPDATE_CHECK_KEY);
-			if (DateUtils.dateToInteger(new Date()) - DateUtils.dateToInteger(last) >= days) {
-				CheckUpdateDialog.check(owner, true);
-			}
+		boolean prefChoice = (days>=0) && (today - lastCheck >= days); // Auto check is requested by preference settings
+		boolean forced = !Preferences.INSTANCE.isFirstRun() && (today - Math.max(releaseDate,lastCheck)>30); // Force checking because release is too old
+		if (prefChoice || forced) {
+			CheckUpdateDialog.check(owner, true, forced);
 		}
 	}
 }
