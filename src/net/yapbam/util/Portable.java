@@ -18,7 +18,7 @@ public final class Portable {
 
 	static {
 		File file = getLaunchDirectory();
-		IS_PORTABLE = /*false; //TODO*/FileUtils.isWritable(file);
+		IS_PORTABLE = FileUtils.isWritable(file);
 		if (IS_PORTABLE) {
 			file = new File(file, "Data");
 		} else {
@@ -95,8 +95,8 @@ public final class Portable {
 	/** Gets the directory where patches are installed.
 	 * @return a directory or null if not such directory is available
 	 */
-	public static File getJarDirectory() {
+/*	public static File getJarDirectory() {
 		if (IS_PORTABLE) return new File(getLaunchDirectory(), "App");
 		return DATA_IS_TEMPORARY ? null : new File(getDataDirectory(), "patches");
-	}
+	}*/
 }

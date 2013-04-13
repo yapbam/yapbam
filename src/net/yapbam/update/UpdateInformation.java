@@ -13,6 +13,7 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.util.CheckSum;
 
 public class UpdateInformation {
+	private URL sourceURL;
 	private int errorCode;
 	private ReleaseInfo lastestRelease;
 	private URL updateURL;
@@ -24,11 +25,13 @@ public class UpdateInformation {
 	private long autoUpdaterSize;
 	
 	UpdateInformation (URL url) throws UnknownHostException, IOException {
+		this.sourceURL = url;
 		HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 		errorCode = ct.getResponseCode();
 		if (errorCode==HttpURLConnection.HTTP_OK) {
 			Properties p = new Properties();
 			String encoding = ct.getContentEncoding();
+			if (encoding==null) throw new IOException("Encoding is null");
 			InputStream in = ct.getInputStream();
 			p.load(new InputStreamReader(in,encoding));
 			String serialNumber = p.getProperty("serialNumber");
