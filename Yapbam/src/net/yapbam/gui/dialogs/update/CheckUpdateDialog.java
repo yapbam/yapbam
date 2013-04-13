@@ -153,8 +153,6 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		 */
 		private boolean isUpdateInstallable(UpdateInformation update) {
 			//TODO Use a HTMLPane in order to be able to display a the relnotes
-//FIXME Display a specific message if the update check is forced
-//FIXME Patch the right place
 			File launchDirectory = Portable.getLaunchDirectory();
 			boolean canWrite = FileUtils.isWritable(launchDirectory);
 			if (auto && Preferences.INSTANCE.getAutoUpdateInstall() && canWrite) return true;
