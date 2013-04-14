@@ -9,6 +9,7 @@ fix
 	L'ouverture d'un fichier inexistant via le menu "Fichier/Fichiers récents" provoquait une erreur. 
 improvement
 	Yapbam peut être connecté à un compte Dropbox de manière à partager vos données entre plusieurs ordinateurs via Internet, et bénéficier des fonctions de sauvegarde de Dropbox.
+	Pour aider à maintenir Yapbam à jour, la vérification de la présence de mises à jour est systématiquement forcée une fois par mois.
 
 version	0.14.5 (24/03/2013)
 fix

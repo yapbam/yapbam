@@ -8,7 +8,8 @@ version	0.14.6 (04/??/2013)
 fix
 	Opening a deleted file with the "File/Recent file" menu caused an error. 
 improvement
-	Yapbam will be able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
+	Yapbam is able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
+	To help maintain Yapbam uptodate, verifying the presence of updates is systematically enforced once a month.
 
 version	0.14.5 (03/24/2013)
 fix

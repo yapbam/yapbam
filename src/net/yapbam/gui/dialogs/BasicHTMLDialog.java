@@ -58,6 +58,7 @@ public class BasicHTMLDialog extends AbstractDialog<Object[], Void> {
 				public JComponent getCenterComponent() {
 					if (htmlPane==null) {
 						htmlPane = new HTMLPane();
+						htmlPane.setContentType("text/html");
 						htmlPane.setPreferredSize(PREFERED_HTML_PANE_SIZE);
 						htmlPane.setFocusable(false);
 					}

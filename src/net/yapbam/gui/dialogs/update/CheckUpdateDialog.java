@@ -12,6 +12,7 @@ import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
 import net.yapbam.util.Portable;
@@ -80,7 +81,6 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 
 	// A SwingWorker that performs the update availability check
 	class UpdateSwingWorker extends SwingWorker<UpdateInformation, Void> {
-		private static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck"; //$NON-NLS-1$
 		private Window owner;
 
 		UpdateSwingWorker(Window owner) {
@@ -114,7 +114,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 						}
 					} else {
 						// If we've got the update information
-						YapbamState.INSTANCE.put(LAST_UPDATE_CHECK_KEY, new Date());
+						YapbamState.INSTANCE.put(CheckNewReleaseAction.LAST_UPDATE_CHECK_KEY, new Date());
 						// Using a tray icon was an idea I had to alert the user in case of update availability
 						// Unfortunately, as far as I understood the java tray icon implementation, user can disable 
 						// java tray icons in a windows configuration panel. So it's safer to use a dialog.

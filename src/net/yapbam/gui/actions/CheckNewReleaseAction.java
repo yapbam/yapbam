@@ -17,7 +17,10 @@ import net.yapbam.util.DateUtils;
 /** This class is in charge of checking for Yapbam updates over the Internet */
 @SuppressWarnings("serial")
 public class CheckNewReleaseAction extends AbstractAction {
-	private static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck"; //$NON-NLS-1$
+	/** Key used in the to store the last update check in Yapbam state
+	 * @see YapbamState
+	 */
+	public static final String LAST_UPDATE_CHECK_KEY = "net.yapbam.lastUpdateCheck"; //$NON-NLS-1$
 	private Window owner;
 
 	/**

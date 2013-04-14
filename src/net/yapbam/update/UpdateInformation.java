@@ -13,7 +13,6 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.util.CheckSum;
 
 public class UpdateInformation {
-	private URL sourceURL;
 	private int errorCode;
 	private ReleaseInfo lastestRelease;
 	private URL updateURL;
@@ -25,7 +24,6 @@ public class UpdateInformation {
 	private long autoUpdaterSize;
 	
 	UpdateInformation (URL url) throws UnknownHostException, IOException {
-		this.sourceURL = url;
 		HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 		errorCode = ct.getResponseCode();
 		if (errorCode==HttpURLConnection.HTTP_OK) {
