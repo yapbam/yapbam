@@ -4,6 +4,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
+import javax.swing.UIManager;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -22,6 +23,7 @@ import net.yapbam.gui.Preferences;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+import javax.swing.SwingConstants;
 
 public class AutoUpdatePanel extends PreferencePanel {
 
@@ -49,11 +51,18 @@ public class AutoUpdatePanel extends PreferencePanel {
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+		gridBagConstraints51.insets = new Insets(10, 0, 0, 0);
+		gridBagConstraints51.gridwidth = 0;
+		gridBagConstraints51.fill = GridBagConstraints.BOTH;
+		gridBagConstraints51.anchor = GridBagConstraints.NORTHWEST;
 		gridBagConstraints51.gridx = 0;
 		gridBagConstraints51.weighty = 1.0D;
 		gridBagConstraints51.gridy = 3;
-		jLabel2 = new JLabel();
-		jLabel2.setText(""); //$NON-NLS-1$
+		jLabel2 = new JLabel(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
+		jLabel2.setVerticalAlignment(SwingConstants.TOP);
+		jLabel2.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.forcedCheck.message")); //$NON-NLS-1$
+//		System.out.println (YapbamState.INSTANCE.getDate(CheckNewReleaseAction.LAST_UPDATE_CHECK_KEY));
+		jLabel2.setPreferredSize(new Dimension(getPreferredSize().height, 100)); // Forces the label to autowrap is content 
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 0;
 		gridBagConstraints4.gridwidth = 4;

@@ -165,13 +165,13 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			buf.append(message);
 		}
 		// The lines below are a sample for next time we want to add a "important" release information
-//		if (lastVersion.compareTo(new ReleaseInfo("0.8.2 (10/04/2011)"))<=0) { //$NON-NLS-1$
-//			if (buf.length()>0) buf.append("<br><br><hr><br>");
-//			String message = MessageFormat.format(LocalizationData.get("ImportantNews.0.8.2"), //$NON-NLS-1$
-//					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
-//					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
-//			buf.append(message);
-//		}
+		if (lastVersion.compareTo(new ReleaseInfo("0.14.5 (24/03/2013)"))<=0) { //$NON-NLS-1$
+			if (buf.length()>0) buf.append("<br><br><hr><br>");
+			String message = MessageFormat.format(LocalizationData.get("ImportantNews.0.14.5"), //$NON-NLS-1$
+					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
+					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
+			buf.append(message);
+		}
 		return buf.toString();
 	}
 	
