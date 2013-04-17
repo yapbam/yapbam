@@ -20,21 +20,30 @@ class BalanceRule extends JComponent {
 	private BalanceHistory balanceHistory;
 	private YAxis yAxis;
 	
+	@SuppressWarnings("unused")
+	private BalanceRule() {
+		// This constructor is needed by the windows builder editor
+		this(new BalanceHistory(0.0));
+	}
+	
 	BalanceRule (BalanceHistory history) {
+		if (history==null) throw new NullPointerException();
 		this.balanceHistory = history;
 		this.yAxis = new YAxis(this, history);
 	}
 	
 	void setBalanceHistory(BalanceHistory balanceHistory) {
 		this.balanceHistory = balanceHistory;
-		this.yAxis = new  YAxis(this, balanceHistory);
+		this.yAxis = new YAxis(this, balanceHistory);
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
+		double min = balanceHistory.getMinBalance();
+		double max = balanceHistory.getMaxBalance();
+		String textMin = LocalizationData.getCurrencyInstance().format(min);
+		String textMax = LocalizationData.getCurrencyInstance().format(max);
 		FontMetrics fontMetrics = this.getFontMetrics(this.getFont());
-		String textMin = LocalizationData.getCurrencyInstance().format(balanceHistory.getMinBalance());
-		String textMax = LocalizationData.getCurrencyInstance().format(balanceHistory.getMaxBalance());
 		int width = Math.max(fontMetrics.stringWidth(textMin), fontMetrics.stringWidth(textMax));
 		return new Dimension(width+15, 1);
 	}
