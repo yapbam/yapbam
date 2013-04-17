@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
 
@@ -47,8 +48,14 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	private boolean gridIsVisible;
 	private Date preferredEndDate;
 	
+	@SuppressWarnings("unused")
+	private BalanceGraphic() {
+		// This constructor is needed by the windows builder editor
+		this(new BalanceHistory(0.0), new YAxis(new JLabel(), new BalanceHistory(0.0)));
+	}
+	
 	BalanceGraphic(BalanceHistory history, YAxis yAxis) {
-		super();
+		if ((history==null) || (yAxis==null)) throw new NullPointerException();
 		this.selectedDate=new Date();
 		this.balanceHistory = history;
 		this.needUpdate = true;

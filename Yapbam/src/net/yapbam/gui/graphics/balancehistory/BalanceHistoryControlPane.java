@@ -21,7 +21,7 @@ class BalanceHistoryControlPane extends JPanel {
 	private JButton today = null;
 	private JCheckBox isGridVisible = null;
 	private JPanel center = null;
-	private JPanel east = null;
+	private JCheckBox isEndIgnored;
 
 	/**
 	 * This is the default constructor
@@ -37,10 +37,10 @@ class BalanceHistoryControlPane extends JPanel {
 	private void initialize() {
 		report = new JLabel();
 		report.setToolTipText(LocalizationData.get("BalanceHistory.report.toolTip")); //$NON-NLS-1$
-		this.setSize(300, 200);
 		this.setLayout(new BorderLayout());
 		this.add(getCenter(), BorderLayout.CENTER);
-		this.add(getEast(), BorderLayout.EAST);
+		this.add(getIsGridVisible(), BorderLayout.EAST);
+		add(getIsEndIgnored(), BorderLayout.WEST);
 	}
 
 	/**
@@ -84,11 +84,12 @@ class BalanceHistoryControlPane extends JPanel {
 	private JPanel getCenter() {
 		if (center == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.gridx = 2;
 			gridBagConstraints2.insets = new Insets(0, 5, 0, 0);
 			gridBagConstraints2.gridy = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.insets = new Insets(0, 0, 0, 5);
+			gridBagConstraints4.gridx = 1;
 			gridBagConstraints4.gridy = 0;
 			center = new JPanel();
 			center.setLayout(new GridBagLayout());
@@ -98,21 +99,12 @@ class BalanceHistoryControlPane extends JPanel {
 		return center;
 	}
 
-	/**
-	 * This method initializes east	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getEast() {
-		if (east == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new Insets(0, 0, 0, 5);
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.gridy = 0;
-			east = new JPanel();
-			east.setLayout(new GridBagLayout());
-			east.add(getIsGridVisible(), gridBagConstraints3);
+	JCheckBox getIsEndIgnored() {
+		if (isEndIgnored == null) {
+			isEndIgnored = new JCheckBox(LocalizationData.get("BalanceHistory.ignoreEnd")); //$NON-NLS-1$
+			isEndIgnored.setSelected(true);
+			isEndIgnored.setToolTipText(LocalizationData.get("BalanceHistory.ignoreEnd.toolTip")); //$NON-NLS-1$
 		}
-		return east;
+		return isEndIgnored;
 	}
 }

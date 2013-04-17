@@ -21,6 +21,7 @@ import javax.swing.ScrollPaneConstants;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.DateUtils;
 
@@ -34,14 +35,15 @@ public class BalanceHistoryGraphPane extends JPanel {
 	private BalanceRule rule;
 	private FilteredData data;
 	
-	private BalanceHistory getBalanceHistory() {
-		return this.data.getBalanceData().getBalanceHistory();
+	@SuppressWarnings("unused")
+	private BalanceHistoryGraphPane() {
+		// This constructor is needed by the windows builder editor
+		this(new FilteredData(new GlobalData()));
 	}
-
+	
 	public BalanceHistoryGraphPane(FilteredData data) {
 		super(new BorderLayout());
 		this.data = data;
-		rule = new BalanceRule(this.getBalanceHistory());
 		
 		createGraphic();
 		
@@ -67,8 +69,27 @@ public class BalanceHistoryGraphPane extends JPanel {
 				setSelectedDate(alert.getDate());
 			}
 		});
+		control.getIsEndIgnored().addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent evt) {
+				//FIXME Hide this control when filter has no end date
+				// TODO Auto-generated method stub
+				System.out.println ("Ignore end is "+control.getIsEndIgnored().isSelected());
+			}
+		});
 		this.add(alerts, BorderLayout.NORTH);
 		this.add(control, BorderLayout.SOUTH);
+	}
+	
+	private BalanceHistory getBalanceHistory() {
+		return this.data.getBalanceData().getBalanceHistory();
+	}
+
+	private BalanceRule getBalanceRule() {
+		if (rule==null) {
+			rule = new BalanceRule(this.getBalanceHistory());
+		}
+		return rule;
 	}
 
 	private String getBalanceReportText() {
@@ -80,7 +101,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 	}
 
 	void setBalanceHistory() {
-		this.rule.setBalanceHistory(this.getBalanceHistory());
+		getBalanceRule().setBalanceHistory(this.getBalanceHistory());
 		this.remove(scrollPane);
 		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
@@ -93,7 +114,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 	}
 	
 	private void createGraphic() {
-		graph = new BalanceGraphic(this.getBalanceHistory(), rule.getYAxis());
+		graph = new BalanceGraphic(this.getBalanceHistory(), getBalanceRule().getYAxis());
 		graph.setToolTipText(LocalizationData.get("BalanceHistory.chart.toolTip")); //$NON-NLS-1$
 		graph.addPropertyChangeListener(BalanceGraphic.SELECTED_DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -103,7 +124,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		});
 		scrollPane = new JScrollPane(graph, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setRowHeaderView(rule);
+		scrollPane.setRowHeaderView(getBalanceRule());
 	}
 
 	private void setSelectedDate(Date date) {
