@@ -188,8 +188,6 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		
 //		System.out.println (System.getProperty("java.version")); //SEEYOU
 		this.getJFrame().setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("yapbam_16.png"))); //$NON-NLS-1$
-		this.getJFrame().setMinimumSize(new Dimension(800,400));
-
 		getJFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		getJFrame().addWindowListener(new WindowAdapter() {
 			@Override
@@ -284,6 +282,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 
 		mainMenu = new MainMenuBar(this);
 		getJFrame().setJMenuBar(mainMenu);
+		float ratio = Preferences.INSTANCE.getFontSizeRatio();
+		this.getJFrame().setMinimumSize(new Dimension((int)(800*ratio),(int)(400*ratio)));
 	    
 		// Restore initial state (last opened file, window position, ...)
 		restoreMainFramePosition();

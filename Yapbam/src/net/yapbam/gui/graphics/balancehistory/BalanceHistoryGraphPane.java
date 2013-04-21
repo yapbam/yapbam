@@ -105,6 +105,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		this.remove(scrollPane);
 		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
+		control.getIsEndIgnored().setVisible(data.getFilter().getValueDateTo()!=null);
 		graph.setSelectedDate(currentlySelected);
 		graph.setPreferredEndDate(data.getFilter().getValueDateTo());
 		graph.setGridVisible(control.getIsGridVisible().isSelected());
