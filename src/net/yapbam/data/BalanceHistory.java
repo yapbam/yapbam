@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import net.astesana.ajlib.utilities.NullUtils;
+
 /** A balance history.
  * <br>The balance history is an ordered list of periods, during one of these periods, the balance is constant.
  * These periods are represented by BalanceHistoryElement class.
@@ -26,7 +28,10 @@ public class BalanceHistory implements Serializable {
 		}	
 	};
 	
-	private boolean minMaxAccurate;
+	/** True if the min and max do not need to be computed and are the min/max values according to minMaxEnddate. */
+	private boolean minMaxCached;
+	/** The end data used to compute the min/max values (null for no end date). */
+	private Date minMaxEndDate;
 	private double minBalance;
 	private double maxBalance;
 	private ArrayList<BalanceHistoryElement> elements;
@@ -37,7 +42,7 @@ public class BalanceHistory implements Serializable {
 	 */
 	public BalanceHistory(double intialBalance) {
 		super();
-		this.minMaxAccurate = false;
+		this.minMaxCached = false;
 		this.elements = new ArrayList<BalanceHistoryElement>();
 		this.elements.add(new BalanceHistoryElement(intialBalance, null, null));
 		this.transactions = new ArrayList<Transaction>();
@@ -47,7 +52,15 @@ public class BalanceHistory implements Serializable {
 	 * @return history's minimum balance 
 	 */
 	public double getMinBalance() {
-		refreshMinMax();
+		return getMinBalance(null);
+	}
+	
+	/** Returns the minimum balance of the history.
+	 * @param endDate All elements after this date will be ignored (null, to ignore nothing).
+	 * @return history's minimum balance 
+	 */
+	public double getMinBalance(Date endDate) {
+		refreshMinMax(endDate);
 		return this.minBalance;
 	}
 	
@@ -76,20 +89,30 @@ public class BalanceHistory implements Serializable {
 	 * @return history's maximum balance 
 	 */
 	public double getMaxBalance() {
-		refreshMinMax();
-		return this.maxBalance;
+		return this.getMaxBalance(null);
 	}
 	
-	private void refreshMinMax() {
-		if (!minMaxAccurate) {
+	/** Returns the maximum balance of the history.
+	 * @param endDate All elements after this date will be ignored (null, to ignore nothing).
+	 * @return history's maximum balance 
+	 */
+	public double getMaxBalance(Date endDate) {
+		refreshMinMax(endDate);
+		return this.maxBalance;
+	}
+
+	private void refreshMinMax(Date endDate) {
+		if (!minMaxCached || !NullUtils.areEquals(endDate, minMaxEndDate)) {
 			this.maxBalance = get(0).getBalance();
 			this.minBalance = this.maxBalance;
-			for (Iterator<BalanceHistoryElement> iterator = elements.iterator(); iterator.hasNext();) {
-				double balance = iterator.next().getBalance();
+			for (BalanceHistoryElement element : elements) {
+				if ((endDate!=null) && (element.getRelativePosition(endDate)<0)) break;
+				double balance = element.getBalance();
 				if (this.maxBalance<balance) this.maxBalance = balance;
 				else if (this.minBalance>balance) this.minBalance = balance;
 			}
-			minMaxAccurate = true;
+			this.minMaxEndDate = endDate;
+			minMaxCached = true;
 		}
 	}
 
@@ -127,7 +150,7 @@ public class BalanceHistory implements Serializable {
 	 */
 	void add(double amount, Date date) {
 		if (date==null) {
-			if (minMaxAccurate) {
+			if (minMaxCached) {
 				this.minBalance += amount;
 				this.maxBalance += amount;
 			}
@@ -159,7 +182,7 @@ public class BalanceHistory implements Serializable {
 				element = this.elements.get(i);
 				element.add(amount);
 			}
-			minMaxAccurate = false;
+			minMaxCached = false;
 		}
 	}
 

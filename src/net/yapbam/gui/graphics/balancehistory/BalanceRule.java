@@ -11,36 +11,21 @@ import java.util.Iterator;
 
 import javax.swing.JComponent;
 
-import net.yapbam.data.BalanceHistory;
 import net.yapbam.gui.LocalizationData;
 
 class BalanceRule extends JComponent {
 	private static final long serialVersionUID = 1L;
 	
-	private BalanceHistory balanceHistory;
 	private YAxis yAxis;
 	
-	@SuppressWarnings("unused")
-	private BalanceRule() {
-		// This constructor is needed by the windows builder editor
-		this(new BalanceHistory(0.0));
+	BalanceRule () {
+		this.yAxis = new YAxis(this);
 	}
 	
-	BalanceRule (BalanceHistory history) {
-		if (history==null) throw new NullPointerException();
-		this.balanceHistory = history;
-		this.yAxis = new YAxis(this, history);
-	}
-	
-	void setBalanceHistory(BalanceHistory balanceHistory) {
-		this.balanceHistory = balanceHistory;
-		this.yAxis = new YAxis(this, balanceHistory);
-	}
-
 	@Override
 	public Dimension getPreferredSize() {
-		double min = balanceHistory.getMinBalance();
-		double max = balanceHistory.getMaxBalance();
+		double min = this.yAxis.getMin();
+		double max = this.yAxis.getMax();
 		String textMin = LocalizationData.getCurrencyInstance().format(min);
 		String textMax = LocalizationData.getCurrencyInstance().format(max);
 		FontMetrics fontMetrics = this.getFontMetrics(this.getFont());

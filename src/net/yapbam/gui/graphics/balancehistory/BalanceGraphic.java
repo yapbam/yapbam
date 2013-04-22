@@ -51,7 +51,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	@SuppressWarnings("unused")
 	private BalanceGraphic() {
 		// This constructor is needed by the windows builder editor
-		this(new BalanceHistory(0.0), new YAxis(new JLabel(), new BalanceHistory(0.0)));
+		this(new BalanceHistory(0.0), new YAxis(new JLabel()));
 	}
 	
 	BalanceGraphic(BalanceHistory history, YAxis yAxis) {
@@ -364,7 +364,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	/** Sets the preferred end date of this graphic.
 	 * <br>If the end date if lower than what could be displayed in the graphic's window,
 	 * the graphic will display data after this endDate. You have to think this attribute
-	 * only limit the horizontal scroll.
+	 * only limits the horizontal scroll.
 	 * @param endDate a date
 	 */
 	public void setPreferredEndDate(Date endDate) {
