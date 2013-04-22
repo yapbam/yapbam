@@ -87,7 +87,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 
 	private BalanceRule getBalanceRule() {
 		if (rule==null) {
-			rule = new BalanceRule(this.getBalanceHistory());
+			rule = new BalanceRule();
 		}
 		return rule;
 	}
@@ -101,13 +101,18 @@ public class BalanceHistoryGraphPane extends JPanel {
 	}
 
 	void setBalanceHistory() {
-		getBalanceRule().setBalanceHistory(this.getBalanceHistory());
+		Date endDate = data.getFilter().getValueDateTo();
+		control.getIsEndIgnored().setVisible(endDate!=null);
+//		if (control.getIsEndIgnored().isSelected()) endDate = null;
+		double min = Math.min(0, this.getBalanceHistory().getMinBalance(endDate));
+		double max = Math.max(0, this.getBalanceHistory().getMaxBalance(endDate));
+		getBalanceRule().getYAxis().setBounds(min, max);
+
 		this.remove(scrollPane);
 		Date currentlySelected = graph.getSelectedDate();
 		createGraphic();
-		control.getIsEndIgnored().setVisible(data.getFilter().getValueDateTo()!=null);
 		graph.setSelectedDate(currentlySelected);
-		graph.setPreferredEndDate(data.getFilter().getValueDateTo());
+		graph.setPreferredEndDate(endDate);
 		graph.setGridVisible(control.getIsGridVisible().isSelected());
 		control.setReportText(getBalanceReportText());
 		scrollToSelectedDate();

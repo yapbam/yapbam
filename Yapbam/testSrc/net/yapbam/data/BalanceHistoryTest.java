@@ -13,7 +13,7 @@ import org.junit.Test;
 public class BalanceHistoryTest {
 	private static final Date dBeforeUnix = new Date(-1000,1,1); // A date before the Unix start of time (1/1/1970)
 
-//	@Test
+	@Test
 	public void testBalanceHistory() {		
 		Date date1 = new Date(109,5,1);
 		BalanceHistory history = new BalanceHistory(0);
@@ -55,6 +55,9 @@ public class BalanceHistoryTest {
 		
 		history.add(5,dBeforeUnix);
 		assertEquals(3, history.size());
+		
+		Date date = new Date(108,1,1);
+		assertEquals(15, history.getMaxBalance(date), 0.01);
 	}
 	
 	@Test

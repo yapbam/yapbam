@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.GlobalData;
 
 class YAxis {
 	private Component parent;
-	private BalanceHistory balanceHistory;
+	private double min;
+	private double max;
 	private int yOffset;
 	private double yRatio;
 	private List<Graduation> yGraduations;
@@ -22,26 +22,25 @@ class YAxis {
 	private double lastMin;
 	private double lastMax;
 	
-	YAxis (Component parent, BalanceHistory history) {
+	YAxis (Component parent) {
 		this.parent = parent;
-		this.setBalanceHistory(history);
+		this.setBounds(0, 0);
 	}
 
-	void setBalanceHistory(BalanceHistory balanceHistory) {
-		this.balanceHistory = balanceHistory;
-		this.lastParentHeight = -1; //To force the first computing
-	}
-
-	void update() {
-		int parentHeight = this.parent.getSize().height;
-		int fontHeight = this.parent.getFontMetrics(this.parent.getFont()).getHeight();
-		double min = Math.min(0, this.balanceHistory.getMinBalance());
-		double max = Math.max(0,this.balanceHistory.getMaxBalance());
-		
+	void setBounds(double min, double max) {
 		if (GlobalData.AMOUNT_COMPARATOR.compare(min, max) == 0) {
 			min--;
 			max++;
 		}
+		this.min = min;
+		this.max = max;
+		this.lastParentHeight = -1; //To force the first computing
+	}
+
+	private void update() {
+		int parentHeight = this.parent.getSize().height;
+		int fontHeight = this.parent.getFontMetrics(this.parent.getFont()).getHeight();
+		
 		if ((parentHeight!=lastParentHeight) || (fontHeight!=lastFontHeight) ||
 				(min!=lastMin) || (max!=lastMax)) {
 			this.lastMin = min;
@@ -94,5 +93,13 @@ class YAxis {
 	public Iterator<Graduation> getYGraduations() {
 		update();
 		return this.yGraduations.iterator();
+	}
+
+	public double getMin() {
+		return min;
+	}
+
+	public double getMax() {
+		return max;
 	}
 }
