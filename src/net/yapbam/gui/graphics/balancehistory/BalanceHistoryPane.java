@@ -1,5 +1,7 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import javax.swing.JCheckBox;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -25,6 +27,12 @@ import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.widget.TabbedPane;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.print.Printable;
 import java.text.DateFormat;
 import java.text.MessageFormat;
@@ -52,7 +60,35 @@ public class BalanceHistoryPane extends JPanel {
 		this.graph = new BalanceHistoryGraphPane(data);
 		setLayout(new BorderLayout(0, 0));
 		tabbedPane = new TabbedPane();
-		add(tabbedPane);
+		final JLayeredPane layered = new JLayeredPane();
+		add(layered, BorderLayout.CENTER);
+		layered.add(tabbedPane);
+		layered.addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e){
+				tabbedPane.setBounds(layered.getBounds());
+			}
+		});
+		final JCheckBox checkbox = new JCheckBox(LocalizationData.get("BalanceHistory.ignoreEnd")); //$NON-NLS-1$
+		checkbox.setToolTipText(LocalizationData.get("BalanceHistory.ignoreEnd.toolTip")); //$NON-NLS-1$
+		checkbox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				System.out.println ("clicked");
+			}
+		});
+		layered.add(checkbox, JLayeredPane.MODAL_LAYER);
+		tabbedPane.addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e){
+				Rectangle bounds = tabbedPane.getBounds();
+				Dimension preferredSize = checkbox.getPreferredSize();
+				bounds.x = bounds.width - preferredSize.width - 2;
+				bounds.y = 2;
+				bounds.width = preferredSize.width;
+				bounds.height = preferredSize.height;
+				checkbox.setBounds(bounds);
+			}
+		});
+		
 		tabbedPane.addTab(LocalizationData.get("BalanceHistory.graph.title"), null, this.graph, LocalizationData.get("BalanceHistory.graph.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 		data.addListener(new DataListener() {
 			@Override
