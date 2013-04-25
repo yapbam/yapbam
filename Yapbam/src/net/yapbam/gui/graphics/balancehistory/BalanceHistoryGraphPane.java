@@ -69,12 +69,6 @@ public class BalanceHistoryGraphPane extends JPanel {
 				setSelectedDate(alert.getDate());
 			}
 		});
-		control.getIsEndIgnored().addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent evt) {
-				setBalanceHistory();
-			}
-		});
 		this.add(alerts, BorderLayout.NORTH);
 		this.add(control, BorderLayout.SOUTH);
 	}
@@ -98,10 +92,8 @@ public class BalanceHistoryGraphPane extends JPanel {
 		return text;
 	}
 
-	void setBalanceHistory() {
-		Date endDate = data.getFilter().getValueDateTo();
-		control.getIsEndIgnored().setVisible(endDate!=null);
-		if (control.getIsEndIgnored().isSelected()) endDate = null;
+	void refresh(boolean ignoreEnd) {
+		Date endDate = ignoreEnd ? null : data.getFilter().getValueDateTo();
 		double min = Math.min(0, this.getBalanceHistory().getMinBalance(endDate));
 		double max = Math.max(0, this.getBalanceHistory().getMaxBalance(endDate));
 		getBalanceRule().getYAxis().setBounds(min, max);

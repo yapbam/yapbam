@@ -21,7 +21,6 @@ class BalanceHistoryControlPane extends JPanel {
 	private JButton today = null;
 	private JCheckBox isGridVisible = null;
 	private JPanel center = null;
-	private JCheckBox isEndIgnored;
 
 	/**
 	 * This is the default constructor
@@ -40,7 +39,6 @@ class BalanceHistoryControlPane extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.add(getCenter(), BorderLayout.CENTER);
 		this.add(getIsGridVisible(), BorderLayout.EAST);
-		add(getIsEndIgnored(), BorderLayout.WEST);
 	}
 
 	/**
@@ -97,14 +95,5 @@ class BalanceHistoryControlPane extends JPanel {
 			center.add(getToday(), gridBagConstraints2);
 		}
 		return center;
-	}
-
-	JCheckBox getIsEndIgnored() {
-		if (isEndIgnored == null) {
-			isEndIgnored = new JCheckBox(LocalizationData.get("BalanceHistory.ignoreEnd")); //$NON-NLS-1$
-			isEndIgnored.setSelected(true);
-			isEndIgnored.setToolTipText(LocalizationData.get("BalanceHistory.ignoreEnd.toolTip")); //$NON-NLS-1$
-		}
-		return isEndIgnored;
 	}
 }

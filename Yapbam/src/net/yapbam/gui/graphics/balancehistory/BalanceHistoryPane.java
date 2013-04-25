@@ -44,6 +44,7 @@ public class BalanceHistoryPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static final String FIRST_ALERT = "FIRST_ALERT"; //$NON-NLS-1$
 	static final String SELECTED_PANEL = "SELECTED_PANEL"; //$NON-NLS-1$
+	private JCheckBox ignoreEnd;
 	private BalanceHistoryGraphPane graph;
 	private Date firstAlert;
 	private TabbedPane tabbedPane;
@@ -68,24 +69,24 @@ public class BalanceHistoryPane extends JPanel {
 				tabbedPane.setBounds(layered.getBounds());
 			}
 		});
-		final JCheckBox checkbox = new JCheckBox(LocalizationData.get("BalanceHistory.ignoreEnd")); //$NON-NLS-1$
-		checkbox.setToolTipText(LocalizationData.get("BalanceHistory.ignoreEnd.toolTip")); //$NON-NLS-1$
-		checkbox.addItemListener(new ItemListener() {
+		ignoreEnd = new JCheckBox(LocalizationData.get("BalanceHistory.ignoreEnd")); //$NON-NLS-1$
+		ignoreEnd.setToolTipText(LocalizationData.get("BalanceHistory.ignoreEnd.toolTip")); //$NON-NLS-1$
+		ignoreEnd.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
-				System.out.println ("clicked");
+				graph.refresh(ignoreEnd.isSelected());
 			}
 		});
-		layered.add(checkbox, JLayeredPane.MODAL_LAYER);
+		layered.add(ignoreEnd, JLayeredPane.MODAL_LAYER);
 		tabbedPane.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e){
 				Rectangle bounds = tabbedPane.getBounds();
-				Dimension preferredSize = checkbox.getPreferredSize();
+				Dimension preferredSize = ignoreEnd.getPreferredSize();
 				bounds.x = bounds.width - preferredSize.width - 2;
 				bounds.y = 2;
 				bounds.width = preferredSize.width;
 				bounds.height = preferredSize.height;
-				checkbox.setBounds(bounds);
+				ignoreEnd.setBounds(bounds);
 			}
 		});
 		
@@ -94,7 +95,8 @@ public class BalanceHistoryPane extends JPanel {
 			@Override
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent)) {
-					graph.setBalanceHistory();
+					ignoreEnd.setVisible(BalanceHistoryPane.this.data.getFilter().getValueDateTo()!=null);
+					graph.refresh(ignoreEnd.isSelected());
 				}
 			}
 		});
@@ -104,7 +106,7 @@ public class BalanceHistoryPane extends JPanel {
 				if ((event instanceof EverythingChangedEvent)
 					|| (event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) || (event instanceof AccountPropertyChangedEvent)
 					|| (event instanceof TransactionsAddedEvent) || (event instanceof TransactionsRemovedEvent)) {
-					graph.setBalanceHistory();
+					graph.refresh(ignoreEnd.isSelected());
 					testAlert();
 				}
 			}
