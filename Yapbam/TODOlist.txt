@@ -2,14 +2,11 @@ TODO list
 
 Bug :
 	Changer la font size et le thème ne marche pas (la font size est ignorée).
-	Finir le "ignore end date" (Tenir compte de la date de fin dans le tableau des opération, et mettre en pointillé ce qui dépasse de la date de fin dans le graphique). 
+	Finir le "ignore end date" (mettre en pointillé ce qui dépasse de la date de fin dans le graphique). 
 
 Question à cent sous :
 Depuis la 0.12.0 on ne peut plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
 
-Améliorations en cours :
-- La possibilité de compresser le fichier de données, et de le stocker/lire sur Internet.
-	
 Code cleaning :
 Utiliser le framework AJLib pour créer l'application.
 
