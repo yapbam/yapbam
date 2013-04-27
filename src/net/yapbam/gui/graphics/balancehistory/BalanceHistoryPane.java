@@ -20,6 +20,7 @@ import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.CompoundTransactionSelector;
@@ -73,17 +74,19 @@ public class BalanceHistoryPane extends JPanel {
 		ignoreEnd.setToolTipText(LocalizationData.get("BalanceHistory.ignoreEnd.toolTip")); //$NON-NLS-1$
 		ignoreEnd.addItemListener(new ItemListener() {
 			@Override
-			public void itemStateChanged(ItemEvent arg0) {
+			public void itemStateChanged(ItemEvent evt) {
 				graph.refresh(ignoreEnd.isSelected());
+				setTableEnd();
 			}
 		});
 		layered.add(ignoreEnd, JLayeredPane.MODAL_LAYER);
+		final int margin = (int) (Preferences.INSTANCE.getFontSizeRatio()*3);
 		tabbedPane.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e){
 				Rectangle bounds = tabbedPane.getBounds();
 				Dimension preferredSize = ignoreEnd.getPreferredSize();
-				bounds.x = bounds.width - preferredSize.width - 2;
-				bounds.y = 2;
+				bounds.x = bounds.width - preferredSize.width - margin;
+				bounds.y = margin;
 				bounds.width = preferredSize.width;
 				bounds.height = preferredSize.height;
 				ignoreEnd.setBounds(bounds);
@@ -121,6 +124,8 @@ public class BalanceHistoryPane extends JPanel {
 		tablePane = new BalanceHistoryTablePane(data);
 		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		transactionSelector = new CompoundTransactionSelector();
+		setTableEnd();
+		graph.refresh(ignoreEnd.isSelected());
 	}
 	
 	void changeDisplayed () {
@@ -185,12 +190,14 @@ public class BalanceHistoryPane extends JPanel {
 
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
+		YapbamState.INSTANCE.put(this.getClass().getCanonicalName()+".ignoreEnd", Boolean.toString(ignoreEnd.isSelected()));
 		this.tablePane.saveState();
 	}
 
 	public void restoreState() {
 		this.tablePane.restoreState();
 		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
+		ignoreEnd.setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(this.getClass().getCanonicalName()+".ignoreEnd", "true")));
 	}
 
 	public Printable getPrintable() {
@@ -199,5 +206,9 @@ public class BalanceHistoryPane extends JPanel {
 	
 	TransactionSelector getTransactionSelector() {
 		return transactionSelector;
+	}
+
+	private void setTableEnd() {
+		((BalanceHistoryModel)tablePane.table.getModel()).setEndDate(ignoreEnd.isSelected()?null:BalanceHistoryPane.this.data.getFilter().getValueDateTo());
 	}
 }

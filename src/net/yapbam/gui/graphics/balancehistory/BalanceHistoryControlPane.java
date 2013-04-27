@@ -5,14 +5,16 @@ import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import java.awt.Dimension;
 import javax.swing.JCheckBox;
 
+import net.astesana.ajlib.swing.Utils;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.net.URL;
 
 class BalanceHistoryControlPane extends JPanel {
 
@@ -49,9 +51,11 @@ class BalanceHistoryControlPane extends JPanel {
 	JButton getToday() {
 		if (today == null) {
 			today = new JButton();
-			today.setIcon(new ImageIcon(getClass().getResource("/net/astesana/ajlib/swing/widget/date/stop.png"))); //$NON-NLS-1$
+			URL url = getClass().getResource("/net/astesana/ajlib/swing/widget/date/stop.png"); //$NON-NLS-1$
+			today.setIcon(Utils.createIcon(url, (int)(16*Preferences.INSTANCE.getFontSizeRatio())));
 			today.setToolTipText(LocalizationData.get("BalanceHistory.toDay.toolTip")); //$NON-NLS-1$
-			today.setPreferredSize(new Dimension(20, 20));
+			int size = today.getPreferredSize().height;
+			today.setPreferredSize(new Dimension(size, size));
 		}
 		return today;
 	}

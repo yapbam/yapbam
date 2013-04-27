@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
 
+import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.BalanceData;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
@@ -18,16 +19,22 @@ final class BalanceHistoryModel extends AbstractTableModel {
 	static final int VALUE_DATE_COLUMN = 7;
 	
 	private BalanceData data;
+	private Date endDate;
 	private DescriptionSettings descriptionSettings;
+	
+	private int rowCount;
 
 	/** Constructor. */
 	public BalanceHistoryModel(BalanceData data) {
 		super();
 		this.descriptionSettings = new DescriptionSettings();
 		this.data = data;
+		this.endDate = null;
+		this.rowCount = data.getBalanceHistory().getTransactionsNumber();
 		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
+				updateRowCount();
 				fireTableDataChanged();
 			}
 		});
@@ -85,7 +92,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return data.getBalanceHistory().getTransactionsNumber();
+		return this.rowCount;
 	}
 
 	@Override
@@ -111,5 +118,25 @@ final class BalanceHistoryModel extends AbstractTableModel {
 
 	public int find(Transaction transaction) {
 		return data.getBalanceHistory().find(transaction);
+	}
+
+	public void setEndDate(Date date) {
+		if (!NullUtils.areEquals(date, this.endDate)) {
+			this.endDate = date;
+			updateRowCount();
+			this.fireTableDataChanged();
+		}
+	}
+
+	private void updateRowCount() {
+		if (this.endDate==null) {
+			this.rowCount = data.getBalanceHistory().getTransactionsNumber();
+		} else {
+			this.rowCount = 0;
+			for (int i = 0; i < data.getBalanceHistory().getTransactionsNumber(); i++) {
+				if (data.getBalanceHistory().getTransaction(i).getValueDate().after(this.endDate)) break;
+				this.rowCount++;
+			}
+		}
 	}
 }
