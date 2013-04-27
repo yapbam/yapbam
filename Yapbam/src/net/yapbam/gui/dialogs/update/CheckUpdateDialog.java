@@ -38,7 +38,6 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	private static final boolean SLOW_UPDATE_CHECKING = Boolean.getBoolean("SlowUpdateChecking");
 
 	private boolean auto;
-	private boolean forced;
 
 	/** Constructor.
 	 * @param owner The owner window of the this dialog. 
@@ -48,7 +47,6 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	CheckUpdateDialog(Window owner, boolean auto, boolean forced) {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
 		this.auto = auto;
-		this.forced = forced;
 		if (auto) setDelay(Long.MAX_VALUE);
 		getCancelButton().setToolTipText(LocalizationData.get("MainMenu.CheckUpdate.Dialog.cancel.tooltip")); //$NON-NLS-1$
 	}

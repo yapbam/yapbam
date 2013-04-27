@@ -4,12 +4,13 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 	When editing a subtransaction, selecting a predefined label sets the amount to 0.
 
-version	0.14.6 (04/??/2013)
+version	0.15.0 (04/27/2013)
 fix
 	Opening a deleted file with the "File/Recent file" menu caused an error. 
 improvement
 	Yapbam is able to be connected to a Dropbox account in order to share data across Internet and backup it through built-in Dropbox functions.
 	To help maintain Yapbam uptodate, verifying the presence of updates is systematically enforced once a month.
+	Adds a checkbox "Ignore end date" in the "History of the balance" tab. When this box is not checked, the zoom of the graph is set according to the range of date of values â€‹allowed by the filter.
 
 version	0.14.5 (03/24/2013)
 fix
@@ -525,15 +526,15 @@ improvement
 	The main frame title now indicates if the data needs to be saved (its title ends with a *).
 fix
 	Deleting a category used in a transaction corrupted the data.
-	When reading the last opened file failed, this file was still considered as "last opened file". 
-	If, after reading a file you create a new file, then quit and restart Yapbam, the file was opened again
+	When reading the last opened file failed, this file was still considered as "last opened file".Â 
+	If, after reading a file you create a new file, then quit and restart Yapbam, the file wasÂ opened again
 
 version	0.3.1 (10/31/2009)
 improvement
 	The currency converter tool now work through proxied Internet connections and a now displays a conversion rates table.
 fix
 	When the currency converter was called, closing the main window didn't shutdown the java virtual machine.
-	The percentage in the pie statistic's chart's tooltips were wrong.
+	The percentage in the pie statistic's chart's tooltips wereÂ wrong.
 	Sometimes, when a transaction was duplicated or convert to periodical, the payment mode of the created transaction were wrong.
 	The balance history was wrong when there was a switch from summer to winter time in it.
 
@@ -655,7 +656,7 @@ improvement
 	A lot of undergroud work in order to implement account management in a future release.
 	The bank account creation dialog allows you to create payment method.
 	Improves the sort of the transactions list (in previous versions a duplicated transaction could appear far away for its clone).
-	Improves the "last state save":<ul><li>Be aware : In order to prepare a plugin architecture, the state file format changed. Your previous column sizes wiln not be restored when you will upgrade to this version.</li><li>The order of the columns is saved (in previous releases, column order where always reset to the default order, and the saved column size where applied tothe default column order ... which could be considered as a bug).</li><li>The scroll position of the transactions table is now saved.</li></ul>
+	Improves the "last state save":<ul><li>Be aware : In order to prepare a plugin architecture, the state file format changed. Your previous column sizes wiln not be restored when you will upgrade to this version.</li><li>The order of the columns is saved (in previous releases, column order where always reset to the default order, and the saved column size where applied tothe default column order ... which could be considered as a bug).</li><li>TheÂ scroll position ofÂ the transactions table is now saved.</li></ul>
 fix
 	<a href="https://sourceforge.net/tracker/?func=detail&aid=2856006&group_id=276272&atid=1173518">Bug 2856006</a> fixed : "Last chance to save is broken in v0.1.12".
 	<a href="https://sourceforge.net/tracker/?func=detail&amp;aid=2856394&amp;group_id=276272&amp;atid=1173518">Bug 2856394</a> fixed : "Balances disappears during interface reloading after a preference change".
