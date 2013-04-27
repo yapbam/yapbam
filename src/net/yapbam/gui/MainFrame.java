@@ -18,7 +18,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import com.fathzer.soft.jclop.Service;
 
 import net.astesana.ajlib.utilities.NullUtils;
-import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
@@ -167,7 +166,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			buf.append(message);
 		}
 		// The lines below are a sample for next time we want to add a "important" release information
-		if (lastVersion.compareTo(new ReleaseInfo("0.14.5 (24/03/2013)"))<=0) { //$NON-NLS-1$
+		if (NullUtils.compareTo(lastVersion, new ReleaseInfo("0.14.5 (24/03/2013)"), true)<=0) { //$NON-NLS-1$
 			if (buf.length()>0) buf.append("<br><br><hr><br>");
 			String message = MessageFormat.format(HtmlUtils.removeHtmlTags(LocalizationData.get("ImportantNews.0.14.5")), //$NON-NLS-1$
 					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
