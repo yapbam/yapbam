@@ -11,16 +11,13 @@ import net.yapbam.currency.CurrencyConverter;
 
 public class FileCache implements CurrencyConverter.Cache {
 	private File cacheFile;
-	private boolean isNotCommited;
 	
 	public FileCache(File file) {
 		cacheFile = file;
-		this.isNotCommited = false;
 	}
 
 	@Override
 	public Writer getWriter() throws IOException {
-		isNotCommited = true;
 		return new FileWriter(getTmpFile());
 	}
 
@@ -29,13 +26,13 @@ public class FileCache implements CurrencyConverter.Cache {
 	}
 
 	@Override
-	public Reader getReader() throws IOException {
-		return new FileReader(isNotCommited?getTmpFile():cacheFile);
+	public Reader getReader(boolean tmp) throws IOException {
+		return new FileReader(tmp?getTmpFile():cacheFile);
 	}
 
 	@Override
 	public void commit() {
-		if (cacheFile.exists()) cacheFile.delete();
-		isNotCommited = !getTmpFile().renameTo(cacheFile);
+		if (getTmpFile().exists() && cacheFile.exists()) cacheFile.delete();
+		getTmpFile().renameTo(cacheFile);
 	}
 }

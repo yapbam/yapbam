@@ -4,7 +4,7 @@
 	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
 	| jfreechartpath properties in the customPaths.properties file used in the line below.             |
 	| These properties have to reference the apache commonsnet, jfreeChart, JCommon, A-JLib,           |
-	| Javaluator and JClop sources.|
+	| Javaluator, JClop and YapbamCommons sources.                                                     |
 	| These sources are available at http://commons.apache.org/net/, http://www.jfree.org and          |
 	| http://sourceforge.net/projects/ajlib/                                                           |
 	| Here is a sample of what this file could contain :                                               |
@@ -17,7 +17,7 @@
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
 	
-	<property name="yapbamVersion" value="0.15.0"/>
+	<property name="yapbamVersion" value="0.15.1"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -63,6 +63,7 @@
 	    	<fileset dir="${jfreechart.path}" includes="org/jfree/chart/editor/LocalizationBundl*.properties"/>
 	    	<fileset dir="${jcommon.path}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
 	    	<fileset dir="${ajlib.path}" includes="**/*.properties"/>
+	    	<fileset dir="${yapbam.commons.path}" includes="**/*.properties"/>
 	    	<fileset dir="${ajlib.path}" includes="**/*.png"/>
 	    	<fileset dir="${jclop.path}" includes="**/*.properties"/>
 	    	<fileset dir="${jclop.path}" includes="**/*.png"/>
@@ -77,7 +78,7 @@
 		<echo>logging</echo>
 		<javac srcdir="${apache.commons.logging.path}" includes="org/apache/commons/logging/impl/LogFactoryImpl.java,org/apache/commons/logging/impl/SimpleLog.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<echo>end logging</echo>
-		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechart.path};${jcommon.path};${ajlib.path};${apache.commons.lang.path};${javaluator.path};${jclop.path};${jclop-dropbox.path};${dropbox.path};${apache.commons.codec.path};${apache.http.client.path};${apache.http.core.path};${jsonsimple.path};${apache.commons.logging.path}" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechart.path};${jcommon.path};${yapbam.commons.path};${ajlib.path};${apache.commons.lang.path};${javaluator.path};${jclop.path};${jclop-dropbox.path};${dropbox.path};${apache.commons.codec.path};${apache.http.client.path};${apache.http.core.path};${jsonsimple.path};${apache.commons.logging.path}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>
