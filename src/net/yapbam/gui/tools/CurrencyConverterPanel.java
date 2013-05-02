@@ -80,7 +80,7 @@ public class CurrencyConverterPanel extends JPanel {
 			}
 			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
 			this.title.setText(title);
-			if (!this.converter.isNetworkSynchronized()) this.title.setIcon(IconManager.get(Name.ALERT));
+			if (!this.converter.isSynchronized()) this.title.setIcon(IconManager.get(Name.ALERT));
 		}
 	}
 

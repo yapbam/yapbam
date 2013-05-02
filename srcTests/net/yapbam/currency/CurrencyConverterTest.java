@@ -11,8 +11,8 @@ public class CurrencyConverterTest {
 	 */
 	public static void main(String[] args) {
 		try {
-			CurrencyConverter converter = new CurrencyConverter(Proxy.NO_PROXY, new FileCache(new File("toto.txt")));
-			System.out.println ("Converter was created ("+(converter.isNetworkSynchronized()?"synchro":"cache data")+")");
+			CurrencyConverter converter = new CurrencyConverter(Proxy.NO_PROXY, new FileCache(new File("data/ExchangeRates.xml")));
+			System.out.println ("Converter was created ("+(converter.isSynchronized()?"synchro":"cache data")+")");
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
