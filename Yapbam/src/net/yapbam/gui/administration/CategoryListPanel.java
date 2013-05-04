@@ -81,7 +81,8 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return getCategory(rowIndex).getName();
+			Category category = getCategory(rowIndex);
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
 		}
 		
 		Category getCategory(int row) {

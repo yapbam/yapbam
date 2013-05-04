@@ -253,7 +253,8 @@ public class CustomFilterPanel extends JPanel {
 			categoryList = new JList();
 			categoryList.setModel(new AbstractListModel(){
 				public Object getElementAt(int index) {
-					return gData.getCategory(index).getName();
+					Category category = gData.getCategory(index);
+					return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
 				}
 				public int getSize() {
 					return gData.getCategoriesNumber();

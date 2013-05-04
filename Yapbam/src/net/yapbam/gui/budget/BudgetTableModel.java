@@ -102,7 +102,8 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 		if (rowIndex==budget.getCategoriesSize()) {
 			return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 		} else {
-			return budget.getCategory(rowIndex).getName();
+			Category category = budget.getCategory(rowIndex);
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
 		}
 	}
 }
