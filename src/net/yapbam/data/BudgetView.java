@@ -1,12 +1,5 @@
 package net.yapbam.data;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -14,9 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
-import net.astesana.ajlib.utilities.CSVExporter;
 import net.yapbam.data.event.*;
 import net.yapbam.util.DateUtils;
 
@@ -181,75 +172,12 @@ public class BudgetView extends DefaultListenable {
 	/** Gets the amount for a date and a category.
 	 * @param date a date returned by getDate(int) method
 	 * @param category a category
-	 * @return a double, 0 if there's no amount for this date and category.
+	 * @return a double, null if there's no amount for this date and category.
 	 * @see #getDate(int)
 	 * @see #getCategory(int)
 	 */
-	public double getAmount(Date date, Category category) {
-		Double result = values.get(new Key(date, category));
-		return result==null?0:result;
-	}
-	
-	/** Exports this budget to a text file.
-	 * @param file that will receive the content.
-	 * @param columnSeparator the character to use to separate columns
-	 * @param locale The locale to use to export the dates and numbers
-	 * @throws IOException
-	 */
-	public void export(File file, char columnSeparator, Locale locale, String dateSumWording, String categorySumWording) throws IOException {
-		BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		try {
-			// Output header line
-			DateFormat dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
-			for (int i = 0; i < getDatesSize(); i++) {
-				out.append(columnSeparator);
-				out.append(dateFormater.format(getDate(i)));
-			}
-			if (categorySumWording!=null) {
-				out.append(columnSeparator);
-				out.append(categorySumWording);
-			}
-			// Output category lines
-			NumberFormat currencyFormatter = CSVExporter.getCurrencyFormater(locale);
-			for (Category category : categories) {
-				out.newLine();
-				out.append(category.getName());
-				for (int j = 0; j < getDatesSize(); j++) {
-					out.append(columnSeparator);
-					Double value = values.get(new Key(getDate(j), category));
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
-				}
-				if (categorySumWording!=null) {
-					out.append(columnSeparator);
-					Double value = getSum(category);
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
-				}
-			}
-			if (dateSumWording!=null) {
-				out.newLine();
-				out.append(dateSumWording);
-				for (int j = 0; j < getDatesSize(); j++) {
-					out.append(columnSeparator);
-					Double value = getSum(getDate(j));
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
-				}
-				if (categorySumWording!=null) {
-					out.append(columnSeparator);
-					Double value = getSum();
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
-				}
-			}
-		} finally {
-			out.close();
-		}
+	public Double getAmount(Date date, Category category) {
+		return values.get(new Key(date, category));
 	}
 	
 	/** Gets the sum of amounts of all categories for a date.

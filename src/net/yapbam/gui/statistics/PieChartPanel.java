@@ -51,7 +51,7 @@ class PieChartPanel extends ChartPanel {
 			double expense = -summary.getReceipts() - summary.getDebts();
 			if (GlobalData.AMOUNT_COMPARATOR.compare(expense, 0.0)>0) {
 				total = total + expense;
-				map.put(category.getName(), expense);
+				map.put(category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName(), expense);
 			}
 		}
 		Iterator<Entry<String, Double>> iterator = map.entrySet().iterator();

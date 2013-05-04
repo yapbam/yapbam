@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import net.yapbam.data.Category;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.DescriptionSettings;
@@ -51,7 +52,10 @@ class StatementTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (columnIndex==0) return transactions[rowIndex].getDate();
 		else if (columnIndex==1) return DescriptionSettings.getMergedDescriptionAndComment(transactions[rowIndex]);
-		else if (columnIndex==2) return transactions[rowIndex].getCategory().getName();
+		else if (columnIndex==2) {
+			Category category = transactions[rowIndex].getCategory();
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+		}
 		else if (columnIndex==3) return transactions[rowIndex].getMode().getName();
 		else if (columnIndex==4) return transactions[rowIndex].getNumber();
 		else if (columnIndex==5) return transactions[rowIndex].getValueDate();

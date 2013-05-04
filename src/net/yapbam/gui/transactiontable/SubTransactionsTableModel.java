@@ -9,6 +9,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
+import net.yapbam.data.Category;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.gui.LocalizationData;
 
@@ -50,7 +51,10 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 		SubTransaction st = this.subTransactions.get(rowIndex);
 		if (columnIndex==0) return st.getDescription();
 		if (columnIndex==1) return new double[]{st.getAmount()};
-		if (columnIndex==2) return st.getCategory().getName();
+		if (columnIndex==2) {
+			Category category = st.getCategory();
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+		}
 		return null;
 	}
 

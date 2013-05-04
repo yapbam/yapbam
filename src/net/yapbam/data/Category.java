@@ -2,8 +2,6 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 
-import net.yapbam.gui.LocalizationData;
-
 /** A category (Food, Sport, etc ...) */
 public class Category implements Serializable, Comparable<Category> {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +23,7 @@ public class Category implements Serializable, Comparable<Category> {
 	 * @return a String
 	 */
 	public String getName() {
-		return this.name.length()==0 ? LocalizationData.get("Category.undefined") : this.name; //$NON-NLS-1$
+		return this.name;
 	}
 
 	/** Tests whether an object is equal to this.
