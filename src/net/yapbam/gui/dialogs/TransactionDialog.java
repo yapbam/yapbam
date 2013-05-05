@@ -212,12 +212,14 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	@Override
 	protected void setContent(AbstractTransaction transaction) {
 		super.setContent(transaction);
+		this.ignoreEvents = true;
 		Transaction t = (Transaction) transaction;
 		date.setDate(t.getDate());
 		transactionNumber.setText(t.getNumber());
 		checkNumber.setText(t.getNumber());
 		defDate.setDate(t.getValueDate());
 		statement.setText(t.getStatement());
+		this.ignoreEvents = false;
 	}
 
 	@Override
@@ -245,8 +247,10 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		defDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				autoFillStatement(VALUE_DATE_CHANGED);
-				updateOkButtonEnabled();
+				if (!ignoreEvents) {
+					autoFillStatement(VALUE_DATE_CHANGED);
+					updateOkButtonEnabled();
+				}
 			}
 		});
 		c.gridx=1; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
@@ -302,15 +306,17 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		date.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getNewValue() != null) {
-					Mode m = getCurrentMode();
-					DateStepper vdc = isExpense() ? m.getExpenseVdc() : m.getReceiptVdc();
-					// If the date stepper is no more available (if the transaction payment mode is no more usable), use the default value date computer.
-					if (vdc==null) vdc = DateStepper.IMMEDIATE;
-					defDate.setDate(vdc.getNextStep(date.getDate()));
+				if (!ignoreEvents) {
+					if (evt.getNewValue() != null) {
+						Mode m = getCurrentMode();
+						DateStepper vdc = isExpense() ? m.getExpenseVdc() : m.getReceiptVdc();
+						// If the date stepper is no more available (if the transaction payment mode is no more usable), use the default value date computer.
+						if (vdc==null) vdc = DateStepper.IMMEDIATE;
+						defDate.setDate(vdc.getNextStep(date.getDate()));
+					}
+					autoFillStatement(DATE_CHANGED);
+					updateOkButtonEnabled();
 				}
-				autoFillStatement(DATE_CHANGED);
-				updateOkButtonEnabled();
 			}
 		});
 		c.gridx++;
