@@ -41,10 +41,12 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	private Mode originalMode;
 	private boolean originalIsExpense;
 	private PredefinedDescriptionComputer pdc;
+	protected boolean ignoreEvents;
 	
 	protected AbstractTransactionDialog(Window owner, String title, FilteredData data, AbstractTransaction transaction) {
 		super(owner, title, data); //$NON-NLS-1$
 		pdc = null;
+		this.ignoreEvents = false;
 		if (transaction!=null) setContent(transaction);
 	}
 	
@@ -54,32 +56,21 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
-		Account account = transaction.getAccount();
-		accounts.set(account);
+		this.ignoreEvents = true;
+		accounts.set(transaction.getAccount());
 		description.setText(transaction.getDescription());
 		comment.setText(transaction.getComment());
-		subtransactionsPanel.fill(transaction);
-		// Danger, subtransaction.fill throws Property Change events that may alter the amount field content.
-		// So, always set up the amountField after the subtransactions list.
 		amount.setValue(Math.abs(transaction.getAmount()));
-		receipt.setSelected(transaction.getAmount()>0);
-		// Be aware, as its listener change the selectedMode, receipt must always be set before mode.
+		originalIsExpense = transaction.getAmount()<=0;
+		receipt.setSelected(!originalIsExpense);
+		// Be aware, as its listener changes the selectedMode, receipt must always be set before mode.
 		originalMode = transaction.getMode();
-		originalIsExpense = transaction.getAmount()<0;
-		ComboBox combo = modes.getCombo();
-		if (!combo.contains(originalMode) && (account.indexOf(originalMode)>=0)) {
-			// It is possible that the mode of the transaction is no more available for this kind of transaction.
-			// For instance, if this account had a payment mode (for example check), that was usable for expenses,
-			// but that is, now, no more usable.
-			// In order to allow the user to not change this original payment mode, will we add it to the available
-			// payment modes.
-			boolean old = combo.isActionEnabled();
-			combo.setActionEnabled(false);
-			combo.addItem(originalMode);
-			combo.setActionEnabled(old);
-		}
+		// Update mode list
+		buildModes(originalIsExpense);
 		modes.set(transaction.getMode());
 		categories.set(transaction.getCategory());
+		subtransactionsPanel.fill(transaction);
+		this.ignoreEvents = false;
 	}
 
 	protected void setMode(Mode mode) {
@@ -135,7 +126,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 			accounts.set(filterAccounts.get(0));
 		}
 		AccountsListener accountListener = new AccountsListener();
-		accounts.addPropertyChangeListener(accountListener);
+		accounts.addPropertyChangeListener(AccountWidget.ACCOUNT_PROPERTY, accountListener);
 		accounts.setToolTipText(LocalizationData.get("TransactionDialog.account.tooltip")); //$NON-NLS-1$
 		centerPane.add(accounts, c);
 
@@ -194,7 +185,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		modes.getJLabel().setVisible(false);
 		buildModes(!receipt.isSelected());
 		ModesListener modeListener = new ModesListener();
-		modes.addPropertyChangeListener(modeListener);
+		modes.addPropertyChangeListener(ModeWidget.MODE_PROPERTY, modeListener);
 		modes.setToolTipText(LocalizationData.get("TransactionDialog.mode.tooltip")); //$NON-NLS-1$
 		c.gridx = 1; c.weightx = 1.0; c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(modes, c);
@@ -221,7 +212,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		subtransactionsPanel.addPropertyChangeListener(SubtransactionListPanel.SUM_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if ((amount.getValue() != null) && subtransactionsPanel.isAddToTransactionSelected()) {
+				if (!ignoreEvents && (amount.getValue() != null) && subtransactionsPanel.isAddToTransactionSelected()) {
 					double diff = (Double) evt.getNewValue() - (Double) evt.getOldValue();
 					if (isExpense()) diff = -diff;
 					double newValue = amount.getValue() + diff;
@@ -256,10 +247,15 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	 */
 	private void buildModes(boolean expense) {
 		Mode current = modes.get();
+//System.out.println ("buildModes is called. account="+getAccount().getName()+", expense="+expense+", original="+originalMode+" ("+originalIsExpense+")"); //TODO
 		modes.setParameters(new ModeWidgetParams(data.getGlobalData(), getAccount(), expense));
 		ComboBox combo = modes.getCombo();
 		combo.setActionEnabled(false);
 		if ((originalMode!=null) && (originalIsExpense==expense) && !combo.contains(originalMode) && (getAccount().indexOf(originalMode)>=0)) {
+			// It is possible that the original mode of the transaction is no more available for this kind of transaction.
+			// For instance, if this account had a payment mode that was usable for expenses, but that is, now, no more usable.
+			// In order to allow the user to leave unchanged the original payment mode, will we add it to the available
+			// payment modes.
 			combo.addItem(originalMode);
 		}
 		// Clears the selection in order future selection to fire a selection change
@@ -286,16 +282,18 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	class AccountsListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (DEBUG) System.out.println("Account " + getAccount() + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-			buildModes(isExpense());
-			if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
+			if (!ignoreEvents) {
+				if (DEBUG) System.out.println("Account " + getAccount() + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+				buildModes(isExpense());
+				if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
+			}
 		}
 	}
 
 	class ReceiptListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			buildModes(e.getStateChange() == ItemEvent.DESELECTED);
+			if (!ignoreEvents) buildModes(e.getStateChange() == ItemEvent.DESELECTED);
 		}
 	}
 
@@ -305,12 +303,14 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			Mode selected = modes.get();
-			if (!NullUtils.areEquals(lastSelected, selected) || (isExpense()!=lastWasExpense)) {
-				lastSelected = selected;
-				lastWasExpense = isExpense();
-				if (DEBUG) System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-				optionnalUpdatesOnModeChange();
+			if (!ignoreEvents) {
+				Mode selected = modes.get();
+				if (!NullUtils.areEquals(lastSelected, selected) || (isExpense()!=lastWasExpense)) {
+					lastSelected = selected;
+					lastWasExpense = isExpense();
+					if (DEBUG) System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+					optionnalUpdatesOnModeChange();
+				}
 			}
 		}
 	}

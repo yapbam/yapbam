@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.CategoryPropertyChangedEvent;
