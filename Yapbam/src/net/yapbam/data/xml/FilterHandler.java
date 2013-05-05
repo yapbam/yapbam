@@ -6,10 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.astesana.ajlib.utilities.TextMatcher;
-import net.astesana.ajlib.utilities.TextMatcher.Kind;
 import net.yapbam.data.*;
 import net.yapbam.util.ArrayUtils;
+import net.yapbam.util.TextMatcher;
+import net.yapbam.util.TextMatcher.Kind;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

@@ -128,8 +128,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 				return getName(transaction.getCategory());
 			}
 		} else if (columnIndex==6) {
-			Mode mode = transaction.getMode();
-			return mode.equals(Mode.UNDEFINED) ? "" : mode.getName(); //$NON-NLS-1$
+			return transaction.getMode().getName();
 		} else if (columnIndex==7) return transaction.getNumber();
 		else if (columnIndex==8) return transaction.getValueDate();
 		else if (columnIndex==9) return transaction.getStatement();

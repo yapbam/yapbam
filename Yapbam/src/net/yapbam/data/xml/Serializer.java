@@ -15,7 +15,6 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import net.astesana.ajlib.utilities.FileUtils;
-import net.astesana.ajlib.utilities.TextMatcher;
 import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.date.helpers.DayDateStepper;
@@ -23,6 +22,7 @@ import net.yapbam.date.helpers.DeferredValueDateComputer;
 import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.util.ArrayUtils;
 import net.yapbam.util.Crypto;
+import net.yapbam.util.TextMatcher;
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -542,7 +542,13 @@ public class Serializer {
 		hd.endElement(EMPTY,EMPTY,ACCOUNT_TAG);
 	}
 	
+	/** Serialize a mode.
+	 * @param mode The mode to serialize.
+	 * @throws SAXException
+	 * @throws IllegalArgumentException if mode is Mode.UNDEFINED
+	 */
 	private void serialize(Mode mode) throws SAXException {
+		if (mode.equals(Mode.UNDEFINED)) throw new IllegalArgumentException();
 		atts.clear();
 		atts.addAttribute(EMPTY,EMPTY,ID_ATTRIBUTE,CDATA,mode.getName());
 		if (mode.isUseCheckBook()) atts.addAttribute(EMPTY, EMPTY, CHECKBOOK_ATTRIBUTE, CDATA, TRUE);

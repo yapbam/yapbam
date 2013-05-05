@@ -19,13 +19,13 @@ import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 
 import net.astesana.ajlib.utilities.NullUtils;
-import net.astesana.ajlib.utilities.TextMatcher;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.TextMatcher;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -295,7 +295,8 @@ public class CustomFilterPanel extends JPanel {
 			Account account = gData.getAccount(accountIndices[i]);
 			int nb = account.getModesNumber();
 			for (int j = 0; j < nb; j++) {
-				modes.add(account.getMode(j).getName());
+				Mode mode = account.getMode(j);
+				modes.add(mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName());
 			}
 		}
 		final String[] arrayModes = modes.toArray(new String[modes.size()]);
@@ -316,7 +317,7 @@ public class CustomFilterPanel extends JPanel {
 			if (validModes!=null) {
 				for (int i = 0; i < validModes.size(); i++) {
 					String name = validModes.get(i);
-					if (name.isEmpty()) name = Mode.UNDEFINED.getName();
+					if (name.isEmpty()) name = LocalizationData.get("Mode.undefined");
 					int index = Arrays.binarySearch(arrayModes, name);
 					if (index>=0) newSelection.add(index);
 				}

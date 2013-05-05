@@ -37,8 +37,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 
-	protected int selectedAccount;
-	private JComboBox accounts;
+	private AccountWidget accounts;
 	protected TextWidget description;
 	protected JTextField comment;
 	protected CurrencyWidget amount;
@@ -63,7 +62,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 	protected void setContent(AbstractTransaction transaction) {
 		Account account = transaction.getAccount();
-		accounts.setSelectedIndex(data.getGlobalData().indexOf(account));
+		accounts.set(account);
 		description.setText(transaction.getDescription());
 		comment.setText(transaction.getComment());
 		subtransactionsPanel.fill(transaction);
@@ -90,7 +89,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	}
 
 	protected void setMode(Mode mode) {
-		Account account = data.getGlobalData().getAccount(selectedAccount);
+		Account account = getAccount();
 		int index = account.findMode(mode);
 		if (index>=0) {
 			modes.setSelectedItem(mode.getName()); // If the mode isn't available for this account, do nothing.
@@ -101,7 +100,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	 * @return an account.
 	 */
 	protected Account getAccount() {
-		return this.data.getGlobalData().getAccount(selectedAccount);
+		return accounts.get();
 	}
 
 	/** Gets the currently selected amount.
@@ -142,26 +141,21 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 		// Account
 		Insets insets = new Insets(5,5,5,5);
-		JLabel titleCompte = new JLabel(LocalizationData.get("AccountDialog.account")); //$NON-NLS-1$
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = insets; c.gridx=0; c.gridy=0; c.anchor=GridBagConstraints.WEST;
-		centerPane.add(titleCompte, c);
-		accounts = new JComboBox(getAccounts());
-		selectedAccount = 0; // TODO let select the last selected account
+		c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		accounts = new AccountWidget(data.getGlobalData());
 		List<Account> filterAccounts = data.getFilter().getValidAccounts();
 		if ((filterAccounts!=null) && (filterAccounts.size()==1)) { // If the filter defines only one account, select this account
-			selectedAccount = data.getGlobalData().indexOf(filterAccounts.get(0));
+			accounts.set(filterAccounts.get(0));
 		}
-		accounts.setSelectedIndex(selectedAccount);
 		AccountsListener accountListener = new AccountsListener();
-		accounts.addActionListener(accountListener);
+		accounts.addPropertyChangeListener(accountListener);
 		accounts.setToolTipText(LocalizationData.get("TransactionDialog.account.tooltip")); //$NON-NLS-1$
 		JButton newAccount = new JButton(IconManager.get(Name.NEW_ACCOUNT));
 		newAccount.setFocusable(false);
-		newAccount.addActionListener(accountListener);
 		newAccount.setToolTipText(LocalizationData.get("TransactionDialog.account.new.tooltip")); //$NON-NLS-1$
-		c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
-		centerPane.add(combine(accounts, newAccount), c);
+		centerPane.add(accounts, c);
 
 		// Description
 		JLabel titleLibelle = new JLabel(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
@@ -287,7 +281,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		modes.setActionEnabled(false);
 		String current = (String) modes.getSelectedItem();
 		modes.removeAllItems();
-		Account currentAccount = data.getGlobalData().getAccount(selectedAccount);
+		Account currentAccount = getAccount();
 		int nb = currentAccount.getModesNumber();
 		for (int i = 0; i < nb; i++) {
 			Mode mode = currentAccount.getMode(i);
@@ -311,51 +305,27 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		}
 	}
 
-	private String[] getAccounts() {
-		GlobalData globalData = data.getGlobalData();
-		String[] result = new String[globalData.getAccountsNumber()];
-		for (int i = 0; i < globalData.getAccountsNumber(); i++) {
-			result[i] = globalData.getAccount(i).getName();
-		}
-		return result;
-	}
-
 	public AbstractTransaction getTransaction() {
 		return (Transaction) super.getResult();
 	}
 
 	private Mode displayNewModeDialog() {
-		Account ac = data.getGlobalData().getAccount(selectedAccount);
-		Mode mode = ModeDialog.open(data.getGlobalData(), ac, this);
+		Mode mode = ModeDialog.open(data.getGlobalData(), getAccount(), this);
 		if (mode == null) return null;
 		DateStepper vdc = isExpense() ? mode.getExpenseVdc() : mode.getReceiptVdc();
 		return (vdc != null) ? mode : null;
 	}
 
 	protected Mode getCurrentMode() {
-		Account account = AbstractTransactionDialog.this.data.getGlobalData().getAccount(selectedAccount);
-		return account.getMode((String)modes.getSelectedItem());
+		return getAccount().getMode((String)modes.getSelectedItem());
 	}
 
-	class AccountsListener implements ActionListener {
+	class AccountsListener implements PropertyChangeListener {
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == accounts) {
-				int index = accounts.getSelectedIndex();
-				if (index != selectedAccount) {
-					selectedAccount = index;
-					if (DEBUG) System.out.println("Account " + selectedAccount + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-					buildModes(isExpense());
-					if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
-				}
-			} else {
-				Account ac = EditAccountDialog.open(data.getGlobalData(), AbstractTransactionDialog.this, null);
-				if (ac != null) {
-					accounts.addItem(ac.getName());
-					accounts.setSelectedIndex(accounts.getItemCount() - 1);
-					pack();
-				}
-			}
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (DEBUG) System.out.println("Account " + getAccount() + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+			buildModes(isExpense());
+			if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
 		}
 	}
 

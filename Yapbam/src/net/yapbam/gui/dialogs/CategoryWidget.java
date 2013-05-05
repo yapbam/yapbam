@@ -47,7 +47,7 @@ public class CategoryWidget extends AbstractSelector<Category, GlobalData> {
 		
 	@Override
 	protected Object getDefaultRenderedValue(Category category) {
-		return category==null ? category : category.getName();
+		return category==null ? category : category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
 	}
 
 	@Override

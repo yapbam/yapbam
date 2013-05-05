@@ -119,7 +119,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			@Override
 			protected void process(Transaction transaction) {
 				double ranking = getRankingBasedOnDate(now, transaction);
-				if (!transaction.getAccount().equals(data.getAccount(selectedAccount))) ranking = ranking / 100;
+				if (!transaction.getAccount().equals(getAccount())) ranking = ranking / 100;
 				super.add(transaction.getDescription(), ranking);
 			}
 		});
@@ -127,7 +127,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			@Override
 			protected void process(Transaction transaction) {
 				double ranking = getRankingBasedOnDate(now, transaction);
-				if (!transaction.getAccount().equals(data.getAccount(selectedAccount))) ranking = ranking / 100;
+				if (!transaction.getAccount().equals(getAccount())) ranking = ranking / 100;
 				super.add(transaction.getDescription(), ranking/10);
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					super.add(transaction.getSubTransaction(i).getDescription(),ranking);
@@ -166,7 +166,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 						Transaction transaction = gData.getTransaction(i);
 						// In order to minimize the impact of very old transactions, we will use the date ranking
 						double ranking = getRankingBasedOnDate(now, transaction);
-						if (!transaction.getAccount().equals(gData.getAccount(selectedAccount))) ranking = ranking / 100;
+						if (!transaction.getAccount().equals(getAccount())) ranking = ranking / 100;
 						if (transaction.getDescription().equalsIgnoreCase(description)) {
 							add(map, transaction.getCategory(), transaction.getAmount()>0, ranking/10);
 						}
@@ -405,7 +405,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				double transactionWeight = getRankingBasedOnDate(now, transaction);
 				Double weight = categories.get(category);
 				categories.put(category, transactionWeight + (weight == null ? 0 : weight));
-				if (transaction.getAccount() == data.getGlobalData().getAccount(selectedAccount)) {
+				if (transaction.getAccount() == getAccount()) {
 					// As mode are attached to accounts, it would be unsafe to try to
 					// deduce modes on accounts different from the current one.
 					ModeAndType mt = new ModeAndType(transaction.getAmount()>0, transaction.getMode());

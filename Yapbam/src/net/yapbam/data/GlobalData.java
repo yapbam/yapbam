@@ -14,9 +14,9 @@ import java.util.Locale;
 
 import javax.swing.SwingUtilities;
 
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.event.*;
 import net.yapbam.date.helpers.DateStepper;
+import net.yapbam.util.NullUtils;
 
 /** The whole Yapbam data.
  *  <br>You can also have a look at FilteredData which presents a filtered view of Yapbam data.
@@ -679,6 +679,7 @@ public class GlobalData extends DefaultListenable {
 	}
 
 	public void setMode(Account account, Mode oldMode, Mode newMode) {
+		if (oldMode.equals(Mode.UNDEFINED)) throw new IllegalArgumentException("Undefined mode can't be modified");
 		ModePropertyChangedEvent event = new ModePropertyChangedEvent(this, account, oldMode, newMode);
 		if (event.getChanges()!=0) {
 			// oldMode object will be updated. In order to send the right event data, we have to remember it

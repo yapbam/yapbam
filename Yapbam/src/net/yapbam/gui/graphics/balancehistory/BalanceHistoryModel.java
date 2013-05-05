@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.BalanceData;
 import net.yapbam.data.Category;
+import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -61,7 +62,10 @@ final class BalanceHistoryModel extends AbstractTableModel {
 			Category category = transaction.getCategory();
 			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
 		}
-		if (columnIndex==5) return transaction.getMode().getName();
+		if (columnIndex==5) {
+			Mode mode = transaction.getMode();
+			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
+		}
 		if (columnIndex==6) return transaction.getNumber();
 		if (columnIndex==VALUE_DATE_COLUMN) return transaction.getValueDate();
 		if (columnIndex==8) return transaction.getStatement();

@@ -6,6 +6,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.Category;
+import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.DescriptionSettings;
@@ -56,7 +57,10 @@ class StatementTableModel extends AbstractTableModel {
 			Category category = transactions[rowIndex].getCategory();
 			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
 		}
-		else if (columnIndex==3) return transactions[rowIndex].getMode().getName();
+		else if (columnIndex==3) {
+			Mode mode = transactions[rowIndex].getMode();
+			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
+		}
 		else if (columnIndex==4) return transactions[rowIndex].getNumber();
 		else if (columnIndex==5) return transactions[rowIndex].getValueDate();
 		else if (columnIndex==6) return transactions[rowIndex].getAmount()<0?-transactions[rowIndex].getAmount():null;

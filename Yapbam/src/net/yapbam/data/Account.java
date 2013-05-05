@@ -66,7 +66,7 @@ public class Account implements Serializable {
 	}
 
 	/** Gets an account's payment mode by its name.
-	 * @param name the payment mode's name
+	 * @param name the payment mode's name (an empty string to retrieve the UNDEFINED mode)
 	 * @return The payment mode, or null, if no payment mode with that name exists
 	 */
 	public Mode getMode(String name) {
