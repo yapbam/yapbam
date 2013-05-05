@@ -76,7 +76,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		originalIsExpense = transaction.getAmount()<0;
 		if (!modes.contains(originalMode) && (account.getMode(originalMode)!=null)) {
 			// It is possible that the mode of the transaction is no more available for this kind of transaction.
-			// For instance, if you this account had a payment mode (for example check), that was usable for expenses ...
+			// For instance, if this account had a payment mode (for example check), that was usable for expenses,
 			// but that is, now, no more usable.
 			// In order to allow the user to not change this original payment mode, will we add it to the available
 			// payment modes.
