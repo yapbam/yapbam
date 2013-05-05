@@ -2,8 +2,8 @@ package net.yapbam.data;
 
 import java.util.*;
 
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.event.*;
+import net.yapbam.util.NullUtils;
 
 /** The filtered Data (the global data viewed through a filter).
  * </BR>A filter is based on all the attributes of a transaction (amount, category, account, ...).

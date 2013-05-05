@@ -2,17 +2,16 @@ package net.yapbam.data;
 
 import java.io.Serializable;
 
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.date.helpers.DateStepper;
-import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.NullUtils;
 
 /** A payment mode (Blue card, check ...).
  */
 public class Mode implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	/** Undefined mode (useable for receipts and expenses, the date value is the operation date). */ 
-	public static final Mode UNDEFINED = new Mode(null,DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
+	/** Undefined mode (usable for receipts and expenses, the date value is the operation date). */ 
+	public static final Mode UNDEFINED = new Mode("",DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
 	
 	private String name;
 	private DateStepper receiptVDC;
@@ -20,7 +19,7 @@ public class Mode implements Serializable {
 	private boolean useCheckBook;
 
 	/** Constructor
-	 * @param name The name
+	 * @param name The name (must not be null)
 	 * @param receiptVDC A ValueDateComputer used to compute value date for receipts, or null if this mode
 	 *  can't be used for receipts
 	 * @param expenseVDC A ValueDateComputer used to compute value date for expenditures, or null if this mode
@@ -28,9 +27,8 @@ public class Mode implements Serializable {
 	 * @param useCheckbook true if this mode use a checkbook
 	 * @throws IllegalArgumentException if useCheckbook is true and vdcForExpenditure is false;
 	 */
-	public Mode(String name, DateStepper receiptVDC,
-			DateStepper expenseVDC, boolean useCheckbook) {
-		super();
+	public Mode(String name, DateStepper receiptVDC, DateStepper expenseVDC, boolean useCheckbook) {
+		if (name==null) throw new IllegalArgumentException();
 		if (useCheckbook && (expenseVDC==null)) throw new IllegalArgumentException();
 		this.name = name;
 		this.receiptVDC = receiptVDC;
@@ -39,7 +37,7 @@ public class Mode implements Serializable {
 	}
 
 	public String getName() {
-		return name == null?LocalizationData.get("Mode.undefined"):name; //$NON-NLS-1$
+		return name;
 	}
 
 	public DateStepper getReceiptVdc() {

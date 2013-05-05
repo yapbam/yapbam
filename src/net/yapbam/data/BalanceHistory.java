@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import net.yapbam.util.NullUtils;
 
 /** A balance history.
  * <br>The balance history is an ordered list of periods, during one of these periods, the balance is constant.

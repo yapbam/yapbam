@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
 
-import net.astesana.ajlib.utilities.NullUtils;
-import net.astesana.ajlib.utilities.TextMatcher;
+import net.yapbam.util.NullUtils;
+import net.yapbam.util.TextMatcher;
 
 /** A data filter.
  */
@@ -30,7 +30,7 @@ public class Filter extends Observable {
 	private Date valueDateTo;
 	private double minAmount;
 	private double maxAmount;
-	private net.astesana.ajlib.utilities.TextMatcher descriptionMatcher;
+	private TextMatcher descriptionMatcher;
 	private TextMatcher commentMatcher;
 	private TextMatcher numberMatcher;
 	private TextMatcher statementMatcher;

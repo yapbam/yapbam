@@ -9,7 +9,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AbstractSelector;
 
 @SuppressWarnings("serial")
-/** A category selector widget. */
+/** A mode selector widget. */
 public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 	public static final String MODE_PROPERTY = "mode"; //$NON-NLS-1$
 	
@@ -53,7 +53,7 @@ public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 		
 	@Override
 	protected Object getDefaultRenderedValue(Mode mode) {
-		return mode==null ? mode : mode.getName();
+		return mode==null ? mode : mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
 	}
 
 	@Override

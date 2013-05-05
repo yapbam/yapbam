@@ -1,9 +1,9 @@
 package net.yapbam.data.event;
 
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
+import net.yapbam.util.NullUtils;
 
 /** This event is sent when a mode is updated. */
 public class ModePropertyChangedEvent extends DataEvent {
@@ -41,7 +41,7 @@ public class ModePropertyChangedEvent extends DataEvent {
 		this.oldMode = oldMode;
 		this.newMode = newMode;
 		changes = 0;
-		if (!oldMode.getName().equals(newMode.getName())) changes += NAME;
+		if (!NullUtils.areEquals(oldMode.getName(),newMode.getName())) changes += NAME;
 		if (!NullUtils.areEquals(oldMode.getExpenseVdc(),newMode.getExpenseVdc())) changes += EXPENSE_VDC;
 		if (!NullUtils.areEquals(oldMode.getReceiptVdc(),newMode.getReceiptVdc())) changes += RECEIPT_VDC;
 		if (oldMode.isUseCheckBook()!=newMode.isUseCheckBook()) changes += CHECKBOOK;
