@@ -354,7 +354,7 @@ public class CustomFilterPanel extends JPanel {
 			accounts[i] = gData.getAccount(accountIndices[i]);
 			for (int j=0; j<accounts[i].getModesNumber(); j++) {
 				Mode mode = accounts[i].getMode(j);
-				if (Arrays.binarySearch(selectedModes,mode.getName())<0) {
+				if (Arrays.binarySearch(selectedModes,mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName())<0) {
 					all = false;
 				} else {
 					modes.add(mode.equals(Mode.UNDEFINED)?"":mode.getName());
