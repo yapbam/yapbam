@@ -1,13 +1,9 @@
 package net.yapbam.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -24,9 +20,6 @@ import net.astesana.ajlib.swing.widget.TextWidget;
 import net.astesana.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.*;
-import net.yapbam.date.helpers.DateStepper;
-import net.yapbam.gui.IconManager;
-import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
@@ -42,10 +35,10 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected JTextField comment;
 	protected CurrencyWidget amount;
 	protected JCheckBox receipt;
-	protected ComboBox modes;
+	protected ModeWidget modes;
 	protected CategoryWidget categories;
 	protected SubtransactionListPanel subtransactionsPanel;
-	private String originalMode;
+	private Mode originalMode;
 	private boolean originalIsExpense;
 	private PredefinedDescriptionComputer pdc;
 	
@@ -71,28 +64,29 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		amount.setValue(Math.abs(transaction.getAmount()));
 		receipt.setSelected(transaction.getAmount()>0);
 		// Be aware, as its listener change the selectedMode, receipt must always be set before mode.
-		originalMode = transaction.getMode().getName();
+		originalMode = transaction.getMode();
 		originalIsExpense = transaction.getAmount()<0;
-		if (!modes.contains(originalMode) && (account.getMode(originalMode)!=null)) {
+		ComboBox combo = modes.getCombo();
+		if (!combo.contains(originalMode) && (account.indexOf(originalMode)>=0)) {
 			// It is possible that the mode of the transaction is no more available for this kind of transaction.
 			// For instance, if this account had a payment mode (for example check), that was usable for expenses,
 			// but that is, now, no more usable.
 			// In order to allow the user to not change this original payment mode, will we add it to the available
 			// payment modes.
-			boolean old = modes.isActionEnabled();
-			modes.setActionEnabled(false);
-			modes.addItem(originalMode);
-			modes.setActionEnabled(old);
+			boolean old = combo.isActionEnabled();
+			combo.setActionEnabled(false);
+			combo.addItem(originalMode);
+			combo.setActionEnabled(old);
 		}
-		modes.setSelectedItem(transaction.getMode().getName());
+		modes.set(transaction.getMode());
 		categories.set(transaction.getCategory());
 	}
 
 	protected void setMode(Mode mode) {
 		Account account = getAccount();
-		int index = account.findMode(mode);
+		int index = account.indexOf(mode);
 		if (index>=0) {
-			modes.setSelectedItem(mode.getName()); // If the mode isn't available for this account, do nothing.
+			modes.set(mode); // If the mode isn't available for this account, do nothing.
 		}
 	}
 	
@@ -125,15 +119,6 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		return getAmount()<0;
 	}
 
-/**/	private JPanel combine (JComboBox box, JButton button) {
-        JPanel pane = new JPanel(new BorderLayout());
-        Dimension dimension = box.getPreferredSize();
-        button.setPreferredSize(new Dimension(dimension.height, dimension.height));
-        pane.add(box, BorderLayout.CENTER);
-        pane.add(button, BorderLayout.EAST);
-        return pane;
-	}/**/ //TODO remove
-	
 	@Override
 	protected JPanel createCenterPane() {
 		// Create the content pane.
@@ -152,20 +137,16 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		AccountsListener accountListener = new AccountsListener();
 		accounts.addPropertyChangeListener(accountListener);
 		accounts.setToolTipText(LocalizationData.get("TransactionDialog.account.tooltip")); //$NON-NLS-1$
-		JButton newAccount = new JButton(IconManager.get(Name.NEW_ACCOUNT));
-		newAccount.setFocusable(false);
-		newAccount.setToolTipText(LocalizationData.get("TransactionDialog.account.new.tooltip")); //$NON-NLS-1$
 		centerPane.add(accounts, c);
 
 		// Description
+		JPanel panel = new JPanel(new GridBagLayout());
+		c.gridy=1; c.insets=new Insets(0, 0, 0, 0);
+		centerPane.add(panel, c);
 		JLabel titleLibelle = new JLabel(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
 		c = new GridBagConstraints();
-		c.insets = insets; c.gridx=0; c.gridy=1; c.anchor = GridBagConstraints.WEST; c.weightx=1.0;
-		centerPane.add(titleLibelle, c);
-		JPanel panel = new JPanel(new GridBagLayout());
-		c.gridx=1; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;
-		centerPane.add(panel, c);
-		c = new GridBagConstraints();
+		c.insets = insets; c.gridx=0; c.gridy=0; c.anchor = GridBagConstraints.WEST; c.weightx=0.0;
+		panel.add(titleLibelle, c);
 		description = new TextWidget();
 		description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
 		description.addPropertyChangeListener(TextWidget.PREDEFINED_VALUE, new PropertyChangeListener() {
@@ -175,13 +156,13 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 			}
 		});
 		description.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		c = new GridBagConstraints(); c.fill=GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		c.gridx=1; c.fill=GridBagConstraints.HORIZONTAL; c.weightx=1.0;
 		panel.add(description, c);
 		
 		// Comment
 		comment = new JTextField();
 		comment.setToolTipText(LocalizationData.get("TransactionDialog.comment.tooltip")); //$NON-NLS-1$
-		c.gridx=1;;
+		c.gridx=2;;
 		panel.add(comment, c);
 
 		// Next line
@@ -209,17 +190,14 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c = new GridBagConstraints();
 		c.insets = insets; c.gridx = 0; c.gridy = 3; c.anchor = GridBagConstraints.WEST;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.mode")), c); //$NON-NLS-1$
-		modes = new ComboBox();
+		modes = new ModeWidget(new ModeWidgetParams(data.getGlobalData(), getAccount(), true));
+		modes.getJLabel().setVisible(false);
 		buildModes(!receipt.isSelected());
 		ModesListener modeListener = new ModesListener();
-		modes.addActionListener(modeListener);
+		modes.addPropertyChangeListener(modeListener);
 		modes.setToolTipText(LocalizationData.get("TransactionDialog.mode.tooltip")); //$NON-NLS-1$
 		c.gridx = 1; c.weightx = 1.0; c.fill = GridBagConstraints.HORIZONTAL;
-		JButton newMode = new JButton(IconManager.get(Name.NEW_MODE));
-		newMode.setFocusable(false);
-		newMode.addActionListener(modeListener);
-		newMode.setToolTipText(LocalizationData.get("TransactionDialog.mode.new.tooltip")); //$NON-NLS-1$
-		centerPane.add(combine(modes, newMode), c);
+		centerPane.add(modes, c);
 		
 		c.gridx = 2;
 		buildNumberField(centerPane, AutoSelectFocusListener.INSTANCE, c); // Subclasses may insert a number field here
@@ -277,31 +255,23 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	 * the list will be selected.
 	 */
 	private void buildModes(boolean expense) {
-		// Prevents selection events to be sent
-		modes.setActionEnabled(false);
-		String current = (String) modes.getSelectedItem();
-		modes.removeAllItems();
-		Account currentAccount = getAccount();
-		int nb = currentAccount.getModesNumber();
-		for (int i = 0; i < nb; i++) {
-			Mode mode = currentAccount.getMode(i);
-			if ((expense?mode.getExpenseVdc():mode.getReceiptVdc())!=null) {
-				modes.addItem(mode.getName());
-			}
-		}
-		if ((originalMode!=null) && (originalIsExpense==expense) && !modes.contains(originalMode) && (currentAccount.getMode(originalMode)!=null)) {
-			modes.addItem(originalMode);
+		Mode current = modes.get();
+		modes.setParameters(new ModeWidgetParams(data.getGlobalData(), getAccount(), expense));
+		ComboBox combo = modes.getCombo();
+		combo.setActionEnabled(false);
+		if ((originalMode!=null) && (originalIsExpense==expense) && !combo.contains(originalMode) && (getAccount().indexOf(originalMode)>=0)) {
+			combo.addItem(originalMode);
 		}
 		// Clears the selection in order future selection to fire a selection change
 		// event ... even if the same value is selected (as selectedMode and value date may be
 		// changed)
-		modes.setSelectedItem(null);
-		modes.setActionEnabled(true);
+		modes.set(null);
+		combo.setActionEnabled(true);
 		// Restore the previously selected mode, if it is still available
-		if ((current != null) && (modes.contains(current))) {
-			modes.setSelectedItem(current);
+		if ((current != null) && (combo.contains(current))) {
+			modes.set(current);
 		} else {
-			modes.setSelectedIndex(0);
+			combo.setSelectedIndex(0);
 		}
 	}
 
@@ -309,15 +279,8 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		return (Transaction) super.getResult();
 	}
 
-	private Mode displayNewModeDialog() {
-		Mode mode = ModeDialog.open(data.getGlobalData(), getAccount(), this);
-		if (mode == null) return null;
-		DateStepper vdc = isExpense() ? mode.getExpenseVdc() : mode.getReceiptVdc();
-		return (vdc != null) ? mode : null;
-	}
-
 	protected Mode getCurrentMode() {
-		return getAccount().getMode((String)modes.getSelectedItem());
+		return modes.get();
 	}
 
 	class AccountsListener implements PropertyChangeListener {
@@ -336,27 +299,18 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		}
 	}
 
-	class ModesListener implements ActionListener {
+	class ModesListener implements PropertyChangeListener {
 		private Object lastSelected = null;
 		private boolean lastWasExpense = true;
+
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == modes) {
-				Object selected = modes.getSelectedItem();
-				if (!NullUtils.areEquals(lastSelected, selected) || (isExpense()!=lastWasExpense)) {
-					lastSelected = selected;
-					lastWasExpense = isExpense();
-					if (DEBUG) System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-					optionnalUpdatesOnModeChange();
-				}
-			} else {
-				// New mode required
-				Mode m = displayNewModeDialog();
-				if (m != null) {
-					modes.addItem(m.getName());
-					modes.setSelectedIndex(modes.getItemCount() - 1);
-					pack();
-				}
+		public void propertyChange(PropertyChangeEvent evt) {
+			Mode selected = modes.get();
+			if (!NullUtils.areEquals(lastSelected, selected) || (isExpense()!=lastWasExpense)) {
+				lastSelected = selected;
+				lastWasExpense = isExpense();
+				if (DEBUG) System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+				optionnalUpdatesOnModeChange();
 			}
 		}
 	}
