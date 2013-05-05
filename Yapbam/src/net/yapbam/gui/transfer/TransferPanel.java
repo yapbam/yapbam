@@ -63,8 +63,6 @@ public class TransferPanel extends JPanel {
 
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout.columnWeights = new double[]{1.0};
 		setLayout(gridBagLayout);
 		GridBagConstraints gbc_upperPane = new GridBagConstraints();
 		gbc_upperPane.insets = new Insets(0, 5, 0, 5);

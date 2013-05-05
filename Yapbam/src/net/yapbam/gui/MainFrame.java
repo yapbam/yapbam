@@ -242,7 +242,20 @@ public class MainFrame extends JFrame implements YapbamInstance {
 
 		if (filteredData == null) {
 			// Create the data structures if they are not provided as argument
-			this.data = new GlobalData();
+			this.data = new GlobalData() {
+				private final boolean CHECK_EVENT_ON_EDT = Boolean.getBoolean("CheckGlobalDataEventAreOnEDT"); //$NON-NLS-1$
+				@Override
+				protected void fireEvent(DataEvent event) {
+					if (IsEventsEnabled()) {
+						if (CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread() && (getNumberOfListeners()>0)) {
+							RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !"); //$NON-NLS-1$
+							e.fillInStackTrace();
+							e.printStackTrace();
+						}
+					}
+					super.fireEvent(event);
+				}
+			};
 			this.filteredData = new FilteredData(this.data);
 		} else {
 			this.data = filteredData.getGlobalData();
