@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
-import net.yapbam.data.xml.Serializer;
+import net.yapbam.data.xml.YapbamSerializer;
 import net.yapbam.gui.LocalizationData;
 
 /** A worker (see AJLib library) that reads a GlobalData URI in background. 
@@ -27,7 +27,7 @@ class OnlyReadWorker extends Worker<GlobalData, Void> implements ProgressReport 
 	
 	@Override
 	protected GlobalData doProcessing() throws Exception {
-		return Serializer.read(uri, password, this);
+		return YapbamSerializer.read(uri, password, this);
 	}
 
 	@Override
