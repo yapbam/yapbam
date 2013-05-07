@@ -16,7 +16,7 @@ import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.UnreachableHostException;
 import com.fathzer.soft.jclop.swing.MessagePack;
 
-import net.yapbam.data.xml.Serializer;
+import net.yapbam.data.xml.YapbamSerializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
@@ -103,7 +103,7 @@ public class DataReader {
 		while (true) {
 			if (password==null) return false; // The user cancels the read
 			try {
-				if (Serializer.isPasswordOk(localURI, password)) break; // If the user cancels or entered the right password ... go next step
+				if (YapbamSerializer.isPasswordOk(localURI, password)) break; // If the user cancels or entered the right password ... go next step
 			} catch (IOException e) {
 				throw new ExecutionException(e);
 			}
@@ -188,7 +188,7 @@ public class DataReader {
 		if (password==null) {
 			boolean passwordRequired;
 			try {
-				passwordRequired = Serializer.getSerializationData(localURI).isPasswordRequired();
+				passwordRequired = YapbamSerializer.getSerializationData(localURI).isPasswordRequired();
 			} catch (IOException e) {
 				throw new ExecutionException(e);
 			}

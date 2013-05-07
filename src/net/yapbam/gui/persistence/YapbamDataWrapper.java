@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.xml.Serializer;
+import net.yapbam.data.xml.YapbamSerializer;
 
 import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
@@ -37,12 +37,12 @@ public class YapbamDataWrapper extends DataWrapper<GlobalData> {
 
 	@Override
 	public void serialize(File file, Service service, Cancellable cancellable) throws IOException {
-		Serializer.write(data, file, !service.isLocal(), new ProgressReportAdapter(cancellable));
+		YapbamSerializer.write(data, file, !service.isLocal(), new ProgressReportAdapter(cancellable));
 	}
 
 	@Override
 	public GlobalData deserialize(File file, String password, Service service, Cancellable cancellable) throws IOException {
-		return Serializer.read(file.toURI(), password, new ProgressReportAdapter(cancellable));
+		return YapbamSerializer.read(file.toURI(), password, new ProgressReportAdapter(cancellable));
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class YapbamDataWrapper extends DataWrapper<GlobalData> {
 
 	@Override
 	public boolean needPassword(File file) throws IOException {
-		return Serializer.getSerializationData(file.toURI()).isPasswordRequired();
+		return YapbamSerializer.getSerializationData(file.toURI()).isPasswordRequired();
 	}
 
 	@Override
