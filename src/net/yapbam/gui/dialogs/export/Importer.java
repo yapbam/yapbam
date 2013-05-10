@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,8 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 import net.astesana.ajlib.utilities.FileUtils;
-import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
@@ -54,16 +54,11 @@ public class Importer {
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(FileUtils.getCanonical(file)));
+			CSVReader reader = new CSVReader(new FileReader(FileUtils.getCanonical(file)), parameters.getSeparator(),'"', parameters.getIgnoredLeadingLines());
 			try {
-				int lineNumber = 0;
-				for (int i=0;i<parameters.getIgnoredLeadingLines();i++) {
-					reader.readLine();
+				int lineNumber = parameters.getIgnoredLeadingLines();
+				for (String[] fields = reader.readNext(); fields != null; fields = reader.readNext()) {
 					lineNumber++;
-				}
-				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-					lineNumber++;
-					String[] fields = StringUtils.split(line, parameters.getSeparator());
 					try {
 						accountPart = !importLine(data, lineNumber, fields, accountPart) && accountPart;
 					} catch (ImportException e) {

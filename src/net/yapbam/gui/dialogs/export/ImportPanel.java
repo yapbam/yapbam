@@ -17,7 +17,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -28,7 +27,6 @@ import javax.swing.JButton;
 
 import net.astesana.ajlib.utilities.FileUtils;
 import net.astesana.ajlib.utilities.NullUtils;
-import net.astesana.ajlib.utilities.StringUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;
@@ -38,6 +36,9 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
 
 import javax.swing.JLabel;
+
+import au.com.bytecode.opencsv.CSVReader;
+
 import java.awt.Insets;
 
 public class ImportPanel extends JPanel {
@@ -438,9 +439,9 @@ public class ImportPanel extends JPanel {
 	}
 
 	private void countFileLines() throws FileNotFoundException, IOException, EmptyImportFileException {
-		BufferedReader reader = new BufferedReader(new FileReader(canonicalFile));
+		CSVReader reader = new CSVReader(new FileReader(canonicalFile), separatorPanel.getSeparator(), '"');
 		try {
-			for (String line = reader.readLine(); line!=null; line=reader.readLine()) {
+			for (String[] fields = reader.readNext(); fields!=null; fields=reader.readNext()) {
 				numberOfLines++;
 			}
 			if (this.numberOfLines==0) {
@@ -486,13 +487,9 @@ public class ImportPanel extends JPanel {
 	}
 	
 	private String[] getFields(int lineNumber) throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(canonicalFile));
+		CSVReader reader = new CSVReader(new FileReader(canonicalFile), separatorPanel.getSeparator(), '"', lineNumber);
 		try {
-			for (int i = 0; i < lineNumber; i++) {
-				reader.readLine();
-			}
-			String line = reader.readLine();
-			return (line==null) ? null : StringUtils.split(line, separatorPanel.getSeparator());
+			return reader.readNext();
 		} finally {
 			try {
 				reader.close();

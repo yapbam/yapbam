@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,7 +8,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
-import net.astesana.ajlib.utilities.CSVExporter;
+import net.astesana.ajlib.utilities.CSVWriter;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.SubTransaction;
@@ -25,18 +24,19 @@ public class Exporter {
 		super();
 		this.parameters = parameters;
 		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
-		amountFormatter = CSVExporter.getCurrencyFormater(LocalizationData.getLocale());
+		amountFormatter = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
 	}
 	
 	public void exportFile(File file, FilteredData data) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+		FileWriter fileWriter = new FileWriter(file);
 		try {
+			CSVWriter writer = new CSVWriter(fileWriter);
+			writer.setSeparator(parameters.getSeparator());
 			int[] fields = parameters.getExportedIndexes();
 			if (parameters.isInsertHeader()) {
 				// insert the header line
 				for (int i = 0; i < fields.length; i++) {
-					if (i>0) writer.write(parameters.getSeparator());
-					writer.write(ExportTableModel.columns[fields[i]]);
+					writer.writeCell(ExportTableModel.columns[fields[i]]);
 				}
 				writer.newLine();
 			}
@@ -46,8 +46,7 @@ public class Exporter {
 					Account account = data.getGlobalData().getAccount(i);
 					if (data.getFilter().isOk(account) || !parameters.isExportFilteredData()) {
 						for (int j = 0; j < fields.length; j++) {
-							if (j>0) writer.write(parameters.getSeparator());
-							writer.write(getField(account, fields[j]));
+							writer.writeCell(getField(account, fields[j]));
 						}
 						writer.newLine();
 					}
@@ -57,21 +56,20 @@ public class Exporter {
 			while (transactions.hasNext()) {
 				Transaction transaction = transactions.next();
 				for (int i = 0; i < fields.length; i++) {
-					if (i>0) writer.write(parameters.getSeparator());
-					writer.write(getField(transaction, fields[i]));
+					writer.writeCell(getField(transaction, fields[i]));
 				}
 				writer.newLine();
 				for (int j=0;j<transaction.getSubTransactionSize();j++) {
 					SubTransaction sub = transaction.getSubTransaction(j);
 					for (int i = 0; i < fields.length; i++) {
-						if (i>0) writer.write(parameters.getSeparator());
-						writer.write(getField(sub, fields[i]));
+						writer.writeCell(getField(sub, fields[i]));
 					}
 					writer.newLine();
 				}
 			}
+			writer.flush();
 		} finally {
-			writer.close();
+			fileWriter.close();
 		}
 	}
 	

@@ -78,7 +78,7 @@
 		<echo>logging</echo>
 		<javac srcdir="${apache.commons.logging.path}" includes="org/apache/commons/logging/impl/LogFactoryImpl.java,org/apache/commons/logging/impl/SimpleLog.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<echo>end logging</echo>
-		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechart.path};${jcommon.path};${yapbam.commons.path};${ajlib.path};${apache.commons.lang.path};${javaluator.path};${jclop.path};${jclop-dropbox.path};${dropbox.path};${apache.commons.codec.path};${apache.http.client.path};${apache.http.core.path};${jsonsimple.path};${apache.commons.logging.path}" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechart.path};${jcommon.path};${yapbam.commons.path};${ajlib.path};${apache.commons.lang.path};${javaluator.path};${jclop.path};${jclop-dropbox.path};${dropbox.path};${apache.commons.codec.path};${apache.http.client.path};${apache.http.core.path};${jsonsimple.path};${apache.commons.logging.path};;${opencsv.path}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>

@@ -23,5 +23,6 @@
 	<classpathentry kind="var" path="COMMONS-LANG"/>
 	<classpathentry kind="var" path="COMMONS-LOGGING"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/YapbamCommons"/>
+	<classpathentry kind="var" path="OPENCSV"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
