@@ -1,16 +1,17 @@
 package net.yapbam.gui.util;
 
 import java.awt.event.ActionEvent;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 
 import net.astesana.ajlib.swing.table.JTable;
+import net.astesana.ajlib.utilities.CSVWriter;
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.widget.JLabelMenu;
 
@@ -112,43 +113,33 @@ public class FriendlyTable extends JTable {
 	 * @see ExportFormat
 	 */
 	public void export(File file, ExportFormat format) throws IOException {
-		file = FileUtils.getCanonical(file);
-		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		Writer fileWriter = new FileWriter(FileUtils.getCanonical(file));
 		try {
-			boolean first = true;
+			CSVWriter out = new CSVWriter(fileWriter);
+			out.setSeparator(format.getSeparator());
 			int[] modelIndexes = new int[getColumnCount(false)];
 			for (int colIndex=0; colIndex < getColumnCount(false); colIndex++) {
 				if (isColumnVisible(colIndex)) {
 					modelIndexes[colIndex] = ((XTableColumnModel)getColumnModel()).getColumn(colIndex, false).getModelIndex();
 					if (format.hasHeader()) {
-						if (first) {
-							first = false;
-						} else {
-							out.append(format.getSeparator());
-						}
-						out.append(getModel().getColumnName(modelIndexes[colIndex]));
+						out.writeCell(getModel().getColumnName(modelIndexes[colIndex]));
 					}
 				}
 			}
 			out.newLine();
 			for (int rowIndex = 0; rowIndex < getRowCount(); rowIndex++) {
-				first = true;
 				int modelRowIndex = convertRowIndexToModel(rowIndex);
 				for (int colIndex=0; colIndex < getColumnCount(false); colIndex++) {
 					if (isColumnVisible(colIndex)) {
-						if (first) {
-							first = false;
-						} else {
-							out.append(format.getSeparator());
-						}
 						Object obj = getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
-						out.append(format.format(obj));
+						out.writeCell(format.format(obj));
 					}
 				}
 				out.newLine();
 			}
+			out.flush();
 		} finally {
-			out.close();
+			fileWriter.close();
 		}
 	}
 	

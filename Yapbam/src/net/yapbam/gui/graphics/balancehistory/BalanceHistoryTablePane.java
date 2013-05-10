@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 
 import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.FileChooser;
-import net.astesana.ajlib.utilities.CSVExporter;
+import net.astesana.ajlib.utilities.CSVWriter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
@@ -130,7 +130,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 		private DefaultExporter (Locale locale) {
 			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
-			currencyFormat = CSVExporter.getCurrencyFormater(locale);
+			currencyFormat = CSVWriter.getDecimalFormater(locale);
 		}
 		
 		@Override

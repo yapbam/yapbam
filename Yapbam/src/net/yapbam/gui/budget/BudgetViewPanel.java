@@ -19,7 +19,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,7 +39,7 @@ import net.astesana.ajlib.swing.Utils;
 import net.astesana.ajlib.swing.dialog.FileChooser;
 import net.astesana.ajlib.swing.table.RowHeaderRenderer;
 import net.astesana.ajlib.swing.table.Table;
-import net.astesana.ajlib.utilities.CSVExporter;
+import net.astesana.ajlib.utilities.CSVWriter;
 import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
@@ -97,7 +96,6 @@ public class BudgetViewPanel extends JPanel {
 		gbc_topPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_topPanel.weightx = 1.0D;
 		gbc_topPanel.gridy = 0;
-		this.setSize(529, 287);
 		this.setLayout(new GridBagLayout());
 		this.add(getTopPanel(), gbc_topPanel);
 		this.add(getTable(), gbc_budgetTable);
@@ -240,59 +238,49 @@ public class BudgetViewPanel extends JPanel {
 	 * @throws IOException
 	 */
 	private void export(File file, char columnSeparator, Locale locale, String dateSumWording, String categorySumWording) throws IOException {
-		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		FileWriter fileWriter = new FileWriter(file);
 		try {
+			CSVWriter out = new CSVWriter(fileWriter);
+			out.setSeparator(columnSeparator);
 			// Output header line
 			DateFormat dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
+			out.writeCell("");
 			for (int i = 0; i < budget.getDatesSize(); i++) {
-				out.append(columnSeparator);
-				out.append(dateFormater.format(budget.getDate(i)));
+				out.writeCell(dateFormater.format(budget.getDate(i)));
 			}
 			if (categorySumWording!=null) {
-				out.append(columnSeparator);
-				out.append(categorySumWording);
+				out.writeCell(categorySumWording);
 			}
 			// Output category lines
-			NumberFormat currencyFormatter = CSVExporter.getCurrencyFormater(locale);
+			NumberFormat currencyFormatter = CSVWriter.getDecimalFormater(locale);
 			for (int i=0;i<budget.getCategoriesSize();i++) {
 				Category category = budget.getCategory(i);
 				out.newLine();
-				out.append(category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName());
+				out.writeCell(category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName());
 				for (int j = 0; j < budget.getDatesSize(); j++) {
-					out.append(columnSeparator);
 					Double value = budget.getAmount(budget.getDate(j), category);
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
+					out.writeCell(value!=null?currencyFormatter.format(value):"");
 				}
 				if (categorySumWording!=null) {
-					out.append(columnSeparator);
 					Double value = budget.getSum(category);
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
+					out.writeCell(value!=null?currencyFormatter.format(value):"");
 				}
 			}
 			if (dateSumWording!=null) {
 				out.newLine();
-				out.append(dateSumWording);
+				out.writeCell(dateSumWording);
 				for (int j = 0; j < budget.getDatesSize(); j++) {
-					out.append(columnSeparator);
 					Double value = budget.getSum(budget.getDate(j));
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
+					out.writeCell(value!=null?currencyFormatter.format(value):"");
 				}
 				if (categorySumWording!=null) {
-					out.append(columnSeparator);
 					Double value = budget.getSum();
-					if (value!=null) {
-						out.append(currencyFormatter.format(value));
-					}
+					out.writeCell(value!=null?currencyFormatter.format(value):"");
 				}
 			}
+			out.flush();
 		} finally {
-			out.close();
+			fileWriter.close();
 		}
 	}
 
