@@ -3,7 +3,7 @@
 	<!--======================================  README ================================================>
 	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
 	| jfreechartpath properties in the customPaths.properties file used in the line below.             |
-	| These properties have to reference the apache commonsnet, jfreeChart, JCommon, A-JLib,           |
+	| These properties have to reference the apache commonsnet, jfreeChart, JCommon, OpenCSV, A-JLib,  |
 	| Javaluator, JClop and YapbamCommons sources.                                                     |
 	| These sources are available at http://commons.apache.org/net/, http://www.jfree.org and          |
 	| http://sourceforge.net/projects/ajlib/                                                           |
@@ -31,7 +31,8 @@
 	<target name="updater.build">
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
-		<javac srcdir="srcUpdater" sourcepath="src;${ajlibpath}" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<echo message="${ajlib.path}"/>
+		<javac srcdir="srcUpdater" sourcepath="src;${ajlib.path}" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<copy todir="releaseCompile">
 	    	<fileset dir="srcUpdater" excludes="**/*.java"/>
 		</copy>
