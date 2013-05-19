@@ -71,8 +71,6 @@ public class DataReader {
 			// If another phase was cancelled -> Cancel the whole read operation
 			return false;
 		} catch (ExecutionException e) {
-			// An error occurred while reading the cache file
-			if (adapter.getService()==null || (e.getCause() instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
 			return doErrorOccurred(e);
 		}
 		File localFile = adapter.getLocalFile(uri);
@@ -136,13 +134,20 @@ public class DataReader {
 	}
 
 	private boolean doErrorOccurred(ExecutionException e) throws ExecutionException {
-		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
-		if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cacheCorrupted"), //$NON-NLS-1$
-				LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
+		// An error occurred while reading the cache file
+		if (adapter.getService().isLocal() || (e.getCause() instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
+		if (adapter.getService().isLocal()) {
+			e.printStackTrace();
 			return false;
+		} else {
+			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
+			if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cacheCorrupted"), //$NON-NLS-1$
+					LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
+				return false;
+			}
+			adapter.getLocalFile(uri).delete();
+			return doSyncAndRead(SynchronizeCommand.DOWNLOAD);
 		}
-		adapter.getLocalFile(uri).delete();
-		return doSyncAndRead(SynchronizeCommand.DOWNLOAD);
 	}
 	
 	private boolean doRemoteNotFound() throws ExecutionException {

@@ -65,6 +65,7 @@
 	    	<fileset dir="${jcommon.path}" includes="org/jfree/ui/LocalizationBundl*.properties"/>
 	    	<fileset dir="${ajlib.path}" includes="**/*.properties"/>
 	    	<fileset dir="${yapbam.commons.path}" includes="**/*.properties"/>
+	    	<fileset dir="${yapbam.commons.path}" includes="**/*.xsd"/>
 	    	<fileset dir="${ajlib.path}" includes="**/*.png"/>
 	    	<fileset dir="${jclop.path}" includes="**/*.properties"/>
 	    	<fileset dir="${jclop.path}" includes="**/*.png"/>
