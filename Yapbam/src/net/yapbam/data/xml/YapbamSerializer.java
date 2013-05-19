@@ -68,23 +68,24 @@ public class YapbamSerializer {
 	public static GlobalData read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
 //		long start = System.currentTimeMillis();//TODO
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) { //$NON-NLS-1$ //$NON-NLS-2$
-			InputStream is = getUnzippedInputStream(uri);
+			InputStream global = uri.toURL().openStream();
 			try {
-				GlobalData redData = Serializer.read(password, is, report);
-				redData.setURI(uri);
-				redData.setChanged(false);
-				return redData;
+				InputStream is = Serializer.getUnzippedInputStream(global);
+				try {
+					GlobalData redData = Serializer.read(password, is, report);
+					redData.setURI(uri);
+					redData.setChanged(false);
+					return redData;
+				} finally {
+					is.close();
+				}
 			} finally {
-				is.close();
+				global.close();
 			}
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme()); //$NON-NLS-1$
 		}
 //		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");//TODO
-	}
-	
-	private static InputStream getUnzippedInputStream(URI uri) throws IOException {
-		return Serializer.getUnzippedInputStream(new BufferedInputStream(uri.toURL().openStream()));
 	}
 	
 	/** Tests whether a password is the right one for an uri.
@@ -93,14 +94,19 @@ public class YapbamSerializer {
 	 * @throws IOException If an I/O error occurred
 	 */
 	public static boolean isPasswordOk(URI uri, String password) throws IOException {
-		InputStream is = getUnzippedInputStream(uri);
+		InputStream global = uri.toURL().openStream();
 		try {
-			Serializer.getDecryptedStream(password, is);
-			return true;
-		} catch (AccessControlException e) {
-			return false;
+			InputStream is = Serializer.getUnzippedInputStream(global);
+			try {
+				Serializer.getDecryptedStream(password, is);
+				return true;
+			} catch (AccessControlException e) {
+				return false;
+			} finally {
+				is.close();
+			}
 		} finally {
-			is.close();
+			global.close();
 		}
 	}
 
@@ -110,11 +116,16 @@ public class YapbamSerializer {
 	 * @throws IOException
 	 */
 	public static SerializationData getSerializationData(URI uri) throws IOException {
-		InputStream in = getUnzippedInputStream(uri);
+		InputStream global = uri.toURL().openStream();
 		try {
-			return Serializer.getSerializationData(in);
+			InputStream in = Serializer.getUnzippedInputStream(global);
+			try {
+				return Serializer.getSerializationData(in);
+			} finally {
+				in.close();
+			}
 		} finally {
-			in.close();
+			global.close();
 		}
 	}
 }
