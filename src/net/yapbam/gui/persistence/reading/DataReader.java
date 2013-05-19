@@ -16,6 +16,7 @@ import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.UnreachableHostException;
 import com.fathzer.soft.jclop.swing.MessagePack;
 
+import net.yapbam.data.xml.UnsupportedFileVersionException;
 import net.yapbam.data.xml.YapbamSerializer;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
@@ -118,9 +119,9 @@ public class DataReader {
 	private boolean doSyncFailed(Throwable throwable) throws ExecutionException {
 		boolean internetIsDown = throwable instanceof UnreachableHostException;
 		if (!adapter.getLocalFile(uri).exists()) {
-			String message = LocalizationData.get("synchronization.downloadFailed");
-			if (internetIsDown) message = "<html>"+HtmlUtils.removeHtmlTags(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+HtmlUtils.removeHtmlTags(message)+"</html>";
-			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), internetIsDown?JOptionPane.WARNING_MESSAGE:JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1
+			String message = LocalizationData.get("synchronization.downloadFailed"); //$NON-NLS-1$
+			if (internetIsDown) message = "<html>"+HtmlUtils.removeHtmlTags(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+HtmlUtils.removeHtmlTags(message)+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), internetIsDown?JOptionPane.WARNING_MESSAGE:JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1 //$NON-NLS-1$
 			return false;
 		} else {
 			//TODO be more precise in the next messages?
@@ -134,19 +135,26 @@ public class DataReader {
 	}
 
 	private boolean doErrorOccurred(ExecutionException e) throws ExecutionException {
-		// An error occurred while reading the cache file
-		if (adapter.getService().isLocal() || (e.getCause() instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
-		if (adapter.getService().isLocal()) {
-			e.printStackTrace();
+		// An error occurred while reading the cached file (or the local file)
+		Throwable cause = e.getCause();
+		if (adapter.getService().isLocal() || (cause instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
+		if (cause instanceof UnsupportedFileVersionException) {
+			String message = MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
+					adapter.getService().getDisplayable(uri));
+			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 			return false;
 		} else {
-			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
-			if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cacheCorrupted"), //$NON-NLS-1$
-					LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
+			if (adapter.getService().isLocal()) {
 				return false;
+			} else {
+				String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
+				if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cacheCorrupted"), //$NON-NLS-1$
+						LocalizationData.get("ErrorManager.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
+					return false;
+				}
+				adapter.getLocalFile(uri).delete();
+				return doSyncAndRead(SynchronizeCommand.DOWNLOAD);
 			}
-			adapter.getLocalFile(uri).delete();
-			return doSyncAndRead(SynchronizeCommand.DOWNLOAD);
 		}
 	}
 	
