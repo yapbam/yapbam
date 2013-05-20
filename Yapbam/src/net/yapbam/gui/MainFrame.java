@@ -20,6 +20,8 @@ import com.fathzer.soft.jclop.Service;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.*;
 import net.yapbam.data.event.*;
+import net.yapbam.data.xml.UnsupportedFileVersionException;
+import net.yapbam.data.xml.UnsupportedFormatException;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
@@ -501,6 +503,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),displayedURI)); //$NON-NLS-1$
 						}
 					} else if (e instanceof IOException) {
+						if ((e instanceof UnsupportedFileVersionException) || (e instanceof UnsupportedFormatException)) return false; 
 						if (restore) {
 							ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),displayedURI)); //$NON-NLS-1$
 						} else {

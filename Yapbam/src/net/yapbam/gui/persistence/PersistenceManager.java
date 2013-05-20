@@ -22,6 +22,7 @@ import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
 import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
 import net.astesana.ajlib.swing.worker.Worker;
+import net.yapbam.data.xml.UnsupportedFileVersionException;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
 import net.yapbam.gui.dialogs.BasicHTMLDialog.Type;
@@ -176,6 +177,10 @@ public abstract class PersistenceManager {
 								//FIXME
 								throw new RuntimeException(exception);
 							}
+						} else if (exception instanceof UnsupportedFileVersionException) {
+							String message = MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
+									adapter.getService().getDisplayable(path));
+							JOptionPane.showMessageDialog(frame, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 						} else if (exception instanceof IOException) {
 							ByteArrayOutputStream out = new ByteArrayOutputStream();
 							exception.printStackTrace(new PrintStream(out));
