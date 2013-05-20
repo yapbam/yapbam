@@ -23,15 +23,14 @@ public class YapbamSerializer {
 	 * @throws IOException if something goes wrong while writing
 	 */
 	public static void write(GlobalData data, File file, boolean zipped, ProgressReport report) throws IOException {
-		if (file.exists() && !file.canWrite()) throw new IOException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
+		if ((file.exists() && !file.canWrite()) || !FileUtils.isWritable(file)) throw new FileNotFoundException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
 		// Proceed safely, it means not to erase the old version until the new version is written
 		// Everything here is pretty ugly.
 		//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
-		if (!FileUtils.isWritable(file)) throw new FileNotFoundException();
 		File writed = file.exists()?getSafeTmpFile("yapbam", null, file.getParentFile()):file; //$NON-NLS-1$
 		OutputStream out = new FileOutputStream(writed);
 		try {
-			Serializer.write(data, out, zipped?file.getName():null, report);
+			Serializer.write(data, out, zipped?getEntryName(file.getName()):null, report);
 		} finally {
 			out.close();
 		}
@@ -45,6 +44,15 @@ public class YapbamSerializer {
 			}
 			FileUtils.move(writed, file);
 		}
+	}
+	
+	private static String getEntryName(String fileName) {
+		String lowerCase = fileName.toLowerCase();
+		if (lowerCase.endsWith(".zip")) {
+			fileName = fileName.substring(0, fileName.length()-".zip".length());
+			lowerCase = lowerCase.substring(0, lowerCase.length()-".zip".length());
+		}
+		return lowerCase.endsWith(".xml") ? fileName : fileName+".xml";
 	}
 	
 	private static File getSafeTmpFile(String prefix, String suffix, File directory) throws IOException {
