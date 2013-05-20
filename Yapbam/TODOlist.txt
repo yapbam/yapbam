@@ -3,10 +3,6 @@ TODO list
 Bug :
 	Changer la font size et le thème ne marche pas (la font size est ignorée).
 	Finir le "ignore end date" (mettre en pointillé ce qui dépasse de la date de fin dans le graphique).
-	(Fixed, need to put it in release notes) Quand on ouvre un fichier xml autre qu'un fichier Yapbam ... rien ne se passe, on se retrouve avec un document vide.
-	Quand on ouvre un fichier qui n'est pas du bon format (exemple un fichier pdf), les messages ne sont pas les bons du tout ... et ça fait une FileNotFound Exception si on retente, pire, ça supprime le fichier.
-	Les fichiers sauvegardés au format zip ne peuvent pas être réouverts par 7Zip !
-	Changer le message d'erreur sur les IOException.
 
 Question à cent sous :
 Depuis la 0.12.0 on ne peut plus créer d'opération périodique inactive sans périodicité, bug ou feature ?
