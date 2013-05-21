@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import net.astesana.ajlib.swing.widget.ComboBox;
 import net.yapbam.data.Alert;
+import net.yapbam.data.Alert.Kind;
 import net.yapbam.gui.LocalizationData;
 
 import java.awt.Insets;
@@ -74,7 +75,7 @@ class AlertsPane extends JPanel {
 			MessageFormat format = new MessageFormat(LocalizationData.get("BalanceHistory.alerts.format"), LocalizationData.getLocale()); //$NON-NLS-1$
 			String balance = LocalizationData.getCurrencyInstance().format(alerts[i].getBalance());
 			String threshold = LocalizationData.getCurrencyInstance().format(alerts[i].getThreshold());
-			String ope = alerts[i].getKind()==Alert.IS_LESS?" < ":" > "; //$NON-NLS-1$ //$NON-NLS-2$
+			String ope = alerts[i].getKind().equals(Kind.IS_LESS)?" < ":" > "; //$NON-NLS-1$ //$NON-NLS-2$
 			String message = format.format(new Object[]{alerts[i].getAccount().getName(), alerts[i].getDate(), (balance+ope+threshold)});
 			this.alertsMenu.addItem(message);
 		}
