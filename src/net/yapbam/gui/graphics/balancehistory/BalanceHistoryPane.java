@@ -8,6 +8,7 @@ import javax.swing.event.ChangeListener;
 
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
+import net.yapbam.data.Alert;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.AccountAddedEvent;
@@ -146,13 +147,8 @@ public class BalanceHistoryPane extends JPanel {
 		List<Alert> alerts = new ArrayList<Alert>();
 		for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
 			Account account = data.getGlobalData().getAccount(i);
-			BalanceHistory balanceHistory = account.getBalanceData().getBalanceHistory();
-			long firstAlertDate = balanceHistory.getFirstAlertDate(today, null, account.getAlertThreshold());
-			if (firstAlertDate>=0) {
-				Date date = new Date();
-				if (firstAlertDate>0) date.setTime(firstAlertDate);
-				alerts.add(new Alert(date, account, balanceHistory.getBalance(date)));
-			}
+			Alert alert = account.getFirstAlert(today, null);
+			if (alert!=null) alerts.add(alert);
 		}
 		graph.setAlerts(alerts.toArray(new Alert[alerts.size()]));
 		// Compute when occurs the first alert.
