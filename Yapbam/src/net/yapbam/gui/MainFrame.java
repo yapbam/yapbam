@@ -305,6 +305,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i] != null) plugins[i].restoreState();
 		}
+		//If the order of the tabs leaves the orginal first tab in the first position,
+		//No event is sent to refresh the displayed menu. So, we "manually" invoke the menu refresh. 
+		mainMenu.updateMenu(((MainPanel)getJFrame().getContentPane()).getSelectedPlugIn());
 
 		updateWindowTitle();
 
