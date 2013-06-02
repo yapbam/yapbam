@@ -3,7 +3,6 @@ TODO list
 Bug :
 	Changer la font size et le thème ne marche pas (la font size est ignorée).
 	Finir le "ignore end date" (mettre en pointillé ce qui dépasse de la date de fin dans le graphique).
-	Il manque un libellé "com.fathzer.soft.jclop.downloading" quand on tente d'ouvrir le site web
 
 Question à cent sous :
 Depuis la 0.12.0 on ne peut plus créer d'opération périodique inactive sans périodicité, bug ou feature ?

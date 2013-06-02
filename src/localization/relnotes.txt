@@ -4,9 +4,12 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 	When editing a subtransaction, selecting a predefined label sets the amount to 0.
 
-version	0.15.3 (06/??/2013)
+version	0.15.3 (06/02/2013)
+improvement
+	Adds, in check mode of the "Account Statements" tab, a field for entering the final statement balance. Once this is defined, the final balance displays its gap with the target.
 fix
-	Trying to link to a new Dropbox account behind a authenticated proxy, with bad authentication data set in preferences caused an error. 
+	Trying to link to a new Dropbox account behind a authenticated proxy, with bad authentication data set in preferences caused an error.
+	When "Operations" was the first tab, the menu "File / Print..." was grayed out at startup. Changing tab and come back to "Operations" fixed the problem. 
 
 version	0.15.2 (05/20/2013)
 fix

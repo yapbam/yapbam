@@ -474,9 +474,8 @@ public class StatementViewPanel extends JPanel {
 		getTransactionsTable().setTransactions(transactions);
 
 		// Set up the balance panel
-		getBalancePanel().setStatementVisible(checkMode);
-		getBalancePanel().setStart(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), statementSelected?ci.format(statement.getStartBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
-		getBalancePanel().setEnd(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), statementSelected?ci.format(statement.getEndBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
+		getBalancePanel().setCheckMode(checkMode);
+		getBalancePanel().setStatement(statementSelected?statement:null);
 		// Set up the details
 		getDetail().setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statementSelected?statement.getNbTransactions():0, //$NON-NLS-1$
 				statementSelected?ci.format(statement.getNegativeBalance()):0.0, statementSelected?ci.format(statement.getPositiveBalance()):0.0));
