@@ -25,6 +25,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 		super(owner, LocalizationData.get("GeneratePeriodicalTransactionsDialog.title"), data); //$NON-NLS-1$
 		this.setResizable(true);
 		this.pack();
+		this.setMinimumSize(getSize());
 	}
 
 	@Override
