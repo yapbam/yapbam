@@ -1,10 +1,14 @@
 package net.yapbam.gui.filter;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
+import java.awt.Rectangle;
+
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 import javax.swing.JList;
 import javax.swing.BorderFactory;
+import javax.swing.Scrollable;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -35,7 +39,7 @@ import java.util.TreeSet;
 
 import javax.swing.JButton;
 
-public class CustomFilterPanel extends JPanel {
+public class CustomFilterPanel extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;
 	public static final String INCONSISTENCY_CAUSE_PROPERTY = "InconsistencyCause"; //$NON-NLS-1$
 	
@@ -783,5 +787,30 @@ public class CustomFilterPanel extends JPanel {
 			commentPanel.setTextMatcher(filter.getCommentMatcher());
 		}
 		return commentPanel;
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return getPreferredSize();
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 10;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 40;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
 	}
 }

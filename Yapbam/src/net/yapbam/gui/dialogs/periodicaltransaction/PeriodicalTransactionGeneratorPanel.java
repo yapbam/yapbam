@@ -84,6 +84,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private EditTransactionAction editAction;
 	private JPanel panel;
 	private JButton editButton;
+	private JPanel panel_1;
 
 	/**
 	 * This is the default constructor
@@ -115,31 +116,10 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-			jLabel = new JLabel();
-			GridBagConstraints gbc_jLabel = new GridBagConstraints();
-			gbc_jLabel.anchor = GridBagConstraints.WEST;
-			gbc_jLabel.insets = new Insets(0, 0, 0, 5);
-			gbc_jLabel.gridx = 0;
-			gbc_jLabel.gridy = 0;
-			jPanel.add(jLabel, gbc_jLabel);
-			jLabel.setText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate")); //$NON-NLS-1$
-			GridBagConstraints gbc_dateField = new GridBagConstraints();
-			gbc_dateField.anchor = GridBagConstraints.WEST;
-			gbc_dateField.insets = new Insets(0, 0, 0, 5);
-			gbc_dateField.gridx = 1;
-			gbc_dateField.gridy = 0;
-			jPanel.add(getDateField(), gbc_dateField);
+			jPanel.setLayout(new BorderLayout(0, 0));
+			jPanel.add(getPanel_1(), BorderLayout.NORTH);
 			summary = new JLabel();
-			GridBagConstraints gbc_summary = new GridBagConstraints();
-			gbc_summary.weightx = 1.0;
-			gbc_summary.fill = GridBagConstraints.HORIZONTAL;
-			gbc_summary.anchor = GridBagConstraints.WEST;
-			gbc_summary.gridwidth = 0;
-			gbc_summary.gridx = 0;
-			gbc_summary.gridy = 1;
-			jPanel.add(summary, gbc_summary);
-			summary.setText(" ");
+			jPanel.add(summary);
 		}
 		return jPanel;
 	}
@@ -188,7 +168,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JTable getJTable() {
 		if (jTable == null) {
 			tableModel = new GenerateTableModel(data.getGlobalData());
-			jTable = new JTable(tableModel) {
+			jTable = new net.astesana.ajlib.swing.table.JTable(tableModel) {
 				/* (non-Javadoc)
 				 * @see javax.swing.JTable#getPreferredScrollableViewportSize()
 				 */
@@ -317,5 +297,30 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 			editButton = new JButton(getEditAction());
 		}
 		return editButton;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			GridBagLayout gbl_panel_1 = new GridBagLayout();
+			gbl_panel_1.columnWidths = new int[]{0, 0, 0};
+			gbl_panel_1.rowHeights = new int[]{0, 0};
+			gbl_panel_1.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+			gbl_panel_1.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+			panel_1.setLayout(gbl_panel_1);
+			jLabel = new JLabel();
+			GridBagConstraints gbc_jLabel = new GridBagConstraints();
+			gbc_jLabel.anchor = GridBagConstraints.WEST;
+			gbc_jLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_jLabel.gridx = 0;
+			gbc_jLabel.gridy = 0;
+			panel_1.add(jLabel, gbc_jLabel);
+			jLabel.setText(LocalizationData.get("GeneratePeriodicalTransactionsDialog.lastDate")); //$NON-NLS-1$
+			GridBagConstraints gbc_dateField = new GridBagConstraints();
+			gbc_dateField.anchor = GridBagConstraints.WEST;
+			gbc_dateField.gridx = 1;
+			gbc_dateField.gridy = 0;
+			panel_1.add(getDateField(), gbc_dateField);
+		}
+		return panel_1;
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
