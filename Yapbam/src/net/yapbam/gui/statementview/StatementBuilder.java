@@ -7,9 +7,11 @@ import java.util.HashMap;
 import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
 
 public class StatementBuilder {
+	//TODO Should be part of YapbamCommons
 	private Statement[] statements;
 	
 	public StatementBuilder(GlobalData data, Account account) {
