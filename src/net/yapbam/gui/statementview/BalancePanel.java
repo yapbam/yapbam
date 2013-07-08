@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Statement;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;

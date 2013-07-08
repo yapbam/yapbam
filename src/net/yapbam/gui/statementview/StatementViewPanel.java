@@ -27,6 +27,7 @@ import net.yapbam.data.AbstractTransactionUpdater;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.DeleteTransactionAction;
