@@ -460,8 +460,7 @@ public class StatementViewPanel extends JPanel {
 			boolean showWarningMessage = false;
 			if (statement==null) {
 				// If the statement doesn't exist (or no statement id is entered), create a fake one.
-				statement = new Statement(statementId);
-				statement.setStartBalance(uncheckedStart);
+				statement = new Statement(statementId, uncheckedStart);
 				transactions = new Transaction[0];
 			} else {
 				// Verify that this statement is the last one
