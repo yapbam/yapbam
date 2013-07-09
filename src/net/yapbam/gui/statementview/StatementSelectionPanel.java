@@ -220,7 +220,7 @@ public class StatementSelectionPanel extends JPanel {
 			statementMenu.setSelectedIndex(-1);
 			statementMenu.setEnabled(false);
 		} else {
-			statements = new StatementBuilder(data.getGlobalData(), data.getGlobalData().getAccount(accountIndex)).getStatements();
+			statements = Statement.getStatements(data.getGlobalData().getAccount(accountIndex));
 			for (int i = 0; i < statements.length; i++) {
 				String id = statements[statements.length - 1 - i].getId();
 				statementMenu.addItem(id == null ? LocalizationData.get("StatementView.notChecked") : id); //$NON-NLS-1$
