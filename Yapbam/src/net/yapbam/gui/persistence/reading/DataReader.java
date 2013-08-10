@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -104,6 +105,8 @@ public class DataReader {
 			try {
 				if (YapbamSerializer.isPasswordOk(localURI, password)) break; // If the user cancels or entered the right password ... go next step
 			} catch (IOException e) {
+				throw new ExecutionException(e);
+			} catch (NoSuchAlgorithmException e) {
 				throw new ExecutionException(e);
 			}
 			dialog = new GetPasswordDialog(owner,

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.security.AccessControlException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -42,7 +44,7 @@ public class PasswordbasedEncryption {
 			e.printStackTrace();
 		}
 	}
-	private static void read(File file) throws IOException {
+	private static void read(File file) throws IOException, NoSuchAlgorithmException {
 		InputStream in = new BufferedInputStream(new FileInputStream(file));
 		in.mark(1024);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
