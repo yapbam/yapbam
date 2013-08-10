@@ -3,6 +3,7 @@ package net.yapbam.data.xml;
 import java.io.*;
 import java.net.URI;
 import java.security.AccessControlException;
+import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 
 import net.astesana.ajlib.utilities.FileUtils;
@@ -101,9 +102,9 @@ public class YapbamSerializer {
 	 * @param uri The URI containing Yapbam data
 	 * @param password A password (null for no password)
 	 * @throws IOException If an I/O error occurred
-	 * @throws NoSuchAlgorithmException If the file encryption is not supported
+	 * @throws GeneralSecurityException If the file encryption is not supported
 	 */
-	public static boolean isPasswordOk(URI uri, String password) throws IOException, NoSuchAlgorithmException {
+	public static boolean isPasswordOk(URI uri, String password) throws IOException, GeneralSecurityException {
 		InputStream global = uri.toURL().openStream();
 		try {
 			InputStream is = Serializer.getUnzippedInputStream(global);
