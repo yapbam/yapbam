@@ -5,6 +5,8 @@ known
 	When editing a subtransaction, selecting a predefined label sets the amount to 0.
 
 version 0.15.5 (???)
+fix
+	Menu shortcuts used the CTRL key on Macintosh (instead of "Apple" key).
 improvement
 	Several speed improvements.
 	Better handling of unsupported file format (especially, future versions of encoded files will be detected as non supported instead of corrupted).

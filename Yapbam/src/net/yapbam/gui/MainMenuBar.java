@@ -1,5 +1,6 @@
 package net.yapbam.gui;
 
+import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
@@ -77,6 +78,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	MainMenuBar (MainFrame frame) {
 		super();
 		this.frame = frame;
+		int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	
 		//Build the file menu.
 		JMenu menu = new JMenu(LocalizationData.get("MainMenu.File")); //$NON-NLS-1$
@@ -91,10 +93,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.add(this.menuItemNew);
 		this.menuItemOpen = new JMenuItem(new OpenAction(this.frame));
 		this.menuItemOpen.setMnemonic(LocalizationData.getChar("MainMenu.Open.Mnemonic")); //$NON-NLS-1$
-		this.menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		menu.add(this.menuItemOpen);
 		this.menuItemSave = new JMenuItem(new SaveAction(this.frame));
-		this.menuItemSave.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Save.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemSave.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Save.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		this.menuItemSave.setMnemonic(LocalizationData.getChar("MainMenu.Save.Mnemonic")); //$NON-NLS-1$
 		this.menuItemSave.setEnabled(frame.getData().somethingHasChanged());
 		menu.add(this.menuItemSave);
@@ -128,7 +130,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.addSeparator();
 		this.menuItemPrint = new JMenuItem(LocalizationData.get("MainMenuBar.Print"), IconManager.get(Name.PRINT)); //$NON-NLS-1$
 		this.menuItemPrint.setMnemonic(LocalizationData.getChar("MainMenu.Print.Mnemonic")); //$NON-NLS-1$
-		this.menuItemPrint.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenuBar.Print.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemPrint.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenuBar.Print.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		this.menuItemPrint.setToolTipText(LocalizationData.get("MainMenuBar.Print.ToolTip")); //$NON-NLS-1$
 		this.menuItemPrint.addActionListener(this);
 		this.menuItemPrint.setEnabled(false);
@@ -141,7 +143,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 
 		menu.addSeparator();
 		this.menuItemQuit = new JMenuItem(LocalizationData.get("MainMenu.Quit")); //$NON-NLS-1$
-		this.menuItemQuit.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Quit.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		this.menuItemQuit.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Quit.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		this.menuItemQuit.setMnemonic(LocalizationData.getChar("MainMenu.Quit.Mnemonic")); //$NON-NLS-1$
 		this.menuItemQuit.setToolTipText(LocalizationData.get("MainMenu.Quit.ToolTip")); //$NON-NLS-1$
 		this.menuItemQuit.addActionListener(this);
@@ -156,22 +158,22 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		insertPluginMenuItems(this.transactionMenu, AbstractPlugIn.ACCOUNTS_PART);
 		this.transactionMenu.addSeparator();
 		JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getFilteredData(), getTransactionSelector(), false));
-		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		transactionMenu.add(item);
 		item = new JMenuItem(new NewTransactionAction(frame.getFilteredData(), getTransactionSelector(), true));
 		item.setText(LocalizationData.get("MainMenu.Transactions.NewMultiple")); //$NON-NLS-1$
 		item.setToolTipText(LocalizationData.get("MainMenu.Transactions.NewMultiple.ToolTip")); //$NON-NLS-1$
-		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), ActionEvent.CTRL_MASK+ActionEvent.SHIFT_MASK)); //$NON-NLS-1$
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.New.Accelerator"), menuShortcutKeyMask+ActionEvent.SHIFT_MASK)); //$NON-NLS-1$
 		transactionMenu.add(item);
 		TransactionSelector selector = getTransactionSelector();
 		item = new JMenuItem(new EditTransactionAction(selector)); 
-		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Edit.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Edit.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		transactionMenu.add(item);
 		item = new JMenuItem(new DuplicateTransactionAction(selector));
-		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Duplicate.Accelerator"), ActionEvent.CTRL_MASK)); //$NON-NLS-1$
+		item.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Transactions.Duplicate.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		transactionMenu.add(item);
 		item = new JMenuItem(new DeleteTransactionAction(selector));
-		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, ActionEvent.CTRL_MASK));
+		item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, menuShortcutKeyMask));
 
 		transactionMenu.add(item);
 

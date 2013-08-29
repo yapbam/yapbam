@@ -1,6 +1,6 @@
 package net.yapbam.gui.statementview;
 
-import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.print.Printable;
 
@@ -63,7 +63,7 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	public JMenuItem[] getMenuItem(int part) {
 		if (part==TRANSACTIONS_PART) {
 			JMenuItem item = new JMenuItem(panel.checkAction);
-			item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, ActionEvent.CTRL_MASK));
+			item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 			return new JMenuItem[]{null, item};
 		} else {
 			return super.getMenuItem(part);
