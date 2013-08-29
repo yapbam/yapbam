@@ -5,6 +5,8 @@ known
 	Lors de l'édition d'une sous opération, la sélection d'un libellé prédéfini remet le montant de la sous-opération à 0.
 
 version 0.15.5 (???)
+fix
+	Les raccourcis de menu utilisaient la touche CTRL sur Macintosh (au lieu de la touche "pomme").
 improvement
 	Plusieurs optimisations en terme de vitesse et de cosommation mémoire.
 	Une meilleure gestion des fichiers non supporés (En particulier, les fichiers encodés avec de futures versions de l'algo seront reconnus comme non supportés et non corrompus).
