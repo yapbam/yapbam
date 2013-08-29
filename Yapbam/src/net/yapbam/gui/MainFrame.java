@@ -140,6 +140,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				try {
 					super.dispatchEvent(event);
 				} catch (Throwable t) {
+					t.printStackTrace();
 					ErrorManager.INSTANCE.log (null,t);
 					// The following portion of code closes the main window if it is not visible.
 					// This solves the case where a exception is thrown during the Mainframe.setVisible(true)

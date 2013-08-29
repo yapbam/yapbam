@@ -15,7 +15,7 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	private int minorRevision;
 	private int buildId;
 	private Date releaseDate;
-	private String preRealeaseComment;
+	private String preReleaseComment;
 	
 	public ReleaseInfo(String rel) {
 		if (rel==null) {
@@ -23,23 +23,28 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 			this.majorRevision = 0;
 			this.minorRevision = 0;
 			this.buildId = 0;
-			this.preRealeaseComment = null;
+			this.preReleaseComment = null;
 			this.releaseDate = new Date(0);
 		} else {
-			StringTokenizer parts = new StringTokenizer(rel, " ");
-			StringTokenizer tokens = new StringTokenizer(parts.nextToken(), ".");
-			majorRevision = Integer.parseInt(tokens.nextToken());
-			minorRevision = Integer.parseInt(tokens.nextToken());
-			buildId = Integer.parseInt(tokens.nextToken());
-			preRealeaseComment = tokens.hasMoreElements()?tokens.nextToken():null;
-			tokens = new StringTokenizer(parts.nextToken(),"()/");
 			try {
-				int dayOfMonth = Integer.parseInt(tokens.nextToken());
-				int month = Integer.parseInt(tokens.nextToken());
-				int year = Integer.parseInt(tokens.nextToken());
-				releaseDate = new GregorianCalendar(year, month-1, dayOfMonth).getTime();
-			} catch (NumberFormatException e) {
-				releaseDate = new Date(Long.MAX_VALUE);
+				StringTokenizer parts = new StringTokenizer(rel, " ");
+				StringTokenizer tokens = new StringTokenizer(parts.nextToken(), ".");
+				majorRevision = Integer.parseInt(tokens.nextToken());
+				minorRevision = Integer.parseInt(tokens.nextToken());
+				buildId = Integer.parseInt(tokens.nextToken());
+				preReleaseComment = tokens.hasMoreElements()?tokens.nextToken():null;
+				tokens = new StringTokenizer(parts.nextToken(),"()/");
+				try {
+					int dayOfMonth = Integer.parseInt(tokens.nextToken());
+					int month = Integer.parseInt(tokens.nextToken());
+					int year = Integer.parseInt(tokens.nextToken());
+					releaseDate = new GregorianCalendar(year, month-1, dayOfMonth).getTime();
+				} catch (NumberFormatException e) {
+					releaseDate = new Date(Long.MAX_VALUE);
+				}
+			} catch (IllegalArgumentException e) {
+				this.releaseDate = new Date(0);
+				this.preReleaseComment="Invalid version format";
 			}
 		}
 	}
@@ -57,7 +62,7 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	}
 	
 	public String getPreReleaseComment() {
-		return this.preRealeaseComment;
+		return this.preReleaseComment;
 	}
 	
 	public Date getReleaseDate() {
@@ -86,7 +91,7 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	@Override
 	public String toString() {
 		if (this.unknown) return "?";
-		return majorRevision+"."+minorRevision+"."+buildId+(preRealeaseComment==null?"":"."+preRealeaseComment)+" ("+
+		return majorRevision+"."+minorRevision+"."+buildId+(preReleaseComment==null?"":"."+preReleaseComment)+" ("+
 			SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, LocalizationData.getLocale()).format(releaseDate)+")";
 	}
 }

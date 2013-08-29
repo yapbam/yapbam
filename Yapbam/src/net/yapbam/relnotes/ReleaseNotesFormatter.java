@@ -147,7 +147,7 @@ public class ReleaseNotesFormatter {
 	}
 
 	private void wrongLine(int lineNumber) {
-		System.err.println ("Line "+lineNumber+" is wrong");
+		System.err.println (this.getClass().getName()+": Line "+lineNumber+" is wrong");
 	}
 	
 	private void openVersion(String version) throws IOException {
