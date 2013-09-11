@@ -2,8 +2,6 @@ package net.yapbam.gui.transfer;
 
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
-import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
@@ -20,6 +18,10 @@ import java.util.Date;
 import java.awt.Insets;
 import net.yapbam.gui.dialogs.ModeWidget;
 import javax.swing.JLabel;
+
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
+
 import net.yapbam.gui.dialogs.TransactionNumberWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 

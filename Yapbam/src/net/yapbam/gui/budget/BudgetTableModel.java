@@ -5,7 +5,8 @@ import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
 
-import net.astesana.ajlib.swing.table.TitledRowsTableModel;
+import com.fathzer.soft.ajlib.swing.table.TitledRowsTableModel;
+
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
 import net.yapbam.data.event.DataEvent;

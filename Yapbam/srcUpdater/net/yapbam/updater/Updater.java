@@ -11,7 +11,8 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.JOptionPane;
 
-import net.astesana.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
 import net.yapbam.util.Portable;
 
 /** This class install the Yapbam updates.

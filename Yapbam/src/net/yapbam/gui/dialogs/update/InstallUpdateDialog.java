@@ -15,8 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import net.astesana.ajlib.utilities.FileUtils;
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;

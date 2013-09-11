@@ -5,8 +5,6 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
@@ -23,6 +21,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
+
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 public class CheckNumberWidget extends JPanel {
 	private static final long serialVersionUID = 1L;

@@ -12,8 +12,9 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
@@ -73,7 +74,7 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 	
 	@Override
 	protected JTable instantiateJTable() {
-		JTable table = new net.astesana.ajlib.swing.table.JTable(getTableModel());
+		JTable table = new com.fathzer.soft.ajlib.swing.table.JTable(getTableModel());
 		// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
 		table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
 		return table;

@@ -11,7 +11,8 @@ import java.util.HashSet;
 
 import javax.swing.JTextField;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+
 import net.yapbam.data.GlobalData;
 
 public class TestPanel extends JPanel {

@@ -6,7 +6,8 @@ import javax.swing.JComboBox;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.widget.ComboBox;
+import com.fathzer.soft.ajlib.swing.widget.ComboBox;
+
 import net.yapbam.data.Alert;
 import net.yapbam.data.Alert.Kind;
 import net.yapbam.gui.LocalizationData;

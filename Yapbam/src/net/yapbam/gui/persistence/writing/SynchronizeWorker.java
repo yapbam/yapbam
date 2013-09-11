@@ -3,11 +3,11 @@ package net.yapbam.gui.persistence.writing;
 import java.net.URI;
 import java.util.Locale;
 
+import com.fathzer.soft.ajlib.swing.worker.Worker;
 import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.SynchronizationState;
 
-import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
 import net.yapbam.gui.persistence.SynchronizeCommand;

@@ -2,7 +2,8 @@ package net.yapbam.util;
 
 import java.io.File;
 
-import net.astesana.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
 
 /** That class provides utilities that help to implement a portable application (with no installation)
  * in the portable apps format.

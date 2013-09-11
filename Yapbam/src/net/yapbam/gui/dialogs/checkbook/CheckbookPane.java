@@ -5,12 +5,14 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
-import net.astesana.ajlib.swing.widget.IntegerWidget;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Checkbook;
 import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JTextField;
+
+import com.fathzer.soft.ajlib.swing.widget.IntegerWidget;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

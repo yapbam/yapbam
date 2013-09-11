@@ -7,9 +7,11 @@ import java.util.Locale;
 import javax.swing.JDialog;
 
 import org.junit.Test;
+
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
+
 import static org.junit.Assert.*;
 
-import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.gui.widget.CurrencyWidget;
 
 public class WidgetTest {

@@ -1,6 +1,7 @@
 package net.yapbam.gui.dialogs;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 

@@ -16,12 +16,12 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
+import com.fathzer.soft.ajlib.swing.worker.Worker;
 import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.swing.URIChooser;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
 
-import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
-import net.astesana.ajlib.swing.worker.Worker;
 import net.yapbam.data.xml.UnsupportedFileVersionException;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;

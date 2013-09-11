@@ -7,10 +7,12 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.CharWidget;
 import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JRadioButton;
+
+import com.fathzer.soft.ajlib.swing.widget.CharWidget;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Dimension;

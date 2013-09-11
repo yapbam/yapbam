@@ -184,7 +184,7 @@ public class ImportErrorPanel extends JPanel {
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
-			jTable = new net.astesana.ajlib.swing.table.JTable(new ImportErrorTableModel());
+			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(new ImportErrorTableModel());
 			jTable.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			jTable.setIntercellSpacing(new Dimension(4, jTable.getIntercellSpacing().height));

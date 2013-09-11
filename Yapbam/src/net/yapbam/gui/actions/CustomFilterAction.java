@@ -7,7 +7,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CustomFilterDialog;

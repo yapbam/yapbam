@@ -5,7 +5,8 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.SwingWorker.StateValue;
 
-import net.astesana.ajlib.swing.worker.Worker;
+import com.fathzer.soft.ajlib.swing.worker.Worker;
+
 
 public class CancelManager implements PropertyChangeListener {
 	private Runnable action;

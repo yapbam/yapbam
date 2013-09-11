@@ -14,10 +14,11 @@ import java.util.prefs.Preferences;
 
 import javax.swing.*;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.astesana.ajlib.swing.widget.ComboBox;
-import net.astesana.ajlib.swing.widget.TextWidget;
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.widget.ComboBox;
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 
 import net.yapbam.data.*;
 import net.yapbam.gui.LocalizationData;

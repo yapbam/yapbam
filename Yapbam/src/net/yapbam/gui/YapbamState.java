@@ -34,8 +34,9 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.SAXException;
 
-import net.astesana.ajlib.utilities.FileUtils;
-import net.astesana.ajlib.utilities.StringUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
+
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.xml.FilterHandler;

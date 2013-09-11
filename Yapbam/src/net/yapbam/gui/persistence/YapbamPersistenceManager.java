@@ -2,7 +2,8 @@ package net.yapbam.gui.persistence;
 
 import java.text.MessageFormat;
 
-import net.astesana.ajlib.utilities.StringUtils;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
+
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 

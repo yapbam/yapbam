@@ -5,9 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.table.JTable;
-import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
@@ -26,6 +23,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
+
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.JTable;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

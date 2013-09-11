@@ -10,7 +10,7 @@ import net.astesana.javaluator.Parameters;
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
-public class CurrencyWidget extends net.astesana.ajlib.swing.widget.CurrencyWidget {
+public class CurrencyWidget extends com.fathzer.soft.ajlib.swing.widget.CurrencyWidget {
 	private static final DoubleEvaluator EVALUATOR = new Evaluator();
 	private static final DecimalFormat US_FORMAT = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
 	

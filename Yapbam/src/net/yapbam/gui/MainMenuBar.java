@@ -25,8 +25,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
-import net.astesana.ajlib.swing.dialog.FileChooser;
-import net.astesana.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;

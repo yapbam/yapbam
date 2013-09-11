@@ -6,7 +6,8 @@ import java.util.Date;
 
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;

@@ -23,7 +23,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.BalanceHistoryElement;
 import net.yapbam.gui.LocalizationData;

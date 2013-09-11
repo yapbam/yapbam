@@ -9,8 +9,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.astesana.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 

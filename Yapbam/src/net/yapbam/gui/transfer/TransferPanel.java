@@ -7,8 +7,9 @@ import java.awt.Insets;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.widget.date.DateWidget;
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryWidget;
 import java.awt.GridLayout;

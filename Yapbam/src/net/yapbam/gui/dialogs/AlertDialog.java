@@ -6,7 +6,8 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+
 import net.yapbam.gui.LocalizationData;
 
 public class AlertDialog extends AbstractDialog<String, Boolean> {

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 

@@ -22,7 +22,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
@@ -38,6 +37,8 @@ import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.JButton;
+
+import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 public class CustomFilterPanel extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;

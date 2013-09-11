@@ -16,7 +16,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.gui.LocalizationData;
 import java.awt.Insets;
 

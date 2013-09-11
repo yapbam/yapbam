@@ -17,7 +17,8 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.widget.HTMLPane;
+import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
+
 import net.yapbam.gui.LocalizationData;
 
 public class ErrorPanel extends JPanel {

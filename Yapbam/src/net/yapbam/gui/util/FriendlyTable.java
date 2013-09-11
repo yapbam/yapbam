@@ -10,9 +10,10 @@ import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 
-import net.astesana.ajlib.swing.table.JTable;
-import net.astesana.ajlib.utilities.CSVWriter;
-import net.astesana.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.swing.table.JTable;
+import com.fathzer.soft.ajlib.utilities.CSVWriter;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
 import net.yapbam.gui.widget.JLabelMenu;
 
 /** A JTable that allows columns to be hidden.

@@ -9,7 +9,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;

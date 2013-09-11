@@ -12,7 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.astesana.ajlib.swing.widget.date.DateWidget;
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
+
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import java.awt.GridBagLayout;

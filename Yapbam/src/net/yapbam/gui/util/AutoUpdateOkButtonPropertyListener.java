@@ -3,7 +3,8 @@ package net.yapbam.gui.util;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+
 
 /** Utility PropertyChangeListener that calls the updateOkButtonEnabled of a dialog each
  * time the property listened by this class is updated.

@@ -3,7 +3,8 @@ package net.yapbam.gui;
 import java.awt.Container;
 import java.awt.Window;
 
-import net.astesana.ajlib.swing.framework.Application;
+import com.fathzer.soft.ajlib.swing.framework.Application;
+
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.actions.TransactionSelector;

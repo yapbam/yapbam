@@ -3,7 +3,8 @@ package net.yapbam.gui.persistence.reading;
 import java.net.URI;
 import java.text.MessageFormat;
 
-import net.astesana.ajlib.swing.worker.Worker;
+import com.fathzer.soft.ajlib.swing.worker.Worker;
+
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.YapbamSerializer;

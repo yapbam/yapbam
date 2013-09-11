@@ -15,10 +15,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.Browser;
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.widget.HTMLPane;
-import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
@@ -27,6 +23,11 @@ import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 
 import javax.swing.JSeparator;
+
+import com.fathzer.soft.ajlib.swing.Browser;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
+import com.fathzer.soft.ajlib.swing.widget.IntegerWidget;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

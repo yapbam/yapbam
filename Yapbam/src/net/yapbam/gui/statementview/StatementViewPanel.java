@@ -20,9 +20,6 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.table.JTableListener;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.AbstractTransactionUpdater;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
@@ -57,6 +54,11 @@ import java.awt.Color;
 import javax.swing.JSplitPane;
 import javax.swing.border.Border;
 import javax.swing.JButton;
+
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.JTableListener;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;

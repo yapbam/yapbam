@@ -3,7 +3,8 @@ package net.yapbam.gui.dialogs;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;

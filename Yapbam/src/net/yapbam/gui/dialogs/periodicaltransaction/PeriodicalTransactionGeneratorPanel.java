@@ -7,10 +7,6 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.table.JTableListener;
-import net.astesana.ajlib.swing.table.RowSorter;
-import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
@@ -44,6 +40,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.JTableListener;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
 
 public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	static final String HAS_IMPACT_PROPERTY = "hasImpact";
@@ -168,7 +169,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JTable getJTable() {
 		if (jTable == null) {
 			tableModel = new GenerateTableModel(data.getGlobalData());
-			jTable = new net.astesana.ajlib.swing.table.JTable(tableModel) {
+			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel) {
 				/* (non-Javadoc)
 				 * @see javax.swing.JTable#getPreferredScrollableViewportSize()
 				 */

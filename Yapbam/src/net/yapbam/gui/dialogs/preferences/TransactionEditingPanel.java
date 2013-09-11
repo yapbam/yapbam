@@ -9,7 +9,6 @@ import java.awt.Insets;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
@@ -28,6 +27,8 @@ import java.util.GregorianCalendar;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 @SuppressWarnings("serial")
 public class TransactionEditingPanel extends PreferencePanel {

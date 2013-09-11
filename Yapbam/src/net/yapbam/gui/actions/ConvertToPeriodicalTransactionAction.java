@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;

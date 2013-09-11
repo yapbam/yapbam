@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
@@ -17,6 +16,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JCheckBox;
+
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 public class SubTransactionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
