@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import net.astesana.ajlib.utilities.StringUtils;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;

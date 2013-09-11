@@ -11,7 +11,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.Portable;
 

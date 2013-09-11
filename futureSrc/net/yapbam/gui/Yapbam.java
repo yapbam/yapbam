@@ -55,9 +55,6 @@ public class Yapbam extends Application implements YapbamInstance {
 		return new MainPanel(plugins);
 	}
 
-	/* (non-Javadoc)
-	 * @see net.astesana.ajlib.swing.framework.Application#getDefaultLookAndFeelName()
-	 */
 	@Override
 	protected String getDefaultLookAndFeelName() {
 		return Preferences.INSTANCE.getLookAndFeel();

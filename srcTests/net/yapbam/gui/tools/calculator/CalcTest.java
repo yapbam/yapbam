@@ -12,10 +12,6 @@ public class CalcTest extends Application {
 		return new CalculatorPanel();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see net.astesana.ajlib.swing.framework.Application#onStart()
-	 */
 	@Override
 	protected boolean onStart() {
 		this.getJFrame().setResizable(false);
