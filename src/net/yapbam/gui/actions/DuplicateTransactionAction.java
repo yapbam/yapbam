@@ -4,7 +4,8 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;

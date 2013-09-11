@@ -7,7 +7,6 @@ import java.util.Date;
 
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.widget.date.DateWidget;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.TransactionSelector;
@@ -16,6 +15,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JButton;
+
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

@@ -17,7 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
-import net.astesana.ajlib.swing.table.JTableListener;
+import com.fathzer.soft.ajlib.swing.table.JTableListener;
+
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;

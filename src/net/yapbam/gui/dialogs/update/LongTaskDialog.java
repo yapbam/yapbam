@@ -6,7 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.SwingWorker;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")

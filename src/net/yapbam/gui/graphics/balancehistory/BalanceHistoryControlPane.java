@@ -8,7 +8,8 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import javax.swing.JCheckBox;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 

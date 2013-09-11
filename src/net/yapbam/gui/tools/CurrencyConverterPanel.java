@@ -13,8 +13,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Currency;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.table.RowSorter;
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
@@ -32,6 +30,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.JButton;
+
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -305,7 +307,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private JTable getJTable() {
 		if (jTable == null) {
 			tableModel = new CurrencyTableModel(this.converter, this.codes);
-			jTable = new net.astesana.ajlib.swing.table.JTable(tableModel);
+			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel);
 			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 			getJTable().setDefaultRenderer(Double.class, new ConversionRateRenderer());
 			Utils.packColumns(jTable, 2);

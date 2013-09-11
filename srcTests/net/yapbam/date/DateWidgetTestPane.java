@@ -7,7 +7,8 @@ import java.util.Locale;
 
 import javax.swing.JTextField;
 
-import net.astesana.ajlib.swing.widget.date.DateWidget;
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
+
 
 public class DateWidgetTestPane extends JPanel {
 

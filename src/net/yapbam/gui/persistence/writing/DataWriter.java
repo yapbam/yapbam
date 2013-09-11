@@ -11,12 +11,12 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
+import com.fathzer.soft.ajlib.swing.worker.Worker;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.swing.MessagePack;
 
-import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
-import net.astesana.ajlib.swing.worker.Worker;
-import net.astesana.ajlib.utilities.FileUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.PersistenceAdapter;

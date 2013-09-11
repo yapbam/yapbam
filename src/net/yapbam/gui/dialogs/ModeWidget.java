@@ -1,6 +1,7 @@
 package net.yapbam.gui.dialogs;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.Mode;
 import net.yapbam.date.helpers.DateStepper;

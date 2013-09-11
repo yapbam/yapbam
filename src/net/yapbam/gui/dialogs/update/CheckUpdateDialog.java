@@ -6,7 +6,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-import net.astesana.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.LocalizationData;

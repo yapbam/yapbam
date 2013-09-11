@@ -6,7 +6,8 @@ import java.security.AccessControlException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 
-import net.astesana.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
 import net.yapbam.data.*;
 import net.yapbam.data.xml.Serializer.SerializationData;
 

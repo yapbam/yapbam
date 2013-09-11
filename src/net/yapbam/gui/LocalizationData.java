@@ -8,14 +8,15 @@ import java.util.Locale;
 
 import javax.swing.JComponent;
 
-import net.astesana.ajlib.swing.framework.Application;
+import com.fathzer.soft.ajlib.swing.framework.Application;
+
 import net.yapbam.data.GlobalData;
 
 /** This class is the main entry point for localization concerns.
  */
 public abstract class LocalizationData {
 	public static final Locale SYS_LOCALE;
-	private static net.astesana.ajlib.utilities.LocalizationData locData;
+	private static com.fathzer.soft.ajlib.utilities.LocalizationData locData;
 	
 	static {
 		SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));  //$NON-NLS-1$//$NON-NLS-2$
@@ -28,7 +29,7 @@ public abstract class LocalizationData {
 		Locale.setDefault(locale);
 		// Be aware that the swing components not take their locale from Locale.getDefault, but from JComponent.getDefaultLocale.
 		JComponent.setDefaultLocale(locale);
-		locData = new net.astesana.ajlib.utilities.LocalizationData(net.astesana.ajlib.utilities.LocalizationData.DEFAULT_BUNDLE_NAME);
+		locData = new com.fathzer.soft.ajlib.utilities.LocalizationData(com.fathzer.soft.ajlib.utilities.LocalizationData.DEFAULT_BUNDLE_NAME);
 		locData.add("Resources"); //$NON-NLS-1$
 		locData.setTranslatorMode(Preferences.safeIsTranslatorMode());
 		com.fathzer.soft.jclop.swing.MessagePack.DEFAULT=locData;

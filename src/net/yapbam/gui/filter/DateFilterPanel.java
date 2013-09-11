@@ -11,8 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.widget.date.DateWidget;
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 

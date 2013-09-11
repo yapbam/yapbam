@@ -21,14 +21,15 @@ import java.text.MessageFormat;
 
 import javax.swing.JPasswordField;
 
-import net.astesana.ajlib.swing.widget.PasswordWidget;
-import net.astesana.ajlib.swing.widget.TextWidget;
-import net.astesana.ajlib.swing.widget.IntegerWidget;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import javax.swing.JCheckBox;
+
+import com.fathzer.soft.ajlib.swing.widget.IntegerWidget;
+import com.fathzer.soft.ajlib.swing.widget.PasswordWidget;
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 public class ProxyPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;

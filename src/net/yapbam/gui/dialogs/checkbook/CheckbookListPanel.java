@@ -13,8 +13,9 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
 import net.yapbam.data.GlobalData;
@@ -124,7 +125,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	
 	@Override
 	protected JTable instantiateJTable() {
-		return new net.astesana.ajlib.swing.table.JTable(getTableModel());
+		return new com.fathzer.soft.ajlib.swing.table.JTable(getTableModel());
 	}
 	
 	protected TableModel getTableModel() {

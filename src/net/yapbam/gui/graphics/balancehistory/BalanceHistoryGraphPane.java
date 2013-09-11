@@ -18,7 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.data.Alert;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;

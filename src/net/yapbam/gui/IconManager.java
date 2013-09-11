@@ -2,7 +2,8 @@ package net.yapbam.gui;
 
 import java.util.HashMap;
 import javax.swing.Icon;
-import net.astesana.ajlib.swing.Utils;
+
+import com.fathzer.soft.ajlib.swing.Utils;
 
 public abstract class IconManager {
 	public enum Name {

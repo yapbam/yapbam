@@ -8,9 +8,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.astesana.ajlib.swing.widget.AbstractTitledPanel;
-import net.astesana.ajlib.swing.widget.HTMLPane;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.widget.AbstractTitledPanel;
+import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
+
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")

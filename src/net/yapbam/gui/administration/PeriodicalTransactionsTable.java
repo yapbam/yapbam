@@ -5,8 +5,9 @@ import java.util.Date;
 
 import javax.swing.table.TableRowSorter;
 
-import net.astesana.ajlib.swing.table.JTable;
-import net.astesana.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.swing.table.JTable;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;

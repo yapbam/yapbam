@@ -9,8 +9,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
@@ -84,7 +85,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		JTable jTable = new net.astesana.ajlib.swing.table.JTable(getTableModel());
+		JTable jTable = new com.fathzer.soft.ajlib.swing.table.JTable(getTableModel());
 		jTable.setDefaultRenderer(Double.class, new DefaultTableCellRenderer(){
 		    @Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,

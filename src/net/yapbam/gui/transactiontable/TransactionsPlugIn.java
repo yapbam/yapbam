@@ -8,7 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable.PrintMode;
 import javax.swing.table.TableColumn;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;

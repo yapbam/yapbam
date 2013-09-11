@@ -15,11 +15,12 @@ import javax.swing.AbstractAction;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.worker.DefaultWorkInProgressPanel;
-import net.astesana.ajlib.swing.worker.WorkInProgressFrame;
-import net.astesana.ajlib.swing.worker.WorkInProgressPanel;
-import net.astesana.ajlib.swing.worker.Worker;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.worker.DefaultWorkInProgressPanel;
+import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
+import com.fathzer.soft.ajlib.swing.worker.WorkInProgressPanel;
+import com.fathzer.soft.ajlib.swing.worker.Worker;
+
 import net.yapbam.currency.CurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.Preferences;

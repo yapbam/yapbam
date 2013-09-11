@@ -5,7 +5,8 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 
 public abstract class ConsistencyCheckedPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

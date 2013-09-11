@@ -3,9 +3,6 @@ package net.yapbam.gui.dialogs;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.widget.AbstractTitledPanel;
-import net.astesana.ajlib.swing.widget.HTMLPane;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 
@@ -21,6 +18,10 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 
 import javax.swing.JTabbedPane;
+
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.widget.AbstractTitledPanel;
+import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
 
 import net.yapbam.relnotes.ReleaseNotesFormatter;
 import net.yapbam.update.VersionManager;

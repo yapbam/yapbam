@@ -3,8 +3,9 @@ package net.yapbam.gui.statementview;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.astesana.ajlib.swing.widget.ComboBox;
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.swing.widget.ComboBox;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;

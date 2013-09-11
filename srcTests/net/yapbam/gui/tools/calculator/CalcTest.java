@@ -2,7 +2,8 @@ package net.yapbam.gui.tools.calculator;
 
 import java.awt.Container;
 
-import net.astesana.ajlib.swing.framework.Application;
+import com.fathzer.soft.ajlib.swing.framework.Application;
+
 
 public class CalcTest extends Application {
 

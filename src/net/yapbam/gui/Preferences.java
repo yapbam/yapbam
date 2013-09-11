@@ -22,8 +22,9 @@ import java.util.StringTokenizer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import net.astesana.ajlib.utilities.FileUtils;
-import net.astesana.ajlib.utilities.StringUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
+
 import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.budget.BudgetPlugin;

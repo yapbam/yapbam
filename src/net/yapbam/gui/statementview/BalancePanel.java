@@ -11,7 +11,6 @@ import java.awt.Insets;
 
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.gui.IconManager;
@@ -26,6 +25,8 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 
 import javax.swing.JTextField;
+
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 public class BalancePanel extends JPanel {
 	public static final String EDITED_STATEMENT_PROPERTY = "editedStatement"; //$NON-NLS-1$

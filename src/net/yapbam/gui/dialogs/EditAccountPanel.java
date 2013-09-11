@@ -10,8 +10,6 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.astesana.ajlib.swing.widget.TextWidget;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.GlobalData;
@@ -20,6 +18,9 @@ import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CurrencyWidget;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 @SuppressWarnings("serial")
 public class EditAccountPanel extends JPanel {

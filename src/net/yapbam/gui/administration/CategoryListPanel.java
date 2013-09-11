@@ -13,8 +13,9 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.widget.CharWidget;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.widget.CharWidget;
+
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.CategoryAddedEvent;
@@ -47,7 +48,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@SuppressWarnings("serial")
 	@Override
 	protected JTable instantiateJTable() {
-		JTable table = new net.astesana.ajlib.swing.table.JTable(getTableModel()) {
+		JTable table = new com.fathzer.soft.ajlib.swing.table.JTable(getTableModel()) {
 			// Implement table cell tool tips.
 			@Override
 			public String getToolTipText(MouseEvent e) {

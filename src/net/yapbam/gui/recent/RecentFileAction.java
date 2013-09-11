@@ -9,7 +9,8 @@ import java.net.URI;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.YapbamDataWrapper;

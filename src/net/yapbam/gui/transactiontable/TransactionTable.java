@@ -8,9 +8,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
-import net.astesana.ajlib.swing.table.JTableSelector;
-import net.astesana.ajlib.swing.table.RowSorter;
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.swing.table.JTableSelector;
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;

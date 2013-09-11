@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
-import net.astesana.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
 import net.yapbam.util.CheckSum;
 import net.yapbam.util.Portable;
 

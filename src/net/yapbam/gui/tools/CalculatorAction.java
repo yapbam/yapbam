@@ -10,7 +10,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 
-import net.astesana.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.gui.tools.calculator.CalculatorPanel;
 
 @SuppressWarnings("serial")

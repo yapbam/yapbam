@@ -4,7 +4,8 @@ import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
 
-import net.astesana.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+
 import net.yapbam.data.BalanceData;
 import net.yapbam.data.Category;
 import net.yapbam.data.Mode;

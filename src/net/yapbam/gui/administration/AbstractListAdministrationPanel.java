@@ -15,12 +15,13 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import net.astesana.ajlib.swing.table.JTableListener;
 import net.yapbam.gui.YapbamState;
 
 import java.awt.Insets;
 import java.util.ArrayList;
 import javax.swing.JLabel;
+
+import com.fathzer.soft.ajlib.swing.table.JTableListener;
 
 /** This panel is an abstract panel containing a table and "create", "delete", "duplicate", "edit" buttons.
  *  The "edit" and "duplicates" button can be omitted.

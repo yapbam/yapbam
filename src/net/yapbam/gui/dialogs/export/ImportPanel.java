@@ -25,8 +25,6 @@ import java.io.IOException;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
-import net.astesana.ajlib.utilities.FileUtils;
-import net.astesana.ajlib.utilities.NullUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;
@@ -36,6 +34,9 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
 
 import javax.swing.JLabel;
+
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -148,7 +149,7 @@ public class ImportPanel extends JPanel {
 	private JTable getJTable() {
 		if (jTable == null) {
 			ImportTableModel model = new ImportTableModel();
-			jTable = new net.astesana.ajlib.swing.table.JTable(model) {
+			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(model) {
 				// Implement table header tool tips.
 				@Override
 				protected JTableHeader createDefaultTableHeader() {

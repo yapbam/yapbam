@@ -4,11 +4,12 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import com.fathzer.soft.ajlib.swing.Utils;
+
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
-import net.astesana.ajlib.swing.Utils;
 import net.yapbam.gui.dialogs.periodicaltransaction.PeriodicalTransactionDialog;
 
 @SuppressWarnings("serial")

@@ -9,9 +9,6 @@ import javax.swing.JTable.PrintMode;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
-import net.astesana.ajlib.swing.Utils;
-import net.astesana.ajlib.swing.dialog.FileChooser;
-import net.astesana.ajlib.utilities.CSVWriter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
@@ -30,6 +27,11 @@ import java.util.Locale;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
+import com.fathzer.soft.ajlib.utilities.CSVWriter;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.print.Printable;

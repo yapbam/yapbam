@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.astesana.ajlib.utilities.StringUtils;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
+
 
 /** Format the release notes from csv to html format. 
  * @author Jean-Marc Astesana
