@@ -22,12 +22,12 @@ import java.util.List;
 
 import javax.swing.border.TitledBorder;
 
-import net.astesana.ajlib.swing.dialog.AbstractDialog;
-import net.astesana.ajlib.swing.widget.PasswordWidget;
-import net.astesana.ajlib.swing.widget.TextWidget;
-import net.astesana.ajlib.swing.widget.IntegerWidget;
-import net.astesana.ajlib.utilities.NullUtils;
-import net.astesana.ajlib.utilities.StringUtils;
+import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
+import com.fathzer.soft.ajlib.swing.widget.PasswordWidget;
+import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.swing.widget.IntegerWidget;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
