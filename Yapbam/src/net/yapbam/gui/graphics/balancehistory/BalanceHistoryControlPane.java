@@ -52,7 +52,7 @@ class BalanceHistoryControlPane extends JPanel {
 	JButton getToday() {
 		if (today == null) {
 			today = new JButton();
-			URL url = getClass().getResource("/net/astesana/ajlib/swing/widget/date/stop.png"); //$NON-NLS-1$
+			URL url = getClass().getResource("/com/fathzer/soft/ajlib/swing/widget/date/stop.png"); //$NON-NLS-1$
 			today.setIcon(Utils.createIcon(url, (int)(16*Preferences.INSTANCE.getFontSizeRatio())));
 			today.setToolTipText(LocalizationData.get("BalanceHistory.toDay.toolTip")); //$NON-NLS-1$
 			int size = today.getPreferredSize().height;
