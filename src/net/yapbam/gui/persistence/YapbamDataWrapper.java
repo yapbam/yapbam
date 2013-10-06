@@ -52,7 +52,7 @@ public class YapbamDataWrapper extends DataWrapper<GlobalData> {
 
 	@Override
 	public boolean needPassword(File file) throws IOException {
-		return YapbamSerializer.getSerializationData(file.toURI()).isPasswordRequired();
+		return !YapbamSerializer.isPasswordOk(file.toURI(), null);
 	}
 
 	@Override

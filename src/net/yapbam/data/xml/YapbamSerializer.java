@@ -3,13 +3,10 @@ package net.yapbam.data.xml;
 import java.io.*;
 import java.net.URI;
 import java.security.AccessControlException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
 
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
 import net.yapbam.data.*;
-import net.yapbam.data.xml.Serializer.SerializationData;
 
 /** The class implements xml yapbam data serialization and deserialization to (or from) an URL.
  * Currently supported URL type are :<UL>
@@ -79,19 +76,14 @@ public class YapbamSerializer {
 	public static GlobalData read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
 //		long start = System.currentTimeMillis();//TODO
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) { //$NON-NLS-1$ //$NON-NLS-2$
-			InputStream global = uri.toURL().openStream();
+			InputStream in = uri.toURL().openStream();
 			try {
-				InputStream is = Serializer.getUnzippedInputStream(global);
-				try {
-					GlobalData redData = Serializer.read(password, is, report);
-					redData.setURI(uri);
-					redData.setChanged(false);
-					return redData;
-				} finally {
-					is.close();
-				}
+				GlobalData redData = Serializer.read(password, in, report);
+				redData.setURI(uri);
+				redData.setChanged(false);
+				return redData;
 			} finally {
-				global.close();
+				in.close();
 			}
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme()); //$NON-NLS-1$
@@ -103,39 +95,11 @@ public class YapbamSerializer {
 	 * @param uri The URI containing Yapbam data
 	 * @param password A password (null for no password)
 	 * @throws IOException If an I/O error occurred
-	 * @throws GeneralSecurityException If the file encryption is not supported
 	 */
-	public static boolean isPasswordOk(URI uri, String password) throws IOException, GeneralSecurityException {
+	public static boolean isPasswordOk(URI uri, String password) throws IOException {
 		InputStream global = uri.toURL().openStream();
 		try {
-			InputStream is = Serializer.getUnzippedInputStream(global);
-			try {
-				Serializer.getDecryptedStream(password, is);
-				return true;
-			} catch (AccessControlException e) {
-				return false;
-			} finally {
-				is.close();
-			}
-		} finally {
-			global.close();
-		}
-	}
-
-	/** Gets the data about the uri (what is its version, is it encoded or not, etc...).
-	 * @param uri the uniform resource locator to test.
-	 * @return A SerializationData instance
-	 * @throws IOException
-	 */
-	public static SerializationData getSerializationData(URI uri) throws IOException {
-		InputStream global = uri.toURL().openStream();
-		try {
-			InputStream in = Serializer.getUnzippedInputStream(global);
-			try {
-				return Serializer.getSerializationData(in);
-			} finally {
-				in.close();
-			}
+			return Serializer.isPasswordOk(global, password);
 		} finally {
 			global.close();
 		}

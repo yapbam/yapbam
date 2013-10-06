@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.security.GeneralSecurityException;
 import java.text.MessageFormat;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -106,8 +105,6 @@ public class DataReader {
 				if (YapbamSerializer.isPasswordOk(localURI, password)) break; // If the user cancels or entered the right password ... go next step
 			} catch (IOException e) {
 				throw new ExecutionException(e);
-			} catch (GeneralSecurityException e) {
-				throw new ExecutionException(e);
 			}
 			dialog = new GetPasswordDialog(owner,
 					LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.openFile.badPassword.question"), //$NON-NLS-1$ //$NON-NLS-2$
@@ -204,7 +201,7 @@ public class DataReader {
 		if (password==null) {
 			boolean passwordRequired;
 			try {
-				passwordRequired = YapbamSerializer.getSerializationData(localURI).isPasswordRequired();
+				passwordRequired = !YapbamSerializer.isPasswordOk(localURI, null);
 			} catch (IOException e) {
 				throw new ExecutionException(e);
 			}
