@@ -10,7 +10,6 @@
 	<classpathentry kind="var" path="JCommon"/>
 	<classpathentry kind="var" path="JFreeChart" sourcepath="/JFreeChartSrc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/A-JLib"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Javaluator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JClop"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JClop-Dropbox"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
@@ -24,5 +23,6 @@
 	<classpathentry kind="var" path="COMMONS-LOGGING"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/YapbamCommons"/>
 	<classpathentry kind="var" path="OPENCSV"/>
+	<classpathentry kind="var" path="JAVALUATOR"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -327,49 +327,51 @@ public class YapbamState {
 	}
 
 	public void save(String key, Filter filter, String password) {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		try {
-			Serializer serializer = new Serializer(password, stream);
-			try {
-				serializer.serialize(filter);
-			} catch (SAXException e) {
-				throw new RuntimeException(e);
-			}
-			serializer.closeDocument(password);
-			stream.flush();
-			String xmlContent = Base64.encodeBase64String(stream.toByteArray());
-			put(key, xmlContent);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		//FIXME
+//		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//		try {
+//			Serializer serializer = new Serializer(password, stream);
+//			try {
+//				serializer.serialize(filter);
+//			} catch (SAXException e) {
+//				throw new RuntimeException(e);
+//			}
+//			serializer.closeDocument(password);
+//			stream.flush();
+//			String xmlContent = Base64.encodeBase64String(stream.toByteArray());
+//			put(key, xmlContent);
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
 	}
 
 	public Filter restoreFilter(String key, GlobalData data) {
-		String property = properties.getProperty(key);
-		if (property!=null) {
-			byte[] bytes;
-			if (property.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) { //$NON-NLS-1$
-				// Yapbam versions until 0.9.4 did not base64 encode the saved filter.
-				bytes = property.getBytes();
-			} else {
-				bytes = Base64.decodeBase64(property);
-			}
-			final InputStream stream = new ByteArrayInputStream(bytes);
-			try {
-				FilterHandler handler = new FilterHandler(data);
-				InputStream decryptedStream = Serializer.getDecryptedStream(data.getPassword(), stream);
-				try {
-					SAXParserFactory.newInstance().newSAXParser().parse(decryptedStream, handler);
-				} finally {
-					decryptedStream.close();
-				}
-				return handler.getFilter();
-			} catch (AccessControlException e) {
-				// The password is not compatible with the saved filter. Simply ignore filter.
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
+		//FIXME
+//		String property = properties.getProperty(key);
+//		if (property!=null) {
+//			byte[] bytes;
+//			if (property.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) { //$NON-NLS-1$
+//				// Yapbam versions until 0.9.4 did not base64 encode the saved filter.
+//				bytes = property.getBytes();
+//			} else {
+//				bytes = Base64.decodeBase64(property);
+//			}
+//			final InputStream stream = new ByteArrayInputStream(bytes);
+//			try {
+//				FilterHandler handler = new FilterHandler(data);
+//				InputStream decryptedStream = Serializer.getDecryptedStream(data.getPassword(), stream);
+//				try {
+//					SAXParserFactory.newInstance().newSAXParser().parse(decryptedStream, handler);
+//				} finally {
+//					decryptedStream.close();
+//				}
+//				return handler.getFilter();
+//			} catch (AccessControlException e) {
+//				// The password is not compatible with the saved filter. Simply ignore filter.
+//			} catch (Exception e) {
+//				throw new RuntimeException(e);
+//			}
+//		}
 		return null;
 	}
 }
