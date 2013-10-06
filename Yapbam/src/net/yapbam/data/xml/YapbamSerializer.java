@@ -32,6 +32,7 @@ public class YapbamSerializer {
 		try {
 			Serializer.write(data, out, zipped?getEntryName(file.getName()):null, report);
 		} finally {
+			out.flush();
 			out.close();
 		}
 		if (report!=null) report.setMax(-1);
