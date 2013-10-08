@@ -3,6 +3,7 @@ package net.yapbam.data.xml;
 import java.io.*;
 import java.net.URI;
 import java.security.AccessControlException;
+import java.util.zip.ZipOutputStream;
 
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
@@ -30,7 +31,12 @@ public class YapbamSerializer {
 		File writed = file.exists()?getSafeTmpFile("yapbam", null, file.getParentFile()):file; //$NON-NLS-1$
 		OutputStream out = new FileOutputStream(writed);
 		try {
-			Serializer.write(data, out, zipped?getEntryName(file.getName()):null, report);
+			if (zipped) {
+				out = new ZipOutputStream(out);
+				Serializer.write(data, (ZipOutputStream) out, getEntryName(file.getName()), report);
+			} else {
+				Serializer.write(data, out, report);
+			}
 		} finally {
 			out.flush();
 			out.close();
