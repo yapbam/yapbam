@@ -33,9 +33,9 @@ public class YapbamSerializer {
 		try {
 			if (zipped) {
 				out = new ZipOutputStream(out);
-				Serializer.write(data, (ZipOutputStream) out, getEntryName(file.getName()), report);
+				new Serializer().writeToZip(data, (ZipOutputStream) out, getEntryName(file.getName()), report);
 			} else {
-				Serializer.write(data, out, report);
+				new Serializer().write(data, out, report);
 			}
 		} finally {
 			out.flush();
@@ -85,7 +85,7 @@ public class YapbamSerializer {
 		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) { //$NON-NLS-1$ //$NON-NLS-2$
 			InputStream in = uri.toURL().openStream();
 			try {
-				GlobalData redData = Serializer.read(password, in, report);
+				GlobalData redData = new Serializer().read(password, in, report);
 				redData.setURI(uri);
 				redData.setChanged(false);
 				return redData;
@@ -106,7 +106,7 @@ public class YapbamSerializer {
 	public static boolean isPasswordOk(URI uri, String password) throws IOException {
 		InputStream global = uri.toURL().openStream();
 		try {
-			return Serializer.isPasswordOk(global, password);
+			return new Serializer().isPasswordOk(global, password);
 		} finally {
 			global.close();
 		}
