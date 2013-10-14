@@ -14,7 +14,6 @@ import com.fathzer.soft.ajlib.swing.table.JTableSelector;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.statementview.CellRenderer;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class BalanceHistoryTable extends FriendlyTable implements TransactionSelector {
@@ -27,8 +26,8 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 		this.data = data;
 		BalanceHistoryModel model = new BalanceHistoryModel(data.getBalanceData());
 		this.setModel(model);
-		setDefaultRenderer(Object.class, new CellRenderer());
-		setDefaultRenderer(Date.class, new CellRenderer());
+		setDefaultRenderer(Object.class, new BalanceHistoryCellRenderer());
+		setDefaultRenderer(Date.class, new BalanceHistoryCellRenderer());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.lastSelected = new Transaction[0];
 		getSelectionModel().addListSelectionListener(new ListSelectionListener() {

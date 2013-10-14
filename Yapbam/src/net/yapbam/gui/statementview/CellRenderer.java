@@ -1,5 +1,6 @@
 package net.yapbam.gui.statementview;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,24 +17,38 @@ public class CellRenderer extends DefaultTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		row = table.convertRowIndexToModel(row);
+		column = table.convertColumnIndexToModel(column);
+		this.setHorizontalAlignment(getAlignment(table, value, isSelected, hasFocus, row, column));
+    this.setBackground(getBackground(table, value, isSelected, hasFocus, row, column));
+    this.setForeground(getForeground(table, value, isSelected, hasFocus, row, column));
+		setValue(getValue(table, value, isSelected, hasFocus, row, column));
+		return this;
+	}
+	
+	protected int getAlignment(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
 		int alignment = SwingConstants.LEFT;
 		if (value instanceof Date) {
 			alignment = SwingConstants.CENTER;
-			value=SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale()).format(value);
 		} else if (value instanceof Double) {
 			alignment = SwingConstants.RIGHT;
-			value = LocalizationData.getCurrencyInstance().format(value);
 		}
-		this.setHorizontalAlignment(alignment);
-		if (isSelected) {
-      this.setBackground(table.getSelectionBackground());
-      this.setForeground(table.getSelectionForeground());
-    } else {
-      this.setBackground(table.getBackground());
-      this.setForeground(table.getForeground());
-		}
-		setValue(value);
-		return this;
+		return alignment;
 	}
 
+	protected Object getValue(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
+		if (value instanceof Date) {
+			value=SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale()).format(value);
+		} else if (value instanceof Double) {
+			value = LocalizationData.getCurrencyInstance().format(value);
+		}
+		return value;
+	}
+	
+	protected Color getBackground(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
+		return isSelected ? table.getSelectionBackground() : table.getBackground();
+	}
+
+	protected Color getForeground(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
+		return isSelected ? table.getSelectionForeground() : table.getForeground();
+	}
 }
