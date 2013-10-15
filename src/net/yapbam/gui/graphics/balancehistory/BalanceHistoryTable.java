@@ -1,7 +1,6 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
