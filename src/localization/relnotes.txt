@@ -9,6 +9,7 @@ fix
 	Menu shortcuts used the CTRL key on Macintosh (instead of "Apple" key).
 	A bug in the encryption of password protected files made ​​it impossible to decrypt on Android (Android application is under development).
 improvement
+	In the "Transactions" table of "Balance History" tab, lines triggering alerts are now highlighted in red.
 	Several speed improvements.
 	Better handling of unsupported file format (especially, future versions of encoded files will be detected as non supported instead of corrupted).
 

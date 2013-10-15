@@ -11,7 +11,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.dialogs.EditAccountDialog;
-import net.yapbam.gui.statementview.CellRenderer;
+import net.yapbam.gui.util.CellRenderer;
 import net.yapbam.gui.util.SplitPane;
 
 import javax.swing.JScrollPane;
