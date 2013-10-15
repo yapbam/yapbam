@@ -1,4 +1,5 @@
 TODO list
+	Test the update dialog
 
 Bug :
 	Changer la font size et le thème ne marche pas (la font size est ignorée).

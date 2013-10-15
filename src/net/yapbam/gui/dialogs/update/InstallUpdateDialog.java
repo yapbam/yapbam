@@ -25,6 +25,7 @@ import net.yapbam.gui.Preferences;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.util.Portable;
 import net.yapbam.util.SecureDownloader;
+import net.yapbam.util.SecureDownloader.DownloadInfo;
 
 public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void> {
 	private static final long serialVersionUID = 1L;
@@ -65,7 +66,6 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 	// A SwingWorker that performs the update availability check
 	class DownloadSwingWorker extends SwingWorker<Boolean, Integer> {
 		private Window owner;
-		private long downloaded;
 		private int lastProgress;
 
 		DownloadSwingWorker(Window owner) {
@@ -77,7 +77,6 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 		protected Boolean doInBackground() throws Exception {
 			while (true) {
 				try {
-					this.downloaded = 0;
 					File destinationFolder = Portable.getUpdateFileDirectory();
 					// delete the destination directory
 					FileUtils.deleteDirectory(destinationFolder);
@@ -87,11 +86,11 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 					// Download the files
 					boolean ok = false;
 					SecureDownloader sd = new MyDownloader(Preferences.INSTANCE.getHttpProxy());
-					sd.download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
-					String zipChck = sd.getCheckSum();
+					DownloadInfo info = sd.download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
+					String zipChck = info==null?null:info.getCheckSum();
 					if (NullUtils.areEquals(zipChck, data.getAutoUpdateCheckSum())) {
-						sd.download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
-						String updaterChck = sd.getCheckSum();
+						DownloadInfo jarInfo = sd.download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
+						String updaterChck = jarInfo==null?null:jarInfo.getCheckSum();
 						ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
 						if (!ok) System.err.println ("ALERT checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)");
 					} else {
@@ -118,12 +117,11 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 			}
 
 			@Override
-			protected void progress() {
+			protected void progress(long downloadedSize) {
 				if (DownloadSwingWorker.this.isCancelled()) {
 					this.cancel();
 				} else {
-					downloaded = this.getDownloadedSize();
-					int percent = (int) (downloaded*100/(data.getAutoUpdateSize()+data.getAutoUpdaterSize()));
+					int percent = (int) (downloadedSize*100/(data.getAutoUpdateSize()+data.getAutoUpdaterSize()));
 					if (percent!=lastProgress) {
 						DownloadSwingWorker.this.publish(percent);
 						lastProgress = percent;
