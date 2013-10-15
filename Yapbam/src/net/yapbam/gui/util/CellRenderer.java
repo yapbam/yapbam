@@ -1,4 +1,4 @@
-package net.yapbam.gui.statementview;
+package net.yapbam.gui.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +17,6 @@ public class CellRenderer extends CustomCellRenderer {
 
 	@Override
 	protected Object getValue(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
-		//FIXME Implement that accordingly to the comment
 		if (value instanceof Date) {
 			value=SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale()).format(value);
 		} else if (value instanceof Double) {
