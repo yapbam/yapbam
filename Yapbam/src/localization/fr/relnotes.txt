@@ -4,13 +4,13 @@ known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 	Lors de l'édition d'une sous opération, la sélection d'un libellé prédéfini remet le montant de la sous-opération à 0.
 
-version 0.15.5 (31/12/9999)
+version	0.15.5 (19/10/2013)
 fix
 	Les raccourcis de menu utilisaient la touche CTRL sur Macintosh (au lieu de la touche "pomme").
 	Un bug dans le cryptage des fichiers protégés par mot de passe rendait le décryptage impossible sous Android (l'application Android est en cours de développement).
 improvement
 	Dans le tableau des "Opérations" de l'onglet "Historique du solde", les lignes déclanchant des alertes sont à présent surlignées en rouge.
-	Plusieurs optimisations en terme de vitesse et de cosommation mémoire.
+	Plusieurs optimisations en terme de vitesse et de consommation mémoire.
 	Une meilleure gestion des fichiers non supportés (En particulier, les fichiers encodés avec de futures versions de l'algo seront reconnus comme non supportés et plus comme corrompus).
 
 version	0.15.4 (09/06/2013)
