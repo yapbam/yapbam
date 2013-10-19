@@ -8,8 +8,9 @@ import java.util.StringTokenizer;
 
 import net.yapbam.gui.LocalizationData;
 
-@SuppressWarnings("serial")
 public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
+	private static final long serialVersionUID = 2256410858572541319L;
+	
 	private boolean unknown;
 	private int majorRevision;
 	private int minorRevision;
