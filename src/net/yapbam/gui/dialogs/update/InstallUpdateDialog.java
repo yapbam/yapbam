@@ -85,6 +85,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 					
 					// Download the files
 					boolean ok = false;
+					String errorMessage = null;
 					SecureDownloader sd = new MyDownloader(Preferences.INSTANCE.getHttpProxy());
 					DownloadInfo info = sd.download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
 					String zipChck = info==null?null:info.getCheckSum();
@@ -92,14 +93,14 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 						DownloadInfo jarInfo = sd.download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
 						String updaterChck = jarInfo==null?null:jarInfo.getCheckSum();
 						ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
-						if (!ok) System.err.println ("ALERT checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)");
+						if (!ok) errorMessage = "Checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)";
 					} else {
-						System.err.println ("ALERT checksum of "+data.getAutoUpdateURL()+" is "+zipChck+" ("+data.getAutoUpdateCheckSum()+" was expected)");
+						errorMessage = "ALERT checksum of "+data.getAutoUpdateURL()+" is "+zipChck+" ("+data.getAutoUpdateCheckSum()+" was expected)";
 					}
 
 					if (this.isCancelled() || !ok) FileUtils.deleteDirectory(destinationFolder);
 					if (this.isCancelled()) return null;
-					if (!ok) throw new IOException("invalid checksum");
+					if (!ok) throw new IOException(errorMessage);
 					return Boolean.TRUE;
 				} catch (Exception e) {
 					if (!auto) {
