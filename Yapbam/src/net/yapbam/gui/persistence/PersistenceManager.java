@@ -92,7 +92,7 @@ public abstract class PersistenceManager {
 		return true;
 	}
 	
-	/** Save the data associated with a main frame. Ask for the file where to save if needed.
+	/** Saves the data associated with a main frame. Ask for the file where to save if needed.
 	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
 	 * @param data The data to save
 	 * @return true if the data was saved
@@ -106,7 +106,7 @@ public abstract class PersistenceManager {
 		return saveTo(owner, data, uri);
 	}
 
-	/** Save the data associated with a main frame. Ask for the file where to save if needed.
+	/** Saves the data associated with a main frame. Ask for the file where to save if needed.
 	 * @param owner The window where the data is displayed (dialogs displayed during the save will have this window as parent).
 	 * @param data The data to save
 	 * @return true if the data was saved
@@ -118,18 +118,27 @@ public abstract class PersistenceManager {
 	}
 
 	private URI getURI(Window owner, URI uri, boolean save) {
-		URIChooser[] panels = new URIChooser[getAdaptersNumber()];
-		for (int i = 0; i < panels.length; i++) {
-			panels[i] = getAdapter(i).buildChooser();
-		}
-		URIChooserDialog dialog = new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
-		dialog.setLocale(LocalizationData.getLocale());
+		URIChooserDialog dialog = getChooserDialog(owner);
 		dialog.setSaveDialog(save);
 		dialog.setSelectedURI(uri);
 		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open"); //$NON-NLS-1$ //$NON-NLS-2$
 		dialog.setTitle(title);
 		dialog.pack();
 		return dialog.showDialog();
+	}
+
+	/** Gets a dialog to open/save file using all the available adapters
+	 * @param owner The dialog's owner
+	 * @return a dialog
+	 */
+	public URIChooserDialog getChooserDialog(Window owner) {
+		URIChooser[] panels = new URIChooser[getAdaptersNumber()];
+		for (int i = 0; i < panels.length; i++) {
+			panels[i] = getAdapter(i).buildChooser();
+		}
+		URIChooserDialog dialog = new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
+		dialog.setLocale(LocalizationData.getLocale());
+		return dialog;
 	}
 	
 	private boolean saveTo(Window owner, DataWrapper<?> data, URI uri) {
@@ -203,11 +212,18 @@ public abstract class PersistenceManager {
 		}
 	}
 
-	private int getAdaptersNumber() {
+	/** Gets the number of available adapters.
+	 * @return an int
+	 */
+	public int getAdaptersNumber() {
 		return this.schemes.size();
 	}
 
-	private PersistenceAdapter getAdapter(int index) {
+	/** Gets an available adapter.
+	 * @param index the adpater's index
+	 * @return a PersistenceAdapter
+	 */
+	public PersistenceAdapter getAdapter(int index) {
 		return this.adaptersMap.get(this.schemes.get(index));
 	}
 	

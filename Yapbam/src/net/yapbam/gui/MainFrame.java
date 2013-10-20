@@ -274,9 +274,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				if (this.plugins[i]!=null) this.plugins[i].setContext(this);
 			}
 			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instantiation
-//				ErrorManager.INSTANCE.display(null, pluginContainers[i].getInstanciationException(), "Une erreur est survenue durant l'instanciation du plugin "+"?"); //LOCAL //TODO
 				ErrorManager.INSTANCE.log(null, pluginContainers[i].getInstanciationException());
-//				pluginContainers[i].getInstanciationException().printStackTrace();
 			}
 		}
 		getJFrame().setContentPane(new MainPanel(this.plugins));
