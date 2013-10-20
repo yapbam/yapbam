@@ -27,7 +27,6 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 			@Override
 			public void processEvent(DataEvent event) {
 				boolean needRefresh = ((event instanceof EverythingChangedEvent) || (event instanceof AccountPropertyChangedEvent));
-				if (needRefresh) System.out.println ("BalanceHistoryCellRenderer receive "+event+" => refresh");
 				if (needRefresh) {
 					refreshMinMax();
 				}

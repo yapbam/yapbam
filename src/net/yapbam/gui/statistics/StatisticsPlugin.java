@@ -27,6 +27,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.filter.FilterView;
 import net.yapbam.gui.widget.TabbedPane;
 
 public class StatisticsPlugin extends AbstractPlugIn {
@@ -73,7 +74,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		buildSummaries();
 		
 /*
- 	An implementation based on a JSplitPane
+// 	An implementation based on a JSplitPane
 		JPanel result = new JPanel(new BorderLayout());
 		FilterView filterView = new FilterView(data);
 		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, filterView, tabbedPane);
@@ -91,14 +92,13 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		return result;
 */		
 		
-// Start implementation of lateral filter panel
 		JPanel result = new JPanel(new BorderLayout());
-//0.9.0		result.add(new FilterView(data), BorderLayout.WEST);
+//		result.add(new FilterView(data), BorderLayout.WEST);
 		result.add(tabbedPane, BorderLayout.CENTER);
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(getGroupSubCategories(), BorderLayout.WEST);
-		panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
-		result.add(panel, BorderLayout.SOUTH);
+		JPanel southPane = new JPanel(new BorderLayout());
+		southPane.add(getGroupSubCategories(), BorderLayout.WEST);
+		southPane.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+		result.add(southPane, BorderLayout.SOUTH);
 		return result;
 	}
 	
