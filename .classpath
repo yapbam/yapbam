@@ -23,6 +23,6 @@
 	<classpathentry kind="var" path="COMMONS-LOGGING"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/YapbamCommons"/>
 	<classpathentry kind="var" path="OPENCSV"/>
-	<classpathentry kind="var" path="JAVALUATOR"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/javaluator"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

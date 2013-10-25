@@ -5,10 +5,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JTextField;
 
-import net.astesana.javaluator.BracketPair;
-import net.astesana.javaluator.DoubleEvaluator;
+import com.fathzer.soft.javaluator.BracketPair;
+import com.fathzer.soft.javaluator.DoubleEvaluator;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
