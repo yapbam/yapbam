@@ -4,9 +4,10 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import net.astesana.javaluator.BracketPair;
-import net.astesana.javaluator.DoubleEvaluator;
-import net.astesana.javaluator.Parameters;
+import com.fathzer.soft.javaluator.BracketPair;
+import com.fathzer.soft.javaluator.DoubleEvaluator;
+import com.fathzer.soft.javaluator.Parameters;
+
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")

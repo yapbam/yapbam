@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Iterator;
 
-import net.astesana.javaluator.AbstractEvaluator;
-import net.astesana.javaluator.BracketPair;
-import net.astesana.javaluator.DoubleEvaluator;
-import net.astesana.javaluator.Operator;
-import net.astesana.javaluator.Parameters;
+import com.fathzer.soft.javaluator.AbstractEvaluator;
+import com.fathzer.soft.javaluator.BracketPair;
+import com.fathzer.soft.javaluator.DoubleEvaluator;
+import com.fathzer.soft.javaluator.Operator;
+import com.fathzer.soft.javaluator.Parameters;
 
 public class BigDecimalEvaluator extends AbstractEvaluator<BigDecimal> {
 	private static final Parameters PARAMS;
