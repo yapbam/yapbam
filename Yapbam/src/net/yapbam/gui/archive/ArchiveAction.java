@@ -3,6 +3,7 @@ package net.yapbam.gui.archive;
 import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
 import java.net.URI;
 
 import javax.swing.AbstractAction;
@@ -21,7 +22,10 @@ import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
+
+import net.yapbam.gui.persistence.PersistenceManager.ErrorProcessor;
 
 @SuppressWarnings("serial")
 public class ArchiveAction extends AbstractAction {
@@ -64,6 +68,17 @@ public class ArchiveAction extends AbstractAction {
 		});
 		URI uri = dialog.showDialog();
 		if (uri!=null) {
+			GlobalData archiveData = new GlobalData();
+			YapbamPersistenceManager.MANAGER.read(owner, new YapbamDataWrapper(archiveData), uri, new ErrorProcessor() {
+				@Override
+				public boolean processError(Throwable e) {
+					// FileNotFound should simply be ignored (the globalData remains unchanged)
+					return e instanceof FileNotFoundException;
+				}
+			});
+			FilterDialog filterDialog = new FilterDialog(owner, "What transaction do you want to archive ?", data);
+			filterDialog.setVisible(true);
+			System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
 			JOptionPane.showMessageDialog(owner, "<html>Not finished<br>Go next with "+uri);
 		}
 	}
