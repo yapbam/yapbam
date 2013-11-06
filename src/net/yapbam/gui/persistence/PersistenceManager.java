@@ -183,7 +183,6 @@ public abstract class PersistenceManager {
 								}
 								JOptionPane.showMessageDialog(frame, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 							} else {
-								//FIXME
 								throw new RuntimeException(exception);
 							}
 						} else if (exception instanceof UnsupportedFileVersionException) {
