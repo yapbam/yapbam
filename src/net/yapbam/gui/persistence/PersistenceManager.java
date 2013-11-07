@@ -153,14 +153,14 @@ public abstract class PersistenceManager {
 	 * @param path the path to read or null to choose this path in a dialog.
 	 * @param errProcessor An ErrorManager that will be used if the read fails or null to display the standard error message. 
 	 */
-	public void read(Window frame, DataWrapper<?> data, URI path, ErrorProcessor errProcessor) {
+	public boolean read(Window frame, DataWrapper<?> data, URI path, ErrorProcessor errProcessor) {
 		if (verify(frame, data)) {
 			if (path==null) {
 				path = getURI(frame, data.getURI(), false);
 			}
 			if (path != null) {
 				try {
-					new DataReader(this, frame, data, path).read();
+					return new DataReader(this, frame, data, path).read();
 				} catch (ExecutionException e) {
 					Throwable exception = e.getCause();
 					boolean notProcessed = true;
@@ -209,6 +209,7 @@ public abstract class PersistenceManager {
 				}
 			}
 		}
+		return false;
 	}
 
 	/** Gets the number of available adapters.
