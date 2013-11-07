@@ -48,6 +48,7 @@ public class FilterPanel extends JPanel {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
+			table.setModel(new AccountTableModel(data));
 		}
 		return table;
 	}

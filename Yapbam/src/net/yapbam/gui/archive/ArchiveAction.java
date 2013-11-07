@@ -69,13 +69,14 @@ public class ArchiveAction extends AbstractAction {
 		URI uri = dialog.showDialog();
 		if (uri!=null) {
 			GlobalData archiveData = new GlobalData();
-			YapbamPersistenceManager.MANAGER.read(owner, new YapbamDataWrapper(archiveData), uri, new ErrorProcessor() {
+			boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, new YapbamDataWrapper(archiveData), uri, new ErrorProcessor() {
 				@Override
 				public boolean processError(Throwable e) {
 					// FileNotFound should simply be ignored (the globalData remains unchanged)
 					return e instanceof FileNotFoundException;
 				}
 			});
+			if (!readIsOk) return;
 			FilterDialog filterDialog = new FilterDialog(owner, "What transaction do you want to archive ?", data);
 			filterDialog.setVisible(true);
 			System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
