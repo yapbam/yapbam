@@ -54,6 +54,12 @@ public class ArchiveAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Window owner = Utils.getOwnerWindow((Component)e.getSource());
+
+		// Select transactions to archive
+		FilterDialog filterDialog = new FilterDialog(owner, "What transaction do you want to archive ?", data);
+		filterDialog.setVisible(true);
+		if (filterDialog.getResult()==null) return;
+		
 		URIChooserDialog dialog = YapbamPersistenceManager.MANAGER.getChooserDialog(owner);
 		dialog.setSaveDialog(true);
 		dialog.setConfirmIfExisting(false);
@@ -77,8 +83,6 @@ public class ArchiveAction extends AbstractAction {
 				}
 			});
 			if (!readIsOk) return;
-			FilterDialog filterDialog = new FilterDialog(owner, "What transaction do you want to archive ?", data);
-			filterDialog.setVisible(true);
 			System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
 			JOptionPane.showMessageDialog(owner, "<html>Not finished<br>Go next with "+uri);
 		}
