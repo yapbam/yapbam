@@ -10,7 +10,6 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import net.yapbam.data.AbstractTransaction;
-import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.PeriodicalTransaction;
@@ -26,6 +25,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 import net.yapbam.gui.transactiontable.SpreadState;
 import net.yapbam.gui.transactiontable.TransactionTableSettings;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 @SuppressWarnings("serial")
 final class PeriodicalTransactionTableModel extends GenericTransactionTableModel {
@@ -77,7 +77,6 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		return String.class;
 	}
 
-	//TODO à fusionner avec TransactionsTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		boolean spread = this.isSpread(rowIndex);
@@ -85,48 +84,11 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		if (columnIndex==0) return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
 		else if (columnIndex==1) return transaction.getAccount().getName();
 		else if (columnIndex==2) {
-			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(transaction.getDescription(!settings.isCommentSeparatedFromDescription())); //$NON-NLS-1$
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(transaction.getSubTransaction(i).getDescription()); //$NON-NLS-1$
-				}
-				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append(LocalizationData.get("Transaction.14")); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-				buf.append("</body></html>"); //$NON-NLS-1$
-				return buf.toString().replace(" ", "&nbsp;");
-			} else {
-				return transaction.getDescription(!settings.isCommentSeparatedFromDescription());
-			}
+			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription());
 		} else if (columnIndex==3) {
-			if (spread) {
-				double complement = transaction.getComplement();
-				int numberOfLines = transaction.getSubTransactionSize()+1;
-				if (complement!=0) numberOfLines++;
-				double[] result = new double[numberOfLines];
-				result[0] = transaction.getAmount();
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					result[i+1] = transaction.getSubTransaction(i).getAmount();
-				}
-				if (complement!=0) result[result.length-1] = complement;
-				return result;
-			} else {
-				return new double[]{transaction.getAmount()};
-			}
+			return TransactionTableUtils.getAmount(transaction, spread);
 		} else if (columnIndex==4) {
-			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(getName(transaction.getCategory())); //$NON-NLS-1$
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getSubTransaction(i).getCategory())); //$NON-NLS-1$
-				}
-				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append(getName(transaction.getCategory())); //$NON-NLS-1$
-				}
-				buf.append("</body></html>"); //$NON-NLS-1$
-				return buf.toString().replace(" ", "&nbsp;");
-			} else {
-				return getName(transaction.getCategory());
-			}
+			return TransactionTableUtils.getCategory(transaction, spread);
 		} else if (columnIndex==5) {
 			Mode mode = transaction.getMode();
 			return mode.equals(Mode.UNDEFINED) ? "" : mode.getName(); //$NON-NLS-1$
@@ -178,10 +140,6 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	@Override
 	public int getColumnCount() {
 		return settings.isCommentSeparatedFromDescription()?10:9;
-	}
-
-	private Object getName(Category category) {
-		return category.equals(Category.UNDEFINED) ? "" : category.getName(); //$NON-NLS-1$
 	}
 
 	@Override

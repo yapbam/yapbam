@@ -11,6 +11,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewPeriodicalTransactionAction;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
+import net.yapbam.gui.util.JTableUtils;
 
 public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<FilteredData> implements AbstractAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration."; //$NON-NLS-1$
@@ -62,5 +63,10 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	@Override
 	public JComponent getPanel() {
 		return this;
+	}
+	@Override
+	public void restoreState() {
+		super.restoreState();
+		JTableUtils.fixColumnSize(getJTable(), 0);
 	}
 }

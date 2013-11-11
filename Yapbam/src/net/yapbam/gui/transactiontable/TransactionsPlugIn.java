@@ -6,9 +6,6 @@ import java.util.Date;
 
 import javax.swing.JPanel;
 import javax.swing.JTable.PrintMode;
-import javax.swing.table.TableColumn;
-
-import com.fathzer.soft.ajlib.swing.Utils;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.DataEvent;
@@ -24,6 +21,7 @@ import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.transactiontable.BalanceReportPanel.Selection;
+import net.yapbam.gui.util.JTableUtils;
 
 public class TransactionsPlugIn extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.transactionTable."; //$NON-NLS-1$
@@ -65,19 +63,7 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		Serializable restoredSelected = YapbamState.INSTANCE.restore(BALANCE_REF);
 		if ((restoredSelected!=null) && (restoredSelected!=BalanceReportPanel.Selection.NONE)) panel.getBalanceReportPanel().setSelected((Selection) restoredSelected);
 		// transactionTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN); //TODO This mode seems better than the default one, but should be done for all tables or none !
-		int columIndex = transactionTable.convertColumnIndexToView(0);
-		// The following lines prevent the open/close subtransactions column from having a size different from the default one
-		int width = Utils.packColumn(transactionTable, 0, 2);
-		if (width>0) { // If column is visible
-			TableColumn firstColumn = transactionTable.getColumnModel().getColumn(columIndex);
-			firstColumn.setMinWidth(width);
-			firstColumn.setMaxWidth(width);
-			firstColumn.setResizable(false);
-	//		if (columIndex!=0) { // If the open/close subtransactions column is not the first one
-	//			transactionTable.moveColumn(columIndex, 0);
-	//			//TODO Prevent the column from being moved (unfortunatly, this seems not easy at all, see http://stackoverflow.com/questions/1155137/how-to-keep-a-single-column-from-being-reordered-in-a-jtable/ Kleopatra's answer).
-	//		}
-		}
+		JTableUtils.fixColumnSize(transactionTable, 0);
 	}
 
 	@Override

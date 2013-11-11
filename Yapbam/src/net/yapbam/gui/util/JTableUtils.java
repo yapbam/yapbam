@@ -6,6 +6,8 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import com.fathzer.soft.ajlib.swing.Utils;
+
 /** Useful methods on JTables.
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
@@ -36,6 +38,21 @@ public abstract class JTableUtils {
 				columnWidth = Math.max(Math.min(comp.getPreferredSize().width + intercellspacing, maxColumnSize), columnWidth);
 			}
 			column.setPreferredWidth(columnWidth);
+		}
+	}
+	
+	public static void fixColumnSize(JTable table, int modelColumnIndex) {
+		// The following lines prevent the open/close subtransactions column from having a size different from the default one
+		int width = Utils.packColumn(table, modelColumnIndex, 2);
+		if (width>0) { // If column is visible
+			TableColumn firstColumn = table.getColumnModel().getColumn(table.convertColumnIndexToView(modelColumnIndex));
+			firstColumn.setMinWidth(width);
+			firstColumn.setMaxWidth(width);
+			firstColumn.setResizable(false);
+	//		if (columIndex!=0) { // If the open/close subtransactions column is not the first one
+	//			transactionTable.moveColumn(columIndex, 0);
+	//			//TODO Prevent the column from being moved (unfortunatly, this seems not easy at all, see http://stackoverflow.com/questions/1155137/how-to-keep-a-single-column-from-being-reordered-in-a-jtable/ Kleopatra's answer).
+	//		}
 		}
 	}
 }
