@@ -13,7 +13,7 @@ import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.transactiontable.DescriptionSettings;
+import net.yapbam.gui.transactiontable.TransactionTableSettings;
 
 /** The transaction's table model. */
 final class BalanceHistoryModel extends AbstractTableModel {
@@ -23,14 +23,14 @@ final class BalanceHistoryModel extends AbstractTableModel {
 	
 	private BalanceData data;
 	private Date endDate;
-	private DescriptionSettings descriptionSettings;
+	private TransactionTableSettings settings;
 	
 	private int rowCount;
 
 	/** Constructor. */
 	public BalanceHistoryModel(BalanceData data) {
 		super();
-		this.descriptionSettings = new DescriptionSettings();
+		this.settings = new TransactionTableSettings();
 		this.data = data;
 		this.endDate = null;
 		this.rowCount = data.getBalanceHistory().getTransactionsNumber();
@@ -57,7 +57,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		Transaction transaction = getTransaction(rowIndex);
 		if (columnIndex==0) return transaction.getAccount().getName();
 		if (columnIndex==1) return transaction.getDate();
-		if (columnIndex==2) return descriptionSettings.getDescription(transaction);
+		if (columnIndex==2) return transaction.getDescription(!settings.isCommentSeparatedFromDescription());
 		if (columnIndex==3) return transaction.getAmount();
 		if (columnIndex==4) {
 			Category category = transaction.getCategory();
@@ -106,7 +106,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return descriptionSettings.isCommentSeparatedFromDescription()?11:10;
+		return settings.isCommentSeparatedFromDescription()?11:10;
 	}
 
 	@Override

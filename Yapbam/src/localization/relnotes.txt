@@ -7,6 +7,8 @@ known
 version	0.16.0 (11/01/2013)
 fix
 	Some wordings in English and Portuguese versions.
+	The table in the appearance setting of the transactions table was incorrect when the font size was not 12.
+	When the description, category, etc ... of an operation or a sub-transaction was greater than its column in a transactions table, the display was incorrect when sub-transactions were displayed.
 improvement
 	Adds the ability to archive old transactions.
 

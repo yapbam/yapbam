@@ -10,17 +10,17 @@ import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class FilterDialog extends AbstractDialog<GlobalData, String[]> {
-	private FilterPanel panel;
+public class StatementSelectionDialog extends AbstractDialog<GlobalData, String[]> {
+	private StatementSelectionPanel panel;
 
-	public FilterDialog(Window owner, GlobalData data) {
+	public StatementSelectionDialog(Window owner, GlobalData data) {
 		super(owner, "Archive", data);
 	}
 
 	@Override
 	protected JPanel createCenterPane() {
-		panel = new FilterPanel(this.data);
-		panel.addPropertyChangeListener(FilterPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
+		panel = new StatementSelectionPanel(this.data);
+		panel.addPropertyChangeListener(StatementSelectionPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
 		return panel;
 	}
 	
@@ -31,7 +31,7 @@ public class FilterDialog extends AbstractDialog<GlobalData, String[]> {
 
 	@Override
 	protected String[] buildResult() {
-		AccountTableModel model = ((AccountTableModel)panel.getTable().getModel());
+		StatementSelectionTableModel model = ((StatementSelectionTableModel)panel.getTable().getModel());
 		String[] result = new String[model.getRowCount()];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = model.getSelectedStatement(i);

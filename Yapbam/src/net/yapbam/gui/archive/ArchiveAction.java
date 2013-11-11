@@ -56,7 +56,7 @@ public class ArchiveAction extends AbstractAction {
 		Window owner = Utils.getOwnerWindow((Component)e.getSource());
 
 		// Select transactions to archive
-		FilterDialog filterDialog = new FilterDialog(owner, data);
+		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data);
 		filterDialog.setVisible(true);
 		if (filterDialog.getResult()==null) return;
 		

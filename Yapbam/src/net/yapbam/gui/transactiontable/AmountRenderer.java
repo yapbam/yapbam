@@ -17,16 +17,29 @@ public class AmountRenderer extends ObjectRenderer {
 		} else {
 			double[] amount = (double[]) value;
 			if (amount.length == 1) {
-				text = LocalizationData.getCurrencyInstance().format(amount[0]);
+				text = toString(amount[0]);
 			} else {
-				StringBuilder buf = new StringBuilder("<html><body>").append(LocalizationData.getCurrencyInstance().format(amount[0])); //$NON-NLS-1$
+				StringBuilder buf = new StringBuilder("<html><body>").append(toString(amount[0])); //$NON-NLS-1$
 				for (int i = 1; i < amount.length; i++) {
-					buf.append("<BR>[").append(LocalizationData.getCurrencyInstance().format(amount[i])).append("]"); //$NON-NLS-1$ //$NON-NLS-2$
+					if (isNaN(amount[i])) {
+						buf.append("<BR>");
+					} else {
+						buf.append("<BR>[").append(toString(amount[i])).append("]"); //$NON-NLS-1$ //$NON-NLS-2$
+					}
 				}
 				buf.append("</body></html>"); //$NON-NLS-1$
-				text = buf.toString();
+				text = buf.toString().replace(" ", "&nbsp;");
 			}
 		}
 		setText(text);
+	}
+	
+	private String toString(double amount) {
+		return isNaN(amount) ? "" : LocalizationData.getCurrencyInstance().format(amount);
+	}
+	
+	private boolean isNaN(double value) {
+		// This test succeed if amount[i] is Double.NaN (be aware that Double.NaN==Double.NaN always returns false).
+		return value!=value;
 	}
 }

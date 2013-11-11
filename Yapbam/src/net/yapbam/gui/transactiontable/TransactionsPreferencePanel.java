@@ -21,12 +21,13 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JTable;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-import javax.swing.JLabel;
+
 import javax.swing.JScrollPane;
+
+import com.fathzer.soft.ajlib.swing.table.JTable;
 
 public class TransactionsPreferencePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
@@ -37,27 +38,26 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JButton jButton1 = null;
 	private JButton setTodefault = null;
 	private JPanel jPanel1 = null;
-	private JCheckBox chckbxReverseDateOrder;
 	private JCheckBox separeCommentChkBx;
+	private JCheckBox separateExpenseReceiptChckbx;
 	private JTable table;
 	private JCheckBox chckBxCustomBackground;
 	private JButton btnExpense;
 	private JButton btnReceipt;
-	private JLabel lblNewLabel;
 	private JScrollPane scrollPane;
 
 	private MyTableModel tableModel;
 	private Color expenseColor = GenericTransactionTableModel.CASHOUT!=null?GenericTransactionTableModel.CASHOUT:DEFAULT_CASHOUT;
 	private Color receiptColor = GenericTransactionTableModel.CASHIN!=null?GenericTransactionTableModel.CASHIN:DEFAULT_CASHIN;
 	private boolean initialSeparateCommentState;
-	private boolean initialReverseDateOrder;
+	private boolean initialSeparateReceiptExpense;
 	
 	static String NEGATIVE_KEY = "net.yapbam.balanceReport.negative"; //$NON-NLS-1$
 	static String POSITIVE_KEY = "net.yapbam.balanceReport.positive"; //$NON-NLS-1$
 	private static String CUSTOMIZED_BACKGROUND_KEY = "net.yapbam.transactionTable.customized.background"; //$NON-NLS-1$
 	static String EXPENSE_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.expense.color"; //$NON-NLS-1$
 	static String RECEIPT_BACKGROUND_COLOR_KEY = "net.yapbam.transactionTable.receipt.color"; //$NON-NLS-1$
-	private static final String REVERSE_DATE_ORDER ="net.yapbam.transactionTable.reverseDateOrder"; //$NON-NLS-1$
+	private static final String SEPARATE_RECEIPT_EXPENSE ="net.yapbam.transactionTable.separateReceiptAndExpense"; //$NON-NLS-1$
 	private static final String SEPARATE_COMMENT = "net.yapbam.transactionTable.separateDescriptionAndComment"; //$NON-NLS-1$
 	
 	static final Color DEFAULT_POSITIVE = new Color(0,200,0);
@@ -71,7 +71,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	public TransactionsPreferencePanel() {
 		super();
 		this.initialSeparateCommentState = isCommentSeparatedFromDescription();
-		this.initialReverseDateOrder = isReverseDateOrder();
+		this.initialSeparateReceiptExpense = isReceiptSeparatedFromExpense();
 		initialize();
 	}
 
@@ -79,8 +79,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(SEPARATE_COMMENT));
 	}
 	
-	public static boolean isReverseDateOrder() {
-		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(REVERSE_DATE_ORDER));
+	public static boolean isReceiptSeparatedFromExpense() {
+		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(SEPARATE_RECEIPT_EXPENSE));
 	}
 	
 	public static boolean isCustomBackgroundColors() {
@@ -132,23 +132,23 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		Color negative = negativeBalanceReport.getForeground();
 		boolean bckHasChange = (GenericTransactionTableModel.CASHIN!=null) && !(GenericTransactionTableModel.CASHIN.equals(receiptColor) && GenericTransactionTableModel.CASHOUT.equals(expenseColor));
 		if (positive.equals(BalanceReportField.POSITIVE_COLOR) && negative.equals(BalanceReportField.NEGATIVE_COLOR)
-				&& (separeCommentChkBx.isSelected()==initialSeparateCommentState) && (getChckbxReverseDateOrder().isSelected()==initialReverseDateOrder) &&
+				&& (separeCommentChkBx.isSelected()==initialSeparateCommentState) && (getSeparateExpenseReceiptChckbx().isSelected()==initialSeparateReceiptExpense) &&
 				(getChckBxCustomBackground().isSelected()==(GenericTransactionTableModel.CASHIN!=null)) && !bckHasChange) {
 			return false;
 		}
 		BalanceReportField.POSITIVE_COLOR = positive;
 		BalanceReportField.NEGATIVE_COLOR = negative;
-		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.POSITIVE_KEY, Integer.toString(positive.getRGB()));
-		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.NEGATIVE_KEY, Integer.toString(negative.getRGB()));
-		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.REVERSE_DATE_ORDER, Boolean.toString(getChckbxReverseDateOrder().isSelected()));
-		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.SEPARATE_COMMENT, Boolean.toString(separeCommentChkBx.isSelected()));
-		Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.CUSTOMIZED_BACKGROUND_KEY, Boolean.toString(getChckBxCustomBackground().isSelected()));
+		Preferences.INSTANCE.setProperty(POSITIVE_KEY, Integer.toString(positive.getRGB()));
+		Preferences.INSTANCE.setProperty(NEGATIVE_KEY, Integer.toString(negative.getRGB()));
+		Preferences.INSTANCE.setProperty(SEPARATE_RECEIPT_EXPENSE, Boolean.toString(getSeparateExpenseReceiptChckbx().isSelected()));
+		Preferences.INSTANCE.setProperty(SEPARATE_COMMENT, Boolean.toString(separeCommentChkBx.isSelected()));
+		Preferences.INSTANCE.setProperty(CUSTOMIZED_BACKGROUND_KEY, Boolean.toString(getChckBxCustomBackground().isSelected()));
 		if (getChckBxCustomBackground().isSelected()) {
-			Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY, Integer.toString(expenseColor.getRGB()));
-			Preferences.INSTANCE.setProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY, Integer.toString(receiptColor.getRGB()));
+			Preferences.INSTANCE.setProperty(EXPENSE_BACKGROUND_COLOR_KEY, Integer.toString(expenseColor.getRGB()));
+			Preferences.INSTANCE.setProperty(RECEIPT_BACKGROUND_COLOR_KEY, Integer.toString(receiptColor.getRGB()));
 		} else {
-			Preferences.INSTANCE.removeProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY);
-			Preferences.INSTANCE.removeProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY);
+			Preferences.INSTANCE.removeProperty(EXPENSE_BACKGROUND_COLOR_KEY);
+			Preferences.INSTANCE.removeProperty(RECEIPT_BACKGROUND_COLOR_KEY);
 		}
 		return true;
 	}
@@ -282,22 +282,21 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			jPanel1.setBorder(null);
 			GridBagLayout gbl_jPanel1 = new GridBagLayout();
 			jPanel1.setLayout(gbl_jPanel1);
-			GridBagConstraints gbc_chckbxReverseDateOrder = new GridBagConstraints();
-			gbc_chckbxReverseDateOrder.weightx = 1.0;
-			gbc_chckbxReverseDateOrder.gridwidth = 0;
-			gbc_chckbxReverseDateOrder.anchor = GridBagConstraints.WEST;
-			gbc_chckbxReverseDateOrder.insets = new Insets(5, 5, 5, 0);
-			gbc_chckbxReverseDateOrder.gridx = 0;
-			gbc_chckbxReverseDateOrder.gridy = 0;
-			jPanel1.add(getChckbxReverseDateOrder(), gbc_chckbxReverseDateOrder);
 			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
 			gbc_separeCommentChkBx.weightx = 1.0;
 			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
 			gbc_separeCommentChkBx.gridwidth = 0;
 			gbc_separeCommentChkBx.insets = new Insets(5, 5, 5, 0);
 			gbc_separeCommentChkBx.gridx = 0;
-			gbc_separeCommentChkBx.gridy = 1;
+			gbc_separeCommentChkBx.gridy = 0;
 			jPanel1.add(getSeparateCommentChkBx(), gbc_separeCommentChkBx);
+			GridBagConstraints gbc_separateExpenseReceiptChckbx = new GridBagConstraints();
+			gbc_separateExpenseReceiptChckbx.gridwidth = 0;
+			gbc_separateExpenseReceiptChckbx.anchor = GridBagConstraints.WEST;
+			gbc_separateExpenseReceiptChckbx.insets = new Insets(0, 5, 0, 5);
+			gbc_separateExpenseReceiptChckbx.gridx = 0;
+			gbc_separateExpenseReceiptChckbx.gridy = 1;
+			jPanel1.add(getSeparateExpenseReceiptChckbx(), gbc_separateExpenseReceiptChckbx);
 			GridBagConstraints gbc_chckBxCustomBackground = new GridBagConstraints();
 			gbc_chckBxCustomBackground.gridwidth = 0;
 			gbc_chckBxCustomBackground.anchor = GridBagConstraints.WEST;
@@ -306,6 +305,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gbc_chckBxCustomBackground.gridy = 2;
 			jPanel1.add(getChckBxCustomBackground(), gbc_chckBxCustomBackground);
 			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+			gbc_scrollPane.weightx = 1.0;
+			gbc_scrollPane.fill = GridBagConstraints.HORIZONTAL;
 			gbc_scrollPane.gridheight = 2;
 			gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
 			gbc_scrollPane.gridx = 0;
@@ -325,12 +326,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			gbc_btnExpense.gridx = 1;
 			gbc_btnExpense.gridy = 3;
 			jPanel1.add(getBtnExpense(), gbc_btnExpense);
-			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-			gbc_lblNewLabel.weightx = 1.0;
-			gbc_lblNewLabel.gridx = 2;
-			gbc_lblNewLabel.gridy = 3;
-			jPanel1.add(getLblNewLabel(), gbc_lblNewLabel);
 		}
 		return jPanel1;
 	}
@@ -377,6 +372,22 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	@SuppressWarnings("serial")
 	class MyTableModel extends AbstractTableModel implements ColoredModel {
+		private int getCommentColumnIndex() {
+			return getSeparateCommentChkBx().isSelected() ? 1 : -1;
+		}
+		private int getReceiptColumnIndex() {
+			if (!getSeparateExpenseReceiptChckbx().isSelected()) return -1;
+			return getSeparateCommentChkBx().isSelected() ? 2:1;
+		}
+		private int getExpenseColumnIndex() {
+			if (!getSeparateExpenseReceiptChckbx().isSelected()) return -1;
+			return getSeparateCommentChkBx().isSelected() ? 3:2;
+		}
+		
+		private boolean isExpense (int rowIndex) {
+			return rowIndex==0;
+		}
+
 		@Override
 		public int getRowCount() {
 			return 2;
@@ -384,26 +395,34 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 		@Override
 		public int getColumnCount() {
-			return getSeparateCommentChkBx().isSelected()?2:1;
+			int nb = 2;
+			if (getSeparateCommentChkBx().isSelected()) nb++;
+			if (getSeparateExpenseReceiptChckbx().isSelected()) nb++;
+			return nb;
 		}
 
 		@Override
 		public Object getValueAt(int row, int column) {
 			if (column==0) {
-				String result = row==0?LocalizationData.get("MainFrame.Transactions.Preferences.expenseSample"):LocalizationData.get("MainFrame.Transactions.Preferences.receiptSample"); //$NON-NLS-1$ //$NON-NLS-2$
+				String result = isExpense(row)?LocalizationData.get("MainFrame.Transactions.Preferences.expenseSample"):LocalizationData.get("MainFrame.Transactions.Preferences.receiptSample"); //$NON-NLS-1$ //$NON-NLS-2$
 				if (!getSeparateCommentChkBx().isSelected()) result = result+" ("+LocalizationData.get("Transaction.comment")+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				return result;
-			} else {
+			} else if (column==getCommentColumnIndex()) {
 				return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
+			} else if (column==getReceiptColumnIndex()) {
+				return isExpense(row) ? "" : "100";
+			} else if (column==getExpenseColumnIndex()) {
+				return isExpense(row) ? "-100" : "";
+			} else {
+				return isExpense(row) ? "-100" : "100";
 			}
 		}
 
 		@Override
-		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
-				boolean expense = row==0;
+		public void setRowLook(Component renderer, javax.swing.JTable table, int row, boolean isSelected) {
 				renderer.setForeground(table.getForeground());
 				if (getChckBxCustomBackground().isSelected()) {
-					renderer.setBackground(expense ? expenseColor : receiptColor);
+					renderer.setBackground(isExpense(row) ? expenseColor : receiptColor);
 				} else {
 					renderer.setBackground(table.getBackground());
 				}
@@ -421,8 +440,10 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		@Override
 		public String getColumnName(int column) {
 			if (column==0) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-			if (column==1) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
-			return null;
+			if (column==getCommentColumnIndex()) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
+			if (column==getReceiptColumnIndex()) return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
+			if (column==getExpenseColumnIndex()) return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
+			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$;
 		}
 	}
 	
@@ -478,12 +499,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		}
 		return btnReceipt;
 	}
-	private JLabel getLblNewLabel() {
-		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel();
-		}
-		return lblNewLabel;
-	}
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane(getTable());
@@ -492,13 +507,18 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		}
 		return scrollPane;
 	}
-	private JCheckBox getChckbxReverseDateOrder() {
-		if (chckbxReverseDateOrder == null) {
-			chckbxReverseDateOrder = new JCheckBox("Afficher les op\u00E9rations les plus r\u00E9centes en premier");
-			chckbxReverseDateOrder.setToolTipText("Cochez cette case pour que les op\u00E9rations les plus r\u00E9centes apparaissent en haut de la liste");
-			chckbxReverseDateOrder.setSelected(initialReverseDateOrder);
-			chckbxReverseDateOrder.setVisible(false); //TODO
+	private JCheckBox getSeparateExpenseReceiptChckbx() {
+		if (separateExpenseReceiptChckbx == null) {
+			separateExpenseReceiptChckbx = new JCheckBox(LocalizationData.get("MainFrame.Transactions.Preferences.separateExpenseReceipt")); //$NON-NLS-1$
+			separateExpenseReceiptChckbx.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					getTableModel().refresh();
+				}
+			});
+			separateExpenseReceiptChckbx.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.separateExpenseReceipt.tooltip")); //$NON-NLS-1$
+			separateExpenseReceiptChckbx.setSelected(initialSeparateReceiptExpense);
+
 		}
-		return chckbxReverseDateOrder;
+		return separateExpenseReceiptChckbx;
 	}
 }  //  @jve:decl-index=0:visual-constraint="64,14"

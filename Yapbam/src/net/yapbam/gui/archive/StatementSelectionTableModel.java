@@ -10,7 +10,7 @@ import net.yapbam.data.Statement;
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
-class AccountTableModel extends AbstractTableModel implements TableModel {
+class StatementSelectionTableModel extends AbstractTableModel implements TableModel {
 	private static final int ACCOUNT_COLUMN = 0;
 	private static final int IGNORED_COLUMN = 1;
 	public static final int STATEMENT_COLUMN = 2;
@@ -20,7 +20,7 @@ class AccountTableModel extends AbstractTableModel implements TableModel {
 	private String[] selectedStatements;
 	private Statement[][] statements;
 
-	public AccountTableModel(GlobalData data) {
+	public StatementSelectionTableModel(GlobalData data) {
 		this.data = data;
 		this.statements = new Statement[data.getAccountsNumber()][];
 		this.ignored = new boolean[data.getAccountsNumber()];
