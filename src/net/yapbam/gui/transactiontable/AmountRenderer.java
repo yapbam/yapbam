@@ -39,7 +39,7 @@ public class AmountRenderer extends ObjectRenderer {
 	}
 	
 	private boolean isNaN(double value) {
-		// This test succeed if amount[i] is Double.NaN (be aware that Double.NaN==Double.NaN always returns false).
+		// This test succeeds if value is Double.NaN (be aware that Double.NaN==Double.NaN always returns false).
 		return value!=value;
 	}
 }

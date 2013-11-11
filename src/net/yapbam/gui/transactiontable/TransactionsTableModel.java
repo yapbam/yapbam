@@ -9,12 +9,8 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import net.yapbam.data.AbstractTransaction;
-import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.CategoryPropertyChangedEvent;
@@ -76,10 +72,6 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		return data==null?0:data.getTransactionsNumber();
 	}
 	
-	public String getDescription (AbstractTransaction transaction) {
-		return transaction.getDescription(!settings.isCommentSeparatedFromDescription());
-	}
-	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		boolean spread = isSpread(rowIndex);
@@ -91,80 +83,15 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		else if (columnIndex==settings.getAccountColumn()) return transaction.getAccount().getName();
 		else if (columnIndex==settings.getDateColumn()) return transaction.getDate();
 		else if (columnIndex==settings.getDescriptionColumn()) {
-			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(StringEscapeUtils.escapeHtml3(getDescription(transaction))); //$NON-NLS-1$
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(transaction.getSubTransaction(i).getDescription())); //$NON-NLS-1$
-				}
-				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(LocalizationData.get("Transaction.14"))); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-				buf.append("</body></html>"); //$NON-NLS-1$
-				return buf.toString().replace(" ", "&nbsp;");
-			} else {
-				return getDescription(transaction);
-			}
+			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription());
 		} else if (columnIndex==settings.getAmountColumn()) {
-			if (spread) {
-				double complement = transaction.getComplement();
-				int numberOfLines = transaction.getSubTransactionSize()+1;
-				if (complement!=0) numberOfLines++;
-				double[] result = new double[numberOfLines];
-				result[0] = transaction.getAmount();
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					result[i+1] = transaction.getSubTransaction(i).getAmount();
-				}
-				if (complement!=0) result[result.length-1] = complement;
-				return result;
-			} else {
-				return new double[]{transaction.getAmount()};
-			}
+			return TransactionTableUtils.getAmount(transaction, spread);
 		} else if (columnIndex==settings.getReceiptColumn()) {
-			if (spread) {
-				double complement = transaction.getComplement();
-				int numberOfLines = transaction.getSubTransactionSize()+1;
-				if (!isZero(complement)) numberOfLines++;
-				double[] result = new double[numberOfLines];
-				result[0] = !isExpense(transaction.getAmount()) ? transaction.getAmount() : Double.NaN;
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					double amount = transaction.getSubTransaction(i).getAmount();
-					result[i+1] = !isExpense(amount) ? amount : Double.NaN;
-				}
-				if (!isZero(complement)) result[result.length-1] = !isExpense(complement) ? complement : Double.NaN;
-				return result;
-			} else {
-				return (!isExpense(transaction.getAmount())) ? new double[]{transaction.getAmount()} : null;
-			}
+			return TransactionTableUtils.getExpenseReceipt(transaction, spread, false);
 		} else if (columnIndex==settings.getExpenseColumn()) {
-			if (spread) {
-				double complement = transaction.getComplement();
-				int numberOfLines = transaction.getSubTransactionSize()+1;
-				if (!isZero(complement)) numberOfLines++;
-				double[] result = new double[numberOfLines];
-				result[0] = isExpense(transaction.getAmount()) ? transaction.getAmount() : Double.NaN;
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					double amount = transaction.getSubTransaction(i).getAmount();
-					result[i+1] = isExpense(amount) ? amount : Double.NaN;
-				}
-				if (!isZero(complement)) result[result.length-1] = isExpense(complement) ? complement : Double.NaN;
-				return result;
-			} else {
-				return (GlobalData.AMOUNT_COMPARATOR.compare(transaction.getAmount(), 0.0)<=0) ? new double[]{transaction.getAmount()} : null;
-			}
+			return TransactionTableUtils.getExpenseReceipt(transaction, spread, true);
 		} else if (columnIndex==settings.getCategoryColumn()) {
-			if (spread) {
-				StringBuilder buf = new StringBuilder("<html><body>").append(StringEscapeUtils.escapeHtml3(getName(transaction.getCategory()))); //$NON-NLS-1$
-				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
-					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(getName(transaction.getSubTransaction(i).getCategory()))); //$NON-NLS-1$
-				}
-				if (transaction.getComplement()!=0) {
-					buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(getName(transaction.getCategory()))); //$NON-NLS-1$
-				}
-				buf.append("</body></html>"); //$NON-NLS-1$
-				return buf.toString().replace(" ", "&nbsp;");
-			} else {
-				return getName(transaction.getCategory());
-			}
+			return TransactionTableUtils.getCategory(transaction, spread);
 		} else if (columnIndex==settings.getModeColumn()) {
 			return transaction.getMode().getName();
 		} else if (columnIndex==settings.getNumberColumn()) return transaction.getNumber();
@@ -172,18 +99,6 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		else if (columnIndex==settings.getStatementColumn()) return transaction.getStatement();
 		else if (columnIndex==settings.getCommentColumn()) return transaction.getComment();
 		return null;
-	}
-	
-	private boolean isExpense (double amount) {
-		return GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<=0;
-	}
-
-	private boolean isZero (double amount) {
-		return GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)==0;
-	}
-
-	private String getName(Category category) {
-		return category.equals(Category.UNDEFINED) ? "" : category.getName(); //$NON-NLS-1$
 	}
 	
 	@Override
