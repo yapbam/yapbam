@@ -12,23 +12,23 @@ import net.yapbam.gui.LocalizationData;
 @SuppressWarnings("serial")
 class AccountTableModel extends AbstractTableModel implements TableModel {
 	private static final int ACCOUNT_COLUMN = 0;
-	private static final int EXPORT_COLUMN = 1;
+	private static final int IGNORED_COLUMN = 1;
 	public static final int STATEMENT_COLUMN = 2;
 	
 	private GlobalData data;
-	private boolean[] selected;
+	private boolean[] ignored;
 	private String[] selectedStatements;
 	private Statement[][] statements;
 
 	public AccountTableModel(GlobalData data) {
 		this.data = data;
 		this.statements = new Statement[data.getAccountsNumber()][];
-		this.selected = new boolean[data.getAccountsNumber()];
+		this.ignored = new boolean[data.getAccountsNumber()];
 		for (int i = 0; i < statements.length; i++) {
 			this.statements[i] = Statement.getStatements(data.getAccount(i));
 		}
-		Arrays.fill(selected, false);
-		this.selectedStatements = new String[this.selected.length];
+		Arrays.fill(ignored, true);
+		this.selectedStatements = new String[this.ignored.length];
 	}
 
 	@Override
@@ -44,10 +44,10 @@ class AccountTableModel extends AbstractTableModel implements TableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (columnIndex==ACCOUNT_COLUMN) return data.getAccount(rowIndex).getName();
-		if (columnIndex==EXPORT_COLUMN) return selected[rowIndex];
+		if (columnIndex==IGNORED_COLUMN) return ignored[rowIndex];
 		if (columnIndex==STATEMENT_COLUMN) {
 			if (!hasStatement(rowIndex)) return "There is no statement in this account"; 
-			return (!selected[rowIndex] || (this.selectedStatements[rowIndex]==null))?"-":this.selectedStatements[rowIndex];
+			return (ignored[rowIndex] || (this.selectedStatements[rowIndex]==null))?"-":this.selectedStatements[rowIndex];
 		}
 		return null;
 	}
@@ -63,22 +63,22 @@ class AccountTableModel extends AbstractTableModel implements TableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==EXPORT_COLUMN) return Boolean.class;
+		if (columnIndex==IGNORED_COLUMN) return Boolean.class;
 		return super.getColumnClass(columnIndex);
 	}
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return hasStatement(rowIndex) && ((columnIndex==EXPORT_COLUMN) || (columnIndex==STATEMENT_COLUMN));
+		return hasStatement(rowIndex) && ((columnIndex==IGNORED_COLUMN) || (columnIndex==STATEMENT_COLUMN));
 	}
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		if (columnIndex==EXPORT_COLUMN) {
-			this.selected[rowIndex] = ((Boolean)aValue);
+		if (columnIndex==IGNORED_COLUMN) {
+			this.ignored[rowIndex] = ((Boolean)aValue);
 		} else if (columnIndex==STATEMENT_COLUMN) {
 			this.selectedStatements[rowIndex] = (String) aValue;
-			this.selected[rowIndex] = true;
+			this.ignored[rowIndex] = false;
 		}
 		this.fireTableRowsUpdated(rowIndex, rowIndex);
 	}
@@ -86,19 +86,23 @@ class AccountTableModel extends AbstractTableModel implements TableModel {
 	@Override
 	public String getColumnName(int column) {
 		if (column == ACCOUNT_COLUMN) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		if (column == EXPORT_COLUMN) return "Export";
-		if (column == STATEMENT_COLUMN) return "Statement";
+		if (column == IGNORED_COLUMN) return "Ignored";
+		if (column == STATEMENT_COLUMN) return "Until statement";
 		return super.getColumnName(column);
 	}
 	
 	void setAllExported(boolean exported) {
 		if (!exported) {
-			Arrays.fill(this.selected, exported);
+			Arrays.fill(this.ignored, true);
 		} else {
-			for (int i = 0; i < this.selected.length; i++) {
-				this.selected[i] = this.hasStatement(i);
+			for (int i = 0; i < this.ignored.length; i++) {
+				this.ignored[i] = !this.hasStatement(i);
 			}
 		}
 		fireTableRowsUpdated(0, getRowCount()-1);
+	}
+
+	String getSelectedStatement(int index) {
+		return (!this.ignored[index] && (this.selectedStatements[index]!=null)) ? this.selectedStatements[index] : null;
 	}
 }

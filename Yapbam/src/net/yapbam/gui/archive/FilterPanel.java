@@ -15,11 +15,13 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import com.fathzer.soft.ajlib.swing.table.JTable;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.gui.util.JTableUtils;
 import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
@@ -28,15 +30,17 @@ import java.awt.Insets;
 
 @SuppressWarnings("serial")
 public class FilterPanel extends JPanel {
+	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
+
 	private JLabel lblWhatAccountsDo;
 	private JTable table;
 	private JScrollPane scrollPane;
-	private JPanel accountPanel;
 	private JPanel panel;
 	private JButton allButton;
 	private JButton noneButton;
 	
 	private GlobalData data;
+	private String invalidityCause;
 
 	/**
 	 * Create the panel.
@@ -51,16 +55,21 @@ public class FilterPanel extends JPanel {
 	}
 
 	private void initialize() {
-		add(getAccountPanel());
+		setLayout(new BorderLayout(0, 0));
+		add(getLblWhatAccountsDo(), BorderLayout.NORTH);
+		add(getScrollPane(), BorderLayout.CENTER);
+		add(getPanel(), BorderLayout.SOUTH);
+		updateIsValid();
 	}
 
 	private JLabel getLblWhatAccountsDo() {
 		if (lblWhatAccountsDo == null) {
-			lblWhatAccountsDo = new JLabel("Please select the statements you want to archive?");
+			lblWhatAccountsDo = new JLabel("<html>Please select the statements you want to archive.<br>"
+					+ "Click the column ... (to be completed) </html>");
 		}
 		return lblWhatAccountsDo;
 	}
-	private JTable getTable() {
+	JTable getTable() {
 		if (table == null) {
 			table = new JTable();
 			// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
@@ -80,7 +89,7 @@ public class FilterPanel extends JPanel {
 						Object value, boolean isSelected, int row, int column) {
 					JComboBox combo = (JComboBox) super.getTableCellEditorComponent(table, value, isSelected, row, column);
 					combo.removeAllItems();
-					Statement[] statements = Statement.getStatements(data.getAccount(row));
+					Statement[] statements = ((AccountTableModel)table.getModel()).getStatements(row);
 					for (Statement statement : statements) {
 						if (statement.getId()!=null) combo.addItem(statement.getId());
 					}
@@ -95,10 +104,7 @@ public class FilterPanel extends JPanel {
 			model.addTableModelListener(new TableModelListener() {
 				@Override
 				public void tableChanged(TableModelEvent e) {
-					
-				System.out.println ("Something changed"); //TODO
-//					updateAddToAccountPanel();
-//					updateIsValid();
+					updateIsValid();
 				}
 			});
 
@@ -112,24 +118,10 @@ public class FilterPanel extends JPanel {
 		}
 		return scrollPane;
 	}
-	private JPanel getAccountPanel() {
-		if (accountPanel == null) {
-			accountPanel = new JPanel();
-			accountPanel.setLayout(new BorderLayout(0, 0));
-			accountPanel.add(getLblWhatAccountsDo(), BorderLayout.NORTH);
-			accountPanel.add(getScrollPane());
-			accountPanel.add(getPanel(), BorderLayout.SOUTH);
-		}
-		return accountPanel;
-	}
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
 			GridBagLayout gbl_panel = new GridBagLayout();
-			gbl_panel.columnWidths = new int[]{33, 99, 117, 0};
-			gbl_panel.rowHeights = new int[]{25, 0};
-			gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 			panel.setLayout(gbl_panel);
 			GridBagConstraints gbc_allButton = new GridBagConstraints();
 			gbc_allButton.weightx = 1.0;
@@ -143,6 +135,7 @@ public class FilterPanel extends JPanel {
 			gbc_noneButton.gridx = 2;
 			gbc_noneButton.gridy = 0;
 			panel.add(getNoneButton(), gbc_noneButton);
+			panel.setVisible(false); // Seems better without these buttons
 		}
 		return panel;
 	}
@@ -167,5 +160,23 @@ public class FilterPanel extends JPanel {
 			});
 		}
 		return noneButton;
+	}
+	
+	private void updateIsValid() {
+		String old = invalidityCause;
+		invalidityCause = "No transaction selected";
+		for (int i = 0; i < data.getAccountsNumber(); i++) {
+			if (((AccountTableModel)getTable().getModel()).getSelectedStatement(i) != null) {
+				invalidityCause = null;
+				break;
+			}
+		}
+		if (!NullUtils.areEquals(invalidityCause, old)) {
+			this.firePropertyChange(INVALIDITY_CAUSE, old, invalidityCause);
+		}
+	}
+
+	String getInvalidityCause() {
+		return invalidityCause;
 	}
 }
