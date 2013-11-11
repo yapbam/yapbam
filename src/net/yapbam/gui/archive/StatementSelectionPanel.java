@@ -27,9 +27,10 @@ import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.text.MessageFormat;
 
 @SuppressWarnings("serial")
-public class FilterPanel extends JPanel {
+public class StatementSelectionPanel extends JPanel {
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
 
 	private JLabel lblWhatAccountsDo;
@@ -45,11 +46,11 @@ public class FilterPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public FilterPanel() {
+	public StatementSelectionPanel() {
 		this(null);
 	}
 
-	public FilterPanel(GlobalData data) {
+	public StatementSelectionPanel(GlobalData data) {
 		this.data = data;
 		initialize();
 	}
@@ -64,8 +65,10 @@ public class FilterPanel extends JPanel {
 
 	private JLabel getLblWhatAccountsDo() {
 		if (lblWhatAccountsDo == null) {
-			lblWhatAccountsDo = new JLabel("<html>Please select the statements you want to archive.<br>"
-					+ "Click the column ... (to be completed) </html>");
+			String message = "<html>Please select the statements you want to archive.<br><br>"
+					+ "Click on cell in the \"{0} \" column to display the statement list<br>The selected statement and all"
+					+ " preceding statements will be archived</html>";
+			lblWhatAccountsDo = new JLabel(MessageFormat.format(message, getTable().getColumnName(StatementSelectionTableModel.STATEMENT_COLUMN)));
 		}
 		return lblWhatAccountsDo;
 	}
@@ -74,7 +77,7 @@ public class FilterPanel extends JPanel {
 			table = new JTable();
 			// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
 			table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
-			AccountTableModel model = new AccountTableModel(data);
+			StatementSelectionTableModel model = new StatementSelectionTableModel(data);
 			table.setModel(model);
 
 			table.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
@@ -82,14 +85,14 @@ public class FilterPanel extends JPanel {
 			table.setPreferredScrollableViewportSize(table.getPreferredSize());
 
 			JComboBox fieldsCombo = new JComboBox();
-			TableColumn importedColumns = table.getColumnModel().getColumn(AccountTableModel.STATEMENT_COLUMN);
+			TableColumn importedColumns = table.getColumnModel().getColumn(StatementSelectionTableModel.STATEMENT_COLUMN);
 			importedColumns.setCellEditor(new DefaultCellEditor(fieldsCombo) {
 				@Override
 				public Component getTableCellEditorComponent(javax.swing.JTable table,
 						Object value, boolean isSelected, int row, int column) {
 					JComboBox combo = (JComboBox) super.getTableCellEditorComponent(table, value, isSelected, row, column);
 					combo.removeAllItems();
-					Statement[] statements = ((AccountTableModel)table.getModel()).getStatements(row);
+					Statement[] statements = ((StatementSelectionTableModel)table.getModel()).getStatements(row);
 					for (Statement statement : statements) {
 						if (statement.getId()!=null) combo.addItem(statement.getId());
 					}
@@ -144,7 +147,7 @@ public class FilterPanel extends JPanel {
 			allButton = new JButton("Select all");
 			allButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					((AccountTableModel)getTable().getModel()).setAllExported(true);
+					((StatementSelectionTableModel)getTable().getModel()).setAllExported(true);
 				}
 			});
 		}
@@ -155,7 +158,7 @@ public class FilterPanel extends JPanel {
 			noneButton = new JButton("Deselect all");
 			noneButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					((AccountTableModel)getTable().getModel()).setAllExported(false);
+					((StatementSelectionTableModel)getTable().getModel()).setAllExported(false);
 				}
 			});
 		}
@@ -166,7 +169,7 @@ public class FilterPanel extends JPanel {
 		String old = invalidityCause;
 		invalidityCause = "No transaction selected";
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			if (((AccountTableModel)getTable().getModel()).getSelectedStatement(i) != null) {
+			if (((StatementSelectionTableModel)getTable().getModel()).getSelectedStatement(i) != null) {
 				invalidityCause = null;
 				break;
 			}

@@ -10,7 +10,6 @@ import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.transactiontable.DescriptionSettings;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 
 @SuppressWarnings("serial")
@@ -68,7 +67,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Transaction t = generator.getTransaction(rowIndex);
 		if (columnIndex==ACCOUNT_INDEX) return t.getAccount().getName();
-		if (columnIndex==DESCRIPTION_INDEX) return DescriptionSettings.getMergedDescriptionAndComment(t);
+		if (columnIndex==DESCRIPTION_INDEX) return t.getDescription(true);
 		if (columnIndex==DATE_INDEX) return t.getDate();
 		if (columnIndex==AMOUNT_INDEX) return new double[]{t.getAmount()};
 		if (columnIndex==CANCELLED_INDEX) return generator.isCancelled(rowIndex);

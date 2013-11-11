@@ -7,6 +7,8 @@ known
 version	0.16.0 (11/01/2013)
 fix
 	Correction de traductions anglaises et portuguaises.
+	La table du panneau de réglage de l'apparence de la table des opérations était incorrecte quand la taille de la police n'était pas 12.
+	Lorsqu'un libellé, une catégorie, etc ... d'une opération ou d'une sous-opération était plus grand que la colonne dans une table des opérations, l'affichage était incorrect quand on affichait les sous-opérations.
 improvement
 	Ajoute la possibilité d'archiver les anciennes opérations.
 
