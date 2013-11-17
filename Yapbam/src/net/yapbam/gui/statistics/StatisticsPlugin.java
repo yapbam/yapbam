@@ -27,7 +27,7 @@ import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.filter.FilterView;
+//import net.yapbam.gui.filter.FilterView;
 import net.yapbam.gui.widget.TabbedPane;
 
 public class StatisticsPlugin extends AbstractPlugIn {
