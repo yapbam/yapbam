@@ -11,6 +11,7 @@ fix
 	Lorsqu'un libellé, une catégorie, etc ... d'une opération ou d'une sous-opération était plus grand que la colonne dans une table des opérations, l'affichage était incorrect quand on affichait les sous-opérations.
 improvement
 	Ajoute la possibilité d'archiver les anciennes opérations.
+	Ajoute la possibilité, dans les preférences, de régler la couleur de fond dans l'onglet "Historique du solde".
 
 version	0.15.5 (19/10/2013)
 fix

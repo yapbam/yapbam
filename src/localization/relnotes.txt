@@ -11,11 +11,12 @@ fix
 	When the description, category, etc ... of an operation or a sub-transaction was greater than its column in a transactions table, the display was incorrect when sub-transactions were displayed.
 improvement
 	Adds the ability to archive old transactions.
+	The background color of "Balance History" tab can be set in the preferences dialog.
 
 version	0.15.5 (10/19/2013)
 fix
 	Menu shortcuts used the CTRL key on Macintosh (instead of "Apple" key).
-	A bug in the encryption of password protected files made ​​it impossible to decrypt on Android (Android application is under development).
+	A bug in the encryption of password protected files made it impossible to decrypt on Android (Android application is under development).
 improvement
 	In the "Transactions" table of "Balance History" tab, lines triggering alerts are now highlighted in red.
 	Several speed improvements.

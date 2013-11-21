@@ -8,20 +8,30 @@ import javax.swing.JTable;
 import net.yapbam.data.Account;
 import net.yapbam.data.AlertThreshold;
 import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.gui.transactiontable.TransactionsPreferencePanel;
 import net.yapbam.gui.util.CellRenderer;
 
 @SuppressWarnings("serial")
 public class BalanceHistoryCellRenderer extends CellRenderer {
-	private static final Color ALERT_COLOR = new Color(255, 100, 100);
+	private Color alertColor;
+	private Color receiptColor;
+	private Color expenseColor;
 	private AlertThreshold alertThreshold;
 	private FilteredData data;
 	
 	public BalanceHistoryCellRenderer(FilteredData data) {
 		this.data = data;
+		this.alertColor = TablePreferencePanel.isHighlightAlerts() ? new Color(255, 100, 100) : null;
+		if (TablePreferencePanel.isSameColors()) {
+			Color[] colors = TransactionsPreferencePanel.getBackgroundColors();
+			this.expenseColor = colors[0];
+			this.receiptColor = colors[1];
+		}
 		refreshMinMax();
 		data.addListener(new DataListener() {
 			@Override
@@ -37,10 +47,17 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 	@Override
 	protected Color getBackground(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
 		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
-		if (!isSelected && (alertThreshold.getTrigger((Double)model.getValueAt(rowModel, 9))!=0)) {
-			return ALERT_COLOR;
+		if ((alertColor!=null) && !isSelected && (alertThreshold.getTrigger((Double)model.getValueAt(rowModel, 9))!=0)) {
+			return alertColor;
 		} else {
-			return super.getBackground(table, value, isSelected, hasFocus, rowModel, columnModel);
+			double amount = (Double)model.getValueAt(rowModel, 3);
+			if ((receiptColor!=null) && (GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)>0)) {
+				return receiptColor;
+			} else if ((expenseColor!=null) && (GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<=0)) {
+				return expenseColor;
+			} else {
+				return super.getBackground(table, value, isSelected, hasFocus, rowModel, columnModel);
+			}
 		}
 	}
 

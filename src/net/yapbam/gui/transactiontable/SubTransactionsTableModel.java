@@ -75,7 +75,7 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 		} else {
 			boolean expense = this.subTransactions.get(row).getAmount() < 0;
 			renderer.setForeground(table.getForeground());
-			renderer.setBackground(expense ? GenericTransactionTableModel.CASHOUT : GenericTransactionTableModel.CASHIN);
+			renderer.setBackground(expense ? GenericTransactionTableModel.BACK_COLORS[0] : GenericTransactionTableModel.BACK_COLORS[1]);
 		}
 	}
 
