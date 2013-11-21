@@ -29,6 +29,10 @@ import javax.swing.JScrollPane;
 
 import com.fathzer.soft.ajlib.swing.table.JTable;
 
+/*Le GenericTransactionModel semble utilisé un peu partout, à voir ...
+ */
+
+
 public class TransactionsPreferencePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
@@ -47,8 +51,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	private JScrollPane scrollPane;
 
 	private MyTableModel tableModel;
-	private Color expenseColor = GenericTransactionTableModel.CASHOUT!=null?GenericTransactionTableModel.CASHOUT:DEFAULT_CASHOUT;
-	private Color receiptColor = GenericTransactionTableModel.CASHIN!=null?GenericTransactionTableModel.CASHIN:DEFAULT_CASHIN;
+	private Color expenseColor;
+	private Color receiptColor;
 	private boolean initialSeparateCommentState;
 	private boolean initialSeparateReceiptExpense;
 	
@@ -72,6 +76,10 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		super();
 		this.initialSeparateCommentState = isCommentSeparatedFromDescription();
 		this.initialSeparateReceiptExpense = isReceiptSeparatedFromExpense();
+		Color[] colors = getBackgroundColors();
+		this.expenseColor = colors[0]!=null?colors[0]:DEFAULT_CASHOUT;
+		this.receiptColor = colors[1]!=null?colors[1]:DEFAULT_CASHIN;
+
 		initialize();
 	}
 
@@ -85,6 +93,25 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	public static boolean isCustomBackgroundColors() {
 		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.CUSTOMIZED_BACKGROUND_KEY, "true"));
+	}
+	
+	/** Gets the transaction's table background colors.
+	 * @return an array of two colors. The first one is the expense color, the second is the receipt color.
+	 * Both are null if the default background should be used. 
+	 */
+	public static Color[] getBackgroundColors() {
+		Color receipt = null;
+		Color expense = null;
+		if (isCustomBackgroundColors()) { 
+			try {
+				receipt = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(RECEIPT_BACKGROUND_COLOR_KEY)));
+				expense = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(EXPENSE_BACKGROUND_COLOR_KEY)));
+			} catch (NumberFormatException e) {
+				receipt = DEFAULT_CASHIN;
+				expense = DEFAULT_CASHOUT;
+			}
+		}
+		return new Color[]{expense, receipt};
 	}
 
 	/**
@@ -130,10 +157,11 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	public boolean updatePreferences() {
 		Color positive = positiveBalanceReport.getForeground();
 		Color negative = negativeBalanceReport.getForeground();
-		boolean bckHasChange = (GenericTransactionTableModel.CASHIN!=null) && !(GenericTransactionTableModel.CASHIN.equals(receiptColor) && GenericTransactionTableModel.CASHOUT.equals(expenseColor));
+		Color[] oldColors = getBackgroundColors();
+		boolean bckHasChange = (oldColors[0]!=null) && !(oldColors[1].equals(receiptColor) && oldColors[0].equals(expenseColor));
 		if (positive.equals(BalanceReportField.POSITIVE_COLOR) && negative.equals(BalanceReportField.NEGATIVE_COLOR)
 				&& (separeCommentChkBx.isSelected()==initialSeparateCommentState) && (getSeparateExpenseReceiptChckbx().isSelected()==initialSeparateReceiptExpense) &&
-				(getChckBxCustomBackground().isSelected()==(GenericTransactionTableModel.CASHIN!=null)) && !bckHasChange) {
+				(getChckBxCustomBackground().isSelected()==(oldColors[0]!=null)) && !bckHasChange) {
 			return false;
 		}
 		BalanceReportField.POSITIVE_COLOR = positive;

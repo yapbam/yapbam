@@ -8,27 +8,14 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
-import net.yapbam.gui.Preferences;
 
 @SuppressWarnings("serial")
 public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel, ColoredModel {
-	static Color CASHIN;
-	static Color CASHOUT;
+	static Color[] BACK_COLORS;
 	private HashSet<Long> spreadTransactionId;
 
 	private void initBackgroundColors() {
-			if (TransactionsPreferencePanel.isCustomBackgroundColors()) { 
-				try {
-					CASHIN = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.RECEIPT_BACKGROUND_COLOR_KEY)));
-					CASHOUT = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.EXPENSE_BACKGROUND_COLOR_KEY)));
-				} catch (Throwable e) {
-					CASHIN = TransactionsPreferencePanel.DEFAULT_CASHIN;
-					CASHOUT = TransactionsPreferencePanel.DEFAULT_CASHOUT;
-				}
-			} else {
-				CASHIN = null;
-				CASHOUT = null;
-			}
+		BACK_COLORS = TransactionsPreferencePanel.getBackgroundColors();
 	}
 	
 	protected GenericTransactionTableModel() {
@@ -43,9 +30,9 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 			renderer.setForeground(table.getSelectionForeground());
 		} else {
 			renderer.setForeground(table.getForeground());
-			if ((CASHIN!=null) && (CASHOUT!=null)) {
+			if ((BACK_COLORS[0]!=null) && (BACK_COLORS[1]!=null)) {
 				boolean expense = this.getTransaction(row).getAmount() < 0;
-				renderer.setBackground(expense ? CASHOUT : CASHIN);
+				renderer.setBackground(expense ? BACK_COLORS[0] : BACK_COLORS[1]);
 			} else {
 				renderer.setBackground(table.getBackground());
 			}
