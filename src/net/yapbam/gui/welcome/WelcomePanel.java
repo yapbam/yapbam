@@ -61,7 +61,9 @@ public class WelcomePanel extends JPanel {
 	private URI getURI(String key) {
 		try {
 			String uriString = urlsResourceBundle.getString(key);
-			if (uriString.startsWith("http:")) return new URI(uriString);
+			if (uriString.startsWith("http:")) {
+				return new URI(uriString);
+			}
 			return new File(uriString).toURI();
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
@@ -83,51 +85,51 @@ public class WelcomePanel extends JPanel {
 		
 		JLabel lblWelcomeToYapbam = new JLabel(LocalizationData.get("Welcome.introduction")); //$NON-NLS-1$
 		lblWelcomeToYapbam.setIcon(UIManager.getIcon("OptionPane.informationIcon")); //$NON-NLS-1$
-		GridBagConstraints gbc_lblWelcomeToYapbam = new GridBagConstraints();
-		gbc_lblWelcomeToYapbam.anchor = GridBagConstraints.WEST;
-		gbc_lblWelcomeToYapbam.gridwidth = 2;
-		gbc_lblWelcomeToYapbam.insets = new Insets(0, 10, 5, 0);
-		gbc_lblWelcomeToYapbam.gridx = 0;
-		gbc_lblWelcomeToYapbam.gridy = 0;
-		add(lblWelcomeToYapbam, gbc_lblWelcomeToYapbam);
+		GridBagConstraints gbcLblWelcomeToYapbam = new GridBagConstraints();
+		gbcLblWelcomeToYapbam.anchor = GridBagConstraints.WEST;
+		gbcLblWelcomeToYapbam.gridwidth = 2;
+		gbcLblWelcomeToYapbam.insets = new Insets(0, 10, 5, 0);
+		gbcLblWelcomeToYapbam.gridx = 0;
+		gbcLblWelcomeToYapbam.gridy = 0;
+		add(lblWelcomeToYapbam, gbcLblWelcomeToYapbam);
 		
 		JPanel bottomPanel = new JPanel();
-		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
-		gbc_bottomPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_bottomPanel.gridwidth = 2;
-		gbc_bottomPanel.fill = GridBagConstraints.BOTH;
-		gbc_bottomPanel.gridx = 0;
-		gbc_bottomPanel.gridy = 3;
-		add(bottomPanel, gbc_bottomPanel);
-		GridBagLayout gbl_bottomPanel = new GridBagLayout();
-		bottomPanel.setLayout(gbl_bottomPanel);
+		GridBagConstraints gbcBottomPanel = new GridBagConstraints();
+		gbcBottomPanel.insets = new Insets(0, 0, 5, 0);
+		gbcBottomPanel.gridwidth = 2;
+		gbcBottomPanel.fill = GridBagConstraints.BOTH;
+		gbcBottomPanel.gridx = 0;
+		gbcBottomPanel.gridy = 3;
+		add(bottomPanel, gbcBottomPanel);
+		GridBagLayout gblBottomPanel = new GridBagLayout();
+		bottomPanel.setLayout(gblBottomPanel);
 		bottomPanel.setOpaque(false);
 		
 		showAtStartup = new JCheckBox(LocalizationData.get("Welcome.showAtStartup")); //$NON-NLS-1$
 		showAtStartup.setToolTipText(LocalizationData.get("Welcome.showAtStartup.tooltip")); //$NON-NLS-1$
 		showAtStartup.setOpaque(false);
 		showAtStartup.setHorizontalAlignment(SwingConstants.RIGHT);
-		GridBagConstraints gbc_showAtStartup = new GridBagConstraints();
-		gbc_showAtStartup.anchor = GridBagConstraints.EAST;
-		gbc_showAtStartup.weightx = 1.0;
-		gbc_showAtStartup.fill = GridBagConstraints.HORIZONTAL;
-		gbc_showAtStartup.gridx = 0;
-		gbc_showAtStartup.gridy = 0;
-		bottomPanel.add(showAtStartup, gbc_showAtStartup);
+		GridBagConstraints gbcShowAtStartup = new GridBagConstraints();
+		gbcShowAtStartup.anchor = GridBagConstraints.EAST;
+		gbcShowAtStartup.weightx = 1.0;
+		gbcShowAtStartup.fill = GridBagConstraints.HORIZONTAL;
+		gbcShowAtStartup.gridx = 0;
+		gbcShowAtStartup.gridy = 0;
+		bottomPanel.add(showAtStartup, gbcShowAtStartup);
 		
 		JPanel shortcutsPanel = new JPanel();
 		shortcutsPanel.setOpaque(false);
 		shortcutsPanel.setBorder(new TitledBorder(null, LocalizationData.get("Welcome.shorcuts.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
-		GridBagConstraints gbc_shortcutsPanel = new GridBagConstraints();
-		gbc_shortcutsPanel.anchor = GridBagConstraints.NORTH;
-		gbc_shortcutsPanel.weighty = 1.0;
-		gbc_shortcutsPanel.insets = new Insets(0, 0, 5, 5);
-		gbc_shortcutsPanel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_shortcutsPanel.gridx = 0;
-		gbc_shortcutsPanel.gridy = 2;
-		add(shortcutsPanel, gbc_shortcutsPanel);
-		GridBagLayout gbl_shortcutsPanel = new GridBagLayout();
-		shortcutsPanel.setLayout(gbl_shortcutsPanel);
+		GridBagConstraints gbcShortcutsPanel = new GridBagConstraints();
+		gbcShortcutsPanel.anchor = GridBagConstraints.NORTH;
+		gbcShortcutsPanel.weighty = 1.0;
+		gbcShortcutsPanel.insets = new Insets(0, 0, 5, 5);
+		gbcShortcutsPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcShortcutsPanel.gridx = 0;
+		gbcShortcutsPanel.gridy = 2;
+		add(shortcutsPanel, gbcShortcutsPanel);
+		GridBagLayout gblShortcutsPanel = new GridBagLayout();
+		shortcutsPanel.setLayout(gblShortcutsPanel);
 		
 		final File file = new File(getURI("sampleFile")); //$NON-NLS-1$
 		final JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
@@ -146,54 +148,54 @@ public class WelcomePanel extends JPanel {
 				});
 			}
 		});
-		btnOpenSampleData.setEnabled((file.exists() && file.isFile() && file.canRead()));
+		btnOpenSampleData.setEnabled(file.exists() && file.isFile() && file.canRead());
 		btnOpenSampleData.setHorizontalAlignment(SwingConstants.LEFT);
 		btnOpenSampleData.setToolTipText(LocalizationData.get("Welcome.sampleData.tooltip")); //$NON-NLS-1$
-		GridBagConstraints gbc_btnOpenSampleData = new GridBagConstraints();
-		gbc_btnOpenSampleData.anchor = GridBagConstraints.NORTH;
-		gbc_btnOpenSampleData.insets = new Insets(0, 0, 5, 0);
-		gbc_btnOpenSampleData.weightx = 1.0;
-		gbc_btnOpenSampleData.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnOpenSampleData.gridx = 0;
-		gbc_btnOpenSampleData.gridy = 0;
-		shortcutsPanel.add(btnOpenSampleData, gbc_btnOpenSampleData);
+		GridBagConstraints gbcBtnOpenSampleData = new GridBagConstraints();
+		gbcBtnOpenSampleData.anchor = GridBagConstraints.NORTH;
+		gbcBtnOpenSampleData.insets = new Insets(0, 0, 5, 0);
+		gbcBtnOpenSampleData.weightx = 1.0;
+		gbcBtnOpenSampleData.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtnOpenSampleData.gridx = 0;
+		gbcBtnOpenSampleData.gridy = 0;
+		shortcutsPanel.add(btnOpenSampleData, gbcBtnOpenSampleData);
 		
 		JButton btnViewTheTutorial = new JButton(LocalizationData.get("Welcome.tutorial")); //$NON-NLS-1$
 		btnViewTheTutorial.addActionListener(new URIClienthandler(getURI("tutorial"))); //$NON-NLS-1$
 		btnViewTheTutorial.setToolTipText(LocalizationData.get("Welcome.tutorial.tooltip")); //$NON-NLS-1$
 		btnViewTheTutorial.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_btnViewTheTutorial = new GridBagConstraints();
-		gbc_btnViewTheTutorial.insets = new Insets(0, 0, 5, 0);
-		gbc_btnViewTheTutorial.anchor = GridBagConstraints.WEST;
-		gbc_btnViewTheTutorial.weightx = 1.0;
-		gbc_btnViewTheTutorial.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnViewTheTutorial.gridx = 0;
-		gbc_btnViewTheTutorial.gridy = 1;
+		GridBagConstraints gbcBtnViewTheTutorial = new GridBagConstraints();
+		gbcBtnViewTheTutorial.insets = new Insets(0, 0, 5, 0);
+		gbcBtnViewTheTutorial.anchor = GridBagConstraints.WEST;
+		gbcBtnViewTheTutorial.weightx = 1.0;
+		gbcBtnViewTheTutorial.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtnViewTheTutorial.gridx = 0;
+		gbcBtnViewTheTutorial.gridy = 1;
 		btnViewTheTutorial.setVisible(true);
-		shortcutsPanel.add(btnViewTheTutorial, gbc_btnViewTheTutorial);
+		shortcutsPanel.add(btnViewTheTutorial, gbcBtnViewTheTutorial);
 		
 		JButton faq = new JButton(LocalizationData.get("Welcome.faq")); //$NON-NLS-1$
 		faq.addActionListener(new URIClienthandler(getURI("faq"))); //$NON-NLS-1$
 		faq.setHorizontalAlignment(SwingConstants.LEFT);
 		faq.setToolTipText(LocalizationData.get("Welcome.faq.tooltip")); //$NON-NLS-1$
-		GridBagConstraints gbc_faq = new GridBagConstraints();
-		gbc_faq.anchor = GridBagConstraints.NORTH;
-		gbc_faq.weighty = 1.0;
-		gbc_faq.fill = GridBagConstraints.HORIZONTAL;
-		gbc_faq.gridx = 0;
-		gbc_faq.gridy = 2;
-		shortcutsPanel.add(faq, gbc_faq);
+		GridBagConstraints gbcFaq = new GridBagConstraints();
+		gbcFaq.anchor = GridBagConstraints.NORTH;
+		gbcFaq.weighty = 1.0;
+		gbcFaq.fill = GridBagConstraints.HORIZONTAL;
+		gbcFaq.gridx = 0;
+		gbcFaq.gridy = 2;
+		shortcutsPanel.add(faq, gbcFaq);
 		
 		JPanel tipsPanel = new JPanel();
 		tipsPanel.setBorder(new TitledBorder(LocalizationData.get("Welcome.tip.title"))); //$NON-NLS-1$
-		GridBagConstraints gbc_tipsPanel = new GridBagConstraints();
-		gbc_tipsPanel.weighty = 1.0;
-		gbc_tipsPanel.weightx = 1.0;
-		gbc_tipsPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_tipsPanel.fill = GridBagConstraints.BOTH;
-		gbc_tipsPanel.gridx = 1;
-		gbc_tipsPanel.gridy = 2;
-		add(tipsPanel, gbc_tipsPanel);
+		GridBagConstraints gbcTipsPanel = new GridBagConstraints();
+		gbcTipsPanel.weighty = 1.0;
+		gbcTipsPanel.weightx = 1.0;
+		gbcTipsPanel.insets = new Insets(0, 0, 5, 0);
+		gbcTipsPanel.fill = GridBagConstraints.BOTH;
+		gbcTipsPanel.gridx = 1;
+		gbcTipsPanel.gridy = 2;
+		add(tipsPanel, gbcTipsPanel);
 		tipsPanel.setOpaque(false);
 		tipsPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -203,8 +205,8 @@ public class WelcomePanel extends JPanel {
 		
 		JPanel tipSelectionPanel = new JPanel();
 		tipsPanel.add(tipSelectionPanel, BorderLayout.SOUTH);
-		GridBagLayout gbl_tipSelectionPanel = new GridBagLayout();
-		tipSelectionPanel.setLayout(gbl_tipSelectionPanel);
+		GridBagLayout gblTipSelectionPanel = new GridBagLayout();
+		tipSelectionPanel.setLayout(gblTipSelectionPanel);
 		tipSelectionPanel.setOpaque(false);
 		
 		firstTip = new JButton();
@@ -215,36 +217,38 @@ public class WelcomePanel extends JPanel {
 		});
 		firstTip.setToolTipText(LocalizationData.get("Welcome.firstTip.tooltip")); //$NON-NLS-1$
 		firstTip.setIcon(IconManager.get(Name.FIRST));
-		GridBagConstraints gbc_firstTip = new GridBagConstraints();
-		gbc_firstTip.insets = new Insets(0, 0, 0, 5);
-		gbc_firstTip.weighty = 1.0;
-		gbc_firstTip.fill = GridBagConstraints.VERTICAL;
-		gbc_firstTip.gridx = 1;
-		gbc_firstTip.gridy = 0;
+		GridBagConstraints gbcFirstTip = new GridBagConstraints();
+		gbcFirstTip.insets = new Insets(0, 0, 0, 5);
+		gbcFirstTip.weighty = 1.0;
+		gbcFirstTip.fill = GridBagConstraints.VERTICAL;
+		gbcFirstTip.gridx = 1;
+		gbcFirstTip.gridy = 0;
 		setTipSelectionButtonSize(firstTip);
-		tipSelectionPanel.add(firstTip, gbc_firstTip);
+		tipSelectionPanel.add(firstTip, gbcFirstTip);
 		
 		tipNumber = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(tips.size()));
 		tipNumber.setToolTipText(LocalizationData.get("Welcome.tipNumber.tooltip")); //$NON-NLS-1$
-		GridBagConstraints gbc_tipNumber = new GridBagConstraints();
-		gbc_tipNumber.gridx = 3;
-		gbc_tipNumber.gridy = 0;
-		gbc_tipNumber.fill = GridBagConstraints.VERTICAL;
-		tipSelectionPanel.add(tipNumber, gbc_tipNumber);
+		GridBagConstraints gbcTipNumber = new GridBagConstraints();
+		gbcTipNumber.gridx = 3;
+		gbcTipNumber.gridy = 0;
+		gbcTipNumber.fill = GridBagConstraints.VERTICAL;
+		tipSelectionPanel.add(tipNumber, gbcTipNumber);
 		tipNumber.setColumns(2);
 		tipNumber.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getNewValue()!=null) setTip(((BigInteger)evt.getNewValue()).intValue()-1);
+				if (evt.getNewValue()!=null) {
+					setTip(((BigInteger)evt.getNewValue()).intValue()-1);
+				}
 			}
 		});
 		
 		JLabel label = new JLabel("/"+tips.size()); //$NON-NLS-1$
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.insets = new Insets(0, 0, 0, 5);
-		gbc_label.gridx = 4;
-		gbc_label.gridy = 0;
-		tipSelectionPanel.add(label, gbc_label);
+		GridBagConstraints gbcLabel = new GridBagConstraints();
+		gbcLabel.insets = new Insets(0, 0, 0, 5);
+		gbcLabel.gridx = 4;
+		gbcLabel.gridy = 0;
+		tipSelectionPanel.add(label, gbcLabel);
 		
 		nextTip = new JButton();
 		nextTip.addActionListener(new ActionListener() {
@@ -254,13 +258,13 @@ public class WelcomePanel extends JPanel {
 		});
 		nextTip.setToolTipText(LocalizationData.get("Welcome.nextTip.tooltip")); //$NON-NLS-1$
 		nextTip.setIcon(IconManager.get(Name.NEXT));
-		GridBagConstraints gbc_nextTip = new GridBagConstraints();
-		gbc_nextTip.fill = GridBagConstraints.VERTICAL;
-		gbc_nextTip.insets = new Insets(0, 0, 0, 5);
-		gbc_nextTip.gridx = 5;
-		gbc_nextTip.gridy = 0;
+		GridBagConstraints gbcNextTip = new GridBagConstraints();
+		gbcNextTip.fill = GridBagConstraints.VERTICAL;
+		gbcNextTip.insets = new Insets(0, 0, 0, 5);
+		gbcNextTip.gridx = 5;
+		gbcNextTip.gridy = 0;
 		setTipSelectionButtonSize(nextTip);
-		tipSelectionPanel.add(nextTip, gbc_nextTip);
+		tipSelectionPanel.add(nextTip, gbcNextTip);
 		
 		lastTip = new JButton();
 		lastTip.addActionListener(new ActionListener() {
@@ -270,12 +274,12 @@ public class WelcomePanel extends JPanel {
 		});
 		lastTip.setToolTipText(LocalizationData.get("Welcome.lastTip.tooltip")); //$NON-NLS-1$
 		lastTip.setIcon(IconManager.get(Name.LAST));
-		GridBagConstraints gbc_lastTip = new GridBagConstraints();
-		gbc_lastTip.fill = GridBagConstraints.VERTICAL;
-		gbc_lastTip.gridx = 6;
-		gbc_lastTip.gridy = 0;
+		GridBagConstraints gbcLastTip = new GridBagConstraints();
+		gbcLastTip.fill = GridBagConstraints.VERTICAL;
+		gbcLastTip.gridx = 6;
+		gbcLastTip.gridy = 0;
 		setTipSelectionButtonSize(lastTip);
-		tipSelectionPanel.add(lastTip, gbc_lastTip);
+		tipSelectionPanel.add(lastTip, gbcLastTip);
 		
 		previousTip = new JButton();
 		previousTip.addActionListener(new ActionListener() {
@@ -285,26 +289,26 @@ public class WelcomePanel extends JPanel {
 		});
 		previousTip.setToolTipText(LocalizationData.get("Welcome.previousTip.tooltip")); //$NON-NLS-1$
 		previousTip.setIcon(IconManager.get(Name.PREVIOUS));
-		GridBagConstraints gbc_previousTip = new GridBagConstraints();
-		gbc_previousTip.fill = GridBagConstraints.VERTICAL;
-		gbc_previousTip.insets = new Insets(0, 0, 0, 5);
-		gbc_previousTip.gridx = 2;
-		gbc_previousTip.gridy = 0;
+		GridBagConstraints gbcPreviousTip = new GridBagConstraints();
+		gbcPreviousTip.fill = GridBagConstraints.VERTICAL;
+		gbcPreviousTip.insets = new Insets(0, 0, 0, 5);
+		gbcPreviousTip.gridx = 2;
+		gbcPreviousTip.gridy = 0;
 		setTipSelectionButtonSize(previousTip);
-		tipSelectionPanel.add(previousTip, gbc_previousTip);
+		tipSelectionPanel.add(previousTip, gbcPreviousTip);
 
 		this.setOpaque(false);
 		
 		JSeparator separator = new JSeparator();
-		GridBagConstraints gbc_separator = new GridBagConstraints();
-		gbc_separator.weightx = 1.0;
-		gbc_separator.gridwidth = 2;
-		gbc_separator.fill = GridBagConstraints.HORIZONTAL;
-		gbc_separator.anchor = GridBagConstraints.NORTH;
-		gbc_separator.insets = new Insets(0, 10, 20, 10);
-		gbc_separator.gridx = 0;
-		gbc_separator.gridy = 1;
-		add(separator, gbc_separator);
+		GridBagConstraints gbcSeparator = new GridBagConstraints();
+		gbcSeparator.weightx = 1.0;
+		gbcSeparator.gridwidth = 2;
+		gbcSeparator.fill = GridBagConstraints.HORIZONTAL;
+		gbcSeparator.anchor = GridBagConstraints.NORTH;
+		gbcSeparator.insets = new Insets(0, 10, 20, 10);
+		gbcSeparator.gridx = 0;
+		gbcSeparator.gridy = 1;
+		add(separator, gbcSeparator);
 		
 		currentTip = -1; // Just to ensure the tip will be displayed (if we omit this line and tip is the first, setTip would think the tip hasn't change)
 		setTip(tips.getRandom());

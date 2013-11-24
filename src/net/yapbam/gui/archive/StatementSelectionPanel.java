@@ -94,7 +94,9 @@ public class StatementSelectionPanel extends JPanel {
 					combo.removeAllItems();
 					Statement[] statements = ((StatementSelectionTableModel)table.getModel()).getStatements(row);
 					for (Statement statement : statements) {
-						if (statement.getId()!=null) combo.addItem(statement.getId());
+						if (statement.getId()!=null) {
+							combo.addItem(statement.getId());
+						}
 					}
 					Object current = table.getModel().getValueAt(row, column);
 					combo.setSelectedItem(current);
@@ -124,20 +126,20 @@ public class StatementSelectionPanel extends JPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			GridBagLayout gbl_panel = new GridBagLayout();
-			panel.setLayout(gbl_panel);
-			GridBagConstraints gbc_allButton = new GridBagConstraints();
-			gbc_allButton.weightx = 1.0;
-			gbc_allButton.anchor = GridBagConstraints.EAST;
-			gbc_allButton.insets = new Insets(0, 0, 0, 5);
-			gbc_allButton.gridx = 1;
-			gbc_allButton.gridy = 0;
-			panel.add(getAllButton(), gbc_allButton);
-			GridBagConstraints gbc_noneButton = new GridBagConstraints();
-			gbc_noneButton.anchor = GridBagConstraints.EAST;
-			gbc_noneButton.gridx = 2;
-			gbc_noneButton.gridy = 0;
-			panel.add(getNoneButton(), gbc_noneButton);
+			GridBagLayout gblPanel = new GridBagLayout();
+			panel.setLayout(gblPanel);
+			GridBagConstraints gbcAllButton = new GridBagConstraints();
+			gbcAllButton.weightx = 1.0;
+			gbcAllButton.anchor = GridBagConstraints.EAST;
+			gbcAllButton.insets = new Insets(0, 0, 0, 5);
+			gbcAllButton.gridx = 1;
+			gbcAllButton.gridy = 0;
+			panel.add(getAllButton(), gbcAllButton);
+			GridBagConstraints gbcNoneButton = new GridBagConstraints();
+			gbcNoneButton.anchor = GridBagConstraints.EAST;
+			gbcNoneButton.gridx = 2;
+			gbcNoneButton.gridy = 0;
+			panel.add(getNoneButton(), gbcNoneButton);
 			panel.setVisible(false); // Seems better without these buttons
 		}
 		return panel;

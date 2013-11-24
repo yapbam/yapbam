@@ -43,18 +43,23 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (columnIndex==ACCOUNT_COLUMN) return data.getAccount(rowIndex).getName();
-		if (columnIndex==IGNORED_COLUMN) return ignored[rowIndex];
-		if (columnIndex==STATEMENT_COLUMN) {
-			if (!hasStatement(rowIndex)) return "There is no statement in this account"; 
-			return (ignored[rowIndex] || (this.selectedStatements[rowIndex]==null))?"-":this.selectedStatements[rowIndex];
+		if (columnIndex==ACCOUNT_COLUMN) {
+			return data.getAccount(rowIndex).getName();
+		} else if (columnIndex==IGNORED_COLUMN) {
+			return ignored[rowIndex];
+		} else if (columnIndex==STATEMENT_COLUMN) {
+			if (!hasStatement(rowIndex)) {
+				return "There is no statement in this account"; 
+			} else {
+				return (ignored[rowIndex] || (this.selectedStatements[rowIndex]==null))?"-":this.selectedStatements[rowIndex];
+			}
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 	boolean hasStatement(int index) {
-		if (getStatements(index).length>=2) return true;
-		return getStatements(index)[0].getId()!=null;
+		return (getStatements(index).length>=2) || (getStatements(index)[0].getId()!=null);
 	}
 
 	Statement[] getStatements(int index) {
@@ -63,8 +68,7 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==IGNORED_COLUMN) return Boolean.class;
-		return super.getColumnClass(columnIndex);
+		return (columnIndex==IGNORED_COLUMN) ? Boolean.class : super.getColumnClass(columnIndex);
 	}
 
 	@Override
@@ -85,10 +89,15 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 
 	@Override
 	public String getColumnName(int column) {
-		if (column == ACCOUNT_COLUMN) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		if (column == IGNORED_COLUMN) return "Ignored";
-		if (column == STATEMENT_COLUMN) return "Until statement";
-		return super.getColumnName(column);
+		if (column == ACCOUNT_COLUMN) {
+			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+		} else if (column == IGNORED_COLUMN) {
+			return "Ignored";
+		} else if (column == STATEMENT_COLUMN) {
+			return "Until statement";
+		} else {
+			return super.getColumnName(column);
+		}
 	}
 	
 	void setAllExported(boolean exported) {

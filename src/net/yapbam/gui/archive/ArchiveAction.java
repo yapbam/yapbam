@@ -19,12 +19,12 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.TransactionsAddedEvent;
+import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
-
 import net.yapbam.gui.persistence.PersistenceManager.ErrorProcessor;
 
 @SuppressWarnings("serial")
@@ -39,7 +39,7 @@ public class ArchiveAction extends AbstractAction {
 			@Override
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent) || (event instanceof TransactionsAddedEvent) ||
-						(event instanceof TransactionsAddedEvent)) {
+						(event instanceof TransactionsRemovedEvent)) {
 					refresh();
 				}
 			}
@@ -58,7 +58,9 @@ public class ArchiveAction extends AbstractAction {
 		// Select transactions to archive
 		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data);
 		filterDialog.setVisible(true);
-		if (filterDialog.getResult()==null) return;
+		if (filterDialog.getResult()==null) {
+			return;
+		}
 		
 		URIChooserDialog dialog = YapbamPersistenceManager.MANAGER.getChooserDialog(owner);
 		dialog.setSaveDialog(true);
@@ -67,7 +69,9 @@ public class ArchiveAction extends AbstractAction {
 		dialog.setConfirmButtonUpdater(new ConfirmButtonUpdater() {
 			@Override
 			public boolean update(JButton button, URI selectedURI, boolean existing) {
-				if (selectedURI==null) return false;
+				if (selectedURI==null) {
+					return false;
+				}
 				button.setText(existing?LocalizationData.get("Archive.selectionDialog.select"):LocalizationData.get("Archive.selectionDialog.create")); //$NON-NLS-1$ //$NON-NLS-2$
 				return true;
 			}
@@ -82,7 +86,9 @@ public class ArchiveAction extends AbstractAction {
 					return e instanceof FileNotFoundException;
 				}
 			});
-			if (!readIsOk) return;
+			if (!readIsOk) {
+				return;
+			}
 			System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
 			JOptionPane.showMessageDialog(owner, "<html>Not finished<br>Go next with "+uri);
 		}

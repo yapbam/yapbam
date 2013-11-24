@@ -35,9 +35,9 @@
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
 		<echo message="${ajlib.path}"/>
-		<javac srcdir="srcUpdater" sourcepath="src;${ajlib.path}" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="${updater.path}" sourcepath="src;${ajlib.path}" destdir="releaseCompile" target="1.6" source="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<copy todir="releaseCompile">
-	    	<fileset dir="srcUpdater" excludes="**/*.java"/>
+	    	<fileset dir="${updater.path}" excludes="**/*.java"/>
 		</copy>
 		<jar destfile="updater.jar">
 			<manifest>
@@ -115,7 +115,7 @@
 		<delete dir="${releaseDir}"/>
 		<!-- Build the launcher jar (for non windows users) -->
 		<copy todir="releaseCompile/net/yapbam/gui/images/" file="src/net/yapbam/gui/images/splash.png"/>
-		<javac srcdir="srcLauncher" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
+		<javac srcdir="${launcher.path}" destdir="releaseCompile" target="1.3" source="1.3" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<jar destfile="${classicRelease}/App/yapbam.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.gui.Launcher"/>
