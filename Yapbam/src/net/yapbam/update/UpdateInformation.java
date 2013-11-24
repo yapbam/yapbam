@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.Properties;
 
 import net.yapbam.gui.Preferences;
@@ -23,15 +22,21 @@ public class UpdateInformation {
 	private String autoUpdaterCheckSum;
 	private long autoUpdaterSize;
 	
-	UpdateInformation (URL url) throws UnknownHostException, IOException {
+	UpdateInformation (URL url) throws IOException {
 		HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 		errorCode = ct.getResponseCode();
 		if (errorCode==HttpURLConnection.HTTP_OK) {
 			Properties p = new Properties();
 			String encoding = ct.getContentEncoding();
-			if (encoding==null) throw new IOException("Encoding is null");
-			InputStream in = ct.getInputStream();
-			p.load(new InputStreamReader(in,encoding));
+			if (encoding==null) {
+				throw new IOException("Encoding is null");
+			}
+			InputStreamReader reader = new InputStreamReader(ct.getInputStream(), encoding);
+			try {
+				p.load(reader);
+			} finally {
+				reader.close();
+			}
 			String serialNumber = p.getProperty("serialNumber");
 			YapbamState.INSTANCE.put(VersionManager.SERIAL_NUMBER, serialNumber);
 			lastestRelease = new ReleaseInfo(p.getProperty("lastestRelease"));

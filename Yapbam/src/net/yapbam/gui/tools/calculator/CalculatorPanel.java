@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class CalculatorPanel extends JPanel {
@@ -64,7 +65,7 @@ public class CalculatorPanel extends JPanel {
 	private CalculatorButton btnEquals;
 	private CalculatorButton btnClear;
 	
-	private HashMap<Character, JButton> map;
+	private Map<Character, JButton> map;
 	private char decimalSeparator;
 	private StringBuilder formula;
 	private StringBuilder internalFormula;
@@ -193,13 +194,19 @@ public class CalculatorPanel extends JPanel {
 	}
 
 	private void doChar(char character) {
-		if (character==(char)10) character = EQUAL; // Return is equivalent to =
+		if (character==(char)10) {
+			character = EQUAL; // Return is equivalent to =
+		}
 		if ((character>='0') && (character<='9')) {
 			// digit
-			if (formulaIsResult) erase();
+			if (formulaIsResult) {
+				erase();
+			}
 			add(character);
 		} else if (character==decimalSeparator) {
-			if (formulaIsResult) erase();
+			if (formulaIsResult) {
+				erase();
+			}
 			add(character);
 		} else if ((character==PLUS) || (character==MINUS) || (character==MULTIPLY) || (character==DIVIDE) || (character==OPEN) || (character==CLOSE)) {
 			add(character);
@@ -264,29 +271,29 @@ public class CalculatorPanel extends JPanel {
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
-		GridBagConstraints gbc_result = new GridBagConstraints();
-		gbc_result.insets = new Insets(0, 0, 5, 0);
-		gbc_result.weightx = 1.0;
-		gbc_result.gridwidth = 0;
-		gbc_result.fill = GridBagConstraints.HORIZONTAL;
-		gbc_result.anchor = GridBagConstraints.NORTH;
-		gbc_result.gridx = 0;
-		gbc_result.gridy = 0;
-		add(getResult(), gbc_result);
-		GridBagConstraints gbc_openBracket = new GridBagConstraints();
-		gbc_openBracket.fill = GridBagConstraints.HORIZONTAL;
-		gbc_openBracket.insets = new Insets(0, 0, 5, 5);
-		gbc_openBracket.weightx = 1.0;
-		gbc_openBracket.gridx = 0;
-		gbc_openBracket.gridy = 1;
-		add(getOpenBracket(), gbc_openBracket);
-		GridBagConstraints gbc_closeBracket = new GridBagConstraints();
-		gbc_closeBracket.fill = GridBagConstraints.HORIZONTAL;
-		gbc_closeBracket.insets = new Insets(0, 0, 5, 5);
-		gbc_closeBracket.weightx = 1.0;
-		gbc_closeBracket.gridx = 1;
-		gbc_closeBracket.gridy = 1;
-		add(getCloseBracket(), gbc_closeBracket);
+		GridBagConstraints gbcResult = new GridBagConstraints();
+		gbcResult.insets = new Insets(0, 0, 5, 0);
+		gbcResult.weightx = 1.0;
+		gbcResult.gridwidth = 0;
+		gbcResult.fill = GridBagConstraints.HORIZONTAL;
+		gbcResult.anchor = GridBagConstraints.NORTH;
+		gbcResult.gridx = 0;
+		gbcResult.gridy = 0;
+		add(getResult(), gbcResult);
+		GridBagConstraints gbcOpenBracket = new GridBagConstraints();
+		gbcOpenBracket.fill = GridBagConstraints.HORIZONTAL;
+		gbcOpenBracket.insets = new Insets(0, 0, 5, 5);
+		gbcOpenBracket.weightx = 1.0;
+		gbcOpenBracket.gridx = 0;
+		gbcOpenBracket.gridy = 1;
+		add(getOpenBracket(), gbcOpenBracket);
+		GridBagConstraints gbcCloseBracket = new GridBagConstraints();
+		gbcCloseBracket.fill = GridBagConstraints.HORIZONTAL;
+		gbcCloseBracket.insets = new Insets(0, 0, 5, 5);
+		gbcCloseBracket.weightx = 1.0;
+		gbcCloseBracket.gridx = 1;
+		gbcCloseBracket.gridy = 1;
+		add(getCloseBracket(), gbcCloseBracket);
 		GridBagConstraints gbc_btnErase = new GridBagConstraints();
 		gbc_btnErase.fill = GridBagConstraints.BOTH;
 		gbc_btnErase.gridwidth = 2;
@@ -294,113 +301,113 @@ public class CalculatorPanel extends JPanel {
 		gbc_btnErase.gridx = 2;
 		gbc_btnErase.gridy = 1;
 		add(getBtnErase(), gbc_btnErase);
-		GridBagConstraints gbc_btnClear = new GridBagConstraints();
-		gbc_btnClear.gridheight = 2;
-		gbc_btnClear.fill = GridBagConstraints.BOTH;
-		gbc_btnClear.insets = new Insets(0, 0, 5, 0);
-		gbc_btnClear.gridx = 4;
-		gbc_btnClear.gridy = 1;
-		add(getBtnClear(), gbc_btnClear);
-		GridBagConstraints gbc_btnDivide = new GridBagConstraints();
-		gbc_btnDivide.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnDivide.insets = new Insets(0, 0, 5, 5);
-		gbc_btnDivide.gridx = 3;
-		gbc_btnDivide.gridy = 2;
-		add(getBtnDivide(), gbc_btnDivide);
-		GridBagConstraints gbc_btnMultiply = new GridBagConstraints();
-		gbc_btnMultiply.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnMultiply.insets = new Insets(0, 0, 5, 5);
-		gbc_btnMultiply.gridx = 3;
-		gbc_btnMultiply.gridy = 3;
-		add(getBtnMultiply(), gbc_btnMultiply);
-		GridBagConstraints gbc_btnMinus = new GridBagConstraints();
-		gbc_btnMinus.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnMinus.weightx = 1.0;
-		gbc_btnMinus.insets = new Insets(0, 0, 5, 5);
-		gbc_btnMinus.gridx = 3;
-		gbc_btnMinus.gridy = 4;
-		add(getBtnMinus(), gbc_btnMinus);
-		GridBagConstraints gbc_btnPlus = new GridBagConstraints();
-		gbc_btnPlus.insets = new Insets(0, 0, 0, 5);
-		gbc_btnPlus.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnPlus.gridx = 3;
-		gbc_btnPlus.gridy = 5;
-		add(getBtnPlus(), gbc_btnPlus);
-		GridBagConstraints gbc_btn7 = new GridBagConstraints();
-		gbc_btn7.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn7.insets = new Insets(0, 0, 5, 5);
-		gbc_btn7.gridx = 0;
-		gbc_btn7.gridy = 2;
-		add(getBtn7(), gbc_btn7);
-		GridBagConstraints gbc_btn8 = new GridBagConstraints();
-		gbc_btn8.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn8.insets = new Insets(0, 0, 5, 5);
-		gbc_btn8.gridx = 1;
-		gbc_btn8.gridy = 2;
-		add(getBtn8(), gbc_btn8);
-		GridBagConstraints gbc_btn9 = new GridBagConstraints();
-		gbc_btn9.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn9.insets = new Insets(0, 0, 5, 5);
-		gbc_btn9.gridx = 2;
-		gbc_btn9.gridy = 2;
-		add(getBtn9(), gbc_btn9);
-		GridBagConstraints gbc_btn4 = new GridBagConstraints();
-		gbc_btn4.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn4.insets = new Insets(0, 0, 5, 5);
-		gbc_btn4.gridx = 0;
-		gbc_btn4.gridy = 3;
-		add(getBtn4(), gbc_btn4);
-		GridBagConstraints gbc_btn5 = new GridBagConstraints();
-		gbc_btn5.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn5.insets = new Insets(0, 0, 5, 5);
-		gbc_btn5.weightx = 1.0;
-		gbc_btn5.gridx = 1;
-		gbc_btn5.gridy = 3;
-		add(getBtn5(), gbc_btn5);
-		GridBagConstraints gbc_btn6 = new GridBagConstraints();
-		gbc_btn6.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn6.weightx = 1.0;
-		gbc_btn6.insets = new Insets(0, 0, 5, 5);
-		gbc_btn6.gridx = 2;
-		gbc_btn6.gridy = 3;
-		add(getBtn6(), gbc_btn6);
-		GridBagConstraints gbc_btn1 = new GridBagConstraints();
-		gbc_btn1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn1.insets = new Insets(0, 0, 5, 5);
-		gbc_btn1.gridx = 0;
-		gbc_btn1.gridy = 4;
-		add(getBtn1(), gbc_btn1);
-		GridBagConstraints gbc_btn2 = new GridBagConstraints();
-		gbc_btn2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn2.insets = new Insets(0, 0, 5, 5);
-		gbc_btn2.gridx = 1;
-		gbc_btn2.gridy = 4;
-		add(getBtn2(), gbc_btn2);
-		GridBagConstraints gbc_btn3 = new GridBagConstraints();
-		gbc_btn3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn3.insets = new Insets(0, 0, 5, 5);
-		gbc_btn3.gridx = 2;
-		gbc_btn3.gridy = 4;
-		add(getBtn3(), gbc_btn3);
-		GridBagConstraints gbc_btn0 = new GridBagConstraints();
-		gbc_btn0.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btn0.gridwidth = 2;
-		gbc_btn0.insets = new Insets(0, 0, 0, 5);
-		gbc_btn0.gridx = 0;
-		gbc_btn0.gridy = 5;
-		add(getBtn0(), gbc_btn0);
-		GridBagConstraints gbc_btnDecimal = new GridBagConstraints();
-		gbc_btnDecimal.insets = new Insets(0, 0, 0, 5);
-		gbc_btnDecimal.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnDecimal.gridx = 2;
-		gbc_btnDecimal.gridy = 5;
-		add(getBtnDecimal(), gbc_btnDecimal);
-		GridBagConstraints gbc_btnEquals = new GridBagConstraints();
-		gbc_btnEquals.fill = GridBagConstraints.VERTICAL;
-		gbc_btnEquals.gridheight = 3;
-		gbc_btnEquals.gridx = 4;
-		gbc_btnEquals.gridy = 3;
-		add(getBtnEquals(), gbc_btnEquals);
+		GridBagConstraints gbcBtnClear = new GridBagConstraints();
+		gbcBtnClear.gridheight = 2;
+		gbcBtnClear.fill = GridBagConstraints.BOTH;
+		gbcBtnClear.insets = new Insets(0, 0, 5, 0);
+		gbcBtnClear.gridx = 4;
+		gbcBtnClear.gridy = 1;
+		add(getBtnClear(), gbcBtnClear);
+		GridBagConstraints gbcBtnDivide = new GridBagConstraints();
+		gbcBtnDivide.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtnDivide.insets = new Insets(0, 0, 5, 5);
+		gbcBtnDivide.gridx = 3;
+		gbcBtnDivide.gridy = 2;
+		add(getBtnDivide(), gbcBtnDivide);
+		GridBagConstraints gbcBtnMultiply = new GridBagConstraints();
+		gbcBtnMultiply.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtnMultiply.insets = new Insets(0, 0, 5, 5);
+		gbcBtnMultiply.gridx = 3;
+		gbcBtnMultiply.gridy = 3;
+		add(getBtnMultiply(), gbcBtnMultiply);
+		GridBagConstraints gbcBtnMinus = new GridBagConstraints();
+		gbcBtnMinus.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtnMinus.weightx = 1.0;
+		gbcBtnMinus.insets = new Insets(0, 0, 5, 5);
+		gbcBtnMinus.gridx = 3;
+		gbcBtnMinus.gridy = 4;
+		add(getBtnMinus(), gbcBtnMinus);
+		GridBagConstraints gbcBtnPlus = new GridBagConstraints();
+		gbcBtnPlus.insets = new Insets(0, 0, 0, 5);
+		gbcBtnPlus.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtnPlus.gridx = 3;
+		gbcBtnPlus.gridy = 5;
+		add(getBtnPlus(), gbcBtnPlus);
+		GridBagConstraints gbcBtn7 = new GridBagConstraints();
+		gbcBtn7.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn7.insets = new Insets(0, 0, 5, 5);
+		gbcBtn7.gridx = 0;
+		gbcBtn7.gridy = 2;
+		add(getBtn7(), gbcBtn7);
+		GridBagConstraints gbcBtn8 = new GridBagConstraints();
+		gbcBtn8.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn8.insets = new Insets(0, 0, 5, 5);
+		gbcBtn8.gridx = 1;
+		gbcBtn8.gridy = 2;
+		add(getBtn8(), gbcBtn8);
+		GridBagConstraints gbcBtn9 = new GridBagConstraints();
+		gbcBtn9.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn9.insets = new Insets(0, 0, 5, 5);
+		gbcBtn9.gridx = 2;
+		gbcBtn9.gridy = 2;
+		add(getBtn9(), gbcBtn9);
+		GridBagConstraints gbcBtn4 = new GridBagConstraints();
+		gbcBtn4.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn4.insets = new Insets(0, 0, 5, 5);
+		gbcBtn4.gridx = 0;
+		gbcBtn4.gridy = 3;
+		add(getBtn4(), gbcBtn4);
+		GridBagConstraints gbcBtn5 = new GridBagConstraints();
+		gbcBtn5.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn5.insets = new Insets(0, 0, 5, 5);
+		gbcBtn5.weightx = 1.0;
+		gbcBtn5.gridx = 1;
+		gbcBtn5.gridy = 3;
+		add(getBtn5(), gbcBtn5);
+		GridBagConstraints gbcBtn6 = new GridBagConstraints();
+		gbcBtn6.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn6.weightx = 1.0;
+		gbcBtn6.insets = new Insets(0, 0, 5, 5);
+		gbcBtn6.gridx = 2;
+		gbcBtn6.gridy = 3;
+		add(getBtn6(), gbcBtn6);
+		GridBagConstraints gbcBtn1 = new GridBagConstraints();
+		gbcBtn1.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn1.insets = new Insets(0, 0, 5, 5);
+		gbcBtn1.gridx = 0;
+		gbcBtn1.gridy = 4;
+		add(getBtn1(), gbcBtn1);
+		GridBagConstraints gbcBtn2 = new GridBagConstraints();
+		gbcBtn2.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn2.insets = new Insets(0, 0, 5, 5);
+		gbcBtn2.gridx = 1;
+		gbcBtn2.gridy = 4;
+		add(getBtn2(), gbcBtn2);
+		GridBagConstraints gbcBtn3 = new GridBagConstraints();
+		gbcBtn3.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn3.insets = new Insets(0, 0, 5, 5);
+		gbcBtn3.gridx = 2;
+		gbcBtn3.gridy = 4;
+		add(getBtn3(), gbcBtn3);
+		GridBagConstraints gbcBtn0 = new GridBagConstraints();
+		gbcBtn0.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtn0.gridwidth = 2;
+		gbcBtn0.insets = new Insets(0, 0, 0, 5);
+		gbcBtn0.gridx = 0;
+		gbcBtn0.gridy = 5;
+		add(getBtn0(), gbcBtn0);
+		GridBagConstraints gbcBtnDecimal = new GridBagConstraints();
+		gbcBtnDecimal.insets = new Insets(0, 0, 0, 5);
+		gbcBtnDecimal.fill = GridBagConstraints.HORIZONTAL;
+		gbcBtnDecimal.gridx = 2;
+		gbcBtnDecimal.gridy = 5;
+		add(getBtnDecimal(), gbcBtnDecimal);
+		GridBagConstraints gbcBtnEquals = new GridBagConstraints();
+		gbcBtnEquals.fill = GridBagConstraints.VERTICAL;
+		gbcBtnEquals.gridheight = 3;
+		gbcBtnEquals.gridx = 4;
+		gbcBtnEquals.gridy = 3;
+		add(getBtnEquals(), gbcBtnEquals);
 	}
 
 	private JTextField getResult() {
@@ -560,7 +567,9 @@ public class CalculatorPanel extends JPanel {
 		 */
 		@Override
 		public void setText(String text) {
-			if (text.length()>0) character = text.charAt(0);
+			if (text.length()>0) {
+				character = text.charAt(0);
+			}
 			super.setText(text);
 		}
 	}
