@@ -249,7 +249,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				private final boolean CHECK_EVENT_ON_EDT = Boolean.getBoolean("CheckGlobalDataEventAreOnEDT"); //$NON-NLS-1$
 				@Override
 				protected void fireEvent(DataEvent event) {
-					if (IsEventsEnabled()) {
+					if (isEventsEnabled()) {
 						if (CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread() && (getNumberOfListeners()>0)) {
 							RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !"); //$NON-NLS-1$
 							e.fillInStackTrace();
@@ -266,7 +266,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		}
 	    
 		PlugInContainer[] pluginContainers = Preferences.getPlugins();
-		if (restartData == null) restartData = new Object[pluginContainers.length];
+		if (restartData == null) {
+			restartData = new Object[pluginContainers.length];
+		}
 		this.plugins = new AbstractPlugIn[pluginContainers.length];
 		for (int i = 0; i < plugins.length; i++) {
 			if (pluginContainers[i].isActivated()) {
