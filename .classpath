@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="testSrc"/>
+	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="testSrc">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="var" path="JCommon"/>
-	<classpathentry kind="var" path="JFreeChart" sourcepath="/JFreeChartSrc"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/A-JLib"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JClop"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JClop-Dropbox"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="var" path="DROPBOX"/>
-	<classpathentry kind="var" path="HTTP-CLIENT"/>
-	<classpathentry kind="var" path="HTTP-CORE"/>
-	<classpathentry kind="var" path="HTTP-MIME"/>
-	<classpathentry kind="var" path="JSON-SIMPLE"/>
-	<classpathentry kind="var" path="COMMONS-CODEC"/>
-	<classpathentry kind="var" path="COMMONS-LANG"/>
-	<classpathentry kind="var" path="COMMONS-LOGGING"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/YapbamCommons"/>
-	<classpathentry kind="var" path="OPENCSV"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/javaluator"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
