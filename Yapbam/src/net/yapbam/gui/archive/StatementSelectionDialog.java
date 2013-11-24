@@ -31,7 +31,7 @@ public class StatementSelectionDialog extends AbstractDialog<GlobalData, String[
 
 	@Override
 	protected String[] buildResult() {
-		StatementSelectionTableModel model = ((StatementSelectionTableModel)panel.getTable().getModel());
+		StatementSelectionTableModel model = (StatementSelectionTableModel)panel.getTable().getModel();
 		String[] result = new String[model.getRowCount()];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = model.getSelectedStatement(i);

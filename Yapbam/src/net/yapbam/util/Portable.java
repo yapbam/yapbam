@@ -24,8 +24,12 @@ public final class Portable {
 			file = new File(file, "Data");
 		} else {
 			String path = System.getenv("APPDATA"); // Check window app data variable
-			if (path==null) path = System.getenv("USERPROFILE"); // Check windows user profile variable
-			if (path==null) path = System.getProperty("user.home"); // Check the user home directory
+			if (path==null) {
+				path = System.getenv("USERPROFILE"); // Check windows user profile variable
+			}
+			if (path==null) {
+				path = System.getProperty("user.home"); // Check the user home directory
+			}
 			if ((path!=null) && FileUtils.isWritable(new File(path))) {
 				// If user data directory or user directory is ok. Use this one
 				file = new File (path, "."+APPLICATION_NAME);
@@ -47,7 +51,9 @@ public final class Portable {
 //		System.out.println ("Data directory : "+getDataDirectory());
 	}
 	
-	private Portable() {}
+	private Portable() {
+		// Hide constructor
+	}
 	
 	/** Tests whether this application is portable or not.
 	 * <br>An application is supposed to be be portable if it is able to write in its launch directory.
