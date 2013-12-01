@@ -136,11 +136,11 @@ public class StatementSelectionPanel extends JPanel {
 
 	private void initialize() {
 		setLayout(new GridBagLayout());
-		GridBagConstraints gbc_checkModePanel = new GridBagConstraints();
-		gbc_checkModePanel.anchor = GridBagConstraints.EAST;
-		gbc_checkModePanel.gridx = 5;
-		gbc_checkModePanel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_checkModePanel.gridy = 0;
+		GridBagConstraints gbcCheckModePanel = new GridBagConstraints();
+		gbcCheckModePanel.anchor = GridBagConstraints.EAST;
+		gbcCheckModePanel.gridx = 5;
+		gbcCheckModePanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcCheckModePanel.gridy = 0;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.insets = new Insets(0, 10, 0, 5);
 		gridBagConstraints3.gridx = 2;
@@ -190,7 +190,9 @@ public class StatementSelectionPanel extends JPanel {
 	}
 	
 	public Account getAccount() {
-		if (data==null) return null;
+		if (data==null) {
+			return null;
+		}
 		int index = getAccountMenu().getSelectedIndex();
 		return index>=0 ? data.getGlobalData().getAccount(index) : null;
 	}
@@ -237,9 +239,10 @@ public class StatementSelectionPanel extends JPanel {
 	}
 
 	public Statement getSelectedStatement() {
-		if ((statements==null) || (getStatementMenu().getSelectedIndex()<0)) return null;
-		Statement statement = statements[statements.length-1-getStatementMenu().getSelectedIndex()];
-		return statement;
+		if ((statements==null) || (getStatementMenu().getSelectedIndex()<0)) {
+			return null;
+		}
+		return statements[statements.length-1-getStatementMenu().getSelectedIndex()];
 	}
 	
 	public void select (String statementId) {
@@ -247,15 +250,21 @@ public class StatementSelectionPanel extends JPanel {
 	}
 
 	public Statement getStatement(String statementId) {
-		if (statements==null) return null;
+		if (statements==null) {
+			return null;
+		}
 		for (Statement statement : statements) {
-			if (NullUtils.areEquals(statement.getId(), statementId)) return statement;
+			if (NullUtils.areEquals(statement.getId(), statementId)) {
+				return statement;
+			}
 		}
 		return null;
 	}
 	
-	public boolean IsThereANewerStatement(String statementId) {
-		if (statements==null) return false;
+	public boolean isThereANewerStatement(String statementId) {
+		if (statements==null) {
+			return false;
+		}
 		int index = -1;
 		for (int i = 0; i < statements.length; i++) {
 			if (NullUtils.areEquals(statements[i].getId(), statementId)) {

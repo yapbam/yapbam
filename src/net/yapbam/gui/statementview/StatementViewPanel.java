@@ -94,7 +94,7 @@ public class StatementViewPanel extends JPanel {
 	private JLabel summaryLabel;
 	private JButton btnRename;
 	private JPanel northPanel;
-	private JPanel panel_1;
+	private JPanel panel1;
 	
 	static {
 		URL imgURL = LocalizationData.class.getResource("images/checkCursor.png"); //$NON-NLS-1$
@@ -128,7 +128,9 @@ public class StatementViewPanel extends JPanel {
 			statementSelectionPanel.getStatementMenu().addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Statement selectedStatement = getStatementSelectionPanel().getSelectedStatement();
-					if ((selectedStatement==null) || (selectedStatement.getId()!=null)) getCheckModeChkbx().setSelected(false);
+					if ((selectedStatement==null) || (selectedStatement.getId()!=null)) {
+						getCheckModeChkbx().setSelected(false);
+					}
 					setTables();
 				}
 			});
@@ -150,35 +152,35 @@ public class StatementViewPanel extends JPanel {
 
 			statementPanel.setLayout(new GridBagLayout());
 
-			GridBagConstraints gbc_balance = new GridBagConstraints();
-			gbc_balance.fill = GridBagConstraints.HORIZONTAL;
-			gbc_balance.weightx = 1.0;
-			statementPanel.add(getBalancePanel(), gbc_balance);
+			GridBagConstraints gbcBalance = new GridBagConstraints();
+			gbcBalance.fill = GridBagConstraints.HORIZONTAL;
+			gbcBalance.weightx = 1.0;
+			statementPanel.add(getBalancePanel(), gbcBalance);
 
-			GridBagConstraints gbc_menuPanel = new GridBagConstraints();
-			gbc_menuPanel.anchor = GridBagConstraints.NORTH;
-			gbc_menuPanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_menuPanel.gridx = 0;
-			gbc_menuPanel.gridy = 1;
-			statementPanel.add(getColumnsMenuPanel(), gbc_menuPanel);
+			GridBagConstraints gbcMenuPanel = new GridBagConstraints();
+			gbcMenuPanel.anchor = GridBagConstraints.NORTH;
+			gbcMenuPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcMenuPanel.gridx = 0;
+			gbcMenuPanel.gridy = 1;
+			statementPanel.add(getColumnsMenuPanel(), gbcMenuPanel);
 
-			GridBagConstraints gbc_jScrollPane = new GridBagConstraints();
-			gbc_jScrollPane.weighty = 1.0;
-			gbc_jScrollPane.weightx = 1.0;
-			gbc_jScrollPane.fill = GridBagConstraints.BOTH;
-			gbc_jScrollPane.gridx = 0;
-			gbc_jScrollPane.gridy = 2;
+			GridBagConstraints gbcJScrollPane = new GridBagConstraints();
+			gbcJScrollPane.weighty = 1.0;
+			gbcJScrollPane.weightx = 1.0;
+			gbcJScrollPane.fill = GridBagConstraints.BOTH;
+			gbcJScrollPane.gridx = 0;
+			gbcJScrollPane.gridy = 2;
 			JScrollPane jScrollPane = new JScrollPane();
 			jScrollPane.setViewportView(getTransactionsTable());
-			statementPanel.add(jScrollPane, gbc_jScrollPane);
+			statementPanel.add(jScrollPane, gbcJScrollPane);
 
-			GridBagConstraints gbc_detail = new GridBagConstraints();
-			gbc_detail.insets = new Insets(0, 0, 5, 0);
-			gbc_detail.weightx = 1.0;
-			gbc_detail.fill = GridBagConstraints.HORIZONTAL;
-			gbc_detail.gridx = 0;
-			gbc_detail.gridy = 3;
-			statementPanel.add(getDetail(), gbc_detail);
+			GridBagConstraints gbcDetail = new GridBagConstraints();
+			gbcDetail.insets = new Insets(0, 0, 5, 0);
+			gbcDetail.weightx = 1.0;
+			gbcDetail.fill = GridBagConstraints.HORIZONTAL;
+			gbcDetail.gridx = 0;
+			gbcDetail.gridy = 3;
+			statementPanel.add(getDetail(), gbcDetail);
 		}
 		return statementPanel;
 	}
@@ -292,15 +294,15 @@ public class StatementViewPanel extends JPanel {
 		if (menuPanel == null) {
 			menuPanel = new JPanel();
 			menuPanel.setBorder(null);
-			GridBagLayout gbl_menuPanel = new GridBagLayout();
-			menuPanel.setLayout(gbl_menuPanel);
-			GridBagConstraints gbc_ColumnsMenu = new GridBagConstraints();
-			gbc_ColumnsMenu.weightx = 1.0;
-			gbc_ColumnsMenu.insets = new Insets(0, 0, 0, 5);
-			gbc_ColumnsMenu.anchor = GridBagConstraints.EAST;
-			gbc_ColumnsMenu.gridx = 0;
-			gbc_ColumnsMenu.gridy = 0;
-			menuPanel.add(getColumnsMenu(), gbc_ColumnsMenu);
+			GridBagLayout gblMenuPanel = new GridBagLayout();
+			menuPanel.setLayout(gblMenuPanel);
+			GridBagConstraints gbcColumnsMenu = new GridBagConstraints();
+			gbcColumnsMenu.weightx = 1.0;
+			gbcColumnsMenu.insets = new Insets(0, 0, 0, 5);
+			gbcColumnsMenu.anchor = GridBagConstraints.EAST;
+			gbcColumnsMenu.gridx = 0;
+			gbcColumnsMenu.gridy = 0;
+			menuPanel.add(getColumnsMenu(), gbcColumnsMenu);
 		}
 		return menuPanel;
 	}
@@ -329,63 +331,63 @@ public class StatementViewPanel extends JPanel {
 			border = BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3), border);
 			notCheckedPanel.setBorder(border);
 
-			GridBagConstraints gbc_panel = new GridBagConstraints();
-			gbc_panel.insets = new Insets(0, 0, 5, 0);
-			gbc_panel.gridwidth = 0;
-			gbc_panel.weightx = 1.0;
-			gbc_panel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_panel.gridx = 0;
-			gbc_panel.gridy = 0;
+			GridBagConstraints gbcPanel = new GridBagConstraints();
+			gbcPanel.insets = new Insets(0, 0, 5, 0);
+			gbcPanel.gridwidth = 0;
+			gbcPanel.weightx = 1.0;
+			gbcPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcPanel.gridx = 0;
+			gbcPanel.gridy = 0;
 			JPanel panel = new JPanel();
 			panel.setBackground(Color.WHITE);
 			panel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.GRAY));
-			GridBagLayout gbl_panel = new GridBagLayout();
-			panel.setLayout(gbl_panel);
-			notCheckedPanel.add(panel, gbc_panel);
+			GridBagLayout gblPanel = new GridBagLayout();
+			panel.setLayout(gblPanel);
+			notCheckedPanel.add(panel, gbcPanel);
 			JLabel label = new JLabel(LocalizationData.get("CheckModePanel.notChecked.title")); //$NON-NLS-1$
 			label.setHorizontalAlignment(SwingConstants.LEFT);
-			GridBagConstraints gbc_label = new GridBagConstraints();
-			gbc_label.weightx = 1.0;
-			gbc_label.insets = new Insets(0, 5, 0, 0);
-			gbc_label.anchor = GridBagConstraints.WEST;
-			gbc_label.gridx = 0;
-			gbc_label.gridy = 0;
+			GridBagConstraints gbcLabel = new GridBagConstraints();
+			gbcLabel.weightx = 1.0;
+			gbcLabel.insets = new Insets(0, 5, 0, 0);
+			gbcLabel.anchor = GridBagConstraints.WEST;
+			gbcLabel.gridx = 0;
+			gbcLabel.gridy = 0;
 			Font font = label.getFont();
 			font = label.getFont().deriveFont(14*label.getFont().getSize()/12);
 			label.setFont(font);
-			panel.add(label, gbc_label);
+			panel.add(label, gbcLabel);
 
-			GridBagConstraints gbc_notCheckedColumns = new GridBagConstraints();
-			gbc_notCheckedColumns.anchor = GridBagConstraints.EAST;
-			gbc_notCheckedColumns.gridx = 0;
-			gbc_notCheckedColumns.gridy = 1;
-			gbc_notCheckedColumns.gridwidth = 0;
-			notCheckedPanel.add(getNotCheckedColumns(), gbc_notCheckedColumns);
+			GridBagConstraints gbcNotCheckedColumns = new GridBagConstraints();
+			gbcNotCheckedColumns.anchor = GridBagConstraints.EAST;
+			gbcNotCheckedColumns.gridx = 0;
+			gbcNotCheckedColumns.gridy = 1;
+			gbcNotCheckedColumns.gridwidth = 0;
+			notCheckedPanel.add(getNotCheckedColumns(), gbcNotCheckedColumns);
 	
 			notCheckedJScrollPane = new JScrollPane();
 			notCheckedJScrollPane.setViewportView(getUncheckedTransactionsTable());
-			GridBagConstraints gbc_notCheckedJScrollPane = new GridBagConstraints();
-			gbc_notCheckedJScrollPane.gridwidth = 0;
-			gbc_notCheckedJScrollPane.weighty = 1.0;
-			gbc_notCheckedJScrollPane.weightx = 1.0;
-			gbc_notCheckedJScrollPane.fill = GridBagConstraints.BOTH;
-			gbc_notCheckedJScrollPane.gridy = 2;
-			gbc_notCheckedJScrollPane.gridx = 0;
-			notCheckedPanel.add(notCheckedJScrollPane, gbc_notCheckedJScrollPane);
+			GridBagConstraints gbcNotCheckedJScrollPane = new GridBagConstraints();
+			gbcNotCheckedJScrollPane.gridwidth = 0;
+			gbcNotCheckedJScrollPane.weighty = 1.0;
+			gbcNotCheckedJScrollPane.weightx = 1.0;
+			gbcNotCheckedJScrollPane.fill = GridBagConstraints.BOTH;
+			gbcNotCheckedJScrollPane.gridy = 2;
+			gbcNotCheckedJScrollPane.gridx = 0;
+			notCheckedPanel.add(notCheckedJScrollPane, gbcNotCheckedJScrollPane);
 
-			GridBagConstraints gbc_changeValueDatePanel = new GridBagConstraints();
-			gbc_changeValueDatePanel.anchor = GridBagConstraints.WEST;
-			gbc_changeValueDatePanel.insets = new Insets(0, 5, 0, 0);
-			gbc_changeValueDatePanel.gridx = 0;
-			gbc_changeValueDatePanel.gridy = 3;
-			notCheckedPanel.add(getChangeValueDatePanel(), gbc_changeValueDatePanel);
+			GridBagConstraints gbcChangeValueDatePanel = new GridBagConstraints();
+			gbcChangeValueDatePanel.anchor = GridBagConstraints.WEST;
+			gbcChangeValueDatePanel.insets = new Insets(0, 5, 0, 0);
+			gbcChangeValueDatePanel.gridx = 0;
+			gbcChangeValueDatePanel.gridy = 3;
+			notCheckedPanel.add(getChangeValueDatePanel(), gbcChangeValueDatePanel);
 
-			GridBagConstraints gbc_summaryLabel = new GridBagConstraints();
-			gbc_summaryLabel.anchor = GridBagConstraints.EAST;
-			gbc_summaryLabel.insets = new Insets(0, 0, 0, 5);
-			gbc_summaryLabel.gridx = 1;
-			gbc_summaryLabel.gridy = 3;
-			notCheckedPanel.add(getSummaryLabel(), gbc_summaryLabel);
+			GridBagConstraints gbcSummaryLabel = new GridBagConstraints();
+			gbcSummaryLabel.anchor = GridBagConstraints.EAST;
+			gbcSummaryLabel.insets = new Insets(0, 0, 0, 5);
+			gbcSummaryLabel.gridx = 1;
+			gbcSummaryLabel.gridy = 3;
+			notCheckedPanel.add(getSummaryLabel(), gbcSummaryLabel);
 		}
 		return notCheckedPanel;
 	}
@@ -466,7 +468,7 @@ public class StatementViewPanel extends JPanel {
 				transactions = new Transaction[0];
 			} else {
 				// Verify that this statement is the last one
-				showWarningMessage = getStatementSelectionPanel().IsThereANewerStatement(statementId);
+				showWarningMessage = getStatementSelectionPanel().isThereANewerStatement(statementId);
 				transactions = getTransactions(statementSelectionPanel.getAccount(), statementId);
 			}
 			getBalancePanel().setAlertVisible(showWarningMessage);
@@ -512,7 +514,9 @@ public class StatementViewPanel extends JPanel {
 			@Override
 			public int compare(Transaction o1, Transaction o2) {
 				int result = DateUtils.dateToInteger(o1.getValueDate())-DateUtils.dateToInteger(o2.getValueDate());
-				if (result == 0) result = DateUtils.dateToInteger(o1.getDate())-DateUtils.dateToInteger(o2.getDate());
+				if (result == 0) {
+					result = DateUtils.dateToInteger(o1.getDate())-DateUtils.dateToInteger(o2.getDate());
+				}
 				return result;
 			}
 		});
@@ -549,7 +553,9 @@ public class StatementViewPanel extends JPanel {
 								String message = MessageFormat.format(LocalizationData.get("StatementDialog.existing.message"), result, current);
 								int choice = JOptionPane.showConfirmDialog(owner, message,
 										LocalizationData.get("StatementDialog.existing.title"),  JOptionPane.OK_CANCEL_OPTION,  JOptionPane.WARNING_MESSAGE);
-								if (choice==2) return;
+								if (choice==2) {
+									return;
+								}
 								break;
 							}
 						}
@@ -579,32 +585,32 @@ public class StatementViewPanel extends JPanel {
 	private JPanel getNorthPanel() {
 		if (northPanel == null) {
 			northPanel = new JPanel();
-			GridBagLayout gbl_northPanel = new GridBagLayout();
-			northPanel.setLayout(gbl_northPanel);
-			GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-			gbc_panel_1.anchor = GridBagConstraints.WEST;
-			gbc_panel_1.weightx = 1.0;
-			gbc_panel_1.fill = GridBagConstraints.VERTICAL;
-			gbc_panel_1.gridx = 1;
-			gbc_panel_1.gridy = 0;
-			northPanel.add(getPanel_1(), gbc_panel_1);
-			GridBagConstraints gbc_checkModeChkbx = new GridBagConstraints();
-			gbc_checkModeChkbx.insets = new Insets(0, 0, 0, 5);
-			gbc_checkModeChkbx.weightx = 1.0;
-			gbc_checkModeChkbx.anchor = GridBagConstraints.EAST;
-			gbc_checkModeChkbx.gridx = 2;
-			gbc_checkModeChkbx.gridy = 0;
-			northPanel.add(getCheckModeChkbx(), gbc_checkModeChkbx);
+			GridBagLayout gblNorthPanel = new GridBagLayout();
+			northPanel.setLayout(gblNorthPanel);
+			GridBagConstraints gbcPanel1 = new GridBagConstraints();
+			gbcPanel1.anchor = GridBagConstraints.WEST;
+			gbcPanel1.weightx = 1.0;
+			gbcPanel1.fill = GridBagConstraints.VERTICAL;
+			gbcPanel1.gridx = 1;
+			gbcPanel1.gridy = 0;
+			northPanel.add(getPanel1(), gbcPanel1);
+			GridBagConstraints gbcCheckModeChkbx = new GridBagConstraints();
+			gbcCheckModeChkbx.insets = new Insets(0, 0, 0, 5);
+			gbcCheckModeChkbx.weightx = 1.0;
+			gbcCheckModeChkbx.anchor = GridBagConstraints.EAST;
+			gbcCheckModeChkbx.gridx = 2;
+			gbcCheckModeChkbx.gridy = 0;
+			northPanel.add(getCheckModeChkbx(), gbcCheckModeChkbx);
 		}
 		return northPanel;
 	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			panel_1.add(getStatementSelectionPanel());
-			panel_1.add(getBtnRename());
+	private JPanel getPanel1() {
+		if (panel1 == null) {
+			panel1 = new JPanel();
+			panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			panel1.add(getStatementSelectionPanel());
+			panel1.add(getBtnRename());
 		}
-		return panel_1;
+		return panel1;
 	}
 }

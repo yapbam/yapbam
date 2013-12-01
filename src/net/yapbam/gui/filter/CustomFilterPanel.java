@@ -74,7 +74,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	};
 	
 	private TextMatcherFilterPanel numberPanel = null;
-	private NatureFilterPanel receipts_expensesPanel;
+	private NatureFilterPanel receiptsExpensesPanel;
 	private JPanel panel;
 	private DateFilterPanel datePanel;
 	private PropertyChangeListener inconsistencyListener;
@@ -123,21 +123,21 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 		gridBagConstraints.weighty = 0.0D;
 		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.gridy = 0;
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridheight = 0;
-		gbc_panel.gridwidth = 2;
-		gbc_panel.weighty = 1.0;
-		gbc_panel.weightx = 1.0;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 1;
-		gbc_panel.gridy = 0;
-		add(getPanel(), gbc_panel);
+		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.gridheight = 0;
+		gbcPanel.gridwidth = 2;
+		gbcPanel.weighty = 1.0;
+		gbcPanel.weightx = 1.0;
+		gbcPanel.fill = GridBagConstraints.BOTH;
+		gbcPanel.gridx = 1;
+		gbcPanel.gridy = 0;
+		add(getPanel(), gbcPanel);
 		this.add(getAccountPanel(), gridBagConstraints);
-		GridBagConstraints gbc_clear = new GridBagConstraints();
-		gbc_clear.insets = new Insets(0, 0, 0, 5);
-		gbc_clear.gridx = 0;
-		gbc_clear.gridy = 4;
-		add(getClear(), gbc_clear);
+		GridBagConstraints gbcClear = new GridBagConstraints();
+		gbcClear.insets = new Insets(0, 0, 0, 5);
+		gbcClear.gridx = 0;
+		gbcClear.gridy = 4;
+		add(getClear(), gbcClear);
 		this.add(getValueDatePanel(), gridBagConstraints41);
 		this.add(getModePanel(), gridBagConstraints28);
 	}
@@ -183,7 +183,9 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			accountList.setToolTipText(LocalizationData.get("CustomFilterPanel.account.toolTip")); //$NON-NLS-1$
 			ArrayList<Integer> indices = new ArrayList<Integer>(gData.getAccountsNumber()); 
 			for (int i=0;i<gData.getAccountsNumber();i++) {
-				if (filter.isOk(gData.getAccount(i))) indices.add(i);
+				if (filter.isOk(gData.getAccount(i))) {
+					indices.add(i);
+				}
 			}
 			int[] selection = new int[indices.size()];
 			for (int i = 0; i < indices.size(); i++) {
@@ -268,7 +270,9 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			categoryList.setToolTipText(LocalizationData.get("CustomFilterPanel.category.toolTip")); //$NON-NLS-1$
 			ArrayList<Integer> indices = new ArrayList<Integer>(gData.getCategoriesNumber()); 
 			for (int i=0;i<gData.getCategoriesNumber();i++) {
-				if (filter.isOk(gData.getCategory(i))) indices.add(i);
+				if (filter.isOk(gData.getCategory(i))) {
+					indices.add(i);
+				}
 			}
 			int[] selection = new int[indices.size()];
 			for (int i = 0; i < indices.size(); i++) {
@@ -322,9 +326,13 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			if (validModes!=null) {
 				for (int i = 0; i < validModes.size(); i++) {
 					String name = validModes.get(i);
-					if (name.isEmpty()) name = LocalizationData.get("Mode.undefined");
+					if (name.isEmpty()) {
+						name = LocalizationData.get("Mode.undefined");
+					}
 					int index = Arrays.binarySearch(arrayModes, name);
-					if (index>=0) newSelection.add(index);
+					if (index>=0) {
+						newSelection.add(index);
+					}
 				}
 			} else {
 				for (int i = 0; i < arrayModes.length; i++) {
@@ -335,7 +343,9 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			// Restore the selection of items that have been deleted
 			for (int i = 0; i < currentSelectedModes.length; i++) {
 				int index = Arrays.binarySearch(arrayModes, currentSelectedModes[i]);
-				if (index>=0) newSelection.add(index);
+				if (index>=0) {
+					newSelection.add(index);
+				}
 			}
 		}
 		int[] indices = new int[newSelection.size()];
@@ -384,8 +394,12 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 		Double min = getAmountPanel().getMinAmount();
 		Double max = getAmountPanel().getMaxAmount();
 		int mask = 0;
-		if (getReceipts_expensesPanel().isReceiptsSelected()) mask += Filter.RECEIPTS;
-		if (getReceipts_expensesPanel().isExpensesSelected()) mask += Filter.EXPENSES;
+		if (getReceiptsExpensesPanel().isReceiptsSelected()) {
+			mask += Filter.RECEIPTS;
+		}
+		if (getReceiptsExpensesPanel().isExpensesSelected()) {
+			mask += Filter.EXPENSES;
+		}
 		filter.setAmountFilter(mask, min, max);
 		// build the date filter
 		filter.setDateFilter(getDatePanel().getDateFrom(), getDatePanel().getDateTo());
@@ -402,7 +416,9 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			mask += Filter.CHECKED;
 			statementFilter = getJPanel11().getTextMatcher();
 		}
-		if (getNotChecked().isSelected()) mask += Filter.NOT_CHECKED;
+		if (getNotChecked().isSelected()) {
+			mask += Filter.NOT_CHECKED;
+		}
 		filter.setStatementFilter(mask, statementFilter);
 		// Build the number filter
 		filter.setNumberMatcher(this.getNumberPanel().getTextMatcher());
@@ -441,18 +457,34 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	 * @return A string that explains the problem, or null if the state is consistent.
 	 */
 	public String getInconsistencyCause() {
-		if (getDescriptionPanel().getInconsistencyCause()!=null) return getDescriptionPanel().getInconsistencyCause();
-		if (getCommentPanel().getInconsistencyCause()!=null) return getCommentPanel().getInconsistencyCause();
-		if (getNumberPanel().getInconsistencyCause()!=null) return getNumberPanel().getInconsistencyCause();
-		if (getJPanel11().getInconsistencyCause()!=null) return getJPanel11().getInconsistencyCause();
-		if (getReceipts_expensesPanel().getInconsistencyCause()!=null) return getReceipts_expensesPanel().getInconsistencyCause();
+		if (getDescriptionPanel().getInconsistencyCause()!=null) {
+			return getDescriptionPanel().getInconsistencyCause();
+		}
+		if (getCommentPanel().getInconsistencyCause()!=null) {
+			return getCommentPanel().getInconsistencyCause();
+		}
+		if (getNumberPanel().getInconsistencyCause()!=null) {
+			return getNumberPanel().getInconsistencyCause();
+		}
+		if (getJPanel11().getInconsistencyCause()!=null) {
+			return getJPanel11().getInconsistencyCause();
+		}
+		if (getReceiptsExpensesPanel().getInconsistencyCause()!=null) {
+			return getReceiptsExpensesPanel().getInconsistencyCause();
+		}
 		if (!getChecked().isSelected() && !getNotChecked().isSelected()) {
 			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.checkStatus"), //$NON-NLS-1$
 					LocalizationData.get("MainMenuBar.checked"), LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		if (getValueDatePanel().getInconsistencyCause()!=null) return getValueDatePanel().getInconsistencyCause();
-		if (getAmountPanel().getInconsistencyCause()!=null) return getAmountPanel().getInconsistencyCause();
-		if (getDatePanel().getInconsistencyCause()!=null) return getDatePanel().getInconsistencyCause();
+		if (getValueDatePanel().getInconsistencyCause()!=null) {
+			return getValueDatePanel().getInconsistencyCause();
+		}
+		if (getAmountPanel().getInconsistencyCause()!=null) {
+			return getAmountPanel().getInconsistencyCause();
+		}
+		if (getDatePanel().getInconsistencyCause()!=null) {
+			return getDatePanel().getInconsistencyCause();
+		}
 		if (getAccountList().getSelectedIndices().length==0) {
 			return LocalizationData.get("CustomFilterPanel.error.noAccount"); //$NON-NLS-1$
 		}
@@ -625,7 +657,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 					selectAll(getModes());
 					selectAll(getCategoryList());
 					getDescriptionPanel().clear();
-					getReceipts_expensesPanel().clear();
+					getReceiptsExpensesPanel().clear();
 					getAmountPanel().clear();
 					getDatePanel().clear();
 					getNumberPanel().clear();
@@ -708,69 +740,69 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 		return numberPanel;
 	}
 
-	private NatureFilterPanel getReceipts_expensesPanel() {
-		if (receipts_expensesPanel == null) {
-			receipts_expensesPanel = new NatureFilterPanel();
-			receipts_expensesPanel.addPropertyChangeListener(inconsistencyListener);
-			receipts_expensesPanel.setSelected(filter.isOk(Filter.RECEIPTS), filter.isOk(Filter.EXPENSES));
+	private NatureFilterPanel getReceiptsExpensesPanel() {
+		if (receiptsExpensesPanel == null) {
+			receiptsExpensesPanel = new NatureFilterPanel();
+			receiptsExpensesPanel.addPropertyChangeListener(inconsistencyListener);
+			receiptsExpensesPanel.setSelected(filter.isOk(Filter.RECEIPTS), filter.isOk(Filter.EXPENSES));
 		}
-		return receipts_expensesPanel;
+		return receiptsExpensesPanel;
 	}
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			GridBagLayout gbl_panel = new GridBagLayout();
-			panel.setLayout(gbl_panel);
-			GridBagConstraints gbc_commentPanel = new GridBagConstraints();
-			gbc_commentPanel.weightx = 1.0;
-			gbc_commentPanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_commentPanel.gridwidth = 2;
-			gbc_commentPanel.insets = new Insets(0, 0, 5, 5);
-			gbc_commentPanel.gridx = 0;
-			gbc_commentPanel.gridy = 1;
-			panel.add(getCommentPanel(), gbc_commentPanel);
-			GridBagConstraints gbc_amountPanel = new GridBagConstraints();
-			gbc_amountPanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_amountPanel.insets = new Insets(0, 0, 5, 5);
-			gbc_amountPanel.gridx = 0;
-			gbc_amountPanel.gridy = 3;
-			panel.add(getAmountPanel(), gbc_amountPanel);
-			GridBagConstraints gbc_Receipts_expensesPanel = new GridBagConstraints();
-			gbc_Receipts_expensesPanel.insets = new Insets(0, 0, 5, 5);
-			gbc_Receipts_expensesPanel.weightx = 1.0;
-			gbc_Receipts_expensesPanel.anchor = GridBagConstraints.NORTH;
-			gbc_Receipts_expensesPanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_Receipts_expensesPanel.gridx = 0;
-			gbc_Receipts_expensesPanel.gridy = 2;
-			panel.add(getReceipts_expensesPanel(), gbc_Receipts_expensesPanel);
-			GridBagConstraints gbc_descriptionPanel = new GridBagConstraints();
-			gbc_descriptionPanel.gridwidth = 2;
-			gbc_descriptionPanel.insets = new Insets(0, 0, 5, 0);
-			gbc_descriptionPanel.weightx = 1.0;
-			gbc_descriptionPanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_descriptionPanel.gridx = 0;
-			gbc_descriptionPanel.gridy = 0;
-			panel.add(getDescriptionPanel(), gbc_descriptionPanel);
-			GridBagConstraints gbc_categoryPanel = new GridBagConstraints();
-			gbc_categoryPanel.fill = GridBagConstraints.BOTH;
-			gbc_categoryPanel.gridheight = 4;
-			gbc_categoryPanel.insets = new Insets(0, 0, 5, 0);
-			gbc_categoryPanel.gridx = 1;
-			gbc_categoryPanel.gridy = 2;
-			panel.add(getCategoryPanel(), gbc_categoryPanel);
-			GridBagConstraints gbc_numberPanel = new GridBagConstraints();
-			gbc_numberPanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_numberPanel.insets = new Insets(0, 0, 5, 5);
-			gbc_numberPanel.gridx = 0;
-			gbc_numberPanel.gridy = 4;
-			panel.add(getNumberPanel(), gbc_numberPanel);
-			GridBagConstraints gbc_statementPanel = new GridBagConstraints();
-			gbc_statementPanel.insets = new Insets(0, 0, 5, 5);
-			gbc_statementPanel.anchor = GridBagConstraints.NORTH;
-			gbc_statementPanel.fill = GridBagConstraints.HORIZONTAL;
-			gbc_statementPanel.gridx = 0;
-			gbc_statementPanel.gridy = 5;
-			panel.add(getStatementPanel(), gbc_statementPanel);
+			GridBagLayout gblPanel = new GridBagLayout();
+			panel.setLayout(gblPanel);
+			GridBagConstraints gbcCommentPanel = new GridBagConstraints();
+			gbcCommentPanel.weightx = 1.0;
+			gbcCommentPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcCommentPanel.gridwidth = 2;
+			gbcCommentPanel.insets = new Insets(0, 0, 5, 5);
+			gbcCommentPanel.gridx = 0;
+			gbcCommentPanel.gridy = 1;
+			panel.add(getCommentPanel(), gbcCommentPanel);
+			GridBagConstraints gbcAmountPanel = new GridBagConstraints();
+			gbcAmountPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcAmountPanel.insets = new Insets(0, 0, 5, 5);
+			gbcAmountPanel.gridx = 0;
+			gbcAmountPanel.gridy = 3;
+			panel.add(getAmountPanel(), gbcAmountPanel);
+			GridBagConstraints gbcReceiptsExpensesPanel = new GridBagConstraints();
+			gbcReceiptsExpensesPanel.insets = new Insets(0, 0, 5, 5);
+			gbcReceiptsExpensesPanel.weightx = 1.0;
+			gbcReceiptsExpensesPanel.anchor = GridBagConstraints.NORTH;
+			gbcReceiptsExpensesPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcReceiptsExpensesPanel.gridx = 0;
+			gbcReceiptsExpensesPanel.gridy = 2;
+			panel.add(getReceiptsExpensesPanel(), gbcReceiptsExpensesPanel);
+			GridBagConstraints gbcDescriptionPanel = new GridBagConstraints();
+			gbcDescriptionPanel.gridwidth = 2;
+			gbcDescriptionPanel.insets = new Insets(0, 0, 5, 0);
+			gbcDescriptionPanel.weightx = 1.0;
+			gbcDescriptionPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcDescriptionPanel.gridx = 0;
+			gbcDescriptionPanel.gridy = 0;
+			panel.add(getDescriptionPanel(), gbcDescriptionPanel);
+			GridBagConstraints gbcCategoryPanel = new GridBagConstraints();
+			gbcCategoryPanel.fill = GridBagConstraints.BOTH;
+			gbcCategoryPanel.gridheight = 4;
+			gbcCategoryPanel.insets = new Insets(0, 0, 5, 0);
+			gbcCategoryPanel.gridx = 1;
+			gbcCategoryPanel.gridy = 2;
+			panel.add(getCategoryPanel(), gbcCategoryPanel);
+			GridBagConstraints gbcNumberPanel = new GridBagConstraints();
+			gbcNumberPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcNumberPanel.insets = new Insets(0, 0, 5, 5);
+			gbcNumberPanel.gridx = 0;
+			gbcNumberPanel.gridy = 4;
+			panel.add(getNumberPanel(), gbcNumberPanel);
+			GridBagConstraints gbcStatementPanel = new GridBagConstraints();
+			gbcStatementPanel.insets = new Insets(0, 0, 5, 5);
+			gbcStatementPanel.anchor = GridBagConstraints.NORTH;
+			gbcStatementPanel.fill = GridBagConstraints.HORIZONTAL;
+			gbcStatementPanel.gridx = 0;
+			gbcStatementPanel.gridy = 5;
+			panel.add(getStatementPanel(), gbcStatementPanel);
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.insets = new Insets(0, 0, 5, 5);
 			gridBagConstraints21.gridx = 0;

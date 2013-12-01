@@ -17,8 +17,8 @@ import java.awt.Insets;
 
 public class AmountPanel extends ConsistencyCheckedPanel {
 	private static final long serialVersionUID = 1L;
-	private JPanel panel_2;
-	private JPanel panel_1;
+	private JPanel panel2;
+	private JPanel panel1;
 	private JRadioButton amountAll;
 	private CurrencyWidget maxAmountWidget;
 	private CurrencyWidget minAmountWidget;
@@ -29,84 +29,84 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 	 * Create the panel.
 	 */
 	public AmountPanel() {
-		GridBagLayout gbl_amountPanel = new GridBagLayout();
-		setLayout(gbl_amountPanel);
+		GridBagLayout gblAmountPanel = new GridBagLayout();
+		setLayout(gblAmountPanel);
 		setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("Transaction.amount"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 5;
 		gridBagConstraints4.gridy = 0;
-		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.anchor = GridBagConstraints.WEST;
-		gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_panel_2.gridx = 0;
-		gbc_panel_2.gridy = 0;
-		add(getPanel_2(), gbc_panel_2);
-		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.weightx = 1.0;
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
-		gbc_panel_1.anchor = GridBagConstraints.WEST;
-		gbc_panel_1.gridwidth = 3;
-		gbc_panel_1.gridx = 1;
-		gbc_panel_1.gridy = 0;
-		add(getPanel_1(), gbc_panel_1);
+		GridBagConstraints gbcPanel2 = new GridBagConstraints();
+		gbcPanel2.anchor = GridBagConstraints.WEST;
+		gbcPanel2.fill = GridBagConstraints.HORIZONTAL;
+		gbcPanel2.insets = new Insets(0, 0, 5, 5);
+		gbcPanel2.gridx = 0;
+		gbcPanel2.gridy = 0;
+		add(getPanel2(), gbcPanel2);
+		GridBagConstraints gbcPanel1 = new GridBagConstraints();
+		gbcPanel1.weightx = 1.0;
+		gbcPanel1.fill = GridBagConstraints.BOTH;
+		gbcPanel1.anchor = GridBagConstraints.WEST;
+		gbcPanel1.gridwidth = 3;
+		gbcPanel1.gridx = 1;
+		gbcPanel1.gridy = 0;
+		add(getPanel1(), gbcPanel1);
 	}
-	private JPanel getPanel_2() {
-		if (panel_2 == null) {
-			panel_2 = new JPanel();
-			GridBagLayout gbl_panel_2 = new GridBagLayout();
-			panel_2.setLayout(gbl_panel_2);
-			GridBagConstraints gbc_amountAll = new GridBagConstraints();
-			gbc_amountAll.anchor = GridBagConstraints.WEST;
-			gbc_amountAll.insets = new Insets(0, 0, 0, 5);
-			gbc_amountAll.gridx = 0;
-			gbc_amountAll.gridy = 0;
-			panel_2.add(getAmountAll(), gbc_amountAll);
-			GridBagConstraints gbc_amountEquals = new GridBagConstraints();
-			gbc_amountEquals.anchor = GridBagConstraints.WEST;
-			gbc_amountEquals.insets = new Insets(0, 0, 0, 5);
-			gbc_amountEquals.gridx = 0;
-			gbc_amountEquals.gridy = 1;
-			panel_2.add(getAmountEquals(), gbc_amountEquals);
-			GridBagConstraints gbc_amountBetween = new GridBagConstraints();
-			gbc_amountBetween.anchor = GridBagConstraints.WEST;
-			gbc_amountBetween.gridx = 0;
-			gbc_amountBetween.gridy = 2;
-			panel_2.add(getAmountBetween(), gbc_amountBetween);
+	private JPanel getPanel2() {
+		if (panel2 == null) {
+			panel2 = new JPanel();
+			GridBagLayout gblPanel2 = new GridBagLayout();
+			panel2.setLayout(gblPanel2);
+			GridBagConstraints gbcAmountAll = new GridBagConstraints();
+			gbcAmountAll.anchor = GridBagConstraints.WEST;
+			gbcAmountAll.insets = new Insets(0, 0, 0, 5);
+			gbcAmountAll.gridx = 0;
+			gbcAmountAll.gridy = 0;
+			panel2.add(getAmountAll(), gbcAmountAll);
+			GridBagConstraints gbcamountEquals = new GridBagConstraints();
+			gbcamountEquals.anchor = GridBagConstraints.WEST;
+			gbcamountEquals.insets = new Insets(0, 0, 0, 5);
+			gbcamountEquals.gridx = 0;
+			gbcamountEquals.gridy = 1;
+			panel2.add(getAmountEquals(), gbcamountEquals);
+			GridBagConstraints gbcamountBetween = new GridBagConstraints();
+			gbcamountBetween.anchor = GridBagConstraints.WEST;
+			gbcamountBetween.gridx = 0;
+			gbcamountBetween.gridy = 2;
+			panel2.add(getAmountBetween(), gbcamountBetween);
 			ButtonGroup group = new ButtonGroup();
 			group.add(getAmountAll());
 			group.add(getAmountEquals());
 			group.add(getAmountBetween());
 		}
-		return panel_2;
+		return panel2;
 	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			GridBagLayout gbl_panel_1 = new GridBagLayout();
-			panel_1.setLayout(gbl_panel_1);
-			GridBagConstraints gbc_maxAmount = new GridBagConstraints();
-			gbc_maxAmount.insets = new Insets(0, 5, 0, 0);
-			gbc_maxAmount.weightx = 1.0;
-			gbc_maxAmount.fill = GridBagConstraints.HORIZONTAL;
-			gbc_maxAmount.gridx = 2;
-			gbc_maxAmount.gridy = 0;
-			panel_1.add(getMaxAmountWidget(), gbc_maxAmount);
-			GridBagConstraints gbc_minAmount = new GridBagConstraints();
-			gbc_minAmount.fill = GridBagConstraints.HORIZONTAL;
-			gbc_minAmount.insets = new Insets(0, 0, 0, 5);
-			gbc_minAmount.weightx = 1.0;
-			gbc_minAmount.gridx = 0;
-			gbc_minAmount.gridy = 0;
-			panel_1.add(getMinAmountWidget(), gbc_minAmount);
+	private JPanel getPanel1() {
+		if (panel1 == null) {
+			panel1 = new JPanel();
+			GridBagLayout gblPanel1 = new GridBagLayout();
+			panel1.setLayout(gblPanel1);
+			GridBagConstraints gbcMaxAmount = new GridBagConstraints();
+			gbcMaxAmount.insets = new Insets(0, 5, 0, 0);
+			gbcMaxAmount.weightx = 1.0;
+			gbcMaxAmount.fill = GridBagConstraints.HORIZONTAL;
+			gbcMaxAmount.gridx = 2;
+			gbcMaxAmount.gridy = 0;
+			panel1.add(getMaxAmountWidget(), gbcMaxAmount);
+			GridBagConstraints gbcMinAmount = new GridBagConstraints();
+			gbcMinAmount.fill = GridBagConstraints.HORIZONTAL;
+			gbcMinAmount.insets = new Insets(0, 0, 0, 5);
+			gbcMinAmount.weightx = 1.0;
+			gbcMinAmount.gridx = 0;
+			gbcMinAmount.gridy = 0;
+			panel1.add(getMinAmountWidget(), gbcMinAmount);
 			JLabel jLabel = new JLabel();
-			GridBagConstraints gbc_jLabel = new GridBagConstraints();
-			gbc_jLabel.gridx = 1;
-			gbc_jLabel.gridy = 0;
-			panel_1.add(jLabel, gbc_jLabel);
+			GridBagConstraints gbcJLabel = new GridBagConstraints();
+			gbcJLabel.gridx = 1;
+			gbcJLabel.gridy = 0;
+			panel1.add(jLabel, gbcJLabel);
 			jLabel.setText(LocalizationData.get("CustomFilterPanel.amount.to")); //$NON-NLS-1$
 		}
-		return panel_1;
+		return panel1;
 	}
 	/**
 	 * This method initializes amountEquals	
@@ -217,8 +217,12 @@ public class AmountPanel extends ConsistencyCheckedPanel {
 
 	@Override
 	protected String computeInconsistencyCause() {
-		if (!getMinAmountWidget().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.amountMimimum"); //$NON-NLS-1$
-		if (!getMaxAmountWidget().isContentValid()) return LocalizationData.get("CustomFilterPanel.error.amountMaximum"); //$NON-NLS-1$
+		if (!getMinAmountWidget().isContentValid()) {
+			return LocalizationData.get("CustomFilterPanel.error.amountMimimum"); //$NON-NLS-1$
+		}
+		if (!getMaxAmountWidget().isContentValid()) {
+			return LocalizationData.get("CustomFilterPanel.error.amountMaximum"); //$NON-NLS-1$
+		}
 		if ((getMinAmountWidget().getValue()!=null) && (getMaxAmountWidget().getValue()!=null)
 				&& (getMinAmountWidget().getValue()>getMaxAmountWidget().getValue())) {
 			return LocalizationData.get("CustomFilterPanel.error.amountFromHigherThanTo"); //$NON-NLS-1$

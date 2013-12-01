@@ -60,74 +60,74 @@ public class EditAccountPanel extends JPanel {
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
-		GridBagConstraints gbc_message = new GridBagConstraints();
-		gbc_message.insets = new Insets(0, 0, 15, 0);
-		gbc_message.anchor = GridBagConstraints.WEST;
-		gbc_message.gridwidth = 0;
-		gbc_message.gridx = 0;
-		gbc_message.gridy = 0;
-		add(getMessage(), gbc_message);
-		GridBagConstraints gbc_lblName = new GridBagConstraints();
-		gbc_lblName.insets = new Insets(0, 0, 5, 5);
-		gbc_lblName.anchor = GridBagConstraints.WEST;
-		gbc_lblName.gridx = 0;
-		gbc_lblName.gridy = 1;
-		add(getLblName(), gbc_lblName);
-		GridBagConstraints gbc_nameField = new GridBagConstraints();
-		gbc_nameField.insets = new Insets(0, 0, 5, 0);
-		gbc_nameField.weightx = 1.0;
-		gbc_nameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_nameField.gridx = 1;
-		gbc_nameField.gridy = 1;
-		add(getNameField(), gbc_nameField);
-		GridBagConstraints gbc_lblInitialBalance = new GridBagConstraints();
-		gbc_lblInitialBalance.anchor = GridBagConstraints.WEST;
-		gbc_lblInitialBalance.insets = new Insets(0, 0, 5, 5);
-		gbc_lblInitialBalance.gridx = 0;
-		gbc_lblInitialBalance.gridy = 2;
-		add(getLblInitialBalance(), gbc_lblInitialBalance);
-		GridBagConstraints gbc_initBalanceField = new GridBagConstraints();
-		gbc_initBalanceField.insets = new Insets(0, 0, 5, 0);
-		gbc_initBalanceField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_initBalanceField.gridx = 1;
-		gbc_initBalanceField.gridy = 2;
-		add(getInitBalanceField(), gbc_initBalanceField);
-		GridBagConstraints gbc_lblLowThreshold = new GridBagConstraints();
-		gbc_lblLowThreshold.anchor = GridBagConstraints.WEST;
-		gbc_lblLowThreshold.insets = new Insets(0, 0, 5, 5);
-		gbc_lblLowThreshold.gridx = 0;
-		gbc_lblLowThreshold.gridy = 3;
-		add(getLblLowThreshold(), gbc_lblLowThreshold);
-		GridBagConstraints gbc_lowThresholdField = new GridBagConstraints();
-		gbc_lowThresholdField.insets = new Insets(0, 0, 5, 0);
-		gbc_lowThresholdField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lowThresholdField.gridx = 1;
-		gbc_lowThresholdField.gridy = 3;
-		add(getLowThresholdField(), gbc_lowThresholdField);
-		GridBagConstraints gbc_lblHighThreshold = new GridBagConstraints();
-		gbc_lblHighThreshold.anchor = GridBagConstraints.WEST;
-		gbc_lblHighThreshold.insets = new Insets(0, 0, 5, 5);
-		gbc_lblHighThreshold.gridx = 0;
-		gbc_lblHighThreshold.gridy = 4;
-		add(getLblHighThreshold(), gbc_lblHighThreshold);
-		GridBagConstraints gbc_hightThresholdField = new GridBagConstraints();
-		gbc_hightThresholdField.insets = new Insets(0, 0, 5, 0);
-		gbc_hightThresholdField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_hightThresholdField.gridx = 1;
-		gbc_hightThresholdField.gridy = 4;
-		add(getHightThresholdField(), gbc_hightThresholdField);
-		GridBagConstraints gbc_lblNotes = new GridBagConstraints();
-		gbc_lblNotes.gridwidth = 0;
-		gbc_lblNotes.anchor = GridBagConstraints.WEST;
-		gbc_lblNotes.gridx = 0;
-		gbc_lblNotes.gridy = 5;
-		add(getLblNotes(), gbc_lblNotes);
-		GridBagConstraints gbc_notePane = new GridBagConstraints();
-		gbc_notePane.gridwidth = 0;
-		gbc_notePane.fill = GridBagConstraints.BOTH;
-		gbc_notePane.gridx = 0;
-		gbc_notePane.gridy = 6;
-		add(getNotePane(), gbc_notePane);
+		GridBagConstraints gbcMessage = new GridBagConstraints();
+		gbcMessage.insets = new Insets(0, 0, 15, 0);
+		gbcMessage.anchor = GridBagConstraints.WEST;
+		gbcMessage.gridwidth = 0;
+		gbcMessage.gridx = 0;
+		gbcMessage.gridy = 0;
+		add(getMessage(), gbcMessage);
+		GridBagConstraints gbcLblName = new GridBagConstraints();
+		gbcLblName.insets = new Insets(0, 0, 5, 5);
+		gbcLblName.anchor = GridBagConstraints.WEST;
+		gbcLblName.gridx = 0;
+		gbcLblName.gridy = 1;
+		add(getLblName(), gbcLblName);
+		GridBagConstraints gbcNameField = new GridBagConstraints();
+		gbcNameField.insets = new Insets(0, 0, 5, 0);
+		gbcNameField.weightx = 1.0;
+		gbcNameField.fill = GridBagConstraints.HORIZONTAL;
+		gbcNameField.gridx = 1;
+		gbcNameField.gridy = 1;
+		add(getNameField(), gbcNameField);
+		GridBagConstraints gbcLblInitialBalance = new GridBagConstraints();
+		gbcLblInitialBalance.anchor = GridBagConstraints.WEST;
+		gbcLblInitialBalance.insets = new Insets(0, 0, 5, 5);
+		gbcLblInitialBalance.gridx = 0;
+		gbcLblInitialBalance.gridy = 2;
+		add(getLblInitialBalance(), gbcLblInitialBalance);
+		GridBagConstraints gbcInitBalanceField = new GridBagConstraints();
+		gbcInitBalanceField.insets = new Insets(0, 0, 5, 0);
+		gbcInitBalanceField.fill = GridBagConstraints.HORIZONTAL;
+		gbcInitBalanceField.gridx = 1;
+		gbcInitBalanceField.gridy = 2;
+		add(getInitBalanceField(), gbcInitBalanceField);
+		GridBagConstraints gbcLblLowThreshold = new GridBagConstraints();
+		gbcLblLowThreshold.anchor = GridBagConstraints.WEST;
+		gbcLblLowThreshold.insets = new Insets(0, 0, 5, 5);
+		gbcLblLowThreshold.gridx = 0;
+		gbcLblLowThreshold.gridy = 3;
+		add(getLblLowThreshold(), gbcLblLowThreshold);
+		GridBagConstraints gbcLowThresholdField = new GridBagConstraints();
+		gbcLowThresholdField.insets = new Insets(0, 0, 5, 0);
+		gbcLowThresholdField.fill = GridBagConstraints.HORIZONTAL;
+		gbcLowThresholdField.gridx = 1;
+		gbcLowThresholdField.gridy = 3;
+		add(getLowThresholdField(), gbcLowThresholdField);
+		GridBagConstraints gbcLblHighThreshold = new GridBagConstraints();
+		gbcLblHighThreshold.anchor = GridBagConstraints.WEST;
+		gbcLblHighThreshold.insets = new Insets(0, 0, 5, 5);
+		gbcLblHighThreshold.gridx = 0;
+		gbcLblHighThreshold.gridy = 4;
+		add(getLblHighThreshold(), gbcLblHighThreshold);
+		GridBagConstraints gbcHightThresholdField = new GridBagConstraints();
+		gbcHightThresholdField.insets = new Insets(0, 0, 5, 0);
+		gbcHightThresholdField.fill = GridBagConstraints.HORIZONTAL;
+		gbcHightThresholdField.gridx = 1;
+		gbcHightThresholdField.gridy = 4;
+		add(getHightThresholdField(), gbcHightThresholdField);
+		GridBagConstraints gbcLblNotes = new GridBagConstraints();
+		gbcLblNotes.gridwidth = 0;
+		gbcLblNotes.anchor = GridBagConstraints.WEST;
+		gbcLblNotes.gridx = 0;
+		gbcLblNotes.gridy = 5;
+		add(getLblNotes(), gbcLblNotes);
+		GridBagConstraints gbcNotePane = new GridBagConstraints();
+		gbcNotePane.gridwidth = 0;
+		gbcNotePane.fill = GridBagConstraints.BOTH;
+		gbcNotePane.gridx = 0;
+		gbcNotePane.gridy = 6;
+		add(getNotePane(), gbcNotePane);
 	}
 	
 	void setAccount(int accountIndex) {
@@ -258,13 +258,21 @@ public class EditAccountPanel extends JPanel {
 	private AlertThreshold getAlerts() {
 		if (getLowThresholdField().isContentValid() && getHightThresholdField().isContentValid()) {
 			Double low = getLowThresholdField().getValue();
-			if (low==null) low = AlertThreshold.NO.getLessThreshold();
+			if (low==null) {
+				low = AlertThreshold.NO.getLessThreshold();
+			}
 			Double high = getHightThresholdField().getValue();
-			if (high==null) high = AlertThreshold.NO.getMoreThreshold();
+			if (high==null) {
+				high = AlertThreshold.NO.getMoreThreshold();
+			}
 			AlertThreshold result = new AlertThreshold(low, high);
-			if (result.equals(AlertThreshold.NO)) return AlertThreshold.NO;
-			if (result.equals(AlertThreshold.DEFAULT)) return AlertThreshold.DEFAULT;
-			return result;
+			if (result.equals(AlertThreshold.NO)) {
+				return AlertThreshold.NO;
+			} else if (result.equals(AlertThreshold.DEFAULT)) {
+				return AlertThreshold.DEFAULT;
+			} else {
+				return result;
+			}
 		} else {
 			return null;
 		}
@@ -282,7 +290,9 @@ public class EditAccountPanel extends JPanel {
 	}
 	
 	Account getAccount() {
-		if (this.okDisabledCause!=null) return null;
+		if (this.okDisabledCause!=null) {
+			return null;
+		}
 		return new Account(this.getNameField().getText().trim(), getInitBalanceField().getValue(), getAlerts(), getNoteField().getText());
 	}
 	
@@ -292,7 +302,9 @@ public class EditAccountPanel extends JPanel {
 		// (because modes could not be the same).
 		// So, we have to test if the name is equivalent to a trimmed previously entered name
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			if ((i!=accountIndex) && name.equalsIgnoreCase(data.getAccount(i).getName().trim())) return false;
+			if ((i!=accountIndex) && name.equalsIgnoreCase(data.getAccount(i).getName().trim())) {
+				return false;
+			}
 		}
 		return true;
 	}

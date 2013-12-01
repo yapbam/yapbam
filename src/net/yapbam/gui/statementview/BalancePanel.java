@@ -40,7 +40,6 @@ public class BalancePanel extends JPanel {
 	private JLabel warningLabel;
 	private String editedStatement;
 	private Font bigFont;
-	private JLabel lblTargetBalance;
 	private CurrencyWidget targetAmount;
 	private JLabel gapLabel;
 	
@@ -83,38 +82,40 @@ public class BalancePanel extends JPanel {
 		
 		panel = new JPanel();
 		panel.setOpaque(false);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.anchor = GridBagConstraints.EAST;
-		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panel.gridwidth = 0;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		add(panel, gbc_panel);
+		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.anchor = GridBagConstraints.EAST;
+		gbcPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcPanel.gridwidth = 0;
+		gbcPanel.gridx = 0;
+		gbcPanel.gridy = 0;
+		add(panel, gbcPanel);
 		panel.setLayout(new GridBagLayout());
-		GridBagConstraints gbc_labelStatement = new GridBagConstraints();
-		gbc_labelStatement.insets = new Insets(0, 5, 0, 0);
-		gbc_labelStatement.anchor = GridBagConstraints.WEST;
-		gbc_labelStatement.gridx = 0;
-		gbc_labelStatement.gridy = 0;
-		panel.add(getLabelStatement(), gbc_labelStatement);
+		GridBagConstraints gbcLabelStatement = new GridBagConstraints();
+		gbcLabelStatement.insets = new Insets(0, 5, 0, 0);
+		gbcLabelStatement.anchor = GridBagConstraints.WEST;
+		gbcLabelStatement.gridx = 0;
+		gbcLabelStatement.gridy = 0;
+		panel.add(getLabelStatement(), gbcLabelStatement);
 		
 		statementField = new TextWidget(8);
 		statementField.setFont(this.bigFont);
 		statementField.setMinimumSize(statementField.getPreferredSize());
 		statementField.setToolTipText(LocalizationData.get("CheckModePanel.statement.tooltip")); //$NON-NLS-1$
-		GridBagConstraints gbc_statementField = new GridBagConstraints();
-		gbc_statementField.insets = new Insets(0, 5, 0, 0);
-		gbc_statementField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_statementField.gridx = 1;
-		gbc_statementField.gridy = 0;
-		panel.add(statementField, gbc_statementField);
+		GridBagConstraints gbcStatementField = new GridBagConstraints();
+		gbcStatementField.insets = new Insets(0, 5, 0, 0);
+		gbcStatementField.fill = GridBagConstraints.HORIZONTAL;
+		gbcStatementField.gridx = 1;
+		gbcStatementField.gridy = 0;
+		panel.add(statementField, gbcStatementField);
 		statementField.setColumns(10);
 		statementField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				String old = editedStatement;
 				editedStatement = statementField.getText().trim();
-				if (editedStatement.isEmpty()) editedStatement = null;
+				if (editedStatement.isEmpty()) {
+					editedStatement = null;
+				}
 				getLabelStatement().setForeground(editedStatement!=null ? Color.black : Color.red);
 				firePropertyChange(EDITED_STATEMENT_PROPERTY, old, editedStatement);
 			}
@@ -123,32 +124,32 @@ public class BalancePanel extends JPanel {
 		warningLabel = new JLabel(IconManager.get(Name.ALERT));
 		warningLabel.setText(LocalizationData.get("CheckModePanel.notLast.message")); //$NON-NLS-1$
 		warningLabel.setForeground(Color.RED);
-		GridBagConstraints gbc_warningLabel = new GridBagConstraints();
-		gbc_warningLabel.anchor = GridBagConstraints.EAST;
-		gbc_warningLabel.insets = new Insets(0, 10, 0, 5);
-		gbc_warningLabel.gridx = 2;
-		gbc_warningLabel.gridy = 0;
-		panel.add(warningLabel, gbc_warningLabel);
+		GridBagConstraints gbcWarningLabel = new GridBagConstraints();
+		gbcWarningLabel.anchor = GridBagConstraints.EAST;
+		gbcWarningLabel.insets = new Insets(0, 10, 0, 5);
+		gbcWarningLabel.gridx = 2;
+		gbcWarningLabel.gridy = 0;
+		panel.add(warningLabel, gbcWarningLabel);
 		
-		lblTargetBalance = new JLabel(LocalizationData.get("CheckModePanel.target")); //$NON-NLS-1$
-		GridBagConstraints gbc_lblTargetBalance = new GridBagConstraints();
-		gbc_lblTargetBalance.weightx = 1.0;
-		gbc_lblTargetBalance.anchor = GridBagConstraints.EAST;
-		gbc_lblTargetBalance.insets = new Insets(0, 5, 0, 5);
-		gbc_lblTargetBalance.gridx = 3;
-		gbc_lblTargetBalance.gridy = 0;
-		panel.add(lblTargetBalance, gbc_lblTargetBalance);
+		JLabel lblTargetBalance = new JLabel(LocalizationData.get("CheckModePanel.target")); //$NON-NLS-1$
+		GridBagConstraints gbcLblTargetBalance = new GridBagConstraints();
+		gbcLblTargetBalance.weightx = 1.0;
+		gbcLblTargetBalance.anchor = GridBagConstraints.EAST;
+		gbcLblTargetBalance.insets = new Insets(0, 5, 0, 5);
+		gbcLblTargetBalance.gridx = 3;
+		gbcLblTargetBalance.gridy = 0;
+		panel.add(lblTargetBalance, gbcLblTargetBalance);
 		
 		targetAmount = new CurrencyWidget();
 		targetAmount.setColumns(8);
 		targetAmount.setToolTipText(LocalizationData.get("CheckModePanel.target.tooltip")); //$NON-NLS-1$
-		GridBagConstraints gbc_targetAmount = new GridBagConstraints();
-		gbc_targetAmount.anchor = GridBagConstraints.EAST;
-		gbc_targetAmount.insets = new Insets(0, 0, 0, 5);
-		gbc_targetAmount.fill = GridBagConstraints.HORIZONTAL;
-		gbc_targetAmount.gridx = 4;
-		gbc_targetAmount.gridy = 0;
-		panel.add(targetAmount, gbc_targetAmount);
+		GridBagConstraints gbcTargetAmount = new GridBagConstraints();
+		gbcTargetAmount.anchor = GridBagConstraints.EAST;
+		gbcTargetAmount.insets = new Insets(0, 0, 0, 5);
+		gbcTargetAmount.fill = GridBagConstraints.HORIZONTAL;
+		gbcTargetAmount.gridx = 4;
+		gbcTargetAmount.gridy = 0;
+		panel.add(targetAmount, gbcTargetAmount);
 		targetAmount.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			
 			@Override
@@ -161,12 +162,12 @@ public class BalancePanel extends JPanel {
 		
 		gapLabel = new JLabel();
 		gapLabel.setForeground(Color.RED);
-		GridBagConstraints gbc_gapLabel = new GridBagConstraints();
-		gbc_gapLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_gapLabel.anchor = GridBagConstraints.EAST;
-		gbc_gapLabel.gridx = 2;
-		gbc_gapLabel.gridy = 1;
-		add(gapLabel, gbc_gapLabel);
+		GridBagConstraints gbcGapLabel = new GridBagConstraints();
+		gbcGapLabel.insets = new Insets(0, 0, 0, 5);
+		gbcGapLabel.anchor = GridBagConstraints.EAST;
+		gbcGapLabel.gridx = 2;
+		gbcGapLabel.gridy = 1;
+		add(gapLabel, gbcGapLabel);
 	}
 	
 	private void setStart(String text) {
@@ -179,7 +180,9 @@ public class BalancePanel extends JPanel {
 	
 	public void setCheckMode(boolean checkMode) {
 		panel.setVisible(checkMode);
-		if (!checkMode) targetAmount.setValue(null);
+		if (!checkMode) {
+			targetAmount.setValue(null);
+		}
 	}
 	
 	public void setAlertVisible(boolean visible) {
@@ -197,7 +200,9 @@ public class BalancePanel extends JPanel {
 	
 	public String getEditedStatement() {
 		editedStatement = statementField.getText().trim();
-		if (editedStatement.isEmpty()) editedStatement = null;
+		if (editedStatement.isEmpty()) {
+			editedStatement = null;
+		}
 		return editedStatement;
 	}
 	
