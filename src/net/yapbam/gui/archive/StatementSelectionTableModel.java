@@ -49,9 +49,9 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 			return ignored[rowIndex];
 		} else if (columnIndex==STATEMENT_COLUMN) {
 			if (!hasStatement(rowIndex)) {
-				return "There is no statement in this account"; 
+				return LocalizationData.get("Archive.statementSelection.nothingSelected");  //$NON-NLS-1$
 			} else {
-				return (ignored[rowIndex] || (this.selectedStatements[rowIndex]==null))?"-":this.selectedStatements[rowIndex];
+				return (ignored[rowIndex] || (this.selectedStatements[rowIndex]==null))?"-":this.selectedStatements[rowIndex]; //$NON-NLS-1$
 			}
 		} else {
 			return null;
@@ -92,9 +92,9 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 		if (column == ACCOUNT_COLUMN) {
 			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
 		} else if (column == IGNORED_COLUMN) {
-			return "Ignored";
+			return LocalizationData.get("Archive.statementSelection.ignored.title"); //$NON-NLS-1$
 		} else if (column == STATEMENT_COLUMN) {
-			return "Until statement";
+			return LocalizationData.get("Archive.statementSelection.until.title"); //$NON-NLS-1$
 		} else {
 			return super.getColumnName(column);
 		}

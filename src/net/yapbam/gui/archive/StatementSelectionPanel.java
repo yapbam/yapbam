@@ -19,6 +19,7 @@ import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
 import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
@@ -65,9 +66,7 @@ public class StatementSelectionPanel extends JPanel {
 
 	private JLabel getLblWhatAccountsDo() {
 		if (lblWhatAccountsDo == null) {
-			String message = "<html>Please select the statements you want to archive.<br><br>"
-					+ "Click on cell in the \"{0} \" column to display the statement list<br>The selected statement and all"
-					+ " preceding statements will be archived</html>";
+			String message = LocalizationData.get("Archive.statementSelection.helpMessage"); //$NON-NLS-1$
 			lblWhatAccountsDo = new JLabel(MessageFormat.format(message, getTable().getColumnName(StatementSelectionTableModel.STATEMENT_COLUMN)));
 		}
 		return lblWhatAccountsDo;
@@ -146,7 +145,7 @@ public class StatementSelectionPanel extends JPanel {
 	}
 	private JButton getAllButton() {
 		if (allButton == null) {
-			allButton = new JButton("Select all");
+			allButton = new JButton(LocalizationData.get("Generic.selectAll")); //$NON-NLS-1$
 			allButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					((StatementSelectionTableModel)getTable().getModel()).setAllExported(true);
@@ -157,7 +156,7 @@ public class StatementSelectionPanel extends JPanel {
 	}
 	private JButton getNoneButton() {
 		if (noneButton == null) {
-			noneButton = new JButton("Deselect all");
+			noneButton = new JButton(LocalizationData.get("Generic.unselectAll")); //$NON-NLS-1$
 			noneButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					((StatementSelectionTableModel)getTable().getModel()).setAllExported(false);
@@ -169,7 +168,7 @@ public class StatementSelectionPanel extends JPanel {
 	
 	private void updateIsValid() {
 		String old = invalidityCause;
-		invalidityCause = "No transaction selected";
+		invalidityCause = LocalizationData.get("Archive.statementSelection.noTransactionSelected"); //$NON-NLS-1$
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
 			if (((StatementSelectionTableModel)getTable().getModel()).getSelectedStatement(i) != null) {
 				invalidityCause = null;

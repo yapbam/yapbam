@@ -5,6 +5,7 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import net.yapbam.data.GlobalData;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
@@ -14,7 +15,7 @@ public class StatementSelectionDialog extends AbstractDialog<GlobalData, String[
 	private StatementSelectionPanel panel;
 
 	public StatementSelectionDialog(Window owner, GlobalData data) {
-		super(owner, "Archive", data);
+		super(owner, LocalizationData.get("Archive.menu.name"), data); //$NON-NLS-1$
 	}
 
 	@Override
