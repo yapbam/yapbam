@@ -5,6 +5,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.net.URI;
+import java.text.MessageFormat;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
 import com.fathzer.soft.jclop.swing.URIChooserDialog.ConfirmButtonUpdater;
 
+import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -58,10 +60,38 @@ public class ArchiveAction extends AbstractAction {
 		// Select transactions to archive
 		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data);
 		filterDialog.setVisible(true);
-		if (filterDialog.getResult()==null) {
+		String[] selectedStatements = filterDialog.getResult();
+		if (selectedStatements==null) {
 			return;
 		}
 		
+		URI uri = getArchiveURI(owner);
+		if (uri==null) {
+			return;
+		}
+		GlobalData archiveData = new GlobalData();
+		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, new YapbamDataWrapper(archiveData), uri, new ErrorProcessor() {
+			@Override
+			public boolean processError(Throwable e) {
+				// FileNotFound should simply be ignored (the globalData remains unchanged)
+				return e instanceof FileNotFoundException;
+			}
+		});
+		if (!readIsOk) {
+			return;
+		}
+		CharSequence alerts = getAlerts(selectedStatements, data, archiveData);
+		if (alerts.length()>0) {
+			int continued = JOptionPane.showOptionDialog(owner, alerts, LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+			if (continued!=0) {
+				return;
+			}
+		}
+		System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
+		JOptionPane.showMessageDialog(owner, "<html>Not finished<br>Go next with "+uri);
+	}
+
+	private URI getArchiveURI(Window owner) {
 		URIChooserDialog dialog = YapbamPersistenceManager.MANAGER.getChooserDialog(owner);
 		dialog.setSaveDialog(true);
 		dialog.setConfirmIfExisting(false);
@@ -77,21 +107,33 @@ public class ArchiveAction extends AbstractAction {
 			}
 		});
 		URI uri = dialog.showDialog();
-		if (uri!=null) {
-			GlobalData archiveData = new GlobalData();
-			boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, new YapbamDataWrapper(archiveData), uri, new ErrorProcessor() {
-				@Override
-				public boolean processError(Throwable e) {
-					// FileNotFound should simply be ignored (the globalData remains unchanged)
-					return e instanceof FileNotFoundException;
-				}
-			});
-			if (!readIsOk) {
-				return;
-			}
-			System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
-			JOptionPane.showMessageDialog(owner, "<html>Not finished<br>Go next with "+uri);
-		}
+		return uri;
 	}
 
+	private CharSequence getAlerts(String[] selectedStatements, GlobalData data, GlobalData archiveData) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < selectedStatements.length; i++) {
+			if (selectedStatements[i]!=null) {
+				// If there will be transactions archived in the account number i
+				Account account = data.getAccount(i);
+				Account archiveAccount = archiveData.getAccount(account.getName());
+				if (archiveAccount!=null) {
+					double arcFinal = archiveAccount.getBalanceData().getFinalBalance();
+					if (GlobalData.AMOUNT_COMPARATOR.compare(arcFinal, account.getInitialBalance())!=0) {
+						// If archive final balance in the archived account is not the initial balance of the account
+						builder.append(builder.length()==0 ? "<html>":"<br>");
+						String strFinal = LocalizationData.getCurrencyInstance().format(arcFinal);
+						String strInitial = LocalizationData.getCurrencyInstance().format(account.getInitialBalance());
+						builder.append(MessageFormat.format(LocalizationData.get("Archive.accountBalancesNotMatch"), account.getName(), strFinal, strInitial));
+					}
+				}
+			}
+		}
+		if (builder.length()>0) {
+			builder.append("<br><br>");
+			builder.append(LocalizationData.get("Archive.accountBalancesNotMatchFinalMessage"));
+			builder.append("</html>");
+		}
+		return builder;
+	}
 }
