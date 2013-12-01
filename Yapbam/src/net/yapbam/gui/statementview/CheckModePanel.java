@@ -28,8 +28,6 @@ public class CheckModePanel extends JPanel {
 	private JCheckBox checkModeBox;
 	private boolean ok;
 	
-	private JPanel panel;
-
 	public CheckModePanel() {
 		super();
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -42,37 +40,37 @@ public class CheckModePanel extends JPanel {
 				refresh();
 			}
 		});
-		GridBagConstraints gbc_checkModeBox = new GridBagConstraints();
-		gbc_checkModeBox.anchor = GridBagConstraints.WEST;
-		gbc_checkModeBox.insets = new Insets(0, 0, 0, 5);
-		gbc_checkModeBox.gridx = 0;
-		gbc_checkModeBox.gridy = 0;
-		add(checkModeBox, gbc_checkModeBox);
+		GridBagConstraints gbcCheckModeBox = new GridBagConstraints();
+		gbcCheckModeBox.anchor = GridBagConstraints.WEST;
+		gbcCheckModeBox.insets = new Insets(0, 0, 0, 5);
+		gbcCheckModeBox.gridx = 0;
+		gbcCheckModeBox.gridy = 0;
+		add(checkModeBox, gbcCheckModeBox);
 		
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridwidth = 0;
-		gbc_panel.insets = new Insets(0, 0, 0, 5);
-		gbc_panel.anchor = GridBagConstraints.NORTH;
-		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 1;
-		add(panel, gbc_panel);
+		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.gridwidth = 0;
+		gbcPanel.insets = new Insets(0, 0, 0, 5);
+		gbcPanel.anchor = GridBagConstraints.NORTH;
+		gbcPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcPanel.gridx = 0;
+		gbcPanel.gridy = 1;
+		add(panel, gbcPanel);
 		valueDateLabel = new JCheckBox(LocalizationData.get("CheckModePanel.valueDateEnabled")); //$NON-NLS-1$
-		GridBagConstraints gbc_valueDateLabel = new GridBagConstraints();
-		gbc_valueDateLabel.anchor = GridBagConstraints.WEST;
-		gbc_valueDateLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_valueDateLabel.gridx = 0;
-		gbc_valueDateLabel.gridy = 0;
-		panel.add(valueDateLabel, gbc_valueDateLabel);
+		GridBagConstraints gbcValueDateLabel = new GridBagConstraints();
+		gbcValueDateLabel.anchor = GridBagConstraints.WEST;
+		gbcValueDateLabel.insets = new Insets(0, 0, 0, 5);
+		gbcValueDateLabel.gridx = 0;
+		gbcValueDateLabel.gridy = 0;
+		panel.add(valueDateLabel, gbcValueDateLabel);
 		valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
 		valueDate = new DateWidget();
 		valueDate.getDateField().setMinimumSize(valueDate.getDateField().getPreferredSize());
-		GridBagConstraints gbc_valueDate = new GridBagConstraints();
-		gbc_valueDate.gridx = 1;
-		gbc_valueDate.gridy = 0;
-		panel.add(valueDate, gbc_valueDate);
+		GridBagConstraints gbcValueDate = new GridBagConstraints();
+		gbcValueDate.gridx = 1;
+		gbcValueDate.gridy = 0;
+		panel.add(valueDate, gbcValueDate);
 		valueDate.setDate(null);
 		valueDate.setLocale(LocalizationData.getLocale());
 		valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$

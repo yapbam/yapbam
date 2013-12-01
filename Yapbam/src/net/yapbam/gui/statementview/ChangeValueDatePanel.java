@@ -45,19 +45,19 @@ public class ChangeValueDatePanel extends JPanel {
 				table.setSelectedTransactions(updater.update(table));
 			}
 		});
-		GridBagConstraints gbc_valueDateLabel = new GridBagConstraints();
-		gbc_valueDateLabel.anchor = GridBagConstraints.WEST;
-		gbc_valueDateLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_valueDateLabel.gridx = 0;
-		gbc_valueDateLabel.gridy = 0;
-		add(valueDateLabel, gbc_valueDateLabel);
+		GridBagConstraints gbcValueDateLabel = new GridBagConstraints();
+		gbcValueDateLabel.anchor = GridBagConstraints.WEST;
+		gbcValueDateLabel.insets = new Insets(0, 0, 0, 5);
+		gbcValueDateLabel.gridx = 0;
+		gbcValueDateLabel.gridy = 0;
+		add(valueDateLabel, gbcValueDateLabel);
 		valueDateLabel.setToolTipText(LocalizationData.get("CheckModePanel.valueDateEnabled.toolTip")); //$NON-NLS-1$
 		valueDate = new DateWidget();
 		valueDate.getDateField().setMinimumSize(valueDate.getDateField().getPreferredSize());
-		GridBagConstraints gbc_valueDate = new GridBagConstraints();
-		gbc_valueDate.gridx = 1;
-		gbc_valueDate.gridy = 0;
-		add(valueDate, gbc_valueDate);
+		GridBagConstraints gbcValueDate = new GridBagConstraints();
+		gbcValueDate.gridx = 1;
+		gbcValueDate.gridy = 0;
+		add(valueDate, gbcValueDate);
 		valueDate.setDate(null);
 		valueDate.setLocale(LocalizationData.getLocale());
 		valueDate.setToolTipText(LocalizationData.get("CheckModePanel.valueDate.tooltip")); //$NON-NLS-1$
@@ -68,7 +68,9 @@ public class ChangeValueDatePanel extends JPanel {
 				refreshOk();
 			}
 		};
-		if (transactionTable!=null) transactionTable.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, listener);
+		if (transactionTable!=null) {
+			transactionTable.addPropertyChangeListener(TransactionSelector.SELECTED_PROPERTY, listener);
+		}
 		valueDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, listener);
 		
 		valueDate.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
