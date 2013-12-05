@@ -30,17 +30,17 @@ final class TablePreferencePanel extends PreferencePanel {
 		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		GridBagConstraints gbc_chckbxHilightAlerts = new GridBagConstraints();
-		gbc_chckbxHilightAlerts.anchor = GridBagConstraints.WEST;
-		gbc_chckbxHilightAlerts.insets = new Insets(5, 0, 5, 0);
-		gbc_chckbxHilightAlerts.gridx = 0;
-		gbc_chckbxHilightAlerts.gridy = 0;
-		add(getChckbxHilightAlerts(), gbc_chckbxHilightAlerts);
-		GridBagConstraints gbc_chckbxUseSameColors = new GridBagConstraints();
-		gbc_chckbxUseSameColors.anchor = GridBagConstraints.WEST;
-		gbc_chckbxUseSameColors.gridx = 0;
-		gbc_chckbxUseSameColors.gridy = 1;
-		add(getChckbxUseSameColors(), gbc_chckbxUseSameColors);
+		GridBagConstraints gbcChckbxHilightAlerts = new GridBagConstraints();
+		gbcChckbxHilightAlerts.anchor = GridBagConstraints.WEST;
+		gbcChckbxHilightAlerts.insets = new Insets(5, 0, 5, 0);
+		gbcChckbxHilightAlerts.gridx = 0;
+		gbcChckbxHilightAlerts.gridy = 0;
+		add(getChckbxHilightAlerts(), gbcChckbxHilightAlerts);
+		GridBagConstraints gbcChckbxUseSameColors = new GridBagConstraints();
+		gbcChckbxUseSameColors.anchor = GridBagConstraints.WEST;
+		gbcChckbxUseSameColors.gridx = 0;
+		gbcChckbxUseSameColors.gridy = 1;
+		add(getChckbxUseSameColors(), gbcChckbxUseSameColors);
 	}
 
 	public static boolean isSameColors() {

@@ -31,13 +31,10 @@ public class AutoUpdatePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 	private JRadioButton auto = null;
 	private JRadioButton manual = null;
-	private JLabel jLabel = null;
 	private IntegerWidget days = null;
-	private JLabel jLabel1 = null;
 	private JPanel jPanel = null;
 	private JRadioButton askMe = null;
 	private JRadioButton autoInstall = null;
-	private JLabel jLabel2 = null;
 
 	/**
 	 * This is the default constructor
@@ -59,7 +56,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 		gridBagConstraints51.gridx = 0;
 		gridBagConstraints51.weighty = 1.0D;
 		gridBagConstraints51.gridy = 3;
-		jLabel2 = new JLabel(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
+		JLabel jLabel2 = new JLabel(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
 		jLabel2.setVerticalAlignment(SwingConstants.TOP);
 		jLabel2.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.forcedCheck.message")); //$NON-NLS-1$
 //		System.out.println (YapbamState.INSTANCE.getDate(CheckNewReleaseAction.LAST_UPDATE_CHECK_KEY));
@@ -78,7 +75,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 		gridBagConstraints3.anchor = GridBagConstraints.WEST;
 		gridBagConstraints3.weightx = 1.0D;
 		gridBagConstraints3.gridy = 1;
-		jLabel1 = new JLabel();
+		JLabel jLabel1 = new JLabel();
 		jLabel1.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.interval.part2")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
@@ -91,7 +88,7 @@ public class AutoUpdatePanel extends PreferencePanel {
 		gridBagConstraints11.gridx = 1;
 		gridBagConstraints11.insets = new Insets(5, 5, 0, 5);
 		gridBagConstraints11.gridy = 1;
-		jLabel = new JLabel();
+		JLabel jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("PreferencesDialog.AutoUpdate.interval.part1")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
@@ -123,7 +120,9 @@ public class AutoUpdatePanel extends PreferencePanel {
 		int period = Preferences.INSTANCE.getAutoUpdatePeriod();
 		days.setValue(Math.max(0, period));
 		(Preferences.INSTANCE.getAutoUpdateInstall()?getAutoInstall():getAskMe()).setSelected(true);
-		if (period>=0) getAuto().setSelected(true);		
+		if (period>=0) {
+			getAuto().setSelected(true);		
+		}
 	}
 	
 	private void refresh() {
@@ -212,26 +211,26 @@ public class AutoUpdatePanel extends PreferencePanel {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
-			GridBagConstraints gbc_autoInstall = new GridBagConstraints();
-			gbc_autoInstall.fill = GridBagConstraints.HORIZONTAL;
-			gbc_autoInstall.gridx = 0;
-			gbc_autoInstall.insets = new Insets(5, 5, 0, 5);
-			gbc_autoInstall.anchor = GridBagConstraints.WEST;
-			gbc_autoInstall.gridy = 1;
-			GridBagConstraints gbc_askMe = new GridBagConstraints();
-			gbc_askMe.fill = GridBagConstraints.HORIZONTAL;
-			gbc_askMe.anchor = GridBagConstraints.WEST;
-			gbc_askMe.gridy = 0;
-			gbc_askMe.insets = new Insets(0, 5, 0, 5);
-			gbc_askMe.gridx = 0;
+			GridBagConstraints gbcAutoInstall = new GridBagConstraints();
+			gbcAutoInstall.fill = GridBagConstraints.HORIZONTAL;
+			gbcAutoInstall.gridx = 0;
+			gbcAutoInstall.insets = new Insets(5, 5, 0, 5);
+			gbcAutoInstall.anchor = GridBagConstraints.WEST;
+			gbcAutoInstall.gridy = 1;
+			GridBagConstraints gbcAskMe = new GridBagConstraints();
+			gbcAskMe.fill = GridBagConstraints.HORIZONTAL;
+			gbcAskMe.anchor = GridBagConstraints.WEST;
+			gbcAskMe.gridy = 0;
+			gbcAskMe.insets = new Insets(0, 5, 0, 5);
+			gbcAskMe.gridx = 0;
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			TitledBorder border = BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.AutoUpdate.ifAvailable.title")); //$NON-NLS-1$
 			jPanel.setBorder(border);
 			jPanel.setEnabled(true);
 			JRadioButton btn = getAskMe();
-			jPanel.add(btn, gbc_askMe);
-			jPanel.add(getAutoInstall(), gbc_autoInstall);
+			jPanel.add(btn, gbcAskMe);
+			jPanel.add(getAutoInstall(), gbcAutoInstall);
 			jPanel.setVisible(false);
 			// Here is a workaround on bug http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4201045
 			Dimension d = btn.getPreferredSize();

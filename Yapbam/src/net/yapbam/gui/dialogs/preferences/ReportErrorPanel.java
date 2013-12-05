@@ -27,61 +27,61 @@ public class ReportErrorPanel extends PreferencePanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
-		JLabel label_1 = new JLabel();
-		label_1.setIcon(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.insets = new Insets(0, 0, 5, 5);
-		gbc_label_1.gridx = 0;
-		gbc_label_1.gridy = 0;
-		add(label_1, gbc_label_1);
+		JLabel label1 = new JLabel();
+		label1.setIcon(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
+		GridBagConstraints gbcLabel1 = new GridBagConstraints();
+		gbcLabel1.insets = new Insets(0, 0, 5, 5);
+		gbcLabel1.gridx = 0;
+		gbcLabel1.gridy = 0;
+		add(label1, gbcLabel1);
 		
 		JLabel label = new JLabel(LocalizationData.get("ErrorManager.preferences.introduction"));
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.fill = GridBagConstraints.BOTH;
-		gbc_label.insets = new Insets(0, 0, 5, 5);
-		gbc_label.gridx = 1;
-		gbc_label.gridy = 0;
-		add(label, gbc_label);
+		GridBagConstraints gbcLabel = new GridBagConstraints();
+		gbcLabel.fill = GridBagConstraints.BOTH;
+		gbcLabel.insets = new Insets(0, 0, 5, 5);
+		gbcLabel.gridx = 1;
+		gbcLabel.gridy = 0;
+		add(label, gbcLabel);
 		
 		ButtonGroup group = new ButtonGroup();
 		
 		yes = new JRadioButton(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking"));
 		yes.setToolTipText(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking.tooltip"));
-		GridBagConstraints gbc_yes = new GridBagConstraints();
-		gbc_yes.weightx = 1.0;
-		gbc_yes.fill = GridBagConstraints.HORIZONTAL;
-		gbc_yes.gridwidth = 2;
-		gbc_yes.anchor = GridBagConstraints.WEST;
-		gbc_yes.insets = new Insets(5, 5, 5, 5);
-		gbc_yes.gridx = 0;
-		gbc_yes.gridy = 1;
-		add(yes, gbc_yes);
+		GridBagConstraints gbcYes = new GridBagConstraints();
+		gbcYes.weightx = 1.0;
+		gbcYes.fill = GridBagConstraints.HORIZONTAL;
+		gbcYes.gridwidth = 2;
+		gbcYes.anchor = GridBagConstraints.WEST;
+		gbcYes.insets = new Insets(5, 5, 5, 5);
+		gbcYes.gridx = 0;
+		gbcYes.gridy = 1;
+		add(yes, gbcYes);
 		group.add(yes);
 		
 		no = new JRadioButton(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking"));
 		no.setToolTipText(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking.tooltip"));
-		GridBagConstraints gbc_no = new GridBagConstraints();
-		gbc_no.fill = GridBagConstraints.HORIZONTAL;
-		gbc_no.gridwidth = 2;
-		gbc_no.anchor = GridBagConstraints.WEST;
-		gbc_no.insets = new Insets(0, 5, 5, 5);
-		gbc_no.gridx = 0;
-		gbc_no.gridy = 2;
-		add(no, gbc_no);
+		GridBagConstraints gbcNo = new GridBagConstraints();
+		gbcNo.fill = GridBagConstraints.HORIZONTAL;
+		gbcNo.gridwidth = 2;
+		gbcNo.anchor = GridBagConstraints.WEST;
+		gbcNo.insets = new Insets(0, 5, 5, 5);
+		gbcNo.gridx = 0;
+		gbcNo.gridy = 2;
+		add(no, gbcNo);
 		group.add(no);
 		
 		JRadioButton ask = new JRadioButton(LocalizationData.get("ErrorManager.preferences.alwaysAsk"));
 		ask.setVerticalAlignment(SwingConstants.TOP);
 		ask.setToolTipText(LocalizationData.get("ErrorManager.preferences.alwaysAsk.tooltip"));
-		GridBagConstraints gbc_ask = new GridBagConstraints();
-		gbc_ask.weighty = 1.0;
-		gbc_ask.fill = GridBagConstraints.BOTH;
-		gbc_ask.insets = new Insets(0, 5, 0, 5);
-		gbc_ask.gridwidth = 2;
-		gbc_ask.anchor = GridBagConstraints.NORTHWEST;
-		gbc_ask.gridx = 0;
-		gbc_ask.gridy = 3;
-		add(ask, gbc_ask);
+		GridBagConstraints gbcAsk = new GridBagConstraints();
+		gbcAsk.weighty = 1.0;
+		gbcAsk.fill = GridBagConstraints.BOTH;
+		gbcAsk.insets = new Insets(0, 5, 0, 5);
+		gbcAsk.gridwidth = 2;
+		gbcAsk.anchor = GridBagConstraints.NORTHWEST;
+		gbcAsk.gridx = 0;
+		gbcAsk.gridy = 3;
+		add(ask, gbcAsk);
 		group.add(ask);
 		
 		int whatToDo = Preferences.INSTANCE.getCrashReportAction();

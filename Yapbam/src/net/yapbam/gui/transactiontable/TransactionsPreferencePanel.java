@@ -32,7 +32,6 @@ import com.fathzer.soft.ajlib.swing.table.JTable;
 /*Le GenericTransactionModel semble utilisé un peu partout, à voir ...
  */
 
-
 public class TransactionsPreferencePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel jPanel = null;
@@ -132,14 +131,14 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		gridBagConstraints4.gridy = 1;
 		this.setLayout(new GridBagLayout());
 		this.add(getJPanel(), gridBagConstraints4);
-		GridBagConstraints gbc_setTodefault = new GridBagConstraints();
-		gbc_setTodefault.anchor = GridBagConstraints.SOUTHEAST;
-		gbc_setTodefault.weighty = 1.0;
-		gbc_setTodefault.weightx = 1.0;
-		gbc_setTodefault.insets = new Insets(0, 0, 5, 5);
-		gbc_setTodefault.gridx = 0;
-		gbc_setTodefault.gridy = 2;
-		add(getSetTodefault(), gbc_setTodefault);
+		GridBagConstraints gbcSetTodefault = new GridBagConstraints();
+		gbcSetTodefault.anchor = GridBagConstraints.SOUTHEAST;
+		gbcSetTodefault.weighty = 1.0;
+		gbcSetTodefault.weightx = 1.0;
+		gbcSetTodefault.insets = new Insets(0, 0, 5, 5);
+		gbcSetTodefault.gridx = 0;
+		gbcSetTodefault.gridy = 2;
+		add(getSetTodefault(), gbcSetTodefault);
 		this.add(getJPanel1(), gridBagConstraints6);
 	}
 
@@ -308,52 +307,52 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		if (jPanel1 == null) {
 			jPanel1 = new JPanel();
 			jPanel1.setBorder(null);
-			GridBagLayout gbl_jPanel1 = new GridBagLayout();
-			jPanel1.setLayout(gbl_jPanel1);
-			GridBagConstraints gbc_separeCommentChkBx = new GridBagConstraints();
-			gbc_separeCommentChkBx.weightx = 1.0;
-			gbc_separeCommentChkBx.anchor = GridBagConstraints.WEST;
-			gbc_separeCommentChkBx.gridwidth = 0;
-			gbc_separeCommentChkBx.insets = new Insets(5, 5, 5, 0);
-			gbc_separeCommentChkBx.gridx = 0;
-			gbc_separeCommentChkBx.gridy = 0;
-			jPanel1.add(getSeparateCommentChkBx(), gbc_separeCommentChkBx);
-			GridBagConstraints gbc_separateExpenseReceiptChckbx = new GridBagConstraints();
-			gbc_separateExpenseReceiptChckbx.gridwidth = 0;
-			gbc_separateExpenseReceiptChckbx.anchor = GridBagConstraints.WEST;
-			gbc_separateExpenseReceiptChckbx.insets = new Insets(0, 5, 0, 5);
-			gbc_separateExpenseReceiptChckbx.gridx = 0;
-			gbc_separateExpenseReceiptChckbx.gridy = 1;
-			jPanel1.add(getSeparateExpenseReceiptChckbx(), gbc_separateExpenseReceiptChckbx);
-			GridBagConstraints gbc_chckBxCustomBackground = new GridBagConstraints();
-			gbc_chckBxCustomBackground.gridwidth = 0;
-			gbc_chckBxCustomBackground.anchor = GridBagConstraints.WEST;
-			gbc_chckBxCustomBackground.insets = new Insets(5, 5, 5, 0);
-			gbc_chckBxCustomBackground.gridx = 0;
-			gbc_chckBxCustomBackground.gridy = 2;
-			jPanel1.add(getChckBxCustomBackground(), gbc_chckBxCustomBackground);
-			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-			gbc_scrollPane.weightx = 1.0;
-			gbc_scrollPane.fill = GridBagConstraints.HORIZONTAL;
-			gbc_scrollPane.gridheight = 2;
-			gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
-			gbc_scrollPane.gridx = 0;
-			gbc_scrollPane.gridy = 3;
-			jPanel1.add(getScrollPane(), gbc_scrollPane);
-			GridBagConstraints gbc_btnReceipt = new GridBagConstraints();
-			gbc_btnReceipt.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnReceipt.anchor = GridBagConstraints.WEST;
-			gbc_btnReceipt.insets = new Insets(0, 0, 0, 5);
-			gbc_btnReceipt.gridx = 1;
-			gbc_btnReceipt.gridy = 4;
-			jPanel1.add(getBtnReceipt(), gbc_btnReceipt);
-			GridBagConstraints gbc_btnExpense = new GridBagConstraints();
-			gbc_btnExpense.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnExpense.insets = new Insets(0, 0, 5, 5);
-			gbc_btnExpense.anchor = GridBagConstraints.WEST;
-			gbc_btnExpense.gridx = 1;
-			gbc_btnExpense.gridy = 3;
-			jPanel1.add(getBtnExpense(), gbc_btnExpense);
+			GridBagLayout gblJPanel1 = new GridBagLayout();
+			jPanel1.setLayout(gblJPanel1);
+			GridBagConstraints gbcSepareCommentChkBx = new GridBagConstraints();
+			gbcSepareCommentChkBx.weightx = 1.0;
+			gbcSepareCommentChkBx.anchor = GridBagConstraints.WEST;
+			gbcSepareCommentChkBx.gridwidth = 0;
+			gbcSepareCommentChkBx.insets = new Insets(5, 5, 5, 0);
+			gbcSepareCommentChkBx.gridx = 0;
+			gbcSepareCommentChkBx.gridy = 0;
+			jPanel1.add(getSeparateCommentChkBx(), gbcSepareCommentChkBx);
+			GridBagConstraints gbcSeparateExpenseReceiptChckbx = new GridBagConstraints();
+			gbcSeparateExpenseReceiptChckbx.gridwidth = 0;
+			gbcSeparateExpenseReceiptChckbx.anchor = GridBagConstraints.WEST;
+			gbcSeparateExpenseReceiptChckbx.insets = new Insets(0, 5, 0, 5);
+			gbcSeparateExpenseReceiptChckbx.gridx = 0;
+			gbcSeparateExpenseReceiptChckbx.gridy = 1;
+			jPanel1.add(getSeparateExpenseReceiptChckbx(), gbcSeparateExpenseReceiptChckbx);
+			GridBagConstraints gbcChckBxCustomBackground = new GridBagConstraints();
+			gbcChckBxCustomBackground.gridwidth = 0;
+			gbcChckBxCustomBackground.anchor = GridBagConstraints.WEST;
+			gbcChckBxCustomBackground.insets = new Insets(5, 5, 5, 0);
+			gbcChckBxCustomBackground.gridx = 0;
+			gbcChckBxCustomBackground.gridy = 2;
+			jPanel1.add(getChckBxCustomBackground(), gbcChckBxCustomBackground);
+			GridBagConstraints gbcScrollPane = new GridBagConstraints();
+			gbcScrollPane.weightx = 1.0;
+			gbcScrollPane.fill = GridBagConstraints.HORIZONTAL;
+			gbcScrollPane.gridheight = 2;
+			gbcScrollPane.insets = new Insets(0, 0, 0, 5);
+			gbcScrollPane.gridx = 0;
+			gbcScrollPane.gridy = 3;
+			jPanel1.add(getScrollPane(), gbcScrollPane);
+			GridBagConstraints gbcBtnReceipt = new GridBagConstraints();
+			gbcBtnReceipt.fill = GridBagConstraints.HORIZONTAL;
+			gbcBtnReceipt.anchor = GridBagConstraints.WEST;
+			gbcBtnReceipt.insets = new Insets(0, 0, 0, 5);
+			gbcBtnReceipt.gridx = 1;
+			gbcBtnReceipt.gridy = 4;
+			jPanel1.add(getBtnReceipt(), gbcBtnReceipt);
+			GridBagConstraints gbcBtnExpense = new GridBagConstraints();
+			gbcBtnExpense.fill = GridBagConstraints.HORIZONTAL;
+			gbcBtnExpense.insets = new Insets(0, 0, 5, 5);
+			gbcBtnExpense.anchor = GridBagConstraints.WEST;
+			gbcBtnExpense.gridx = 1;
+			gbcBtnExpense.gridy = 3;
+			jPanel1.add(getBtnExpense(), gbcBtnExpense);
 		}
 		return jPanel1;
 	}
@@ -378,8 +377,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		//This is a JRE known bug fixed in java 7 (http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6524757)
 		//TODO test with JRE 7
 		//TODO probably better to have a customized panel with a BalanceReport field
-		Color c = JColorChooser.showDialog(jButton, LocalizationData.get("MainFrame.Transactions.Preferences.ChooseColorDialog.title"), initialColor); //$NON-NLS-1$
-		return c;
+		return JColorChooser.showDialog(jButton, LocalizationData.get("MainFrame.Transactions.Preferences.ChooseColorDialog.title"), initialColor); //$NON-NLS-1$
 	}
 	
 	private JTable getTable() {
@@ -404,11 +402,15 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			return getSeparateCommentChkBx().isSelected() ? 1 : -1;
 		}
 		private int getReceiptColumnIndex() {
-			if (!getSeparateExpenseReceiptChckbx().isSelected()) return -1;
+			if (!getSeparateExpenseReceiptChckbx().isSelected()) {
+				return -1;
+			}
 			return getSeparateCommentChkBx().isSelected() ? 2:1;
 		}
 		private int getExpenseColumnIndex() {
-			if (!getSeparateExpenseReceiptChckbx().isSelected()) return -1;
+			if (!getSeparateExpenseReceiptChckbx().isSelected()) {
+				return -1;
+			}
 			return getSeparateCommentChkBx().isSelected() ? 3:2;
 		}
 		
@@ -424,8 +426,12 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		@Override
 		public int getColumnCount() {
 			int nb = 2;
-			if (getSeparateCommentChkBx().isSelected()) nb++;
-			if (getSeparateExpenseReceiptChckbx().isSelected()) nb++;
+			if (getSeparateCommentChkBx().isSelected()) {
+				nb++;
+			}
+			if (getSeparateExpenseReceiptChckbx().isSelected()) {
+				nb++;
+			}
 			return nb;
 		}
 
@@ -433,7 +439,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		public Object getValueAt(int row, int column) {
 			if (column==0) {
 				String result = isExpense(row)?LocalizationData.get("MainFrame.Transactions.Preferences.expenseSample"):LocalizationData.get("MainFrame.Transactions.Preferences.receiptSample"); //$NON-NLS-1$ //$NON-NLS-2$
-				if (!getSeparateCommentChkBx().isSelected()) result = result+" ("+LocalizationData.get("Transaction.comment")+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				if (!getSeparateCommentChkBx().isSelected()) {
+					result = result+" ("+LocalizationData.get("Transaction.comment")+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				}
 				return result;
 			} else if (column==getCommentColumnIndex()) {
 				return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
@@ -467,11 +475,17 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 
 		@Override
 		public String getColumnName(int column) {
-			if (column==0) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-			if (column==getCommentColumnIndex()) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
-			if (column==getReceiptColumnIndex()) return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
-			if (column==getExpenseColumnIndex()) return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
-			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$;
+			if (column==0) {
+				return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+			} else if (column==getCommentColumnIndex()) {
+				return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
+			} else if (column==getReceiptColumnIndex()) {
+				return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
+			} else if (column==getExpenseColumnIndex()) {
+				return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
+			} else {
+				return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$;
+			}
 		}
 	}
 	

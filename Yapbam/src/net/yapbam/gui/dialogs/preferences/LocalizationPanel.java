@@ -1,18 +1,20 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import javax.swing.JRadioButton;
+
 import java.awt.GridBagConstraints;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -25,6 +27,7 @@ import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import javax.swing.JButton;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -48,7 +51,7 @@ public class LocalizationPanel extends PreferencePanel {
 	private JRadioButton englishButton = null;
 	private JButton revertButton = null;
 	private ItemListener basicItemListener;
-	private HashMap<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
+	private Map<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
 	private JCheckBox translatorButton = null;
 	private JRadioButton portugueseButton = null;
 	private JRadioButton deutschButton;
@@ -73,30 +76,29 @@ public class LocalizationPanel extends PreferencePanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(548, 200);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
-		GridBagConstraints gbc_countryPanel = new GridBagConstraints();
-		gbc_countryPanel.gridheight = 2;
-		gbc_countryPanel.weighty = 1.0;
-		gbc_countryPanel.anchor = GridBagConstraints.NORTHWEST;
-		gbc_countryPanel.fill = GridBagConstraints.VERTICAL;
-		gbc_countryPanel.insets = new Insets(0, 0, 5, 5);
-		gbc_countryPanel.gridx = 0;
-		gbc_countryPanel.gridy = 0;
-		add(getCountryPanel(), gbc_countryPanel);
-		GridBagConstraints gbc_languagePanel = new GridBagConstraints();
-		gbc_languagePanel.anchor = GridBagConstraints.NORTHWEST;
-		gbc_languagePanel.weightx = 1.0;
-		gbc_languagePanel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_languagePanel.insets = new Insets(0, 0, 5, 0);
-		gbc_languagePanel.gridx = 1;
-		gbc_languagePanel.gridy = 0;
-		add(getLanguagePanel(), gbc_languagePanel);
-		GridBagConstraints gbc_revertButton = new GridBagConstraints();
-		gbc_revertButton.gridx = 1;
-		gbc_revertButton.gridy = 1;
-		add(getRevertButton(), gbc_revertButton);
+		GridBagConstraints gbcCountryPanel = new GridBagConstraints();
+		gbcCountryPanel.gridheight = 2;
+		gbcCountryPanel.weighty = 1.0;
+		gbcCountryPanel.anchor = GridBagConstraints.NORTHWEST;
+		gbcCountryPanel.fill = GridBagConstraints.VERTICAL;
+		gbcCountryPanel.insets = new Insets(0, 0, 5, 5);
+		gbcCountryPanel.gridx = 0;
+		gbcCountryPanel.gridy = 0;
+		add(getCountryPanel(), gbcCountryPanel);
+		GridBagConstraints gbcLanguagePanel = new GridBagConstraints();
+		gbcLanguagePanel.anchor = GridBagConstraints.NORTHWEST;
+		gbcLanguagePanel.weightx = 1.0;
+		gbcLanguagePanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcLanguagePanel.insets = new Insets(0, 0, 5, 0);
+		gbcLanguagePanel.gridx = 1;
+		gbcLanguagePanel.gridy = 0;
+		add(getLanguagePanel(), gbcLanguagePanel);
+		GridBagConstraints gbcRevertButton = new GridBagConstraints();
+		gbcRevertButton.gridx = 1;
+		gbcRevertButton.gridy = 1;
+		add(getRevertButton(), gbcRevertButton);
 		reset();
 	}
 	
@@ -219,12 +221,12 @@ public class LocalizationPanel extends PreferencePanel {
 			languagePanel.add(getEnglishButton(), gridBagConstraints5);
 			languagePanel.add(getTranslatorButton(), gridBagConstraints6);
 			languagePanel.add(getPortugueseButton(), gridBagConstraints7);
-			GridBagConstraints gbc_DeutschButton = new GridBagConstraints();
-			gbc_DeutschButton.insets = new Insets(0, 0, 5, 0);
-			gbc_DeutschButton.anchor = GridBagConstraints.WEST;
-			gbc_DeutschButton.gridx = 0;
-			gbc_DeutschButton.gridy = 2;
-			languagePanel.add(getDeutschButton(), gbc_DeutschButton);
+			GridBagConstraints gbcDeutschButton = new GridBagConstraints();
+			gbcDeutschButton.insets = new Insets(0, 0, 5, 0);
+			gbcDeutschButton.anchor = GridBagConstraints.WEST;
+			gbcDeutschButton.gridx = 0;
+			gbcDeutschButton.gridy = 2;
+			languagePanel.add(getDeutschButton(), gbcDeutschButton);
 		}
 		return languagePanel;
 	}
@@ -442,7 +444,9 @@ public class LocalizationPanel extends PreferencePanel {
 				translatorButton.setToolTipText(LocalizationData.get("PreferencesDialog.translatorMode.tooltip")); //$NON-NLS-1$
 				translatorButton.addItemListener(new ItemListener() {
 					@Override
-					public void itemStateChanged(ItemEvent e) {	checkSomethingChanged();}
+					public void itemStateChanged(ItemEvent e) {
+						checkSomethingChanged();
+					}
 				});
 			} else {
 				translatorButton.setVisible(false);

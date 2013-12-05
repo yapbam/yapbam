@@ -70,9 +70,15 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		this.add(getSouthPanel(), BorderLayout.SOUTH);
 		this.add(getJScrollPane(), BorderLayout.CENTER);
 		ArrayList<Action> actions = new ArrayList<Action>();
-		if (editButtonAction!=null) actions.add(editButtonAction);
-		if (duplicateButtonAction!=null) actions.add(duplicateButtonAction);
-		if (deleteButtonAction!=null) actions.add(deleteButtonAction);
+		if (editButtonAction!=null) {
+			actions.add(editButtonAction);
+		}
+		if (duplicateButtonAction!=null) {
+			actions.add(duplicateButtonAction);
+		}
+		if (deleteButtonAction!=null) {
+			actions.add(deleteButtonAction);
+		}
 		jTable.addMouseListener(new JTableListener(actions.toArray(new Action[actions.size()]), editButtonAction));
 		jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -89,9 +95,15 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	 */
 	protected void refreshActions() {
 		boolean ok = getJTable().getSelectedRow()>=0;
-		if (editButtonAction!=null) editButtonAction.setEnabled(ok);
-		if (duplicateButtonAction!=null) duplicateButtonAction.setEnabled(ok);
-		if (deleteButtonAction!=null) deleteButtonAction.setEnabled(ok);
+		if (editButtonAction!=null) {
+			editButtonAction.setEnabled(ok);
+		}
+		if (duplicateButtonAction!=null) {
+			duplicateButtonAction.setEnabled(ok);
+		}
+		if (deleteButtonAction!=null) {
+			deleteButtonAction.setEnabled(ok);
+		}
 	}
 
 	/**
@@ -143,13 +155,17 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 			gridBagConstraints.gridx = 1;
 			gridBagConstraints.insets = leftInset;
 			gridBagConstraints.gridy = 0;
-			if (getEditButton()!=null) southPanel.add(getEditButton(), gridBagConstraints);
+			if (getEditButton()!=null) {
+				southPanel.add(getEditButton(), gridBagConstraints);
+			}
 
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 2;
 			gridBagConstraints11.insets = leftInset;
 			gridBagConstraints11.gridy = 0;
-			if (getDuplicateButton()!=null) southPanel.add(getDuplicateButton(), gridBagConstraints11);
+			if (getDuplicateButton()!=null) {
+				southPanel.add(getDuplicateButton(), gridBagConstraints11);
+			}
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.insets = leftInset;
@@ -159,15 +175,17 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 			
 			
 			Component rightComponent = getRightComponent();
-			if (rightComponent==null) rightComponent = new JLabel(" "); //$NON-NLS-1$
-			GridBagConstraints gbc_lblToto = new GridBagConstraints();
-			gbc_lblToto.anchor = GridBagConstraints.EAST;
+			if (rightComponent==null) {
+				rightComponent = new JLabel(" "); //$NON-NLS-1$
+			}
+			GridBagConstraints gbcLblToto = new GridBagConstraints();
+			gbcLblToto.anchor = GridBagConstraints.EAST;
 			Insets rightInset = new Insets(0, 5, getBottomInset(), 0);
-			gbc_lblToto.insets = rightInset;
-			gbc_lblToto.gridx = 4;
-			gbc_lblToto.gridy = 0;
-			gbc_lblToto.weightx = 1.0D;
-			southPanel.add(rightComponent, gbc_lblToto);
+			gbcLblToto.insets = rightInset;
+			gbcLblToto.gridx = 4;
+			gbcLblToto.gridy = 0;
+			gbcLblToto.weightx = 1.0D;
+			southPanel.add(rightComponent, gbcLblToto);
 		}
 		return southPanel;
 	}

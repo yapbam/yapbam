@@ -195,7 +195,8 @@ public class CalculatorPanel extends JPanel {
 
 	private void doChar(char character) {
 		if (character==(char)10) {
-			character = EQUAL; // Return is equivalent to =
+			// Return is equivalent to =
+			character = EQUAL;
 		}
 		if ((character>='0') && (character<='9')) {
 			// digit
@@ -294,13 +295,13 @@ public class CalculatorPanel extends JPanel {
 		gbcCloseBracket.gridx = 1;
 		gbcCloseBracket.gridy = 1;
 		add(getCloseBracket(), gbcCloseBracket);
-		GridBagConstraints gbc_btnErase = new GridBagConstraints();
-		gbc_btnErase.fill = GridBagConstraints.BOTH;
-		gbc_btnErase.gridwidth = 2;
-		gbc_btnErase.insets = new Insets(0, 0, 5, 5);
-		gbc_btnErase.gridx = 2;
-		gbc_btnErase.gridy = 1;
-		add(getBtnErase(), gbc_btnErase);
+		GridBagConstraints gbcBtnErase = new GridBagConstraints();
+		gbcBtnErase.fill = GridBagConstraints.BOTH;
+		gbcBtnErase.gridwidth = 2;
+		gbcBtnErase.insets = new Insets(0, 0, 5, 5);
+		gbcBtnErase.gridx = 2;
+		gbcBtnErase.gridy = 1;
+		add(getBtnErase(), gbcBtnErase);
 		GridBagConstraints gbcBtnClear = new GridBagConstraints();
 		gbcBtnClear.gridheight = 2;
 		gbcBtnClear.fill = GridBagConstraints.BOTH;

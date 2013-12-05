@@ -82,13 +82,13 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 		this.wordings = wordings;
 		setBorder(BorderFactory.createTitledBorder(null, wordings.title, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 		setLayout(new GridBagLayout());
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.weighty = 1.0;
-		gbc_panel.weightx = 1.0;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		add(getPanel(), gbc_panel);
+		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.weighty = 1.0;
+		gbcPanel.weightx = 1.0;
+		gbcPanel.fill = GridBagConstraints.BOTH;
+		gbcPanel.gridx = 0;
+		gbcPanel.gridy = 0;
+		add(getPanel(), gbcPanel);
 	}
 	
 	public TextMatcher getTextMatcher() {
@@ -320,31 +320,33 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			GridBagLayout gbl_panel = new GridBagLayout();
-			gbl_panel.columnWidths = new int[]{0, 0, 0};
-			gbl_panel.rowHeights = new int[]{0, 0};
-			gbl_panel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-			gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-			panel.setLayout(gbl_panel);
-			GridBagConstraints gbc_jPanel1 = new GridBagConstraints();
-			gbc_jPanel1.anchor = GridBagConstraints.NORTHWEST;
-			gbc_jPanel1.insets = new Insets(0, 0, 0, 5);
-			gbc_jPanel1.gridx = 0;
-			gbc_jPanel1.gridy = 0;
-			panel.add(getJPanel1(), gbc_jPanel1);
-			GridBagConstraints gbc_jPanel2 = new GridBagConstraints();
-			gbc_jPanel2.weightx = 1.0;
-			gbc_jPanel2.fill = GridBagConstraints.HORIZONTAL;
-			gbc_jPanel2.gridx = 1;
-			gbc_jPanel2.gridy = 0;
-			panel.add(getJPanel2(), gbc_jPanel2);
+			GridBagLayout gblPanel = new GridBagLayout();
+			gblPanel.columnWidths = new int[]{0, 0, 0};
+			gblPanel.rowHeights = new int[]{0, 0};
+			gblPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+			gblPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+			panel.setLayout(gblPanel);
+			GridBagConstraints gbcJPanel1 = new GridBagConstraints();
+			gbcJPanel1.anchor = GridBagConstraints.NORTHWEST;
+			gbcJPanel1.insets = new Insets(0, 0, 0, 5);
+			gbcJPanel1.gridx = 0;
+			gbcJPanel1.gridy = 0;
+			panel.add(getJPanel1(), gbcJPanel1);
+			GridBagConstraints gbcJPanel2 = new GridBagConstraints();
+			gbcJPanel2.weightx = 1.0;
+			gbcJPanel2.fill = GridBagConstraints.HORIZONTAL;
+			gbcJPanel2.gridx = 1;
+			gbcJPanel2.gridy = 0;
+			panel.add(getJPanel2(), gbcJPanel2);
 		}
 		return panel;
 	}
 
 	@Override
 	protected String computeInconsistencyCause() {
-		if (!getDescriptionRegular().isSelected()) return null;
+		if (!getDescriptionRegular().isSelected()) {
+			return null;
+		}
 		String text = getDescription().getText();
 		try {
 			Pattern.compile(text);
