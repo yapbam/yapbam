@@ -35,7 +35,7 @@ public class ThemePanel extends PreferencePanel {
 	private JSlider fontSlider;
 	private JPanel fontPanel;
 	private JLabel textSampleLabel;
-	private JPanel LAFPanel;
+	private JPanel lafPanel;
 
 	/**
 	 * This is the default constructor
@@ -80,20 +80,20 @@ public class ThemePanel extends PreferencePanel {
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		this.setLayout(gridBagLayout);
-		GridBagConstraints gbc_LAFPanel = new GridBagConstraints();
-		gbc_LAFPanel.anchor = GridBagConstraints.WEST;
-		gbc_LAFPanel.insets = new Insets(10, 0, 0, 5);
-		gbc_LAFPanel.gridx = 0;
-		gbc_LAFPanel.gridy = 0;
-		add(getLAFPanel(), gbc_LAFPanel);
-		GridBagConstraints gbc_fontPanel = new GridBagConstraints();
-		gbc_fontPanel.weightx = 1.0;
-		gbc_fontPanel.anchor = GridBagConstraints.NORTHWEST;
-		gbc_fontPanel.weighty = 1.0;
-		gbc_fontPanel.insets = new Insets(10, 0, 5, 0);
-		gbc_fontPanel.gridx = 0;
-		gbc_fontPanel.gridy = 1;
-		add(getFontPanel(), gbc_fontPanel);
+		GridBagConstraints gbcLafPanel = new GridBagConstraints();
+		gbcLafPanel.anchor = GridBagConstraints.WEST;
+		gbcLafPanel.insets = new Insets(10, 0, 0, 5);
+		gbcLafPanel.gridx = 0;
+		gbcLafPanel.gridy = 0;
+		add(getLAFPanel(), gbcLafPanel);
+		GridBagConstraints gbcFontPanel = new GridBagConstraints();
+		gbcFontPanel.weightx = 1.0;
+		gbcFontPanel.anchor = GridBagConstraints.NORTHWEST;
+		gbcFontPanel.weighty = 1.0;
+		gbcFontPanel.insets = new Insets(10, 0, 5, 0);
+		gbcFontPanel.gridx = 0;
+		gbcFontPanel.gridy = 1;
+		add(getFontPanel(), gbcFontPanel);
 	}
 
 	public void refreshFontSlider() {
@@ -119,13 +119,17 @@ public class ThemePanel extends PreferencePanel {
 	@Override
 	public boolean updatePreferences() {
 		boolean lfChanged = !selectedLookAndFeel.equals(Preferences.INSTANCE.getLookAndFeel());
-		if (lfChanged) Preferences.INSTANCE.setLookAndFeel(selectedLookAndFeel);
+		if (lfChanged) {
+			Preferences.INSTANCE.setLookAndFeel(selectedLookAndFeel);
+		}
 		
 		int defaultSize = getDefaultFont().getSize();
 		int old = (int) (defaultSize*Preferences.INSTANCE.getFontSizeRatio());
 		int current = getFontSlider().getValue();
 		boolean fontChanged = (old!=current);
-		if (fontChanged) Preferences.INSTANCE.setFontSizeRatio((float)current/defaultSize);
+		if (fontChanged) {
+			Preferences.INSTANCE.setFontSizeRatio((float)current/defaultSize);
+		}
 
 		return lfChanged || fontChanged;
 	}
@@ -172,22 +176,22 @@ public class ThemePanel extends PreferencePanel {
 		if (fontPanel == null) {
 			fontPanel = new JPanel();
 			fontPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.fontSize"))); //$NON-NLS-1$
-			GridBagLayout gbl_fontPanel = new GridBagLayout();
-			fontPanel.setLayout(gbl_fontPanel);
-			GridBagConstraints gbc_fontSlider = new GridBagConstraints();
-			gbc_fontSlider.insets = new Insets(0, 0, 5, 0);
-			gbc_fontSlider.weighty = 1.0;
-			gbc_fontSlider.weightx = 1.0;
-			gbc_fontSlider.fill = GridBagConstraints.HORIZONTAL;
-			gbc_fontSlider.anchor = GridBagConstraints.NORTHWEST;
-			gbc_fontSlider.gridx = 0;
-			gbc_fontSlider.gridy = 0;
-			fontPanel.add(getFontSlider(), gbc_fontSlider);
-			GridBagConstraints gbc_textSampleLabel = new GridBagConstraints();
-			gbc_textSampleLabel.anchor = GridBagConstraints.WEST;
-			gbc_textSampleLabel.gridx = 0;
-			gbc_textSampleLabel.gridy = 1;
-			fontPanel.add(getTextSampleLabel(), gbc_textSampleLabel);
+			GridBagLayout gblFontPanel = new GridBagLayout();
+			fontPanel.setLayout(gblFontPanel);
+			GridBagConstraints gbcFontSlider = new GridBagConstraints();
+			gbcFontSlider.insets = new Insets(0, 0, 5, 0);
+			gbcFontSlider.weighty = 1.0;
+			gbcFontSlider.weightx = 1.0;
+			gbcFontSlider.fill = GridBagConstraints.HORIZONTAL;
+			gbcFontSlider.anchor = GridBagConstraints.NORTHWEST;
+			gbcFontSlider.gridx = 0;
+			gbcFontSlider.gridy = 0;
+			fontPanel.add(getFontSlider(), gbcFontSlider);
+			GridBagConstraints gbcTextSampleLabel = new GridBagConstraints();
+			gbcTextSampleLabel.anchor = GridBagConstraints.WEST;
+			gbcTextSampleLabel.gridx = 0;
+			gbcTextSampleLabel.gridy = 1;
+			fontPanel.add(getTextSampleLabel(), gbcTextSampleLabel);
 		}
 		return fontPanel;
 	}
@@ -198,13 +202,13 @@ public class ThemePanel extends PreferencePanel {
 		return textSampleLabel;
 	}
 	private JPanel getLAFPanel() {
-		if (LAFPanel == null) {
-			LAFPanel = new JPanel();
-			LAFPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.theme"))); //$NON-NLS-1$
+		if (lafPanel == null) {
+			lafPanel = new JPanel();
+			lafPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.theme"))); //$NON-NLS-1$
 			String current = UIManager.getLookAndFeel().getClass().getName();
 
 			LookAndFeelInfo[] lfs = UIManager.getInstalledLookAndFeels();
-			LAFPanel.setLayout(new GridLayout(lfs.length, 1));
+			lafPanel.setLayout(new GridLayout(lfs.length, 1));
 
 			ButtonGroup group = new ButtonGroup();
 			for (int i = 0; i < lfs.length; i++) {
@@ -216,9 +220,9 @@ public class ThemePanel extends PreferencePanel {
 				}
 				button.addItemListener(new LFAction(lfs[i].getName()));
 				group.add(button);
-				LAFPanel.add(button, i);
+				lafPanel.add(button, i);
 			}
 		}
-		return LAFPanel;
+		return lafPanel;
 	}
 }

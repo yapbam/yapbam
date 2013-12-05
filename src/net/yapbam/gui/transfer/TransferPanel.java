@@ -65,65 +65,65 @@ public class TransferPanel extends JPanel {
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
-		GridBagConstraints gbc_upperPane = new GridBagConstraints();
-		gbc_upperPane.insets = new Insets(0, 5, 0, 5);
-		gbc_upperPane.weightx = 1.0;
-		gbc_upperPane.fill = GridBagConstraints.HORIZONTAL;
-		gbc_upperPane.anchor = GridBagConstraints.NORTHWEST;
-		gbc_upperPane.gridx = 0;
-		gbc_upperPane.gridy = 0;
-		add(getUpperPane(), gbc_upperPane);
-		GridBagConstraints gbc_subTransactionsPanel = new GridBagConstraints();
-		gbc_subTransactionsPanel.fill = GridBagConstraints.BOTH;
-		gbc_subTransactionsPanel.gridx = 0;
-		gbc_subTransactionsPanel.gridy = 2;
-		add(getSubTransactionsPanel(), gbc_subTransactionsPanel);
-		GridBagConstraints gbc_mainPanel = new GridBagConstraints();
-		gbc_mainPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_mainPanel.gridwidth = 0;
-		gbc_mainPanel.weighty = 1.0;
-		gbc_mainPanel.weightx = 1.0;
-		gbc_mainPanel.fill = GridBagConstraints.BOTH;
-		gbc_mainPanel.gridx = 0;
-		gbc_mainPanel.gridy = 1;
-		add(getMainPanel(), gbc_mainPanel);
+		GridBagConstraints gbcUpperPane = new GridBagConstraints();
+		gbcUpperPane.insets = new Insets(0, 5, 0, 5);
+		gbcUpperPane.weightx = 1.0;
+		gbcUpperPane.fill = GridBagConstraints.HORIZONTAL;
+		gbcUpperPane.anchor = GridBagConstraints.NORTHWEST;
+		gbcUpperPane.gridx = 0;
+		gbcUpperPane.gridy = 0;
+		add(getUpperPane(), gbcUpperPane);
+		GridBagConstraints gbcSubTransactionsPanel = new GridBagConstraints();
+		gbcSubTransactionsPanel.fill = GridBagConstraints.BOTH;
+		gbcSubTransactionsPanel.gridx = 0;
+		gbcSubTransactionsPanel.gridy = 2;
+		add(getSubTransactionsPanel(), gbcSubTransactionsPanel);
+		GridBagConstraints gbcMainPanel = new GridBagConstraints();
+		gbcMainPanel.insets = new Insets(0, 0, 5, 0);
+		gbcMainPanel.gridwidth = 0;
+		gbcMainPanel.weighty = 1.0;
+		gbcMainPanel.weightx = 1.0;
+		gbcMainPanel.fill = GridBagConstraints.BOTH;
+		gbcMainPanel.gridx = 0;
+		gbcMainPanel.gridy = 1;
+		add(getMainPanel(), gbcMainPanel);
 	}
 
 	private JPanel getUpperPane() {
 		if (upperPane == null) {
 			upperPane = new JPanel();
-			GridBagLayout gbl_upperPane = new GridBagLayout();
-			upperPane.setLayout(gbl_upperPane);
-			GridBagConstraints gbc_dateLabel = new GridBagConstraints();
-			gbc_dateLabel.insets = new Insets(0, 0, 0, 5);
-			gbc_dateLabel.anchor = GridBagConstraints.WEST;
-			gbc_dateLabel.gridx = 0;
-			gbc_dateLabel.gridy = 0;
-			upperPane.add(getDateLabel(), gbc_dateLabel);
-			GridBagConstraints gbc_dateField = new GridBagConstraints();
-			gbc_dateField.insets = new Insets(0, 0, 0, 5);
-			gbc_dateField.gridx = 1;
-			gbc_dateField.gridy = 0;
-			upperPane.add(getDateField(), gbc_dateField);
-			GridBagConstraints gbc_amountLabel = new GridBagConstraints();
-			gbc_amountLabel.insets = new Insets(0, 5, 0, 5);
-			gbc_amountLabel.anchor = GridBagConstraints.EAST;
-			gbc_amountLabel.gridx = 2;
-			gbc_amountLabel.gridy = 0;
-			upperPane.add(getAmountLabel(), gbc_amountLabel);
-			GridBagConstraints gbc_amountField = new GridBagConstraints();
-			gbc_amountField.anchor = GridBagConstraints.WEST;
-			gbc_amountField.insets = new Insets(0, 0, 0, 5);
-			gbc_amountField.gridx = 3;
-			gbc_amountField.gridy = 0;
-			upperPane.add(getAmountField(), gbc_amountField);
-			GridBagConstraints gbc_categoryWidget = new GridBagConstraints();
-			gbc_categoryWidget.weightx = 1.0;
-			gbc_categoryWidget.fill = GridBagConstraints.HORIZONTAL;
-			gbc_categoryWidget.gridwidth = 0;
-			gbc_categoryWidget.gridx = 4;
-			gbc_categoryWidget.gridy = 0;
-			upperPane.add(getCategoryWidget(), gbc_categoryWidget);
+			GridBagLayout gblUpperPane = new GridBagLayout();
+			upperPane.setLayout(gblUpperPane);
+			GridBagConstraints gbcDateLabel = new GridBagConstraints();
+			gbcDateLabel.insets = new Insets(0, 0, 0, 5);
+			gbcDateLabel.anchor = GridBagConstraints.WEST;
+			gbcDateLabel.gridx = 0;
+			gbcDateLabel.gridy = 0;
+			upperPane.add(getDateLabel(), gbcDateLabel);
+			GridBagConstraints gbcDateField = new GridBagConstraints();
+			gbcDateField.insets = new Insets(0, 0, 0, 5);
+			gbcDateField.gridx = 1;
+			gbcDateField.gridy = 0;
+			upperPane.add(getDateField(), gbcDateField);
+			GridBagConstraints gbcAmountLabel = new GridBagConstraints();
+			gbcAmountLabel.insets = new Insets(0, 5, 0, 5);
+			gbcAmountLabel.anchor = GridBagConstraints.EAST;
+			gbcAmountLabel.gridx = 2;
+			gbcAmountLabel.gridy = 0;
+			upperPane.add(getAmountLabel(), gbcAmountLabel);
+			GridBagConstraints gbcAmountField = new GridBagConstraints();
+			gbcAmountField.anchor = GridBagConstraints.WEST;
+			gbcAmountField.insets = new Insets(0, 0, 0, 5);
+			gbcAmountField.gridx = 3;
+			gbcAmountField.gridy = 0;
+			upperPane.add(getAmountField(), gbcAmountField);
+			GridBagConstraints gbcCategoryWidget = new GridBagConstraints();
+			gbcCategoryWidget.weightx = 1.0;
+			gbcCategoryWidget.fill = GridBagConstraints.HORIZONTAL;
+			gbcCategoryWidget.gridwidth = 0;
+			gbcCategoryWidget.gridx = 4;
+			gbcCategoryWidget.gridy = 0;
+			upperPane.add(getCategoryWidget(), gbcCategoryWidget);
 		}
 		return upperPane;
 	}
@@ -142,7 +142,9 @@ public class TransferPanel extends JPanel {
 	private FromOrToPane getToPane() {
 		if (toPane == null) {
 			toPane = new FromOrToPane(data, false);
-			if ((data!=null) && (data.getAccountsNumber()>1)) toPane.setAccount(data.getAccount(1));
+			if ((data!=null) && (data.getAccountsNumber()>1)) {
+				toPane.setAccount(data.getAccount(1));
+			}
 			toPane.getAccountWidget().setToolTipText(LocalizationData.get("TransferDialog.to.account.tooltip")); //$NON-NLS-1$
 			toPane.getValueDateField().setToolTipText(LocalizationData.get("TransferDialog.to.valueDate.tooltip")); //$NON-NLS-1$
 			toPane.setBorder(new TitledBorder(null, LocalizationData.get("TransferDialog.to.title"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null)); //$NON-NLS-1$

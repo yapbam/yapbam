@@ -84,22 +84,22 @@ public class BudgetViewPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagConstraints gbc_budgetTable = new GridBagConstraints();
-		gbc_budgetTable.insets = new Insets(0, 0, 5, 0);
-		gbc_budgetTable.fill = GridBagConstraints.BOTH;
-		gbc_budgetTable.gridy = 1;
-		gbc_budgetTable.weightx = 1.0;
-		gbc_budgetTable.weighty = 1.0;
-		gbc_budgetTable.gridx = 0;
-		GridBagConstraints gbc_topPanel = new GridBagConstraints();
-		gbc_topPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_topPanel.gridx = 0;
-		gbc_topPanel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_topPanel.weightx = 1.0D;
-		gbc_topPanel.gridy = 0;
+		GridBagConstraints gbcBudgetTable = new GridBagConstraints();
+		gbcBudgetTable.insets = new Insets(0, 0, 5, 0);
+		gbcBudgetTable.fill = GridBagConstraints.BOTH;
+		gbcBudgetTable.gridy = 1;
+		gbcBudgetTable.weightx = 1.0;
+		gbcBudgetTable.weighty = 1.0;
+		gbcBudgetTable.gridx = 0;
+		GridBagConstraints gbcTopPanel = new GridBagConstraints();
+		gbcTopPanel.insets = new Insets(0, 0, 5, 0);
+		gbcTopPanel.gridx = 0;
+		gbcTopPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcTopPanel.weightx = 1.0D;
+		gbcTopPanel.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getTopPanel(), gbc_topPanel);
-		this.add(getTable(), gbc_budgetTable);
+		this.add(getTopPanel(), gbcTopPanel);
+		this.add(getTable(), gbcBudgetTable);
 	}
 
 	/**
@@ -135,32 +135,32 @@ public class BudgetViewPanel extends JPanel {
 			topPanel = new JPanel();
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(getMonth(), gridBagConstraints1);
-			GridBagConstraints gbc_chckbxAddSumLine = new GridBagConstraints();
-			gbc_chckbxAddSumLine.anchor = GridBagConstraints.WEST;
-			gbc_chckbxAddSumLine.weightx = 1.0;
-			gbc_chckbxAddSumLine.insets = new Insets(0, 0, 0, 5);
-			gbc_chckbxAddSumLine.gridx = 2;
-			gbc_chckbxAddSumLine.gridy = 0;
-			topPanel.add(getChckbxAddSumLine(), gbc_chckbxAddSumLine);
+			GridBagConstraints gbcChckbxAddSumLine = new GridBagConstraints();
+			gbcChckbxAddSumLine.anchor = GridBagConstraints.WEST;
+			gbcChckbxAddSumLine.weightx = 1.0;
+			gbcChckbxAddSumLine.insets = new Insets(0, 0, 0, 5);
+			gbcChckbxAddSumLine.gridx = 2;
+			gbcChckbxAddSumLine.gridy = 0;
+			topPanel.add(getChckbxAddSumLine(), gbcChckbxAddSumLine);
 			topPanel.add(getYear(), gridBagConstraints2);
 			topPanel.add(getExport(), gridBagConstraints3);
 			topPanel.add(getFilter(), gridBagConstraints5);
 			ButtonGroup group = new ButtonGroup();
 			group.add(getMonth());
 			group.add(getYear());
-			GridBagConstraints gbc_chckbxAddSumColumn = new GridBagConstraints();
-			gbc_chckbxAddSumColumn.anchor = GridBagConstraints.WEST;
-			gbc_chckbxAddSumColumn.insets = new Insets(0, 0, 0, 5);
-			gbc_chckbxAddSumColumn.gridx = 2;
-			gbc_chckbxAddSumColumn.gridy = 1;
-			topPanel.add(getChckbxAddSumColumn(), gbc_chckbxAddSumColumn);
-			GridBagConstraints gbc_groupSubCategories = new GridBagConstraints();
-			gbc_groupSubCategories.weightx = 1.0;
-			gbc_groupSubCategories.insets = new Insets(0, 0, 0, 5);
-			gbc_groupSubCategories.anchor = GridBagConstraints.WEST;
-			gbc_groupSubCategories.gridx = 1;
-			gbc_groupSubCategories.gridy = 0;
-			topPanel.add(getGroupSubCategories(), gbc_groupSubCategories);
+			GridBagConstraints gbcChckbxAddSumColumn = new GridBagConstraints();
+			gbcChckbxAddSumColumn.anchor = GridBagConstraints.WEST;
+			gbcChckbxAddSumColumn.insets = new Insets(0, 0, 0, 5);
+			gbcChckbxAddSumColumn.gridx = 2;
+			gbcChckbxAddSumColumn.gridy = 1;
+			topPanel.add(getChckbxAddSumColumn(), gbcChckbxAddSumColumn);
+			GridBagConstraints gbcGroupSubCategories = new GridBagConstraints();
+			gbcGroupSubCategories.weightx = 1.0;
+			gbcGroupSubCategories.insets = new Insets(0, 0, 0, 5);
+			gbcGroupSubCategories.anchor = GridBagConstraints.WEST;
+			gbcGroupSubCategories.gridx = 1;
+			gbcGroupSubCategories.gridy = 0;
+			topPanel.add(getGroupSubCategories(), gbcGroupSubCategories);
 		}
 		return topPanel;
 	}
@@ -394,7 +394,9 @@ public class BudgetViewPanel extends JPanel {
 	}
 	
 	private int[] filterSelected(int[] selected, int maxValue) {
-		if ((selected.length==0) || ((selected[selected.length-1]!=maxValue))) return selected;
+		if ((selected.length==0) || ((selected[selected.length-1]!=maxValue))) {
+			return selected;
+		}
 		int[] result = new int[selected.length-1];
 		System.arraycopy(selected, 0, result, 0, result.length);
 		return result;
@@ -455,7 +457,9 @@ public class BudgetViewPanel extends JPanel {
 		public Component getTableCellRendererComponent(JTable table, Object value,
 				boolean isSelected, boolean hasFocus, int row, int column) {
 			boolean extra = (column==budget.getDatesSize()) || (row==budget.getCategoriesSize());
-			if (extra) isSelected = false;
+			if (extra) {
+				isSelected = false;
+			}
 			JLabel result = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			this.setHorizontalAlignment(SwingConstants.RIGHT);
 			Font font = extra ? bold : plain;
@@ -477,7 +481,9 @@ public class BudgetViewPanel extends JPanel {
 				value = "<html><b>"+value.toString()+"</b></html>"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			if (centered && (result instanceof JLabel)) ((JLabel)result).setHorizontalAlignment(JLabel.CENTER);
+			if (centered && (result instanceof JLabel)) {
+				((JLabel)result).setHorizontalAlignment(JLabel.CENTER);
+			}
 			return result;
 		}
 	}

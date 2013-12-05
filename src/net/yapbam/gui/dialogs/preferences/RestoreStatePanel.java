@@ -49,12 +49,12 @@ public class RestoreStatePanel extends PreferencePanel {
 		gbcPanel.gridx = 0;
 		gbcPanel.gridy = 1;
 		add(panel, gbcPanel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
+		GridBagLayout gblPanel = new GridBagLayout();
+		gblPanel.columnWidths = new int[]{0, 0};
+		gblPanel.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gblPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gblPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gblPanel);
 		
 		chckBxColumnsWitdth = new JCheckBox(LocalizationData.get("PreferencesDialog.StartState.columnsWidth")); //$NON-NLS-1$
 		GridBagConstraints gbcChckBxColumnsWitdth = new GridBagConstraints();

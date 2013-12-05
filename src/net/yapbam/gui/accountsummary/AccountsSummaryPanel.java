@@ -114,7 +114,9 @@ public class AccountsSummaryPanel extends JPanel {
 					if (!e.getValueIsAdjusting()) {
 						Account account = getSelectedAccount();
 						if (account!=null) {
-							if (!getSplitPane().isDividerVisible()) getSplitPane().setDividerLocation(0.5);
+							if (!getSplitPane().isDividerVisible()) {
+								getSplitPane().setDividerLocation(0.5);
+							}
 							getNotesField().setText(account.getComment()==null?"":account.getComment());
 						}
 						getSplitPane().setDividerVisible(account!=null);
@@ -173,7 +175,10 @@ public class AccountsSummaryPanel extends JPanel {
 		public int getRowCount() {
 			// fake an additional row
 			int rowCount = super.getRowCount();
-			if (rowCount > 1) rowCount++; // Add a total line if there's more than one account
+			if (rowCount > 1) {
+				// Add a total line if there's more than one account
+				rowCount++;
+			}
 			return rowCount;
 		}
 
@@ -184,12 +189,18 @@ public class AccountsSummaryPanel extends JPanel {
 			}
 			// We deal with the total line
 			column = convertColumnIndexToModel(column);
-			if (column == 0) return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
+			if (column == 0) {
+				return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
+			}
 			double result = 0.0;
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				if (column == 3) result += data.getAccount(i).getBalanceData().getCheckedBalance();
-				else if (column == 1) result += data.getAccount(i).getBalanceData().getCurrentBalance();
-				else if (column == 2) result += data.getAccount(i).getBalanceData().getFinalBalance();
+				if (column == 3) {
+					result += data.getAccount(i).getBalanceData().getCheckedBalance();
+				} else if (column == 1) {
+					result += data.getAccount(i).getBalanceData().getCurrentBalance();
+				} else if (column == 2) {
+					result += data.getAccount(i).getBalanceData().getFinalBalance();
+				}
 			}
 			return result;
 		}
@@ -224,14 +235,14 @@ public class AccountsSummaryPanel extends JPanel {
 	private JPanel getEditPanel() {
 		if (editPanel == null) {
 			editPanel = new JPanel();
-			GridBagLayout gbl_editPanel = new GridBagLayout();
-			editPanel.setLayout(gbl_editPanel);
-			GridBagConstraints gbc_editButton = new GridBagConstraints();
-			gbc_editButton.anchor = GridBagConstraints.WEST;
-			gbc_editButton.weightx = 1.0;
-			gbc_editButton.gridx = 0;
-			gbc_editButton.gridy = 0;
-			editPanel.add(getEditButton(), gbc_editButton);
+			GridBagLayout gblEditPanel = new GridBagLayout();
+			editPanel.setLayout(gblEditPanel);
+			GridBagConstraints gbcEditButton = new GridBagConstraints();
+			gbcEditButton.anchor = GridBagConstraints.WEST;
+			gbcEditButton.weightx = 1.0;
+			gbcEditButton.gridx = 0;
+			gbcEditButton.gridy = 0;
+			editPanel.add(getEditButton(), gbcEditButton);
 		}
 		return editPanel;
 	}

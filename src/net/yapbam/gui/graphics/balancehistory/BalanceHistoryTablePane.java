@@ -51,14 +51,14 @@ public class BalanceHistoryTablePane extends JPanel {
 		setLayout(gridBagLayout);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.insets = new Insets(0, 0, 0, 0);
-		gbc_scrollPane.weighty = 1.0;
-		gbc_scrollPane.gridwidth = 3;
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.gridx = 0;
-		gbc_scrollPane.gridy = 0;
-		add(scrollPane, gbc_scrollPane);
+		GridBagConstraints gbcScrollPane = new GridBagConstraints();
+		gbcScrollPane.insets = new Insets(0, 0, 0, 0);
+		gbcScrollPane.weighty = 1.0;
+		gbcScrollPane.gridwidth = 3;
+		gbcScrollPane.fill = GridBagConstraints.BOTH;
+		gbcScrollPane.gridx = 0;
+		gbcScrollPane.gridy = 0;
+		add(scrollPane, gbcScrollPane);
 		
 		table = new BalanceHistoryTable(data);
 		scrollPane.setViewportView(table);
@@ -75,22 +75,22 @@ public class BalanceHistoryTablePane extends JPanel {
 			}
 		};
 		lblSortBy.setToolTipText("Ce menu permet de trier les opérations par date ou date de valeur"); //LOCAL
-		GridBagConstraints gbc_lblSortBy = new GridBagConstraints();
-		gbc_lblSortBy.insets = new Insets(0, 5, 0, 5);
-		gbc_lblSortBy.gridx = 0;
-		gbc_lblSortBy.gridy = 1;
-		add(lblSortBy, gbc_lblSortBy);
+		GridBagConstraints gbcLblSortBy = new GridBagConstraints();
+		gbcLblSortBy.insets = new Insets(0, 5, 0, 5);
+		gbcLblSortBy.gridx = 0;
+		gbcLblSortBy.gridy = 1;
+		add(lblSortBy, gbcLblSortBy);
 		lblSortBy.setVisible(false); //TODO ... maybe
 		
 		JLabel label = table.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		label.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.insets = new Insets(0, 5, 0, 5);
-		gbc_label.anchor = GridBagConstraints.NORTHWEST;
-		gbc_label.gridx = 1;
-		gbc_label.gridy = 1;
-		add(label, gbc_label);
+		GridBagConstraints gbcLabel = new GridBagConstraints();
+		gbcLabel.insets = new Insets(0, 5, 0, 5);
+		gbcLabel.anchor = GridBagConstraints.NORTHWEST;
+		gbcLabel.gridx = 1;
+		gbcLabel.gridy = 1;
+		add(label, gbcLabel);
 		
 		final JButton btnExport = new JButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
 		btnExport.addActionListener(new ActionListener() {
@@ -109,13 +109,13 @@ public class BalanceHistoryTablePane extends JPanel {
 		});
 		btnExport.setToolTipText("BudgetPanel.export.toolTip"); //$NON-NLS-1$
 		btnExport.setHorizontalAlignment(SwingConstants.RIGHT);
-		GridBagConstraints gbc_btnExport = new GridBagConstraints();
-		gbc_btnExport.anchor = GridBagConstraints.EAST;
-		gbc_btnExport.weightx = 1.0;
-		gbc_btnExport.insets = new Insets(0, 0, 5, 5);
-		gbc_btnExport.gridx = 2;
-		gbc_btnExport.gridy = 1;
-		add(btnExport, gbc_btnExport);
+		GridBagConstraints gbcBtnExport = new GridBagConstraints();
+		gbcBtnExport.anchor = GridBagConstraints.EAST;
+		gbcBtnExport.weightx = 1.0;
+		gbcBtnExport.insets = new Insets(0, 0, 5, 5);
+		gbcBtnExport.gridx = 2;
+		gbcBtnExport.gridy = 1;
+		add(btnExport, gbcBtnExport);
 	}
 
 	public void saveState() {
@@ -147,10 +147,15 @@ public class BalanceHistoryTablePane extends JPanel {
 
 		@Override
 		public String format(Object obj) {
-			if (obj==null) return "";
-			if (obj instanceof Date) return dateFormater.format(obj);
-			if (obj instanceof Double) return currencyFormat.format(obj);
-			return obj.toString();
+			if (obj==null) {
+				return "";
+			} else if (obj instanceof Date) {
+				return dateFormater.format(obj);
+			} else if (obj instanceof Double) {
+				return currencyFormat.format(obj);
+			} else {
+				return obj.toString();
+			}
 		}
 	}
 

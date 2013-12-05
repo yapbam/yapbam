@@ -19,22 +19,22 @@ public class NatureFilterPanel extends ConsistencyCheckedPanel {
 	public NatureFilterPanel() {
 		setBorder(new TitledBorder(null, LocalizationData.get("CustomFilterPanel.nature"), //$NON-NLS-1$
 				TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, null, null));
-		GridBagLayout gbl_Receipts_expensesPanel = new GridBagLayout();
-		setLayout(gbl_Receipts_expensesPanel);
-		GridBagConstraints gbc_receipts = new GridBagConstraints();
-		gbc_receipts.anchor = GridBagConstraints.NORTH;
-		gbc_receipts.weighty = 1.0;
-		gbc_receipts.insets = new Insets(0, 0, 0, 5);
-		gbc_receipts.gridx = 0;
-		gbc_receipts.gridy = 0;
-		add(getReceipts(), gbc_receipts);
-		GridBagConstraints gbc_expenses = new GridBagConstraints();
-		gbc_expenses.weighty = 1.0;
-		gbc_expenses.anchor = GridBagConstraints.NORTHWEST;
-		gbc_expenses.weightx = 1.0;
-		gbc_expenses.gridx = 1;
-		gbc_expenses.gridy = 0;
-		add(getExpenses(), gbc_expenses);
+		GridBagLayout gblReceiptsExpensesPanel = new GridBagLayout();
+		setLayout(gblReceiptsExpensesPanel);
+		GridBagConstraints gbcReceipts = new GridBagConstraints();
+		gbcReceipts.anchor = GridBagConstraints.NORTH;
+		gbcReceipts.weighty = 1.0;
+		gbcReceipts.insets = new Insets(0, 0, 0, 5);
+		gbcReceipts.gridx = 0;
+		gbcReceipts.gridy = 0;
+		add(getReceipts(), gbcReceipts);
+		GridBagConstraints gbcExpenses = new GridBagConstraints();
+		gbcExpenses.weighty = 1.0;
+		gbcExpenses.anchor = GridBagConstraints.NORTHWEST;
+		gbcExpenses.weightx = 1.0;
+		gbcExpenses.gridx = 1;
+		gbcExpenses.gridy = 0;
+		add(getExpenses(), gbcExpenses);
 	}
 
 	@Override

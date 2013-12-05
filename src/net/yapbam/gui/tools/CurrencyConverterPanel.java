@@ -44,7 +44,6 @@ public class CurrencyConverterPanel extends JPanel {
 	private JComboBox currency2 = null;
 	private CurrencyWidget amount1 = null;
 	private CurrencyWidget amount2 = null;
-	private JLabel jLabel = null;
 	
 	private CurrencyConverter converter;
 	private String[] codes;
@@ -82,7 +81,9 @@ public class CurrencyConverterPanel extends JPanel {
 			}
 			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
 			this.title.setText(title);
-			if (!this.converter.isSynchronized()) this.title.setIcon(IconManager.get(Name.ALERT));
+			if (!this.converter.isSynchronized()) {
+				this.title.setIcon(IconManager.get(Name.ALERT));
+			}
 		}
 	}
 
@@ -118,7 +119,7 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints31.gridx = 2;
 		gridBagConstraints31.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints31.gridy = 1;
-		jLabel = new JLabel();
+		JLabel jLabel = new JLabel();
 		jLabel.setText("="); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
@@ -162,11 +163,11 @@ public class CurrencyConverterPanel extends JPanel {
 		this.add(jLabel, gridBagConstraints31);
 		this.add(title, gridBagConstraints4);
 		this.add(getErrField(), gridBagConstraints6);
-		GridBagConstraints gbc_swapButton = new GridBagConstraints();
-		gbc_swapButton.gridwidth = 0;
-		gbc_swapButton.gridx = 0;
-		gbc_swapButton.gridy = 2;
-		add(getSwapButton(), gbc_swapButton);
+		GridBagConstraints gbcSwapButton = new GridBagConstraints();
+		gbcSwapButton.gridwidth = 0;
+		gbcSwapButton.gridx = 0;
+		gbcSwapButton.gridy = 2;
+		add(getSwapButton(), gbcSwapButton);
 		this.add(getJScrollPane(), gridBagConstraints12);
 	}
 
@@ -197,7 +198,9 @@ public class CurrencyConverterPanel extends JPanel {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					amount1.setCurrency(Currency.getInstance(codes[currency1.getSelectedIndex()]));
-					if (tableModel!=null) tableModel.setCurrency(codes[currency1.getSelectedIndex()]);
+					if (tableModel!=null) {
+						tableModel.setCurrency(codes[currency1.getSelectedIndex()]);
+					}
 					doConvert();
 				}
 			});

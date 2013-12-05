@@ -34,23 +34,23 @@ public class ErrorPanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(null);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.insets = new Insets(0, 0, 5, 5);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		add(panel, gbc_panel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		panel.setLayout(gbl_panel);
+		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.insets = new Insets(0, 0, 5, 5);
+		gbcPanel.fill = GridBagConstraints.BOTH;
+		gbcPanel.gridx = 0;
+		gbcPanel.gridy = 0;
+		add(panel, gbcPanel);
+		GridBagLayout gblPanel = new GridBagLayout();
+		panel.setLayout(gblPanel);
 		
 		JLabel icon = new JLabel();
-		GridBagConstraints gbc_icon = new GridBagConstraints();
-		gbc_icon.anchor = GridBagConstraints.WEST;
-		gbc_icon.fill = GridBagConstraints.VERTICAL;
-		gbc_icon.insets = new Insets(0, 0, 0, 5);
-		gbc_icon.gridx = 0;
-		gbc_icon.gridy = 0;
-		panel.add(icon, gbc_icon);
+		GridBagConstraints gbcIcon = new GridBagConstraints();
+		gbcIcon.anchor = GridBagConstraints.WEST;
+		gbcIcon.fill = GridBagConstraints.VERTICAL;
+		gbcIcon.insets = new Insets(0, 0, 0, 5);
+		gbcIcon.gridx = 0;
+		gbcIcon.gridy = 0;
+		panel.add(icon, gbcIcon);
 		icon.setIcon(getIcon());
 		
 		Component label;
@@ -60,24 +60,24 @@ public class ErrorPanel extends JPanel {
 		} else {
 			label = new JLabel(getMessage());
 		}
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.insets = new Insets(0, 10, 0, 0);
-		gbc_label.anchor = GridBagConstraints.WEST;
-		gbc_label.fill = GridBagConstraints.HORIZONTAL;
-		gbc_label.gridx = 1;
-		gbc_label.gridy = 0;
-		panel.add(label, gbc_label);
+		GridBagConstraints gbcLabel = new GridBagConstraints();
+		gbcLabel.insets = new Insets(0, 10, 0, 0);
+		gbcLabel.anchor = GridBagConstraints.WEST;
+		gbcLabel.fill = GridBagConstraints.HORIZONTAL;
+		gbcLabel.gridx = 1;
+		gbcLabel.gridy = 0;
+		panel.add(label, gbcLabel);
 		
 		chckbxDontAskMe = new JCheckBox(getDontAskMeText());
 		chckbxDontAskMe.setHorizontalAlignment(SwingConstants.RIGHT);
 		chckbxDontAskMe.setToolTipText(getDontAskMeTooltip());
-		GridBagConstraints gbc_chckbxDontAskMe = new GridBagConstraints();
-		gbc_chckbxDontAskMe.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxDontAskMe.fill = GridBagConstraints.HORIZONTAL;
-		gbc_chckbxDontAskMe.anchor = GridBagConstraints.EAST;
-		gbc_chckbxDontAskMe.gridx = 0;
-		gbc_chckbxDontAskMe.gridy = 1;
-		add(chckbxDontAskMe, gbc_chckbxDontAskMe);
+		GridBagConstraints gbcChckbxDontAskMe = new GridBagConstraints();
+		gbcChckbxDontAskMe.insets = new Insets(0, 0, 5, 5);
+		gbcChckbxDontAskMe.fill = GridBagConstraints.HORIZONTAL;
+		gbcChckbxDontAskMe.anchor = GridBagConstraints.EAST;
+		gbcChckbxDontAskMe.gridx = 0;
+		gbcChckbxDontAskMe.gridy = 1;
+		add(chckbxDontAskMe, gbcChckbxDontAskMe);
 	}
 
 	protected String getDontAskMeTooltip() {
@@ -102,7 +102,7 @@ public class ErrorPanel extends JPanel {
 	}
 
 	private boolean hasExtendedMessage() {
-		return LocalizationData.getLocale().getLanguage().equals("fr");
+		return "fr".equals(LocalizationData.getLocale().getLanguage());
 	}
 
 	public boolean isDontAskMeSelected() {
