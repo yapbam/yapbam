@@ -48,12 +48,16 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		super(owner, title, data); //$NON-NLS-1$
 		pdc = null;
 		this.ignoreEvents = false;
-		if (transaction!=null) setContent(transaction);
+		if (transaction!=null) {
+			setContent(transaction);
+		}
 	}
 	
 	protected void setPredefinedDescriptionComputer(PredefinedDescriptionComputer pdc) {
 		this.pdc = pdc;
-		if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
+		if (pdc!=null) {
+			description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
+		}
 	}
 
 	protected void setContent(AbstractTransaction transaction) {
@@ -78,7 +82,8 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		Account account = getAccount();
 		int index = account.indexOf(mode);
 		if (index>=0) {
-			modes.set(mode); // If the mode isn't available for this account, do nothing.
+			// If the mode isn't available for this account, do nothing.
+			modes.set(mode);
 		}
 	}
 	
@@ -100,7 +105,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		if (amount==0) {
 			amount=Double.MIN_VALUE;
 		}
-		if (!this.receipt.isSelected()) amount = -amount;
+		if (!this.receipt.isSelected()) {
+			amount = -amount;
+		}
 		return amount;
 	}
 	
@@ -119,11 +126,17 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		// Account
 		Insets insets = new Insets(5,5,5,5);
 		GridBagConstraints c = new GridBagConstraints();
-		c.insets = insets; c.gridx=0; c.gridy=0; c.anchor=GridBagConstraints.WEST;
-		c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		c.insets = insets;
+		c.gridx=0;
+		c.gridy=0;
+		c.anchor=GridBagConstraints.WEST;
+		c.gridwidth=GridBagConstraints.REMAINDER;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx=1.0;
 		accounts = new AccountWidget(data.getGlobalData());
 		List<Account> filterAccounts = data.getFilter().getValidAccounts();
-		if ((filterAccounts!=null) && (filterAccounts.size()==1)) { // If the filter defines only one account, select this account
+		if ((filterAccounts!=null) && (filterAccounts.size()==1)) {
+			// If the filter defines only one account, select this account
 			accounts.set(filterAccounts.get(0));
 		}
 		AccountsListener accountListener = new AccountsListener();
@@ -133,11 +146,16 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 		// Description
 		JPanel panel = new JPanel(new GridBagLayout());
-		c.gridy=1; c.insets=new Insets(0, 0, 0, 0);
+		c.gridy=1;
+		c.insets=new Insets(0, 0, 0, 0);
 		centerPane.add(panel, c);
 		JLabel titleLibelle = new JLabel(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
 		c = new GridBagConstraints();
-		c.insets = insets; c.gridx=0; c.gridy=0; c.anchor = GridBagConstraints.WEST; c.weightx=0.0;
+		c.insets = insets;
+		c.gridx=0;
+		c.gridy=0;
+		c.anchor = GridBagConstraints.WEST;
+		c.weightx=0.0;
 		panel.add(titleLibelle, c);
 		description = new TextWidget();
 		description.setToolTipText(LocalizationData.get("TransactionDialog.description.tooltip")); //$NON-NLS-1$
@@ -148,7 +166,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 			}
 		});
 		description.addFocusListener(AutoSelectFocusListener.INSTANCE);
-		c.gridx=1; c.fill=GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		c.gridx=1;
+		c.fill=GridBagConstraints.HORIZONTAL;
+		c.weightx=1.0;
 		panel.add(description, c);
 		
 		// Comment
@@ -159,28 +179,41 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 		// Next line
 		c = new GridBagConstraints();
-		c.insets = insets; c.gridx=0; c.gridy=2; c.anchor = GridBagConstraints.WEST;
+		c.insets = insets;
+		c.gridx=0;
+		c.gridy=2;
+		c.anchor = GridBagConstraints.WEST;
 		buildDateField(centerPane, AutoSelectFocusListener.INSTANCE, c); // Subclasses may insert a date field here
 
-		c.fill=GridBagConstraints.NONE; c.anchor = GridBagConstraints.WEST; c.weightx = 0;
+		c.fill=GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.WEST;
+		c.weightx = 0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.amount")), c); //$NON-NLS-1$
 		amount = new CurrencyWidget(LocalizationData.getLocale());
 		amount.setColumns(10);
 		amount.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		amount.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		amount.setToolTipText(LocalizationData.get("TransactionDialog.amount.tooltip")); //$NON-NLS-1$
-		c.gridx++; c.weightx = 1.0;c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx++;
+		c.weightx = 1.0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(amount, c);
 		
 		receipt = new JCheckBox(LocalizationData.get("TransactionDialog.receipt")); //$NON-NLS-1$
 		receipt.setToolTipText(LocalizationData.get("TransactionDialog.receipt.tooltip")); //$NON-NLS-1$
 		receipt.addItemListener(new ReceiptListener());
-		c.gridx++; c.weightx=1.0; c.anchor = GridBagConstraints.WEST; c.gridwidth = GridBagConstraints.REMAINDER;
+		c.gridx++;
+		c.weightx=1.0;
+		c.anchor = GridBagConstraints.WEST;
+		c.gridwidth = GridBagConstraints.REMAINDER;
 		centerPane.add(receipt, c);
 
 		// Next line
 		c = new GridBagConstraints();
-		c.insets = insets; c.gridx = 0; c.gridy = 3; c.anchor = GridBagConstraints.WEST;
+		c.insets = insets;
+		c.gridx = 0;
+		c.gridy = 3;
+		c.anchor = GridBagConstraints.WEST;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.mode")), c); //$NON-NLS-1$
 		modes = new ModeWidget(new ModeWidgetParams(data.getGlobalData(), getAccount(), true));
 		modes.getJLabel().setVisible(false);
@@ -188,34 +221,52 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		ModesListener modeListener = new ModesListener();
 		modes.addPropertyChangeListener(ModeWidget.MODE_PROPERTY, modeListener);
 		modes.setToolTipText(LocalizationData.get("TransactionDialog.mode.tooltip")); //$NON-NLS-1$
-		c.gridx = 1; c.weightx = 1.0; c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.weightx = 1.0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(modes, c);
 		
 		c.gridx = 2;
 		buildNumberField(centerPane, AutoSelectFocusListener.INSTANCE, c); // Subclasses may insert a number field here
 
 		categories = new CategoryWidget(this.data.getGlobalData());
-		c.gridx++; c.weightx = 1.0; c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx++;
+		c.weightx = 1.0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(categories, c);
 
 		// Next line
 		c = new GridBagConstraints();
-		c.insets=insets; c.gridx=0; c.gridy=5; c.anchor = GridBagConstraints.WEST;
+		c.insets=insets;
+		c.gridx=0;
+		c.gridy=5;
+		c.anchor = GridBagConstraints.WEST;
 		buildStatementFields(centerPane, AutoSelectFocusListener.INSTANCE, c);
 
 		// Next Line
-		c.gridx=0; c.gridy++; c.gridwidth=GridBagConstraints.REMAINDER; c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx=0;
+		c.gridy++;
+		c.gridwidth=GridBagConstraints.REMAINDER;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(new JSeparator(JSeparator.HORIZONTAL), c);
 
-		c.insets = insets; c.gridx=0; c.gridy++; c.gridwidth = GridBagConstraints.REMAINDER;
-		c.gridheight = 1; c.fill=GridBagConstraints.BOTH; c.weightx = 1.0; c.weighty = 1.0;
+		c.insets = insets;
+		c.gridx=0;
+		c.gridy++;
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.gridheight = 1;
+		c.fill=GridBagConstraints.BOTH;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		subtransactionsPanel = new SubtransactionListPanel(this.data.getGlobalData());
 		subtransactionsPanel.addPropertyChangeListener(SubtransactionListPanel.SUM_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (!ignoreEvents && (amount.getValue() != null) && subtransactionsPanel.isAddToTransactionSelected()) {
 					double diff = (Double) evt.getNewValue() - (Double) evt.getOldValue();
-					if (isExpense()) diff = -diff;
+					if (isExpense()) {
+						diff = -diff;
+					}
 					double newValue = amount.getValue() + diff;
 					if (newValue < 0) {
 						newValue = -newValue;
@@ -284,9 +335,13 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!ignoreEvents) {
-				if (DEBUG) System.out.println("Account " + getAccount() + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+				if (DEBUG) {
+					System.out.println("Account " + getAccount() + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
 				buildModes(isExpense());
-				if (pdc!=null) description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
+				if (pdc!=null) {
+					description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
+				}
 			}
 		}
 	}
@@ -294,7 +349,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	class ReceiptListener implements ItemListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			if (!ignoreEvents) buildModes(e.getStateChange() == ItemEvent.DESELECTED);
+			if (!ignoreEvents) {
+				buildModes(e.getStateChange() == ItemEvent.DESELECTED);
+			}
 		}
 	}
 
@@ -309,7 +366,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 				if (!NullUtils.areEquals(lastSelected, selected) || (isExpense()!=lastWasExpense)) {
 					lastSelected = selected;
 					lastWasExpense = isExpense();
-					if (DEBUG) System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+					if (DEBUG) {
+						System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
+					}
 					optionnalUpdatesOnModeChange();
 				}
 			}
@@ -321,7 +380,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 
 	@Override
 	protected String getOkDisabledCause() {
-		if (this.amount.getValue() == null) return LocalizationData.get("TransactionDialog.bad.amount"); //$NON-NLS-1$
+		if (this.amount.getValue() == null){
+			return LocalizationData.get("TransactionDialog.bad.amount"); //$NON-NLS-1$
+		}
 		return null;
 	}
 	

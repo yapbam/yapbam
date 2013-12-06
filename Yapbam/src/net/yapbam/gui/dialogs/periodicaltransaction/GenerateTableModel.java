@@ -34,28 +34,44 @@ class GenerateTableModel extends GenericTransactionTableModel {
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==ACCOUNT_INDEX) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		if (columnIndex==DESCRIPTION_INDEX) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-		if (columnIndex==DATE_INDEX) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
-		if (columnIndex==AMOUNT_INDEX) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-		if (columnIndex==CANCELLED_INDEX) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.cancelled"); //$NON-NLS-1$
-		if (columnIndex==POSTPONED_INDEX) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.postponed"); //$NON-NLS-1$
+		if (columnIndex==ACCOUNT_INDEX) {
+			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+		} else if (columnIndex==DESCRIPTION_INDEX) {
+			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+		} else if (columnIndex==DATE_INDEX) {
+			return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
+		} else if (columnIndex==AMOUNT_INDEX) {
+			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+		} else if (columnIndex==CANCELLED_INDEX) {
+			return LocalizationData.get("GeneratePeriodicalTransactionsDialog.cancelled"); //$NON-NLS-1$
+		} else if (columnIndex==POSTPONED_INDEX) {
+			return LocalizationData.get("GeneratePeriodicalTransactionsDialog.postponed"); //$NON-NLS-1$
+		}
 		throw new IllegalArgumentException();
 	}
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==DATE_INDEX) return Date.class;
-		if (columnIndex==AMOUNT_INDEX) return double[].class;
-		if (columnIndex==CANCELLED_INDEX || columnIndex==POSTPONED_INDEX) return Boolean.class;
-		return String.class;
+		if (columnIndex==DATE_INDEX) {
+			return Date.class;
+		} else if (columnIndex==AMOUNT_INDEX) {
+			return double[].class;
+		} else if (columnIndex==CANCELLED_INDEX || columnIndex==POSTPONED_INDEX) {
+			return Boolean.class;
+		} else {
+			return String.class;
+		}
 	}
 
 	@Override
 	public int getAlignment(int column) {
-		if (column==AMOUNT_INDEX) return SwingConstants.RIGHT;
-    	if ((column==ACCOUNT_INDEX) || (column==DESCRIPTION_INDEX)) return SwingConstants.LEFT;
-    	else return SwingConstants.CENTER;
+		if (column==AMOUNT_INDEX) {
+			return SwingConstants.RIGHT;
+		} else if ((column==ACCOUNT_INDEX) || (column==DESCRIPTION_INDEX)) {
+			return SwingConstants.LEFT;
+		} else {
+			return SwingConstants.CENTER;
+		}
 	}
 
 	@Override
@@ -66,12 +82,19 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Transaction t = generator.getTransaction(rowIndex);
-		if (columnIndex==ACCOUNT_INDEX) return t.getAccount().getName();
-		if (columnIndex==DESCRIPTION_INDEX) return t.getDescription(true);
-		if (columnIndex==DATE_INDEX) return t.getDate();
-		if (columnIndex==AMOUNT_INDEX) return new double[]{t.getAmount()};
-		if (columnIndex==CANCELLED_INDEX) return generator.isCancelled(rowIndex);
-		if (columnIndex==POSTPONED_INDEX) return generator.isPostponed(rowIndex); 
+		if (columnIndex==ACCOUNT_INDEX) {
+			return t.getAccount().getName();
+		} else if (columnIndex==DESCRIPTION_INDEX) {
+			return t.getDescription(true);
+		} else if (columnIndex==DATE_INDEX) {
+			return t.getDate();
+		} else if (columnIndex==AMOUNT_INDEX) {
+			return new double[]{t.getAmount()};
+		} else if (columnIndex==CANCELLED_INDEX) {
+			return generator.isCancelled(rowIndex);
+		} else if (columnIndex==POSTPONED_INDEX) {
+			return generator.isPostponed(rowIndex); 
+		}
 		throw new IllegalArgumentException();
 	}
 
@@ -125,9 +148,13 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	 * @return true if the date change adds or removes transactions to the transaction list
 	 */
 	public boolean setDate(Date date) {
-		if (NullUtils.areEquals(date, this.generator.getDate())) return false;
+		if (NullUtils.areEquals(date, this.generator.getDate())) {
+			return false;
+		}
 		boolean result = generator.setDate(date);
-		if (result) fireTableDataChanged();
+		if (result) {
+			fireTableDataChanged();
+		}
 		return result;
 	}
 
@@ -141,9 +168,13 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	 */
 	boolean hasImpact() {
 		int nb = getRowCount();
-		if (nb==0) return false;
+		if (nb==0) {
+			return false;
+		}
 		for (int i = 0; i < nb; i++) {
-			if (!generator.isPostponed(i)) return true;
+			if (!generator.isPostponed(i)) {
+				return true;
+			}
 		}
 		return false;
 	}

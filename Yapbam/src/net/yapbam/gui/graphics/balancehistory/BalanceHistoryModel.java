@@ -48,31 +48,43 @@ final class BalanceHistoryModel extends AbstractTableModel {
 	 */
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==VALUE_DATE_COLUMN) return Date.class;
-		return super.getColumnClass(columnIndex);
+		if (columnIndex==VALUE_DATE_COLUMN) {
+			return Date.class;
+		} else {
+			return super.getColumnClass(columnIndex);
+		}
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Transaction transaction = getTransaction(rowIndex);
-		if (columnIndex==0) return transaction.getAccount().getName();
-		if (columnIndex==1) return transaction.getDate();
-		if (columnIndex==2) return transaction.getDescription(!settings.isCommentSeparatedFromDescription());
-		if (columnIndex==3) return transaction.getAmount();
-		if (columnIndex==4) {
+		if (columnIndex==0) {
+			return transaction.getAccount().getName();
+		} else if (columnIndex==1) {
+			return transaction.getDate();
+		} else if (columnIndex==2) {
+			return transaction.getDescription(!settings.isCommentSeparatedFromDescription());
+		} else if (columnIndex==3) {
+			return transaction.getAmount();
+		} else if (columnIndex==4) {
 			Category category = transaction.getCategory();
 			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
-		}
-		if (columnIndex==5) {
+		} else if (columnIndex==5) {
 			Mode mode = transaction.getMode();
 			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
+		} else if (columnIndex==6) {
+			return transaction.getNumber();
+		} else if (columnIndex==VALUE_DATE_COLUMN) {
+			return transaction.getValueDate();
+		} else if (columnIndex==8) {
+			return transaction.getStatement();
+		} else if (columnIndex==9) {
+			return getRemaining(rowIndex);
+		} else if (columnIndex==10) {
+			return transaction.getComment();
+		} else {
+			return "?"; //$NON-NLS-1$
 		}
-		if (columnIndex==6) return transaction.getNumber();
-		if (columnIndex==VALUE_DATE_COLUMN) return transaction.getValueDate();
-		if (columnIndex==8) return transaction.getStatement();
-		if (columnIndex==9) return getRemaining(rowIndex);
-		if (columnIndex==10) return transaction.getComment();
-		return "?"; //$NON-NLS-1$
 	}
 
 	/** Gets the remaining amount after a transaction.
@@ -111,18 +123,31 @@ final class BalanceHistoryModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-		if (columnIndex==3) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-		if (columnIndex==4) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
-		if (columnIndex==5) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
-		if (columnIndex==6) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
-		if (columnIndex==7) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
-		if (columnIndex==8) return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
-		if (columnIndex==9) return LocalizationData.get("BalanceHistory.transaction.remainingBalance"); //$NON-NLS-1$
-		if (columnIndex==10) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
-		return "?"; //$NON-NLS-1$
+		if (columnIndex==0) {
+			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+		} else if (columnIndex==1) {
+			return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
+		} else if (columnIndex==2) {
+			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+		} else if (columnIndex==3) {
+			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+		} else if (columnIndex==4) {
+			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+		} else if (columnIndex==5) {
+			return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
+		} else if (columnIndex==6) {
+			return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
+		} else if (columnIndex==7) {
+			return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
+		} else if (columnIndex==8) {
+			return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
+		} else if (columnIndex==9) {
+			return LocalizationData.get("BalanceHistory.transaction.remainingBalance"); //$NON-NLS-1$
+		} else if (columnIndex==10) {
+			return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
+		} else {
+			return "?"; //$NON-NLS-1$
+		}
 	}
 
 	public int find(Transaction transaction) {
