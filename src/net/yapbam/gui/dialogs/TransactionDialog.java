@@ -53,12 +53,16 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 * @exception IllegalArgumentException if edit and withNextButton are both true
 	 */
 	public static Transaction open(FilteredData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd, boolean withNextButton) {
-		if (edit && withNextButton) throw new IllegalArgumentException();
+		if (edit && withNextButton) {
+			throw new IllegalArgumentException();
+		}
 		GlobalData globalData = data.getGlobalData();
 		if (globalData.getAccountsNumber() == 0) {
 			// Need to create an account first
 			EditAccountDialog.open(globalData, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
-			if (globalData.getAccountsNumber() == 0) return null;
+			if (globalData.getAccountsNumber() == 0) {
+				return null;
+			}
 		}
 		TransactionDialog dialog = new TransactionDialog(owner, data, transaction, edit);
 		if (withNextButton) {
@@ -78,7 +82,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				if (alert) {
 					AlertDialog alertDial = new AlertDialog(owner, LocalizationData.get("ModifyCheckedTransactionAlert.title"), LocalizationData.get("ModifyCheckedTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$
 					alertDial.setVisible(true);
-					if (alertDial.getResult()==null) return null;
+					if (alertDial.getResult()==null) {
+						return null;
+					}
 					if (alertDial.getResult()) {
 						editingOptions.setAlertOnModifyChecked(false);
 						Preferences.INSTANCE.setEditingOptions(editingOptions);
@@ -86,7 +92,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				}
 			}
 			globalData.add(newTransaction);
-			if (transaction != null) globalData.remove(transaction);
+			if (transaction != null) {
+				globalData.remove(transaction);
+			}
 		}
 		return newTransaction;
 	}
@@ -110,17 +118,22 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				Double oldValue = (Double) evt.getOldValue();
 				boolean negativeNew = (newValue != null) && (newValue < 0);
 				boolean negativeOld = (oldValue != null) && (oldValue < 0);
-				if ((negativeNew && !negativeOld) || (negativeOld && !negativeNew)) setTransactionNumberWidget();
+				if ((negativeNew && !negativeOld) || (negativeOld && !negativeNew)) {
+					setTransactionNumberWidget();
+				}
 			}
 		});
-		if (useCheckbook() && !edit) { // If the transaction is a new one and use a check, change to next check number
+		if (useCheckbook() && !edit) {
+			// If the transaction is a new one and use a check, change to next check number
 			checkNumber.setAccount(data.getGlobalData(), getAccount());
 		}
 		this.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data.getGlobalData()) {
 			@Override
 			protected void process(Transaction transaction) {
 				double ranking = getRankingBasedOnDate(now, transaction);
-				if (!transaction.getAccount().equals(getAccount())) ranking = ranking / 100;
+				if (!transaction.getAccount().equals(getAccount())) {
+					ranking = ranking / 100;
+				}
 				super.add(transaction.getDescription(), ranking);
 			}
 		});
@@ -128,7 +141,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			@Override
 			protected void process(Transaction transaction) {
 				double ranking = getRankingBasedOnDate(now, transaction);
-				if (!transaction.getAccount().equals(getAccount())) ranking = ranking / 100;
+				if (!transaction.getAccount().equals(getAccount())) {
+					ranking = ranking / 100;
+				}
 				super.add(transaction.getDescription(), ranking/10);
 				for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 					super.add(transaction.getSubTransaction(i).getDescription(),ranking);
@@ -199,7 +214,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				map.put(ct, ranking);
 			}
 		});
-		if (statement.getText().length()==0) {autoFillStatement();}
+		if (statement.getText().length()==0) {
+			autoFillStatement();
+		}
 	}
 
 	public void setTransactionDate(Date date) {
@@ -227,9 +244,13 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	protected Transaction buildResult() {
 		double amount = getAmount();
 		String statementId = statement.getText().trim();
-		if (statementId.length() == 0) statementId = null;
+		if (statementId.length() == 0) {
+			statementId = null;
+		}
 		String number = transactionNumber.getText().trim();
-		if (number.length() == 0) number = null;
+		if (number.length() == 0) {
+			number = null;
+		}
 		ArrayList<SubTransaction> subTransactions = new ArrayList<SubTransaction>();
 		for (int i = 0; i < subtransactionsPanel.getSubtransactionsCount(); i++) {
 			subTransactions.add(subtransactionsPanel.getSubtransaction(i));
@@ -254,7 +275,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				}
 			}
 		});
-		c.gridx=1; c.weightx=0; c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx=1;
+		c.weightx=0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(defDate, c);
 		c.gridx = 2;
 		c.fill = GridBagConstraints.NONE;
@@ -263,13 +286,16 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		statement = new JTextField(15);
 		statement.setToolTipText(LocalizationData.get("TransactionDialog.statement.tooltip")); //$NON-NLS-1$
 		statement.addFocusListener(focusListener);
-		c.gridx = 3; c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 1.0;
+		c.gridx = 3;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0;
 		centerPane.add(statement, c);
 	}
 
 	@Override
 	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
-		c.fill=GridBagConstraints.NONE; c.weightx=0.0;
+		c.fill=GridBagConstraints.NONE;
+		c.weightx=0.0;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.number")), c); //$NON-NLS-1$
 		JPanel alternateNumberFields = new JPanel(new CardLayout());
 
@@ -291,7 +317,8 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		layout.last(alternateNumberFields);
 
 		c.gridx++;
-		c.fill = GridBagConstraints.HORIZONTAL; c.weightx=1.0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx=1.0;
 		centerPane.add(alternateNumberFields, c);
 		c.gridx++;
 	}
@@ -312,7 +339,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 						Mode m = getCurrentMode();
 						DateStepper vdc = isExpense() ? m.getExpenseVdc() : m.getReceiptVdc();
 						// If the date stepper is no more available (if the transaction payment mode is no more usable), use the default value date computer.
-						if (vdc==null) vdc = DateStepper.IMMEDIATE;
+						if (vdc==null) {
+							vdc = DateStepper.IMMEDIATE;
+						}
 						defDate.setDate(vdc.getNextStep(date.getDate()));
 					}
 					autoFillStatement(DATE_CHANGED);
@@ -343,24 +372,33 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	@Override
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause();
-		if (disabledCause != null) return disabledCause;
-		if (this.date.getDate() == null) return LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
-		if (this.defDate.getDate() == null) return LocalizationData.get("TransactionDialog.bad.valueDate"); //$NON-NLS-1$
-		return null;
+		if (disabledCause != null) {
+			return disabledCause;
+		} else if (this.date.getDate() == null) {
+			return LocalizationData.get("TransactionDialog.bad.date"); //$NON-NLS-1$
+		} else if (this.defDate.getDate() == null) {
+			return LocalizationData.get("TransactionDialog.bad.valueDate"); //$NON-NLS-1$
+		} else {
+			return null;
+		}
 	}
 	
 	private static class CategoryAndType extends XAndType<Category>{
 		private CategoryAndType(boolean receipt, Category mode) {
 			super(receipt, mode);
 		}
-		public Category getCategory() { return x; }
+		public Category getCategory() {
+			return x;
+		}
 	}
 	
 	private static class ModeAndType extends XAndType<Mode>{
 		private ModeAndType(boolean receipt, Mode mode) {
 			super(receipt, mode);
 		}
-		public Mode getMode() { return x; }
+		public Mode getMode() {
+			return x;
+		}
 	}
 	
 	private static class XAndType<T> {
@@ -380,7 +418,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this.receipt != ((XAndType<?>)obj).receipt) return false;
+			if (this.receipt != ((XAndType<?>)obj).receipt) {
+				return false;
+			}
 			return this.x.equals(((XAndType<?>)obj).x);
 		}
 	}
@@ -458,7 +498,11 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			// If we need to switch from text field to check numbers popup
 			Container parent = checkNumber.getParent();
 			CardLayout layout = (CardLayout) parent.getLayout();
-			if (checkNumberRequired) layout.first(parent); else layout.last(parent);
+			if (checkNumberRequired) {
+				layout.first(parent);
+			} else {
+				layout.last(parent);
+			}
 			checkNumberIsVisible = !checkNumberIsVisible;
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(), getAccount())) {
 			checkNumber.setAccount(data.getGlobalData(), getAccount());
@@ -477,11 +521,11 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	/** Constant that indicates the date has changed.
 	 * @see #autoFillStatement(int)
 	 */
-	public static int DATE_CHANGED = 1;
+	private final static int DATE_CHANGED = 1;
 	/** Constant that indicates the date has changed.
 	 * @see #autoFillStatement(int)
 	 */
-	public static int VALUE_DATE_CHANGED = 2;
+	private final static int VALUE_DATE_CHANGED = 2;
 	/** Updates, if needed, the statement id field.
 	 * @param changed an integer that identifies what field has been changed.
 	 * This integer can be the sum of the DATE_CHANGED and VALUE_DATE_CHANGED constants
@@ -497,7 +541,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			} else if (((changed&VALUE_DATE_CHANGED)!=0) && editOptions.isDateBasedAutoStatement()) {
 				aDate = defDate.getDate();
 			}
-			if (aDate!=null) statement.setText(editOptions.getStatementId(aDate));
+			if (aDate!=null) {
+				statement.setText(editOptions.getStatementId(aDate));
+			}
 		}
 	}
 	/** Updates the statement id field.
