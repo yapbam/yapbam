@@ -27,25 +27,25 @@ import net.yapbam.gui.LocalizationData;
 
 class AccountsSummaryTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
-	private static final Set<Class<? extends DataEvent>> ignoredEvents;
+	private static final Set<Class<? extends DataEvent>> IGNORED_EVENTS;
 	private GlobalData data;
 	
 	static {
-		ignoredEvents = new HashSet<Class<? extends DataEvent>>();
-		ignoredEvents.add(CategoryAddedEvent.class);
-		ignoredEvents.add(CategoryRemovedEvent.class);
-		ignoredEvents.add(CategoryPropertyChangedEvent.class);
-		ignoredEvents.add(CheckbookAddedEvent.class);
-		ignoredEvents.add(CheckbookRemovedEvent.class);
-		ignoredEvents.add(CheckbookPropertyChangedEvent.class);
-		ignoredEvents.add(ModeAddedEvent.class);
-		ignoredEvents.add(ModeRemovedEvent.class);
-		ignoredEvents.add(ModePropertyChangedEvent.class);
-		ignoredEvents.add(NeedToBeSavedChangedEvent.class);
-		ignoredEvents.add(PasswordChangedEvent.class);
-		ignoredEvents.add(PeriodicalTransactionsAddedEvent.class);
-		ignoredEvents.add(PeriodicalTransactionsRemovedEvent.class);
-		ignoredEvents.add(URIChangedEvent.class);
+		IGNORED_EVENTS = new HashSet<Class<? extends DataEvent>>();
+		IGNORED_EVENTS.add(CategoryAddedEvent.class);
+		IGNORED_EVENTS.add(CategoryRemovedEvent.class);
+		IGNORED_EVENTS.add(CategoryPropertyChangedEvent.class);
+		IGNORED_EVENTS.add(CheckbookAddedEvent.class);
+		IGNORED_EVENTS.add(CheckbookRemovedEvent.class);
+		IGNORED_EVENTS.add(CheckbookPropertyChangedEvent.class);
+		IGNORED_EVENTS.add(ModeAddedEvent.class);
+		IGNORED_EVENTS.add(ModeRemovedEvent.class);
+		IGNORED_EVENTS.add(ModePropertyChangedEvent.class);
+		IGNORED_EVENTS.add(NeedToBeSavedChangedEvent.class);
+		IGNORED_EVENTS.add(PasswordChangedEvent.class);
+		IGNORED_EVENTS.add(PeriodicalTransactionsAddedEvent.class);
+		IGNORED_EVENTS.add(PeriodicalTransactionsRemovedEvent.class);
+		IGNORED_EVENTS.add(URIChangedEvent.class);
 	}
 	
 	AccountsSummaryTableModel(JTable table, GlobalData data) {
@@ -54,7 +54,7 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if (!ignoredEvents.contains(event.getClass())) {
+				if (!IGNORED_EVENTS.contains(event.getClass())) {
 					fireTableDataChanged();
 				}
 			}
@@ -63,8 +63,7 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex!=0) return Double.class;
-		return Object.class;
+		return columnIndex==0 ? Object.class : Double.class;
 	}
 
 	public int getColumnCount() {
@@ -73,24 +72,34 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		if (columnIndex==3) return LocalizationData.get("AccountsSummary.CheckedBalance"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("AccountsSummary.CurrentBalance"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("AccountsSummary.FinalBalance"); //$NON-NLS-1$
-		return "?"; //$NON-NLS-1$
+		if (columnIndex==0) {
+			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+		} else if (columnIndex==1) {
+			return LocalizationData.get("AccountsSummary.CurrentBalance"); //$NON-NLS-1$
+		} else if (columnIndex==2) {
+			return LocalizationData.get("AccountsSummary.FinalBalance"); //$NON-NLS-1$
+		} else if (columnIndex==3) {
+			return LocalizationData.get("AccountsSummary.CheckedBalance"); //$NON-NLS-1$
+		} else {
+			return "?"; //$NON-NLS-1$
+		}
 	}
 
 	public int getRowCount() {
-		if (data==null) return 0;
-		int nb = data.getAccountsNumber();
-		return nb;
+		return data==null ? 0 : data.getAccountsNumber();
 	}
 	
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (columnIndex==0) return data.getAccount(rowIndex).getName();
-		if (columnIndex==3) return data.getAccount(rowIndex).getBalanceData().getCheckedBalance();
-		if (columnIndex==1) return data.getAccount(rowIndex).getBalanceData().getCurrentBalance();
-		if (columnIndex==2) return data.getAccount(rowIndex).getBalanceData().getFinalBalance();
-		return null;
+		if (columnIndex==0) {
+			return data.getAccount(rowIndex).getName();
+		} else if (columnIndex==1) {
+			return data.getAccount(rowIndex).getBalanceData().getCurrentBalance();
+		} else if (columnIndex==2) {
+			return data.getAccount(rowIndex).getBalanceData().getFinalBalance();
+		} else if (columnIndex==3) {
+			return data.getAccount(rowIndex).getBalanceData().getCheckedBalance();
+		} else {
+			return null;
+		}
 	}
 }

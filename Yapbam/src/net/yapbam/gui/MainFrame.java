@@ -114,14 +114,16 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				
 				// As the check for update is a (possibly) long background task, we do not wait its completion before showing the dialogs
 				// So, we do not need to use a BackgroundTaskContext there
-				if (Preferences.INSTANCE.isWelcomeAllowed()) new WelcomeDialog(frame.getJFrame(), frame.getData()).setVisible(true);
+				if (Preferences.INSTANCE.isWelcomeAllowed()) {
+					new WelcomeDialog(frame.getJFrame(), frame.getData()).setVisible(true);
+				}
 				
 				if (!Preferences.INSTANCE.isFirstRun()) {
 					String importantNews = buildNews();
 					if (importantNews.length()>0) {
 						BasicHTMLDialog dialog = new BasicHTMLDialog(frame.getJFrame(), LocalizationData.get("ImportantNews.title"), LocalizationData.get("ImportantNews.intro"), BasicHTMLDialog.Type.INFO); //$NON-NLS-1$ //$NON-NLS-2$
 						dialog.setContent(importantNews);
-						dialog.setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+						dialog.setVisible(true);
 					}
 				}
 			}
@@ -148,10 +150,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					// the window for exiting from yapbam.
 					Window[] windows = Window.getWindows();
 					for (int i = 0; i < windows.length; i++) {
-						if (windows[i] instanceof MainFrame) {
-							if (!windows[i].isVisible()) {
-								windows[i].dispatchEvent(new WindowEvent(windows[i],WindowEvent.WINDOW_CLOSING));
-							}
+						if ((windows[i] instanceof MainFrame) && !windows[i].isVisible()) {
+							windows[i].dispatchEvent(new WindowEvent(windows[i],WindowEvent.WINDOW_CLOSING));
 						}
 					}
 				}
@@ -170,7 +170,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		}
 		// The lines below are a sample for next time we want to add a "important" release information
 		if (NullUtils.compareTo(lastVersion, new ReleaseInfo("0.14.5 (24/03/2013)"), true)<=0) { //$NON-NLS-1$
-			if (buf.length()>0) buf.append("<br><br><hr><br>");
+			if (buf.length()>0) {
+				buf.append("<br><br><hr><br>");
+			}
 			String message = MessageFormat.format(HtmlUtils.removeHtmlTags(LocalizationData.get("ImportantNews.0.14.5")), //$NON-NLS-1$
 					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -249,12 +251,10 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				private final boolean CHECK_EVENT_ON_EDT = Boolean.getBoolean("CheckGlobalDataEventAreOnEDT"); //$NON-NLS-1$
 				@Override
 				protected void fireEvent(DataEvent event) {
-					if (isEventsEnabled()) {
-						if (CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread() && (getNumberOfListeners()>0)) {
-							RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !"); //$NON-NLS-1$
-							e.fillInStackTrace();
-							e.printStackTrace();
-						}
+					if (isEventsEnabled() && CHECK_EVENT_ON_EDT && !SwingUtilities.isEventDispatchThread() && (getNumberOfListeners()>0)) {
+						RuntimeException e = new RuntimeException("WARNING: a GlobalData event is thrown in a thread different from the event dispatch thread !"); //$NON-NLS-1$
+						e.fillInStackTrace();
+						e.printStackTrace();
 					}
 					super.fireEvent(event);
 				}
@@ -273,7 +273,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		for (int i = 0; i < plugins.length; i++) {
 			if (pluginContainers[i].isActivated()) {
 				this.plugins[i] = (AbstractPlugIn) pluginContainers[i].build(this.filteredData, restartData[i]);
-				if (this.plugins[i]!=null) this.plugins[i].setContext(this);
+				if (this.plugins[i]!=null) {
+					this.plugins[i].setContext(this);
+				}
 			}
 			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instantiation
 				ErrorManager.INSTANCE.log(null, pluginContainers[i].getInstanciationException());
@@ -304,7 +306,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		restoreMainFramePosition();
 		getStateSaver().restoreState((TabbedPane)getContentPane(), this.getClass().getCanonicalName());
 		for (int i = 0; i < plugins.length; i++) {
-			if (plugins[i] != null) plugins[i].restoreState();
+			if (plugins[i] != null) {
+				plugins[i].restoreState();
+			}
 		}
 		//If the order of the tabs leaves the orginal first tab in the first position,
 		//No event is sent to refresh the displayed menu. So, we "manually" invoke the menu refresh. 
@@ -342,8 +346,12 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	private void updateWindowTitle() {
 		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
 		URI uri = data.getURI();
-		if (uri!=null) title = title + " - " + YapbamPersistenceManager.MANAGER.getAdapter(uri).getService().getDisplayable(uri); //$NON-NLS-1$
-		if (data.somethingHasChanged()) title = title+" *"; //$NON-NLS-1$
+		if (uri!=null) {
+			title = title + " - " + YapbamPersistenceManager.MANAGER.getAdapter(uri).getService().getDisplayable(uri); //$NON-NLS-1$
+		}
+		if (data.somethingHasChanged()) {
+			title = title+" *"; //$NON-NLS-1$
+		}
 		this.getJFrame().setTitle(title);
 	}
 	
@@ -359,7 +367,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		setLookAndFeel();
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new MainFrame(filteredData, restartData);
 			}
@@ -381,7 +389,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			}
 			UIManager.setLookAndFeel(lookAndFeelClass);
 			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 		try {
 			int iconSize = 16; // This is the default icon size
 			if (!lookAndFeelName.equalsIgnoreCase("Nimbus")) { //$NON-NLS-1$
@@ -419,7 +428,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		int w = ((getJFrame().getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0) ? size.width : -1;
 		getStateSaver().put(FRAME_SIZE_WIDTH, Integer.toString(w));
 		for (int i = 0; i < getPlugInsNumber(); i++) {
-			if (getPlugIn(i)!=null) getPlugIn(i).saveState();
+			if (getPlugIn(i)!=null) {
+				getPlugIn(i).saveState();
+			}
 		}
 		getStateSaver().saveState((TabbedPane)getContentPane(), this.getClass().getCanonicalName());
 		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
@@ -462,36 +473,42 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		getJFrame().setLocation(x,y);
 		getJFrame().setSize(width,height);
 		int extendedState = Frame.NORMAL;
-		if (height<0) extendedState = extendedState | Frame.MAXIMIZED_VERT;
-		if (width<0) extendedState = extendedState | Frame.MAXIMIZED_HORIZ;
+		if (height<0) {
+			extendedState = extendedState | Frame.MAXIMIZED_VERT;
+		}
+		if (width<0) {
+			extendedState = extendedState | Frame.MAXIMIZED_HORIZ;
+		}
 		getJFrame().setExtendedState(extendedState);
 	}
 	
 	private void initData(String path) {
 		URI uri = null;
-		if (path!=null) { // If a path was provided
+		if (path!=null) {
+			// If a path was provided
 			uri = new File(path).toURI();
 		} else {
 			// Restore the data according to the Preferences
 			StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
-			if (startOptions.isRememberFile()) {
-				if (getStateSaver().contains(LAST_URI)) {
-					try {
-						uri = new URI((String) getStateSaver().get(LAST_URI));
-					} catch (URISyntaxException e1) {
-						// The saved uri is invalidFormat
-						//TODO inform the user !!!
-					}
+			if (startOptions.isRememberFile() && getStateSaver().contains(LAST_URI)) {
+				try {
+					uri = new URI((String) getStateSaver().get(LAST_URI));
+				} catch (URISyntaxException e1) {
+					// The saved uri is invalidFormat
+					//TODO inform the user !!!
 				}
 			}
 		}
-		final boolean restore = (path == null);
+		final boolean restore = path == null;
 		if (uri!=null) {
 			final URI finalURI = uri; // Just to be able to use it in the ErrorManager.
 			YapbamPersistenceManager.MANAGER.read(getJFrame(), new YapbamDataWrapper(getData()), uri, new PersistenceManager.ErrorProcessor() {
 				@Override
 				public boolean processError(Throwable e) {
-					if (e instanceof UnsupportedSchemeException) return true; // The scheme is no more supported, simply ignore the error
+					if (e instanceof UnsupportedSchemeException) {
+						// The scheme is no more supported, simply ignore the error
+						return true;
+					}
 					Service service = YapbamPersistenceManager.MANAGER.getAdapter(finalURI).getService();
 					String displayedURI = service.getDisplayable(finalURI);
 					File file = service.getLocalFile(finalURI);
@@ -507,7 +524,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),displayedURI)); //$NON-NLS-1$
 						}
 					} else if (e instanceof IOException) {
-						if ((e instanceof UnsupportedFileVersionException) || (e instanceof UnsupportedFormatException)) return false; 
+						if ((e instanceof UnsupportedFileVersionException) || (e instanceof UnsupportedFormatException)) {
+							return false; 
+						}
 						if (restore) {
 							ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),displayedURI)); //$NON-NLS-1$
 						} else {
@@ -522,7 +541,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			if (restore && (uri!=null) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
 				try {
 					Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
-					if (filter!=null) getFilteredData().setFilter(filter);
+					if (filter!=null) {
+						getFilteredData().setFilter(filter);
+					}
 				} catch (Exception e) {
 					ErrorManager.INSTANCE.log(getJFrame(), e);
 					JOptionPane.showMessageDialog(getJFrame(), LocalizationData.get("MainFrame.ReadLastFilterError"), LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$	

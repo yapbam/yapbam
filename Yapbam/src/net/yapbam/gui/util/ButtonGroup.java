@@ -44,8 +44,8 @@ public class ButtonGroup extends Observable implements Serializable {
 				JToggleButton b = (JToggleButton) e.getItem();
 				if (e.getStateChange()==ItemEvent.SELECTED) {
 					setSelected(b);
-				} else {
-					if (selected==b) setSelected(null);
+				} else if (selected==b) {
+					setSelected(null);
 				}
 			}
 		};
@@ -57,10 +57,14 @@ public class ButtonGroup extends Observable implements Serializable {
 	 * @exception NullPointerException if the button is null
 	 */
 	public void add(JToggleButton b) {
-		if (b==null) throw new NullPointerException();
+		if (b==null) {
+			throw new NullPointerException();
+		}
 		buttons.add(b);
 		b.addItemListener(listener);
-		if (b.isSelected()) setSelected(b);
+		if (b.isSelected()) {
+			setSelected(b);
+		}
 	}
 
 	/**
@@ -70,10 +74,14 @@ public class ButtonGroup extends Observable implements Serializable {
 	 * @exception NullPointerException if the button is null
 	 */
 	public void remove(JToggleButton b) {
-		if (b == null) throw new NullPointerException();
+		if (b == null) {
+			throw new NullPointerException();
+		}
 		if (this.buttons.remove(b)) {
 			b.removeItemListener(this.listener);
-			if (this.selected==b) setSelected(null);
+			if (this.selected==b) {
+				setSelected(null);
+			}
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -84,7 +92,9 @@ public class ButtonGroup extends Observable implements Serializable {
 	 * <code>ButtonGroup</code> are selected.
 	 */
 	public void clearSelection() {
-		if (selected != null) setSelected(null);
+		if (selected != null) {
+			setSelected(null);
+		}
 	}
 
 	/**
@@ -100,12 +110,20 @@ public class ButtonGroup extends Observable implements Serializable {
 	 * @exception IllegalArgumentException if the button is not in this group
 	 */
 	public void setSelected(JToggleButton b) {
-		if (b==this.selected) return;
-		if ((b!=null) && (!this.buttons.contains(b))) throw new IllegalArgumentException();
+		if (b==this.selected) {
+			return;
+		}
+		if ((b!=null) && (!this.buttons.contains(b))) {
+			throw new IllegalArgumentException();
+		}
 		JToggleButton old = this.selected;
 		this.selected = b;
-		if (b!=null) b.setSelected(true);
-		if (old!=null) old.setSelected(false);
+		if (b!=null) {
+			b.setSelected(true);
+		}
+		if (old!=null) {
+			old.setSelected(false);
+		}
 		this.setChanged();
 		this.notifyObservers(this.selected);
 	}

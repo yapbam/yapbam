@@ -58,16 +58,16 @@ public class DnDTabbedPane extends JTabbedPane {
   private static Rectangle rBackward = new Rectangle();
   private static Rectangle rForward  = new Rectangle();
   private static int rwh = 20;
-  private static int buttonsize = 30; //xxx magic number of scroll button size
+  private static final int BUTTON_SIZE = 30; // magic number of scroll button size
   private void autoScrollTest(Point glassPt) {
       Rectangle r = getTabAreaBounds();
       int tabPlacement = getTabPlacement();
       if(tabPlacement==TOP || tabPlacement==BOTTOM) {
           rBackward.setBounds(r.x, r.y, rwh, r.height);
-          rForward.setBounds(r.x+r.width-rwh-buttonsize, r.y, rwh+buttonsize, r.height);
-      }else if(tabPlacement==LEFT || tabPlacement==RIGHT) {
+          rForward.setBounds(r.x+r.width-rwh-BUTTON_SIZE, r.y, rwh+BUTTON_SIZE, r.height);
+      } else if(tabPlacement==LEFT || tabPlacement==RIGHT) {
           rBackward.setBounds(r.x, r.y, r.width, rwh);
-          rForward.setBounds(r.x, r.y+r.height-rwh-buttonsize, r.width, rwh+buttonsize);
+          rForward.setBounds(r.x, r.y+r.height-rwh-BUTTON_SIZE, r.width, rwh+BUTTON_SIZE);
       }
       rBackward = SwingUtilities.convertRectangle(getParent(), rBackward, glassPane);
       rForward  = SwingUtilities.convertRectangle(getParent(), rForward,  glassPane);
@@ -136,11 +136,13 @@ public class DnDTabbedPane extends JTabbedPane {
               Point tabPt = e.getDragOrigin();
               dragTabIndex = indexAtLocation(tabPt.x, tabPt.y);
               //"disabled tab problem".
-              if(dragTabIndex<0 || !isEnabledAt(dragTabIndex)) return;
+              if (dragTabIndex<0 || !isEnabledAt(dragTabIndex)) {
+            	  return;
+              }
               initGlassPane(e.getComponent(), e.getDragOrigin());
-              try{
+              try {
                   e.startDrag(DragSource.DefaultMoveDrop, t, dsl);
-              }catch(InvalidDnDOperationException idoe) {
+              } catch(InvalidDnDOperationException idoe) {
                   idoe.printStackTrace();
               }
           }
@@ -151,8 +153,11 @@ public class DnDTabbedPane extends JTabbedPane {
 
   class CDropTargetListener implements DropTargetListener{
       @Override public void dragEnter(DropTargetDragEvent e) {
-          if(isDragAcceptable(e)) e.acceptDrag(e.getDropAction());
-          else e.rejectDrag();
+          if(isDragAcceptable(e)) {
+        	  e.acceptDrag(e.getDropAction());
+          } else {
+        	  e.rejectDrag();
+          }
       }
       @Override public void dragExit(DropTargetEvent e) {}
       @Override public void dropActionChanged(DropTargetDragEvent e) {}
@@ -168,7 +173,9 @@ public class DnDTabbedPane extends JTabbedPane {
           if(hasGhost()) {
               glassPane.setPoint(glassPt);
           }
-          if(!_glassPt.equals(glassPt)) glassPane.repaint();
+          if(!_glassPt.equals(glassPt)) {
+        	  glassPane.repaint();
+          }
           _glassPt = glassPt;
           autoScrollTest(glassPt);
       }
@@ -184,7 +191,9 @@ public class DnDTabbedPane extends JTabbedPane {
       }
       private boolean isDragAcceptable(DropTargetDragEvent e) {
           Transferable t = e.getTransferable();
-          if(t==null) return false;
+          if(t==null) {
+        	  return false;
+          }
           DataFlavor[] f = e.getCurrentDataFlavors();
           if(t.isDataFlavorSupported(f[0]) && dragTabIndex>=0) {
               return true;
@@ -193,7 +202,9 @@ public class DnDTabbedPane extends JTabbedPane {
       }
       private boolean isDropAcceptable(DropTargetDropEvent e) {
           Transferable t = e.getTransferable();
-          if(t==null) return false;
+          if(t==null) {
+        	  return false;
+          }
           DataFlavor[] f = t.getTransferDataFlavors();
           if(t.isDataFlavorSupported(f[0]) && dragTabIndex>=0) {
               return true;
@@ -222,14 +233,22 @@ public class DnDTabbedPane extends JTabbedPane {
       boolean isTB = getTabPlacement()==JTabbedPane.TOP || getTabPlacement()==JTabbedPane.BOTTOM;
       for(int i=0;i<getTabCount();i++) {
           Rectangle r = getBoundsAt(i);
-          if(isTB) r.setRect(r.x-r.width/2, r.y,  r.width, r.height);
-          else     r.setRect(r.x, r.y-r.height/2, r.width, r.height);
-          if(r.contains(tabPt)) return i;
+          if(isTB) {
+        	  r.setRect(r.x-r.width/2, r.y,  r.width, r.height);
+          } else {
+        	  r.setRect(r.x, r.y-r.height/2, r.width, r.height);
+          }
+          if(r.contains(tabPt)) {
+        	  return i;
+          }
       }
       Rectangle r = getBoundsAt(getTabCount()-1);
-      if(isTB) r.setRect(r.x+r.width/2, r.y,  r.width, r.height);
-      else     r.setRect(r.x, r.y+r.height/2, r.width, r.height);
-      return   r.contains(tabPt)?getTabCount():-1;
+      if(isTB) {
+    	  r.setRect(r.x+r.width/2, r.y,  r.width, r.height);
+      } else {
+    	  r.setRect(r.x, r.y+r.height/2, r.width, r.height);
+      }
+      return r.contains(tabPt)?getTabCount():-1;
   }
   protected void convertTab(int prev, int next) {
       if(next<0 || prev==next) {
@@ -247,7 +266,9 @@ public class DnDTabbedPane extends JTabbedPane {
       setEnabledAt(tgtindex, flg);
       //When you drag'n'drop a disabled tab, it finishes enabled and selected.
       //pointed out by dlorde
-      if(flg) setSelectedIndex(tgtindex);
+      if(flg) {
+    	  setSelectedIndex(tgtindex);
+      }
 
       //I have a component in all tabs (jlabel with an X to close the tab) and when i move a tab the component disappear.
       //pointed out by Daniel Dario Morales Salas
@@ -300,7 +321,9 @@ public class DnDTabbedPane extends JTabbedPane {
       //Rectangle compRect   = getSelectedComponent().getBounds();
       Component comp = getSelectedComponent();
       int idx = 0;
-      while(comp==null && idx<getTabCount()) comp = getComponentAt(idx++);
+      while(comp==null && idx<getTabCount()) {
+    	  comp = getComponentAt(idx++);
+      }
       Rectangle compRect = (comp==null)?new Rectangle():comp.getBounds();
       int tabPlacement = getTabPlacement();
       if(tabPlacement==TOP) {

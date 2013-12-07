@@ -11,11 +11,11 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
-
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
@@ -50,7 +50,9 @@ public class Importer {
 	}
 
 	public ImportError[] importFile(GlobalData data) throws IOException {
-		if (data!=null) data.setEventsEnabled(false);
+		if (data!=null) {
+			data.setEventsEnabled(false);
+		}
 		this.current = null;
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
@@ -73,7 +75,9 @@ public class Importer {
 				} catch (IOException e) {}
 			}
 		} finally {
-			if (data!=null) data.setEventsEnabled(true);
+			if (data!=null) {
+				data.setEventsEnabled(true);
+			}
 		}
 		return errors.toArray(new ImportError[errors.size()]);
 	}
@@ -146,7 +150,9 @@ public class Importer {
 				double initialBalance = account.getInitialBalance() + amount;
 				data.setInitialBalance(account, initialBalance);
 			}
-			if (hasError) throw new ImportException(new ImportError(lineNumber, fields, invalidFields));
+			if (hasError) {
+				throw new ImportException(new ImportError(lineNumber, fields, invalidFields));
+			}
 		} else {
 			// Description
 			index = parameters.getImportedFileColumns()[ExportTableModel.DESCRIPTION_INDEX];
@@ -157,7 +163,9 @@ public class Importer {
 			Date valueDate = null;
 			try {
 				valueDate = parseDate(getField(fields, index, "")); //$NON-NLS-1$
-				if (valueDate==null) valueDate = date;
+				if (valueDate==null) {
+					valueDate = date;
+				}
 			} catch (ParseException e) {
 				invalidFields[index] = true;
 				hasError = true;
@@ -171,7 +179,9 @@ public class Importer {
 			String categoryName = getField(fields, index, ""); //$NON-NLS-1$
 			Category category = Category.UNDEFINED;
 			if (data!=null) {
-				if (categoryName.length()>0) category = data.getCategory(categoryName);
+				if (categoryName.length()>0) {
+					category = data.getCategory(categoryName);
+				}
 				if (category==null) {
 					category = new Category(categoryName);
 					data.add(category);
@@ -190,14 +200,18 @@ public class Importer {
 				// Statement
 				index = parameters.getImportedFileColumns()[ExportTableModel.STATEMENT_INDEX];
 				String statement = getField(fields, index, ""); //$NON-NLS-1$
-				if (statement.length()==0) statement = null;
+				if (statement.length()==0) {
+					statement = null;
+				}
 					
 				// Mode
 				index = parameters.getImportedFileColumns()[ExportTableModel.MODE_INDEX];
 				String modeName = getField(fields, index, ""); //$NON-NLS-1$
 				Mode mode = Mode.UNDEFINED;
 				if (data!=null) {
-					if (modeName.length()>0) mode = account.getMode(modeName);
+					if (modeName.length()>0) {
+						mode = account.getMode(modeName);
+					}
 					if (mode==null) {
 						mode = new Mode(modeName, DateStepper.IMMEDIATE, DateStepper.IMMEDIATE, false);
 						data.add(account, mode);
@@ -213,7 +227,9 @@ public class Importer {
 	}
 
 	private String getField(String[] fields, int index, String defaultValue) {
-		if ((index==-1) || (index>=fields.length)) return defaultValue;
+		if ((index==-1) || (index>=fields.length)) {
+			return defaultValue;
+		}
 		return fields[index].trim();
 	}
 	
@@ -232,7 +248,9 @@ public class Importer {
 			format = NumberFormat.getInstance(LocalizationData.getLocale());
 			ppos.setIndex(0);
 			Number parsed = format.parse(text, ppos);
-			if (parsed==null) throw new ParseException(text, ppos.getIndex());
+			if (parsed==null) {
+				throw new ParseException(text, ppos.getIndex());
+			}
 			double value = parsed.doubleValue();
 			if (ppos.getIndex()<text.length()) {
 				throw new ParseException(text, ppos.getIndex());
@@ -242,7 +260,9 @@ public class Importer {
 	}
 	
 	private Date parseDate(String text) throws ParseException {
-		if (text.length()==0) return null;
+		if (text.length()==0) {
+			return null;
+		}
 		return dateFormatter.parse(text);
 	}
 	
@@ -257,7 +277,7 @@ public class Importer {
 		String number;
 		Date valueDate;
 		String statement;
-		ArrayList<SubTransaction> subtransactions;
+		List<SubTransaction> subtransactions;
 		
 		public CurrentTransaction(Account account, String description, String comment, Date date, double amount, Category category, Mode mode,
 				String number, Date valueDate, String statement) {
@@ -282,7 +302,7 @@ public class Importer {
 	
 	@SuppressWarnings("serial")
 	static private class ImportException extends Exception {
-		private ImportError error;
+		private final ImportError error;
 
 		public ImportException(ImportError error) {
 			super();
