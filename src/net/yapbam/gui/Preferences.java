@@ -44,6 +44,7 @@ import net.yapbam.util.PreferencesUtils;
 
 /** This class represents the Yapbam application preferences */
 public class Preferences {
+	private static final String FONT_SIZE_RATIO = "Font.sizeRatio"; //$NON-NLS-1$
 	private static final String LANGUAGE = "lang"; //$NON-NLS-1$
 	private static final String COUNTRY = "country"; //$NON-NLS-1$
 	private static final String LANGUAGE_DEFAULT_VALUE = "default"; //$NON-NLS-1$
@@ -170,9 +171,13 @@ public class Preferences {
 	 */
 	public Locale getLocale() {
 		String lang = this.properties.getProperty(LANGUAGE);
-		if (LANGUAGE_DEFAULT_VALUE.equalsIgnoreCase(lang)) lang = LocalizationData.SYS_LOCALE.getLanguage();
+		if (LANGUAGE_DEFAULT_VALUE.equalsIgnoreCase(lang)) {
+			lang = LocalizationData.SYS_LOCALE.getLanguage();
+		}
 		String country = this.properties.getProperty(COUNTRY);
-		if (COUNTRY_DEFAULT_VALUE.equalsIgnoreCase(country)) country = LocalizationData.SYS_LOCALE.getCountry();
+		if (COUNTRY_DEFAULT_VALUE.equalsIgnoreCase(country)) {
+			country = LocalizationData.SYS_LOCALE.getCountry();
+		}
 		return new Locale(lang, country);
 	}
 	
@@ -222,7 +227,9 @@ public class Preferences {
 		for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
 			// Prior the 0.9.8, the class name were used instead of the generic name.
 			// It caused problem when changing java version (ie: Nimbus in java 1.6 was implemented by a class in com.sun.etc and in javax.swing in java 1.7)
-			if (lookAndFeelInfo.getClassName().equals(className)) return lookAndFeelInfo.getName();
+			if (lookAndFeelInfo.getClassName().equals(className)) {
+				return lookAndFeelInfo.getName();
+			}
 		}
 		return null;
 	}
@@ -237,7 +244,9 @@ public class Preferences {
 	
 	public String getHttpProxyHost() {
 		String property = properties.getProperty(PROXY);
-		if ((property==null) || (property.length()==0)) return null;
+		if ((property==null) || (property.length()==0)) {
+			return null;
+		}
 		int index = property.lastIndexOf(':');
 		if (index<0) {
 			return property;
@@ -248,7 +257,9 @@ public class Preferences {
 	
 	public int getHttpProxyPort() {
 		String property = properties.getProperty(PROXY);
-		if (property==null) return -1;
+		if (property==null) {
+			return -1;
+		}
 		String[] tokens = StringUtils.split(property, ':');
 		try {
 			return Integer.parseInt(tokens[tokens.length-1]);
@@ -259,20 +270,26 @@ public class Preferences {
 
 	public Proxy getHttpProxy() throws UnknownHostException {
 		String property = getHttpProxyHost();
-		if (property==null) return Proxy.NO_PROXY;
+		if (property==null) {
+			return Proxy.NO_PROXY;
+		}
 		InetAddress host = InetAddress.getByName(property);
 		return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(host, Preferences.INSTANCE.getHttpProxyPort()));
 	}
 
 	public String getHttpProxyUser() {
 		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
-		if (property == null) return null;
+		if (property == null) {
+			return null;
+		}
 		return new StringTokenizer(Crypto.decrypt(KEY, property), ":").nextToken(); //$NON-NLS-1$
 	}
 	
 	public String getHttpProxyPassword() {
 		String property = this.properties.getProperty(PROXY_AUTHENTICATION);
-		if (property == null) return null;
+		if (property == null) {
+			return null;
+		}
 		StringTokenizer tokens = new StringTokenizer(Crypto.decrypt(KEY, property), ":"); //$NON-NLS-1$
 		tokens.nextToken();
 		return tokens.nextToken();
@@ -316,12 +333,10 @@ public class Preferences {
 	 */
 	public boolean isWelcomeAllowed() {
 		String property = this.properties.getProperty(WELCOME_DIALOG_ALLOWED);
-		if (property==null) return true;
-		try {
-			return Boolean.parseBoolean(property);
-		} catch (Exception e) {
+		if (property==null) {
 			return true;
 		}
+		return Boolean.parseBoolean(property);
 	}
 	
 	public void setWelcomeAllowed(boolean allowed) {
@@ -334,7 +349,7 @@ public class Preferences {
 	public int getAutoUpdatePeriod() {
 		try {
 			return Integer.parseInt(this.properties.getProperty(AUTO_UPDATE_PERIOD));
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 			return 0;
 		}
 	}
@@ -382,7 +397,8 @@ public class Preferences {
 //		else if (!file.isDirectory()) {
 //			ErrorManager.INSTANCE.display(null, null, MessageFormat.format("It seems your yapbam copy is corrupted.\n {0} is not a directory.",file.getAbsolutePath()));
 //		}
-		if (file.exists() && file.isDirectory()) { // Adds the custom plugins
+		if (file.exists() && file.isDirectory()) {
+			// Add the custom plugins
 			file.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File file) {
@@ -478,7 +494,9 @@ public class Preferences {
 	 */
 	public String getProperty(String key, String defaultValue) {
 		String result = getProperty(key);
-		if (result==null) result = defaultValue;
+		if (result==null) {
+			result = defaultValue;
+		}
 		return result;
 	}
 	
@@ -509,7 +527,9 @@ public class Preferences {
 	 * @throws IllegalArgumentException if the action is an invalid parameter (not one of the value listed above) 
 	 */
 	public void setCrashReportAction(int action) {
-		if (Math.abs(action)>1) throw new IllegalArgumentException();
+		if (Math.abs(action)>1) {
+			throw new IllegalArgumentException();
+		}
 		this.properties.setProperty(CRASH_REPORT_ACTION,Integer.toString(action));
 	}
 	
@@ -531,7 +551,9 @@ public class Preferences {
 			SimpleDateFormat format = new SimpleDateFormat(defaultPattern);
 			try {
 				format = new SimpleDateFormat(pattern, getLocale());
-			} catch (Exception e) {}
+			} catch (RuntimeException e) {
+				// If statement format is wrong, use the default format
+			}
 			editingOptions = new EditingOptions(
 				getBoolean(PREF_PREFIX+DELETE_ALERT, true), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, true),
 				getBoolean(PREF_PREFIX+SET_DUPLICATE_TRANSACTION_DATE_TO_CURRENT, true),
@@ -560,70 +582,7 @@ public class Preferences {
 		}
 		return this.startStateOptions;
 	}
-/* Obsolete	
-	private static final String PREF_BACKUP_PREFIX = "backup.";
-	private static final String ENABLED = "enabled";
-	private static final String COMPRESSED = "compressed";
-	private static final String SPACE_LIMIT = "spaceLimit";
-	private static final String URi = "uri";
-	private static final String FTP_ACCOUNT = "ftpAccount";
 
-	private BackupOptions backupOptions;
-	public void setBackupOptions(BackupOptions options) {
-		this.backupOptions = options;
-		setBoolean(PREF_BACKUP_PREFIX+ENABLED, options.isEnabled());
-		setBoolean(PREF_BACKUP_PREFIX+COMPRESSED, options.isCompressed());
-		setProperty(PREF_BACKUP_PREFIX+SPACE_LIMIT, options.getSpaceLimit()==null?"none":options.getSpaceLimit().toString());
-		URI uri = options.getUri();
-		if (uri==null) {
-			removeProperty(PREF_BACKUP_PREFIX+URi);
-			removeProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
-		} else {
-			// To preserve a relative secret on the user login and password to an ftp account, we will
-			// store these information crypted in a separate property.
-			if (uri.getRawUserInfo()==null) {
-				removeProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
-			} else {
-				setProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT, Crypto.encrypt(KEY, uri.getRawUserInfo()));
-			}
-			try {
-				uri = new URI(uri.getScheme(),"",uri.getHost(),uri.getPort(),uri.getPath(),uri.getQuery(),uri.getFragment());
-				setProperty(PREF_BACKUP_PREFIX+URi, uri.toString());
-			} catch (URISyntaxException e) {
-				// I can't see a reason why this could happen !
-				ErrorManager.INSTANCE.log(null, e);
-			}
-		}
-	}
-
-	public BackupOptions getBackupOptions() {
-		if (backupOptions==null) {
-			String uriStr = getProperty(PREF_BACKUP_PREFIX+URi);
-			URI uri = Portable.getBackupDirectory().toURI();
-			if (uriStr!=null) {
-				try {
-					uri = new URI(uriStr);
-					String userInfo = getProperty(PREF_BACKUP_PREFIX+FTP_ACCOUNT);
-					if (userInfo!=null) {
-						uri = new URI(uri.getScheme(),Crypto.decrypt(KEY, userInfo),uri.getHost(),uri.getPort(),uri.getPath(),uri.getQuery(),uri.getFragment());
-					}
-				} catch (URISyntaxException e) {
-					// Hum ... the URI in the preference file is invalid ... maybe somebody has edit it by hand
-					// Do nothing, it strange ... the best is to ignore it and use the default value
-				}
-			}
-			String limitStr = getProperty(PREF_BACKUP_PREFIX+SPACE_LIMIT);
-			BigInteger limit = new BigInteger("10"); // The default space limit
-			try {
-				if (limitStr!=null) limit = "none".equalsIgnoreCase(limitStr) ? null : new BigInteger(limitStr);
-			} catch (NumberFormatException e) {
-				// Same thing as for the URI ... if it is wrong, we ignore and use the default value
-			}
-			backupOptions = new BackupOptions(getBoolean(PREF_BACKUP_PREFIX+ENABLED, true), uri, getBoolean(PREF_BACKUP_PREFIX+COMPRESSED, true),	limit);
-		}
-		return this.backupOptions;
-	}
-*/
 	/** Tests whether Preferences is able to save preferences at this time.
 	 * <br>It is not during the instantiation of the preferences singleton.
 	 * So, code executing during this instantiation should not refer to Preferences.INSTANCE
@@ -658,10 +617,10 @@ public class Preferences {
 	}
 
 	public float getFontSizeRatio() {
-		return getFloat("Font.sizeRatio",1.0f);
+		return getFloat(FONT_SIZE_RATIO, 1.0f);
 	}
 
 	public void setFontSizeRatio(float f) {
-		setFloat("Font.sizeRatio", f);
+		setFloat(FONT_SIZE_RATIO, f);
 	}
 }

@@ -3,18 +3,15 @@ package net.yapbam.gui.archive;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 import javax.swing.JPanel;
 
 import net.yapbam.data.Account;
-import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
-import net.yapbam.util.TextMatcher;
 
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
@@ -64,4 +61,8 @@ public class StatementSelectionDialog extends AbstractDialog<GlobalData, Collect
 		return transactions;
 	}
 
+	public boolean[] isAccountSelected() {
+		StatementSelectionTableModel model = (StatementSelectionTableModel)panel.getTable().getModel();
+		return model.isSelectedAccount();
+	}
 }

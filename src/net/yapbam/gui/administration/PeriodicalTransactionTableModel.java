@@ -55,35 +55,56 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return LocalizationData.get("Transaction.0"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-		if (columnIndex==3) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-		if (columnIndex==4) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
-		if (columnIndex==5) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
-		if (columnIndex==6) return LocalizationData.get("PeriodicalTransactionManager.nextDate.column"); //$NON-NLS-1$
-		if (columnIndex==7) return LocalizationData.get("PeriodicalTransactionManager.period.column"); //$NON-NLS-1$
-		if (columnIndex==8) return LocalizationData.get("PeriodicalTransactionManager.active.column"); //$NON-NLS-1$
-		if (columnIndex==9) return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
-		return "?"; //$NON-NLS-1$
+		if (columnIndex==0) {
+			return LocalizationData.get("Transaction.0"); //$NON-NLS-1$
+		} else if (columnIndex==1) {
+			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+		} else if (columnIndex==2) {
+			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+		} else if (columnIndex==3) {
+			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+		} else if (columnIndex==4) {
+			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+		} else if (columnIndex==5) {
+			return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
+		} else if (columnIndex==6) {
+			return LocalizationData.get("PeriodicalTransactionManager.nextDate.column"); //$NON-NLS-1$
+		}
+		if (columnIndex==7) {
+			return LocalizationData.get("PeriodicalTransactionManager.period.column"); //$NON-NLS-1$
+		} else if (columnIndex==8) {
+			return LocalizationData.get("PeriodicalTransactionManager.active.column"); //$NON-NLS-1$
+		} else if (columnIndex==9) {
+			return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
+		} else {
+			return "?"; //$NON-NLS-1$
+		}
 	}
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==0) return SpreadState.class;
-		if (columnIndex==6) return Date.class;
-		if (columnIndex==3) return double[].class;
-		if (columnIndex==8) return Boolean.class;
-		return String.class;
+		if (columnIndex==0) {
+			return SpreadState.class;
+		} else if (columnIndex==6) {
+			return Date.class;
+		} else if (columnIndex==3) {
+			return double[].class;
+		} else if (columnIndex==8) {
+			return Boolean.class;
+		} else {
+			return String.class;
+		}
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		boolean spread = this.isSpread(rowIndex);
 		PeriodicalTransaction transaction = (PeriodicalTransaction) this.getTransaction(rowIndex);
-		if (columnIndex==0) return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
-		else if (columnIndex==1) return transaction.getAccount().getName();
-		else if (columnIndex==2) {
+		if (columnIndex==0) {
+			return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
+		} else if (columnIndex==1) {
+			return transaction.getAccount().getName();
+		} else if (columnIndex==2) {
 			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription());
 		} else if (columnIndex==3) {
 			return TransactionTableUtils.getAmount(transaction, spread);
@@ -112,7 +133,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 					} else {
 						result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.yearly.content"), monthlyPeriod.getPeriod()/12, monthlyPeriod.getDay()); //$NON-NLS-1$
 					}
-				}	else if (monthlyPeriod.getPeriod()==1) {
+				} else if (monthlyPeriod.getPeriod()==1) {
 					result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.monthly.singular.content"), monthlyPeriod.getDay()); //$NON-NLS-1$
 				} else {
 					result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.monthly.content"), monthlyPeriod.getPeriod(), monthlyPeriod.getDay()); //$NON-NLS-1$
@@ -149,9 +170,13 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public int getAlignment(int column) {
-    	if ((column==1) || (column==2)) return SwingConstants.LEFT;
-    	if (column==3) return SwingConstants.RIGHT;
-    	else return SwingConstants.CENTER;
+    	if ((column==1) || (column==2)) {
+    		return SwingConstants.LEFT;
+    	} else if (column==3) {
+    		return SwingConstants.RIGHT;
+    	} else {
+    		return SwingConstants.CENTER;
+    	}
 	}
 
 	FilteredData getFilteredData() {

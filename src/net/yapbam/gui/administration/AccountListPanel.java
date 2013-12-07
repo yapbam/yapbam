@@ -111,33 +111,56 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		}
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			if ((columnIndex>=1) && (columnIndex<=3)) return Double.class;
-			else if ((columnIndex>=4) && (columnIndex<=6)) return Integer.class;
-			return String.class;
+			if ((columnIndex>=1) && (columnIndex<=3)) {
+				return Double.class;
+			} else if ((columnIndex>=4) && (columnIndex<=6)) {
+				return Integer.class;
+			} else {
+				return String.class;
+			}
 		}
 		@Override
 		public String getColumnName(int columnIndex) {
-			if (columnIndex==0) return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-			if (columnIndex==1) return LocalizationData.get("AccountManager.balanceColumn.title"); //$NON-NLS-1$
-			if (columnIndex==2) return LocalizationData.get("AccountManager.alertThresholdLess.title"); //$NON-NLS-1$
-			if (columnIndex==3) return LocalizationData.get("AccountManager.alertThresholdMore.title"); //$NON-NLS-1$
-			if (columnIndex==4) return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
-			if (columnIndex==5) return LocalizationData.get("AccountManager.modesNumber.title"); //$NON-NLS-1$
-			if (columnIndex==6) return LocalizationData.get("AccountManager.checkbooksNumber.title"); //$NON-NLS-1$
-			return "?"; //$NON-NLS-1$
+			if (columnIndex==0) {
+				return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
+			} else if (columnIndex==1) {
+				return LocalizationData.get("AccountManager.balanceColumn.title"); //$NON-NLS-1$
+			} else if (columnIndex==2) {
+				return LocalizationData.get("AccountManager.alertThresholdLess.title"); //$NON-NLS-1$
+			} else if (columnIndex==3) {
+				return LocalizationData.get("AccountManager.alertThresholdMore.title"); //$NON-NLS-1$
+			} else if (columnIndex==4) {
+				return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
+			} else if (columnIndex==5) {
+				return LocalizationData.get("AccountManager.modesNumber.title"); //$NON-NLS-1$
+			} else if (columnIndex==6) {
+				return LocalizationData.get("AccountManager.checkbooksNumber.title"); //$NON-NLS-1$
+			} else {
+				return "?"; //$NON-NLS-1$
+			}
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			Account account = ((GlobalData)data).getAccount(rowIndex);
-			if (columnIndex==0) return account.getName();
-			else if (columnIndex==1) return account.getInitialBalance();
-			else if (columnIndex==2) return account.getAlertThreshold().getLessThreshold();
-			else if (columnIndex==3) return account.getAlertThreshold().getMoreThreshold();
-			else if (columnIndex==4) return account.getTransactionsNumber();
-			else if (columnIndex==5) return account.getModesNumber()-1; // The undefined mode is returned in getModesNumber
-			else if (columnIndex==6) return account.getCheckbooksNumber();
-			return "?"; //$NON-NLS-1$
+			if (columnIndex==0) {
+				return account.getName();
+			} else if (columnIndex==1) {
+				return account.getInitialBalance();
+			} else if (columnIndex==2) {
+				return account.getAlertThreshold().getLessThreshold();
+			} else if (columnIndex==3) {
+				return account.getAlertThreshold().getMoreThreshold();
+			} else if (columnIndex==4) {
+				return account.getTransactionsNumber();
+			} else if (columnIndex==5) {
+				// The undefined mode is returned in getModesNumber
+				return account.getModesNumber()-1; 
+			} else if (columnIndex==6) {
+				return account.getCheckbooksNumber();
+			} else {
+				return "?"; //$NON-NLS-1$
+			}
 		}
 		
 		@Override

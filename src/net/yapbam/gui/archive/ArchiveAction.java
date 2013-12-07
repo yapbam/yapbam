@@ -6,9 +6,7 @@ import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -21,7 +19,6 @@ import com.fathzer.soft.jclop.swing.URIChooserDialog.ConfirmButtonUpdater;
 import net.yapbam.data.Account;
 import net.yapbam.data.Archiver;
 import net.yapbam.data.GlobalData;
-import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -79,7 +76,8 @@ public class ArchiveAction extends AbstractAction {
 		
 		// Read the archive file
 		GlobalData archiveData = new GlobalData();
-		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, new YapbamDataWrapper(archiveData), uri, new ErrorProcessor() {
+		YapbamDataWrapper wrapper = new YapbamDataWrapper(archiveData);
+		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, wrapper, uri, new ErrorProcessor() {
 			@Override
 			public boolean processError(Throwable e) {
 				// FileNotFound should simply be ignored (the globalData remains unchanged)
@@ -91,38 +89,26 @@ public class ArchiveAction extends AbstractAction {
 		}
 		
 		// Report the collisions between final archive balance and data initial balance (there should be equals).
-		//FIXME
-//		CharSequence alerts = getAlerts(selectedStatements, data, archiveData);
-//		if (alerts.length()>0) {
-//			int continued = JOptionPane.showOptionDialog(owner, alerts, LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
-//			if (continued!=0) {
-//				return;
-//			}
-//		}
-		
-		// Copy archived transactions into archive
-		Archiver.archive(archiveData, selectedTransactions.toArray(new Transaction[selectedTransactions.size()]));
-		
-		// Save the archive
-		
-		// Remove transactions from the data
-		System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
-		JOptionPane.showMessageDialog(owner, "<html>Not finished<br>Go next with "+uri);
-	}
-
-	private Transaction[] getTransactions(String[] selectedStatements) {
-		List<Transaction> result = new ArrayList<Transaction>();
-		for (int i = 0; i < selectedStatements.length; i++) {
-			if (selectedStatements[i]!=null) {
-				Account account = data.getAccount(i);
-				Statement[] statements = Statement.getStatements(account);
-				for (Statement statement : statements) {
-//					statement.
-					System.out.println (statement.getId());
-				}
+		CharSequence alerts = getAlerts(filterDialog.isAccountSelected(), archiveData);
+		if (alerts.length()>0) {
+			int continued = JOptionPane.showOptionDialog(owner, alerts, LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+			if (continued!=0) {
+				return;
 			}
 		}
-		return null;
+		
+		// Copy archived transactions into archive
+		Transaction[] transactions = selectedTransactions.toArray(new Transaction[selectedTransactions.size()]);
+		Archiver.archive(archiveData, transactions);
+		
+		// Save the archive
+		if (!YapbamPersistenceManager.MANAGER.save(owner, wrapper)) {
+			return;
+		}
+		
+		// Remove transactions from the data
+		Archiver.remove(data, transactions);
+		JOptionPane.showMessageDialog(owner, MessageFormat.format(LocalizationData.get("Archive.report"),transactions.length));
 	}
 
 	private URI getArchiveURI(Window owner) {
@@ -140,14 +126,13 @@ public class ArchiveAction extends AbstractAction {
 				return true;
 			}
 		});
-		URI uri = dialog.showDialog();
-		return uri;
+		return dialog.showDialog();
 	}
 
-	private CharSequence getAlerts(String[] selectedStatements, GlobalData data, GlobalData archiveData) {
+	private CharSequence getAlerts(boolean[] isAccountSelected, GlobalData archiveData) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < selectedStatements.length; i++) {
-			if (selectedStatements[i]!=null) {
+		for (int i = 0; i < data.getAccountsNumber(); i++) {
+			if (isAccountSelected[i]) {
 				// If there will be transactions archived in the account number i
 				Account account = data.getAccount(i);
 				Account archiveAccount = archiveData.getAccount(account.getName());

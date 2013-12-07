@@ -118,11 +118,21 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 			HashSet<String> result = new HashSet<String>();
 			for (int i = 0; i < statements[index].length; i++) {
 				result.add(statements[index][i].getId());
-				if (statements[index][i].getId().equals(selectedStatements[index])) break;
+				if (statements[index][i].getId().equals(selectedStatements[index])) {
+					break;
+				}
 			}
 			return result;
 		} else {
 			return null;
 		}
+	}
+
+	public boolean[] isSelectedAccount() {
+		boolean[] result = new boolean[data.getAccountsNumber()];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = this.selectedStatements[i] != null;
+		}
+		return result;
 	}
 }
