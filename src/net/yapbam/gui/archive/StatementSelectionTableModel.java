@@ -1,6 +1,8 @@
 package net.yapbam.gui.archive;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -111,7 +113,16 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 		fireTableRowsUpdated(0, getRowCount()-1);
 	}
 
-	String getSelectedStatement(int index) {
-		return (!this.ignored[index] && (this.selectedStatements[index]!=null)) ? this.selectedStatements[index] : null;
+	Set<String> getSelectedStatements(int index) {
+		if (!this.ignored[index] && (this.selectedStatements[index]!=null)) {
+			HashSet<String> result = new HashSet<String>();
+			for (int i = 0; i < statements[index].length; i++) {
+				result.add(statements[index][i].getId());
+				if (statements[index][i].getId().equals(selectedStatements[index])) break;
+			}
+			return result;
+		} else {
+			return null;
+		}
 	}
 }

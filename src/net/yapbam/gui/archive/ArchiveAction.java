@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -16,7 +19,10 @@ import com.fathzer.soft.jclop.swing.URIChooserDialog;
 import com.fathzer.soft.jclop.swing.URIChooserDialog.ConfirmButtonUpdater;
 
 import net.yapbam.data.Account;
+import net.yapbam.data.Archiver;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.Statement;
+import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -60,15 +66,18 @@ public class ArchiveAction extends AbstractAction {
 		// Select transactions to archive
 		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data);
 		filterDialog.setVisible(true);
-		String[] selectedStatements = filterDialog.getResult();
-		if (selectedStatements==null) {
+		Collection<Transaction> selectedTransactions = filterDialog.getResult();
+		if (selectedTransactions.isEmpty()) {
 			return;
 		}
 		
+		// Select archive file
 		URI uri = getArchiveURI(owner);
 		if (uri==null) {
 			return;
 		}
+		
+		// Read the archive file
 		GlobalData archiveData = new GlobalData();
 		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, new YapbamDataWrapper(archiveData), uri, new ErrorProcessor() {
 			@Override
@@ -80,15 +89,40 @@ public class ArchiveAction extends AbstractAction {
 		if (!readIsOk) {
 			return;
 		}
-		CharSequence alerts = getAlerts(selectedStatements, data, archiveData);
-		if (alerts.length()>0) {
-			int continued = JOptionPane.showOptionDialog(owner, alerts, LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
-			if (continued!=0) {
-				return;
-			}
-		}
+		
+		// Report the collisions between final archive balance and data initial balance (there should be equals).
+		//FIXME
+//		CharSequence alerts = getAlerts(selectedStatements, data, archiveData);
+//		if (alerts.length()>0) {
+//			int continued = JOptionPane.showOptionDialog(owner, alerts, LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+//			if (continued!=0) {
+//				return;
+//			}
+//		}
+		
+		// Copy archived transactions into archive
+		Archiver.archive(archiveData, selectedTransactions.toArray(new Transaction[selectedTransactions.size()]));
+		
+		// Save the archive
+		
+		// Remove transactions from the data
 		System.out.println(archiveData.getTransactionsNumber()+" transactions in archive");
 		JOptionPane.showMessageDialog(owner, "<html>Not finished<br>Go next with "+uri);
+	}
+
+	private Transaction[] getTransactions(String[] selectedStatements) {
+		List<Transaction> result = new ArrayList<Transaction>();
+		for (int i = 0; i < selectedStatements.length; i++) {
+			if (selectedStatements[i]!=null) {
+				Account account = data.getAccount(i);
+				Statement[] statements = Statement.getStatements(account);
+				for (Statement statement : statements) {
+//					statement.
+					System.out.println (statement.getId());
+				}
+			}
+		}
+		return null;
 	}
 
 	private URI getArchiveURI(Window owner) {
