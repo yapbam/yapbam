@@ -170,7 +170,7 @@ public class StatementSelectionPanel extends JPanel {
 		String old = invalidityCause;
 		invalidityCause = LocalizationData.get("Archive.statementSelection.noTransactionSelected"); //$NON-NLS-1$
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			if (((StatementSelectionTableModel)getTable().getModel()).getSelectedStatement(i) != null) {
+			if (((StatementSelectionTableModel)getTable().getModel()).getSelectedStatements(i) != null) {
 				invalidityCause = null;
 				break;
 			}

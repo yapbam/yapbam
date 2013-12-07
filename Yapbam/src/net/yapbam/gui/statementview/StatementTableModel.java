@@ -17,7 +17,9 @@ class StatementTableModel extends AbstractTableModel {
 	
 	StatementTableModel(JTable table, Transaction[] transactions) {
 		super();
-		if (transactions==null) throw new NullPointerException();
+		if (transactions==null) {
+			throw new NullPointerException();
+		}
 		this.transactions = transactions;
 	}
 
@@ -27,15 +29,25 @@ class StatementTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
-		if (columnIndex==3) return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
-		if (columnIndex==4) return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
-		if (columnIndex==5) return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
-		if (columnIndex==6) return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
-		if (columnIndex==7) return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
-		return "?"; //$NON-NLS-1$
+		if (columnIndex==0) {
+			return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
+		} else if (columnIndex==1) {
+			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+		} else if (columnIndex==2) {
+			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+		} else if (columnIndex==3) {
+			return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
+		} else if (columnIndex==4) {
+			return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
+		} else if (columnIndex==5) {
+			return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
+		} else if (columnIndex==6) {
+			return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
+		} else if (columnIndex==7) {
+			return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
+		} else {
+			return "?"; //$NON-NLS-1$
+		}
 	}
 
 	public int getRowCount() {
@@ -44,33 +56,44 @@ class StatementTableModel extends AbstractTableModel {
 	
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if ((columnIndex==0)||(columnIndex==5)) return Date.class;
-		if ((columnIndex==6)||(columnIndex==7)) return Double.class;
-		return super.getColumnClass(columnIndex);
+		if ((columnIndex==0)||(columnIndex==5)) {
+			return Date.class;
+		} else if ((columnIndex==6)||(columnIndex==7)) {
+			return Double.class;
+		} else {
+			return super.getColumnClass(columnIndex);
+		}
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Transaction transaction = transactions[rowIndex];
-		if (columnIndex==0) return transaction.getDate();
-		else if (columnIndex==1) {
+		if (columnIndex==0) {
+			return transaction.getDate();
+		} else if (columnIndex==1) {
 			return transaction.getDescription(true);
 		} else if (columnIndex==2) {
 			Category category = transaction.getCategory();
 			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
-		}
-		else if (columnIndex==3) {
+		} else if (columnIndex==3) {
 			Mode mode = transaction.getMode();
 			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
+		} else if (columnIndex==4) {
+			return transaction.getNumber();
+		} else if (columnIndex==5) {
+			return transaction.getValueDate();
+		} else if (columnIndex==6) {
+			return transaction.getAmount()<0?-transaction.getAmount():null;
+		} else if (columnIndex==7) {
+			return transaction.getAmount()>=0?transaction.getAmount():null;
+		} else {
+			return null;
 		}
-		else if (columnIndex==4) return transaction.getNumber();
-		else if (columnIndex==5) return transaction.getValueDate();
-		else if (columnIndex==6) return transaction.getAmount()<0?-transaction.getAmount():null;
-		else if (columnIndex==7) return transaction.getAmount()>=0?transaction.getAmount():null;
-		return null;
 	}
 
 	public void setTransactions(Transaction[] transactions) {
-		if (transactions==null) throw new NullPointerException();
+		if (transactions==null) {
+			throw new NullPointerException();
+		}
 		this.transactions = transactions;
 		this.fireTableDataChanged();
 	}
@@ -81,7 +104,9 @@ class StatementTableModel extends AbstractTableModel {
 
 	public int find(Transaction transaction) {
 		for (int i = 0; i < this.transactions.length; i++) {
-			if (transactions[i].getId()==transaction.getId()) return i;
+			if (transactions[i].getId()==transaction.getId()) {
+				return i;
+			}
 		}
 		return -1;
 	}
