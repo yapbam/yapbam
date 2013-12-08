@@ -1,7 +1,10 @@
 package net.yapbam.gui.transactiontable;
 
+import javax.swing.AbstractButton;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+
+import com.fathzer.soft.ajlib.swing.ButtonGroup;
 
 import java.awt.GridLayout;
 import java.util.Observable;
@@ -11,11 +14,11 @@ import net.yapbam.data.BalanceData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.ButtonGroup;
 
 public class BalanceReportPanel extends JPanel {
+	public enum Selection {NONE, CURRENT, FINAL, CHECKED}
+
 	private static final long serialVersionUID = 1L;
-	public enum Selection {NONE, CURRENT, FINAL, CHECKED};
 	
 	private BalanceData balance;
 
@@ -44,6 +47,7 @@ public class BalanceReportPanel extends JPanel {
 		add(finalBalance);
 		add(checkedBalance);
 		group = new ButtonGroup();
+		group.setAutoDeselect(true);
 		group.add(checkedBalance);
 		group.add(currentBalance);
 		group.add(finalBalance);
@@ -57,7 +61,7 @@ public class BalanceReportPanel extends JPanel {
 	}
 
 	private void updateBalances() {
-		JToggleButton selected = group.getSelected();
+		AbstractButton selected = group.getSelected();
 		if (balance!=null) {
 			if (selected==null) {
 				currentBalance.setValue(balance.getCurrentBalance(), true);
@@ -84,23 +88,29 @@ public class BalanceReportPanel extends JPanel {
 	
 	private String getTooltip(JToggleButton button, String baseTip) {
 		StringBuilder b = new StringBuilder("<html>").append(baseTip).append("<br>"); //$NON-NLS-1$ //$NON-NLS-2$
-		JToggleButton selected = group.getSelected();
-		if ((selected!=null)&&(selected!=button)) b.append(LocalizationData.get("MainFrame.BalancePanel.Relative.ToolTip")).append("<br><br>"); //$NON-NLS-1$ //$NON-NLS-2$
+		AbstractButton selected = group.getSelected();
+		if ((selected!=null)&&(selected!=button)) {
+			b.append(LocalizationData.get("MainFrame.BalancePanel.Relative.ToolTip")).append("<br><br>"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		b.append(LocalizationData.get(selected==button?"MainFrame.BalancePanel.Selected.ToolTip":"MainFrame.BalancePanel.NotSelected.ToolTip")); //$NON-NLS-1$ //$NON-NLS-2$
 		b.append("</html>"); //$NON-NLS-1$
 		return b.toString();
 	}
 	
 	public Selection getSelected() {
-		JToggleButton selected = group.getSelected();
-		if (selected==currentBalance) return Selection.CURRENT;
-		if (selected==checkedBalance) return Selection.CHECKED;
-		if (selected==finalBalance) return Selection.FINAL;
+		AbstractButton selected = group.getSelected();
+		if (selected==currentBalance) {
+			return Selection.CURRENT;
+		} else if (selected==checkedBalance) {
+			return Selection.CHECKED;
+		} else if (selected==finalBalance) {
+			return Selection.FINAL;
+		}
 		return Selection.NONE;
 	}
 
 	public void setSelected(Selection selected) {
-		JToggleButton button = null;
+		AbstractButton button = null;
 		if (selected==Selection.CHECKED) {
 			button = checkedBalance;
 		} else if (selected==Selection.CURRENT) {

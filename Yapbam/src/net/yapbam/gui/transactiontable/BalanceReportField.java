@@ -20,7 +20,7 @@ public class BalanceReportField extends JToggleButton {
 		try {
 			POSITIVE_COLOR = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.POSITIVE_KEY)));
 			NEGATIVE_COLOR = new Color(Integer.parseInt(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.NEGATIVE_KEY)));
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			POSITIVE_COLOR = TransactionsPreferencePanel.DEFAULT_POSITIVE;
 			NEGATIVE_COLOR = TransactionsPreferencePanel.DEFAULT_NEGATIVE;
 		}
@@ -32,7 +32,7 @@ public class BalanceReportField extends JToggleButton {
 		super();
 		this.contentPattern = contentPattern;
 		this.setOpaque(true);
-    this.setFont(new Font(getFont().getFontName(), getFont().getStyle() ^ Font.BOLD, getFont().getSize()));
+		this.setFont(new Font(getFont().getFontName(), getFont().getStyle() ^ Font.BOLD, getFont().getSize()));
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 		this.setFocusable(false);
 		this.setValue(0, true);
@@ -42,7 +42,7 @@ public class BalanceReportField extends JToggleButton {
 	}
 	
 	public void setValue(double balance, boolean absolute) {
-    this.setFont(this.getFont().deriveFont(absolute?Font.BOLD:Font.ITALIC+Font.BOLD));
+		this.setFont(this.getFont().deriveFont(absolute?Font.BOLD:Font.ITALIC+Font.BOLD));
 		this.setForeground(balance<0?NEGATIVE_COLOR:POSITIVE_COLOR);
 		String text = MessageFormat.format(this.contentPattern, LocalizationData.getCurrencyInstance().format(balance));
 		setText(text);
