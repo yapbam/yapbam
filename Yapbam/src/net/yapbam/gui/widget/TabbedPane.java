@@ -2,6 +2,7 @@ package net.yapbam.gui.widget;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -22,7 +23,7 @@ import terai.xrea.jp.DnDTabbedPane;
  */
 @SuppressWarnings("serial")
 public class TabbedPane extends DnDTabbedPane {
-	private ArrayList<Integer> positions;
+	private List<Integer> positions;
 	private boolean movingTab;
 	
 	/** Constructor.
@@ -37,7 +38,9 @@ public class TabbedPane extends DnDTabbedPane {
 	protected void convertTab(int prev, int next) {
 //		System.out.println (prev+"/"+this.getTabCount()+" -> "+next+"/"+this.getTabCount());
 		// If the tab was moved outside of the tabs region => Do nothing
-		if (next==-1) return;
+		if (next==-1) {
+			return;
+		}
 		if (next>prev) {
 			positions.add(next-1, positions.remove(prev));
 		} else if (next!=prev){
@@ -52,7 +55,7 @@ public class TabbedPane extends DnDTabbedPane {
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		if (!movingTab) {
-			positions.add(index, new Integer(getTabCount()));
+			positions.add(index, Integer.valueOf(getTabCount()));
 		}
 		super.insertTab(title, icon, component, tip, index);
 	}
@@ -97,7 +100,9 @@ public class TabbedPane extends DnDTabbedPane {
 	 */
 	public int getIndexOf(int id) {
 		for (int i = 0; i < positions.size(); i++) {
-			if (positions.get(i)==id) return i;
+			if (positions.get(i)==id) {
+				return i;
+			}
 		}
 		return -1;
 	}

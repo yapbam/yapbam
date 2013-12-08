@@ -58,7 +58,9 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 		table.getModel().addTableModelListener(new TableModelListener() {
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				if (getJTable().isEditing()) getJTable().getCellEditor().cancelCellEditing();
+				if (getJTable().isEditing()) {
+					getJTable().getCellEditor().cancelCellEditing();
+				}
 			}
 		});
 		return table;
@@ -76,7 +78,9 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 		
 		@Override
 		public String getColumnName(int columnIndex) {
-			if (columnIndex==0) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+			if (columnIndex==0) {
+				return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+			}
 			return "?"; //$NON-NLS-1$
 		}
 
@@ -99,7 +103,9 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 			} else {
 				Category category = ((GlobalData)data).getCategory(name);
 				if (category!=null) {
-					if (category==getCategory(row)) return;
+					if (category==getCategory(row)) {
+						return;
+					}
 					errorMessage = MessageFormat.format(LocalizationData.get("CategoryManager.error.message.alreadyUsed"), name); //$NON-NLS-1$
 					//TODO We could merge the two categories, on demand
 				}
@@ -116,7 +122,8 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 
 		@Override
 		public int getRowCount() {
-			return ((GlobalData)data).getCategoriesNumber()-1; // The undefined category is omitted
+			// The undefined category is omitted
+			return ((GlobalData)data).getCategoriesNumber()-1;
 		}
 
 		@Override
@@ -144,21 +151,36 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	}
 
 	@Override
-	protected Action getNewButtonAction() { return new NewAction(); }
+	protected Action getNewButtonAction() {
+		return new NewAction();
+	}
+	
 	@Override
-	protected Action getDeleteButtonAction() { return new DeleteAction(); }
+	protected Action getDeleteButtonAction() {
+		return new DeleteAction();
+	}
+	
 	@Override
-	protected Action getEditButtonAction() { return null; }
+	protected Action getEditButtonAction() {
+		return null;
+	}
+	
 	@Override
-	protected Action getDuplicateButtonAction() { return null; }
+	protected Action getDuplicateButtonAction() {
+		return null;
+	}
 	
 	private boolean isUsed(Category category) {
 		GlobalData gData = (GlobalData)data;
 		for (int i = 0; i < gData.getTransactionsNumber(); i++) {
-			if (gData.getTransaction(i).hasCategory(category)) return true;
+			if (gData.getTransaction(i).hasCategory(category)) {
+				return true;
+			}
 		}
 		for (int i = 0; i < gData.getPeriodicalTransactionsNumber(); i++) {
-			if (gData.getPeriodicalTransaction(i).hasCategory(category)) return true;			
+			if (gData.getPeriodicalTransaction(i).hasCategory(category)) {
+				return true;			
+			}
 		}
 		return false;
 	}

@@ -222,7 +222,9 @@ public class GetPasswordPanel extends JPanel {
 	 * @param message the new message
 	 */
 	public void setWarningMessage(String message) {
-		if (message!=null) this.warningField.setText(message);
+		if (message!=null) {
+			this.warningField.setText(message);
+		}
 		this.getWarningPanel().setVisible(message!=null);
 	}
 

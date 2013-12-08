@@ -90,8 +90,7 @@ public class YapbamState {
 	}
 
 	protected File getFile() {
-		File file = new File (Portable.getDataDirectory(), ".yapbam"); //$NON-NLS-1$
-		return file;
+		return new File (Portable.getDataDirectory(), ".yapbam"); //$NON-NLS-1$
 	}
 	
 	public void restoreState(JTable table, String prefix) {
@@ -103,7 +102,9 @@ public class YapbamState {
 				String valueString = (String) properties.get(prefix+COLUMN_WIDTH+i);
 				if (valueString!=null) {
 					int width = Integer.parseInt(valueString);
-					if (width>0) model.getColumn(i).setPreferredWidth(width);
+					if (width>0) {
+						model.getColumn(i).setPreferredWidth(width);
+					}
 				}
 			}
 		}
@@ -113,7 +114,9 @@ public class YapbamState {
 				String valueString = (String) properties.get(prefix+COLUMN_INDEX+i);
 				if (valueString!=null) {
 					int modelIndex = Integer.parseInt(valueString);
-					if ((modelIndex>=0) && (modelIndex<table.getColumnCount())) table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
+					if ((modelIndex>=0) && (modelIndex<table.getColumnCount())) {
+						table.moveColumn(table.convertColumnIndexToView(modelIndex), i);
+					}
 				}
 			}
 		}
@@ -170,7 +173,9 @@ public class YapbamState {
 			List<? extends SortKey> sortKeys = sorter.getSortKeys();
 			for (SortKey sortKey : sortKeys) {
 				if (sortKey.getSortOrder()!=SortOrder.UNSORTED) {
-					if (buf.length()!=0) buf.append(',');
+					if (buf.length()!=0) {
+						buf.append(',');
+					}
 					buf.append(sortKey.getColumn()+":"+sortKey.getSortOrder().equals(SortOrder.ASCENDING));
 				}
 			}
@@ -220,7 +225,9 @@ public class YapbamState {
 			}
 			// TabbedPane.setOrder changes the selected tab.
 			// I think it's better to restore with the first tab displayed
-			if (tabbedPane.getTabCount()>0) tabbedPane.setSelectedIndex(0);
+			if (tabbedPane.getTabCount()>0) {
+				tabbedPane.setSelectedIndex(0);
+			}
 		}
 	}
 
@@ -255,7 +262,9 @@ public class YapbamState {
 
 	public Date getDate(String key) {
 		String dummy = properties.getProperty(key);
-		if (dummy==null) return new Date(0);
+		if (dummy==null) {
+			return new Date(0);
+		}
 		return DateUtils.integerToDate(Integer.parseInt(dummy));
 	}
 	
@@ -269,7 +278,9 @@ public class YapbamState {
 	
 	public Rectangle getRectangle(String key) {
 		String value = properties.getProperty(key);
-		if (value==null) return null;
+		if (value==null) {
+			return null;
+		}
 		StringTokenizer tokens = new StringTokenizer(value, ","); //$NON-NLS-1$
 		return new Rectangle(Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()),
 				Integer.parseInt(tokens.nextToken()),Integer.parseInt(tokens.nextToken()));
@@ -316,7 +327,9 @@ public class YapbamState {
 	 * @see #save(String, Serializable)
 	 */
 	public Serializable restore(String key) {
-		if (!contains(key)) return null;
+		if (!contains(key)) {
+			return null;
+		}
 		try {
 			byte[] decoded = Base64.decodeBase64(get(key));
 			ByteArrayInputStream bais = new ByteArrayInputStream(decoded);

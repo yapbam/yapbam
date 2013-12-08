@@ -27,7 +27,7 @@ import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 public class CheckNumberWidget extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final String NUMBER_PROPERTY = "Number"; // @jve:decl-index=0: //$NON-NLS-1$
+	public static final String NUMBER_PROPERTY = "Number"; //$NON-NLS-1$
 
 	private JComboBox numbers = null;
 	private JButton newButton = null;
@@ -56,10 +56,11 @@ public class CheckNumberWidget extends JPanel {
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 1;
 		this.add(getNewButton(), gridBagConstraints1);
-    Dimension dimension = getNumbers().getPreferredSize();
-    getNewButton().setPreferredSize(new Dimension(dimension.height, dimension.height));
-    // Setting the editable property before would lead to wrong dimension (at most with Nimbus LAF)
-    getNumbers().setEditable(true);
+		Dimension dimension = getNumbers().getPreferredSize();
+		getNewButton().setPreferredSize(new Dimension(dimension.height, dimension.height));
+		// Setting the editable property before would lead to wrong dimension
+		// (at most with Nimbus LAF)
+		getNumbers().setEditable(true);
 	}
 
 	/**
@@ -123,7 +124,9 @@ public class CheckNumberWidget extends JPanel {
 		numbers.removeAllItems();
 		for (int i = 0; i < account.getCheckbooksNumber(); i++) {
 			Checkbook checkbook = account.getCheckbook(i);
-			if (!checkbook.isEmpty()) numbers.addItem(checkbook.getFullNumber(checkbook.getNext()));
+			if (!checkbook.isEmpty()) {
+				numbers.addItem(checkbook.getFullNumber(checkbook.getNext()));
+			}
 		}
 	}
 

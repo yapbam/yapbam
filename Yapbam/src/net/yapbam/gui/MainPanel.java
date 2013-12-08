@@ -63,7 +63,9 @@ public class MainPanel extends TabbedPane {
 	private void updateSelectedPlugin() {
 		AbstractPlugIn old = selectedPlugin;
 		selectedPlugin = this.paneledPlugins.get(getId(getSelectedIndex()));
-		if (old!=null) old.setDisplayed(false);
+		if (old!=null) {
+			old.setDisplayed(false);
+		}
 		selectedPlugin.setDisplayed(true);
 		firePropertyChange(SELECTED_PLUGIN_PROPERTY, old, selectedPlugin);
 	}

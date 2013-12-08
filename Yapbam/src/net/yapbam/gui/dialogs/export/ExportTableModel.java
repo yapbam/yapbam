@@ -17,7 +17,7 @@ class ExportTableModel extends AbstractTableModel {
 	static final int VALUE_DATE_INDEX = 8;
 	static final int STATEMENT_INDEX = 9;
 	
-	static final String[] columns = new String[] {LocalizationData.get("Transaction.account"), LocalizationData.get("Transaction.date"),
+	static final String[] COLUMNS = new String[] {LocalizationData.get("Transaction.account"), LocalizationData.get("Transaction.date"),
 		LocalizationData.get("Transaction.description"), LocalizationData.get("Transaction.comment"), LocalizationData.get("Transaction.amount"),
 		LocalizationData.get("Transaction.category"), LocalizationData.get("Transaction.mode"), LocalizationData.get("Transaction.number"),
 		LocalizationData.get("Transaction.valueDate"), LocalizationData.get("Transaction.statement")};
@@ -26,7 +26,7 @@ class ExportTableModel extends AbstractTableModel {
 
 	ExportTableModel() {
 		super();
-		this.allowed = new boolean[columns.length];
+		this.allowed = new boolean[COLUMNS.length];
 		for (int i = 0; i < allowed.length; i++) {
 			this.allowed[i] = true;
 		}
@@ -39,12 +39,12 @@ class ExportTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return columns.length;
+		return COLUMNS.length;
 	}
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		return columns[columnIndex];
+		return COLUMNS[columnIndex];
 	}
 
 	@Override

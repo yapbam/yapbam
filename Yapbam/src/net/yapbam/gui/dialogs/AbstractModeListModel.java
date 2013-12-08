@@ -9,10 +9,15 @@ import net.yapbam.gui.LocalizationData;
 public abstract class AbstractModeListModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return LocalizationData.get("ModeDialog.name.short"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("ModeDialog.forDebts.short"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("ModeDialog.forReceipts.short"); //$NON-NLS-1$
-		return "?"; //$NON-NLS-1$
+		if (columnIndex==0) {
+			return LocalizationData.get("ModeDialog.name.short"); //$NON-NLS-1$
+		} else if (columnIndex==1) {
+			return LocalizationData.get("ModeDialog.forDebts.short"); //$NON-NLS-1$
+		} else if (columnIndex==2) {
+			return LocalizationData.get("ModeDialog.forReceipts.short"); //$NON-NLS-1$
+		} else {
+			return "?"; //$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -26,10 +31,15 @@ public abstract class AbstractModeListModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Mode mode = getMode(rowIndex);
-		if (columnIndex==0) return mode.getName();
-		if (columnIndex==1) return mode.getExpenseVdc()!=null;
-		if (columnIndex==2) return mode.getReceiptVdc()!=null;
-		return "?"; //$NON-NLS-1$
+		if (columnIndex==0) {
+			return mode.getName();
+		} else if (columnIndex==1) {
+			return mode.getExpenseVdc()!=null;
+		} else if (columnIndex==2) {
+			return mode.getReceiptVdc()!=null;
+		} else {
+			return "?"; //$NON-NLS-1$
+		}
 	}
 
 	protected abstract Mode getMode(int rowIndex);
@@ -41,7 +51,9 @@ public abstract class AbstractModeListModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if ((columnIndex==1)||(columnIndex==2)) return Boolean.class;
+		if ((columnIndex==1)||(columnIndex==2)) {
+			return Boolean.class;
+		}
 		return String.class;
 	}
 }

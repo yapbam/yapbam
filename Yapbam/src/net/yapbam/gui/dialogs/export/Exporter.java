@@ -37,7 +37,7 @@ public class Exporter {
 			if (parameters.isInsertHeader()) {
 				// insert the header line
 				for (int i = 0; i < fields.length; i++) {
-					writer.writeCell(ExportTableModel.columns[fields[i]]);
+					writer.writeCell(ExportTableModel.COLUMNS[fields[i]]);
 				}
 				writer.newLine();
 			}

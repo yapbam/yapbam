@@ -18,7 +18,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 public class DateFilterPanel extends ConsistencyCheckedPanel {
-	public static Wordings TRANSACTION_DATE = new Wordings(LocalizationData.get("Transaction.date"),
+	public static final Wordings TRANSACTION_DATE = new Wordings(LocalizationData.get("Transaction.date"),
 			LocalizationData.get("CustomFilterPanel.date.all"), LocalizationData.get("CustomFilterPanel.date.all.toolTip"),
 			LocalizationData.get("CustomFilterPanel.date.equals"), LocalizationData.get("CustomFilterPanel.date.equals.toolTip"),
 			LocalizationData.get("CustomFilterPanel.date.between"), LocalizationData.get("CustomFilterPanel.date.between.toolTip"),
@@ -26,7 +26,7 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 			LocalizationData.get("CustomFilterPanel.date.to"),
 			LocalizationData.get("CustomFilterPanel.error.dateFrom"), LocalizationData.get("CustomFilterPanel.error.date.to"),
 			LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"));
-	public static Wordings VALUE_DATE = new Wordings(LocalizationData.get("Transaction.valueDate"),
+	public static final Wordings VALUE_DATE = new Wordings(LocalizationData.get("Transaction.valueDate"),
 			LocalizationData.get("CustomFilterPanel.valueDate.all"), LocalizationData.get("CustomFilterPanel.valueDate.all.toolTip"),
 			LocalizationData.get("CustomFilterPanel.valueDate.equals"), LocalizationData.get("CustomFilterPanel.valueDate.equals.toolTip"),
 			LocalizationData.get("CustomFilterPanel.valueDate.between"), LocalizationData.get("CustomFilterPanel.valueDate.between.toolTip"),
@@ -44,19 +44,19 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	private Wordings wordings;
 	
 	public static class Wordings {
-		public String title;
-		public String all;
-		public String allTooltip;
-		public String equals;
-		public String equalsTooltip;
-		public String between;
-		public String betweenTooltip;
-		public String fromTooltip;
-		public String toTooltip;
-		public String to;
-		public String errorFrom;
-		public String errorTo;
-		public String errorFromHigherThanTo;
+		private String title;
+		private String all;
+		private String allTooltip;
+		private String equals;
+		private String equalsTooltip;
+		private String between;
+		private String betweenTooltip;
+		private String fromTooltip;
+		private String toTooltip;
+		private String to;
+		private String errorFrom;
+		private String errorTo;
+		private String errorFromHigherThanTo;
 		
 		public Wordings(String title, String all, String allTooltip, String equals, String equalsTooltip, String between,
 				String betweenTooltip, String fromTooltip, String toTooltip, String to, String errorFrom, String errorTo, String errorFromHigherThanTo) {
@@ -227,13 +227,16 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 
 	@Override
 	protected String computeInconsistencyCause() {
-		if (!getDateFromField().isContentValid()) return wordings.errorFrom;
-		if (!getDateToField().isContentValid()) return wordings.errorTo;
-		if ((getDateFromField().getDate()!=null) && (getDateToField().getDate()!=null)
+		if (!getDateFromField().isContentValid()) {
+			return wordings.errorFrom;
+		} else if (!getDateToField().isContentValid()) {
+			return wordings.errorTo;
+		} else if ((getDateFromField().getDate()!=null) && (getDateToField().getDate()!=null)
 				&& (getDateFromField().getDate().compareTo(getDateToField().getDate())>0)) {
 			return wordings.errorFromHigherThanTo;
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 	public void clear() {
@@ -250,13 +253,19 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 	}
 	
 	public Date getDateFrom() {
-		if (getDateAll().isSelected()) return null;
+		if (getDateAll().isSelected()) {
+			return null;
+		}
 		return getDateFromField().getDate();
 	}
 	
 	public Date getDateTo() {
-		if (getDateAll().isSelected()) return null;
-		if (getDateEquals().isSelected()) return getDateFrom();
-		return getDateToField().getDate();
+		if (getDateAll().isSelected()) {
+			return null;
+		} else if (getDateEquals().isSelected()) {
+			return getDateFrom();
+		} else {
+			return getDateToField().getDate();
+		}
 	}
 }

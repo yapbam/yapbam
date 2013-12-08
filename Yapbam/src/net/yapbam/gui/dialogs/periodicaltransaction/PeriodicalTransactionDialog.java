@@ -28,13 +28,17 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 		if (globalData.getAccountsNumber()==0) {
 			//Need to create an account first
 			EditAccountDialog.open(globalData, frame, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
-			if (globalData.getAccountsNumber()==0) return null;
+			if (globalData.getAccountsNumber()==0) {
+				return null;
+			}
 		}
 		PeriodicalTransactionDialog dialog = new PeriodicalTransactionDialog(frame, data, transaction, edit);
 		dialog.setVisible(true);
 		PeriodicalTransaction newTransaction = dialog.getTransaction();
 		if (newTransaction!=null) {
-			if (transaction!=null) globalData.remove(transaction);
+			if (transaction!=null) {
+				globalData.remove(transaction);
+			}
 			globalData.add(newTransaction);
 		}
 		return newTransaction;
@@ -83,13 +87,16 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 	}
 	
 	@Override
-	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
+	protected void buildStatementFields(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
+	}
 
 	@Override
-	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
+	protected void buildNumberField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
+	}
 
 	@Override
-	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {}
+	protected void buildDateField(JPanel centerPane, FocusListener focusListener, GridBagConstraints c) {
+	}
 
 	@Override
 	public PeriodicalTransaction getTransaction() {
@@ -99,14 +106,24 @@ public class PeriodicalTransactionDialog extends AbstractTransactionDialog<Perio
 	@Override
 	protected String getOkDisabledCause() {
 		String disabledCause = super.getOkDisabledCause(); 
-		if ((disabledCause!=null) || (generationPanel==null)) return disabledCause;
-		if (!generationPanel.getNextDateIsValid()) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
+		if ((disabledCause!=null) || (generationPanel==null)) {
+			return disabledCause;
+		} else if (!generationPanel.getNextDateIsValid()) {
+			return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
+		}
 		Date nextDate = generationPanel.getNextDate();
-		if ((nextDate==null) && generationPanel.isActivated()) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
+		if ((nextDate==null) && generationPanel.isActivated()) {
+			return LocalizationData.get("PeriodicalTransactionDialog.error.nextDate"); //$NON-NLS-1$
+		}
 		DateStepper dateStepper = generationPanel.getDateStepper();
-		if (dateStepper==null) return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper"); //$NON-NLS-1$
-		if (!generationPanel.getLastDateIsValid()) return LocalizationData.get("PeriodicalTransactionDialog.error.endDate"); //$NON-NLS-1$
-		if ((dateStepper.getLastDate()!=null) && (nextDate!=null) && (dateStepper.getLastDate().compareTo(nextDate)<0)) return LocalizationData.get("PeriodicalTransactionDialog.error.nextDateAfterEnd"); //$NON-NLS-1$
-		return null;
+		if (dateStepper==null) {
+			return LocalizationData.get("PeriodicalTransactionDialog.error.dateStepper"); //$NON-NLS-1$
+		} else if (!generationPanel.getLastDateIsValid()) {
+			return LocalizationData.get("PeriodicalTransactionDialog.error.endDate"); //$NON-NLS-1$
+		} else if ((dateStepper.getLastDate()!=null) && (nextDate!=null) && (dateStepper.getLastDate().compareTo(nextDate)<0)) {
+			return LocalizationData.get("PeriodicalTransactionDialog.error.nextDateAfterEnd"); //$NON-NLS-1$
+		} else {
+			return null;
+		}
 	}
 }

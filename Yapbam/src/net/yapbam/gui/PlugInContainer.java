@@ -37,7 +37,9 @@ public class PlugInContainer {
 	}
 
 	public AbstractPlugIn build(FilteredData filteredData, Object restartData) {
-		if (this.plugin==null) return null;
+		if (this.plugin==null) {
+			return null;
+		}
 		try {
 			Constructor<? extends AbstractPlugIn> constructor = this.plugin.getConstructor(FilteredData.class, Object.class);
 			return (AbstractPlugIn) constructor.newInstance(filteredData, restartData);
@@ -57,8 +59,8 @@ public class PlugInContainer {
 		return this.plugin.getCanonicalName();
 	}
 
-	/** Gets the exception that occured during the plugin instanciation.
-	 * @return a throwable or null if no error occured.
+	/** Gets the exception that occurred during the plugin instanciation.
+	 * @return a throwable or null if no error occurred.
 	 */
 	public Throwable getInstanciationException() {
 		return e;

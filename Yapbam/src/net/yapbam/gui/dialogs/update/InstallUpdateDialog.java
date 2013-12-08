@@ -36,7 +36,9 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 	public InstallUpdateDialog(Window owner, boolean auto, UpdateInformation data) {
 		super(owner, LocalizationData.get("Update.Downloading.title"), data);
 		this.auto = auto;
-		if (auto) setDelay(Long.MAX_VALUE);
+		if (auto) {
+			setDelay(Long.MAX_VALUE);
+		}
 	}
 
 	@Override
@@ -93,20 +95,30 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 						DownloadInfo jarInfo = sd.download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
 						String updaterChck = jarInfo==null?null:jarInfo.getCheckSum();
 						ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
-						if (!ok) errorMessage = "Checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)";
+						if (!ok) {
+							errorMessage = "Checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)";
+						}
 					} else {
 						errorMessage = "ALERT checksum of "+data.getAutoUpdateURL()+" is "+zipChck+" ("+data.getAutoUpdateCheckSum()+" was expected)";
 					}
 
-					if (this.isCancelled() || !ok) FileUtils.deleteDirectory(destinationFolder);
-					if (this.isCancelled()) return null;
-					if (!ok) throw new IOException(errorMessage);
-					return Boolean.TRUE;
+					if (this.isCancelled() || !ok) {
+						FileUtils.deleteDirectory(destinationFolder);
+					}
+					if (this.isCancelled()) {
+						return null;
+					} else if (!ok) {
+						throw new IOException(errorMessage);
+					} else {
+						return Boolean.TRUE;
+					}
 				} catch (Exception e) {
 					if (!auto) {
 						DoShowDialog doShowDialog = new DoShowDialog();
 						SwingUtilities.invokeAndWait(doShowDialog);
-						if (!doShowDialog.proceedConfirmed) return null;
+						if (!doShowDialog.proceedConfirmed) {
+							return null;
+						}
 					}
 				}
 			}

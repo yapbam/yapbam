@@ -48,7 +48,9 @@ public class DataReader {
 	}
 
 	public boolean doSyncAndRead(SynchronizeCommand command) throws ExecutionException {
-		if (this.adapter==null) throw new ExecutionException(new UnsupportedSchemeException(uri));
+		if (this.adapter==null) {
+			throw new ExecutionException(new UnsupportedSchemeException(uri));
+		}
 		SyncAndReadWorker basicWorker = new SyncAndReadWorker(adapter.getService(), data, uri, command);
 		manager.buildWaitDialog(owner, basicWorker).setVisible(true);
 		ReaderResult result;
@@ -68,14 +70,18 @@ public class DataReader {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		} catch (CancellationException e) {
-			if (basicWorker.isSynchronizing())	return syncCancelled(); // If the synchronization was cancelled
+			if (basicWorker.isSynchronizing()) {
+				return syncCancelled(); // If the synchronization was cancelled
+			}
 			// If another phase was cancelled -> Cancel the whole read operation
 			return false;
 		} catch (ExecutionException e) {
 			return doErrorOccurred(e);
 		}
 		File localFile = adapter.getLocalFile(uri);
-		if (basicWorker.isCancelled()) return false; // Anything but the synchronization was cancelled => Globally cancel
+		if (basicWorker.isCancelled()) {
+			return false; // Anything but the synchronization was cancelled => Globally cancel
+		}
 		SynchronizationState state = result.getSyncState();
 		if (state.equals(SynchronizationState.CONFLICT)) { // There's a conflict between remote resource a local cache
 			return doConflict();
@@ -100,9 +106,14 @@ public class DataReader {
 		dialog.setVisible(true);
 		String password = dialog.getPassword();
 		while (true) {
-			if (password==null) return false; // The user cancels the read
+			if (password==null) {
+				// The user cancels the read
+				return false;
+			}
 			try {
-				if (YapbamSerializer.isPasswordOk(localURI, password)) break; // If the user cancels or entered the right password ... go next step
+				if (YapbamSerializer.isPasswordOk(localURI, password)) {
+					break; // If the user cancels or entered the right password ... go next step
+				}
 			} catch (IOException e) {
 				throw new ExecutionException(e);
 			}
@@ -120,7 +131,9 @@ public class DataReader {
 		boolean internetIsDown = throwable instanceof UnreachableHostException;
 		if (!adapter.getLocalFile(uri).exists()) {
 			String message = LocalizationData.get("synchronization.downloadFailed"); //$NON-NLS-1$
-			if (internetIsDown) message = "<html>"+HtmlUtils.removeHtmlTags(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+HtmlUtils.removeHtmlTags(message)+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			if (internetIsDown) {
+				message = "<html>"+HtmlUtils.removeHtmlTags(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+HtmlUtils.removeHtmlTags(message)+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			}
 			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), internetIsDown?JOptionPane.WARNING_MESSAGE:JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1 //$NON-NLS-1$
 			return false;
 		} else {
@@ -137,7 +150,9 @@ public class DataReader {
 	private boolean doErrorOccurred(ExecutionException e) throws ExecutionException {
 		// An error occurred while reading the cached file (or the local file)
 		Throwable cause = e.getCause();
-		if (adapter.getService().isLocal() || (cause instanceof FileNotFoundException)) throw e; // If not a remote service, or the URI is not found, directly throw the exception
+		if (adapter.getService().isLocal() || (cause instanceof FileNotFoundException)) {
+			throw e; // If not a remote service, or the URI is not found, directly throw the exception
+		}
 		if (cause instanceof UnsupportedFileVersionException) {
 			String message = MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
 					adapter.getService().getDisplayable(uri));
@@ -187,7 +202,9 @@ public class DataReader {
 	}
 
 	private boolean syncCancelled() throws ExecutionException {
-		if (!adapter.getLocalFile(uri).exists()) return false;
+		if (!adapter.getLocalFile(uri).exists()) {
+			return false;
+		}
 		String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
 		if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.cancelled"), //$NON-NLS-1$
 				LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$

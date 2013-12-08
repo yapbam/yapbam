@@ -152,6 +152,8 @@ public class SeparatorPanel extends JPanel {
 			customSeparatorValue.setText(new String(new char[]{separator}));
 			customSeparatorButton.setSelected(true);
 		}
-		if (old!=separator) this.firePropertyChange(SEPARATOR_PROPERTY, old, separator);
+		if (old!=separator) {
+			this.firePropertyChange(SEPARATOR_PROPERTY, old, separator);
+		}
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
