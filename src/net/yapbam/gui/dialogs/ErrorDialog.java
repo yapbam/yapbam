@@ -52,6 +52,8 @@ public class ErrorDialog extends AbstractDialog<Throwable, Boolean> {
 	private void setPreferences(int action) {
 		// Be aware that Preferences.INSTANCE could be null (if we are reporting an error during its instantiation)
 		// Be also aware that in such a case, you absolutely may not access Preferences.INSTANCE, it would cause a deadlock !
-		if (this.prefcanBeSaved) Preferences.INSTANCE.setCrashReportAction(panel.isDontAskMeSelected()?action:0);
+		if (this.prefcanBeSaved) {
+			Preferences.INSTANCE.setCrashReportAction(panel.isDontAskMeSelected()?action:0);
+		}
 	}
 }

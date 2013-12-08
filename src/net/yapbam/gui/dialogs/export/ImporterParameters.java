@@ -12,7 +12,7 @@ public class ImporterParameters implements Serializable {
 
 	public ImporterParameters(char separator, int ignoredLeadingLines, int[] importedFileColumns) {
 		super();
-		if (importedFileColumns.length!=ExportTableModel.columns.length) throw new IllegalArgumentException();
+		if (importedFileColumns.length!=ExportTableModel.COLUMNS.length) throw new IllegalArgumentException();
 		this.separator = separator;
 		this.ignoredLeadingLines = ignoredLeadingLines;
 		this.importedFileColumns = importedFileColumns;
@@ -20,10 +20,10 @@ public class ImporterParameters implements Serializable {
 	
 	Object readResolve() throws ObjectStreamException {
 		// Some Yapbam version may add some attributes to a transaction
-		if (this.importedFileColumns.length==ExportTableModel.columns.length) return this;
+		if (this.importedFileColumns.length==ExportTableModel.COLUMNS.length) return this;
 		if (this.importedFileColumns.length==9)  {
 			// The comment column has been added
-			int[] array = new int[ExportTableModel.columns.length];
+			int[] array = new int[ExportTableModel.COLUMNS.length];
 			System.arraycopy(this.importedFileColumns, 0, array, 0, ExportTableModel.COMMENT_INDEX);
 			array[ExportTableModel.COMMENT_INDEX] = -1;
 			System.arraycopy(this.importedFileColumns, ExportTableModel.AMOUNT_INDEX-1, array, ExportTableModel.AMOUNT_INDEX, array.length-ExportTableModel.AMOUNT_INDEX);

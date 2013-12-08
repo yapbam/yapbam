@@ -22,16 +22,13 @@ import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 public class SubTransactionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String AMOUNT_PROPERTY = "amount";  //  @jve:decl-index=0: //$NON-NLS-1$
-	public static final String DESCRIPTION_PROPERTY = "description";  //  @jve:decl-index=0: //$NON-NLS-1$
+	public static final String AMOUNT_PROPERTY = "amount"; //$NON-NLS-1$
+	public static final String DESCRIPTION_PROPERTY = "description"; //$NON-NLS-1$
 	private static final String CATEGORY_PROPERTY = "category"; //$NON-NLS-1$
 	
-	private JLabel jLabel = null;
 	private TextWidget descriptionField = null;
-	private JLabel jLabel1 = null;
 	private CurrencyWidget amountField = null;
 	private CategoryWidget categoryPanel = null;
-	private JLabel jLabel2 = null;
 	private JCheckBox jCheckBox = null;
 	
 	private GlobalData data;
@@ -64,7 +61,7 @@ public class SubTransactionPanel extends JPanel {
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints11.gridy = 2;
-		jLabel2 = new JLabel();
+		JLabel jLabel2 = new JLabel();
 		jLabel2.setText(LocalizationData.get("TransactionDialog.category")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.gridx = 1;
@@ -84,7 +81,7 @@ public class SubTransactionPanel extends JPanel {
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridy = 1;
-		jLabel1 = new JLabel();
+		JLabel jLabel1 = new JLabel();
 		jLabel1.setText(LocalizationData.get("TransactionDialog.amount")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
@@ -98,7 +95,7 @@ public class SubTransactionPanel extends JPanel {
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints.gridy = 0;
-		jLabel = new JLabel();
+		JLabel jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
 		this.setSize(333, 106);
 		this.setLayout(new GridBagLayout());
@@ -123,7 +120,9 @@ public class SubTransactionPanel extends JPanel {
 			public void propertyChange(PropertyChangeEvent evt) {
 				Double old = amount;
 				amount = amountField.getValue();
-				if (!jCheckBox.isSelected() && (amount!=null)) amount = -amount;
+				if (!jCheckBox.isSelected() && (amount!=null)) {
+					amount = -amount;
+				}
 				SubTransactionPanel.this.firePropertyChange(AMOUNT_PROPERTY, old, amount);
 			}
 		});
@@ -243,4 +242,4 @@ public class SubTransactionPanel extends JPanel {
 	public void setPredefined(String[] predefined, int unsortedSize) {
 		this.getDescriptionField().setPredefined(predefined, unsortedSize);
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,53"
+}

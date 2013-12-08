@@ -56,7 +56,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 	
 	BalanceGraphic(BalanceHistory history, YAxis yAxis) {
-		if ((history==null) || (yAxis==null)) throw new NullPointerException();
+		if ((history==null) || (yAxis==null)) {
+			throw new NullPointerException();
+		}
 		this.selectedDate=new Date();
 		this.balanceHistory = history;
 		this.needUpdate = true;
@@ -78,7 +80,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 				if (lastElement.getFrom()!=null) {
 					this.endDate = (Date) lastElement.getFrom().clone();
 				}
-				if (this.endDate==null) this.endDate = new Date();
+				if (this.endDate==null) {
+					this.endDate = new Date();
+				}
 			}
 			if (this.endDate.compareTo(new Date())<0) { // If end date is before today
 				this.endDate = new Date(); // Extend the graphic in order to see today
@@ -154,7 +158,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 			if ((p2.y == p.y) && (Math.abs(p.y - y0) > 1)) {
 				int y, h;
 				Paint c;
-				if (p.y > y0) { // balance is negative
+				if (p.y > y0) {
+					// balance is negative
 					y = y0;
 					h = p.y - y0;
 					c = negativeGradient;
@@ -214,7 +219,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		date.setDate(1);
 		FontMetrics metrics = g2.getFontMetrics();
 		while (x<size.width) {
-			int month = date.getMonth();;
+			int month = date.getMonth();
 			if (x>0) {
 				if (this.isGridVisible()) {
 					Color color = g2.getColor();
@@ -225,7 +230,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 				g2.drawLine(x, y0-3, x, y0+3); // y axis
 				StringBuilder buf = new StringBuilder();
 				buf.append(months[month]);
-				if (month==1) buf.append(" ").append(date.getYear()+1900);
+				if (month==1) {
+					buf.append(" ").append(date.getYear()+1900);
+				}
 				String dateString = buf.toString();
 				g2.drawString(dateString, x - metrics.stringWidth(dateString)/2, y0+metrics.getHeight());
 			}
@@ -288,7 +295,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		for (int i = 0; i < balanceHistory.size(); i++) {
 			BalanceHistoryElement element = balanceHistory.get(i);
 			Date from = element.getFrom();
-			if (from==null) from = getStartDate();
+			if (from==null) {
+				from = getStartDate();
+			}
 			int y = yAxis.getY(element.getBalance());
 			long x = getX(from);
 			result[i*2] = new Point((int)x, y);
@@ -296,7 +305,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 			if (to==null) {
 				long rightWindowTime = xToTime(this.getSize().width-1);
 				to = new Date(from.getTime()+((3600000*24)*3)); // Three days after last known date
-				if (rightWindowTime>to.getTime()) to.setTime(rightWindowTime);
+				if (rightWindowTime>to.getTime()) {
+					to.setTime(rightWindowTime);
+				}
 			}
 			x = getX(to);
 			result[i*2+1] = new Point((int)x,(int)y);
@@ -351,7 +362,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	public boolean getScrollableTracksViewportHeight() {
-		return true; // The component doesn't need a vertical scrollbar and ensure that it always displays in the height of the parent component
+		// The component doesn't need a vertical scrollbar and ensure that it always displays in the height of the parent component
+		return true;
 	}
 
 	public boolean getScrollableTracksViewportWidth() {
@@ -359,7 +371,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-		return pixelPerDay; // Increments by one day
+		// Increments by one day
+		return pixelPerDay;
 	}
 
 	/** Sets the preferred end date of this graphic.

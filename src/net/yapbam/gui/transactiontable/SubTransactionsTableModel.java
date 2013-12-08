@@ -24,8 +24,7 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==1) return double[].class;
-		return String.class;
+		return columnIndex==1 ? double[].class : String.class;
 	}
 
 	@Override
@@ -35,10 +34,15 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-		if (columnIndex==1) return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-		if (columnIndex==2) return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
-		return "?"; //$NON-NLS-1$
+		if (columnIndex==0) {
+			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
+		} else if (columnIndex==1) {
+			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+		} else if (columnIndex==2) {
+			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+		} else {
+			return "?"; //$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -49,13 +53,16 @@ public class SubTransactionsTableModel extends AbstractTableModel implements Col
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		SubTransaction st = this.subTransactions.get(rowIndex);
-		if (columnIndex==0) return st.getDescription();
-		if (columnIndex==1) return new double[]{st.getAmount()};
-		if (columnIndex==2) {
+		if (columnIndex==0) {
+			return st.getDescription();
+		} else if (columnIndex==1) {
+			return new double[]{st.getAmount()};
+		} else if (columnIndex==2) {
 			Category category = st.getCategory();
 			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 	@Override

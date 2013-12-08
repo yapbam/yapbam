@@ -16,7 +16,7 @@ public class ImportTableModel extends AbstractTableModel {
 	public ImportTableModel() {
 		super();
 		this.fields = new String[0];
-		this.linked = new boolean[ExportTableModel.columns.length];
+		this.linked = new boolean[ExportTableModel.COLUMNS.length];
 		this.to = new int[this.linked.length];
 		for (int i = 0; i < this.linked.length; i++) {
 			this.to[i] = -1;
@@ -24,7 +24,7 @@ public class ImportTableModel extends AbstractTableModel {
 	}
 	
 	public int[] getRelations() {
-		int[] result = new int[ExportTableModel.columns.length];
+		int[] result = new int[ExportTableModel.COLUMNS.length];
 		for (int i = 0; i < result.length; i++) {
 			result[i] = linked[i]?to[i]:-1;
 		}
@@ -34,7 +34,9 @@ public class ImportTableModel extends AbstractTableModel {
 	public void setRelations(int[] importedColumns) {
 		for (int i = 0; i < importedColumns.length; i++) {
 			linked[i] = importedColumns[i]>=0;
-			if (importedColumns[i]!=-1) to[i] = importedColumns[i];
+			if (importedColumns[i]!=-1) {
+				to[i] = importedColumns[i];
+			}
 		}
 		fireTableDataChanged();
 	}
@@ -46,26 +48,30 @@ public class ImportTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return ExportTableModel.columns.length;
+		return ExportTableModel.COLUMNS.length;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (columnIndex==0) {
-			return ExportTableModel.columns[rowIndex];
+			return ExportTableModel.COLUMNS[rowIndex];
 		} else if (columnIndex==1) {
 			return linked[rowIndex] && (to[rowIndex]>=0);
 		} else {
 			int index = this.to[rowIndex];
-			return ((index==-1) || !linked[rowIndex])?"-":(fields.length>index?fields[index]:"");
+			return (index==-1) || !linked[rowIndex]?"-":(fields.length>index?fields[index]:"");
 		}
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		if (column==0) return LocalizationData.get("ImportDialog.YapbamFields");
-		else if (column==1) return LocalizationData.get("ImportDialog.linkedTo");
-		else return LocalizationData.get("ImportDialog.importedFields");
+		if (column==0) {
+			return LocalizationData.get("ImportDialog.YapbamFields");
+		} else if (column==1) {
+			return LocalizationData.get("ImportDialog.linkedTo");
+		} else {
+			return LocalizationData.get("ImportDialog.importedFields");
+		}
 	}
 
 	@Override
@@ -75,8 +81,9 @@ public class ImportTableModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		if (columnIndex==1) this.linked[rowIndex] = (Boolean) aValue;
-		if (columnIndex==2) {
+		if (columnIndex==1) {
+			this.linked[rowIndex] = (Boolean) aValue;
+		} else if (columnIndex==2) {
 			this.to[rowIndex] = -1;
 			for (int i = 0; i < fields.length; i++) {
 				if (aValue == fields[i]) {
@@ -91,16 +98,15 @@ public class ImportTableModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==1) return Boolean.class;
-		return super.getColumnClass(columnIndex);
+		return columnIndex==1 ? Boolean.class : super.getColumnClass(columnIndex);
 	}
 	
 	public void setFields(String[] fields) {
-		this.fields = fields;
+		this.fields = fields.clone();
 		// Auto select fields equals to the columns title
 		List<String> asList = Arrays.asList(fields);
-		for (int i = 0; i < ExportTableModel.columns.length; i++) {
-			int index = asList.indexOf(ExportTableModel.columns[i]);
+		for (int i = 0; i < ExportTableModel.COLUMNS.length; i++) {
+			int index = asList.indexOf(ExportTableModel.COLUMNS[i]);
 			if (index>=0) {
 				to[i] = index;
 				linked[i] = true;

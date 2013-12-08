@@ -33,7 +33,9 @@ public class SplitPane extends JSplitPane {
 	}
 
 	public void setDividerVisible(boolean visible) {
-		if (visible==isDividerVisible()) return;
+		if (visible==isDividerVisible()) {
+			return;
+		}
 		setDividerSize(visible ? defaultDividerSize : 0);
 	}
 	

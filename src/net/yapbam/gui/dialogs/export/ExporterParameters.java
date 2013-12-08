@@ -20,7 +20,7 @@ public class ExporterParameters implements Serializable {
 	private int[] exportedIndexes;
 
 	public ExporterParameters() {
-		this(ArrayUtils.buildIntArray(ExportTableModel.columns.length, 0, 1), ArrayUtils.buildBooleanArray(ExportTableModel.columns.length, true),
+		this(ArrayUtils.buildIntArray(ExportTableModel.COLUMNS.length, 0, 1), ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true),
 				true, ';', true, true);
 	}
 	

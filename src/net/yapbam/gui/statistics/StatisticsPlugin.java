@@ -9,6 +9,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
@@ -33,7 +34,7 @@ import net.yapbam.gui.widget.TabbedPane;
 public class StatisticsPlugin extends AbstractPlugIn {
 	private FilteredData data;
 	private boolean displayed;
-	private TreeMap<Category, Summary> categoryToAmount;
+	private Map<Category, Summary> categoryToAmount;
 	private PieChartPanel pie;
 	private BarChartPanel bar;
 	private TabbedPane tabbedPane;
@@ -45,7 +46,9 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if (displayed) buildSummaries();
+				if (displayed) {
+					buildSummaries();
+				}
 			}
 		});
 		this.setPanelTitle(LocalizationData.get("StatisticsPlugin.title")); //$NON-NLS-1$
@@ -137,10 +140,14 @@ public class StatisticsPlugin extends AbstractPlugIn {
 			if (this.data.isOk(transaction)) {
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 					SubTransaction subTransaction = transaction.getSubTransaction(j);
-					if (this.data.isOk(subTransaction)) categoryToAmount.get(subTransaction.getCategory()).add(subTransaction.getAmount());
+					if (this.data.isOk(subTransaction)) {
+						categoryToAmount.get(subTransaction.getCategory()).add(subTransaction.getAmount());
+					}
 				}
 				Category category = transaction.getCategory();
-				if (this.data.isComplementOk(transaction)) categoryToAmount.get(category).add(transaction.getComplement());
+				if (this.data.isComplementOk(transaction)) {
+					categoryToAmount.get(category).add(transaction.getComplement());
+				}
 			}
 		}
 		if (getGroupSubCategories().isSelected()) {
@@ -177,7 +184,9 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	public void setDisplayed(boolean displayed) {
 		super.setDisplayed(displayed);
 		this.displayed = displayed;
-		if (displayed) buildSummaries();
+		if (displayed) {
+			buildSummaries();
+		}
 	}
 
 	@Override
@@ -195,5 +204,4 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	private String getGroupSubCategoriesStateKey() {
 		return this.getClass().getCanonicalName()+".groupSubCategories";
 	}
-
 }

@@ -162,7 +162,9 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		description.addPropertyChangeListener(TextWidget.PREDEFINED_VALUE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getNewValue()!=null) predefinedDescriptionSelected((String) evt.getNewValue());
+				if (evt.getNewValue()!=null) {
+					predefinedDescriptionSelected((String) evt.getNewValue());
+				}
 			}
 		});
 		description.addFocusListener(AutoSelectFocusListener.INSTANCE);
@@ -174,7 +176,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		// Comment
 		comment = new JTextField();
 		comment.setToolTipText(LocalizationData.get("TransactionDialog.comment.tooltip")); //$NON-NLS-1$
-		c.gridx=2;;
+		c.gridx=2;
 		panel.add(comment, c);
 
 		// Next line

@@ -60,7 +60,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private MainFrame frame;
 
 	private JMenuItem menuItemNew;
-	private JMenuItem menuItemOpen;
 	private JMenuItem menuItemImport;
 	private JMenuItem menuItemSave;
 	private JMenuItem menuItemSaveAs;
@@ -69,8 +68,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private JMenuItem menuItemPrint;
 	private JMenuItem menuItemQuit;
 
-	private Action editPreferences;
-    
 	private JMenuItem menuItemAbout;
 	
 	private JMenu filterMenu;
@@ -92,10 +89,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.menuItemNew.setToolTipText(LocalizationData.get("MainMenu.NewFile.ToolTip")); //$NON-NLS-1$
 		this.menuItemNew.addActionListener(this);
 		menu.add(this.menuItemNew);
-		this.menuItemOpen = new JMenuItem(new OpenAction(this.frame));
-		this.menuItemOpen.setMnemonic(LocalizationData.getChar("MainMenu.Open.Mnemonic")); //$NON-NLS-1$
-		this.menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
-		menu.add(this.menuItemOpen);
+		JMenuItem menuItemOpen = new JMenuItem(new OpenAction(this.frame));
+		menuItemOpen.setMnemonic(LocalizationData.getChar("MainMenu.Open.Mnemonic")); //$NON-NLS-1$
+		menuItemOpen.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Open.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
+		menu.add(menuItemOpen);
 		this.menuItemSave = new JMenuItem(new SaveAction(this.frame));
 		this.menuItemSave.setAccelerator(KeyStroke.getKeyStroke(LocalizationData.getChar("MainMenu.Save.Accelerator"), menuShortcutKeyMask)); //$NON-NLS-1$
 		this.menuItemSave.setMnemonic(LocalizationData.getChar("MainMenu.Save.Mnemonic")); //$NON-NLS-1$
@@ -138,7 +135,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.add(this.menuItemPrint);
 
 		menu.addSeparator();
-		editPreferences = new EditPreferenceAction(frame);
+		Action editPreferences = new EditPreferenceAction(frame);
 		menu.add(editPreferences);
 		insertPluginMenuItems(menu, AbstractPlugIn.PREFERENCES_PART);
 
@@ -316,7 +313,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				chooser.setLocale(LocalizationData.getLocale());
 				if (ImportDialog.lastFile != null) {
 					File lastFile = ImportDialog.lastFile;
-					if (lastFile.exists() && lastFile.canRead()) chooser.setSelectedFile(lastFile);
+					if (lastFile.exists() && lastFile.canRead()) {
+						chooser.setSelectedFile(lastFile);
+					}
 				}
 				chooser.updateUI();
 				File file = chooser.showOpenDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
@@ -334,7 +333,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 								if (errors.length!=0) {
 									ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame.getJFrame(), importer.getParameters().getImportedFileColumns(), errors);
 									importErrorDialog.setVisible(true);
-									if (importErrorDialog.getResult()!=null) errors = new ImportError[0];
+									if (importErrorDialog.getResult()!=null) {
+										errors = new ImportError[0];
+									}
 								}
 								if (errors.length==0) {
 									importer.importFile(data);
@@ -428,12 +429,14 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				}
 			};
 			List<Account> filterAccounts = frame.getFilteredData().getFilter().getValidAccounts();
-			boolean hasAccountFilter = (filterAccounts!=null);
+			boolean hasAccountFilter = filterAccounts!=null;
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				Account account = data.getAccount(i);
 				JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
 				item.setToolTipText(MessageFormat.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
-				if (hasAccountFilter) item.setSelected(filterAccounts.contains(account));
+				if (hasAccountFilter) {
+					item.setSelected(filterAccounts.contains(account));
+				}
 				filterMenu.add(item);
 				item.addActionListener(listener);
 			}
@@ -451,8 +454,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			buildBooleanFilterChoiceMenu(FilterActionItem.CHECKED_STATUS,
 					new String[] { LocalizationData.get("MainMenuBar.checked"), //$NON-NLS-1$
 							LocalizationData.get("MainMenuBar.notChecked") }, new int[] { Filter.CHECKED, Filter.NOT_CHECKED }, //$NON-NLS-1$
-					new String[] {
-							LocalizationData.get("MainMenuBar.checked.toolTip"), LocalizationData.get("MainMenuBar.notChecked.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
+					new String[] { LocalizationData.get("MainMenuBar.checked.toolTip"), LocalizationData.get("MainMenuBar.notChecked.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("MainMenuBar.NoCheckedFilter.toolTip")); //$NON-NLS-1$
 			filterMenu.addSeparator();
 			buildBooleanFilterChoiceMenu(FilterActionItem.NATURE,
@@ -518,8 +520,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Filter filter = frame.getFilteredData().getFilter();
-			if (this.kind==CHECKED_STATUS) filter.setStatementFilter(property,filter.getStatementMatcher());
-			else filter.setAmountFilter(property, filter.getMinAmount(), filter.getMaxAmount());
+			if (this.kind==CHECKED_STATUS) {
+				filter.setStatementFilter(property,filter.getStatementMatcher());
+			} else {
+				filter.setAmountFilter(property, filter.getMinAmount(), filter.getMaxAmount());
+			}
 		}
 	}
 

@@ -132,7 +132,9 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		return new AbstractCheckbookListModel() {		
 			@Override
 			public int getRowCount() {
-				if (account==null) return 0;
+				if (account==null) {
+					return 0;
+				}
 				return account.getCheckbooksNumber();
 			}
 			

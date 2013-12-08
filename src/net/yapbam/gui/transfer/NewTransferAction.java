@@ -31,7 +31,9 @@ public class NewTransferAction extends AbstractAction {
 		while (data.getAccountsNumber()<2) {
 			// Need to create two accounts first
 			Account account = EditAccountDialog.open(data, Utils.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
-			if (account == null) return;
+			if (account == null) {
+				return;
+			}
 		}
 		TransferDialog dialog = new TransferDialog(Utils.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
 		dialog.setVisible(true);

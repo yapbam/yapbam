@@ -62,8 +62,8 @@ public class ReleaseNotesFormatter {
 		echo("<html>");
 		echo("<head>");
 		echoCSS();
-	  echo("</head>");
-	  echo("<body>");
+		echo("</head>");
+		echo("<body>");
 	}
 
 	/** Echoes the CSS used in the release notes. 
@@ -71,28 +71,28 @@ public class ReleaseNotesFormatter {
 	 */
 	protected void echoCSS() throws IOException {
 		// Output the css styles
-	  echo("<style type=\"text/css\">");
-	  echo(".relnotes-version {");
-	  echo("background: #f0f0f0;");
-	  echo("margin-bottom: 10px;");
-	  echo("padding-left: 5px;");
-	  echo("}");
-	  
-	  echo(".relnotes-bugFix {");
-	  echo("background: #f8fff8;");
-	  echo("color: #202020;");
-	  echo("padding-left: 5px;");
-	  echo("margin-bottom: 5px;");
-	  echo("margin-right: 5px;");
-	  echo("}");
-	  
-	  echo("h2 { font-size: 1.2em; }");
-	  echo ("ul { margin-top: 0px; }");
-	  echo("</style>");
+		echo("<style type=\"text/css\">");
+		echo(".relnotes-version {");
+		echo("background: #f0f0f0;");
+		echo("margin-bottom: 10px;");
+		echo("padding-left: 5px;");
+		echo("}");
+
+		echo(".relnotes-bugFix {");
+		echo("background: #f8fff8;");
+		echo("color: #202020;");
+		echo("padding-left: 5px;");
+		echo("margin-bottom: 5px;");
+		echo("margin-right: 5px;");
+		echo("}");
+
+		echo("h2 { font-size: 1.2em; }");
+		echo("ul { margin-top: 0px; }");
+		echo("</style>");
 	}
 	
 	private void echoBottom() throws IOException {
-	  echo("</body>");
+		echo("</body>");
 		echo("</html>");
 	}
 
@@ -100,11 +100,15 @@ public class ReleaseNotesFormatter {
 		this.writer = writer;
 		this.echoHead();
 		// Read the wordings (there at the first line)
-		{
+		
 		String line = reader.readLine();
-		if (line==null) throw new EOFException();
+		if (line==null) {
+			throw new EOFException();
+		}
 		String[] fields = StringUtils.split(line, '\t');
-		if (fields.length<7) throw new EOFException(line);
+		if (fields.length<7) {
+			throw new EOFException(line);
+		}
 		this.next=fields[0];
 		this.knownSingular=fields[1];
 		this.knownPlural=fields[2];
@@ -112,23 +116,23 @@ public class ReleaseNotesFormatter {
 		this.changePlural=fields[4];
 		this.fixSingular=fields[5];
 		this.fixPlural=fields[6];
-		}
+		
 		int lineNumber = 1;
-		for (String line=reader.readLine(); line!=null; line=reader.readLine()) {
+		for (line=reader.readLine(); line!=null; line=reader.readLine()) {
 			lineNumber++;
-			String[] fields = StringUtils.split(line, '\t');
+			fields = StringUtils.split(line, '\t');
 			String code = fields[0].trim();
 			line = fields.length>1?fields[1].trim():"";
-			if (code.equals("version")) {
+			if ("version".equals(code)) {
 				openVersion(line);
-			} else if (code.equals("improvement")) {
+			} else if ("improvement".equals(code)) {
 				this.currentList = this.changes;
-			} else if (code.equals("fix")) {
+			} else if ("fix".equals(code)) {
 				this.currentList = this.fixes;
-			} else if (code.equals("known")) {
+			} else if ("known".equals(code)) {
 				this.currentList = this.known;
-			} else if (code.length()==0) {
-				if (line.length()!=0) {
+			} else if (code.isEmpty()) {
+				if (!line.isEmpty()) {
 					if (this.currentList==null) {
 						System.err.println ("Line "+lineNumber+" is not preceded by a kind");
 					} else {
@@ -153,7 +157,7 @@ public class ReleaseNotesFormatter {
 	
 	private void openVersion(String version) throws IOException {
 		this.closeVersion();
-		if (version.equals("next")) {
+		if ("next".equals(version)) {
 			if (this.ignoreNext) {
 				this.ignoredVersion = true;
 			} else {
@@ -192,7 +196,7 @@ public class ReleaseNotesFormatter {
 	}
 	
 	private void output(List<String> array, String className, String singular, String plural) throws IOException {
-		if (array.size()!=0) {
+		if (!array.isEmpty()) {
 			String title = (array.size()==1) ? singular : plural;
 			echo ("<div class=\""+className+"\"><h3>"+title+"</h3><ul>");
 			for (String line : array) {

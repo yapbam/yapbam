@@ -48,7 +48,9 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	CheckUpdateDialog(Window owner, boolean auto, boolean forced) {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
 		this.auto = auto;
-		if (auto) setDelay(Long.MAX_VALUE);
+		if (auto) {
+			setDelay(Long.MAX_VALUE);
+		}
 		getCancelButton().setToolTipText(LocalizationData.get("MainMenu.CheckUpdate.Dialog.cancel.tooltip")); //$NON-NLS-1$
 	}
 	
@@ -88,7 +90,9 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		
 		@Override
 		protected UpdateInformation doInBackground() throws Exception {
-			if (SLOW_UPDATE_CHECKING) Thread.sleep(2000);
+			if (SLOW_UPDATE_CHECKING) {
+				Thread.sleep(2000);
+			}
 			return VersionManager.getUpdateInformation();
 		}
 		
@@ -125,8 +129,11 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 							}
 //TODO Remove the localized wordings (verify they are no more used)						new DefaultHTMLInfoDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.Success.title"), LocalizationData.get("MainMenu.CheckUpdate.Success.Header"), //$NON-NLS-1$ //$NON-NLS-2$
 //									message).setVisible(true);
-						} else { // Version is up to date
-							if (!auto) JOptionPane.showMessageDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.NoUpdate"), LocalizationData.get("MainMenu.CheckUpdate.NoUpdate.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+						} else {
+							// Version is up to date
+							if (!auto) {
+								JOptionPane.showMessageDialog(owner, LocalizationData.get("MainMenu.CheckUpdate.NoUpdate"), LocalizationData.get("MainMenu.CheckUpdate.NoUpdate.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+							}
 						}
 					}
 				}
@@ -154,7 +161,9 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 			//TODO Use a HTMLPane in order to be able to display a the relnotes
 			File launchDirectory = Portable.getLaunchDirectory();
 			boolean canWrite = FileUtils.isWritable(launchDirectory);
-			if (auto && Preferences.INSTANCE.getAutoUpdateInstall() && canWrite) return true;
+			if (auto && Preferences.INSTANCE.getAutoUpdateInstall() && canWrite) {
+				return true;
+			}
 
 			String title = LocalizationData.get("MainMenu.CheckUpdate.Success.title"); //$NON-NLS-1$
 			if (!canWrite) {

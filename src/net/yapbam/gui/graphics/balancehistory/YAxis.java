@@ -49,7 +49,9 @@ class YAxis {
 			this.lastParentHeight = parentHeight;
 			this.yOffset = fontHeight+2;
 			double yVariation = max - min;
-			if (yVariation==0) yVariation = 1;
+			if (yVariation==0) {
+				yVariation = 1;
+			}
 			this.yRatio = (double)(parentHeight-2*yOffset)/yVariation;
 			computeYGraduations();
 		}

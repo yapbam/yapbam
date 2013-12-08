@@ -74,7 +74,7 @@ public class ImportErrorPanel extends JPanel {
 			for (int i = 0; i < importedFileColumns.length; i++) {
 				if (importedFileColumns[i]>=0) {
 					// This Yapbam field is imported => Put it in the headers
-					columnsHeaders[importedFileColumns[i]+1] = ExportTableModel.columns[i];
+					columnsHeaders[importedFileColumns[i]+1] = ExportTableModel.COLUMNS[i];
 				}
 			}
 		}

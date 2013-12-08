@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -26,10 +27,10 @@ import net.yapbam.update.VersionManager;
 public class ErrorManager {
 	/** The instance of this class.*/
 	public static final ErrorManager INSTANCE = new ErrorManager();
-	private final static String ENC = "UTF-8";
+	private static final String ENC = "UTF-8";
 
 	private BlockingDeque<Message> errorsQueue;
-	private HashSet<String> encounteredErrors;
+	private Set<String> encounteredErrors;
 	
 	private ErrorManager() {
 		this.encounteredErrors = new HashSet<String>();
@@ -123,7 +124,9 @@ public class ErrorManager {
 		buffer.append(t.toString());
 		int i=0;
 		for (StackTraceElement element : elements) {
-			if (i==2) break;
+			if (i==2) {
+				break;
+			}
 			buffer.append(element.toString());
 			i++;
 		}

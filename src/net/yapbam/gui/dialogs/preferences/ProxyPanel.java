@@ -99,17 +99,25 @@ public class ProxyPanel extends PreferencePanel {
 		getNoProxyButton().setSelected(host==null);
 		getProxyButton().setSelected(host!=null);
 		getProxyHostField().setText(host);
-		if (host!=null) getProxyPortField().setText(Integer.toString(Preferences.INSTANCE.getHttpProxyPort()));
+		if (host!=null) {
+			getProxyPortField().setText(Integer.toString(Preferences.INSTANCE.getHttpProxyPort()));
+		}
 		getUserField().setText(Preferences.INSTANCE.getHttpProxyUser());
 		getPasswordField().setText(Preferences.INSTANCE.getHttpProxyPassword());
 	}
 	
 	private String buildOkDisabledCause() {
 		if (getProxyButton().isSelected()) {
-			if (getProxyHost()==null) return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.proxyNameMissing"),getTitle()); //$NON-NLS-1$
-			if (getProxyHost().indexOf(':')>=0) return LocalizationData.get("PreferencesDialog.Network.invalidProxyName"); //$NON-NLS-1$
-			Integer port = getProxyPort();
-			if ((port==0) || (port>IP_PORT_MAX_VALUE)) return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.invalidPort"),getTitle(),IP_PORT_MAX_VALUE); //$NON-NLS-1$
+			if (getProxyHost()==null) {
+				return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.proxyNameMissing"),getTitle()); //$NON-NLS-1$
+			} else if (getProxyHost().indexOf(':')>=0) {
+				return LocalizationData.get("PreferencesDialog.Network.invalidProxyName"); //$NON-NLS-1$
+			} else {
+				Integer port = getProxyPort();
+				if ((port==0) || (port>IP_PORT_MAX_VALUE)) {
+					return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.invalidPort"),getTitle(),IP_PORT_MAX_VALUE); //$NON-NLS-1$
+				}
+			}
 		}
 		return null;
 	}
@@ -146,8 +154,7 @@ public class ProxyPanel extends PreferencePanel {
 		getPasswordField().setEnabled(enabled);
 		Color color = enabled?Color.BLACK:Color.GRAY;
 		TitledBorder border = BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Network.authentication"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color);
-		
-		getAuthenticationPanel().setBorder(border); //$NON-NLS-1$ //$NON-NLS-2$
+		getAuthenticationPanel().setBorder(border);
 	}
 
 	/**
@@ -337,21 +344,30 @@ public class ProxyPanel extends PreferencePanel {
 		if (getProxyHost()==null) {
 			return null;
 		} else {
-			if (getProxyPortField().getText().trim().length()==0) return DEFAULT_PROXY_PORT; // The default port
+			if (getProxyPortField().getText().trim().length()==0) {
+				return DEFAULT_PROXY_PORT; // The default port
+			}
 			BigInteger port = getProxyPortField().getValue();
-			if (port.compareTo(new BigInteger(Integer.toString(IP_PORT_MAX_VALUE)))>0) return Integer.MAX_VALUE;
-			return port.intValue();
+			if (port.compareTo(new BigInteger(Integer.toString(IP_PORT_MAX_VALUE)))>0) {
+				return Integer.MAX_VALUE;
+			} else {
+				return port.intValue();
+			}
 		}
 	}
 
 	public String getProxyUser() {
-		if (getProxyHost()==null) return null;
+		if (getProxyHost()==null) {
+			return null;
+		}
 		String user = getUserField().getText().trim();
 		return user.length()==0?null:user;
 	}
 
 	public String getProxyPassword() {
-		if (getProxyUser()==null) return null;
+		if (getProxyUser()==null) {
+			return null;
+		}
 		String password = new String(getPasswordField().getPassword()).trim();
 		return password.length()==0?null:password;
 	}

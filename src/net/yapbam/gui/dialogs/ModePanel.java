@@ -64,7 +64,7 @@ class ModePanel extends JPanel {
 		isSelectedBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				boolean ok = (e.getStateChange() == ItemEvent.SELECTED);
+				boolean ok = e.getStateChange() == ItemEvent.SELECTED;
 				combo.setEnabled(ok);
 				relField.setEnabled(ok);
 				stopField.setEnabled(ok);
@@ -73,15 +73,22 @@ class ModePanel extends JPanel {
 				stopLabel.setEnabled(ok);
 				debtLabel.setEnabled(ok);
 				relLabel.setEnabled(ok);
-				if (checkBook!=null) checkBook.setEnabled(ok);
-				if (!ok && (checkBook!=null)) checkBook.setSelected(false);
+				if (checkBook!=null) {
+					checkBook.setEnabled(ok);
+				}
+				if (!ok && (checkBook!=null)) {
+					checkBook.setSelected(false);
+				}
 				firePropertyChange(IS_SELECTED_PROPERTY, !ok, ok);
 				checkValidity();
 			}});
 		this.add(isSelectedBox, c);
 		
 		c = new GridBagConstraints();
-		c.gridy=1; c.anchor=GridBagConstraints.WEST; c.insets=insets; c.gridwidth=1;
+		c.gridy=1;
+		c.anchor=GridBagConstraints.WEST;
+		c.insets=insets;
+		c.gridwidth=1;
 		comboLabel = new JLabel(LocalizationData.get("TransactionDialog.valueDate")); //$NON-NLS-1$
 		comboLabel.setEnabled(false);
 		this.add(comboLabel,c);
@@ -92,12 +99,15 @@ class ModePanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int index = combo.getSelectedIndex();
-				emptyPanel.setVisible((index==0));
-				relativePanel.setVisible((index==1));
+				emptyPanel.setVisible(index==0);
+				relativePanel.setVisible(index==1);
 				deferedPanel.setVisible(index==2);
 				checkValidity();
 			}});
-		c = new GridBagConstraints(); c.gridy=1; c.gridx=1; c.weightx=1;
+		c = new GridBagConstraints();
+		c.gridy=1;
+		c.gridx=1;
+		c.weightx=1;
 		this.add(combo, c);
 		
 		PropertyChangeListener listener = new PropertyChangeListener() {
@@ -108,7 +118,9 @@ class ModePanel extends JPanel {
 		};
 
 		relativePanel = new JPanel(new GridBagLayout());
-		if (DEBUG) relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
+		if (DEBUG) {
+			relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
+		}
 		GridBagConstraints c2 = new GridBagConstraints();
 		c2.insets = insets;
 		c2.anchor = GridBagConstraints.WEST;
@@ -124,7 +136,9 @@ class ModePanel extends JPanel {
 		relativePanel.setVisible(false);
 
 		deferedPanel = new JPanel(new GridBagLayout());
-		if (DEBUG) deferedPanel.setBorder(BorderFactory.createTitledBorder("defferedPanel")); //$NON-NLS-1$
+		if (DEBUG) {
+			deferedPanel.setBorder(BorderFactory.createTitledBorder("defferedPanel")); //$NON-NLS-1$
+		}
 		c2 = new GridBagConstraints();
 		c2.weightx = 1.0;
 		c2.insets = insets;
@@ -148,10 +162,15 @@ class ModePanel extends JPanel {
 		deferedPanel.setVisible(false);
 
 		emptyPanel = new JPanel();
-		if (DEBUG) emptyPanel.setBorder(BorderFactory.createTitledBorder("emptyPanel")); //$NON-NLS-1$
+		if (DEBUG) {
+			emptyPanel.setBorder(BorderFactory.createTitledBorder("emptyPanel")); //$NON-NLS-1$
+		}
 
 		homogeneizePreferedSize(new JPanel[]{emptyPanel,relativePanel,deferedPanel});
-		c.gridy = 2; c.gridx=0; c.gridwidth=GridBagConstraints.REMAINDER; c.fill=GridBagConstraints.HORIZONTAL;
+		c.gridy = 2;
+		c.gridx=0;
+		c.gridwidth=GridBagConstraints.REMAINDER;
+		c.fill=GridBagConstraints.HORIZONTAL;
 		this.add(relativePanel, c);
 		this.add(deferedPanel, c);
 		this.add(emptyPanel, c);
@@ -213,7 +232,9 @@ class ModePanel extends JPanel {
 	}
 
 	public boolean hasValidContent() {
-		if (!this.isSelected()) return true;
+		if (!this.isSelected()) {
+			return true;
+		}
 		int index = combo.getSelectedIndex();
 		if (index==1) {
 			return relField.getValue()!=null;

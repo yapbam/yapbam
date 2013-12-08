@@ -37,10 +37,13 @@ class SaveWorker extends Worker<WriterResult, Void> implements Cancellable {
 			Boolean deleteOnCancelled = !file.exists();
 			data.serialize(file, service, this);
 			if (isCancelled()) {
-				if (deleteOnCancelled) file.delete();
+				if (deleteOnCancelled) {
+					file.delete();
+				}
 				return null;
 			} else {
-				if (!previousFile.equals(file)) { // Previous and currently saved file are not the same
+				if (!previousFile.equals(file)) {
+					// Previous and currently saved file are not the same
 					// Delete previous one
 					previousFile.delete();
 				}

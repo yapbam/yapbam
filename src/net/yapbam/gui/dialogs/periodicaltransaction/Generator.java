@@ -57,7 +57,9 @@ public class Generator {
 	 * @return true if the date change adds or removes transactions to the transaction list
 	 */
 	public boolean setDate(Date date) {
-		if (NullUtils.areEquals(date, this.date)) return false;
+		if (NullUtils.areEquals(date, this.date)) {
+			return false;
+		}
 		// As transactions can be edited after this method is called, we should not change transactions that were already there before
 		// the date change (or modifications would be lost).
 		// We also need to consider that some transactions may be postponed

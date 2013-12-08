@@ -45,7 +45,9 @@ public class StatementViewPlugin extends AbstractPlugIn {
 
 	@Override
 	public boolean allowMenu(int menuId) {
-		if (menuId==FILTER_MENU) return false;
+		if (menuId==FILTER_MENU) {
+			return false;
+		}
 		return super.allowMenu(menuId);
 	}
 
