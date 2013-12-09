@@ -122,7 +122,7 @@ public class ArchiveAction extends AbstractAction {
 				if (selectedURI==null) {
 					return false;
 				}
-				button.setText(existing?LocalizationData.get("Archive.selectionDialog.select"):LocalizationData.get("Archive.selectionDialog.create")); //$NON-NLS-1$ //$NON-NLS-2$
+				button.setText(existing?LocalizationData.get("GenericButton.select"):LocalizationData.get("GenericButton.new")); //$NON-NLS-1$ //$NON-NLS-2$
 				return true;
 			}
 		});
