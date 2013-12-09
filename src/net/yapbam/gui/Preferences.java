@@ -27,6 +27,7 @@ import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 import net.yapbam.gui.accountsummary.AccountsSummaryPlugin;
 import net.yapbam.gui.administration.AdministrationPlugIn;
+import net.yapbam.gui.archive.ArchivePlugin;
 import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
 import net.yapbam.gui.preferences.EditingOptions;
@@ -385,6 +386,7 @@ public class Preferences {
 		plugins.add(new PlugInContainer(AdministrationPlugIn.class));
 		plugins.add(new PlugInContainer(TransferPlugin.class));
 		plugins.add(new PlugInContainer(RecentFilesPlugin.class));
+		plugins.add(new PlugInContainer(ArchivePlugin.class));
 
 		// Load additionnal plugins
 		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$
