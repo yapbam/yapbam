@@ -55,7 +55,9 @@ class FolderCleaner {
 			if (checksums.length>0) {
 				System.out.print (URLEncoder.encode(filePath)+"=");
 				for (int i = 0; i < checksums.length; i++) {
-					if (i!=0) System.out.print(',');
+					if (i!=0) {
+						System.out.print(',');
+					}
 					System.out.print(checksums[i]);
 				}
 				System.out.println();
@@ -106,7 +108,9 @@ class FolderCleaner {
 		// file, it will initialize Preferences.INSTANCE and its firstRun attribute.
 		// It would leads to think that it's the first Yapbam run ... but it's not if the yapbam pref file is
 		// simply at the wrong place.
-		if (!Portable.isPortable()) return false;
+		if (!Portable.isPortable()) {
+			return false;
+		}
 		File prefFile = new File(Portable.getDataDirectory(), ".yapbampref");
 		return !prefFile.exists();
 	}
@@ -135,13 +139,11 @@ class FolderCleaner {
 		void clean() {
 //			System.out.println ("Start cleaning of "+source);
 			try {
-				if (source.exists() && source.canWrite()) {
-					if (isValidCheckSum()) {
-						if (this.destination==null) {
-							source.delete();
-						} else {
-							FileUtils.move(source, destination);
-						}
+				if (source.exists() && source.canWrite() && isValidCheckSum()) {
+					if (this.destination==null) {
+						source.delete();
+					} else {
+						FileUtils.move(source, destination);
 					}
 				}
 			} catch (Throwable e) {
@@ -154,10 +156,14 @@ class FolderCleaner {
 		 * @throws IOException
 		 */
 		private boolean isValidCheckSum() throws IOException {
-			if (this.checkSums.length==0) return true;
+			if (this.checkSums.length==0) {
+				return true;
+			}
 			String checkSum = CheckSum.toString(CheckSum.getChecksum(source));
 			for (String validCheckSum : this.checkSums) {
-				if (validCheckSum.equals(checkSum)) return true;
+				if (validCheckSum.equals(checkSum)) {
+					return true;
+				}
 			}
 //			System.out.println (source + " invalid checksum");
 			return false;

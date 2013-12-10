@@ -100,11 +100,9 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 							int row = e.getIndex()-1; // -1 because undefined mode is the first one and is not displayed
 							fireTableRowsDeleted(row, row);
 						}
-					} else if (event instanceof ModePropertyChangedEvent) {
-						if (account==((ModePropertyChangedEvent)event).getAccount()) {
-							int row = account.indexOf(((ModePropertyChangedEvent)event).getNewMode()) - 1;
-							fireTableRowsUpdated(row, row); 
-						}
+					} else if ((event instanceof ModePropertyChangedEvent) && (account==((ModePropertyChangedEvent)event).getAccount())) {
+						int row = account.indexOf(((ModePropertyChangedEvent)event).getNewMode()) - 1;
+						fireTableRowsUpdated(row, row); 
 					}
 				}
 			});
@@ -125,11 +123,15 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 		GlobalData gData = (GlobalData)data;
 		for (int i = 0; i < gData.getTransactionsNumber(); i++) {
 			Transaction transaction = gData.getTransaction(i);
-			if (transaction.getAccount().equals(account) && transaction.getMode().equals(mode)) return true;
+			if (transaction.getAccount().equals(account) && transaction.getMode().equals(mode)) {
+				return true;
+			}
 		}
 		for (int i = 0; i < gData.getPeriodicalTransactionsNumber(); i++) {
 			PeriodicalTransaction periodicalTransaction = gData.getPeriodicalTransaction(i);
-			if (periodicalTransaction.getAccount().equals(account) && periodicalTransaction.getMode().equals(mode)) return true;			
+			if (periodicalTransaction.getAccount().equals(account) && periodicalTransaction.getMode().equals(mode)) {
+				return true;			
+			}
 		}
 		return false;
 	}

@@ -21,7 +21,7 @@ import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importer> {
 	private ImportPanel importPanel;
 	public static File lastFile;
-	public transient IOException instantiateException;
+	private transient IOException instantiateException;
 
 	static final class Container {
 		File file;
@@ -36,7 +36,9 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 	
 	public ImportDialog(Window owner, GlobalData data, File file) throws IOException {
 		super(owner, LocalizationData.get("ImportDialog.title"), new Container(file, data)); //$NON-NLS-1$
-		if (instantiateException!=null) throw instantiateException;
+		if (instantiateException!=null) {
+			throw instantiateException;
+		}
 	}
 
 	@Override
@@ -78,7 +80,9 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 					YapbamState.INSTANCE.save(getStateKey(), parameters);
 				}
 			}
-			if (parameters!=null) importPanel.setParameters(parameters);
+			if (parameters!=null) {
+				importPanel.setParameters(parameters);
+			}
 		}
 		return importPanel;
 	}

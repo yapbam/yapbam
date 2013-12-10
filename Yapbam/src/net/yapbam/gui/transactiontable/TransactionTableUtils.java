@@ -43,13 +43,17 @@ public abstract class TransactionTableUtils {
 		if (spread) {
 			double complement = transaction.getComplement();
 			int numberOfLines = transaction.getSubTransactionSize()+1;
-			if (complement!=0) numberOfLines++;
+			if (complement!=0) {
+				numberOfLines++;
+			}
 			double[] result = new double[numberOfLines];
 			result[0] = transaction.getAmount();
 			for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 				result[i+1] = transaction.getSubTransaction(i).getAmount();
 			}
-			if (complement!=0) result[result.length-1] = complement;
+			if (complement!=0) {
+				result[result.length-1] = complement;
+			}
 			return result;
 		} else {
 			return new double[]{transaction.getAmount()};
@@ -60,14 +64,18 @@ public abstract class TransactionTableUtils {
 		if (spread) {
 			double complement = transaction.getComplement();
 			int numberOfLines = transaction.getSubTransactionSize()+1;
-			if (!isZero(complement)) numberOfLines++;
+			if (!isZero(complement)) {
+				numberOfLines++;
+			}
 			double[] result = new double[numberOfLines];
 			result[0] = expense==isExpense(transaction.getAmount()) ? transaction.getAmount() : Double.NaN;
 			for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 				double amount = transaction.getSubTransaction(i).getAmount();
 				result[i+1] = expense==isExpense(amount) ? amount : Double.NaN;
 			}
-			if (!isZero(complement)) result[result.length-1] = expense==isExpense(complement) ? complement : Double.NaN;
+			if (!isZero(complement)) {
+				result[result.length-1] = expense==isExpense(complement) ? complement : Double.NaN;
+			}
 			return result;
 		} else {
 			return (expense==isExpense(transaction.getAmount())) ? new double[]{transaction.getAmount()} : null;

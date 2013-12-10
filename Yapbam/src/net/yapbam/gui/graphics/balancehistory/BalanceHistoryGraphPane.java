@@ -90,8 +90,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		Date date = graph.getSelectedDate();
 		String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
 		String balance = LocalizationData.getCurrencyInstance().format(this.getBalanceHistory().getBalance(date));
-		String text = MessageFormat.format(LocalizationData.get("BalanceHistory.balance"), dateStr, balance); //$NON-NLS-1$
-		return text;
+		return MessageFormat.format(LocalizationData.get("BalanceHistory.balance"), dateStr, balance); //$NON-NLS-1$
 	}
 
 	void refresh(boolean ignoreEnd) {
@@ -145,8 +144,11 @@ public class BalanceHistoryGraphPane extends JPanel {
 		if ((viewport.getViewPosition().x > selected) || (viewport.getViewPosition().x+viewWidth<selected)) {
 			//Do nothing if selected date is already visible.
 			int position = selected-viewWidth/2;
-			if (position < 0) position = 0;
-			else if (position + viewWidth > graphWidth) position = graphWidth-viewWidth;
+			if (position < 0) {
+				position = 0;
+			} else if (position + viewWidth > graphWidth) {
+				position = graphWidth-viewWidth;
+			}
 			viewport.setViewPosition(new Point(position, 0));
 		}
 	}

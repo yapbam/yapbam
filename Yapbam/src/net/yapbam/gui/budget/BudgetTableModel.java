@@ -32,14 +32,18 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 	@Override
 	public int getColumnCount() {
 		int count = this.budget.getDatesSize();
-		if (hasExtraColumn) count++;
+		if (hasExtraColumn) {
+			count++;
+		}
 		return count;
 	}
 
 	@Override
 	public int getRowCount() {
 		int count = this.budget.getCategoriesSize();
-		if (hasExtraLine) count++;
+		if (hasExtraLine) {
+			count++;
+		}
 		return count;
 	}
 
@@ -70,7 +74,9 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 		int datesSize = this.budget.getDatesSize();
 		if (column<datesSize) {
 			Date date = this.budget.getDate(column);
-			if (this.budget.isYear()) return ""+(date.getYear()+1900); //$NON-NLS-1$
+			if (this.budget.isYear()) {
+				return ""+(date.getYear()+1900); //$NON-NLS-1$
+			}
 			//TODO It would be better to have a localized version for this formatter ...
 			// but I can't find how to do that (simple with the day, but not documented without)
 			return new SimpleDateFormat("yyyy/MM").format(date);

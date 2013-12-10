@@ -28,9 +28,9 @@ import java.util.Date;
 
 public class GenerationPanel extends JPanel {
 	// Properties
-	public static final String ACTIVATED_PROPERTY = "activated";  //  @jve:decl-index=0: //$NON-NLS-1$
+	public static final String ACTIVATED_PROPERTY = "activated"; //$NON-NLS-1$
 	public static final String DATE_STEPPER_PROPERTY = "dateStepper"; //$NON-NLS-1$
-	public static final String NEXT_DATE_PROPERTY = "nextDate"; //$NON-NLS-1$  //  @jve:decl-index=0:
+	public static final String NEXT_DATE_PROPERTY = "nextDate"; //$NON-NLS-1$
 
 	// Indexes of date stepper kind
 	private static final int YEARLY_INDEX = 0;
@@ -39,7 +39,6 @@ public class GenerationPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JCheckBox activatedBox = null;
-	private JLabel jLabel = null;
 	private DateWidget date = null;
 	private JLabel jLabel1 = null;
 	private IntegerWidget nb = null;
@@ -49,8 +48,8 @@ public class GenerationPanel extends JPanel {
 	private JLabel jLabel2 = null;
 	private IntegerWidget day = null;
 
-	private DateStepper currentDateStepper;  //  @jve:decl-index=0:
-	private Date currentNextDate;  //  @jve:decl-index=0:
+	private DateStepper currentDateStepper;
+	private Date currentNextDate;
 	private JLabel jLabel3 = null;
 	private DateWidget lastDate = null;
 
@@ -85,7 +84,7 @@ public class GenerationPanel extends JPanel {
 		gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints1.anchor = GridBagConstraints.EAST;
 		gridBagConstraints1.gridy = 0;
-		jLabel = new JLabel();
+		JLabel jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("PeriodicalTransactionDialog.nextDate")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -177,7 +176,7 @@ public class GenerationPanel extends JPanel {
 
 	private boolean areEquals (Date d1, Date d2) {
 		if (d1==null) {
-			return (d2==null);
+			return d2==null;
 		} else {
 			return d1.equals(d2);
 		}
@@ -253,17 +252,23 @@ public class GenerationPanel extends JPanel {
 	
 	private boolean areEquals (DateStepper s1, DateStepper s2) {
 		if (s1==null) {
-			return (s2==null);
+			return s2==null;
 		} else if (s2 == null) {
 			return false;
 		} else if (!NullUtils.areEquals(s1.getLastDate(),s2.getLastDate())) {
 			return false;
 		} else if (s1 instanceof DayDateStepper) {
-			if (!(s2 instanceof DayDateStepper)) return false;
-			return ((DayDateStepper)s1).equals((DayDateStepper)s2);
+			if (!(s2 instanceof DayDateStepper)) {
+				return false;
+			} else {
+				return ((DayDateStepper)s1).equals((DayDateStepper)s2);
+			}
 		} else if (s1 instanceof MonthDateStepper) {
-			if (!(s2 instanceof MonthDateStepper)) return false;
-			return ((MonthDateStepper)s1).equals((MonthDateStepper)s2);
+			if (!(s2 instanceof MonthDateStepper)) {
+				return false;
+			} else {
+				return ((MonthDateStepper)s1).equals((MonthDateStepper)s2);
+			}
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -382,11 +387,11 @@ public class GenerationPanel extends JPanel {
 	}
 
 	private boolean isYearly() {
-		return (kind.getSelectedIndex()==YEARLY_INDEX);
+		return kind.getSelectedIndex()==YEARLY_INDEX;
 	}
 
 	private boolean isMonthly() {
-		return (kind.getSelectedIndex()==MONTHLY_INDEX);
+		return kind.getSelectedIndex()==MONTHLY_INDEX;
 	}
 
 	/**
@@ -415,4 +420,4 @@ public class GenerationPanel extends JPanel {
 	public boolean getLastDateIsValid() {
 		return getLastDate().isContentValid();
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

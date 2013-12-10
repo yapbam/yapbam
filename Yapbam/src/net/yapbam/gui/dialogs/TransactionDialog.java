@@ -182,7 +182,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 						Transaction transaction = gData.getTransaction(i);
 						// In order to minimize the impact of very old transactions, we will use the date ranking
 						double ranking = getRankingBasedOnDate(now, transaction);
-						if (!transaction.getAccount().equals(getAccount())) ranking = ranking / 100;
+						if (!transaction.getAccount().equals(getAccount())) {
+							ranking = ranking / 100;
+						}
 						if (transaction.getDescription().equalsIgnoreCase(description)) {
 							add(map, transaction.getCategory(), transaction.getAmount()>0, ranking/10);
 						}
@@ -366,7 +368,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		setTransactionNumberWidget();
 		Mode mode = getCurrentMode();
 		DateStepper vdc = isExpense() ? mode.getExpenseVdc() : mode.getReceiptVdc();
-		if ((vdc!=null) && (date.getDate()!=null)) defDate.setDate(vdc.getNextStep(date.getDate()));
+		if ((vdc!=null) && (date.getDate()!=null)) {
+			defDate.setDate(vdc.getNextStep(date.getDate()));
+		}
 	}
 
 	@Override
@@ -402,7 +406,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	}
 	
 	private static class XAndType<T> {
-		public boolean receipt;
+		protected boolean receipt;
 		protected T x;
 		
 		private XAndType(boolean receipt, T x) {
@@ -418,6 +422,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 
 		@Override
 		public boolean equals(Object obj) {
+			if (!(obj instanceof XAndType<?>)) {
+				return false;
+			}
 			if (this.receipt != ((XAndType<?>)obj).receipt) {
 				return false;
 			}

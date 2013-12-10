@@ -10,7 +10,9 @@ import java.util.prefs.Preferences;
  * <BR>License : GPL v3
  */   
 public final class PreferencesUtils {
-	private PreferencesUtils() {}
+	private PreferencesUtils() {
+		// Just to prevent class being intantiated
+	}
 	
 	/** Verifies that a key/value couple is compliant with the limitations of java.util.prefs.Preferences.
 	 * <br>As state could be saved by java.util.prefs.Preferences, we should verify that the key and
@@ -20,8 +22,12 @@ public final class PreferencesUtils {
 	 * @throws IllegalArgumentException if the key or value is not compliant with the limitations of java.util.prefs.Preferences.
 	 */
 	public static void verifyPreferencesCompliance(String key, String value) {
-		if (key.length()>java.util.prefs.Preferences.MAX_KEY_LENGTH) throw new IllegalArgumentException("Key is to long: "+key);
-		if (value.length()>java.util.prefs.Preferences.MAX_VALUE_LENGTH) throw new IllegalArgumentException("Value is to long: "+value);
+		if (key.length()>java.util.prefs.Preferences.MAX_KEY_LENGTH) {
+			throw new IllegalArgumentException("Key is to long: "+key);
+		}
+		if (value.length()>java.util.prefs.Preferences.MAX_VALUE_LENGTH) {
+			throw new IllegalArgumentException("Value is to long: "+value);
+		}
 	}
 
 	/** Saves properties to a Preferences node.

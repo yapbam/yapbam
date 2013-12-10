@@ -49,14 +49,18 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 				new TransactionEditingPanel(), new ProxyPanel(), new AutoUpdatePanel(), new ReportErrorPanel(), new RestoreStatePanel()}));
 		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
 			PreferencePanel preferencePanel = data.getPlugIn(i).getPreferencePanel();
-			if (preferencePanel!=null) this.panels.add(preferencePanel) ;
+			if (preferencePanel!=null) {
+				this.panels.add(preferencePanel) ;
+			}
 		}
 		tabbedPane.addChangeListener(new ChangeListener() {
 			private int lastSelected = -1;
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if (lastSelected>=0) panels.get(lastSelected).setDisplayed(false);
+				if (lastSelected>=0) {
+					panels.get(lastSelected).setDisplayed(false);
+				}
 				lastSelected = tabbedPane.getSelectedIndex();
 				panels.get(lastSelected).setDisplayed(true);
 			}
@@ -76,7 +80,9 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 		if (result!=null) {
 			for (PreferencePanel panel:this.panels) {
 				result = panel.getOkDisabledCause();
-				if (result!=null) break;
+				if (result!=null) {
+					break;
+				}
 			}
 		}
 		return result;

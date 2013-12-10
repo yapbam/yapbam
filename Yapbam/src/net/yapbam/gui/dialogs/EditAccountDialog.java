@@ -74,9 +74,15 @@ public class EditAccountDialog extends AbstractDialog<GlobalData, Account> {
 		dialog.setVisible(true);
 		Account result = dialog.getResult();
 		if (result!=null) {
-			if (!result.getName().equals(account.getName())) data.setName(account, result.getName());
-			if (result.getInitialBalance()!=account.getInitialBalance()) data.setInitialBalance(account, result.getInitialBalance());
-			if (!result.getAlertThreshold().equals(account.getAlertThreshold())) data.setAlertThreshold(account, result.getAlertThreshold());
+			if (!result.getName().equals(account.getName())) {
+				data.setName(account, result.getName());
+			}
+			if (result.getInitialBalance()!=account.getInitialBalance()) {
+				data.setInitialBalance(account, result.getInitialBalance());
+			}
+			if (!result.getAlertThreshold().equals(account.getAlertThreshold())) {
+				data.setAlertThreshold(account, result.getAlertThreshold());
+			}
 			data.setComment(account, result.getComment());
 		}
 	}

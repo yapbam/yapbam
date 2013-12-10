@@ -70,7 +70,9 @@ public class Importer {
 				}
 			} finally {
 				try {
-					if (data!=null) recordCurrentTransaction(data);
+					if (data!=null) {
+						recordCurrentTransaction(data);
+					}
 					reader.close();
 				} catch (IOException e) {}
 			}
@@ -217,7 +219,9 @@ public class Importer {
 						data.add(account, mode);
 					}
 				}
-				if (data!=null) recordCurrentTransaction(data);
+				if (data!=null) {
+					recordCurrentTransaction(data);
+				}
 				current = new CurrentTransaction(account, description, comment, date, amount, category, mode, number, valueDate, statement);
 			} else {
 				current.subtransactions.add(new SubTransaction(amount, description, category));

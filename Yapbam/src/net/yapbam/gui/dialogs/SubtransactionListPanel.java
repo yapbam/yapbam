@@ -60,13 +60,18 @@ public class SubtransactionListPanel extends JPanel {
 		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), LocalizationData.get("TransactionDialog.SubPanel.title"))); //$NON-NLS-1$
 		
 		JPanel pane = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints(); c.weightx=1; c.anchor=GridBagConstraints.WEST;
+		GridBagConstraints c = new GridBagConstraints();
+		c.weightx=1;
+		c.anchor=GridBagConstraints.WEST;
 		addToTransaction = new JCheckBox(LocalizationData.get("TransactionDialog.SubPanel.add")); //$NON-NLS-1$
 		addToTransaction.setSelected(true);
 		addToTransaction.setToolTipText(LocalizationData.get("TransactionDialog.SubPanel.add.tooltip")); //$NON-NLS-1$
 		pane.add(addToTransaction, c);
 		
-		GridBagConstraints c2 = new GridBagConstraints();  c2.gridx = 1; c2.weightx=1; c2.anchor=GridBagConstraints.EAST;
+		GridBagConstraints c2 = new GridBagConstraints();
+		c2.gridx = 1;
+		c2.weightx=1;
+		c2.anchor=GridBagConstraints.EAST;
 		sumLabel = new JLabel();
 		pane.add(sumLabel, c2);
 		this.add(pane, BorderLayout.NORTH);
@@ -211,7 +216,9 @@ public class SubtransactionListPanel extends JPanel {
 			SubTransaction old = tableModel.get(index);
 			SubTransactionDialog dialog = new SubTransactionDialog(Utils.getOwnerWindow(this), data, old);
 			setPredefinedDescriptions(dialog);
-			if (this.updater!=null) dialog.setPredefinedUpdater(updater);
+			if (this.updater!=null) {
+				dialog.setPredefinedUpdater(updater);
+			}
 			dialog.setVisible(true);
 			SubTransaction sub = dialog.getSubTransaction();
 			if (sub!=null) {
@@ -237,7 +244,9 @@ public class SubtransactionListPanel extends JPanel {
 	private void create(final GlobalData data) {
 		SubTransactionDialog dialog = new SubTransactionDialog(Utils.getOwnerWindow(this), data, null);
 		setPredefinedDescriptions(dialog);
-		if (this.updater!=null) dialog.setPredefinedUpdater(updater);
+		if (this.updater!=null) {
+			dialog.setPredefinedUpdater(updater);
+		}
 		dialog.setVisible(true);
 		SubTransaction sub = dialog.getSubTransaction();
 		if (sub!=null) {
@@ -250,8 +259,9 @@ public class SubtransactionListPanel extends JPanel {
 	
 	private PredefinedDescriptionComputer predefinedDescriptionComputer;
 	private void setPredefinedDescriptions(SubTransactionDialog dialog) {
-		if (predefinedDescriptionComputer!=null) dialog.setPredefined(predefinedDescriptionComputer.getPredefined(),
-				predefinedDescriptionComputer.getUnsortedSize());
+		if (predefinedDescriptionComputer!=null) {
+			dialog.setPredefined(predefinedDescriptionComputer.getPredefined(), predefinedDescriptionComputer.getUnsortedSize());
+		}
 	}
 	public void setPredefinedDescriptionComputer(PredefinedDescriptionComputer predefinedDescriptionComputer) {
 		this.predefinedDescriptionComputer = predefinedDescriptionComputer;

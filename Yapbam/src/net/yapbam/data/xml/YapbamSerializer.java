@@ -24,7 +24,9 @@ public class YapbamSerializer {
 	 * @throws IOException if something goes wrong while writing
 	 */
 	public static void write(GlobalData data, File file, boolean zipped, ProgressReport report) throws IOException {
-		if ((file.exists() && !file.canWrite()) || !FileUtils.isWritable(file)) throw new FileNotFoundException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
+		if ((file.exists() && !file.canWrite()) || !FileUtils.isWritable(file)) {
+			throw new FileNotFoundException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		// Proceed safely, it means not to erase the old version until the new version is written
 		// Everything here is pretty ugly.
 		//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
@@ -41,7 +43,9 @@ public class YapbamSerializer {
 			out.flush();
 			out.close();
 		}
-		if (report!=null) report.setMax(-1);
+		if (report!=null) {
+			report.setMax(-1);
+		}
 		if (!file.equals(writed)) {
 			// Ok, not so safe as I want since we could lost the file between deleting and renaming
 			// but I can't find a better way

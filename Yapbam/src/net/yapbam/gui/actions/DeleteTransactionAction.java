@@ -36,7 +36,9 @@ public class DeleteTransactionAction extends AbstractTransactionAction {
 			AlertDialog alert = new AlertDialog(Utils.getOwnerWindow((Component) e.getSource()),
 					LocalizationData.get("DeleteCheckedTransactionAlert.title"), LocalizationData.get("DeleteCheckedTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			alert.setVisible(true);
-			if (alert.getResult() == null) return;
+			if (alert.getResult() == null) {
+				return;
+			}
 			if (alert.getResult()) {
 				editingOptions.setAlertOnModifyChecked(false);
 				Preferences.INSTANCE.setEditingOptions(editingOptions);
@@ -45,7 +47,9 @@ public class DeleteTransactionAction extends AbstractTransactionAction {
 			AlertDialog alert = new AlertDialog(Utils.getOwnerWindow((Component) e.getSource()),
 					LocalizationData.get("DeleteTransactionAlert.title"), LocalizationData.get("DeleteTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			alert.setVisible(true);
-			if (alert.getResult() == null) return;
+			if (alert.getResult() == null) {
+				return;
+			}
 			if (alert.getResult()) {
 				editingOptions.setAlertOnDelete(false);
 				Preferences.INSTANCE.setEditingOptions(editingOptions);

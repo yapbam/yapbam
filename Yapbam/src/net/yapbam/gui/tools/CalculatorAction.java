@@ -38,7 +38,9 @@ public class CalculatorAction extends AbstractAction {
 				 */
 				@Override
 				public void windowClosing(WindowEvent e) {
-					if (frame!=null) frame.dispose();
+					if (frame!=null) {
+						frame.dispose();
+					}
 					frame = null;
 					super.windowClosing(e);
 				}
@@ -48,7 +50,9 @@ public class CalculatorAction extends AbstractAction {
 				 */
 				@Override
 				public void windowIconified(WindowEvent e) {
-					if (frame!=null) frame.setState(Frame.ICONIFIED);
+					if (frame!=null) {
+						frame.setState(Frame.ICONIFIED);
+					}
 					super.windowIconified(e);
 				}
 
@@ -57,7 +61,9 @@ public class CalculatorAction extends AbstractAction {
 				 */
 				@Override
 				public void windowDeiconified(WindowEvent e) {
-					if (frame!=null) frame.setState(Frame.NORMAL);
+					if (frame!=null) {
+						frame.setState(Frame.NORMAL);
+					}
 					super.windowDeiconified(e);
 				}
 			});

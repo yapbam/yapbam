@@ -67,7 +67,11 @@ public class TransactionNumberWidget extends JPanel {
 			}
 			// If we need to switch from text field to check numbers popup
 			CardLayout layout = (CardLayout) getLayout();
-			if (checkNumberRequired) layout.first(this); else layout.last(this);
+			if (checkNumberRequired) {
+				layout.first(this);
+			} else {
+				layout.last(this);
+			}
 			checkNumberIsVisible = !checkNumberIsVisible;
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(), account)) {
 			checkNumber.setAccount(data, account);
