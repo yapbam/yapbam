@@ -4,8 +4,12 @@ class TableSettings extends TransactionTableSettings {
 
 	int getColumnCount() {
 		int nb = 10;
-		if (isCommentSeparatedFromDescription()) nb++;
-		if (isReceiptsSeparatedFromExpenses()) nb++;
+		if (isCommentSeparatedFromDescription()) {
+			nb++;
+		}
+		if (isReceiptsSeparatedFromExpenses()) {
+			nb++;
+		}
 		return nb;
 	}
 	
@@ -58,7 +62,10 @@ class TableSettings extends TransactionTableSettings {
 	}
 	
 	int getCommentColumn() {
-		if (!isCommentSeparatedFromDescription()) return -1;
-		return isReceiptsSeparatedFromExpenses() ? 11 : 10;
+		if (!isCommentSeparatedFromDescription()) {
+			return -1;
+		} else {
+			return isReceiptsSeparatedFromExpenses() ? 11 : 10;
+		}
 	}
 }

@@ -44,11 +44,15 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		centerPane.add(
 						new JLabel(MessageFormat.format(LocalizationData.get("ModeDialog.account"), data.getName())), BorderLayout.NORTH); //$NON-NLS-1$
 		JPanel main = new JPanel(new GridBagLayout());
-		if (DEBUG) main.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
+		if (DEBUG) {
+			main.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
+		}
 		centerPane.add(main, BorderLayout.CENTER);
 
 		JPanel idPanel = new JPanel(new GridBagLayout());
-		if (DEBUG) idPanel.setBorder(BorderFactory.createTitledBorder("idPanel")); //$NON-NLS-1$
+		if (DEBUG) {
+			idPanel.setBorder(BorderFactory.createTitledBorder("idPanel")); //$NON-NLS-1$
+		}
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(10, 5, 5, 5);
 		c.anchor = GridBagConstraints.WEST;

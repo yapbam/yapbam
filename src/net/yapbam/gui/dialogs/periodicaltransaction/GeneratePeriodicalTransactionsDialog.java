@@ -68,9 +68,13 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 
 	@Override
 	protected String getOkDisabledCause() {
-		if (panel.getDate()==null) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.date"); //$NON-NLS-1$
-		if (!panel.hasImpact()) return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.noTransaction"); //$NON-NLS-1$
-		return null;
+		if (panel.getDate()==null) {
+			return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.date"); //$NON-NLS-1$
+		} else if (!panel.hasImpact()) {
+			return LocalizationData.get("GeneratePeriodicalTransactionsDialog.error.noTransaction"); //$NON-NLS-1$
+		} else {
+			return null;
+		}
 	}
 
 	@Override

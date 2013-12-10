@@ -20,18 +20,14 @@ import java.math.BigInteger;
 
 public class CheckbookPane extends JPanel {
 	private static final long serialVersionUID = 1L;
-	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$  //  @jve:decl-index=0:
+	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
 
-	private JLabel jLabel = null;
 	private IntegerWidget first = null;
-	private JLabel jLabel1 = null;
 	private IntegerWidget number = null;
 	
-	private String invalidityCause;  //  @jve:decl-index=0:
-	private Checkbook currentBook;  //  @jve:decl-index=0:
-	private JLabel jLabel2 = null;
+	private String invalidityCause;
+	private Checkbook currentBook;
 	private JTextField prefix = null;
-	private JLabel jLabel3 = null;
 	private IntegerWidget next = null;
 	private PropertyChangeListener changeListener;
 	
@@ -64,7 +60,7 @@ public class CheckbookPane extends JPanel {
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 0;
 		gridBagConstraints31.gridy = 3;
-		jLabel3 = new JLabel();
+		JLabel jLabel3 = new JLabel();
 		jLabel3.setText(LocalizationData.get("checkbookDialog.next")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.fill = GridBagConstraints.VERTICAL;
@@ -76,7 +72,7 @@ public class CheckbookPane extends JPanel {
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.anchor = GridBagConstraints.WEST;
 		gridBagConstraints11.gridy = 0;
-		jLabel2 = new JLabel();
+		JLabel jLabel2 = new JLabel();
 		jLabel2.setText(LocalizationData.get("checkbookDialog.prefix")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
@@ -89,7 +85,7 @@ public class CheckbookPane extends JPanel {
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.anchor = GridBagConstraints.WEST;
 		gridBagConstraints1.gridy = 2;
-		jLabel1 = new JLabel();
+		JLabel jLabel1 = new JLabel();
 		jLabel1.setText(LocalizationData.get("checkbookDialog.number")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
@@ -102,7 +98,7 @@ public class CheckbookPane extends JPanel {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.gridy = 1;
-		jLabel = new JLabel();
+		JLabel jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("checkbookDialog.first")); //$NON-NLS-1$
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
@@ -162,8 +158,11 @@ public class CheckbookPane extends JPanel {
 		if (first.getValue()==null) {
 			invalidityCause = LocalizationData.get("checkbookDialog.error.firstIsBlank");  //$NON-NLS-1$
 		} else if (number.getValue()==null) {
-			if (number.getText().isEmpty()) invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsBlank"); //$NON-NLS-1$
-			else invalidityCause = LocalizationData.get("checkbookDialog.error.numberOutOfRange"); //$NON-NLS-1$
+			if (number.getText().isEmpty()) {
+				invalidityCause = LocalizationData.get("checkbookDialog.error.numberIsBlank"); //$NON-NLS-1$
+			} else {
+				invalidityCause = LocalizationData.get("checkbookDialog.error.numberOutOfRange"); //$NON-NLS-1$
+			}
 		} else if (next.getValue()==null) {
 			invalidityCause = LocalizationData.get("checkbookDialog.error.nextIsBlank");  //$NON-NLS-1$
 		} else {

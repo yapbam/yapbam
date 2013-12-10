@@ -12,6 +12,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
@@ -38,7 +39,7 @@ public abstract class PersistenceManager {
 		public abstract boolean processError(Throwable e);
 	}
 	
-	private HashMap<String, PersistenceAdapter> adaptersMap;
+	private Map<String, PersistenceAdapter> adaptersMap;
 	private List<String> schemes;
 
 	public PersistenceManager() {
@@ -74,7 +75,8 @@ public abstract class PersistenceManager {
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
 	public boolean verify(Window owner, DataWrapper<?> data) {
-		if (data.isChanged()) { // Some modifications has not been saved
+		if (data.isChanged()) {
+			// Some modifications has not been saved
 			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			int n = JOptionPane.showOptionDialog(owner,
 				    LocalizationData.get("NotSavedDialog.message"), //$NON-NLS-1$
@@ -84,8 +86,9 @@ public abstract class PersistenceManager {
 				    null,     //do not use a custom Icon
 				    options,  //the titles of buttons
 				    options[2]); //default button title
-			if (n==2) return false;
-			if (n==0) {
+			if (n==2) {
+				return false;
+			} else if (n==0) {
 				return save(owner, data);
 			}
 		}
@@ -102,7 +105,9 @@ public abstract class PersistenceManager {
 		if (uri==null) {
 			uri = getURI(owner, uri, true);
 		}
-		if (uri==null) return false;
+		if (uri==null) {
+			return false;
+		}
 		return saveTo(owner, data, uri);
 	}
 
@@ -113,7 +118,9 @@ public abstract class PersistenceManager {
 	 */
 	public boolean saveAs(Window owner, DataWrapper<?> data) {
 		URI uri = getURI(owner, data.getURI(), true);
-		if (uri==null) return false;
+		if (uri==null) {
+			return false;
+		}
 		return saveTo(owner, data, uri);
 	}
 

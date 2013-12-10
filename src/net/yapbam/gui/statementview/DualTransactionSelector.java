@@ -4,13 +4,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
 
 public class DualTransactionSelector implements TransactionSelector {
-	private ArrayList<PropertyChangeListener> listeners;
+	private List<PropertyChangeListener> listeners;
 	private StatementViewPanel panel;
 	private Transaction[] lastSelected;
 	
@@ -39,14 +40,18 @@ public class DualTransactionSelector implements TransactionSelector {
 	
 	@Override
 	public Transaction[] getSelectedTransactions() {
-		if (panel.isCheckModeReady()) return new Transaction[0];
+		if (panel.isCheckModeReady()) {
+			return new Transaction[0];
+		}
 		return (panel.isCheckMode()?panel.getUncheckedTransactionsTable():panel.getTransactionsTable()).getSelectedTransactions();
 	}
 
 	@Override
 	public void setSelectedTransactions(Transaction[] transactions) {
 		panel.getTransactionsTable().setSelectedTransactions(transactions);
-		if (panel.isCheckMode()) panel.getUncheckedTransactionsTable().setSelectedTransactions(transactions);
+		if (panel.isCheckMode()) {
+			panel.getUncheckedTransactionsTable().setSelectedTransactions(transactions);
+		}
 	}
 	
 	@Override

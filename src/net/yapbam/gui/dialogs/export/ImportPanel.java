@@ -311,8 +311,8 @@ public class ImportPanel extends JPanel {
 		accounts.setEnabled(ok);
 		if (!ok) {
 			accounts.setSelectedIndex(-1);
-		} else {
-			if (accounts.getSelectedIndex()<1) accounts.setSelectedIndex(0);
+		} else if (accounts.getSelectedIndex()<1) {
+			accounts.setSelectedIndex(0);
 		}
 	}
 
@@ -456,7 +456,9 @@ public class ImportPanel extends JPanel {
 	}
 	
 	public void setLine (int lineNumber) throws IOException {
-		if (lineNumber>=this.numberOfLines) throw new IllegalArgumentException("line ("+lineNumber+") must be less than "+this.numberOfLines);
+		if (lineNumber>=this.numberOfLines) {
+			throw new IllegalArgumentException("line ("+lineNumber+") must be less than "+this.numberOfLines);
+		}
 		String[] fields = getFields(lineNumber);
 		while (fields==null) {
 			// No such line in the file (it was probably edited by the user)

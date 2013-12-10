@@ -37,7 +37,8 @@ public class ImportErrorPanel extends JPanel {
 			if (!isSelected) {
 				column = table.convertColumnIndexToModel(column);
 				boolean error = false;
-				if (column > 0) { // No special rendering on the line number (displayed in the first row)
+				if (column > 0) {
+					// No special rendering on the line number (displayed in the first row)
 					row = table.convertRowIndexToModel(row);
 					error = errors[row].hasError(column - 1);
 				}
@@ -57,7 +58,9 @@ public class ImportErrorPanel extends JPanel {
 			// We will add one column for the line number
 			columnsCount = 1;
 			for (int i = 0; i < importedFileColumns.length; i++) {
-				if (importedFileColumns[i]>=0) columnsCount = Math.max(columnsCount, importedFileColumns[i]+1);
+				if (importedFileColumns[i]>=0) {
+					columnsCount = Math.max(columnsCount, importedFileColumns[i]+1);
+				}
 			}
 			for (int i = 0; i < errors.length; i++) {
 				columnsCount = Math.max(columnsCount, errors[i].getFields().length);
@@ -85,7 +88,9 @@ public class ImportErrorPanel extends JPanel {
 				return errors[rowIndex].getLineNumber();
 			} else {
 				String[] fields = errors[rowIndex].getFields();
-				if (columnIndex>fields.length) return "";
+				if (columnIndex>fields.length) {
+					return "";
+				}
 				return fields[columnIndex-1];
 			}
 		}
@@ -102,8 +107,7 @@ public class ImportErrorPanel extends JPanel {
 
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			if (columnIndex==0) return Integer.class;
-			return super.getColumnClass(columnIndex);
+			return columnIndex==0 ? Integer.class : super.getColumnClass(columnIndex);
 		}
 
 		@Override

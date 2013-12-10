@@ -15,10 +15,28 @@ public class SpreadState implements Comparable<SpreadState> {
 		return this.toInt() - o.toInt();
 	}
 	
+	@Override
+	public int hashCode() {
+		return toInt();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (! (obj instanceof SpreadState)) {
+			return false;
+		} else {
+			return toInt()==((SpreadState)obj).toInt();
+		}
+	}
+
 	private int toInt() {
 		int result = 0;
-		if (spreadable) result += 1;
-		if (spread) result += 2;
+		if (spreadable) {
+			result += 1;
+		}
+		if (spread) {
+			result += 2;
+		}
 		return result;
 	}
 }

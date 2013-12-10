@@ -47,14 +47,19 @@ public class DataWriter {
 			String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
 			int choice = JOptionPane.showOptionDialog(owner, message,	LocalizationData.get("Generic.warning"), //$NON-NLS-1$
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); //$NON-NLS-1$
-			if (choice==0) return false;
+			if (choice==0) {
+				return false;
+			}
 		}
 		final Worker<WriterResult, Void> worker = new SaveWorker(manager,data, uri);
 		WorkInProgressFrame waitFrame = manager.buildWaitDialog(owner, worker);
 		waitFrame.setVisible(true);
 		try {
 			WriterResult result = worker.get();
-			if (result==null) return false; // Saving to local cache was cancelled
+			if (result==null) {
+				// Saving to local cache was cancelled
+				return false;
+			}
 			data.setURI(uri);
 			data.setUnchanged();
 			if (result.getState().equals(WriterResult.State.EXCEPTION_WHILE_SYNC)) {

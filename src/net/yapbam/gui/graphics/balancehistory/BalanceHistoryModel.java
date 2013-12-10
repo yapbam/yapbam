@@ -98,7 +98,9 @@ final class BalanceHistoryModel extends AbstractTableModel {
 			Transaction transaction = getTransaction(i);
 			if (transaction.getValueDate().equals(valueDate)) {
 				balance = balance - transaction.getAmount();
-			} else break;
+			} else {
+				break;
+			}
 		}
 		return balance;
 	}
@@ -168,7 +170,9 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		} else {
 			this.rowCount = 0;
 			for (int i = 0; i < data.getBalanceHistory().getTransactionsNumber(); i++) {
-				if (data.getBalanceHistory().getTransaction(i).getValueDate().after(this.endDate)) break;
+				if (data.getBalanceHistory().getTransaction(i).getValueDate().after(this.endDate)) {
+					break;
+				}
 				this.rowCount++;
 			}
 		}

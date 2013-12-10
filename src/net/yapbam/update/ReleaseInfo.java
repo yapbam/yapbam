@@ -73,14 +73,21 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	@Override
 	public int compareTo(ReleaseInfo o) {
 		int result = majorRevision - o.majorRevision;
-		if (result == 0) result = minorRevision - o.minorRevision; 
-		if (result == 0) result = buildId - o.buildId;
-		if (result == 0) result = getReleaseDate().compareTo(o.getReleaseDate());
+		if (result == 0) {
+			result = minorRevision - o.minorRevision; 
+		}
+		if (result == 0) {
+			result = buildId - o.buildId;
+		}
+		if (result == 0) {
+			result = getReleaseDate().compareTo(o.getReleaseDate());
+		}
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
+		if (! (obj instanceof ReleaseInfo)) return false;
 		return this.compareTo((ReleaseInfo) obj)==0;
 	}
 
@@ -91,8 +98,11 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 
 	@Override
 	public String toString() {
-		if (this.unknown) return "?";
-		return majorRevision+"."+minorRevision+"."+buildId+(preReleaseComment==null?"":"."+preReleaseComment)+" ("+
-			SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, LocalizationData.getLocale()).format(releaseDate)+")";
+		if (this.unknown) {
+			return "?";
+		} else {
+			return majorRevision+"."+minorRevision+"."+buildId+(preReleaseComment==null?"":"."+preReleaseComment)+" ("+
+					SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, LocalizationData.getLocale()).format(releaseDate)+")";
+		}
 	}
 }

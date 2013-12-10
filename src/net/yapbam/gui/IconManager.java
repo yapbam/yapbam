@@ -1,6 +1,8 @@
 package net.yapbam.gui;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.Icon;
 
 import com.fathzer.soft.ajlib.swing.Utils;
@@ -22,7 +24,7 @@ public abstract class IconManager {
 		reset (16);
 	}
 	
-	private static HashMap<Name, Icon> map;
+	private static Map<Name, Icon> map;
 	private static int currentSize = -1;
 	
 	public static Icon get(Name name) {
@@ -30,9 +32,15 @@ public abstract class IconManager {
 	}
 	
 	public static void reset(int size) {
-		if (size<=0) throw new IllegalArgumentException();
-		if (size == currentSize) return;
-		if (map==null) map = new HashMap<IconManager.Name, Icon>();
+		if (size<=0) {
+			throw new IllegalArgumentException();
+		}
+		if (size == currentSize) {
+			return;
+		}
+		if (map==null) {
+			map = new HashMap<IconManager.Name, Icon>();
+		}
 		map.clear();
 		map.put(Name.OPEN, create("images/open.png", size)); //$NON-NLS-1$
 		map.put(Name.SAVE, create("images/save.png", size)); //$NON-NLS-1$
