@@ -13,7 +13,9 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import java.awt.GridBagConstraints;
+
 import javax.swing.JButton;
+
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.event.ListSelectionEvent;
@@ -377,8 +380,8 @@ public class BudgetViewPanel extends JPanel {
 		return filter;
 	}
 	
-	private ArrayList<Category> getDataCategories(Category category) {
-		ArrayList<Category> result = new ArrayList<Category>();
+	private List<Category> getDataCategories(Category category) {
+		List<Category> result = new ArrayList<Category>();
 		if (category.equals(Category.UNDEFINED) || !getGroupSubCategories().isSelected()) {
 			result.add(category);
 		} else {
@@ -394,7 +397,7 @@ public class BudgetViewPanel extends JPanel {
 	}
 	
 	private int[] filterSelected(int[] selected, int maxValue) {
-		if ((selected.length==0) || ((selected[selected.length-1]!=maxValue))) {
+		if ((selected.length==0) || (selected[selected.length-1]!=maxValue)) {
 			return selected;
 		}
 		int[] result = new int[selected.length-1];

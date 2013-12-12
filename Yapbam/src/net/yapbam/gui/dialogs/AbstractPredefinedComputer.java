@@ -14,9 +14,7 @@ abstract class AbstractPredefinedComputer implements PredefinedDescriptionComput
 	protected GlobalData data;
 	/** The instance creation time in the same scale than System.currentTimeMillis. */
 	protected long now;
-	
-
-	private HashMap<String, Double> map;
+	private Map<String, Double> map;
 
 	protected AbstractPredefinedComputer (GlobalData data) {
 		this.data = data;

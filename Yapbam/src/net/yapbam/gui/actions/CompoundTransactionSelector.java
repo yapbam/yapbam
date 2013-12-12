@@ -3,13 +3,14 @@ package net.yapbam.gui.actions;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
 
 public class CompoundTransactionSelector implements TransactionSelector {
-	private ArrayList<PropertyChangeListener> listeners;
+	private List<PropertyChangeListener> listeners;
 	private TransactionSelector internalSelector;
 	private PropertyChangeListener internalListener;
 	

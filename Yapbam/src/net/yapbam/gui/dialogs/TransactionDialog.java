@@ -197,7 +197,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 							}
 						}
 					}
-					CategoryAndType ct = getHeavier(map);
+					CategoryAndType ct = getHeaviest(map);
 					this.category = ct.getCategory();
 					this.amount = ct.receipt?Double.MIN_VALUE:-Double.MIN_VALUE;
 				}
@@ -389,7 +389,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		}
 	}
 	
-	private static <T> T getHeavier(Map<T, Double> map) {
+	private static <T> T getHeaviest(Map<T, Double> map) {
 		T ct = null;
 		double max = 0.0;
 		for (Iterator<Entry<T, Double>> iterator = map.entrySet().iterator(); iterator.hasNext();) {
@@ -475,8 +475,8 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			}
 		}
 		// Search for the mode and category with the highest weight.
-		this.categories.set(getHeavier(categories));
-		ModeAndType modeAndType = getHeavier(modes);
+		this.categories.set(getHeaviest(categories));
+		ModeAndType modeAndType = getHeaviest(modes);
 		if (modeAndType != null) {
 			this.receipt.setSelected(modeAndType.receipt);
 			this.setMode(modeAndType.getMode());

@@ -86,7 +86,7 @@ public class YapbamSerializer {
 	 */
 	public static GlobalData read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
 //		long start = System.currentTimeMillis();//TODO
-		if (uri.getScheme().equals("file") || uri.getScheme().equals("ftp")) { //$NON-NLS-1$ //$NON-NLS-2$
+		if ("file".equals(uri.getScheme()) || "ftp".equals(uri.getScheme())) { //$NON-NLS-1$ //$NON-NLS-2$
 			InputStream in = uri.toURL().openStream();
 			try {
 				GlobalData redData = new Serializer().read(password, in, report);

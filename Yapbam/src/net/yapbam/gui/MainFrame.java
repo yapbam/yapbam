@@ -393,7 +393,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		}
 		try {
 			int iconSize = 16; // This is the default icon size
-			if (!lookAndFeelName.equalsIgnoreCase("Nimbus")) { //$NON-NLS-1$
+			if (!"Nimbus".equalsIgnoreCase(lookAndFeelName)) { //$NON-NLS-1$
 				// If LAF is not Nimbus, there's no generic value for font in look and feel
 				// In such a case, we ignore the setting
 			} else {
@@ -515,7 +515,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					if (e instanceof FileNotFoundException) {
 						if (file.exists()) {
 							// The file exist, but it is read protected
-							if (finalURI.getScheme().equals("file")) { //$NON-NLS-1$
+							if ("file".equals(finalURI.getScheme())) { //$NON-NLS-1$
 								ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotReadable"),displayedURI)); //$NON-NLS-1$
 							} else {
 								ErrorManager.INSTANCE.display(getJFrame(), null,  MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
