@@ -85,7 +85,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 		int noColumns = allTableColumns.size();
 
 		for (int columnIndex = 0; columnIndex < noColumns; ++columnIndex) {
-			TableColumn visibleColumn = (columnIndex < tableColumns.size() ? tableColumns.get(columnIndex) : null);
+			TableColumn visibleColumn = columnIndex < tableColumns.size() ? tableColumns.get(columnIndex) : null;
 			TableColumn invisibleColumn = allTableColumns.get(columnIndex);
 
 			if (visibleColumn != invisibleColumn) {
@@ -121,7 +121,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	 *         all. [It's not visible, right?])
 	 */
 	public boolean isColumnVisible(TableColumn aColumn) {
-		return (tableColumns.indexOf(aColumn) >= 0);
+		return tableColumns.indexOf(aColumn) >= 0;
 	}
 
 	/**
@@ -221,7 +221,9 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	 * @see #getColumn
 	 */
 	public int getColumnIndex(Object identifier, boolean onlyVisible) {
-		if (identifier == null) throw new IllegalArgumentException("Identifier is null");
+		if (identifier == null) {
+			throw new IllegalArgumentException("Identifier is null");
+		}
 
 		List<TableColumn> columns = onlyVisible ? tableColumns : allTableColumns;
 		int noColumns = columns.size();

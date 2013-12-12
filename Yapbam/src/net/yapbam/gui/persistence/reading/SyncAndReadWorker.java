@@ -62,7 +62,9 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 			} catch (Exception e) {
 				return new ReaderResult(State.EXCEPTION_WHILE_SYNC, null, e); 
 			}
-			if (this.isCancelled()) return null;
+			if (this.isCancelled()) {
+				return null;
+			}
 		} else {
 			syncState = SynchronizationState.SYNCHRONIZED;
 		}

@@ -35,7 +35,9 @@ public class ExporterParameters implements Serializable {
 		this.exportFilteredData = exportFilteredData;
 		int nbSelected = 0;
 		for (boolean b : selectedModelColumns) {
-			if (b) nbSelected++;
+			if (b) {
+				nbSelected++;
+			}
 		}
 		int i = 0;
 		this.exportedIndexes = new int[nbSelected];

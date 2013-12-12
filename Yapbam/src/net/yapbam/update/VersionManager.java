@@ -61,7 +61,9 @@ public class VersionManager {
 			addPropertyParameter (url, "javaVersion", "java.version");
 			String serialNumber = YapbamState.INSTANCE.get(SERIAL_NUMBER);
 			url.append("&portable=").append(URLEncoder.encode(Boolean.toString(Portable.isPortable()),"UTF-8"));
-			if (serialNumber!=null) url.append("&id=").append(URLEncoder.encode(serialNumber,"UTF-8"));
+			if (serialNumber!=null) {
+				url.append("&id=").append(URLEncoder.encode(serialNumber,"UTF-8"));
+			}
 			return new URL(url.toString());
 		} catch (Exception e) {
 			ErrorManager.INSTANCE.log(null,e);

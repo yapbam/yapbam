@@ -3,6 +3,7 @@ package net.yapbam.gui.transactiontable;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -12,7 +13,7 @@ import net.yapbam.data.AbstractTransaction;
 @SuppressWarnings("serial")
 public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel, ColoredModel {
 	static Color[] BACK_COLORS;
-	private HashSet<Long> spreadTransactionId;
+	private Set<Long> spreadTransactionId;
 
 	private void initBackgroundColors() {
 		BACK_COLORS = TransactionsPreferencePanel.getBackgroundColors();
@@ -62,7 +63,9 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 	@Override
 	public int getSpreadLines(int row) {
 		int lines = this.getTransaction(row).getSubTransactionSize()+1;
-		if (getTransaction(row).getComplement()!=0) lines++;
+		if (getTransaction(row).getComplement()!=0) {
+			lines++;
+		}
 		return lines;
 	}
 	

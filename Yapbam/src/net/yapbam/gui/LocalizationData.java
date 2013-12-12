@@ -61,7 +61,9 @@ public abstract class LocalizationData {
 
 		URL url = LocalizationData.class.getResource("/localization/"+getLocale().getLanguage()+"/"+document);  //$NON-NLS-1$//$NON-NLS-2$
 //		if (url!=null) {System.out.println("ok 1"); return url;}
-		if (url==null) url = LocalizationData.class.getResource("/localization/"+document); //$NON-NLS-1$
+		if (url==null) {
+			url = LocalizationData.class.getResource("/localization/"+document); //$NON-NLS-1$
+		}
 //		if (url!=null) {System.out.println("ok 2"); return url;}
 //		url = LocalizationData.class.getResource("../../../localization/"+getLocale().getLanguage()+"/"+document);
 //		if (url!=null) {System.out.println("ok 3"); return url;}

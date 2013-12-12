@@ -38,6 +38,8 @@ public class NewTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = TransactionDialog.open(data, Utils.getOwnerWindow((Component) e.getSource()), null, false, true, this.massMode);
-		if (transaction!=null) this.selector.setSelectedTransactions(new Transaction[]{transaction});
+		if (transaction!=null) {
+			this.selector.setSelectedTransactions(new Transaction[]{transaction});
+		}
 	}
 }

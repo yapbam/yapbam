@@ -404,7 +404,9 @@ public class Preferences {
 			file.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File file) {
-					if (!file.getName().endsWith(".jar")) return false; //$NON-NLS-1$
+					if (!file.getName().endsWith(".jar")) { //$NON-NLS-1$
+						return false;
+					}
 					plugins.add(new PlugInContainer(file));
 					return true;
 				}

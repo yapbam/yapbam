@@ -36,7 +36,9 @@ public class CurrencyWidget extends com.fathzer.soft.ajlib.swing.widget.Currency
 		protected Double toValue(String literal, Object evaluationContext) {
 			CurrencyWidget widget = (CurrencyWidget)evaluationContext;
 			Number result = widget.parseLiteral(literal);
-			if (result==null) throw new IllegalArgumentException();
+			if (result==null) {
+				throw new IllegalArgumentException();
+			}
 			return result.doubleValue();
 		}
 	}

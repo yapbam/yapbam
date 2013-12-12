@@ -88,7 +88,9 @@ public final class Portable {
 		file = new File(file,"Other/Help");
 		// Once, I've made a mistake and named the directory "help" (with a small h), and, as subversion is a little bit too complex for me
 		// (on windows), I've never found a way to fix this mistake in svn. So, Yapbam will stay with this ugly "help" directory.
-		if (!file.exists()) file = new File(getLaunchDirectory(),"Other/help");
+		if (!file.exists()) {
+			file = new File(getLaunchDirectory(),"Other/help");
+		}
 		return file;
 	}
 

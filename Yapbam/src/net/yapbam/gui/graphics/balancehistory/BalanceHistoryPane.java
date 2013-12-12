@@ -149,7 +149,9 @@ public class BalanceHistoryPane extends JPanel {
 		for (int i=0;i<data.getGlobalData().getAccountsNumber();i++) {
 			Account account = data.getGlobalData().getAccount(i);
 			Alert alert = account.getFirstAlert(today, null);
-			if (alert!=null) alerts.add(alert);
+			if (alert!=null) {
+				alerts.add(alert);
+			}
 		}
 		graph.setAlerts(alerts.toArray(new Alert[alerts.size()]));
 		// Compute when occurs the first alert.

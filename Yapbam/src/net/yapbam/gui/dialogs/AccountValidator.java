@@ -18,7 +18,9 @@ public class AccountValidator {
 		// (because modes could not be the same).
 		// So, we have to test if the name is equivalent to a trimmed previously entered name
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			if ((i!=accountNumber) && name.equalsIgnoreCase(data.getAccount(i).getName().trim())) return false;
+			if ((i!=accountNumber) && name.equalsIgnoreCase(data.getAccount(i).getName().trim())) {
+				return false;
+			}
 		}
 		return true;
 	}
