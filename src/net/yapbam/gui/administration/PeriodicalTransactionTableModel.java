@@ -101,7 +101,11 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		boolean spread = this.isSpread(rowIndex);
 		PeriodicalTransaction transaction = (PeriodicalTransaction) this.getTransaction(rowIndex);
 		if (columnIndex==0) {
-			return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
+			if (transaction.getSubTransactionSize()==0) {
+				return SpreadState.NOT_SPREADABLE;
+			} else {
+				return spread ? SpreadState.SPREAD : SpreadState.NOT_SPREAD;
+			}
 		} else if (columnIndex==1) {
 			return transaction.getAccount().getName();
 		} else if (columnIndex==2) {
