@@ -102,7 +102,11 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		}
 		Transaction transaction = (Transaction) this.getTransaction(rowIndex);
 		if (columnIndex==settings.getSpreadColumn()) {
-			return new SpreadState(transaction.getSubTransactionSize()!=0, spread);
+			if (transaction.getSubTransactionSize()==0) {
+				return SpreadState.NOT_SPREADABLE;
+			} else {
+				return spread ? SpreadState.SPREAD : SpreadState.NOT_SPREAD;
+			}
 		} else if (columnIndex==settings.getAccountColumn()) {
 			return transaction.getAccount().getName();
 		} else if (columnIndex==settings.getDateColumn()) {

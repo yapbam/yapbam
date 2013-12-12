@@ -15,8 +15,8 @@ public class SpreadStateRenderer extends ObjectRenderer {
 	@Override
 	public void setValue(Object value) {
 		SpreadState state = (SpreadState) value;
-		if ((state!=null) && state.spreadable) {
-			setIcon(IconManager.get(state.spread ? Name.SPREAD : Name.SPREADABLE));
+		if ((state!=null) && state.isSpreadable()) {
+			setIcon(IconManager.get(state.isSpread() ? Name.SPREAD : Name.SPREADABLE));
 		} else {
 			setIcon(null);
 		}
