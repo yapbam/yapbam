@@ -3,6 +3,7 @@ package net.yapbam.gui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
@@ -16,7 +17,7 @@ import net.yapbam.gui.widget.TabbedPane;
 @SuppressWarnings("serial")
 public class MainPanel extends TabbedPane {
 	public static final String SELECTED_PLUGIN_PROPERTY = "selectedPlugin";
-	private ArrayList<AbstractPlugIn> paneledPlugins;
+	private List<AbstractPlugIn> paneledPlugins;
 	private AbstractPlugIn selectedPlugin;
 
 	public MainPanel(AbstractPlugIn[] plugins) {

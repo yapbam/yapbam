@@ -183,7 +183,7 @@ public abstract class PersistenceManager {
 							if (file.exists()) {
 								String message;
 								// The file exist, but it is read protected
-								if (path.getScheme().equals("file")) {
+								if ("file".equals(path.getScheme())) {
 									message = MessageFormat.format(LocalizationData.get("openDialog.fileNotReadable"),displayedURI); //$NON-NLS-1$
 								} else {
 									message = MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file); //$NON-NLS-1$
