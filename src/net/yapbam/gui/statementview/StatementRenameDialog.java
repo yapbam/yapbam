@@ -31,7 +31,9 @@ public class StatementRenameDialog extends BasicInputDialog<GlobalData, String> 
 	@Override
 	protected String getOkDisabledCause() {
 		String name = this.getField().getText().trim();
-		if (name.length()==0) return LocalizationData.get("StatementDialog.err"); //$NON-NLS-1$
+		if (name.length()==0) {
+			return LocalizationData.get("StatementDialog.err"); //$NON-NLS-1$
+		}
 		return null;
 	}
 }

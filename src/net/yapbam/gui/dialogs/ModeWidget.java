@@ -46,7 +46,9 @@ public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 				for (int i = 0; i < account.getModesNumber(); i++) {
 					Mode mode = account.getMode(i);
 					DateStepper ds = getParameters().isExpense()?mode.getExpenseVdc():mode.getReceiptVdc();
-					if (ds!=null)	getCombo().addItem(mode);
+					if (ds!=null) {
+						getCombo().addItem(mode);
+					}
 				}
 			}
 		}

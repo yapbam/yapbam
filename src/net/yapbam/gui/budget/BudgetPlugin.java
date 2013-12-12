@@ -43,7 +43,9 @@ public class BudgetPlugin extends AbstractPlugIn {
 		panel.getChckbxAddSumColumn().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(STATE_PREFIX+SUM_COLUMN, "false")));
 		panel.getChckbxAddSumLine().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(STATE_PREFIX+SUM_LINE, "false")));
 		boolean perYear = Boolean.parseBoolean(YapbamState.INSTANCE.get(STATE_PREFIX+PER_YEAR, "false"));
-		if (perYear) panel.getYear().setSelected(true);
+		if (perYear) {
+			panel.getYear().setSelected(true);
+		}
 		panel.getGroupSubCategories().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(STATE_PREFIX+GROUP_SUB_CATEGORIES, "false")));
 	}
 }

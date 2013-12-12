@@ -58,7 +58,8 @@ public abstract class LongTaskDialog<T,V> extends AbstractDialog<T,V> {
 
 	@Override
 	public void setVisible(boolean visible) {
-		if (visible) { // If the dialog is opened
+		if (visible) {
+			// If the dialog is opened
 			// Start the "check for update" thread.
 			this.worker = getWorker();
 			worker.execute();
@@ -74,18 +75,23 @@ public abstract class LongTaskDialog<T,V> extends AbstractDialog<T,V> {
 				protected void done() {
 					// This method is called when the showWorker end.
 					// This means it is time to display the dialog.
-					if (!worker.isDone()) { // If the task is not finished (please note we task the main task of the dialog, not the "display timer" task)
+					if (!worker.isDone()) {
+						// If the task is not finished (please note we task the main task of the dialog, not the "display timer" task)
 						// If main task not ended, show the dialog
 						doShow();
 					}
 				}
 			};
 			this.showWorker.execute();
-		} else { // If the dialog is closed
-			if (this.showWorker!=null) this.showWorker.cancel(true);
+		} else {
+			// If the dialog is closed
+			if (this.showWorker!=null) {
+				this.showWorker.cancel(true);
+			}
 			long delay = MINIMUM_TIME_VISIBLE-(System.currentTimeMillis()-this.setVisibleTime);
 			try {
-				if (delay>0) { // If the dialog is displayed for less than 500 ms, wait for the user to see what happens ;-)
+				if (delay>0) {
+					// If the dialog is displayed for less than 500 ms, wait for the user to see what happens ;-)
 					Thread.sleep(delay);
 				}
 			} catch (InterruptedException e) {

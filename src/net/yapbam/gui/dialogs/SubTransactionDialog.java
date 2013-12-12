@@ -31,7 +31,9 @@ public class SubTransactionDialog extends AbstractDialog<GlobalData, SubTransact
 	protected JPanel createCenterPane() {
 		this.panel = new SubTransactionPanel(data);
 		this.panel.addPropertyChangeListener(new AutoUpdateOkButtonPropertyListener(this));
-		if (DEBUG) this.panel.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
+		if (DEBUG) {
+			this.panel.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
+		}
 		return this.panel;
 	}
 	

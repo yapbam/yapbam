@@ -30,7 +30,9 @@ public class LookAndFeelPanel extends CompoundPreferencePanel {
 		for (int i=0 ; i<frame.getPlugInsNumber(); i++) {
 			try {
 				PreferencePanel preferencePanel = frame.getPlugIn(i).getLFPreferencePanel();
-				if (preferencePanel!=null) lfPanels.add(preferencePanel);
+				if (preferencePanel!=null) {
+					lfPanels.add(preferencePanel);
+				}
 			} catch (Throwable e) {
 				ErrorManager.INSTANCE.log(frame, e);
 			}

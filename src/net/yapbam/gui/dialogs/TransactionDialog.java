@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.*;
 
@@ -176,7 +178,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				if (!NullUtils.areEquals(this.lastDescription, description)) {
 					this.lastDescription = description;
 					long now = System.currentTimeMillis();
-					HashMap<CategoryAndType, Double> map = new HashMap<CategoryAndType, Double>();
+					Map<CategoryAndType, Double> map = new HashMap<CategoryAndType, Double>();
 					GlobalData gData = data.getGlobalData();
 					for (int i = 0; i < gData.getTransactionsNumber(); i++) {
 						Transaction transaction = gData.getTransaction(i);
@@ -195,22 +197,13 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 							}
 						}
 					}
-					// Search for the category with the highest weight.
-					CategoryAndType ct = null;
-					double max = 0.0;
-					for (Iterator<CategoryAndType> iterator = map.keySet().iterator(); iterator.hasNext();) {
-						CategoryAndType next = iterator.next();
-						if (map.get(next) > max) {
-							ct = next;
-							max = map.get(next);
-						}
-					}
+					CategoryAndType ct = getHeavier(map);
 					this.category = ct.getCategory();
 					this.amount = ct.receipt?Double.MIN_VALUE:-Double.MIN_VALUE;
 				}
 			}
 
-			private void add(HashMap<CategoryAndType, Double> map, Category category, boolean receipt, double ranking) {
+			private void add(Map<CategoryAndType, Double> map, Category category, boolean receipt, double ranking) {
 				CategoryAndType ct = new CategoryAndType(receipt, category);
 				ranking = map.containsKey(ct)?map.get(ct)+ranking:ranking;
 				map.put(ct, ranking);
@@ -220,7 +213,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			autoFillStatement();
 		}
 	}
-
+	
 	public void setTransactionDate(Date date) {
 		this.date.setDate(date);
 	}
@@ -396,6 +389,19 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		}
 	}
 	
+	private static <T> T getHeavier(Map<T, Double> map) {
+		T ct = null;
+		double max = 0.0;
+		for (Iterator<Entry<T, Double>> iterator = map.entrySet().iterator(); iterator.hasNext();) {
+			Entry<T, Double> next = iterator.next();
+			if (next.getValue() > max) {
+				ct = next.getKey();
+				max = next.getValue();
+			}
+		}
+		return ct;
+	}
+	
 	private static class ModeAndType extends XAndType<Mode>{
 		private ModeAndType(boolean receipt, Mode mode) {
 			super(receipt, mode);
@@ -469,25 +475,8 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			}
 		}
 		// Search for the mode and category with the highest weight.
-		Category category = null;
-		double max = 0;
-		for (Iterator<Category> iterator = categories.keySet().iterator(); iterator.hasNext();) {
-			Category next = iterator.next();
-			if (categories.get(next) > max) {
-				category = next;
-				max = categories.get(next);
-			}
-		}
-		this.categories.set(category);
-		ModeAndType modeAndType = null;
-		max = 0;
-		for (Iterator<ModeAndType> iterator = modes.keySet().iterator(); iterator.hasNext();) {
-			ModeAndType next = iterator.next();
-			if (modes.get(next) > max) {
-				modeAndType = next;
-				max = modes.get(next);
-			}
-		}
+		this.categories.set(getHeavier(categories));
+		ModeAndType modeAndType = getHeavier(modes);
 		if (modeAndType != null) {
 			this.receipt.setSelected(modeAndType.receipt);
 			this.setMode(modeAndType.getMode());

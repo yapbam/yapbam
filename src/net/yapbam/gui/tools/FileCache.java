@@ -32,7 +32,9 @@ public class FileCache implements CurrencyConverter.Cache {
 
 	@Override
 	public void commit() {
-		if (getTmpFile().exists() && cacheFile.exists()) cacheFile.delete();
+		if (getTmpFile().exists() && cacheFile.exists()) {
+			cacheFile.delete();
+		}
 		getTmpFile().renameTo(cacheFile);
 	}
 }

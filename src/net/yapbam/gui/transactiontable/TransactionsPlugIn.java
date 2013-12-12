@@ -61,7 +61,9 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 		YapbamState.INSTANCE.restoreState(transactionTable, STATE_PREFIX);
 		transactionTable.scrollToLastLine();
 		Serializable restoredSelected = YapbamState.INSTANCE.restore(BALANCE_REF);
-		if ((restoredSelected!=null) && (restoredSelected!=BalanceReportPanel.Selection.NONE)) panel.getBalanceReportPanel().setSelected((Selection) restoredSelected);
+		if ((restoredSelected!=null) && (restoredSelected!=BalanceReportPanel.Selection.NONE)) {
+			panel.getBalanceReportPanel().setSelected((Selection) restoredSelected);
+		}
 		// transactionTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN); //TODO This mode seems better than the default one, but should be done for all tables or none !
 		JTableUtils.fixColumnSize(transactionTable, 0);
 	}

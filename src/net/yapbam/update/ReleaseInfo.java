@@ -87,7 +87,9 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (! (obj instanceof ReleaseInfo)) return false;
+		if (! (obj instanceof ReleaseInfo)) {
+			return false;
+		}
 		return this.compareTo((ReleaseInfo) obj)==0;
 	}
 

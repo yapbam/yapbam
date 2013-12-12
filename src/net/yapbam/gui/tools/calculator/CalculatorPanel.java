@@ -239,7 +239,9 @@ public class CalculatorPanel extends JPanel {
 				for (int precision=0; precision<PRECISION; precision++) {
 					format.setMaximumFractionDigits(precision);
 					if (fontMetrics.stringWidth(format.format(this.value))>availableWidth) {
-						if (precision>0) format.setMaximumFractionDigits(precision-1);
+						if (precision>0) {
+							format.setMaximumFractionDigits(precision-1);
+						}
 						break;
 					}
 				}

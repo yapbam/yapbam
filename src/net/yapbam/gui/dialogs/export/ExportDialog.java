@@ -53,7 +53,9 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
 			}
 		}
 		if (parameters!=null) {
-			if (!hasFilter) parameters.setExportFilteredData(false);
+			if (!hasFilter) {
+				parameters.setExportFilteredData(false);
+			}
 			if (!exportPanel.setParameters(parameters)) {
 				JOptionPane.showMessageDialog(this.getOwner(), LocalizationData.get("ExportDialog.columnsChangedMessage"), //$NON-NLS-1$
 						LocalizationData.get("Generic.warning"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$

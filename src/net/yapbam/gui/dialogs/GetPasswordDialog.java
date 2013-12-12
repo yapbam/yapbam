@@ -50,7 +50,9 @@ public class GetPasswordDialog extends AbstractDialog<GetPasswordDialog.InitData
 	@Override
 	protected JPanel createCenterPane() {
 		panel = new GetPasswordPanel();
-		if (data.password!=null) panel.setPassword(data.password);
+		if (data.password!=null) {
+			panel.setPassword(data.password);
+		}
 		this.panel.setIcon(data.icon);
 		this.panel.setQuestion(data.question);
 		this.panel.addPropertyChangeListener(GetPasswordPanel.CONFIRMED_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
