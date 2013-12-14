@@ -1,28 +1,35 @@
 package net.yapbam.gui.archive;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.Icon;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
+import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.ArrayUtils;
 
 @SuppressWarnings("serial")
 class StatementSelectionTableModel extends AbstractTableModel implements TableModel {
-	private static final int ACCOUNT_COLUMN = 0;
-	private static final int IGNORED_COLUMN = 1;
-	public static final int STATEMENT_COLUMN = 2;
+	private final int alertColumn;
+	private final int accountColumn;
+	private final int ignoredColumn;
+	private final int statementColumn;
 	
 	private GlobalData data;
 	private boolean[] ignored;
 	private String[] selectedStatements;
 	private Statement[][] statements;
+	private CharSequence[] alerts;
 
-	public StatementSelectionTableModel(GlobalData data) {
+	public StatementSelectionTableModel(GlobalData data, CharSequence[] alerts) {
 		this.data = data;
 		this.statements = new Statement[data.getAccountsNumber()][];
 		this.ignored = new boolean[data.getAccountsNumber()];
@@ -31,6 +38,15 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 		}
 		Arrays.fill(ignored, true);
 		this.selectedStatements = new String[this.ignored.length];
+		this.alerts = alerts.clone();
+		if (ArrayUtils.isAllNull(alerts)) {
+			this.alertColumn = -1;
+		} else {
+			this.alertColumn = 0;
+		}
+		this.accountColumn = this.alertColumn + 1;
+		this.ignoredColumn = this.accountColumn + 1;
+		this.statementColumn = this.ignoredColumn +1;
 	}
 
 	@Override
@@ -40,16 +56,18 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return this.statementColumn+1;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		if (columnIndex==ACCOUNT_COLUMN) {
+		if (columnIndex==alertColumn) {
+			return this.alerts[rowIndex]==null ? null : IconManager.get(Name.ALERT);
+		} else if (columnIndex==accountColumn) {
 			return data.getAccount(rowIndex).getName();
-		} else if (columnIndex==IGNORED_COLUMN) {
+		} else if (columnIndex==ignoredColumn) {
 			return ignored[rowIndex];
-		} else if (columnIndex==STATEMENT_COLUMN) {
+		} else if (columnIndex==statementColumn) {
 			if (!hasStatement(rowIndex)) {
 				return LocalizationData.get("Archive.statementSelection.nothingSelected");  //$NON-NLS-1$
 			} else {
@@ -70,19 +88,27 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		return (columnIndex==IGNORED_COLUMN) ? Boolean.class : super.getColumnClass(columnIndex);
+		if (columnIndex==this.alertColumn) {
+			return Icon.class;
+		} else if (columnIndex==accountColumn) {
+			return String.class;
+		} else if (columnIndex==ignoredColumn) {
+			return Boolean.class;
+		} else {
+			return super.getColumnClass(columnIndex);
+		}
 	}
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return hasStatement(rowIndex) && ((columnIndex==IGNORED_COLUMN) || (columnIndex==STATEMENT_COLUMN));
+		return hasStatement(rowIndex) && ((columnIndex==ignoredColumn) || (columnIndex==statementColumn));
 	}
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		if (columnIndex==IGNORED_COLUMN) {
+		if (columnIndex==ignoredColumn) {
 			this.ignored[rowIndex] = ((Boolean)aValue);
-		} else if (columnIndex==STATEMENT_COLUMN) {
+		} else if (columnIndex==statementColumn) {
 			this.selectedStatements[rowIndex] = (String) aValue;
 			this.ignored[rowIndex] = false;
 		}
@@ -91,11 +117,13 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 
 	@Override
 	public String getColumnName(int column) {
-		if (column == ACCOUNT_COLUMN) {
+		if (column == alertColumn) {
+			return ""; //$NON-NLS-1$
+		} else if (column == accountColumn) {
 			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		} else if (column == IGNORED_COLUMN) {
+		} else if (column == ignoredColumn) {
 			return LocalizationData.get("Archive.statementSelection.ignored.title"); //$NON-NLS-1$
-		} else if (column == STATEMENT_COLUMN) {
+		} else if (column == statementColumn) {
 			return LocalizationData.get("Archive.statementSelection.until.title"); //$NON-NLS-1$
 		} else {
 			return super.getColumnName(column);
@@ -124,7 +152,7 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 			}
 			return result;
 		} else {
-			return null;
+			return Collections.emptySet();
 		}
 	}
 
@@ -134,5 +162,21 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 			result[i] = this.selectedStatements[i] != null;
 		}
 		return result;
+	}
+
+	int getAlertColumn() {
+		return this.alertColumn;
+	}
+
+	int getStatementColumn() {
+		return this.statementColumn;
+	}
+
+	int getAccountColumn() {
+		return this.accountColumn;
+	}
+
+	boolean hasAlert(int row) {
+		return this.alerts[row] != null;
 	}
 }

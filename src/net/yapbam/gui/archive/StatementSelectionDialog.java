@@ -16,16 +16,24 @@ import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
 @SuppressWarnings("serial")
-public class StatementSelectionDialog extends AbstractDialog<GlobalData, Collection<Transaction>> {
+public class StatementSelectionDialog extends AbstractDialog<Object[], Collection<Transaction>> {
 	private StatementSelectionPanel panel;
 
-	public StatementSelectionDialog(Window owner, GlobalData data) {
-		super(owner, LocalizationData.get("Archive.menu.name"), data); //$NON-NLS-1$
+	public StatementSelectionDialog(Window owner, GlobalData data, CharSequence[] alerts) {
+		super(owner, LocalizationData.get("Archive.menu.name"), new Object[]{data, alerts}); //$NON-NLS-1$
+	}
+	
+	private GlobalData getCurrentData() {
+		return (GlobalData) data[0];
+	}
+	
+	private CharSequence[] getAlerts() {
+		return (CharSequence[]) data[1];
 	}
 
 	@Override
 	protected JPanel createCenterPane() {
-		panel = new StatementSelectionPanel(this.data);
+		panel = new StatementSelectionPanel(this.getCurrentData(), this.getAlerts());
 		panel.addPropertyChangeListener(StatementSelectionPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
 		return panel;
 	}
@@ -39,19 +47,16 @@ public class StatementSelectionDialog extends AbstractDialog<GlobalData, Collect
 	protected Collection<Transaction> buildResult() {
 		StatementSelectionTableModel model = (StatementSelectionTableModel)panel.getTable().getModel();
 		Collection<Transaction> result = new ArrayList<Transaction>();
-		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			Set<String> selectedStatements = model.getSelectedStatements(i);
-			if (selectedStatements!=null) {
-				result.addAll(getTransactions(data.getAccount(i), selectedStatements));
-			}
+		for (int i = 0; i < getCurrentData().getAccountsNumber(); i++) {
+			result.addAll(getTransactions(getCurrentData().getAccount(i), model.getSelectedStatements(i)));
 		}
 		return result;
 	}
 
 	private Collection<Transaction> getTransactions(Account account, Set<String> statementIds) {
 		Collection<Transaction> transactions = new ArrayList<Transaction>();
-		for (int i = 0; i < data.getTransactionsNumber(); i++) {
-			Transaction transaction = data.getTransaction(i);
+		for (int i = 0; i < getCurrentData().getTransactionsNumber(); i++) {
+			Transaction transaction = getCurrentData().getTransaction(i);
 			Account tAccount = transaction.getAccount();
 			String tStatement = transaction.getStatement();
 			if (tAccount.equals(account) && statementIds.contains(tStatement)) {
