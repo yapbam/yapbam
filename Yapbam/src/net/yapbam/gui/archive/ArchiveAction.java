@@ -31,6 +31,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.persistence.PersistenceManager.ErrorProcessor;
+import net.yapbam.util.ArrayUtils;
 
 @SuppressWarnings("serial")
 public class ArchiveAction extends AbstractAction {
@@ -60,14 +61,6 @@ public class ArchiveAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		Window owner = Utils.getOwnerWindow((Component)e.getSource());
 
-		// Select transactions to archive
-		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data);
-		filterDialog.setVisible(true);
-		Collection<Transaction> selectedTransactions = filterDialog.getResult();
-		if (selectedTransactions.isEmpty()) {
-			return;
-		}
-		
 		// Select archive file
 		URI uri = getArchiveURI(owner);
 		if (uri==null) {
@@ -89,12 +82,20 @@ public class ArchiveAction extends AbstractAction {
 		}
 		
 		// Report the collisions between final archive balance and data initial balance (there should be equals).
-		CharSequence alerts = getAlerts(filterDialog.isAccountSelected(), archiveData);
-		if (alerts.length()>0) {
-			int continued = JOptionPane.showOptionDialog(owner, alerts, LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+		CharSequence[] alerts = getAlerts(archiveData);
+		if (!ArrayUtils.isAllNull(alerts)) {
+			int continued = JOptionPane.showOptionDialog(owner, getAlertMessage(alerts), LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
 			if (continued!=0) {
 				return;
 			}
+		}
+
+		// Select transactions to archive
+		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data, alerts);
+		filterDialog.setVisible(true);
+		Collection<Transaction> selectedTransactions = filterDialog.getResult();
+		if (selectedTransactions == null || selectedTransactions.isEmpty()) {
+			return;
 		}
 		
 		// Copy archived transactions into archive
@@ -129,23 +130,31 @@ public class ArchiveAction extends AbstractAction {
 		return dialog.showDialog();
 	}
 
-	private CharSequence getAlerts(boolean[] isAccountSelected, GlobalData archiveData) {
-		StringBuilder builder = new StringBuilder();
+	private CharSequence[] getAlerts(GlobalData archiveData) {
+		CharSequence[] result = new CharSequence[data.getAccountsNumber()];
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			if (isAccountSelected[i]) {
-				// If there will be transactions archived in the account number i
-				Account account = data.getAccount(i);
-				Account archiveAccount = archiveData.getAccount(account.getName());
-				if (archiveAccount!=null) {
-					double arcFinal = archiveAccount.getBalanceData().getFinalBalance();
-					if (GlobalData.AMOUNT_COMPARATOR.compare(arcFinal, account.getInitialBalance())!=0) {
-						// If archive final balance in the archived account is not the initial balance of the account
-						builder.append(builder.length()==0 ? "<html>":"<br>");
-						String strFinal = LocalizationData.getCurrencyInstance().format(arcFinal);
-						String strInitial = LocalizationData.getCurrencyInstance().format(account.getInitialBalance());
-						builder.append(MessageFormat.format(LocalizationData.get("Archive.accountBalancesNotMatch"), account.getName(), strFinal, strInitial));
-					}
+			// If there will be transactions archived in the account number i
+			Account account = data.getAccount(i);
+			Account archiveAccount = archiveData.getAccount(account.getName());
+			if (archiveAccount!=null) {
+				double arcFinal = archiveAccount.getBalanceData().getFinalBalance();
+				if (GlobalData.AMOUNT_COMPARATOR.compare(arcFinal, account.getInitialBalance())!=0) {
+					// If archive final balance in the archived account is not the initial balance of the account
+					String strFinal = LocalizationData.getCurrencyInstance().format(arcFinal);
+					String strInitial = LocalizationData.getCurrencyInstance().format(account.getInitialBalance());
+					result[i] = MessageFormat.format(LocalizationData.get("Archive.accountBalancesNotMatch"), account.getName(), strFinal, strInitial);
 				}
+			}
+		}
+		return result;
+	}
+	
+	private CharSequence getAlertMessage(CharSequence[] alerts) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < alerts.length; i++) {
+			if (alerts[i]!=null) {
+				builder.append(builder.length()==0 ? "<html>":"<br>");
+				builder.append(alerts[i]);
 			}
 		}
 		if (builder.length()>0) {

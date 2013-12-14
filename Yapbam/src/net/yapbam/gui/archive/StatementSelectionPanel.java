@@ -1,6 +1,7 @@
 package net.yapbam.gui.archive;
 
 import javax.swing.DefaultCellEditor;
+import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -42,17 +43,19 @@ public class StatementSelectionPanel extends JPanel {
 	private JButton noneButton;
 	
 	private GlobalData data;
+	private CharSequence[] alerts;
 	private String invalidityCause;
 
 	/**
 	 * Create the panel.
 	 */
 	public StatementSelectionPanel() {
-		this(null);
+		this(null, new CharSequence[0]);
 	}
 
-	public StatementSelectionPanel(GlobalData data) {
+	public StatementSelectionPanel(GlobalData data, CharSequence[] alerts) {
 		this.data = data;
+		this.alerts = alerts.clone();
 		initialize();
 	}
 
@@ -67,24 +70,27 @@ public class StatementSelectionPanel extends JPanel {
 	private JLabel getLblWhatAccountsDo() {
 		if (lblWhatAccountsDo == null) {
 			String message = LocalizationData.get("Archive.statementSelection.helpMessage"); //$NON-NLS-1$
-			lblWhatAccountsDo = new JLabel(MessageFormat.format(message, getTable().getColumnName(StatementSelectionTableModel.STATEMENT_COLUMN)));
+			StatementSelectionTableModel model = (StatementSelectionTableModel) getTable().getModel();
+			lblWhatAccountsDo = new JLabel(MessageFormat.format(message, getTable().getColumnName(model.getStatementColumn())));
 		}
 		return lblWhatAccountsDo;
 	}
+	
 	JTable getTable() {
 		if (table == null) {
+			final StatementSelectionTableModel model = new StatementSelectionTableModel(data, alerts);
 			table = new JTable();
+			table.setDefaultRenderer(Icon.class, new AlertCellRenderer());
 			// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
 			table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
-			StatementSelectionTableModel model = new StatementSelectionTableModel(data);
 			table.setModel(model);
-
-			table.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
+			// Disallow columns reordering
+			table.getTableHeader().setReorderingAllowed(false);
 			JTableUtils.initColumnSizes(table, Integer.MAX_VALUE);
 			table.setPreferredScrollableViewportSize(table.getPreferredSize());
 
 			JComboBox fieldsCombo = new JComboBox();
-			TableColumn importedColumns = table.getColumnModel().getColumn(StatementSelectionTableModel.STATEMENT_COLUMN);
+			TableColumn importedColumns = table.getColumnModel().getColumn(model.getStatementColumn());
 			importedColumns.setCellEditor(new DefaultCellEditor(fieldsCombo) {
 				@Override
 				public Component getTableCellEditorComponent(javax.swing.JTable table,
@@ -101,7 +107,6 @@ public class StatementSelectionPanel extends JPanel {
 					combo.setSelectedItem(current);
 					return combo;
 				}
-				
 			});
 
 			table.setFillsViewportHeight(true);
@@ -139,7 +144,8 @@ public class StatementSelectionPanel extends JPanel {
 			gbcNoneButton.gridx = 2;
 			gbcNoneButton.gridy = 0;
 			panel.add(getNoneButton(), gbcNoneButton);
-			panel.setVisible(false); // Seems better without these buttons
+			// Seems better without these all and none buttons
+			panel.setVisible(false); 
 		}
 		return panel;
 	}
@@ -170,7 +176,7 @@ public class StatementSelectionPanel extends JPanel {
 		String old = invalidityCause;
 		invalidityCause = LocalizationData.get("Archive.statementSelection.noTransactionSelected"); //$NON-NLS-1$
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
-			if (((StatementSelectionTableModel)getTable().getModel()).getSelectedStatements(i) != null) {
+			if (!((StatementSelectionTableModel)getTable().getModel()).getSelectedStatements(i).isEmpty()) {
 				invalidityCause = null;
 				break;
 			}
