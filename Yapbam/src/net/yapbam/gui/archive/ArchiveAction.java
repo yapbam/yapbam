@@ -35,6 +35,25 @@ import net.yapbam.util.ArrayUtils;
 
 @SuppressWarnings("serial")
 public class ArchiveAction extends AbstractAction {
+	private static final class ReadErrorProcessor implements ErrorProcessor {
+		private boolean isNewFile = false;
+		
+		ReadErrorProcessor() {
+			this.isNewFile = false;
+		}
+
+		@Override
+		public boolean processError(Throwable e) {
+			// FileNotFound should simply be ignored (the globalData remains unchanged)
+			this.isNewFile = true;
+			return e instanceof FileNotFoundException;
+		}
+
+		boolean isNewFile() {
+			return isNewFile;
+		}
+	}
+
 	private GlobalData data;
 
 	public ArchiveAction(GlobalData data) {
@@ -70,14 +89,11 @@ public class ArchiveAction extends AbstractAction {
 		// Read the archive file
 		GlobalData archiveData = new GlobalData();
 		YapbamDataWrapper wrapper = new YapbamDataWrapper(archiveData);
-		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, wrapper, uri, new ErrorProcessor() {
-			@Override
-			public boolean processError(Throwable e) {
-				// FileNotFound should simply be ignored (the globalData remains unchanged)
-				return e instanceof FileNotFoundException;
-			}
-		});
-		if (!readIsOk) {
+		ReadErrorProcessor errProcessor = new ReadErrorProcessor();
+		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, wrapper, uri, errProcessor);
+		if (errProcessor.isNewFile()) {
+			archiveData.setURI(uri);
+		} else if (!readIsOk) {
 			return;
 		}
 		
