@@ -70,10 +70,8 @@
 	    	<fileset dir="${yapbam.commons.path}" includes="**/*.properties"/>
 	    	<fileset dir="${yapbam.commons.path}" includes="**/*.xsd"/>
 	    	<fileset dir="${ajlib.path}" includes="**/*.png"/>
-	    	<fileset dir="${jclop.path}" includes="**/*.properties"/>
-	    	<fileset dir="${jclop.path}" includes="**/*.png"/>
-	    	<fileset dir="${jclop-dropbox.path}" includes="**/*.properties"/>
-	    	<fileset dir="${jclop-dropbox.path}" includes="**/*.png"/>
+	    	<fileset dir="${jclop.resources.path}" includes="**/*.*"/>
+	    	<fileset dir="${jclop-dropbox.resources.path}" includes="**/*.*"/>
 		</copy>
 		<javac srcdir="${jfreechart.path}" includes="org/jfree/chart/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
 		<javac srcdir="${jcommon.path}" includes="org/jfree/resources/**/*.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
@@ -99,7 +97,9 @@
 				<attribute name="Main-Class" value="net.yapbam.gui.MainFrame"/>
 				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
 			</manifest>
-			<fileset dir="releaseCompile"/>
+			<fileset dir="releaseCompile">
+			    <exclude name="org/slf4j/impl/**"/>
+		    </fileset>
 		</jar>
 		<delete dir="releaseCompile"/>
 		<copy todir="${othersDir}">
