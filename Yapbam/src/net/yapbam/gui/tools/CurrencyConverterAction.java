@@ -21,7 +21,11 @@ import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
 import com.fathzer.soft.ajlib.swing.worker.WorkInProgressPanel;
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 
-import net.yapbam.currency.CurrencyConverter;
+
+
+import net.yapbam.currency.AbstractCurrencyConverter;
+import net.yapbam.currency.ECBCurrencyConverter;
+//import net.yapbam.currency.ECBCurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.Preferences;
 import net.yapbam.util.Portable;
@@ -37,10 +41,10 @@ final public class CurrencyConverterAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final Window owner = Utils.getOwnerWindow((Component) e.getSource());
-		final Worker<CurrencyConverter, Void> worker = new Worker<CurrencyConverter, Void>() {
+		final Worker<AbstractCurrencyConverter, Void> worker = new Worker<AbstractCurrencyConverter, Void>() {
 			@Override
-			protected CurrencyConverter doProcessing() throws Exception {
-				return new CurrencyConverter(Preferences.INSTANCE.getHttpProxy(), new FileCache(new File(Portable.getDataDirectory(), "ExchangeRates.xml"))); //$NON-NLS-1$
+			protected AbstractCurrencyConverter doProcessing() throws Exception {
+				return new ECBCurrencyConverter(Preferences.INSTANCE.getHttpProxy(), new FileCache(new File(Portable.getDataDirectory(), "ExchangeRates.xml"))); //$NON-NLS-1$
 			}
 		};
 		final WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), ModalityType.APPLICATION_MODAL, worker) { //$NON-NLS-1$
@@ -58,7 +62,7 @@ final public class CurrencyConverterAction extends AbstractAction {
 				if (evt.getPropertyName().equals(Worker.STATE_PROPERTY_NAME)) {
 					if (evt.getNewValue().equals(StateValue.DONE)) {
 						if (!worker.isCancelled()) {
-							CurrencyConverter converter = null;
+							AbstractCurrencyConverter converter = null;
 							try {
 								converter = worker.get();
 							} catch (InterruptedException e) {

@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import net.yapbam.currency.CurrencyConverter;
+import net.yapbam.currency.AbstractCurrencyConverter;
 
-public class FileCache implements CurrencyConverter.Cache {
+public class FileCache implements AbstractCurrencyConverter.Cache {
 	private File cacheFile;
 	
 	public FileCache(File file) {
