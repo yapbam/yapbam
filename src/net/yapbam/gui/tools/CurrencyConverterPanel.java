@@ -1,6 +1,7 @@
 package net.yapbam.gui.tools;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.ListSelectionModel;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Currency;
 
-import net.yapbam.currency.CurrencyConverter;
+import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
@@ -22,8 +23,10 @@ import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CurrencyWidget;
 
 import javax.swing.JLabel;
+
 import java.awt.Insets;
 import java.awt.Color;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
@@ -45,7 +48,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private CurrencyWidget amount1 = null;
 	private CurrencyWidget amount2 = null;
 	
-	private CurrencyConverter converter;
+	private AbstractCurrencyConverter converter;
 	private String[] codes;
 	private JLabel title = null;
 	private JLabel errField = null;
@@ -57,7 +60,7 @@ public class CurrencyConverterPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public CurrencyConverterPanel(CurrencyConverter converter) {
+	public CurrencyConverterPanel(AbstractCurrencyConverter converter) {
 		this.converter = converter;
 		if (this.converter!=null) {
 			this.codes = this.converter.getCurrencies();

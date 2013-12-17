@@ -4,16 +4,16 @@ import java.text.MessageFormat;
 
 import javax.swing.table.AbstractTableModel;
 
-import net.yapbam.currency.CurrencyConverter;
+import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
 
 @SuppressWarnings("serial")
 public class CurrencyTableModel extends AbstractTableModel {
 	private int currentCurrency;
-	private CurrencyConverter converter;
+	private AbstractCurrencyConverter converter;
 	private String[] codes;
 	
-	public CurrencyTableModel(CurrencyConverter converter, String[] codes) {
+	public CurrencyTableModel(AbstractCurrencyConverter converter, String[] codes) {
 		this.converter = converter;
 		if (this.converter!=null) {
 			this.codes = codes;
