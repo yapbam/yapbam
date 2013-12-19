@@ -37,4 +37,9 @@ public class FileCache implements AbstractCurrencyConverter.Cache {
 		}
 		getTmpFile().renameTo(cacheFile);
 	}
+
+	@Override
+	public boolean isEmpty() {
+		return !getTmpFile().exists() && !cacheFile.exists();
+	}
 }
