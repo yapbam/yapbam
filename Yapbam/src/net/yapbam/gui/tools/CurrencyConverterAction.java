@@ -8,6 +8,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.Proxy;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
@@ -15,23 +16,26 @@ import javax.swing.AbstractAction;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.worker.DefaultWorkInProgressPanel;
 import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
 import com.fathzer.soft.ajlib.swing.worker.WorkInProgressPanel;
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 
-
-
 import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.ECBCurrencyConverter;
-//import net.yapbam.currency.ECBCurrencyConverter;
+import net.yapbam.currency.YahooCurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.Preferences;
 import net.yapbam.util.Portable;
 
 @SuppressWarnings("serial")
 final public class CurrencyConverterAction extends AbstractAction {
+	private static final String SOURCE_PREF_KEY = "net.yapbam.gui.tools.currencyConverter.source"; //$NON-NLS-1$
+	private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConverterAction.class);
 	
 	public CurrencyConverterAction() {
 		super(Messages.getString("ToolsPlugIn.currencyConverter.title")); //$NON-NLS-1$
@@ -44,7 +48,13 @@ final public class CurrencyConverterAction extends AbstractAction {
 		final Worker<AbstractCurrencyConverter, Void> worker = new Worker<AbstractCurrencyConverter, Void>() {
 			@Override
 			protected AbstractCurrencyConverter doProcessing() throws Exception {
-				return new ECBCurrencyConverter(Preferences.INSTANCE.getHttpProxy(), new FileCache(new File(Portable.getDataDirectory(), "ExchangeRates.xml"))); //$NON-NLS-1$
+				Proxy proxy = Preferences.INSTANCE.getHttpProxy();
+				CurrencyConverterSource source = getSource();
+				if (CurrencyConverterSource.ECB.equals(source)) {
+					return new ECBCurrencyConverter(proxy, new FileCache(new File(Portable.getDataDirectory(), "ExchangeRates.xml"))); //$NON-NLS-1$
+				} else {
+					return new YahooCurrencyConverter(proxy, new FileCache(new File(Portable.getDataDirectory(), "YahooExchangeRates.xml"))); //$NON-NLS-1$
+				}
 			}
 		};
 		final WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), ModalityType.APPLICATION_MODAL, worker) { //$NON-NLS-1$
@@ -83,5 +93,23 @@ final public class CurrencyConverterAction extends AbstractAction {
 			}
 		});
 		waitFrame.setVisible(true);
+	}
+
+	public static CurrencyConverterSource getSource() {
+		try {
+			String property = Preferences.INSTANCE.getProperty(SOURCE_PREF_KEY, CurrencyConverterSource.ECB.name());
+			return CurrencyConverterSource.valueOf(property);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("Invalid value in preferences", e);
+			return CurrencyConverterSource.ECB;
+		}
+	}
+
+	static void setSource(CurrencyConverterSource source) {
+		if (CurrencyConverterSource.ECB.equals(source)) {
+			Preferences.INSTANCE.removeProperty(SOURCE_PREF_KEY);
+		} else {
+			Preferences.INSTANCE.setProperty(SOURCE_PREF_KEY, source.name());
+		}
 	}
 }

@@ -166,13 +166,13 @@ public class CurrencyConverterPanel extends JPanel {
 		gbcSwapButton.gridx = 0;
 		gbcSwapButton.gridy = 2;
 		add(getSwapButton(), gbcSwapButton);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridwidth = 0;
-		gbc_panel.insets = new Insets(0, 0, 5, 5);
-		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		add(getPanel(), gbc_panel);
+		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.gridwidth = 0;
+		gbcPanel.insets = new Insets(0, 0, 5, 5);
+		gbcPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcPanel.gridx = 0;
+		gbcPanel.gridy = 0;
+		add(getPanel(), gbcPanel);
 		this.add(getJScrollPane(), gridBagConstraints12);
 	}
 
