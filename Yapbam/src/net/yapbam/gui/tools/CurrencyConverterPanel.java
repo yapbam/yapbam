@@ -13,6 +13,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Currency;
+import java.util.Date;
 
 import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
@@ -82,7 +83,7 @@ public class CurrencyConverterPanel extends JPanel {
 				getCurrency1().setSelectedIndex(index);
 				getCurrency2().setSelectedIndex(index);
 			}
-			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), this.converter.getReferenceDate()); //$NON-NLS-1$
+			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), new Date(this.converter.getTimeStamp())); //$NON-NLS-1$
 			this.title.setText(title);
 			if (!this.converter.isSynchronized()) {
 				this.title.setIcon(IconManager.get(Name.ALERT));
@@ -204,6 +205,7 @@ public class CurrencyConverterPanel extends JPanel {
 					if (tableModel!=null) {
 						tableModel.setCurrency(codes[currency1.getSelectedIndex()]);
 					}
+					Utils.packColumns(getJTable(), 2);
 					doConvert();
 				}
 			});

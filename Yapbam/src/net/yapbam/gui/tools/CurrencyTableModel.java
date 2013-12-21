@@ -32,7 +32,7 @@ public class CurrencyTableModel extends AbstractTableModel {
 					break;
 				}
 			}
-			this.fireTableDataChanged();
+			this.fireTableStructureChanged();
 		}
 	}
 
