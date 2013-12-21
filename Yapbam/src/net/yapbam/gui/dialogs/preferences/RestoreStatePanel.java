@@ -6,11 +6,15 @@ import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.StartStateOptions;
 
 import java.awt.GridBagLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
@@ -42,7 +46,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		add(chckbxTabsOrder, gbcChckbxConserverLordreDes);
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(LocalizationData.get("PreferencesDialog.StartState.tableTitle"))); //$NON-NLS-1$
+		panel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.StartState.tableTitle"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
 		GridBagConstraints gbcPanel = new GridBagConstraints();
 		gbcPanel.insets = new Insets(5, 5, 5, 5);
 		gbcPanel.fill = GridBagConstraints.HORIZONTAL;
@@ -96,7 +100,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		chckbxHiddenColumns.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.hiddenColumns.tooltip")); //$NON-NLS-1$
 		
 		JPanel panel1 = new JPanel();
-		panel1.setBorder(new TitledBorder(null, LocalizationData.get("PreferencesDialog.StartState.dataTitle"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
+		panel1.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.StartState.dataTitle"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
 		GridBagConstraints gbcPanel1 = new GridBagConstraints();
 		gbcPanel1.insets = new Insets(5, 5, 5, 5);
 		gbcPanel1.fill = GridBagConstraints.BOTH;
