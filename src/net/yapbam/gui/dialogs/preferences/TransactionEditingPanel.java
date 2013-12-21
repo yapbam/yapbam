@@ -2,10 +2,14 @@ package net.yapbam.gui.dialogs.preferences;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JCheckBox;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
@@ -15,6 +19,7 @@ import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingOptions;
 
 import javax.swing.JSeparator;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -24,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -45,9 +51,6 @@ public class TransactionEditingPanel extends PreferencePanel {
 	private JRadioButton rdbtnCustomized;
 	private JTextField formatPatternField;
 	private JLabel labelExample;
-	private JSeparator separator1;
-	private JPanel panel1;
-	private JLabel lblWhen;
 	private JRadioButton rdbtnDupDateCurrent;
 	private JRadioButton rdbtnDupDateOriginal;
 
@@ -85,7 +88,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gbcSeparator.gridy = 2;
 		add(separator, gbcSeparator);
 		
-		panel1 = new JPanel();
+		JPanel panel1 = new JPanel();
 		GridBagConstraints gbcPanel1 = new GridBagConstraints();
 		gbcPanel1.insets = new Insets(0, 0, 5, 0);
 		gbcPanel1.fill = GridBagConstraints.BOTH;
@@ -95,7 +98,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		GridBagLayout gblPanel1 = new GridBagLayout();
 		panel1.setLayout(gblPanel1);
 		
-		lblWhen = new JLabel(LocalizationData.get("TransactionEditingPreferencesPanel.duplicateTransaction.title")); //$NON-NLS-1$
+		JLabel lblWhen = new JLabel(LocalizationData.get("TransactionEditingPreferencesPanel.duplicateTransaction.title")); //$NON-NLS-1$
 		GridBagConstraints gbcLblWhen = new GridBagConstraints();
 		gbcLblWhen.anchor = GridBagConstraints.WEST;
 		gbcLblWhen.gridheight = 0;
@@ -127,7 +130,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gpDuplicate.add(rdbtnDupDateCurrent);
 		gpDuplicate.add(rdbtnDupDateOriginal);
 		
-		separator1 = new JSeparator();
+		JSeparator separator1 = new JSeparator();
 		GridBagConstraints gbcSeparator1 = new GridBagConstraints();
 		gbcSeparator1.fill = GridBagConstraints.BOTH;
 		gbcSeparator1.insets = new Insets(5, 50, 10, 50);
@@ -182,7 +185,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		chckbxAutoFillStatement.addItemListener(itemListener);
 		
 		JPanel panelFormat = new JPanel();
-		panelFormat.setBorder(new TitledBorder(null, LocalizationData.get("TransactionEditingPreferencesPanel.format.title"), TitledBorder.LEADING, TitledBorder.TOP, null, null)); //$NON-NLS-1$
+		panelFormat.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("TransactionEditingPreferencesPanel.format.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
 		GridBagConstraints gbcPanelFormat = new GridBagConstraints();
 		gbcPanelFormat.anchor = GridBagConstraints.NORTHWEST;
 		gbcPanelFormat.weightx = 1.0;

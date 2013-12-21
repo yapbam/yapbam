@@ -5,6 +5,7 @@ import javax.swing.JMenuItem;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
+import net.yapbam.gui.PreferencePanel;
 
 public class ToolsPlugIn extends AbstractPlugIn {
 	public ToolsPlugIn(FilteredData data, Object restoreData) {
@@ -18,5 +19,10 @@ public class ToolsPlugIn extends AbstractPlugIn {
 		jmenu.add(new JMenuItem(new CurrencyConverterAction()));
 		jmenu.add(new JMenuItem(new CalculatorAction()));
 		return new JMenu[]{jmenu};
+	}
+
+	@Override
+	public PreferencePanel getPreferencePanel() {
+		return new CurrencyConverterPreferencePanel();
 	}
 }

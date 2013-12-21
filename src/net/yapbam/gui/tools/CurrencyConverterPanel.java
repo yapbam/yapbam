@@ -42,7 +42,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class CurrencyConverterPanel extends JPanel {
-
 	private static final long serialVersionUID = 1L;
 	private JComboBox currency1 = null;
 	private JComboBox currency2 = null;
@@ -57,6 +56,7 @@ public class CurrencyConverterPanel extends JPanel {
 	private JTable jTable = null;
 	private CurrencyTableModel tableModel;
 	private JButton swapButton;
+	private JPanel panel;
 	
 	/**
 	 * This is the default constructor
@@ -110,15 +110,6 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints6.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints6.gridwidth = 0;
 		gridBagConstraints6.gridy = 2;
-		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-		gridBagConstraints4.gridx = 0;
-		gridBagConstraints4.gridy = 0;
-		gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints4.anchor = GridBagConstraints.WEST;
-		gridBagConstraints4.insets = new Insets(5, 5, 5, 0);
-		gridBagConstraints4.gridwidth = GridBagConstraints.REMAINDER;
-		title = new JLabel();
-		title.setText(""); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 2;
 		gridBagConstraints31.insets = new Insets(5, 5, 5, 5);
@@ -159,19 +150,29 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints2.weightx = 0.0D;
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridx = 1;
-		this.setLayout(new GridBagLayout());
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0};
+		this.setLayout(gridBagLayout);
 		this.add(getCurrency1(), gridBagConstraints2);
 		this.add(getCurrency2(), gridBagConstraints1);
 		this.add(getAmount1(), gridBagConstraints11);
 		this.add(getAmount2(), gridBagConstraints21);
 		this.add(jLabel, gridBagConstraints31);
-		this.add(title, gridBagConstraints4);
 		this.add(getErrField(), gridBagConstraints6);
 		GridBagConstraints gbcSwapButton = new GridBagConstraints();
+		gbcSwapButton.insets = new Insets(0, 0, 5, 0);
 		gbcSwapButton.gridwidth = 0;
 		gbcSwapButton.gridx = 0;
 		gbcSwapButton.gridy = 2;
 		add(getSwapButton(), gbcSwapButton);
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.gridwidth = 0;
+		gbc_panel.insets = new Insets(0, 0, 5, 5);
+		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 0;
+		add(getPanel(), gbc_panel);
 		this.add(getJScrollPane(), gridBagConstraints12);
 	}
 
@@ -350,5 +351,14 @@ public class CurrencyConverterPanel extends JPanel {
 			swapButton.setToolTipText(Messages.getString("CurrencyConverterPanel.swapButton.toolTipText")); //$NON-NLS-1$
 		}
 		return swapButton;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			title = new JLabel();
+			panel.add(title);
+			title.setText(""); //$NON-NLS-1$
+		}
+		return panel;
 	}
 }
