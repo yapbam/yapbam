@@ -33,7 +33,7 @@ import net.yapbam.gui.Preferences;
 import net.yapbam.util.Portable;
 
 @SuppressWarnings("serial")
-final public class CurrencyConverterAction extends AbstractAction {
+public final class CurrencyConverterAction extends AbstractAction {
 	private static final String SOURCE_PREF_KEY = "net.yapbam.gui.tools.currencyConverter.source"; //$NON-NLS-1$
 	private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConverterAction.class);
 	
@@ -69,25 +69,22 @@ final public class CurrencyConverterAction extends AbstractAction {
 		worker.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals(Worker.STATE_PROPERTY_NAME)) {
-					if (evt.getNewValue().equals(StateValue.DONE)) {
-						if (!worker.isCancelled()) {
-							AbstractCurrencyConverter converter = null;
-							try {
-								converter = worker.get();
-							} catch (InterruptedException e) {
-							} catch (ExecutionException e) {
-								if (e.getCause() instanceof IOException) {
-									ErrorManager.INSTANCE.display(owner, null, Messages.getString("ToolsPlugin.currencyConverter.ioErrorMessage")); //$NON-NLS-1$
-								} else {
-									String message = MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.getCause()); //$NON-NLS-1$
-									ErrorManager.INSTANCE.display(owner, null, message);
-								}
-							}
-							if (converter!=null) {
-								new CurrencyConverterDialog(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), converter).setVisible(true); //$NON-NLS-1$
-							}
+				if (evt.getPropertyName().equals(Worker.STATE_PROPERTY_NAME)
+						&& evt.getNewValue().equals(StateValue.DONE) && !worker.isCancelled()) {
+					AbstractCurrencyConverter converter = null;
+					try {
+						converter = worker.get();
+					} catch (InterruptedException e) {
+					} catch (ExecutionException e) {
+						if (e.getCause() instanceof IOException) {
+							ErrorManager.INSTANCE.display(owner, null, Messages.getString("ToolsPlugin.currencyConverter.ioErrorMessage")); //$NON-NLS-1$
+						} else {
+							String message = MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.getCause()); //$NON-NLS-1$
+							ErrorManager.INSTANCE.display(owner, null, message);
 						}
+					}
+					if (converter!=null) {
+						new CurrencyConverterDialog(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), converter).setVisible(true); //$NON-NLS-1$
 					}
 				}
 			}
