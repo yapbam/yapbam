@@ -13,6 +13,7 @@ fix
 improvement
 	Adds the ability to archive old transactions.
 	The background color of "Balance History" tab can be set in the preferences dialog.
+	In the currency converter, the list of countries using a currency appears when you hover over it in the currency table.
 
 version	0.15.5 (10/19/2013)
 fix

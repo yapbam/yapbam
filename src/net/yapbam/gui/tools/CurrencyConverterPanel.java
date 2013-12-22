@@ -10,12 +10,19 @@ import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import net.yapbam.currency.AbstractCurrencyConverter;
+import net.yapbam.currency.CountryCurrencyMap;
 import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
@@ -40,6 +47,7 @@ import com.fathzer.soft.ajlib.swing.table.RowSorter;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 
 public class CurrencyConverterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -315,8 +323,35 @@ public class CurrencyConverterPanel extends JPanel {
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
+			final CountryCurrencyMap map = new CountryCurrencyMap();
 			tableModel = new CurrencyTableModel(this.converter, this.codes);
-			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel);
+			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public String getToolTipText(MouseEvent event) {
+					int row = jTable.convertRowIndexToModel(jTable.rowAtPoint(event.getPoint()));
+					Set<String> countries = map.getCountries(tableModel.getCode(row));
+					if (countries==null) {
+						return super.getToolTipText(event);
+					} else {
+						List<String> lines = new ArrayList<String>(countries.size());
+						Iterator<String> iter = countries.iterator();
+						while (iter.hasNext()) {
+							lines.add(new Locale("",iter.next()).getDisplayCountry());
+						}
+						Collections.sort(lines);
+						StringBuilder buf = new StringBuilder();
+						for (String line : lines) {
+							if (buf.length()!=0) {
+								buf.append("<br>");
+							}
+							buf.append(line);
+						}
+						return "<html>"+buf.toString()+"</html>";
+					}
+				}
+			};
 			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
 			getJTable().setDefaultRenderer(Double.class, new ConversionRateRenderer());
 			Utils.packColumns(jTable, 2);
