@@ -13,6 +13,7 @@ fix
 improvement
 	Ajoute la possibilité d'archiver les anciennes opérations.
 	Ajoute la possibilité, dans les preférences, de régler la couleur de fond dans l'onglet "Historique du solde".
+	Dans le convertisseur de devises, la liste des pays utilisant une devise s'affiche quand on survole celle-ci dans le tableau des devises.
 
 version	0.15.5 (19/10/2013)
 fix
