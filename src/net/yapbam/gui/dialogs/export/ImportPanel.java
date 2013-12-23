@@ -35,6 +35,9 @@ import net.yapbam.gui.util.JTableUtils;
 
 import javax.swing.JLabel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -451,8 +454,18 @@ public class ImportPanel extends JPanel {
 		} finally {
 			try {
 				reader.close();
-			} catch (IOException e) {}
+			} catch (IOException e) {
+				getLogger().warn("Error closing file "+canonicalFile, e);
+			}
 		}
+	}
+	
+	private Logger logger;
+	private Logger getLogger() {
+		if (this.logger==null) {
+			this.logger = LoggerFactory.getLogger(getClass());
+		}
+		return logger;
 	}
 	
 	public void setLine (int lineNumber) throws IOException {
@@ -496,7 +509,9 @@ public class ImportPanel extends JPanel {
 		} finally {
 			try {
 				reader.close();
-			} catch (IOException e) {}
+			} catch (IOException e) {
+				getLogger().warn("Error while closing file "+canonicalFile, e);
+			}
 		}
 	}
 		

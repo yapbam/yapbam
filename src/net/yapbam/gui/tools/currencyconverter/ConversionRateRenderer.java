@@ -1,4 +1,4 @@
-package net.yapbam.gui.tools;
+package net.yapbam.gui.tools.currencyconverter;
 
 import java.text.NumberFormat;
 
