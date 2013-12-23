@@ -1,4 +1,4 @@
-package net.yapbam.gui.tools;
+package net.yapbam.gui.tools.currencyconverter;
 
 import java.text.MessageFormat;
 
@@ -6,21 +6,28 @@ import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
+import net.yapbam.gui.tools.Messages;
 
 @SuppressWarnings("serial")
-public class CurrencyTableModel extends AbstractTableModel {
+public class CurrenciesTableModel extends AbstractTableModel {
 	private int currentCurrency;
 	private AbstractCurrencyConverter converter;
 	private String[] codes;
 	
-	public CurrencyTableModel(AbstractCurrencyConverter converter, String[] codes) {
+	public CurrenciesTableModel() {
+		setContent(null, null);
+	}
+	
+	public void setContent(AbstractCurrencyConverter converter, String[] codes) {
 		this.converter = converter;
 		if (this.converter!=null) {
 			this.codes = codes;
 			this.currentCurrency = 0;
 		} else {
+			this.codes = null;
 			this.currentCurrency = -1;
 		}
+		fireTableDataChanged();
 	}
 	
 	public void setCurrency(String currencyCode) {

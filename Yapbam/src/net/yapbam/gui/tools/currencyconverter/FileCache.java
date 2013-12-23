@@ -1,4 +1,4 @@
-package net.yapbam.gui.tools;
+package net.yapbam.gui.tools.currencyconverter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,7 +22,7 @@ public class FileCache implements Cache {
 	}
 
 	private File getTmpFile() {
-		return new File(cacheFile.getAbsolutePath()+".tmp");
+		return new File(cacheFile.getAbsolutePath()+".tmp"); //$NON-NLS-1$
 	}
 
 	@Override

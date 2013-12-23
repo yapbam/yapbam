@@ -187,7 +187,9 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * <br>The plugin may perform some actions like showing/hidding its specifics menus when such an event occurs.
 	 * @param displayed true if the panel obtains the focus, false if it looses it
 	 */
-	public void setDisplayed(boolean displayed) {}
+	public void setDisplayed(boolean displayed) {
+		// Override this method to do plugin specific actions
+	}
 	
 	/** This method is called when the plugin panel gain the focus.
 	 * <br>It ask the plugin if a general (not a plugin specific) menu is useful for this plugin.
@@ -205,7 +207,9 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * <br>The plugin may use YabamState class to perform these backups.
 	 * @see YapbamState
 	 */
-	public void saveState() {}
+	public void saveState() {
+		// Override this method to save plugin state
+	}
 
 	/** Restores the state of this panel.
 	 * This method is called when needed (usually at Yapbam startup) in order to let the plugin restore its previous state
@@ -213,7 +217,9 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * <br>The plugin may use YabamState class to perform its restore.
 	 * @see YapbamState
 	 */
-	public void restoreState() {}
+	public void restoreState() {
+		// Override this method to restore plugin state
+	}
 
 	/** On some events, the GUI has to be restarted (for instance if the look and feel is changed).
 	 * Then, the plugin has to be unloaded and then reloaded.

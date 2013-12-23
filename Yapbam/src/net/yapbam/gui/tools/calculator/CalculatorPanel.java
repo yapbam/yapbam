@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JTextField;
 
+import net.yapbam.util.BigDecimalEvaluator;
+
 import com.fathzer.soft.javaluator.BracketPair;
 import com.fathzer.soft.javaluator.DoubleEvaluator;
 

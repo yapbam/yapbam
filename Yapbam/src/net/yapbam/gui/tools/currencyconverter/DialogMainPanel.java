@@ -1,21 +1,18 @@
-package net.yapbam.gui.tools;
+package net.yapbam.gui.tools.currencyconverter;
 
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
-import javax.swing.JComboBox;
 import javax.swing.ListSelectionModel;
 
 import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -24,9 +21,8 @@ import java.util.Set;
 import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.CountryCurrencyMap;
 import net.yapbam.currency.CurrencyNames;
-import net.yapbam.gui.IconManager;
-import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.tools.Messages;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CurrencyWidget;
 
@@ -44,59 +40,36 @@ import javax.swing.JButton;
 
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.swing.widget.ComboBox;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
-public class CurrencyConverterPanel extends JPanel {
+public class DialogMainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JComboBox currency1 = null;
-	private JComboBox currency2 = null;
+	
+	private static final CountryCurrencyMap MAP = new CountryCurrencyMap();
+
+	private ComboBox currency1 = null;
+	private ComboBox currency2 = null;
 	private CurrencyWidget amount1 = null;
 	private CurrencyWidget amount2 = null;
 	
 	private AbstractCurrencyConverter converter;
 	private String[] codes;
-	private JLabel title = null;
 	private JLabel errField = null;
 	private JScrollPane jScrollPane = null;
 	private JTable jTable = null;
-	private CurrencyTableModel tableModel;
+	private CurrenciesTableModel tableModel;
 	private JButton swapButton;
-	private JPanel panel;
 	
 	/**
 	 * This is the default constructor
 	 */
-	public CurrencyConverterPanel(AbstractCurrencyConverter converter) {
-		this.converter = converter;
-		if (this.converter!=null) {
-			this.codes = this.converter.getCurrencies();
-			// Sort the codes accordingly to their wordings
-			Arrays.sort(this.codes, new Comparator<String>() {
-				@Override
-				public int compare(String o1, String o2) {
-					String w1 = CurrencyNames.get(o1);
-					String w2 = CurrencyNames.get(o2);
-					return w1.compareToIgnoreCase(w2);
-				}
-			});
-		}
+	public DialogMainPanel() {
+		this.converter = null;
 		initialize();
-		if (this.converter!=null) {
-			Currency currency = Currency.getInstance(LocalizationData.getLocale());
-			int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
-			if (index>=0) {
-				getCurrency1().setSelectedIndex(index);
-				getCurrency2().setSelectedIndex(index);
-			}
-			String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), new Date(this.converter.getTimeStamp())); //$NON-NLS-1$
-			this.title.setText(title);
-			if (!this.converter.isSynchronized()) {
-				this.title.setIcon(IconManager.get(Name.ALERT));
-			}
-		}
 	}
 
 	/**
@@ -159,8 +132,6 @@ public class CurrencyConverterPanel extends JPanel {
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridx = 1;
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0};
-		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0};
 		this.setLayout(gridBagLayout);
 		this.add(getCurrency1(), gridBagConstraints2);
 		this.add(getCurrency2(), gridBagConstraints1);
@@ -174,13 +145,6 @@ public class CurrencyConverterPanel extends JPanel {
 		gbcSwapButton.gridx = 0;
 		gbcSwapButton.gridy = 2;
 		add(getSwapButton(), gbcSwapButton);
-		GridBagConstraints gbcPanel = new GridBagConstraints();
-		gbcPanel.gridwidth = 0;
-		gbcPanel.insets = new Insets(0, 0, 5, 5);
-		gbcPanel.fill = GridBagConstraints.HORIZONTAL;
-		gbcPanel.gridx = 0;
-		gbcPanel.gridy = 0;
-		add(getPanel(), gbcPanel);
 		this.add(getJScrollPane(), gridBagConstraints12);
 	}
 
@@ -197,16 +161,10 @@ public class CurrencyConverterPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private JComboBox getCurrency1() {
+	private ComboBox getCurrency1() {
 		if (currency1 == null) {
-			currency1 = new JComboBox();
+			currency1 = new ComboBox();
 			currency1.setToolTipText(Messages.getString("CurrencyConverterPanel.origin.toolTip")); //$NON-NLS-1$
-			if (codes!=null) {
-				for (int i = 0; i < codes.length; i++) {
-					String symbol = CurrencyNames.get(this.codes[i]);
-					currency1.addItem(symbol);
-				}
-			}
 			currency1.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -227,16 +185,10 @@ public class CurrencyConverterPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private JComboBox getCurrency2() {
+	private ComboBox getCurrency2() {
 		if (currency2 == null) {
-			currency2 = new JComboBox();
+			currency2 = new ComboBox();
 			currency2.setToolTipText(Messages.getString("CurrencyConverterPanel.destination.toolTip")); //$NON-NLS-1$
-			if (codes!=null) {
-				for (int i = 0; i < codes.length; i++) {
-					String symbol = CurrencyNames.get(this.codes[i]);
-					currency2.addItem(symbol);
-				}
-			}
 			currency2.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -296,7 +248,7 @@ public class CurrencyConverterPanel extends JPanel {
 
 	private void doConvert() {
 		Double value = amount1.getValue();
-		if ((value!=null) && (codes!=null)) {
+		if ((value!=null) && (codes!=null) && (currency1.getSelectedIndex()>=0) && (currency2.getSelectedIndex()>=0)) {
 			String from = codes[currency1.getSelectedIndex()];
 			String to = codes[currency2.getSelectedIndex()];
 			amount2.setValue(this.converter.convert(value, from, to));
@@ -323,32 +275,31 @@ public class CurrencyConverterPanel extends JPanel {
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
-			final CountryCurrencyMap map = new CountryCurrencyMap();
-			tableModel = new CurrencyTableModel(this.converter, this.codes);
+			tableModel = new CurrenciesTableModel();
 			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				public String getToolTipText(MouseEvent event) {
 					int row = jTable.convertRowIndexToModel(jTable.rowAtPoint(event.getPoint()));
-					Set<String> countries = map.getCountries(tableModel.getCode(row));
+					Set<String> countries = MAP.getCountries(tableModel.getCode(row));
 					if (countries==null) {
 						return super.getToolTipText(event);
 					} else {
 						List<String> lines = new ArrayList<String>(countries.size());
 						Iterator<String> iter = countries.iterator();
 						while (iter.hasNext()) {
-							lines.add(new Locale("",iter.next()).getDisplayCountry());
+							lines.add(new Locale("",iter.next()).getDisplayCountry()); //$NON-NLS-1$
 						}
 						Collections.sort(lines);
 						StringBuilder buf = new StringBuilder();
 						for (String line : lines) {
 							if (buf.length()!=0) {
-								buf.append("<br>");
+								buf.append("<br>"); //$NON-NLS-1$
 							}
 							buf.append(line);
 						}
-						return "<html>"+buf.toString()+"</html>";
+						return "<html>"+buf.toString()+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 			};
@@ -387,13 +338,43 @@ public class CurrencyConverterPanel extends JPanel {
 		}
 		return swapButton;
 	}
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			title = new JLabel();
-			panel.add(title);
-			title.setText(""); //$NON-NLS-1$
+
+	void setConverter (AbstractCurrencyConverter converter) {
+		this.converter = converter;
+		
+		// Sort the codes accordingly to their wordings
+		this.codes = this.converter.getCurrencies();
+		Arrays.sort(this.codes, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				String w1 = CurrencyNames.get(o1);
+				String w2 = CurrencyNames.get(o2);
+				return w1.compareToIgnoreCase(w2);
+			}
+		});
+		
+		// Fill the table model
+		this.tableModel.setContent(this.converter, codes);
+		
+		// Fill currency combos
+		getCurrency1().setActionEnabled(false);
+		getCurrency2().setActionEnabled(false);
+		getCurrency1().setSelectedItem(null);
+		getCurrency2().setSelectedItem(null);
+		for (int i = 0; i < codes.length; i++) {
+			String symbol = CurrencyNames.get(this.codes[i]);
+			getCurrency1().addItem(symbol);
+			getCurrency2().addItem(symbol);
 		}
-		return panel;
+		getCurrency1().setActionEnabled(true);
+		getCurrency2().setActionEnabled(true);
+		
+		// Select available currencies
+		Currency currency = Currency.getInstance(LocalizationData.getLocale());
+		int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
+		if (index>=0) {
+			getCurrency1().setSelectedIndex(index);
+			getCurrency2().setSelectedIndex(index);
+		}
 	}
 }

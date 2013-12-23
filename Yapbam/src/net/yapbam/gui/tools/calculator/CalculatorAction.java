@@ -1,4 +1,4 @@
-package net.yapbam.gui.tools;
+package net.yapbam.gui.tools.calculator;
 
 import java.awt.Component;
 import java.awt.Frame;
@@ -12,13 +12,13 @@ import javax.swing.JFrame;
 
 import com.fathzer.soft.ajlib.swing.Utils;
 
-import net.yapbam.gui.tools.calculator.CalculatorPanel;
+import net.yapbam.gui.tools.Messages;
 
 @SuppressWarnings("serial")
 public class CalculatorAction extends AbstractAction {
 	private JFrame frame;
 	
-	CalculatorAction() {
+	public CalculatorAction() {
 		super(Messages.getString("ToolsPlugIn.calculator.title")); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION, Messages.getString("ToolsPlugIn.calculator.toolTip")); //$NON-NLS-1$
 	}
