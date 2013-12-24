@@ -21,7 +21,6 @@ final class GetConverterWorker extends Worker<AbstractCurrencyConverter, Void> {
 	@Override
 	protected AbstractCurrencyConverter doProcessing() throws Exception {
 		Proxy proxy = Preferences.INSTANCE.getHttpProxy();
-		Thread.sleep(2000); //FIXME
 		if (Source.ECB.equals(source)) {
 			return new ECBCurrencyConverter(proxy, new FileCache(new File(Portable.getDataDirectory(), "ExchangeRates.xml"))); //$NON-NLS-1$
 		} else {

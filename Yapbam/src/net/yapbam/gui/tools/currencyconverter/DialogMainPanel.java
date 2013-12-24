@@ -49,8 +49,6 @@ import java.awt.event.MouseEvent;
 public class DialogMainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private static final CountryCurrencyMap MAP = new CountryCurrencyMap();
-
 	private ComboBox currency1 = null;
 	private ComboBox currency2 = null;
 	private CurrencyWidget amount1 = null;
@@ -282,7 +280,7 @@ public class DialogMainPanel extends JPanel {
 				@Override
 				public String getToolTipText(MouseEvent event) {
 					int row = jTable.convertRowIndexToModel(jTable.rowAtPoint(event.getPoint()));
-					Set<String> countries = MAP.getCountries(tableModel.getCode(row));
+					Set<String> countries = CountryCurrencyMap.INSTANCE.getCountries(tableModel.getCode(row));
 					if (countries==null) {
 						return super.getToolTipText(event);
 					} else {
@@ -359,6 +357,8 @@ public class DialogMainPanel extends JPanel {
 		// Fill currency combos
 		getCurrency1().setActionEnabled(false);
 		getCurrency2().setActionEnabled(false);
+		getCurrency1().removeAllItems();
+		getCurrency2().removeAllItems();
 		getCurrency1().setSelectedItem(null);
 		getCurrency2().setSelectedItem(null);
 		for (int i = 0; i < codes.length; i++) {
