@@ -24,7 +24,6 @@ import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.tools.Messages;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
-import net.yapbam.gui.widget.CurrencyWidget;
 
 import javax.swing.JLabel;
 
@@ -41,6 +40,7 @@ import javax.swing.JButton;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
 import com.fathzer.soft.ajlib.swing.widget.ComboBox;
+import com.fathzer.soft.ajlib.swing.widget.NumberWidget;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -51,8 +51,8 @@ public class DialogMainPanel extends JPanel {
 	
 	private ComboBox currency1 = null;
 	private ComboBox currency2 = null;
-	private CurrencyWidget amount1 = null;
-	private CurrencyWidget amount2 = null;
+	private NumberWidget amount1 = null;
+	private NumberWidget amount2 = null;
 	
 	private AbstractCurrencyConverter converter;
 	private String[] codes;
@@ -166,7 +166,6 @@ public class DialogMainPanel extends JPanel {
 			currency1.addActionListener(new java.awt.event.ActionListener() {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					amount1.setCurrency(Currency.getInstance(codes[currency1.getSelectedIndex()]));
 					if (tableModel!=null) {
 						tableModel.setCurrency(codes[currency1.getSelectedIndex()]);
 					}
@@ -199,7 +198,6 @@ public class DialogMainPanel extends JPanel {
 						getJTable().getSelectionModel().setSelectionInterval(index, index);
 						getJTable().scrollRectToVisible(getJTable().getCellRect(index, 0, true));
 					}
-					amount2.setCurrency(Currency.getInstance(currencyCode));
 					doConvert();
 				}
 			});
@@ -212,14 +210,14 @@ public class DialogMainPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.AmountWidget	
 	 */
-	private CurrencyWidget getAmount1() {
+	private NumberWidget getAmount1() {
 		if (amount1 == null) {
-			amount1 = new CurrencyWidget(LocalizationData.getLocale());
+			amount1 = new NumberWidget(LocalizationData.getLocale());
 			amount1.setColumns(10);
 			amount1.setToolTipText(Messages.getString("CurrencyConverterPanel.amount.toolTip")); //$NON-NLS-1$
 			amount1.setValue(0.0);
 			amount1.addFocusListener(AutoSelectFocusListener.INSTANCE);
-			amount1.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+			amount1.addPropertyChangeListener(NumberWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					doConvert();
@@ -234,9 +232,9 @@ public class DialogMainPanel extends JPanel {
 	 * 	
 	 * @return net.yapbam.gui.widget.AmountWidget	
 	 */
-	private CurrencyWidget getAmount2() {
+	private NumberWidget getAmount2() {
 		if (amount2 == null) {
-			amount2 = new CurrencyWidget(LocalizationData.getLocale());
+			amount2 = new NumberWidget(LocalizationData.getLocale());
 			amount2.setColumns(10);
 			amount2.setToolTipText(Messages.getString("CurrencyConverterPanel.result.toolTip")); //$NON-NLS-1$
 			amount2.setEditable(false);
