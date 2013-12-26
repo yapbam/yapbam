@@ -13,6 +13,7 @@ fix
 improvement
 	Ajoute la possibilité d'archiver les anciennes opérations.
 	Ajoute la possibilité, dans les preférences, de régler la couleur de fond dans l'onglet "Historique du solde".
+	Ajoute la possibilité, via les préférences, de présenter les montants des recettes et des dépenses dans des colonnes séparées dans l'onglet "Opérations".
 	Dans le convertisseur de devises, la liste des pays utilisant une devise s'affiche quand on survole celle-ci dans le tableau des devises.
 	Le convertisseur de devises peut être alimenté par Yahoo, ce qui augmente considérablement le nombre de monnaies disponibles.
 
