@@ -32,6 +32,7 @@ import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.persistence.PersistenceManager.ErrorProcessor;
 import net.yapbam.util.ArrayUtils;
+import net.yapbam.util.HtmlUtils;
 
 @SuppressWarnings("serial")
 public class ArchiveAction extends AbstractAction {
@@ -92,6 +93,7 @@ public class ArchiveAction extends AbstractAction {
 		ReadErrorProcessor errProcessor = new ReadErrorProcessor();
 		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, wrapper, uri, errProcessor);
 		if (errProcessor.isNewFile()) {
+			archiveData.setArchive(true);
 			archiveData.setURI(uri);
 		} else if (!readIsOk) {
 			return;
@@ -99,8 +101,10 @@ public class ArchiveAction extends AbstractAction {
 		
 		// Report the collisions between final archive balance and data initial balance (there should be equals).
 		CharSequence[] alerts = getAlerts(archiveData);
-		if (!ArrayUtils.isAllNull(alerts)) {
-			int continued = JOptionPane.showOptionDialog(owner, getAlertMessage(alerts), LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+		if (!ArrayUtils.isAllNull(alerts) || !archiveData.isArchive()) {
+			String cancel = LocalizationData.get("GenericButton.cancel"); //$NON-NLS-1$
+			String[] options = new String[] {LocalizationData.get("GenericButton.continue"), cancel}; //$NON-NLS-1$
+			int continued = JOptionPane.showOptionDialog(owner, getAlertMessage(archiveData, alerts), LocalizationData.get("Generic.warning"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, cancel); //$NON-NLS-1$
 			if (continued!=0) {
 				return;
 			}
@@ -125,7 +129,7 @@ public class ArchiveAction extends AbstractAction {
 		
 		// Remove transactions from the data
 		Archiver.remove(data, transactions);
-		JOptionPane.showMessageDialog(owner, MessageFormat.format(LocalizationData.get("Archive.report"),transactions.length));
+		JOptionPane.showMessageDialog(owner, MessageFormat.format(LocalizationData.get("Archive.report"),transactions.length)); //$NON-NLS-1$
 	}
 
 	private URI getArchiveURI(Window owner) {
@@ -158,25 +162,31 @@ public class ArchiveAction extends AbstractAction {
 					// If archive final balance in the archived account is not the initial balance of the account
 					String strFinal = LocalizationData.getCurrencyInstance().format(arcFinal);
 					String strInitial = LocalizationData.getCurrencyInstance().format(account.getInitialBalance());
-					result[i] = MessageFormat.format(LocalizationData.get("Archive.accountBalancesNotMatch"), account.getName(), strFinal, strInitial);
+					result[i] = MessageFormat.format(LocalizationData.get("Archive.accountBalancesNotMatch"), account.getName(), strFinal, strInitial); //$NON-NLS-1$
 				}
 			}
 		}
 		return result;
 	}
 	
-	private CharSequence getAlertMessage(CharSequence[] alerts) {
+	private CharSequence getAlertMessage(GlobalData archiveData, CharSequence[] alerts) {
 		StringBuilder builder = new StringBuilder();
+		if (!archiveData.isArchive()) {
+			builder.append(HtmlUtils.START_TAG);
+			builder.append(LocalizationData.get("Archive.warning.notAnArchiveFile")); //$NON-NLS-1$
+			builder.append(HtmlUtils.NEW_LINE_TAG);
+		}
 		for (int i = 0; i < alerts.length; i++) {
 			if (alerts[i]!=null) {
-				builder.append(builder.length()==0 ? "<html>":"<br>");
+				builder.append(builder.length()==0 ? HtmlUtils.START_TAG:HtmlUtils.NEW_LINE_TAG);
 				builder.append(alerts[i]);
 			}
 		}
 		if (builder.length()>0) {
-			builder.append("<br><br>");
-			builder.append(LocalizationData.get("Archive.accountBalancesNotMatchFinalMessage"));
-			builder.append("</html>");
+			builder.append(HtmlUtils.NEW_LINE_TAG);
+			builder.append(HtmlUtils.NEW_LINE_TAG);
+			builder.append(LocalizationData.get("Archive.accountBalancesNotMatchFinalMessage")); //$NON-NLS-1$
+			builder.append(HtmlUtils.END_TAG);
 		}
 		return builder;
 	}
