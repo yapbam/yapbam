@@ -6,8 +6,9 @@ package net.yapbam.util;
  * License GPL v3
  */
 public abstract class HtmlUtils {
-	private static final String HTML_START_TAG = "<HTML>";
-	private static final String HTML_END_TAG = "</HTML>";
+	public static final String START_TAG = "<HTML>";
+	public static final String END_TAG = "</HTML>";
+	public static final String NEW_LINE_TAG = "<BR>";
 
 	private HtmlUtils() {}
 	
@@ -18,9 +19,9 @@ public abstract class HtmlUtils {
 	public static String removeHtmlTags (String text) {
 		text = text.trim();
 		String upper = text.toUpperCase();
-		if (upper.startsWith(HTML_START_TAG) && upper.endsWith(HTML_END_TAG)) {
-			text = text.substring(HTML_START_TAG.length());
-			text = text.substring(0, text.length()-HTML_END_TAG.length());
+		if (upper.startsWith(START_TAG) && upper.endsWith(END_TAG)) {
+			text = text.substring(START_TAG.length());
+			text = text.substring(0, text.length()-END_TAG.length());
 		}
 		return text;
 	}

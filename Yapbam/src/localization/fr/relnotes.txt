@@ -4,7 +4,7 @@ known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 	Lors de l'édition d'une sous opération, la sélection d'un libellé prédéfini remet le montant de la sous-opération à 0.
 
-version	0.16.0 (24/12/2013)
+version	0.16.0 (26/12/2013)
 fix
 	Correction de traductions anglaises et portuguaises.
 	La table du panneau de réglage de l'apparence de la table des opérations était incorrecte quand la taille de la police n'était pas 12.
