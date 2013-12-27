@@ -388,7 +388,7 @@ public class Preferences {
 		plugins.add(new PlugInContainer(RecentFilesPlugin.class));
 		plugins.add(new PlugInContainer(ArchivePlugin.class));
 
-		// Load additionnal plugins
+		// Load additional plugins
 		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$
 		if (!file.exists()) {
 			if (!file.mkdirs()) {
