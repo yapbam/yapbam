@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.16.0</version>
+	<version>0.16.1</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 	</properties>
@@ -27,6 +27,54 @@
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<minimizeJar>true</minimizeJar>
+							<filters>
+								<filter>
+									<!-- Remove signatures -->
+			                        <artifact>*:*</artifact>
+			                        <excludes>
+			                            <exclude>META-INF/*.DSA</exclude>
+			                            <exclude>META-INF/*.SF</exclude>
+			                            <exclude>META-INF/*.RSA</exclude>
+			                            <exclude>META-INF/*.INF</exclude>
+			                        </excludes>
+			                    </filter>
+								<filter>
+									<artifact>commons-logging:commons-logging</artifact>
+									<includes>
+										<include>**</include>
+									</includes>
+								</filter>
+								<!-- filter>
+									<artifact>org.jfree:jfreechart</artifact>
+									<includes>
+										<include>**/*.properties</include>
+									</includes>
+								</filter-->
+							</filters>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>net.yapbam.gui.MainFrame</Main-Class>
+										<!-- Class-Path>your/class/path/here</Class-Path -->
+									</manifestEntries>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

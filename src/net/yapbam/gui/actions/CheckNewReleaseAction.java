@@ -49,10 +49,11 @@ public class CheckNewReleaseAction extends AbstractAction {
 	public static void doAutoCheck(final Window owner) {
 		if (Preferences.INSTANCE.isFirstRun()) {
 			// Ask the user to grant us the right to connect to Internet to check for updates
+			String yes = LocalizationData.get("GenericButton.yes"); //$NON-NLS-1$
 			int option = JOptionPane.showOptionDialog(
 							owner, LocalizationData.get("MainMenu.CheckUpdate.FirstRun.message"), //$NON-NLS-1$
 							LocalizationData.get("MainMenu.CheckUpdate.FirstRun.title"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, //$NON-NLS-1$
-							new String[] { LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no") }, LocalizationData.get("GenericButton.yes")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							new String[] { yes, LocalizationData.get("GenericButton.no") }, yes); //$NON-NLS-1$
 			Preferences.INSTANCE.setAutoUpdate(-option, false);
 		}
 		int lastCheck = DateUtils.dateToInteger(YapbamState.INSTANCE.getDate(LAST_UPDATE_CHECK_KEY));
