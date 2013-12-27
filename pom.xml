@@ -41,13 +41,37 @@
 							<minimizeJar>true</minimizeJar>
 							<filters>
 								<filter>
-									<!-- Remove signatures -->
+									<!-- Remove signatures and other useless stuff -->
 			                        <artifact>*:*</artifact>
 			                        <excludes>
-			                            <exclude>META-INF/*.DSA</exclude>
+			                            <exclude>license/**</exclude>
+			                            <exclude>META-INF/**</exclude>
+			                            <!-- exclude>javax/**</exclude -->
+			                            <!-- exclude>META-INF/*.DSA</exclude>
 			                            <exclude>META-INF/*.SF</exclude>
 			                            <exclude>META-INF/*.RSA</exclude>
-			                            <exclude>META-INF/*.INF</exclude>
+			                            <exclude>META-INF/*.INF</exclude -->
+			                        </excludes>
+			                    </filter>
+								<filter>
+									<!-- Remove itext (think it is never used) -->
+			                        <artifact>com.lowagie:*</artifact>
+			                        <excludes>
+			                            <exclude>**</exclude>
+			                        </excludes>
+			                    </filter>
+								<filter>
+									<!-- Remove bouncycastle stuff used only in not supported jdk -->
+			                        <artifact>bouncycastle:*</artifact>
+			                        <excludes>
+			                            <exclude>**</exclude>
+			                        </excludes>
+			                    </filter>
+								<filter>
+									<!-- Remove xml api stuff used only in not supported jdk -->
+			                        <artifact>xml-apis:*</artifact>
+			                        <excludes>
+			                            <exclude>**</exclude>
 			                        </excludes>
 			                    </filter>
 								<filter>
@@ -129,7 +153,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.5</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

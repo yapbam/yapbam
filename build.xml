@@ -2,7 +2,7 @@
 <project default="build" name="Create Runnable Jar for Yapbam project">
 	<!--======================================  README ================================================>
 	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
-	| jfreechartpath properties in the customPaths.properties file used in the line below.             |
+	| jfreechartpath, etc ... properties in the customPaths.properties file used in the line below.    |
 	| These properties have to reference the apache commonsnet, jfreeChart, JCommon, OpenCSV, A-JLib,  |
 	| Javaluator, JClop and YapbamCommons sources.                                                     |
 	| These sources are available at http://commons.apache.org/net/, http://www.jfree.org and          |
