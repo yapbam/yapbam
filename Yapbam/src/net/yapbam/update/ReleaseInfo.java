@@ -4,12 +4,18 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import net.yapbam.gui.LocalizationData;
 
 public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	private static final long serialVersionUID = 2256410858572541319L;
+
+	/** An unknown release.
+	 * <br>That release is before any other release regarding to compareTo method.
+	 */
+	public static final ReleaseInfo UNKNOWN = new ReleaseInfo("");
 	
 	private boolean unknown;
 	private int majorRevision;
@@ -19,34 +25,31 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 	private String preReleaseComment;
 	
 	public ReleaseInfo(String rel) {
-		if (rel==null) {
-			this.unknown = true;
-			this.majorRevision = 0;
-			this.minorRevision = 0;
-			this.buildId = 0;
-			this.preReleaseComment = null;
+		try {
+			StringTokenizer parts = new StringTokenizer(rel, " ");
+			StringTokenizer tokens = new StringTokenizer(parts.nextToken(), ".");
+			majorRevision = Integer.parseInt(tokens.nextToken());
+			minorRevision = Integer.parseInt(tokens.nextToken());
+			buildId = Integer.parseInt(tokens.nextToken());
+			preReleaseComment = tokens.hasMoreElements()?tokens.nextToken():null;
+			parseDate(parts);
+		} catch (IllegalArgumentException e) {
 			this.releaseDate = new Date(0);
-		} else {
-			try {
-				StringTokenizer parts = new StringTokenizer(rel, " ");
-				StringTokenizer tokens = new StringTokenizer(parts.nextToken(), ".");
-				majorRevision = Integer.parseInt(tokens.nextToken());
-				minorRevision = Integer.parseInt(tokens.nextToken());
-				buildId = Integer.parseInt(tokens.nextToken());
-				preReleaseComment = tokens.hasMoreElements()?tokens.nextToken():null;
-				tokens = new StringTokenizer(parts.nextToken(),"()/");
-				try {
-					int dayOfMonth = Integer.parseInt(tokens.nextToken());
-					int month = Integer.parseInt(tokens.nextToken());
-					int year = Integer.parseInt(tokens.nextToken());
-					releaseDate = new GregorianCalendar(year, month-1, dayOfMonth).getTime();
-				} catch (NumberFormatException e) {
-					releaseDate = new Date(Long.MAX_VALUE);
-				}
-			} catch (IllegalArgumentException e) {
-				this.releaseDate = new Date(0);
-				this.preReleaseComment="Invalid version format";
-			}
+			this.preReleaseComment="Invalid version format";
+		} catch (NoSuchElementException e) {
+			this.unknown = true;
+		}
+	}
+
+	private void parseDate(StringTokenizer parts) {
+		StringTokenizer tokens = new StringTokenizer(parts.nextToken(),"()/");
+		try {
+			int dayOfMonth = Integer.parseInt(tokens.nextToken());
+			int month = Integer.parseInt(tokens.nextToken());
+			int year = Integer.parseInt(tokens.nextToken());
+			releaseDate = new GregorianCalendar(year, month-1, dayOfMonth).getTime();
+		} catch (NumberFormatException e) {
+			releaseDate = new Date(Long.MAX_VALUE);
 		}
 	}
 	
@@ -72,6 +75,15 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 
 	@Override
 	public int compareTo(ReleaseInfo o) {
+		if (this.unknown) {
+			if (o.unknown) {
+				return 0;
+			} else {
+				return -1;
+			}
+		} else if (o.unknown) {
+			return 1;
+		}
 		int result = majorRevision - o.majorRevision;
 		if (result == 0) {
 			result = minorRevision - o.minorRevision; 
@@ -95,7 +107,11 @@ public class ReleaseInfo implements Comparable<ReleaseInfo>, Serializable {
 
 	@Override
 	public int hashCode() {
-		return majorRevision*100 + minorRevision*100 + buildId;
+		if (unknown) {
+			return 0;
+		} else {
+			return majorRevision*100 + minorRevision*100 + buildId;
+		}
 	}
 
 	@Override
