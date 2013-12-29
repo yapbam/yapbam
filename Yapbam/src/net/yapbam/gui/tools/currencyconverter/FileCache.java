@@ -44,4 +44,9 @@ public class FileCache implements Cache {
 	public boolean isEmpty() {
 		return !getTmpFile().exists() && !cacheFile.exists();
 	}
+
+	@Override
+	public long getTimeStamp() {
+		return cacheFile.exists() ? cacheFile.lastModified() : -1;
+	}
 }
