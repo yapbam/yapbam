@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
+import java.net.Proxy;
+import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
@@ -22,9 +25,13 @@ import com.fathzer.soft.ajlib.swing.worker.WorkInProgressPanel;
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 
 import net.yapbam.currency.AbstractCurrencyConverter;
+import net.yapbam.currency.ECBCurrencyConverter;
+import net.yapbam.currency.YahooCurrencyConverter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.tools.Messages;
+import net.yapbam.util.Portable;
 
 @SuppressWarnings("serial")
 public class Dialog extends AbstractDialog<Void, Void> {
@@ -37,7 +44,7 @@ public class Dialog extends AbstractDialog<Void, Void> {
 		getOkButton().setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
 		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
 	}
-
+	
 	@Override
 	protected Void buildResult() {
 		return null;
@@ -74,9 +81,15 @@ public class Dialog extends AbstractDialog<Void, Void> {
 	}
 
 	private void setSource(Source source) {
+		final AbstractCurrencyConverter converter = getConverter(source);
 		SourceManager.setSource(source);
-
-		final Worker<AbstractCurrencyConverter, Void> worker = new GetConverterWorker(source);
+		final Worker<AbstractCurrencyConverter, Void> worker = new Worker<AbstractCurrencyConverter, Void>() {
+			@Override
+			protected AbstractCurrencyConverter doProcessing() throws Exception {
+				converter.update();
+				return converter;
+			}
+		};
 		final Window owner = Utils.getOwnerWindow(this);
 		final WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), ModalityType.APPLICATION_MODAL, worker) { //$NON-NLS-1$
 			private static final long serialVersionUID = 1L;
@@ -113,6 +126,20 @@ public class Dialog extends AbstractDialog<Void, Void> {
 			}
 		});
 		waitFrame.setVisible(true);
+	}
+	
+	private AbstractCurrencyConverter getConverter(Source source) {
+		Proxy proxy;
+		try {
+			proxy = Preferences.INSTANCE.getHttpProxy();
+			if (Source.ECB.equals(source)) {
+				return new ECBCurrencyConverter(proxy, new FileCache(new File(Portable.getDataDirectory(), "ExchangeRates.xml"))); //$NON-NLS-1$
+			} else {
+				return new YahooCurrencyConverter(proxy, new FileCache(new File(Portable.getDataDirectory(), "YahooExchangeRates.xml"))); //$NON-NLS-1$
+			}
+		} catch (UnknownHostException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	private void setConverter(AbstractCurrencyConverter converter) {

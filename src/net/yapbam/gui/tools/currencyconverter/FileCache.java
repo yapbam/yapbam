@@ -1,11 +1,11 @@
 package net.yapbam.gui.tools.currencyconverter;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import net.yapbam.remote.Cache;
 
@@ -17,8 +17,8 @@ public class FileCache implements Cache {
 	}
 
 	@Override
-	public Writer getWriter() throws IOException {
-		return new FileWriter(getTmpFile());
+	public OutputStream getOutputStream() throws IOException {
+		return new FileOutputStream(getTmpFile());
 	}
 
 	private File getTmpFile() {
@@ -26,16 +26,18 @@ public class FileCache implements Cache {
 	}
 
 	@Override
-	public Reader getReader(boolean tmp) throws IOException {
-		return new FileReader(tmp?getTmpFile():cacheFile);
+	public InputStream getInputStream(boolean tmp) throws IOException {
+		return new FileInputStream(tmp?getTmpFile():cacheFile);
 	}
 
 	@Override
-	public void commit() {
+	public void commit() throws IOException {
 		if (getTmpFile().exists() && cacheFile.exists()) {
 			cacheFile.delete();
 		}
-		getTmpFile().renameTo(cacheFile);
+		if (!getTmpFile().renameTo(cacheFile)) {
+			throw new IOException("Unable to commit cache");
+		}
 	}
 
 	@Override
