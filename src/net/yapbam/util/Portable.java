@@ -12,10 +12,10 @@ import com.fathzer.soft.ajlib.utilities.FileUtils;
  * <BR>License : GPL v3
  */   
 public final class Portable {
+	//TODO This class is duplicated from Yapbam. We probably should make it a unique common class
 	private static final String APPLICATION_NAME = "yapbam"; 
 	private static final boolean IS_PORTABLE;
 	private static final File DATA_DIRECTORY;
-	private static boolean DATA_IS_TEMPORARY = false;
 
 	static {
 		File file = getLaunchDirectory();
@@ -23,32 +23,32 @@ public final class Portable {
 		if (IS_PORTABLE) {
 			file = new File(file, "Data");
 		} else {
-			String path = System.getenv("APPDATA"); // Check window app data variable
+			// Try with Windows app data variable
+			String path = System.getenv("APPDATA");
 			if (path==null) {
-				path = System.getenv("USERPROFILE"); // Check windows user profile variable
+				// Try with windows user profile variable
+				path = System.getenv("USERPROFILE");
 			}
 			if (path==null) {
-				path = System.getProperty("user.home"); // Check the user home directory
+				// Try with the user home directory
+				path = System.getProperty("user.home");
 			}
 			if ((path!=null) && FileUtils.isWritable(new File(path))) {
 				// If user data directory or user directory is ok. Use this one
 				file = new File (path, "."+APPLICATION_NAME);
 			} else {
+				// Try with tmp directory
 				path = System.getProperty("java.io.tmpdir");
 				if ((path!=null) && FileUtils.isWritable(new File(path))) {
-					// If tmp directory or user directory is ok. Use this one
+					// If tmp directory is ok. Use it
 					file = new File (path, "."+APPLICATION_NAME);
-					DATA_IS_TEMPORARY = true;
 				} else {
+					// Damned there's really no way to write on this machine !
 					file = null;
 				}
 			}
 		}
 		DATA_DIRECTORY = file;
-//TODO		
-//		System.out.println ("Launch directory : "+getLaunchDirectory());
-//		System.out.println ("Jar directory : "+getJarDirectory());
-//		System.out.println ("Data directory : "+getDataDirectory());
 	}
 	
 	private Portable() {
