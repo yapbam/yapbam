@@ -132,13 +132,15 @@ public class DataReader {
 		if (!adapter.getLocalFile(uri).exists()) {
 			String message = LocalizationData.get("synchronization.downloadFailed"); //$NON-NLS-1$
 			if (internetIsDown) {
-				message = "<html>"+HtmlUtils.removeHtmlTags(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+"<br><br>"+HtmlUtils.removeHtmlTags(message)+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				message = HtmlUtils.START_TAG+HtmlUtils.removeHtmlTags(adapter.getMessage("com.fathzer.soft.jclop.connectionFailed"))+ //$NON-NLS-1$
+						HtmlUtils.NEW_LINE_TAG+HtmlUtils.NEW_LINE_TAG+HtmlUtils.removeHtmlTags(message)+HtmlUtils.END_TAG;
 			}
-			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), internetIsDown?JOptionPane.WARNING_MESSAGE:JOptionPane.ERROR_MESSAGE);  //$NON-NLS-1 //$NON-NLS-1$
+			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), internetIsDown?JOptionPane.WARNING_MESSAGE:JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 			return false;
 		} else {
 			//TODO be more precise in the next messages?
-			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$ //$NON-NLS-2$
+			String[] options = new String[]{LocalizationData.get("GenericButton.yes"), //$NON-NLS-1$
+					LocalizationData.get("GenericButton.no")};  //$NON-NLS-1$
 			if (JOptionPane.showOptionDialog(owner, LocalizationData.get("synchronization.question.failed"), //$NON-NLS-1$
 					LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, 0)!=0) { //$NON-NLS-1$
 				return false;
@@ -151,7 +153,8 @@ public class DataReader {
 		// An error occurred while reading the cached file (or the local file)
 		Throwable cause = e.getCause();
 		if (adapter.getService().isLocal() || (cause instanceof FileNotFoundException)) {
-			throw e; // If not a remote service, or the URI is not found, directly throw the exception
+			// If not a remote service, or the URI is not found, directly throw the exception
+			throw e;
 		}
 		if (cause instanceof UnsupportedFileVersionException) {
 			String message = MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
