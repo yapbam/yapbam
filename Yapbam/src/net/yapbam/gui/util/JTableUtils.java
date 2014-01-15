@@ -13,6 +13,10 @@ import com.fathzer.soft.ajlib.swing.Utils;
  * <BR>License : GPL v3
  */
 public abstract class JTableUtils {
+	private JTableUtils() {
+		// Prevents instantiation
+	}
+	
 	/**
 	 * This method picks column sizes in order all headers and content are
 	 * visible. Be aware that JTable.setAutoResizemode may have an impact on this
@@ -41,10 +45,10 @@ public abstract class JTableUtils {
 		}
 	}
 	
-	public static void fixColumnSize(JTable table, int modelColumnIndex) {
-		// The following lines prevent the open/close subtransactions column from having a size different from the default one
-		int width = Utils.packColumn(table, modelColumnIndex, 2);
-		if (width>0) { // If column is visible
+	public static void fixColumnSize(JTable table, int modelColumnIndex, int margin) {
+		int width = Utils.packColumn(table, modelColumnIndex, margin);
+		if (width>0) {
+			// If column is visible
 			TableColumn firstColumn = table.getColumnModel().getColumn(table.convertColumnIndexToView(modelColumnIndex));
 			firstColumn.setMinWidth(width);
 			firstColumn.setMaxWidth(width);
