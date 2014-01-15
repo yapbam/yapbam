@@ -1,6 +1,7 @@
 package net.yapbam.gui.accountsummary;
 
 import javax.swing.JPanel;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
@@ -12,6 +13,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.dialogs.EditAccountDialog;
 import net.yapbam.gui.util.CellRenderer;
+import net.yapbam.gui.util.JTableUtils;
 import net.yapbam.gui.util.SplitPane;
 
 import javax.swing.JScrollPane;
@@ -21,7 +23,10 @@ import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableCellRenderer;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JButton;
 
 import com.fathzer.soft.ajlib.swing.Utils;
@@ -124,6 +129,7 @@ public class AccountsSummaryPanel extends JPanel {
 					}
 				}
 			});
+			JTableUtils.fixColumnSize(table, AccountsSummaryTableModel.SELECT_COLUMN);
 		}
 		return table;
 	}
@@ -189,17 +195,22 @@ public class AccountsSummaryPanel extends JPanel {
 			}
 			// We deal with the total line
 			column = convertColumnIndexToModel(column);
-			if (column == 0) {
+			if (column == AccountsSummaryTableModel.SELECT_COLUMN) {
+				return null;
+			} else if (column == AccountsSummaryTableModel.ACCOUNT_COLUMN) {
 				return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 			}
 			double result = 0.0;
+			row = convertRowIndexToModel(row);
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				if (column == 3) {
-					result += data.getAccount(i).getBalanceData().getCheckedBalance();
-				} else if (column == 1) {
-					result += data.getAccount(i).getBalanceData().getCurrentBalance();
-				} else if (column == 2) {
-					result += data.getAccount(i).getBalanceData().getFinalBalance();
+				if ((Boolean) super.getValueAt(i, AccountsSummaryTableModel.SELECT_COLUMN)) {
+					if (column == AccountsSummaryTableModel.CHECKED_BALANCE_COLUMN) {
+						result += data.getAccount(i).getBalanceData().getCheckedBalance();
+					} else if (column == AccountsSummaryTableModel.CURRENT_BALANCE_COLUMN) {
+						result += data.getAccount(i).getBalanceData().getCurrentBalance();
+					} else if (column == AccountsSummaryTableModel.FINAL_BALANCE_COLUMN) {
+						result += data.getAccount(i).getBalanceData().getFinalBalance();
+					}
 				}
 			}
 			return result;
@@ -211,6 +222,14 @@ public class AccountsSummaryPanel extends JPanel {
 				return super.convertRowIndexToModel(viewRowIndex);
 			}
 			return super.getRowCount(); // can't convert our faked row
+		}
+		
+    @Override
+		public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+			if ((row == getRowCount() - 1) && (convertColumnIndexToModel(column) == AccountsSummaryTableModel.SELECT_COLUMN)) {
+				return new JLabel();
+			}
+			return super.prepareRenderer(renderer, row, column);
 		}
 	}
 
