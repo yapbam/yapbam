@@ -67,6 +67,7 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	@Override
 	public void restoreState() {
 		super.restoreState();
-		JTableUtils.fixColumnSize(getJTable(), 0);
+		// The following lines prevent the open/close subtransactions column from having a size different from the default one
+		JTableUtils.fixColumnSize(getJTable(), 0, 0);
 	}
 }

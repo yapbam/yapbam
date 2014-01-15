@@ -14,6 +14,7 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.dialogs.EditAccountDialog;
 import net.yapbam.gui.util.CellRenderer;
 import net.yapbam.gui.util.JTableUtils;
+import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 import net.yapbam.gui.util.SplitPane;
 
 import javax.swing.JScrollPane;
@@ -110,6 +111,8 @@ public class AccountsSummaryPanel extends JPanel {
 			this.model = new AccountsSummaryTableModel(table, data);
 			table.setModel(this.model);
 			table.setRowSorter(new RowSorter<AccountsSummaryTableModel>(model));
+			// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
+			table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
 			table.setDefaultRenderer(Object.class, new MyRenderer());
 			table.setDefaultRenderer(Double.class, new MyRenderer());
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -129,7 +132,7 @@ public class AccountsSummaryPanel extends JPanel {
 					}
 				}
 			});
-			JTableUtils.fixColumnSize(table, AccountsSummaryTableModel.SELECT_COLUMN);
+			JTableUtils.fixColumnSize(table, AccountsSummaryTableModel.SELECT_COLUMN, 10);
 		}
 		return table;
 	}
@@ -227,9 +230,15 @@ public class AccountsSummaryPanel extends JPanel {
     @Override
 		public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 			if ((row == getRowCount() - 1) && (convertColumnIndexToModel(column) == AccountsSummaryTableModel.SELECT_COLUMN)) {
-				return new JLabel();
+				// Replace the checkbox by an empty string
+				renderer = getDefaultRenderer(Object.class);
+				column = AccountsSummaryTableModel.ACCOUNT_COLUMN;
+				JLabel component = (JLabel) super.prepareRenderer(renderer, row, column);
+				component.setText("");
+				return component;
+			} else {
+				return super.prepareRenderer(renderer, row, column);
 			}
-			return super.prepareRenderer(renderer, row, column);
 		}
 	}
 

@@ -65,7 +65,8 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 			panel.getBalanceReportPanel().setSelected((Selection) restoredSelected);
 		}
 		// transactionTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN); //TODO This mode seems better than the default one, but should be done for all tables or none !
-		JTableUtils.fixColumnSize(transactionTable, 0);
+		// The following lines prevent the open/close subtransactions column from having a size different from the default one
+		JTableUtils.fixColumnSize(transactionTable, 0,0);
 	}
 
 	@Override

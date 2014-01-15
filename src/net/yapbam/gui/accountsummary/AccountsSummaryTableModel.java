@@ -1,7 +1,6 @@
 package net.yapbam.gui.accountsummary;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,7 +80,8 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 					} else if (event instanceof AccountAddedEvent) {
 						accountSelected.add(Boolean.TRUE);
 					} else if (event instanceof AccountRemovedEvent) {
-						accountSelected.remove(((AccountRemovedEvent)event).getIndex());
+						int index = ((AccountRemovedEvent)event).getIndex();
+						accountSelected.remove(index);
 					}
 					fireTableDataChanged();
 				}
