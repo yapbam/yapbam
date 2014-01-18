@@ -204,7 +204,6 @@ public class AccountsSummaryPanel extends JPanel {
 				return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 			}
 			double result = 0.0;
-			row = convertRowIndexToModel(row);
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				if ((Boolean) super.getValueAt(i, AccountsSummaryTableModel.SELECT_COLUMN)) {
 					if (column == AccountsSummaryTableModel.CHECKED_BALANCE_COLUMN) {
@@ -224,7 +223,8 @@ public class AccountsSummaryPanel extends JPanel {
 			if (viewRowIndex < super.getRowCount()) {
 				return super.convertRowIndexToModel(viewRowIndex);
 			}
-			return super.getRowCount(); // can't convert our faked row
+			// can't convert our faked row
+			return super.getRowCount();
 		}
 		
     @Override

@@ -68,15 +68,13 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 		super();
 		this.data = data;
 		this.accountSelected = new ArrayList<Boolean>();
+		this.setAllAccountSelected();
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (!IGNORED_EVENTS.contains(event.getClass())) {
 					if (event instanceof EverythingChangedEvent) {
-						accountSelected.clear();
-						for (int i = 0; i < AccountsSummaryTableModel.this.data.getAccountsNumber(); i++) {
-							accountSelected.add(Boolean.TRUE);
-						}
+						setAllAccountSelected();
 					} else if (event instanceof AccountAddedEvent) {
 						accountSelected.add(Boolean.TRUE);
 					} else if (event instanceof AccountRemovedEvent) {
@@ -87,6 +85,13 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 				}
 			}
 		});
+	}
+
+	private void setAllAccountSelected() {
+		accountSelected.clear();
+		for (int i = 0; i < AccountsSummaryTableModel.this.data.getAccountsNumber(); i++) {
+			accountSelected.add(Boolean.TRUE);
+		}
 	}
 
 	@Override
@@ -150,7 +155,7 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		this.accountSelected.set(rowIndex, (Boolean) aValue);
 //		fireTableCellUpdated(rowIndex, columnIndex);
-//		fireTableRowsUpdated(getRowCount(), getRowCount()); //FIXME Hangs
+//		fireTableRowsUpdated(getRowCount(), getRowCount()); //This line Hangs
 		fireTableDataChanged(); //TODO Remove (this clears the selection and makes the screen flicky
 	}
 }
