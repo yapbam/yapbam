@@ -204,8 +204,9 @@ public class AccountsSummaryPanel extends JPanel {
 				return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 			}
 			double result = 0.0;
+			AccountsSummaryTableModel model = (AccountsSummaryTableModel) getModel();
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				if ((Boolean) super.getValueAt(i, AccountsSummaryTableModel.SELECT_COLUMN)) {
+				if ((Boolean) model.getValueAt(i, AccountsSummaryTableModel.SELECT_COLUMN)) {
 					if (column == AccountsSummaryTableModel.CHECKED_BALANCE_COLUMN) {
 						result += data.getAccount(i).getBalanceData().getCheckedBalance();
 					} else if (column == AccountsSummaryTableModel.CURRENT_BALANCE_COLUMN) {
