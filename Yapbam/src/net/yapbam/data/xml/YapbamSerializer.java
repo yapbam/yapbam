@@ -80,7 +80,7 @@ public class YapbamSerializer {
 	 * @param uri
 	 * @param password
 	 * @param report 
-	 * @return The GlobalData that was located at the uri
+	 * @return The GlobalData that was located at the uri, null if reading was cancelled (using report in another thread) 
 	 * @throws IOException
 	 * @throws AccessControlException
 	 */
@@ -90,8 +90,10 @@ public class YapbamSerializer {
 			InputStream in = uri.toURL().openStream();
 			try {
 				GlobalData redData = new Serializer().read(password, in, report);
-				redData.setURI(uri);
-				redData.setChanged(false);
+				if (redData!=null) {
+					redData.setURI(uri);
+					redData.setChanged(false);
+				}
 				return redData;
 			} finally {
 				in.close();

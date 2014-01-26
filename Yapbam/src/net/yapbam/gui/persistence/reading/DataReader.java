@@ -63,7 +63,7 @@ public class DataReader {
 				// The synchronization failed => Ask the user what to do
 				return doSyncFailed(result.getException());
 			} else if (result.getState().equals(State.FINISHED)) {
-				// Data was synchronized and red
+				// Data was synchronized and read
 				data.commit(uri, basicWorker.getData());
 				return true;
 			}
@@ -80,18 +80,23 @@ public class DataReader {
 		}
 		File localFile = adapter.getLocalFile(uri);
 		if (basicWorker.isCancelled()) {
-			return false; // Anything but the synchronization was cancelled => Globally cancel
+			// Anything but the synchronization was cancelled => Globally cancel
+			return false;
 		}
 		SynchronizationState state = result.getSyncState();
-		if (state.equals(SynchronizationState.CONFLICT)) { // There's a conflict between remote resource a local cache
+		if (state.equals(SynchronizationState.CONFLICT)) {
+			// There's a conflict between remote resource a local cache
 			return doConflict();
-		} else if (state.equals(SynchronizationState.REMOTE_DELETED)) { // The remote resource doesn't exist
+		} else if (state.equals(SynchronizationState.REMOTE_DELETED)) {
+			// The remote resource doesn't exist
 			return doRemoteNotFound();
-		} else if (state.equals(SynchronizationState.SYNCHRONIZED)) { // The local data is ready to be red
-			if (result.getState().equals(State.NEED_PASSWORD)) { // A password is needed
+		} else if (state.equals(SynchronizationState.SYNCHRONIZED)) {
+			// The local data is ready to be read
+			if (result.getState().equals(State.NEED_PASSWORD)) {
+				// A password is needed
 				return doPasswordNeeded(localFile.toURI());
 			} else {
-				throw new RuntimeException ("Unexpected state: data is synchronized, but not red with no password needed"); //$NON-NLS-1$
+				throw new RuntimeException ("Unexpected state: data is synchronized, not read but has no password required"); //$NON-NLS-1$
 			}
 		} else {
 			throw new RuntimeException ("Unexpected state: "+state); //$NON-NLS-1$
@@ -112,7 +117,8 @@ public class DataReader {
 			}
 			try {
 				if (YapbamSerializer.isPasswordOk(localURI, password)) {
-					break; // If the user cancels or entered the right password ... go next step
+					// If the user cancels or entered the right password ... go next step
+					break;
 				}
 			} catch (IOException e) {
 				throw new ExecutionException(e);
