@@ -159,7 +159,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 		 */
 		private boolean isUpdateInstallable(UpdateInformation update) {
 			//TODO Use a HTMLPane in order to be able to display a the relnotes
-			File launchDirectory = Portable.getLaunchDirectory();
+			File launchDirectory = Portable.getApplicationDirectory();
 			boolean canWrite = FileUtils.isWritable(launchDirectory);
 			if (auto && Preferences.INSTANCE.getAutoUpdateInstall() && canWrite) {
 				return true;
