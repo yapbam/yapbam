@@ -1,9 +1,16 @@
 package net.yapbam.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Properties;
 
 import com.fathzer.soft.ajlib.utilities.FileUtils;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
 
+import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** That class provides utilities that help to implement a portable application (with no installation)
  * in the portable apps format.
@@ -12,13 +19,78 @@ import com.fathzer.soft.ajlib.utilities.FileUtils;
  * <BR>License : GPL v3
  */   
 public final class Portable {
-	//TODO This class is duplicated from Yapbam. We probably should make it a unique common class
-	private static final String APPLICATION_NAME = "yapbam"; 
-	private static final boolean IS_PORTABLE;
-	private static final File DATA_DIRECTORY;
-
+	private static ApplicationDefinition appDefinition = null;
+	private static boolean IS_PORTABLE;
+	private static File APP_DIRECTORY;
+	private static File DATA_DIRECTORY;
+	
+	public interface ApplicationDefinition {
+		public File getAppDirectory();
+		public String getApplicationName();
+	}
+	
 	static {
-		File file = getLaunchDirectory();
+		InputStream in = Portable.class.getClassLoader().getResourceAsStream("applicationDefinition.properties");
+		if (in!=null) {
+			Logger logger = LoggerFactory.getLogger(Portable.class);
+			logger.trace("Application definition is specified");
+			try {
+				initDefFromPropertyStream(in);
+			} catch (IOException e) {
+				logger.warn("Unable to read property resource file", e);
+			} finally {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.warn("Unable to close property resource file", e);
+				}
+			}
+		}
+	}
+
+	private static void initDefFromPropertyStream(InputStream in) throws IOException {
+		Logger logger = LoggerFactory.getLogger(Portable.class);
+		Properties properties = new Properties();
+		properties.load(in);
+		String className = properties.getProperty("class");
+		if (className==null) {
+			logger.warn("No class specified in property resource file");
+		} else {
+			try {
+				Portable.appDefinition = (ApplicationDefinition) Class.forName(className).newInstance();
+			} catch (InstantiationException e) {
+				logger.warn("Unable to create application description ("+className+")", e);
+			} catch (IllegalAccessException e) {
+				logger.warn("Error while creating application description ("+className+")", e);
+			} catch (ClassNotFoundException e) {
+				logger.warn("Unable to find application description class ("+className+")", e);
+			}
+		}
+	}
+
+	/** Sets the application definition.
+	 * <br>The application definition must be set before methods of this class to be called.
+	 * <br>Another way to set the application definition is to define a property file named <b>applicationDefinition</b>
+	 * in the default package. This file must contains a property named <b>class</b> that contains the name of a class that implements
+	 * the {@link ApplicationDefinition}. This class must have a public no argument constructor.
+	 * @param definition The application definition.
+	 */
+	public static void setDefinition(ApplicationDefinition definition) {
+		if (!NullUtils.areEquals(definition, Portable.appDefinition)) {
+			APP_DIRECTORY = null;
+			Portable.appDefinition = definition;
+		}
+	}
+	
+	private static void init() {
+		if (APP_DIRECTORY!=null) {
+			return;
+		}
+		if (Portable.appDefinition==null) {
+			throw new IllegalStateException();
+		}
+		APP_DIRECTORY = Portable.appDefinition.getAppDirectory();
+		File file = getApplicationDirectory();
 		IS_PORTABLE = FileUtils.isWritable(file);
 		if (IS_PORTABLE) {
 			file = new File(file, "Data");
@@ -35,13 +107,13 @@ public final class Portable {
 			}
 			if ((path!=null) && FileUtils.isWritable(new File(path))) {
 				// If user data directory or user directory is ok. Use this one
-				file = new File (path, "."+APPLICATION_NAME);
+				file = new File (path, "."+Portable.appDefinition.getApplicationName());
 			} else {
 				// Try with tmp directory
 				path = System.getProperty("java.io.tmpdir");
 				if ((path!=null) && FileUtils.isWritable(new File(path))) {
 					// If tmp directory is ok. Use it
-					file = new File (path, "."+APPLICATION_NAME);
+					file = new File (path, "."+Portable.appDefinition.getApplicationName());
 				} else {
 					// Damned there's really no way to write on this machine !
 					file = null;
@@ -61,14 +133,16 @@ public final class Portable {
 	 * @return a boolean, true if the application is portable
 	 */
 	public static boolean isPortable() {
+		init();
 		return IS_PORTABLE;
 	}
 	
-	/** Gets the directory where the application was launched.
-	 * @return the directory from where the application is executed.
+	/** Gets the application's installation directory.
+	 * @return a File.
 	 */
-	public static File getLaunchDirectory() {
-		return new File(System.getProperty("user.dir"));
+	public static File getApplicationDirectory() {
+		init();
+		return APP_DIRECTORY;
 	}
 	
 	/** Gets the applications's data directory.
@@ -77,6 +151,7 @@ public final class Portable {
 	 * @return a directory where typically the portable application can store its data or null if there's nowhere where the application can write.
 	 */
 	public static File getDataDirectory() {
+		init();
 		return DATA_DIRECTORY;
 	}
 	
@@ -84,12 +159,13 @@ public final class Portable {
 	 * @return a directory where typically the portable application can store its help pages.
 	 */
 	public static File getHelpDirectory() {
-		File file = getLaunchDirectory();
+		init();
+		File file = getApplicationDirectory();
 		file = new File(file,"Other/Help");
 		// Once, I've made a mistake and named the directory "help" (with a small h), and, as subversion is a little bit too complex for me
 		// (on windows), I've never found a way to fix this mistake in svn. So, Yapbam will stay with this ugly "help" directory.
 		if (!file.exists()) {
-			file = new File(getLaunchDirectory(),"Other/help");
+			file = new File(getApplicationDirectory(),"Other/help");
 		}
 		return file;
 	}
@@ -98,6 +174,7 @@ public final class Portable {
 	 * @return a directory
 	 */
 	public static File getUpdateFileDirectory() {
+		init();
 		return new File(getDataDirectory(),"update");
 	}
 	

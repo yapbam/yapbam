@@ -42,7 +42,7 @@ public class DataWriter {
 	}
 
 	public boolean save() {
-		if ("file".equals(uri.getScheme()) && FileUtils.isIncluded(new File(uri), Portable.getLaunchDirectory())) { //$NON-NLS-1$
+		if ("file".equals(uri.getScheme()) && FileUtils.isIncluded(new File(uri), Portable.getApplicationDirectory())) { //$NON-NLS-1$
 			Object[] options = {LocalizationData.get("GenericButton.cancel"),LocalizationData.get("GenericButton.continue")}; //$NON-NLS-1$ //$NON-NLS-2$
 			String message = LocalizationData.get("saveDialog.dangerousLocation.message"); //$NON-NLS-1$
 			int choice = JOptionPane.showOptionDialog(owner, message,	LocalizationData.get("Generic.warning"), //$NON-NLS-1$

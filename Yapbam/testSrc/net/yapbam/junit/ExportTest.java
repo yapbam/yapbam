@@ -17,6 +17,7 @@ import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.dialogs.export.ImporterParameters;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class ExportTest {

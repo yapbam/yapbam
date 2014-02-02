@@ -98,7 +98,7 @@ class FolderCleaner {
 	 */
 	static void clean() {
 		if (needToClean()) { // If we need to perform cleaning ?
-			clean (Portable.getLaunchDirectory());
+			clean (Portable.getApplicationDirectory());
 		}
 	}
 	
