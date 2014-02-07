@@ -37,6 +37,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	private static final boolean SLOW_UPDATE_CHECKING = Boolean.getBoolean("SlowUpdateChecking");
+	private static final String YABAM_HOME_URL = "http://www.yapbam.net";
 
 	private boolean auto;
 
@@ -111,7 +112,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 								message = LocalizationData.get("MainMenu.CheckUpdate.ProxyAuthError"); //$NON-NLS-1$
 							} else {
 								String pattern = LocalizationData.get("MainMenu.CheckUpdate.HttpError"); //$NON-NLS-1$
-								message = MessageFormat.format(pattern, code, VersionManager.YABAM_HOME_URL);
+								message = MessageFormat.format(pattern, code, YABAM_HOME_URL);
 							}
 							JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE);	//$NON-NLS-1$
 						}
@@ -144,7 +145,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					Throwable cause = e.getCause();
 					if ((cause instanceof IOException) || (cause instanceof UnknownHostException)) {
 						String pattern = LocalizationData.get("MainMenu.CheckUpdate.IOError"); //$NON-NLS-1$
-						String message = MessageFormat.format(pattern, cause, VersionManager.YABAM_HOME_URL);
+						String message = MessageFormat.format(pattern, cause, YABAM_HOME_URL);
 						JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 					} else {
 						ErrorManager.INSTANCE.log(owner,cause);
