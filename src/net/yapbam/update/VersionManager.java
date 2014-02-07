@@ -19,10 +19,9 @@ public abstract class VersionManager {
 	private static final String UTF_8 = "UTF-8";
 	private static final String VERSION_PROPERTY_NAME = "version";
 	private static final String BASE_UPDATE_URL = "http://yapbam.sourceforge.net/updateInfo.php";
-//	private static final String BASE_UPDATE_URL = "http://127.0.0.1/updateInfo.php";
+	private static final String BETA_BASE_UPDATE_URL = "http://yapbam.sourceforge.net/updateInfoBeta.php";
 	
 	static final String SERIAL_NUMBER = "serialNumber";
-	public static final String YABAM_HOME_URL = "http://www.yapbam.net";
 
 	private static ReleaseInfo version;
 	
@@ -66,9 +65,9 @@ public abstract class VersionManager {
 		url.append("&").append(paramName).append("=").append(URLEncoder.encode(property,UTF_8));
 	}
 
-	public static URL getUpdateURL() {
+	private static URL getUpdateURL() {
 		try {
-			StringBuilder url = new StringBuilder(BASE_UPDATE_URL);
+			StringBuilder url = new StringBuilder(Boolean.getBoolean("BetaUpdating")?BETA_BASE_UPDATE_URL:BASE_UPDATE_URL);
 			url.append("?version=").append(URLEncoder.encode(version.toString(),UTF_8));
 			url.append("&country=").append(URLEncoder.encode(LocalizationData.getLocale().getCountry(),UTF_8));
 			url.append("&lang=").append(URLEncoder.encode(LocalizationData.getLocale().getLanguage(),UTF_8));
