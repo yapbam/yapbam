@@ -41,7 +41,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	private Date startDate;
 	private Date endDate;
 	private YAxis yAxis;
-	private int pixelPerDay = 3;
+	private int pixelPerDay;
 
 	private Date selectedDate;
 
@@ -230,7 +230,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 				g2.drawLine(x, y0-3, x, y0+3); // y axis
 				StringBuilder buf = new StringBuilder();
 				buf.append(months[month]);
-				if (month==1) {
+				if (month==0) {
 					buf.append(" ").append(date.getYear()+1900);
 				}
 				String dateString = buf.toString();
@@ -390,5 +390,10 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	 */
 	public Date getPreferredEndDate() {
 		return preferredEndDate;
+	}
+
+	public void setHorizontalScale(int value) {
+		this.pixelPerDay = value*getFont().getSize()/12;
+		this.revalidate();
 	}
 }

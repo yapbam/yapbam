@@ -1,3 +1,3 @@
 HERE=`dirname "$0"`
-cd ${HERE}
+cd "${HERE}"
 java -jar App/yapbam.jar
