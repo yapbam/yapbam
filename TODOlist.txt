@@ -1,5 +1,4 @@
 TODO list
-Re-tester le processus de mise à jour
 
 Bug :
 	Diminuer le nombre de plugin avec onglet fait planter la restauration.

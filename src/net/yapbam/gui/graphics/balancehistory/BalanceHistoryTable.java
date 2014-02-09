@@ -51,7 +51,7 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 			 */
 			@Override
 			public int convertRowIndexToModel(int index) {
-				if (getSortKeys().size()==0 || getSortKeys().get(0).getSortOrder().equals(SortOrder.DESCENDING)) {
+				if (getSortKeys().isEmpty() || getSortKeys().get(0).getSortOrder().equals(SortOrder.DESCENDING)) {
 					// Use the reverse
 					return getModel().getRowCount()-1-index;
 				} else {

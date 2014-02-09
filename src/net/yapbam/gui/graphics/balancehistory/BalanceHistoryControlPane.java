@@ -1,11 +1,16 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
+
 import java.awt.GridBagConstraints;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
+
 import java.awt.Dimension;
+
 import javax.swing.JCheckBox;
 
 import com.fathzer.soft.ajlib.swing.Utils;
@@ -17,13 +22,16 @@ import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.net.URL;
 
-class BalanceHistoryControlPane extends JPanel {
+import javax.swing.JSlider;
 
+class BalanceHistoryControlPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel report = null;
 	private JButton today = null;
 	private JCheckBox isGridVisible = null;
 	private JPanel center = null;
+	private JSlider slider;
+	private JPanel panel;
 
 	/**
 	 * This is the default constructor
@@ -42,6 +50,7 @@ class BalanceHistoryControlPane extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.add(getCenter(), BorderLayout.CENTER);
 		this.add(getIsGridVisible(), BorderLayout.EAST);
+		add(getPanel(), BorderLayout.WEST);
 	}
 
 	/**
@@ -100,5 +109,19 @@ class BalanceHistoryControlPane extends JPanel {
 			center.add(getToday(), gridBagConstraints2);
 		}
 		return center;
+	}
+	JSlider getSlider() {
+		if (slider == null) {
+			slider = new JSlider(JSlider.HORIZONTAL, 1, 30, 3);
+		}
+		return slider;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.add(new JLabel("Zoom:"));
+			panel.add(getSlider());
+		}
+		return panel;
 	}
 }

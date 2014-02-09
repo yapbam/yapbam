@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -62,6 +64,12 @@ public class BalanceHistoryGraphPane extends JPanel {
 				setSelectedDate(today);
 			}
 		});
+		control.getSlider().addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				graph.setHorizontalScale(control.getSlider().getValue());
+			}
+		});
 		control.setReportText(getBalanceReportText());
 		alerts.getAlerts().addActionListener(new ActionListener() {
 			@Override
@@ -105,6 +113,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		graph.setSelectedDate(currentlySelected);
 		graph.setPreferredEndDate(endDate);
 		graph.setGridVisible(control.getIsGridVisible().isSelected());
+		graph.setHorizontalScale(control.getSlider().getValue());
 		control.setReportText(getBalanceReportText());
 		scrollToSelectedDate();
 		this.validate();

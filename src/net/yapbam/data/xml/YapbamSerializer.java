@@ -3,7 +3,10 @@ package net.yapbam.data.xml;
 import java.io.*;
 import java.net.URI;
 import java.security.AccessControlException;
+import java.text.MessageFormat;
 import java.util.zip.ZipOutputStream;
+
+import org.slf4j.LoggerFactory;
 
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
@@ -11,10 +14,14 @@ import net.yapbam.data.*;
 
 /** The class implements xml yapbam data serialization and deserialization to (or from) an URL.
  * Currently supported URL type are :<UL>
- * <LI> file.
+ * <LI> file.</LI>
  * </UL>
  */
 public class YapbamSerializer {
+	private YapbamSerializer() {
+		// To prevent instantiation
+	}
+	
 	/** Saves the data in a file.
 	 * @param data The data to save
 	 * @param file The file where to save the data
@@ -24,14 +31,25 @@ public class YapbamSerializer {
 	 * @throws IOException if something goes wrong while writing
 	 */
 	public static void write(GlobalData data, File file, boolean zipped, ProgressReport report) throws IOException {
-		if ((file.exists() && !file.canWrite()) || !FileUtils.isWritable(file)) {
-			throw new FileNotFoundException("writing to "+file+" is not allowed"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (!FileUtils.isWritable(file)) {
+			throw new FileNotFoundException(MessageFormat.format("Writing to {} is not allowed",file)); //$NON-NLS-1$
 		}
-		// Proceed safely, it means not to erase the old version until the new version is written
-		// Everything here is pretty ugly.
-		//TODO Implement this stuff using the transactional File access in Apache Commons (http://commons.apache.org/transaction/file/index.html)
-		File writed = file.exists()?getSafeTmpFile("yapbam", null, file.getParentFile()):file; //$NON-NLS-1$
-		OutputStream out = new FileOutputStream(writed);
+		// Proceed safely, it means backup the old version before to write the new one
+		File backupFile = file.exists() && file.isFile() ? getBackupFile(file) : null;
+		if (backupFile!=null) {
+			FileUtils.copy(file, backupFile, false);
+		}
+		doWrite(data, file, zipped, report);
+		if (report!=null) {
+			report.setMax(-1);
+		}
+		if (backupFile!=null && !backupFile.delete()) {
+			throw new IOException(MessageFormat.format("Unable to delete backup file {0}", file));
+		}
+	}
+
+	private static void doWrite(GlobalData data, File file, boolean zipped, ProgressReport report) throws IOException {
+		OutputStream out = new FileOutputStream(file);
 		try {
 			if (zipped) {
 				out = new ZipOutputStream(out);
@@ -43,18 +61,19 @@ public class YapbamSerializer {
 			out.flush();
 			out.close();
 		}
-		if (report!=null) {
-			report.setMax(-1);
-		}
-		if (!file.equals(writed)) {
-			// Ok, not so safe as I want since we could lost the file between deleting and renaming
-			// but I can't find a better way
-			if (!file.delete()) {
-				writed.delete();
-				throw new FileNotFoundException();
+	}
+
+	private static File getBackupFile(File file) {
+		File parent = file.getParentFile();
+		String root = FileUtils.getRootName(file);
+		String extension = FileUtils.getExtension(file);
+		for (int i = 1; i >0; i++) {
+			File candidate = new File(parent, root+"_backup"+i+extension);
+			if (!candidate.exists()) {
+				return candidate;
 			}
-			FileUtils.move(writed, file);
 		}
+		return null;
 	}
 	
 	private static String getEntryName(String fileName) {
@@ -66,16 +85,6 @@ public class YapbamSerializer {
 		return lowerCase.endsWith(".xml") ? fileName : fileName+".xml";
 	}
 	
-	private static File getSafeTmpFile(String prefix, String suffix, File directory) throws IOException {
-		File result;
-		try {
-			result = File.createTempFile(prefix, suffix, directory);
-		} catch (IOException e) {
-			result = File.createTempFile(prefix, suffix);
-		}
-		return result;
-	}
-	
 	/** Reads data from an uri.
 	 * @param uri
 	 * @param password
@@ -85,7 +94,6 @@ public class YapbamSerializer {
 	 * @throws AccessControlException
 	 */
 	public static GlobalData read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
-//		long start = System.currentTimeMillis();//TODO
 		if ("file".equals(uri.getScheme()) || "ftp".equals(uri.getScheme())) { //$NON-NLS-1$ //$NON-NLS-2$
 			InputStream in = uri.toURL().openStream();
 			try {
@@ -101,7 +109,6 @@ public class YapbamSerializer {
 		} else {
 			throw new IOException("Unsupported protocol: "+uri.getScheme()); //$NON-NLS-1$
 		}
-//		System.out.println ("Data read in "+(System.currentTimeMillis()-start)+"ms");//TODO
 	}
 	
 	/** Tests whether a password is the right one for an uri.
