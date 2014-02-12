@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
+import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 
 import java.awt.Insets;
@@ -371,11 +372,29 @@ public class ImportPanel extends JPanel {
 			separatorPanel.addPropertyChangeListener(SeparatorPanel.SEPARATOR_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					doSetLine(currentLine);
+					setSeparator(separatorPanel.getSeparator());
 				}
 			});
 		}
 		return separatorPanel;
+	}
+	
+	private void setSeparator(char separator) {
+		if ((separator==CSVParser.DEFAULT_QUOTE_CHARACTER) || (separator==CSVParser.DEFAULT_ESCAPE_CHARACTER)) {
+			getSeparatorPanel().setError(LocalizationData.get("ImportDialog.badSeparator")); //$NON-NLS-1$
+			getFirst().setEnabled(false);
+			getPrevious().setEnabled(false);
+			getLast().setEnabled(false);
+			getNext().setEnabled(false);
+			String[] fields = new String[0];
+			setFieldsCombo(fields);
+			ImportTableModel model = (ImportTableModel) getJTable().getModel();
+			model.setFields(fields);
+		} else {
+			getSeparatorPanel().setError(null);
+			doSetLine(currentLine);
+		}
+		updateIsValid();
 	}
 	
 	private void doSetLine(int line) {
@@ -503,7 +522,7 @@ public class ImportPanel extends JPanel {
 	}
 	
 	private String[] getFields(int lineNumber) throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(canonicalFile), separatorPanel.getSeparator(), '"', lineNumber);
+		CSVReader reader = new CSVReader(new FileReader(canonicalFile), separatorPanel.getSeparator(), CSVParser.DEFAULT_QUOTE_CHARACTER, lineNumber);
 		try {
 			return reader.readNext();
 		} finally {
@@ -545,13 +564,15 @@ public class ImportPanel extends JPanel {
 	
 	private void updateIsValid() {
 		String old = invalidityCause;
-		invalidityCause = null;
-		// Date, amount are mandatory
-		int[] relations = ((ImportTableModel)getJTable().getModel()).getRelations();
-		if (relations[ExportTableModel.AMOUNT_INDEX]<0) {
-			invalidityCause = LocalizationData.get("ImportDialog.noAmountSelected"); //$NON-NLS-1$
-		} else if (relations[ExportTableModel.DATE_INDEX]<0) {
-			invalidityCause = LocalizationData.get("ImportDialog.noDateSelected"); //$NON-NLS-1$
+		invalidityCause = getSeparatorPanel().getError();
+		if (invalidityCause==null) {
+			// Date, amount are mandatory
+			int[] relations = ((ImportTableModel)getJTable().getModel()).getRelations();
+			if (relations[ExportTableModel.AMOUNT_INDEX]<0) {
+				invalidityCause = LocalizationData.get("ImportDialog.noAmountSelected"); //$NON-NLS-1$
+			} else if (relations[ExportTableModel.DATE_INDEX]<0) {
+				invalidityCause = LocalizationData.get("ImportDialog.noDateSelected"); //$NON-NLS-1$
+			}
 		}
 		if (!NullUtils.areEquals(invalidityCause, old)) {
 			this.firePropertyChange(INVALIDITY_CAUSE, old, invalidityCause);
