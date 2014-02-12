@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 
+import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JRadioButton;
@@ -19,6 +21,8 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.JLabel;
+
 public class SeparatorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final String SEPARATOR_PROPERTY = "separator"; //$NON-NLS-1$
@@ -29,6 +33,7 @@ public class SeparatorPanel extends JPanel {
 	
 	private char defaultSeparator = '\t';
 	private char separator = defaultSeparator;
+	private JLabel errorLabel;
 
 	/**
 	 * This is the default constructor
@@ -45,14 +50,15 @@ public class SeparatorPanel extends JPanel {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints2.gridy = 1;
-		gridBagConstraints2.weightx = 1.0;
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
-		gridBagConstraints2.insets = new Insets(0, 5, 0, 0);
+		gridBagConstraints2.insets = new Insets(0, 5, 0, 5);
 		gridBagConstraints2.gridx = 1;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.insets = new Insets(0, 0, 0, 5);
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new Insets(0, 0, 5, 5);
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.fill = GridBagConstraints.NONE;
@@ -61,7 +67,6 @@ public class SeparatorPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("ExportDialog.columnSeparator") //$NON-NLS-1$
 				, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
-		this.setSize(new Dimension(196, 86));
 		this.add(getDefaultSeparatorButton(), gridBagConstraints);
 		this.add(getCustomSeparatorButton(), gridBagConstraints1);
 		this.add(getCustomSeparatorValue(), gridBagConstraints2);
@@ -69,6 +74,12 @@ public class SeparatorPanel extends JPanel {
 		ButtonGroup group = new ButtonGroup();
 		group.add(getDefaultSeparatorButton());
 		group.add(getCustomSeparatorButton());
+		GridBagConstraints gbcErrorLabel = new GridBagConstraints();
+		gbcErrorLabel.weightx = 1.0;
+		gbcErrorLabel.anchor = GridBagConstraints.WEST;
+		gbcErrorLabel.gridx = 2;
+		gbcErrorLabel.gridy = 1;
+		add(getErrorLabel(), gbcErrorLabel);
 	}
 
 	/**
@@ -156,4 +167,25 @@ public class SeparatorPanel extends JPanel {
 			this.firePropertyChange(SEPARATOR_PROPERTY, old, separator);
 		}
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+	private JLabel getErrorLabel() {
+		if (errorLabel == null) {
+			errorLabel = new JLabel("");
+		}
+		return errorLabel;
+	}
+	
+	public void setError(String message) {
+		if (message!=null) {
+			getErrorLabel().setText(message);
+			getErrorLabel().setIcon(IconManager.get(Name.ALERT));
+		} else {
+			getErrorLabel().setText("");
+			getErrorLabel().setIcon(null);
+		}
+	}
+
+	public String getError() {
+		String result = getErrorLabel().getText();
+		return result.isEmpty()? null : result;
+	}
+}

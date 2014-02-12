@@ -5,6 +5,8 @@ known
 	Lors de l'édition d'une sous opération, la sélection d'un libellé prédéfini remet le montant de la sous-opération à 0.
 
 version	0.16.3 (??/02/2014)
+fix
+	Régler le séparateur à " ou \ dans le dialogue d'importation de données causait une erreur. 
 improvement
 	Il est à présent possible de lancer l'application directement avec la commande java -jar path/App/yapbam.jar (path est le répertoire d'installation de Yapbam). 
 
