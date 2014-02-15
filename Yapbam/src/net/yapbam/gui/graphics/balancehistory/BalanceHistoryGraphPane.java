@@ -20,6 +20,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.fathzer.soft.ajlib.swing.widget.RotatingLabel;
+import com.fathzer.soft.ajlib.swing.widget.RotatingLabel.Direction;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.Alert;
@@ -28,6 +30,11 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.DateUtils;
+
+import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class BalanceHistoryGraphPane extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -38,6 +45,9 @@ public class BalanceHistoryGraphPane extends JPanel {
 	private AlertsPane alerts;
 	private BalanceRule rule;
 	private FilteredData data;
+	private JPanel leftPanel;
+	private JLabel lblZoom;
+	private JSlider slider;
 	
 	@SuppressWarnings("unused")
 	private BalanceHistoryGraphPane() {
@@ -81,6 +91,28 @@ public class BalanceHistoryGraphPane extends JPanel {
 		});
 		this.add(alerts, BorderLayout.NORTH);
 		this.add(control, BorderLayout.SOUTH);
+		
+		leftPanel = new JPanel();
+		leftPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
+		add(leftPanel, BorderLayout.WEST);
+		leftPanel.setLayout(new BorderLayout(0, 0));
+		
+		lblZoom = new RotatingLabel(Direction.COUNTERCLOCKWISE);
+		lblZoom.setHorizontalAlignment(SwingConstants.CENTER);
+		lblZoom.setText("Zoom");
+		leftPanel.add(lblZoom, BorderLayout.WEST);
+		
+		slider = new JSlider();
+		slider.setValue(1);
+		slider.setMinimum(1);
+		slider.setOrientation(SwingConstants.VERTICAL);
+		leftPanel.add(slider, BorderLayout.EAST);
+		slider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				graph.setVerticalScale(slider.getValue());
+			}
+		});
 	}
 	
 	private BalanceHistory getBalanceHistory() {

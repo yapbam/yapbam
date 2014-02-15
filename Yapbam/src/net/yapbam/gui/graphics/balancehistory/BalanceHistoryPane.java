@@ -10,7 +10,6 @@ import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Alert;
-import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;

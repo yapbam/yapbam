@@ -34,7 +34,8 @@ class YAxis {
 		}
 		this.min = min;
 		this.max = max;
-		this.lastParentHeight = -1; //To force the first computing
+		// Force the first computing
+		this.lastParentHeight = -1;
 	}
 
 	private void update() {
