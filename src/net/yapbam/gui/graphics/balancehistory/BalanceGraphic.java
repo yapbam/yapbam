@@ -76,7 +76,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 			this.points = null;
 			BalanceHistoryElement lastElement = balanceHistory.get(balanceHistory.size()-1);
 			this.endDate = lastElement.getTo();
-			if (this.endDate==null) { // If last date is "end of times"
+			if (this.endDate==null) {
+				// If last date is "end of times"
 				if (lastElement.getFrom()!=null) {
 					this.endDate = (Date) lastElement.getFrom().clone();
 				}
@@ -84,8 +85,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 					this.endDate = new Date();
 				}
 			}
-			if (this.endDate.compareTo(new Date())<0) { // If end date is before today
-				this.endDate = new Date(); // Extend the graphic in order to see today
+			if (this.endDate.compareTo(new Date())<0) {
+				// If end date is before today, extend the graphic in order to see today
+				this.endDate = new Date();
 			}
 			this.endDate.setTime(this.endDate.getTime()+3*24*3600000); // three days after last date
 			this.startDate = balanceHistory.get(0).getFrom();
@@ -395,5 +397,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	public void setHorizontalScale(int value) {
 		this.pixelPerDay = value*getFont().getSize()/12;
 		this.revalidate();
+	}
+
+	public void setVerticalScale(int value) {
+		System.out.println ("set scale to "+value); //TODO
 	}
 }
