@@ -21,7 +21,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.fathzer.soft.ajlib.swing.widget.RotatingLabel;
-import com.fathzer.soft.ajlib.swing.widget.RotatingLabel.Direction;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.Alert;
@@ -46,7 +45,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 	private BalanceRule rule;
 	private FilteredData data;
 	private JPanel leftPanel;
-	private JLabel lblZoom;
+	private RotatingLabel lblZoom;
 	private JSlider slider;
 	
 	@SuppressWarnings("unused")
@@ -97,9 +96,10 @@ public class BalanceHistoryGraphPane extends JPanel {
 		add(leftPanel, BorderLayout.WEST);
 		leftPanel.setLayout(new BorderLayout(0, 0));
 		
-		lblZoom = new RotatingLabel(Direction.COUNTERCLOCKWISE);
+		lblZoom = new RotatingLabel();
 		lblZoom.setHorizontalAlignment(SwingConstants.CENTER);
 		lblZoom.setText("Zoom");
+		lblZoom.setRotation(-90);
 		leftPanel.add(lblZoom, BorderLayout.WEST);
 		
 		slider = new JSlider();
