@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/** The Balance History plugin panel.
+ */
 public class BalanceHistoryPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static final String FIRST_ALERT = "FIRST_ALERT"; //$NON-NLS-1$
@@ -76,7 +78,7 @@ public class BalanceHistoryPane extends JPanel {
 		ignoreEnd.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent evt) {
-				graph.refresh(ignoreEnd.isSelected());
+				graph.setIgnoreEnd(ignoreEnd.isSelected());
 				setTableEnd();
 			}
 		});
@@ -100,7 +102,6 @@ public class BalanceHistoryPane extends JPanel {
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent)) {
 					ignoreEnd.setVisible(BalanceHistoryPane.this.data.getFilter().getValueDateTo()!=null);
-					graph.refresh(ignoreEnd.isSelected());
 				}
 			}
 		});
@@ -110,7 +111,6 @@ public class BalanceHistoryPane extends JPanel {
 				if ((event instanceof EverythingChangedEvent)
 					|| (event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) || (event instanceof AccountPropertyChangedEvent)
 					|| (event instanceof TransactionsAddedEvent) || (event instanceof TransactionsRemovedEvent)) {
-					graph.refresh(ignoreEnd.isSelected());
 					testAlert();
 				}
 			}
@@ -126,7 +126,7 @@ public class BalanceHistoryPane extends JPanel {
 		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		transactionSelector = new CompoundTransactionSelector();
 		setTableEnd();
-		graph.refresh(ignoreEnd.isSelected());
+//		graph.refresh();
 	}
 	
 	void changeDisplayed () {
