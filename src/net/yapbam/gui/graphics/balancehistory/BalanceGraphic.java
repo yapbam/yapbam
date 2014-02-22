@@ -71,6 +71,13 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		pixelPerDay = 3*getFont().getSize()/12;
 	}
 	
+	void setHistory(BalanceHistory history, YAxis yAxis) {
+		this.balanceHistory = history;
+		this.yAxis = yAxis;
+		this.needUpdate = true;
+		this.revalidate();
+	}
+	
 	private void restoreHistory() {
 		if (needUpdate) {
 			this.points = null;
@@ -96,7 +103,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 				Date end = balanceHistory.get(0).getTo();
 				if (end!=null) {
 					this.startDate.setTime(end.getTime());
-				} // else start is today
+				}
+				// else start is today
 			}
 			this.startDate.setTime(this.startDate.getTime()-3*24*3600000); // three days before
 			needUpdate = false;
@@ -364,8 +372,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	public boolean getScrollableTracksViewportHeight() {
-		// The component doesn't need a vertical scrollbar and ensure that it always displays in the height of the parent component
-		return true;
+		return false;
 	}
 
 	public boolean getScrollableTracksViewportWidth() {
@@ -385,6 +392,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	 */
 	public void setPreferredEndDate(Date endDate) {
 		this.preferredEndDate = endDate;
+		this.revalidate();
 	}
 
 	/** Gets the preferred end date.
@@ -396,6 +404,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 
 	public void setHorizontalScale(int value) {
 		this.pixelPerDay = value*getFont().getSize()/12;
+		this.repaint();
 		this.revalidate();
 	}
 

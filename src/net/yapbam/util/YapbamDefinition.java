@@ -33,5 +33,4 @@ public class YapbamDefinition implements ApplicationDefinition {
 	public String getApplicationName() {
 		return "yapbam"; 
 	}
-
 }
