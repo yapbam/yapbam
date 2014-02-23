@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
@@ -78,6 +79,7 @@ class BalanceHistoryControlPane extends JPanel {
 	JCheckBox getIsGridVisible() {
 		if (isGridVisible == null) {
 			isGridVisible = new JCheckBox();
+			isGridVisible.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 			isGridVisible.setText(LocalizationData.get("BalanceHistory.showGrid")); //$NON-NLS-1$
 			isGridVisible.setToolTipText(LocalizationData.get("BalanceHistory.showGrid.toolTip")); //$NON-NLS-1$
 		}
@@ -112,7 +114,10 @@ class BalanceHistoryControlPane extends JPanel {
 	}
 	JSlider getSlider() {
 		if (slider == null) {
-			slider = new JSlider(JSlider.HORIZONTAL, 1, 30, 3);
+			slider = new JSlider(JSlider.HORIZONTAL, 1, 20, 3);
+			slider.setMinorTickSpacing(1);
+			slider.setPaintTicks(true);
+			slider.setSnapToTicks(true);
 		}
 		return slider;
 	}

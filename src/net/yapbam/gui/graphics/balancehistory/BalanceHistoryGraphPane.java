@@ -42,8 +42,6 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import org.slf4j.LoggerFactory;
-
 /** The whole balance history pane, with its controls.
  */
 public class BalanceHistoryGraphPane extends JPanel {
@@ -122,19 +120,19 @@ public class BalanceHistoryGraphPane extends JPanel {
 		lblZoom.setRotation(-90);
 		leftPanel.add(lblZoom, BorderLayout.WEST);
 		
-		slider = new JSlider();
-		slider.setValue(1);
-		slider.setMinimum(1);
-		slider.setOrientation(SwingConstants.VERTICAL);
+		slider = new JSlider(SwingConstants.VERTICAL, 1, 20, 1);
+		slider.setPaintTicks(true);
+		slider.setSnapToTicks(true);
+		slider.setMinorTickSpacing(1);
 		leftPanel.add(slider, BorderLayout.EAST);
 		slider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				LoggerFactory.getLogger(BalanceHistoryGraphPane.class).debug ("set scale to {}",slider.getValue()); //TODO
+				rule.getYAxis().setVerticalScale(slider.getValue());
 			}
 		});
 		
-		data.getGlobalData().addListener(new DataListener() {
+		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if ((event instanceof EverythingChangedEvent)
@@ -169,9 +167,8 @@ public class BalanceHistoryGraphPane extends JPanel {
 		double min = Math.min(0, this.getBalanceHistory().getMinBalance(endDate));
 		double max = Math.max(0, this.getBalanceHistory().getMaxBalance(endDate));
 		getBalanceRule().getYAxis().setBounds(min, max);
-
 		graph.setPreferredEndDate(endDate);
-		graph.setHistory(getBalanceHistory(), getBalanceRule().getYAxis());
+		graph.setHistory(getBalanceHistory());
 		scrollToSelectedDate();
 	}
 	

@@ -14,6 +14,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DateFormatSymbols;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -64,6 +66,13 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		this.needUpdate = true;
 		this.points = null;
 		this.yAxis = yAxis;
+		this.yAxis.addPropertyChangeListener(YAxis.SCALE_PROPERTY_NAME, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				revalidate();
+				repaint();
+			}
+		});
 		MouseListener listener = new MouseListener();
 		this.addMouseListener(listener);
 		this.addMouseMotionListener(listener);
@@ -71,9 +80,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		pixelPerDay = 3*getFont().getSize()/12;
 	}
 	
-	void setHistory(BalanceHistory history, YAxis yAxis) {
+	void setHistory(BalanceHistory history) {
 		this.balanceHistory = history;
-		this.yAxis = yAxis;
 		this.needUpdate = true;
 		this.repaint();
 		this.revalidate();
@@ -381,7 +389,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		long days = 1 + (end.getTime() - this.getStartDate().getTime()) / 24 / 3600000;
 		int pixels = (int) (days * pixelPerDay);
 		int width = Math.max(pixels, parentSize.width);
-		return new Dimension(width, parentSize.height);
+		return new Dimension(width, parentSize.height*yAxis.getVerticalScale());
 	}
 
 	public Dimension getPreferredScrollableViewportSize() {

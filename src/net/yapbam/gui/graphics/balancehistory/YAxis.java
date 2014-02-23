@@ -3,6 +3,8 @@ package net.yapbam.gui.graphics.balancehistory;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
 import net.yapbam.data.GlobalData;
 
 class YAxis {
+	public static final String SCALE_PROPERTY_NAME = "VERTICAL_SCALE";
+	
 	private Component parent;
 	private double min;
 	private double max;
@@ -21,10 +25,14 @@ class YAxis {
 	private int lastFontHeight;
 	private double lastMin;
 	private double lastMax;
+	private PropertyChangeSupport pcSupport;
+	private int scale;
 	
 	YAxis (Component parent) {
 		this.parent = parent;
+		this.scale = 1;
 		this.setBounds(0, 0);
+		pcSupport = new PropertyChangeSupport(this);
 	}
 
 	void setBounds(double min, double max) {
@@ -32,10 +40,26 @@ class YAxis {
 			min--;
 			max++;
 		}
-		this.min = min;
-		this.max = max;
-		// Force the first computing
-		this.lastParentHeight = -1;
+		if (GlobalData.AMOUNT_COMPARATOR.compare(min, lastMin) != 0 || GlobalData.AMOUNT_COMPARATOR.compare(max, lastMax) != 0) {
+			this.min = min;
+			this.max = max;
+			// Force the first computing
+			this.lastParentHeight = -1;
+		}
+	}
+	
+	public void setVerticalScale(int scale) {
+		if (scale!=this.scale) {
+			double old = this.scale;
+			this.scale = scale;
+			// Force yRatio computing
+			this.lastParentHeight = -1;
+			this.pcSupport.firePropertyChange(SCALE_PROPERTY_NAME, old, this.scale);
+		}
+	}
+	
+	public int getVerticalScale() {
+		return this.scale;
 	}
 
 	private void update() {
@@ -90,7 +114,7 @@ class YAxis {
 	
 	int getY(double value) {
 		update();
-		return this.yOffset+ (int)((this.lastMax-value)*this.yRatio);
+		return this.yOffset+ (int)((this.lastMax-value)*this.yRatio)*scale;
 	}
 	
 	public Iterator<Graduation> getYGraduations() {
@@ -105,4 +129,12 @@ class YAxis {
 	public double getMax() {
 		return max;
 	}
+	
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        pcSupport.addPropertyChangeListener(propertyName, listener);
+    }
+    
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcSupport.removePropertyChangeListener(listener);
+    }
 }
