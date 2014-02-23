@@ -75,6 +75,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		this.balanceHistory = history;
 		this.yAxis = yAxis;
 		this.needUpdate = true;
+		this.repaint();
 		this.revalidate();
 	}
 	
@@ -221,7 +222,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		Stroke oldStroke = g2.getStroke();
 		g2.setStroke(new BasicStroke(3));
 		Dimension size = getSize();
-		g2.drawLine(0, y0, size.width, y0); // x axis
+		// Paint the X axis
+		g2.drawLine(0, y0, size.width, y0);
 		g2.setStroke(oldStroke);
 		String[] months = DateFormatSymbols.getInstance(LocalizationData.getLocale()).getMonths();
 		Date date = (Date) this.getStartDate().clone();
@@ -229,22 +231,41 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		date.setDate(1);
 		FontMetrics metrics = g2.getFontMetrics();
 		while (x<size.width) {
+			// For every months
 			int month = date.getMonth();
 			if (x>0) {
 				if (this.isGridVisible()) {
+					// Paint the vertical grid line
 					Color color = g2.getColor();
 					g2.setColor(Color.LIGHT_GRAY);
-					g2.drawLine(x, 0, x, size.height); // y axis
+					g2.drawLine(x, 0, x, size.height);
 					g2.setColor(color);
 				}
-				g2.drawLine(x, y0-3, x, y0+3); // y axis
-				StringBuilder buf = new StringBuilder();
-				buf.append(months[month]);
-				if (month==0) {
-					buf.append(" ").append(date.getYear()+1900);
+				// Paint the graduation
+				g2.drawLine(x, y0-3, x, y0+3);
+				// Paint the month name
+				// In order to prevent overlapping month wordings, 
+				boolean paintMonthName;
+				switch (pixelPerDay) {
+				case 1:
+					paintMonthName = month%3==0;
+					break;
+				case 2:
+					paintMonthName = month%2==0;
+					break;
+				default:
+					paintMonthName = true;
+					break;
 				}
-				String dateString = buf.toString();
-				g2.drawString(dateString, x - metrics.stringWidth(dateString)/2, y0+metrics.getHeight());
+				if (paintMonthName) {
+					StringBuilder buf = new StringBuilder();
+					buf.append(months[month]);
+					if (month==0) {
+						buf.append(" ").append(date.getYear()+1900);
+					}
+					String dateString = buf.toString();
+					g2.drawString(dateString, x - metrics.stringWidth(dateString)/2, y0+metrics.getHeight());
+				}
 			}
 			month++;
 			if (month>12) {
@@ -406,9 +427,5 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		this.pixelPerDay = value*getFont().getSize()/12;
 		this.repaint();
 		this.revalidate();
-	}
-
-	public void setVerticalScale(int value) {
-		System.out.println ("set scale to "+value); //TODO
 	}
 }

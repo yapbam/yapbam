@@ -46,11 +46,13 @@ class BalanceRule extends JComponent {
 		g2.setColor(Color.BLACK);
 		g2.drawLine(0, size.height - 1, size.width, size.height - 1);
 
+		// Paint the x axis
 		g2.setStroke(new BasicStroke(3));
 		int y0 = this.yAxis.getY(0);
-		g2.drawLine(0, y0, size.width, y0); // x axis
+		g2.drawLine(0, y0, size.width, y0);
 
-		g2.drawLine(size.width - 1, 0, size.width - 1, size.height); // y axis
+		// Paint the y axis
+		g2.drawLine(size.width - 1, 0, size.width - 1, size.height);
 		g2.setStroke(oldStroke);
 
 		FontMetrics fontMetrics = this.getFontMetrics(this.getFont());

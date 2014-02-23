@@ -6,8 +6,6 @@ import java.security.AccessControlException;
 import java.text.MessageFormat;
 import java.util.zip.ZipOutputStream;
 
-import org.slf4j.LoggerFactory;
-
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
 import net.yapbam.data.*;
