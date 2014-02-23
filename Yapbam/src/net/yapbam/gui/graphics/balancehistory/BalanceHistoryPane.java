@@ -100,7 +100,7 @@ public class BalanceHistoryPane extends JPanel {
 		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if ((event instanceof EverythingChangedEvent)) {
+				if (event instanceof EverythingChangedEvent) {
 					ignoreEnd.setVisible(BalanceHistoryPane.this.data.getFilter().getValueDateTo()!=null);
 				}
 			}
