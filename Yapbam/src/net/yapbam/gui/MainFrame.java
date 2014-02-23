@@ -538,7 +538,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					return true;
 				}
 			});
-			if (restore && (uri!=null) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
+			if (restore && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
 				try {
 					Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
 					if (filter!=null) {

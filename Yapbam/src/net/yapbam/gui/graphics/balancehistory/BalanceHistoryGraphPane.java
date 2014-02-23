@@ -42,6 +42,8 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.LoggerFactory;
+
 /** The whole balance history pane, with its controls.
  */
 public class BalanceHistoryGraphPane extends JPanel {
@@ -53,8 +55,6 @@ public class BalanceHistoryGraphPane extends JPanel {
 	private AlertsPane alerts;
 	private BalanceRule rule;
 	private FilteredData data;
-	private JPanel leftPanel;
-	private RotatingLabel lblZoom;
 	private JSlider slider;
 	private boolean ignoreEnd;
 	
@@ -111,12 +111,12 @@ public class BalanceHistoryGraphPane extends JPanel {
 		this.add(alerts, BorderLayout.NORTH);
 		this.add(control, BorderLayout.SOUTH);
 		
-		leftPanel = new JPanel();
+		JPanel leftPanel = new JPanel();
 		leftPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
 		add(leftPanel, BorderLayout.WEST);
 		leftPanel.setLayout(new BorderLayout(0, 0));
 		
-		lblZoom = new RotatingLabel();
+		RotatingLabel lblZoom = new RotatingLabel();
 		lblZoom.setHorizontalAlignment(SwingConstants.CENTER);
 		lblZoom.setText("Zoom");
 		lblZoom.setRotation(-90);
@@ -130,7 +130,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		slider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				graph.setVerticalScale(slider.getValue());
+				LoggerFactory.getLogger(BalanceHistoryGraphPane.class).debug ("set scale to {}",slider.getValue()); //TODO
 			}
 		});
 		

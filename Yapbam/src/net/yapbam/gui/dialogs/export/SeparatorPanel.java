@@ -17,7 +17,6 @@ import com.fathzer.soft.ajlib.swing.widget.CharWidget;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
