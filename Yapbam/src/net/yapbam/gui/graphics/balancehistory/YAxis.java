@@ -21,7 +21,7 @@ class YAxis {
 	private double yRatio;
 	private List<Graduation> yGraduations;
 	
-	private int lastParentHeight;
+	private int lastHeight;
 	private int lastFontHeight;
 	private double lastMin;
 	private double lastMax;
@@ -44,7 +44,7 @@ class YAxis {
 			this.min = min;
 			this.max = max;
 			// Force the first computing
-			this.lastParentHeight = -1;
+			this.lastHeight = -1;
 		}
 	}
 	
@@ -53,7 +53,7 @@ class YAxis {
 			double old = this.scale;
 			this.scale = scale;
 			// Force yRatio computing
-			this.lastParentHeight = -1;
+			this.lastHeight = -1;
 			this.pcSupport.firePropertyChange(SCALE_PROPERTY_NAME, old, this.scale);
 		}
 	}
@@ -66,12 +66,12 @@ class YAxis {
 		int parentHeight = this.parent.getSize().height;
 		int fontHeight = this.parent.getFontMetrics(this.parent.getFont()).getHeight();
 		
-		if ((parentHeight!=lastParentHeight) || (fontHeight!=lastFontHeight) ||
+		if ((parentHeight!=lastHeight) || (fontHeight!=lastFontHeight) ||
 				(min!=lastMin) || (max!=lastMax)) {
 			this.lastMin = min;
 			this.lastMax = max;
 			this.lastFontHeight = fontHeight;
-			this.lastParentHeight = parentHeight;
+			this.lastHeight = parentHeight;
 			this.yOffset = fontHeight+2;
 			double yVariation = max - min;
 			if (yVariation==0) {
@@ -114,7 +114,7 @@ class YAxis {
 	
 	int getY(double value) {
 		update();
-		return this.yOffset+ (int)((this.lastMax-value)*this.yRatio)*scale;
+		return this.yOffset+ (int)((this.lastMax-value)*this.yRatio);
 	}
 	
 	public Iterator<Graduation> getYGraduations() {

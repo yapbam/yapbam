@@ -4,11 +4,12 @@ known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 	Lors de l'édition d'une sous opération, la sélection d'un libellé prédéfini remet le montant de la sous-opération à 0.
 
-version	0.16.3 (??/02/2014)
+version	0.16.3 (25/02/2014)
 fix
 	Régler le séparateur à " ou \ dans le dialogue d'importation de données causait une erreur. 
 improvement
-	Il est à présent possible de lancer l'application directement avec la commande java -jar path/App/yapbam.jar (path est le répertoire d'installation de Yapbam). 
+	Ajoute la possibilité de lancer l'application directement avec la commande java -jar path/App/yapbam.jar (path est le répertoire d'installation de Yapbam).
+	Ajoute la possibilité de zoomer sur le graphique de l'évolution du solde.
 
 version	0.16.2 (18/01/2014)
 fix

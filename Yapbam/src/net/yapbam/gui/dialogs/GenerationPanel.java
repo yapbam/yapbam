@@ -243,69 +243,46 @@ public class GenerationPanel extends JPanel {
 		} else {
 			newStepper = new DayDateStepper(nb.getValue().intValue(), getLastDate().getDate());
 		}
-		if (!areEquals(newStepper,currentDateStepper)) {
+		if (!NullUtils.areEquals(newStepper,currentDateStepper)) {
 			Object old = currentDateStepper;
 			currentDateStepper = newStepper;
 			firePropertyChange(DATE_STEPPER_PROPERTY, old, currentDateStepper);
 		}
 	}
-	
-	private boolean areEquals (DateStepper s1, DateStepper s2) {
-		if (s1==null) {
-			return s2==null;
-		} else if (s2 == null) {
-			return false;
-		} else if (!NullUtils.areEquals(s1.getLastDate(),s2.getLastDate())) {
-			return false;
-		} else if (s1 instanceof DayDateStepper) {
-			if (!(s2 instanceof DayDateStepper)) {
-				return false;
-			} else {
-				return ((DayDateStepper)s1).equals((DayDateStepper)s2);
-			}
-		} else if (s1 instanceof MonthDateStepper) {
-			if (!(s2 instanceof MonthDateStepper)) {
-				return false;
-			} else {
-				return ((MonthDateStepper)s1).equals((MonthDateStepper)s2);
-			}
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
-	
+
 	public DateStepper getDateStepper() {
 		return currentDateStepper;
 	}
 
 	public void setDateStepper(DateStepper nextDateBuilder) {
-		if (!areEquals(nextDateBuilder, currentDateStepper)) {
-			if (nextDateBuilder instanceof MonthDateStepper) {
-				MonthDateStepper monthStepper = (MonthDateStepper)nextDateBuilder;
-				if (monthStepper.getPeriod()%12==0) {
-					nb.setValue(monthStepper.getPeriod()/12);					
-					kind.setSelectedIndex(YEARLY_INDEX);
-				} else {
-					nb.setValue(monthStepper.getPeriod());
-					kind.setSelectedIndex(MONTHLY_INDEX);
-				}
-				day.setValue(monthStepper.getDay());
-				getLastDate().setDate(nextDateBuilder.getLastDate());
-			} else if (nextDateBuilder instanceof DayDateStepper) {
-				kind.setSelectedIndex(DAILY_INDEX);
-				nb.setValue(((DayDateStepper)nextDateBuilder).getStep());
-				getLastDate().setDate(nextDateBuilder.getLastDate());
-			} else if (nextDateBuilder==null) {
-				kind.setSelectedIndex(MONTHLY_INDEX);
-				nb.setText(""); //$NON-NLS-1$
-				day.setText(""); //$NON-NLS-1$
-			} else {
-				throw new IllegalArgumentException();
-			}
-			Object old = currentDateStepper;
-			currentDateStepper = nextDateBuilder;
-			firePropertyChange(DATE_STEPPER_PROPERTY, old, currentDateStepper);
+		if (NullUtils.areEquals(nextDateBuilder, currentDateStepper)) {
+			return;
 		}
+		if (nextDateBuilder instanceof MonthDateStepper) {
+			MonthDateStepper monthStepper = (MonthDateStepper)nextDateBuilder;
+			if (monthStepper.getPeriod()%12==0) {
+				nb.setValue(monthStepper.getPeriod()/12);					
+				kind.setSelectedIndex(YEARLY_INDEX);
+			} else {
+				nb.setValue(monthStepper.getPeriod());
+				kind.setSelectedIndex(MONTHLY_INDEX);
+			}
+			day.setValue(monthStepper.getDay());
+			getLastDate().setDate(nextDateBuilder.getLastDate());
+		} else if (nextDateBuilder instanceof DayDateStepper) {
+			kind.setSelectedIndex(DAILY_INDEX);
+			nb.setValue(((DayDateStepper)nextDateBuilder).getStep());
+			getLastDate().setDate(nextDateBuilder.getLastDate());
+		} else if (nextDateBuilder==null) {
+			kind.setSelectedIndex(MONTHLY_INDEX);
+			nb.setText(""); //$NON-NLS-1$
+			day.setText(""); //$NON-NLS-1$
+		} else {
+			throw new IllegalArgumentException();
+		}
+		Object old = currentDateStepper;
+		currentDateStepper = nextDateBuilder;
+		firePropertyChange(DATE_STEPPER_PROPERTY, old, currentDateStepper);
 	}
 
 	/**
