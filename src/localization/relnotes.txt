@@ -4,11 +4,12 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 	When editing a subtransaction, selecting a predefined label sets the amount to 0.
 
-version	0.16.3 (02/??/2014)
+version	0.16.3 (02/25/2014)
 fix
 	Setting the separator to " or \ in the import dialog caused an error. 
 improvement
 	It is now possible to run the application directly with the command java -jar path/App/yapbam.jar (path is the installation directory of Yapbam).
+	Adds the ability to zoom on the balance history graphic.
 	
 version	0.16.2 (01/18/2014)
 fix
