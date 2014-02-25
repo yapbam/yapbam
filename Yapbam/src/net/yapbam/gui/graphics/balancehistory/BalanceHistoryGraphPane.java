@@ -36,6 +36,7 @@ import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 import net.yapbam.util.DateUtils;
 
 import javax.swing.JSlider;
@@ -116,9 +117,9 @@ public class BalanceHistoryGraphPane extends JPanel {
 		
 		RotatingLabel lblZoom = new RotatingLabel();
 		lblZoom.setHorizontalAlignment(SwingConstants.CENTER);
-		lblZoom.setText("Zoom");
+		lblZoom.setText(LocalizationData.get("BalanceHistory.zoom")); //$NON-NLS-1$
 		lblZoom.setRotation(-90);
-		leftPanel.add(lblZoom, BorderLayout.WEST);
+		leftPanel.add(lblZoom, BorderLayout.SOUTH);
 		
 		slider = new JSlider(SwingConstants.VERTICAL, 1, 20, 1);
 		slider.setPaintTicks(true);
@@ -215,6 +216,23 @@ public class BalanceHistoryGraphPane extends JPanel {
 	
 			graph.setPreferredEndDate(endDate);
 			scrollToSelectedDate();
+		}
+	}
+
+	public void saveState() {
+		YapbamState.INSTANCE.put(getVerticalZoomStateKey(), Integer.toString(slider.getValue()));
+		control.saveState();
+	}
+
+	private String getVerticalZoomStateKey() {
+		return this.getClass().getCanonicalName()+".verticalZoom"; //$NON-NLS-1$
+	}
+
+	public void restoreState() {
+		control.restoreState();
+		Integer value = YapbamState.INSTANCE.getInteger(getVerticalZoomStateKey());
+		if (value!=null) {
+			slider.setValue(value);
 		}
 	}
 }

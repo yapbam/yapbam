@@ -253,9 +253,6 @@ public class YapbamState {
 	 * @see PreferencesUtils#verifyPreferencesCompliance(String, String)
 	 */
 	public void put(String key, String value) {
-		if (key.startsWith("net.yapbam.gui.dialogs.periodicaltransaction.PeriodicalTransactionDialog")) {
-			System.out.println ("stopped here");
-		}
 		PreferencesUtils.verifyPreferencesCompliance(key, value);
 		properties.put(key, value);
 	}
@@ -268,6 +265,22 @@ public class YapbamState {
 		return DateUtils.integerToDate(Integer.parseInt(dummy));
 	}
 	
+	/** Gets an integer value.
+	 * @param key The key to get
+	 * @return an Integer or null if the key is unknown or not contains an integer.  
+	 */
+	public Integer getInteger(String key) {
+		String dummy = properties.getProperty(key, null);
+		if (dummy!=null) {
+			try {
+				return Integer.valueOf(dummy);
+			} catch (NumberFormatException e) {
+				return null;
+			}
+		}
+		return null;
+	}
+
 	public void put (String key, Date date) {
 		put(key, Integer.toString(DateUtils.dateToInteger(date)));
 	}

@@ -14,7 +14,7 @@ import net.yapbam.data.GlobalData;
 class YAxis {
 	public static final String SCALE_PROPERTY_NAME = "VERTICAL_SCALE";
 	
-	private Component parent;
+	private Component owner;
 	private double min;
 	private double max;
 	private int yOffset;
@@ -28,8 +28,8 @@ class YAxis {
 	private PropertyChangeSupport pcSupport;
 	private int scale;
 	
-	YAxis (Component parent) {
-		this.parent = parent;
+	YAxis (Component owner) {
+		this.owner = owner;
 		this.scale = 1;
 		this.setBounds(0, 0);
 		pcSupport = new PropertyChangeSupport(this);
@@ -63,8 +63,8 @@ class YAxis {
 	}
 
 	private void update() {
-		int parentHeight = this.parent.getSize().height;
-		int fontHeight = this.parent.getFontMetrics(this.parent.getFont()).getHeight();
+		int parentHeight = this.owner.getSize().height;
+		int fontHeight = this.owner.getFontMetrics(this.owner.getFont()).getHeight();
 		
 		if ((parentHeight!=lastHeight) || (fontHeight!=lastFontHeight) ||
 				(min!=lastMin) || (max!=lastMax)) {
@@ -83,8 +83,8 @@ class YAxis {
 	}
 	
 	private void computeYGraduations() {
-		FontMetrics fontMetrics = this.parent.getFontMetrics(this.parent.getFont());
-		Dimension size = this.parent.getSize();
+		FontMetrics fontMetrics = this.owner.getFontMetrics(this.owner.getFont());
+		Dimension size = this.owner.getSize();
 		int lineHeight = fontMetrics.getHeight();
 		int h = lineHeight * 2;
 		double step = RuleBuilder.getNormalizedStep(((double) h) / this.yRatio);

@@ -18,6 +18,7 @@ import com.fathzer.soft.ajlib.swing.Utils;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.YapbamState;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
@@ -124,9 +125,32 @@ class BalanceHistoryControlPane extends JPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.add(new JLabel("Zoom:"));
+			panel.add(new JLabel(LocalizationData.get("BalanceHistory.zoom"))); //$NON-NLS-1$
 			panel.add(getSlider());
 		}
 		return panel;
+	}
+
+	public void saveState() {
+		YapbamState.INSTANCE.put(getHorizontalZoomStateKey(), Integer.toString(getSlider().getValue()));
+		YapbamState.INSTANCE.put(getShowGridKey(), Boolean.toString(getIsGridVisible().isSelected()));
+	}
+
+	public void restoreState() {
+		Integer value = YapbamState.INSTANCE.getInteger(getHorizontalZoomStateKey());
+		if (value!=null) {
+			getSlider().setValue(value);
+		}
+		boolean showGrid = Boolean.parseBoolean(YapbamState.INSTANCE.get(getShowGridKey()));
+		getIsGridVisible().setSelected(showGrid);
+		
+	}
+	
+	private String getHorizontalZoomStateKey() {
+		return this.getClass().getCanonicalName()+".horizontalZoom"; //$NON-NLS-1$
+	}
+
+	private String getShowGridKey() {
+		return this.getClass().getCanonicalName()+".showGrid"; //$NON-NLS-1$
 	}
 }
