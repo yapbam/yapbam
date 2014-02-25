@@ -190,9 +190,11 @@ public class BalanceHistoryPane extends JPanel {
 		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
 		YapbamState.INSTANCE.put(this.getClass().getCanonicalName()+".ignoreEnd", Boolean.toString(ignoreEnd.isSelected()));
 		this.tablePane.saveState();
+		this.graph.saveState();
 	}
 
 	public void restoreState() {
+		this.graph.restoreState();
 		this.tablePane.restoreState();
 		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
 		ignoreEnd.setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(this.getClass().getCanonicalName()+".ignoreEnd", "true")));
