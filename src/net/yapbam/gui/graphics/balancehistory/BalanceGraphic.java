@@ -120,12 +120,12 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 	}
 	
-	private Date getStartDate() {
+	public Date getStartDate() {
 		restoreHistory();
 		return startDate;
 	}
 
-	private Date getEndDate() {
+	public Date getEndDate() {
 		restoreHistory();
 		return endDate;
 	}
@@ -321,8 +321,10 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		}
 	}
 
+	private static final double MILLIS_PER_DAY = 24 * 3600 * 1000;
 	int getX(Date date) {
-		return X_OFFSET + (int) ((date.getTime()-getStartDate().getTime())/(3600000*24)*pixelPerDay);
+		int nbDays = (int) Math.round((date.getTime()-getStartDate().getTime()) / MILLIS_PER_DAY);
+		return X_OFFSET + nbDays*pixelPerDay;
 	}
 	
 	private long xToTime(int x) {

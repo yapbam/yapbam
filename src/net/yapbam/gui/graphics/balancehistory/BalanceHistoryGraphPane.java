@@ -170,6 +170,11 @@ public class BalanceHistoryGraphPane extends JPanel {
 		getBalanceRule().getYAxis().setBounds(min, max);
 		graph.setPreferredEndDate(endDate);
 		graph.setHistory(getBalanceHistory());
+		if (graph.getSelectedDate().compareTo(graph.getStartDate())<0 || graph.getSelectedDate().compareTo(graph.getEndDate())>0) {
+			graph.setSelectedDate(new Date());
+		} else {
+			control.setReportText(getBalanceReportText());
+		}
 		scrollToSelectedDate();
 	}
 	
