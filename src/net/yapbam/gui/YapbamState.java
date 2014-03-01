@@ -140,7 +140,13 @@ public class YapbamState {
 					ArrayList<SortKey> keys = new ArrayList<RowSorter.SortKey>();
 					String[] split = StringUtils.split(sorters, ',');
 					for (int i = 0; i < split.length; i++) {
-						keys.add(getSortKey(split[i]));
+						SortKey sortKey = getSortKey(split[i]);
+						if (sortKey.getColumn()<table.getColumnCount()) {
+							// If the column is in the table, add it to sort keys
+							// Some may wonder why we have to test that column is in the table.
+							// You should remember that some columns may have been removed since the state was saved.
+							keys.add(sortKey);
+						}
 					}
 					sorter.setSortKeys(keys);
 				}

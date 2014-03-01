@@ -43,10 +43,9 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	private Date startDate;
 	private Date endDate;
 	private YAxis yAxis;
+	private int zoomLevel;
 	private int pixelPerDay;
-
 	private Date selectedDate;
-
 	private Point[] points;
 	private boolean gridIsVisible;
 	private Date preferredEndDate;
@@ -77,7 +76,12 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		this.addMouseListener(listener);
 		this.addMouseMotionListener(listener);
 		this.setAutoscrolls(true);
-		pixelPerDay = 3*getFont().getSize()/12;
+		this.setZoomLevel(3);
+	}
+	
+	private void setZoomLevel(int level) {
+		this.zoomLevel = level;
+		pixelPerDay = Math.max(1, level*getFont().getSize()/12);
 	}
 	
 	void setHistory(BalanceHistory history) {
@@ -254,7 +258,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 				// Paint the month name
 				// In order to prevent overlapping month wordings, 
 				boolean paintMonthName;
-				switch (pixelPerDay) {
+				switch (zoomLevel) {
 				case 1:
 					paintMonthName = month%3==0;
 					break;
@@ -434,7 +438,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 	}
 
 	public void setHorizontalScale(int value) {
-		this.pixelPerDay = value*getFont().getSize()/12;
+		this.setZoomLevel(value);
 		this.repaint();
 		this.revalidate();
 	}
