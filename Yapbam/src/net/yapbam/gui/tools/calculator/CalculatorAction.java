@@ -4,12 +4,11 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 
+import com.fathzer.soft.ajlib.swing.ToolsFrame;
 import com.fathzer.soft.ajlib.swing.Utils;
 
 import net.yapbam.gui.tools.Messages;
@@ -27,46 +26,8 @@ public class CalculatorAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		if (frame==null) {
 			Window owner = Utils.getOwnerWindow((Component) e.getSource());
-			frame = new JFrame(Messages.getString("ToolsPlugIn.calculator.title"));
-			frame.setContentPane(new CalculatorPanel());
-			frame.pack();
-			frame.setResizable(false);
-			frame.setLocationRelativeTo(owner);
-			owner.addWindowListener(new WindowAdapter() {
-				/* (non-Javadoc)
-				 * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
-				 */
-				@Override
-				public void windowClosing(WindowEvent e) {
-					if (frame!=null) {
-						frame.dispose();
-					}
-					frame = null;
-					super.windowClosing(e);
-				}
-
-				/* (non-Javadoc)
-				 * @see java.awt.event.WindowAdapter#windowIconified(java.awt.event.WindowEvent)
-				 */
-				@Override
-				public void windowIconified(WindowEvent e) {
-					if (frame!=null) {
-						frame.setState(Frame.ICONIFIED);
-					}
-					super.windowIconified(e);
-				}
-
-				/* (non-Javadoc)
-				 * @see java.awt.event.WindowAdapter#windowDeiconified(java.awt.event.WindowEvent)
-				 */
-				@Override
-				public void windowDeiconified(WindowEvent e) {
-					if (frame!=null) {
-						frame.setState(Frame.NORMAL);
-					}
-					super.windowDeiconified(e);
-				}
-			});
+			frame = new ToolsFrame(owner, new CalculatorPanel());
+			frame.setTitle(Messages.getString("ToolsPlugIn.calculator.title"));
 		}
 		frame.setState(Frame.NORMAL);
 		frame.setVisible(true);

@@ -1,6 +1,6 @@
 package net.yapbam.gui.tools.currencyconverter;
 
-import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -11,14 +11,12 @@ import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager;
 
+import com.fathzer.soft.ajlib.swing.ToolsFrame;
 import com.fathzer.soft.ajlib.swing.Utils;
-import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 import com.fathzer.soft.ajlib.swing.worker.DefaultWorkInProgressPanel;
 import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
 import com.fathzer.soft.ajlib.swing.worker.WorkInProgressPanel;
@@ -28,39 +26,18 @@ import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.ECBCurrencyConverter;
 import net.yapbam.currency.YahooCurrencyConverter;
 import net.yapbam.gui.ErrorManager;
-import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.tools.Messages;
 import net.yapbam.util.Portable;
 
 @SuppressWarnings("serial")
-public class Dialog extends AbstractDialog<Void, Void> {
+public class Dialog extends ToolsFrame {
 	private DialogMainPanel panel;
-	private DialogButtons extra;
 	
 	public Dialog(Window owner) {
-		super(owner, Messages.getString("ToolsPlugIn.currencyConverter.title"), null); //$NON-NLS-1$
-		getCancelButton().setVisible(false);
-		getOkButton().setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
-		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$
-	}
-	
-	@Override
-	protected Void buildResult() {
-		return null;
-	}
-
-	@Override
-	protected JPanel createCenterPane() {
-		this.panel = new DialogMainPanel();
-		return this.panel;
-	}
-
-	@Override
-	protected JComponent createExtraComponent() {
-		this.extra = new DialogButtons(SourceManager.getSource());
-		DialogButtons panel = extra;
-		panel.addPropertyChangeListener(new PropertyChangeListener() {
+		super(owner, new DialogMainPanel());
+		this.panel = (DialogMainPanel) getContentPane();
+		this.panel.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (DialogButtons.SOURCE_PROPERTY.equals(evt.getPropertyName())) {
@@ -68,17 +45,9 @@ public class Dialog extends AbstractDialog<Void, Void> {
 				}
 			}
 		});
-		return panel;
+		setTitle(Messages.getString("ToolsPlugIn.currencyConverter.title")); //$NON-NLS-1$
 	}
 
-	@Override
-	protected JPanel createButtonsPane() {
-		// Put the close button at the bottom edge of the dialog
-		// Remove the cancel button
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(getOkButton(), BorderLayout.SOUTH);
-		return panel;
-	}
 
 	private void setSource(Source source) {
 		final AbstractCurrencyConverter converter = getConverter(source);
@@ -144,8 +113,6 @@ public class Dialog extends AbstractDialog<Void, Void> {
 	
 	private void setConverter(AbstractCurrencyConverter converter) {
 		this.panel.setConverter(converter);
-		this.extra.setConverter(converter);
-
 		this.setSize(this.getPreferredSize());
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

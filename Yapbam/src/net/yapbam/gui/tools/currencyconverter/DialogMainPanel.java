@@ -21,6 +21,8 @@ import java.util.Set;
 import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.CountryCurrencyMap;
 import net.yapbam.currency.CurrencyNames;
+import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.tools.Messages;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
@@ -44,7 +46,11 @@ import com.fathzer.soft.ajlib.swing.widget.NumberWidget;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JLayeredPane;
+import javax.swing.SwingConstants;
 
 public class DialogMainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -61,6 +67,9 @@ public class DialogMainPanel extends JPanel {
 	private JTable jTable = null;
 	private CurrenciesTableModel tableModel;
 	private JButton swapButton;
+	private DialogButtons bottomPanel;
+	private JLayeredPane swapPanel;
+	private JLabel extendButton;
 	
 	/**
 	 * This is the default constructor
@@ -79,8 +88,8 @@ public class DialogMainPanel extends JPanel {
 		gridBagConstraints12.weighty = 1.0;
 		gridBagConstraints12.gridwidth = 0;
 		gridBagConstraints12.gridx = 0;
-		gridBagConstraints12.gridy = 4;
-		gridBagConstraints12.insets = new Insets(5, 5, 0, 0);
+		gridBagConstraints12.gridy = 2;
+		gridBagConstraints12.insets = new Insets(0, 5, 5, 0);
 		gridBagConstraints12.weightx = 1.0;
 		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 		gridBagConstraints6.gridx = 0;
@@ -92,24 +101,24 @@ public class DialogMainPanel extends JPanel {
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 		gridBagConstraints31.gridx = 2;
 		gridBagConstraints31.insets = new Insets(5, 5, 5, 5);
-		gridBagConstraints31.gridy = 1;
+		gridBagConstraints31.gridy = 0;
 		JLabel jLabel = new JLabel();
 		jLabel.setText("="); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 		gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints21.gridy = 1;
+		gridBagConstraints21.gridy = 0;
 		gridBagConstraints21.weightx = 1.0;
 		gridBagConstraints21.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints21.gridx = 3;
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 		gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints11.gridy = 1;
+		gridBagConstraints11.gridy = 0;
 		gridBagConstraints11.weightx = 1.0;
 		gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints11.gridx = 0;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = GridBagConstraints.VERTICAL;
-		gridBagConstraints1.gridy = 1;
+		gridBagConstraints1.gridy = 0;
 		gridBagConstraints1.weightx = 0.0D;
 		gridBagConstraints1.insets = new Insets(5, 5, 5, 0);
 		gridBagConstraints1.gridx = 4;
@@ -125,11 +134,13 @@ public class DialogMainPanel extends JPanel {
 		gridBagConstraints3.gridx = 2;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
-		gridBagConstraints2.gridy = 1;
+		gridBagConstraints2.gridy = 0;
 		gridBagConstraints2.weightx = 0.0D;
 		gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints2.gridx = 1;
 		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0};
 		this.setLayout(gridBagLayout);
 		this.add(getCurrency1(), gridBagConstraints2);
 		this.add(getCurrency2(), gridBagConstraints1);
@@ -137,13 +148,19 @@ public class DialogMainPanel extends JPanel {
 		this.add(getAmount2(), gridBagConstraints21);
 		this.add(jLabel, gridBagConstraints31);
 		this.add(getErrField(), gridBagConstraints6);
-		GridBagConstraints gbcSwapButton = new GridBagConstraints();
-		gbcSwapButton.insets = new Insets(0, 0, 5, 0);
-		gbcSwapButton.gridwidth = 0;
-		gbcSwapButton.gridx = 0;
-		gbcSwapButton.gridy = 2;
-		add(getSwapButton(), gbcSwapButton);
+		GridBagConstraints gbcSwapPanel = new GridBagConstraints();
+		gbcSwapPanel.fill = GridBagConstraints.BOTH;
+		gbcSwapPanel.gridwidth = 0;
+		gbcSwapPanel.gridx = 0;
+		gbcSwapPanel.gridy = 1;
+		add(getSwapPanel(), gbcSwapPanel);
 		this.add(getJScrollPane(), gridBagConstraints12);
+		GridBagConstraints gbcBottomPanel = new GridBagConstraints();
+		gbcBottomPanel.gridwidth = 0;
+		gbcBottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbcBottomPanel.gridx = 0;
+		gbcBottomPanel.gridy = 3;
+		add(getBottomPanel(), gbcBottomPanel);
 	}
 
 	private JLabel getErrField() {
@@ -337,6 +354,7 @@ public class DialogMainPanel extends JPanel {
 
 	void setConverter (AbstractCurrencyConverter converter) {
 		this.converter = converter;
+		this.getBottomPanel().setConverter(converter);
 		
 		// Sort the codes accordingly to their wordings
 		this.codes = this.converter.getCurrencies();
@@ -374,5 +392,59 @@ public class DialogMainPanel extends JPanel {
 			getCurrency1().setSelectedIndex(index);
 			getCurrency2().setSelectedIndex(index);
 		}
+	}
+	private DialogButtons getBottomPanel() {
+		if (bottomPanel == null) {
+			bottomPanel = new DialogButtons(SourceManager.getSource());
+			bottomPanel.addPropertyChangeListener(new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					if (DialogButtons.SOURCE_PROPERTY.equals(evt.getPropertyName())) {
+						firePropertyChange(DialogButtons.SOURCE_PROPERTY, evt.getOldValue(), evt.getNewValue());
+					}
+				}
+			});
+		}
+		return bottomPanel;
+	}
+	private JLayeredPane getSwapPanel() {
+		if (swapPanel == null) {
+			swapPanel = new JLayeredPane();
+			GridBagLayout gbl_swapPanel = new GridBagLayout();
+			swapPanel.setLayout(gbl_swapPanel);
+			GridBagConstraints gbcSwapButton = new GridBagConstraints();
+			gbcSwapButton.insets = new Insets(0, 0, 5, 0);
+			gbcSwapButton.gridwidth = 0;
+			gbcSwapButton.gridx = 0;
+			gbcSwapButton.gridy = 0;
+			swapPanel.add(getSwapButton(), gbcSwapButton);
+			GridBagConstraints gbcExtendButton = new GridBagConstraints();
+			gbcExtendButton.insets = new Insets(0, 5, 0, 0);
+			gbcExtendButton.weightx = 1.0;
+			gbcExtendButton.anchor = GridBagConstraints.SOUTHWEST;
+			gbcExtendButton.gridx = 0;
+			gbcExtendButton.gridy = 0;
+			swapPanel.add(getExtendButton(), gbcExtendButton);
+		}
+		return swapPanel;
+	}
+	private JLabel getExtendButton() {
+		if (extendButton == null) {
+			extendButton = new JLabel(IconManager.get(Name.SPREAD));
+//			extendButton.setToolTipText("kjkfgdjml");
+			extendButton.setVerticalAlignment(SwingConstants.BOTTOM);
+			getSwapPanel().setLayer(extendButton, 1);
+			extendButton.addMouseListener(new MouseAdapter() {
+				  @Override
+				  public void mouseClicked(MouseEvent e) {
+					  boolean deploy = extendButton.getIcon()!=IconManager.get(Name.SPREAD); 
+					  extendButton.setIcon(IconManager.get(deploy?Name.SPREAD:Name.SPREADABLE));
+					  getJScrollPane().setVisible(deploy);
+					  getBottomPanel().setVisible(deploy);
+					  Utils.getOwnerWindow(DialogMainPanel.this).pack();
+				  }
+			});
+		}
+		return extendButton;
 	}
 }
