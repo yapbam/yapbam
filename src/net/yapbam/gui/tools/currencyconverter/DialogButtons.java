@@ -21,6 +21,7 @@ import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.tools.Messages;
+
 import javax.swing.SwingConstants;
 
 public class DialogButtons extends JPanel {
@@ -49,6 +50,7 @@ public class DialogButtons extends JPanel {
 		gbcPanel.gridy = 0;
 		add(getPanel(), gbcPanel);
 		GridBagConstraints gbcLblMessage = new GridBagConstraints();
+		gbcLblMessage.insets = new Insets(0, 0, 0, 5);
 		gbcLblMessage.anchor = GridBagConstraints.NORTHWEST;
 		gbcLblMessage.weightx = 1.0;
 		gbcLblMessage.fill = GridBagConstraints.BOTH;
@@ -76,6 +78,7 @@ public class DialogButtons extends JPanel {
 	private JLabel getLblMessage() {
 		if (lblMessage == null) {
 			lblMessage = new JLabel();
+			lblMessage.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblMessage.setVerticalAlignment(SwingConstants.TOP);
 		}
 		return lblMessage;
@@ -98,9 +101,9 @@ public class DialogButtons extends JPanel {
 		if (panel == null) {
 			panel = new JPanel();
 			panel.setBorder(BorderFactory.createTitledBorder(Messages.getString("CurrencyConverterPanel.source"))); //$NON-NLS-1$
-			panel.setLayout(new BorderLayout(0, 0));
-			panel.add(getRdbtnECB(), BorderLayout.NORTH);
-			panel.add(getRdbtnYahoo(), BorderLayout.SOUTH);
+			panel.setLayout(new BorderLayout(5, 0));
+			panel.add(getRdbtnECB(), BorderLayout.WEST);
+			panel.add(getRdbtnYahoo(), BorderLayout.EAST);
 		}
 		return panel;
 	}
