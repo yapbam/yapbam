@@ -43,6 +43,9 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /** The whole balance history pane, with its controls.
  */
 public class BalanceHistoryGraphPane extends JPanel {
@@ -95,7 +98,31 @@ public class BalanceHistoryGraphPane extends JPanel {
 		control.getSlider().addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
+				JViewport vp = scrollPane.getViewport();
+				final int startX = vp.getViewPosition().x;
+				final int y = vp.getViewPosition().y;
+				final int startPrefWidth = graph.getPreferredSize().width;
+				final int width = vp.getWidth();
+		//		final int startZoom = graph.getHorizontalScale();
 				graph.setHorizontalScale(control.getSlider().getValue());
+				final int endPrefWidth = graph.getPreferredSize().width;
+				if (startX==startPrefWidth-width) {
+					// If view is at the right side, keep it there
+					vp.setViewPosition(new Point(endPrefWidth-width,y));
+				} else if (startX!=0) {
+					// If view is on the left side, keep it there
+					// else set the position in order to have the view centered on the same date.
+					//FIXME Not working and flickering :-(. Calling the content of the method outside invokeLater doesn't not work  
+//					SwingUtilities.invokeLater(new Runnable() {
+//						public void run() {
+//							int endPosition = ((2*startX+width)*endPrefWidth/startPrefWidth-width)/2;
+//							scrollPane.getViewport().setViewPosition(new Point(endPosition,y));
+//							System.out.println ("Start: zoom="+startZoom+" x="+startX+" prefWidth="+startPrefWidth+" width="+width+" ratio="+((double)(2*startX+width))/startPrefWidth/2); //TODO
+//							System.out.println ("End: zoom="+graph.getHorizontalScale()+" x="+endPosition+" prefWidth="+endPrefWidth+" width="+width+" ratio="+((double)(2*endPosition+width))/endPrefWidth/2); //TODO
+//							System.out.println (); //TODO
+//						}
+//					});
+				}
 			}
 		});
 		control.setReportText(getBalanceReportText());
@@ -129,7 +156,28 @@ public class BalanceHistoryGraphPane extends JPanel {
 		slider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
+				Logger logger = LoggerFactory.getLogger(BalanceHistoryGraphPane.class);
+				JViewport vp = scrollPane.getViewport();
+				final int startY = vp.getViewPosition().y;
+				final int x = vp.getViewPosition().x;
+				final int startPrefHeight = graph.getPreferredSize().height;
+				final int height = vp.getHeight();
+				final int startZoom = rule.getYAxis().getVerticalScale();
 				rule.getYAxis().setVerticalScale(slider.getValue());
+				final int endPrefHeight = graph.getPreferredSize().height;
+				if (startY==startPrefHeight-height || startPrefHeight==height) {
+					// If view is at the bottom side, keep it there
+					vp.setViewPosition(new Point(x, endPrefHeight-height));
+				} else if (startY!=0) {
+					// If view is on the left side, keep it there
+					// else set the position in order to have the view centered on the same date.
+					//FIXME Sometimes not working :-(: The position seems to change from its own desire when zooming fast
+//					int endPosition = ((2*startY+height)*endPrefHeight/startPrefHeight-height)/2;
+//					scrollPane.getViewport().setViewPosition(new Point(x,endPosition));
+//					logger.debug("Start: zoom="+startZoom+" y="+startY+" prefHeight="+startPrefHeight+" height="+height+" ratio="+((double)(2*startY+height))/startPrefHeight/2);
+//					logger.debug("End: zoom="+rule.getYAxis().getVerticalScale()+" y="+endPosition+" prefHeight="+endPrefHeight+" height="+height+" ratio="+((double)(2*endPosition+height))/endPrefHeight/2);
+//					logger.debug(""); //TODO
+				}
 			}
 		});
 		

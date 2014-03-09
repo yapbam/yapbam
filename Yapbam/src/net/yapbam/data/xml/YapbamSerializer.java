@@ -30,7 +30,7 @@ public class YapbamSerializer {
 	 */
 	public static void write(GlobalData data, File file, boolean zipped, ProgressReport report) throws IOException {
 		if (!FileUtils.isWritable(file)) {
-			throw new FileNotFoundException(MessageFormat.format("Writing to {} is not allowed",file)); //$NON-NLS-1$
+			throw new FileNotFoundException(MessageFormat.format("Writing to {0} is not allowed",file)); //$NON-NLS-1$
 		}
 		// Proceed safely, it means backup the old version before to write the new one
 		File backupFile = file.exists() && file.isFile() ? getBackupFile(file) : null;
