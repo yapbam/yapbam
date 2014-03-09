@@ -55,8 +55,8 @@ public class YapbamSerializer {
 			} else {
 				new Serializer().write(data, out, report);
 			}
-		} finally {
 			out.flush();
+		} finally {
 			out.close();
 		}
 	}

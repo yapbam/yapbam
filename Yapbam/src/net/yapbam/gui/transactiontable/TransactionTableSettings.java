@@ -1,6 +1,8 @@
 package net.yapbam.gui.transactiontable;
 
-public class TransactionTableSettings {
+import java.io.Serializable;
+
+public class TransactionTableSettings implements Serializable {
 	private boolean isCommentSeparatedFromDescription;
 	private boolean isReceiptsSeparatedFromExpenses;
 	

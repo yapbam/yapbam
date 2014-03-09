@@ -1,6 +1,6 @@
 package net.yapbam.gui.transactiontable;
 
-class TableSettings extends TransactionTableSettings {
+class TableSettings extends TransactionTableSettings{
 
 	int getColumnCount() {
 		int nb = 10;
