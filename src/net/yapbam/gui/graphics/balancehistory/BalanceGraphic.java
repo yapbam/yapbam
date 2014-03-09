@@ -442,4 +442,8 @@ class BalanceGraphic extends JPanel implements Scrollable {
 		this.repaint();
 		this.revalidate();
 	}
+
+	public int getHorizontalScale() {
+		return this.zoomLevel;
+	}
 }
