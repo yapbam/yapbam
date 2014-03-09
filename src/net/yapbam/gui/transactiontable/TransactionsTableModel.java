@@ -26,7 +26,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	private static final long serialVersionUID = 1L;
 
 	private transient DateFormat dateFormater;
-	private FilteredData data;
+	private transient FilteredData data;
 	private TableSettings settings;
 
 	TransactionsTableModel(TransactionTable table, FilteredData data) {

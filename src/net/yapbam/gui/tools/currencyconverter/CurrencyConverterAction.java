@@ -11,8 +11,8 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import net.yapbam.gui.tools.Messages;
 
 @SuppressWarnings("serial")
-public final class Action extends AbstractAction {
-	public Action() {
+public final class CurrencyConverterAction extends AbstractAction {
+	public CurrencyConverterAction() {
 		super(Messages.getString("ToolsPlugIn.currencyConverter.title")); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION, Messages.getString("ToolsPlugIn.currencyConverter.toolTip")); //$NON-NLS-1$
 	}

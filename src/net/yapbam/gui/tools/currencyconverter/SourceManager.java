@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class SourceManager {
 	private static final String SOURCE_PREF_KEY = "net.yapbam.gui.tools.currencyConverter.source"; //$NON-NLS-1$
-	private static final Logger LOGGER = LoggerFactory.getLogger(Action.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConverterAction.class);
 
 	public static Source getSource() {
 		try {

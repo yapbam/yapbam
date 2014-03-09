@@ -2,6 +2,7 @@ package net.yapbam.gui.tools.currencyconverter;
 
 import java.awt.GridBagLayout;
 
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
@@ -24,6 +25,7 @@ import net.yapbam.currency.CurrencyNames;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.tools.Messages;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
@@ -54,6 +56,9 @@ import javax.swing.SwingConstants;
 
 public class DialogMainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private static final String KEY_ROOT = "net.yapbam.gui.tools.currencyconverter.";
+	private static final String CURRENCY1_KEY = KEY_ROOT+"currency1";
+	private static final String CURRENCY2_KEY = KEY_ROOT+"currency2";
 	
 	private ComboBox currency1 = null;
 	private ComboBox currency2 = null;
@@ -184,7 +189,9 @@ public class DialogMainPanel extends JPanel {
 				@Override
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (tableModel!=null) {
-						tableModel.setCurrency(codes[currency1.getSelectedIndex()]);
+						String currencyCode = codes[currency1.getSelectedIndex()];
+						YapbamState.INSTANCE.put(CURRENCY1_KEY, currencyCode);
+						tableModel.setCurrency(currencyCode);
 					}
 					Utils.packColumns(getJTable(), 2);
 					doConvert();
@@ -214,6 +221,7 @@ public class DialogMainPanel extends JPanel {
 						index = getJTable().convertRowIndexToView(index);
 						getJTable().getSelectionModel().setSelectionInterval(index, index);
 						getJTable().scrollRectToVisible(getJTable().getCellRect(index, 0, true));
+						YapbamState.INSTANCE.put(CURRENCY2_KEY, currencyCode);
 					}
 					doConvert();
 				}
@@ -386,13 +394,22 @@ public class DialogMainPanel extends JPanel {
 		getCurrency2().setActionEnabled(true);
 		
 		// Select available currencies
-		Currency currency = Currency.getInstance(LocalizationData.getLocale());
-		int index = Arrays.asList(this.codes).indexOf(currency.getCurrencyCode());
-		if (index>=0) {
-			getCurrency1().setSelectedIndex(index);
-			getCurrency2().setSelectedIndex(index);
+		String currencyCode = Currency.getInstance(LocalizationData.getLocale()).getCurrencyCode();
+		if (!tryToSet(getCurrency1(), YapbamState.INSTANCE.get(CURRENCY1_KEY))) {
+			tryToSet(getCurrency1(), currencyCode);
+		}
+		if (!tryToSet(getCurrency2(), YapbamState.INSTANCE.get(CURRENCY2_KEY))) {
+			tryToSet(getCurrency2(), currencyCode);
 		}
 	}
+	private boolean tryToSet(JComboBox selector, String currencyCode) {
+		int index = currencyCode==null ? -1 : Arrays.asList(this.codes).indexOf(currencyCode);
+		if (index>=0) {
+			selector.setSelectedIndex(index);
+		}
+		return index>=0;
+	}
+	
 	private DialogButtons getBottomPanel() {
 		if (bottomPanel == null) {
 			bottomPanel = new DialogButtons(SourceManager.getSource());
@@ -410,8 +427,8 @@ public class DialogMainPanel extends JPanel {
 	private JLayeredPane getSwapPanel() {
 		if (swapPanel == null) {
 			swapPanel = new JLayeredPane();
-			GridBagLayout gbl_swapPanel = new GridBagLayout();
-			swapPanel.setLayout(gbl_swapPanel);
+			GridBagLayout gblSwapPanel = new GridBagLayout();
+			swapPanel.setLayout(gblSwapPanel);
 			GridBagConstraints gbcSwapButton = new GridBagConstraints();
 			gbcSwapButton.insets = new Insets(0, 0, 5, 0);
 			gbcSwapButton.gridwidth = 0;

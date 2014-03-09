@@ -7,7 +7,7 @@ known
 version	0.16.5 (09/03/2014)
 improvement
 	Les outils (calculatrice et convertisseur de devise) peuvent à présent être utilisés dans les dialogues (par exemple pendant la saisie d'une opération).
-	
+	Dans le convertisseur de devises, les devises sélectionnées sont mémorisées entre deux lancements de l'application. La table des devises peut à présent être cachée afin de réduire la taille de la fenêtre.
 fix
 	Sauvegarder les données dans un fichier protégé en écriture pouvait, parfois, causer une erreur. 
 	
