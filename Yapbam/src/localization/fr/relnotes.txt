@@ -89,7 +89,7 @@ fix
 	Le menu "Fichier/Fichiers récents" était systématiquement inactif au lancement de Yapbam quand aucun fichier n'était ouvert.
 	Certaines traductions en allemand ou portuguais étaient erronées. 
 improvement
-	Dans l'onglet "Opérations", la colonne "S/O", qui permet d'afficher ou de masquer les sous-opération, a maintenant une taille fixe.
+	Dans l'onglet "Opérations", la colonne "S/O", qui permet d'afficher ou de masquer les sous-opérations, a maintenant une taille fixe.
 
 version	0.14.3 (24/02/2013)
 improvement
