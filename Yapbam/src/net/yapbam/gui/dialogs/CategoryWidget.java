@@ -1,10 +1,12 @@
 package net.yapbam.gui.dialogs;
 
+import java.util.Arrays;
+
 import com.fathzer.soft.ajlib.swing.Utils;
 
 import net.yapbam.data.Category;
+import net.yapbam.data.CategoryComparator;
 import net.yapbam.data.GlobalData;
-
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AbstractSelector;
 
@@ -40,8 +42,13 @@ public class CategoryWidget extends AbstractSelector<Category, GlobalData> {
 	@Override
 	protected void populateCombo() {
 		if (getParameters()!=null) {
+			Category[] categories = new Category[getParameters().getCategoriesNumber()];
 			for (int i = 0; i < getParameters().getCategoriesNumber(); i++) {
-				getCombo().addItem(getParameters().getCategory(i));
+				categories[i] = getParameters().getCategory(i);
+			}
+			Arrays.sort(categories, new CategoryComparator(getLocale(), getParameters().getSubCategorySeparator()));
+			for (int i = 0; i < getParameters().getCategoriesNumber(); i++) {
+				getCombo().addItem(categories[i]);
 			}
 		}
 	}

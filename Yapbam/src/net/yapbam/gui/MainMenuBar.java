@@ -42,6 +42,7 @@ import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
+import net.yapbam.gui.dialogs.AccountWidget;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.dialogs.export.Exporter;
@@ -430,8 +431,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			};
 			List<Account> filterAccounts = frame.getFilteredData().getFilter().getValidAccounts();
 			boolean hasAccountFilter = filterAccounts!=null;
+			Account[] accounts = AccountWidget.getSortedAccounts(frame.getData(), getLocale());
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				Account account = data.getAccount(i);
+				Account account = accounts[i];
 				JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
 				item.setToolTipText(MessageFormat.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
 				if (hasAccountFilter) {
