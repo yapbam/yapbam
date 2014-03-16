@@ -45,7 +45,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	protected boolean ignoreEvents;
 	
 	protected AbstractTransactionDialog(Window owner, String title, FilteredData data, AbstractTransaction transaction) {
-		super(owner, title, data); //$NON-NLS-1$
+		super(owner, title, data);
 		pdc = null;
 		this.ignoreEvents = false;
 		if (transaction!=null) {

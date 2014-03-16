@@ -17,6 +17,7 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.CharWidget;
 
 import net.yapbam.data.Category;
+import net.yapbam.data.CategoryComparator;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.CategoryAddedEvent;
 import net.yapbam.data.event.CategoryRemovedEvent;
@@ -34,8 +35,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.Object;
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel { //TODO Add split functions
 	private static final long serialVersionUID = 1L;
@@ -72,8 +73,20 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	
 	@SuppressWarnings("serial")
 	private final class CategoryTableModel extends AbstractTableModel implements DataListener {
+		Category[] content;
+		
 		CategoryTableModel() {
 			data.addListener(this);
+			buildContent();
+		}
+		
+		private void buildContent() {
+			// We will ignore first category which is the UNDEFINED one and is not displayed in the table
+			content = new Category[data.getCategoriesNumber()-1];
+			for (int i = 0; i < content.length; i++) {
+				content[i] = data.getCategory(i+1);
+			}
+			Arrays.sort(content, new CategoryComparator(getLocale(), data.getSubCategorySeparator()));
 		}
 		
 		@Override
@@ -91,7 +104,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 		}
 		
 		Category getCategory(int row) {
-			return ((GlobalData)data).getCategory(row+1); // rowIndex+1 because the undefined category is ommited
+			return content[row];
 		}
 
 		@Override
@@ -122,8 +135,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 
 		@Override
 		public int getRowCount() {
-			// The undefined category is omitted
-			return ((GlobalData)data).getCategoriesNumber()-1;
+			return content.length;
 		}
 
 		@Override
@@ -138,13 +150,8 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 
 		@Override
 		public void processEvent(DataEvent event) {
-			if (event instanceof CategoryAddedEvent) {
-				int row = ((GlobalData)data).indexOf(((CategoryAddedEvent)event).getCategory())-1; // -1 because undefined category is omitted
-				fireTableRowsInserted(row, row);
-			} else if (event instanceof CategoryRemovedEvent) {
-				int row = ((CategoryRemovedEvent)event).getIndex()-1; // -1 because undefined category is omitted
-				fireTableRowsDeleted(row, row);
-			} else if (event instanceof EverythingChangedEvent) {
+			if (event instanceof CategoryAddedEvent || event instanceof CategoryRemovedEvent || event instanceof EverythingChangedEvent) {
+				buildContent();
 				fireTableDataChanged();
 			}
 		}
