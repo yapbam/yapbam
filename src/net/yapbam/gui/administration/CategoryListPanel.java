@@ -17,8 +17,8 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.CharWidget;
 
 import net.yapbam.data.Category;
-import net.yapbam.data.CategoryComparator;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.comparator.CategoryComparator;
 import net.yapbam.data.event.CategoryAddedEvent;
 import net.yapbam.data.event.CategoryRemovedEvent;
 import net.yapbam.data.event.DataEvent;

@@ -5,15 +5,17 @@ import java.awt.GridBagLayout;
 import java.awt.Rectangle;
 
 import javax.swing.JPanel;
+
 import java.awt.GridBagConstraints;
+
 import javax.swing.JList;
 import javax.swing.BorderFactory;
 import javax.swing.Scrollable;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import javax.swing.JCheckBox;
+
 import java.awt.Insets;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -27,6 +29,8 @@ import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
+import net.yapbam.data.comparator.AccountComparator;
+import net.yapbam.data.comparator.CategoryComparator;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.TextMatcher;
 
@@ -171,19 +175,20 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	@SuppressWarnings("serial")
 	private JList getAccountList() {
 		if (accountList == null) {
+			final Account[] accounts = AccountComparator.getSortedAccounts(gData, getLocale());
 			accountList = new JList();
 			accountList.setModel(new AbstractListModel(){
 				public Object getElementAt(int index) {
-					return gData.getAccount(index).getName();
+					return accounts[index].getName();
 				}
 				public int getSize() {
-					return gData.getAccountsNumber();
+					return accounts.length;
 				}
 			});
 			accountList.setToolTipText(LocalizationData.get("CustomFilterPanel.account.toolTip")); //$NON-NLS-1$
-			ArrayList<Integer> indices = new ArrayList<Integer>(gData.getAccountsNumber()); 
-			for (int i=0;i<gData.getAccountsNumber();i++) {
-				if (filter.isOk(gData.getAccount(i))) {
+			ArrayList<Integer> indices = new ArrayList<Integer>(accounts.length); 
+			for (int i=0;i<accounts.length;i++) {
+				if (filter.isOk(accounts[i])) {
 					indices.add(i);
 				}
 			}
@@ -257,20 +262,21 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	@SuppressWarnings("serial")
 	private JList getCategoryList() {
 		if (categoryList == null) {
+			final Category[] categories = CategoryComparator.getSortedCategories(gData, getLocale());
 			categoryList = new JList();
 			categoryList.setModel(new AbstractListModel(){
 				public Object getElementAt(int index) {
-					Category category = gData.getCategory(index);
+					Category category = categories[index];
 					return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
 				}
 				public int getSize() {
-					return gData.getCategoriesNumber();
+					return categories.length;
 				}
 			});
 			categoryList.setToolTipText(LocalizationData.get("CustomFilterPanel.category.toolTip")); //$NON-NLS-1$
 			ArrayList<Integer> indices = new ArrayList<Integer>(gData.getCategoriesNumber()); 
-			for (int i=0;i<gData.getCategoriesNumber();i++) {
-				if (filter.isOk(gData.getCategory(i))) {
+			for (int i=0;i<categories.length;i++) {
+				if (filter.isOk(categories[i])) {
 					indices.add(i);
 				}
 			}
@@ -298,10 +304,10 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 		}
 		// Update the list content
 		// We have to merge all the names of the modes of the currently selected accounts.
-		int[] accountIndices =	this.accountList.getSelectedIndices();
+		Object[] accountNames =	this.accountList.getSelectedValues();
 		TreeSet<String> modes = new TreeSet<String>();
-		for (int i = 0; i < accountIndices.length; i++) {
-			Account account = gData.getAccount(accountIndices[i]);
+		for (int i = 0; i < accountNames.length; i++) {
+			Account account = gData.getAccount((String)accountNames[i]);
 			int nb = account.getModesNumber();
 			for (int j = 0; j < nb; j++) {
 				Mode mode = account.getMode(j);
@@ -363,10 +369,10 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 		Object[] selectedModes = getModes().getSelectedValues();
 		ArrayList<String> modes = new ArrayList<String>();
 		boolean all = true;
-		int[] accountIndices = this.accountList.getSelectedIndices();
-		Account[] accounts = new Account[accountIndices.length];
+		Object[] accountNames = this.accountList.getSelectedValues();
+		Account[] accounts = new Account[accountNames.length];
 		for (int i = 0; i < accounts.length; i++) {
-			accounts[i] = gData.getAccount(accountIndices[i]);
+			accounts[i] = gData.getAccount((String)accountNames[i]);
 			for (int j=0; j<accounts[i].getModesNumber(); j++) {
 				Mode mode = accounts[i].getMode(j);
 				if (Arrays.binarySearch(selectedModes,mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName())<0) {
@@ -380,13 +386,13 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 		// set the mode filter
 		filter.setValidModes(all?null:modes);
 		// build the category filter
-		int[] categoryIndices = this.categoryList.getSelectedIndices();
-		if (categoryIndices.length==gData.getCategoriesNumber()) {
+		Object[] categoryNames = this.categoryList.getSelectedValues();
+		if (categoryNames.length==gData.getCategoriesNumber()) {
 			filter.setValidCategories(null);
 		} else {
-			List<Category> categories = new ArrayList<Category>(categoryIndices.length);
-			for (int i = 0; i < categoryIndices.length; i++) {
-				categories.add(gData.getCategory(categoryIndices[i]));
+			List<Category> categories = new ArrayList<Category>(categoryNames.length);
+			for (int i = 0; i < categoryNames.length; i++) {
+				categories.add(gData.getCategory((String)categoryNames[i]));
 			}
 			filter.setValidCategories(categories);
 		}

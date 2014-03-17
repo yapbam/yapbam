@@ -31,6 +31,7 @@ import com.fathzer.soft.ajlib.utilities.FileUtils;
 import net.yapbam.data.Account;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
+import net.yapbam.data.comparator.AccountComparator;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
@@ -42,7 +43,6 @@ import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
-import net.yapbam.gui.dialogs.AccountWidget;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.dialogs.export.Exporter;
@@ -431,7 +431,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			};
 			List<Account> filterAccounts = frame.getFilteredData().getFilter().getValidAccounts();
 			boolean hasAccountFilter = filterAccounts!=null;
-			Account[] accounts = AccountWidget.getSortedAccounts(frame.getData(), getLocale());
+			Account[] accounts = AccountComparator.getSortedAccounts(frame.getData(), getLocale());
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				Account account = accounts[i];
 				JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
