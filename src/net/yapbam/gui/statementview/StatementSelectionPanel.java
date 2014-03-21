@@ -11,6 +11,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
+import net.yapbam.data.comparator.AccountComparator;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
@@ -124,9 +125,9 @@ public class StatementSelectionPanel extends JPanel {
 			accountMenu.setEnabled(true);
 			accountMenu.setActionEnabled(false);
 			accountMenu.removeAllItems();
-			for (int i = 0; i < global.getAccountsNumber(); i++) {
-				String accountName = global.getAccount(i).getName();
-				accountMenu.addItem(accountName);
+			Account[] accounts = AccountComparator.getSortedAccounts(global, getLocale());
+			for (Account account : accounts) {
+				accountMenu.addItem(account.getName());
 			}
 			accountMenu.setActionEnabled(true);
 			accountMenu.setSelectedIndex(0);
@@ -193,8 +194,8 @@ public class StatementSelectionPanel extends JPanel {
 		if (data==null) {
 			return null;
 		}
-		int index = getAccountMenu().getSelectedIndex();
-		return index>=0 ? data.getGlobalData().getAccount(index) : null;
+		Object accountName = getAccountMenu().getSelectedItem();
+		return accountName!=null ? data.getGlobalData().getAccount((String)accountName) : null;
 	}
 	
 	/**
@@ -211,19 +212,19 @@ public class StatementSelectionPanel extends JPanel {
 	}
 
 	private void refresh() {
-		int accountIndex = getAccountMenu().getSelectedIndex();
+		String accountName = (String) getAccountMenu().getSelectedItem();
 		ComboBox statementMenu = getStatementMenu();
 		statementMenu .setActionEnabled(false);
 //		String lastSelectedStatement = (String) (statementMenu.getSelectedIndex()==0?null:statementMenu.getSelectedItem());
 		String lastSelectedStatement = (String) ((statements==null)||(statementMenu.getSelectedIndex()<0)?null:statementMenu.getSelectedItem());
 		statementMenu.removeAllItems();
-		if (accountIndex < 0) {
+		if (accountName==null) {
 			statements = null;
 			statementMenu.setActionEnabled(true);
 			statementMenu.setSelectedIndex(-1);
 			statementMenu.setEnabled(false);
 		} else {
-			statements = Statement.getStatements(data.getGlobalData().getAccount(accountIndex));
+			statements = Statement.getStatements(data.getGlobalData().getAccount(accountName));
 			for (int i = 0; i < statements.length; i++) {
 				String id = statements[statements.length - 1 - i].getId();
 				statementMenu.addItem(id == null ? LocalizationData.get("StatementView.notChecked") : id); //$NON-NLS-1$
