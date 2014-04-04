@@ -391,8 +391,10 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			filter.setValidCategories(null);
 		} else {
 			List<Category> categories = new ArrayList<Category>(categoryNames.length);
+			String undefinedCategoryName = LocalizationData.get("Category.undefined");
 			for (int i = 0; i < categoryNames.length; i++) {
-				categories.add(gData.getCategory((String)categoryNames[i]));
+				String name = (String)categoryNames[i];
+				categories.add(undefinedCategoryName.equals(categoryNames[i])?Category.UNDEFINED:gData.getCategory(name));
 			}
 			filter.setValidCategories(categories);
 		}
