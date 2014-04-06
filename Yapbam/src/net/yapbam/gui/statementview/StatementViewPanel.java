@@ -125,8 +125,9 @@ public class StatementViewPanel extends JPanel {
 	private StatementSelectionPanel getStatementSelectionPanel() {
 		if (statementSelectionPanel==null) {
 			statementSelectionPanel = new StatementSelectionPanel(data);
-			statementSelectionPanel.getStatementMenu().addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
+			statementSelectionPanel.addPropertyChangeListener(StatementSelectionPanel.SELECTED_STATEMENT_PROPERTY_NAME, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
 					Statement selectedStatement = getStatementSelectionPanel().getSelectedStatement();
 					if ((selectedStatement==null) || (selectedStatement.getId()!=null)) {
 						getCheckModeChkbx().setSelected(false);
