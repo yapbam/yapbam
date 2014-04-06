@@ -27,6 +27,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class StatementSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -53,7 +54,12 @@ public class StatementSelectionPanel extends JPanel {
 							// If there was no account before this one
 							init();
 						} else {
-							accountMenu.addItem(((AccountAddedEvent)event).getAccount().getName());
+							// Find the future location of the new account in the menu
+							Account[] accounts = AccountComparator.getSortedAccounts(global, getLocale());
+							Account account = ((AccountAddedEvent)event).getAccount();
+							int index = Arrays.binarySearch(accounts, account, AccountComparator.getInstance(getLocale()));
+System.out.println("Inserting account at "+index);
+							accountMenu.insertItemAt(account.getName(), index);
 						}
 					} else if (event instanceof AccountRemovedEvent) {
 						String accountName = ((AccountRemovedEvent)event).getRemoved().getName();
@@ -215,8 +221,8 @@ public class StatementSelectionPanel extends JPanel {
 		String accountName = (String) getAccountMenu().getSelectedItem();
 		ComboBox statementMenu = getStatementMenu();
 		statementMenu .setActionEnabled(false);
-//		String lastSelectedStatement = (String) (statementMenu.getSelectedIndex()==0?null:statementMenu.getSelectedItem());
 		String lastSelectedStatement = (String) ((statements==null)||(statementMenu.getSelectedIndex()<0)?null:statementMenu.getSelectedItem());
+System.out.println (accountName+"/"+lastSelectedStatement); //TODO
 		statementMenu.removeAllItems();
 		if (accountName==null) {
 			statements = null;
@@ -232,6 +238,7 @@ public class StatementSelectionPanel extends JPanel {
 			statementMenu.setActionEnabled(true);
 			statementMenu.setEnabled(statements.length > 0);
 			if ((lastSelectedStatement!=null) && (statementMenu.contains(lastSelectedStatement))){
+System.out.println ("Selecting "+lastSelectedStatement); //TODO
 				statementMenu.setSelectedItem(lastSelectedStatement);
 			} else {
 				statementMenu.setSelectedIndex(statements.length > 0 ? 0 : -1);
