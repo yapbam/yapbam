@@ -164,9 +164,10 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			}
 			
 			@Override
-			public double getAmount(String description) {
+			public double getAmount(String description, double amount) {
+				this.amount = amount;
 				update(description);
-				return amount;
+				return this.amount;
 			}
 
 			private void update(String description) {
@@ -199,7 +200,11 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					}
 					CategoryAndType ct = getHeaviest(map);
 					this.category = ct.getCategory();
-					this.amount = ct.receipt?Double.MIN_VALUE:-Double.MIN_VALUE;
+					if (ct.receipt && amount<0) {
+						amount = Math.abs(amount);
+					} else if (!ct.receipt && amount>0) {
+						amount = -amount;
+					}
 				}
 			}
 
@@ -563,17 +568,14 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			public void actionPerformed(ActionEvent e) {
 				data.getGlobalData().add(buildResult());
 				description.requestFocus();
-				clear();
+				Date today = date.getDate();
+				setContent(new Transaction(today, null, "", null, 0.0, getAccount(), Mode.UNDEFINED, Category.UNDEFINED, today, null, new ArrayList<SubTransaction>())); //$NON-NLS-1$
+				autoFillStatement();
 			}
 		});
 		result.add(nextButton);
 		result.add(getCancelButton());
 		return result;
-	}
-
-	private void clear() {
-		Date today = date.getDate();
-		setContent(new Transaction(today, null, "", null, 0.0, getAccount(), Mode.UNDEFINED, Category.UNDEFINED, today, null, new ArrayList<SubTransaction>())); //$NON-NLS-1$
 	}
 
 	@Override
