@@ -47,6 +47,8 @@ import com.fathzer.soft.ajlib.utilities.NullUtils;
 public class CustomFilterPanel extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;
 	public static final String INCONSISTENCY_CAUSE_PROPERTY = "InconsistencyCause"; //$NON-NLS-1$
+	private static final String CATEGORY_UNDEFINED_RESOURCE = "Category.undefined"; //$NON-NLS-1$
+	private static final String MODE_UNDEFINED_RESOURCE = "Mode.undefined"; //$NON-NLS-1$
 	
 	private JPanel accountPanel = null;
 	private JList accountList = null;
@@ -267,7 +269,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			categoryList.setModel(new AbstractListModel(){
 				public Object getElementAt(int index) {
 					Category category = categories[index];
-					return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+					return category.equals(Category.UNDEFINED)?LocalizationData.get(CATEGORY_UNDEFINED_RESOURCE):category.getName();
 				}
 				public int getSize() {
 					return categories.length;
@@ -311,7 +313,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			int nb = account.getModesNumber();
 			for (int j = 0; j < nb; j++) {
 				Mode mode = account.getMode(j);
-				modes.add(mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName());
+				modes.add(mode.equals(Mode.UNDEFINED)?LocalizationData.get(MODE_UNDEFINED_RESOURCE):mode.getName());
 			}
 		}
 		final String[] arrayModes = modes.toArray(new String[modes.size()]);
@@ -333,7 +335,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 				for (int i = 0; i < validModes.size(); i++) {
 					String name = validModes.get(i);
 					if (name.isEmpty()) {
-						name = LocalizationData.get("Mode.undefined");
+						name = LocalizationData.get(MODE_UNDEFINED_RESOURCE);
 					}
 					int index = Arrays.binarySearch(arrayModes, name);
 					if (index>=0) {
@@ -375,10 +377,10 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			accounts[i] = gData.getAccount((String)accountNames[i]);
 			for (int j=0; j<accounts[i].getModesNumber(); j++) {
 				Mode mode = accounts[i].getMode(j);
-				if (Arrays.binarySearch(selectedModes,mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName())<0) {
+				if (Arrays.binarySearch(selectedModes,mode.equals(Mode.UNDEFINED)?LocalizationData.get(MODE_UNDEFINED_RESOURCE):mode.getName())<0) {
 					all = false;
 				} else {
-					modes.add(mode.equals(Mode.UNDEFINED)?"":mode.getName());
+					modes.add(mode.equals(Mode.UNDEFINED)?"":mode.getName()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -391,7 +393,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			filter.setValidCategories(null);
 		} else {
 			List<Category> categories = new ArrayList<Category>(categoryNames.length);
-			String undefinedCategoryName = LocalizationData.get("Category.undefined");
+			String undefinedCategoryName = LocalizationData.get(CATEGORY_UNDEFINED_RESOURCE);
 			for (int i = 0; i < categoryNames.length; i++) {
 				String name = (String)categoryNames[i];
 				categories.add(undefinedCategoryName.equals(categoryNames[i])?Category.UNDEFINED:gData.getCategory(name));

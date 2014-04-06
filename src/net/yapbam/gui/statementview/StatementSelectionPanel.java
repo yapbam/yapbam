@@ -60,7 +60,6 @@ public class StatementSelectionPanel extends JPanel {
 							Account[] accounts = AccountComparator.getSortedAccounts(global, getLocale());
 							Account account = ((AccountAddedEvent)event).getAccount();
 							int index = Arrays.binarySearch(accounts, account, AccountComparator.getInstance(getLocale()));
-System.out.println("Inserting account at "+index);
 							accountMenu.insertItemAt(account.getName(), index);
 						}
 					} else if (event instanceof AccountRemovedEvent) {

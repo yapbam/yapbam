@@ -37,7 +37,7 @@ public class SubTransactionPanel extends JPanel {
 	private PredefinedDescriptionUpdater updater;
 
 	public interface PredefinedDescriptionUpdater {
-		public double getAmount(String description);
+		public double getAmount(String description, double currentAmount);
 		public Category getCategory(String description);
 	}
 
@@ -142,7 +142,7 @@ public class SubTransactionPanel extends JPanel {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if ((updater!=null) && (evt.getNewValue()!=null)) {
-						setAmount(updater.getAmount((String) evt.getNewValue()));
+						setAmount(updater.getAmount((String) evt.getNewValue(), getAmount()));
 						setCategory(updater.getCategory((String) evt.getNewValue()));
 					}
 				}
