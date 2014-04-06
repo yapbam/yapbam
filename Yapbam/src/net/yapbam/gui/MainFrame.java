@@ -69,7 +69,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		// Workaround of a bug in swing with Java 1.7
 		// Should absolutely be the first thing called in the program !!!
 		String current = System.getProperty("java.specification.version"); //$NON-NLS-1$
-		if ("1.7".equals(current)) { //$NON-NLS-1$
+		if (!"1.6".equals(current)) { //$NON-NLS-1$
 			System.setProperty("java.util.Arrays.useLegacyMergeSort", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 

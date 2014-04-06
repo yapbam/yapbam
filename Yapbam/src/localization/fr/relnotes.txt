@@ -7,6 +7,8 @@ known
 version	0.16.7 (06/04/2014)
 fix
 	La catégorie "indéfinie" était ignorée lorsqu'on la sélectionnait dans le dialogue de filtre personnalisé.
+	Bug introduit en 0.16.6: Les opérations de catégories "indéfinie" était systématiquement ignorée quand on activait le filtrage sur les catégories.
+	Contournement d'un bug de Java 8 qui provoquait une erreur lors de l'ouverture du dialogue de création d'opération périodique.
 
 version	0.16.6 (20/03/2014)
 improvement

@@ -7,6 +7,8 @@ known
 version	0.16.7 (04/06/2014)
 fix
 	The "undefined" category was ignored when selected in the custom filter dialog.
+	Bug introduced in 0.16.6: Transactions with "Undefined" category were always ignored when using category filtering.
+	Workaround for a Java 8 bug that caused an error when opening the dialog for creating periodic transaction.
 
 version	0.16.6 (03/20/2014)
 improvement
