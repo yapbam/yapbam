@@ -1,6 +1,3 @@
-TODO list
-	Finir le tri des comptes dans la vue "Relevés de compte" (L'ajout de compte n'est pas bien géré).
-
 Bug :
 	L'export sur Linux flingue les accents. 
 	Diminuer le nombre de plugin avec onglet fait planter la restauration.
