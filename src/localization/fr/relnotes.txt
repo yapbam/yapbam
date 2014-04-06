@@ -9,6 +9,8 @@ fix
 	La catégorie "indéfinie" était ignorée lorsqu'on la sélectionnait dans le dialogue de filtre personnalisé.
 	Bug introduit en 0.16.6: Les opérations de catégories "indéfinie" était systématiquement ignorée quand on activait le filtrage sur les catégories.
 	Contournement d'un bug de Java 8 qui provoquait une erreur lors de l'ouverture du dialogue de création d'opération périodique.
+improvement
+	Les comptes sont à présent triés par ordre alphabétique dans le menu de l'onglet relevé de comptes.
 
 version	0.16.6 (20/03/2014)
 improvement

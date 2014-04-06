@@ -31,12 +31,14 @@ import java.util.Arrays;
 
 public class StatementSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	public static final String SELECTED_STATEMENT_PROPERTY_NAME = "SelectedStatement";
 	
 	private ComboBox accountMenu;
 	private ComboBox statementMenu;
 
 	private FilteredData data;
 	private Statement[] statements;
+	private String lastSelectedStatement;
 
 	public StatementSelectionPanel(FilteredData data) {
 		this.data = data;
@@ -209,20 +211,33 @@ System.out.println("Inserting account at "+index);
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	public ComboBox getStatementMenu() {
+	private ComboBox getStatementMenu() {
 		if (statementMenu == null) {
 			statementMenu = new ComboBox();
 			statementMenu.setToolTipText(LocalizationData.get("StatementView.statementMenu.statementMenu.tooltip")); //$NON-NLS-1$
+			statementMenu.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					statementSelected(true);
+				}
+			});
 		}
 		return statementMenu;
+	}
+	
+	private void statementSelected(boolean forcePropertyChange) {
+		Statement selectedStatement = getSelectedStatement();
+		String statementName = selectedStatement==null?null:selectedStatement.getId();
+		if (forcePropertyChange || !NullUtils.areEquals(statementName, lastSelectedStatement)) {
+			lastSelectedStatement = statementName;
+			firePropertyChange(SELECTED_STATEMENT_PROPERTY_NAME, lastSelectedStatement, selectedStatement);
+		}
 	}
 
 	private void refresh() {
 		String accountName = (String) getAccountMenu().getSelectedItem();
-		ComboBox statementMenu = getStatementMenu();
 		statementMenu .setActionEnabled(false);
-		String lastSelectedStatement = (String) ((statements==null)||(statementMenu.getSelectedIndex()<0)?null:statementMenu.getSelectedItem());
-System.out.println (accountName+"/"+lastSelectedStatement); //TODO
+		boolean ignoreLastSelected = (statements==null)||(statementMenu.getSelectedIndex()<0)||(statementMenu.getItemCount()<=2);
+		String lastSelectedStatement = (String) (ignoreLastSelected?null:statementMenu.getSelectedItem());
 		statementMenu.removeAllItems();
 		if (accountName==null) {
 			statements = null;
@@ -238,7 +253,6 @@ System.out.println (accountName+"/"+lastSelectedStatement); //TODO
 			statementMenu.setActionEnabled(true);
 			statementMenu.setEnabled(statements.length > 0);
 			if ((lastSelectedStatement!=null) && (statementMenu.contains(lastSelectedStatement))){
-System.out.println ("Selecting "+lastSelectedStatement); //TODO
 				statementMenu.setSelectedItem(lastSelectedStatement);
 			} else {
 				statementMenu.setSelectedIndex(statements.length > 0 ? 0 : -1);
