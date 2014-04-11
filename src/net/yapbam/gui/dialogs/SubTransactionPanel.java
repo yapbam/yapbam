@@ -142,7 +142,9 @@ public class SubTransactionPanel extends JPanel {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if ((updater!=null) && (evt.getNewValue()!=null)) {
-						setAmount(updater.getAmount((String) evt.getNewValue(), getAmount()));
+						if (getAmount()!=null) {
+							setAmount(updater.getAmount((String) evt.getNewValue(), getAmount()));
+						}
 						setCategory(updater.getCategory((String) evt.getNewValue()));
 					}
 				}
