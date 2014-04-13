@@ -6,6 +6,7 @@ known
 version	0.16.8 (13/04/2014)
 fix
 	Bug introduit en 0.16.7 : Dans l'édition une sous-opération, une erreur survenait lorsqu'on effaçait le montant puis qu'on choisissait un libellé dans le menu déroulant.  
+	Contournement d'un bug de java 8 bug qui causait un plantage de Yapbam après sa fermeture sur certains système Linux.
 
 version	0.16.7 (06/04/2014)
 fix
