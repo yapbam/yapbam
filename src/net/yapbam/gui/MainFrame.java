@@ -277,7 +277,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					this.plugins[i].setContext(this);
 				}
 			}
-			if (pluginContainers[i].getInstanciationException()!=null) { // An error occurs during plugin instantiation
+			if (pluginContainers[i].getInstanciationException()!=null) {
+				// An error occurs during plugin instantiation
 				ErrorManager.INSTANCE.log(null, pluginContainers[i].getInstanciationException());
 			}
 		}
@@ -378,7 +379,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		String lookAndFeelName = Preferences.INSTANCE.getLookAndFeel();
 		try {
 			LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
-			String lookAndFeelClass = UIManager.getSystemLookAndFeelClassName();
+			String lookAndFeelClass = null;
 			for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
 				// Prior the 0.9.8, the class name were used instead of the generic name.
 				// It caused problem when changing java version (ie: Nimbus in java 1.6 was implemented by a class in com.sun.etc and in javax.swing in java 1.7)
@@ -387,7 +388,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					break;
 				}
 			}
-			UIManager.setLookAndFeel(lookAndFeelClass);
+			if (lookAndFeelClass!=null) {
+				UIManager.setLookAndFeel(lookAndFeelClass);
+			}
 			UIManager.getLookAndFeelDefaults().setDefaultLocale(LocalizationData.getLocale());
 		} catch (Exception e) {
 		}

@@ -530,11 +530,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 	}
 
-	public void updateMenu(AbstractPlugIn plugIn) {
-		transactionMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.TRANSACTIONS_MENU));
-		filterMenu.setVisible(plugIn.allowMenu(AbstractPlugIn.FILTER_MENU));
-		menuItemPrint.setEnabled(plugIn.isPrintingSupported());
-		getTransactionSelector().setInternalSelector(plugIn.getTransactionSelector());
+	public void updateMenu(AbstractPlugIn plugin) {
+		transactionMenu.setVisible((plugin!=null) && plugin.allowMenu(AbstractPlugIn.TRANSACTIONS_MENU));
+		filterMenu.setVisible((plugin!=null) && plugin.allowMenu(AbstractPlugIn.FILTER_MENU));
+		menuItemPrint.setEnabled((plugin!=null) && plugin.isPrintingSupported());
+		getTransactionSelector().setInternalSelector(plugin==null?null:plugin.getTransactionSelector());
 	}
 	
 	private CompoundTransactionSelector selector; 

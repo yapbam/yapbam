@@ -6,6 +6,7 @@ known
 version	0.16.8 (04/13/2014)
 fix
 	In the subtransaction editing dialog, an error occurred when you selected a predefined description after having the amount cleared.
+	Workaround to a java 8 bug that caused Yapbam hangs after closing on some Linux systems.
 
 version	0.16.7 (04/06/2014)
 fix
