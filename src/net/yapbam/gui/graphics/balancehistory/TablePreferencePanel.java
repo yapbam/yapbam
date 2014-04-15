@@ -16,30 +16,37 @@ final class TablePreferencePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 	private static final String SAME_COLORS = "SameColorsAsTransactionsTab"; //$NON-NLS-1$
 	private static final String HIGHLIGHT_ALERTS = "HighlightAlerts"; //$NON-NLS-1$
+	private static final String SEPARATE_EXPENSE_RECEIPT = "SeparateExpenseReceipt"; //$NON-NLS-1$
 	
 	private JCheckBox chckbxUseSameColors;
 	private JCheckBox chckbxHilightAlerts;
+	private JCheckBox chckbxSeparateExpenseReceipt;
 
 	public TablePreferencePanel() {
 		initialize();
 	}
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{420, 0};
-		gridBagLayout.rowHeights = new int[]{23, 23, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		GridBagConstraints gbcChckbxHilightAlerts = new GridBagConstraints();
 		gbcChckbxHilightAlerts.anchor = GridBagConstraints.WEST;
-		gbcChckbxHilightAlerts.insets = new Insets(5, 0, 5, 0);
+		gbcChckbxHilightAlerts.insets = new Insets(5, 5, 5, 0);
 		gbcChckbxHilightAlerts.gridx = 0;
 		gbcChckbxHilightAlerts.gridy = 0;
 		add(getChckbxHilightAlerts(), gbcChckbxHilightAlerts);
+		GridBagConstraints gbcChckbxSeparateExpenseReceipt = new GridBagConstraints();
+		gbcChckbxSeparateExpenseReceipt.anchor = GridBagConstraints.WEST;
+		gbcChckbxSeparateExpenseReceipt.insets = new Insets(0, 5, 5, 0);
+		gbcChckbxSeparateExpenseReceipt.gridx = 0;
+		gbcChckbxSeparateExpenseReceipt.gridy = 1;
+		add(getChckbxSeparateExpenseReceipt(), gbcChckbxSeparateExpenseReceipt);
 		GridBagConstraints gbcChckbxUseSameColors = new GridBagConstraints();
-		gbcChckbxUseSameColors.anchor = GridBagConstraints.WEST;
+		gbcChckbxUseSameColors.insets = new Insets(0, 5, 0, 0);
+		gbcChckbxUseSameColors.weightx = 1.0;
+		gbcChckbxUseSameColors.weighty = 1.0;
+		gbcChckbxUseSameColors.anchor = GridBagConstraints.NORTHWEST;
 		gbcChckbxUseSameColors.gridx = 0;
-		gbcChckbxUseSameColors.gridy = 1;
+		gbcChckbxUseSameColors.gridy = 2;
 		add(getChckbxUseSameColors(), gbcChckbxUseSameColors);
 	}
 
@@ -50,16 +57,22 @@ final class TablePreferencePanel extends PreferencePanel {
 	public static boolean isHighlightAlerts() {
 		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(HIGHLIGHT_ALERTS, "true"));
 	}
+	
+	public static boolean isReceiptSeparatedFromExpense() {
+		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(SEPARATE_EXPENSE_RECEIPT, "false"));
+	}
 
 	@Override
 	public boolean updatePreferences() {
 		boolean isSameColors = getChckbxUseSameColors().isSelected();
 		boolean isHighlightAlerts = getChckbxHilightAlerts().isSelected();
-		if (isSameColors==isSameColors() && isHighlightAlerts==isHighlightAlerts()) {
+		boolean separateExpenseReceipt = getChckbxSeparateExpenseReceipt().isSelected();
+		if (isSameColors==isSameColors() && isHighlightAlerts==isHighlightAlerts() && separateExpenseReceipt==isReceiptSeparatedFromExpense()) {
 			return false;
 		}
 		Preferences.INSTANCE.setProperty(SAME_COLORS, Boolean.toString(isSameColors));
 		Preferences.INSTANCE.setProperty(HIGHLIGHT_ALERTS, Boolean.toString(isHighlightAlerts));
+		Preferences.INSTANCE.setProperty(SEPARATE_EXPENSE_RECEIPT, Boolean.toString(separateExpenseReceipt));
 		return true;
 	}
 
@@ -91,4 +104,13 @@ final class TablePreferencePanel extends PreferencePanel {
 		}
 		return chckbxHilightAlerts;
 	}
+	private JCheckBox getChckbxSeparateExpenseReceipt() {
+		if (chckbxSeparateExpenseReceipt == null) {
+			chckbxSeparateExpenseReceipt = new JCheckBox(LocalizationData.get("MainFrame.Transactions.Preferences.separateExpenseReceipt")); //$NON-NLS-1$
+			chckbxSeparateExpenseReceipt.setToolTipText(LocalizationData.get("MainFrame.Transactions.Preferences.separateExpenseReceipt.tooltip")); //$NON-NLS-1$
+			chckbxSeparateExpenseReceipt.setSelected(isReceiptSeparatedFromExpense());
+		}
+		return chckbxSeparateExpenseReceipt;
+	}
+	
 }
