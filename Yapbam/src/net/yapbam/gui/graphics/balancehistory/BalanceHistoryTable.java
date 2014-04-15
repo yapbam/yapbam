@@ -46,9 +46,6 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 			// It enough to have the illusion the table is sorted and faster than a "real" sort.
 			// Moreover, if we had to sort, we should have been very careful, because sorting on the value date value leads to
 			// wrong order (the sort have to take care of the remaining balance).
-			/* (non-Javadoc)
-			 * @see javax.swing.DefaultRowSorter#convertRowIndexToModel(int)
-			 */
 			@Override
 			public int convertRowIndexToModel(int index) {
 				if (getSortKeys().isEmpty() || getSortKeys().get(0).getSortOrder().equals(SortOrder.DESCENDING)) {
@@ -60,16 +57,13 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 				}
 			}
 
-			/* (non-Javadoc)
-			 * @see javax.swing.DefaultRowSorter#sort()
-			 */
 			@Override
 			public void sort() {
 				// The model doesn't need to be sorted, we just have to know if the order is the model one or not
 			}
 		};
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			sorter.setSortable(i, i==BalanceHistoryModel.VALUE_DATE_COLUMN);
+			sorter.setSortable(i, i==model.getValueDateColumn());
 			//TODO Could be cool to allow sorting on transaction date ...
 		}
 		setRowSorter(sorter);

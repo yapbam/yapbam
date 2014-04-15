@@ -3,8 +3,8 @@ package net.yapbam.gui.transactiontable;
 import java.io.Serializable;
 
 public class TransactionTableSettings implements Serializable {
-	private boolean isCommentSeparatedFromDescription;
-	private boolean isReceiptsSeparatedFromExpenses;
+	protected boolean isCommentSeparatedFromDescription;
+	protected boolean isReceiptsSeparatedFromExpenses;
 	
 	public TransactionTableSettings() {
 		super();

@@ -563,4 +563,5 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		}
 		return separateExpenseReceiptChckbx;
 	}
-}  //  @jve:decl-index=0:visual-constraint="64,14"
+}
+

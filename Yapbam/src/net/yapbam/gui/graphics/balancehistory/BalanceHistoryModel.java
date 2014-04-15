@@ -13,24 +13,22 @@ import net.yapbam.data.Transaction;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.transactiontable.TransactionTableSettings;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 /** The transaction's table model. */
 final class BalanceHistoryModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
-
-	static final int VALUE_DATE_COLUMN = 7;
 	
 	private BalanceData data;
 	private Date endDate;
-	private TransactionTableSettings settings;
+	private TableSettings settings;
 	
 	private int rowCount;
 
 	/** Constructor. */
 	public BalanceHistoryModel(BalanceData data) {
 		super();
-		this.settings = new TransactionTableSettings();
+		this.settings = new TableSettings();
 		this.data = data;
 		this.endDate = null;
 		this.rowCount = data.getBalanceHistory().getTransactionsNumber();
@@ -43,12 +41,9 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		});
 	}
 	
-	/* (non-Javadoc)
-	 * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
-	 */
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==VALUE_DATE_COLUMN) {
+		if (columnIndex==settings.getDateColumn() || columnIndex==settings.getValueDateColumn()) {
 			return Date.class;
 		} else {
 			return super.getColumnClass(columnIndex);
@@ -58,29 +53,35 @@ final class BalanceHistoryModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Transaction transaction = getTransaction(rowIndex);
-		if (columnIndex==0) {
+		if (columnIndex==settings.getAccountColumn()) {
 			return transaction.getAccount().getName();
-		} else if (columnIndex==1) {
+		} else if (columnIndex==settings.getDateColumn()) {
 			return transaction.getDate();
-		} else if (columnIndex==2) {
+		} else if (columnIndex==settings.getDescriptionColumn()) {
 			return transaction.getDescription(!settings.isCommentSeparatedFromDescription());
-		} else if (columnIndex==3) {
+		} else if (columnIndex==settings.getAmountColumn()) {
 			return transaction.getAmount();
-		} else if (columnIndex==4) {
+		} else if (columnIndex==settings.getReceiptColumn()) {
+			double[] expenseReceipt = TransactionTableUtils.getExpenseReceipt(transaction, false, false);
+			return expenseReceipt==null?null:expenseReceipt[0];
+		} else if (columnIndex==settings.getExpenseColumn()) {
+			double[] expenseReceipt = TransactionTableUtils.getExpenseReceipt(transaction, false, true);
+			return expenseReceipt==null?null:expenseReceipt[0];
+		} else if (columnIndex==settings.getCategoryColumn()) {
 			Category category = transaction.getCategory();
 			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
-		} else if (columnIndex==5) {
+		} else if (columnIndex==settings.getModeColumn()) {
 			Mode mode = transaction.getMode();
 			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
-		} else if (columnIndex==6) {
+		} else if (columnIndex==settings.getNumberColumn()) {
 			return transaction.getNumber();
-		} else if (columnIndex==VALUE_DATE_COLUMN) {
+		} else if (columnIndex==settings.getValueDateColumn()) {
 			return transaction.getValueDate();
-		} else if (columnIndex==8) {
+		} else if (columnIndex==settings.getStatementColumn()) {
 			return transaction.getStatement();
-		} else if (columnIndex==9) {
+		} else if (columnIndex==settings.getRemainingColumn()) {
 			return getRemaining(rowIndex);
-		} else if (columnIndex==10) {
+		} else if (columnIndex==settings.getCommentColumn()) {
 			return transaction.getComment();
 		} else {
 			return "?"; //$NON-NLS-1$
@@ -120,33 +121,37 @@ final class BalanceHistoryModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return settings.isCommentSeparatedFromDescription()?11:10;
+		return settings.getColumnCount();
 	}
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) {
+		if (columnIndex==settings.getAccountColumn()) {
 			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		} else if (columnIndex==1) {
+		} else if (columnIndex==settings.getDateColumn()) {
 			return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
-		} else if (columnIndex==2) {
+		} else if (columnIndex==settings.getDescriptionColumn()) {
 			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-		} else if (columnIndex==3) {
+		} else if (columnIndex==settings.getAmountColumn()) {
 			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-		} else if (columnIndex==4) {
+		} else if (columnIndex==settings.getCategoryColumn()) {
 			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
-		} else if (columnIndex==5) {
+		} else if (columnIndex==settings.getModeColumn()) {
 			return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
-		} else if (columnIndex==6) {
+		} else if (columnIndex==settings.getNumberColumn()) {
 			return LocalizationData.get("Transaction.number"); //$NON-NLS-1$
-		} else if (columnIndex==7) {
+		} else if (columnIndex==settings.getValueDateColumn()) {
 			return LocalizationData.get("Transaction.valueDate"); //$NON-NLS-1$
-		} else if (columnIndex==8) {
+		} else if (columnIndex==settings.getStatementColumn()) {
 			return LocalizationData.get("Transaction.statement"); //$NON-NLS-1$
-		} else if (columnIndex==9) {
+		} else if (columnIndex==settings.getRemainingColumn()) {
 			return LocalizationData.get("BalanceHistory.transaction.remainingBalance"); //$NON-NLS-1$
-		} else if (columnIndex==10) {
+		} else if (columnIndex==settings.getCommentColumn()) {
 			return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getReceiptColumn()) {
+			return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getExpenseColumn()) {
+			return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
 		} else {
 			return "?"; //$NON-NLS-1$
 		}
@@ -176,5 +181,13 @@ final class BalanceHistoryModel extends AbstractTableModel {
 				this.rowCount++;
 			}
 		}
+	}
+
+	int getValueDateColumn() {
+		return settings.getValueDateColumn();
+	}
+
+	int getRemainingColumn() {
+		return settings.getRemainingColumn();
 	}
 }
