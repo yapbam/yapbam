@@ -67,7 +67,8 @@ class YAxis {
 		int fontHeight = this.owner.getFontMetrics(this.owner.getFont()).getHeight();
 		
 		if ((parentHeight!=lastHeight) || (fontHeight!=lastFontHeight) ||
-				(min!=lastMin) || (max!=lastMax)) {
+				(GlobalData.AMOUNT_COMPARATOR.compare(min, lastMin) != 0) ||
+				(GlobalData.AMOUNT_COMPARATOR.compare(max, lastMax) != 0)) {
 			this.lastMin = min;
 			this.lastMax = max;
 			this.lastFontHeight = fontHeight;

@@ -7,7 +7,8 @@ version	0.16.8 (19/04/2014)
 fix
 	Bug introduit en 0.16.7 : Dans l'édition une sous-opération, une erreur survenait lorsqu'on effaçait le montant puis qu'on choisissait un libellé dans le menu déroulant.  
 	Contournement d'un bug de java 8 bug qui causait un plantage de Yapbam après sa fermeture sur certains système Linux.
-	La couleur de sélection de la table des opérations de l'onglet "Historique du solde" était incorrecte quand cette table utilisait les couleurs de fond de l'onglet "Opérations". 
+	La couleur de sélection de la table des opérations de l'onglet "Historique du solde" était incorrecte quand cette table utilisait les couleurs de fond de l'onglet "Opérations".
+	Parfois, quand les préférences d'apparence étaient changées, le graphique d'historique du solde était erroné et Yapbam devenait très lent. 
 improvement
 	Les recettes et les dépenses peuvent à présent être présentées dans des colonnes séparées dans la table des opérations de l'onglet "Historique du solde".
 

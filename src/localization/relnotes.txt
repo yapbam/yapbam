@@ -8,6 +8,7 @@ fix
 	In the subtransaction editing dialog, an error occurred when you selected a predefined description after having the amount cleared.
 	Workaround to a java 8 bug that caused Yapbam hangs after closing on some Linux systems.
 	The selection color of transactions table in the "History of balance" tab was wrong when this table used same background colors as the "Operations" tab.
+	Sometimes when appearance preferences were changed, the balance history chart was wrong and Yapbam became very slow.
 improvement
 	The transactions table of the "Balance history" tab can now display expenses and receipts in separate columns.
 
