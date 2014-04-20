@@ -100,7 +100,6 @@ public class BalanceHistoryGraphPane extends JPanel {
 				final int y = vp.getViewPosition().y;
 				final int startPrefWidth = graph.getPreferredSize().width;
 				final int width = vp.getWidth();
-//				final int startZoom = graph.getHorizontalScale();
 				graph.setHorizontalScale(control.getSlider().getValue());
 				final int endPrefWidth = graph.getPreferredSize().width;
 				if (startX==startPrefWidth-width) {
@@ -184,6 +183,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 					}
 			}
 		});
+		onDataChanged();
 	}
 	
 	private BalanceHistory getBalanceHistory() {

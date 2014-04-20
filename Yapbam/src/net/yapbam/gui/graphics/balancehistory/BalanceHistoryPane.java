@@ -126,7 +126,7 @@ public class BalanceHistoryPane extends JPanel {
 		tabbedPane.addTab(LocalizationData.get("BalanceHistory.transaction.title"), null, tablePane, LocalizationData.get("BalanceHistory.transaction.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		transactionSelector = new CompoundTransactionSelector();
 		setTableEnd();
-//		graph.refresh();
+		ignoreEnd.setVisible(BalanceHistoryPane.this.data.getFilter().getValueDateTo()!=null);
 	}
 	
 	void changeDisplayed () {
