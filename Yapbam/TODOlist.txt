@@ -1,6 +1,5 @@
 A finir
-	Utiliser le réglage des colonnes dépenses/recettes séparées pour l'admin des opérations périodiques.
-	Le changement des préférences entrainant le raffraichissement de la fenêtre fait épouvantablement ramer l'histo du solde ... et en plus, il est faux !!!
+	Utiliser le réglage des colonnes dépenses/recettes séparées pour la génération des opérations périodiques.
 
 Bug :
 	L'export sur Linux flingue les accents. 
