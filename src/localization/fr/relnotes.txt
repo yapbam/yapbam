@@ -3,7 +3,7 @@ version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 
-version	0.16.8 (19/04/2014)
+version	0.16.8 (21/04/2014)
 fix
 	Bug introduit en 0.16.7 : Dans l'édition une sous-opération, une erreur survenait lorsqu'on effaçait le montant puis qu'on choisissait un libellé dans le menu déroulant.  
 	Contournement d'un bug de java 8 bug qui causait un plantage de Yapbam après sa fermeture sur certains système Linux.
@@ -11,6 +11,7 @@ fix
 	Parfois, quand les préférences d'apparence étaient changées, le graphique d'historique du solde était erroné et Yapbam devenait très lent. 
 improvement
 	Les recettes et les dépenses peuvent à présent être présentées dans des colonnes séparées dans la table des opérations de l'onglet "Historique du solde".
+	Les préférences de séparation des colonnes recettes/dépenses de l'onglet "Opérations" est réutilisé pour présenter les opérations périodiques dans l'onglet d'administration.
 
 version	0.16.7 (06/04/2014)
 fix

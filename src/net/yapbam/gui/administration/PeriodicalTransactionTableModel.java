@@ -24,17 +24,16 @@ import net.yapbam.date.helpers.MonthDateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 import net.yapbam.gui.transactiontable.SpreadState;
-import net.yapbam.gui.transactiontable.TransactionTableSettings;
 import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 @SuppressWarnings("serial")
 final class PeriodicalTransactionTableModel extends GenericTransactionTableModel {
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
-	private TransactionTableSettings settings;
+	private PeriodicalTransactionsTableSettings settings;
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
 		this.periodicTransactionListPanel = periodicTransactionListPanel;
-		this.settings = new TransactionTableSettings();
+		this.settings = new PeriodicalTransactionsTableSettings();
 		this.getFilteredData().getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
@@ -55,27 +54,30 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if (columnIndex==0) {
+		if (columnIndex==settings.getSpreadColumn()) {
 			return LocalizationData.get("Transaction.0"); //$NON-NLS-1$
-		} else if (columnIndex==1) {
+		} else if (columnIndex==settings.getAccountColumn()) {
 			return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-		} else if (columnIndex==2) {
+		} else if (columnIndex==settings.getDescriptionColumn()) {
 			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
-		} else if (columnIndex==3) {
-			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
-		} else if (columnIndex==4) {
-			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
-		} else if (columnIndex==5) {
-			return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
-		} else if (columnIndex==6) {
-			return LocalizationData.get("PeriodicalTransactionManager.nextDate.column"); //$NON-NLS-1$
-		}
-		if (columnIndex==7) {
-			return LocalizationData.get("PeriodicalTransactionManager.period.column"); //$NON-NLS-1$
-		} else if (columnIndex==8) {
-			return LocalizationData.get("PeriodicalTransactionManager.active.column"); //$NON-NLS-1$
-		} else if (columnIndex==9) {
+		} else if (columnIndex==settings.getCommentColumn()) {
 			return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getAmountColumn()) {
+			return LocalizationData.get("Transaction.amount"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getReceiptColumn()) {
+			return LocalizationData.get("StatementView.receipt"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getExpenseColumn()) {
+			return LocalizationData.get("StatementView.debt"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getCategoryColumn()) {
+			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getModeColumn()) {
+			return LocalizationData.get("Transaction.mode"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getNextDateColumn()) {
+			return LocalizationData.get("PeriodicalTransactionManager.nextDate.column"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getPeriodColumn()) {
+			return LocalizationData.get("PeriodicalTransactionManager.period.column"); //$NON-NLS-1$
+		} else if (columnIndex==settings.getActiveColumn()) {
+			return LocalizationData.get("PeriodicalTransactionManager.active.column"); //$NON-NLS-1$
 		} else {
 			return "?"; //$NON-NLS-1$
 		}
@@ -83,13 +85,13 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex==0) {
+		if (columnIndex==settings.getSpreadColumn()) {
 			return SpreadState.class;
-		} else if (columnIndex==6) {
+		} else if (columnIndex==settings.getNextDateColumn()) {
 			return Date.class;
-		} else if (columnIndex==3) {
+		} else if (columnIndex==settings.getAmountColumn() || columnIndex==settings.getReceiptColumn() || columnIndex==settings.getExpenseColumn()) {
 			return double[].class;
-		} else if (columnIndex==8) {
+		} else if (columnIndex==settings.getActiveColumn()) {
 			return Boolean.class;
 		} else {
 			return String.class;
@@ -100,26 +102,32 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		boolean spread = this.isSpread(rowIndex);
 		PeriodicalTransaction transaction = (PeriodicalTransaction) this.getTransaction(rowIndex);
-		if (columnIndex==0) {
+		if (columnIndex==settings.getSpreadColumn()) {
 			if (transaction.getSubTransactionSize()==0) {
 				return SpreadState.NOT_SPREADABLE;
 			} else {
 				return spread ? SpreadState.SPREAD : SpreadState.NOT_SPREAD;
 			}
-		} else if (columnIndex==1) {
+		} else if (columnIndex==settings.getAccountColumn()) {
 			return transaction.getAccount().getName();
-		} else if (columnIndex==2) {
+		} else if (columnIndex==settings.getDescriptionColumn()) {
 			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription());
-		} else if (columnIndex==3) {
+		} else if (columnIndex==settings.getCommentColumn()) {
+			return transaction.getComment();
+		} else if (columnIndex==settings.getAmountColumn()) {
 			return TransactionTableUtils.getAmount(transaction, spread);
-		} else if (columnIndex==4) {
+		} else if (columnIndex==settings.getReceiptColumn()) {
+			return TransactionTableUtils.getExpenseReceipt(transaction, spread, false);
+		} else if (columnIndex==settings.getExpenseColumn()) {
+			return TransactionTableUtils.getExpenseReceipt(transaction, spread, true);
+		} else if (columnIndex==settings.getCategoryColumn()) {
 			return TransactionTableUtils.getCategory(transaction, spread);
-		} else if (columnIndex==5) {
+		} else if (columnIndex==settings.getModeColumn()) {
 			Mode mode = transaction.getMode();
 			return mode.equals(Mode.UNDEFINED) ? "" : mode.getName(); //$NON-NLS-1$
-		} else if (columnIndex==6) {
+		} else if (columnIndex==settings.getNextDateColumn()) {
 			return transaction.getNextDate();
-		} else if (columnIndex==7) {
+		} else if (columnIndex==settings.getPeriodColumn()) {
 			DateStepper period = transaction.getNextDateBuilder();
 			String result;
 			if (period instanceof DayDateStepper) {
@@ -149,10 +157,8 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.until"), result, period.getLastDate()); //$NON-NLS-1$
 			}
 			return result;
-		} else if (columnIndex==8) {
+		} else if (columnIndex==settings.getActiveColumn()) {
 			return transaction.isEnabled();
-		} else if (columnIndex==9) {
-			return transaction.getComment();
 		}
 		throw new IllegalArgumentException();
 	}
@@ -164,7 +170,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public int getColumnCount() {
-		return settings.isCommentSeparatedFromDescription()?10:9;
+		return settings.getColumnCount();
 	}
 
 	@Override
@@ -174,9 +180,9 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public int getAlignment(int column) {
-    	if ((column==1) || (column==2)) {
+    	if ((column==settings.getDescriptionColumn()) || (column==settings.getCommentColumn()) || (column==settings.getAccountColumn())) {
     		return SwingConstants.LEFT;
-    	} else if (column==3) {
+    	} else if (column==settings.getAmountColumn() || column==settings.getReceiptColumn() || column==settings.getExpenseColumn()) {
     		return SwingConstants.RIGHT;
     	} else {
     		return SwingConstants.CENTER;
