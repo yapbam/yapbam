@@ -1,6 +1,7 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
@@ -26,6 +27,7 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 		BalanceHistoryModel model = new BalanceHistoryModel(data.getBalanceData());
 		this.setModel(model);
 		BalanceHistoryCellRenderer cellRenderer = new BalanceHistoryCellRenderer(data);
+		setDefaultRenderer(Date.class, cellRenderer);
 		setDefaultRenderer(Object.class, cellRenderer);
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.lastSelected = new Transaction[0];
@@ -63,7 +65,7 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 			}
 		};
 		for (int i = 0; i < model.getColumnCount(); i++) {
-			sorter.setSortable(i, i==model.getValueDateColumn());
+			sorter.setSortable(i, i==model.getSettings().getValueDateColumn());
 			//TODO Could be cool to allow sorting on transaction date ...
 		}
 		setRowSorter(sorter);

@@ -183,11 +183,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		}
 	}
 
-	int getValueDateColumn() {
-		return settings.getValueDateColumn();
-	}
-
-	int getRemainingColumn() {
-		return settings.getRemainingColumn();
+	TableSettings getSettings() {
+		return settings;
 	}
 }

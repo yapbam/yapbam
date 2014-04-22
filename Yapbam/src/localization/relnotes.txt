@@ -3,6 +3,12 @@ version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 
+version	0.16.10 (04/23/2014)
+fix
+	With some themes, in the "Balance History" tab, the date was not in the right format and has not the same background color as the rest of the line.
+improvement
+	In the balance history table and in the "Account statements" tab, the columns have now the same alignment as in the transactions table (amounts to the right, description to the left, the rest remains centered).
+
 version	0.16.8 (04/21/2014)
 fix
 	In the subtransaction editing dialog, an error occurred when you selected a predefined description after having the amount cleared.

@@ -3,6 +3,12 @@ version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 
+version	0.16.10 (23/04/2014)
+fix
+	Avec certains thèmes, dans l'onglet "Historique du solde", la date n'était pas au bon format et n'était pas de la même couleur de fond que le reste de la ligne.
+improvement
+	Dans le tableau de l'historique du solde et dans l'onglet "relevés de comptes", les colonnes ont le même alignement que dans la table des opérations (montants à droite, libellé à gauche, reste centré).
+
 version	0.16.8 (21/04/2014)
 fix
 	Bug introduit en 0.16.7 : Dans l'édition d'une sous-opération, une erreur survenait lorsqu'on effaçait le montant puis qu'on choisissait un libellé dans le menu déroulant.  
