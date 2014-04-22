@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.AlertThreshold;
@@ -47,7 +48,7 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 	@Override
 	protected Color getBackground(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
 		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
-		if ((alertColor!=null) && !isSelected && (alertThreshold.getTrigger((Double)model.getValueAt(rowModel, model.getRemainingColumn()))!=0)) {
+		if ((alertColor!=null) && !isSelected && (alertThreshold.getTrigger((Double)model.getValueAt(rowModel, model.getSettings().getRemainingColumn()))!=0)) {
 			return alertColor;
 		} else {
 			double amount = model.getTransaction(rowModel).getAmount();
@@ -77,4 +78,18 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 			this.alertThreshold = singleAccount.getAlertThreshold();
 		}
 	}
+
+	@Override
+	protected int getAlignment(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
+		TableSettings settings = ((BalanceHistoryModel) table.getModel()).getSettings();
+		if ((columnModel == settings.getAmountColumn()) || (columnModel == settings.getReceiptColumn())
+				|| (columnModel == settings.getExpenseColumn()) || (columnModel == settings.getRemainingColumn())) {
+			return SwingConstants.RIGHT;
+		} else if ((columnModel == settings.getAccountColumn()) || (columnModel == settings.getDescriptionColumn())) {
+			return SwingConstants.LEFT;
+		} else {
+			return SwingConstants.CENTER;
+		}
+	}
+	
 }

@@ -14,7 +14,6 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
-import net.yapbam.gui.util.CellRenderer;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class StatementTable extends FriendlyTable implements TransactionSelector {
@@ -29,9 +28,10 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 		this.setModel(model);
 		setAutoCreateRowSorter(true);
 		
-		setDefaultRenderer(Object.class, new CellRenderer());
-		setDefaultRenderer(Double.class, new CellRenderer());
-		setDefaultRenderer(Date.class, new CellRenderer());
+		StatementCellRenderer renderer = new StatementCellRenderer();
+		setDefaultRenderer(Object.class, renderer);
+		setDefaultRenderer(Double.class, renderer);
+		setDefaultRenderer(Date.class, renderer);
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		this.setRowSorter(new RowSorter<StatementTableModel>(model));
 		this.lastSelected = null;
