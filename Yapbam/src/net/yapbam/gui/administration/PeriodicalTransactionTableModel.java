@@ -208,4 +208,8 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		}
 		renderer.setFont(font);
 	}
+
+	public PeriodicalTransactionsTableSettings getTableSettings() {
+		return settings;
+	}
 }

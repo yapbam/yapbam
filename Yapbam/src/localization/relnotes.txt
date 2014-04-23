@@ -9,6 +9,10 @@ fix
 improvement
 	In the balance history table and in the "Account statements" tab, the columns have now the same alignment as in the transactions table (amounts to the right, description to the left, the rest remains centered).
 
+version	0.16.9 (22/04/2014)
+fix
+	Bug introduced in 0.16.8: Depending on preference settings, performing a sort in the administration tab of periodic transactions on the "comment" column  could cause an error.
+
 version	0.16.8 (04/21/2014)
 fix
 	In the subtransaction editing dialog, an error occurred when you selected a predefined description after having the amount cleared.
