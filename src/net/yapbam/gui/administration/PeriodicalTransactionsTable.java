@@ -18,6 +18,7 @@ import net.yapbam.gui.transactiontable.ObjectRenderer;
 import net.yapbam.gui.transactiontable.SpreadState;
 import net.yapbam.gui.transactiontable.SpreadStateRenderer;
 import net.yapbam.gui.transactiontable.SpreadableMouseAdapter;
+import net.yapbam.gui.util.DoubleArrayComparator;
 
 class PeriodicalTransactionsTable extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -31,12 +32,17 @@ class PeriodicalTransactionsTable extends JTable {
 		this.setDefaultRenderer(Object.class, new ObjectRenderer());
 		this.addMouseListener(new SpreadableMouseAdapter());
 		TableRowSorter<PeriodicalTransactionTableModel> sorter = new RowSorter<PeriodicalTransactionTableModel>(model);
-		sorter.setComparator(3, new Comparator<double[]>() {
-			@Override
-			public int compare(double[] o1, double[] o2) {
-				return (int) Math.signum(o1[0]-o2[0]);
-			}
-		});
+		PeriodicalTransactionsTableSettings settings = model.getTableSettings();
+		Comparator<double[]> doubleArrayComparator = new DoubleArrayComparator();
+		if (settings.getAmountColumn()!=-1) {
+			sorter.setComparator(settings.getAmountColumn(), doubleArrayComparator);
+		}
+		if (settings.getReceiptColumn()!=-1) {
+			sorter.setComparator(settings.getReceiptColumn(), doubleArrayComparator);
+		}
+		if (settings.getExpenseColumn()!=-1) {
+			sorter.setComparator(settings.getExpenseColumn(), doubleArrayComparator);
+		}
 		this.setRowSorter(sorter);
 	}
 

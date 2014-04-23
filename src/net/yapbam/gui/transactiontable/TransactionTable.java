@@ -16,6 +16,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.util.DoubleArrayComparator;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class TransactionTable extends FriendlyTable implements TransactionSelector {
@@ -36,6 +37,17 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.addMouseListener(new SpreadableMouseAdapter());
 		TableRowSorter<TransactionsTableModel> sorter = new RowSorter<TransactionsTableModel>(model);
+		TableSettings settings = model.getTableSettings();
+		Comparator<double[]> doubleArrayComparator = new DoubleArrayComparator();
+		if (settings.getAmountColumn()!=-1) {
+			sorter.setComparator(settings.getAmountColumn(), doubleArrayComparator);
+		}
+		if (settings.getReceiptColumn()!=-1) {
+			sorter.setComparator(settings.getReceiptColumn(), doubleArrayComparator);
+		}
+		if (settings.getExpenseColumn()!=-1) {
+			sorter.setComparator(settings.getExpenseColumn(), doubleArrayComparator);
+		}
 		sorter.setComparator(4, new Comparator<double[]>() {
 			@Override
 			public int compare(double[] o1, double[] o2) {

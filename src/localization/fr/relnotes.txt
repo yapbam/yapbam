@@ -9,6 +9,10 @@ fix
 improvement
 	Dans le tableau de l'historique du solde et dans l'onglet "relevés de comptes", les colonnes ont le même alignement que dans la table des opérations (montants à droite, libellé à gauche, reste centré).
 
+version	0.16.9 (22/04/2014)
+fix
+	Bug introduit en 0.16.8 : Suivant les réglages des préférences, dans l'onglet d'administration, effectuer un tri des opérations périodiques sur la colonne "commentaire" pouvait provoquer une erreur.
+	
 version	0.16.8 (21/04/2014)
 fix
 	Bug introduit en 0.16.7 : Dans l'édition d'une sous-opération, une erreur survenait lorsqu'on effaçait le montant puis qu'on choisissait un libellé dans le menu déroulant.  
