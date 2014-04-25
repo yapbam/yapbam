@@ -185,7 +185,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	@Override
 	public int getAlignment(int column) {
 		if ((column == settings.getAmountColumn()) || (column == settings.getReceiptColumn())
-				|| (column == settings.getExpenseColumn()) || (column == settings.getNumberColumn())) {
+				|| (column == settings.getExpenseColumn()) /*|| (column == settings.getNumberColumn())*/) {
 			return SwingConstants.RIGHT;
 		} else if ((column == settings.getAccountColumn()) || (column == settings.getDescriptionColumn())) {
 			return SwingConstants.LEFT;
