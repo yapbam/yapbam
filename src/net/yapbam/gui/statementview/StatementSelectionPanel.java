@@ -28,6 +28,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.List;
 
 public class StatementSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -44,83 +45,96 @@ public class StatementSelectionPanel extends JPanel {
 		this.data = data;
 		initialize();
 		if (data!=null) {
-			this.data.getGlobalData().addListener(new DataListener() {
+			this.data.addListener(new DataListener() {
 				@Override
 				public void processEvent(DataEvent event) {
-					GlobalData global = StatementSelectionPanel.this.data.getGlobalData();
-					ComboBox accountMenu = getAccountMenu();
 					if (event instanceof EverythingChangedEvent) {
-						init();
-					} else if (event instanceof AccountAddedEvent) {
-						if (global.getAccountsNumber()==1) {
-							// If there was no account before this one
-							init();
-						} else {
-							// Find the future location of the new account in the menu
-							Account[] accounts = AccountComparator.getSortedAccounts(global, getLocale());
-							Account account = ((AccountAddedEvent)event).getAccount();
-							int index = Arrays.binarySearch(accounts, account, AccountComparator.getInstance(getLocale()));
-							accountMenu.insertItemAt(account.getName(), index);
+						List<Account> validAccounts = StatementSelectionPanel.this.data.getFilter().getValidAccounts();
+						if ((validAccounts!=null) && (validAccounts.size()==1)) {
+							getAccountMenu().setSelectedItem(validAccounts.get(0).getName());
 						}
-					} else if (event instanceof AccountRemovedEvent) {
-						String accountName = ((AccountRemovedEvent)event).getRemoved().getName();
-						if (NullUtils.areEquals(accountMenu.getSelectedItem(), accountName)) {
-							// If the removed account is the current one, reset default settings
-							init();
-						} else {
-							// simply remove the account in the menu
-							accountMenu.removeItem(accountName);
-						}
-					} else if (event instanceof AccountPropertyChangedEvent) {
-						String property = ((AccountPropertyChangedEvent)event).getProperty();
-						if (property.equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) {
-							Account account = ((AccountPropertyChangedEvent)event).getAccount();
-							if (account.getName().equals(accountMenu.getSelectedItem())) {
-								refresh();
-							}
-						} else if (property.equals(AccountPropertyChangedEvent.NAME)) {
-							// An account has changed its name
-							// Change it in the menu
-							accountMenu.setActionEnabled(false);
-							String old = (String) ((AccountPropertyChangedEvent)event).getOldValue();
-							int index = accountMenu.getSelectedIndex();
-							for (int i = 0; i < accountMenu.getItemCount(); i++) {
-								if (accountMenu.getItemAt(i).equals(old)) {
-									accountMenu.removeItemAt(i);
-									accountMenu.insertItemAt(((AccountPropertyChangedEvent)event).getNewValue(), i);
-									break;
-								}
-							}
-							// Restore the selected index
-							accountMenu.setSelectedIndex(index);
-							accountMenu.setActionEnabled(true);
-						}
-					} else if (event instanceof TransactionsAddedEvent) {
-						Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
-						refreshIfNeeded(ts);
-					} else if (event instanceof TransactionsRemovedEvent) {
-						Transaction[] t = ((TransactionsRemovedEvent)event).getRemoved();
-						refreshIfNeeded(t);
-					}
-				}
-	
-				private void refreshIfNeeded(Transaction[] ts) {
-					boolean refresh = false;
-					for (int i = 0; i < ts.length; i++) {
-						if (ts[i].getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
-							refresh = true;
-							break;
-						}
-					}
-					if (refresh) {
-						refresh();
 					}
 				}
 			});
+			this.data.getGlobalData().addListener(new GlobalDataListener());
 			init();
 		}
 	}
 	
+	private final class GlobalDataListener implements DataListener {
+		@Override
+		public void processEvent(DataEvent event) {
+			GlobalData global = StatementSelectionPanel.this.data.getGlobalData();
+			ComboBox accountMenu = getAccountMenu();
+			if (event instanceof EverythingChangedEvent) {
+				init();
+			} else if (event instanceof AccountAddedEvent) {
+				if (global.getAccountsNumber()==1) {
+					// If there was no account before this one
+					init();
+				} else {
+					// Find the future location of the new account in the menu
+					Account[] accounts = AccountComparator.getSortedAccounts(global, getLocale());
+					Account account = ((AccountAddedEvent)event).getAccount();
+					int index = Arrays.binarySearch(accounts, account, AccountComparator.getInstance(getLocale()));
+					accountMenu.insertItemAt(account.getName(), index);
+				}
+			} else if (event instanceof AccountRemovedEvent) {
+				String accountName = ((AccountRemovedEvent)event).getRemoved().getName();
+				if (NullUtils.areEquals(accountMenu.getSelectedItem(), accountName)) {
+					// If the removed account is the current one, reset default settings
+					init();
+				} else {
+					// simply remove the account in the menu
+					accountMenu.removeItem(accountName);
+				}
+			} else if (event instanceof AccountPropertyChangedEvent) {
+				String property = ((AccountPropertyChangedEvent)event).getProperty();
+				if (property.equals(AccountPropertyChangedEvent.INITIAL_BALANCE)) {
+					Account account = ((AccountPropertyChangedEvent)event).getAccount();
+					if (account.getName().equals(accountMenu.getSelectedItem())) {
+						refresh();
+					}
+				} else if (property.equals(AccountPropertyChangedEvent.NAME)) {
+					// An account has changed its name
+					// Change it in the menu
+					accountMenu.setActionEnabled(false);
+					String old = (String) ((AccountPropertyChangedEvent)event).getOldValue();
+					int index = accountMenu.getSelectedIndex();
+					for (int i = 0; i < accountMenu.getItemCount(); i++) {
+						if (accountMenu.getItemAt(i).equals(old)) {
+							accountMenu.removeItemAt(i);
+							accountMenu.insertItemAt(((AccountPropertyChangedEvent)event).getNewValue(), i);
+							break;
+						}
+					}
+					// Restore the selected index
+					accountMenu.setSelectedIndex(index);
+					accountMenu.setActionEnabled(true);
+				}
+			} else if (event instanceof TransactionsAddedEvent) {
+				Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
+				refreshIfNeeded(ts);
+			} else if (event instanceof TransactionsRemovedEvent) {
+				Transaction[] t = ((TransactionsRemovedEvent)event).getRemoved();
+				refreshIfNeeded(t);
+			}
+		}
+
+		private void refreshIfNeeded(Transaction[] ts) {
+			boolean refresh = false;
+			for (int i = 0; i < ts.length; i++) {
+				if (ts[i].getAccount().getName().equals(getAccountMenu().getSelectedItem())) {
+					refresh = true;
+					break;
+				}
+			}
+			if (refresh) {
+				refresh();
+			}
+		}
+	}
+
 	private void init() {
 		GlobalData global = data.getGlobalData();
 		ComboBox accountMenu = getAccountMenu();
