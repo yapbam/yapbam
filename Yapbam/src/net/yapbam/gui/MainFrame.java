@@ -29,7 +29,7 @@ import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.UnsupportedSchemeException;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
-import net.yapbam.gui.preferences.StartStateOptions;
+import net.yapbam.gui.preferences.StartStateSettings;
 import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.update.ReleaseInfo;
@@ -492,7 +492,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			uri = new File(path).toURI();
 		} else {
 			// Restore the data according to the Preferences
-			StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
+			StartStateSettings startOptions = Preferences.INSTANCE.getStartStateOptions();
 			if (startOptions.isRememberFile() && getStateSaver().contains(LAST_URI)) {
 				try {
 					uri = new URI((String) getStateSaver().get(LAST_URI));

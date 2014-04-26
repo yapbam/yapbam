@@ -13,7 +13,7 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.AlertDialog;
-import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.preferences.EditingSettings;
 
 /**
  * An action that deletes a selected transaction.
@@ -31,7 +31,7 @@ public class DeleteTransactionAction extends AbstractTransactionAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = selector.getSelectedTransactions()[0];
-		EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editingOptions = Preferences.INSTANCE.getEditingOptions();
 		if (editingOptions.isAlertOnModifyChecked() && (transaction.getStatement() != null)) {
 			AlertDialog alert = new AlertDialog(Utils.getOwnerWindow((Component) e.getSource()),
 					LocalizationData.get("DeleteCheckedTransactionAlert.title"), LocalizationData.get("DeleteCheckedTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$

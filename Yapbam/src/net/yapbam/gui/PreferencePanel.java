@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
-
 /** This abstract class represents a preference panel.
  * The preference panels are displayed each in a tab of the preferences dialog.
  */
@@ -13,7 +12,7 @@ public abstract class PreferencePanel extends JPanel {
 	/** The name of the property containing the reason why the panel can't be validated.
 	 * @see PreferencePanel#getOkDisabledCause()
 	 */
-	public static String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause"; //$NON-NLS-1$
+	public static final String OK_DISABLED_CAUSE_PROPERTY = "okDisabledCause"; //$NON-NLS-1$
 	
 	private String okDisabledCause;
 	
@@ -39,7 +38,9 @@ public abstract class PreferencePanel extends JPanel {
 	 * It could be used to perform specific actions (for instance refresh the panel).
 	 * @param displayed true if the panel is now displayed, false if it becomes invisible.
 	 */
-	public void setDisplayed(boolean displayed) {}
+	public void setDisplayed(boolean displayed) {
+		// Do nothing by default 
+	}
 
 	/** Gets the reason why the preference dialog can't be validated.
 	 * @return a String explaining why this panel has an invalid state, null, if everything is ok.

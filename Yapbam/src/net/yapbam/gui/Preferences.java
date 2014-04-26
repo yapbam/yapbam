@@ -30,8 +30,11 @@ import net.yapbam.gui.administration.AdministrationPlugIn;
 import net.yapbam.gui.archive.ArchivePlugin;
 import net.yapbam.gui.budget.BudgetPlugin;
 import net.yapbam.gui.graphics.balancehistory.BalanceHistoryPlugIn;
-import net.yapbam.gui.preferences.EditingOptions;
-import net.yapbam.gui.preferences.StartStateOptions;
+import net.yapbam.gui.preferences.EditingSettings;
+import net.yapbam.gui.preferences.EditionWizardSettings;
+import net.yapbam.gui.preferences.EditionWizardSettings.Source;
+import net.yapbam.gui.preferences.StartStateSettings;
+import net.yapbam.gui.preferences.EditionWizardSettings.Mode;
 import net.yapbam.gui.recent.RecentFilesPlugin;
 import net.yapbam.gui.statementview.StatementViewPlugin;
 import net.yapbam.gui.statistics.StatisticsPlugin;
@@ -62,6 +65,8 @@ public class Preferences {
 	private static final String CRASH_REPORT_ACTION = "crash_report_action"; //$NON-NLS-1$
 	private static final String KEY = "6a2a46e94506ebc3957df475e1da7f78"; //$NON-NLS-1$
 	private static final String PREF_PREFIX = "TransactionEditing."; //$NON-NLS-1$
+	private static final String EDITION_WIZARD_MODE = "fillAmount"; //$NON-NLS-1$
+	private static final String EDITION_WIZARD_SOURCE = "fillAmountWith"; //$NON-NLS-1$
 	private static final String DELETE_ALERT = "alertOnDelete"; //$NON-NLS-1$
 	private static final String MODIFY_CHECKED_ALERT = "alertOnModifyChecked"; //$NON-NLS-1$
 	private static final String AUTO_FILL_STATEMENT = "autoFillStatement"; //$NON-NLS-1$
@@ -537,8 +542,8 @@ public class Preferences {
 		this.properties.setProperty(CRASH_REPORT_ACTION,Integer.toString(action));
 	}
 	
-	private EditingOptions editingOptions;
-	public void setEditingOptions(EditingOptions edit) {
+	private EditingSettings editingOptions;
+	public void setEditingOptions(EditingSettings edit) {
 		this.editingOptions = edit;
 		setBoolean(PREF_PREFIX+DELETE_ALERT, edit.isAlertOnDelete());
 		setBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, edit.isAlertOnModifyChecked());
@@ -546,9 +551,11 @@ public class Preferences {
 		setBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, edit.isAutoFillStatement());
 		setBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, edit.isDateBasedAutoStatement());
 		this.properties.setProperty(PREF_PREFIX+AUTO_STATEMENT_FORMAT, edit.getStatementDateFormat().toPattern());
+		this.properties.setProperty(PREF_PREFIX+EDITION_WIZARD_MODE, edit.getEditionWizardSettings().getMode().name());
+		this.properties.setProperty(PREF_PREFIX+EDITION_WIZARD_SOURCE, edit.getEditionWizardSettings().getSource().name());
 	}
 	
-	public EditingOptions getEditingOptions() {
+	public EditingSettings getEditingOptions() {
 		if (editingOptions==null) {
 			String defaultPattern = "yyyyMM";
 			String pattern = this.properties.getProperty(PREF_PREFIX+AUTO_STATEMENT_FORMAT, defaultPattern);
@@ -558,17 +565,20 @@ public class Preferences {
 			} catch (RuntimeException e) {
 				// If statement format is wrong, use the default format
 			}
-			editingOptions = new EditingOptions(
+			EditionWizardSettings edwSettings = new EditionWizardSettings(
+					Mode.valueOf(getProperty(PREF_PREFIX+EDITION_WIZARD_MODE,Mode.NEVER.name())),
+					Source.valueOf(getProperty(PREF_PREFIX+EDITION_WIZARD_SOURCE,Source.MOST_PROBABLE.name())));
+			editingOptions = new EditingSettings(
 				getBoolean(PREF_PREFIX+DELETE_ALERT, true), getBoolean(PREF_PREFIX+MODIFY_CHECKED_ALERT, true),
 				getBoolean(PREF_PREFIX+SET_DUPLICATE_TRANSACTION_DATE_TO_CURRENT, true),
 				getBoolean(PREF_PREFIX+AUTO_FILL_STATEMENT, false), getBoolean(PREF_PREFIX+DATE_BASED_AUTO_STATEMENT, false),
-				format);
+				format, edwSettings);
 		}
 		return this.editingOptions;
 	}
 
-	private StartStateOptions startStateOptions;
-	public void setStartStateOptions(StartStateOptions options) {
+	private StartStateSettings startStateOptions;
+	public void setStartStateOptions(StartStateSettings options) {
 		this.startStateOptions = options;
 		setBoolean(PREF_START_PREFIX+FILE, options.isRememberFile());
 		setBoolean(PREF_START_PREFIX+FILTER, options.isRememberFilter());
@@ -579,9 +589,9 @@ public class Preferences {
 		setBoolean(PREF_START_PREFIX+ROW_SORTER_KEYS, options.isRememberRowsSortKeys());
 	}
 
-	public StartStateOptions getStartStateOptions() {
+	public StartStateSettings getStartStateOptions() {
 		if (startStateOptions==null) {
-			startStateOptions = new StartStateOptions(getBoolean(PREF_START_PREFIX+FILE, true), getBoolean(PREF_START_PREFIX+FILTER, false),
+			startStateOptions = new StartStateSettings(getBoolean(PREF_START_PREFIX+FILE, true), getBoolean(PREF_START_PREFIX+FILTER, false),
 				getBoolean(PREF_START_PREFIX+TABS_ORDER, true),	getBoolean(PREF_START_PREFIX+COLUMNS_WIDTH, true),	getBoolean(PREF_START_PREFIX+COLUMNS_ORDER, true),	getBoolean(PREF_START_PREFIX+HIDDEN_COLUMNS, true), getBoolean(PREF_START_PREFIX+ROW_SORTER_KEYS, false));
 		}
 		return this.startStateOptions;

@@ -1,6 +1,6 @@
 package net.yapbam.gui.preferences;
 
-public class StartStateOptions {
+public class StartStateSettings {
 	private boolean rememberFile;
 	private boolean rememberFilter;
 	private boolean rememberTabsOrder;
@@ -9,7 +9,7 @@ public class StartStateOptions {
 	private boolean rememberHiddenColumns;
 	private boolean rememberRowsSortKeys;
 	
-	public StartStateOptions(boolean rememberFile, boolean rememberFilter, boolean rememberTabsOrder, boolean rememberColumnsWidth, boolean rememberColumnsOrder, boolean rememberHiddenColumns, boolean rememberRowsSortKeys) {
+	public StartStateSettings(boolean rememberFile, boolean rememberFilter, boolean rememberTabsOrder, boolean rememberColumnsWidth, boolean rememberColumnsOrder, boolean rememberHiddenColumns, boolean rememberRowsSortKeys) {
 		this.rememberFile = rememberFile;
 		this.rememberFilter = rememberFilter;
 		this.rememberTabsOrder = rememberTabsOrder;
