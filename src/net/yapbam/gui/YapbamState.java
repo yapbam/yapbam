@@ -45,7 +45,7 @@ import net.yapbam.data.ProgressReport;
 import net.yapbam.data.xml.AbstractSerializer;
 import net.yapbam.data.xml.FilterHandler;
 import net.yapbam.data.xml.XMLSerializer;
-import net.yapbam.gui.preferences.StartStateOptions;
+import net.yapbam.gui.preferences.StartStateSettings;
 import net.yapbam.gui.util.XTableColumnModel;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.util.ArrayUtils;
@@ -95,7 +95,7 @@ public class YapbamState {
 	
 	public void restoreState(JTable table, String prefix) {
 		TableColumnModel model = table.getColumnModel();
-		StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
+		StartStateSettings startOptions = Preferences.INSTANCE.getStartStateOptions();
 		if (startOptions.isRememberColumnsWidth()) {
 			// Restore the width
 			for (int i = 0; i < model.getColumnCount(); i++) {

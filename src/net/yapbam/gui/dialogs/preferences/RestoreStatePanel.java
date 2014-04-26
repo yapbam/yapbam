@@ -3,7 +3,7 @@ package net.yapbam.gui.dialogs.preferences;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.preferences.StartStateOptions;
+import net.yapbam.gui.preferences.StartStateSettings;
 
 import java.awt.GridBagLayout;
 
@@ -29,7 +29,7 @@ public class RestoreStatePanel extends PreferencePanel {
 	private JCheckBox chckbxRowsSortKeys;
 
 	public RestoreStatePanel() {
-		StartStateOptions startOptions = Preferences.INSTANCE.getStartStateOptions();
+		StartStateSettings startOptions = Preferences.INSTANCE.getStartStateOptions();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0};
 		gridBagLayout.columnWeights = new double[]{1.0};
@@ -162,7 +162,7 @@ public class RestoreStatePanel extends PreferencePanel {
 
 	@Override
 	public boolean updatePreferences() {
-		Preferences.INSTANCE.setStartStateOptions(new StartStateOptions(chckbxFile.isSelected(), chckbxFilter.isSelected(),
+		Preferences.INSTANCE.setStartStateOptions(new StartStateSettings(chckbxFile.isSelected(), chckbxFilter.isSelected(),
 				chckbxTabsOrder.isSelected(), chckBxColumnsWitdth.isSelected(), chckBxColumnsOrder.isSelected(), chckbxHiddenColumns.isSelected(), chckbxRowsSortKeys.isSelected()));
 		return false;
 	}

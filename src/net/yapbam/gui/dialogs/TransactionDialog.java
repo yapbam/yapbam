@@ -25,7 +25,7 @@ import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.preferences.EditingSettings;
 import net.yapbam.gui.widget.CurrencyWidget;
 
 /** This dialog allows to create or edit a transaction */
@@ -74,7 +74,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if ((newTransaction != null) && autoAdd) {
-			EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
+			EditingSettings editingOptions = Preferences.INSTANCE.getEditingOptions();
 			if (editingOptions.isAlertOnModifyChecked() && (transaction!=null) && (transaction.getStatement()!=null)) {
 				boolean alert = !transaction.getAccount().equals(newTransaction.getAccount());
 				alert = alert || (GlobalData.AMOUNT_COMPARATOR.compare(transaction.getAmount(), newTransaction.getAmount())!=0);
@@ -459,8 +459,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	@Override
 	protected void predefinedDescriptionSelected(String description) {
 		long now = System.currentTimeMillis();
-		HashMap<ModeAndType, Double> modes = new HashMap<ModeAndType, Double>();
-		HashMap<Category, Double> categories = new HashMap<Category, Double>();
+		Map<ModeAndType, Double> modes = new HashMap<ModeAndType, Double>();
+		Map<Category, Double> categories = new HashMap<Category, Double>();
+		Map<Double, Double> amount = new HashMap<Double, Double>();
 		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
 			Transaction transaction = data.getGlobalData().getTransaction(i);
 			if (transaction.getDescription().equalsIgnoreCase(description)) {
@@ -487,7 +488,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			this.setMode(modeAndType.getMode());
 		}
 	}
-
+	
 	private void setTransactionNumberWidget() {
 		boolean checkNumberRequired = useCheckbook();
 		if (checkNumberRequired != checkNumberIsVisible) {
@@ -534,7 +535,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 * @see #VALUE_DATE_CHANGED
 	 */
 	private void autoFillStatement(int changed) {
-		EditingOptions editOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editOptions = Preferences.INSTANCE.getEditingOptions();
 		if (editOptions.isAutoFillStatement()) {
 			Date aDate = null;
 			if (((changed&DATE_CHANGED)!=0) && !editOptions.isDateBasedAutoStatement()) {

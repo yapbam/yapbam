@@ -14,7 +14,7 @@ import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.preferences.EditingSettings;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.util.DateUtils;
 
@@ -33,7 +33,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 	protected Void buildResult() {
 		// Add the generated transactions
 		Transaction[] transactions = panel.getValidTransactions();
-		EditingOptions editingOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editingOptions = Preferences.INSTANCE.getEditingOptions();
 		if (editingOptions.isAutoFillStatement()) {
 			for (int i = 0; i < transactions.length; i++) {
 				Transaction t = transactions[i];

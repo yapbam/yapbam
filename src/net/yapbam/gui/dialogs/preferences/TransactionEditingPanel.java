@@ -16,7 +16,10 @@ import javax.swing.border.TitledBorder;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.preferences.EditingOptions;
+import net.yapbam.gui.preferences.EditingSettings;
+import net.yapbam.gui.preferences.EditionWizardSettings;
+import net.yapbam.gui.preferences.EditionWizardSettings.Mode;
+import net.yapbam.gui.preferences.EditionWizardSettings.Source;
 
 import javax.swing.JSeparator;
 
@@ -35,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 @SuppressWarnings("serial")
 public class TransactionEditingPanel extends PreferencePanel {
@@ -53,6 +57,8 @@ public class TransactionEditingPanel extends PreferencePanel {
 	private JLabel labelExample;
 	private JRadioButton rdbtnDupDateCurrent;
 	private JRadioButton rdbtnDupDateOriginal;
+	private JSeparator separator2;
+	private EditionWizardPanel panel2;
 
 	/**
 	 * Create the panel.
@@ -140,8 +146,8 @@ public class TransactionEditingPanel extends PreferencePanel {
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.insets = new Insets(0, 0, 5, 0);
 		gbcPanel.anchor = GridBagConstraints.NORTHWEST;
-		gbcPanel.weighty = 1.0;
 		gbcPanel.weightx = 1.0;
 		gbcPanel.gridx = 0;
 		gbcPanel.gridy = 6;
@@ -153,7 +159,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		chckbxAutoFillStatement.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				boolean selected = (e.getStateChange() == ItemEvent.SELECTED);
+				boolean selected = e.getStateChange() == ItemEvent.SELECTED;
 				rdbtnBasedOnDate.setEnabled(selected);
 				rdbtnBasedOnValue.setEnabled(selected);
 				rdbtnLongStyle.setEnabled(selected);
@@ -161,12 +167,12 @@ public class TransactionEditingPanel extends PreferencePanel {
 				rdbtnCustomized.setEnabled(selected);
 				formatPatternField.setEnabled(selected);
 				labelExample.setEnabled(selected);
-				rdbtnShortStyle.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.short.tooltip"):""); //$NON-NLS-1$ //$NON-NLS-2$
-				rdbtnLongStyle.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.long.tooltip"):""); //$NON-NLS-1$ //$NON-NLS-2$
-				rdbtnCustomized.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.customized.tooltip"):""); //$NON-NLS-1$ //$NON-NLS-2$
-				formatPatternField.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.customizedField.tooltip"):""); //$NON-NLS-1$ //$NON-NLS-2$
-				rdbtnBasedOnDate.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnDate.tooltip"):""); //$NON-NLS-1$ //$NON-NLS-2$
-				rdbtnBasedOnValue.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnValueDate.tooltip"):""); //$NON-NLS-1$ //$NON-NLS-2$
+				rdbtnShortStyle.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.short.tooltip"):StringUtils.EMPTY); //$NON-NLS-1$
+				rdbtnLongStyle.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.long.tooltip"):StringUtils.EMPTY); //$NON-NLS-1$
+				rdbtnCustomized.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.customized.tooltip"):StringUtils.EMPTY); //$NON-NLS-1$
+				formatPatternField.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.format.customizedField.tooltip"):StringUtils.EMPTY); //$NON-NLS-1$
+				rdbtnBasedOnDate.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnDate.tooltip"):StringUtils.EMPTY); //$NON-NLS-1$
+				rdbtnBasedOnValue.setToolTipText(selected?LocalizationData.get("TransactionEditingPreferencesPanel.statementBasedOnValueDate.tooltip"):StringUtils.EMPTY); //$NON-NLS-1$
 			}
 		});
 		GridBagConstraints gbcChckbxAutoFillStatement = new GridBagConstraints();
@@ -198,8 +204,9 @@ public class TransactionEditingPanel extends PreferencePanel {
 		panelFormat.setLayout(new GridBagLayout());
 		
 		Date date = getSampleDate();
+		EditingSettings dummySettings = new EditingSettings(true, true, true, true, true, SHORT_FORMAT, new EditionWizardSettings(Mode.NEVER, Source.LAST));
 		rdbtnShortStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.short"), //$NON-NLS-1$
-				new EditingOptions(true, true, true, true, true, SHORT_FORMAT).getStatementId(date)));
+				dummySettings.getStatementId(date)));
 		rdbtnShortStyle.setEnabled(false);
 		rdbtnShortStyle.addItemListener(itemListener);
 		GridBagConstraints gbcRdbtnShortStyle = new GridBagConstraints();
@@ -210,8 +217,9 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gbcRdbtnShortStyle.gridy = 0;
 		panelFormat.add(rdbtnShortStyle, gbcRdbtnShortStyle);
 		
+		dummySettings.setStatementDateFormat(LONG_FORMAT);
 		rdbtnLongStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.long"), //$NON-NLS-1$
-				new EditingOptions(true, true, true, true, true, LONG_FORMAT).getStatementId(date)));
+				dummySettings.getStatementId(date)));
 		rdbtnLongStyle.setEnabled(false);
 		rdbtnLongStyle.addItemListener(itemListener);
 		GridBagConstraints gbcRdbtnLongStyle = new GridBagConstraints();
@@ -290,6 +298,22 @@ public class TransactionEditingPanel extends PreferencePanel {
 		gp2.add(rdbtnBasedOnDate);
 		gp2.add(rdbtnBasedOnValue);
 		
+		separator2 = new JSeparator();
+		GridBagConstraints gbcSeparator2 = new GridBagConstraints();
+		gbcSeparator2.fill = GridBagConstraints.BOTH;
+		gbcSeparator2.insets = new Insets(5, 50, 10, 50);
+		gbcSeparator2.gridx = 0;
+		gbcSeparator2.gridy = 7;
+		add(separator2, gbcSeparator2);
+		
+		panel2 = new EditionWizardPanel();
+		GridBagConstraints gbcPanel2 = new GridBagConstraints();
+		gbcPanel2.anchor = GridBagConstraints.NORTHWEST;
+		gbcPanel2.weighty = 1.0;
+		gbcPanel2.gridx = 0;
+		gbcPanel2.gridy = 8;
+		add(panel2, gbcPanel2);
+		
 		initFromPreferences();
 	}
 
@@ -334,13 +358,14 @@ public class TransactionEditingPanel extends PreferencePanel {
 		if (chckbxAutoFillStatement.isSelected() && rdbtnCustomized.isSelected()) {
 			format = new SimpleDateFormat(formatPatternField.getText(), LocalizationData.getLocale());
 		}
-		Preferences.INSTANCE.setEditingOptions(new EditingOptions(chckbxAskMeOnDelete.isSelected(), chckbxAlertMeIf.isSelected(),
-						rdbtnDupDateCurrent.isSelected(), chckbxAutoFillStatement.isSelected(), rdbtnBasedOnDate.isSelected(), format));
+		Preferences.INSTANCE.setEditingOptions(new EditingSettings(chckbxAskMeOnDelete.isSelected(), chckbxAlertMeIf.isSelected(),
+						rdbtnDupDateCurrent.isSelected(), chckbxAutoFillStatement.isSelected(), rdbtnBasedOnDate.isSelected(),
+						format, panel2.getSettings()));
 		return false;
 	}
 
 	private void initFromPreferences() {
-		EditingOptions editOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editOptions = Preferences.INSTANCE.getEditingOptions();
 		chckbxAskMeOnDelete.setSelected(editOptions.isAlertOnDelete());
 		chckbxAlertMeIf.setSelected(editOptions.isAlertOnModifyChecked());
 		chckbxAutoFillStatement.setSelected(editOptions.isAutoFillStatement());
@@ -355,5 +380,6 @@ public class TransactionEditingPanel extends PreferencePanel {
 			formatPatternField.setText(editOptions.getStatementDateFormat().toPattern());
 			updateOkDisabledCause();
 		}
+		panel2.setSettings(editOptions.getEditionWizardSettings());
 	}
 }

@@ -255,19 +255,19 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	}
 
 	private JMenuItem getURLMenuItem(String title, final String url) {
-		JMenuItem item;
-		item = new JMenuItem(new AbstractAction(title) {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					HelpManager.show(MainMenuBar.this, new URI(url));
-				} catch (URISyntaxException e1) {
-					e1.printStackTrace(); //TODO
+		try {
+			final URI uri = new URI(url);
+			JMenuItem item = new JMenuItem(new AbstractAction(title) {
+				private static final long serialVersionUID = 1L;
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					HelpManager.show(MainMenuBar.this, uri);
 				}
-			}
-		});
-		return item;
+			});
+			return item;
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	private void insertPluginMenuItems(JMenu menu, int part) {

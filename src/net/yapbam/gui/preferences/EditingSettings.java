@@ -3,16 +3,18 @@ package net.yapbam.gui.preferences;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EditingOptions {
+public class EditingSettings {
 	private boolean alertOnDelete;
 	private boolean alertOnModifyChecked;
 	private boolean autoFillStatement;
 	private boolean dateBasedAutoStatement;
 	private boolean duplicateTransactionDateToCurrent;
 	private SimpleDateFormat dateFormat;
+	private EditionWizardSettings editionWizardSettings;
 	
-	public EditingOptions(boolean alertOnDelete, boolean alertOnModifyChecked, boolean duplicateTransactionDateToCurrent,
-			boolean autoFillStatement, boolean dateBasedAutoStatement, SimpleDateFormat dateFormat) {
+	public EditingSettings(boolean alertOnDelete, boolean alertOnModifyChecked, boolean duplicateTransactionDateToCurrent,
+			boolean autoFillStatement, boolean dateBasedAutoStatement, SimpleDateFormat dateFormat,
+			EditionWizardSettings edwSettings) {
 		super();
 		this.alertOnDelete = alertOnDelete;
 		this.alertOnModifyChecked = alertOnModifyChecked;
@@ -20,6 +22,7 @@ public class EditingOptions {
 		this.autoFillStatement = autoFillStatement;
 		this.dateBasedAutoStatement = dateBasedAutoStatement;
 		this.dateFormat = dateFormat;
+		this.editionWizardSettings = edwSettings;
 	}
 
 	public boolean isAlertOnDelete() {
@@ -59,5 +62,17 @@ public class EditingOptions {
 
 	public boolean isDuplicateTransactionDateToCurrent() {
 		return duplicateTransactionDateToCurrent;
+	}
+
+	public EditionWizardSettings getEditionWizardSettings() {
+		return editionWizardSettings;
+	}
+
+	public void setEditionWizardSettings(EditionWizardSettings editionWizardSettings) {
+		this.editionWizardSettings = editionWizardSettings;
+	}
+
+	public void setStatementDateFormat(SimpleDateFormat format) {
+		this.dateFormat = format;
 	}
 }
