@@ -26,6 +26,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
+import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,13 +57,12 @@ public class ImportPanel extends JPanel {
 	private SeparatorPanel columnSeparatorPanel = null;
     private SeparatorPanel decimalSeparatorPanel = null;
 	private JPanel jPanel2 = null;
-	GlobalData data = null;  //  @jve:decl-index=0:
-	private File file;  //  @jve:decl-index=0:
+	GlobalData data = null;
+	private File file;
 	private int numberOfLines;
 	private int currentLine;
 	private JComboBox fieldsCombo;
-	private String invalidityCause;  //  @jve:decl-index=0:
-	private JLabel jLabel = null;
+	private String invalidityCause;
 	private File canonicalFile;
 	
 	/**
@@ -77,18 +77,6 @@ public class ImportPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		jLabel = new JLabel();
-		jLabel.setText(LocalizationData.get("ImportDialog.help")); //$NON-NLS-1$
-		jLabel.setIcon(IconManager.get(Name.HELP));
-		jLabel.setToolTipText(LocalizationData.get("ImportDialog.help.toolTip")); //$NON-NLS-1$
-		jLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				HelpManager.show(ImportPanel.this, HelpManager.IMPORT);
-				super.mouseClicked(e);
-			}
-		});
-
 		GridBagConstraints gbcColumnSeparatorPanel = new GridBagConstraints();
 		gbcColumnSeparatorPanel.gridx = 0;
         gbcColumnSeparatorPanel.gridy = 0;
@@ -105,7 +93,8 @@ public class ImportPanel extends JPanel {
         gbcScrollPane.gridwidth = 0;
 
         GridBagConstraints gbcPanel2 = new GridBagConstraints();
-        gbcPanel2.gridx = 4;
+        gbcPanel2.gridwidth = 0;
+        gbcPanel2.gridx = 0;
         gbcPanel2.gridy = 2;
         gbcPanel2.fill = GridBagConstraints.HORIZONTAL;
 
@@ -181,8 +170,8 @@ public class ImportPanel extends JPanel {
 					};
 				}
 			};
-
-			jTable.getTableHeader().setReorderingAllowed(false); // Disallow columns reordering
+			// Disallow columns reordering
+			jTable.getTableHeader().setReorderingAllowed(false);
 			JTableUtils.initColumnSizes(jTable, Integer.MAX_VALUE);
 			jTable.setPreferredScrollableViewportSize(getJTable().getPreferredSize());
 
@@ -190,6 +179,7 @@ public class ImportPanel extends JPanel {
 			TableColumn importedColumns = jTable.getColumnModel().getColumn(2);
 			importedColumns.setCellEditor(new DefaultCellEditor(fieldsCombo));
 
+			jTable.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
 			jTable.setFillsViewportHeight(true);
 			model.addTableModelListener(new TableModelListener() {
                 @Override
@@ -456,7 +446,7 @@ public class ImportPanel extends JPanel {
 			gridBagConstraints7.gridy = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
-			gridBagConstraints1.gridwidth = 1;
+			gridBagConstraints1.gridwidth = 0;
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.gridy = 1;
 			gridBagConstraints1.weightx = 0.0D;
@@ -485,6 +475,17 @@ public class ImportPanel extends JPanel {
 			jPanel2.add(getPrevious(), gridBagConstraints3);
 			jPanel2.add(getFirst(), gridBagConstraints2);
 			jPanel2.add(getIgnoreFirstLine(), gridBagConstraints1);
+			JLabel jLabel = new JLabel();
+			jLabel.setText(LocalizationData.get("ImportDialog.help")); //$NON-NLS-1$
+			jLabel.setIcon(IconManager.get(Name.HELP));
+			jLabel.setToolTipText(LocalizationData.get("ImportDialog.help.toolTip")); //$NON-NLS-1$
+			jLabel.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					HelpManager.show(ImportPanel.this, HelpManager.IMPORT);
+					super.mouseClicked(e);
+				}
+			});
 			jPanel2.add(jLabel, gridBagConstraints7);
 		}
 		return jPanel2;
