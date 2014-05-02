@@ -1,18 +1,15 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.awt.GridBagLayout;
+import java.awt.*;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
-import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -22,9 +19,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
-
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.HelpManager;
@@ -32,8 +26,6 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
-
-import javax.swing.JLabel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +36,6 @@ import com.fathzer.soft.ajlib.utilities.NullUtils;
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 
-import java.awt.Insets;
-
 public class ImportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
@@ -53,6 +43,8 @@ public class ImportPanel extends JPanel {
 	private JScrollPane jScrollPane = null;
 	private JTable jTable = null;
 	private JCheckBox ignoreFirstLine = null;
+    private JPanel ignoreHeaderPanel = null;
+    private JSpinner numberOfHeaderLines = null;
 	private JButton first = null;
 	private JButton previous = null;
 	private JButton next = null;
@@ -61,7 +53,8 @@ public class ImportPanel extends JPanel {
 	private JComboBox accounts = null;
 	private JPanel addToAccountPanel = null;
 	private JLabel jLabel1 = null;
-	private SeparatorPanel separatorPanel = null;
+	private SeparatorPanel columnSeparatorPanel = null;
+    private SeparatorPanel decimalSeparatorPanel = null;
 	private JPanel jPanel2 = null;
 	GlobalData data = null;  //  @jve:decl-index=0:
 	private File file;  //  @jve:decl-index=0:
@@ -95,39 +88,49 @@ public class ImportPanel extends JPanel {
 				super.mouseClicked(e);
 			}
 		});
-		GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
-		gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints22.gridx = 0;
-		gridBagConstraints22.gridy = 0;
-		gridBagConstraints22.weightx = 1.0D;
-		gridBagConstraints22.gridwidth = 0;
-		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-		gridBagConstraints11.gridx = 4;
-		gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints11.gridy = 2;
-		GridBagConstraints gridBagConstraints91 = new GridBagConstraints();
-		gridBagConstraints91.anchor = GridBagConstraints.WEST;
-		gridBagConstraints91.gridy = 7;
-		gridBagConstraints91.gridwidth = 0;
-		gridBagConstraints91.gridx = 0;
-		GridBagConstraints gridBagConstraints81 = new GridBagConstraints();
-		gridBagConstraints81.gridx = 0;
-		gridBagConstraints81.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints81.gridwidth = 0;
-		gridBagConstraints81.gridy = 8;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.weightx = 1.0;
-		gridBagConstraints.weighty = 1.0;
-		gridBagConstraints.gridwidth = 0;
-		gridBagConstraints.gridx = 0;
+
+		GridBagConstraints gbcColumnSeparatorPanel = new GridBagConstraints();
+		gbcColumnSeparatorPanel.gridx = 0;
+        gbcColumnSeparatorPanel.gridy = 0;
+        gbcColumnSeparatorPanel.fill = GridBagConstraints.HORIZONTAL;
+        gbcColumnSeparatorPanel.weightx = 1.0D;
+		gbcColumnSeparatorPanel.gridwidth = 0;
+
+        GridBagConstraints gbcScrollPane = new GridBagConstraints();
+        gbcScrollPane.gridx = 0;
+        gbcScrollPane.gridy = 1;
+        gbcScrollPane.fill = GridBagConstraints.BOTH;
+        gbcScrollPane.weightx = 1.0;
+        gbcScrollPane.weighty = 1.0;
+        gbcScrollPane.gridwidth = 0;
+
+        GridBagConstraints gbcPanel2 = new GridBagConstraints();
+        gbcPanel2.gridx = 4;
+        gbcPanel2.gridy = 2;
+        gbcPanel2.fill = GridBagConstraints.HORIZONTAL;
+
+        GridBagConstraints gbcDecimalSeparatorPanel = (GridBagConstraints) gbcColumnSeparatorPanel.clone();
+        gbcDecimalSeparatorPanel.gridy = 3;
+
+        GridBagConstraints gbcAddToCurrentFile = new GridBagConstraints();
+        gbcAddToCurrentFile.gridx = 0;
+        gbcAddToCurrentFile.gridy = 4;
+        gbcAddToCurrentFile.gridwidth = 0;
+        gbcAddToCurrentFile.anchor = GridBagConstraints.WEST;
+
+        GridBagConstraints gbcAddToAccountPanel = new GridBagConstraints();
+        gbcAddToAccountPanel.gridx = 0;
+        gbcAddToAccountPanel.gridy = 5;
+        gbcAddToAccountPanel.fill = GridBagConstraints.HORIZONTAL;
+        gbcAddToAccountPanel.gridwidth = 0;
+
 		this.setLayout(new GridBagLayout());
-		this.add(getSeparatorPanel(), gridBagConstraints22);
-		this.add(getJScrollPane(), gridBagConstraints);
-		this.add(getAddToCurrentFile(), gridBagConstraints91);
-		this.add(getAddToAccountPanel(), gridBagConstraints81);
-		this.add(getJPanel2(), gridBagConstraints11);
+		this.add(getColumnSeparatorPanel(), gbcColumnSeparatorPanel);
+        this.add(getDecimalSeparatorPanel(), gbcDecimalSeparatorPanel);
+		this.add(getJScrollPane(), gbcScrollPane);
+		this.add(getAddToCurrentFile(), gbcAddToCurrentFile);
+		this.add(getAddToAccountPanel(), gbcAddToAccountPanel);
+		this.add(getJPanel2(), gbcPanel2);
 		updateAddToAccountPanel();
 	}
 
@@ -189,29 +192,50 @@ public class ImportPanel extends JPanel {
 
 			jTable.setFillsViewportHeight(true);
 			model.addTableModelListener(new TableModelListener() {
-				@Override
-				public void tableChanged(TableModelEvent e) {
-					updateAddToAccountPanel();
-					updateIsValid();
-				}
-			});
+                @Override
+                public void tableChanged(TableModelEvent e) {
+                    updateAddToAccountPanel();
+                    updateIsValid();
+                }
+            });
 		}
 		return jTable;
 	}
 
 	/**
-	 * This method initializes ignoreFirstLine	
+	 * This method initializes ignoreFirstLine, numberOfHeaderLines and ignoreHeaderPanel
 	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * @return javax.swing.JPanel
 	 */
-	private JCheckBox getIgnoreFirstLine() {
-		if (ignoreFirstLine == null) {
+	private JPanel getIgnoreFirstLine() {
+        if (ignoreHeaderPanel == null) {
 			ignoreFirstLine = new JCheckBox();
 			ignoreFirstLine.setText(LocalizationData.get("ImportDialog.ignoreFirstLine")); //$NON-NLS-1$
 			ignoreFirstLine.setSelected(true);
 			ignoreFirstLine.setToolTipText(LocalizationData.get("ImportDialog.ignoreFirstLine.toolTip")); //$NON-NLS-1$
-		}
-		return ignoreFirstLine;
+
+            final SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 999, 1);
+            numberOfHeaderLines = new JSpinner(model);
+            ((JSpinner.DefaultEditor)numberOfHeaderLines.getEditor()).getTextField().setColumns(3);
+            model.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    doSetLine(getNumberOfHeaderLines() - 1);
+                }
+            });
+
+            ignoreFirstLine.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    numberOfHeaderLines.setEnabled(ignoreFirstLine.isSelected());
+                }
+            });
+
+            ignoreHeaderPanel = new JPanel(new FlowLayout());
+            ignoreHeaderPanel.add(ignoreFirstLine);
+            ignoreHeaderPanel.add(numberOfHeaderLines);
+        }
+		return ignoreHeaderPanel;
 	}
 
 	/**
@@ -224,10 +248,10 @@ public class ImportPanel extends JPanel {
 			first = new JButton(IconManager.get(Name.TOP));
 			first.setToolTipText(LocalizationData.get("ImportDialog.first.toolTip")); //$NON-NLS-1$
 			first.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					doSetLine(0);
-				}
-			});
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    doSetLine(0);
+                }
+            });
 			first.setFocusable(false);
 		}
 		return first;
@@ -301,10 +325,10 @@ public class ImportPanel extends JPanel {
 			addToCurrentFile.setText(LocalizationData.get("ImportDialog.addToCurrentFile")); //$NON-NLS-1$
 			addToCurrentFile.setToolTipText(LocalizationData.get("ImportDialog.addToCurrentFile.toolTip")); //$NON-NLS-1$
 			addToCurrentFile.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					updateAddToAccountPanel();
-				}
-			});
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    updateAddToAccountPanel();
+                }
+            });
 		}
 		return addToCurrentFile;
 	}
@@ -362,26 +386,38 @@ public class ImportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes separatorPanel	
+	 * This method initializes columnSeparatorPanel
 	 * 	
 	 * @return net.yapbam.gui.dialogs.export.SeparatorPanel	
 	 */
-	private SeparatorPanel getSeparatorPanel() {
-		if (separatorPanel == null) {
-			separatorPanel = new SeparatorPanel();
-			separatorPanel.addPropertyChangeListener(SeparatorPanel.SEPARATOR_PROPERTY, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					setSeparator(separatorPanel.getSeparator());
-				}
-			});
+	private SeparatorPanel getColumnSeparatorPanel() {
+		if (columnSeparatorPanel == null) {
+			columnSeparatorPanel = SeparatorPanel.createColumnSeparatorPanel();
+			columnSeparatorPanel.addPropertyChangeListener(SeparatorPanel.SEPARATOR_PROPERTY, new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    setSeparator(columnSeparatorPanel.getSeparator());
+                }
+            });
 		}
-		return separatorPanel;
+		return columnSeparatorPanel;
 	}
-	
+
+    /**
+     * This method initializes decimalSeparatorPanel
+     *
+     * @return net.yapbam.gui.dialogs.export.SeparatorPanel
+     */
+    private SeparatorPanel getDecimalSeparatorPanel() {
+        if (decimalSeparatorPanel == null) {
+            decimalSeparatorPanel = SeparatorPanel.createDecimalSeparatorPanel();
+        }
+        return decimalSeparatorPanel;
+    }
+
 	private void setSeparator(char separator) {
 		if ((separator==CSVParser.DEFAULT_QUOTE_CHARACTER) || (separator==CSVParser.DEFAULT_ESCAPE_CHARACTER)) {
-			getSeparatorPanel().setError(LocalizationData.get("ImportDialog.badSeparator")); //$NON-NLS-1$
+			getColumnSeparatorPanel().setError(LocalizationData.get("ImportDialog.badSeparator")); //$NON-NLS-1$
 			getFirst().setEnabled(false);
 			getPrevious().setEnabled(false);
 			getLast().setEnabled(false);
@@ -391,7 +427,7 @@ public class ImportPanel extends JPanel {
 			ImportTableModel model = (ImportTableModel) getJTable().getModel();
 			model.setFields(fields);
 		} else {
-			getSeparatorPanel().setError(null);
+			getColumnSeparatorPanel().setError(null);
 			doSetLine(currentLine);
 		}
 		updateIsValid();
@@ -462,7 +498,7 @@ public class ImportPanel extends JPanel {
 	}
 
 	private void countFileLines() throws FileNotFoundException, IOException, EmptyImportFileException {
-		CSVReader reader = new CSVReader(new FileReader(canonicalFile), separatorPanel.getSeparator(), '"');
+		CSVReader reader = new CSVReader(new FileReader(canonicalFile), columnSeparatorPanel.getSeparator(), '"');
 		try {
 			for (String[] fields = reader.readNext(); fields!=null; fields=reader.readNext()) {
 				numberOfLines++;
@@ -522,7 +558,7 @@ public class ImportPanel extends JPanel {
 	}
 	
 	private String[] getFields(int lineNumber) throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(canonicalFile), separatorPanel.getSeparator(), CSVParser.DEFAULT_QUOTE_CHARACTER, lineNumber);
+		CSVReader reader = new CSVReader(new FileReader(canonicalFile), columnSeparatorPanel.getSeparator(), CSVParser.DEFAULT_QUOTE_CHARACTER, lineNumber);
 		try {
 			return reader.readNext();
 		} finally {
@@ -549,12 +585,18 @@ public class ImportPanel extends JPanel {
 		boolean addToCurrentData = addToCurrentFile.isSelected();
 		int index = accounts.getSelectedIndex();
 		Account defaultAccount = index>=0?data.getAccount(index):null;
-		return new Importer(file, new ImporterParameters(separatorPanel.getSeparator(), ignoreFirstLine.isSelected()?1:0,
+        return new Importer(file, new ImporterParameters(columnSeparatorPanel.getSeparator(),
+                decimalSeparatorPanel.getSeparator(),
+                getNumberOfHeaderLines(),
 				((ImportTableModel)getJTable().getModel()).getRelations()),
 				addToCurrentData?data:null, defaultAccount);
 	}
 
-	public boolean getAddToCurrentData() {
+    private int getNumberOfHeaderLines() {
+        return ignoreFirstLine.isSelected()?((Number)numberOfHeaderLines.getValue()).intValue():0;
+    }
+
+    public boolean getAddToCurrentData() {
 		return addToCurrentFile.isSelected();
 	}
 	
@@ -564,7 +606,7 @@ public class ImportPanel extends JPanel {
 	
 	private void updateIsValid() {
 		String old = invalidityCause;
-		invalidityCause = getSeparatorPanel().getError();
+		invalidityCause = getColumnSeparatorPanel().getError();
 		if (invalidityCause==null) {
 			// Date, amount are mandatory
 			int[] relations = ((ImportTableModel)getJTable().getModel()).getRelations();
@@ -580,8 +622,12 @@ public class ImportPanel extends JPanel {
 	}
 
 	public void setParameters(ImporterParameters parameters) {
-		separatorPanel.setSeparator(parameters.getSeparator());
+		columnSeparatorPanel.setSeparator(parameters.getColumnSeparator());
+        decimalSeparatorPanel.setSeparator(parameters.getDecimalSeparator());
 		ignoreFirstLine.setSelected(parameters.getIgnoredLeadingLines()!=0);
+        if (ignoreFirstLine.isSelected()) {
+            numberOfHeaderLines.setValue(parameters.getIgnoredLeadingLines());
+        }
 		((ImportTableModel)getJTable().getModel()).setRelations(parameters.getImportedFileColumns());
 	}
 }

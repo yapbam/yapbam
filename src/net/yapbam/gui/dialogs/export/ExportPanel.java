@@ -23,17 +23,16 @@ import java.awt.Insets;
 
 public class ExportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$  //  @jve:decl-index=0:
+	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
 	
-	private JCheckBox title = null;
-	private JRadioButton all = null;
-	private JRadioButton filtered = null;
-	private JTable jTable = null;
-	private JScrollPane jScrollPane = null;
-	private JLabel jLabel = null;
-	private JCheckBox includeInitialBalance = null;
-	private String invalidityCause = null;  //  @jve:decl-index=0:
-	private SeparatorPanel separatorPanel = null;
+	private JCheckBox title;
+	private JRadioButton all;
+	private JRadioButton filtered;
+	private JTable jTable;
+	private JScrollPane jScrollPane;
+	private JCheckBox includeInitialBalance;
+	private String invalidityCause;
+	private SeparatorPanel separatorPanel;
 	private ButtonGroup group;
 	
 	public String getInvalidityCause() {
@@ -70,7 +69,7 @@ public class ExportPanel extends JPanel {
 		gridBagConstraints21.fill = GridBagConstraints.BOTH;
 		gridBagConstraints21.gridwidth = 0;
 		gridBagConstraints21.gridy = 0;
-		jLabel = new JLabel();
+		JLabel jLabel = new JLabel();
 		jLabel.setText(LocalizationData.get("ExportDialog.message")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 		gridBagConstraints11.insets = new Insets(10, 0, 15, 0);
@@ -183,8 +182,10 @@ public class ExportPanel extends JPanel {
 						false, false, 0, 0).getPreferredSize().width;
 				column.setPreferredWidth(w);
 			}
-			jTable.getTableHeader().setResizingAllowed(false); // Disallow resizing of columns
-			jTable.setCellSelectionEnabled(false); // Prevents the user to select cells (would have a strange look)
+			// Disallow resizing of columns
+			jTable.getTableHeader().setResizingAllowed(false);
+			// Prevent the user to select cells (would have a strange look)
+			jTable.setCellSelectionEnabled(false);
 			tableModel.addTableModelListener(new TableModelListener() {
 				@Override
 				public void tableChanged(TableModelEvent e) {
@@ -247,13 +248,13 @@ public class ExportPanel extends JPanel {
 	 */
 	private SeparatorPanel getSeparatorPanel() {
 		if (separatorPanel == null) {
-			separatorPanel = new SeparatorPanel();
+			separatorPanel = SeparatorPanel.createColumnSeparatorPanel();
 		}
 		return separatorPanel;
 	}
 
 	public ExporterParameters getExporterParameters() {
-		ExportTableModel model = ((ExportTableModel)getJTable().getModel());
+		ExportTableModel model = (ExportTableModel)getJTable().getModel();
 		int[] viewToModel = new int[getJTable().getColumnCount()];
 		boolean[] selected = new boolean[viewToModel.length];
 		for (int i = 0; i < viewToModel.length; i++) {
@@ -261,16 +262,16 @@ public class ExportPanel extends JPanel {
 			viewToModel[i] = modelColumn;
 			selected[modelColumn] = (Boolean) model.getValueAt(0, modelColumn);
 		}
-		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(), includeInitialBalance.isSelected(), !all.isSelected());
+		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(), getIncludeInitialBalance().isSelected(), !all.isSelected());
 	}
 
 	public boolean setParameters(ExporterParameters parameters) {
 		title.setSelected(parameters.isInsertHeader());
 		separatorPanel.setSeparator(parameters.getSeparator());
-		includeInitialBalance.setSelected(parameters.isExportInitialBalance());
+		getIncludeInitialBalance().setSelected(parameters.isExportInitialBalance());
 		JRadioButton sel = parameters.isExportFilteredData()?filtered:all;
 		group.setSelected(sel.getModel(), true);
-		boolean ok = (jTable.getColumnCount()==parameters.getViewIndexesToModel().length);
+		boolean ok = jTable.getColumnCount()==parameters.getViewIndexesToModel().length;
 		if (ok) {
 			for (int i = jTable.getColumnCount()-1; i>=0 ; i--) {
 				int modelIndex = parameters.getViewIndexesToModel()[i];
@@ -283,4 +284,4 @@ public class ExportPanel extends JPanel {
 		}
 		return ok;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

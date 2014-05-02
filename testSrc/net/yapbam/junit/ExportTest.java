@@ -36,7 +36,7 @@ public class ExportTest {
 		File file = File.createTempFile("ExportTest", "txt");
 		exporter.exportFile(file, fData);
 		GlobalData rdata = new GlobalData();
-		Importer importer = new Importer(file, new ImporterParameters(parameters.getSeparator(), parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
+		Importer importer = new Importer(file, new ImporterParameters(parameters.getSeparator(), null, parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
 		importer.importFile(rdata);
 		
 		assertEquals(1,rdata.getAccountsNumber());

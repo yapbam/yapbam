@@ -6,16 +6,18 @@ import java.io.Serializable;
 public class ImporterParameters implements Serializable {
 	private static final long serialVersionUID = 560758261413517776L;
 
-	private char separator;
+	private char columnSeparator;
 	private int ignoredLeadingLines;
 	private int[] importedFileColumns;
+    private Character decimalSeparator;
 
-	public ImporterParameters(char separator, int ignoredLeadingLines, int[] importedFileColumns) {
+    public ImporterParameters(char columnSeparator, Character decimalSeparator, int ignoredLeadingLines, int[] importedFileColumns) {
 		super();
 		if (importedFileColumns.length!=ExportTableModel.COLUMNS.length) {
 			throw new IllegalArgumentException();
 		}
-		this.separator = separator;
+		this.columnSeparator = columnSeparator;
+        this.decimalSeparator = decimalSeparator;
 		this.ignoredLeadingLines = ignoredLeadingLines;
 		this.importedFileColumns = importedFileColumns;
 	}
@@ -38,12 +40,12 @@ public class ImporterParameters implements Serializable {
 		return this;
 	}
 
-	public char getSeparator() {
-		return separator;
+	public char getColumnSeparator() {
+		return columnSeparator;
 	}
 
-	public void setSeparator(char separator) {
-		this.separator = separator;
+	public void setColumnSeparator(char columnSeparator) {
+		this.columnSeparator = columnSeparator;
 	}
 
 	public int getIgnoredLeadingLines() {
@@ -61,4 +63,12 @@ public class ImporterParameters implements Serializable {
 	public void setImportedFilecolumns(int[] importedFilecolumns) {
 		this.importedFileColumns = importedFilecolumns;
 	}
+
+    public Character getDecimalSeparator() {
+        return decimalSeparator;
+    }
+
+    public void setDecimalSeparator(Character decimalSeparator) {
+        this.decimalSeparator = decimalSeparator;
+    }
 }

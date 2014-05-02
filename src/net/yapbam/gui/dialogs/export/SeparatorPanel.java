@@ -14,38 +14,84 @@ import net.yapbam.gui.LocalizationData;
 import javax.swing.JRadioButton;
 
 import com.fathzer.soft.ajlib.swing.widget.CharWidget;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
 
 import javax.swing.JLabel;
 
 public class SeparatorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final String SEPARATOR_PROPERTY = "separator"; //$NON-NLS-1$
+
+	private JRadioButton defaultSeparatorButton;
+	private JRadioButton customSeparatorButton;
+	private CharWidget customSeparatorValue;
 	
-	private JRadioButton defaultSeparatorButton = null;
-	private JRadioButton customSeparatorButton = null;
-	private CharWidget customSeparatorValue = null;
-	
-	private char defaultSeparator = '\t';
-	private char separator = defaultSeparator;
+	private char defaultSeparator;
+	private char separator;
 	private JLabel errorLabel;
+
+    public static SeparatorPanel createDecimalSeparatorPanel() {
+    	DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        String defaultSeparatorWording = LocalizationData.get("ExportDialog.decimalSeparator.defaultSeparator"); //$NON-NLS-1$
+        char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
+		defaultSeparatorWording = MessageFormat.format(defaultSeparatorWording, decimalSeparator);
+		return new SeparatorPanel(LocalizationData.get("ExportDialog.decimalSeparator"), //$NON-NLS-1$
+        		defaultSeparatorWording,
+        		LocalizationData.get("ExportDialog.decimalSeparator.defaultSeparator.toolTip"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.decimalSeparator.customized"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.decimalSeparator.customized.toolTip"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.decimalSeparator.customizedChar.toolTip"), //$NON-NLS-1$
+                decimalSeparator
+        );
+    }
+
+    public static SeparatorPanel createColumnSeparatorPanel() {
+        return new SeparatorPanel(LocalizationData.get("ExportDialog.columnSeparator"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.columnSeparator.defaultSeparator"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.columnSeparator.defaultSeparator.toolTip"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.columnSeparator.customized"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.columnSeparator.customized.toolTip"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.columnSeparator.customizedChar.toolTip"), //$NON-NLS-1$
+                '\t'
+        );
+    }
 
 	/**
 	 * This is the default constructor
-	 */
-	public SeparatorPanel() {
+     * @param titleKey
+     * @param defaultSeparatorKey
+     * @param defaultSeparatorToolTipKey
+     * @param customizedSeparatorKey
+     * @param customizedSeparatorToolTipKey
+     * @param customizedCharToolTipKey
+     * @param defaultSeparator
+     */
+    private SeparatorPanel(String title, String defaultSeparatorWording, String defaultSeparatorToolTip,
+                           String customizedSeparatorWording, String customizedSeparatorToolTip,
+                           String customizedCharToolTip, char defaultSeparator) {
 		super();
-		initialize();
+        this.separator = defaultSeparator;
+        initialize(title, defaultSeparatorWording, defaultSeparatorToolTip, customizedSeparatorWording,
+        		customizedSeparatorToolTip, customizedCharToolTip);
 	}
 
-	/**
+    /**
 	 * This method initializes this
+     * @param customizedCharToolTip 
+     * @param customizedSeparatorToolTip 
+     * @param customizedSeparatorWording 
+     * @param defaultSeparatorToolTip 
+     * @param defaultSeparatorWording 
+     * @param title 
 	 */
-	private void initialize() {
+	private void initialize(String title, String defaultSeparatorWording, String defaultSeparatorToolTip, String customizedSeparatorWording, String customizedSeparatorToolTip, String customizedCharToolTip) {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
 		gridBagConstraints2.gridy = 1;
@@ -64,10 +110,16 @@ public class SeparatorPanel extends JPanel {
 		gridBagConstraints.gridwidth = 0;
 		gridBagConstraints.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("ExportDialog.columnSeparator") //$NON-NLS-1$
-				, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
-		this.add(getDefaultSeparatorButton(), gridBagConstraints);
-		this.add(getCustomSeparatorButton(), gridBagConstraints1);
+		this.setBorder(BorderFactory.createTitledBorder(null, title, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+		JRadioButton btn = getDefaultSeparatorButton();
+		btn.setText(defaultSeparatorWording);
+		btn.setToolTipText(defaultSeparatorToolTip);
+		this.add(btn, gridBagConstraints);
+		btn = getCustomSeparatorButton();
+		btn.setText(customizedSeparatorWording);
+		btn.setToolTipText(customizedSeparatorToolTip);
+		this.add(btn, gridBagConstraints1);
+		getCustomSeparatorValue().setToolTipText(customizedCharToolTip);
 		this.add(getCustomSeparatorValue(), gridBagConstraints2);
 		
 		ButtonGroup group = new ButtonGroup();
@@ -89,9 +141,7 @@ public class SeparatorPanel extends JPanel {
 	private JRadioButton getDefaultSeparatorButton() {
 		if (defaultSeparatorButton == null) {
 			defaultSeparatorButton = new JRadioButton();
-			defaultSeparatorButton.setText(LocalizationData.get("ExportDialog.columnSeparator.defaultSeparator")); //$NON-NLS-1$
 			defaultSeparatorButton.setSelected(true);
-			defaultSeparatorButton.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.defaultSeparator.toolTip")); //$NON-NLS-1$
 		}
 		return defaultSeparatorButton;
 	}
@@ -104,8 +154,6 @@ public class SeparatorPanel extends JPanel {
 	private JRadioButton getCustomSeparatorButton() {
 		if (customSeparatorButton == null) {
 			customSeparatorButton = new JRadioButton();
-			customSeparatorButton.setText(LocalizationData.get("ExportDialog.columnSeparator.customized")); //$NON-NLS-1$
-			customSeparatorButton.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customized.toolTip")); //$NON-NLS-1$
 			customSeparatorButton.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (customSeparatorButton.isSelected()) {
@@ -129,22 +177,20 @@ public class SeparatorPanel extends JPanel {
 	 * @return javax.swing.JTextField	
 	 */
 	private CharWidget getCustomSeparatorValue() {
-		//TODO Use CharWidget
 		if (customSeparatorValue == null) {
 			customSeparatorValue = new CharWidget();
-			customSeparatorValue.setToolTipText(LocalizationData.get("ExportDialog.columnSeparator.customizedChar.toolTip")); //$NON-NLS-1$
-			// We will not use a document listener to listen the field modifications because we want to change the field (truncate it to its fisrt character)
+			// We will not use a document listener to listen the field modifications because we want to change the field (truncate it to its first character)
 			// and document listener can't modify the source event (it throws an IllegalStateException).
 			customSeparatorValue.addPropertyChangeListener(CharWidget.CHAR_PROPERTY, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					if (evt.getNewValue()==null) {
-						defaultSeparatorButton.setSelected(true);
-					} else {
-						setSeparator(customSeparatorValue.getChar());
-					}
-				}
-			});
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (evt.getNewValue() == null) {
+                        defaultSeparatorButton.setSelected(true);
+                    } else {
+                        setSeparator(customSeparatorValue.getChar());
+                    }
+                }
+            });
 		}
 		return customSeparatorValue;
 	}
@@ -154,7 +200,7 @@ public class SeparatorPanel extends JPanel {
 	}
 
 	public void setSeparator(char separator) {
-		char old = this.separator;
+        char old = this.separator;
 		this.separator = separator;
 		if (this.separator==defaultSeparator) {
 			defaultSeparatorButton.setSelected(true);
@@ -168,7 +214,7 @@ public class SeparatorPanel extends JPanel {
 	}
 	private JLabel getErrorLabel() {
 		if (errorLabel == null) {
-			errorLabel = new JLabel("");
+			errorLabel = new JLabel();
 		}
 		return errorLabel;
 	}
@@ -178,7 +224,7 @@ public class SeparatorPanel extends JPanel {
 			getErrorLabel().setText(message);
 			getErrorLabel().setIcon(IconManager.get(Name.ALERT));
 		} else {
-			getErrorLabel().setText("");
+			getErrorLabel().setText(StringUtils.EMPTY);
 			getErrorLabel().setIcon(null);
 		}
 	}

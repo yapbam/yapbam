@@ -5,6 +5,7 @@ known
 
 version	0.17.0 (01/05/2014)
 improvement
+	Il est à présent possible de choisir le séparateur des décimales dans l'import. Les montants précédés d'un + sont à présent acceptés.
 	Le compte sélectionné par défaut dans l'onglet "Relevés de compte" est à présent celui sélectionné dans le filtre.
 
 version	0.16.10 (25/04/2014)
