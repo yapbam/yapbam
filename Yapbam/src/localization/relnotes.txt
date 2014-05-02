@@ -7,6 +7,8 @@ version	0.17.0 (05/01/2014)
 improvement
 	It is now possible to select the decimal separator in the import dialog. Amounts preceded by a + are now accepted.
 	By default, the selected account in the "Account Statements" tab is now the one selected in the filter.
+fix
+	Under Swing look and feel, the background color of "Linked to" column was wrong in import dialog.
 	
 version	0.16.10 (04/25/2014)
 fix

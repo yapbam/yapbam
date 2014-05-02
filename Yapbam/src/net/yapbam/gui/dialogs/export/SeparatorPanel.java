@@ -77,6 +77,7 @@ public class SeparatorPanel extends JPanel {
                            String customizedSeparatorWording, String customizedSeparatorToolTip,
                            String customizedCharToolTip, char defaultSeparator) {
 		super();
+		this.defaultSeparator = defaultSeparator;
         this.separator = defaultSeparator;
         initialize(title, defaultSeparatorWording, defaultSeparatorToolTip, customizedSeparatorWording,
         		customizedSeparatorToolTip, customizedCharToolTip);
