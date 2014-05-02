@@ -10,7 +10,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -21,7 +20,6 @@ import java.io.IOException;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
-import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
@@ -438,12 +436,6 @@ public class ImportPanel extends JPanel {
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.anchor = GridBagConstraints.WEST;
-			gridBagConstraints7.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints7.gridy = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			gridBagConstraints1.gridwidth = 0;
@@ -475,18 +467,6 @@ public class ImportPanel extends JPanel {
 			jPanel2.add(getPrevious(), gridBagConstraints3);
 			jPanel2.add(getFirst(), gridBagConstraints2);
 			jPanel2.add(getIgnoreFirstLine(), gridBagConstraints1);
-			JLabel jLabel = new JLabel();
-			jLabel.setText(LocalizationData.get("ImportDialog.help")); //$NON-NLS-1$
-			jLabel.setIcon(IconManager.get(Name.HELP));
-			jLabel.setToolTipText(LocalizationData.get("ImportDialog.help.toolTip")); //$NON-NLS-1$
-			jLabel.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					HelpManager.show(ImportPanel.this, HelpManager.IMPORT);
-					super.mouseClicked(e);
-				}
-			});
-			jPanel2.add(jLabel, gridBagConstraints7);
 		}
 		return jPanel2;
 	}

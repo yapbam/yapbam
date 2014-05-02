@@ -2,10 +2,14 @@ package net.yapbam.gui.dialogs.export;
 
 import java.awt.Component;
 import java.awt.Window;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -13,6 +17,9 @@ import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.ErrorManager;
+import net.yapbam.gui.HelpManager;
+import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
@@ -111,5 +118,21 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 		} else {
 			ErrorManager.INSTANCE.display(parent, e);
 		}
+	}
+
+	@Override
+	protected JComponent createExtraComponent() {
+		JLabel jLabel = new JLabel();
+		jLabel.setText(LocalizationData.get("ImportDialog.help")); //$NON-NLS-1$
+		jLabel.setIcon(IconManager.get(Name.HELP));
+		jLabel.setToolTipText(LocalizationData.get("ImportDialog.help.toolTip")); //$NON-NLS-1$
+		jLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				HelpManager.show(importPanel, HelpManager.IMPORT);
+				super.mouseClicked(e);
+			}
+		});
+		return jLabel;
 	}
 }

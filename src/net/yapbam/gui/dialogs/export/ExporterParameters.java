@@ -1,15 +1,15 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 import net.yapbam.util.ArrayUtils;
 
-@SuppressWarnings("serial")
 public class ExporterParameters implements Serializable {
-	// There's no default serial uid, because if this class changes, the easiest way to prevent problems
-	// is to do nothing. Deserialization of saved parameters will fail and they will be ignored. If we
-	// change the class and forget to change the serial uid, we could have an inconsistent parameter instance
-	// that could cause crashes.
+	private static final long serialVersionUID = 6487527320997875709L;
+	// WARNING. If we change the attribute list or their names and forget to change the serial uid,
+	// we could have an inconsistent parameter instance that could cause crashes.
+	// Changing serialVersionUID would just lead to ignore saved configuration. 
 	private int[] viewIndexesToModel;
 	private boolean[] selectedModelColumns;
 	private boolean insertHeader;
@@ -79,5 +79,10 @@ public class ExporterParameters implements Serializable {
 
 	public void setExportFilteredData(boolean exportFilteredData) {
 		this.exportFilteredData = exportFilteredData;
+	}
+
+	public Charset getEncoding() {
+		//TODO
+		return Charset.defaultCharset();
 	}
 }

@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.security.AccessControlException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.fathzer.soft.ajlib.utilities.FileUtils;
@@ -182,7 +184,7 @@ public class YapbamState {
 					if (buf.length()!=0) {
 						buf.append(',');
 					}
-					buf.append(sortKey.getColumn()+":"+sortKey.getSortOrder().equals(SortOrder.ASCENDING));
+					buf.append(sortKey.getColumn()+":"+sortKey.getSortOrder().equals(SortOrder.ASCENDING)); //$NON-NLS-1$
 				}
 			}
 		}
@@ -358,6 +360,7 @@ public class YapbamState {
 			return result;
 		} catch (Exception e) {
 			// If something goes wrong, return null
+			LoggerFactory.getLogger(getClass()).warn(MessageFormat.format("Exception while restoring {0}",key), e); //$NON-NLS-1$
 			return null;
 		}
 	}

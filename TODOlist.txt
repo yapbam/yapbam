@@ -6,7 +6,6 @@ Travaux de Fabien :
 	Bug dans le dialogue d'import quand on sélectionne plus d'une ligne d'entête (les titres de colonnes sautent).
 
 Bug :
-	L'export sur Linux flingue les accents. 
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
 	Changer la font size et le thème ne marche pas (la font size est ignorée).
 	Finir le "ignore end date" (mettre en pointillé ce qui dépasse de la date de fin dans le graphique).
@@ -18,6 +17,7 @@ Code cleaning :
 Utiliser le framework AJLib pour créer l'application.
 
 Features :
+* Pouvoir choisir l'encoding dans l'import/export 
 * La possibilité de créer des raccourcis vers les filtres préférés.
 * Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done).
 * Tenir compte de la date de fin sélectionnée dans le filtre pour régler le zoom vertical dans le graphique de l'historique du solde
