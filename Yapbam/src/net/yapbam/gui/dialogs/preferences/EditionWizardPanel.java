@@ -13,6 +13,7 @@ import java.util.Observer;
 
 import javax.swing.JRadioButton;
 
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.preferences.EditionWizardSettings;
 import net.yapbam.gui.preferences.EditionWizardSettings.Mode;
 import net.yapbam.gui.preferences.EditionWizardSettings.Source;
@@ -86,48 +87,49 @@ public class EditionWizardPanel extends JPanel {
 
 	private JRadioButton getAlwaysBtn() {
 		if (alwaysBtn == null) {
-			alwaysBtn = new JRadioButton("Toujours remplir le montant");
+			alwaysBtn = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.always")); //$NON-NLS-1$
 			buttonGroup.add(alwaysBtn);
 		}
 		return alwaysBtn;
 	}
 	private JLabel getLbl() {
 		if (lbl == null) {
-			lbl = new JLabel("Lorsque je choisis un libell\u00E9 pr\u00E9d\u00E9fini :");
+			lbl = new JLabel(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.title")); //$NON-NLS-1$
 		}
 		return lbl;
 	}
 	private JRadioButton getNeverBtn() {
 		if (neverBtn == null) {
-			neverBtn = new JRadioButton("Ne jamais remplir le montant");
+			neverBtn = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.never")); //$NON-NLS-1$
 			buttonGroup.add(neverBtn);
 		}
 		return neverBtn;
 	}
 	private JRadioButton getWhenEmptyBtn() {
 		if (whenEmptyBtn == null) {
-			whenEmptyBtn = new JRadioButton("Remplir le montant s'il est nul");
+			whenEmptyBtn = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.ifNull")); //$NON-NLS-1$
 			buttonGroup.add(whenEmptyBtn);
 		}
 		return whenEmptyBtn;
 	}
 	private JLabel getLbl2() {
 		if (lbl2 == null) {
-			lbl2 = new JLabel("avec");
+			lbl2 = new JLabel(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.with")); //$NON-NLS-1$
 		}
 		return lbl2;
 	}
 	private JRadioButton getLastBtn() {
 		if (lastBtn == null) {
-			lastBtn = new JRadioButton("La derni\u00E8re valeur");
+			lastBtn = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.last")); //$NON-NLS-1$
+			lastBtn.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.last.tooltip")); //$NON-NLS-1$
 			buttonGroup1.add(lastBtn);
-			lastBtn.setToolTipText("S\u00E9lectionner cette option pour r\u00E9utiliser le montant de la derni\u00E8re op\u00E9ration avec ce libell\u00E9 ");
 		}
 		return lastBtn;
 	}
 	private JRadioButton getMostProbableBtn() {
 		if (mostProbableBtn == null) {
-			mostProbableBtn = new JRadioButton("Le montant le plus probable");
+			mostProbableBtn = new JRadioButton(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.mostProbable")); //$NON-NLS-1$
+			mostProbableBtn.setToolTipText(LocalizationData.get("TransactionEditingPreferencesPanel.wizard.mostProbable.tooltip")); //$NON-NLS-1$
 			mostProbableBtn.setSelected(true);
 			buttonGroup1.add(mostProbableBtn);
 		}
@@ -136,8 +138,8 @@ public class EditionWizardPanel extends JPanel {
 	private JPanel getWithWhatPanel() {
 		if (withWhatPanel == null) {
 			withWhatPanel = new JPanel();
-			GridBagLayout gbl_withWhatPanel = new GridBagLayout();
-			withWhatPanel.setLayout(gbl_withWhatPanel);
+			GridBagLayout gblWithWhatPanel = new GridBagLayout();
+			withWhatPanel.setLayout(gblWithWhatPanel);
 			GridBagConstraints gbcLbl2 = new GridBagConstraints();
 			gbcLbl2.anchor = GridBagConstraints.WEST;
 			gbcLbl2.gridheight = 2;

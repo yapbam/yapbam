@@ -29,6 +29,14 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<encoding>ISO-8859-1</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.2</version>
 				<executions>
@@ -42,50 +50,44 @@
 							<filters>
 								<filter>
 									<!-- Remove signatures and other useless stuff -->
-			                        <artifact>*:*</artifact>
-			                        <excludes>
-			                            <exclude>license/**</exclude>
-			                            <exclude>META-INF/**</exclude>
-			                            <!-- exclude>javax/**</exclude -->
-			                            <!-- exclude>META-INF/*.DSA</exclude>
-			                            <exclude>META-INF/*.SF</exclude>
-			                            <exclude>META-INF/*.RSA</exclude>
-			                            <exclude>META-INF/*.INF</exclude -->
-			                        </excludes>
-			                    </filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>license/**</exclude>
+										<exclude>META-INF/**</exclude>
+										<!-- exclude>javax/**</exclude -->
+										<!-- exclude>META-INF/*.DSA</exclude> <exclude>META-INF/*.SF</exclude> 
+											<exclude>META-INF/*.RSA</exclude> <exclude>META-INF/*.INF</exclude -->
+									</excludes>
+								</filter>
 								<filter>
 									<!-- Remove itext (think it is never used) -->
-			                        <artifact>com.lowagie:*</artifact>
-			                        <excludes>
-			                            <exclude>**</exclude>
-			                        </excludes>
-			                    </filter>
+									<artifact>com.lowagie:*</artifact>
+									<excludes>
+										<exclude>**</exclude>
+									</excludes>
+								</filter>
 								<filter>
 									<!-- Remove bouncycastle stuff used only in not supported jdk -->
-			                        <artifact>bouncycastle:*</artifact>
-			                        <excludes>
-			                            <exclude>**</exclude>
-			                        </excludes>
-			                    </filter>
+									<artifact>bouncycastle:*</artifact>
+									<excludes>
+										<exclude>**</exclude>
+									</excludes>
+								</filter>
 								<filter>
 									<!-- Remove xml api stuff used only in not supported jdk -->
-			                        <artifact>xml-apis:*</artifact>
-			                        <excludes>
-			                            <exclude>**</exclude>
-			                        </excludes>
-			                    </filter>
+									<artifact>xml-apis:*</artifact>
+									<excludes>
+										<exclude>**</exclude>
+									</excludes>
+								</filter>
 								<filter>
 									<artifact>commons-logging:commons-logging</artifact>
 									<includes>
 										<include>**</include>
 									</includes>
 								</filter>
-								<!-- filter>
-									<artifact>org.jfree:jfreechart</artifact>
-									<includes>
-										<include>**/*.properties</include>
-									</includes>
-								</filter-->
+								<!-- filter> <artifact>org.jfree:jfreechart</artifact> <includes> 
+									<include>**/*.properties</include> </includes> </filter -->
 							</filters>
 							<transformers>
 								<transformer

@@ -3,12 +3,7 @@ package net.yapbam.gui.dialogs.export;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +52,7 @@ public class Importer {
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
-			CSVReader reader = new CSVReader(new FileReader(FileUtils.getCanonical(file)), parameters.getSeparator(),'"', parameters.getIgnoredLeadingLines());
+			CSVReader reader = new CSVReader(new FileReader(FileUtils.getCanonical(file)), parameters.getColumnSeparator(),'"', parameters.getIgnoredLeadingLines());
 			try {
 				int lineNumber = parameters.getIgnoredLeadingLines();
 				for (String[] fields = reader.readNext(); fields != null; fields = reader.readNext()) {
@@ -240,6 +235,11 @@ public class Importer {
 	private ParsePosition ppos = new ParsePosition(0);
 	private double parseAmount(String text) throws ParseException {
 		NumberFormat format = NumberFormat.getCurrencyInstance(LocalizationData.getLocale());
+        customizeSymbols(format);
+        if (text.charAt(0) == '+') {
+            text = text.substring(1);
+        }
+
 		char groupingSeparator = ((DecimalFormat)format).getDecimalFormatSymbols().getGroupingSeparator();
 		if (groupingSeparator==160) {
 			// If separator is non breaking space, replace spaces by non breaking space
@@ -250,6 +250,7 @@ public class Importer {
 			return format.parse(text).doubleValue();
 		} catch (ParseException e) {
 			format = NumberFormat.getInstance(LocalizationData.getLocale());
+            customizeSymbols(format);
 			ppos.setIndex(0);
 			Number parsed = format.parse(text, ppos);
 			if (parsed==null) {
@@ -262,6 +263,18 @@ public class Importer {
 			return value;
 		}
 	}
+
+    private void customizeSymbols(NumberFormat format) {
+        Character decimalSeparator = parameters.getDecimalSeparator();
+        if (decimalSeparator != null) {
+            DecimalFormatSymbols decimalFormatSymbols = ((DecimalFormat)format).getDecimalFormatSymbols();
+
+            decimalFormatSymbols.setMonetaryDecimalSeparator(decimalSeparator);
+            decimalFormatSymbols.setDecimalSeparator(decimalSeparator);
+
+            ((DecimalFormat) format).setDecimalFormatSymbols(decimalFormatSymbols);
+        }
+    }
 	
 	private Date parseDate(String text) throws ParseException {
 		if (text.length()==0) {

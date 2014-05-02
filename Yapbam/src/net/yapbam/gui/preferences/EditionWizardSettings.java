@@ -1,8 +1,12 @@
 package net.yapbam.gui.preferences;
 
 public class EditionWizardSettings {
-	public enum Mode {NEVER, WHEN_NULL, ALWAYS}
-	public enum Source {MOST_PROBABLE, LAST}
+	public enum Mode {
+		NEVER, WHEN_NULL, ALWAYS
+	}
+	public enum Source {
+		MOST_PROBABLE, LAST
+	}
 	
 	private Mode mode;
 	private Source source;

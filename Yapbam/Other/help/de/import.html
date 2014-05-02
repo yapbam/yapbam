@@ -1,10 +1,41 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Yapbam Hilfe : Import</title></head>
-<body>
-<h1>Yapbam Hilfe</h1>
-<hr style="width: 100%; height: 2px;">
-<h2>Import</h2>
-<p>Yapbam ermöglicht Ihnen den Import von Daten, die von einem anderen Kontenverwaltungsprogramm oder einer Tabellenkalkulation (wie Excel oder Open Office) im Textformat gespeichert wurden.</p><h3><span class="mw-headline">Wie Yapbam Zahlungsvorgänge, Teilbeträge und den Anfangskontostand erkennt:</span></h3><ul><li>Eine Zeile, die einen Wert in der Datumsspalte enthält, wird immer als Zahlungsvorgang angesehen.</li><li>Andere Zeilen sind Teilbeträge, wenn sie direkt auf einen Zahlungsvorgang folgen, oder der Anfangs-Kontostand, wenn sie vor einem Zahlungsvorgang stehen.</li><li>Wenn die Kontoangabe in einer Zeile mit Anfangs-Kontostand fehlt, wird der Kontostand dem Standardkonto zugewiesen.</li><li>Wenn ein Konto mehrere Zeilen mit Anfangs-Kontostand enthält, bildet deren Summe den tatsählichen Anfangsstand.</li></ul><h3>Datumsformat:</h3>Das Datumsformat hängt von der in Yapbam eingestellten Sprache und dem Land ab.<br>Es ist das "kurze" Standard-Datumsformat. Dies wäre in den USA z.B. das Format "MM/DD/AA"
-<h3>Dezimalformat für Beträge:</h3>Das Format für Beträge hängt von der in Yapbam eingestellten Sprache und dem Land ab.<br>Das Trennzeichen zwischen dem ganzzahligen Teil und den Dezimalstellen ist z.B. ein Punkt in den USA und ein Komma in Deutschland.<br>Yapbam akzeptiert das Währungszeichen, wenn es in Betragsfeldern angegeben wird.<br></body></html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>Yapbam Hilfe : Import</title>
+  </head>
+  <body>
+    <h1>Yapbam Hilfe</h1>
+    <hr style="width: 100%; height: 2px;">
+    <h2>Import</h2>
+    <p>Yapbam ermöglicht Ihnen den Import von Daten, die von einem anderen
+      Kontenverwaltungsprogramm oder einer Tabellenkalkulation (wie Excel oder
+      Open Office) im Textformat gespeichert wurden.</p>
+    <h3><span class="mw-headline">Wie Yapbam Zahlungsvorgänge, Teilbeträge und
+        den Anfangskontostand erkennt:</span></h3>
+    <ul>
+      <li>Eine Zeile, die einen Wert in der Datumsspalte enthält, wird immer als
+        Zahlungsvorgang angesehen.</li>
+      <li>Andere Zeilen sind Teilbeträge, wenn sie direkt auf einen
+        Zahlungsvorgang folgen, oder der Anfangs-Kontostand, wenn sie vor einem
+        Zahlungsvorgang stehen.</li>
+      <li>Wenn die Kontoangabe in einer Zeile mit Anfangs-Kontostand fehlt, wird
+        der Kontostand dem Standardkonto zugewiesen.</li>
+      <li>Wenn ein Konto mehrere Zeilen mit Anfangs-Kontostand enthält, bildet
+        deren Summe den tatsählichen Anfangsstand.</li>
+    </ul>
+    <h3>Datumsformat:</h3>
+    Das Datumsformat hängt von der in Yapbam eingestellten Sprache und dem Land
+    ab.<br>
+    Es ist das "kurze" Standard-Datumsformat. Dies wäre in den USA z.B. das
+    Format "MM/DD/AA"
+    <h3>Dezimalformat für Beträge:</h3>
+    Das Format für Beträge hängt von der in Yapbam eingestellten Sprache und dem
+    Land ab.<br>
+    Das Trennzeichen zwischen dem ganzzahligen Teil und den Dezimalstellen ist
+    z.B. ein Punkt in den USA und ein Komma in Deutschland. Es kann durch eine
+    benutzerdefinierte Trenn ersetzt werden.<br>
+    Yapbam akzeptiert das Währungszeichen, wenn es in Betragsfeldern angegeben
+    wird.
+  </body>
+</html>

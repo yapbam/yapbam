@@ -1,3 +1,10 @@
+Avant livraison :
+	Libellés en P, A
+	net.yapbam.gui.util.DoubleArrayComparator (à quoi sert cette classe étrange !!!)
+
+Travaux de Fabien :
+	Bug dans le dialogue d'import quand on sélectionne plus d'une ligne d'entête (les titres de colonnes sautent).
+
 Bug :
 	L'export sur Linux flingue les accents. 
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
