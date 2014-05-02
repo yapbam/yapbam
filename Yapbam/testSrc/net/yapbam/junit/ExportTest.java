@@ -2,6 +2,8 @@ package net.yapbam.junit;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Date;
 
@@ -36,7 +38,9 @@ public class ExportTest {
 		File file = File.createTempFile("ExportTest", "txt");
 		exporter.exportFile(file, fData);
 		GlobalData rdata = new GlobalData();
-		Importer importer = new Importer(file, new ImporterParameters(parameters.getSeparator(), null, parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
+		DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance();
+		char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
+		Importer importer = new Importer(file, new ImporterParameters(parameters.getSeparator(), decimalSeparator, parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
 		importer.importFile(rdata);
 		
 		assertEquals(1,rdata.getAccountsNumber());

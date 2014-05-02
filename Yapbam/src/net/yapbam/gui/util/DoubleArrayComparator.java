@@ -8,7 +8,13 @@ public class DoubleArrayComparator implements Comparator<double[]>, Serializable
 
 	@Override
 	public int compare(double[] o1, double[] o2) {
-		//FIXME What a strange order !!! Bug if one has no elements !!!
-		return (int) Math.signum(o1[0]-o2[0]);
+		int len = Math.min(o1.length,o2.length);
+		for (int i = 0; i < len; i++) {
+			int result = (int) Math.signum(o1[0]-o2[0]);
+			if (result!=0) {
+				return result;
+			}
+		}
+		return o1.length-o2.length;
 	}
 }

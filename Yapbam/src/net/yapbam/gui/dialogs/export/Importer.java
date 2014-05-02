@@ -1,8 +1,11 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.text.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +46,7 @@ public class Importer {
 		}
 		this.lastUsedColumnInImportedFile++;
 	}
-
+	
 	public ImportError[] importFile(GlobalData data) throws IOException {
 		if (data!=null) {
 			data.setEventsEnabled(false);
@@ -52,7 +55,8 @@ public class Importer {
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
-			CSVReader reader = new CSVReader(new FileReader(FileUtils.getCanonical(file)), parameters.getColumnSeparator(),'"', parameters.getIgnoredLeadingLines());
+			Reader fileReader = new InputStreamReader(new FileInputStream(FileUtils.getCanonical(file)), parameters.getEncoding());
+			CSVReader reader = new CSVReader(fileReader, parameters.getColumnSeparator(),'"', parameters.getIgnoredLeadingLines());
 			try {
 				int lineNumber = parameters.getIgnoredLeadingLines();
 				for (String[] fields = reader.readNext(); fields != null; fields = reader.readNext()) {

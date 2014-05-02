@@ -1,8 +1,10 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -29,7 +31,7 @@ public class Exporter {
 	}
 	
 	public void exportFile(File file, FilteredData data) throws IOException {
-		FileWriter fileWriter = new FileWriter(file);
+		Writer fileWriter = new OutputStreamWriter(new FileOutputStream(file), parameters.getEncoding());
 		try {
 			CSVWriter writer = new CSVWriter(fileWriter);
 			writer.setSeparator(parameters.getSeparator());

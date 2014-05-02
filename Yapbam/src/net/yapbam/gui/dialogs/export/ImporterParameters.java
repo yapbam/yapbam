@@ -2,21 +2,24 @@ package net.yapbam.gui.dialogs.export;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 public class ImporterParameters implements Serializable {
 	private static final long serialVersionUID = 560758261413517776L;
-
-	private char columnSeparator;
+	// WARNING. If we change the attribute list or their names and forget to change the serial uid,
+	// we could have an inconsistent parameter instance that could cause crashes.
+	// Changing serialVersionUID would just lead to ignore saved configuration. 
+	private char separator;
 	private int ignoredLeadingLines;
 	private int[] importedFileColumns;
-    private Character decimalSeparator;
+    private char decimalSeparator;
 
-    public ImporterParameters(char columnSeparator, Character decimalSeparator, int ignoredLeadingLines, int[] importedFileColumns) {
+    public ImporterParameters(char columnSeparator, char decimalSeparator, int ignoredLeadingLines, int[] importedFileColumns) {
 		super();
 		if (importedFileColumns.length!=ExportTableModel.COLUMNS.length) {
 			throw new IllegalArgumentException();
 		}
-		this.columnSeparator = columnSeparator;
+		this.separator = columnSeparator;
         this.decimalSeparator = decimalSeparator;
 		this.ignoredLeadingLines = ignoredLeadingLines;
 		this.importedFileColumns = importedFileColumns;
@@ -35,17 +38,19 @@ public class ImporterParameters implements Serializable {
 			System.arraycopy(this.importedFileColumns, ExportTableModel.AMOUNT_INDEX-1, array, ExportTableModel.AMOUNT_INDEX, array.length-ExportTableModel.AMOUNT_INDEX);
 			this.importedFileColumns = array;
 		} else {
-			throw new ObjectStreamException() {private static final long serialVersionUID = 1L;};
+			throw new ObjectStreamException() {
+				private static final long serialVersionUID = 1L;
+			};
 		}
 		return this;
 	}
 
 	public char getColumnSeparator() {
-		return columnSeparator;
+		return separator;
 	}
 
 	public void setColumnSeparator(char columnSeparator) {
-		this.columnSeparator = columnSeparator;
+		this.separator = columnSeparator;
 	}
 
 	public int getIgnoredLeadingLines() {
@@ -64,11 +69,16 @@ public class ImporterParameters implements Serializable {
 		this.importedFileColumns = importedFilecolumns;
 	}
 
-    public Character getDecimalSeparator() {
+    public char getDecimalSeparator() {
         return decimalSeparator;
     }
 
-    public void setDecimalSeparator(Character decimalSeparator) {
+    public void setDecimalSeparator(char decimalSeparator) {
         this.decimalSeparator = decimalSeparator;
     }
+
+	public Charset getEncoding() {
+		//TODO
+		return Charset.defaultCharset();
+	}
 }
