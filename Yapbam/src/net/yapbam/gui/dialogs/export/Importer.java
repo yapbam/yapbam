@@ -2,7 +2,6 @@ package net.yapbam.gui.dialogs.export;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -10,6 +9,9 @@ import java.text.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
@@ -24,6 +26,8 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 
 public class Importer {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Importer.class);
+	
 	private File file;
 	private ImporterParameters parameters;
 	private Account defaultAccount;
@@ -64,6 +68,7 @@ public class Importer {
 					try {
 						accountPart = !importLine(data, lineNumber, fields, accountPart) && accountPart;
 					} catch (ImportException e) {
+						LOGGER.trace("ImportLine reports", e); //$NON-NLS-1$
 						errors.add(e.getError());
 					}
 				}
@@ -73,7 +78,9 @@ public class Importer {
 						recordCurrentTransaction(data);
 					}
 					reader.close();
-				} catch (IOException e) {}
+				} catch (IOException e) {
+					LOGGER.warn("Error while closing "+file, e); //$NON-NLS-1$
+				}
 			}
 		} finally {
 			if (data!=null) {
@@ -133,12 +140,14 @@ public class Importer {
 		if ((isTransaction || accountPart) && !hasError) {
 			index = parameters.getImportedFileColumns()[ExportTableModel.ACCOUNT_INDEX];
 			String accountStr = getField(fields, index, ""); //$NON-NLS-1$
-			if (accountStr.length()==0) { // No account specified
+			if (accountStr.length()==0) {
+				// No account specified
 				accountStr = defaultAccount==null?LocalizationData.get("ImportDialog.defaultAccount"):defaultAccount.getName(); //$NON-NLS-1$
 			}
 			if (data!=null) {
 				account =  data.getAccount(accountStr);
-				if (account==null) { // New account
+				if (account==null) {
+					// New account
 					account = new Account(accountStr, 0);
 					data.add(account);
 				}
@@ -322,7 +331,7 @@ public class Importer {
 	}
 	
 	@SuppressWarnings("serial")
-	static private class ImportException extends Exception {
+	private static class ImportException extends Exception {
 		private final ImportError error;
 
 		public ImportException(ImportError error) {

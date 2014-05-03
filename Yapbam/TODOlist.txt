@@ -1,9 +1,8 @@
 Avant livraison :
 	Libellés en P, A
-	net.yapbam.gui.util.DoubleArrayComparator (à quoi sert cette classe étrange !!!)
 
 Travaux de Fabien :
-	Bug dans le dialogue d'import quand on sélectionne plus d'une ligne d'entête (les titres de colonnes sautent).
+	Bug dans le dialogue d'import comportement différent quand on sélectionne plus d'une ligne d'entête et quand on clique sur la case à cocher (les titres de colonnes changent ... ou pas).
 
 Bug :
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
