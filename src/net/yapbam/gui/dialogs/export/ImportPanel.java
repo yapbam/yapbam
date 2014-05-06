@@ -10,6 +10,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
@@ -39,23 +42,21 @@ public class ImportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
 
-	private JScrollPane jScrollPane = null;
-	private JTable jTable = null;
-	private JCheckBox ignoreFirstLine = null;
-    private JPanel ignoreHeaderPanel = null;
-    private JSpinner numberOfHeaderLines = null;
-	private JButton first = null;
-	private JButton previous = null;
-	private JButton next = null;
-	private JButton last = null;
-	private JCheckBox addToCurrentFile = null;
-	private JComboBox accounts = null;
-	private JPanel addToAccountPanel = null;
-	private JLabel jLabel1 = null;
-	private SeparatorPanel columnSeparatorPanel = null;
-    private SeparatorPanel decimalSeparatorPanel = null;
-	private JPanel jPanel2 = null;
-	GlobalData data = null;
+	private JScrollPane jScrollPane;
+	private JTable jTable;
+	private JCheckBox ignoreFirstLine;
+    private JPanel ignoreHeaderPanel;
+    private JSpinner numberOfHeaderLines;
+	private JButton first;
+	private JButton last;
+	private JCheckBox addToCurrentFile;
+	private JComboBox accounts;
+	private JPanel addToAccountPanel;
+	private JLabel jLabel1;
+	private SeparatorPanel columnSeparatorPanel;
+    private SeparatorPanel decimalSeparatorPanel;
+	private JPanel jPanel2;
+	GlobalData data;
 	private File file;
 	private int numberOfLines;
 	private int currentLine;
@@ -191,39 +192,35 @@ public class ImportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes ignoreFirstLine, numberOfHeaderLines and ignoreHeaderPanel
-	 * 	
+	 * This method initializes ignoreHeaderPanel
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getIgnoreFirstLine() {
+	private JPanel getIgnoreHeaderPanel() {
         if (ignoreHeaderPanel == null) {
+            ignoreHeaderPanel = new JPanel(new FlowLayout());
+            ignoreHeaderPanel.add(getIgnoreFirstLine());
+            ignoreHeaderPanel.add(getNumberOfHeaderLinesSpinner());
+        }
+		return ignoreHeaderPanel;
+	}
+	
+	private JCheckBox getIgnoreFirstLine() {
+		if (ignoreFirstLine==null) {
 			ignoreFirstLine = new JCheckBox();
 			ignoreFirstLine.setText(LocalizationData.get("ImportDialog.ignoreFirstLine")); //$NON-NLS-1$
 			ignoreFirstLine.setSelected(true);
 			ignoreFirstLine.setToolTipText(LocalizationData.get("ImportDialog.ignoreFirstLine.toolTip")); //$NON-NLS-1$
 
-            final SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 999, 1);
-            numberOfHeaderLines = new JSpinner(model);
-            ((JSpinner.DefaultEditor)numberOfHeaderLines.getEditor()).getTextField().setColumns(3);
-            model.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    doSetLine(getNumberOfHeaderLines() - 1);
-                }
-            });
-
-            ignoreFirstLine.addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    numberOfHeaderLines.setEnabled(ignoreFirstLine.isSelected());
-                }
-            });
-
-            ignoreHeaderPanel = new JPanel(new FlowLayout());
-            ignoreHeaderPanel.add(ignoreFirstLine);
-            ignoreHeaderPanel.add(numberOfHeaderLines);
-        }
-		return ignoreHeaderPanel;
+            ignoreFirstLine.addItemListener(new ItemListener() {
+				
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+                    getNumberOfHeaderLinesSpinner().setEnabled(ignoreFirstLine.isSelected());
+                    doSetLine(getNumberOfHeaderLines());
+				}
+			});
+		}
+		return ignoreFirstLine;
 	}
 
 	/**
@@ -233,7 +230,7 @@ public class ImportPanel extends JPanel {
 	 */
 	private JButton getFirst() {
 		if (first == null) {
-			first = new JButton(IconManager.get(Name.TOP));
+			first = new JButton(IconManager.get(Name.BOTTOM));
 			first.setToolTipText(LocalizationData.get("ImportDialog.first.toolTip")); //$NON-NLS-1$
 			first.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -246,51 +243,13 @@ public class ImportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes previous	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getPrevious() {
-		if (previous == null) {
-			previous = new JButton(IconManager.get(Name.UP));
-			previous.setToolTipText(LocalizationData.get("ImportDialog.previous.toolTip")); //$NON-NLS-1$
-			previous.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					doSetLine(currentLine-1);
-				}
-			});
-			previous.setFocusable(false);
-		}
-		return previous;
-	}
-
-	/**
-	 * This method initializes next	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getNext() {
-		if (next == null) {
-			next = new JButton(IconManager.get(Name.DOWN));
-			next.setToolTipText(LocalizationData.get("ImportDialog.next.toolTip")); //$NON-NLS-1$
-			next.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					doSetLine(currentLine+1);
-				}
-			});
-			next.setFocusable(false);
-		}
-		return next;
-	}
-
-	/**
 	 * This method initializes last	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
 	private JButton getLast() {
 		if (last == null) {
-			last = new JButton(IconManager.get(Name.BOTTOM));
+			last = new JButton(IconManager.get(Name.TOP));
 			last.setToolTipText(LocalizationData.get("ImportDialog.last.toolTip")); //$NON-NLS-1$
 			last.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -407,9 +366,7 @@ public class ImportPanel extends JPanel {
 		if ((separator==CSVParser.DEFAULT_QUOTE_CHARACTER) || (separator==CSVParser.DEFAULT_ESCAPE_CHARACTER)) {
 			getColumnSeparatorPanel().setError(LocalizationData.get("ImportDialog.badSeparator")); //$NON-NLS-1$
 			getFirst().setEnabled(false);
-			getPrevious().setEnabled(false);
 			getLast().setEnabled(false);
-			getNext().setEnabled(false);
 			String[] fields = new String[0];
 			setFieldsCombo(fields);
 			ImportTableModel model = (ImportTableModel) getJTable().getModel();
@@ -437,6 +394,7 @@ public class ImportPanel extends JPanel {
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints1.anchor = GridBagConstraints.WEST;
 			gridBagConstraints1.gridwidth = 0;
 			gridBagConstraints1.gridx = 0;
@@ -444,29 +402,29 @@ public class ImportPanel extends JPanel {
 			gridBagConstraints1.weightx = 0.0D;
 			gridBagConstraints1.fill = GridBagConstraints.NONE;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.weightx = 1.0;
+			gridBagConstraints2.insets = new Insets(0, 0, 5, 5);
+			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.fill = GridBagConstraints.NONE;
-			gridBagConstraints2.weightx = 1.0D;
 			gridBagConstraints2.anchor = GridBagConstraints.EAST;
 			gridBagConstraints2.gridy = 0;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 2;
-			gridBagConstraints3.gridy = 0;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 3;
-			gridBagConstraints4.gridy = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints5.anchor = GridBagConstraints.EAST;
-			gridBagConstraints5.gridx = 4;
+			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.gridy = 0;
 			gridBagConstraints5.fill = GridBagConstraints.NONE;
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.add(getLast(), gridBagConstraints5);
-			jPanel2.add(getNext(), gridBagConstraints4);
-			jPanel2.add(getPrevious(), gridBagConstraints3);
 			jPanel2.add(getFirst(), gridBagConstraints2);
-			jPanel2.add(getIgnoreFirstLine(), gridBagConstraints1);
+			jPanel2.add(getIgnoreHeaderPanel(), gridBagConstraints1);
+			GridBagConstraints gbcLineNumber = new GridBagConstraints();
+			gbcLineNumber.anchor = GridBagConstraints.EAST;
+			gbcLineNumber.insets = new Insets(0, 0, 0, 5);
+			gbcLineNumber.gridx = 1;
+			gbcLineNumber.gridy = 0;
+			jPanel2.add(getLineNumber(), gbcLineNumber);
 		}
 		return jPanel2;
 	}
@@ -476,6 +434,32 @@ public class ImportPanel extends JPanel {
 		this.canonicalFile = FileUtils.getCanonical(file);
 		this.numberOfLines = 0;
 		countFileLines();
+		if (numberOfLines<2) {
+			getIgnoreFirstLine().setSelected(false);
+			getIgnoreFirstLine().setEnabled(false);
+		}
+		int max = Math.max(numberOfLines-1, 1);
+		int current = Math.max(Math.min(getNumberOfHeaderLines(), max), 1);
+		SpinnerNumberModel model = new SpinnerNumberModel(current, 1, max, 1);
+		model.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				doSetLine(getNumberOfHeaderLines());
+			}
+		});
+		getNumberOfHeaderLinesSpinner().setModel(model);
+		max = Math.max(numberOfLines, 1);
+		model = new SpinnerNumberModel(1, 1, max, 1);
+		model.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int futureLine = ((Number)getLineNumber().getValue()).intValue()-1;
+				if (futureLine!=currentLine) {
+					doSetLine(futureLine);
+				}
+			}
+		});
+		getLineNumber().setModel(model);
 	}
 
 	private void countFileLines() throws FileNotFoundException, IOException, EmptyImportFileException {
@@ -491,12 +475,13 @@ public class ImportPanel extends JPanel {
 			try {
 				reader.close();
 			} catch (IOException e) {
-				getLogger().warn("Error closing file "+canonicalFile, e);
+				getLogger().warn("Error closing file "+canonicalFile, e); //$NON-NLS-1$
 			}
 		}
 	}
 	
 	private Logger logger;
+	private JSpinner lineNumber;
 	private Logger getLogger() {
 		if (this.logger==null) {
 			this.logger = LoggerFactory.getLogger(getClass());
@@ -506,7 +491,7 @@ public class ImportPanel extends JPanel {
 	
 	public void setLine (int lineNumber) throws IOException {
 		if (lineNumber>=this.numberOfLines) {
-			throw new IllegalArgumentException("line ("+lineNumber+") must be less than "+this.numberOfLines);
+			throw new IllegalArgumentException(MessageFormat.format("line ({0}) must be less than {1}",lineNumber, this.numberOfLines)); //$NON-NLS-1$
 		}
 		String[] fields = getFields(lineNumber);
 		while (fields==null) {
@@ -521,11 +506,10 @@ public class ImportPanel extends JPanel {
 		boolean first = this.currentLine==0;
 		getFirst().setSelected(first);
 		getFirst().setEnabled(!first);
-		getPrevious().setEnabled(!first);
 		boolean last = this.currentLine==this.numberOfLines-1;
 		getLast().setSelected(last);
 		getLast().setEnabled(!last);
-		getNext().setEnabled(!last);
+		getLineNumber().setValue(lineNumber+1);
 		setFieldsCombo(fields);
 		ImportTableModel model = (ImportTableModel) getJTable().getModel();
 		model.setFields(fields);
@@ -546,7 +530,7 @@ public class ImportPanel extends JPanel {
 			try {
 				reader.close();
 			} catch (IOException e) {
-				getLogger().warn("Error while closing file "+canonicalFile, e);
+				getLogger().warn("Error while closing file "+canonicalFile, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -572,10 +556,6 @@ public class ImportPanel extends JPanel {
 				((ImportTableModel)getJTable().getModel()).getRelations()),
 				addToCurrentData?data:null, defaultAccount);
 	}
-
-    private int getNumberOfHeaderLines() {
-        return ignoreFirstLine.isSelected()?((Number)numberOfHeaderLines.getValue()).intValue():0;
-    }
 
     public boolean getAddToCurrentData() {
 		return addToCurrentFile.isSelected();
@@ -605,10 +585,31 @@ public class ImportPanel extends JPanel {
 	public void setParameters(ImporterParameters parameters) {
 		columnSeparatorPanel.setSeparator(parameters.getColumnSeparator());
         decimalSeparatorPanel.setSeparator(parameters.getDecimalSeparator());
-		ignoreFirstLine.setSelected(parameters.getIgnoredLeadingLines()!=0);
-        if (ignoreFirstLine.isSelected()) {
-            numberOfHeaderLines.setValue(parameters.getIgnoredLeadingLines());
+		getIgnoreFirstLine().setSelected((numberOfLines>1) && (parameters.getIgnoredLeadingLines()!=0));
+        if (getIgnoreFirstLine().isSelected()) {
+    		int max = Math.max(numberOfLines-1, 1);
+    		int current = Math.max(Math.min(parameters.getIgnoredLeadingLines(), max), 1);
+            getNumberOfHeaderLinesSpinner().setValue(current);
         }
 		((ImportTableModel)getJTable().getModel()).setRelations(parameters.getImportedFileColumns());
 	}
-}
+	private JSpinner getLineNumber() {
+		if (lineNumber == null) {
+			lineNumber = new JSpinner();
+			String columnName = LocalizationData.get("ImportDialog.importedFields"); //$NON-NLS-1$
+			lineNumber.setToolTipText(MessageFormat.format("This field contains the number of the line used to fill the {0} column", columnName));
+			((JSpinner.DefaultEditor) lineNumber.getEditor()).getTextField().setColumns(4);
+		}
+		return lineNumber;
+	}
+	private JSpinner getNumberOfHeaderLinesSpinner() {
+		if (numberOfHeaderLines==null) {
+	        numberOfHeaderLines = new JSpinner();
+			((JSpinner.DefaultEditor) numberOfHeaderLines.getEditor()).getTextField().setColumns(4);
+		}
+		return numberOfHeaderLines;
+	}
+    private int getNumberOfHeaderLines() {
+        return getIgnoreFirstLine().isSelected()?((Number)getNumberOfHeaderLinesSpinner().getValue()).intValue():0;
+    }
+ }

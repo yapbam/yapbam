@@ -71,7 +71,6 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 		importPanel.setData(data.data);
 		try {
 			importPanel.setFile(data.file);
-			importPanel.setLine(0);
 		} catch (IOException e) {
 			instantiateException = e;
 		}
