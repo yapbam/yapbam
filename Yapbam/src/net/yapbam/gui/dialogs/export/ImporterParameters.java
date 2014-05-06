@@ -79,6 +79,9 @@ public class ImporterParameters implements Serializable {
 
 	public Charset getEncoding() {
 		//TODO
+//		for (Charset charset : Charset.availableCharsets().values()) {
+//			System.out.println (charset.name()+": "+charset.displayName(Locale.getDefault()));
+//		} 
 		return Charset.defaultCharset();
 	}
 }
