@@ -597,7 +597,7 @@ public class ImportPanel extends JPanel {
 		if (lineNumber == null) {
 			lineNumber = new JSpinner();
 			String columnName = LocalizationData.get("ImportDialog.importedFields"); //$NON-NLS-1$
-			lineNumber.setToolTipText(MessageFormat.format("This field contains the number of the line used to fill the {0} column", columnName));
+			lineNumber.setToolTipText(MessageFormat.format(LocalizationData.get("ImportDialog.lineNumber.toolTip"), columnName)); //$NON-NLS-1$
 			((JSpinner.DefaultEditor) lineNumber.getEditor()).getTextField().setColumns(4);
 		}
 		return lineNumber;

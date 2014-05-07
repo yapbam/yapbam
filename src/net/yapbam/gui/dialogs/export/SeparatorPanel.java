@@ -45,7 +45,7 @@ public class SeparatorPanel extends JPanel {
 		return new SeparatorPanel(LocalizationData.get("ExportDialog.decimalSeparator"), //$NON-NLS-1$
         		defaultSeparatorWording,
         		LocalizationData.get("ExportDialog.decimalSeparator.defaultSeparator.toolTip"), //$NON-NLS-1$
-        		LocalizationData.get("ExportDialog.decimalSeparator.customized"), //$NON-NLS-1$
+        		LocalizationData.get("ExportDialog.columnSeparator.customized"), //$NON-NLS-1$
         		LocalizationData.get("ExportDialog.decimalSeparator.customized.toolTip"), //$NON-NLS-1$
         		LocalizationData.get("ExportDialog.decimalSeparator.customizedChar.toolTip"), //$NON-NLS-1$
                 decimalSeparator
