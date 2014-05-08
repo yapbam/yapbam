@@ -56,11 +56,11 @@ public abstract class EditionWizard<T> {
 			for (int i = 0; i < data.getTransactionsNumber(); i++) {
 				Transaction transaction = data.getTransaction(i);
 				if (transaction.getDescription().equalsIgnoreCase(description)) {
-					T value = getValue(transaction);
-					if (value != null) {
-						Double weight = toProbability.get(value);
+					T transactionValue = getValue(transaction);
+					if (transactionValue != null) {
+						Double weight = toProbability.get(transactionValue);
 						double transactionWeight = getRankingBasedOnDate(now, transaction);
-						toProbability.put(value, transactionWeight + (weight == null ? 0 : weight));
+						toProbability.put(transactionValue, transactionWeight + (weight == null ? 0 : weight));
 					}
 				}
 			}
