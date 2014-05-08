@@ -24,6 +24,7 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.transaction.AmountWizard;
+import net.yapbam.gui.dialogs.transaction.CategoryAndType;
 import net.yapbam.gui.dialogs.transaction.EditionWizard;
 import net.yapbam.gui.dialogs.transaction.ModeWizard;
 import net.yapbam.gui.preferences.EditingSettings;
@@ -39,6 +40,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	private DateWidget defDate;
 	private JTextField statement;
 	private boolean checkNumberIsVisible;
+	private boolean editionMode;
 	
 	/** Display the creation dialog, if the creation is confirmed, add the transaction to the global data 
 	 * @param data the global data
@@ -109,7 +111,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 */
 	public TransactionDialog(Window owner, final FilteredData data, Transaction transaction, boolean edit) {
 		super(owner,
-				(edit ? LocalizationData.get("TransactionDialog.title.edit") : LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$ //$NON-NLS-2$
+				(edit ? LocalizationData.get("TransactionDialog.title.edit") : //$NON-NLS-1$
+					LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$
+		this.editionMode = edit;
 		amount.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -383,72 +387,42 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			return null;
 		}
 	}
-	private static class CategoryAndType {
-		protected boolean receipt;
-		protected Category category;
-
-		private CategoryAndType(boolean receipt, Category category) {
-			this.receipt = receipt;
-			this.category = category;
-		}
-		public Category getCategory() {
-			return category;
-		}
-		@Override
-		public int hashCode() {
-			return category.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CategoryAndType)) {
-				return false;
-			}
-			if (this.receipt != ((CategoryAndType)obj).receipt) {
-				return false;
-			}
-			return this.category.equals(((CategoryAndType)obj).category);
-		}
-
-		public boolean isReceipt() {
-			return receipt;
-		}
-	}
 	
 	@Override
 	protected void predefinedDescriptionSelected(String description) {
+		if (editionMode) {
+			// Do nothing if we are editing an existing transaction
+			return;
+		}
+		
 		// Search for the receipt/expense, category, mode and amount with the highest probability.
-		EditionWizard<Category> cWizard = new EditionWizard<Category>(data.getGlobalData(), description) {
+		EditionWizard<CategoryAndType> cWizard = new EditionWizard<CategoryAndType>(data.getGlobalData(), description) {
 			@Override
-			protected Category getValue(Transaction transaction) {
-				return transaction.getCategory();
+			protected CategoryAndType getValue(Transaction transaction) {
+				return new CategoryAndType(transaction.getAmount()>0, transaction.getCategory());
 			}
 		};
-		this.categories.set(cWizard.get());
+		boolean isReceipt = cWizard.get().isReceipt();
+		this.categories.set(cWizard.get().getCategory());
+		this.receipt.setSelected(isReceipt);
 		
-		EditionWizard<Boolean> rWizard = new EditionWizard<Boolean>(data.getGlobalData(), description) {
-			@Override
-			protected Boolean getValue(Transaction transaction) {
-				return transaction.getAmount()>0;
-			}
-		};
-		this.receipt.setSelected(rWizard.get());
-		
-		ModeWizard mWizard = new ModeWizard(data.getGlobalData(), description, getAccount(), rWizard.get());
+		ModeWizard mWizard = new ModeWizard(data.getGlobalData(), description, getAccount(), isReceipt);
 		Mode mode = mWizard.get();
 		if (mode!=null) {
 			// Mode can be null if the description has never been used for a mode available in this account
 			this.setMode(mode);
+		} else {
+			// Check if current mode is available for that expense/receipt nature and update the mode accordingly
+			boolean ok = isReceipt ? getCurrentMode().isUsableForReceipt() : getCurrentMode().isUsableForExpense();
+			if (!ok) {
+				this.setMode(Mode.UNDEFINED);
+			}
 		}
-		// Check if current mode is available for that expense/receipt nature and update the mode accordingly
-		//FIXME
 		
-		//TODO restrict amount research to expense/receipt 
-		AmountWizard aWizard = new AmountWizard(data.getGlobalData(), description, getAmount());
+		AmountWizard aWizard = new AmountWizard(data.getGlobalData(), description, getAmount(), isReceipt);
 		Double autoAmount = aWizard.get();
 		if (autoAmount!=null) {
 			this.amount.setValue(Math.abs(autoAmount));
-			this.receipt.setSelected(autoAmount>0);
 		}
 	}
 	

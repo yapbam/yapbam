@@ -11,8 +11,9 @@ public class AmountWizard extends EditionWizard<Double> {
 	private Double lastAmount;
 	private int lastDate = 0;
 	private Source source;
+	private boolean isReceipt;
 
-	public AmountWizard(GlobalData data, String description, double currentAmount) {
+	public AmountWizard(GlobalData data, String description, double currentAmount, boolean isReceipt) {
 		super(data, description);
 		EditionWizardSettings settings = Preferences.INSTANCE.getEditionSettings().getEditionWizardSettings();
 		Mode mode = settings.getMode();
@@ -20,11 +21,12 @@ public class AmountWizard extends EditionWizard<Double> {
 			mode = Mode.NEVER;
 		}
 		source = Mode.NEVER.equals(mode) ? null : settings.getSource();
+		this.isReceipt = isReceipt;
 	}
 
 	@Override
 	protected Double getValue(Transaction transaction) {
-		if (source==null) {
+		if ((source==null) || (isReceipt!=transaction.getAmount()>0)) {
 			return null;
 		} else if (Source.MOST_PROBABLE.equals(source)) {
 			return transaction.getAmount();

@@ -7,7 +7,6 @@ import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
-import net.yapbam.date.helpers.DateStepper;
 
 public class ModeWizard extends EditionWizard<Mode> {
 	private Set<String> allowedModes;
@@ -20,8 +19,8 @@ public class ModeWizard extends EditionWizard<Mode> {
 		allowedModes = new HashSet<String>();
 		for (int i = 0; i < account.getModesNumber(); i++) {
 			Mode mode = account.getMode(i);
-			DateStepper dateStepper = receipt ? mode.getReceiptVdc() : mode.getExpenseVdc();
-			if (dateStepper!=null) {
+			boolean ok = receipt ? mode.isUsableForReceipt() : mode.isUsableForExpense();
+			if (ok) {
 				allowedModes.add(mode.getName());
 			}
 		}
