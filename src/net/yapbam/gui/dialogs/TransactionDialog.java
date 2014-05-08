@@ -12,9 +12,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.*;
 
@@ -25,13 +23,14 @@ import net.yapbam.data.*;
 import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.dialogs.transaction.AmountWizard;
+import net.yapbam.gui.dialogs.transaction.EditionWizard;
+import net.yapbam.gui.dialogs.transaction.ModeWizard;
 import net.yapbam.gui.preferences.EditingSettings;
 import net.yapbam.gui.widget.CurrencyWidget;
 
 /** This dialog allows to create or edit a transaction */
 public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
-	private static final int MILLIS_PER_DAY = 60000 * 24;
-
 	private static final long serialVersionUID = 1L;
 
 	private DateWidget date;
@@ -74,7 +73,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		dialog.setVisible(true);
 		Transaction newTransaction = dialog.getTransaction();
 		if ((newTransaction != null) && autoAdd) {
-			EditingSettings editingOptions = Preferences.INSTANCE.getEditingOptions();
+			EditingSettings editingOptions = Preferences.INSTANCE.getEditionSettings();
 			if (editingOptions.isAlertOnModifyChecked() && (transaction!=null) && (transaction.getStatement()!=null)) {
 				boolean alert = !transaction.getAccount().equals(newTransaction.getAccount());
 				alert = alert || (GlobalData.AMOUNT_COMPARATOR.compare(transaction.getAmount(), newTransaction.getAmount())!=0);
@@ -132,7 +131,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		this.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data.getGlobalData()) {
 			@Override
 			protected void process(Transaction transaction) {
-				double ranking = getRankingBasedOnDate(now, transaction);
+				double ranking = EditionWizard.getRankingBasedOnDate(now, transaction);
 				if (!transaction.getAccount().equals(getAccount())) {
 					ranking = ranking / 100;
 				}
@@ -142,7 +141,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		this.subtransactionsPanel.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data.getGlobalData()) {
 			@Override
 			protected void process(Transaction transaction) {
-				double ranking = getRankingBasedOnDate(now, transaction);
+				double ranking = EditionWizard.getRankingBasedOnDate(now, transaction);
 				if (!transaction.getAccount().equals(getAccount())) {
 					ranking = ranking / 100;
 				}
@@ -184,7 +183,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					for (int i = 0; i < gData.getTransactionsNumber(); i++) {
 						Transaction transaction = gData.getTransaction(i);
 						// In order to minimize the impact of very old transactions, we will use the date ranking
-						double ranking = getRankingBasedOnDate(now, transaction);
+						double ranking = EditionWizard.getRankingBasedOnDate(now, transaction);
 						if (!transaction.getAccount().equals(getAccount())) {
 							ranking = ranking / 100;
 						}
@@ -198,11 +197,11 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 							}
 						}
 					}
-					CategoryAndType ct = getHeaviest(map);
+					CategoryAndType ct = EditionWizard.getHeaviest(map);
 					this.category = ct.getCategory();
-					if (ct.receipt && amount<0) {
+					if (ct.isReceipt() && amount<0) {
 						amount = Math.abs(amount);
-					} else if (!ct.receipt && amount>0) {
+					} else if (!ct.isReceipt() && amount>0) {
 						amount = -amount;
 					}
 				}
@@ -384,108 +383,72 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			return null;
 		}
 	}
-	
-	private static class CategoryAndType extends XAndType<Category>{
-		private CategoryAndType(boolean receipt, Category mode) {
-			super(receipt, mode);
+	private static class CategoryAndType {
+		protected boolean receipt;
+		protected Category category;
+
+		private CategoryAndType(boolean receipt, Category category) {
+			this.receipt = receipt;
+			this.category = category;
 		}
 		public Category getCategory() {
-			return x;
+			return category;
 		}
-	}
-	
-	private static <T> T getHeaviest(Map<T, Double> map) {
-		T ct = null;
-		double max = 0.0;
-		for (Iterator<Entry<T, Double>> iterator = map.entrySet().iterator(); iterator.hasNext();) {
-			Entry<T, Double> next = iterator.next();
-			if (next.getValue() > max) {
-				ct = next.getKey();
-				max = next.getValue();
-			}
-		}
-		return ct;
-	}
-	
-	private static class ModeAndType extends XAndType<Mode>{
-		private ModeAndType(boolean receipt, Mode mode) {
-			super(receipt, mode);
-		}
-		public Mode getMode() {
-			return x;
-		}
-	}
-	
-	private static class XAndType<T> {
-		protected boolean receipt;
-		protected T x;
-		
-		private XAndType(boolean receipt, T x) {
-			super();
-			this.receipt = receipt;
-			this.x = x;
-		}
-
 		@Override
 		public int hashCode() {
-			return x.hashCode();
+			return category.hashCode();
 		}
 
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof XAndType<?>)) {
+			if (!(obj instanceof CategoryAndType)) {
 				return false;
 			}
-			if (this.receipt != ((XAndType<?>)obj).receipt) {
+			if (this.receipt != ((CategoryAndType)obj).receipt) {
 				return false;
 			}
-			return this.x.equals(((XAndType<?>)obj).x);
+			return this.category.equals(((CategoryAndType)obj).category);
+		}
+
+		public boolean isReceipt() {
+			return receipt;
 		}
 	}
 	
-	/** Gets the ranking of a transaction, based on its date.
-	 * This method is used by the wizard to determine which descriptions are the most probable.
-	 * @param transaction The transaction
-	 * @return a double
-	 */
-	private double getRankingBasedOnDate(long now, Transaction transaction) {
-		// we will use a function between 0 (for very, very old ones) and 1 for
-		// recent one.
-		// Probably this function could be improved ...
-		long time = Math.abs(transaction.getDate().getTime() - now) / MILLIS_PER_DAY;
-		return 2 / Math.sqrt(time + 4);
-	}
-
 	@Override
 	protected void predefinedDescriptionSelected(String description) {
-		long now = System.currentTimeMillis();
-		Map<ModeAndType, Double> modes = new HashMap<ModeAndType, Double>();
-		Map<Category, Double> categories = new HashMap<Category, Double>();
-		Map<Double, Double> amount = new HashMap<Double, Double>();
-		for (int i = 0; i < data.getGlobalData().getTransactionsNumber(); i++) {
-			Transaction transaction = data.getGlobalData().getTransaction(i);
-			if (transaction.getDescription().equalsIgnoreCase(description)) {
-				Category category = transaction.getCategory();
-				// In order to minimize the impact of very old transactions, we will use
-				// the date ranking
-				double transactionWeight = getRankingBasedOnDate(now, transaction);
-				Double weight = categories.get(category);
-				categories.put(category, transactionWeight + (weight == null ? 0 : weight));
-				if (transaction.getAccount() == getAccount()) {
-					// As mode are attached to accounts, it would be unsafe to try to
-					// deduce modes on accounts different from the current one.
-					ModeAndType mt = new ModeAndType(transaction.getAmount()>0, transaction.getMode());
-					weight = modes.get(mt);
-					modes.put(mt, transactionWeight + (weight == null ? 0 : weight));
-				}
+		// Search for the receipt/expense, category, mode and amount with the highest probability.
+		EditionWizard<Category> cWizard = new EditionWizard<Category>(data.getGlobalData(), description) {
+			@Override
+			protected Category getValue(Transaction transaction) {
+				return transaction.getCategory();
 			}
+		};
+		this.categories.set(cWizard.get());
+		
+		EditionWizard<Boolean> rWizard = new EditionWizard<Boolean>(data.getGlobalData(), description) {
+			@Override
+			protected Boolean getValue(Transaction transaction) {
+				return transaction.getAmount()>0;
+			}
+		};
+		this.receipt.setSelected(rWizard.get());
+		
+		ModeWizard mWizard = new ModeWizard(data.getGlobalData(), description, getAccount(), rWizard.get());
+		Mode mode = mWizard.get();
+		if (mode!=null) {
+			// Mode can be null if the description has never been used for a mode available in this account
+			this.setMode(mode);
 		}
-		// Search for the mode and category with the highest weight.
-		this.categories.set(getHeaviest(categories));
-		ModeAndType modeAndType = getHeaviest(modes);
-		if (modeAndType != null) {
-			this.receipt.setSelected(modeAndType.receipt);
-			this.setMode(modeAndType.getMode());
+		// Check if current mode is available for that expense/receipt nature and update the mode accordingly
+		//FIXME
+		
+		//TODO restrict amount research to expense/receipt 
+		AmountWizard aWizard = new AmountWizard(data.getGlobalData(), description, getAmount());
+		Double autoAmount = aWizard.get();
+		if (autoAmount!=null) {
+			this.amount.setValue(Math.abs(autoAmount));
+			this.receipt.setSelected(autoAmount>0);
 		}
 	}
 	
@@ -535,7 +498,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 * @see #VALUE_DATE_CHANGED
 	 */
 	private void autoFillStatement(int changed) {
-		EditingSettings editOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editOptions = Preferences.INSTANCE.getEditionSettings();
 		if (editOptions.isAutoFillStatement()) {
 			Date aDate = null;
 			if (((changed&DATE_CHANGED)!=0) && !editOptions.isDateBasedAutoStatement()) {

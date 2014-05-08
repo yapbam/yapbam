@@ -31,7 +31,7 @@ public class DeleteTransactionAction extends AbstractTransactionAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = selector.getSelectedTransactions()[0];
-		EditingSettings editingOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editingOptions = Preferences.INSTANCE.getEditionSettings();
 		if (editingOptions.isAlertOnModifyChecked() && (transaction.getStatement() != null)) {
 			AlertDialog alert = new AlertDialog(Utils.getOwnerWindow((Component) e.getSource()),
 					LocalizationData.get("DeleteCheckedTransactionAlert.title"), LocalizationData.get("DeleteCheckedTransactionAlert.message")); //$NON-NLS-1$ //$NON-NLS-2$

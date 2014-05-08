@@ -365,7 +365,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 	}
 
 	private void initFromPreferences() {
-		EditingSettings editOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editOptions = Preferences.INSTANCE.getEditionSettings();
 		chckbxAskMeOnDelete.setSelected(editOptions.isAlertOnDelete());
 		chckbxAlertMeIf.setSelected(editOptions.isAlertOnModifyChecked());
 		chckbxAutoFillStatement.setSelected(editOptions.isAutoFillStatement());
