@@ -555,7 +555,7 @@ public class Preferences {
 		this.properties.setProperty(PREF_PREFIX+EDITION_WIZARD_SOURCE, edit.getEditionWizardSettings().getSource().name());
 	}
 	
-	public EditingSettings getEditingOptions() {
+	public EditingSettings getEditionSettings() {
 		if (editingOptions==null) {
 			String defaultPattern = "yyyyMM";
 			String pattern = this.properties.getProperty(PREF_PREFIX+AUTO_STATEMENT_FORMAT, defaultPattern);

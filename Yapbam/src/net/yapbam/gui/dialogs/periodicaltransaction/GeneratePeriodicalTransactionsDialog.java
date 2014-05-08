@@ -33,7 +33,7 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 	protected Void buildResult() {
 		// Add the generated transactions
 		Transaction[] transactions = panel.getValidTransactions();
-		EditingSettings editingOptions = Preferences.INSTANCE.getEditingOptions();
+		EditingSettings editingOptions = Preferences.INSTANCE.getEditionSettings();
 		if (editingOptions.isAutoFillStatement()) {
 			for (int i = 0; i < transactions.length; i++) {
 				Transaction t = transactions[i];

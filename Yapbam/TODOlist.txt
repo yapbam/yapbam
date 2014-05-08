@@ -1,8 +1,5 @@
 Avant livraison :
-	Libellés en P, A
-
-Travaux de Fabien :
-	Bug dans le dialogue d'import comportement différent quand on sélectionne plus d'une ligne d'entête et quand on clique sur la case à cocher (les titres de colonnes changent ... ou pas).
+	Libellés en P
 
 Bug :
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
