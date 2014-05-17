@@ -11,6 +11,7 @@ improvement
 	L'assistant d'édition des opérations est à présent désactivé lors de la modification d'une opération existante. Ceci permet d'éviter de modifier par erreur le moyen de paiement ou le montant en changeant le libellé.
 fix
 	Sous le thème Swing, la couleur de fond de la colonne "Lié à" du dialogue d'import était incorrecte.
+	Quand on confirmait l'archivage dans un fichier standard (pas un fichier d'archive), cela provoquait une erreur.
 
 version	0.16.10 (25/04/2014)
 fix

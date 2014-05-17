@@ -120,7 +120,11 @@ public class ArchiveAction extends AbstractAction {
 		
 		// Copy archived transactions into archive
 		Transaction[] transactions = selectedTransactions.toArray(new Transaction[selectedTransactions.size()]);
+		// As the user can force to archive data in a "standard" file, we have to ensure the archiveData has the archive type  
+		boolean old = archiveData.isArchive();
+		archiveData.setArchive(true);
 		Archiver.archive(archiveData, transactions);
+		archiveData.setArchive(old);
 		
 		// Save the archive
 		if (!YapbamPersistenceManager.MANAGER.save(owner, wrapper)) {
