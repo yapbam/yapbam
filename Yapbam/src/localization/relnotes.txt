@@ -11,6 +11,7 @@ improvement
 	The transaction editing wizard is now disabled when editing an existing transaction. This avoids inadvertently change the method of payment or the amount while changing the description.
 fix
 	Under Swing look and feel, the background color of "Linked to" column was wrong in import dialog.
+	When the user confirmed the archiving in a standard file (not an archive file), it caused an error.
 	
 version	0.16.10 (04/25/2014)
 fix
