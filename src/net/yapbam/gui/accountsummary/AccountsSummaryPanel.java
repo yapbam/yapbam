@@ -16,6 +16,7 @@ import net.yapbam.gui.util.CellRenderer;
 import net.yapbam.gui.util.JTableUtils;
 import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 import net.yapbam.gui.util.SplitPane;
+import net.yapbam.util.NumberUtils;
 
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -203,17 +204,17 @@ public class AccountsSummaryPanel extends JPanel {
 			} else if (column == AccountsSummaryTableModel.ACCOUNT_COLUMN) {
 				return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 			}
-			double result = 0.0;
 			AccountsSummaryTableModel model = (AccountsSummaryTableModel) getModel();
+			Number result;
+			if (column == AccountsSummaryTableModel.NB_TRANSACTIONS_COLUMN ||
+					column == AccountsSummaryTableModel.NB_UNCHECKED_TRANSACTIONS_COLUMN) {
+				result = Long.valueOf(0);
+			} else {
+				result = Double.valueOf(0.0);
+			}
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				if ((Boolean) model.getValueAt(i, AccountsSummaryTableModel.SELECT_COLUMN)) {
-					if (column == AccountsSummaryTableModel.CHECKED_BALANCE_COLUMN) {
-						result += data.getAccount(i).getBalanceData().getCheckedBalance();
-					} else if (column == AccountsSummaryTableModel.CURRENT_BALANCE_COLUMN) {
-						result += data.getAccount(i).getBalanceData().getCurrentBalance();
-					} else if (column == AccountsSummaryTableModel.FINAL_BALANCE_COLUMN) {
-						result += data.getAccount(i).getBalanceData().getFinalBalance();
-					}
+					result = NumberUtils.add(result, (Number)model.getValueAt(i, column));
 				}
 			}
 			return result;

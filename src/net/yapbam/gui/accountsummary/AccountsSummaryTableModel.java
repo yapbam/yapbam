@@ -38,6 +38,8 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 	static final int CURRENT_BALANCE_COLUMN = 2;
 	static final int FINAL_BALANCE_COLUMN = 3;
 	static final int CHECKED_BALANCE_COLUMN = 4;
+	static final int NB_TRANSACTIONS_COLUMN = 5;
+	static final int NB_UNCHECKED_TRANSACTIONS_COLUMN = 6;
 	
 	private static final long serialVersionUID = 1L;
 	private static final Set<Class<? extends DataEvent>> IGNORED_EVENTS;
@@ -100,13 +102,15 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 			return Boolean.class;
 		} else if (columnIndex==ACCOUNT_COLUMN) {
 			return Object.class;
+		} else if (columnIndex==NB_TRANSACTIONS_COLUMN || columnIndex==NB_UNCHECKED_TRANSACTIONS_COLUMN) {
+			return Long.class;
 		} else {
 			return Double.class;
 		}
 	}
 
 	public int getColumnCount() {
-		return 5;
+		return 7;
 	}
 
 	@Override
@@ -121,6 +125,11 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 			return LocalizationData.get("AccountsSummary.FinalBalance"); //$NON-NLS-1$
 		} else if (columnIndex==CHECKED_BALANCE_COLUMN) {
 			return LocalizationData.get("AccountsSummary.CheckedBalance"); //$NON-NLS-1$
+		} else if (columnIndex==NB_TRANSACTIONS_COLUMN) {
+			//TODO Change the wording name
+			return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
+		} else if (columnIndex==NB_UNCHECKED_TRANSACTIONS_COLUMN) {
+			return LocalizationData.get("AccountsSummary.uncheckedTransactionsNumber"); //$NON-NLS-1$
 		} else {
 			return "?"; //$NON-NLS-1$
 		}
@@ -141,6 +150,10 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 			return data.getAccount(rowIndex).getBalanceData().getFinalBalance();
 		} else if (columnIndex==CHECKED_BALANCE_COLUMN) {
 			return data.getAccount(rowIndex).getBalanceData().getCheckedBalance();
+		} else if (columnIndex==NB_TRANSACTIONS_COLUMN) {
+			return data.getAccount(rowIndex).getTransactionsNumber();
+		} else if (columnIndex==NB_UNCHECKED_TRANSACTIONS_COLUMN) {
+			return -1; //TODO
 		} else {
 			return null;
 		}
@@ -156,6 +169,6 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 		this.accountSelected.set(rowIndex, (Boolean) aValue);
 //		fireTableCellUpdated(rowIndex, columnIndex);
 //		fireTableRowsUpdated(getRowCount(), getRowCount()); //This line Hangs
-		fireTableDataChanged(); //TODO Remove (this clears the selection and makes the screen flicky
+		fireTableDataChanged(); //TODO Remove (this clears the selection and makes the screen flicky)
 	}
 }
