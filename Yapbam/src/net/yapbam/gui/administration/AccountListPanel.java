@@ -17,15 +17,9 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
-import net.yapbam.data.event.CheckbookAddedEvent;
-import net.yapbam.data.event.CheckbookRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.data.event.ModeAddedEvent;
-import net.yapbam.data.event.ModeRemovedEvent;
-import net.yapbam.data.event.TransactionsAddedEvent;
-import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
@@ -129,12 +123,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 				return LocalizationData.get("AccountManager.alertThresholdLess.title"); //$NON-NLS-1$
 			} else if (columnIndex==3) {
 				return LocalizationData.get("AccountManager.alertThresholdMore.title"); //$NON-NLS-1$
-			} else if (columnIndex==4) {
-				return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
-			} else if (columnIndex==5) {
-				return LocalizationData.get("AccountManager.modesNumber.title"); //$NON-NLS-1$
-			} else if (columnIndex==6) {
-				return LocalizationData.get("AccountManager.checkbooksNumber.title"); //$NON-NLS-1$
 			} else {
 				return "?"; //$NON-NLS-1$
 			}
@@ -151,13 +139,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 				return account.getAlertThreshold().getLessThreshold();
 			} else if (columnIndex==3) {
 				return account.getAlertThreshold().getMoreThreshold();
-			} else if (columnIndex==4) {
-				return account.getTransactionsNumber();
-			} else if (columnIndex==5) {
-				// The undefined mode is returned in getModesNumber
-				return account.getModesNumber()-1; 
-			} else if (columnIndex==6) {
-				return account.getCheckbooksNumber();
 			} else {
 				return "?"; //$NON-NLS-1$
 			}
@@ -170,7 +151,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 
 		@Override
 		public int getColumnCount() {
-			return 5;
+			return 4;
 		}
 
 		@Override
@@ -186,18 +167,6 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 				this.fireTableRowsDeleted(index, index);
 			} else if (event instanceof AccountPropertyChangedEvent) {
 				account = ((AccountPropertyChangedEvent)event).getAccount();
-			} else if (event instanceof TransactionsAddedEvent) {
-				this.fireTableDataChanged(); //TODO Refresh only modified accounts ?
-			} else if (event instanceof TransactionsRemovedEvent) {
-				this.fireTableDataChanged(); //TODO Refresh only modified accounts ?
-			} else if (event instanceof ModeAddedEvent) {
-				account = ((ModeAddedEvent)event).getAccount();
-			} else if (event instanceof ModeRemovedEvent) {
-				account = ((ModeRemovedEvent)event).getAccount();
-			} else if (event instanceof CheckbookAddedEvent) {
-				account = ((CheckbookAddedEvent)event).getAccount();
-			} else if (event instanceof CheckbookRemovedEvent) {
-				account = ((CheckbookRemovedEvent)event).getAccount();
 			}
 			if (account!=null) {
 				int row = ((GlobalData)data).indexOf(account);

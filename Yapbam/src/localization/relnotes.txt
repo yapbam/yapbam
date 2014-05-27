@@ -3,6 +3,10 @@ version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 
+version	0.17.1 (06/01/2014)
+improvement
+	The number of transactions per account is moved from the account administration panel to the account summary. This panel now displays the total number of transactions. 
+
 version	0.17.0 (05/01/2014)
 improvement
 	It is now possible to select the decimal separator in the import dialog. Amounts preceded by a + are now accepted.
