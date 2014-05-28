@@ -25,10 +25,10 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
 import net.yapbam.gui.dialogs.EditAccountDialog;
+import net.yapbam.util.HtmlUtils;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.lang.Object;
 import java.text.MessageFormat;
 
 public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData> {
@@ -49,8 +49,8 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			int nb = account.getTransactionsNumber();
 			if (nb!=0) {
 				String mess = nb==1?LocalizationData.get("AccountManager.deleteMessage.one"): //$NON-NLS-1$
-						MessageFormat.format("<HTML>"+LocalizationData.get("AccountManager.deleteMessage.more")+ //$NON-NLS-1$ //$NON-NLS-2$
-						"<BR>"+LocalizationData.get("AccountManager.deleteMessage.confirm")+"</HTML>", nb); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						MessageFormat.format(HtmlUtils.START_TAG+LocalizationData.get("AccountManager.deleteMessage.more")+ //$NON-NLS-1$
+						HtmlUtils.NEW_LINE_TAG+LocalizationData.get("AccountManager.deleteMessage.confirm")+HtmlUtils.END_TAG, nb); //$NON-NLS-1$
 				Object[] options = {LocalizationData.get("GenericButton.ok"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
 				int ok = JOptionPane.showOptionDialog(getJTable(), mess, LocalizationData.get("AccountManager.deleteMessage.title"), //$NON-NLS-1$
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);		
@@ -201,10 +201,5 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	@Override
 	protected Action getDuplicateButtonAction() {
 		return null;
-	}
-
-	@Override
-	public JTable getJTable() {
-		return super.getJTable();
 	}
 }
