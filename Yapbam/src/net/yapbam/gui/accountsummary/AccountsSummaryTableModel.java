@@ -126,10 +126,9 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 		} else if (columnIndex==CHECKED_BALANCE_COLUMN) {
 			return LocalizationData.get("AccountsSummary.CheckedBalance"); //$NON-NLS-1$
 		} else if (columnIndex==NB_TRANSACTIONS_COLUMN) {
-			//TODO Change the wording name
-			return LocalizationData.get("AccountManager.transactionsNumber.title"); //$NON-NLS-1$
+			return LocalizationData.get("AccountsSummary.TransactionsNumber"); //$NON-NLS-1$
 		} else if (columnIndex==NB_UNCHECKED_TRANSACTIONS_COLUMN) {
-			return LocalizationData.get("AccountsSummary.uncheckedTransactionsNumber"); //$NON-NLS-1$
+			return LocalizationData.get("AccountsSummary.UncheckedTransactionsNumber"); //$NON-NLS-1$
 		} else {
 			return "?"; //$NON-NLS-1$
 		}
