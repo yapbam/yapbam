@@ -158,5 +158,10 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.fathzer</groupId>
+			<artifactId>jlocal</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 </project>
