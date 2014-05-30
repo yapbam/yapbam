@@ -9,6 +9,8 @@ import java.util.Date;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
+import com.fathzer.jlocal.Formatter;
+
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Mode;
@@ -154,7 +156,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 				result = ""; //$NON-NLS-1$
 			}
 			if ((period!=null) && (period.getLastDate()!=null)) {
-				result = MessageFormat.format(LocalizationData.get("PeriodicalTransactionManager.period.until"), result, period.getLastDate()); //$NON-NLS-1$
+				result = Formatter.format(LocalizationData.get("PeriodicalTransactionManager.period.until"), result, period.getLastDate()); //$NON-NLS-1$
 			}
 			return result;
 		} else if (columnIndex==settings.getActiveColumn()) {
