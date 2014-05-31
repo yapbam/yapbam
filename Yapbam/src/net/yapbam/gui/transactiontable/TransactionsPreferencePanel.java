@@ -3,8 +3,8 @@ package net.yapbam.gui.transactiontable;
 import java.awt.GridBagLayout;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.dialogs.preferences.PreferencePanel;
 
 import java.awt.Component;
 import java.awt.Dimension;

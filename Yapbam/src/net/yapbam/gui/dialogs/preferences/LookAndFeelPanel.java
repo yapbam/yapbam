@@ -6,7 +6,6 @@ import net.yapbam.gui.CompoundPreferencePanel;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
-import net.yapbam.gui.PreferencePanel;
 
 public class LookAndFeelPanel extends CompoundPreferencePanel {
 	private static final long serialVersionUID = 1L;

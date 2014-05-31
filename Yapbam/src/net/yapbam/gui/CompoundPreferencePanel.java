@@ -3,6 +3,9 @@ package net.yapbam.gui;
 import javax.swing.JTabbedPane;
 
 
+
+import net.yapbam.gui.dialogs.preferences.PreferencePanel;
+
 import java.awt.BorderLayout;
 
 /** A preferences panel that groups several preference panels in a JTabbedPane.

@@ -16,12 +16,16 @@ import java.awt.event.ItemListener;
 import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
+
 import javax.swing.JSlider;
+
 import java.awt.Insets;
+
 import javax.swing.JPanel;
+
 import java.awt.GridLayout;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 

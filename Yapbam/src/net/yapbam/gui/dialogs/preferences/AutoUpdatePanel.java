@@ -16,7 +16,6 @@ import java.math.BigInteger;
 import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import javax.swing.JPanel;

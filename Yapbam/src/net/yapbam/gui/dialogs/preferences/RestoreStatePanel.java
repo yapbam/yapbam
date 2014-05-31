@@ -1,7 +1,6 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.StartStateSettings;
 

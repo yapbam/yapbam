@@ -1,7 +1,6 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import java.awt.GridBagLayout;
@@ -11,8 +10,11 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 import java.awt.GridBagConstraints;
+
 import javax.swing.JRadioButton;
+
 import java.awt.Insets;
+
 import javax.swing.SwingConstants;
 
 public class ReportErrorPanel extends PreferencePanel {
