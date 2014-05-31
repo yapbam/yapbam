@@ -7,6 +7,8 @@ version	0.17.1 (06/01/2014)
 improvement
 	The number of transactions per account is moved from the account administration panel to the account summary. This panel now displays the total number of transactions. 
 	Adds a column containing the number of unchecked transactions the "Accounts summary" tab.
+fix
+	Bug introduced in 0.17.0: Importing a file with empty cells in the "amount" column caused an error.
 
 version	0.17.0 (05/01/2014)
 improvement
@@ -26,7 +28,7 @@ improvement
 
 version	0.16.9 (04/22/2014)
 fix
-	Bug introduced in 0.16.8: Depending on preference settings, performing a sort in the administration tab of periodic transactions on the "comment" column  could cause an error.
+	Bug introduced in 0.16.8: Depending on preference settings, performing a sort in the administration tab of periodic transactions on the "comment" column could cause an error.
 
 version	0.16.8 (04/21/2014)
 fix

@@ -1,5 +1,6 @@
 package net.yapbam.gui.persistence;
 
+import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.Dialog.ModalityType;
 import java.io.ByteArrayOutputStream;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
+import com.fathzer.soft.ajlib.swing.worker.WorkInProgressPanel;
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.swing.URIChooser;
@@ -64,7 +66,10 @@ public abstract class PersistenceManager {
 	
 	public WorkInProgressFrame buildWaitDialog(Window owner, Worker<?,?> worker) {
 		WorkInProgressFrame waitFrame = new WorkInProgressFrame(owner, LocalizationData.get("Generic.wait.title"), ModalityType.APPLICATION_MODAL, worker); //$NON-NLS-1$
-		waitFrame.setSize(400, waitFrame.getSize().height);
+		WorkInProgressPanel panel = waitFrame.getWorkInProgressPanel();
+		Dimension oldPref = panel.getPreferredSize();
+		panel.setPreferredSize(new java.awt.Dimension(Math.max(400,oldPref.width), oldPref.height));
+		waitFrame.pack();
 		waitFrame.setLocationRelativeTo(owner);
 		return waitFrame;
 	}

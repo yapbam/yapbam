@@ -249,7 +249,7 @@ public class Importer {
 	private double parseAmount(String text) throws ParseException {
 		NumberFormat format = NumberFormat.getCurrencyInstance(LocalizationData.getLocale());
         customizeSymbols(format);
-        if (text.charAt(0) == '+') {
+        if (!text.isEmpty() && (text.charAt(0) == '+')) {
             text = text.substring(1);
         }
 
