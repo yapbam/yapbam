@@ -8,10 +8,10 @@ import java.awt.Toolkit;
 import java.awt.Window;
 
 import javax.swing.JPanel;
+
 import java.awt.GridBagConstraints;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,7 +41,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+
 import java.awt.Insets;
+
 import javax.swing.JTable.PrintMode;
 
 import java.awt.event.ItemEvent;
@@ -49,12 +51,16 @@ import java.awt.event.ItemListener;
 import java.awt.print.Printable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
 import javax.swing.SwingConstants;
+
 import java.awt.Color;
+
 import javax.swing.JSplitPane;
 import javax.swing.border.Border;
 import javax.swing.JButton;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
@@ -411,13 +417,13 @@ public class StatementViewPanel extends JPanel {
 					if (transactions.length>0) {
 						String message;
 						if (transactions.length==1) {
-							message = MessageFormat.format(LocalizationData.get("CheckModePanel.selectedSummarySingular"),LocalizationData.getCurrencyInstance().format(transactions[0].getAmount())); //$NON-NLS-1$
+							message = Formatter.format(LocalizationData.get("CheckModePanel.selectedSummarySingular"),LocalizationData.getCurrencyInstance().format(transactions[0].getAmount())); //$NON-NLS-1$
 						} else {
 							double total = 0.0;
 							for (Transaction transaction : transactions) {
 								total += transaction.getAmount();
 							}
-							message = MessageFormat.format(LocalizationData.get("CheckModePanel.selectedSummaryPlural"), transactions.length, LocalizationData.getCurrencyInstance().format(total)); //$NON-NLS-1$
+							message = Formatter.format(LocalizationData.get("CheckModePanel.selectedSummaryPlural"), transactions.length, LocalizationData.getCurrencyInstance().format(total)); //$NON-NLS-1$
 						}
 						summaryLabel.setText(message);
 					}
@@ -482,7 +488,7 @@ public class StatementViewPanel extends JPanel {
 		getBalancePanel().setCheckMode(checkMode);
 		getBalancePanel().setStatement(statementSelected?statement:null);
 		// Set up the details
-		getDetail().setText(MessageFormat.format(LocalizationData.get("StatementView.statementSummary"), statementSelected?statement.getNbTransactions():0, //$NON-NLS-1$
+		getDetail().setText(Formatter.format(LocalizationData.get("StatementView.statementSummary"), statementSelected?statement.getNbTransactions():0, //$NON-NLS-1$
 				statementSelected?ci.format(statement.getNegativeBalance()):0.0, statementSelected?ci.format(statement.getPositiveBalance()):0.0));
 		
 		// Sets the cursors
@@ -551,7 +557,7 @@ public class StatementViewPanel extends JPanel {
 					if ((result!=null) && (!result.equals(current))) {
 						for (int i = 0; i < gData.getTransactionsNumber(); i++) {
 							if (result.equals(gData.getTransaction(i).getStatement())) {
-								String message = MessageFormat.format(LocalizationData.get("StatementDialog.existing.message"), result, current);
+								String message = Formatter.format(LocalizationData.get("StatementDialog.existing.message"), result, current);
 								int choice = JOptionPane.showConfirmDialog(owner, message,
 										LocalizationData.get("StatementDialog.existing.title"),  JOptionPane.OK_CANCEL_OPTION,  JOptionPane.WARNING_MESSAGE);
 								if (choice==2) {

@@ -13,7 +13,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.security.AccessControlException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +37,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
@@ -360,7 +360,7 @@ public class YapbamState {
 			return result;
 		} catch (Exception e) {
 			// If something goes wrong, return null
-			LoggerFactory.getLogger(getClass()).warn(MessageFormat.format("Exception while restoring {0}",key), e); //$NON-NLS-1$
+			LoggerFactory.getLogger(getClass()).warn(Formatter.format("Exception while restoring {0}",key), e); //$NON-NLS-1$
 			return null;
 		}
 	}

@@ -4,10 +4,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemListener;
-import java.text.MessageFormat;
 
 import javax.swing.JCheckBox;
 import javax.swing.border.TitledBorder;
+
+import com.fathzer.jlocal.Formatter;
 
 import net.yapbam.gui.LocalizationData;
 
@@ -40,7 +41,7 @@ public class NatureFilterPanel extends ConsistencyCheckedPanel {
 	@Override
 	protected String computeInconsistencyCause() {
 		if (!getExpenses().isSelected() && !getReceipts().isSelected()) {
-			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.natureStatus"), //$NON-NLS-1$
+			return Formatter.format(LocalizationData.get("CustomFilterPanel.error.natureStatus"), //$NON-NLS-1$
 					LocalizationData.get("MainMenuBar.Expenses"), LocalizationData.get("MainMenuBar.Receipts")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return null;

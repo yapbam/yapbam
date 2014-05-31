@@ -10,7 +10,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.JRadioButton;
 
 import java.awt.GridBagConstraints;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -27,6 +26,8 @@ import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import javax.swing.JButton;
+
+import com.fathzer.jlocal.Formatter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -240,9 +241,9 @@ public class LocalizationPanel extends PreferencePanel {
 		if (defaultCButton == null) {
 			defaultCButton = new JRadioButton();
 			String defaultDisplayCountry = LocalizationData.SYS_LOCALE.getDisplayCountry(Preferences.INSTANCE.getLocale());
-			String tip = MessageFormat.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry.toolTip"), defaultDisplayCountry); //$NON-NLS-1$
+			String tip = Formatter.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry.toolTip"), defaultDisplayCountry); //$NON-NLS-1$
 			defaultCButton.setToolTipText(tip);
-			defaultCButton.setText(MessageFormat.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry"),defaultDisplayCountry)); //$NON-NLS-1$
+			defaultCButton.setText(Formatter.format(LocalizationData.get("PreferencesDialog.Localization.defaultCountry"),defaultDisplayCountry)); //$NON-NLS-1$
 			defaultCButton.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {

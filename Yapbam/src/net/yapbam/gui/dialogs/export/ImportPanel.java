@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
@@ -32,6 +31,7 @@ import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -491,7 +491,7 @@ public class ImportPanel extends JPanel {
 	
 	public void setLine (int lineNumber) throws IOException {
 		if (lineNumber>=this.numberOfLines) {
-			throw new IllegalArgumentException(MessageFormat.format("line ({0}) must be less than {1}",lineNumber, this.numberOfLines)); //$NON-NLS-1$
+			throw new IllegalArgumentException(Formatter.format("line ({0}) must be less than {1}",lineNumber, this.numberOfLines)); //$NON-NLS-1$
 		}
 		String[] fields = getFields(lineNumber);
 		while (fields==null) {
@@ -597,7 +597,7 @@ public class ImportPanel extends JPanel {
 		if (lineNumber == null) {
 			lineNumber = new JSpinner();
 			String columnName = LocalizationData.get("ImportDialog.importedFields"); //$NON-NLS-1$
-			lineNumber.setToolTipText(MessageFormat.format(LocalizationData.get("ImportDialog.lineNumber.toolTip"), columnName)); //$NON-NLS-1$
+			lineNumber.setToolTipText(Formatter.format(LocalizationData.get("ImportDialog.lineNumber.toolTip"), columnName)); //$NON-NLS-1$
 			((JSpinner.DefaultEditor) lineNumber.getEditor()).getTextField().setColumns(4);
 		}
 		return lineNumber;

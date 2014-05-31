@@ -1,11 +1,15 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
+
 import java.awt.GridBagConstraints;
+
 import javax.swing.JLabel;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.ComboBox;
 
 import net.yapbam.data.Alert;
@@ -72,8 +76,8 @@ class AlertsPane extends JPanel {
 		this.setVisible(alerts.length>0);
 		this.alertsMenu.setActionEnabled(false);
 		this.alertsMenu.removeAllItems();
+		MessageFormat format = Formatter.getMessageFormat(LocalizationData.get("BalanceHistory.alerts.format")); //$NON-NLS-1$
 		for (int i = 0; i < alerts.length; i++) {
-			MessageFormat format = new MessageFormat(LocalizationData.get("BalanceHistory.alerts.format"), LocalizationData.getLocale()); //$NON-NLS-1$
 			String balance = LocalizationData.getCurrencyInstance().format(alerts[i].getBalance());
 			String threshold = LocalizationData.getCurrencyInstance().format(alerts[i].getThreshold());
 			String ope = alerts[i].getKind().equals(Kind.IS_LESS)?" < ":" > "; //$NON-NLS-1$ //$NON-NLS-2$

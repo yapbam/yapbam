@@ -9,6 +9,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
 
@@ -29,7 +30,6 @@ import net.yapbam.util.HtmlUtils;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.text.MessageFormat;
 
 public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData> {
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			int nb = account.getTransactionsNumber();
 			if (nb!=0) {
 				String mess = nb==1?LocalizationData.get("AccountManager.deleteMessage.one"): //$NON-NLS-1$
-						MessageFormat.format(HtmlUtils.START_TAG+LocalizationData.get("AccountManager.deleteMessage.more")+ //$NON-NLS-1$
+						Formatter.format(HtmlUtils.START_TAG+LocalizationData.get("AccountManager.deleteMessage.more")+ //$NON-NLS-1$
 						HtmlUtils.NEW_LINE_TAG+LocalizationData.get("AccountManager.deleteMessage.confirm")+HtmlUtils.END_TAG, nb); //$NON-NLS-1$
 				Object[] options = {LocalizationData.get("GenericButton.ok"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
 				int ok = JOptionPane.showOptionDialog(getJTable(), mess, LocalizationData.get("AccountManager.deleteMessage.title"), //$NON-NLS-1$

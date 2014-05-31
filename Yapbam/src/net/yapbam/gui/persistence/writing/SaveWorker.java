@@ -2,8 +2,8 @@ package net.yapbam.gui.persistence.writing;
 
 import java.io.File;
 import java.net.URI;
-import java.text.MessageFormat;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
@@ -30,7 +30,7 @@ class SaveWorker extends Worker<WriterResult, Void> implements Cancellable {
 
 		@Override
 		protected WriterResult doProcessing() throws Exception {
-			setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
+			setPhase(Formatter.format(LocalizationData.get("Generic.wait.writingTo"), uri.getPath()), -1); //$NON-NLS-1$
 			Service service = manager.getAdapter(uri).getService();
 			File previousFile = service.getLocalFile(uri);
 			File file = service.getLocalFileForWriting(uri);

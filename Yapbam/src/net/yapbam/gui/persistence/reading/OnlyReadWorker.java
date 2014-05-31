@@ -1,8 +1,8 @@
 package net.yapbam.gui.persistence.reading;
 
 import java.net.URI;
-import java.text.MessageFormat;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 
 import net.yapbam.data.GlobalData;
@@ -23,7 +23,7 @@ class OnlyReadWorker extends Worker<GlobalData, Void> implements ProgressReport 
 	public OnlyReadWorker (URI uri, String password) {
 		this.uri = uri;
 		this.password = password;
-		setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), uri.getPath()),-1); //$NON-NLS-1$
+		setPhase(Formatter.format(LocalizationData.get("Generic.wait.readingFrom"), uri.getPath()),-1); //$NON-NLS-1$
 	}
 	
 	@Override

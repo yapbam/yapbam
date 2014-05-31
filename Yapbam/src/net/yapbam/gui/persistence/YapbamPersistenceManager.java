@@ -1,12 +1,10 @@
 package net.yapbam.gui.persistence;
 
-import java.text.MessageFormat;
-
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-
 import net.yapbam.gui.persistence.dropbox.YapbamDropboxPersistenceAdapter;
 import net.yapbam.gui.persistence.file.FilePersistenceAdapter;
 
@@ -29,7 +27,7 @@ public class YapbamPersistenceManager extends PersistenceManager {
 						Class<? extends PersistenceAdapter> pClass = (Class<? extends PersistenceAdapter>) Class.forName(className);
 						add(pClass.newInstance());
 					} catch (Exception e) {
-						ErrorManager.INSTANCE.display(null, e, MessageFormat.format(LocalizationData.get("persitencePlugin.load.error"), className)); //$NON-NLS-1$
+						ErrorManager.INSTANCE.display(null, e, Formatter.format(LocalizationData.get("persitencePlugin.load.error"), className)); //$NON-NLS-1$
 					}
 				}
 			}

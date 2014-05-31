@@ -2,9 +2,13 @@ package net.yapbam.gui.dialogs.periodicaltransaction;
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JLabel;
+
 import java.awt.GridBagConstraints;
 
 import net.yapbam.data.AbstractTransaction;
@@ -25,8 +29,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -41,6 +43,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
@@ -240,7 +243,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 					debts += transaction.getAmount();
 				}
 			}
-			message = MessageFormat.format(LocalizationData.get("GeneratePeriodicalTransactionsDialog.summary"), this.tableModel.getRowCount(), //$NON-NLS-1$
+			message = Formatter.format(LocalizationData.get("GeneratePeriodicalTransactionsDialog.summary"), this.tableModel.getRowCount(), //$NON-NLS-1$
 					LocalizationData.getCurrencyInstance().format(receipts), LocalizationData.getCurrencyInstance().format(-debts),
 					LocalizationData.getCurrencyInstance().format(receipts+debts));
 		}

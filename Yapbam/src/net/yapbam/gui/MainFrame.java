@@ -9,12 +9,12 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 import com.fathzer.soft.jclop.Service;
 
@@ -163,7 +163,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		StringBuilder buf = new StringBuilder();
 		ReleaseInfo lastVersion = (ReleaseInfo) YapbamState.INSTANCE.restore(LAST_VERSION_USED);
 		if (NullUtils.compareTo(lastVersion, new ReleaseInfo("0.8.2 (10/04/2011)"), true)<=0) { //$NON-NLS-1$
-			String message = MessageFormat.format(HtmlUtils.removeHtmlTags(LocalizationData.get("ImportantNews.0.8.2")), //$NON-NLS-1$
+			String message = Formatter.format(HtmlUtils.removeHtmlTags(LocalizationData.get("ImportantNews.0.8.2")), //$NON-NLS-1$
 					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
 			buf.append(message);
@@ -173,7 +173,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			if (buf.length()>0) {
 				buf.append("<br><br><hr><br>");
 			}
-			String message = MessageFormat.format(HtmlUtils.removeHtmlTags(LocalizationData.get("ImportantNews.0.14.5")), //$NON-NLS-1$
+			String message = Formatter.format(HtmlUtils.removeHtmlTags(LocalizationData.get("ImportantNews.0.14.5")), //$NON-NLS-1$
 					LocalizationData.get("CheckModePanel.title"), LocalizationData.get("MainFrame.Transactions"), //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("StatementView.title"), LocalizationData.get("StatementView.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
 			buf.append(message);
@@ -212,7 +212,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					try {
 						Preferences.INSTANCE.save();
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog(event.getWindow(), MessageFormat.format(LocalizationData.get("MainFrame.SavePreferencesError"), getStateSaver().getFile().getAbsolutePath()), //$NON-NLS-1$
+						JOptionPane.showMessageDialog(event.getWindow(), Formatter.format(LocalizationData.get("MainFrame.SavePreferencesError"), getStateSaver().getFile().getAbsolutePath()), //$NON-NLS-1$
 								LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					super.windowClosing(event);
@@ -447,7 +447,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		try {
 			getStateSaver().toDisk();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this.getJFrame(), MessageFormat.format(LocalizationData.get("MainFrame.SaveStateError"), getStateSaver().getFile().getAbsolutePath()), //$NON-NLS-1$
+			JOptionPane.showMessageDialog(this.getJFrame(), Formatter.format(LocalizationData.get("MainFrame.SaveStateError"), getStateSaver().getFile().getAbsolutePath()), //$NON-NLS-1$
 					LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 		}
 	}
@@ -519,19 +519,19 @@ public class MainFrame extends JFrame implements YapbamInstance {
 						if (file.exists()) {
 							// The file exist, but it is read protected
 							if ("file".equals(finalURI.getScheme())) { //$NON-NLS-1$
-								ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotReadable"),displayedURI)); //$NON-NLS-1$
+								ErrorManager.INSTANCE.display(getJFrame(), null, Formatter.format(LocalizationData.get("MainFrame.LastNotReadable"),displayedURI)); //$NON-NLS-1$
 							} else {
-								ErrorManager.INSTANCE.display(getJFrame(), null,  MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
+								ErrorManager.INSTANCE.display(getJFrame(), null,  Formatter.format(LocalizationData.get("openDialog.cacheNotReadable"),file)); //$NON-NLS-1$
 							}
 						} else {
-							ErrorManager.INSTANCE.display(getJFrame(), null, MessageFormat.format(LocalizationData.get("MainFrame.LastNotFound"),displayedURI)); //$NON-NLS-1$
+							ErrorManager.INSTANCE.display(getJFrame(), null, Formatter.format(LocalizationData.get("MainFrame.LastNotFound"),displayedURI)); //$NON-NLS-1$
 						}
 					} else if (e instanceof IOException) {
 						if ((e instanceof UnsupportedFileVersionException) || (e instanceof UnsupportedFormatException)) {
 							return false; 
 						}
 						if (restore) {
-							ErrorManager.INSTANCE.display(getJFrame(), e, MessageFormat.format(LocalizationData.get("MainFrame.ReadLastError"),displayedURI)); //$NON-NLS-1$
+							ErrorManager.INSTANCE.display(getJFrame(), e, Formatter.format(LocalizationData.get("MainFrame.ReadLastError"),displayedURI)); //$NON-NLS-1$
 						} else {
 							ErrorManager.INSTANCE.display(getJFrame(), e, LocalizationData.get("MainFrame.ReadError")); //$NON-NLS-1$ //If path is not null
 						}

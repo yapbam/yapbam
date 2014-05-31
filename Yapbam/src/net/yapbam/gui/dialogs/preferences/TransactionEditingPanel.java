@@ -27,7 +27,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -37,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
@@ -205,7 +205,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		
 		Date date = getSampleDate();
 		EditingSettings dummySettings = new EditingSettings(true, true, true, true, true, SHORT_FORMAT, new EditionWizardSettings(Mode.NEVER, Source.LAST));
-		rdbtnShortStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.short"), //$NON-NLS-1$
+		rdbtnShortStyle = new JRadioButton(Formatter.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.short"), //$NON-NLS-1$
 				dummySettings.getStatementId(date)));
 		rdbtnShortStyle.setEnabled(false);
 		rdbtnShortStyle.addItemListener(itemListener);
@@ -218,7 +218,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		panelFormat.add(rdbtnShortStyle, gbcRdbtnShortStyle);
 		
 		dummySettings.setStatementDateFormat(LONG_FORMAT);
-		rdbtnLongStyle = new JRadioButton(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.long"), //$NON-NLS-1$
+		rdbtnLongStyle = new JRadioButton(Formatter.format(LocalizationData.get("TransactionEditingPreferencesPanel.format.long"), //$NON-NLS-1$
 				dummySettings.getStatementId(date)));
 		rdbtnLongStyle.setEnabled(false);
 		rdbtnLongStyle.addItemListener(itemListener);
@@ -332,9 +332,9 @@ public class TransactionEditingPanel extends PreferencePanel {
 			} catch (Exception e) {}
 			if ((format==null) || (format.toPattern().length()==0)) {
 				labelExample.setText(LocalizationData.get("TransactionEditingPreferencesPanel.format.customized.invalidFormat")); //$NON-NLS-1$
-				setOkDisabledCause(MessageFormat.format(LocalizationData.get("TransactionEditingPreferencesPanel.okDisabledCauseFormat"), getTitle())); //$NON-NLS-1$
+				setOkDisabledCause(Formatter.format(LocalizationData.get("TransactionEditingPreferencesPanel.okDisabledCauseFormat"), getTitle())); //$NON-NLS-1$
 			} else {
-				labelExample.setText(MessageFormat.format(
+				labelExample.setText(Formatter.format(
 						LocalizationData.get("TransactionEditingPreferencesPanel.format.customized.sample"), format.format(getSampleDate()))); //$NON-NLS-1$
 				setOkDisabledCause(null);
 			}

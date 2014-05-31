@@ -13,6 +13,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.CharWidget;
 
@@ -35,7 +36,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
 import java.util.Arrays;
 
 public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel { //TODO Add split functions
@@ -119,7 +119,7 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 					if (category==getCategory(row)) {
 						return;
 					}
-					errorMessage = MessageFormat.format(LocalizationData.get("CategoryManager.error.message.alreadyUsed"), name); //$NON-NLS-1$
+					errorMessage = Formatter.format(LocalizationData.get("CategoryManager.error.message.alreadyUsed"), name); //$NON-NLS-1$
 					//TODO We could merge the two categories, on demand
 				}
 			}

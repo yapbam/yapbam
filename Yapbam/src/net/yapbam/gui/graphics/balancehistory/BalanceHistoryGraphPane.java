@@ -9,7 +9,6 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Date;
 
@@ -20,6 +19,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.RotatingLabel;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -201,7 +201,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		Date date = graph.getSelectedDate();
 		String dateStr = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()).format(date);
 		String balance = LocalizationData.getCurrencyInstance().format(this.getBalanceHistory().getBalance(date));
-		return MessageFormat.format(LocalizationData.get("BalanceHistory.balance"), dateStr, balance); //$NON-NLS-1$
+		return Formatter.format(LocalizationData.get("BalanceHistory.balance"), dateStr, balance); //$NON-NLS-1$
 	}
 
 	private void onDataChanged() {

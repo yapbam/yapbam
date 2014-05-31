@@ -14,7 +14,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.text.MessageFormat;
 import java.util.Date;
 
 import net.yapbam.currency.AbstractCurrencyConverter;
@@ -23,6 +22,8 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.tools.Messages;
 
 import javax.swing.SwingConstants;
+
+import com.fathzer.jlocal.Formatter;
 
 public class DialogButtons extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -114,7 +115,7 @@ public class DialogButtons extends JPanel {
 
 	void setConverter(AbstractCurrencyConverter converter) {
 		// Display referenceDate
-		String title = MessageFormat.format(Messages.getString("CurrencyConverterPanel.topMessage"), new Date(converter.getTimeStamp())); //$NON-NLS-1$
+		String title = Formatter.format(Messages.getString("CurrencyConverterPanel.topMessage"), new Date(converter.getTimeStamp())); //$NON-NLS-1$
 		getLblMessage().setText(title);
 		if (!converter.isSynchronized()) {
 			getLblMessage().setIcon(IconManager.get(Name.ALERT));

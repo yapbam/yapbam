@@ -34,7 +34,6 @@ import net.yapbam.data.comparator.CategoryComparator;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.util.TextMatcher;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +41,7 @@ import java.util.TreeSet;
 
 import javax.swing.JButton;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 public class CustomFilterPanel extends JPanel implements Scrollable {
@@ -483,7 +483,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			return getReceiptsExpensesPanel().getInconsistencyCause();
 		}
 		if (!getChecked().isSelected() && !getNotChecked().isSelected()) {
-			return MessageFormat.format(LocalizationData.get("CustomFilterPanel.error.checkStatus"), //$NON-NLS-1$
+			return Formatter.format(LocalizationData.get("CustomFilterPanel.error.checkStatus"), //$NON-NLS-1$
 					LocalizationData.get("MainMenuBar.checked"), LocalizationData.get("MainMenuBar.notChecked")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (getValueDatePanel().getInconsistencyCause()!=null) {

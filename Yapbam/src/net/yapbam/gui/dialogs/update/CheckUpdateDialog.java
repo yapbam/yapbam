@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
 import net.yapbam.gui.ErrorManager;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.text.MessageFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -112,7 +112,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 								message = LocalizationData.get("MainMenu.CheckUpdate.ProxyAuthError"); //$NON-NLS-1$
 							} else {
 								String pattern = LocalizationData.get("MainMenu.CheckUpdate.HttpError"); //$NON-NLS-1$
-								message = MessageFormat.format(pattern, code, YABAM_HOME_URL);
+								message = Formatter.format(pattern, code, YABAM_HOME_URL);
 							}
 							JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE);	//$NON-NLS-1$
 						}
@@ -145,7 +145,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					Throwable cause = e.getCause();
 					if ((cause instanceof IOException) || (cause instanceof UnknownHostException)) {
 						String pattern = LocalizationData.get("MainMenu.CheckUpdate.IOError"); //$NON-NLS-1$
-						String message = MessageFormat.format(pattern, cause, YABAM_HOME_URL);
+						String message = Formatter.format(pattern, cause, YABAM_HOME_URL);
 						JOptionPane.showMessageDialog(owner, message, LocalizationData.get("MainMenu.CheckUpdate.Error.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 					} else {
 						ErrorManager.INSTANCE.log(owner,cause);
@@ -179,7 +179,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					// If the launch directory is not writable.
 					message = LocalizationData.get("MainMenu.CheckUpdate.Success.writeProtected"); //$NON-NLS-1$
 				}
-				message = MessageFormat.format(message, VersionManager.getVersion(), update.getLastestRelease());
+				message = Formatter.format(message, VersionManager.getVersion(), update.getLastestRelease());
 				int choice = JOptionPane.showOptionDialog(owner, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{cancel, open}, open);
 				if (choice==1) {
 					try {
@@ -193,7 +193,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 				// The application can write to the the installation directory
 				String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
 				String download = LocalizationData.get("MainMenu.CheckUpdate.installNow"); //$NON-NLS-1$
-				int choice = JOptionPane.showOptionDialog(owner, MessageFormat.format(pattern, VersionManager.getVersion(),update.getLastestRelease()), title, //$NON-NLS-1$
+				int choice = JOptionPane.showOptionDialog(owner, Formatter.format(pattern, VersionManager.getVersion(),update.getLastestRelease()), title, //$NON-NLS-1$
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
 					new String[]{LocalizationData.get("MainMenu.CheckUpdate.cancel"), download}, download); //$NON-NLS-1$
 				return choice == 1;
