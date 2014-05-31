@@ -7,6 +7,8 @@ version	0.17.1 (01/06/2014)
 improvement
 	Le nombre d'opérations par compte est déplacé de l'onglet "Administration/Gestion des comptes" vers l'onglet "Bilan des comptes". Cet onglet affiche à présent le nombre total d'opérations tous comptes confondus.
 	Ajout d'une colonne contenant le nombre d'opérations non pointées dans l'onglet "Bilan des comptes".
+fix
+	Bug introduit en 0.17.0 : Importer un fichier avec des cellules vides dans la colonne "montant" provoquait une erreur.
 
 version	0.17.0 (01/05/2014)
 improvement

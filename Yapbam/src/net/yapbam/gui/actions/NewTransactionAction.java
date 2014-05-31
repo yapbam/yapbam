@@ -23,7 +23,7 @@ public class NewTransactionAction extends AbstractAction {
 	
 	/** Constructor.
 	 * @param data FilteredData (mandatory, even if TransactionSelector has a getFilteredData method, because selector may be null)
-	 * @param selector An optional selector (it is used to selected the created transactions) 
+	 * @param selector An optional selector (it is used to select the created transactions once they are created) 
 	 * @param massMode true to select mass modification
 	 */
 	public NewTransactionAction(FilteredData data, TransactionSelector selector, boolean massMode) {
