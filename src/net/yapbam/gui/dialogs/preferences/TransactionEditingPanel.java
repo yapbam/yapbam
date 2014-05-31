@@ -14,7 +14,6 @@ import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.preferences.EditingSettings;
 import net.yapbam.gui.preferences.EditionWizardSettings;

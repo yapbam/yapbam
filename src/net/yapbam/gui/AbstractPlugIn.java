@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.dialogs.preferences.PreferencePanel;
 
 /** This abstract class represents a Yapbam plugin.
  * Such a plugin can define (or not) some GUI elements that will be added to the Yapbam interface :<UL>

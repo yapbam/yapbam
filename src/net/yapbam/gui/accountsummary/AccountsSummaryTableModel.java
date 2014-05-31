@@ -152,7 +152,7 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 		} else if (columnIndex==NB_TRANSACTIONS_COLUMN) {
 			return data.getAccount(rowIndex).getTransactionsNumber();
 		} else if (columnIndex==NB_UNCHECKED_TRANSACTIONS_COLUMN) {
-			return -1; //TODO
+			return data.getAccount(rowIndex).getUncheckedTransactionsNumber();
 		} else {
 			return null;
 		}

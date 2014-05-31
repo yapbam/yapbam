@@ -11,7 +11,6 @@ import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 import java.util.ArrayList;
@@ -19,15 +18,15 @@ import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
+public class PreferenceDialog extends AbstractDialog<Boolean, Boolean> {
 	public static final long LOCALIZATION_CHANGED = 1;
 	public static final long LOOK_AND_FEEL_CHANGED = 2;
 
 	private List<PreferencePanel> panels;
 	private JTabbedPane tabbedPane;
 
-	public PreferenceDialog(MainFrame owner) {
-		super(owner.getJFrame(), LocalizationData.get("PreferencesDialog.title"), owner);
+	public PreferenceDialog(MainFrame owner, boolean expertMode) {
+		super(owner, LocalizationData.get("PreferencesDialog.title"), expertMode);
 		this.setLocationRelativeTo(owner.getJFrame());
 	}
 
@@ -42,13 +41,13 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 
 	@Override
 	protected JPanel createCenterPane() {
-		JPanel panel = new JPanel(new BorderLayout());
 		tabbedPane = new JTabbedPane();
 		this.panels = new ArrayList<PreferencePanel>();
-		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(data),
+		MainFrame frame = (MainFrame) getOwner();
+		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(frame),
 				new TransactionEditingPanel(), new ProxyPanel(), new AutoUpdatePanel(), new ReportErrorPanel(), new RestoreStatePanel()}));
-		for (int i=0 ; i<data.getPlugInsNumber(); i++) {
-			PreferencePanel preferencePanel = data.getPlugIn(i).getPreferencePanel();
+		for (int i=0 ; i<frame.getPlugInsNumber(); i++) {
+			PreferencePanel preferencePanel = frame.getPlugIn(i).getPreferencePanel();
 			if (preferencePanel!=null) {
 				this.panels.add(preferencePanel) ;
 			}
@@ -65,10 +64,12 @@ public class PreferenceDialog extends AbstractDialog<MainFrame, Boolean> {
 				panels.get(lastSelected).setDisplayed(true);
 			}
 		});
-		for (int i = 0; i < panels.size(); i++) {
-			tabbedPane.addTab(panels.get(i).getTitle(), null, panels.get(i), panels.get(i).getToolTip());
-			panels.get(i).addPropertyChangeListener(PreferencePanel.OK_DISABLED_CAUSE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
+		for (PreferencePanel panel : panels) {
+			panel.setExpertMode(data);
+			tabbedPane.addTab(panel.getTitle(), null, panel, panel.getToolTip());
+			panel.addPropertyChangeListener(PreferencePanel.OK_DISABLED_CAUSE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
 		}
+		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(tabbedPane, BorderLayout.CENTER);
 		return panel;
 	}

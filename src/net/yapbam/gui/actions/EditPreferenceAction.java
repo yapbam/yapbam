@@ -7,6 +7,7 @@ import javax.swing.Action;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
+import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.preferences.PreferenceDialog;
 
 @SuppressWarnings("serial")
@@ -22,7 +23,8 @@ public class EditPreferenceAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		PreferenceDialog dialog = new PreferenceDialog(frame);
+		boolean expertMode = Preferences.INSTANCE.isExpertMode() || ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0);
+		PreferenceDialog dialog = new PreferenceDialog(frame, expertMode);
 		dialog.setVisible(true);
 		Boolean result = dialog.getChanges();
 		if ((result!=null) && result) {

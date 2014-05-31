@@ -22,7 +22,6 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import javax.swing.JButton;
@@ -439,24 +438,25 @@ public class LocalizationPanel extends PreferencePanel {
 	 */
 	private JCheckBox getTranslatorButton() {
 		if (translatorButton == null) {
-			translatorButton = new JCheckBox();
-			if (Preferences.INSTANCE.isExpertMode()) {
-				translatorButton.setText(LocalizationData.get("PreferencesDialog.translatorMode")); //$NON-NLS-1$
-				translatorButton.setToolTipText(LocalizationData.get("PreferencesDialog.translatorMode.tooltip")); //$NON-NLS-1$
-				translatorButton.addItemListener(new ItemListener() {
-					@Override
-					public void itemStateChanged(ItemEvent e) {
-						checkSomethingChanged();
-					}
-				});
-			} else {
-				translatorButton.setVisible(false);
-			}
+			translatorButton = new JCheckBox(LocalizationData.get("PreferencesDialog.translatorMode")); //$NON-NLS-1$
+			translatorButton.setToolTipText(LocalizationData.get("PreferencesDialog.translatorMode.tooltip")); //$NON-NLS-1$
+			translatorButton.setSelected(Preferences.safeIsTranslatorMode());
+			translatorButton.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					checkSomethingChanged();
+				}
+			});
+			translatorButton.setVisible(false);
 		}
 		return translatorButton;
 	}
 
-
+	@Override
+	protected void setExpertMode(boolean expertMode) {
+		getTranslatorButton().setVisible(expertMode || Preferences.safeIsTranslatorMode());
+	}
+	
 	/**
 	 * This method initializes frenchButton	
 	 * 	

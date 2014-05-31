@@ -6,6 +6,7 @@ known
 version	0.17.1 (06/01/2014)
 improvement
 	The number of transactions per account is moved from the account administration panel to the account summary. This panel now displays the total number of transactions. 
+	Adds a column containing the number of unchecked transactions the "Accounts summary" tab.
 
 version	0.17.0 (05/01/2014)
 improvement
@@ -23,7 +24,7 @@ fix
 improvement
 	In the balance history table and in the "Account statements" tab, the columns have now the same alignment as in the transactions table (amounts to the right, description to the left, the rest remains centered).
 
-version	0.16.9 (22/04/2014)
+version	0.16.9 (04/22/2014)
 fix
 	Bug introduced in 0.16.8: Depending on preference settings, performing a sort in the administration tab of periodic transactions on the "comment" column  could cause an error.
 

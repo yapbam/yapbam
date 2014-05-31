@@ -1,11 +1,13 @@
-package net.yapbam.gui;
+package net.yapbam.gui.dialogs.preferences;
 
 import javax.swing.JPanel;
+
+import net.yapbam.gui.Preferences;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 /** This abstract class represents a preference panel.
- * The preference panels are displayed each in a tab of the preferences dialog.
+ * <br>The preference panels are displayed each in a tab of the preferences dialog.
  */
 @SuppressWarnings("serial")
 public abstract class PreferencePanel extends JPanel {
@@ -58,5 +60,13 @@ public abstract class PreferencePanel extends JPanel {
 			this.okDisabledCause = cause;
 			this.firePropertyChange(OK_DISABLED_CAUSE_PROPERTY, old, okDisabledCause);
 		}
+	}
+
+	/** Sets the expert mode of the panel.
+	 * <br>Default implementation does nothing. You should override this method if the panel has an expert mode.
+	 * @param expertMode true if expertMode is set, false if not
+	 */
+	protected void setExpertMode(boolean expertMode) {
+		// Override this method if an expert mode is available
 	}
 }

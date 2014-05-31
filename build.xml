@@ -4,7 +4,7 @@
 	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
 	| jfreechartpath, etc ... properties in the customPaths.properties file used in the line below.    |
 	| These properties have to reference the apache commonsnet, jfreeChart, JCommon, OpenCSV, A-JLib,  |
-	| Javaluator, JClop and YapbamCommons sources.                                                     |
+	| Javaluator, JClop, jlocal and YapbamCommons sources.                                                     |
 	| These sources are available at http://commons.apache.org/net/, http://www.jfree.org and          |
 	| http://sourceforge.net/projects/ajlib/                                                           |
 	| Here is a sample of what this file could contain :                                               |
@@ -20,7 +20,7 @@
 	<!-- Yapbam version. This should have the following format = major.minor.build.comment were
 		major, minor and build are integers. comment is a string that do not contain space character. 
 	 -->
-	<property name="yapbamVersion" value="0.17.0"/>
+	<property name="yapbamVersion" value="0.17.1"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -55,11 +55,6 @@
 		<echo message="version=${yapbamVersion} (${TODAY})" file="src/net/yapbam/update/version.txt"/>
 		<delete dir="releaseCompile"/>
 		<mkdir dir="releaseCompile"/>
-		<!--unzip dest="releaseCompile">
-		    <fileset dir="${otherlibpath}">
-		        <include name="**/*.jar"/>
-		    </fileset>
-		</unzip-->
 		<copy todir="releaseCompile">
 	    	<fileset dir="src" excludes="**/*.java"/>
 	    	<fileset dir="${jfreechart.path}" includes="org/jfree/chart/plot/LocalizationBundl*.properties"/>
@@ -78,11 +73,9 @@
 		<!-- Be aware that commons logging reference some classes by reflection, so, adding it to srcDir while compiling
 			src is not enough. As some sources in common logging refers to external libray, we will only compile the classes
 			we need (they do not need external libraries. -->
-		<echo>logging</echo>
 		<javac srcdir="${apache.commons.logging.path}" includes="org/apache/commons/logging/impl/LogFactoryImpl.java,org/apache/commons/logging/impl/SimpleLog.java" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" includeAntRuntime="false" debug="true"/>
-		<echo>end logging</echo>
 		<javac srcdir="src" destdir="releaseCompile" source="1.6" target="1.6" encoding="ISO8859-1" sourcepath="${jfreechart.path};${jcommon.path};${yapbam.commons.path};
-		    C:/Users/Jean-Marc/workspace/YapbamCommons/workInProgress;${ajlib.path};${apache.commons.lang.path};${javaluator.path};${jclop.path};${jclop-dropbox.path};${dropbox.path};${apache.commons.codec.path};${apache.http.client.path};${apache.http.core.path};${jsonsimple.path};${apache.commons.logging.path};${opencsv.path};${slf4j-api.path}" includeAntRuntime="false" debug="true"/>
+		    C:/Users/Jean-Marc/workspace/YapbamCommons/workInProgress;${ajlib.path};${apache.commons.lang.path};${javaluator.path};${jclop.path};${jclop-dropbox.path};${jlocal.path};${dropbox.path};${apache.commons.codec.path};${apache.http.client.path};${apache.http.core.path};${jsonsimple.path};${apache.commons.logging.path};${opencsv.path};${slf4j-api.path}" includeAntRuntime="false" debug="true"/>
 		<property name="appDir" value="${releaseDir}/App"/>
 		<property name="othersDir" value="${releaseDir}/Other"/>
 		<property name="helpDir" value="${othersDir}/Help"/>

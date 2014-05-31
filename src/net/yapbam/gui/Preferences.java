@@ -461,7 +461,7 @@ public class Preferences {
 		return translatorMode;
 	}
 	
-	static boolean safeIsTranslatorMode() {
+	public static boolean safeIsTranslatorMode() {
 		return INSTANCE!=null?INSTANCE.isTranslatorMode():false;
 	}
 	
