@@ -1,8 +1,8 @@
 package net.yapbam.gui.tools.currencyconverter;
 
-import java.text.MessageFormat;
-
 import javax.swing.table.AbstractTableModel;
+
+import com.fathzer.jlocal.Formatter;
 
 import net.yapbam.currency.AbstractCurrencyConverter;
 import net.yapbam.currency.CurrencyNames;
@@ -89,9 +89,9 @@ public class CurrenciesTableModel extends AbstractTableModel {
 		}
 		String currencyName = CurrencyNames.get(this.codes[currentCurrency]);
 		if (column==2) {
-			return MessageFormat.format(Messages.getString("CurrencyConverterPanel.ToCurrencyColumnName"), currencyName); //$NON-NLS-1$
+			return Formatter.format(Messages.getString("CurrencyConverterPanel.ToCurrencyColumnName"), currencyName); //$NON-NLS-1$
 		} else if (column==3) {
-			return MessageFormat.format(Messages.getString("CurrencyConverterPanel.CurrencyToColumnName"),currencyName); //$NON-NLS-1$
+			return Formatter.format(Messages.getString("CurrencyConverterPanel.CurrencyToColumnName"),currencyName); //$NON-NLS-1$
 		} else {
 			return super.getColumnName(column);
 		}

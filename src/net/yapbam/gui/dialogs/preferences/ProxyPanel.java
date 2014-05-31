@@ -1,8 +1,10 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
 import java.awt.GridBagConstraints;
 
 import javax.swing.ButtonGroup;
@@ -10,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
@@ -17,7 +20,6 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
-import java.text.MessageFormat;
 
 import javax.swing.JPasswordField;
 
@@ -27,6 +29,7 @@ import net.yapbam.gui.Preferences;
 
 import javax.swing.JCheckBox;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.IntegerWidget;
 import com.fathzer.soft.ajlib.swing.widget.PasswordWidget;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
@@ -109,13 +112,13 @@ public class ProxyPanel extends PreferencePanel {
 	private String buildOkDisabledCause() {
 		if (getProxyButton().isSelected()) {
 			if (getProxyHost()==null) {
-				return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.proxyNameMissing"),getTitle()); //$NON-NLS-1$
+				return Formatter.format(LocalizationData.get("PreferencesDialog.Network.proxyNameMissing"),getTitle()); //$NON-NLS-1$
 			} else if (getProxyHost().indexOf(':')>=0) {
 				return LocalizationData.get("PreferencesDialog.Network.invalidProxyName"); //$NON-NLS-1$
 			} else {
 				Integer port = getProxyPort();
 				if ((port==0) || (port>IP_PORT_MAX_VALUE)) {
-					return MessageFormat.format(LocalizationData.get("PreferencesDialog.Network.invalidPort"),getTitle(),IP_PORT_MAX_VALUE); //$NON-NLS-1$
+					return Formatter.format(LocalizationData.get("PreferencesDialog.Network.invalidPort"),getTitle(),IP_PORT_MAX_VALUE); //$NON-NLS-1$
 				}
 			}
 		}

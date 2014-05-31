@@ -6,12 +6,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
@@ -42,7 +42,7 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		// Create the content pane.
 		JPanel centerPane = new JPanel(new BorderLayout());
 		centerPane.add(
-						new JLabel(MessageFormat.format(LocalizationData.get("ModeDialog.account"), data.getName())), BorderLayout.NORTH); //$NON-NLS-1$
+						new JLabel(Formatter.format(LocalizationData.get("ModeDialog.account"), data.getName())), BorderLayout.NORTH); //$NON-NLS-1$
 		JPanel main = new JPanel(new GridBagLayout());
 		if (DEBUG) {
 			main.setBorder(BorderFactory.createTitledBorder("main")); //$NON-NLS-1$
@@ -116,7 +116,7 @@ public class ModeDialog extends AbstractDialog<Account, Mode> {
 		if (name.length()==0) {
 			return LocalizationData.get("ModeDialog.bad.emptyName"); //$NON-NLS-1$
 		} else if ((account.getMode(name)!=null) && (! ((original!=null) && name.equals(original.getName())))) {
-			return MessageFormat.format(LocalizationData.get("ModeDialog.bad.duplicateMode"),name, account.getName()); //$NON-NLS-1$
+			return Formatter.format(LocalizationData.get("ModeDialog.bad.duplicateMode"),name, account.getName()); //$NON-NLS-1$
 		} else if (!(leftPane.isSelected()||rightPane.isSelected())) {
 			return LocalizationData.get("ModeDialog.bad.neverAvalaible"); //$NON-NLS-1$
 		} else if (leftPane.isSelected() && !leftPane.hasValidContent()) {

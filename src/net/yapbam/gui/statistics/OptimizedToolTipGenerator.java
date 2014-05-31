@@ -1,11 +1,11 @@
 package net.yapbam.gui.statistics;
 
-import java.text.MessageFormat;
-
 import net.yapbam.gui.LocalizationData;
 
 import org.jfree.chart.labels.PieToolTipGenerator;
 import org.jfree.data.general.PieDataset;
+
+import com.fathzer.jlocal.Formatter;
 
 class OptimizedToolTipGenerator implements PieToolTipGenerator {
 	Double total = null;
@@ -21,7 +21,7 @@ class OptimizedToolTipGenerator implements PieToolTipGenerator {
 		}
 		Double amount = (Double) dataset.getValue(key);
 		String amountString = LocalizationData.getCurrencyInstance().format(amount);
-		return MessageFormat.format("{0} : {1} ({2,number,#.#}%)", key, amountString, amount/total*100);
+		return Formatter.format("{0} : {1} ({2,number,#.#}%)", key, amountString, amount/total*100);
 	}
 
 	public void clear() {

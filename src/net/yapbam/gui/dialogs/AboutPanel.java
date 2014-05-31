@@ -6,8 +6,6 @@ import javax.swing.UIManager;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 
-import java.text.MessageFormat;
-
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +17,7 @@ import java.net.URL;
 
 import javax.swing.JTabbedPane;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.AbstractTitledPanel;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
@@ -37,7 +36,7 @@ public class AboutPanel extends AbstractTitledPanel<Void> {
 	 * This is the default constructor
 	 */
 	public AboutPanel() {
-		super(MessageFormat.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion()), UIManager.getIcon("OptionPane.informationIcon"), null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		super(Formatter.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion()), UIManager.getIcon("OptionPane.informationIcon"), null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**

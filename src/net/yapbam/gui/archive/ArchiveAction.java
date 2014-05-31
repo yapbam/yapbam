@@ -5,13 +5,13 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.Collection;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.jclop.swing.URIChooserDialog;
 import com.fathzer.soft.jclop.swing.URIChooserDialog.ConfirmButtonUpdater;
@@ -133,7 +133,7 @@ public class ArchiveAction extends AbstractAction {
 		
 		// Remove transactions from the data
 		Archiver.remove(data, transactions);
-		JOptionPane.showMessageDialog(owner, MessageFormat.format(LocalizationData.get("Archive.report"),transactions.length)); //$NON-NLS-1$
+		JOptionPane.showMessageDialog(owner, Formatter.format(LocalizationData.get("Archive.report"),transactions.length)); //$NON-NLS-1$
 	}
 
 	private URI getArchiveURI(Window owner) {
@@ -166,7 +166,7 @@ public class ArchiveAction extends AbstractAction {
 					// If archive final balance in the archived account is not the initial balance of the account
 					String strFinal = LocalizationData.getCurrencyInstance().format(arcFinal);
 					String strInitial = LocalizationData.getCurrencyInstance().format(account.getInitialBalance());
-					result[i] = MessageFormat.format(LocalizationData.get("Archive.accountBalancesNotMatch"), account.getName(), strFinal, strInitial); //$NON-NLS-1$
+					result[i] = Formatter.format(LocalizationData.get("Archive.accountBalancesNotMatch"), account.getName(), strFinal, strInitial); //$NON-NLS-1$
 				}
 			}
 		}

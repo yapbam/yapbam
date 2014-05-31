@@ -1,7 +1,9 @@
 package net.yapbam.gui.welcome;
 
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JLabel;
 
 import java.awt.Dimension;
@@ -24,6 +26,7 @@ import net.yapbam.gui.persistence.YapbamPersistenceManager;
 
 import javax.swing.JSeparator;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Browser;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
@@ -37,7 +40,6 @@ import java.io.File;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.awt.BorderLayout;
 
@@ -138,7 +140,7 @@ public class WelcomePanel extends JPanel {
 				YapbamPersistenceManager.MANAGER.read(Utils.getOwnerWindow(WelcomePanel.this), new YapbamDataWrapper(WelcomePanel.this.data),
 						file.toURI(), new YapbamPersistenceManager.ErrorProcessor() {
 					public boolean processError(Throwable e) {
-						String message = MessageFormat.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
+						String message = Formatter.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
 								file.getAbsolutePath());
 						JOptionPane.showMessageDialog(Utils.getOwnerWindow(WelcomePanel.this), message,
 								LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$

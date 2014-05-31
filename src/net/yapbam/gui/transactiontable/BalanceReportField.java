@@ -3,10 +3,11 @@ package net.yapbam.gui.transactiontable;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.text.MessageFormat;
 
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+
+import com.fathzer.jlocal.Formatter;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
@@ -44,7 +45,7 @@ public class BalanceReportField extends JToggleButton {
 	public void setValue(double balance, boolean absolute) {
 		this.setFont(this.getFont().deriveFont(absolute?Font.BOLD:Font.ITALIC+Font.BOLD));
 		this.setForeground(balance<0?NEGATIVE_COLOR:POSITIVE_COLOR);
-		String text = MessageFormat.format(this.contentPattern, LocalizationData.getCurrencyInstance().format(balance));
+		String text = Formatter.format(this.contentPattern, LocalizationData.getCurrencyInstance().format(balance));
 		setText(text);
 	}
 }

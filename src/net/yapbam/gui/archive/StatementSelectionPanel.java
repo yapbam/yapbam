@@ -15,6 +15,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.table.JTable;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -29,7 +30,6 @@ import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.text.MessageFormat;
 
 @SuppressWarnings("serial")
 public class StatementSelectionPanel extends JPanel {
@@ -71,7 +71,7 @@ public class StatementSelectionPanel extends JPanel {
 		if (lblWhatAccountsDo == null) {
 			String message = LocalizationData.get("Archive.statementSelection.helpMessage"); //$NON-NLS-1$
 			StatementSelectionTableModel model = (StatementSelectionTableModel) getTable().getModel();
-			lblWhatAccountsDo = new JLabel(MessageFormat.format(message, getTable().getColumnName(model.getStatementColumn())));
+			lblWhatAccountsDo = new JLabel(Formatter.format(message, getTable().getColumnName(model.getStatementColumn())));
 		}
 		return lblWhatAccountsDo;
 	}

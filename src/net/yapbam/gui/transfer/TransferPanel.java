@@ -1,17 +1,21 @@
 package net.yapbam.gui.transfer;
 
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CategoryWidget;
+
 import java.awt.GridLayout;
 
 import net.yapbam.data.GlobalData;
@@ -20,7 +24,6 @@ import net.yapbam.data.Transaction;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -226,9 +229,9 @@ public class TransferPanel extends JPanel {
 		} else if (getFromPane().getAccountWidget().get().equals(getToPane().getAccountWidget().get())) {
 			okDisabledCause = LocalizationData.get("TransferDialog.error.accountAreEquals"); //$NON-NLS-1$
 		} else if (getFromPane().getValueDateField().getDate()==null) {
-			okDisabledCause = MessageFormat.format(LocalizationData.get("TransferDialog.errorValueDate"), LocalizationData.get("TransferDialog.from.title")); //$NON-NLS-1$ //$NON-NLS-2$
+			okDisabledCause = Formatter.format(LocalizationData.get("TransferDialog.errorValueDate"), LocalizationData.get("TransferDialog.from.title")); //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (getToPane().getValueDateField().getDate()==null) {
-			okDisabledCause = MessageFormat.format(LocalizationData.get("TransferDialog.errorValueDate"), LocalizationData.get("TransferDialog.to.title")); //$NON-NLS-1$ //$NON-NLS-2$
+			okDisabledCause = Formatter.format(LocalizationData.get("TransferDialog.errorValueDate"), LocalizationData.get("TransferDialog.to.title")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (!NullUtils.areEquals(old, okDisabledCause)) {
 			firePropertyChange(OK_DISABLED_CAUSE_PROPERTY, old, okDisabledCause);
@@ -261,8 +264,8 @@ public class TransferPanel extends JPanel {
 			subTo.add(sub);
 			subFrom.add(new SubTransaction(-sub.getAmount(), sub.getDescription(), sub.getCategory()));
 		}
-		String descriptionFrom = MessageFormat.format(LocalizationData.get("TransferDialog.from.description"),getToPane().getAccountWidget().get().getName()); //$NON-NLS-1$
-		String descriptionTo = MessageFormat.format(LocalizationData.get("TransferDialog.to.description"),getFromPane().getAccountWidget().get().getName()); //$NON-NLS-1$
+		String descriptionFrom = Formatter.format(LocalizationData.get("TransferDialog.from.description"),getToPane().getAccountWidget().get().getName()); //$NON-NLS-1$
+		String descriptionTo = Formatter.format(LocalizationData.get("TransferDialog.to.description"),getFromPane().getAccountWidget().get().getName()); //$NON-NLS-1$
 		result[0] = new Transaction(getDateField().getDate(), getFromPane().getNumberField().getNumber(), descriptionFrom, null, -getAmountField().getValue(),
 				getFromPane().getAccountWidget().get(), getFromPane().getModeWidget().get(), getCategoryWidget().get(), getFromPane().getValueDateField().getDate(),
 				getFromPane().getStatementField().getText(), subFrom);

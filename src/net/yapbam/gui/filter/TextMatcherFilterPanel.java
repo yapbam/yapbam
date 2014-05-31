@@ -9,6 +9,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 import net.yapbam.gui.HelpManager;
@@ -27,7 +28,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -352,7 +352,7 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 			Pattern.compile(text);
 			return null;
 		} catch (PatternSyntaxException e) {
-			return MessageFormat.format(LocalizationData.get("TextMatcherFilterPanel.invalidRegularExpression"), text); //$NON-NLS-1$
+			return Formatter.format(LocalizationData.get("TextMatcherFilterPanel.invalidRegularExpression"), text); //$NON-NLS-1$
 		}
 	}
 }

@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.worker.WorkInProgressFrame;
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 import com.fathzer.soft.jclop.Service;
@@ -56,7 +56,7 @@ public abstract class PersistenceManager {
 	public void add(PersistenceAdapter adapter) {
 		String scheme = adapter.getService().getScheme();
 		if (adaptersMap.containsKey(scheme)) {
-			throw new IllegalArgumentException(MessageFormat.format("Can''t have two adapters for {0} scheme",scheme));
+			throw new IllegalArgumentException(Formatter.format("Can''t have two adapters for {0} scheme",scheme));
 		}
 		adaptersMap.put(scheme, adapter);
 		schemes.add(scheme);
@@ -184,16 +184,16 @@ public abstract class PersistenceManager {
 								String message;
 								// The file exist, but it is read protected
 								if ("file".equals(path.getScheme())) {
-									message = MessageFormat.format(LocalizationData.get("openDialog.fileNotReadable"),displayedURI); //$NON-NLS-1$
+									message = Formatter.format(LocalizationData.get("openDialog.fileNotReadable"),displayedURI); //$NON-NLS-1$
 								} else {
-									message = MessageFormat.format(LocalizationData.get("openDialog.cacheNotReadable"),file); //$NON-NLS-1$
+									message = Formatter.format(LocalizationData.get("openDialog.cacheNotReadable"),file); //$NON-NLS-1$
 								}
 								JOptionPane.showMessageDialog(frame, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 							} else {
 								throw new RuntimeException(exception);
 							}
 						} else if (exception instanceof UnsupportedFileVersionException) {
-							String message = MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
+							String message = Formatter.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
 									adapter.getService().getDisplayable(path));
 							JOptionPane.showMessageDialog(frame, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 						} else if (exception instanceof IOException) {
@@ -203,7 +203,7 @@ public abstract class PersistenceManager {
 							trace = trace.replace("\t", "  "); //$NON-NLS-1$ //$NON-NLS-2$
 							//Next line is html version ... bad idea as html is not easy to copy/paste in an email
 							//trace = "<html>"+trace.replace("\n", "<br>").replace("\t", "&nbsp;&nbsp;")+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-							BasicHTMLDialog dialog = new BasicHTMLDialog(frame, LocalizationData.get("ErrorManager.title"), MessageFormat.format(LocalizationData //$NON-NLS-1$
+							BasicHTMLDialog dialog = new BasicHTMLDialog(frame, LocalizationData.get("ErrorManager.title"), Formatter.format(LocalizationData //$NON-NLS-1$
 									.get("MainMenu.Open.Error.DialogContent"), displayedURI), Type.ERROR); //$NON-NLS-1$
 							dialog.setContent(trace);
 							dialog.setVisible(true);

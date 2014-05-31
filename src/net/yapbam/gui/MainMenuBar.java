@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
@@ -371,7 +371,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					this.frame.getCurrentPlugIn().print();
 				} catch (PrinterException e1) {
 					String okButton = LocalizationData.get("GenericButton.ok"); //$NON-NLS-1$
-					String message = MessageFormat.format(LocalizationData.get("MainMenuBar.Print.Error.Message"),e1.getMessage()); //$NON-NLS-1$
+					String message = Formatter.format(LocalizationData.get("MainMenuBar.Print.Error.Message"),e1.getMessage()); //$NON-NLS-1$
 					JOptionPane.showOptionDialog(frame.getJFrame(),
 						    message, LocalizationData.get("MainMenuBar.Print.Error.Title"), //$NON-NLS-1$
 						    JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE, null,
@@ -435,7 +435,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			for (int i = 0; i < data.getAccountsNumber(); i++) {
 				Account account = accounts[i];
 				JRadioButtonMenuItem item = new JRadioButtonMenuItem(account.getName());
-				item.setToolTipText(MessageFormat.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
+				item.setToolTipText(Formatter.format(LocalizationData.get("MainMenuBar.AccountFilter.toolTip"), account.getName())); //$NON-NLS-1$
 				if (hasAccountFilter) {
 					item.setSelected(filterAccounts.contains(account));
 				}

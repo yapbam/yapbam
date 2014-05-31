@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.UnreachableHostException;
 import com.fathzer.soft.jclop.swing.MessagePack;
@@ -163,7 +163,7 @@ public class DataReader {
 			throw e;
 		}
 		if (cause instanceof UnsupportedFileVersionException) {
-			String message = MessageFormat.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
+			String message = Formatter.format(LocalizationData.get("MainMenu.Open.Error.DialogContent.needUpdate"), //$NON-NLS-1$
 					adapter.getService().getDisplayable(uri));
 			JOptionPane.showMessageDialog(owner, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 			return false;
@@ -183,7 +183,7 @@ public class DataReader {
 	}
 	
 	private boolean doRemoteNotFound() throws ExecutionException {
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"), adapter.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
+		String message = Formatter.format(LocalizationData.get("synchronization.question.other"), adapter.getMessage(MessagePack.REMOTE_MISSING_MESSAGE)); //$NON-NLS-1$
 		Object[] options = {adapter.getMessage(MessagePack.UPLOAD_ACTION), LocalizationData.get("synchronization.deleteCache.action"), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);
@@ -197,7 +197,7 @@ public class DataReader {
 	}
 
 	private boolean doConflict() throws ExecutionException {
-		String message = MessageFormat.format(LocalizationData.get("synchronization.question.other"),adapter.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
+		String message = Formatter.format(LocalizationData.get("synchronization.question.other"),adapter.getMessage(MessagePack.CONFLICT_MESSAGE)); //$NON-NLS-1$
 		Object[] options = {adapter.getMessage(MessagePack.UPLOAD_ACTION), adapter.getMessage(MessagePack.DOWNLOAD_ACTION), LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-1$
 		int n = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Generic.warning"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, //$NON-NLS-1$
 				null, options, options[2]);

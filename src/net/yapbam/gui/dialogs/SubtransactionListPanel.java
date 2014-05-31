@@ -12,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -27,6 +26,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
 
@@ -171,7 +171,7 @@ public class SubtransactionListPanel extends JPanel {
 				if (getSubtransactionsCount()==0) {
 					sumLabel.setText(""); //$NON-NLS-1$
 				} else {
-					sumLabel.setText(MessageFormat.format(LocalizationData.get("TransactionDialog.SubPanel.total"), evt.getNewValue())); //$NON-NLS-1$
+					sumLabel.setText(Formatter.format(LocalizationData.get("TransactionDialog.SubPanel.total"), evt.getNewValue())); //$NON-NLS-1$
 				}
 			}
 		});

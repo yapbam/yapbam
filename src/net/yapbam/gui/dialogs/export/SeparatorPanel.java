@@ -13,6 +13,7 @@ import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JRadioButton;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.CharWidget;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
@@ -21,7 +22,6 @@ import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 
 import javax.swing.JLabel;
 
@@ -41,7 +41,7 @@ public class SeparatorPanel extends JPanel {
     	DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
         String defaultSeparatorWording = LocalizationData.get("ExportDialog.decimalSeparator.defaultSeparator"); //$NON-NLS-1$
         char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
-		defaultSeparatorWording = MessageFormat.format(defaultSeparatorWording, decimalSeparator);
+		defaultSeparatorWording = Formatter.format(defaultSeparatorWording, decimalSeparator);
 		return new SeparatorPanel(LocalizationData.get("ExportDialog.decimalSeparator"), //$NON-NLS-1$
         		defaultSeparatorWording,
         		LocalizationData.get("ExportDialog.decimalSeparator.defaultSeparator.toolTip"), //$NON-NLS-1$

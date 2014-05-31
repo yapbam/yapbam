@@ -8,13 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Proxy;
 import java.net.UnknownHostException;
-import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.UIManager;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.ToolsFrame;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.worker.DefaultWorkInProgressPanel;
@@ -84,7 +84,7 @@ public class Dialog extends ToolsFrame {
 						if (e.getCause() instanceof IOException) {
 							ErrorManager.INSTANCE.display(owner, null, Messages.getString("ToolsPlugin.currencyConverter.ioErrorMessage")); //$NON-NLS-1$
 						} else {
-							String message = MessageFormat.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.getCause()); //$NON-NLS-1$
+							String message = Formatter.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.getCause()); //$NON-NLS-1$
 							ErrorManager.INSTANCE.display(owner, null, message);
 						}
 					}

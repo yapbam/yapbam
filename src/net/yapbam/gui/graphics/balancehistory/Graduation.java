@@ -1,6 +1,6 @@
 package net.yapbam.gui.graphics.balancehistory;
 
-import java.text.MessageFormat;
+import com.fathzer.jlocal.Formatter;
 
 public class Graduation {
 	private int position;
@@ -22,6 +22,6 @@ public class Graduation {
 
 	@Override
 	public String toString() {
-		return MessageFormat.format("{0,number,currency}[{1}]", getValue(), getPosition());
+		return Formatter.format("{0,number,currency}[{1}]", getValue(), getPosition());
 	}
 }

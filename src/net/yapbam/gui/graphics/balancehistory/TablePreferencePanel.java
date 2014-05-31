@@ -1,12 +1,12 @@
 package net.yapbam.gui.graphics.balancehistory;
 
-import java.text.MessageFormat;
-
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.PreferencePanel;
 import net.yapbam.gui.Preferences;
 
 import javax.swing.JCheckBox;
+
+import com.fathzer.jlocal.Formatter;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -88,9 +88,9 @@ final class TablePreferencePanel extends PreferencePanel {
 	private JCheckBox getChckbxUseSameColors() {
 		if (chckbxUseSameColors == null) {
 			String tab = LocalizationData.get("MainFrame.Transactions"); //$NON-NLS-1$
-			String title = MessageFormat.format(LocalizationData.get("BalanceHistory.prefs.sameBackgroundAsTransactionTable"), tab); //$NON-NLS-1$
+			String title = Formatter.format(LocalizationData.get("BalanceHistory.prefs.sameBackgroundAsTransactionTable"), tab); //$NON-NLS-1$
 			chckbxUseSameColors = new JCheckBox(title);
-			String tip = MessageFormat.format(LocalizationData.get("BalanceHistory.prefs.sameBackgroundAsTransactionTable.tooltip"),tab); //$NON-NLS-1$
+			String tip = Formatter.format(LocalizationData.get("BalanceHistory.prefs.sameBackgroundAsTransactionTable.tooltip"),tab); //$NON-NLS-1$
 			chckbxUseSameColors.setToolTipText(tip);
 			chckbxUseSameColors.setSelected(isSameColors());
 		}

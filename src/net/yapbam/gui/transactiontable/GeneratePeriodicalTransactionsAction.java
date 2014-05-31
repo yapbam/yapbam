@@ -2,13 +2,13 @@ package net.yapbam.gui.transactiontable;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.text.MessageFormat;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 
 import net.yapbam.data.FilteredData;
@@ -60,7 +60,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 		Icon icon = null;
 		if (!enabled) {
 			toolTip.append("<br>").append(LocalizationData.get("MainMenu.Transactions.Periodical.disabled.tooltip.line1")); //$NON-NLS-1$ //$NON-NLS-2$
-			toolTip.append("<br>").append(MessageFormat.format(LocalizationData.get("MainMenu.Transactions.Periodical.disabled.tooltip.line2"), //$NON-NLS-1$ //$NON-NLS-2$
+			toolTip.append("<br>").append(Formatter.format(LocalizationData.get("MainMenu.Transactions.Periodical.disabled.tooltip.line2"), //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("PeriodicalTransactionManager.title"),LocalizationData.get("AdministrationPlugIn.title"))); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
 			if (data.getGlobalData().hasPendingPeriodicalTransactions(new Date())) {

@@ -5,7 +5,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.Proxy;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -15,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -49,7 +49,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 	@Override
 	protected JPanel createCenterPane() {
 		waitPanel = new WaitPanel();
-		waitPanel.setMessage(MessageFormat.format(LocalizationData.get("Update.Downloading.message"),data.getLastestRelease().toString()));
+		waitPanel.setMessage(Formatter.format(LocalizationData.get("Update.Downloading.message"),data.getLastestRelease().toString()));
 		waitPanel.setIndeterminate(false);
 		waitPanel.setMaximum(100);
 		return waitPanel;
@@ -155,7 +155,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 						// I preferred to use the "standard" MainFrame close job.
 						MainFrame.updater = getUpdaterFile();
 						// Display message to inform the user that the download is completed
-						String message = MessageFormat.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
+						String message = Formatter.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
 						Object[] options = {LocalizationData.get("GenericButton.close"), LocalizationData.get("Update.Downloaded.quitNow")};
 						int choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION,
 								JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);

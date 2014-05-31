@@ -22,10 +22,10 @@ import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 
 import javax.swing.JTextField;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 public class BalancePanel extends JPanel {
@@ -213,14 +213,14 @@ public class BalancePanel extends JPanel {
 
 	private void updateBalances() {
 		DecimalFormat ci = LocalizationData.getCurrencyInstance();
-		setStart(MessageFormat.format(LocalizationData.get("StatementView.startBalance"), statement!=null?ci.format(statement.getStartBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
-		setEnd(MessageFormat.format(LocalizationData.get("StatementView.endBalance"), statement!=null?ci.format(statement.getEndBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
+		setStart(Formatter.format(LocalizationData.get("StatementView.startBalance"), statement!=null?ci.format(statement.getStartBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
+		setEnd(Formatter.format(LocalizationData.get("StatementView.endBalance"), statement!=null?ci.format(statement.getEndBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		Double target = targetAmount.getValue();
 		if ((statement==null) || (target==null) || (GlobalData.AMOUNT_COMPARATOR.compare(target,statement.getEndBalance())==0)) {
 			gapLabel.setVisible(false);
 		} else {
-			gapLabel.setText(MessageFormat.format(LocalizationData.get("CheckModePanel.gap"),ci.format(target-statement.getEndBalance()))); //$NON-NLS-1$
+			gapLabel.setText(Formatter.format(LocalizationData.get("CheckModePanel.gap"),ci.format(target-statement.getEndBalance()))); //$NON-NLS-1$
 			gapLabel.setVisible(true);
 		}
 	}
