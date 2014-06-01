@@ -128,7 +128,7 @@ class AccountsSummaryTableModel extends AbstractTableModel {
 		} else if (columnIndex==NB_TRANSACTIONS_COLUMN) {
 			return LocalizationData.get("AccountsSummary.TransactionsNumber"); //$NON-NLS-1$
 		} else if (columnIndex==NB_UNCHECKED_TRANSACTIONS_COLUMN) {
-			return LocalizationData.get("AccountsSummary.UncheckedTransactionsNumber"); //$NON-NLS-1$
+			return LocalizationData.get("MainMenuBar.notChecked"); //$NON-NLS-1$
 		} else {
 			return "?"; //$NON-NLS-1$
 		}
