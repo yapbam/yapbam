@@ -6,6 +6,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
+import net.yapbam.gui.TransactionSelector;
+
 @SuppressWarnings("serial")
 public abstract class AbstractTransactionAction extends AbstractAction {
 	protected TransactionSelector selector;

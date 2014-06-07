@@ -7,17 +7,17 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
-import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewPeriodicalTransactionAction;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 import net.yapbam.gui.util.JTableUtils;
 
-public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<FilteredData> implements AbstractAdministrationPanel {
+public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration."; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 
-	public PeriodicalTransactionListPanel(FilteredData data) {
+	public PeriodicalTransactionListPanel(GlobalData data) {
 		super(data);
 	}
 	@Override

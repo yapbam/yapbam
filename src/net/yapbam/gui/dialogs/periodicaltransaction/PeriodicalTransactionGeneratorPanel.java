@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 
 import net.yapbam.data.AbstractTransaction;
-import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
@@ -84,7 +84,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	private JTable jTable = null;
 	private GenerateTableModel tableModel;
 
-	private FilteredData data;
+	private GlobalData data;
 	private boolean hasImpact;
 
 	private EditTransactionAction editAction;
@@ -95,7 +95,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public PeriodicalTransactionGeneratorPanel(FilteredData data) {
+	public PeriodicalTransactionGeneratorPanel(GlobalData data) {
 		super();
 		this.data = data;
 		this.hasImpact = false;
@@ -173,7 +173,7 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
-			tableModel = new GenerateTableModel(data.getGlobalData());
+			tableModel = new GenerateTableModel(data);
 			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel) {
 				/* (non-Javadoc)
 				 * @see javax.swing.JTable#getPreferredScrollableViewportSize()

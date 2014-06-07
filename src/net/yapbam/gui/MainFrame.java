@@ -23,7 +23,6 @@ import net.yapbam.data.event.*;
 import net.yapbam.data.xml.UnsupportedFileVersionException;
 import net.yapbam.data.xml.UnsupportedFormatException;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
-import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.UnsupportedSchemeException;

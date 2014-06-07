@@ -11,7 +11,7 @@ import javax.swing.SwingConstants;
 import com.fathzer.jlocal.Formatter;
 
 import net.yapbam.data.AbstractTransaction;
-import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.event.DataEvent;
@@ -35,7 +35,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
 		this.periodicTransactionListPanel = periodicTransactionListPanel;
 		this.settings = new PeriodicalTransactionsTableSettings();
-		this.getFilteredData().getGlobalData().addListener(new DataListener() {
+		this.getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof PeriodicalTransactionsAddedEvent) {
@@ -166,7 +166,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public int getRowCount() {
-		return getFilteredData().getGlobalData().getPeriodicalTransactionsNumber();
+		return getGlobalData().getPeriodicalTransactionsNumber();
 	}
 
 	@Override
@@ -190,13 +190,13 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
     	}
 	}
 
-	FilteredData getFilteredData() {
+	GlobalData getGlobalData() {
 		return this.periodicTransactionListPanel.data;
 	}
 
 	@Override
 	protected AbstractTransaction getTransaction(int rowIndex) {
-		return this.periodicTransactionListPanel.data.getGlobalData().getPeriodicalTransaction(rowIndex);
+		return this.periodicTransactionListPanel.data.getPeriodicalTransaction(rowIndex);
 	}
 
 	@Override

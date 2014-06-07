@@ -13,7 +13,7 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 	private AdministrationPanel panel;
 
 	public AdministrationPlugIn(FilteredData filteredData, Object restartData) {
-		this.panel = new AdministrationPanel(filteredData);
+		this.panel = new AdministrationPanel(filteredData.getGlobalData());
 		this.setPanelTitle(LocalizationData.get("AdministrationPlugIn.title")); //$NON-NLS-1$
 		this.setPanelToolTip(LocalizationData.get("AdministrationPlugIn.toolTip")); //$NON-NLS-1$
 	}

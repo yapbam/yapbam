@@ -12,6 +12,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.dialogs.AlertDialog;
 import net.yapbam.gui.preferences.EditingSettings;
 

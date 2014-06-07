@@ -8,7 +8,7 @@ import java.util.List;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
-import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.TransactionSelector;
 
 public class DualTransactionSelector implements TransactionSelector {
 	private List<PropertyChangeListener> listeners;

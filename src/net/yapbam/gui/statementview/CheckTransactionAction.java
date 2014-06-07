@@ -7,10 +7,10 @@ import java.util.Arrays;
 
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.AbstractTransactionAction;
-import net.yapbam.gui.actions.TransactionSelector;
 
 public class CheckTransactionAction extends AbstractTransactionAction {
 	private static final long serialVersionUID = 1L;

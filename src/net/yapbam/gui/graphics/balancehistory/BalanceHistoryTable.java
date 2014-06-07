@@ -13,7 +13,7 @@ import com.fathzer.soft.ajlib.swing.table.JTableSelector;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
-import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class BalanceHistoryTable extends FriendlyTable implements TransactionSelector {

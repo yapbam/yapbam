@@ -8,11 +8,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.actions.TransactionSelector;
 
 public class StatementViewPlugin extends AbstractPlugIn {
 	private static final String STATE_PREFIX = "net.yapbam.statementView."; //$NON-NLS-1$
@@ -80,5 +81,10 @@ public class StatementViewPlugin extends AbstractPlugIn {
 		} else {
 			panel.checkAction.setEnabled(false);
 		}
+	}
+
+	@Override
+	public Account getDefaultAccount() {
+		return this.panel.getSelectedAccount();
 	}
 }
