@@ -27,7 +27,7 @@ import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 @SuppressWarnings("serial")
 public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importer> {
 	private ImportPanel importPanel;
-	public static File lastFile;
+	private static File lastFile;
 	private transient IOException instantiateException;
 
 	static final class Container {
@@ -71,6 +71,7 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 		importPanel.setData(data.data);
 		try {
 			importPanel.setFile(data.file);
+			importPanel.setLine(0);
 		} catch (IOException e) {
 			instantiateException = e;
 		}
@@ -133,5 +134,9 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 			}
 		});
 		return jLabel;
+	}
+	
+	public static File getLastFile() {
+		return lastFile;
 	}
 }

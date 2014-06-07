@@ -3,6 +3,10 @@ version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 
+version	0.17.2 (09/06/2014)
+fix
+	Bug introduit en 0.17.0 : Lors de la première importation d'un fichier, il était possible de lancer l'import sans fixer les correspondances entre les colonnes du fichier importé et les attributs des opérations. L'import se terminait alors par une erreur.
+
 version	0.17.1 (01/06/2014)
 improvement
 	Le nombre d'opérations par compte est déplacé de l'onglet "Administration/Gestion des comptes" vers l'onglet "Bilan des comptes". Cet onglet affiche à présent le nombre total d'opérations tous comptes confondus.
