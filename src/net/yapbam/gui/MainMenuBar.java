@@ -290,96 +290,92 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		// output.setText("Menu selected"+e.getSource().toString());
 		Object source = event.getSource();
+		GlobalData data = this.frame.getData();
 		if (source.equals(this.menuItemQuit)) {
 			this.frame.getJFrame().dispatchEvent(new WindowEvent(this.frame.getJFrame(), WindowEvent.WINDOW_CLOSING));
-		} else {
-			GlobalData data = this.frame.getData();
-			if (source.equals(this.menuItemNew)) {
-				if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData()))) {
-					data.clear();
-				}
-			} else if (source.equals(this.menuItemProtect)) {
-				String password = this.frame.getData().getPassword();
-				GetPasswordDialog dialog = new GetPasswordDialog(frame.getJFrame(), LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
-				dialog.setWarningMessage(LocalizationData.get("FilePasswordDialog.setPassword.warning")); //$NON-NLS-1$
-				dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.setPassword.tooltip")); //$NON-NLS-1$
-				dialog.setConfirmIsRequired(true);
-				dialog.setVisible(true);
-				String newPassword = dialog.getPassword();
-				if (newPassword!=null) {
-					this.frame.getData().setPassword(newPassword);
-				}
-			} else if (source.equals(this.menuItemImport)) {
-				JFileChooser chooser = new FileChooser(null);
-				chooser.setLocale(LocalizationData.getLocale());
-				if (ImportDialog.lastFile != null) {
-					File lastFile = ImportDialog.lastFile;
-					if (lastFile.exists() && lastFile.canRead()) {
-						chooser.setSelectedFile(lastFile);
-					}
-				}
-				chooser.updateUI();
-				File file = chooser.showOpenDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-				if (file!=null) {
-					try {
-						ImportDialog dialog = new ImportDialog(this.frame.getJFrame(), data, file);
-						dialog.setVisible(true);
-						Importer importer = dialog.getResult();
-						if (importer!=null) {
-							if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData()))) {
-								if (!dialog.getAddToCurrentData()) {
-									data.clear();
-								}
-								ImportError[] errors = importer.importFile(null);
-								if (errors.length!=0) {
-									ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame.getJFrame(), importer.getParameters().getImportedFileColumns(), errors);
-									importErrorDialog.setVisible(true);
-									if (importErrorDialog.getResult()!=null) {
-										errors = new ImportError[0];
-									}
-								}
-								if (errors.length==0) {
-									importer.importFile(data);
+		} else if (source.equals(this.menuItemNew)) {
+			if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData()))) {
+				data.clear();
+			}
+		} else if (source.equals(this.menuItemProtect)) {
+			String password = this.frame.getData().getPassword();
+			GetPasswordDialog dialog = new GetPasswordDialog(frame.getJFrame(), LocalizationData.get("FilePasswordDialog.title"), LocalizationData.get("FilePasswordDialog.setPassword.question"), null, password); //$NON-NLS-1$ //$NON-NLS-2$
+			dialog.setWarningMessage(LocalizationData.get("FilePasswordDialog.setPassword.warning")); //$NON-NLS-1$
+			dialog.setPasswordFieldToolTipText(LocalizationData.get("FilePasswordDialog.setPassword.tooltip")); //$NON-NLS-1$
+			dialog.setConfirmIsRequired(true);
+			dialog.setVisible(true);
+			String newPassword = dialog.getPassword();
+			if (newPassword!=null) {
+				this.frame.getData().setPassword(newPassword);
+			}
+		} else if (source.equals(this.menuItemImport)) {
+			JFileChooser chooser = new FileChooser(null);
+			chooser.setLocale(LocalizationData.getLocale());
+			File lastFile = ImportDialog.getLastFile();
+			if ((lastFile != null) && lastFile.exists() && lastFile.canRead()) {
+				chooser.setSelectedFile(lastFile);
+			}
+			chooser.updateUI();
+			File file = chooser.showOpenDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+			if (file!=null) {
+				try {
+					ImportDialog dialog = new ImportDialog(this.frame.getJFrame(), data, file);
+					dialog.setVisible(true);
+					Importer importer = dialog.getResult();
+					if (importer!=null) {
+						if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData()))) {
+							if (!dialog.getAddToCurrentData()) {
+								data.clear();
+							}
+							ImportError[] errors = importer.importFile(null);
+							if (errors.length!=0) {
+								ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame.getJFrame(), importer.getParameters().getImportedFileColumns(), errors);
+								importErrorDialog.setVisible(true);
+								if (importErrorDialog.getResult()!=null) {
+									errors = new ImportError[0];
 								}
 							}
+							if (errors.length==0) {
+								importer.importFile(data);
+							}
 						}
-					} catch (IOException e) {
-						ImportDialog.doError(this.frame.getJFrame(), e);
 					}
+				} catch (IOException e) {
+					ImportDialog.doError(this.frame.getJFrame(), e);
 				}
-			} else if (source.equals(this.menuItemExport)) {
-				ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
-				exportDialog.setVisible(true);
-				Exporter exporter = exportDialog.getResult();
-				if (exporter!=null) {
-					JFileChooser chooser = new FileChooser(null);
-					chooser.setLocale(LocalizationData.getLocale());
-					chooser.updateUI();
-					File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-					if (file!=null) {
-						try {
-							file = FileUtils.getCanonical(file);
-							exporter.exportFile(file, frame.getFilteredData());
-							JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
-						} catch (IOException e1) {
-							ErrorManager.INSTANCE.display(frame.getJFrame(), e1);
-						}
-					}					
-				}
-			} else if (source.equals(this.menuItemPrint)) {
-				try {
-					this.frame.getCurrentPlugIn().print();
-				} catch (PrinterException e1) {
-					String okButton = LocalizationData.get("GenericButton.ok"); //$NON-NLS-1$
-					String message = Formatter.format(LocalizationData.get("MainMenuBar.Print.Error.Message"),e1.getMessage()); //$NON-NLS-1$
-					JOptionPane.showOptionDialog(frame.getJFrame(),
-						    message, LocalizationData.get("MainMenuBar.Print.Error.Title"), //$NON-NLS-1$
-						    JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE, null,
-						    new String[]{okButton}, okButton);
-				}
-			} else if (source.equals(this.menuItemAbout)) {
-				new AboutDialog(MainMenuBar.this.frame.getJFrame()).setVisible(true);
 			}
+		} else if (source.equals(this.menuItemExport)) {
+			ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
+			exportDialog.setVisible(true);
+			Exporter exporter = exportDialog.getResult();
+			if (exporter!=null) {
+				JFileChooser chooser = new FileChooser(null);
+				chooser.setLocale(LocalizationData.getLocale());
+				chooser.updateUI();
+				File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+				if (file!=null) {
+					try {
+						file = FileUtils.getCanonical(file);
+						exporter.exportFile(file, frame.getFilteredData());
+						JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+					} catch (IOException e1) {
+						ErrorManager.INSTANCE.display(frame.getJFrame(), e1);
+					}
+				}					
+			}
+		} else if (source.equals(this.menuItemPrint)) {
+			try {
+				this.frame.getCurrentPlugIn().print();
+			} catch (PrinterException e1) {
+				String okButton = LocalizationData.get("GenericButton.ok"); //$NON-NLS-1$
+				String message = Formatter.format(LocalizationData.get("MainMenuBar.Print.Error.Message"),e1.getMessage()); //$NON-NLS-1$
+				JOptionPane.showOptionDialog(frame.getJFrame(),
+					    message, LocalizationData.get("MainMenuBar.Print.Error.Title"), //$NON-NLS-1$
+					    JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE, null,
+					    new String[]{okButton}, okButton);
+			}
+		} else if (source.equals(this.menuItemAbout)) {
+			new AboutDialog(MainMenuBar.this.frame.getJFrame()).setVisible(true);
 		}
 	}
 
