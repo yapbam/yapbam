@@ -15,10 +15,10 @@ import net.yapbam.data.event.PeriodicalTransactionsAddedEvent;
 import net.yapbam.data.event.PeriodicalTransactionsRemovedEvent;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.preferences.PreferencePanel;
 import net.yapbam.gui.transactiontable.BalanceReportPanel.Selection;
 import net.yapbam.gui.util.JTableUtils;
@@ -32,13 +32,13 @@ public class TransactionsPlugIn extends AbstractPlugIn {
 
 	public TransactionsPlugIn(FilteredData filteredData, Object restoreData) {
 		data = filteredData;
-		this.panel = new TransactionsPlugInPanel(data);
+		this.panel = new TransactionsPlugInPanel(data, this);
 		setPanelTitle(LocalizationData.get("MainFrame.Transactions")); //$NON-NLS-1$
 		setPanelToolTip(LocalizationData.get("MainFrame.Transactions.toolTip")); //$NON-NLS-1$
 		testAlert();
 		// Add a listener in order to be able to display an alert if some periodical transactions need to be generated
 		// We will listen to the global data because, events may not be thrown by the filtered data (for example if the
-		// account of a new peridiocal transaction is not ok wiht the filter) and we want to be able to display alerts
+		// account of a new peridiocal transaction is not ok with the filter) and we want to be able to display alerts
 		// event if it concern a hidden data.
 		data.getGlobalData().addListener(new DataListener() {
 			@Override

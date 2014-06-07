@@ -9,7 +9,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 import java.util.prefs.Preferences;
 
 import javax.swing.*;
@@ -27,7 +26,7 @@ import net.yapbam.gui.widget.AutoSelectFocusListener;
 import net.yapbam.gui.widget.CurrencyWidget;
 
 /** This dialog allows to create or edit a transaction */
-public abstract class AbstractTransactionDialog<V> extends AbstractDialog<FilteredData, V> {
+public abstract class AbstractTransactionDialog<V> extends AbstractDialog<GlobalData, V> {
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = false;
 
@@ -44,7 +43,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	private PredefinedDescriptionComputer pdc;
 	protected boolean ignoreEvents;
 	
-	protected AbstractTransactionDialog(Window owner, String title, FilteredData data, AbstractTransaction transaction) {
+	protected AbstractTransactionDialog(Window owner, String title, GlobalData data, AbstractTransaction transaction) {
 		super(owner, title, data);
 		pdc = null;
 		this.ignoreEvents = false;
@@ -133,12 +132,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c.gridwidth=GridBagConstraints.REMAINDER;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx=1.0;
-		accounts = new AccountWidget(data.getGlobalData());
-		List<Account> filterAccounts = data.getFilter().getValidAccounts();
-		if ((filterAccounts!=null) && (filterAccounts.size()==1)) {
-			// If the filter defines only one account, select this account
-			accounts.set(filterAccounts.get(0));
-		}
+		accounts = new AccountWidget(data);
 		AccountsListener accountListener = new AccountsListener();
 		accounts.addPropertyChangeListener(AccountWidget.ACCOUNT_PROPERTY, accountListener);
 		accounts.setToolTipText(LocalizationData.get("TransactionDialog.account.tooltip")); //$NON-NLS-1$
@@ -217,7 +211,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c.gridy = 3;
 		c.anchor = GridBagConstraints.WEST;
 		centerPane.add(new JLabel(LocalizationData.get("TransactionDialog.mode")), c); //$NON-NLS-1$
-		modes = new ModeWidget(new ModeWidgetParams(data.getGlobalData(), getAccount(), true));
+		modes = new ModeWidget(new ModeWidgetParams(data, getAccount(), true));
 		modes.getJLabel().setVisible(false);
 		buildModes(!receipt.isSelected());
 		ModesListener modeListener = new ModesListener();
@@ -231,7 +225,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c.gridx = 2;
 		buildNumberField(centerPane, AutoSelectFocusListener.INSTANCE, c); // Subclasses may insert a number field here
 
-		categories = new CategoryWidget(this.data.getGlobalData());
+		categories = new CategoryWidget(this.data);
 		c.gridx++;
 		c.weightx = 1.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -260,7 +254,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 		c.fill=GridBagConstraints.BOTH;
 		c.weightx = 1.0;
 		c.weighty = 1.0;
-		subtransactionsPanel = new SubtransactionListPanel(this.data.getGlobalData());
+		subtransactionsPanel = new SubtransactionListPanel(this.data);
 		subtransactionsPanel.addPropertyChangeListener(SubtransactionListPanel.SUM_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -302,7 +296,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Filter
 	private void buildModes(boolean expense) {
 		Mode current = modes.get();
 //System.out.println ("buildModes is called. account="+getAccount().getName()+", expense="+expense+", original="+originalMode+" ("+originalIsExpense+")"); //TODO
-		modes.setParameters(new ModeWidgetParams(data.getGlobalData(), getAccount(), expense));
+		modes.setParameters(new ModeWidgetParams(data, getAccount(), expense));
 		ComboBox combo = modes.getCombo();
 		combo.setActionEnabled(false);
 		if ((originalMode!=null) && (originalIsExpense==expense) && !combo.contains(originalMode) && (getAccount().indexOf(originalMode)>=0)) {

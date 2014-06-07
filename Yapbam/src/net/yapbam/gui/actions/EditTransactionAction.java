@@ -9,6 +9,7 @@ import com.fathzer.soft.ajlib.swing.Utils;
 
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.IconManager;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.TransactionDialog;
@@ -25,7 +26,7 @@ public class EditTransactionAction extends AbstractTransactionAction {
 	public void actionPerformed(ActionEvent e) {
 		Transaction[] transactions = selector.getSelectedTransactions();
 		if (transactions.length==1) {
-			Transaction transaction = TransactionDialog.open(selector.getFilteredData(), Utils.getOwnerWindow((Component) e.getSource()), transactions[0], true, true, false);
+			Transaction transaction = TransactionDialog.open(selector.getFilteredData().getGlobalData(), Utils.getOwnerWindow((Component) e.getSource()), transactions[0], true, true, false);
 			if (transaction!=null) {
 				selector.setSelectedTransactions(new Transaction[]{transaction});
 			}

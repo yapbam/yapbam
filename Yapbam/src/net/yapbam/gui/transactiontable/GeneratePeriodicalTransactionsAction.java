@@ -11,7 +11,7 @@ import javax.swing.Icon;
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 
-import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -24,16 +24,16 @@ import net.yapbam.gui.dialogs.periodicaltransaction.GeneratePeriodicalTransactio
 
 @SuppressWarnings("serial")
 public class GeneratePeriodicalTransactionsAction extends AbstractAction {
-	private FilteredData data;
+	private GlobalData data;
 	
-	public GeneratePeriodicalTransactionsAction(FilteredData filteredData, boolean isMenu) {
+	public GeneratePeriodicalTransactionsAction(GlobalData data, boolean isMenu) {
 		super(LocalizationData.get("MainMenu.Transactions.Periodical")); //$NON-NLS-1$
 		if (isMenu) {
 			putValue(Action.MNEMONIC_KEY, (int) LocalizationData.getChar("MainMenu.Transactions.Periodical.Mnemonic")); //$NON-NLS-1$
 		}
-		this.data = filteredData;
+		this.data = data;
 		if (data!=null) {
-			filteredData.getGlobalData().addListener(new DataListener() {
+			data.addListener(new DataListener() {
 				@Override
 				public void processEvent(DataEvent event) {
 					if ((event instanceof EverythingChangedEvent) || (event instanceof PeriodicalTransactionsRemovedEvent) ||
@@ -52,7 +52,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 	}
 
 	private void refreshEnabled() {
-		boolean enabled = data.getGlobalData().getPeriodicalTransactionsNumber()!=0;
+		boolean enabled = data.getPeriodicalTransactionsNumber()!=0;
 		setEnabled(enabled);
 		StringBuilder toolTip = new StringBuilder();
 		toolTip.append("<html>"); //$NON-NLS-1$
@@ -63,7 +63,7 @@ public class GeneratePeriodicalTransactionsAction extends AbstractAction {
 			toolTip.append("<br>").append(Formatter.format(LocalizationData.get("MainMenu.Transactions.Periodical.disabled.tooltip.line2"), //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("PeriodicalTransactionManager.title"),LocalizationData.get("AdministrationPlugIn.title"))); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			if (data.getGlobalData().hasPendingPeriodicalTransactions(new Date())) {
+			if (data.hasPendingPeriodicalTransactions(new Date())) {
 				toolTip.append("<br>").append(LocalizationData.get("GeneratePeriodicalTransactionsDialog.alert")); //$NON-NLS-1$ //$NON-NLS-2$
 				icon = IconManager.get(Name.ALERT);
 			}

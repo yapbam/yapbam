@@ -1,7 +1,7 @@
 package net.yapbam.gui.statementview;
 
 import net.yapbam.data.Transaction;
-import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.gui.TransactionSelector;
 
 public abstract class TransactionsUpdater {
 	protected abstract Transaction update(Transaction t);

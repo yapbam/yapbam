@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.Transaction;
@@ -19,10 +18,10 @@ import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 import net.yapbam.util.DateUtils;
 
 @SuppressWarnings("serial")
-public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<FilteredData, Void> {
+public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<GlobalData, Void> {
 	private PeriodicalTransactionGeneratorPanel panel;
 
-	public GeneratePeriodicalTransactionsDialog(Window owner, FilteredData data) {
+	public GeneratePeriodicalTransactionsDialog(Window owner, GlobalData data) {
 		super(owner, LocalizationData.get("GeneratePeriodicalTransactionsDialog.title"), data); //$NON-NLS-1$
 		this.setResizable(true);
 		this.pack();
@@ -42,20 +41,19 @@ public class GeneratePeriodicalTransactionsDialog extends AbstractDialog<Filtere
 						t.getValueDate(), editingOptions.getStatementId(date), Arrays.asList(t.getSubTransactions()));
 			}
 		}
-		GlobalData globalData = data.getGlobalData();
-		globalData.add(transactions);
+		data.add(transactions);
 		// Update the next date of periodical transactions
-		PeriodicalTransaction[] wholeTransactions = new PeriodicalTransaction[globalData.getPeriodicalTransactionsNumber()];
+		PeriodicalTransaction[] wholeTransactions = new PeriodicalTransaction[data.getPeriodicalTransactionsNumber()];
 		Date[] dates = new Date[wholeTransactions.length];
 		for (int i = 0; i < wholeTransactions.length; i++) {
-			wholeTransactions[i] = globalData.getPeriodicalTransaction(i);
+			wholeTransactions[i] = data.getPeriodicalTransaction(i);
 			dates[i] = panel.getDate();
 			Date pDate = panel.getPostponedDate(i);
 			if (pDate!=null) {
 				dates[i] = DateUtils.integerToDate(DateUtils.dateToInteger(pDate)-1);
 			}
 		}
-		globalData.setPeriodicalTransactionNextDate(wholeTransactions, dates);
+		data.setPeriodicalTransactionNextDate(wholeTransactions, dates);
 		return null;
 	}
 

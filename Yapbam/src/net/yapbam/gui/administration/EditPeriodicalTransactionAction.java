@@ -27,7 +27,7 @@ public class EditPeriodicalTransactionAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		PeriodicalTransaction transaction = table.getSelectedTransaction();
 		if (transaction != null) {
-			PeriodicalTransactionDialog.open(table.getFilteredData(), Utils.getOwnerWindow((Component) e.getSource()), transaction, true);
+			PeriodicalTransactionDialog.open(table.getGlobalData(), Utils.getOwnerWindow((Component) e.getSource()), transaction, true);
 		}
 	}
 }

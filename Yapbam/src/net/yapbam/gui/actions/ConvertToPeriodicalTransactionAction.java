@@ -11,6 +11,7 @@ import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.dialogs.periodicaltransaction.PeriodicalTransactionDialog;
 
 @SuppressWarnings("serial")
@@ -30,6 +31,6 @@ public class ConvertToPeriodicalTransactionAction extends AbstractTransactionAct
 		}
 		PeriodicalTransaction model = new PeriodicalTransaction(transaction.getDescription(), transaction.getComment(), transaction.getAmount(),
 				transaction.getAccount(), transaction.getMode(), transaction.getCategory(), list, null, false, null);
-		PeriodicalTransactionDialog.open(selector.getFilteredData(), Utils.getOwnerWindow((Component)e.getSource()), model, false);
+		PeriodicalTransactionDialog.open(selector.getFilteredData().getGlobalData(), Utils.getOwnerWindow((Component)e.getSource()), model, false);
 	}
 }

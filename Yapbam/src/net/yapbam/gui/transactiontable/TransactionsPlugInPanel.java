@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.gui.AccountSelector;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
 import net.yapbam.gui.actions.DeleteTransactionAction;
@@ -35,7 +36,7 @@ public class TransactionsPlugInPanel extends JPanel {
 	private BalanceReportPanel balances;
 
 	@SuppressWarnings("serial")
-	public TransactionsPlugInPanel(FilteredData data) {
+	public TransactionsPlugInPanel(FilteredData data, AccountSelector accountSelector) {
 		super(new BorderLayout());
 
 		balances = new BalanceReportPanel(data==null?null:data.getBalanceData());
@@ -51,9 +52,9 @@ public class TransactionsPlugInPanel extends JPanel {
 		transactionTable.addMouseListener(new JTableListener(new Action[] { editTransactionAction, duplicateTransactionAction,
 				deleteTransactionAction, null, new ConvertToPeriodicalTransactionAction(transactionTable) }, editTransactionAction));
        
-		final JButton newTransactionButton = new JButton(new NewTransactionAction(data, transactionTable,false));
+		final JButton newTransactionButton = new JButton(new NewTransactionAction(data, transactionTable,false,accountSelector));
 		newTransactionButton.setText(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
-		final JButton massNewTransactionButton = new JButton(new NewTransactionAction(data, transactionTable,true));
+		final JButton massNewTransactionButton = new JButton(new NewTransactionAction(data, transactionTable,true, accountSelector));
 		massNewTransactionButton.setText(LocalizationData.get("MainMenu.Transactions.NewMultiple")); //$NON-NLS-1$
 		final JButton editTransactionButton = new JButton(editTransactionAction);
 		editTransactionButton.setText(LocalizationData.get("GenericButton.edit")); //$NON-NLS-1$
@@ -72,7 +73,8 @@ public class TransactionsPlugInPanel extends JPanel {
 		c.gridx = 4;
 		c.anchor = GridBagConstraints.WEST;
 		buttons.add(deleteTransactionButton, c);
-		final JButton periodicalTransactionsButton = new JButton(new GeneratePeriodicalTransactionsAction(data, false));
+		GeneratePeriodicalTransactionsAction action = new GeneratePeriodicalTransactionsAction(data==null?null:data.getGlobalData(), false);
+		final JButton periodicalTransactionsButton = new JButton(action);
 		c.gridx = 5;
 		c.weightx = 1;
 		c.anchor = GridBagConstraints.EAST;

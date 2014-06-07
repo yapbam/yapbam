@@ -14,8 +14,8 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.IconManager.Name;
-import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.dialogs.preferences.PreferencePanel;
 
 public class BalanceHistoryPlugIn extends AbstractPlugIn {

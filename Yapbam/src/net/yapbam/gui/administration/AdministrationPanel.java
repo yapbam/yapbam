@@ -1,9 +1,10 @@
 package net.yapbam.gui.administration;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 
-import net.yapbam.data.FilteredData;
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.widget.TabbedPane;
 
@@ -13,7 +14,7 @@ import java.awt.Insets;
 public class AdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private FilteredData data;
+	private GlobalData data;
 	private AbstractAdministrationPanel[] panels;
 
 	private TabbedPane tabbedPane;
@@ -21,7 +22,7 @@ public class AdministrationPanel extends JPanel {
 	/**
 	 * This is the constructor
 	 */
-	public AdministrationPanel(FilteredData data) {
+	public AdministrationPanel(GlobalData data) {
 		super();
 		this.data = data;
 		initialize();
@@ -44,8 +45,8 @@ public class AdministrationPanel extends JPanel {
 		this.add(tabbedPane, gridBagConstraints);
 		panels = new AbstractAdministrationPanel[]{
 				new PeriodicalTransactionListPanel(data),
-				new AccountAdministrationPanel(data.getGlobalData()),
-				new CategoryListPanel(data.getGlobalData())
+				new AccountAdministrationPanel(data),
+				new CategoryListPanel(data)
 		};
 		for (int i = 0; i < panels.length; i++) {
 			tabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());

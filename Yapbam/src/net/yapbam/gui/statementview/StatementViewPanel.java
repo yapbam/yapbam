@@ -27,10 +27,10 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
-import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
 
@@ -619,5 +619,9 @@ public class StatementViewPanel extends JPanel {
 			panel1.add(getBtnRename());
 		}
 		return panel1;
+	}
+
+	Account getSelectedAccount() {
+		return getStatementSelectionPanel().getAccount();
 	}
 }

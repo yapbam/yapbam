@@ -55,15 +55,14 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 * @return the new transaction or the edited one
 	 * @exception IllegalArgumentException if edit and withNextButton are both true
 	 */
-	public static Transaction open(FilteredData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd, boolean withNextButton) {
+	public static Transaction open(GlobalData data, Window owner, Transaction transaction, boolean edit, boolean autoAdd, boolean withNextButton) {
 		if (edit && withNextButton) {
 			throw new IllegalArgumentException();
 		}
-		GlobalData globalData = data.getGlobalData();
-		if (globalData.getAccountsNumber() == 0) {
+		if (data.getAccountsNumber() == 0) {
 			// Need to create an account first
-			EditAccountDialog.open(globalData, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
-			if (globalData.getAccountsNumber() == 0) {
+			EditAccountDialog.open(data, owner, LocalizationData.get("TransactionDialog.needAccount")); //$NON-NLS-1$
+			if (data.getAccountsNumber() == 0) {
 				return null;
 			}
 		}
@@ -94,9 +93,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					}
 				}
 			}
-			globalData.add(newTransaction);
+			data.add(newTransaction);
 			if (transaction != null) {
-				globalData.remove(transaction);
+				data.remove(transaction);
 			}
 		}
 		return newTransaction;
@@ -109,10 +108,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 	 * @param edit True if we edit an existing transaction, false if we edit a new transaction
 	 * @see #open(FilteredData, Window, Transaction, boolean, boolean, boolean)
 	 */
-	public TransactionDialog(Window owner, final FilteredData data, Transaction transaction, boolean edit) {
-		super(owner,
-				(edit ? LocalizationData.get("TransactionDialog.title.edit") : //$NON-NLS-1$
-					LocalizationData.get("TransactionDialog.title.new")), data, transaction); //$NON-NLS-1$
+	public TransactionDialog(Window owner, final GlobalData data, Transaction transaction, boolean edit) {
+		super(owner, edit ? LocalizationData.get("TransactionDialog.title.edit") : //$NON-NLS-1$
+					LocalizationData.get("TransactionDialog.title.new"), data, transaction); //$NON-NLS-1$
 		this.editionMode = edit;
 		amount.addPropertyChangeListener(CurrencyWidget.VALUE_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -130,9 +128,9 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		});
 		if (useCheckbook() && !edit) {
 			// If the transaction is a new one and use a check, change to next check number
-			checkNumber.setAccount(data.getGlobalData(), getAccount());
+			checkNumber.setAccount(data, getAccount());
 		}
-		this.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data.getGlobalData()) {
+		this.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data) {
 			@Override
 			protected void process(Transaction transaction) {
 				double ranking = EditionWizard.getRankingBasedOnDate(now, transaction);
@@ -142,7 +140,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				super.add(transaction.getDescription(), ranking);
 			}
 		});
-		this.subtransactionsPanel.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data.getGlobalData()) {
+		this.subtransactionsPanel.setPredefinedDescriptionComputer(new AbstractPredefinedComputer(data) {
 			@Override
 			protected void process(Transaction transaction) {
 				double ranking = EditionWizard.getRankingBasedOnDate(now, transaction);
@@ -183,7 +181,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					this.lastDescription = description;
 					long now = System.currentTimeMillis();
 					Map<CategoryAndType, Double> map = new HashMap<CategoryAndType, Double>();
-					GlobalData gData = data.getGlobalData();
+					GlobalData gData = data;
 					for (int i = 0; i < gData.getTransactionsNumber(); i++) {
 						Transaction transaction = gData.getTransaction(i);
 						// In order to minimize the impact of very old transactions, we will use the date ranking
@@ -396,7 +394,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		}
 		
 		// Search for the receipt/expense, category, mode and amount with the highest probability.
-		EditionWizard<CategoryAndType> cWizard = new EditionWizard<CategoryAndType>(data.getGlobalData(), description) {
+		EditionWizard<CategoryAndType> cWizard = new EditionWizard<CategoryAndType>(data, description) {
 			@Override
 			protected CategoryAndType getValue(Transaction transaction) {
 				return new CategoryAndType(transaction.getAmount()>0, transaction.getCategory());
@@ -406,7 +404,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		this.categories.set(cWizard.get().getCategory());
 		this.receipt.setSelected(isReceipt);
 		
-		ModeWizard mWizard = new ModeWizard(data.getGlobalData(), description, getAccount(), isReceipt);
+		ModeWizard mWizard = new ModeWizard(data, description, getAccount(), isReceipt);
 		Mode mode = mWizard.get();
 		if (mode!=null) {
 			// Mode can be null if the description has never been used for a mode available in this account
@@ -419,7 +417,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			}
 		}
 		
-		AmountWizard aWizard = new AmountWizard(data.getGlobalData(), description, getAmount(), isReceipt);
+		AmountWizard aWizard = new AmountWizard(data, description, getAmount(), isReceipt);
 		Double autoAmount = aWizard.get();
 		if (autoAmount!=null) {
 			this.amount.setValue(Math.abs(autoAmount));
@@ -432,7 +430,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			if (!checkNumberRequired) {
 				transactionNumber.setText(""); //$NON-NLS-1$
 			} else {
-				checkNumber.setAccount(data.getGlobalData(), getAccount());
+				checkNumber.setAccount(data, getAccount());
 			}
 			// If we need to switch from text field to check numbers popup
 			Container parent = checkNumber.getParent();
@@ -444,7 +442,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			}
 			checkNumberIsVisible = !checkNumberIsVisible;
 		} else if (checkNumberRequired && !NullUtils.areEquals(checkNumber.getAccount(), getAccount())) {
-			checkNumber.setAccount(data.getGlobalData(), getAccount());
+			checkNumber.setAccount(data, getAccount());
 		}
 	}
 
@@ -504,7 +502,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				data.getGlobalData().add(buildResult());
+				data.add(buildResult());
 				description.requestFocus();
 				Date today = date.getDate();
 				setContent(new Transaction(today, null, "", null, 0.0, getAccount(), Mode.UNDEFINED, Category.UNDEFINED, today, null, new ArrayList<SubTransaction>())); //$NON-NLS-1$

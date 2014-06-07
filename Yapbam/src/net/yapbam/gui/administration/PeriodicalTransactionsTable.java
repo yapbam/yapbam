@@ -8,7 +8,6 @@ import javax.swing.table.TableRowSorter;
 import com.fathzer.soft.ajlib.swing.table.JTable;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
 
-import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.PeriodicalTransaction;
 import net.yapbam.gui.transactiontable.AmountRenderer;
@@ -52,10 +51,6 @@ class PeriodicalTransactionsTable extends JTable {
 	}
 
 	public GlobalData getGlobalData() {
-		return this.getFilteredData().getGlobalData();
-	}
-
-	public FilteredData getFilteredData() {
-		return ((PeriodicalTransactionTableModel)this.getModel()).getFilteredData();
+		return ((PeriodicalTransactionTableModel)this.getModel()).getGlobalData();
 	}
 }

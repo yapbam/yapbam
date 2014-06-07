@@ -23,10 +23,10 @@ import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.CompoundTransactionSelector;
-import net.yapbam.gui.actions.TransactionSelector;
 import net.yapbam.gui.widget.TabbedPane;
 
 import java.awt.BorderLayout;

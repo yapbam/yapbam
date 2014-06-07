@@ -4,6 +4,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.Icon;
@@ -13,7 +14,8 @@ import javax.swing.JPanel;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
-import net.yapbam.gui.actions.TransactionSelector;
+import net.yapbam.data.Account;
+import net.yapbam.data.Filter;
 import net.yapbam.gui.dialogs.preferences.PreferencePanel;
 
 /** This abstract class represents a Yapbam plugin.
@@ -32,7 +34,8 @@ import net.yapbam.gui.dialogs.preferences.PreferencePanel;
  * The net.yapbam.ihm.transactiontable.TransactionsPlugIn is a good example of what could be done by a plugin.
  * @see #AbstractPlugIn()
  */
-public abstract class AbstractPlugIn { //TODO Define how to check for updates and how to download plugins
+public abstract class AbstractPlugIn implements AccountSelector {
+	//TODO Define how to check for updates and how to download plugins
 	/** The open, save ... part of the file menu */
 	public static final int FILE_MANIPULATION_PART = 1;
 	/** The preference part of the file menu */
@@ -319,7 +322,7 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 		return null;
 	}
 
-	/** Plugins support events sending (see constants that define the supported events by default ealier in this page)
+	/** Plugins support events sending (see constants that define the supported events by default earlier in this page)
 	 * @return a PropertyChangeSupport that can be listened to by other plugins (or by YapBam itself). Plugins may use
 	 * this instance to fire their properties change.
 	 */
@@ -334,6 +337,19 @@ public abstract class AbstractPlugIn { //TODO Define how to check for updates an
 	 * @see TransactionSelector
 	 */
 	public TransactionSelector getTransactionSelector() {
+		return null;
+	}
+	
+	@Override
+	public Account getDefaultAccount() {
+		if (allowMenu(FILTER_MENU)) {
+			Filter filter = getContext().getCurrentTransactionSelector().getFilteredData().getFilter();
+			List<Account> filterAccounts = filter.getValidAccounts();
+			if ((filterAccounts!=null) && (filterAccounts.size()==1)) {
+				// If the filter defines only one account, select this account in the created dialog
+				return filterAccounts.get(0);
+			}
+		}
 		return null;
 	}
 }
