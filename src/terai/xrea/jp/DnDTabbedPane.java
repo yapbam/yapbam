@@ -161,10 +161,12 @@ public class DnDTabbedPane extends JTabbedPane {
         	  e.rejectDrag();
           }
       }
-      @Override public void dragExit(DropTargetEvent e) {}
-      @Override public void dropActionChanged(DropTargetDragEvent e) {}
+      @Override public void dragExit(DropTargetEvent e) {
+      }
+      @Override public void dropActionChanged(DropTargetDragEvent e) {
+      }
 
-      private Point _glassPt = new Point();
+      private Point lastGlassPt = new Point();
       @Override public void dragOver(final DropTargetDragEvent e) {
           Point glassPt = e.getLocation();
           if(getTabPlacement()==JTabbedPane.TOP || getTabPlacement()==JTabbedPane.BOTTOM) {
@@ -175,10 +177,10 @@ public class DnDTabbedPane extends JTabbedPane {
           if(hasGhost()) {
               glassPane.setPoint(glassPt);
           }
-          if(!_glassPt.equals(glassPt)) {
+          if(!lastGlassPt.equals(glassPt)) {
         	  glassPane.repaint();
           }
-          _glassPt = glassPt;
+          lastGlassPt = glassPt;
           autoScrollTest(glassPt);
       }
 
@@ -193,9 +195,6 @@ public class DnDTabbedPane extends JTabbedPane {
       }
       private boolean isDragAcceptable(DropTargetDragEvent e) {
           Transferable t = e.getTransferable();
-          if(t==null) {
-        	  return false;
-          }
           DataFlavor[] f = e.getCurrentDataFlavors();
           if(t.isDataFlavorSupported(f[0]) && dragTabIndex>=0) {
               return true;
@@ -204,9 +203,6 @@ public class DnDTabbedPane extends JTabbedPane {
       }
       private boolean isDropAcceptable(DropTargetDropEvent e) {
           Transferable t = e.getTransferable();
-          if(t==null) {
-        	  return false;
-          }
           DataFlavor[] f = t.getTransferDataFlavors();
           if(t.isDataFlavorSupported(f[0]) && dragTabIndex>=0) {
               return true;

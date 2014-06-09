@@ -341,7 +341,7 @@ public abstract class AbstractPlugIn implements AccountSelector {
 	}
 	
 	@Override
-	public Account getDefaultAccount() {
+	public Account getSelectedAccount() {
 		if (allowMenu(FILTER_MENU)) {
 			Filter filter = getContext().getCurrentTransactionSelector().getFilteredData().getFilter();
 			List<Account> filterAccounts = filter.getValidAccounts();

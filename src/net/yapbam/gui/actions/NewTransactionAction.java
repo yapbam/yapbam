@@ -49,7 +49,7 @@ public class NewTransactionAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Transaction transaction = null;
-		Account defaultAccount = accountSelector.getDefaultAccount();
+		Account defaultAccount = accountSelector.getSelectedAccount();
 		if (defaultAccount!=null) {
 			// If there's a default account, select it in the created dialog
 			Date today = new Date();

@@ -9,5 +9,5 @@ public interface AccountSelector {
 	/** Gets the default account or null if no default account is defined.
 	 * @return an Account or null.
 	 */
-	abstract Account getDefaultAccount();
+	abstract Account getSelectedAccount();
 }

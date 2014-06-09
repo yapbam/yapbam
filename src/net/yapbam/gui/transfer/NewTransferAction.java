@@ -1,6 +1,7 @@
 package net.yapbam.gui.transfer;
 
 import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -28,14 +29,19 @@ public class NewTransferAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Window owner = Utils.getOwnerWindow((Component) e.getSource());
 		while (data.getAccountsNumber()<2) {
 			// Need to create two accounts first
-			Account account = EditAccountDialog.open(data, Utils.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
+			Account account = EditAccountDialog.open(data, owner, LocalizationData.get("TransferDialog.needsTwoAccounts")); //$NON-NLS-1$
 			if (account == null) {
 				return;
 			}
 		}
-		TransferDialog dialog = new TransferDialog(Utils.getOwnerWindow((Component) e.getSource()), LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
+		TransferDialog dialog = new TransferDialog(owner, LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
+		Account selectedAccount = plugin.getContext().getSelectedAccount();
+		if (selectedAccount!=null) {
+			dialog.setFromAccount(selectedAccount);
+		}
 		dialog.setVisible(true);
 		Transaction[] transactions = dialog.getResult();
 		if (transactions!=null) {
