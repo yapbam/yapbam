@@ -158,8 +158,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.transactionMenu.addSeparator();
 		AccountSelector as = new AccountSelector() {
 			@Override
-			public Account getDefaultAccount() {
-				return MainMenuBar.this.frame.getCurrentPlugIn().getDefaultAccount();
+			public Account getSelectedAccount() {
+				return MainMenuBar.this.frame.getSelectedAccount();
 			}
 		};
 		JMenuItem item = new JMenuItem(new NewTransactionAction(frame.getFilteredData(), getTransactionSelector(), false, as));

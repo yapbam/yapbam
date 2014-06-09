@@ -554,8 +554,14 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		}
 	}
 	
+	@Override
 	public TransactionSelector getCurrentTransactionSelector() {
 		return this.mainMenu.getTransactionSelector();
+	}
+
+	@Override
+	public Account getSelectedAccount() {
+		return this.getCurrentPlugIn().getSelectedAccount();
 	}
 
 	@Override

@@ -130,7 +130,7 @@ public class TransferPanel extends JPanel {
 		}
 		return upperPane;
 	}
-	private FromOrToPane getFromPane() {
+	FromOrToPane getFromPane() {
 		if (fromPane == null) {
 			fromPane = new FromOrToPane(data, true);
 			fromPane.getAccountWidget().setToolTipText(LocalizationData.get("TransferDialog.from.account.tooltip")); //$NON-NLS-1$
@@ -142,7 +142,7 @@ public class TransferPanel extends JPanel {
 		}
 		return fromPane;
 	}
-	private FromOrToPane getToPane() {
+	FromOrToPane getToPane() {
 		if (toPane == null) {
 			toPane = new FromOrToPane(data, false);
 			if ((data!=null) && (data.getAccountsNumber()>1)) {

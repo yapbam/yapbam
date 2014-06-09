@@ -84,7 +84,7 @@ public class StatementViewPlugin extends AbstractPlugIn {
 	}
 
 	@Override
-	public Account getDefaultAccount() {
+	public Account getSelectedAccount() {
 		return this.panel.getSelectedAccount();
 	}
 }

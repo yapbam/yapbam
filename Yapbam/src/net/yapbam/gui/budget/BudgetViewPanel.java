@@ -266,16 +266,16 @@ public class BudgetViewPanel extends JPanel {
 					out.writeCell(value!=null?currencyFormatter.format(value):"");
 				}
 				if (categorySumWording!=null) {
-					Double value = budget.getSum(category);
-					out.writeCell(value!=null?currencyFormatter.format(value):"");
+					double value = budget.getSum(category);
+					out.writeCell(currencyFormatter.format(value));
 				}
 			}
 			if (dateSumWording!=null) {
 				out.newLine();
 				out.writeCell(dateSumWording);
 				for (int j = 0; j < budget.getDatesSize(); j++) {
-					Double value = budget.getSum(budget.getDate(j));
-					out.writeCell(value!=null?currencyFormatter.format(value):"");
+					double value = budget.getSum(budget.getDate(j));
+					out.writeCell(currencyFormatter.format(value));
 				}
 				if (categorySumWording!=null) {
 					Double value = budget.getSum();
