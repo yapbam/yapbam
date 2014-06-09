@@ -9,6 +9,7 @@ import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
+import net.yapbam.data.comparator.AccountComparator;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 public class TransferDialog extends AbstractDialog<GlobalData, Transaction[]> {
@@ -38,16 +39,17 @@ public class TransferDialog extends AbstractDialog<GlobalData, Transaction[]> {
 	}
 
 	public void setFromAccount(Account selectedAccount) {
+		Account[] accounts = AccountComparator.getSortedAccounts(data, getLocale());
 		if (selectedAccount==null) {
-			selectedAccount = data.getAccount(0);
+			selectedAccount = accounts[0];
 		}
 		transferPanel.getFromPane().setAccount(selectedAccount);
 		// Find which destination is the most probable
 		Account dest = new DestinationAccountWizard(data, selectedAccount).get();
 		if (dest==null) {
-			for (int i = 0; i < data.getAccountsNumber(); i++) {
-				if (!data.getAccount(i).equals(selectedAccount)) {
-					dest = data.getAccount(i);
+			for (Account account : accounts) {
+				if (!account.equals(selectedAccount)) {
+					dest = account;
 					break;
 				}
 			}
