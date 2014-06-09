@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -385,6 +386,43 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 	}
 
+	private final class AccountFilterActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JMenuItem item = (JMenuItem) e.getSource();
+			Account account = frame.getData().getAccount(item.getText());
+			if ((e.getModifiers() & ActionEvent.SHIFT_MASK) == 0) {
+				frame.getFilteredData().getFilter().setValidAccounts(Collections.singletonList(account));
+			} else {
+				doRemove(account);
+			}
+		}
+
+		private void doRemove(Account account) {
+			GlobalData globalData = frame.getData();
+			Filter filter = frame.getFilteredData().getFilter();
+			List<Account> validAccounts = frame.getFilteredData().getFilter().getValidAccounts();
+			if (validAccounts==null) {
+				validAccounts = new ArrayList<Account>();
+				for (int i = 0; i < globalData.getAccountsNumber(); i++) {
+					validAccounts.add(globalData.getAccount(i));
+				}
+			}
+			if (validAccounts.contains(account)) {
+				validAccounts.remove(account);
+				if (validAccounts.isEmpty()) {
+					validAccounts = null;
+				}
+			} else {
+				validAccounts.add(account);
+				if (validAccounts.size()==globalData.getAccountsNumber()) {
+					validAccounts = null;
+				}
+			}
+			filter.setValidAccounts(validAccounts);
+		}
+	}
+	
 	class GlobalDataListener implements DataListener {
 	    public void processEvent(DataEvent event) {
 			GlobalData data = (GlobalData) event.getSource();
@@ -423,14 +461,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			filterMenu.add(eraseItem);
 			filterMenu.addSeparator();
 			GlobalData data = this.frame.getData();
-			ActionListener listener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JMenuItem item = (JMenuItem) e.getSource();
-					Account account = frame.getData().getAccount(item.getText());
-					frame.getFilteredData().getFilter().setValidAccounts(Collections.singletonList(account));
-				}
-			};
+			ActionListener listener = new AccountFilterActionListener();
 			List<Account> filterAccounts = frame.getFilteredData().getFilter().getValidAccounts();
 			boolean hasAccountFilter = filterAccounts!=null;
 			Account[] accounts = AccountComparator.getSortedAccounts(frame.getData(), getLocale());
