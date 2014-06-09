@@ -38,10 +38,7 @@ public class NewTransferAction extends AbstractAction {
 			}
 		}
 		TransferDialog dialog = new TransferDialog(owner, LocalizationData.get("TransferDialog.title"), data); //$NON-NLS-1$
-		Account selectedAccount = plugin.getContext().getSelectedAccount();
-		if (selectedAccount!=null) {
-			dialog.setFromAccount(selectedAccount);
-		}
+		dialog.setFromAccount(plugin.getContext().getSelectedAccount());
 		dialog.setVisible(true);
 		Transaction[] transactions = dialog.getResult();
 		if (transactions!=null) {
