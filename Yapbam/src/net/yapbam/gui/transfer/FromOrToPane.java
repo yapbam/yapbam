@@ -24,6 +24,7 @@ import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
 
 import net.yapbam.gui.dialogs.TransactionNumberWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+import javax.swing.JTextField;
 
 public class FromOrToPane extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -44,6 +45,10 @@ public class FromOrToPane extends JPanel {
 	private TextWidget statementField;
 	private boolean from;
 	private Date date;
+	private JLabel lblDescription;
+	private JLabel lblComment;
+	private TextWidget descriptionField;
+	private JTextField commentField;
 
 	/**
 	 * Create the panel.
@@ -56,6 +61,7 @@ public class FromOrToPane extends JPanel {
 
 	private void initialize() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0};
 		setLayout(gridBagLayout);
 		GridBagConstraints gbcLblAccount = new GridBagConstraints();
 		gbcLblAccount.anchor = GridBagConstraints.WEST;
@@ -70,52 +76,76 @@ public class FromOrToPane extends JPanel {
 		gbcAccountWidget.gridx = 1;
 		gbcAccountWidget.gridy = 0;
 		add(getAccountWidget(), gbcAccountWidget);
+		GridBagConstraints gbcDescriptionField = new GridBagConstraints();
+		gbcDescriptionField.insets = new Insets(0, 0, 5, 0);
+		gbcDescriptionField.fill = GridBagConstraints.HORIZONTAL;
+		gbcDescriptionField.gridx = 1;
+		gbcDescriptionField.gridy = 1;
+		add(getDescriptionField(), gbcDescriptionField);
+		GridBagConstraints gbcLblDescription = new GridBagConstraints();
+		gbcLblDescription.anchor = GridBagConstraints.WEST;
+		gbcLblDescription.insets = new Insets(0, 0, 5, 5);
+		gbcLblDescription.gridx = 0;
+		gbcLblDescription.gridy = 1;
+		add(getLblDescription(), gbcLblDescription);
+		GridBagConstraints gbcLblComment = new GridBagConstraints();
+		gbcLblComment.anchor = GridBagConstraints.WEST;
+		gbcLblComment.insets = new Insets(0, 0, 5, 5);
+		gbcLblComment.gridx = 0;
+		gbcLblComment.gridy = 2;
+		add(getLblComment(), gbcLblComment);
+		GridBagConstraints gbcCommentField = new GridBagConstraints();
+		gbcCommentField.insets = new Insets(0, 0, 5, 0);
+		gbcCommentField.fill = GridBagConstraints.HORIZONTAL;
+		gbcCommentField.gridx = 1;
+		gbcCommentField.gridy = 2;
+		add(getCommentField(), gbcCommentField);
 		GridBagConstraints gbcLblMode = new GridBagConstraints();
 		gbcLblMode.anchor = GridBagConstraints.WEST;
 		gbcLblMode.insets = new Insets(0, 0, 5, 5);
 		gbcLblMode.gridx = 0;
-		gbcLblMode.gridy = 1;
+		gbcLblMode.gridy = 3;
 		add(getLblMode(), gbcLblMode);
 		GridBagConstraints gbcModeWidget = new GridBagConstraints();
 		gbcModeWidget.insets = new Insets(0, 0, 5, 0);
 		gbcModeWidget.fill = GridBagConstraints.HORIZONTAL;
 		gbcModeWidget.gridx = 1;
-		gbcModeWidget.gridy = 1;
+		gbcModeWidget.gridy = 3;
 		add(getModeWidget(), gbcModeWidget);
 		GridBagConstraints gbcLblNumber = new GridBagConstraints();
 		gbcLblNumber.anchor = GridBagConstraints.WEST;
 		gbcLblNumber.insets = new Insets(0, 0, 5, 5);
 		gbcLblNumber.gridx = 0;
-		gbcLblNumber.gridy = 2;
+		gbcLblNumber.gridy = 4;
 		add(getLblNumber(), gbcLblNumber);
 		GridBagConstraints gbcNumberField = new GridBagConstraints();
 		gbcNumberField.insets = new Insets(0, 0, 5, 0);
 		gbcNumberField.fill = GridBagConstraints.HORIZONTAL;
 		gbcNumberField.gridx = 1;
-		gbcNumberField.gridy = 2;
+		gbcNumberField.gridy = 4;
 		add(getNumberField(), gbcNumberField);
 		GridBagConstraints gbcLblDateVal = new GridBagConstraints();
 		gbcLblDateVal.anchor = GridBagConstraints.WEST;
 		gbcLblDateVal.insets = new Insets(0, 0, 5, 5);
 		gbcLblDateVal.gridx = 0;
-		gbcLblDateVal.gridy = 3;
+		gbcLblDateVal.gridy = 5;
 		add(getLblDateVal(), gbcLblDateVal);
 		GridBagConstraints gbcValueDateField = new GridBagConstraints();
 		gbcValueDateField.insets = new Insets(0, 0, 5, 0);
 		gbcValueDateField.anchor = GridBagConstraints.WEST;
 		gbcValueDateField.gridx = 1;
-		gbcValueDateField.gridy = 3;
+		gbcValueDateField.gridy = 5;
 		add(getValueDateField(), gbcValueDateField);
 		GridBagConstraints gbcLblStatement = new GridBagConstraints();
 		gbcLblStatement.anchor = GridBagConstraints.WEST;
 		gbcLblStatement.insets = new Insets(0, 0, 0, 5);
 		gbcLblStatement.gridx = 0;
-		gbcLblStatement.gridy = 4;
+		gbcLblStatement.gridy = 6;
 		add(getLblStatement(), gbcLblStatement);
 		GridBagConstraints gbcStatementField = new GridBagConstraints();
 		gbcStatementField.anchor = GridBagConstraints.WEST;
 		gbcStatementField.gridx = 1;
-		gbcStatementField.gridy = 4;
+		gbcStatementField.gridy = 6;
 		add(getStatementField(), gbcStatementField);
 	}
 
@@ -232,5 +262,31 @@ public class FromOrToPane extends JPanel {
 
 	public void setAccount(Account account) {
 		getAccountWidget().set(account);
+	}
+	private JLabel getLblDescription() {
+		if (lblDescription == null) {
+			lblDescription = new JLabel(LocalizationData.get("TransactionDialog.description"));
+		}
+		return lblDescription;
+	}
+	private JLabel getLblComment() {
+		if (lblComment == null) {
+			lblComment = new JLabel(LocalizationData.get("TransactionDialog.comment"));
+		}
+		return lblComment;
+	}
+	private TextWidget getDescriptionField() {
+		if (descriptionField == null) {
+			descriptionField = new TextWidget();
+			descriptionField.setColumns(10);
+		}
+		return descriptionField;
+	}
+	private JTextField getCommentField() {
+		if (commentField == null) {
+			commentField = new JTextField();
+			commentField.setColumns(10);
+		}
+		return commentField;
 	}
 }
