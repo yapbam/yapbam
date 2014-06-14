@@ -16,14 +16,18 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.awt.Insets;
+
 import net.yapbam.gui.dialogs.ModeWidget;
+
 import javax.swing.JLabel;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
 
 import net.yapbam.gui.dialogs.TransactionNumberWidget;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
+
 import javax.swing.JTextField;
 
 public class FromOrToPane extends JPanel {
@@ -275,14 +279,14 @@ public class FromOrToPane extends JPanel {
 		}
 		return lblComment;
 	}
-	private TextWidget getDescriptionField() {
+	public TextWidget getDescriptionField() {
 		if (descriptionField == null) {
 			descriptionField = new TextWidget();
 			descriptionField.setColumns(10);
 		}
 		return descriptionField;
 	}
-	private JTextField getCommentField() {
+	public JTextField getCommentField() {
 		if (commentField == null) {
 			commentField = new JTextField();
 			commentField.setColumns(10);
