@@ -18,6 +18,7 @@ import net.yapbam.gui.dialogs.CategoryWidget;
 
 import java.awt.GridLayout;
 
+import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
@@ -51,6 +52,13 @@ public class TransferPanel extends JPanel {
 	private PropertyChangeListener listener = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
+			if (FromOrToPane.ACCOUNT_PROPERTY.equals(evt.getPropertyName())) {
+				boolean from = evt.getSource()==getFromPane();
+				String format = LocalizationData.get(from?"TransferDialog.to.description": //$NON-NLS-1$
+						"TransferDialog.from.description"); //$NON-NLS-1$
+				FromOrToPane opposite = from ? getToPane() : getFromPane();
+				opposite.getDescriptionField().setText(Formatter.format(format, ((Account)evt.getNewValue()).getName()));
+			}
 			updateOkDisabledCause();
 		}
 	};
@@ -264,13 +272,15 @@ public class TransferPanel extends JPanel {
 			subTo.add(sub);
 			subFrom.add(new SubTransaction(-sub.getAmount(), sub.getDescription(), sub.getCategory()));
 		}
-		String descriptionFrom = Formatter.format(LocalizationData.get("TransferDialog.from.description"),getToPane().getAccountWidget().get().getName()); //$NON-NLS-1$
-		String descriptionTo = Formatter.format(LocalizationData.get("TransferDialog.to.description"),getFromPane().getAccountWidget().get().getName()); //$NON-NLS-1$
-		result[0] = new Transaction(getDateField().getDate(), getFromPane().getNumberField().getNumber(), descriptionFrom, null, -getAmountField().getValue(),
-				getFromPane().getAccountWidget().get(), getFromPane().getModeWidget().get(), getCategoryWidget().get(), getFromPane().getValueDateField().getDate(),
+		result[0] = new Transaction(getDateField().getDate(), getFromPane().getNumberField().getNumber(), 
+				getFromPane().getDescriptionField().getText(), getFromPane().getCommentField().getText(),
+				-getAmountField().getValue(), getFromPane().getAccountWidget().get(), getFromPane().getModeWidget().get(),
+				getCategoryWidget().get(), getFromPane().getValueDateField().getDate(),
 				getFromPane().getStatementField().getText(), subFrom);
-		result[1] = new Transaction(getDateField().getDate(), getToPane().getNumberField().getNumber(), descriptionTo, null, getAmountField().getValue(),
-				getToPane().getAccountWidget().get(), getToPane().getModeWidget().get(), getCategoryWidget().get(), getToPane().getValueDateField().getDate(),
+		result[1] = new Transaction(getDateField().getDate(), getToPane().getNumberField().getNumber(),
+				getToPane().getDescriptionField().getText(), getToPane().getCommentField().getText(),
+				getAmountField().getValue(), getToPane().getAccountWidget().get(), getToPane().getModeWidget().get(),
+				getCategoryWidget().get(), getToPane().getValueDateField().getDate(),
 				getToPane().getStatementField().getText(), subFrom);
 		return result;
 	}

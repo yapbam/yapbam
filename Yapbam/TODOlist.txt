@@ -1,4 +1,4 @@
-Finir l'ajout de la description et du commentaire dans le transfert.
+Finir l'init de la description dans le transfert.
 Mettre à jour Crowdin
 
 Bug :
