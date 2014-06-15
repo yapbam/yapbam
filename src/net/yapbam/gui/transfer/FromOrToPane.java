@@ -21,7 +21,6 @@ import net.yapbam.gui.dialogs.ModeWidget;
 
 import javax.swing.JLabel;
 
-import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
 

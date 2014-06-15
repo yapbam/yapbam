@@ -18,7 +18,6 @@ import net.yapbam.gui.dialogs.CategoryWidget;
 
 import java.awt.GridLayout;
 
-import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
@@ -53,23 +52,28 @@ public class TransferPanel extends JPanel {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (FromOrToPane.ACCOUNT_PROPERTY.equals(evt.getPropertyName())) {
-				boolean from = evt.getSource()==getFromPane();
-				String format = LocalizationData.get(from?"TransferDialog.to.description": //$NON-NLS-1$
-						"TransferDialog.from.description"); //$NON-NLS-1$
-				FromOrToPane opposite = from ? getToPane() : getFromPane();
-				opposite.getDescriptionField().setText(Formatter.format(format, ((Account)evt.getNewValue()).getName()));
+				setDefaultDescription(evt.getSource()!=getFromPane());
 			}
 			updateOkDisabledCause();
 		}
 	};
 	private SubtransactionListPanel subTransactionsPanel;
 	
+	private void setDefaultDescription(boolean from) {
+		String format = LocalizationData.get(from?"TransferDialog.from.description": //$NON-NLS-1$
+				"TransferDialog.to.description"); //$NON-NLS-1$
+		String description = Formatter.format(format, (from ? getToPane() : getFromPane()).getAccountWidget().get().getName());
+		(from ? getFromPane() : getToPane()).getDescriptionField().setText(description);
+	}
+
 	/**
 	 * Create the panel.
 	 */
 	public TransferPanel(GlobalData data) {
 		this.data = data;
 		initialize();
+		setDefaultDescription(true);
+		setDefaultDescription(false);
 		updateOkDisabledCause();
 	}
 
