@@ -35,27 +35,35 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 	private static final long serialVersionUID = 1L;
 
 	public static final Wordings DESCRIPTION_WORDING = new Wordings(LocalizationData.get("Transaction.description"), //$NON-NLS-1$
-			LocalizationData.get("CustomFilterPanel.description.equals.toolTip"), LocalizationData.get("CustomFilterPanel.description.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
-			LocalizationData.get("CustomFilterPanel.description.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.description.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.description.equals.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.description.contains.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.description.regularExpression.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.description.toolTip")); //$NON-NLS-1$
 
 	public static final Wordings COMMENT_WORDING = new Wordings(LocalizationData.get("Transaction.comment"), //$NON-NLS-1$
-			LocalizationData.get("CustomFilterPanel.comment.equals.toolTip"), LocalizationData.get("CustomFilterPanel.comment.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
-			LocalizationData.get("CustomFilterPanel.comment.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.comment.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.comment.equals.toolTip"),  //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.comment.contains.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.comment.regularExpression.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.comment.toolTip")); //$NON-NLS-1$
 
 	public static final Wordings NUMBER_WORDING = new Wordings(LocalizationData.get("Transaction.number"), //$NON-NLS-1$
-			LocalizationData.get("CustomFilterPanel.number.equals.toolTip"), LocalizationData.get("CustomFilterPanel.number.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
-			LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.number.equals.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.number.contains.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.number.regularExpression.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.number.toolTip")); //$NON-NLS-1$
 	
 	public static final Wordings STATEMENT_WORDING = new Wordings(LocalizationData.get("Transaction.statement"), //$NON-NLS-1$
-			LocalizationData.get("CustomFilterPanel.statement.equals.toolTip"), LocalizationData.get("CustomFilterPanel.statement.contains.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
-			LocalizationData.get("CustomFilterPanel.statement.regularExpression.toolTip"), LocalizationData.get("CustomFilterPanel.statement.toolTip")); //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.statement.equals.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.statement.contains.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.statement.regularExpression.toolTip"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.statement.toolTip")); //$NON-NLS-1$
 	
 	public static class Wordings {
-		public String title;
-		public String equalsToolTip;
-		public String containsToolTip;
-		public String regExprToolTip;
-		public String descriptionToolTip;
+		private String title;
+		private String equalsToolTip;
+		private String containsToolTip;
+		private String regExprToolTip;
+		private String descriptionToolTip;
 		
 		public Wordings(String title, String equalsToolTip, String containsToolTip, String regExprToolTip, String descriptionToolTip) {
 			super();
@@ -321,10 +329,6 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 		if (panel == null) {
 			panel = new JPanel();
 			GridBagLayout gblPanel = new GridBagLayout();
-			gblPanel.columnWidths = new int[]{0, 0, 0};
-			gblPanel.rowHeights = new int[]{0, 0};
-			gblPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-			gblPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 			panel.setLayout(gblPanel);
 			GridBagConstraints gbcJPanel1 = new GridBagConstraints();
 			gbcJPanel1.anchor = GridBagConstraints.NORTHWEST;
