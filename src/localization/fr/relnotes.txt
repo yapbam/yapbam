@@ -3,9 +3,11 @@ version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 
-version	0.17.3 (15/06/2014)
+version	0.17.3 (17/06/2014)
 improvement
 	Le dialogue de création de transfert permet à présent d'éditer le libellé et le commentaire des opérations.
+fix
+	Bug introduit en 0.17.2 : Créer un nouveau transfert alors que le graphique d'historique du solde était affiché causait une erreur.
 
 version	0.17.2 (09/06/2014)
 improvement
