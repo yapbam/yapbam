@@ -573,7 +573,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private CompoundTransactionSelector selector; 
 	public CompoundTransactionSelector getTransactionSelector() {
 		if (selector==null) {
-			selector = new CompoundTransactionSelector();
+			selector = new CompoundTransactionSelector(frame.getFilteredData());
 		}
 		return selector;
 	}

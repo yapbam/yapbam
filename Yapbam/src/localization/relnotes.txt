@@ -3,9 +3,11 @@ version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 
-version	0.17.3 (06/15/2014)
+version	0.17.3 (06/17/2014)
 improvement
 	The transfer creation dialog now allows you to edit the description and comment of the transactions.
+fix
+	Bug introduced in 0.17.2: Create a new transfer while balance history chart was displayed caused an error. 
 
 version	0.17.2 (06/09/2014)
 improvement
@@ -13,7 +15,7 @@ improvement
 	When creating a new transfer, the destination account is now pre-selected according to its probability in the history of transfers.
 	Press the "Shift" key when selecting an account in the "Filter" menu removes the account from the filter.
 fix
-	Bug introduced in 0.17.0 : When you imported a file for the very first time, it was possible to launch the import without specifying the correspondences between the columns of the imported file and the attributes of transactions. The import then ended with an error.
+	Bug introduced in 0.17.0: When you imported a file for the very first time, it was possible to launch the import without specifying the correspondences between the columns of the imported file and the attributes of transactions. The import then ended with an error.
 
 version	0.17.1 (06/01/2014)
 improvement

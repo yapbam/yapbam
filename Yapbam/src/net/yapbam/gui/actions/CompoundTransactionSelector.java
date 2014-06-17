@@ -13,8 +13,10 @@ public class CompoundTransactionSelector implements TransactionSelector {
 	private List<PropertyChangeListener> listeners;
 	private TransactionSelector internalSelector;
 	private PropertyChangeListener internalListener;
+	private FilteredData data;
 	
-	public CompoundTransactionSelector() {
+	public CompoundTransactionSelector(FilteredData data) {
+		this.data = data;
 		this.listeners = new ArrayList<PropertyChangeListener>();
 		this.internalSelector = null;
 		this.internalListener = new PropertyChangeListener() {
@@ -39,7 +41,7 @@ public class CompoundTransactionSelector implements TransactionSelector {
 	
 	@Override
 	public FilteredData getFilteredData() {
-		return internalSelector==null?null:internalSelector.getFilteredData();
+		return internalSelector==null?data:internalSelector.getFilteredData();
 	}
 
 	public void setInternalSelector(TransactionSelector selector) {

@@ -1,5 +1,3 @@
-Mettre à jour Crowdin
-
 Bug :
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
 	Changer la font size et le thème ne marche pas (la font size est ignorée).
