@@ -1,6 +1,7 @@
 package net.yapbam.gui.dialogs.preferences;
 
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
@@ -25,9 +26,13 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 
 import java.awt.GridLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.fathzer.soft.ajlib.swing.widget.AbstractSelector;
 
 public class ThemePanel extends PreferencePanel {
 	private static final float MAX_RATIO = 2.5f;
@@ -40,6 +45,8 @@ public class ThemePanel extends PreferencePanel {
 	private JPanel fontPanel;
 	private JLabel textSampleLabel;
 	private JPanel lafPanel;
+	private JLabel fontSliderTitle;
+	private FontSelector fontSelector;
 
 	/**
 	 * This is the default constructor
@@ -86,7 +93,7 @@ public class ThemePanel extends PreferencePanel {
 		this.setLayout(gridBagLayout);
 		GridBagConstraints gbcLafPanel = new GridBagConstraints();
 		gbcLafPanel.anchor = GridBagConstraints.WEST;
-		gbcLafPanel.insets = new Insets(10, 0, 0, 5);
+		gbcLafPanel.insets = new Insets(10, 0, 5, 0);
 		gbcLafPanel.gridx = 0;
 		gbcLafPanel.gridy = 0;
 		add(getLAFPanel(), gbcLafPanel);
@@ -94,7 +101,7 @@ public class ThemePanel extends PreferencePanel {
 		gbcFontPanel.weightx = 1.0;
 		gbcFontPanel.anchor = GridBagConstraints.NORTHWEST;
 		gbcFontPanel.weighty = 1.0;
-		gbcFontPanel.insets = new Insets(10, 0, 5, 0);
+		gbcFontPanel.insets = new Insets(10, 0, 0, 0);
 		gbcFontPanel.gridx = 0;
 		gbcFontPanel.gridy = 1;
 		add(getFontPanel(), gbcFontPanel);
@@ -103,6 +110,9 @@ public class ThemePanel extends PreferencePanel {
 	public void refreshFontSlider() {
 		boolean enabled = Preferences.INSTANCE.isLookAndFeelSupportFontSize(selectedLookAndFeel);
 		getFontSlider().setEnabled(enabled);
+		getFontSliderTitle().setEnabled(enabled);
+		getFontSelector().setEnabled(enabled);
+		getTextSampleLabel().setEnabled(enabled);
 		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+(enabled?"enabled":"disabled")));
 	}
 
@@ -160,12 +170,16 @@ public class ThemePanel extends PreferencePanel {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if (!fontSlider.getValueIsAdjusting()) {
-						getTextSampleLabel().setFont(defaultFont.deriveFont((float)fontSlider.getValue()));
+						refreshSampleText();
 					}
 				}
 			});
 		}
 		return fontSlider;
+	}
+
+	private void refreshSampleText() {
+		getTextSampleLabel().setFont(getDefaultFont().deriveFont((float)fontSlider.getValue()));
 	}
 
 	private Font getDefaultFont() {
@@ -179,9 +193,21 @@ public class ThemePanel extends PreferencePanel {
 	private JPanel getFontPanel() {
 		if (fontPanel == null) {
 			fontPanel = new JPanel();
-			fontPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.fontSize"))); //$NON-NLS-1$
-			GridBagLayout gblFontPanel = new GridBagLayout();
-			fontPanel.setLayout(gblFontPanel);
+			fontPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.font"))); //$NON-NLS-1$
+			GridBagLayout gbl_fontPanel = new GridBagLayout();
+			fontPanel.setLayout(gbl_fontPanel);
+			GridBagConstraints gbcFontSelector = new GridBagConstraints();
+			gbcFontSelector.anchor = GridBagConstraints.WEST;
+			gbcFontSelector.insets = new Insets(0, 0, 5, 0);
+			gbcFontSelector.gridx = 0;
+			gbcFontSelector.gridy = 0;
+			fontPanel.add(getFontSelector(), gbcFontSelector);
+			GridBagConstraints gbcFontSliderTitle = new GridBagConstraints();
+			gbcFontSliderTitle.anchor = GridBagConstraints.WEST;
+			gbcFontSliderTitle.insets = new Insets(0, 0, 5, 0);
+			gbcFontSliderTitle.gridx = 0;
+			gbcFontSliderTitle.gridy = 1;
+			fontPanel.add(getFontSliderTitle(), gbcFontSliderTitle);
 			GridBagConstraints gbcFontSlider = new GridBagConstraints();
 			gbcFontSlider.insets = new Insets(0, 0, 5, 0);
 			gbcFontSlider.weighty = 1.0;
@@ -189,12 +215,12 @@ public class ThemePanel extends PreferencePanel {
 			gbcFontSlider.fill = GridBagConstraints.HORIZONTAL;
 			gbcFontSlider.anchor = GridBagConstraints.NORTHWEST;
 			gbcFontSlider.gridx = 0;
-			gbcFontSlider.gridy = 0;
+			gbcFontSlider.gridy = 2;
 			fontPanel.add(getFontSlider(), gbcFontSlider);
 			GridBagConstraints gbcTextSampleLabel = new GridBagConstraints();
 			gbcTextSampleLabel.anchor = GridBagConstraints.WEST;
 			gbcTextSampleLabel.gridx = 0;
-			gbcTextSampleLabel.gridy = 1;
+			gbcTextSampleLabel.gridy = 3;
 			fontPanel.add(getTextSampleLabel(), gbcTextSampleLabel);
 		}
 		return fontPanel;
@@ -228,5 +254,62 @@ public class ThemePanel extends PreferencePanel {
 			}
 		}
 		return lafPanel;
+	}
+	private JLabel getFontSliderTitle() {
+		if (fontSliderTitle == null) {
+			fontSliderTitle = new JLabel(LocalizationData.get("PreferencesDialog.Theme.fontSize"));
+		}
+		return fontSliderTitle;
+	}
+	private FontSelector getFontSelector() {
+		if (fontSelector == null) {
+			fontSelector = new FontSelector();
+			fontSelector.set(getDefaultFont().getFontName());
+			fontSelector.addPropertyChangeListener(fontSelector.getPropertyName(), new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					System.out.println (fontSelector.get()+" was selected"); //TODO
+					refreshSampleText();
+				}
+			});
+		}
+		return fontSelector;
+	}
+	
+	private static class FontSelector extends AbstractSelector<String, Void> {
+		private static final long serialVersionUID = 1L;
+
+		public FontSelector() {
+			super(null);
+		}
+
+		@Override
+		protected void populateCombo() {
+			GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    Font[] fonts = e.getAllFonts(); // Get the fonts
+	    for (Font f : fonts) {
+	      getCombo().addItem(f.getFontName());
+	    }
+	  }
+		
+		@Override
+		protected String getLabel() {
+			return LocalizationData.get("PreferencesDialog.Theme.fontName");
+		}
+
+		@Override
+		protected String createNew() {
+			return null;
+		}
+
+		@Override
+		protected String getPropertyName() {
+			return "SelectedFont";
+		}
+
+		@Override
+		protected boolean isNewButtonVisible() {
+			return false;
+		}
 	}
 }
