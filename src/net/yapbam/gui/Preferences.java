@@ -1,6 +1,7 @@
 package net.yapbam.gui;
 
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -41,6 +42,7 @@ import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 import net.yapbam.gui.transfer.TransferPlugin;
+import net.yapbam.gui.util.FontUtils;
 import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
@@ -48,6 +50,7 @@ import net.yapbam.util.PreferencesUtils;
 
 /** This class represents the Yapbam application preferences */
 public class Preferences {
+	private static final String FONT_NAME = "Font.name"; //$NON-NLS-1$
 	private static final String FONT_SIZE_RATIO = "Font.sizeRatio"; //$NON-NLS-1$
 	private static final String LANGUAGE = "lang"; //$NON-NLS-1$
 	private static final String COUNTRY = "country"; //$NON-NLS-1$
@@ -605,16 +608,25 @@ public class Preferences {
 	public static boolean canSave() {
 		return INSTANCE!=null;
 	}
-
-	private Font defaultFont;
+	
 	/** Gets the default font.
 	 * @return a Font or null if the current L&F not have a default font (I think only Nimbus supports this).
 	 */
 	public Font getDefaultFont() {
-		if (defaultFont==null) {
-			defaultFont = (Font)UIManager.getDefaults().getFont("defaultFont");
+		Font trueDefault = (Font)UIManager.getDefaults().getFont("defaultFont");
+		if (trueDefault==null) {
+			return null;
 		}
-		return defaultFont;
+		
+		String fontName = getProperty(FONT_NAME);
+		if (fontName!=null) {
+			for (Font font : FontUtils.getAvailableFonts(getLocale())) {
+			    if (fontName.equals(font.getName())) { 
+			    	return font;
+			    }
+			}
+		}
+		return trueDefault;
 	}
 
 	private float getFloat(String key, float defaultValue) {

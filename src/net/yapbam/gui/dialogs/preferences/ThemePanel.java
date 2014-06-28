@@ -1,7 +1,7 @@
 package net.yapbam.gui.dialogs.preferences;
 
+import java.awt.Component;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.util.FontUtils;
 
 import javax.swing.JSlider;
 
@@ -285,12 +286,10 @@ public class ThemePanel extends PreferencePanel {
 
 		@Override
 		protected void populateCombo() {
-			GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    Font[] fonts = e.getAllFonts(); // Get the fonts
-	    for (Font f : fonts) {
-	      getCombo().addItem(f.getFontName());
-	    }
-	  }
+			for (Font f : FontUtils.getAvailableFonts(getLocale())) {
+				getCombo().addItem(f.getFontName());
+			}
+		}
 		
 		@Override
 		protected String getLabel() {
@@ -310,6 +309,13 @@ public class ThemePanel extends PreferencePanel {
 		@Override
 		protected boolean isNewButtonVisible() {
 			return false;
+		}
+		
+		@Override
+		protected Component getCustomizedRenderer (Component renderer, String value, int index, boolean isSelected, boolean cellHasFocus) {
+			renderer.setFont(new Font(value, Font.PLAIN, 12));
+			renderer.setEnabled(isEnabled());
+			return renderer;
 		}
 	}
 }
