@@ -7,8 +7,10 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
@@ -18,7 +20,6 @@ import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.util.FontUtils;
 
 import javax.swing.JSlider;
 
@@ -33,6 +34,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.fathzer.soft.ajlib.swing.FontUtils;
+import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.AbstractSelector;
 
 public class ThemePanel extends PreferencePanel {
@@ -109,10 +112,14 @@ public class ThemePanel extends PreferencePanel {
 	}
 
 	public void refreshFontSlider() {
-		boolean enabled = Preferences.INSTANCE.isLookAndFeelSupportFontSize(selectedLookAndFeel);
+		boolean enabled = FontUtils.isDefaultFontSupportedByLookAndFeel(selectedLookAndFeel);
 		getFontSlider().setEnabled(enabled);
 		getFontSliderTitle().setEnabled(enabled);
 		getFontSelector().setEnabled(enabled);
+		getFontSelector().refresh();
+		if (enabled) {
+			getFontSelector().set(getDefaultFont().getFontName());
+		}
 		getTextSampleLabel().setEnabled(enabled);
 		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+(enabled?"enabled":"disabled")));
 	}
@@ -184,10 +191,16 @@ public class ThemePanel extends PreferencePanel {
 	}
 
 	private Font getDefaultFont() {
-		//Some L&F not support "defaultFont" -> we use the JLabel default font instead
 		Font dummy = Preferences.INSTANCE.getDefaultFont();
 		if (dummy==null) {
-			dummy = getTextSampleLabel().getFont();
+			LookAndFeel current = UIManager.getLookAndFeel();
+			try {
+				UIManager.setLookAndFeel(Utils.getLFClassFromName(selectedLookAndFeel));
+				dummy = new JLabel().getFont();
+				UIManager.setLookAndFeel(current);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 		return dummy;
 	}
@@ -265,7 +278,6 @@ public class ThemePanel extends PreferencePanel {
 	private FontSelector getFontSelector() {
 		if (fontSelector == null) {
 			fontSelector = new FontSelector();
-			fontSelector.set(getDefaultFont().getFontName());
 			fontSelector.addPropertyChangeListener(fontSelector.getPropertyName(), new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -277,7 +289,7 @@ public class ThemePanel extends PreferencePanel {
 		return fontSelector;
 	}
 	
-	private static class FontSelector extends AbstractSelector<String, Void> {
+	private class FontSelector extends AbstractSelector<String, Void> {
 		private static final long serialVersionUID = 1L;
 
 		public FontSelector() {
@@ -286,8 +298,10 @@ public class ThemePanel extends PreferencePanel {
 
 		@Override
 		protected void populateCombo() {
-			for (Font f : FontUtils.getAvailableFonts(getLocale())) {
-				getCombo().addItem(f.getFontName());
+			if (FontUtils.isDefaultFontSupportedByLookAndFeel(selectedLookAndFeel)) {
+				for (Font f : FontUtils.getAvailableTextFonts(getLocale())) {
+					getCombo().addItem(f.getFontName());
+				}
 			}
 		}
 		

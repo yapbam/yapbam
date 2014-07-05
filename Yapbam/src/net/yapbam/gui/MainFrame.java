@@ -12,9 +12,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import com.fathzer.jlocal.Formatter;
+import com.fathzer.soft.ajlib.swing.FontUtils;
+import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 import com.fathzer.soft.jclop.Service;
 
@@ -377,16 +378,9 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	public static void setLookAndFeel() {
 		String lookAndFeelName = Preferences.INSTANCE.getLookAndFeel();
 		try {
-			LookAndFeelInfo[] installedLookAndFeels = UIManager.getInstalledLookAndFeels();
-			String lookAndFeelClass = null;
-			for (LookAndFeelInfo lookAndFeelInfo : installedLookAndFeels) {
-				// Prior the 0.9.8, the class name were used instead of the generic name.
-				// It caused problem when changing java version (ie: Nimbus in java 1.6 was implemented by a class in com.sun.etc and in javax.swing in java 1.7)
-				if (lookAndFeelInfo.getName().equals(lookAndFeelName)) {
-					lookAndFeelClass = lookAndFeelInfo.getClassName();
-					break;
-				}
-			}
+			// Note : Prior the 0.9.8, the class name was used instead of the generic name.
+			// It caused problem when changing java version (ie: Nimbus in java 1.6 was implemented by a class in com.sun.etc and in javax.swing in java 1.7)
+			String lookAndFeelClass = Utils.getLFClassFromName(lookAndFeelName);
 			if (lookAndFeelClass!=null) {
 				UIManager.setLookAndFeel(lookAndFeelClass);
 			}
@@ -398,7 +392,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 			Font defaultFont = Preferences.INSTANCE.getDefaultFont();
 			if (defaultFont!=null) {
 				Font requiredFont = defaultFont.deriveFont(Preferences.INSTANCE.getFontSizeRatio()*defaultFont.getSize());
-				UIManager.getLookAndFeelDefaults().put("defaultFont", requiredFont); //$NON-NLS-1$
+				FontUtils.setDefaultFont(requiredFont);
 				iconSize = 16*requiredFont.getSize()/12;
 			}
 			IconManager.reset(iconSize);
