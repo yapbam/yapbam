@@ -1,7 +1,6 @@
 package net.yapbam.gui;
 
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -23,6 +22,7 @@ import java.util.StringTokenizer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import com.fathzer.soft.ajlib.swing.FontUtils;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
@@ -42,7 +42,6 @@ import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 import net.yapbam.gui.transfer.TransferPlugin;
-import net.yapbam.gui.util.FontUtils;
 import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
@@ -245,10 +244,6 @@ public class Preferences {
 
 	public void setLookAndFeel(String lookAndFeelName) {
 		put(LOOK_AND_FEEL, lookAndFeelName);
-	}
-	
-	public boolean isLookAndFeelSupportFontSize(String name) {
-		return "Nimbus".equals(name);
 	}
 	
 	public String getHttpProxyHost() {
@@ -613,14 +608,14 @@ public class Preferences {
 	 * @return a Font or null if the current L&F not have a default font (I think only Nimbus supports this).
 	 */
 	public Font getDefaultFont() {
-		Font trueDefault = (Font)UIManager.getDefaults().getFont("defaultFont");
+		Font trueDefault = FontUtils.getDefaultFont();
 		if (trueDefault==null) {
 			return null;
 		}
 		
 		String fontName = getProperty(FONT_NAME);
 		if (fontName!=null) {
-			for (Font font : FontUtils.getAvailableFonts(getLocale())) {
+			for (Font font : FontUtils.getAvailableTextFonts(getLocale())) {
 			    if (fontName.equals(font.getName())) { 
 			    	return font;
 			    }
