@@ -10,7 +10,6 @@ import javax.swing.JRadioButton;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
@@ -84,7 +83,7 @@ public class ThemePanel extends PreferencePanel {
 				 * 	ex.printStackTrace();
 				 * }
 				 */
-				refreshFontSlider();
+				refreshFontPanel();
 			}
 		}
 	}
@@ -111,7 +110,7 @@ public class ThemePanel extends PreferencePanel {
 		add(getFontPanel(), gbcFontPanel);
 	}
 
-	public void refreshFontSlider() {
+	private void refreshFontPanel() {
 		boolean enabled = FontUtils.isDefaultFontSupportedByLookAndFeel(selectedLookAndFeel);
 		getFontSlider().setEnabled(enabled);
 		getFontSliderTitle().setEnabled(enabled);
@@ -121,7 +120,12 @@ public class ThemePanel extends PreferencePanel {
 			getFontSelector().set(getDefaultFont().getFontName());
 		}
 		getTextSampleLabel().setEnabled(enabled);
-		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+(enabled?"enabled":"disabled")));
+		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+getEnableSuffix(enabled)));
+		getFontSelector().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSelector.tooltip."+getEnableSuffix(enabled)));
+	}
+
+	private String getEnableSuffix(boolean enabled) {
+		return enabled?"enabled":"disabled";
 	}
 
 	public String getSelectedLookAndFeel() {
@@ -173,7 +177,7 @@ public class ThemePanel extends PreferencePanel {
 			fontSlider.setMinorTickSpacing(1);
 			fontSlider.setPaintLabels(true);
 			fontSlider.setPaintTicks(true);
-			refreshFontSlider();
+			refreshFontPanel();
 			fontSlider.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
