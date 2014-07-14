@@ -50,23 +50,23 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	private static final String CATEGORY_UNDEFINED_RESOURCE = "Category.undefined"; //$NON-NLS-1$
 	private static final String MODE_UNDEFINED_RESOURCE = "Mode.undefined"; //$NON-NLS-1$
 	
-	private JPanel accountPanel = null;
-	private JList accountList = null;
-	private AmountPanel amountPanel = null;
-	private JPanel categoryPanel = null;
-	private JList categoryList = null;
-	private TextMatcherFilterPanel descriptionPanel = null;
-	private JPanel statementPanel = null;
-	private JCheckBox checked = null;
-	private JCheckBox notChecked = null;
-	private DateFilterPanel valueDatePanel = null;
-	private JScrollPane jScrollPane = null;
-	private JScrollPane jScrollPane1 = null;
-	private TextMatcherFilterPanel jPanel11 = null;
-	private JButton clear = null;
-	private JPanel modePanel = null;
-	private JScrollPane jScrollPane2 = null;
-	private JList modes = null;
+	private JPanel accountPanel;
+	private JList accountList;
+	private AmountPanel amountPanel;
+	private JPanel categoryPanel;
+	private JList categoryList;
+	private TextMatcherFilterPanel descriptionPanel;
+	private JPanel statementPanel;
+	private JCheckBox checked;
+	private JCheckBox notChecked;
+	private DateFilterPanel valueDatePanel;
+	private JScrollPane jScrollPane;
+	private JScrollPane jScrollPane1;
+	private TextMatcherFilterPanel jPanel11;
+	private JButton clear;
+	private JPanel modePanel;
+	private JScrollPane jScrollPane2;
+	private JList modes;
 		
 	private String oldInconsistencyCause;
 	private Filter filter;
@@ -79,7 +79,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 		}
 	};
 	
-	private TextMatcherFilterPanel numberPanel = null;
+	private TextMatcherFilterPanel numberPanel;
 	private NatureFilterPanel receiptsExpensesPanel;
 	private JPanel panel;
 	private DateFilterPanel datePanel;
@@ -667,6 +667,7 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 					selectAll(getModes());
 					selectAll(getCategoryList());
 					getDescriptionPanel().clear();
+					getCommentPanel().clear();
 					getReceiptsExpensesPanel().clear();
 					getAmountPanel().clear();
 					getDatePanel().clear();

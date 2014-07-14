@@ -516,8 +516,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				(filter.getValidCategories()!=null) || (filter.getValidModes()!=null) ||
 				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
 				(filter.getValueDateFrom()!=null) || (filter.getValueDateTo()!=null) ||
-				(filter.getDescriptionMatcher()!=null) || (filter.getNumberMatcher()!=null) ||
-				(filter.getStatementMatcher()!=null) || !amountSimple);
+				(filter.getDescriptionMatcher()!=null) || (filter.getCommentMatcher()!=null) ||
+				(filter.getNumberMatcher()!=null) || (filter.getStatementMatcher()!=null) || !amountSimple);
 	}
 	
 	private void buildBooleanFilterChoiceMenu(int kind, String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {
