@@ -6,6 +6,7 @@ known
 version	0.17.4 (20/07/2014)
 fix
 	Quelques bugs mineurs relatifs au filtage sur les commentaires des transactions.
+	Problème de lancement via un lien symbolique vers le script shell yapbam.sh sur certains systèmes Linux.
 
 version	0.17.3 (17/06/2014)
 improvement
