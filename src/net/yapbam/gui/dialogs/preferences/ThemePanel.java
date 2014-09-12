@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.util.NullUtils;
 
 import javax.swing.JSlider;
 
@@ -44,6 +45,7 @@ public class ThemePanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 
 	private String selectedLookAndFeel;
+	private String oldSelectedFont;
 	private JSlider fontSlider;
 	private JPanel fontPanel;
 	private JLabel textSampleLabel;
@@ -56,6 +58,8 @@ public class ThemePanel extends PreferencePanel {
 	 */
 	public ThemePanel() {
 		super();
+		Font defaultFont = Preferences.INSTANCE.getDefaultFont();
+		this.oldSelectedFont = defaultFont==null?null:defaultFont.getName();
 		initialize();
 	}
 
@@ -115,10 +119,6 @@ public class ThemePanel extends PreferencePanel {
 		getFontSlider().setEnabled(enabled);
 		getFontSliderTitle().setEnabled(enabled);
 		getFontSelector().setEnabled(enabled);
-		getFontSelector().refresh();
-		if (enabled) {
-			getFontSelector().set(getDefaultFont().getFontName());
-		}
 		getTextSampleLabel().setEnabled(enabled);
 		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+getEnableSuffix(enabled)));
 		getFontSelector().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSelector.tooltip."+getEnableSuffix(enabled)));
@@ -141,6 +141,10 @@ public class ThemePanel extends PreferencePanel {
 	public String getToolTip() {
 		return LocalizationData.get("PreferencesDialog.Theme.toolTip"); //$NON-NLS-1$
 	}
+	
+	private String getSelectedFont() {
+		return getFontSelector().isEnabled()?getFontSelector().get():null;
+	}
 
 	@Override
 	public boolean updatePreferences() {
@@ -149,15 +153,20 @@ public class ThemePanel extends PreferencePanel {
 			Preferences.INSTANCE.setLookAndFeel(selectedLookAndFeel);
 		}
 		
+		boolean fontChanged = !NullUtils.areEquals(getSelectedFont(), oldSelectedFont);
+		if (fontChanged) {
+			Preferences.INSTANCE.setDefaultFont(getSelectedFont());
+		}
+		
 		int defaultSize = getDefaultFont().getSize();
 		int old = (int) (defaultSize*Preferences.INSTANCE.getFontSizeRatio());
 		int current = getFontSlider().getValue();
-		boolean fontChanged = (old!=current);
-		if (fontChanged) {
+		boolean fontSizeChanged = (old!=current);
+		if (fontSizeChanged) {
 			Preferences.INSTANCE.setFontSizeRatio((float)current/defaultSize);
 		}
 
-		return lfChanged || fontChanged;
+		return lfChanged || fontSizeChanged || fontChanged;
 	}
 	private JSlider getFontSlider() {
 		if (fontSlider == null) {
@@ -195,18 +204,18 @@ public class ThemePanel extends PreferencePanel {
 	}
 
 	private Font getDefaultFont() {
-		Font dummy = Preferences.INSTANCE.getDefaultFont();
-		if (dummy==null) {
+		Font result = (getSelectedFont()!=null) ? new Font(getSelectedFont(), Font.PLAIN, 12):Preferences.INSTANCE.getDefaultFont();
+		if (result==null) {
 			LookAndFeel current = UIManager.getLookAndFeel();
 			try {
 				UIManager.setLookAndFeel(Utils.getLFClassFromName(selectedLookAndFeel));
-				dummy = new JLabel().getFont();
+				result = new JLabel().getFont();
 				UIManager.setLookAndFeel(current);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		return dummy;
+		return result;
 	}
 	private JPanel getFontPanel() {
 		if (fontPanel == null) {
@@ -282,10 +291,13 @@ public class ThemePanel extends PreferencePanel {
 	private FontSelector getFontSelector() {
 		if (fontSelector == null) {
 			fontSelector = new FontSelector();
+			Font defaultFont = Preferences.INSTANCE.getDefaultFont();
+			if (defaultFont!=null) {
+				getFontSelector().set(defaultFont.getFontName());
+			}
 			fontSelector.addPropertyChangeListener(fontSelector.getPropertyName(), new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					System.out.println (fontSelector.get()+" was selected"); //TODO
 					refreshSampleText();
 				}
 			});

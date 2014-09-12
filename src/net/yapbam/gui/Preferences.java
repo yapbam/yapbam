@@ -617,11 +617,19 @@ public class Preferences {
 		if (fontName!=null) {
 			for (Font font : FontUtils.getAvailableTextFonts(getLocale())) {
 			    if (fontName.equals(font.getName())) { 
-			    	return font;
+			    	return new Font(fontName, Font.PLAIN, 12);
 			    }
 			}
 		}
 		return trueDefault;
+	}
+	
+	public void setDefaultFont(String fontName) {
+		if (fontName==null) {
+			removeProperty(FONT_NAME);
+		} else {
+			setProperty(FONT_NAME, fontName);
+		}
 	}
 
 	private float getFloat(String key, float defaultValue) {
