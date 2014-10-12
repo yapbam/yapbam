@@ -20,7 +20,7 @@
 	<!-- Yapbam version. This should have the following format = major.minor.build.comment were
 		major, minor and build are integers. comment is a string that do not contain space character. 
 	 -->
-	<property name="yapbamVersion" value="0.17.4"/>
+	<property name="yapbamVersion" value="0.17.5"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>

@@ -301,13 +301,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		if (source.equals(this.menuItemQuit)) {
 			this.frame.getJFrame().dispatchEvent(new WindowEvent(this.frame.getJFrame(), WindowEvent.WINDOW_CLOSING));
 		} else if (source.equals(this.menuItemNew)) {
-			if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData()))) {
-				if (!data.isEmpty()) {
-					if (JOptionPane.showConfirmDialog(this.frame, LocalizationData.get("MainMenu.NewFile.ConfirmMessage"), //$NON-NLS-1$
+			if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData())) &&
+					!data.isEmpty() && JOptionPane.showConfirmDialog(this.frame,
+							LocalizationData.get("MainMenu.NewFile.ConfirmMessage"), //$NON-NLS-1$
 							LocalizationData.get("MainMenu.NewFile"), JOptionPane.YES_NO_OPTION)==0) { //$NON-NLS-1$
 						data.clear();
-					}
-				}
 			}
 		} else if (source.equals(this.menuItemProtect)) {
 			String password = this.frame.getData().getPassword();
@@ -517,12 +515,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		boolean amountSimple = (min==0) && (max==Double.POSITIVE_INFINITY);
 		List<Account> validAccounts = filter.getValidAccounts();
 		boolean complexAccount = (validAccounts!=null) && (validAccounts.size()!=1);
-		return (complexAccount ||
+		return complexAccount ||
 				(filter.getValidCategories()!=null) || (filter.getValidModes()!=null) ||
 				(filter.getDateFrom()!=null) || (filter.getDateTo()!=null) ||
 				(filter.getValueDateFrom()!=null) || (filter.getValueDateTo()!=null) ||
 				(filter.getDescriptionMatcher()!=null) || (filter.getCommentMatcher()!=null) ||
-				(filter.getNumberMatcher()!=null) || (filter.getStatementMatcher()!=null) || !amountSimple);
+				(filter.getNumberMatcher()!=null) || (filter.getStatementMatcher()!=null) || !amountSimple;
 	}
 	
 	private void buildBooleanFilterChoiceMenu(int kind, String[] texts, int[] properties, String[] tooltips, String eraseTooltip) {

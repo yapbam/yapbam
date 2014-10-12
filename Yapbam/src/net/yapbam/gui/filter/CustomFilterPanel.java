@@ -663,27 +663,30 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 			clear.setEnabled(true);
 			clear.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					selectAll(getAccountList());
-					selectAll(getModes());
-					selectAll(getCategoryList());
-					getDescriptionPanel().clear();
-					getCommentPanel().clear();
-					getReceiptsExpensesPanel().clear();
-					getAmountPanel().clear();
-					getDatePanel().clear();
-					getNumberPanel().clear();
-					getValueDatePanel().clear();
-					getChecked().setSelected(true);
-					getNotChecked().setSelected(true);
-					getJPanel11().clear();
-				}
-
-				private void selectAll(JList list) {
-					list.getSelectionModel().addSelectionInterval(0, list.getModel().getSize()-1);
+					clear();
 				}
 			});
 		}
 		return clear;
+	}
+	
+	private void clear() {
+		selectAll(getAccountList());
+		selectAll(getModes());
+		selectAll(getCategoryList());
+		getDescriptionPanel().clear();
+		getCommentPanel().clear();
+		getReceiptsExpensesPanel().clear();
+		getAmountPanel().clear();
+		getDatePanel().clear();
+		getNumberPanel().clear();
+		getValueDatePanel().clear();
+		getChecked().setSelected(true);
+		getNotChecked().setSelected(true);
+		getJPanel11().clear();
+	}
+	private void selectAll(JList list) {
+		list.getSelectionModel().addSelectionInterval(0, list.getModel().getSize()-1);
 	}
 
 	/**

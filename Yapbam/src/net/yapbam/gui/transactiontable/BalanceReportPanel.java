@@ -67,15 +67,15 @@ public class BalanceReportPanel extends JPanel {
 				currentBalance.setValue(balance.getCurrentBalance(), true);
 				finalBalance.setValue(balance.getFinalBalance(), true);
 				checkedBalance.setValue(balance.getCheckedBalance(), true);
-			} else if (selected==currentBalance) {
+			} else if (selected.equals(currentBalance)) {
 				currentBalance.setValue(balance.getCurrentBalance(), true);
 				finalBalance.setValue(balance.getFinalBalance()-balance.getCurrentBalance(), false);
 				checkedBalance.setValue(balance.getCheckedBalance()-balance.getCurrentBalance(), false);
-			} else if (selected==finalBalance) {
+			} else if (selected.equals(finalBalance)) {
 				currentBalance.setValue(balance.getCurrentBalance()-balance.getFinalBalance(), false);
 				finalBalance.setValue(balance.getFinalBalance(), true);
 				checkedBalance.setValue(balance.getCheckedBalance()-balance.getFinalBalance(), false);
-			} else if (selected==checkedBalance) {			
+			} else if (selected.equals(checkedBalance)) {			
 				currentBalance.setValue(balance.getCurrentBalance()-balance.getCheckedBalance(), false);
 				finalBalance.setValue(balance.getFinalBalance()-balance.getCheckedBalance(), false);
 				checkedBalance.setValue(balance.getCheckedBalance(), true);
