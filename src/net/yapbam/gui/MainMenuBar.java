@@ -302,7 +302,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			this.frame.getJFrame().dispatchEvent(new WindowEvent(this.frame.getJFrame(), WindowEvent.WINDOW_CLOSING));
 		} else if (source.equals(this.menuItemNew)) {
 			if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData()))) {
-				data.clear();
+				if (!data.isEmpty()) {
+					if (JOptionPane.showConfirmDialog(this.frame, LocalizationData.get("MainMenu.NewFile.ConfirmMessage"), //$NON-NLS-1$
+							LocalizationData.get("MainMenu.NewFile"), JOptionPane.YES_NO_OPTION)==0) { //$NON-NLS-1$
+						data.clear();
+					}
+				}
 			}
 		} else if (source.equals(this.menuItemProtect)) {
 			String password = this.frame.getData().getPassword();

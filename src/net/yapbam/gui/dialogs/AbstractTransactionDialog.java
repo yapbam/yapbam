@@ -13,10 +13,15 @@ import java.util.prefs.Preferences;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 import com.fathzer.soft.ajlib.swing.widget.ComboBox;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
+
+
 
 
 import net.yapbam.data.*;
@@ -28,7 +33,7 @@ import net.yapbam.gui.widget.CurrencyWidget;
 /** This dialog allows to create or edit a transaction */
 public abstract class AbstractTransactionDialog<V> extends AbstractDialog<GlobalData, V> {
 	private static final long serialVersionUID = 1L;
-	private static final boolean DEBUG = false;
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTransactionDialog.class);
 
 	private AccountWidget accounts;
 	protected TextWidget description;
@@ -72,6 +77,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 		// Update mode list
 		buildModes(originalIsExpense);
 		modes.set(transaction.getMode());
+		//FIXME
 		categories.set(transaction.getCategory());
 		subtransactionsPanel.fill(transaction);
 		this.ignoreEvents = false;
@@ -295,7 +301,6 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 	 */
 	private void buildModes(boolean expense) {
 		Mode current = modes.get();
-//System.out.println ("buildModes is called. account="+getAccount().getName()+", expense="+expense+", original="+originalMode+" ("+originalIsExpense+")"); //TODO
 		modes.setParameters(new ModeWidgetParams(data, getAccount(), expense));
 		ComboBox combo = modes.getCombo();
 		combo.setActionEnabled(false);
@@ -331,9 +336,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!ignoreEvents) {
-				if (DEBUG) {
-					System.out.println("Account " + getAccount() + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-				}
+				LOGGER.trace("Account {} is selected", getAccount()); //$NON-NLS-1$
 				buildModes(isExpense());
 				if (pdc!=null) {
 					description.setPredefined(pdc.getPredefined(), pdc.getUnsortedSize());
@@ -357,17 +360,14 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (!ignoreEvents) {
-				Mode selected = modes.get();
-				if (!NullUtils.areEquals(lastSelected, selected) || (isExpense()!=lastWasExpense)) {
-					lastSelected = selected;
-					lastWasExpense = isExpense();
-					if (DEBUG) {
-						System.out.println("Mode " + lastSelected + " is selected"); //$NON-NLS-1$ //$NON-NLS-2$
-					}
-					optionnalUpdatesOnModeChange();
-				}
+			LOGGER.debug("Mode listener is called"); //TODO
+			Mode selected = modes.get();
+			if (!(ignoreEvents || (NullUtils.areEquals(lastSelected, selected) && (isExpense()==lastWasExpense)))) {
+				LOGGER.trace("Mode {} is selected", selected); //$NON-NLS-1$
+				optionnalUpdatesOnModeChange();
 			}
+			lastSelected = selected;
+			lastWasExpense = isExpense();
 		}
 	}
 
