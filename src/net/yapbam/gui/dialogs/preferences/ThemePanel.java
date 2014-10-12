@@ -161,7 +161,7 @@ public class ThemePanel extends PreferencePanel {
 		int defaultSize = getDefaultFont().getSize();
 		int old = (int) (defaultSize*Preferences.INSTANCE.getFontSizeRatio());
 		int current = getFontSlider().getValue();
-		boolean fontSizeChanged = (old!=current);
+		boolean fontSizeChanged = old!=current;
 		if (fontSizeChanged) {
 			Preferences.INSTANCE.setFontSizeRatio((float)current/defaultSize);
 		}
@@ -221,8 +221,8 @@ public class ThemePanel extends PreferencePanel {
 		if (fontPanel == null) {
 			fontPanel = new JPanel();
 			fontPanel.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("PreferencesDialog.Theme.font"))); //$NON-NLS-1$
-			GridBagLayout gbl_fontPanel = new GridBagLayout();
-			fontPanel.setLayout(gbl_fontPanel);
+			GridBagLayout gblFontPanel = new GridBagLayout();
+			fontPanel.setLayout(gblFontPanel);
 			GridBagConstraints gbcFontSelector = new GridBagConstraints();
 			gbcFontSelector.anchor = GridBagConstraints.WEST;
 			gbcFontSelector.insets = new Insets(0, 0, 5, 0);

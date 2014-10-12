@@ -77,7 +77,6 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 		// Update mode list
 		buildModes(originalIsExpense);
 		modes.set(transaction.getMode());
-		//FIXME
 		categories.set(transaction.getCategory());
 		subtransactionsPanel.fill(transaction);
 		this.ignoreEvents = false;
@@ -360,7 +359,6 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			LOGGER.debug("Mode listener is called"); //TODO
 			Mode selected = modes.get();
 			if (!(ignoreEvents || (NullUtils.areEquals(lastSelected, selected) && (isExpense()==lastWasExpense)))) {
 				LOGGER.trace("Mode {} is selected", selected); //$NON-NLS-1$
