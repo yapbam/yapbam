@@ -23,6 +23,8 @@ public final class Portable {
 	private static boolean IS_PORTABLE;
 	private static File APP_DIRECTORY;
 	private static File DATA_DIRECTORY;
+	private static boolean IS_JNLP;
+	private static boolean inited;
 	
 	public interface ApplicationDefinition {
 		public File getAppDirectory();
@@ -46,6 +48,7 @@ public final class Portable {
 				}
 			}
 		}
+		inited = false;
 	}
 
 	private static void initDefFromPropertyStream(InputStream in) throws IOException {
@@ -83,15 +86,16 @@ public final class Portable {
 	}
 	
 	private static void init() {
-		if (APP_DIRECTORY!=null) {
+		if (inited) {
 			return;
 		}
 		if (Portable.appDefinition==null) {
 			throw new IllegalStateException();
 		}
 		APP_DIRECTORY = Portable.appDefinition.getAppDirectory();
-		File file = getApplicationDirectory();
-		IS_PORTABLE = FileUtils.isWritable(file);
+		IS_JNLP = APP_DIRECTORY==null;
+		IS_PORTABLE = (APP_DIRECTORY!=null) && FileUtils.isWritable(APP_DIRECTORY);
+		File file = APP_DIRECTORY;
 		if (IS_PORTABLE) {
 			file = new File(file, "Data");
 		} else {
@@ -121,6 +125,7 @@ public final class Portable {
 			}
 		}
 		DATA_DIRECTORY = file;
+		inited = true;
 	}
 	
 	private Portable() {
@@ -135,6 +140,15 @@ public final class Portable {
 	public static boolean isPortable() {
 		init();
 		return IS_PORTABLE;
+	}
+	
+	/** Tests whether this application is launched by Java Web Start.
+	 * <br>A Java Web started application is not portable because the application can't write to its launch directory.
+	 * @return a boolean, true if the application is launched through Java Web Start
+	 */
+	public static boolean isWebStarted() {
+		init();
+		return IS_JNLP;
 	}
 	
 	/** Gets the application's installation directory.
