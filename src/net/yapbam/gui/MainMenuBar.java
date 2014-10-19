@@ -223,7 +223,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.setToolTipText(LocalizationData.get("MainMenu.QuestionMark.ToolTip")); //$NON-NLS-1$
 		this.add(menu);
 
-		if (Portable.getApplicationDirectory()!=null) {
+		if (!Portable.isWebStarted()) {
 			menu.add(new CheckNewReleaseAction(this.frame.getJFrame()));
 			insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
 			menu.addSeparator();
