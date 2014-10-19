@@ -223,9 +223,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.setToolTipText(LocalizationData.get("MainMenu.QuestionMark.ToolTip")); //$NON-NLS-1$
 		this.add(menu);
 
-		menu.add(new CheckNewReleaseAction(this.frame.getJFrame()));
-		insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
-		menu.addSeparator();
+		if (Portable.getApplicationDirectory()!=null) {
+			menu.add(new CheckNewReleaseAction(this.frame.getJFrame()));
+			insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
+			menu.addSeparator();
+		}
 		item = getURLMenuItem(LocalizationData.get("MainMenu.help"), new File(Portable.getApplicationDirectory(),"help.html").toURI().toString()); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.help.tooltip")); //$NON-NLS-1$
 		menu.add(item);
