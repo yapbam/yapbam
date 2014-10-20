@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.17.5</version>
+	<version>0.17.6</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 	</properties>
@@ -94,6 +94,10 @@
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
 										<Main-Class>net.yapbam.gui.MainFrame</Main-Class>
+										<Permissions>all-permissions</Permissions>
+										<Application-Name>Yapbam</Application-Name>
+										<Entry-Point>net.yapbam.gui.MainFrame</Entry-Point>
+										<Trusted-Only>true</Trusted-Only>
 										<!-- Class-Path>your/class/path/here</Class-Path -->
 									</manifestEntries>
 								</transformer>
@@ -101,6 +105,32 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archiveDirectory>${project.build.directory}</archiveDirectory>
+					<includes>
+						<include>${customized.jar.name}.jar</include>
+					</includes>
+					<!-- keystore and password should be defined in the settings.xml file 
+						example: <profile> <id>nexus</id> ... <properties> <sicg.keystore.password>the 
+						keystore pwd</sicg.keystore.password> </properties> </profile>
+						//TODO use yapbam certificate 
+					-->
+					<keystore>http://sicg.tpz.renault.fr/DocDev/keys.jks</keystore>
+					<storepass>${sicg.keystore.password}</storepass>
+					<alias>iaa</alias>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
