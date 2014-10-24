@@ -92,7 +92,7 @@ public final class Portable {
 		if (Portable.appDefinition==null) {
 			throw new IllegalStateException();
 		}
-		APP_DIRECTORY = Portable.appDefinition.getAppDirectory();
+		APP_DIRECTORY = Boolean.getBoolean("simulateJNLP") ? null : Portable.appDefinition.getAppDirectory();
 		IS_JNLP = APP_DIRECTORY==null;
 		IS_PORTABLE = (APP_DIRECTORY!=null) && FileUtils.isWritable(APP_DIRECTORY);
 		File file = APP_DIRECTORY;

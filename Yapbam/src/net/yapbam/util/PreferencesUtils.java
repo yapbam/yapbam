@@ -33,15 +33,19 @@ public final class PreferencesUtils {
 	/** Saves properties to a Preferences node.
 	 * @param pref The preferences node in which the properties will be saved.
 	 * @param properties The properties to save. Be aware that these properties can only contains strings
+	 * @param clear If true, the preferences node is cleared before properties are added to it. 
 	 * @throws IOException If it fails writing the preferences.
 	 */
-	public static void toPreferences(Preferences pref, Properties properties) throws IOException {
-		for (Object obj : properties.keySet()) {
-			String key = (String)obj;
-			String value = properties.getProperty(key);
-			pref.put(key, value);
-		}
+	public static void toPreferences(Preferences pref, Properties properties, boolean clear) throws IOException {
 		try {
+			if (clear) {
+				pref.clear();
+			}
+			for (Object obj : properties.keySet()) {
+				String key = (String)obj;
+				String value = properties.getProperty(key);
+				pref.put(key, value);
+			}
 			pref.flush();
 		} catch (BackingStoreException e) {
 			throw new IOException(e);

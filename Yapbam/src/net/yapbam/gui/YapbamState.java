@@ -316,7 +316,7 @@ public class YapbamState {
 				stream.close();
 			}
 		} else {
-			PreferencesUtils.toPreferences(getPreferences(), properties);
+			PreferencesUtils.toPreferences(getPreferences(), properties, true);
 		}
 	}
 

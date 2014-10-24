@@ -6,6 +6,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.Authenticator;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -161,15 +162,20 @@ System.out.println ("Preferences exists"+!this.firstRun);
 			PreferencesUtils.fromPreferences(prefs, properties);
 System.out.println ("Preferences are loaded from java repository");
 		}
-displayProperties("Loaded Preferences:");
+displayProperties("Loaded Preferences:", properties, System.out);
 	}
 
-	private void displayProperties(String title) {
-		System.out.println (title);
-		for (Entry<Object, Object> entry : properties.entrySet()) {
-			System.out.println ("  "+entry.getKey()+"="+entry.getValue());
+	public static void displayProperties(String title, Properties properties, PrintStream out) {
+		if (title!=null) {
+			out.println (title);
 		}
-		System.out.println ();
+		for (Entry<Object, Object> entry : properties.entrySet()) {
+			if (title!=null) {
+				out.print("  ");
+			}
+			out.println (entry.getKey()+"="+entry.getValue());
+		}
+		out.println ();
 	}
 
 	public void save() throws IOException {
@@ -188,10 +194,10 @@ System.out.println ("Properties were saved successfully to file "+file);
 			}
 		} else {
 System.out.println ("Saving preferences to java repository");
-			PreferencesUtils.toPreferences(getJavaPref(), this.properties);
+			PreferencesUtils.toPreferences(getJavaPref(), this.properties, true);
 System.out.println ("Properties were successfully saved to java repository");
 		}
-		displayProperties("Saved Preferences:");
+		displayProperties("Saved Preferences:", properties, System.out);
 	}
 
 	private static java.util.prefs.Preferences getJavaPref() {
