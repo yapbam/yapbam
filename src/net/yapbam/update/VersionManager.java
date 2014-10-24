@@ -76,6 +76,7 @@ public abstract class VersionManager {
 			addPropertyParameter (url, "javaVendor", "java.vendor");
 			addPropertyParameter (url, "javaVersion", "java.version");
 			url.append("&portable=").append(URLEncoder.encode(Boolean.toString(Portable.isPortable()),UTF_8));
+			url.append("&jnlp=").append(URLEncoder.encode(Boolean.toString(Portable.isWebStarted()),UTF_8));
 			String serialNumber = YapbamState.INSTANCE.get(SERIAL_NUMBER);
 			if (serialNumber!=null) {
 				url.append("&id=").append(URLEncoder.encode(serialNumber,UTF_8));
