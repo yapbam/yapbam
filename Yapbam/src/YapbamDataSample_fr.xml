@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DATA version="1" nbAccounts="4" nbCategories="29" subCategorySeparator="/" nbPeriodicalTransactions="16" nbTransactions="210">
+<ACCOUNT id="Compte courant" initialBalance="588.0"><![CDATA[Mon compte courant.
+Contact : Mme Durand - 06 88 25 25 25.]]>
+<MODE id="Carte bleue">
+<EXPENSE stopDay="15" debtDay="31" kind="deferred"/>
+</MODE>
+<MODE id="Prélévement">
+<EXPENSE kind="immediate"/>
+</MODE>
+<MODE id="Virement">
+<EXPENSE kind="immediate"/>
+<RECEIPT kind="immediate"/>
+</MODE>
+<MODE id="Chèque">
+<EXPENSE period="2" kind="daily"/>
+<RECEIPT period="2" kind="daily"/>
+</MODE>
+<MODE id="TIP">
+<EXPENSE kind="immediate"/>
+</MODE>
+</ACCOUNT>
+<ACCOUNT id="Livret A" initialBalance="2500.0"/>
+<ACCOUNT id="LDD" initialBalance="3000.0">
+<MODE id="Virement">
+<EXPENSE kind="immediate"/>
+<RECEIPT kind="immediate"/>
+</MODE>
+</ACCOUNT>
+<ACCOUNT id="Compte épargne logement" initialBalance="2322.4"/>
+<CATEGORY id="Argent de poche/fiston"/>
+<CATEGORY id="Cadeaux"/>
+<CATEGORY id="Impôts/Fonciers"/>
+<CATEGORY id="Impôts/Locaux"/>
+<CATEGORY id="Impôts/Revenu"/>
+<CATEGORY id="Investissement/LDD"/>
+<CATEGORY id="Investissement/Livret A"/>
+<CATEGORY id="Liquide"/>
+<CATEGORY id="Loisirs/Divers"/>
+<CATEGORY id="Loisirs/Informatique/Abonnements"/>
+<CATEGORY id="Loisirs/Informatique/Matériel"/>
+<CATEGORY id="Loisirs/Sport"/>
+<CATEGORY id="Loisirs/TV-Hifi-Vidéo"/>
+<CATEGORY id="Maison/Achat"/>
+<CATEGORY id="Maison/Charges"/>
+<CATEGORY id="Maison/Entretien"/>
+<CATEGORY id="Salaire"/>
+<CATEGORY id="Scolarité"/>
+<CATEGORY id="Transport/Moto"/>
+<CATEGORY id="Transport/Transports en commun"/>
+<CATEGORY id="Transport/Voiture"/>
+<CATEGORY id="Téléphone/Mobile/Abonnements"/>
+<CATEGORY id="Téléphone/Mobile/Matériel"/>
+<CATEGORY id="Vacances"/>
+<CATEGORY id="Vie courante/Divers"/>
+<CATEGORY id="Vie courante/Habillement"/>
+<CATEGORY id="Vie courante/Nourriture"/>
+<CATEGORY id="Vie courante/Santé"/>
+<PERIODICAL account="Compte courant" description="Abonnement Internet" amount="-24.5" mode="Prélévement" category="Loisirs/Informatique/Abonnements" enabled="true" next="2013/12/10">
+<DATE_STEPPER kind="monthly" period="1" day="10"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Abonnement Internet Maman" amount="-35.78" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" enabled="true" next="2013/11/10">
+<DATE_STEPPER kind="monthly" period="2" day="10"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Abonnement mobile JM" amount="-31.9" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" enabled="true" next="2013/12/11">
+<DATE_STEPPER kind="monthly" period="1" day="11"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Assurance" amount="-281.09" mode="TIP" enabled="true" next="2013/3/10">
+<DATE_STEPPER kind="monthly" period="6" day="10"/>
+<SUBTRANSACTION description="Fazer" amount="-125.69" category="Transport/Moto"/>
+<SUBTRANSACTION description="125 SR" amount="-11.7" category="Transport/Moto"/>
+<SUBTRANSACTION description="Maison" amount="-93.63" category="Maison/Charges"/>
+<SUBTRANSACTION description="Prévoyance" amount="-33.57"/>
+<SUBTRANSACTION description="Catastrophes naturelles" amount="-10.66"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Charges" amount="-61.16" mode="Prélévement" category="Maison/Charges" enabled="true" next="2013/12/5">
+<DATE_STEPPER kind="monthly" period="1" day="5"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Eau" amount="-24.53" mode="Prélévement" category="Maison/Charges" enabled="true" next="2013/12/8">
+<DATE_STEPPER kind="monthly" period="1" day="8"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="EDF" amount="-46.0" mode="Prélévement" category="Maison/Charges" enabled="true" next="2013/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Entretien chaudière" amount="-126.0" mode="Chèque" category="Maison/Entretien" enabled="true" next="2013/10/30">
+<DATE_STEPPER kind="monthly" period="12" day="30"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="FlickR" amount="-34.66" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" enabled="true" next="2013/7/23">
+<DATE_STEPPER kind="monthly" period="24" day="23"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="GDF" amount="-115.11" mode="Prélévement" category="Maison/Charges" enabled="true" next="2013/12/14">
+<DATE_STEPPER kind="monthly" period="1" day="11"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Impôt sur le revenu" amount="-216.0" mode="Prélévement" category="Impôts/Revenu" enabled="true" next="2013/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Impôts fonciers" amount="-95.0" mode="Prélévement" category="Impôts/Fonciers" enabled="true" next="2013/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Impôts locaux" amount="-95.0" mode="Prélévement" category="Impôts/Locaux" enabled="true" next="2013/1/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Paye" amount="3245.0" mode="Virement" category="Salaire" enabled="true" next="2013/11/30">
+<DATE_STEPPER kind="monthly" period="1" day="30"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Renouvellement yapbam.net" amount="-14.35" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" enabled="true" next="2013/9/11">
+<DATE_STEPPER kind="monthly" period="12" day="11"/>
+</PERIODICAL>
+<PERIODICAL account="Compte courant" description="Virement fiston" amount="-200.0" mode="Virement" enabled="true" next="2013/12/1">
+<DATE_STEPPER kind="monthly" period="1" day="1"/>
+<SUBTRANSACTION description="Argent de poche" amount="-60.0" category="Argent de poche/fiston"/>
+<SUBTRANSACTION description="Repas midi" amount="-100.0" category="Vie courante/Nourriture"/>
+<SUBTRANSACTION description="Abonnement mobile" amount="-40.0" category="Téléphone/Mobile/Abonnements"/>
+</PERIODICAL>
+<TRANSACTION account="Compte courant" description="Parking gare" date="2013/5/17" amount="-2.8" mode="Carte bleue" category="Transport/Voiture" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Scala rider passenger" date="2013/5/19" amount="-120.0" mode="Carte bleue" category="Transport/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet Maman" date="2013/5/20" amount="-17.9" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/5/22" amount="-105.44" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/5/22" amount="-20.59" mode="Carte bleue" category="Transport/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/5/25" amount="-40.0" mode="Carte bleue" category="Liquide" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/5/31" amount="-21.75" mode="Carte bleue" category="Transport/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Cantine" date="2013/6/4" amount="-30.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/6/5" amount="-33.84" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet" date="2013/6/10" amount="-61.03" mode="Prélévement" category="Loisirs/Informatique/Abonnements" valueDate="2013/6/10" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Charges" date="2013/6/10" amount="-59.91" mode="Prélévement" category="Maison/Charges" valueDate="2013/6/10" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/6/11" amount="-21.65" mode="Carte bleue" category="Transport/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="GDF" date="2013/6/12" amount="-134.69" mode="Prélévement" category="Maison/Charges" valueDate="2013/6/11" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/6/12" amount="-28.79" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="EDF" date="2013/6/15" amount="-46.0" mode="Prélévement" category="Maison/Charges" valueDate="2013/6/16" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Coiffeur" date="2013/6/17" amount="-22.0" mode="Carte bleue" category="Vie courante/Divers" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/6/19" amount="-33.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Cantine" date="2013/6/19" amount="-30.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/6/19" amount="-22.57" mode="Carte bleue" category="Transport/Moto" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Solde vacances" date="2013/6/23" amount="-1419.93" mode="Carte bleue" category="Vacances" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/6/23" amount="-86.18" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Eau" date="2013/6/25" amount="-24.53" mode="Prélévement" category="Maison/Charges" valueDate="2013/6/25" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/6/26" amount="6.6" mode="Virement" category="Vie courante/Santé" valueDate="2013/6/26" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Radio" date="2013/6/26" amount="-157.71" mode="Carte bleue" category="Vie courante/Santé" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/6/27" amount="-35.7" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Plein Twingo" date="2013/6/27" amount="-34.0" mode="Carte bleue" category="Transport/Voiture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Vers LDD" date="2013/6/30" amount="-2000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/6/30" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/6/30" amount="-17.79" mode="Carte bleue" category="Transport/Moto" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/7/3" amount="10.37" mode="Virement" category="Vie courante/Santé" valueDate="2013/7/3" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Moniteur 24&quot;" date="2013/7/3" amount="-249.0" mode="Carte bleue" category="Loisirs/Informatique/Matériel" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Raquettes de tennis" date="2013/7/3" amount="-149.5" mode="Carte bleue" category="Loisirs/Sport" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Réparation enceinte" date="2013/7/3" amount="-39.1" mode="Carte bleue" category="Loisirs/TV-Hifi-Vidéo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Parking aéroport" date="2013/7/5" amount="-120.0" mode="Carte bleue" category="Vacances" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Cantine" date="2013/7/6" amount="-30.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/7/7" amount="-18.71" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Charges" date="2013/7/10" amount="-61.16" mode="Prélévement" category="Maison/Charges" valueDate="2013/7/10" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Retrait CL" date="2013/7/10" amount="-40.0" mode="Carte bleue" category="Liquide" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet Maman" date="2013/7/10" amount="-35.78" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Celio" date="2013/7/10" amount="-24.99" mode="Carte bleue" category="Vie courante/Habillement" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/7/10" amount="-21.8" mode="Carte bleue" category="Transport/Moto" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Magazines" date="2013/7/11" amount="-18.05" mode="Carte bleue" category="Vacances" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="GDF" date="2013/7/12" amount="-134.69" mode="Prélévement" category="Maison/Charges" valueDate="2013/7/12" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Sandwichs" date="2013/7/12" amount="-52.0" mode="Carte bleue" category="Vacances" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Magazines" date="2013/7/12" amount="-27.65" mode="Carte bleue" category="Vacances" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile JM" date="2013/7/12" amount="-32.66" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" valueDate="2013/7/31" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Retrait 80 DT" date="2013/7/13" amount="-47.34" mode="Carte bleue" category="Vacances" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="EDF" date="2013/7/15" amount="-46.0" mode="Prélévement" category="Maison/Charges" valueDate="2013/7/15" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/7/15" amount="6.9" mode="Virement" category="Vie courante/Santé" valueDate="2013/7/15" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Eau" date="2013/7/27" amount="-24.53" mode="Prélévement" category="Maison/Charges" valueDate="2013/7/27" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/7/28" amount="6.9" mode="Virement" category="Vie courante/Santé" valueDate="2013/7/28" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Reçu de LDD" date="2013/7/28" amount="2000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/7/28" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/8/4" amount="6.9" mode="Virement" category="Vie courante/Santé" valueDate="2013/8/4" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile JM (solde orange)" date="2013/8/7" amount="-11.16" mode="Prélévement" category="Téléphone/Mobile/Abonnements" valueDate="2013/8/7" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Pneu moto" date="2013/7/24" amount="-120.2" mode="Carte bleue" category="Transport/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="FlickR" date="2013/7/23" amount="-34.66" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/7/24" amount="-80.0" mode="Carte bleue" category="Liquide" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/7/28" amount="-26.72" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Cantine" date="2013/7/28" amount="-30.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/7/31" amount="-12.76" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/7/31" amount="-21.36" mode="Carte bleue" category="Transport/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/8/4" amount="-87.15" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Kart" date="2013/8/5" amount="-26.0" mode="Carte bleue" category="Loisirs/Divers" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Parking hopital" date="2013/8/6" amount="-2.0" mode="Carte bleue" category="Transport/Voiture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/8/6" amount="-54.48" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Parking hopital" date="2013/8/7" amount="-1.0" mode="Carte bleue" category="Transport/Voiture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Cables audio" date="2013/8/7" amount="-19.99" mode="Carte bleue" category="Loisirs/TV-Hifi-Vidéo" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Parking hopital" date="2013/8/9" amount="-1.0" mode="Carte bleue" category="Transport/Voiture" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Plein 125" date="2013/8/9" amount="-4.84" mode="Carte bleue" category="Transport/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/8/9" amount="-20.35" mode="Carte bleue" category="Transport/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/7/21" amount="-40.0" mode="Carte bleue" category="Liquide" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet" date="2013/8/10" amount="-12.7" mode="Prélévement" category="Loisirs/Informatique/Abonnements" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Charges" date="2013/8/10" amount="-61.16" mode="Prélévement" category="Maison/Charges" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Compte courant" description="GDF" date="2013/8/11" amount="-134.69" mode="Prélévement" category="Maison/Charges" valueDate="2013/8/11" statement="201309"/>
+<TRANSACTION account="Compte courant" description="EDF" date="2013/8/15" amount="-46.0" mode="Prélévement" category="Maison/Charges" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Compte courant" description="De livret A" date="2013/8/18" amount="2450.0" mode="Virement" category="Investissement/Livret A" valueDate="2013/8/18" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Reliquat communications mobile" date="2013/9/7" amount="-6.55" mode="Prélévement" category="Téléphone/Mobile/Abonnements" valueDate="2013/9/7" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Eau" date="2013/9/8" amount="-24.53" mode="Prélévement" category="Maison/Charges" valueDate="2013/9/8" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/9/15" amount="-29.64" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/30"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/9/17" amount="-40.0" mode="Carte bleue" category="Liquide" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/9/18" amount="-20.5" mode="Carte bleue" category="Transport/Moto" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Cantine" date="2013/9/21" amount="-60.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/9/25" amount="-168.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/9/28" amount="-50.0" mode="Carte bleue" category="Liquide" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/9/30" amount="-21.22" mode="Carte bleue" category="Transport/Moto" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/9/30" amount="-32.74" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/10/7" amount="-40.0" mode="Carte bleue" category="Liquide" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet" date="2013/10/10" amount="-27.5" mode="Prélévement" category="Loisirs/Informatique/Abonnements" valueDate="2013/10/10"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/10/9" amount="-44.42" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile JM" date="2013/10/11" amount="-35.33" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Trop perçu EDF" date="2013/10/9" amount="38.4" category="Maison/Charges" valueDate="2013/10/9"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/10/13" amount="6.9" mode="Virement" category="Vie courante/Santé" valueDate="2013/10/13"/>
+<TRANSACTION account="Compte courant" description="Remboursement sécu" date="2013/6/24" amount="13.9" mode="Virement" category="Vie courante/Santé" valueDate="2013/6/24" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Remboursement sécu" date="2013/7/1" amount="144.84" mode="Virement" category="Vie courante/Santé" valueDate="2013/7/1" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Remboursement sécu" date="2013/7/10" amount="15.1" mode="Virement" category="Vie courante/Santé" valueDate="2013/7/10" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Remboursement sécu" date="2013/7/24" amount="14.1" mode="Virement" category="Vie courante/Santé" valueDate="2013/7/24" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Remboursement sécu" date="2013/7/31" amount="15.1" mode="Virement" category="Vie courante/Santé" valueDate="2013/7/31" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet Maman" date="2013/11/10" amount="-35.78" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile fiston" date="2013/11/20" amount="-32.0" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" valueDate="2013/12/31"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile JM" date="2013/11/11" amount="-31.9" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Charges" date="2013/11/5" amount="-61.16" mode="Prélévement" category="Maison/Charges" valueDate="2013/11/5"/>
+<TRANSACTION account="Compte courant" description="Eau" date="2013/11/8" amount="-24.53" mode="Prélévement" category="Maison/Charges" valueDate="2013/11/8"/>
+<TRANSACTION account="Compte courant" description="EDF" date="2013/11/15" amount="-46.0" mode="Prélévement" category="Maison/Charges" valueDate="2013/11/15"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet" date="2013/11/10" amount="-24.5" mode="Prélévement" category="Loisirs/Informatique/Abonnements" valueDate="2013/11/10"/>
+<TRANSACTION account="Compte courant" description="Vers LDD" date="2013/10/15" amount="-2000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/10/15"/>
+<TRANSACTION account="Compte courant" description="MacDo" date="2013/8/16" amount="-17.3" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/8/17" amount="-43.16" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/8/19" amount="-51.35" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/8/20" amount="-22.12" mode="Carte bleue" category="Transport/Moto" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Cantine" date="2013/8/24" amount="-60.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Coiffeur" date="2013/8/26" amount="-22.0" mode="Carte bleue" category="Vie courante/Divers" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/8/28" amount="-44.83" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/8/29" amount="-20.13" mode="Carte bleue" category="Transport/Moto" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/8/29" amount="-60.0" mode="Carte bleue" category="Liquide" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/9/2" amount="-36.92" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Chaussures de foot et autres bricoles sportives" date="2013/9/3" amount="-60.8" mode="Carte bleue" category="Loisirs/Sport" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/9/5" amount="-40.0" mode="Carte bleue" category="Liquide" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/9/5" amount="-50.28" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/9/9" amount="-21.27" mode="Carte bleue" category="Transport/Moto" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet Maman" date="2013/9/10" amount="-35.78" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Achat yapbam.net" date="2013/9/11" amount="-14.35" mode="Carte bleue" category="Loisirs/Informatique/Abonnements" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/9/11" amount="-41.95" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile JM" date="2013/9/11" amount="-64.86" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Abonnement Internet" date="2013/9/10" amount="-27.55" mode="Prélévement" category="Loisirs/Informatique/Abonnements" valueDate="2013/9/10" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Charges" date="2013/9/10" amount="-61.15" mode="Prélévement" category="Maison/Charges" valueDate="2013/9/10" statement="201310"/>
+<TRANSACTION account="Compte courant" description="GDF" date="2013/9/11" amount="-134.69" mode="Prélévement" category="Maison/Charges" valueDate="2013/9/11" statement="201310"/>
+<TRANSACTION account="Compte courant" description="EDF" date="2013/9/15" amount="-46.0" mode="Prélévement" category="Maison/Charges" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Remboursement sécu" date="2013/9/23" amount="14.4" mode="Virement" category="Vie courante/Santé" valueDate="2013/9/23" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Eau" date="2013/9/25" amount="-24.53" mode="Prélévement" category="Maison/Charges" valueDate="2013/10/8" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/9/25" amount="6.6" mode="Virement" category="Vie courante/Santé" valueDate="2013/9/25" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Remboursement sécu" date="2013/9/28" amount="57.36" mode="Virement" category="Vie courante/Santé" valueDate="2013/9/28" statement="201310"/>
+<TRANSACTION account="Compte courant" description="De LDD" date="2013/10/1" amount="500.0" mode="Virement" category="Investissement/LDD" valueDate="2013/10/1" statement="201310"/>
+<TRANSACTION account="Compte courant" description="License Foot" date="2013/9/12" amount="-31.3" mode="Chèque" number="0555375" category="Loisirs/Sport" valueDate="2013/9/30" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Remb mutuelle" date="2013/10/1" amount="24.58" mode="Virement" category="Vie courante/Santé" valueDate="2013/10/1" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Charges" date="2013/10/5" amount="-61.16" mode="Prélévement" category="Maison/Charges" valueDate="2013/10/5" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Trop perçu GDF" date="2013/10/6" amount="44.35" category="Maison/Charges" valueDate="2013/10/6" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/10/9" amount="-21.11" mode="Carte bleue" category="Transport/Moto" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/10/15" amount="-46.71" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/10/17" amount="-20.72" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Cantine" date="2013/10/20" amount="-60.0" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Plein moto" date="2013/10/22" amount="-19.09" mode="Carte bleue" category="Transport/Moto" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Supermarché" date="2013/10/23" amount="-12.29" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/11/30"/>
+<TRANSACTION account="LDD" description="Reçu de compte courant" date="2013/6/30" amount="2000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/6/30" statement="x"/>
+<TRANSACTION account="LDD" description="Reçu de compte courant" date="2013/10/15" amount="2000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/10/15" statement="x"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile fiston" date="2013/10/20" amount="-40.57" mode="Prélévement" category="Téléphone/Mobile/Abonnements" valueDate="2013/10/20"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/10/28" amount="-20.72" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Coiffeur" date="2013/10/27" amount="-22.0" mode="Carte bleue" category="Vie courante/Divers" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Plein Twingo" date="2013/10/30" amount="-35.5" mode="Carte bleue" category="Transport/Voiture" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Entretien chaudière" date="2013/10/30" amount="-126.0" mode="Chèque" number="0555383" category="Maison/Entretien" valueDate="2013/11/1"/>
+<TRANSACTION account="Compte courant" description="De LDD" date="2013/11/2" amount="3000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/11/2"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/10/30" amount="-19.73" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Papier peint + divers" date="2013/5/19" amount="-135.6" mode="Carte bleue" category="Maison/Entretien" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Achat mobile" date="2013/5/18" amount="-188.22" mode="Carte bleue" category="Téléphone/Mobile/Matériel" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Parfum" date="2013/6/2" amount="-67.3" mode="Carte bleue" category="Cadeaux" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Impôt sur le revenu" date="2013/6/15" amount="-216.0" mode="Prélévement" category="Impôts/Revenu" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Impôt sur le revenu" date="2013/7/15" amount="-216.0" mode="Prélévement" category="Impôts/Revenu" valueDate="2013/7/15" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Impôt sur le revenu" date="2013/8/15" amount="-216.0" mode="Prélévement" category="Impôts/Revenu" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Impôt sur le revenu" date="2013/9/15" amount="-216.0" mode="Prélévement" category="Impôts/Revenu" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Impôt sur le revenu" date="2013/10/15" amount="-216.0" mode="Prélévement" category="Impôts/Revenu" valueDate="2013/10/15"/>
+<TRANSACTION account="Compte courant" description="Impôt sur le revenu" date="2013/11/15" amount="-216.0" mode="Prélévement" category="Impôts/Revenu" valueDate="2013/11/15"/>
+<TRANSACTION account="Compte courant" description="Divers bricolage" date="2013/7/24" amount="-20.9" mode="Carte bleue" category="Maison/Entretien" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Moniteur 22&quot;" date="2013/6/29" amount="-164.0" mode="Carte bleue" category="Loisirs/Informatique/Matériel" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Fleurs pour les amis" date="2013/9/19" amount="-25.0" mode="Carte bleue" category="Cadeaux" valueDate="2013/10/31"/>
+<TRANSACTION account="Compte courant" description="Consultation hopital" date="2013/9/18" amount="-6.9" mode="Chèque" number="0555378" category="Vie courante/Santé" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Impôts fonciers" date="2013/6/15" amount="-95.0" mode="Prélévement" category="Impôts/Fonciers" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Impôts fonciers" date="2013/7/15" amount="-95.0" mode="Prélévement" category="Impôts/Fonciers" valueDate="2013/6/15" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Impôts fonciers" date="2013/8/15" amount="-95.0" mode="Prélévement" category="Impôts/Fonciers" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Impôts fonciers" date="2013/9/15" amount="-95.0" mode="Prélévement" category="Impôts/Fonciers" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Impôts fonciers" date="2013/10/15" amount="-95.0" mode="Prélévement" category="Impôts/Fonciers" valueDate="2013/10/15"/>
+<TRANSACTION account="Compte courant" description="Impôts fonciers" date="2013/11/15" amount="-95.0" mode="Prélévement" category="Impôts/Fonciers" valueDate="2013/11/15"/>
+<TRANSACTION account="Compte courant" description="Impôts locaux" date="2013/6/15" amount="-95.0" mode="Prélévement" category="Impôts/Locaux" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Impôts locaux" date="2013/7/15" amount="-95.0" mode="Prélévement" category="Impôts/Locaux" valueDate="2013/6/15" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Impôts locaux" date="2013/8/15" amount="-95.0" mode="Prélévement" category="Impôts/Locaux" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Impôts locaux" date="2013/9/15" amount="-95.0" mode="Prélévement" category="Impôts/Locaux" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Impôts locaux" date="2013/10/15" amount="-95.0" mode="Prélévement" category="Impôts/Locaux" valueDate="2013/10/15"/>
+<TRANSACTION account="Compte courant" description="Impôts locaux" date="2013/11/15" amount="-42.0" mode="Prélévement" category="Impôts/Locaux" valueDate="2013/11/15"/>
+<TRANSACTION account="Compte courant" description="Parking aéroport (solde)" date="2013/7/20" amount="-15.0" mode="Carte bleue" category="Vacances" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Pinceau + peinture" date="2013/8/15" amount="-17.61" mode="Carte bleue" category="Maison/Entretien" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Accompte voiture" date="2013/8/10" amount="-350.0" mode="Prélévement" category="Transport/Voiture" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Assurance" date="2013/9/9" amount="-269.39" mode="TIP" valueDate="2013/9/15" statement="201310">
+<SUBTRANSACTION description="Moto" amount="-125.69" category="Transport/Moto"/>
+<SUBTRANSACTION description="Maison" amount="-93.63" category="Maison/Charges"/>
+<SUBTRANSACTION description="Prévoyance" amount="-33.57"/>
+<SUBTRANSACTION description="Catastrophes naturelles" amount="-10.66"/>
+</TRANSACTION>
+<TRANSACTION account="Compte courant" description="Assurance voiture" date="2013/8/10" amount="-185.28" mode="Prélévement" category="Transport/Voiture" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Carte grise voiture" date="2013/9/1" amount="-191.5" mode="Chèque" number="0555374" category="Transport/Voiture" valueDate="2013/11/3"/>
+<TRANSACTION account="Compte courant" description="Carte SIM" date="2013/6/29" amount="-1.0" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Epicerie" date="2013/7/11" amount="-14.89" mode="Carte bleue" category="Vie courante/Nourriture" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Cotisation football" date="2013/9/12" amount="-44.0" mode="Chèque" number="0555376" category="Loisirs/Sport" valueDate="2013/9/14"/>
+<TRANSACTION account="Compte courant" description="Consultation docteur" date="2013/9/18" amount="-22.0" mode="Chèque" number="0555377" category="Vie courante/Santé" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Consultation docteur" date="2013/10/9" amount="-22.0" mode="Chèque" number="0555380" category="Vie courante/Santé" valueDate="2013/10/11"/>
+<TRANSACTION account="Compte courant" description="Consultation docteur" date="2013/10/28" amount="-22.0" mode="Chèque" number="0555382" category="Vie courante/Santé" valueDate="2013/10/30"/>
+<TRANSACTION account="Compte courant" description="Inscription école fiston" date="2013/7/9" amount="-800.0" mode="Chèque" number="0555372" category="Scolarité" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Inscription école fiston (solde)" date="2013/8/23" amount="-5200.0" mode="Chèque" number="0555373" category="Scolarité" valueDate="2013/8/28" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Paye" date="2013/9/29" amount="3245.0" mode="Virement" category="Salaire" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Paye" date="2013/10/30" amount="3245.0" mode="Virement" category="Salaire" valueDate="2013/10/30"/>
+<TRANSACTION account="Compte courant" description="Paye 06/2012" date="2013/6/30" amount="3245.0" mode="Virement" category="Salaire" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Paye 07/2012" date="2013/7/31" amount="3245.0" mode="Virement" category="Salaire" valueDate="2013/7/30" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Paye 08/2012" date="2013/8/28" amount="3245.0" mode="Virement" category="Salaire" valueDate="2013/8/28" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Portable fiston" date="2013/7/17" amount="-42.23" mode="Prélévement" category="Téléphone/Mobile/Abonnements" valueDate="2013/7/17" statement="201308"/>
+<TRANSACTION account="Compte courant" description="Portable fiston" date="2013/6/17" amount="-32.0" mode="Prélévement" category="Téléphone/Mobile/Abonnements" valueDate="2013/6/17" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Portable fiston" date="2013/8/18" amount="-73.42" mode="Prélévement" category="Téléphone/Mobile/Abonnements" valueDate="2013/8/18" statement="201309"/>
+<TRANSACTION account="Compte courant" description="Portable JM" date="2013/6/15" amount="-33.13" mode="Prélévement" category="Téléphone/Mobile/Abonnements" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Compte courant" description="Prime à la casse et écolo" date="2013/11/15" amount="2700.0" mode="Virement" category="Transport/Voiture" valueDate="2013/11/15"/>
+<TRANSACTION account="Compte courant" description="Recommandé assurance voiture" date="2013/10/30" amount="-6.93" mode="Carte bleue" category="Transport/Voiture" valueDate="2013/11/30"/>
+<TRANSACTION account="Compte courant" description="Remboursement inscription école fiston" date="2013/11/7" amount="1500.0" mode="Virement" category="Scolarité" valueDate="2013/11/7"/>
+<TRANSACTION account="LDD" description="Vers compte courant" date="2013/7/28" amount="-2000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/7/15" statement="x"/>
+<TRANSACTION account="Livret A" description="Vers compte courant" date="2013/8/18" amount="-2450.0" category="Investissement/Livret A" valueDate="2013/8/15" statement="x"/>
+<TRANSACTION account="LDD" description="Vers compte courant" date="2013/9/29" amount="-500.0" mode="Virement" category="Investissement/LDD" valueDate="2013/9/29" statement="x"/>
+<TRANSACTION account="LDD" description="Vers compte courant" date="2013/11/2" amount="-3000.0" mode="Virement" category="Investissement/LDD" valueDate="2013/11/2" statement="x"/>
+<TRANSACTION account="Compte courant" description="Abonnement mobile fiston" date="2013/9/20" amount="-32.0" mode="Carte bleue" category="Téléphone/Mobile/Abonnements" valueDate="2013/10/31" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Retrait" date="2013/8/14" amount="-20.0" mode="Carte bleue" category="Liquide" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Compte courant" description="Solde voiture" date="2013/11/5" amount="-4615.4" mode="Prélévement" category="Transport/Voiture" valueDate="2013/11/5"/>
+<TRANSACTION account="Compte courant" description="Virement fiston" date="2013/11/1" amount="-200.0" mode="Virement" valueDate="2013/11/1">
+<SUBTRANSACTION description="Argent de poche" amount="-60.0" category="Argent de poche/fiston"/>
+<SUBTRANSACTION description="Repas midi" amount="-100.0" category="Vie courante/Nourriture"/>
+<SUBTRANSACTION description="Abonnement mobile" amount="-40.0" category="Téléphone/Mobile/Abonnements"/>
+</TRANSACTION>
+<TRANSACTION account="Compte courant" description="Vacances ski" date="2013/9/28" amount="-880.0" mode="Chèque" number="0555379" category="Vacances" valueDate="2013/1/15"/>
+</DATA>

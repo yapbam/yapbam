@@ -11,6 +11,7 @@ import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Service;
 import com.fathzer.soft.jclop.SynchronizationState;
 
+import net.yapbam.data.xml.YapbamSerializer;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
 import net.yapbam.gui.persistence.DataWrapper;
@@ -39,6 +40,13 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 	
 	@Override
 	protected ReaderResult doProcessing() throws Exception {
+		if ("classpath".equals(uri.getScheme())) {
+			// Unfortunately, the classpath scheme does not fit well with JClop service model.
+			// There's no local java.io.File as the data is loaded from a classpath resource.
+			// So, we have to make this ugly patch 
+			this.data = YapbamSerializer.read(uri, null, null);
+			return new ReaderResult(State.FINISHED, SynchronizationState.SYNCHRONIZED);
+		}
 		SynchronizationState syncState;
 		if (!command.equals(SynchronizeCommand.NOTHING)) {
 			this.isSynchronizing = true;

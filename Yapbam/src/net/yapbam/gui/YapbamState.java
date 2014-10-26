@@ -71,11 +71,13 @@ public class YapbamState {
 		this.properties = new Properties();
 		try {
 			if (Portable.isPortable()) {
-				FileInputStream inStream = new FileInputStream(getFile());
-				try {
-					properties.load(inStream);
-				} finally {
-					inStream.close();
+				if (!Preferences.INSTANCE.isFirstRun()) {
+					FileInputStream inStream = new FileInputStream(getFile());
+					try {
+						properties.load(inStream);
+					} finally {
+						inStream.close();
+					}
 				}
 			} else {
 				PreferencesUtils.fromPreferences(getPreferences(), properties);
