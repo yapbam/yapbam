@@ -5,6 +5,7 @@ import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.persistence.classpath.ClasspathPersistenceAdapter;
 import net.yapbam.gui.persistence.dropbox.YapbamDropboxPersistenceAdapter;
 import net.yapbam.gui.persistence.file.FilePersistenceAdapter;
 
@@ -15,6 +16,7 @@ public class YapbamPersistenceManager extends PersistenceManager {
 		super();
 		add(new FilePersistenceAdapter());
 		add(new YapbamDropboxPersistenceAdapter());
+		add(new ClasspathPersistenceAdapter());
 		
 		// Load adapters under development
 		String testedAdapter = System.getProperty("testedPersistenceAdapter.className"); //$NON-NLS-1$

@@ -58,7 +58,7 @@ public abstract class PersistenceManager {
 	public void add(PersistenceAdapter adapter) {
 		String scheme = adapter.getService().getScheme();
 		if (adaptersMap.containsKey(scheme)) {
-			throw new IllegalArgumentException(Formatter.format("Can''t have two adapters for {0} scheme",scheme));
+			throw new IllegalArgumentException(Formatter.format("Can't have two adapters for {0} scheme",scheme));
 		}
 		adaptersMap.put(scheme, adapter);
 		schemes.add(scheme);
@@ -132,7 +132,9 @@ public abstract class PersistenceManager {
 	private URI getURI(Window owner, URI uri, boolean save) {
 		URIChooserDialog dialog = getChooserDialog(owner);
 		dialog.setSaveDialog(save);
-		dialog.setSelectedURI(uri);
+		if (dialog.hasScheme(uri.getScheme())) {
+			dialog.setSelectedURI(uri);
+		}
 		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open"); //$NON-NLS-1$ //$NON-NLS-2$
 		dialog.setTitle(title);
 		dialog.pack();
@@ -144,11 +146,14 @@ public abstract class PersistenceManager {
 	 * @return a dialog
 	 */
 	public URIChooserDialog getChooserDialog(Window owner) {
-		URIChooser[] panels = new URIChooser[getAdaptersNumber()];
-		for (int i = 0; i < panels.length; i++) {
-			panels[i] = getAdapter(i).buildChooser();
+		List<URIChooser> panels = new ArrayList<URIChooser>(getAdaptersNumber());
+		for (int i = 0; i < getAdaptersNumber(); i++) {
+			URIChooser chooser = getAdapter(i).buildChooser();
+			if (chooser!=null) {
+				panels.add(chooser);
+			}
 		}
-		URIChooserDialog dialog = new URIChooserDialog(owner, "", panels); //$NON-NLS-1$
+		URIChooserDialog dialog = new URIChooserDialog(owner, "", panels.toArray(new URIChooser[panels.size()])); //$NON-NLS-1$
 		dialog.setLocale(LocalizationData.getLocale());
 		return dialog;
 	}
@@ -214,6 +219,7 @@ public abstract class PersistenceManager {
 							dialog.setVisible(true);
 						} else if (exception instanceof UnsupportedSchemeException) {
 							// The scheme is no more supported, simply ignore the error
+							//TODO Seems a strange idea, probably it should be better to inform the user
 						} else {
 							throw new RuntimeException(exception);
 						}

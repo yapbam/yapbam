@@ -92,20 +92,16 @@ public class YapbamSerializer {
 	 * @throws AccessControlException
 	 */
 	public static GlobalData read(URI uri, String password, ProgressReport report) throws IOException, AccessControlException {
-		if ("file".equals(uri.getScheme()) || "ftp".equals(uri.getScheme())) { //$NON-NLS-1$ //$NON-NLS-2$
-			InputStream in = uri.toURL().openStream();
-			try {
-				GlobalData redData = new Serializer().read(password, in, report);
-				if (redData!=null) {
-					redData.setURI(uri);
-					redData.setChanged(false);
-				}
-				return redData;
-			} finally {
-				in.close();
+		InputStream in = getStream(uri);
+		try {
+			GlobalData redData = new Serializer().read(password, in, report);
+			if (redData!=null) {
+				redData.setURI(uri);
+				redData.setChanged(false);
 			}
-		} else {
-			throw new IOException("Unsupported protocol: "+uri.getScheme()); //$NON-NLS-1$
+			return redData;
+		} finally {
+			in.close();
 		}
 	}
 	
@@ -115,11 +111,23 @@ public class YapbamSerializer {
 	 * @throws IOException If an I/O error occurred
 	 */
 	public static boolean isPasswordOk(URI uri, String password) throws IOException {
-		InputStream global = uri.toURL().openStream();
+		InputStream global = getStream(uri);
 		try {
 			return new Serializer().isPasswordOk(global, password);
 		} finally {
 			global.close();
+		}
+	}
+	
+	private static InputStream getStream(URI uri) throws IOException {
+		String scheme = uri.getScheme();
+		if ("file".equals(scheme) || "ftp".equals(scheme)) { //$NON-NLS-1$ //$NON-NLS-2$
+			return uri.toURL().openStream();
+		} else if ("classpath".equals(scheme)) {
+			String resourcePath = uri.toString().substring("classpath".length()+1);
+			return YapbamSerializer.class.getResourceAsStream(resourcePath);
+		} else {
+			throw new IOException("Unsupported protocol: "+scheme); //$NON-NLS-1$
 		}
 	}
 }

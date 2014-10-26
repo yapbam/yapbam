@@ -123,13 +123,12 @@
 						<include>${customized.jar.name}.jar</include>
 					</includes>
 					<!-- keystore and password should be defined in the settings.xml file 
-						example: <profile> <id>nexus</id> ... <properties> <sicg.keystore.password>the 
-						keystore pwd</sicg.keystore.password> </properties> </profile>
-						//TODO use yapbam certificate 
+						example: <profile> <id>yapbam</id> ... <properties> <yapbam.keystore.pwd>the 
+						keystore pwd</yapbam.keystore.pwd> </properties> </profile>
 					-->
-					<keystore>http://sicg.tpz.renault.fr/DocDev/keys.jks</keystore>
-					<storepass>${sicg.keystore.password}</storepass>
-					<alias>iaa</alias>
+					<keystore>${yapbam.keystore}</keystore>
+					<storepass>${yapbam.keystore.pwd}</storepass>
+					<alias>fathzer</alias>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -148,7 +147,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>jclop-dropbox</artifactId>
-			<version>0.0.2</version>
+			<version>0.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
@@ -192,6 +191,11 @@
 			<groupId>com.fathzer</groupId>
 			<artifactId>jlocal</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fathzer</groupId>
+			<artifactId>jclop</artifactId>
+			<version>0.0.4</version>
 		</dependency>
 	</dependencies>
 </project>

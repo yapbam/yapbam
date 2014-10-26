@@ -11,7 +11,7 @@ import com.fathzer.soft.jclop.swing.URIChooser;
  * <br>JClop data persistence model allows developers to implement adapters that allow the users to
  * save/read their data in various locations (computer's disks, ftp server, Cloud services, etc ...).
  * <br>An adapter implements the save/read to a particular destination.
- * For example, the FilePersistencePlugin implements saving/reading to/from the computer's disks.
+ * For example, the FilePersistenceAdapter implements saving/reading to/from the computer's disks.
  * @author Jean-Marc Astesana
  * <BR>License : GPL v3
  */
@@ -40,7 +40,7 @@ public abstract class PersistenceAdapter {
 	 * this is mandatory.
 	 * <br>The getSelectedURI of the returned component must have the same scheme returned by the getScheme method
 	 * of this class.
-	 * @return a component
+	 * @return a component or null if the adapter doesn't provide any chooser facility
 	 * @see URIChooser#getSelectedURI()
 	 */
 	public abstract URIChooser buildChooser();

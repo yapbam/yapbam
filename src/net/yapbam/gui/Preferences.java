@@ -6,7 +6,6 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.Authenticator;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -17,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -140,64 +138,36 @@ public class Preferences {
 	}
 
 	private void load() throws IOException {
-System.out.println ("Start loading preferences");
 		if (Portable.isPortable()) {
-System.out.println ("Application is portable");
 			this.firstRun = !getFile().exists();
-System.out.println ("Preference file "+getFile()+" exists: "+!this.firstRun);
 			if (!firstRun) {
 				FileInputStream inStream = new FileInputStream(getFile());
 				try {
 					properties.load(inStream);
-System.out.println ("Preferences are loaded from file");
 				} finally {
 					inStream.close();
 				}
 			}
 		} else {
-System.out.println ("Application is not portable");
 			java.util.prefs.Preferences prefs = getJavaPref();
 			this.firstRun = PreferencesUtils.isEmpty(prefs);
-System.out.println ("Preferences exists"+!this.firstRun);
 			PreferencesUtils.fromPreferences(prefs, properties);
-System.out.println ("Preferences are loaded from java repository");
 		}
-displayProperties("Loaded Preferences:", properties, System.out);
-	}
-
-	public static void displayProperties(String title, Properties properties, PrintStream out) {
-		if (title!=null) {
-			out.println (title);
-		}
-		for (Entry<Object, Object> entry : properties.entrySet()) {
-			if (title!=null) {
-				out.print("  ");
-			}
-			out.println (entry.getKey()+"="+entry.getValue());
-		}
-		out.println ();
 	}
 
 	public void save() throws IOException {
-System.out.println ("Start saving preferences");
 		if (Portable.isPortable()) {
-System.out.println ("Saving preferences to local storage");
 			File file = getFile();
 			file.getParentFile().mkdirs();
-System.out.println ("Parent file was created");
 			FileOutputStream out = FileUtils.getHiddenCompliantStream(file);
 			try {
 				properties.store(out, "Yapbam preferences"); //$NON-NLS-1$
-System.out.println ("Properties were saved successfully to file "+file);
 			} finally {
 				out.close();
 			}
 		} else {
-System.out.println ("Saving preferences to java repository");
 			PreferencesUtils.toPreferences(getJavaPref(), this.properties, true);
-System.out.println ("Properties were successfully saved to java repository");
 		}
-		displayProperties("Saved Preferences:", properties, System.out);
 	}
 
 	private static java.util.prefs.Preferences getJavaPref() {

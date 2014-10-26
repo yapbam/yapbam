@@ -12,7 +12,6 @@ import java.awt.Insets;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 import javax.swing.UIManager;
@@ -26,7 +25,6 @@ import net.yapbam.gui.persistence.YapbamPersistenceManager;
 
 import javax.swing.JSeparator;
 
-import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Browser;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
@@ -63,7 +61,7 @@ public class WelcomePanel extends JPanel {
 	private URI getURI(String key) {
 		try {
 			String uriString = urlsResourceBundle.getString(key);
-			if (uriString.startsWith("http:")) {
+			if (uriString.contains(":")) {
 				return new URI(uriString);
 			}
 			return new File(uriString).toURI();
@@ -133,24 +131,14 @@ public class WelcomePanel extends JPanel {
 		GridBagLayout gblShortcutsPanel = new GridBagLayout();
 		shortcutsPanel.setLayout(gblShortcutsPanel);
 		
-		final File file = new File(getURI("sampleFile")); //$NON-NLS-1$
+		final URI file = getURI("sampleFile"); //$NON-NLS-1$
 		final JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				YapbamPersistenceManager.MANAGER.read(Utils.getOwnerWindow(WelcomePanel.this), new YapbamDataWrapper(WelcomePanel.this.data),
-						file.toURI(), new YapbamPersistenceManager.ErrorProcessor() {
-					public boolean processError(Throwable e) {
-						String message = Formatter.format(LocalizationData.get("Welcome.sampleData.openFails"), //$NON-NLS-1$
-								file.getAbsolutePath());
-						JOptionPane.showMessageDialog(Utils.getOwnerWindow(WelcomePanel.this), message,
-								LocalizationData.get("ErrorManager.title"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-						btnOpenSampleData.setEnabled(false);
-						return true;
-					}
-				});
+						file, null);
 			}
 		});
-		btnOpenSampleData.setEnabled(file.exists() && file.isFile() && file.canRead());
 		btnOpenSampleData.setHorizontalAlignment(SwingConstants.LEFT);
 		btnOpenSampleData.setToolTipText(LocalizationData.get("Welcome.sampleData.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbcBtnOpenSampleData = new GridBagConstraints();
