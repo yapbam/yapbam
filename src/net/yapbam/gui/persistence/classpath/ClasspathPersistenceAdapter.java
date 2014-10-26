@@ -5,18 +5,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.PersistenceAdapter;
 import net.yapbam.util.Portable;
 
-import com.fathzer.soft.ajlib.utilities.StringUtils;
 import com.fathzer.soft.jclop.Account;
 import com.fathzer.soft.jclop.Cancellable;
 import com.fathzer.soft.jclop.Entry;
@@ -78,7 +76,12 @@ public class ClasspathPersistenceAdapter extends PersistenceAdapter {
 					throw new IllegalArgumentException();
 				}
 				Account account = new Account(this, "1", "common", BigInteger.ZERO);
-				return new Entry(account, "x"); //TODO
+				return new Entry(account, uri.toString().substring("classpath".length()+1));
+			}
+
+			@Override
+			public String getDisplayable(URI uri) {
+				return LocalizationData.get("Generic.example")+getEntry(uri).getDisplayName();
 			}
 		});
 	}
