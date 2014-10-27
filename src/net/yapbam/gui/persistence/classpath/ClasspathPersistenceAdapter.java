@@ -24,6 +24,7 @@ import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.swing.URIChooser;
 
 public class ClasspathPersistenceAdapter extends PersistenceAdapter {
+	public static final String SCHEME = "classpath";
 
 	public ClasspathPersistenceAdapter() {
 		super(new Service(new File(Portable.getDataDirectory(), "cache"), true) {
@@ -36,7 +37,7 @@ public class ClasspathPersistenceAdapter extends PersistenceAdapter {
 			
 			@Override
 			public String getScheme() {
-				return "classpath";
+				return SCHEME;
 			}
 			
 			@Override
@@ -76,7 +77,7 @@ public class ClasspathPersistenceAdapter extends PersistenceAdapter {
 					throw new IllegalArgumentException();
 				}
 				Account account = new Account(this, "1", "common", BigInteger.ZERO);
-				return new Entry(account, uri.toString().substring("classpath".length()+1));
+				return new Entry(account, uri.toString().substring(SCHEME.length()+1));
 			}
 
 			@Override
