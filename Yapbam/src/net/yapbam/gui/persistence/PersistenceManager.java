@@ -132,7 +132,7 @@ public abstract class PersistenceManager {
 	private URI getURI(Window owner, URI uri, boolean save) {
 		URIChooserDialog dialog = getChooserDialog(owner);
 		dialog.setSaveDialog(save);
-		if (dialog.hasScheme(uri.getScheme())) {
+		if ((uri!=null) && dialog.hasScheme(uri.getScheme())) {
 			dialog.setSelectedURI(uri);
 		}
 		String title = save?LocalizationData.get("MainMenu.Save"):LocalizationData.get("MainMenu.Open"); //$NON-NLS-1$ //$NON-NLS-2$

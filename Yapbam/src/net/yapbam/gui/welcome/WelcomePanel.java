@@ -135,8 +135,10 @@ public class WelcomePanel extends JPanel {
 		final JButton btnOpenSampleData = new JButton(LocalizationData.get("Welcome.sampleData")); //$NON-NLS-1$
 		btnOpenSampleData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				YapbamPersistenceManager.MANAGER.read(Utils.getOwnerWindow(WelcomePanel.this), new YapbamDataWrapper(WelcomePanel.this.data),
-						file, null);
+				if (YapbamPersistenceManager.MANAGER.read(Utils.getOwnerWindow(WelcomePanel.this), new YapbamDataWrapper(WelcomePanel.this.data),
+						file, null)) {
+					WelcomePanel.this.data.setURI(null);
+				}
 			}
 		});
 		btnOpenSampleData.setHorizontalAlignment(SwingConstants.LEFT);

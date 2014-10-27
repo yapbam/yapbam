@@ -15,6 +15,7 @@ import net.yapbam.data.event.URIChangedEvent;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.persistence.classpath.ClasspathPersistenceAdapter;
 
 /** This plugin remembers the latest opened files and displays them in a menu Item.
  */
@@ -45,7 +46,7 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 
 	private void updateMenu() {
 		URI currentUri = data.getURI();
-		if ((currentUri!=null) && !currentUri.equals(lastURI)) {
+		if ((currentUri!=null) && !currentUri.equals(lastURI) && isValid(currentUri)) {
 			// Put the uri at the top of the list
 			latest.remove(currentUri);
 			latest.add(0, currentUri);
@@ -64,6 +65,10 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 			}
 		}
 		menu.setEnabled(!empty);
+	}
+
+	private boolean isValid(URI uri) {
+		return !uri.getScheme().equals(ClasspathPersistenceAdapter.SCHEME);
 	}
 
 	private int getSizeLimit() {
