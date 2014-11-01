@@ -12,6 +12,7 @@ import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.MainFrame;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
+import net.yapbam.util.Portable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +46,10 @@ public class PreferenceDialog extends AbstractDialog<Boolean, Boolean> {
 		this.panels = new ArrayList<PreferencePanel>();
 		MainFrame frame = (MainFrame) getOwner();
 		this.panels.addAll(Arrays.asList(new PreferencePanel[]{new LocalizationPanel(), new LookAndFeelPanel(frame),
-				new TransactionEditingPanel(), new ProxyPanel(), new AutoUpdatePanel(), new ReportErrorPanel(), new RestoreStatePanel()}));
+				new TransactionEditingPanel(), new ProxyPanel(), new ReportErrorPanel(), new RestoreStatePanel()}));
+		if (!Portable.isWebStarted()) {
+			this.panels.add(new AutoUpdatePanel());
+		}
 		for (int i=0 ; i<frame.getPlugInsNumber(); i++) {
 			PreferencePanel preferencePanel = frame.getPlugIn(i).getPreferencePanel();
 			if (preferencePanel!=null) {

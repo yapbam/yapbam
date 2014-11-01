@@ -4,7 +4,7 @@
 	| if you want to run this build file, you have to set the following commonsnetpath, commonpath and |
 	| jfreechartpath, etc ... properties in the customPaths.properties file used in the line below.    |
 	| These properties have to reference the apache commonsnet, jfreeChart, JCommon, OpenCSV, A-JLib,  |
-	| Javaluator, JClop, jlocal and YapbamCommons sources.                                                     |
+	| Javaluator, JClop, jlocal and YapbamCommons sources.                                             |
 	| These sources are available at http://commons.apache.org/net/, http://www.jfree.org and          |
 	| http://sourceforge.net/projects/ajlib/                                                           |
 	| Here is a sample of what this file could contain :                                               |
@@ -14,13 +14,19 @@
 	| jfreechartpath=C:/username/externalLibs/jFreeChart ...                                           |
 	| This file may also contains a pointer to PortableApps.comInstaller.exe (in the variable          |
 	| portableappsinstallerpath).                                                                      |
+	| The jarsign.secret.properties should contains the following properties:                          |
+	| - sign.keystore: The path to the keystore used to signed the jar.                                |
+	| - sign.keystore.pwd: The keystore password.                                                      |
+	| - sign.alias: The alias used to sign the jar.                                                    |
+	| - sign.alias.pwd: The alias password.                                                            |
 	<================================================================================================-->
 	<property file="customPaths.properties"/>
-	
+	<property file="jarsign.secret.properties"/>
+		
 	<!-- Yapbam version. This should have the following format = major.minor.build.comment were
 		major, minor and build are integers. comment is a string that do not contain space character. 
 	 -->
-	<property name="yapbamVersion" value="0.17.6"/>
+	<property name="yapbamVersion" value="0.17.7"/>
 	<tstamp><format property="TODAY" pattern="dd/MM/yyyy" locale="fr,FR"/></tstamp>
 	
 	<property name="releaseDir" value="YapbamRelease"/>
@@ -42,10 +48,6 @@
 		<jar destfile="updater.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.updater.Updater"/>
-	      <attribute name="Permissions" value="all-permissions"/>
-				<attribute name="Application-Name" value="Yapbam"/>
-				<attribute name="Entry-Point" value="net.yapbam.gui.MainFrame"/>
-				<attribute name="Trusted-Only" value="true"/>
 			</manifest>
 			<fileset dir="releaseCompile"/>
 		</jar>
@@ -93,11 +95,20 @@
 			<manifest>
 				<attribute name="Main-Class" value="net.yapbam.gui.MainFrame"/>
 				<attribute name="SplashScreen-Image" value="net/yapbam/gui/images/splash.png"/>
+	 			<attribute name="Permissions" value="all-permissions"/>
+				<attribute name="Application-Name" value="Yapbam"/>
+				<attribute name="Entry-Point" value="net.yapbam.gui.MainFrame"/>
+				<attribute name="Trusted-Only" value="true"/>
 			</manifest>
 			<fileset dir="releaseCompile">
 			    <exclude name="org/slf4j/impl/**"/>
 		    </fileset>
 		</jar>
+		<signjar jar="${appDir}/program.jar"
+		  keystore="${sign.keystore}"
+		  storepass="${sign.keystore.pwd}"
+		  alias="${sign.alias}"
+		  keypass="${sicg.alias.pwd}"/>
 		<delete dir="releaseCompile"/>
 		<copy todir="${othersDir}">
 	    	<fileset dir="Other" includes="**/*.*"/>
