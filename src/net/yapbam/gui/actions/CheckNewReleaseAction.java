@@ -80,7 +80,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 							LoggerFactory.getLogger(CheckNewReleaseAction.class).warn("Unable to contact yapbam site", e);
 						}
 					}
-				});
+				}).start();
 			} else {
 				CheckUpdateDialog.check(owner, true, forced);
 			}
