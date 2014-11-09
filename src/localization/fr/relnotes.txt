@@ -5,6 +5,7 @@ known
 
 version	0.17.7 (??/11/2014)
 fix
+	Lorsque qu'on voulait entrer la formule 1/0.5 dans la calculatrice, une erreur survenait quand on tapait le caractère 0.
 	Lorsque Yapbam était installé dans un dossier protégé en écriture, il était impossible d'effacer certaines préférences (le réglage du proxy, par exemple).
 
 version	0.17.6 (20/10/2014)

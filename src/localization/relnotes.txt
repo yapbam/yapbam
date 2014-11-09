@@ -5,6 +5,7 @@ known
 
 version	0.17.7 (11/??/2014)
 fix
+	When you tried to enter the formula 1/0.5 in the calculator, an error occurred when you typed the zero.
 	When Yapbam was installed in a write protected folder, it was impossible to clear some preferences (The proxy settings, for instance).
 
 version	0.17.6 (10/20/2014)
