@@ -256,6 +256,8 @@ public class CalculatorPanel extends JPanel {
 			value = evaluator.evaluate(evaluatedString);
 		} catch (IllegalArgumentException e) {
 			value = null;
+		} catch (ArithmeticException e) {
+			value = null;
 		}
 		formulaIsResult = (this.value!=null) && (character==EQUAL);
 		getResult().setForeground(value==null?this.invalidColor:this.validColor);
