@@ -104,11 +104,11 @@
 			    <exclude name="org/slf4j/impl/**"/>
 		    </fileset>
 		</jar>
-		<signjar jar="${appDir}/program.jar"
+		<!-- signjar jar="${appDir}/program.jar"
 		  keystore="${sign.keystore}"
 		  storepass="${sign.keystore.pwd}"
 		  alias="${sign.alias}"
-		  keypass="${sicg.alias.pwd}"/>
+		  keypass="${sicg.alias.pwd}"/-->
 		<delete dir="releaseCompile"/>
 		<copy todir="${othersDir}">
 	    	<fileset dir="Other" includes="**/*.*"/>
