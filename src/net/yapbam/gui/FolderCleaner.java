@@ -71,7 +71,6 @@ class FolderCleaner {
 	 */
 	@SuppressWarnings("deprecation")
 	private static void clean(File installationFolder) {
-//		System.out.println ("start cleaning of "+installationFolder);
 		try {
 			Collection<CleaningJob> jobs = new ArrayList<FolderCleaner.CleaningJob>();
 			// Files we need to remove are stored in a resource bundle file
@@ -88,6 +87,8 @@ class FolderCleaner {
 			// It remains that damned help directory
 			new File(installationFolder,"help/fr").delete();
 			new File(installationFolder,"help").delete();
+			// ... and, maybe sample file directory
+			new File(installationFolder,"Other/samples").delete();
 		} catch (Throwable e) {
 			// This method must never fail.
 			// If there's a problem, forget cleaning ... it's not so important.
@@ -97,23 +98,20 @@ class FolderCleaner {
 	/** Cleans yapbam installation folder.
 	 */
 	static void clean() {
-		if (needToClean()) {
-			// If we need to perform cleaning then clean
-			clean (Portable.getApplicationDirectory());
-		}
-	}
-	
-	private static boolean needToClean() {
 		// If we never ran the 0.7.2 for the first time => There's no preferences in the data directory ?
 		// Danger, if we call the Preferences.getFile() method here to identify where should be the preference
 		// file, it will initialize Preferences.INSTANCE and its firstRun attribute.
 		// It would leads to think that it's the first Yapbam run ... but it's not if the yapbam pref file is
 		// simply at the wrong place.
-		if (!Portable.isPortable()) {
-			return false;
+		if (Portable.isPortable()) {
+			// If we need to perform cleaning then clean in a background thread
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					clean (Portable.getApplicationDirectory());
+				}
+			}).start();
 		}
-		File prefFile = new File(Portable.getDataDirectory(), ".yapbampref");
-		return !prefFile.exists();
 	}
 	
 	/** A cleaning job.
@@ -138,7 +136,6 @@ class FolderCleaner {
 		/** Performs the cleaning.
 		 */
 		void clean() {
-//			System.out.println ("Start cleaning of "+source);
 			try {
 				if (source.exists() && source.canWrite() && isValidCheckSum()) {
 					if (this.destination==null) {
@@ -166,7 +163,6 @@ class FolderCleaner {
 					return true;
 				}
 			}
-//			System.out.println (source + " invalid checksum");
 			return false;
 		}
 	}
