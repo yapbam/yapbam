@@ -201,10 +201,14 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 					}
 					CategoryAndType ct = EditionWizard.getHeaviest(map);
 					this.category = ct.getCategory();
-					if (ct.isReceipt() && amount<0) {
-						amount = Math.abs(amount);
-					} else if (!ct.isReceipt() && amount>0) {
+					if (!ct.isReceipt() && amount>0) {
 						amount = -amount;
+					} else if (ct.isReceipt()) {
+						if (GlobalData.AMOUNT_COMPARATOR.compare(amount,0.0)==0) {
+							amount = Double.MIN_VALUE;
+						} else if (amount<0) {
+							amount = Math.abs(amount);
+						}
 					}
 				}
 			}
