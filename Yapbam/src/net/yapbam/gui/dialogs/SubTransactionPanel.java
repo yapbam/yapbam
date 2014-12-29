@@ -29,7 +29,7 @@ public class SubTransactionPanel extends JPanel {
 	private TextWidget descriptionField = null;
 	private CurrencyWidget amountField = null;
 	private CategoryWidget categoryPanel = null;
-	private JCheckBox jCheckBox = null;
+	private JCheckBox receiptCheckBox = null;
 	
 	private GlobalData data;
 	private Double amount;
@@ -53,10 +53,10 @@ public class SubTransactionPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-		gridBagConstraints12.gridx = 2;
-		gridBagConstraints12.anchor = GridBagConstraints.WEST;
-		gridBagConstraints12.gridy = 1;
+		GridBagConstraints gbcReceiptCheckBox = new GridBagConstraints();
+		gbcReceiptCheckBox.gridx = 2;
+		gbcReceiptCheckBox.anchor = GridBagConstraints.WEST;
+		gbcReceiptCheckBox.gridy = 1;
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
@@ -105,7 +105,7 @@ public class SubTransactionPanel extends JPanel {
 		this.add(getAmountField(), gridBagConstraints3);
 		this.add(getCategoryPanel(), gridBagConstraints4);
 		this.add(jLabel2, gridBagConstraints11);
-		this.add(getJCheckBox(), gridBagConstraints12);
+		this.add(getReceiptCheckBox(), gbcReceiptCheckBox);
 		
 		descriptionField.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 			@Override
@@ -120,7 +120,7 @@ public class SubTransactionPanel extends JPanel {
 			public void propertyChange(PropertyChangeEvent evt) {
 				Double old = amount;
 				amount = amountField.getValue();
-				if (!jCheckBox.isSelected() && (amount!=null)) {
+				if (!receiptCheckBox.isSelected() && (amount!=null)) {
 					amount = -amount;
 				}
 				SubTransactionPanel.this.firePropertyChange(AMOUNT_PROPERTY, old, amount);
@@ -194,12 +194,12 @@ public class SubTransactionPanel extends JPanel {
 	 * This method initializes jCheckBox	
 	 * @return javax.swing.JCheckBox	
 	 */
-	private JCheckBox getJCheckBox() {
-		if (jCheckBox == null) {
-			jCheckBox = new JCheckBox();
-			jCheckBox.setText(LocalizationData.get("TransactionDialog.receipt")); //$NON-NLS-1$
-			jCheckBox.setToolTipText(LocalizationData.get("SubTransactionDialog.receipt.tooltip")); //$NON-NLS-1$
-			jCheckBox.addItemListener(new java.awt.event.ItemListener() {
+	private JCheckBox getReceiptCheckBox() {
+		if (receiptCheckBox == null) {
+			receiptCheckBox = new JCheckBox();
+			receiptCheckBox.setText(LocalizationData.get("TransactionDialog.receipt")); //$NON-NLS-1$
+			receiptCheckBox.setToolTipText(LocalizationData.get("SubTransactionDialog.receipt.tooltip")); //$NON-NLS-1$
+			receiptCheckBox.addItemListener(new java.awt.event.ItemListener() {
 				@Override
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if ((amount!=null) && (amount!=0)) {
@@ -210,7 +210,7 @@ public class SubTransactionPanel extends JPanel {
 				}
 			});
 		}
-		return jCheckBox;
+		return receiptCheckBox;
 	}
 
 	public Double getAmount() {
@@ -219,7 +219,7 @@ public class SubTransactionPanel extends JPanel {
 	
 	public void setAmount(Double amount) {
 		Object old = this.amount;
-		this.jCheckBox.setSelected(amount>=0);
+		this.receiptCheckBox.setSelected(amount>0);
 		this.amountField.setValue(Math.abs(amount));
 		this.amount = amount;
 		this.firePropertyChange(AMOUNT_PROPERTY, old, amount);
