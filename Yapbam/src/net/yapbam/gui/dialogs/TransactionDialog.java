@@ -242,6 +242,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		checkNumber.setText(t.getNumber());
 		defDate.setDate(t.getValueDate());
 		statement.setText(t.getStatement());
+		optionnalUpdatesOnModeChange();
 		this.ignoreEvents = false;
 	}
 

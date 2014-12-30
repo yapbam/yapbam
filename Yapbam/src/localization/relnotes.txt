@@ -6,6 +6,7 @@ known
 version 0.17.8 (01/02/2015)
 fix
 	When selecting a predefined label in the sub-transaction creation dialog, the receipt box was systematically checked.
+	When entering transactions in bulk mode, for an operation other than the first, when we chose a predefined label involving the use of a checkbook, check number was not filled.
 
 version	0.17.7 (11/10/2014)
 fix

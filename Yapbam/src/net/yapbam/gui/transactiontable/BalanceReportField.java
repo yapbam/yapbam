@@ -33,7 +33,7 @@ public class BalanceReportField extends JToggleButton {
 		super();
 		this.contentPattern = contentPattern;
 		this.setOpaque(true);
-		this.setFont(new Font(getFont().getFontName(), getFont().getStyle() ^ Font.BOLD, getFont().getSize()));
+		this.setFont(this.getFont().deriveFont(Font.BOLD));
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 		this.setFocusable(false);
 		this.setValue(0, true);
