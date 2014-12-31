@@ -35,14 +35,19 @@ public class YapbamSerializer {
 		// Proceed safely, it means backup the old version before to write the new one
 		File backupFile = file.exists() && file.isFile() ? getBackupFile(file) : null;
 		if (backupFile!=null) {
-			FileUtils.copy(file, backupFile, false);
+			FileUtils.copy(file, backupFile, true);
 		}
 		doWrite(data, file, zipped, report);
 		if (report!=null) {
 			report.setMax(-1);
 		}
-		if (backupFile!=null && !backupFile.delete()) {
-			throw new IOException(MessageFormat.format("Unable to delete backup file {0}", file));
+		if ((backupFile!=null) && !backupFile.delete()) {
+			// Unable to delete the backup file.
+			// It seems strange that we were able to write to a file and we can't delete it.
+			// It's strange, but possible (tested under Windows 8).
+			// In such a case, we will empty the file
+			OutputStream out = new FileOutputStream(backupFile);
+			out.close();
 		}
 	}
 
@@ -67,7 +72,7 @@ public class YapbamSerializer {
 		String extension = FileUtils.getExtension(file);
 		for (int i = 1; i >0; i++) {
 			File candidate = new File(parent, root+"_backup"+i+extension);
-			if (!candidate.exists()) {
+			if (!candidate.exists() || (candidate.length()==0)) {
 				return candidate;
 			}
 		}
