@@ -8,6 +8,8 @@ fix
 	Lors de la sélection d'un libellé prédéfini dans le dialogue de création des sous-opérations, la case recette était systématiquement cochée.
 	Lors de la saisie en rafale, quand, pour une opération autre que la première, on choisissait un libellé prédéfini impliquant l'usage d'un chéquier, le numéro de chèque n'était pas renseigné.
 	Lorsqu'on enregistrait un fichier dans un dossier où l'utilisateurn'avait pas l'autorisation de supprimer des fichiers, une erreur survenait après la sauvegarde du fichier.
+improvement
+	Ajout des traductions partielles en turc et chinois traditionnel.
 
 version	0.17.7 (10/11/2014)
 fix

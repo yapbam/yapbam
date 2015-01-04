@@ -55,6 +55,8 @@ public class LocalizationPanel extends PreferencePanel {
 	private JCheckBox translatorButton = null;
 	private JRadioButton portugueseButton = null;
 	private JRadioButton deutschButton;
+	private JRadioButton turkishButton;
+	private JRadioButton tChineseButton;
 	
 	/**
 	 * This is the default constructor
@@ -116,10 +118,14 @@ public class LocalizationPanel extends PreferencePanel {
 			defaultLButton.setSelected(true);
 		} else if (locale.getLanguage().equals(Locale.FRENCH.getLanguage())) {
 			frenchButton.setSelected(true);
-		} else if (locale.getLanguage().equals(new Locale("pt").getLanguage())) {
+		} else if ("pt".equals(locale.getLanguage())) {
 			portugueseButton.setSelected(true);
 		} else if (locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
 			deutschButton.setSelected(true);
+		} else if ("tr".equals(locale.getLanguage())) {
+			turkishButton.setSelected(true);
+		} else if ("zh".equals(locale.getLanguage())) {
+			tChineseButton.setSelected(true);
 		} else {
 			englishButton.setSelected(true);
 		}
@@ -166,8 +172,22 @@ public class LocalizationPanel extends PreferencePanel {
 			group.add(getFrenchButton());
 			group.add(getPortugueseButton());
 			group.add(getDeutschButton());
+			group.add(getTurkishButton());
+			group.add(getTChineseButton());
 		}
 		return countryPanel;
+	}
+	
+	private GridBagConstraints getLanguageGBC(int index) {
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = index;
+		gridBagConstraints.insets = new Insets(0, 0, 5, 0);
+		gridBagConstraints.weightx = 1.0;
+		gridBagConstraints.weighty = 1.0;
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		return gridBagConstraints;
 	}
 
 	/**
@@ -177,56 +197,22 @@ public class LocalizationPanel extends PreferencePanel {
 	 */
 	private JPanel getLanguagePanel() {
 		if (languagePanel == null) {
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.insets = new Insets(0, 0, 5, 0);
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints7.weighty = 1.0D;
-			gridBagConstraints7.gridy = 5;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.insets = new Insets(0, 0, 5, 0);
 			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.anchor = GridBagConstraints.WEST;
 			gridBagConstraints6.gridy = 0;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.insets = new Insets(0, 0, 5, 0);
-			gridBagConstraints5.weightx = 1.0;
-			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.gridx = 0;
-			gridBagConstraints5.anchor = GridBagConstraints.WEST;
-			gridBagConstraints5.gridy = 3;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new Insets(0, 0, 5, 0);
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.weighty = 0.0D;
-			gridBagConstraints4.weightx = 1.0D;
-			gridBagConstraints4.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.gridy = 4;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.insets = new Insets(0, 0, 5, 0);
-			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.anchor = GridBagConstraints.NORTHWEST;
-			gridBagConstraints3.weightx = 1.0D;
-			gridBagConstraints3.weighty = 0.0D;
-			gridBagConstraints3.gridy = 1;
+			gridBagConstraints6.insets = new Insets(0, 0, 5, 0);
+			gridBagConstraints6.anchor = GridBagConstraints.WEST;
 			languagePanel = new JPanel();
 			languagePanel.setLayout(new GridBagLayout());
 			languagePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.language"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
-			languagePanel.add(getDefaultLButton(), gridBagConstraints3);
-			languagePanel.add(getFrenchButton(), gridBagConstraints4);
-			languagePanel.add(getEnglishButton(), gridBagConstraints5);
 			languagePanel.add(getTranslatorButton(), gridBagConstraints6);
-			languagePanel.add(getPortugueseButton(), gridBagConstraints7);
-			GridBagConstraints gbcDeutschButton = new GridBagConstraints();
-			gbcDeutschButton.insets = new Insets(0, 0, 5, 0);
-			gbcDeutschButton.anchor = GridBagConstraints.WEST;
-			gbcDeutschButton.gridx = 0;
-			gbcDeutschButton.gridy = 2;
-			languagePanel.add(getDeutschButton(), gbcDeutschButton);
+			languagePanel.add(getDefaultLButton(), getLanguageGBC(1));
+			languagePanel.add(getDeutschButton(), getLanguageGBC(2));
+			languagePanel.add(getEnglishButton(), getLanguageGBC(3));
+			languagePanel.add(getFrenchButton(), getLanguageGBC(4));
+			languagePanel.add(getPortugueseButton(), getLanguageGBC(5));
+			languagePanel.add(getTurkishButton(), getLanguageGBC(6));
+			languagePanel.add(getTChineseButton(), getLanguageGBC(7));
 		}
 		return languagePanel;
 	}
@@ -355,6 +341,10 @@ public class LocalizationPanel extends PreferencePanel {
 			lang = Locale.GERMAN.getLanguage();
 		} else if (getPortugueseButton().isSelected()) {
 			lang = "pt";
+		} else if (getTurkishButton().isSelected()) {
+			lang = "tr";
+		} else if (getTChineseButton().isSelected()) {
+			lang = "zh";
 		}
 		return new Locale(lang, country);
 	}
@@ -508,5 +498,25 @@ public class LocalizationPanel extends PreferencePanel {
 			deutschButton.addItemListener(basicItemListener);
 		}
 		return deutschButton;
+	}
+	
+	private JRadioButton getTurkishButton() {
+		if (turkishButton == null) {
+			turkishButton = new JRadioButton();
+			Locale locale = new Locale("tr");
+			turkishButton.setText("<html>"+locale.getDisplayLanguage(locale)+" (k&#305;smi)</html>");
+			turkishButton.addItemListener(basicItemListener);
+		}
+		return turkishButton;
+	}
+
+	private JRadioButton getTChineseButton() {
+		if (tChineseButton == null) {
+			tChineseButton = new JRadioButton();
+			Locale locale = Locale.TRADITIONAL_CHINESE;
+			tChineseButton.setText("<html>"+locale.getDisplayLanguage(locale)+" (&#23616;&#37096;)</html>");
+			tChineseButton.addItemListener(basicItemListener);
+		}
+		return tChineseButton;
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"

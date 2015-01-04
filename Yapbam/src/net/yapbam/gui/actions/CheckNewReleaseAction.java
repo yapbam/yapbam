@@ -15,6 +15,7 @@ import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.dialogs.update.CheckUpdateDialog;
 import net.yapbam.update.VersionManager;
+import net.yapbam.util.ApplicationContext;
 import net.yapbam.util.DateUtils;
 import net.yapbam.util.Portable;
 
@@ -64,7 +65,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 			Preferences.INSTANCE.setAutoUpdate(-option, false);
 		}
 		int lastCheck = DateUtils.dateToInteger(YapbamState.INSTANCE.getDate(LAST_UPDATE_CHECK_KEY));
-		int releaseDate = DateUtils.dateToInteger(VersionManager.getVersion().getReleaseDate());
+		int releaseDate = DateUtils.dateToInteger(ApplicationContext.getVersion().getReleaseDate());
 		int today = DateUtils.dateToInteger(new Date());
 		int days = Preferences.INSTANCE.getAutoUpdatePeriod();
 		boolean prefChoice = (days>=0) && (today - lastCheck >= days); // Auto check is requested by preference settings

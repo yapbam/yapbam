@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.util.ApplicationContext;
 import net.yapbam.util.CheckSum;
 
 public class UpdateInformation {
@@ -37,7 +38,7 @@ public class UpdateInformation {
 				reader.close();
 			}
 			String serialNumber = p.getProperty("serialNumber");
-			YapbamState.INSTANCE.put(VersionManager.SERIAL_NUMBER, serialNumber);
+			YapbamState.INSTANCE.put(ApplicationContext.SERIAL_NUMBER, serialNumber);
 			lastestRelease = new ReleaseInfo(p.getProperty("lastestRelease"));
 			updateURL = new URL(p.getProperty("updateURL"));
 			autoUpdateURL = new URL(p.getProperty("autoUpdateURL"));

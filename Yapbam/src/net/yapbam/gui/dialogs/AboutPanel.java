@@ -23,7 +23,7 @@ import com.fathzer.soft.ajlib.swing.widget.AbstractTitledPanel;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
 
 import net.yapbam.relnotes.ReleaseNotesFormatter;
-import net.yapbam.update.VersionManager;
+import net.yapbam.util.ApplicationContext;
 
 public class AboutPanel extends AbstractTitledPanel<Void> {
 	private static final Dimension PREFERED_HTML_PANE_SIZE = new Dimension(640,480);  //  @jve:decl-index=0:
@@ -36,7 +36,7 @@ public class AboutPanel extends AbstractTitledPanel<Void> {
 	 * This is the default constructor
 	 */
 	public AboutPanel() {
-		super(Formatter.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", VersionManager.getVersion()), UIManager.getIcon("OptionPane.informationIcon"), null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		super(Formatter.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", ApplicationContext.getVersion()), UIManager.getIcon("OptionPane.informationIcon"), null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
