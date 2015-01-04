@@ -17,6 +17,7 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
+import net.yapbam.util.ApplicationContext;
 import net.yapbam.util.Portable;
 
 import java.io.File;
@@ -122,7 +123,8 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 						// Using a tray icon was an idea I had to alert the user in case of update availability
 						// Unfortunately, as far as I understood the java tray icon implementation, user can disable 
 						// java tray icons in a windows configuration panel. So it's safer to use a dialog.
-						if (update.getLastestRelease().compareTo(VersionManager.getVersion())>0) { // If there's an update
+						if (update.getLastestRelease().compareTo(ApplicationContext.getVersion())>0) {
+							// If there's an update
 							if (isUpdateInstallable(update)) {
 								CheckUpdateDialog.this.setVisible(false);
 								InstallUpdateDialog dialog = new InstallUpdateDialog(owner, auto && Preferences.INSTANCE.getAutoUpdateInstall(), update);
@@ -179,7 +181,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					// If the launch directory is not writable.
 					message = LocalizationData.get("MainMenu.CheckUpdate.Success.writeProtected"); //$NON-NLS-1$
 				}
-				message = Formatter.format(message, VersionManager.getVersion(), update.getLastestRelease());
+				message = Formatter.format(message, ApplicationContext.getVersion(), update.getLastestRelease());
 				int choice = JOptionPane.showOptionDialog(owner, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{cancel, open}, open);
 				if (choice==1) {
 					try {
@@ -193,7 +195,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 				// The application can write to the the installation directory
 				String pattern = LocalizationData.get("MainMenu.CheckUpdate.Success.Detail"); //$NON-NLS-1$
 				String download = LocalizationData.get("MainMenu.CheckUpdate.installNow"); //$NON-NLS-1$
-				int choice = JOptionPane.showOptionDialog(owner, Formatter.format(pattern, VersionManager.getVersion(),update.getLastestRelease()), title, //$NON-NLS-1$
+				int choice = JOptionPane.showOptionDialog(owner, Formatter.format(pattern, ApplicationContext.getVersion(),update.getLastestRelease()), title, //$NON-NLS-1$
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
 					new String[]{LocalizationData.get("MainMenu.CheckUpdate.cancel"), download}, download); //$NON-NLS-1$
 				return choice == 1;

@@ -31,9 +31,8 @@ import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.preferences.StartStateSettings;
 import net.yapbam.gui.welcome.WelcomeDialog;
-import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.update.ReleaseInfo;
-import net.yapbam.update.VersionManager;
+import net.yapbam.util.ApplicationContext;
 import net.yapbam.util.HtmlUtils;
 
 public class MainFrame extends JFrame implements YapbamInstance {
@@ -126,6 +125,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 						dialog.setVisible(true);
 					}
 				}
+				
+				NewsBuilder.build(((GlobalPanel)frame.getContentPane()).getInfoPanel());
 			}
 		});
 	}
@@ -282,11 +283,12 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				ErrorManager.INSTANCE.log(null, pluginContainers[i].getInstanciationException());
 			}
 		}
-		getJFrame().setContentPane(new MainPanel(this.plugins));
+		GlobalPanel gPanel = new GlobalPanel(new MainPanel(this.plugins));
+		getJFrame().setContentPane(gPanel);
 		getJFrame().getContentPane().addPropertyChangeListener(MainPanel.SELECTED_PLUGIN_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				mainMenu.updateMenu(((MainPanel)getJFrame().getContentPane()).getSelectedPlugIn());
+				mainMenu.updateMenu(getCurrentPlugIn());
 			}
 		});
 		this.data.addListener(new DataListener() {
@@ -305,7 +307,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	    
 		// Restore initial state (last opened file, window position, ...)
 		restoreMainFramePosition();
-		getStateSaver().restoreState((TabbedPane)getContentPane(), this.getClass().getCanonicalName());
+		getStateSaver().restoreState(gPanel.getMainPanel(), this.getClass().getCanonicalName());
 		for (int i = 0; i < plugins.length; i++) {
 			if (plugins[i] != null) {
 				plugins[i].restoreState();
@@ -313,7 +315,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		}
 		//If the order of the tabs leaves the orginal first tab in the first position,
 		//No event is sent to refresh the displayed menu. So, we "manually" invoke the menu refresh. 
-		mainMenu.updateMenu(((MainPanel)getJFrame().getContentPane()).getSelectedPlugIn());
+		mainMenu.updateMenu(gPanel.getMainPanel().getSelectedPlugIn());
 
 		updateWindowTitle();
 
@@ -341,7 +343,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	 * @return the currently displayed plugin
 	 */
 	public AbstractPlugIn getCurrentPlugIn() {
-		return ((MainPanel)getContentPane()).getSelectedPlugIn();
+		return ((GlobalPanel)getContentPane()).getMainPanel().getSelectedPlugIn();
 	}
 
 	private void updateWindowTitle() {
@@ -420,8 +422,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				getPlugIn(i).saveState();
 			}
 		}
-		getStateSaver().saveState((TabbedPane)getContentPane(), this.getClass().getCanonicalName());
-		getStateSaver().save(LAST_VERSION_USED, VersionManager.getVersion());
+		getStateSaver().saveState(((GlobalPanel)getContentPane()).getMainPanel(), this.getClass().getCanonicalName());
+		getStateSaver().save(LAST_VERSION_USED, ApplicationContext.getVersion());
 		if (Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
 			if (!getData().somethingHasChanged() && getFilteredData().getFilter().isActive()) {
 				getStateSaver().save(LAST_FILTER_USED, getFilteredData().getFilter(), getData().getPassword());

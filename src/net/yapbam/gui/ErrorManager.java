@@ -20,7 +20,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import javax.swing.JOptionPane;
 
 import net.yapbam.gui.dialogs.ErrorDialog;
-import net.yapbam.update.VersionManager;
+import net.yapbam.util.ApplicationContext;
 
 /** This class is responsible for handling errors.
  */
@@ -204,7 +204,7 @@ public class ErrorManager {
 		
 		Message (Throwable t) {
 			this.error = t;
-			this.version = VersionManager.getVersion().toString();
+			this.version = ApplicationContext.getVersion().toString();
 			this.country = LocalizationData.getLocale().getCountry();
 			this.lang = LocalizationData.getLocale().getLanguage();
 			this.osName = System.getProperty("os.name", "?");
