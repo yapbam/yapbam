@@ -3,11 +3,12 @@ version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 
-version	0.17.8 (02/01/2015)
+version	0.17.8 (04/01/2015)
 fix
 	Lors de la sélection d'un libellé prédéfini dans le dialogue de création des sous-opérations, la case recette était systématiquement cochée.
 	Lors de la saisie en rafale, quand, pour une opération autre que la première, on choisissait un libellé prédéfini impliquant l'usage d'un chéquier, le numéro de chèque n'était pas renseigné.
-	Lorsqu'on enregistrait un fichier dans un dossier où l'utilisateurn'avait pas l'autorisation de supprimer des fichiers, une erreur survenait après la sauvegarde du fichier.
+	Lorsqu'on enregistrait un fichier dans un dossier où l'utilisateur n'avait pas l'autorisation de supprimer des fichiers, une erreur survenait après la sauvegarde du fichier.
+	Dans l'onglet "Historique du solde", lorsqu'on passait d'un compte à l'autre via le menu filtre, l'échelle verticale n'était parfois pas correctement remise à jour. 
 improvement
 	Ajout des traductions partielles en turc et chinois traditionnel.
 

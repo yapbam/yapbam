@@ -32,7 +32,7 @@ public abstract class ApplicationContext {
 	 */
 	public static ReleaseInfo getVersion() {
 		if (version==null) {
-			InputStream inStream = ApplicationContext.class.getResourceAsStream("../update/version.txt"); //$NON-NLS-1$
+			InputStream inStream = ApplicationContext.class.getResourceAsStream("/net/yapbam/update/version.txt"); //$NON-NLS-1$
 			Properties properties = new Properties();
 			if (inStream == null) {
 				LoggerFactory.getLogger(ApplicationContext.class).warn("Unable to find version file"); //$NON-NLS-1$

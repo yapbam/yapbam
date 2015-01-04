@@ -209,6 +209,7 @@ public class BalanceHistoryGraphPane extends JPanel {
 		double min = Math.min(0, this.getBalanceHistory().getMinBalance(endDate));
 		double max = Math.max(0, this.getBalanceHistory().getMaxBalance(endDate));
 		getBalanceRule().getYAxis().setBounds(min, max);
+		getBalanceRule().revalidate();
 		graph.setPreferredEndDate(endDate);
 		graph.setHistory(getBalanceHistory());
 		if (graph.getSelectedDate().compareTo(graph.getStartDate())<0 || graph.getSelectedDate().compareTo(graph.getEndDate())>0) {

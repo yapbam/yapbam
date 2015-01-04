@@ -6,27 +6,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingUtilities;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.yapbam.util.ApplicationContext;
 
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 
-public class NewsBuilder {
+public abstract class NewsBuilder {
+	private NewsBuilder() {
+		// To prevent this class from being instantiated
+		super();
+	}
 
 	public static void build(InfoPanel infoPanel) {
-		new UpdateSwingWorker(SwingUtilities.getWindowAncestor(infoPanel)).execute();
+//TODO		new UpdateSwingWorker(SwingUtilities.getWindowAncestor(infoPanel)).execute();
 	}
 
 	// A SwingWorker that performs the update availability check
 	static class UpdateSwingWorker extends Worker<JSONArray, Void> {
+		private static final Logger LOGGER = LoggerFactory.getLogger(NewsBuilder.class);
 		private static final boolean SLOW_UPDATE_CHECKING = false;
 		private static final String BASE_URL = "http://www.yapbam.net/news";
 
@@ -44,11 +49,12 @@ public class NewsBuilder {
 					System.out.println (news);
 				}
 			} catch (InterruptedException e) {
+				LOGGER.trace("Worker was interrupted", e);
 			} catch (ExecutionException e) {
 				if (! (e.getCause() instanceof IOException)) {
 					ErrorManager.INSTANCE.log(owner,e);
 				} else {
-					LoggerFactory.getLogger(NewsBuilder.class).debug("Error while communicating with server", e.getCause());
+					LOGGER.debug("Error while communicating with server", e.getCause());
 				}
 			}
 		}
@@ -60,7 +66,6 @@ public class NewsBuilder {
 				Thread.sleep(2000);
 			}
 			URL url = ApplicationContext.toURL(BASE_URL);
-			System.out.println (url); //TODO
 			HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 			int errorCode = ct.getResponseCode();
 			if (errorCode==HttpURLConnection.HTTP_OK) {
@@ -91,8 +96,5 @@ public class NewsBuilder {
 				throw new IOException ("Unexpected error code "+errorCode);
 			}
 		}
-	}
-	
-	private static class News {
 	}
 }

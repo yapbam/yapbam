@@ -21,8 +21,8 @@ import javax.swing.JLabel;
 
 public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private final static ImageIcon OPEN = new ImageIcon(InfoPanel.class.getResource("/net/yapbam/gui/images/spread.png"));
-	private final static ImageIcon CLOSED = new ImageIcon(InfoPanel.class.getResource("/net/yapbam/gui/images/undeploy.png"));
+	private static final ImageIcon OPEN = new ImageIcon(InfoPanel.class.getResource("/net/yapbam/gui/images/spread.png"));
+	private static final ImageIcon CLOSED = new ImageIcon(InfoPanel.class.getResource("/net/yapbam/gui/images/undeploy.png"));
 
 	private JButton closeBtn;
 	private HTMLPane textPane;
