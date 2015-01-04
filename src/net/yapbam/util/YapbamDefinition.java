@@ -12,7 +12,7 @@ public class YapbamDefinition implements ApplicationDefinition {
 	public YapbamDefinition() {
 		try {
 			URI location = Portable.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-			if (location.getScheme().equals("file")) {
+			if ("file".equals(location.getScheme())) {
 				appDirectory = new File(location);
 				if (appDirectory.isFile()) {
 					appDirectory = appDirectory.getParentFile();

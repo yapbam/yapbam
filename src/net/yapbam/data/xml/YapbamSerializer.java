@@ -16,6 +16,10 @@ import net.yapbam.data.*;
  * </UL>
  */
 public class YapbamSerializer {
+	private static final String XML_EXTENSION = ".xml";
+	private static final String ZIP_EXTENSION = ".zip";
+	private static final String CLASSPATH_SCHEME = "classpath";
+
 	private YapbamSerializer() {
 		// To prevent instantiation
 	}
@@ -81,11 +85,11 @@ public class YapbamSerializer {
 	
 	private static String getEntryName(String fileName) {
 		String lowerCase = fileName.toLowerCase();
-		if (lowerCase.endsWith(".zip")) {
-			fileName = fileName.substring(0, fileName.length()-".zip".length());
-			lowerCase = lowerCase.substring(0, lowerCase.length()-".zip".length());
+		if (lowerCase.endsWith(ZIP_EXTENSION)) {
+			fileName = fileName.substring(0, fileName.length()-ZIP_EXTENSION.length());
+			lowerCase = lowerCase.substring(0, lowerCase.length()-ZIP_EXTENSION.length());
 		}
-		return lowerCase.endsWith(".xml") ? fileName : fileName+".xml";
+		return lowerCase.endsWith(XML_EXTENSION) ? fileName : fileName+XML_EXTENSION;
 	}
 	
 	/** Reads data from an uri.
@@ -128,8 +132,8 @@ public class YapbamSerializer {
 		String scheme = uri.getScheme();
 		if ("file".equals(scheme) || "ftp".equals(scheme)) { //$NON-NLS-1$ //$NON-NLS-2$
 			return uri.toURL().openStream();
-		} else if ("classpath".equals(scheme)) {
-			String resourcePath = uri.toString().substring("classpath".length()+1);
+		} else if (CLASSPATH_SCHEME.equals(scheme)) {
+			String resourcePath = uri.toString().substring(CLASSPATH_SCHEME.length()+1);
 			return YapbamSerializer.class.getResourceAsStream(resourcePath);
 		} else {
 			throw new IOException("Unsupported protocol: "+scheme); //$NON-NLS-1$
