@@ -1,6 +1,8 @@
 package net.yapbam.gui.graphics.balancehistory;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -24,6 +26,8 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 	private Color expenseColor;
 	private AlertThreshold alertThreshold;
 	private FilteredData data;
+	private Font defaultFont;
+	private Font boldFont;
 	
 	public BalanceHistoryCellRenderer(FilteredData data) {
 		this.data = data;
@@ -91,5 +95,33 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 			return SwingConstants.CENTER;
 		}
 	}
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		row = table.convertRowIndexToModel(row);
+		column = table.convertColumnIndexToModel(column);
+		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
+		TableSettings settings = model.getSettings();
+		Font font = (column==settings.getRemainingColumn() && model.isDayBalance(row)) ? getBoldFont(result) : getStdFont(result);
+		result.setFont(font);
+		return result;
+	}
 	
+	private Font getBoldFont(Component component) {
+		initFonts(component);
+		return boldFont;
+	}
+
+	private Font getStdFont(Component component) {
+		initFonts(component);
+		return defaultFont;
+	}
+
+	private void initFonts(Component component) {
+		if (boldFont==null) {
+			defaultFont = component.getFont();
+			boldFont = defaultFont.deriveFont(Font.BOLD);
+		}
+	}
 }
