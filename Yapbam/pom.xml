@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.17.8</version>
+	<version>0.17.9</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 	</properties>
@@ -152,7 +152,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
-			<version>1.4.2</version>
+			<version>1.4.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
