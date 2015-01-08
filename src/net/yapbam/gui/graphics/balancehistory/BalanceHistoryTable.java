@@ -24,11 +24,13 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 	public BalanceHistoryTable(FilteredData data) {
 		super();
 		this.data = data;
-		BalanceHistoryModel model = new BalanceHistoryModel(data.getBalanceData());
+		BalanceHistoryModel model = new BalanceHistoryModel(data==null?null:data.getBalanceData());
 		this.setModel(model);
-		BalanceHistoryCellRenderer cellRenderer = new BalanceHistoryCellRenderer(data);
-		setDefaultRenderer(Date.class, cellRenderer);
-		setDefaultRenderer(Object.class, cellRenderer);
+		if (data!=null) {
+			BalanceHistoryCellRenderer cellRenderer = new BalanceHistoryCellRenderer(data);
+			setDefaultRenderer(Date.class, cellRenderer);
+			setDefaultRenderer(Object.class, cellRenderer);
+		}
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.lastSelected = new Transaction[0];
 		getSelectionModel().addListSelectionListener(new ListSelectionListener() {

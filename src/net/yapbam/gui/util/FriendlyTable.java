@@ -71,40 +71,48 @@ public class FriendlyTable extends JTable {
 		}
 	}
 	
-	private final class ShowHideColumnAction extends AbstractAction {
+	private static final class ShowHideColumnAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 		private int index;
+		private FriendlyTable table;
 		
-		public ShowHideColumnAction(int i) {
-			super (getColumnName(i, false));
+		public ShowHideColumnAction(FriendlyTable table, int i) {
+			super (table.getColumnName(i, false));
 			this.index = i;
+			this.table = table;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			boolean visible = !isColumnVisible(index);
-			setColumnVisible(index, visible);
+			boolean visible = !table.isColumnVisible(index);
+			table.setColumnVisible(index, visible);
 		}
 	}
 
-	/** Gets a menu that interact with this table to show/hide its columns.
-	 * @param title The menu title.
-	 * @return a JLabelMenu
+	/** A menu that interact with a friendly table to show/hide its columns.
 	 * @see JLabelMenu
 	 */
-	public JLabelMenu getShowHideColumnsMenu(String title) {
-		return new JLabelMenu(title) {
-			private static final long serialVersionUID = 1L;
+	public static class ShowHideColumsMenu extends JLabelMenu {
+		private static final long serialVersionUID = 1L;
+		private FriendlyTable table;
 
-			@Override
-			protected void fillPopUp(JPopupMenu popup) {
-				for (int i = 0; i < getColumnCount(false); i++) {
-					JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ShowHideColumnAction(i));
-					menuItem.setSelected(isColumnVisible(i));
-					popup.add(menuItem);
-				}
+		/** Constructor.
+		 * @param table The table to interact with
+		 * @param title The menu title.
+		 */
+		public ShowHideColumsMenu(FriendlyTable table, String title) {
+			super(title);
+			this.table = table;
+		}
+
+		@Override
+		protected void fillPopUp(JPopupMenu popup) {
+			for (int i = 0; i < table.getColumnCount(false); i++) {
+				JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(new ShowHideColumnAction(table, i));
+				menuItem.setSelected(table.isColumnVisible(i));
+				popup.add(menuItem);
 			}
-		};
+		}
 	}
 	
 	/** Exports the visible content of this table to an excel like formatted file.

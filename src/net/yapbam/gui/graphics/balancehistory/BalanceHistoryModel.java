@@ -31,14 +31,18 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		this.settings = new TableSettings();
 		this.data = data;
 		this.endDate = null;
-		this.rowCount = data.getBalanceHistory().getTransactionsNumber();
-		data.addListener(new DataListener() {
-			@Override
-			public void processEvent(DataEvent event) {
-				updateRowCount();
-				fireTableDataChanged();
-			}
-		});
+		if (data==null) {
+			this.rowCount = 0;
+		} else {
+			this.rowCount = data.getBalanceHistory().getTransactionsNumber();
+			data.addListener(new DataListener() {
+				@Override
+				public void processEvent(DataEvent event) {
+					updateRowCount();
+					fireTableDataChanged();
+				}
+			});
+		}
 	}
 	
 	@Override

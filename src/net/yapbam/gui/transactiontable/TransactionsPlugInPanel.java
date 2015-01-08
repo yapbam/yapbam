@@ -27,6 +27,7 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.actions.NewTransactionAction;
+import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.widget.JLabelMenu;
 
 public class TransactionsPlugInPanel extends JPanel {
@@ -94,7 +95,7 @@ public class TransactionsPlugInPanel extends JPanel {
 		EmptyBorder border = new EmptyBorder(0, 5, 0, 5);
 		deploy.setBorder(border);
 		menus.add(deploy, BorderLayout.WEST);
-		JLabel columns = transactionTable.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+		JLabel columns = new FriendlyTable.ShowHideColumsMenu(transactionTable, LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		columns.setBorder(border);
 		menus.add(columns, BorderLayout.EAST);

@@ -1,20 +1,23 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable.PrintMode;
 
 import java.awt.GridBagLayout;
+
 import javax.swing.JLabel;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
+import net.yapbam.gui.actions.DeleteTransactionAction;
+import net.yapbam.gui.actions.DuplicateTransactionAction;
+import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.util.FriendlyTable;
-import net.yapbam.gui.widget.JLabelMenu;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -30,6 +33,7 @@ import javax.swing.JButton;
 
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
+import com.fathzer.soft.ajlib.swing.table.JTableListener;
 import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
 import java.awt.event.ActionListener;
@@ -40,30 +44,39 @@ import java.io.IOException;
 
 public class BalanceHistoryTablePane extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private JLabel columnMenu;
 	BalanceHistoryTable table;
+	private FilteredData data;
 
 	/**
 	 * Creates the panel.
 	 * @param data the data to be displayed
 	 */
 	public BalanceHistoryTablePane(FilteredData data) {
+		this.data = data;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		
+		GridBagConstraints gbcLabel = new GridBagConstraints();
+		gbcLabel.insets = new Insets(0, 5, 0, 5);
+		gbcLabel.anchor = GridBagConstraints.EAST;
+		gbcLabel.gridx = 1;
+		gbcLabel.gridy = 0;
+		add(getColumnMenu(), gbcLabel);
+
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbcScrollPane = new GridBagConstraints();
 		gbcScrollPane.insets = new Insets(0, 0, 0, 0);
 		gbcScrollPane.weighty = 1.0;
-		gbcScrollPane.gridwidth = 3;
+		gbcScrollPane.gridwidth = 0;
 		gbcScrollPane.fill = GridBagConstraints.BOTH;
 		gbcScrollPane.gridx = 0;
-		gbcScrollPane.gridy = 0;
+		gbcScrollPane.gridy = 1;
 		add(scrollPane, gbcScrollPane);
+		scrollPane.setViewportView(getTable());
 		
-		table = new BalanceHistoryTable(data);
-		scrollPane.setViewportView(table);
-		
-		JLabel lblSortBy = new JLabelMenu("Sort by:") {
+/*
+	JLabel lblSortBy = new JLabelMenu("Sort by:") {
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void fillPopUp(JPopupMenu popup) {
@@ -74,24 +87,18 @@ public class BalanceHistoryTablePane extends JPanel {
 				popup.add(menuItem);
 			}
 		};
+
 		lblSortBy.setToolTipText("Ce menu permet de trier les opérations par date ou date de valeur"); //LOCAL
 		GridBagConstraints gbcLblSortBy = new GridBagConstraints();
+		gbcLblSortBy.weightx = 1.0;
+		gbcLblSortBy.anchor = GridBagConstraints.WEST;
 		gbcLblSortBy.insets = new Insets(0, 5, 0, 5);
 		gbcLblSortBy.gridx = 0;
-		gbcLblSortBy.gridy = 1;
+		gbcLblSortBy.gridy = 0;
 		add(lblSortBy, gbcLblSortBy);
 		lblSortBy.setVisible(false); //TODO ... maybe
-		
-		JLabel label = table.getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
-		label.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
-		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		GridBagConstraints gbcLabel = new GridBagConstraints();
-		gbcLabel.insets = new Insets(0, 5, 0, 5);
-		gbcLabel.anchor = GridBagConstraints.NORTHWEST;
-		gbcLabel.gridx = 1;
-		gbcLabel.gridy = 1;
-		add(label, gbcLabel);
-		
+*/		
+	
 		final JButton btnExport = new JButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
 		btnExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -100,7 +107,7 @@ public class BalanceHistoryTablePane extends JPanel {
 				File file = chooser.showSaveDialog(Utils.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
 				if (file!=null) {
 					try {
-						table.export(file, new DefaultExporter(LocalizationData.getLocale()));
+						getTable().export(file, new DefaultExporter(LocalizationData.getLocale()));
 					} catch (IOException e1) {
 						ErrorManager.INSTANCE.display(btnExport, e1);
 					}
@@ -113,17 +120,40 @@ public class BalanceHistoryTablePane extends JPanel {
 		gbcBtnExport.anchor = GridBagConstraints.EAST;
 		gbcBtnExport.weightx = 1.0;
 		gbcBtnExport.insets = new Insets(0, 0, 5, 5);
-		gbcBtnExport.gridx = 2;
-		gbcBtnExport.gridy = 1;
+		gbcBtnExport.gridx = 1;
+		gbcBtnExport.gridy = 2;
 		add(btnExport, gbcBtnExport);
+	}
+	
+	private JLabel getColumnMenu() {
+		if (columnMenu==null) {
+			columnMenu = new FriendlyTable.ShowHideColumsMenu(getTable(), LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+			columnMenu.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
+			columnMenu.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return columnMenu;
+	}
+	
+	private BalanceHistoryTable getTable() {
+		if (table==null) {
+			table = new BalanceHistoryTable(data);
+			if (data!=null) {
+				Action edit = new EditTransactionAction(table);
+				Action delete = new DeleteTransactionAction(table);
+				Action duplicate = new DuplicateTransactionAction(table);
+				table.addMouseListener(new JTableListener(new Action[] { edit, duplicate,
+						delete, null, new ConvertToPeriodicalTransactionAction(table) }, edit));
+			}
+		}
+		return table;
 	}
 
 	public void saveState() {
-		YapbamState.INSTANCE.saveState(table, this.getClass().getCanonicalName());
+		YapbamState.INSTANCE.saveState(getTable(), this.getClass().getCanonicalName());
 	}
 
 	public void restoreState() {
-		YapbamState.INSTANCE.restoreState(table, this.getClass().getCanonicalName());
+		YapbamState.INSTANCE.restoreState(getTable(), this.getClass().getCanonicalName());
 	}
 
 	private final class DefaultExporter implements FriendlyTable.ExportFormat {
@@ -160,6 +190,6 @@ public class BalanceHistoryTablePane extends JPanel {
 	}
 
 	public Printable getPrintable() {
-		return table.getPrintable(PrintMode.FIT_WIDTH, null, null);
+		return getTable().getPrintable(PrintMode.FIT_WIDTH, null, null);
 	}
 }
