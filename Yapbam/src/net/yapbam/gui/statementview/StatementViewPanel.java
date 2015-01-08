@@ -31,6 +31,7 @@ import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
+import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
 
@@ -316,7 +317,7 @@ public class StatementViewPanel extends JPanel {
 	
 	private JLabel getColumnsMenu() {
 		if (lblNewLabel == null) {
-			lblNewLabel = getTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+			lblNewLabel = new FriendlyTable.ShowHideColumsMenu(getTransactionsTable(), LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		}
 		return lblNewLabel;
 	}
@@ -401,7 +402,7 @@ public class StatementViewPanel extends JPanel {
 	
 	private JLabel getNotCheckedColumns() {
 		if (notCheckedColumns == null) {
-			notCheckedColumns = getUncheckedTransactionsTable().getShowHideColumnsMenu(LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+			notCheckedColumns = new FriendlyTable.ShowHideColumsMenu(getUncheckedTransactionsTable(), LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		}
 		return notCheckedColumns;
 	}
