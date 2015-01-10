@@ -42,11 +42,19 @@ import java.awt.print.Printable;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JCheckBox;
+
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+
 public class BalanceHistoryTablePane extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getCanonicalName()+".hideIntermediateBalance";
+
 	private JLabel columnMenu;
 	BalanceHistoryTable table;
 	private FilteredData data;
+	private JCheckBox hideIntermediateChkBx;
 
 	/**
 	 * Creates the panel.
@@ -58,7 +66,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		setLayout(gridBagLayout);
 		
 		GridBagConstraints gbcLabel = new GridBagConstraints();
-		gbcLabel.insets = new Insets(0, 5, 0, 5);
+		gbcLabel.insets = new Insets(0, 5, 5, 0);
 		gbcLabel.anchor = GridBagConstraints.EAST;
 		gbcLabel.gridx = 1;
 		gbcLabel.gridy = 0;
@@ -66,7 +74,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbcScrollPane = new GridBagConstraints();
-		gbcScrollPane.insets = new Insets(0, 0, 0, 0);
+		gbcScrollPane.insets = new Insets(0, 0, 5, 0);
 		gbcScrollPane.weighty = 1.0;
 		gbcScrollPane.gridwidth = 0;
 		gbcScrollPane.fill = GridBagConstraints.BOTH;
@@ -114,15 +122,31 @@ public class BalanceHistoryTablePane extends JPanel {
 				}
 			}
 		});
+		GridBagConstraints gbcChckbxHide = new GridBagConstraints();
+		gbcChckbxHide.insets = new Insets(0, 0, 0, 5);
+		gbcChckbxHide.gridx = 0;
+		gbcChckbxHide.gridy = 2;
+		add(getHideIntermediateChkBx(), gbcChckbxHide);
 		btnExport.setToolTipText("BudgetPanel.export.toolTip"); //$NON-NLS-1$
 		btnExport.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbcBtnExport = new GridBagConstraints();
 		gbcBtnExport.anchor = GridBagConstraints.EAST;
 		gbcBtnExport.weightx = 1.0;
-		gbcBtnExport.insets = new Insets(0, 0, 5, 5);
 		gbcBtnExport.gridx = 1;
 		gbcBtnExport.gridy = 2;
 		add(btnExport, gbcBtnExport);
+	}
+
+	private JCheckBox getHideIntermediateChkBx() {
+		if (hideIntermediateChkBx==null) {
+			hideIntermediateChkBx = new JCheckBox(LocalizationData.get("BalanceHistory.transaction.hideIntermediate"));
+			hideIntermediateChkBx.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					System.out.println ("changed"); //FIXME
+				}
+			});
+		}
+		return hideIntermediateChkBx;
 	}
 	
 	private JLabel getColumnMenu() {
@@ -150,10 +174,12 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(getTable(), this.getClass().getCanonicalName());
+		YapbamState.INSTANCE.put(HIDE_INTERMEDIATE_BALANCE_KEY, Boolean.toString(getHideIntermediateChkBx().isSelected()));
 	}
 
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(getTable(), this.getClass().getCanonicalName());
+		getHideIntermediateChkBx().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(HIDE_INTERMEDIATE_BALANCE_KEY, "true")));
 	}
 
 	private final class DefaultExporter implements FriendlyTable.ExportFormat {

@@ -196,4 +196,8 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		boolean isDayBalance = row==getRowCount()-1 || !getTransaction(row+1).getValueDate().equals(valueDate);
 		return isDayBalance;
 	}
+
+	public Double getDayBalance(int row) {
+		return data.getBalanceHistory().getBalance(getTransaction(row).getValueDate());
+	}
 }

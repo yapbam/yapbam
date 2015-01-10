@@ -52,7 +52,7 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 	@Override
 	protected Color getBackground(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
 		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
-		if ((alertColor!=null) && !isSelected && (alertThreshold.getTrigger((Double)model.getValueAt(rowModel, model.getSettings().getRemainingColumn()))!=0)) {
+		if ((alertColor!=null) && !isSelected && (alertThreshold.getTrigger(model.getDayBalance(rowModel))!=0)) {
 			return alertColor;
 		} else {
 			double amount = model.getTransaction(rowModel).getAmount();
