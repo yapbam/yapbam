@@ -66,6 +66,13 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 		}
 	}
 
+	@Override
+	protected Object getValue(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
+		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
+		return (columnModel==model.getSettings().getRemainingColumn() && model.getHideIntermediateBalances() && !model.isDayBalance(rowModel)) ?
+				"" : super.getValue(table, value, isSelected, hasFocus, rowModel, columnModel);
+	}
+
 	private void refreshMinMax() {
 		Account singleAccount = null;
 		if (data.getGlobalData().getAccountsNumber()==1) {
@@ -99,11 +106,11 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
 		row = table.convertRowIndexToModel(row);
 		column = table.convertColumnIndexToModel(column);
-		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
 		TableSettings settings = model.getSettings();
-		Font font = (column==settings.getRemainingColumn() && model.isDayBalance(row)) ? getBoldFont(result) : getStdFont(result);
+		Font font = (!model.getHideIntermediateBalances() && column==settings.getRemainingColumn() && model.isDayBalance(row)) ? getBoldFont(result) : getStdFont(result);
 		result.setFont(font);
 		return result;
 	}

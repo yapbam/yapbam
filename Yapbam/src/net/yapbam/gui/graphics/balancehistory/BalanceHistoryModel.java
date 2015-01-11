@@ -2,6 +2,7 @@ package net.yapbam.gui.graphics.balancehistory;
 
 import java.util.Date;
 
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
@@ -22,6 +23,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 	private BalanceData data;
 	private Date endDate;
 	private TableSettings settings;
+	private boolean hideIntermediateBalances;
 	
 	private int rowCount;
 
@@ -31,6 +33,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		this.settings = new TableSettings();
 		this.data = data;
 		this.endDate = null;
+		this.hideIntermediateBalances = false;
 		if (data==null) {
 			this.rowCount = 0;
 		} else {
@@ -43,6 +46,19 @@ final class BalanceHistoryModel extends AbstractTableModel {
 				}
 			});
 		}
+	}
+	
+	void setHideIntermediateBalances(boolean hide) {
+		if (hide!=hideIntermediateBalances) {
+			this.hideIntermediateBalances = hide;
+			if (rowCount!=0) {
+				fireTableChanged(new TableModelEvent(this, 0, rowCount-1, this.settings.getRemainingColumn(), TableModelEvent.UPDATE));
+			}
+		}
+	}
+	
+	boolean getHideIntermediateBalances() {
+		return hideIntermediateBalances;
 	}
 	
 	@Override
