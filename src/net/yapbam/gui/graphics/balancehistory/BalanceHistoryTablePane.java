@@ -49,7 +49,7 @@ import java.awt.event.ItemEvent;
 
 public class BalanceHistoryTablePane extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getCanonicalName()+".hideIntermediateBalance";
+	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()+".hideIntermediateBalance";
 
 	private JLabel columnMenu;
 	BalanceHistoryTable table;
@@ -142,7 +142,7 @@ public class BalanceHistoryTablePane extends JPanel {
 			hideIntermediateChkBx = new JCheckBox(LocalizationData.get("BalanceHistory.transaction.hideIntermediate"));
 			hideIntermediateChkBx.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					System.out.println ("changed"); //FIXME
+					((BalanceHistoryModel)getTable().getModel()).setHideIntermediateBalances(e.getStateChange()==ItemEvent.SELECTED);
 				}
 			});
 		}
