@@ -1,6 +1,5 @@
 package net.yapbam.gui;
 
-import java.awt.Window;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,7 +28,7 @@ public abstract class NewsBuilder {
 	}
 
 	public static void build(InfoPanel infoPanel) {
-		new UpdateSwingWorker(infoPanel).execute();
+//		new UpdateSwingWorker(infoPanel).execute();
 	}
 
 	// A SwingWorker that performs the update availability check
