@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingUtilities;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +29,7 @@ public abstract class NewsBuilder {
 	}
 
 	public static void build(InfoPanel infoPanel) {
-//TODO		new UpdateSwingWorker(SwingUtilities.getWindowAncestor(infoPanel)).execute();
+		new UpdateSwingWorker(infoPanel).execute();
 	}
 
 	// A SwingWorker that performs the update availability check
@@ -35,24 +38,31 @@ public abstract class NewsBuilder {
 		private static final boolean SLOW_UPDATE_CHECKING = false;
 		private static final String BASE_URL = "http://www.yapbam.net/news";
 
-		private Window owner;
+		private InfoPanel infoPanel;
 
-		UpdateSwingWorker(Window owner) {
-			this.owner = owner;
+		UpdateSwingWorker(InfoPanel infoPanel) {
+			this.infoPanel = infoPanel;
 		}
 		
 		@Override
 		public void done() {
 			try {
 				if (!isCancelled()) {
-					JSONArray news = get();
-					System.out.println (news);
+					JSONArray json = get();
+					List<InfoPanel.Info> news = new ArrayList<InfoPanel.Info>();
+					for (int i = 0; i < json.size(); i++) {
+						JSONObject obj = (JSONObject) json.get(i);
+						if ("news".equals(obj.get("kind"))) {
+							news.add(new InfoPanel.Info((String)obj.get("id"), (String)obj.get("text")));
+						}
+					}
+					infoPanel.setInfo(news);
 				}
 			} catch (InterruptedException e) {
 				LOGGER.trace("Worker was interrupted", e);
 			} catch (ExecutionException e) {
 				if (! (e.getCause() instanceof IOException)) {
-					ErrorManager.INSTANCE.log(owner,e);
+					ErrorManager.INSTANCE.log(SwingUtilities.getWindowAncestor(infoPanel),e);
 				} else {
 					LOGGER.debug("Error while communicating with server", e.getCause());
 				}
@@ -61,7 +71,6 @@ public abstract class NewsBuilder {
 
 		@Override
 		protected JSONArray doProcessing() throws Exception {
-			System.out.println ("let's go!");
 			if (SLOW_UPDATE_CHECKING) {
 				Thread.sleep(2000);
 			}

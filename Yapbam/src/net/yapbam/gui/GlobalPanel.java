@@ -40,5 +40,4 @@ public class GlobalPanel extends JPanel {
 	MainPanel getMainPanel() {
 		return mainPanel;
 	}
-
 }

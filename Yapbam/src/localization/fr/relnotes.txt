@@ -3,6 +3,10 @@ version	next
 known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 
+version	0.17.10 (18/01/2015)
+fix
+	L'édition d'une opération pouvait parfois automatiquement changer son numéro.
+
 version	0.17.9 (11/01/2015)
 fix
 	Dans l'onglet "Historique du solde/Opérations", les recettes n'étaient pas comptabilisées avant les dépenses, ce qui provoquait des fausses alertes.
