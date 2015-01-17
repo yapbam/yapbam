@@ -16,6 +16,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.JLabel;
 
@@ -27,6 +28,7 @@ public class InfoPanel extends JPanel {
 	private JButton closeBtn;
 	private HTMLPane textPane;
 	private JLabel alertIcon;
+	private List<Info> news;
 
 	/**
 	 * Create the panel.
@@ -93,5 +95,31 @@ public class InfoPanel extends JPanel {
 			alertIcon.setIcon(new ImageIcon(InfoPanel.class.getResource("/net/yapbam/gui/images/alert.png")));
 		}
 		return alertIcon;
+	}
+
+	public void setInfo(List<Info> news) {
+		//TODO Display all news
+		//TODO Check if id is ok
+		this.news = news;
+		setVisible(!news.isEmpty());
+		if (!news.isEmpty()) {
+			setNews(0);
+		}
+	}
+
+	private void setNews(int index) {
+		setInfoVisible(true);
+		getTextPane().setContent(news.get(index).content);
+	}
+
+	static class Info {
+		private String id;
+		private String content;
+		
+		public Info(String id, String content) {
+			super();
+			this.id = id;
+			this.content = content;
+		}
 	}
 }

@@ -242,7 +242,6 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 		checkNumber.setText(t.getNumber());
 		defDate.setDate(t.getValueDate());
 		statement.setText(t.getStatement());
-		optionnalUpdatesOnModeChange();
 		this.ignoreEvents = false;
 	}
 
@@ -511,6 +510,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 				description.requestFocus();
 				Date today = date.getDate();
 				setContent(new Transaction(today, null, "", null, 0.0, getAccount(), Mode.UNDEFINED, Category.UNDEFINED, today, null, new ArrayList<SubTransaction>())); //$NON-NLS-1$
+				optionnalUpdatesOnModeChange();
 				autoFillStatement();
 			}
 		});
