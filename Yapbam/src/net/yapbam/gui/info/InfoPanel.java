@@ -1,4 +1,4 @@
-package net.yapbam.gui;
+package net.yapbam.gui.info;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -16,6 +16,8 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -46,6 +48,7 @@ public class InfoPanel extends JPanel {
 		gbcCloseBtn.gridy = 0;
 		add(getCloseBtn(), gbcCloseBtn);
 		GridBagConstraints gbcTextPane = new GridBagConstraints();
+		gbcTextPane.weighty = 1.0;
 		gbcTextPane.insets = new Insets(0, 0, 5, 0);
 		gbcTextPane.fill = GridBagConstraints.BOTH;
 		gbcTextPane.gridx = 0;
@@ -76,15 +79,15 @@ public class InfoPanel extends JPanel {
 		return closeBtn;
 	}
 	
-	public void setInfoVisible(boolean visible) {
-		getTextPane().setVisible(visible);
-		getCloseBtn().setIcon(visible?OPEN:CLOSED);
-		revalidate();
-	}
-	
 	private HTMLPane getTextPane() {
 		if (textPane == null) {
 			textPane = new HTMLPane();
+			textPane.addPropertyChangeListener(HTMLPane.CONTENT_CHANGED_PROPERTY, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					revalidate();
+				}
+			});
 		}
 		return textPane;
 	}
@@ -108,18 +111,14 @@ public class InfoPanel extends JPanel {
 	}
 
 	private void setNews(int index) {
+		getTextPane().setContent(news.get(index).getContent());
 		setInfoVisible(true);
-		getTextPane().setContent(news.get(index).content);
 	}
 
-	static class Info {
-		private String id;
-		private String content;
-		
-		public Info(String id, String content) {
-			super();
-			this.id = id;
-			this.content = content;
-		}
+	public void setInfoVisible(boolean visible) {
+		getTextPane().setVisible(visible);
+		getCloseBtn().setIcon(visible?OPEN:CLOSED);
+		getTextPane().getTextPane().revalidate();
+		revalidate();
 	}
 }
