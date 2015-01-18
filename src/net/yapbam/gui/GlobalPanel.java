@@ -2,6 +2,8 @@ package net.yapbam.gui;
 
 import javax.swing.JPanel;
 
+import net.yapbam.gui.info.InfoPanel;
+
 import java.awt.BorderLayout;
 
 public class GlobalPanel extends JPanel {

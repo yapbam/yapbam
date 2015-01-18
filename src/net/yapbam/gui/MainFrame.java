@@ -25,6 +25,7 @@ import net.yapbam.data.xml.UnsupportedFileVersionException;
 import net.yapbam.data.xml.UnsupportedFormatException;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
 import net.yapbam.gui.dialogs.BasicHTMLDialog;
+import net.yapbam.gui.info.NewsBuilder;
 import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.UnsupportedSchemeException;
 import net.yapbam.gui.persistence.YapbamDataWrapper;

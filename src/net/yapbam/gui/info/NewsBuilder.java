@@ -1,4 +1,4 @@
-package net.yapbam.gui;
+package net.yapbam.gui.info;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +17,8 @@ import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.yapbam.gui.ErrorManager;
+import net.yapbam.gui.Preferences;
 import net.yapbam.util.ApplicationContext;
 
 import com.fathzer.soft.ajlib.swing.worker.Worker;
@@ -28,7 +30,7 @@ public abstract class NewsBuilder {
 	}
 
 	public static void build(InfoPanel infoPanel) {
-//		new UpdateSwingWorker(infoPanel).execute();
+		new UpdateSwingWorker(infoPanel).execute();
 	}
 
 	// A SwingWorker that performs the update availability check
@@ -48,11 +50,12 @@ public abstract class NewsBuilder {
 			try {
 				if (!isCancelled()) {
 					JSONArray json = get();
-					List<InfoPanel.Info> news = new ArrayList<InfoPanel.Info>();
+					List<Info> news = new ArrayList<Info>();
 					for (int i = 0; i < json.size(); i++) {
 						JSONObject obj = (JSONObject) json.get(i);
-						if ("news".equals(obj.get("kind"))) {
-							news.add(new InfoPanel.Info((String)obj.get("id"), (String)obj.get("text")));
+						Info info = Info.build(obj);
+						if (info!=null) {
+							news.add(info);
 						}
 					}
 					infoPanel.setInfo(news);
