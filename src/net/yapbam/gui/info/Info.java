@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.fathzer.jlocal.Formatter;
 
 class Info {
+	private static final String KIND_ATTR = "kind";
 	private static final String IGNORE_TIME_ATTR = "ignoreTime";
 	private static final String PARAMS_ATTR = "parameters";
 	private static final String TEXT_ATTR = "text";
@@ -31,10 +32,18 @@ class Info {
 			return Formatter.format(content, (Object[])parameters);
 		}
 	}
+	
+	private static boolean isInfo(JSONObject obj) {
+		Object kind = obj.get(KIND_ATTR);
+		return "news".equals(kind) || "warning".equals(kind);
+	}
 
 	public static Info build(JSONObject obj) {
-		if (!"news".equals(obj.get("kind")) || !(obj.get(ID_ATTR) instanceof String) || !(obj.get(TEXT_ATTR) instanceof String)) {
-			LoggerFactory.getLogger(Info.class).info("Invalid JSON object: {}", obj);
+		if ("arguments".equals(obj.get(KIND_ATTR))) {
+			LoggerFactory.getLogger(Info.class).info("Input: {}", obj);
+			return null;
+		} else if (!isInfo(obj) || !(obj.get(ID_ATTR) instanceof String) || !(obj.get(TEXT_ATTR) instanceof String)) {
+			LoggerFactory.getLogger(Info.class).info("Unexpected JSON object: {}", obj);
 			return null;
 		}
 		Info result = new Info((String)obj.get(ID_ATTR), (String)obj.get(TEXT_ATTR));
@@ -54,7 +63,7 @@ class Info {
 				result.parameters = params;
 			}
 		}
-		System.out.println (obj.get(IGNORE_TIME_ATTR).getClass());
+		System.out.println (result.getContent());
 		return result;
 	}
 }
