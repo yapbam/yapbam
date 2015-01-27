@@ -17,13 +17,13 @@ import javax.swing.table.TableColumn;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.table.JTable;
+import com.fathzer.soft.ajlib.swing.table.NimbusPatchBooleanTableCellRenderer;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
-import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

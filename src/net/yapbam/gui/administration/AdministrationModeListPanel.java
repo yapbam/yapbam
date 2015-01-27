@@ -13,6 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.NimbusPatchBooleanTableCellRenderer;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
 
 import net.yapbam.data.Account;
@@ -30,7 +31,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.dialogs.AbstractModeListModel;
 import net.yapbam.gui.dialogs.ModeDialog;
-import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 @SuppressWarnings("serial")
 class AdministrationModeListPanel extends AbstractListAdministrationPanel<GlobalData> {

@@ -26,12 +26,12 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
-import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fathzer.jlocal.Formatter;
+import com.fathzer.soft.ajlib.swing.table.NimbusPatchBooleanTableCellRenderer;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
