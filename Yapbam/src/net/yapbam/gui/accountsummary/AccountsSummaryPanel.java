@@ -14,7 +14,6 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.dialogs.EditAccountDialog;
 import net.yapbam.gui.util.CellRenderer;
 import net.yapbam.gui.util.JTableUtils;
-import net.yapbam.gui.util.NimbusPatchBooleanTableCellRenderer;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.NumberUtils;
 
@@ -33,6 +32,7 @@ import javax.swing.JButton;
 
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.JTable;
+import com.fathzer.soft.ajlib.swing.table.NimbusPatchBooleanTableCellRenderer;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
 
 import java.awt.GridBagConstraints;
