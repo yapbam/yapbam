@@ -284,9 +284,10 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				ErrorManager.INSTANCE.log(null, pluginContainers[i].getInstanciationException());
 			}
 		}
-		GlobalPanel gPanel = new GlobalPanel(new MainPanel(this.plugins));
+		MainPanel mainPanel = new MainPanel(this.plugins);
+		GlobalPanel gPanel = new GlobalPanel(mainPanel);
 		getJFrame().setContentPane(gPanel);
-		getJFrame().getContentPane().addPropertyChangeListener(MainPanel.SELECTED_PLUGIN_PROPERTY, new PropertyChangeListener() {
+		mainPanel.addPropertyChangeListener(MainPanel.SELECTED_PLUGIN_PROPERTY, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				mainMenu.updateMenu(getCurrentPlugIn());
