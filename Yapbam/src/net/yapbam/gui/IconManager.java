@@ -9,7 +9,7 @@ import com.fathzer.soft.ajlib.swing.Utils;
 
 public abstract class IconManager {
 	public enum Name {
-		OPEN, SAVE, SAVE_AS, NEW, DELETE, EDIT, DUPLICATE, NEW_FILE,
+		OPEN, CLOSE, SAVE, SAVE_AS, NEW, DELETE, EDIT, DUPLICATE, NEW_FILE,
 		NEW_ACCOUNT, EDIT_ACCOUNT, DELETE_ACCOUNT,
 		NEW_TRANSACTION, DELETE_TRANSACTION, EDIT_TRANSACTION, DUPLICATE_TRANSACTION, NEW_BULK_TRANSACTION,
 		CHECK_TRANSACTION, UNCHECK_TRANSACTION,
@@ -43,6 +43,7 @@ public abstract class IconManager {
 		}
 		map.clear();
 		map.put(Name.OPEN, create("images/open.png", size)); //$NON-NLS-1$
+		map.put(Name.CLOSE, create("images/close.png", size)); //$NON-NLS-1$
 		map.put(Name.SAVE, create("images/save.png", size)); //$NON-NLS-1$
 		map.put(Name.SAVE_AS, create("images/saveAs.png", size)); //$NON-NLS-1$
 		map.put(Name.NEW, create("images/new.png", size)); //$NON-NLS-1$
