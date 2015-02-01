@@ -64,7 +64,7 @@ public class GlobalPanel extends JPanel {
 	
 	private JButton getInfoDisplayer() {
 		if (infoDisplayer==null) {
-			infoDisplayer = new JButton(IconManager.get(Name.ALERT));
+			infoDisplayer = new JButton(IconManager.get(Name.MESSAGE));
 			infoDisplayer.setBorder(BorderFactory.createEmptyBorder());
 			infoDisplayer.setBorderPainted(false);
 			infoDisplayer.setFocusPainted(false);
