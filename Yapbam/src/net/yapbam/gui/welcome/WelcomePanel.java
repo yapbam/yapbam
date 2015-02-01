@@ -17,46 +17,39 @@ import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
 import net.yapbam.data.GlobalData;
-import net.yapbam.gui.IconManager;
-import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
+import net.yapbam.gui.widget.PageSelector;
 
 import javax.swing.JSeparator;
 
 import com.fathzer.soft.ajlib.swing.Browser;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
-import com.fathzer.soft.ajlib.swing.widget.IntegerWidget;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 @SuppressWarnings("serial")
 public class WelcomePanel extends JPanel {
 	private static final String BUNDLE_NAME = "net.yapbam.gui.welcome.urls"; //$NON-NLS-1$
 
 	private JCheckBox showAtStartup;
-	private IntegerWidget tipNumber;
 	private HTMLPane tipPane;
 	private TipManager tips;
-	private JButton nextTip;
-	private JButton lastTip;
-	private JButton previousTip;
-	private JButton firstTip;
-	private int currentTip;
 	private ResourceBundle urlsResourceBundle;
 	
 	private GlobalData data;
+
+	private PageSelector tipSelectionPanel;
 		
 	private URI getURI(String key) {
 		try {
@@ -195,99 +188,23 @@ public class WelcomePanel extends JPanel {
 		tipPane.setPreferredSize(new Dimension(300*getFont().getSize()/12, 200*getFont().getSize()/12));
 		tipsPanel.add(tipPane, BorderLayout.CENTER);
 		
-		JPanel tipSelectionPanel = new JPanel();
-		tipsPanel.add(tipSelectionPanel, BorderLayout.SOUTH);
-		GridBagLayout gblTipSelectionPanel = new GridBagLayout();
-		tipSelectionPanel.setLayout(gblTipSelectionPanel);
-		tipSelectionPanel.setOpaque(false);
-		
-		firstTip = new JButton();
-		firstTip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setTip(0);
-			}
-		});
-		firstTip.setToolTipText(LocalizationData.get("Welcome.firstTip.tooltip")); //$NON-NLS-1$
-		firstTip.setIcon(IconManager.get(Name.FIRST));
-		GridBagConstraints gbcFirstTip = new GridBagConstraints();
-		gbcFirstTip.insets = new Insets(0, 0, 0, 5);
-		gbcFirstTip.weighty = 1.0;
-		gbcFirstTip.fill = GridBagConstraints.VERTICAL;
-		gbcFirstTip.gridx = 1;
-		gbcFirstTip.gridy = 0;
-		setTipSelectionButtonSize(firstTip);
-		tipSelectionPanel.add(firstTip, gbcFirstTip);
-		
-		tipNumber = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(tips.size()));
-		tipNumber.setToolTipText(LocalizationData.get("Welcome.tipNumber.tooltip")); //$NON-NLS-1$
-		GridBagConstraints gbcTipNumber = new GridBagConstraints();
-		gbcTipNumber.gridx = 3;
-		gbcTipNumber.gridy = 0;
-		gbcTipNumber.fill = GridBagConstraints.VERTICAL;
-		tipSelectionPanel.add(tipNumber, gbcTipNumber);
-		tipNumber.setColumns(2);
-		tipNumber.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, new PropertyChangeListener() {
+		tipSelectionPanel = new PageSelector();
+		tipSelectionPanel.addPropertyChangeListener(PageSelector.PAGE_SELECTED_PROPERTY_NAME, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getNewValue()!=null) {
-					setTip(((BigInteger)evt.getNewValue()).intValue()-1);
+				Integer index = (Integer) evt.getNewValue();
+				if (index!=null) {
+					tipPane.setContent(tips.get(index));
 				}
 			}
 		});
+		tipsPanel.add(tipSelectionPanel, BorderLayout.SOUTH);
 		
-		JLabel label = new JLabel("/"+tips.size()); //$NON-NLS-1$
-		GridBagConstraints gbcLabel = new GridBagConstraints();
-		gbcLabel.insets = new Insets(0, 0, 0, 5);
-		gbcLabel.gridx = 4;
-		gbcLabel.gridy = 0;
-		tipSelectionPanel.add(label, gbcLabel);
-		
-		nextTip = new JButton();
-		nextTip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setTip(currentTip+1);
-			}
-		});
-		nextTip.setToolTipText(LocalizationData.get("Welcome.nextTip.tooltip")); //$NON-NLS-1$
-		nextTip.setIcon(IconManager.get(Name.NEXT));
-		GridBagConstraints gbcNextTip = new GridBagConstraints();
-		gbcNextTip.fill = GridBagConstraints.VERTICAL;
-		gbcNextTip.insets = new Insets(0, 0, 0, 5);
-		gbcNextTip.gridx = 5;
-		gbcNextTip.gridy = 0;
-		setTipSelectionButtonSize(nextTip);
-		tipSelectionPanel.add(nextTip, gbcNextTip);
-		
-		lastTip = new JButton();
-		lastTip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setTip(tips.size()-1);
-			}
-		});
-		lastTip.setToolTipText(LocalizationData.get("Welcome.lastTip.tooltip")); //$NON-NLS-1$
-		lastTip.setIcon(IconManager.get(Name.LAST));
-		GridBagConstraints gbcLastTip = new GridBagConstraints();
-		gbcLastTip.fill = GridBagConstraints.VERTICAL;
-		gbcLastTip.gridx = 6;
-		gbcLastTip.gridy = 0;
-		setTipSelectionButtonSize(lastTip);
-		tipSelectionPanel.add(lastTip, gbcLastTip);
-		
-		previousTip = new JButton();
-		previousTip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setTip(currentTip-1);
-			}
-		});
-		previousTip.setToolTipText(LocalizationData.get("Welcome.previousTip.tooltip")); //$NON-NLS-1$
-		previousTip.setIcon(IconManager.get(Name.PREVIOUS));
-		GridBagConstraints gbcPreviousTip = new GridBagConstraints();
-		gbcPreviousTip.fill = GridBagConstraints.VERTICAL;
-		gbcPreviousTip.insets = new Insets(0, 0, 0, 5);
-		gbcPreviousTip.gridx = 2;
-		gbcPreviousTip.gridy = 0;
-		setTipSelectionButtonSize(previousTip);
-		tipSelectionPanel.add(previousTip, gbcPreviousTip);
+		tipSelectionPanel.getPageNumber().setToolTipText(LocalizationData.get("Welcome.tipNumber.tooltip")); //$NON-NLS-1$
+		tipSelectionPanel.getFirstPage().setToolTipText(LocalizationData.get("Welcome.firstTip.tooltip")); //$NON-NLS-1$
+		tipSelectionPanel.getNextPage().setToolTipText(LocalizationData.get("Welcome.nextTip.tooltip")); //$NON-NLS-1$
+		tipSelectionPanel.getLastPage().setToolTipText(LocalizationData.get("Welcome.lastTip.tooltip")); //$NON-NLS-1$
+		tipSelectionPanel.getPreviousPage().setToolTipText(LocalizationData.get("Welcome.previousTip.tooltip")); //$NON-NLS-1$
 
 		this.setOpaque(false);
 		
@@ -302,8 +219,8 @@ public class WelcomePanel extends JPanel {
 		gbcSeparator.gridy = 1;
 		add(separator, gbcSeparator);
 		
-		currentTip = -1; // Just to ensure the tip will be displayed (if we omit this line and tip is the first, setTip would think the tip hasn't change)
-		setTip(tips.getRandom());
+		tipSelectionPanel.setPageCount(tips.size());
+		tipSelectionPanel.setPage(tips.getRandom());
 	}
 	
 	private final class URIClienthandler implements ActionListener {
@@ -318,12 +235,6 @@ public class WelcomePanel extends JPanel {
 			Browser.show(uri, WelcomePanel.this, null);
 		}
 	}
-	
-	private void setTipSelectionButtonSize(JButton button) {
-		Dimension preferredSize = button.getPreferredSize();
-		preferredSize.width = preferredSize.height;
-		button.setPreferredSize(preferredSize);
-	}
 
 	public boolean isShowAtStartup() {
 		return this.showAtStartup.isSelected();
@@ -331,17 +242,5 @@ public class WelcomePanel extends JPanel {
 	
 	public void setShowAtStartup(boolean show) {
 		this.showAtStartup.setSelected(show);
-	}
-	
-	private void setTip(int index) {
-		if (index!=currentTip) {
-			currentTip = index;
-			tipPane.setContent(tips.get(index));
-			firstTip.setEnabled(index!=0);
-			previousTip.setEnabled(index!=0);
-			nextTip.setEnabled(index!=tips.size()-1);
-			lastTip.setEnabled(index!=tips.size()-1);
-			tipNumber.setText(Integer.toString(index+1));
-		}
 	}
 }
