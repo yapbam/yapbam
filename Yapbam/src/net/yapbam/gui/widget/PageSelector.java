@@ -186,8 +186,9 @@ public class PageSelector extends JPanel {
 			throw new IllegalArgumentException();
 		}
 		this.pageCount = pageCount;
-		getPageNumber().setMaxValue(BigInteger.valueOf(pageCount));
-		getPageNumber().setMinValue(pageCount==0?BigInteger.ZERO:BigInteger.ONE);
+		BigInteger min = pageCount==0?BigInteger.ZERO:BigInteger.ONE;
+		BigInteger max = BigInteger.valueOf(pageCount);
+		getPageNumber().setRange(min, max);
 		sizeLabel.setText("/"+pageCount);
 		if (currentPage>=pageCount) {
 			setPage(pageCount-1);
