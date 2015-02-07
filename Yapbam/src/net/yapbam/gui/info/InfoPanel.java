@@ -145,6 +145,14 @@ public class InfoPanel extends JPanel {
 	private InfoCommandPanel getPanel() {
 		if (panel == null) {
 			panel = new InfoCommandPanel();
+			panel.getMarkAsReadButton().addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int index = panel.getPageSelector().getPageNumber().getValue().intValue();
+					Info info = news.get(index);
+					info.markRead();
+					//FIXME Go to next, or prev, or close the panel
+				}
+			});
 			panel.getPageSelector().addPropertyChangeListener(PageSelector.PAGE_SELECTED_PROPERTY_NAME, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
