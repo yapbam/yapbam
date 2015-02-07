@@ -17,6 +17,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigInteger;
 import java.util.List;
 
 import net.yapbam.gui.IconManager;
@@ -116,6 +117,7 @@ public class InfoPanel extends JPanel {
 		Info info = news.get(index);
 		// Update the command panel
 		getPanel().getMarkAsReadButton().setEnabled(!info.isRead());
+		getPanel().getPageSelector().getPageNumber().setValue((BigInteger)null);
 		getPanel().getPageSelector().setPageCount(news.size());
 		getPanel().getPageSelector().setPage(index);
 		setVisible(true);

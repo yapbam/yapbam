@@ -27,7 +27,6 @@ public class PageSelector extends JPanel {
 	private JButton lastPage;
 	private JButton previousPage;
 	private JButton firstPage;
-	private int currentPage;
 	private int pageCount;
 	private JLabel sizeLabel;
 
@@ -35,9 +34,6 @@ public class PageSelector extends JPanel {
 	 * Create the panel.
 	 */
 	public PageSelector() {
-		// Init current page to ensure the page changed event will be fired
-		// if we omit this line setPage(0) would think the page hasn't change
-		currentPage = -1;
 		this.pageCount = 0;
 		setLayout(new GridBagLayout());
 		setOpaque(false);
@@ -107,7 +103,7 @@ public class PageSelector extends JPanel {
 			nextPage = new JButton();
 			nextPage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					setPage(currentPage+1);
+					setPage(getCurrentPage()+1);
 				}
 			});
 			nextPage.setIcon(IconManager.get(Name.NEXT));
@@ -135,7 +131,7 @@ public class PageSelector extends JPanel {
 			previousPage = new JButton();
 			previousPage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					setPage(currentPage-1);
+					setPage(getCurrentPage()-1);
 				}
 			});
 			previousPage.setIcon(IconManager.get(Name.PREVIOUS));
@@ -159,16 +155,16 @@ public class PageSelector extends JPanel {
 	}
 
 	public void setPage(int index) {
-		if (index!=currentPage) {
-			int old = currentPage;
-			currentPage = index;
-			pageNumber.setText(Integer.toString(index+1));
+		int old = getCurrentPage();
+		if (index!=old) {
+			pageNumber.setValue(index<0?null:index+1);
 			restoreButtonStates();
-			firePropertyChange(PAGE_SELECTED_PROPERTY_NAME, old, currentPage);
+			firePropertyChange(PAGE_SELECTED_PROPERTY_NAME, old, index);
 		}
 	}
 	
 	private void restoreButtonStates() {
+		int currentPage = getCurrentPage();
 		firstPage.setEnabled(currentPage>0);
 		previousPage.setEnabled(currentPage>0);
 		nextPage.setEnabled(currentPage<pageCount-1);
@@ -190,7 +186,7 @@ public class PageSelector extends JPanel {
 		BigInteger max = BigInteger.valueOf(pageCount);
 		getPageNumber().setRange(min, max);
 		sizeLabel.setText("/"+pageCount);
-		if (currentPage>=pageCount) {
+		if (getCurrentPage()>=pageCount) {
 			setPage(pageCount-1);
 		} else {
 			restoreButtonStates();
@@ -198,7 +194,8 @@ public class PageSelector extends JPanel {
 	}
 	
 	public int getCurrentPage() {
-		return getPageNumber().getValue().intValue();
+		BigInteger value = getPageNumber().getValue();
+		return value==null?-1:value.intValue()-1;
 	}
 	
 	public int getPageCount() {
