@@ -34,12 +34,11 @@ public class ReadInfo implements Serializable {
 	
 	public static void setReadTime(Info info, long time) {
 		ReadInfo readInfo = get();
-		if (time==0) {
+		if (time<=0) {
 			readInfo.idToReadTime.remove(info.getId());
 		} else {
 			readInfo.idToReadTime.put(info.getId(), time);
 		}
 		YapbamState.INSTANCE.save(ReadInfo.class.getName(), readInfo);
 	}
-
 }

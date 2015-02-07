@@ -10,7 +10,7 @@ import javax.swing.JButton;
 
 public class InfoCommandPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JCheckBox chckbxNewCheckBox;
+	private JCheckBox showReadCheckBox;
 	private PageSelector pageSelector;
 	private JButton markAsReadButton;
 
@@ -24,11 +24,11 @@ public class InfoCommandPanel extends JPanel {
 		setOpaque(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
-		GridBagConstraints gbcChckbxNewCheckBox = new GridBagConstraints();
-		gbcChckbxNewCheckBox.insets = new Insets(0, 0, 0, 5);
-		gbcChckbxNewCheckBox.gridx = 0;
-		gbcChckbxNewCheckBox.gridy = 0;
-		add(getChckbxNewCheckBox(), gbcChckbxNewCheckBox);
+		GridBagConstraints gbcShowReadCheckBox = new GridBagConstraints();
+		gbcShowReadCheckBox.insets = new Insets(0, 0, 0, 5);
+		gbcShowReadCheckBox.gridx = 0;
+		gbcShowReadCheckBox.gridy = 0;
+		add(getShowReadCheckBox(), gbcShowReadCheckBox);
 		GridBagConstraints gbcPageSelector = new GridBagConstraints();
 		gbcPageSelector.weightx = 1.0;
 		gbcPageSelector.insets = new Insets(0, 0, 0, 5);
@@ -42,11 +42,11 @@ public class InfoCommandPanel extends JPanel {
 		add(getMarkAsReadButton(), gbcMarkAsReadButton);
 	}
 
-	public JCheckBox getChckbxNewCheckBox() {
-		if (chckbxNewCheckBox == null) {
-			chckbxNewCheckBox = new JCheckBox("show {0} read messages");
+	public JCheckBox getShowReadCheckBox() {
+		if (showReadCheckBox == null) {
+			showReadCheckBox = new JCheckBox("show {0} read messages");
 		}
-		return chckbxNewCheckBox;
+		return showReadCheckBox;
 	}
 	public PageSelector getPageSelector() {
 		if (pageSelector == null) {

@@ -13,6 +13,8 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -27,7 +29,7 @@ public class InfoPanel extends JPanel {
 
 	private JButton closeBtn;
 	private HTMLPane textPane;
-	private List<Info> news;
+	private News news;
 	private JButton displayButton;
 	private InfoCommandPanel panel;
 
@@ -97,10 +99,12 @@ public class InfoPanel extends JPanel {
 		return textPane;
 	}
 
-	public void setInfo(List<Info> news) {
-		//TODO Display all news
-		//TODO Check if id is ok
-		this.news = news;
+	public void setInfo(List<Info> newsList) {
+		for (Info info : newsList) {
+			System.out.println (info.getId()+" -> "+info.isRead()); //TODO
+		}
+		
+		this.news = new News(newsList);
 		setVisible(!news.isEmpty());
 		if (!news.isEmpty()) {
 			getPanel().getPageSelector().setPageCount(news.size());
@@ -109,19 +113,13 @@ public class InfoPanel extends JPanel {
 	}
 
 	private void setNews(int index) {
-		getTextPane().setContent(news.get(index).getContent());
+		Info info = news.get(index);
+		// Update the command panel
+		getPanel().getMarkAsReadButton().setEnabled(!info.isRead());
+		getPanel().getPageSelector().setPageCount(news.size());
+		getPanel().getPageSelector().setPage(index);
 		setVisible(true);
 	}
-
-//	public void setInfoVisible(boolean visible) {
-//		getTextPane().setVisible(visible);
-//		getCloseBtn().setVisible(visible);
-//		if (displayButton!=null) {
-//			displayButton.setVisible(!visible);
-//		}
-//		getTextPane().getTextPane().revalidate();
-//		revalidate();
-//	}
 
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
@@ -147,16 +145,41 @@ public class InfoPanel extends JPanel {
 			panel = new InfoCommandPanel();
 			panel.getMarkAsReadButton().addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int index = panel.getPageSelector().getPageNumber().getValue().intValue();
+					int index = panel.getPageSelector().getPageNumber().getValue().intValue()-1;
 					Info info = news.get(index);
 					info.markRead();
-					//FIXME Go to next, or prev, or close the panel
+					if (news.isOnlyUnread()) {
+						// Only unread are displayed
+						if (news.isEmpty()) {
+							InfoPanel.this.setVisible(false);
+						} else {
+							if (index<=news.size()-1) {
+								setNews(index);
+							} else {
+								setNews(0);
+							}
+						}
+					} else {
+						if (index<news.size()-1) {
+							setNews(index+1);
+						} else {
+							setNews(0);
+						}
+					}
+				}
+			});
+			panel.getShowReadCheckBox().addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					System.out.println ("Changed to "+(e.getStateChange()==ItemEvent.SELECTED));
 				}
 			});
 			panel.getPageSelector().addPropertyChangeListener(PageSelector.PAGE_SELECTED_PROPERTY_NAME, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
-					setNews((Integer) evt.getNewValue());
+					int index = (Integer) evt.getNewValue();
+					System.out.println (news.isOnlyUnread()+", selected info: "+index+" -> "+news.get(index).getId()+(news.get(index).isRead()?" (read)":" (unread)")); //TODO
+					getTextPane().setContent(news.get(index).getContent());
 				}
 			});
 		}
