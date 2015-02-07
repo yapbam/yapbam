@@ -18,7 +18,7 @@ class Info {
 	/** Max ignore time in days. */
 	private long maxIgnoreTime;
 	
-	private Info(String id, String content) {
+	Info(String id, String content) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -71,17 +71,26 @@ class Info {
 	}
 
 	public void markRead() {
-		System.out.println(id+" is mark read (was "+isRead()+")");
 		ReadInfo.setReadTime(this, System.currentTimeMillis());
 	}
 	
 	public boolean isRead() {
-		long ms = System.currentTimeMillis()-ReadInfo.getReadTime(this);
-		long days = ms/(60000*60*24);
-		return days<=maxIgnoreTime;
+		long readTime = ReadInfo.getReadTime(this);
+		if (readTime<=0) {
+			return false;
+		} else {
+			long ms = System.currentTimeMillis()-readTime;
+			long days = ms/(60000*60*24);
+			return days<=maxIgnoreTime;
+		}
 	}
 	
 	String getId() {
 		return this.id;
+	}
+
+	@Override
+	public String toString() {
+		return "["+getId()+" ("+(isRead()?"read":"unread")+")]";
 	}
  }

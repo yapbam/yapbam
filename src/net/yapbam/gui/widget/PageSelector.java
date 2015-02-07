@@ -196,4 +196,12 @@ public class PageSelector extends JPanel {
 			restoreButtonStates();
 		}
 	}
+	
+	public int getCurrentPage() {
+		return getPageNumber().getValue().intValue();
+	}
+	
+	public int getPageCount() {
+		return this.pageCount;
+	}
 }
