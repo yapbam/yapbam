@@ -15,6 +15,7 @@ class Info {
 	private String id;
 	private String content;
 	private String[] parameters;
+	/** Max ignore time in days. */
 	private long maxIgnoreTime;
 	
 	private Info(String id, String content) {
@@ -47,6 +48,9 @@ class Info {
 			return null;
 		}
 		Info result = new Info((String)obj.get(ID_ATTR), (String)obj.get(TEXT_ATTR));
+		if (obj.get(IGNORE_TIME_ATTR) instanceof Long) {
+			result.maxIgnoreTime = (Long) obj.get(IGNORE_TIME_ATTR);
+		}
 		if (obj.get(PARAMS_ATTR) instanceof JSONArray) {
 			JSONArray array = (JSONArray) obj.get(PARAMS_ATTR);
 			String[] params = new String[array.size()];
@@ -63,7 +67,21 @@ class Info {
 				result.parameters = params;
 			}
 		}
-		System.out.println (result.getContent());
 		return result;
 	}
-}
+
+	public void markRead() {
+		System.out.println(id+" is mark read (was "+isRead()+")");
+		ReadInfo.setReadTime(this, System.currentTimeMillis());
+	}
+	
+	public boolean isRead() {
+		long ms = System.currentTimeMillis()-ReadInfo.getReadTime(this);
+		long days = ms/(60000*60*24);
+		return days<=maxIgnoreTime;
+	}
+	
+	String getId() {
+		return this.id;
+	}
+ }
