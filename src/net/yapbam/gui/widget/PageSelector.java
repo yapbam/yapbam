@@ -91,6 +91,8 @@ public class PageSelector extends JPanel {
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt.getNewValue()!=null) {
 						setPage(((BigInteger)evt.getNewValue()).intValue()-1);
+					} else {
+						setPage(-1);
 					}
 				}
 			});

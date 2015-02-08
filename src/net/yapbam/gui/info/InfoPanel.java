@@ -18,7 +18,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.math.BigInteger;
 import java.util.List;
 
 import net.yapbam.gui.IconManager;
@@ -123,7 +122,7 @@ System.out.println("Setting message "+index);//TODO
 		getPanel().getMarkAsReadButton().setEnabled(size!=0);
 		getPanel().getMarkAsReadButton().setEnabled(info!=null && !info.isRead());
 		getPanel().getPageSelector().setVisible(size!=0);
-		getPanel().getPageSelector().getPageNumber().setValue((BigInteger)null);
+		getPanel().getPageSelector().setPage(-1);
 		getPanel().getPageSelector().setPageCount(size);
 		getPanel().getPageSelector().setPage(index);
 		int read = news.getNbRead();
@@ -191,8 +190,9 @@ System.out.println("Setting message "+index);//TODO
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					int index = (Integer) evt.getNewValue();
-					System.out.println (news.isOnlyUnread()+", selected info: "+index+" -> "+news.get(index).getId()+(news.get(index).isRead()?" (read)":" (unread)")); //TODO
-					getTextPane().setContent(news.get(index).getContent());
+System.out.println (news.isOnlyUnread()+", selected info: "+index+
+	(index<0?"":" -> "+news.get(index).getId()+(news.get(index).isRead()?" (read)":" (unread)"))); //TODO
+					getTextPane().setContent(index<0?"":news.get(index).getContent());
 				}
 			});
 		}
