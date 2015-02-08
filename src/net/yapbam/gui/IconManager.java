@@ -17,7 +17,7 @@ public abstract class IconManager {
 		NEW_CATEGORY, DELETE_CATEGORY,
 		SPREAD, SPREADABLE,
 		FIRST, PREVIOUS, NEXT, LAST, UP, DOWN, TOP, BOTTOM, DEPLOY, UNDEPLOY,
-		IMPORT, EXPORT, ARCHIVE, LOCK, ALERT, MESSAGE, HELP, PRINT
+		IMPORT, EXPORT, ARCHIVE, LOCK, ALERT, NEW_MESSAGE, MESSAGE, HELP, PRINT
 	}
 	
 	static {
@@ -81,6 +81,7 @@ public abstract class IconManager {
 		map.put(Name.EXPORT, create("images/export.png", size)); //$NON-NLS-1$
 		map.put(Name.ARCHIVE, create("images/archive.png", size)); //$NON-NLS-1$
 		map.put(Name.ALERT, create("images/alert.png", size)); //$NON-NLS-1$
+		map.put(Name.NEW_MESSAGE, create("images/newMessage.png", size)); //$NON-NLS-1$
 		map.put(Name.MESSAGE, create("images/message.png", size)); //$NON-NLS-1$
 		map.put(Name.LOCK, create("images/locked.png", size)); //$NON-NLS-1$
 		map.put(Name.HELP, create("images/help.png", size)); //$NON-NLS-1$

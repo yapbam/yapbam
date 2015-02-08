@@ -38,4 +38,8 @@ public class News extends FilteredList<Info> {
 	public void setOnlyUnread(boolean onlyUnread) {
 		this.onlyUnread = onlyUnread;
 	}
+	
+	List<Info> getAll() {
+		return physical;
+	}
 }
