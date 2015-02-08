@@ -3,7 +3,7 @@ version	next
 known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 
-version	0.17.11 (02/01/2015)
+version	0.17.11 (02/08/2015)
 fix
 	Bug introduced in 0.17.8: Filter menu was always hidden when the selected tab at startup was "Accounts summary", "Account statements" or "Administration".
 

@@ -30,7 +30,7 @@ public abstract class NewsBuilder {
 	}
 
 	public static void build(InfoPanel infoPanel) {
-		new UpdateSwingWorker(infoPanel).execute();
+//TODO		new UpdateSwingWorker(infoPanel).execute();
 	}
 
 	// A SwingWorker that performs the update availability check

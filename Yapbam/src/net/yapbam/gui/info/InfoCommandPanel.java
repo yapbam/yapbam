@@ -25,6 +25,8 @@ public class InfoCommandPanel extends JPanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		GridBagConstraints gbcShowReadCheckBox = new GridBagConstraints();
+		gbcShowReadCheckBox.anchor = GridBagConstraints.WEST;
+		gbcShowReadCheckBox.weightx = 1.0;
 		gbcShowReadCheckBox.insets = new Insets(0, 0, 0, 5);
 		gbcShowReadCheckBox.gridx = 0;
 		gbcShowReadCheckBox.gridy = 0;
@@ -36,6 +38,8 @@ public class InfoCommandPanel extends JPanel {
 		gbcPageSelector.gridy = 0;
 		add(getPageSelector(), gbcPageSelector);
 		GridBagConstraints gbcMarkAsReadButton = new GridBagConstraints();
+		gbcMarkAsReadButton.weightx = 1.0;
+		gbcMarkAsReadButton.anchor = GridBagConstraints.EAST;
 		gbcMarkAsReadButton.insets = new Insets(0, 5, 0, 0);
 		gbcMarkAsReadButton.gridx = 2;
 		gbcMarkAsReadButton.gridy = 0;
@@ -44,7 +48,7 @@ public class InfoCommandPanel extends JPanel {
 
 	public JCheckBox getShowReadCheckBox() {
 		if (showReadCheckBox == null) {
-			showReadCheckBox = new JCheckBox("show {0} read messages");
+			showReadCheckBox = new JCheckBox();
 		}
 		return showReadCheckBox;
 	}

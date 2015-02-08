@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
 
 import javax.swing.JButton;
@@ -25,6 +26,8 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.widget.PageSelector;
 import net.yapbam.gui.LocalizationData;
 
+import javax.swing.JLabel;
+
 public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -33,6 +36,7 @@ public class InfoPanel extends JPanel {
 	private News news;
 	private JButton displayButton;
 	private InfoCommandPanel panel;
+	private JLabel titleLabel;
 
 	/**
 	 * Create the panel.
@@ -42,31 +46,36 @@ public class InfoPanel extends JPanel {
 	}
 
 	private void initialize() {
-		System.out.println (getBackground());
-		System.out.println (getBackground().darker());
-		setBackground(getBackground().darker());
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
+		GridBagConstraints gbcTitleLabel = new GridBagConstraints();
+		gbcTitleLabel.insets = new Insets(0, 5, 0, 5);
+		gbcTitleLabel.gridx = 0;
+		gbcTitleLabel.gridy = 0;
+		add(getTitleLabel(), gbcTitleLabel);
 		GridBagConstraints gbcCloseBtn = new GridBagConstraints();
-		gbcCloseBtn.insets = new Insets(5, 0, 0, 5);
+		gbcCloseBtn.weightx = 1.0;
 		gbcCloseBtn.anchor = GridBagConstraints.NORTHEAST;
 		gbcCloseBtn.gridx = 1;
 		gbcCloseBtn.gridy = 0;
 		add(getCloseBtn(), gbcCloseBtn);
 		GridBagConstraints gbcTextPane = new GridBagConstraints();
+		gbcTextPane.insets = new Insets(0, 0, 5, 0);
+		gbcTextPane.gridwidth = 0;
 		gbcTextPane.weighty = 1.0;
 		gbcTextPane.weightx = 1.0;
 		gbcTextPane.fill = GridBagConstraints.BOTH;
 		gbcTextPane.gridx = 0;
-		gbcTextPane.gridy = 0;
+		gbcTextPane.gridy = 1;
 		add(getTextPane(), gbcTextPane);
 		setVisible(false);
 		GridBagConstraints gbcPanel = new GridBagConstraints();
+		gbcPanel.gridwidth = 0;
 		gbcPanel.weightx = 1.0;
-		gbcPanel.insets = new Insets(0, 5, 0, 0);
+		gbcPanel.insets = new Insets(0, 5, 5, 0);
 		gbcPanel.fill = GridBagConstraints.BOTH;
 		gbcPanel.gridx = 0;
-		gbcPanel.gridy = 1;
+		gbcPanel.gridy = 2;
 		add(getPanel(), gbcPanel);
 	}
 	
@@ -107,26 +116,41 @@ public class InfoPanel extends JPanel {
 		
 		this.news = new News(newsList);
 		setVisible(!news.isEmpty());
-		if (!news.isEmpty()) {
-			getPanel().getPageSelector().setPageCount(news.size());
-			getPanel().getPageSelector().setPage(0);
-		}
+		setNews(news.isEmpty()?-1:0);
 	}
 
 	private void setNews(int index) {
-		Info info = news.get(index);
+System.out.println("Setting message "+index);//TODO
+		Info info = index<0?null:news.get(index);
+		int size = news.size();
 		// Update the command panel
-		getPanel().getMarkAsReadButton().setEnabled(!info.isRead());
+		getPanel().getMarkAsReadButton().setEnabled(size!=0);
+		getPanel().getMarkAsReadButton().setEnabled(info!=null && !info.isRead());
+		getPanel().getPageSelector().setVisible(size!=0);
 		getPanel().getPageSelector().getPageNumber().setValue((BigInteger)null);
-		getPanel().getPageSelector().setPageCount(news.size());
+		getPanel().getPageSelector().setPageCount(size);
 		getPanel().getPageSelector().setPage(index);
-		setVisible(true);
+		int read;
+		if (getPanel().getShowReadCheckBox().isSelected()) {
+			read = 0;
+			for (Info element : news.getAll()) {
+				if (element.isRead()) {
+					read++;
+				}
+			}
+		} else {
+			// read messages are visible
+			read = news.getPhysicalSize()-news.size();
+		}
+		getPanel().getShowReadCheckBox().setEnabled(read!=0);
+		getPanel().getShowReadCheckBox().setText(Formatter.format("Show {0} read messages", read));
 	}
 
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (displayButton!=null) {
 			displayButton.setVisible(!visible);
+			displayButton.setIcon(IconManager.get(news.isEmpty()?IconManager.Name.MESSAGE:IconManager.Name.NEW_MESSAGE));
 		}
 	}
 
@@ -154,6 +178,7 @@ public class InfoPanel extends JPanel {
 						// Only unread are displayed
 						if (news.isEmpty()) {
 							InfoPanel.this.setVisible(false);
+							setNews(-1);
 						} else {
 							if (index<=news.size()-1) {
 								setNews(index);
@@ -186,5 +211,11 @@ public class InfoPanel extends JPanel {
 			});
 		}
 		return panel;
+	}
+	private JLabel getTitleLabel() {
+		if (titleLabel == null) {
+			titleLabel = new JLabel("Messages");
+		}
+		return titleLabel;
 	}
 }
