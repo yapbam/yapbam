@@ -49,18 +49,18 @@ public class InfoPanel extends JPanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		GridBagConstraints gbcTitleLabel = new GridBagConstraints();
-		gbcTitleLabel.insets = new Insets(0, 5, 0, 5);
+		gbcTitleLabel.insets = new Insets(2, 5, 0, 5);
 		gbcTitleLabel.gridx = 0;
 		gbcTitleLabel.gridy = 0;
 		add(getTitleLabel(), gbcTitleLabel);
 		GridBagConstraints gbcCloseBtn = new GridBagConstraints();
+		gbcCloseBtn.insets = new Insets(2, 0, 0, 2);
 		gbcCloseBtn.weightx = 1.0;
 		gbcCloseBtn.anchor = GridBagConstraints.NORTHEAST;
 		gbcCloseBtn.gridx = 1;
 		gbcCloseBtn.gridy = 0;
 		add(getCloseBtn(), gbcCloseBtn);
 		GridBagConstraints gbcTextPane = new GridBagConstraints();
-		gbcTextPane.insets = new Insets(0, 0, 5, 0);
 		gbcTextPane.gridwidth = 0;
 		gbcTextPane.weighty = 1.0;
 		gbcTextPane.weightx = 1.0;
@@ -110,10 +110,6 @@ public class InfoPanel extends JPanel {
 	}
 
 	public void setInfo(List<Info> newsList) {
-		for (Info info : newsList) {
-			System.out.println (info.getId()+" -> "+info.isRead()); //TODO
-		}
-		
 		this.news = new News(newsList);
 		setVisible(!news.isEmpty());
 		setNews(news.isEmpty()?-1:0);
@@ -130,27 +126,17 @@ System.out.println("Setting message "+index);//TODO
 		getPanel().getPageSelector().getPageNumber().setValue((BigInteger)null);
 		getPanel().getPageSelector().setPageCount(size);
 		getPanel().getPageSelector().setPage(index);
-		int read;
-		if (getPanel().getShowReadCheckBox().isSelected()) {
-			read = 0;
-			for (Info element : news.getAll()) {
-				if (element.isRead()) {
-					read++;
-				}
-			}
-		} else {
-			// read messages are visible
-			read = news.getPhysicalSize()-news.size();
-		}
+		int read = news.getNbRead();
 		getPanel().getShowReadCheckBox().setEnabled(read!=0);
-		getPanel().getShowReadCheckBox().setText(Formatter.format("Show {0} read messages", read));
+		getPanel().getShowReadCheckBox().setText(Formatter.format("Show read messages ({0})", read));
+		getTitleLabel().setIcon(IconManager.get(read==news.getPhysicalSize()?Name.MESSAGE:Name.NEW_MESSAGE));
 	}
 
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (displayButton!=null) {
 			displayButton.setVisible(!visible);
-			displayButton.setIcon(IconManager.get(news.isEmpty()?IconManager.Name.MESSAGE:IconManager.Name.NEW_MESSAGE));
+			displayButton.setIcon(IconManager.get(news.isEmpty()?Name.MESSAGE:Name.NEW_MESSAGE));
 		}
 	}
 
@@ -214,7 +200,7 @@ System.out.println("Setting message "+index);//TODO
 	}
 	private JLabel getTitleLabel() {
 		if (titleLabel == null) {
-			titleLabel = new JLabel("Messages");
+			titleLabel = new JLabel(Formatter.format("<HTML><font size=\"4\"><U><B>{0}</B></U></font></HTML>", "Messages"));
 		}
 		return titleLabel;
 	}
