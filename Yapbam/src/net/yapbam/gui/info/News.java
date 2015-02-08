@@ -39,7 +39,13 @@ public class News extends FilteredList<Info> {
 		this.onlyUnread = onlyUnread;
 	}
 	
-	List<Info> getAll() {
-		return physical;
+	public int getNbRead() {
+		int read = 0;
+		for (Info info : physical) {
+			if (info.isRead()) {
+				read++;
+			}
+		}
+		return read;
 	}
 }
