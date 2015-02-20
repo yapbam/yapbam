@@ -42,6 +42,7 @@ import net.yapbam.gui.statistics.StatisticsPlugin;
 import net.yapbam.gui.tools.ToolsPlugIn;
 import net.yapbam.gui.transactiontable.TransactionsPlugIn;
 import net.yapbam.gui.transfer.TransferPlugin;
+import net.yapbam.gui.util.LookAndFeelUtils;
 import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
 import net.yapbam.util.Portable;
@@ -218,6 +219,7 @@ public class Preferences {
 	 */
 	public String getLookAndFeel() {
 		String value = this.properties.getProperty(LOOK_AND_FEEL);
+		value = LookAndFeelUtils.isValid(value)?value:null;
 		if (LOOK_AND_FEEL_JAVA_VALUE.equalsIgnoreCase(value)) {
 			// Versions before 0.7.4 used LOOK_AND_FEEL_JAVA_VALUE and LOOK_AND_FEEL_CUSTOM_VALUE to code the look and feel
 			value = getLookAndFeelName(UIManager.getCrossPlatformLookAndFeelClassName());
