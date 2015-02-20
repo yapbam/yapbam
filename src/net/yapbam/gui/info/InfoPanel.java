@@ -115,7 +115,7 @@ public class InfoPanel extends JPanel {
 	}
 
 	private void setNews(int index) {
-System.out.println("Setting message "+index);//TODO
+//System.out.println("Setting message "+index);//TODO
 		Info info = index<0?null:news.get(index);
 		int size = news.size();
 		// Update the command panel

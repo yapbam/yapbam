@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
+import net.yapbam.gui.util.LookAndFeelUtils;
 import net.yapbam.util.NullUtils;
 
 import javax.swing.JSlider;
@@ -268,20 +269,25 @@ public class ThemePanel extends PreferencePanel {
 			lafPanel.setLayout(new GridLayout(lfs.length, 1));
 
 			ButtonGroup group = new ButtonGroup();
+			int index = 0;
 			for (int i = 0; i < lfs.length; i++) {
 				String name = lfs[i].getName();
-				JRadioButton button = new JRadioButton(name);
-				if (lfs[i].getClassName().equals(current)) {
-					button.setSelected(true);
-					selectedLookAndFeel = lfs[i].getName();
+				if (LookAndFeelUtils.isValid(name)) {
+					JRadioButton button = new JRadioButton(name);
+					if (lfs[i].getClassName().equals(current)) {
+						button.setSelected(true);
+						selectedLookAndFeel = lfs[i].getName();
+					}
+					button.addItemListener(new LFAction(lfs[i].getName()));
+					group.add(button);
+					lafPanel.add(button, index);
+					index++;
 				}
-				button.addItemListener(new LFAction(lfs[i].getName()));
-				group.add(button);
-				lafPanel.add(button, i);
 			}
 		}
 		return lafPanel;
 	}
+
 	private JLabel getFontSliderTitle() {
 		if (fontSliderTitle == null) {
 			fontSliderTitle = new JLabel(LocalizationData.get("PreferencesDialog.Theme.fontSize"));
