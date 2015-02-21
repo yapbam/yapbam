@@ -29,7 +29,7 @@ public abstract class NewsBuilder {
 		super();
 	}
 
-	public static void build(InfoPanel infoPanel) {
+	public static void build(MessagesPanel infoPanel) {
 		new UpdateSwingWorker(infoPanel).execute();
 	}
 
@@ -37,11 +37,11 @@ public abstract class NewsBuilder {
 	static class UpdateSwingWorker extends Worker<JSONArray, Void> {
 		private static final Logger LOGGER = LoggerFactory.getLogger(NewsBuilder.class);
 		private static final boolean SLOW_UPDATE_CHECKING = false;
-		private static final String BASE_URL = "http://www.yapbam.net/news";
+		private static final String BASE_URL = "http://www.yapbam.net/news"; //$NON-NLS-1$
 
-		private InfoPanel infoPanel;
+		private MessagesPanel infoPanel;
 
-		UpdateSwingWorker(InfoPanel infoPanel) {
+		UpdateSwingWorker(MessagesPanel infoPanel) {
 			this.infoPanel = infoPanel;
 		}
 		
@@ -50,23 +50,23 @@ public abstract class NewsBuilder {
 			try {
 				if (!isCancelled()) {
 					JSONArray json = get();
-					List<Info> news = new ArrayList<Info>();
+					List<Message> news = new ArrayList<Message>();
 					for (int i = 0; i < json.size(); i++) {
 						JSONObject obj = (JSONObject) json.get(i);
-						Info info = Info.build(obj);
+						Message info = Message.build(obj);
 						if (info!=null) {
 							news.add(info);
 						}
 					}
-					infoPanel.setInfo(news);
+					infoPanel.setMessages(news);
 				}
 			} catch (InterruptedException e) {
-				LOGGER.trace("Worker was interrupted", e);
+				LOGGER.trace("Worker was interrupted", e); //$NON-NLS-1$
 			} catch (ExecutionException e) {
 				if (! (e.getCause() instanceof IOException)) {
 					ErrorManager.INSTANCE.log(SwingUtilities.getWindowAncestor(infoPanel),e);
 				} else {
-					LOGGER.debug("Error while communicating with server", e.getCause());
+					LOGGER.debug("Error while communicating with server", e.getCause()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -82,7 +82,7 @@ public abstract class NewsBuilder {
 			if (errorCode==HttpURLConnection.HTTP_OK) {
 				String encoding = ct.getContentEncoding();
 				if (encoding==null) {
-					throw new IOException("Encoding is null");
+					throw new IOException("Encoding is null"); //$NON-NLS-1$
 				}
 				InputStreamReader reader = new InputStreamReader(ct.getInputStream(), encoding);
 				try {
@@ -90,13 +90,13 @@ public abstract class NewsBuilder {
 					BufferedReader r = new BufferedReader(reader);
 					try {
 						for (String line=r.readLine();line!=null;line=r.readLine()) {
-							if (line.startsWith("#")) {
+							if (line.startsWith("#")) { //$NON-NLS-1$
 								System.out.println (line);
 							} else {
 								return (JSONArray) JSONValue.parse(line);
 							}
 						}
-						throw new IOException ("Not result found");
+						throw new IOException ("Not result found"); //$NON-NLS-1$
 					} finally {
 						r.close();
 					}
@@ -104,7 +104,7 @@ public abstract class NewsBuilder {
 					reader.close();
 				}
 			} else {
-				throw new IOException ("Unexpected error code "+errorCode);
+				throw new IOException ("Unexpected error code "+errorCode); //$NON-NLS-1$
 			}
 		}
 	}

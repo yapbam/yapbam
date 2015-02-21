@@ -6,7 +6,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.IconManager.Name;
-import net.yapbam.gui.info.InfoPanel;
+import net.yapbam.gui.info.MessagesPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,7 +17,7 @@ import java.awt.event.ComponentEvent;
 public class GlobalPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private InfoPanel infoPanel;
+	private MessagesPanel infoPanel;
 	private MainPanel mainPanel;
 	private JButton infoDisplayer;
 
@@ -74,9 +74,9 @@ public class GlobalPanel extends JPanel {
 		return infoDisplayer;
 	}
 
-	InfoPanel getInfoPanel() {
+	MessagesPanel getInfoPanel() {
 		if (infoPanel == null) {
-			infoPanel = new InfoPanel();
+			infoPanel = new MessagesPanel();
 			infoPanel.setVisible(false);
 		}
 		return infoPanel;

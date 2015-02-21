@@ -9,6 +9,7 @@ import java.awt.Insets;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
+import com.fathzer.soft.ajlib.swing.widget.PageSelector;
 
 import javax.swing.JButton;
 
@@ -22,25 +23,24 @@ import java.util.List;
 
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
-import net.yapbam.gui.widget.PageSelector;
 import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JLabel;
 
-public class InfoPanel extends JPanel {
+public class MessagesPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JButton closeBtn;
 	private HTMLPane textPane;
-	private News news;
+	private Messages messages;
 	private JButton displayButton;
-	private InfoCommandPanel panel;
+	private MessagesCommandPanel panel;
 	private JLabel titleLabel;
 
 	/**
 	 * Create the panel.
 	 */
-	public InfoPanel() {
+	public MessagesPanel() {
 		initialize();
 	}
 
@@ -90,7 +90,7 @@ public class InfoPanel extends JPanel {
 					setVisible(false);
 				}
 			});
-			closeBtn.setToolTipText(LocalizationData.get("info.close.tooltip")); //$NON-NLS-1$
+			closeBtn.setToolTipText(LocalizationData.get("messages.close.tooltip")); //$NON-NLS-1$
 		}
 		return closeBtn;
 	}
@@ -98,6 +98,7 @@ public class InfoPanel extends JPanel {
 	private HTMLPane getTextPane() {
 		if (textPane == null) {
 			textPane = new HTMLPane();
+			textPane.setContent(getNoMessageWording());
 			textPane.addPropertyChangeListener(HTMLPane.CONTENT_CHANGED_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -108,41 +109,49 @@ public class InfoPanel extends JPanel {
 		return textPane;
 	}
 
-	public void setInfo(List<Info> newsList) {
-		this.news = new News(newsList);
-		setVisible(!news.isEmpty());
-		setNews(news.isEmpty()?-1:0);
+	public void setMessages(List<Message> newsList) {
+		this.messages = new Messages(newsList);
+		boolean isEmpty = messages.isEmpty();
+		setVisible(!isEmpty);
+		setMessage(isEmpty?-1:0);
 	}
 
-	private void setNews(int index) {
-//System.out.println("Setting message "+index);//TODO
-		Info info = index<0?null:news.get(index);
-		int size = news.size();
-		// Update the command panel
-		getPanel().getMarkAsReadButton().setEnabled(size!=0);
-		getPanel().getMarkAsReadButton().setEnabled(info!=null && !info.isRead());
+	private void setMessage(int index) {
+		int size = messages.size();
 		getPanel().getPageSelector().setVisible(size!=0);
 		getPanel().getPageSelector().setPage(-1);
 		getPanel().getPageSelector().setPageCount(size);
-		getPanel().getPageSelector().setPage(index);
-		int read = news.getNbRead();
+		if (index>=0) {
+			getPanel().getPageSelector().setPage(index);
+		}
+		refreshButtons(index);
+	}
+
+	private void refreshButtons(int index) {
+		Message message = index<0?null:messages.get(index);
+		// Update the command panel
+		getPanel().getMarkAsReadButton().setEnabled(message!=null && !message.isRead());
+		int read = messages.getNbRead();
 		getPanel().getShowReadCheckBox().setEnabled(read!=0);
-		getPanel().getShowReadCheckBox().setText(Formatter.format("Show read messages ({0})", read));
-		getTitleLabel().setIcon(IconManager.get(read==news.getPhysicalSize()?Name.MESSAGE:Name.NEW_MESSAGE));
+		getPanel().getShowReadCheckBox().setText(Formatter.format(LocalizationData.get("messages.showReadMessages"), read, messages.getPhysicalSize())); //$NON-NLS-1$
+		getTitleLabel().setIcon(IconManager.get(read==messages.getPhysicalSize()?Name.MESSAGE:Name.NEW_MESSAGE));
 	}
 
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (displayButton!=null) {
 			displayButton.setVisible(!visible);
-			displayButton.setIcon(IconManager.get(news.isEmpty()?Name.MESSAGE:Name.NEW_MESSAGE));
+			displayButton.setIcon(IconManager.get(messages.isAllRead()?Name.MESSAGE:Name.NEW_MESSAGE));
+		}
+		if (visible && !getPanel().getShowReadCheckBox().isSelected() && messages.isEmpty()) {
+			getPanel().getShowReadCheckBox().setSelected(true);
 		}
 	}
 
 	public void setDisplayButton(JButton displayButton) {
 		this.displayButton = displayButton;
 		if (displayButton!=null) {
-			this.displayButton.setToolTipText(LocalizationData.get("info.open.tooltip"));
+			this.displayButton.setToolTipText(LocalizationData.get("messages.open.tooltip")); //$NON-NLS-1$
 			this.displayButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -151,31 +160,31 @@ public class InfoPanel extends JPanel {
 			});
 		}
 	}
-	private InfoCommandPanel getPanel() {
+	private MessagesCommandPanel getPanel() {
 		if (panel == null) {
-			panel = new InfoCommandPanel();
+			panel = new MessagesCommandPanel();
 			panel.getMarkAsReadButton().addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int index = panel.getPageSelector().getPageNumber().getValue().intValue()-1;
-					Info info = news.get(index);
-					info.markRead();
-					if (news.isOnlyUnread()) {
+					Message message = messages.get(index);
+					message.markRead();
+					if (messages.isOnlyUnread()) {
 						// Only unread are displayed
-						if (news.isEmpty()) {
-							InfoPanel.this.setVisible(false);
-							setNews(-1);
+						if (messages.isEmpty()) {
+							MessagesPanel.this.setVisible(false);
+							setMessage(-1);
 						} else {
-							if (index<=news.size()-1) {
-								setNews(index);
+							if (index<=messages.size()-1) {
+								setMessage(index);
 							} else {
-								setNews(0);
+								setMessage(0);
 							}
 						}
 					} else {
-						if (index<news.size()-1) {
-							setNews(index+1);
+						if (index<messages.size()-1) {
+							setMessage(index+1);
 						} else {
-							setNews(0);
+							setMessage(0);
 						}
 					}
 				}
@@ -183,16 +192,24 @@ public class InfoPanel extends JPanel {
 			panel.getShowReadCheckBox().addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					System.out.println ("Changed to "+(e.getStateChange()==ItemEvent.SELECTED));
+					boolean onlyUnread = e.getStateChange()==ItemEvent.DESELECTED;
+					Message message = getMessage();
+					messages.setOnlyUnread(onlyUnread);
+					if (messages.size()==0) {
+						setMessage(-1);
+					} else if (message==null) {
+						setMessage(0);
+					} else {
+						setMessage(messages.getNearest(message));
+					}
 				}
 			});
 			panel.getPageSelector().addPropertyChangeListener(PageSelector.PAGE_SELECTED_PROPERTY_NAME, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					int index = (Integer) evt.getNewValue();
-System.out.println (news.isOnlyUnread()+", selected info: "+index+
-	(index<0?"":" -> "+news.get(index).getId()+(news.get(index).isRead()?" (read)":" (unread)"))); //TODO
-					getTextPane().setContent(index<0?"":news.get(index).getContent());
+					getTextPane().setContent(index<0?getNoMessageWording():messages.get(index).getContent()); //$NON-NLS-1$
+					refreshButtons(index);
 				}
 			});
 		}
@@ -200,8 +217,18 @@ System.out.println (news.isOnlyUnread()+", selected info: "+index+
 	}
 	private JLabel getTitleLabel() {
 		if (titleLabel == null) {
-			titleLabel = new JLabel(Formatter.format("<HTML><font size=\"4\"><U><B>{0}</B></U></font></HTML>", "Messages"));
+			titleLabel = new JLabel(Formatter.format("<HTML><U><B>{0}</B></U></HTML>", LocalizationData.get("messages.title"))); //$NON-NLS-1$ //$NON-NLS-2$
+			titleLabel.setFont(titleLabel.getFont().deriveFont(titleLabel.getFont().getSize()*1.2f));
 		}
 		return titleLabel;
+	}
+	
+	private Message getMessage() {
+		int index = getPanel().getPageSelector().getCurrentPage();
+		return index<0?null:messages.get(index);
+	}
+
+	private String getNoMessageWording() {
+		return Formatter.format("<html>{0}</html>",LocalizationData.get("messagesnoMessageAvailable")); //$NON-NLS-1$
 	}
 }

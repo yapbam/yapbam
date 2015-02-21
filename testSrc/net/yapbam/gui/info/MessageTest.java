@@ -6,15 +6,15 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-public class NewsTest {
+public class MessageTest {
 	@Test
 	public void test() {
-		Info info0 = new Info("0", "content 0");
+		Message info0 = new Message("0", "content 0");
 		assertFalse(info0.isRead());
-		Info info1 = new Info("1", "content 1");
-		Info info2 = new Info("2", "content 2");
+		Message info1 = new Message("1", "content 1");
+		Message info2 = new Message("2", "content 2");
 		
-		News news = new News(Arrays.asList(new Info[]{info0, info1, info2}));
+		Messages news = new Messages(Arrays.asList(new Message[]{info0, info1, info2}));
 		assertEquals(3, news.size());
 		
 		assertEquals(info0.getId(), news.get(0).getId());
