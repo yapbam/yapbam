@@ -27,10 +27,8 @@ public abstract class FilteredList<T> implements Iterable<T> {
 	protected abstract boolean isOk(T element);
 	
 	public T get(int index) {
-System.out.println ("Looking for element "+index); //TODO
 		int count = -1;
 		for (T element : physical) {
-			System.out.println ("  "+element.toString()+" -> "+isOk(element)); //TODO
 			if (isOk(element)) {
 				count++;
 				if (count==index) {

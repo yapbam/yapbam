@@ -6,19 +6,19 @@ import org.slf4j.LoggerFactory;
 
 import com.fathzer.jlocal.Formatter;
 
-class Info {
-	private static final String KIND_ATTR = "kind";
-	private static final String IGNORE_TIME_ATTR = "ignoreTime";
-	private static final String PARAMS_ATTR = "parameters";
-	private static final String TEXT_ATTR = "text";
-	private static final String ID_ATTR = "id";
+class Message {
+	private static final String KIND_ATTR = "kind"; //$NON-NLS-1$
+	private static final String IGNORE_TIME_ATTR = "ignoreTime"; //$NON-NLS-1$
+	private static final String PARAMS_ATTR = "parameters"; //$NON-NLS-1$
+	private static final String TEXT_ATTR = "text"; //$NON-NLS-1$
+	private static final String ID_ATTR = "id"; //$NON-NLS-1$
 	private String id;
 	private String content;
 	private String[] parameters;
 	/** Max ignore time in days. */
 	private long maxIgnoreTime;
 	
-	Info(String id, String content) {
+	Message(String id, String content) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -34,20 +34,20 @@ class Info {
 		}
 	}
 	
-	private static boolean isInfo(JSONObject obj) {
+	private static boolean isMessage(JSONObject obj) {
 		Object kind = obj.get(KIND_ATTR);
-		return "news".equals(kind) || "warning".equals(kind);
+		return "news".equals(kind) || "warning".equals(kind); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public static Info build(JSONObject obj) {
-		if ("arguments".equals(obj.get(KIND_ATTR))) {
-			LoggerFactory.getLogger(Info.class).info("Input: {}", obj);
+	public static Message build(JSONObject obj) {
+		if ("arguments".equals(obj.get(KIND_ATTR))) { //$NON-NLS-1$
+			LoggerFactory.getLogger(Message.class).info("Input: {}", obj); //$NON-NLS-1$
 			return null;
-		} else if (!isInfo(obj) || !(obj.get(ID_ATTR) instanceof String) || !(obj.get(TEXT_ATTR) instanceof String)) {
-			LoggerFactory.getLogger(Info.class).info("Unexpected JSON object: {}", obj);
+		} else if (!isMessage(obj) || !(obj.get(ID_ATTR) instanceof String) || !(obj.get(TEXT_ATTR) instanceof String)) {
+			LoggerFactory.getLogger(Message.class).info("Unexpected JSON object: {}", obj); //$NON-NLS-1$
 			return null;
 		}
-		Info result = new Info((String)obj.get(ID_ATTR), (String)obj.get(TEXT_ATTR));
+		Message result = new Message((String)obj.get(ID_ATTR), (String)obj.get(TEXT_ATTR));
 		if (obj.get(IGNORE_TIME_ATTR) instanceof Long) {
 			result.maxIgnoreTime = (Long) obj.get(IGNORE_TIME_ATTR);
 		}
@@ -71,11 +71,11 @@ class Info {
 	}
 
 	public void markRead() {
-		ReadInfo.setReadTime(this, System.currentTimeMillis());
+		MessagesHistory.setReadTime(this, System.currentTimeMillis());
 	}
 	
 	public boolean isRead() {
-		long readTime = ReadInfo.getReadTime(this);
+		long readTime = MessagesHistory.getReadTime(this);
 		if (readTime<=0) {
 			return false;
 		} else {
@@ -91,6 +91,6 @@ class Info {
 
 	@Override
 	public String toString() {
-		return "["+getId()+" ("+(isRead()?"read":"unread")+")]";
+		return "["+getId()+" ("+(isRead()?"read":"unread")+")]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
  }

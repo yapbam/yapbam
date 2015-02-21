@@ -1,14 +1,21 @@
 package net.yapbam.gui.info;
 
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JCheckBox;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import net.yapbam.gui.widget.PageSelector;
+
 import javax.swing.JButton;
 
-public class InfoCommandPanel extends JPanel {
+import net.yapbam.gui.LocalizationData;
+
+import com.fathzer.soft.ajlib.swing.widget.PageSelector;
+
+public class MessagesCommandPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JCheckBox showReadCheckBox;
 	private PageSelector pageSelector;
@@ -17,7 +24,7 @@ public class InfoCommandPanel extends JPanel {
 	/**
 	 * Constructor.
 	 */
-	public InfoCommandPanel() {
+	public MessagesCommandPanel() {
 		initialize();
 	}
 	private void initialize() {
@@ -60,7 +67,7 @@ public class InfoCommandPanel extends JPanel {
 	}
 	public JButton getMarkAsReadButton() {
 		if (markAsReadButton == null) {
-			markAsReadButton = new JButton("Mark as read");
+			markAsReadButton = new JButton(LocalizationData.get("messages.markAsRead")); //$NON-NLS-1$
 		}
 		return markAsReadButton;
 	}

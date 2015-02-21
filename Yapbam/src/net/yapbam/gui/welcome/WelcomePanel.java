@@ -20,13 +20,13 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
-import net.yapbam.gui.widget.PageSelector;
 
 import javax.swing.JSeparator;
 
 import com.fathzer.soft.ajlib.swing.Browser;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.widget.HTMLPane;
+import com.fathzer.soft.ajlib.swing.widget.PageSelector;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -54,7 +54,7 @@ public class WelcomePanel extends JPanel {
 	private URI getURI(String key) {
 		try {
 			String uriString = urlsResourceBundle.getString(key);
-			if (uriString.contains(":")) {
+			if (uriString.contains(":")) { //$NON-NLS-1$
 				return new URI(uriString);
 			}
 			return new File(uriString).toURI();

@@ -69,10 +69,10 @@ public abstract class IconManager {
 		map.put(Name.UNCHECK_TRANSACTION, create("images/uncheck.png", size)); //$NON-NLS-1$
 		map.put(Name.SPREAD, create("images/spread.png", size)); //$NON-NLS-1$
 		map.put(Name.SPREADABLE, create("images/spreadable.png", size)); //$NON-NLS-1$
-		map.put(Name.FIRST, create("images/first.png", size)); //$NON-NLS-1$
-		map.put(Name.PREVIOUS, create("images/previous.png", size)); //$NON-NLS-1$
-		map.put(Name.NEXT, create("images/next.png", size)); //$NON-NLS-1$
-		map.put(Name.LAST, create("images/last.png", size)); //$NON-NLS-1$
+		map.put(Name.FIRST, create("/com/fathzer/soft/ajlib/swing/widget/first.png", size)); //$NON-NLS-1$
+		map.put(Name.PREVIOUS, create("/com/fathzer/soft/ajlib/swing/widget/previous.png", size)); //$NON-NLS-1$
+		map.put(Name.NEXT, create("/com/fathzer/soft/ajlib/swing/widget/next.png", size)); //$NON-NLS-1$
+		map.put(Name.LAST, create("/com/fathzer/soft/ajlib/swing/widget/last.png", size)); //$NON-NLS-1$
 		map.put(Name.UP, create("images/up.png", size)); //$NON-NLS-1$
 		map.put(Name.DOWN, create("images/down.png", size)); //$NON-NLS-1$
 		map.put(Name.TOP, create("images/top.png", size)); //$NON-NLS-1$
