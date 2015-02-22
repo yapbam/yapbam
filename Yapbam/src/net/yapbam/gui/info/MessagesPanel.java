@@ -195,7 +195,7 @@ public class MessagesPanel extends JPanel {
 					boolean onlyUnread = e.getStateChange()==ItemEvent.DESELECTED;
 					Message message = getMessage();
 					messages.setOnlyUnread(onlyUnread);
-					if (messages.size()==0) {
+					if (messages.isEmpty()) {
 						setMessage(-1);
 					} else if (message==null) {
 						setMessage(0);
