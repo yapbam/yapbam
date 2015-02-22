@@ -49,8 +49,6 @@ public class WelcomePanel extends JPanel {
 	
 	private GlobalData data;
 
-	private PageSelector tipSelectionPanel;
-		
 	private URI getURI(String key) {
 		try {
 			String uriString = urlsResourceBundle.getString(key);
@@ -188,7 +186,7 @@ public class WelcomePanel extends JPanel {
 		tipPane.setPreferredSize(new Dimension(300*getFont().getSize()/12, 200*getFont().getSize()/12));
 		tipsPanel.add(tipPane, BorderLayout.CENTER);
 		
-		tipSelectionPanel = new PageSelector();
+		PageSelector tipSelectionPanel = new PageSelector();
 		tipSelectionPanel.addPropertyChangeListener(PageSelector.PAGE_SELECTED_PROPERTY_NAME, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
