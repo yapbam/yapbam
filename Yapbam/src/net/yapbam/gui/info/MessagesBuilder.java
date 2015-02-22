@@ -23,8 +23,8 @@ import net.yapbam.util.ApplicationContext;
 
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 
-public abstract class NewsBuilder {
-	private NewsBuilder() {
+public abstract class MessagesBuilder {
+	private MessagesBuilder() {
 		// To prevent this class from being instantiated
 		super();
 	}
@@ -35,9 +35,10 @@ public abstract class NewsBuilder {
 
 	// A SwingWorker that performs the update availability check
 	static class UpdateSwingWorker extends Worker<JSONArray, Void> {
-		private static final Logger LOGGER = LoggerFactory.getLogger(NewsBuilder.class);
+		private static final Logger LOGGER = LoggerFactory.getLogger(MessagesBuilder.class);
 		private static final boolean SLOW_UPDATE_CHECKING = false;
-		private static final String BASE_URL = "http://www.yapbam.net/news"; //$NON-NLS-1$
+		private static final String BASE_URL_PROPERTY = "newsURL"; //$NON-NLS-1$
+		private static final String BASE_URL = System.getProperty(BASE_URL_PROPERTY, "http://www.yapbam.net/messages"); //$NON-NLS-1$
 
 		private MessagesPanel infoPanel;
 
@@ -91,7 +92,7 @@ public abstract class NewsBuilder {
 					try {
 						for (String line=r.readLine();line!=null;line=r.readLine()) {
 							if (line.startsWith("#")) { //$NON-NLS-1$
-								System.out.println (line);
+								LOGGER.trace(line);
 							} else {
 								return (JSONArray) JSONValue.parse(line);
 							}
