@@ -9,10 +9,10 @@ import org.junit.Test;
 public class MessageTest {
 	@Test
 	public void test() {
-		Message info0 = new Message("0", "content 0");
+		Message info0 = new Message("0", "news", "content 0");
 		assertFalse(info0.isRead());
-		Message info1 = new Message("1", "content 1");
-		Message info2 = new Message("2", "content 2");
+		Message info1 = new Message("1", "warning", "content 1");
+		Message info2 = new Message("2", "news", "content 2");
 		
 		Messages news = new Messages(Arrays.asList(new Message[]{info0, info1, info2}));
 		assertEquals(3, news.size());

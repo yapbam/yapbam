@@ -1,7 +1,9 @@
 package net.yapbam.gui.info;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -27,6 +29,8 @@ import net.yapbam.gui.LocalizationData;
 
 import javax.swing.JLabel;
 
+import java.awt.BorderLayout;
+
 public class MessagesPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -36,6 +40,8 @@ public class MessagesPanel extends JPanel {
 	private JButton displayButton;
 	private MessagesCommandPanel panel;
 	private JLabel titleLabel;
+	private JPanel panel_1;
+	private JLabel icon;
 
 	/**
 	 * Create the panel.
@@ -48,30 +54,31 @@ public class MessagesPanel extends JPanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		setLayout(gridBagLayout);
 		GridBagConstraints gbcTitleLabel = new GridBagConstraints();
-		gbcTitleLabel.insets = new Insets(2, 5, 0, 5);
+		gbcTitleLabel.insets = new Insets(2, 5, 5, 5);
 		gbcTitleLabel.gridx = 0;
 		gbcTitleLabel.gridy = 0;
 		add(getTitleLabel(), gbcTitleLabel);
 		GridBagConstraints gbcCloseBtn = new GridBagConstraints();
-		gbcCloseBtn.insets = new Insets(2, 0, 0, 2);
+		gbcCloseBtn.insets = new Insets(2, 0, 5, 2);
 		gbcCloseBtn.weightx = 1.0;
 		gbcCloseBtn.anchor = GridBagConstraints.NORTHEAST;
 		gbcCloseBtn.gridx = 1;
 		gbcCloseBtn.gridy = 0;
 		add(getCloseBtn(), gbcCloseBtn);
-		GridBagConstraints gbcTextPane = new GridBagConstraints();
-		gbcTextPane.gridwidth = 0;
-		gbcTextPane.weighty = 1.0;
-		gbcTextPane.weightx = 1.0;
-		gbcTextPane.fill = GridBagConstraints.BOTH;
-		gbcTextPane.gridx = 0;
-		gbcTextPane.gridy = 1;
-		add(getTextPane(), gbcTextPane);
+		GridBagConstraints gbcPanel_1 = new GridBagConstraints();
+		gbcPanel_1.weighty = 1.0;
+		gbcPanel_1.weightx = 1.0;
+		gbcPanel_1.fill = GridBagConstraints.BOTH;
+		gbcPanel_1.gridwidth = 0;
+		gbcPanel_1.insets = new Insets(0, 5, 0, 0);
+		gbcPanel_1.gridx = 0;
+		gbcPanel_1.gridy = 1;
+		add(getPanel_1(), gbcPanel_1);
 		setVisible(false);
 		GridBagConstraints gbcPanel = new GridBagConstraints();
 		gbcPanel.gridwidth = 0;
 		gbcPanel.weightx = 1.0;
-		gbcPanel.insets = new Insets(0, 5, 5, 0);
+		gbcPanel.insets = new Insets(0, 5, 0, 0);
 		gbcPanel.fill = GridBagConstraints.BOTH;
 		gbcPanel.gridx = 0;
 		gbcPanel.gridy = 2;
@@ -135,6 +142,16 @@ public class MessagesPanel extends JPanel {
 		getPanel().getShowReadCheckBox().setEnabled(read!=0);
 		getPanel().getShowReadCheckBox().setText(Formatter.format(LocalizationData.get("messages.showReadMessages"), read, messages.getPhysicalSize())); //$NON-NLS-1$
 		getTitleLabel().setIcon(IconManager.get(read==messages.getPhysicalSize()?Name.MESSAGE:Name.NEW_MESSAGE));
+		getIcon().setIcon(getIcon(message));
+	}
+	
+	private Icon getIcon(Message message) {
+		if (message==null) {
+			return null;
+		} else if (Message.Kind.WARNING.equals(message.getKind())) {
+			return UIManager.getIcon("OptionPane.warningIcon"); //$NON-NLS-1$
+		}
+		return UIManager.getIcon("OptionPane.informationIcon"); //$NON-NLS-1$
 	}
 
 	public void setVisible(boolean visible) {
@@ -230,5 +247,20 @@ public class MessagesPanel extends JPanel {
 
 	private String getNoMessageWording() {
 		return Formatter.format("<html>{0}</html>",LocalizationData.get("messagesnoMessageAvailable")); //$NON-NLS-1$
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			panel_1.setLayout(new BorderLayout(0, 0));
+			panel_1.add(getTextPane());
+			panel_1.add(getIcon(), BorderLayout.WEST);
+		}
+		return panel_1;
+	}
+	private JLabel getIcon() {
+		if (icon == null) {
+			icon = new JLabel();
+		}
+		return icon;
 	}
 }
