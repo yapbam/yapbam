@@ -126,8 +126,6 @@ public class MainFrame extends JFrame implements YapbamInstance {
 						dialog.setVisible(true);
 					}
 				}
-				
-				MessagesBuilder.build(((GlobalPanel)frame.getContentPane()).getInfoPanel());
 			}
 		});
 	}
@@ -323,6 +321,8 @@ public class MainFrame extends JFrame implements YapbamInstance {
 
 		// Display the window.
 		getJFrame().setVisible(true);
+		
+		MessagesBuilder.build(((GlobalPanel)this.getContentPane()).getInfoPanel());
 	}
 	
 	public GlobalData getData() {

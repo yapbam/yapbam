@@ -30,7 +30,7 @@ public abstract class ApplicationContext {
 	/** Gets the version of currently running Yapbam copy.
 	 * @return a ReleaseInfo instance ({@link ReleaseInfo#UNKNOWN if the version is unknown}
 	 */
-	public static ReleaseInfo getVersion() {
+	public static synchronized ReleaseInfo getVersion() {
 		if (version==null) {
 			InputStream inStream = ApplicationContext.class.getResourceAsStream("/net/yapbam/update/version.txt"); //$NON-NLS-1$
 			Properties properties = new Properties();
@@ -66,7 +66,7 @@ public abstract class ApplicationContext {
 	public static URL toURL(String baseURL) {
 		try {
 			StringBuilder url = new StringBuilder(baseURL);
-			url.append("?version=").append(URLEncoder.encode(version.toString(),UTF_8));
+			url.append("?version=").append(URLEncoder.encode(getVersion().toString(),UTF_8));
 			url.append("&country=").append(URLEncoder.encode(LocalizationData.getLocale().getCountry(),UTF_8));
 			url.append("&lang=").append(URLEncoder.encode(LocalizationData.getLocale().getLanguage(),UTF_8));
 			addPropertyParameter (url, "osName", "os.name");
