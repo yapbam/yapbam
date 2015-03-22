@@ -157,7 +157,7 @@ public class MessagesPanel extends JPanel {
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (displayButton!=null) {
-			displayButton.setVisible(!visible);
+			displayButton.setVisible(!visible && messages.getPhysicalSize()!=0);
 			displayButton.setIcon(IconManager.get(messages.isAllRead()?Name.MESSAGE:Name.NEW_MESSAGE));
 		}
 		if (visible && !getPanel().getShowReadCheckBox().isSelected() && messages.isEmpty()) {
