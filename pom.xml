@@ -6,9 +6,40 @@
 	<version>0.18.2</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-	</properties>
+    </properties>
 
 	<build>
+		<pluginManagement>
+		    <plugins>
+		        <plugin>
+		            <groupId>org.eclipse.m2e</groupId>
+		            <artifactId>lifecycle-mapping</artifactId>
+		            <version>1.0.0</version>
+		            <configuration>
+		                <lifecycleMappingMetadata>
+		                    <pluginExecutions>
+		                        <pluginExecution>
+		                            <pluginExecutionFilter>
+		                                <groupId>org.codehaus.mojo</groupId>
+		                                <artifactId>buildnumber-maven-plugin</artifactId>
+		                                <versionRange>[1.2,)</versionRange>
+		                                <goals>
+		                                    <goal>create-timestamp</goal>
+		                                </goals>
+		                            </pluginExecutionFilter>
+		                            <action>
+		                                <execute>
+		                                    <runOnConfiguration>true</runOnConfiguration>
+		                                    <runOnIncremental>true</runOnIncremental>
+		                                </execute>
+		                            </action>
+		                        </pluginExecution>
+		                    </pluginExecutions>
+		                </lifecycleMappingMetadata>
+		            </configuration>
+		        </plugin>
+		    </plugins>
+		</pluginManagement>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
@@ -17,9 +48,30 @@
 					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
+			<resource>
+				<directory>filteredResources</directory>
+		        <filtering>true</filtering>
+			</resource>
 		</resources>
 		<testSourceDirectory>testSrc</testSourceDirectory>
 		<plugins>
+			<plugin>
+			    <groupId>org.codehaus.mojo</groupId>
+			    <artifactId>buildnumber-maven-plugin</artifactId>
+			    <version>1.2</version>
+			    <executions>
+			        <execution>
+			            <phase>validate</phase>
+			            <goals>
+			                <goal>create-timestamp</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			    <configuration>
+			        <timestampFormat>dd/MM/yyyy</timestampFormat>
+			        <timestampPropertyName>build.date</timestampPropertyName>
+			    </configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -54,9 +106,6 @@
 									<excludes>
 										<exclude>license/**</exclude>
 										<exclude>META-INF/**</exclude>
-										<!-- exclude>javax/**</exclude -->
-										<!-- exclude>META-INF/*.DSA</exclude> <exclude>META-INF/*.SF</exclude> 
-											<exclude>META-INF/*.RSA</exclude> <exclude>META-INF/*.INF</exclude -->
 									</excludes>
 								</filter>
 								<filter>
@@ -94,11 +143,11 @@
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
 										<Main-Class>net.yapbam.gui.MainFrame</Main-Class>
+										<SplashScreen-Image>net/yapbam/gui/images/splash.png</SplashScreen-Image>
 										<Permissions>all-permissions</Permissions>
 										<Application-Name>Yapbam</Application-Name>
 										<Entry-Point>net.yapbam.gui.MainFrame</Entry-Point>
 										<Trusted-Only>true</Trusted-Only>
-										<!-- Class-Path>your/class/path/here</Class-Path -->
 									</manifestEntries>
 								</transformer>
 							</transformers>
@@ -106,7 +155,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!--plugin>
 				<artifactId>maven-jarsigner-plugin</artifactId>
 				<version>1.2</version>
 				<executions>
@@ -121,16 +170,16 @@
 					<archiveDirectory>${project.build.directory}</archiveDirectory>
 					<includes>
 						<include>${customized.jar.name}.jar</include>
-					</includes>
+					</includes-->
 					<!-- keystore and password should be defined in the settings.xml file 
 						example: <profile> <id>yapbam</id> ... <properties> <yapbam.keystore.pwd>the 
 						keystore pwd</yapbam.keystore.pwd> </properties> </profile>
 					-->
-					<keystore>${yapbam.keystore}</keystore>
+					<!--keystore>${yapbam.keystore}</keystore>
 					<storepass>${yapbam.keystore.pwd}</storepass>
 					<alias>fathzer</alias>
 				</configuration>
-			</plugin>
+			</plugin-->
 		</plugins>
 	</build>
 	<dependencies>
@@ -142,7 +191,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>javaluator</artifactId>
-			<version>2.0.0</version>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
@@ -157,7 +206,7 @@
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
-			<version>1.0.15</version>
+			<version>1.0.19</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
@@ -167,23 +216,23 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
+			<version>3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.8</version>
+			<version>1.10</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.5</version>
+			<version>1.7.12</version>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
