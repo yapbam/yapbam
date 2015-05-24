@@ -35,8 +35,9 @@ import java.awt.event.ItemListener;
 import java.awt.Insets;
 
 public class LocalizationPanel extends PreferencePanel {
-
 	private static final long serialVersionUID = 1L;
+	private static final Locale[] LANGUAGES = new Locale[]{Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH, new Locale("pt"), new Locale("tr"), new Locale("nl"), new Locale("ru"), Locale.TRADITIONAL_CHINESE};
+	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","k&#305;smi","partieel","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","&#23616;&#37096;"};
 	private JPanel countryPanel = null;
 	private JPanel languagePanel = null;
 	private JRadioButton defaultCButton = null;
@@ -47,16 +48,10 @@ public class LocalizationPanel extends PreferencePanel {
 	private boolean jListIsAdjusting = false;
 	
 	private JRadioButton defaultLButton = null;
-	private JRadioButton frenchButton = null;
-	private JRadioButton englishButton = null;
 	private JButton revertButton = null;
 	private ItemListener basicItemListener;
 	private Map<String,String> displayCountrytoCode;  //  @jve:decl-index=0:
 	private JCheckBox translatorButton = null;
-	private JRadioButton portugueseButton = null;
-	private JRadioButton deutschButton;
-	private JRadioButton turkishButton;
-	private JRadioButton tChineseButton;
 	
 	/**
 	 * This is the default constructor
@@ -116,18 +111,13 @@ public class LocalizationPanel extends PreferencePanel {
 		boolean defaultLanguage = Preferences.INSTANCE.isDefaultLanguage();
 		if (defaultLanguage) {
 			defaultLButton.setSelected(true);
-		} else if (locale.getLanguage().equals(Locale.FRENCH.getLanguage())) {
-			frenchButton.setSelected(true);
-		} else if ("pt".equals(locale.getLanguage())) {
-			portugueseButton.setSelected(true);
-		} else if (locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
-			deutschButton.setSelected(true);
-		} else if ("tr".equals(locale.getLanguage())) {
-			turkishButton.setSelected(true);
-		} else if ("zh".equals(locale.getLanguage())) {
-			tChineseButton.setSelected(true);
 		} else {
-			englishButton.setSelected(true);
+			for (Locale lang : LANGUAGES) {
+				if (locale.getLanguage().equals(lang.getLanguage())) {
+					getLngButton(lang).setSelected(true);
+					break;
+				}
+			}
 		}
 		
 		if (Preferences.INSTANCE.isExpertMode()) {
@@ -168,12 +158,13 @@ public class LocalizationPanel extends PreferencePanel {
 			countryPanel.add(getJScrollPane(), gridBagConstraints2);
 			group = new ButtonGroup();
 			group.add(getDefaultLButton());
-			group.add(getEnglishButton());
-			group.add(getFrenchButton());
-			group.add(getPortugueseButton());
-			group.add(getDeutschButton());
-			group.add(getTurkishButton());
-			group.add(getTChineseButton());
+			for (int i = 0; i < LANGUAGES.length; i++) {
+				JRadioButton button = getLngButton(LANGUAGES[i]);
+				if (!LANGUAGES_ADDITIONNAL_WORDING[i].isEmpty()) {
+					button.setText("<html>"+button.getText()+" ("+LANGUAGES_ADDITIONNAL_WORDING[i]+")</html>");
+				}
+				group.add(button);
+			}
 		}
 		return countryPanel;
 	}
@@ -206,13 +197,11 @@ public class LocalizationPanel extends PreferencePanel {
 			languagePanel.setLayout(new GridBagLayout());
 			languagePanel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Localization.language"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 			languagePanel.add(getTranslatorButton(), gridBagConstraints6);
-			languagePanel.add(getDefaultLButton(), getLanguageGBC(1));
-			languagePanel.add(getDeutschButton(), getLanguageGBC(2));
-			languagePanel.add(getEnglishButton(), getLanguageGBC(3));
-			languagePanel.add(getFrenchButton(), getLanguageGBC(4));
-			languagePanel.add(getPortugueseButton(), getLanguageGBC(5));
-			languagePanel.add(getTurkishButton(), getLanguageGBC(6));
-			languagePanel.add(getTChineseButton(), getLanguageGBC(7));
+			int index = 1;
+			languagePanel.add(getDefaultLButton(), getLanguageGBC(index++));
+			for (Locale locale : LANGUAGES) {
+				languagePanel.add(getLngButton(locale), getLanguageGBC(index++));
+			}
 		}
 		return languagePanel;
 	}
@@ -333,18 +322,11 @@ public class LocalizationPanel extends PreferencePanel {
 		String country = getDefaultCButton().isSelected()?LocalizationData.SYS_LOCALE.getCountry():displayCountrytoCode.get((String) jList.getSelectedValue());
 		
 		String lang = LocalizationData.SYS_LOCALE.getLanguage();
-		if (getFrenchButton().isSelected()) {
-			lang = Locale.FRENCH.getLanguage();
-		} else if (getEnglishButton().isSelected()) {
-			lang = Locale.ENGLISH.getLanguage();
-		} else if (getDeutschButton().isSelected()) {
-			lang = Locale.GERMAN.getLanguage();
-		} else if (getPortugueseButton().isSelected()) {
-			lang = "pt";
-		} else if (getTurkishButton().isSelected()) {
-			lang = "tr";
-		} else if (getTChineseButton().isSelected()) {
-			lang = "zh";
+		for (Locale locale : LANGUAGES) {
+			if (getLngButton(locale).isSelected()) {
+				lang = locale.getLanguage();
+				break;
+			}
 		}
 		return new Locale(lang, country);
 	}
@@ -447,76 +429,13 @@ public class LocalizationPanel extends PreferencePanel {
 		getTranslatorButton().setVisible(expertMode || Preferences.safeIsTranslatorMode());
 	}
 	
-	/**
-	 * This method initializes frenchButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getFrenchButton() {
-		if (frenchButton == null) {
-			frenchButton = new JRadioButton();
-			frenchButton.setText(Locale.FRENCH.getDisplayLanguage(Locale.FRENCH));
-			frenchButton.addItemListener(basicItemListener);
+	private Map<Locale, JRadioButton> lngButtons = new HashMap<Locale, JRadioButton>();
+	private JRadioButton getLngButton(Locale locale) {
+		if (!lngButtons.containsKey(locale)) {
+			JRadioButton btn = new JRadioButton(locale.getDisplayLanguage(locale));
+			btn.addItemListener(basicItemListener);
+			lngButtons.put(locale, btn);
 		}
-		return frenchButton;
-	}
-
-	/**
-	 * This method initializes englishButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getEnglishButton() {
-		if (englishButton == null) {
-			englishButton = new JRadioButton();
-			englishButton.setText(Locale.ENGLISH.getDisplayLanguage(Locale.ENGLISH));
-			englishButton.addItemListener(basicItemListener);
-		}
-		return englishButton;
-	}
-
-	/**
-	 * This method initializes portugueseButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getPortugueseButton() {
-		if (portugueseButton == null) {
-			portugueseButton = new JRadioButton();
-			Locale portuguese = new Locale("pt");
-			portugueseButton.setText(portuguese.getDisplayLanguage(portuguese));
-			portugueseButton.addItemListener(basicItemListener);
-		}
-		return portugueseButton;
-	}
-
-	private JRadioButton getDeutschButton() {
-		if (deutschButton == null) {
-			deutschButton = new JRadioButton();
-			Locale locale = new Locale("de");
-			deutschButton.setText(locale.getDisplayLanguage(Locale.GERMAN));
-			deutschButton.addItemListener(basicItemListener);
-		}
-		return deutschButton;
-	}
-	
-	private JRadioButton getTurkishButton() {
-		if (turkishButton == null) {
-			turkishButton = new JRadioButton();
-			Locale locale = new Locale("tr");
-			turkishButton.setText("<html>"+locale.getDisplayLanguage(locale)+" (k&#305;smi)</html>");
-			turkishButton.addItemListener(basicItemListener);
-		}
-		return turkishButton;
-	}
-
-	private JRadioButton getTChineseButton() {
-		if (tChineseButton == null) {
-			tChineseButton = new JRadioButton();
-			Locale locale = Locale.TRADITIONAL_CHINESE;
-			tChineseButton.setText("<html>"+locale.getDisplayLanguage(locale)+" (&#23616;&#37096;)</html>");
-			tChineseButton.addItemListener(basicItemListener);
-		}
-		return tChineseButton;
+		return lngButtons.get(locale);
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"
