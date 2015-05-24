@@ -67,7 +67,7 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 				return ((StatementTableModel) getModel()).find(transaction);
 			}
 		};
-		selector.setSelectedTransactions(transactions);
+		selector.setSelected(transactions);
 	}
 	
 	public GlobalData getGlobalData() {

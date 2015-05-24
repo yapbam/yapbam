@@ -92,7 +92,7 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 				return data==null?-1:data.indexOf(transaction);
 			}
 		};
-		selector.setSelectedTransactions(transactions);
+		selector.setSelected(transactions);
 	}
 
 	public GlobalData getGlobalData() {

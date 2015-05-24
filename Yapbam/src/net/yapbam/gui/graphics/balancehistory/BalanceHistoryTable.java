@@ -52,13 +52,28 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 			// wrong order (the sort have to take care of the remaining balance).
 			@Override
 			public int convertRowIndexToModel(int index) {
-				if (getSortKeys().isEmpty() || getSortKeys().get(0).getSortOrder().equals(SortOrder.DESCENDING)) {
+				if (isReverse()) {
 					// Use the reverse
 					return getModel().getRowCount()-1-index;
 				} else {
 					// Use the native sort
 					return index;
 				}
+			}
+			
+			@Override
+			public int convertRowIndexToView(int index) {
+				if (isReverse()) {
+					// Use the reverse
+					return getModel().getRowCount()-1-index;
+				} else {
+					// Use the native sort
+					return index;
+				}
+			}
+
+			private boolean isReverse() {
+				return getSortKeys().isEmpty() || getSortKeys().get(0).getSortOrder().equals(SortOrder.DESCENDING);
 			}
 
 			@Override
@@ -93,7 +108,7 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 				return ((BalanceHistoryModel) getModel()).find(transaction);
 			}
 		};
-		selector.setSelectedTransactions(transactions);
+		selector.setSelected(transactions);
 	}
 
 	public FilteredData getFilteredData() {
