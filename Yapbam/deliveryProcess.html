@@ -20,10 +20,11 @@ text-decoration: underline;
         lng=fr,pt-BR:pt,de,en:,zh-TW:zh,tr,nl,ru where=<span style="font-style: italic;">workspaceRoot</span><br>
         Then, check whether YapbamCommons translations has changed. In such a
         case, update the artifact.<br>
-        Be aware of changes in Yapbam web resources. Due to a Crowdin bug, ':'
-        characters are preceded by a escape '\' character. Note also that the
-        english version of 'TranslationNeeded.supported' key is not the one
-        stored in Crowdin (should be fixed in the future).</li>
+        <span style="font-weight: bold; text-decoration: underline;">Be aware of
+          changes in Yapbam web resources</span>. Due to a Crowdin bug, ':'
+        and '=' characters are preceded by a escape '\' character. Note also
+        that the French and English versions of 'TranslationNeeded.supported'
+        key is not the one stored in Crowdin.</li>
       <li>Set the version number in the pom.xml file<span class="variable"></span></li>
       <li>Run maven clean package on pom.xml =&gt; That creates a ready to
         deploy zip file in the project directory.<br>
