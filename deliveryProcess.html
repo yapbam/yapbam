@@ -20,8 +20,9 @@ text-decoration: underline;
         lng=fr,pt-BR:pt,de,en:,zh-TW:zh,tr,nl,ru where=<span style="font-style: italic;">workspaceRoot</span><br>
         Then, check whether YapbamCommons translations has changed. In such a
         case, update the artifact.</li>
-      <li>Set the version number in the build.xml file =&gt; <span class="variable">version</span></li>
-      <li>Build the classic distribution with build.xml.<br>
+      <li>Set the version number in the pom.xml file<span class="variable"></span></li>
+      <li>Run maven clean package on pom.xml =&gt; That creates a ready to
+        deploy zip file in the project directory.<br>
         <span class="variable"></span></li>
       <li>Create the windows installer with NSIS.<br>
         select the "Installer based on a zip file" option and enter
