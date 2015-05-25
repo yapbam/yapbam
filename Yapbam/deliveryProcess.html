@@ -19,7 +19,11 @@ text-decoration: underline;
         jlocal-tools project with arguments project=yapbam key=<span style="font-style: italic;">theyapbamkey</span>
         lng=fr,pt-BR:pt,de,en:,zh-TW:zh,tr,nl,ru where=<span style="font-style: italic;">workspaceRoot</span><br>
         Then, check whether YapbamCommons translations has changed. In such a
-        case, update the artifact.</li>
+        case, update the artifact.<br>
+        Be aware of changes in Yapbam web resources. Due to a Crowdin bug, ':'
+        characters are preceded by a escape '\' character. Note also that the
+        english version of 'TranslationNeeded.supported' key is not the one
+        stored in Crowdin (should be fixed in the future).</li>
       <li>Set the version number in the pom.xml file<span class="variable"></span></li>
       <li>Run maven clean package on pom.xml =&gt; That creates a ready to
         deploy zip file in the project directory.<br>
