@@ -20,3 +20,5 @@ Features :
 * La possibilité de supprimer ou d'éditer plusieurs opérations à la fois.
 * La possibilité de définir un budget cible et de le comparer à la dure réalité ;-)
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
+
+Le jour où on utilisera la nouvelle API Dropbox -> JClop-Dropbox 0.1.0+, penser à traduire les libellés manquants.

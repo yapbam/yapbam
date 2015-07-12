@@ -4,6 +4,10 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="http://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 
+version	0.18.3 (07/12/2015)
+fix
+	Updates currency converter in order to comply with changes in Yahoo web service (US dollar is no more represented like other currencies in that web service).
+
 version	0.18.2 (05/25/2015)
 fix
 	When an transaction was edited in the table of "Balance History" table and the transactions were sorted from newest to oldest, the selected transaction after edition was not the one edited.
