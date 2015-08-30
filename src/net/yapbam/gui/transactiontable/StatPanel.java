@@ -101,7 +101,7 @@ public class StatPanel extends JPanel {
 	
 	private JLabel getContent() {
 		if (content==null) {
-			content = new JLabel("this is a test");
+			content = new JLabel();
 		}
 		return content;
 	}
