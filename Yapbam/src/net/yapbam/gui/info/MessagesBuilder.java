@@ -78,6 +78,7 @@ public abstract class MessagesBuilder {
 				Thread.sleep(2000);
 			}
 			URL url = ApplicationContext.toURL(BASE_URL);
+			LOGGER.debug("Getting news from {}",url.toString());
 			HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 			int errorCode = ct.getResponseCode();
 			if (errorCode==HttpURLConnection.HTTP_OK) {
@@ -87,13 +88,13 @@ public abstract class MessagesBuilder {
 				}
 				InputStreamReader reader = new InputStreamReader(ct.getInputStream(), encoding);
 				try {
-//					return (JSONArray) JSONValue.parse(reader);
 					BufferedReader r = new BufferedReader(reader);
 					try {
 						for (String line=r.readLine();line!=null;line=r.readLine()) {
 							if (line.startsWith("#")) { //$NON-NLS-1$
 								LOGGER.trace(line);
 							} else {
+								LOGGER.debug("info: {}",line);
 								return (JSONArray) JSONValue.parse(line);
 							}
 						}
