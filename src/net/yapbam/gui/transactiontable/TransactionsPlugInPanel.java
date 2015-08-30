@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -23,64 +22,60 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AccountSelector;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
-import net.yapbam.gui.actions.DeleteTransactionAction;
-import net.yapbam.gui.actions.DuplicateTransactionAction;
-import net.yapbam.gui.actions.EditTransactionAction;
-import net.yapbam.gui.actions.NewTransactionAction;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.widget.JLabelMenu;
 
+@SuppressWarnings("serial")
 public class TransactionsPlugInPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 		
+	private FilteredData data;
+	private AccountSelector accountSelector;
+
 	private TransactionTable transactionTable;
+	private TransactionEditionButtonsPanel buttons;
 	private BalanceReportPanel balances;
+	
 
-	@SuppressWarnings("serial")
+
 	public TransactionsPlugInPanel(FilteredData data, AccountSelector accountSelector) {
-		super(new BorderLayout());
-
-		balances = new BalanceReportPanel(data==null?null:data.getBalanceData());
-
-		transactionTable = new TransactionTable(data);
-		JScrollPane scrollPane = new JScrollPane(transactionTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-		JPanel buttons = new JPanel(new GridBagLayout());
-		EditTransactionAction editTransactionAction = new EditTransactionAction(transactionTable);
-		DuplicateTransactionAction duplicateTransactionAction = new DuplicateTransactionAction(transactionTable);
-		DeleteTransactionAction deleteTransactionAction = new DeleteTransactionAction(transactionTable);
-		transactionTable.addMouseListener(new JTableListener(new Action[] { editTransactionAction, duplicateTransactionAction,
-				deleteTransactionAction, null, new ConvertToPeriodicalTransactionAction(transactionTable) }, editTransactionAction));
+		super();
+		this.data = data;
+		this.accountSelector = accountSelector;
+		this.initialize();
+	}
+	
+	private void initialize() {
+		setLayout(new BorderLayout());
        
-		final JButton newTransactionButton = new JButton(new NewTransactionAction(data, transactionTable,false,accountSelector));
-		newTransactionButton.setText(LocalizationData.get("GenericButton.new")); //$NON-NLS-1$
-		final JButton massNewTransactionButton = new JButton(new NewTransactionAction(data, transactionTable,true, accountSelector));
-		massNewTransactionButton.setText(LocalizationData.get("MainMenu.Transactions.NewMultiple")); //$NON-NLS-1$
-		final JButton editTransactionButton = new JButton(editTransactionAction);
-		editTransactionButton.setText(LocalizationData.get("GenericButton.edit")); //$NON-NLS-1$
-		final JButton duplicateTransactionButton = new JButton(duplicateTransactionAction);
-		duplicateTransactionButton.setText(LocalizationData.get("GenericButton.duplicate")); //$NON-NLS-1$
-		final JButton deleteTransactionButton = new JButton(deleteTransactionAction);
-		deleteTransactionButton.setText(LocalizationData.get("GenericButton.delete")); //$NON-NLS-1$
-		GridBagConstraints c = new GridBagConstraints();
-		buttons.add(newTransactionButton, c);
-		c.gridx = 1;
-		buttons.add(massNewTransactionButton, c);
-		c.gridx = 2;
-		buttons.add(editTransactionButton, c);
-		c.gridx = 3;
-		buttons.add(duplicateTransactionButton, c);
-		c.gridx = 4;
-		c.anchor = GridBagConstraints.WEST;
-		buttons.add(deleteTransactionButton, c);
-		GeneratePeriodicalTransactionsAction action = new GeneratePeriodicalTransactionsAction(data==null?null:data.getGlobalData(), false);
-		final JButton periodicalTransactionsButton = new JButton(action);
-		c.gridx = 5;
-		c.weightx = 1;
-		c.anchor = GridBagConstraints.EAST;
-		buttons.add(periodicalTransactionsButton, c);
-
+		JScrollPane scrollPane = new JScrollPane(getTransactionTable(), ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		add(getMenusPanel(), BorderLayout.NORTH);
+		add(scrollPane, BorderLayout.CENTER);
+		add(getSouthPanel(), BorderLayout.SOUTH);
+	}
+	
+	private JPanel getSouthPanel() {
+		JPanel result = new JPanel();
+		result.setLayout(new GridBagLayout());
+		GridBagConstraints cButtons = new GridBagConstraints();
+		cButtons.fill = GridBagConstraints.HORIZONTAL;
+		cButtons.weightx = 1.0;
+		result.add(getButtons(), cButtons);
+		GridBagConstraints cBalance = new GridBagConstraints();
+		cBalance.fill = GridBagConstraints.HORIZONTAL;
+		cBalance.weightx = 1.0;
+		cBalance.gridy = 1;
+		result.add(getBalanceReportPanel(),cBalance);
+		GridBagConstraints cStat = new GridBagConstraints();
+		cStat.fill = GridBagConstraints.HORIZONTAL;
+		cStat.weightx = 1.0;
+		cStat.gridy = 2;
+		result.add(new StatPanel(data), cStat);
+		return result;
+	}
+	
+	private JPanel getMenusPanel() {
 		JPanel menus = new JPanel(new BorderLayout());
 		menus.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
 		menus.setBackground(new Color(240, 240, 240));
@@ -95,20 +90,20 @@ public class TransactionsPlugInPanel extends JPanel {
 		EmptyBorder border = new EmptyBorder(0, 5, 0, 5);
 		deploy.setBorder(border);
 		menus.add(deploy, BorderLayout.WEST);
-		JLabel columns = new FriendlyTable.ShowHideColumsMenu(transactionTable, LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+		JLabel columns = new FriendlyTable.ShowHideColumsMenu(getTransactionTable(), LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 		columns.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 		columns.setBorder(border);
 		menus.add(columns, BorderLayout.EAST);
-
-		JPanel extraPane = new JPanel(new BorderLayout());
-		extraPane.add(buttons, BorderLayout.NORTH);
-		extraPane.add(balances, BorderLayout.SOUTH);
-		add(menus, BorderLayout.NORTH);
-		add(scrollPane, BorderLayout.CENTER);
-		add(extraPane, BorderLayout.SOUTH);
+		return menus;
 	}
 	
-	@SuppressWarnings("serial")
+	private TransactionEditionButtonsPanel getButtons() {
+		if (buttons==null) {
+			buttons = new TransactionEditionButtonsPanel(getTransactionTable(), data, accountSelector);
+		}
+		return buttons;
+	}
+
 	private final class DeploySubTransactionsAction extends AbstractAction {
 		private boolean spread;
 		private DeploySubTransactionsAction(String name, boolean spread) {
@@ -117,15 +112,15 @@ public class TransactionsPlugInPanel extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			SpreadableTableModel model = (SpreadableTableModel)transactionTable.getModel();
-			for (int i = 0; i < transactionTable.getRowCount(); i++) {
+			SpreadableTableModel model = (SpreadableTableModel)getTransactionTable().getModel();
+			for (int i = 0; i < getTransactionTable().getRowCount(); i++) {
 				if (model.isSpreadable(i)) {
 					model.setSpread(i, spread);
-					int viewRow = transactionTable.convertRowIndexToView(i);
+					int viewRow = getTransactionTable().convertRowIndexToView(i);
 					if (spread) {
-						transactionTable.setRowHeight(viewRow, transactionTable.getRowHeight() * model.getSpreadLines(i));
+						getTransactionTable().setRowHeight(viewRow, getTransactionTable().getRowHeight() * model.getSpreadLines(i));
 					} else {
-						transactionTable.setRowHeight(viewRow, transactionTable.getRowHeight());
+						getTransactionTable().setRowHeight(viewRow, getTransactionTable().getRowHeight());
 					}
 				}
 			}
@@ -133,10 +128,24 @@ public class TransactionsPlugInPanel extends JPanel {
 	}
 
 	TransactionTable getTransactionTable() {
+		if (transactionTable==null) {
+			transactionTable = new TransactionTable(data);
+			Action editAction = getButtons().getEditButton().getAction();
+			JTableListener listener = new JTableListener(new Action[] {
+					editAction,
+					getButtons().getDuplicateButton().getAction(),
+					getButtons().getDeleteButton().getAction(),
+					null,
+					new ConvertToPeriodicalTransactionAction(transactionTable) }, editAction);
+			transactionTable.addMouseListener(listener);
+		}
 		return transactionTable;
 	}
 	
 	BalanceReportPanel getBalanceReportPanel() {
+		if (balances==null) {
+			balances = new BalanceReportPanel(data==null?null:data.getBalanceData());
+		}
 		return balances;
 	}
 }

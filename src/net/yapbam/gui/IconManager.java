@@ -15,7 +15,7 @@ public abstract class IconManager {
 		CHECK_TRANSACTION, UNCHECK_TRANSACTION,
 		NEW_MODE, EDIT_MODE, DELETE_MODE, DUPLICATE_MODE,
 		NEW_CATEGORY, DELETE_CATEGORY,
-		SPREAD, SPREADABLE,
+		SPREAD, SPREADABLE, SPREAD_UP,
 		FIRST, PREVIOUS, NEXT, LAST, UP, DOWN, TOP, BOTTOM, DEPLOY, UNDEPLOY,
 		IMPORT, EXPORT, ARCHIVE, LOCK, ALERT, NEW_MESSAGE, MESSAGE, HELP, PRINT
 	}
@@ -68,6 +68,7 @@ public abstract class IconManager {
 		map.put(Name.CHECK_TRANSACTION, create("images/check.png", size)); //$NON-NLS-1$
 		map.put(Name.UNCHECK_TRANSACTION, create("images/uncheck.png", size)); //$NON-NLS-1$
 		map.put(Name.SPREAD, create("images/spread.png", size)); //$NON-NLS-1$
+		map.put(Name.SPREAD_UP, create("images/spreadUp.png", size)); //$NON-NLS-1$
 		map.put(Name.SPREADABLE, create("images/spreadable.png", size)); //$NON-NLS-1$
 		map.put(Name.FIRST, create("/com/fathzer/soft/ajlib/swing/widget/first.png", size)); //$NON-NLS-1$
 		map.put(Name.PREVIOUS, create("/com/fathzer/soft/ajlib/swing/widget/previous.png", size)); //$NON-NLS-1$
