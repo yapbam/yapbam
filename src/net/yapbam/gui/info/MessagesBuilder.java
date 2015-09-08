@@ -67,7 +67,7 @@ public abstract class MessagesBuilder {
 				if (! (e.getCause() instanceof IOException)) {
 					ErrorManager.INSTANCE.log(SwingUtilities.getWindowAncestor(infoPanel),e);
 				} else {
-					LOGGER.debug("Error while communicating with server", e.getCause()); //$NON-NLS-1$
+					LOGGER.warn("Error while communicating with server", e.getCause()); //$NON-NLS-1$
 				}
 			}
 		}

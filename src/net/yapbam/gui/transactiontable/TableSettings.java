@@ -1,6 +1,7 @@
 package net.yapbam.gui.transactiontable;
 
 class TableSettings extends TransactionTableSettings {
+	private static final long serialVersionUID = 1L;
 
 	int getColumnCount() {
 		int nb = 10;

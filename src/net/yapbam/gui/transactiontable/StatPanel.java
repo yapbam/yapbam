@@ -3,6 +3,8 @@ package net.yapbam.gui.transactiontable;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,16 +12,14 @@ import javax.swing.JPanel;
 import com.fathzer.jlocal.Formatter;
 
 import net.yapbam.data.FilteredData;
-import net.yapbam.data.event.DataEvent;
-import net.yapbam.data.event.DataListener;
-import net.yapbam.data.event.NeedToBeSavedChangedEvent;
+import net.yapbam.data.StatData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 
 @SuppressWarnings("serial")
 public class StatPanel extends JPanel {
-	private FilteredData data;
+	private StatData data;
 	private boolean needRefresh;
 
 	private JLabel content;
@@ -27,16 +27,16 @@ public class StatPanel extends JPanel {
 
 	public StatPanel(FilteredData data) {
 		super();
-		this.data = data;
-		data.addListener(new DataListener() {
+		this.initialize();
+		this.data = new StatData(data);
+		this.data.addObserver(new Observer() {
 			@Override
-			public void processEvent(DataEvent event) {
-				if (!(event instanceof NeedToBeSavedChangedEvent)) {
-					update();
+			public void update(Observable o, Object arg) {
+				if (isDeployed()) {
+					doUpdate();;
 				}
 			}
 		});
-		this.initialize();
 	}
 
 	private void initialize() {
@@ -48,41 +48,18 @@ public class StatPanel extends JPanel {
 		add(getShowButton(), cShow);
 	}
 	
-	private void update() {
-		if (isVisible()) {
-			doUpdate();
-		} else {
-			needRefresh = true;
-		}
-	}
-	
 	private void doUpdate() {
-		int nbReceipts = 0;
-		double receipts = 0.0;
-		int nbExpenses = 0;
-		double expenses = 0.0;
-		for (int i = 0; i < data.getTransactionsNumber(); i++) {
-			double amount = data.getTransaction(i).getAmount();
-			if (amount<0) {
-				nbExpenses++;
-				expenses += amount;
-			} else {
-				nbReceipts++;
-				receipts += amount;
-			}
-		}
 		String message = Formatter.format("<html>Nombre de dépenses : <b>{0}</b>, montant : <b>{1}</b><br><html>Nombre de recettes : <b>{2}</b>, montant : <b>{3}</b><br><html>Nombre de d'opérations : <b>{4}</b>, solde : <b>{5}</b></html>",
-				nbExpenses,
-				LocalizationData.getCurrencyInstance().format(-expenses),
-				nbReceipts,
-				LocalizationData.getCurrencyInstance().format(receipts),
-				nbExpenses+nbReceipts,
-				LocalizationData.getCurrencyInstance().format(receipts+expenses)
+				data.getNbExpenses(),
+				LocalizationData.getCurrencyInstance().format(-data.getExpenses()),
+				data.getNbReceipts(),
+				LocalizationData.getCurrencyInstance().format(data.getReceipts()),
+				data.getNbExpenses()+data.getNbReceipts(),
+				LocalizationData.getCurrencyInstance().format(data.getReceipts()+data.getExpenses())
 				);
 		getContent().setText(message);
 		//TODO
-		System.out.println ("Update done");
-		needRefresh = false;
+		System.out.println ("StatPanel.doUpdate done");
 	}
 	
 	private void setDeployed(boolean deployed) {
