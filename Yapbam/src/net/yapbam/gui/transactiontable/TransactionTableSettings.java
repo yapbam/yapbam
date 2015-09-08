@@ -3,6 +3,7 @@ package net.yapbam.gui.transactiontable;
 import java.io.Serializable;
 
 public class TransactionTableSettings implements Serializable {
+	private static final long serialVersionUID = -8786461071723495935L;
 	protected boolean isCommentSeparatedFromDescription;
 	protected boolean isReceiptsSeparatedFromExpenses;
 	

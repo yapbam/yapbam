@@ -36,8 +36,6 @@ public class TransactionsPlugInPanel extends JPanel {
 	private TransactionEditionButtonsPanel buttons;
 	private BalanceReportPanel balances;
 	
-
-
 	public TransactionsPlugInPanel(FilteredData data, AccountSelector accountSelector) {
 		super();
 		this.data = data;
