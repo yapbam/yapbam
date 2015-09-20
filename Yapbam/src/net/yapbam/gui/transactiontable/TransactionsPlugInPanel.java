@@ -58,17 +58,18 @@ public class TransactionsPlugInPanel extends JPanel {
 		result.setLayout(new GridBagLayout());
 		GridBagConstraints cButtons = new GridBagConstraints();
 		cButtons.fill = GridBagConstraints.HORIZONTAL;
+		cButtons.gridy = 1;
 		cButtons.weightx = 1.0;
 		result.add(getButtons(), cButtons);
 		GridBagConstraints cBalance = new GridBagConstraints();
 		cBalance.fill = GridBagConstraints.HORIZONTAL;
 		cBalance.weightx = 1.0;
-		cBalance.gridy = 1;
+		cBalance.gridy = 2;
 		result.add(getBalanceReportPanel(),cBalance);
 		GridBagConstraints cStat = new GridBagConstraints();
 		cStat.fill = GridBagConstraints.HORIZONTAL;
 		cStat.weightx = 1.0;
-		cStat.gridy = 2;
+		cStat.gridy = 0;
 		result.add(new StatPanel(data), cStat);
 		return result;
 	}
