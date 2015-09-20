@@ -116,7 +116,7 @@ public class StatementSelectionPanel extends JPanel {
 				Transaction[] ts = ((TransactionsAddedEvent)event).getTransactions();
 				refreshIfNeeded(ts);
 			} else if (event instanceof TransactionsRemovedEvent) {
-				Transaction[] t = ((TransactionsRemovedEvent)event).getRemoved();
+				Transaction[] t = ((TransactionsRemovedEvent)event).getTransactions();
 				refreshIfNeeded(t);
 			}
 		}

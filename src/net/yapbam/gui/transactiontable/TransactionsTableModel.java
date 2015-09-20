@@ -159,7 +159,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 				fireTableDataChanged();
 			}
 		} else if (event instanceof TransactionsRemovedEvent) {
-			Transaction[] removed = ((TransactionsRemovedEvent)event).getRemoved();
+			Transaction[] removed = ((TransactionsRemovedEvent)event).getTransactions();
 			for (int i = 0; i < removed.length; i++) {
 				this.setSpread(removed[i], false);
 			}
