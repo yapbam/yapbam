@@ -19,12 +19,17 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.yapbam.gui.dialogs.ErrorDialog;
 import net.yapbam.util.ApplicationContext;
 
 /** This class is responsible for handling errors.
  */
 public class ErrorManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ErrorManager.class);
+
 	/** The instance of this class.*/
 	public static final ErrorManager INSTANCE = new ErrorManager();
 	private static final String ENC = "UTF-8";
@@ -66,8 +71,8 @@ public class ErrorManager {
 			StringWriter writer = new StringWriter();
 			t.printStackTrace(new PrintWriter(writer));
 			String trace = writer.getBuffer().toString();
-			t.printStackTrace();
 			message = message + "\n\n" + trace; //$NON-NLS-1$
+			LOGGER.error(message, t);
 		}
 		JOptionPane.showMessageDialog(parent, message, LocalizationData.get("ErrorManager.title"), JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 	}
@@ -92,7 +97,8 @@ public class ErrorManager {
 				ErrorDialog errorDialog = new ErrorDialog(parent, t);
 				errorDialog.setVisible(true);
 				Object result = errorDialog.getResult();
-				errorDialog.dispose(); //Don't remove this line, it would prevent Yapbam from quit !!!
+				//Don't remove the following line, it would prevent Yapbam from quit !!!
+				errorDialog.dispose(); 
 				if (result!=null) {
 					action = 1;
 				}
@@ -100,16 +106,15 @@ public class ErrorManager {
 			if (action==1) {
 				errorsQueue.add(new Message(t));
 			} else {
-				System.err.println("Exception was catched by "+this.getClass().getName());
-				t.printStackTrace();
+				LOGGER.error("Exception catched", t);
 			}
 		} catch (Throwable e) {
-			e.printStackTrace();
+			LOGGER.error("Error while logging exception", e);
 			// Ok ... the logging process failed.
 			// At this point, there's nothing to do.
 		}
 	}
-
+	
 	/** Gets the key of a throwable.
 	 * <BR>That key is used to prevent Yapbam from sending twice the same error.
 	 * <BR>The stack trace could have been used but it seemed to me that it is better to
@@ -169,7 +174,7 @@ public class ErrorManager {
 			
 			// Send data
 			URL url = new URL("http://www.yapbam.net/crashReport.php");
-			URLConnection conn = url.openConnection();
+			URLConnection conn = url.openConnection(Preferences.INSTANCE.getHttpProxy());
 			conn.setDoOutput(true);
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), ENC);
 			try {
@@ -181,7 +186,7 @@ public class ErrorManager {
 				try {
 					for (String line = rd.readLine(); line != null; line = rd.readLine()) {
 						// Process line ... this means do nothing ;-)
-						System.out.println (line); //TODO
+						LOGGER.info(line);
 					}
 				} finally {
 					rd.close();
