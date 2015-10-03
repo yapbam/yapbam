@@ -2,17 +2,13 @@ package net.yapbam.gui;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.info.MessagesPanel;
+import net.yapbam.gui.widget.TabbedPaneWithOption;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class GlobalPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -39,27 +35,7 @@ public class GlobalPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		add(getInfoPanel(), BorderLayout.NORTH);
 		getInfoPanel().setDisplayButton(getInfoDisplayer());
-		final JLayeredPane layered = new JLayeredPane();
-		add(layered, BorderLayout.CENTER);
-		layered.add(getMainPanel());
-		layered.addComponentListener(new ComponentAdapter() {
-			public void componentResized(ComponentEvent e){
-				getMainPanel().setSize(layered.getSize());
-			}
-		});
-		layered.add(getInfoDisplayer(), JLayeredPane.MODAL_LAYER);
-		final int margin = (int) (Preferences.INSTANCE.getFontSizeRatio()*3);
-		getMainPanel().addComponentListener(new ComponentAdapter() {
-			public void componentResized(ComponentEvent e){
-				Rectangle bounds = getMainPanel().getBounds();
-				Dimension preferredSize = getInfoDisplayer().getPreferredSize();
-				bounds.x = bounds.width - preferredSize.width - margin;
-				bounds.y = margin;
-				bounds.width = preferredSize.width;
-				bounds.height = preferredSize.height;
-				getInfoDisplayer().setBounds(bounds);
-			}
-		});
+		add (new TabbedPaneWithOption(getMainPanel(), getInfoDisplayer()));
 	}
 	
 	private JButton getInfoDisplayer() {

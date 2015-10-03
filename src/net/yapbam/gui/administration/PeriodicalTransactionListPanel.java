@@ -7,17 +7,18 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
-import net.yapbam.data.GlobalData;
+import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewPeriodicalTransactionAction;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 import net.yapbam.gui.util.JTableUtils;
 
-public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel {
+public class PeriodicalTransactionListPanel extends AbstractListAdministrationPanel<FilteredData> implements AbstractAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration."; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
+	private PeriodicalTransactionTableModel model;
 
-	public PeriodicalTransactionListPanel(GlobalData data) {
+	public PeriodicalTransactionListPanel(FilteredData data) {
 		super(data);
 	}
 	@Override
@@ -30,7 +31,11 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	}
 	@Override
 	protected Component getRightComponent() {
-		return new JButton(new GeneratePeriodicalTransactionsAction(data, false));
+		return new JButton(new GeneratePeriodicalTransactionsAction(data.getGlobalData(), false));
+	}
+	@Override
+	protected Component getTopComponent() {
+		return new PeriodicalTransactionsStatPanel(data);
 	}
 	@Override
 	protected int getBottomInset() {
@@ -38,7 +43,7 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	}
 	@Override
 	protected Action getNewButtonAction() {
-		return new NewPeriodicalTransactionAction(super.data);
+		return new NewPeriodicalTransactionAction(data.getGlobalData());
 	}
 	@Override
 	protected Action getEditButtonAction() {
@@ -54,7 +59,13 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	}
 	@Override
 	protected JTable instantiateJTable() {
-		return new PeriodicalTransactionsTable(new PeriodicalTransactionTableModel(this));
+		return new PeriodicalTransactionsTable(getModel());
+	}
+	private PeriodicalTransactionTableModel getModel() {
+		if (model ==null) {
+			model = new PeriodicalTransactionTableModel(this);
+		}
+		return model;
 	}
 	@Override
 	protected String getStatePrefix() {
@@ -69,5 +80,8 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 		super.restoreState();
 		// The following lines prevent the open/close subtransactions column from having a size different from the default one
 		JTableUtils.fixColumnSize(getJTable(), 0, 0);
+	}
+	public void setIgnoreFilter(boolean ignore) {
+		model.setIgnoreFilter(ignore);
 	}
 }

@@ -68,6 +68,8 @@ public abstract class AbstractPlugIn implements AccountSelector {
 	public static final String PANEL_TITLE_PROPERTY_NAME = "panelTitle"; //$NON-NLS-1$
 	/** Panel title property name. */
 	public static final String PRINTING_SUPPORTED_PROPERTY_NAME = "printing"; //$NON-NLS-1$
+	/** Panel allow menu. */
+	public static final String FILTER_SUPPORTED_PROPERTY_NAME = "filter"; //$NON-NLS-1$
 	
 	private PropertyChangeSupport propertyChangeSupport;
 	private Icon panelIcon;

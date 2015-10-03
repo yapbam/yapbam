@@ -73,8 +73,7 @@ public class Generator {
 
 	private void refreshTransactions() {
 		this.transactions.clear();
-		if (this.date==null) {
-		} else {
+		if (this.date!=null) {
 			for (int i=0; i<pTransactions.length; i++) {
 				this.transactions.addAll(pTransactions[i].getTransactions(this.date));
 			}

@@ -31,9 +31,11 @@ import net.yapbam.gui.transactiontable.TransactionTableUtils;
 final class PeriodicalTransactionTableModel extends GenericTransactionTableModel {
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
 	private PeriodicalTransactionsTableSettings settings;
+	private boolean ignoreFilter;
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
 		this.periodicTransactionListPanel = periodicTransactionListPanel;
+		this.ignoreFilter = true;
 		this.settings = new PeriodicalTransactionsTableSettings();
 		this.getGlobalData().addListener(new DataListener() {
 			@Override
@@ -191,12 +193,12 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	}
 
 	GlobalData getGlobalData() {
-		return this.periodicTransactionListPanel.data;
+		return this.periodicTransactionListPanel.data.getGlobalData();
 	}
 
 	@Override
 	protected AbstractTransaction getTransaction(int rowIndex) {
-		return this.periodicTransactionListPanel.data.getPeriodicalTransaction(rowIndex);
+		return getGlobalData().getPeriodicalTransaction(rowIndex);
 	}
 
 	@Override
@@ -212,5 +214,13 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	public PeriodicalTransactionsTableSettings getTableSettings() {
 		return settings;
+	}
+
+	public void setIgnoreFilter(boolean ignore) {
+		if (ignore!=this.ignoreFilter) {
+			System.out.println("Set ignore filter to "+ignore); //TODO
+			this.ignoreFilter = ignore;
+			fireTableDataChanged();
+		}
 	}
 }
