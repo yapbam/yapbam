@@ -5,6 +5,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.gui.widget.TabbedPaneWithOption;
@@ -93,7 +94,8 @@ public class AdministrationPanel extends JPanel {
 	}
 	private JCheckBox getIgnoreFilter() {
 		if (ignoreFilter == null) {
-			ignoreFilter = new JCheckBox("Ignore filter");
+			ignoreFilter = new JCheckBox(LocalizationData.get("PeriodicalTransactionManager.ignoreFilter")); //$NON-NLS-1$
+			ignoreFilter.setToolTipText(LocalizationData.get("PeriodicalTransactionManager.ignoreFilter.tooltip")); //$NON-NLS-1$
 			ignoreFilter.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					getPeriodicalTransactionsPanel().setIgnoreFilter(ignoreFilter.isSelected());
