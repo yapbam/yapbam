@@ -142,19 +142,27 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 		if (southPanel == null) {
 			southPanel = new JPanel();
 			southPanel.setLayout(new GridBagLayout());
+			
+			Component top = getTopComponent();
+			if (top!=null) {
+				GridBagConstraints gridBagConstraintsTop = new GridBagConstraints();
+				gridBagConstraintsTop.gridwidth = 0;
+				gridBagConstraintsTop.weightx = 1.0;
+				gridBagConstraintsTop.fill = GridBagConstraints.HORIZONTAL;
+				southPanel.add(top, gridBagConstraintsTop);
+			}
 
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			Insets leftInset = new Insets(0, 5, getBottomInset(), 0);
 			
-			gridBagConstraints1.insets = leftInset;
-			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.gridy = 1;
 			gridBagConstraints1.gridx = 0;
 			southPanel.add(getNewButton(), gridBagConstraints1);
 			
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
 			gridBagConstraints.insets = leftInset;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			if (getEditButton()!=null) {
 				southPanel.add(getEditButton(), gridBagConstraints);
 			}
@@ -162,7 +170,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 2;
 			gridBagConstraints11.insets = leftInset;
-			gridBagConstraints11.gridy = 0;
+			gridBagConstraints11.gridy = 1;
 			if (getDuplicateButton()!=null) {
 				southPanel.add(getDuplicateButton(), gridBagConstraints11);
 			}
@@ -170,7 +178,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.insets = leftInset;
 			gridBagConstraints2.gridx = 3;
-			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.gridy = 1;
 			southPanel.add(getDeleteButton(), gridBagConstraints2);
 			
 			
@@ -183,7 +191,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 			Insets rightInset = new Insets(0, 5, getBottomInset(), 0);
 			gbcLblToto.insets = rightInset;
 			gbcLblToto.gridx = 4;
-			gbcLblToto.gridy = 0;
+			gbcLblToto.gridy = 1;
 			gbcLblToto.weightx = 1.0D;
 			southPanel.add(rightComponent, gbcLblToto);
 		}
@@ -261,6 +269,10 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	}
 	
 	protected Component getRightComponent() {
+		return null;
+	}
+	
+	protected Component getTopComponent() {
 		return null;
 	}
 	

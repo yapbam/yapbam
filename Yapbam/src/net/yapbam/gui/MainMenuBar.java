@@ -201,7 +201,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				//FIXME : We should test that the plugin is currently displayed
-				menuItemPrint.setEnabled((Boolean) evt.getNewValue());
+				if (AbstractPlugIn.FILTER_SUPPORTED_PROPERTY_NAME.equals(evt.getPropertyName())) {
+					filterMenu.setVisible((Boolean) evt.getNewValue());
+				} else if (AbstractPlugIn.PRINTING_SUPPORTED_PROPERTY_NAME.equals(evt.getPropertyName())) {
+					menuItemPrint.setEnabled((Boolean) evt.getNewValue());
+				}
 			}
 		};
 		// Build plugins menus
@@ -213,7 +217,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 						this.add(menus[j]);
 					}
 				}
-				this.frame.getPlugIn(i).getPropertyChangeSupport().addPropertyChangeListener(AbstractPlugIn.PRINTING_SUPPORTED_PROPERTY_NAME, listener);
+				this.frame.getPlugIn(i).getPropertyChangeSupport().addPropertyChangeListener(listener);
 			}
 		}
 
