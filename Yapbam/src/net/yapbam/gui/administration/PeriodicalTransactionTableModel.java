@@ -3,7 +3,11 @@ package net.yapbam.gui.administration;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -11,6 +15,7 @@ import javax.swing.SwingConstants;
 import com.fathzer.jlocal.Formatter;
 
 import net.yapbam.data.AbstractTransaction;
+import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.PeriodicalTransaction;
@@ -32,27 +37,60 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
 	private PeriodicalTransactionsTableSettings settings;
 	private boolean ignoreFilter;
+	private List<PeriodicalTransaction> transactions;
 
 	PeriodicalTransactionTableModel(PeriodicalTransactionListPanel periodicTransactionListPanel) {
 		this.periodicTransactionListPanel = periodicTransactionListPanel;
 		this.ignoreFilter = true;
 		this.settings = new PeriodicalTransactionsTableSettings();
+		this.transactions = new ArrayList<PeriodicalTransaction>();
 		this.getGlobalData().addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
 				if (event instanceof PeriodicalTransactionsAddedEvent) {
-					fireTableDataChanged();
+					updateTransactionList();
 				} else if (event instanceof PeriodicalTransactionsRemovedEvent) {
 					for (PeriodicalTransaction transaction : ((PeriodicalTransactionsRemovedEvent)event).getRemoved()) {
 						setSpread(transaction, false);
 					}
-					fireTableDataChanged();
+					updateTransactionList();
 				} else if (event instanceof EverythingChangedEvent) {
 					clearSpreadData();
-					fireTableDataChanged();
+					transactions.clear();
+					updateTransactionList();
 				}
 			}
 		});
+		this.periodicTransactionListPanel.data.getFilter().addObserver(new Observer() {
+			@Override
+			public void update(Observable o, Object arg) {
+				System.out.println("filter is changed"); //TODO
+				if (!ignoreFilter) {
+					updateTransactionList();
+				}
+			}
+		});
+		updateTransactionList();
+	}
+	
+	private void updateTransactionList() {
+		Filter filter = ignoreFilter?null:this.periodicTransactionListPanel.data.getFilter();
+		List<PeriodicalTransaction> oldList = new ArrayList<PeriodicalTransaction>(this.transactions);
+		this.transactions.clear();
+		for (int i = 0; i<getGlobalData().getPeriodicalTransactionsNumber(); i++) {
+			PeriodicalTransaction tr = getGlobalData().getPeriodicalTransaction(i);
+			if (filter==null || !filter.isActive() || filter.isOk(tr)) {
+				transactions.add(tr);
+			}
+		}
+		if (filter!=null && filter.isActive()) {
+			for (PeriodicalTransaction tr : oldList) {
+				if (!transactions.contains(tr)) {
+					setSpread(tr, false);
+				}
+			}
+		}
+		fireTableDataChanged();
 	}
 
 	@Override
@@ -168,7 +206,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public int getRowCount() {
-		return getGlobalData().getPeriodicalTransactionsNumber();
+		return transactions.size();
 	}
 
 	@Override
@@ -198,7 +236,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	protected AbstractTransaction getTransaction(int rowIndex) {
-		return getGlobalData().getPeriodicalTransaction(rowIndex);
+		return transactions.get(rowIndex);
 	}
 
 	@Override
@@ -218,9 +256,8 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	public void setIgnoreFilter(boolean ignore) {
 		if (ignore!=this.ignoreFilter) {
-			System.out.println("Set ignore filter to "+ignore); //TODO
 			this.ignoreFilter = ignore;
-			fireTableDataChanged();
+			updateTransactionList();
 		}
 	}
 }

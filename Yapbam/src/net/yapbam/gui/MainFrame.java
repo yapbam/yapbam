@@ -534,7 +534,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 				try {
 					Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
 					if (filter!=null) {
-						getFilteredData().setFilter(filter);
+						getFilteredData().getFilter().copy(filter);
 					}
 				} catch (Exception e) {
 					ErrorManager.INSTANCE.log(getJFrame(), e);

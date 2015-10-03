@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.util.ResourceBundleWrapper;
+import org.slf4j.LoggerFactory;
 
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
@@ -137,17 +138,20 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		}
 		for (int i = 0; i < this.data.getTransactionsNumber(); i++) {
 			Transaction transaction = this.data.getTransaction(i);
-			if (this.data.isOk(transaction)) {
+			if (this.data.getFilter().isOk(transaction)) {
 				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 					SubTransaction subTransaction = transaction.getSubTransaction(j);
-					if (this.data.isOk(subTransaction)) {
+					if (this.data.getFilter().isOk(subTransaction)) {
 						categoryToAmount.get(subTransaction.getCategory()).add(subTransaction.getAmount());
 					}
 				}
 				Category category = transaction.getCategory();
-				if (this.data.isComplementOk(transaction)) {
+				if (this.data.getFilter().isComplementOk(transaction)) {
 					categoryToAmount.get(category).add(transaction.getComplement());
 				}
+			} else {
+				//TODO
+				LoggerFactory.getLogger(StatisticsPlugin.class).warn("What a strange thing: transaction {} is in FilteredData but is not ok with its filter");
 			}
 		}
 		if (getGroupSubCategories().isSelected()) {
