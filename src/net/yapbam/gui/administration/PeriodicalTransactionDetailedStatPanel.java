@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import net.yapbam.data.PeriodicalTransactionSimulationData;
 import net.yapbam.data.PeriodicalTransactionSimulationData.Unit;
+import net.yapbam.gui.LocalizationData;
 
 import java.awt.GridBagLayout;
 import javax.swing.border.TitledBorder;
@@ -33,7 +34,7 @@ public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 	}
 	
 	private void initialize() {
-		setBorder(new TitledBorder("Settings"));
+		setBorder(new TitledBorder(LocalizationData.get("PeriodicalTransactionManager.settings.title"))); //$NON-NLS-1$
 		GridBagLayout gblWestPanel = new GridBagLayout();
 		setLayout(gblWestPanel);
 		GridBagConstraints gbcNextMonth = new GridBagConstraints();
@@ -57,7 +58,7 @@ public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 
 	JRadioButton getNextMonth() {
 		if (nextMonth == null) {
-			nextMonth = new JRadioButton("Next month");
+			nextMonth = new JRadioButton(LocalizationData.get("PeriodicalTransactionManager.settings.nextMonth")); //$NON-NLS-1$
 			nextMonth.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (nextMonth.isSelected()) {
@@ -72,7 +73,7 @@ public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 	}
 	JRadioButton getNext3months() {
 		if (next3months == null) {
-			next3months = new JRadioButton("Next 3 months");
+			next3months = new JRadioButton(LocalizationData.get("PeriodicalTransactionManager.settings.nextQuarter")); //$NON-NLS-1$
 			buttonGroup.add(next3months);
 			next3months.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
@@ -86,7 +87,7 @@ public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 	}
 	JRadioButton getNextYear() {
 		if (nextYear == null) {
-			nextYear = new JRadioButton("Next year");
+			nextYear = new JRadioButton(LocalizationData.get("PeriodicalTransactionManager.settings.nextYear")); //$NON-NLS-1$
 			buttonGroup.add(nextYear);
 			nextYear.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {

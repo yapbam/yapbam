@@ -172,7 +172,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 			String result;
 			if (period instanceof DayDateStepper) {
 				if (((DayDateStepper) period).getStep()==1) {
-					result = LocalizationData.get("PeriodicalTransactionManager.period.daily.singular.content");
+					result = LocalizationData.get("PeriodicalTransactionManager.period.daily.singular.content"); //$NON-NLS-1$
 				} else {
 					result = Formatter.format(LocalizationData.get("PeriodicalTransactionManager.period.daily.content"), ((DayDateStepper)period).getStep()); //$NON-NLS-1$
 				}

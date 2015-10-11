@@ -4,9 +4,10 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="https://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 
-version	0.18.5 (10/04/2015)
+version	0.18.5 (10/11/2015)
 improvement
 	Periodical transactions can be filtered in the "Administration/Periodical Transactions Management" tab.
+	Adds a summary of displayed transactions in the "Administration/Periodical Transactions Management" tab.
 
 version	0.18.4 (09/20/2015)
 improvement
