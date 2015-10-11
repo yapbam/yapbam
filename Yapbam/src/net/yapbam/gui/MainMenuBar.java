@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -137,8 +136,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.add(this.menuItemPrint);
 
 		menu.addSeparator();
-		Action editPreferences = new EditPreferenceAction(frame);
-		menu.add(editPreferences);
+		JMenuItem editPrefMenu = new JMenuItem(new EditPreferenceAction(frame));
+		editPrefMenu.setIcon(IconManager.get(Name.SETTINGS));
+		menu.add(editPrefMenu);
 		insertPluginMenuItems(menu, AbstractPlugIn.PREFERENCES_PART);
 
 		menu.addSeparator();

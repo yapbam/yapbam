@@ -10,6 +10,8 @@ import javax.swing.JComponent;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.PeriodicalTransactionSimulationData;
+import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AbstractStatPanel;
 
@@ -18,6 +20,7 @@ public class PeriodicalTransactionsStatPanel extends AbstractStatPanel<Periodica
 
 	public PeriodicalTransactionsStatPanel(FilteredData data) {
 		super(data);
+		getShowButton().setIcon(IconManager.get(Name.SETTINGS));
 	}
 
 	@Override
@@ -37,24 +40,25 @@ public class PeriodicalTransactionsStatPanel extends AbstractStatPanel<Periodica
 	@Override
 	protected void setDeployed(boolean deployed) {
 		super.setDeployed(deployed);
+		getShowButton().setIcon(IconManager.get(deployed?Name.CLOSE:Name.SETTINGS));
 	}
 
 	@Override
 	protected void initialize() {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints cShow = new GridBagConstraints();
-		cShow.insets = new Insets(0, 0, 5, 0);
 		cShow.gridx = 0;
 		cShow.anchor = GridBagConstraints.NORTHWEST;
 		add(getShowButton(), cShow);
 		GridBagConstraints gbcSummaryLabel = new GridBagConstraints();
+		gbcSummaryLabel.insets = new Insets(0, 5, 0, 0);
 		gbcSummaryLabel.weightx = 1.0;
 		gbcSummaryLabel.anchor = GridBagConstraints.WEST;
 		gbcSummaryLabel.gridx = 2;
 		add(getSummary(), gbcSummaryLabel);
 		GridBagConstraints cContent = new GridBagConstraints();
 		cContent.anchor = GridBagConstraints.WEST;
-		cContent.insets = new Insets(0, 0, 5, 0);
+		cContent.insets = new Insets(0, 5, 0, 0);
 		cContent.gridx = 1;
 		add(getDetails(), cContent);
 	}
@@ -62,19 +66,19 @@ public class PeriodicalTransactionsStatPanel extends AbstractStatPanel<Periodica
 	private String getPeriodWording() {
 		PeriodicalTransactionDetailedStatPanel settings = (PeriodicalTransactionDetailedStatPanel)getDetails();
 		if (settings.getNextMonth().isSelected()) {
-			return "next month";
+			return LocalizationData.get("PeriodicalTransactionManager.nextMonth"); //$NON-NLS-1$
 		} else if (settings.getNext3months().isSelected()) {
-			return "next quater";
+			return LocalizationData.get("PeriodicalTransactionManager.nextQuarter"); //$NON-NLS-1$
 		} else if (settings.getNextYear().isSelected()) {
-			return "next year";
+			return LocalizationData.get("PeriodicalTransactionManager.nextYear"); //$NON-NLS-1$
 		} else {
-			return "?";
+			return "?"; //$NON-NLS-1$
 		}
 	}
 	
 	protected void doUpdate() {
 		DecimalFormat ci = LocalizationData.getCurrencyInstance();
-		String format = "{1} transactions during {0}. Total expenses: {2}. Total receipts: {3}. Balance: {4}";
+		String format = LocalizationData.get("PeriodicalTransactionManager.summary"); //$NON-NLS-1$
 		getSummary().setText(MessageFormat.format(format, getPeriodWording(), getData().getNbTransactions(),
 				ci.format(-getData().getTotalExpenses()), ci.format(getData().getTotalReceips()), ci.format(getData().getTotalExpenses()+getData().getTotalReceips())));
 	}
