@@ -17,6 +17,7 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	private static final String STATE_PREFIX = "net.yapbam.periodicalTransactionAdministration."; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 	private PeriodicalTransactionTableModel model;
+	private PeriodicalTransactionsStatPanel statPanel;
 
 	public PeriodicalTransactionListPanel(FilteredData data) {
 		super(data);
@@ -35,7 +36,10 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 	}
 	@Override
 	protected Component getTopComponent() {
-		return new PeriodicalTransactionsStatPanel(data);
+		if (statPanel==null) {
+			statPanel = new PeriodicalTransactionsStatPanel(data);
+		}
+		return statPanel;
 	}
 	@Override
 	protected int getBottomInset() {
@@ -82,6 +86,7 @@ public class PeriodicalTransactionListPanel extends AbstractListAdministrationPa
 		JTableUtils.fixColumnSize(getJTable(), 0, 0);
 	}
 	public void setIgnoreFilter(boolean ignore) {
-		model.setIgnoreFilter(ignore);
+		getModel().setIgnoreFilter(ignore);
+		((PeriodicalTransactionsStatPanel)getTopComponent()).setIgnoreFilter(ignore);
 	}
 }
