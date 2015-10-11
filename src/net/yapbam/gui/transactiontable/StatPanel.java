@@ -41,7 +41,7 @@ public class StatPanel extends AbstractStatPanel<StatData, FilteredData> {
 			((JLabel)getDetails()).setText(message);
 			String summary = Formatter.format(LocalizationData.get("StatementView.statementSummary"), getData().getNbExpenses()+getData().getNbReceipts(), //$NON-NLS-1$
 					format.format(getData().getExpenses()), format.format(getData().getReceipts()));
-			setSummary(summary);
+			getSummary().setText(summary);
 			this.setVisible(true);
 		}
 	}

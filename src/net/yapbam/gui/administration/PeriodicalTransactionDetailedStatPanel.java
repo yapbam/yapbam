@@ -5,9 +5,7 @@ import javax.swing.JPanel;
 import net.yapbam.data.PeriodicalTransactionSimulationData;
 import net.yapbam.data.PeriodicalTransactionSimulationData.Unit;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
 import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
@@ -20,8 +18,6 @@ import java.awt.event.ItemEvent;
 public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 	private PeriodicalTransactionSimulationData data;
 
-	private JPanel westPanel;
-	private JLabel detailsLabel;
 	private JRadioButton nextMonth;
 	private JRadioButton next3months;
 	private JRadioButton nextYear;
@@ -37,44 +33,29 @@ public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 	}
 	
 	private void initialize() {
-		setLayout(new BorderLayout(0, 0));
-		add(getWestPanel(), BorderLayout.WEST);
-		add(getDetailsLabel(), BorderLayout.CENTER);
+		setBorder(new TitledBorder("Settings"));
+		GridBagLayout gblWestPanel = new GridBagLayout();
+		setLayout(gblWestPanel);
+		GridBagConstraints gbcNextMonth = new GridBagConstraints();
+		gbcNextMonth.anchor = GridBagConstraints.WEST;
+		gbcNextMonth.insets = new Insets(0, 0, 5, 0);
+		gbcNextMonth.gridx = 0;
+		gbcNextMonth.gridy = 0;
+		add(getNextMonth(), gbcNextMonth);
+		GridBagConstraints gbcNext3months = new GridBagConstraints();
+		gbcNext3months.insets = new Insets(0, 0, 5, 0);
+		gbcNext3months.anchor = GridBagConstraints.WEST;
+		gbcNext3months.gridx = 0;
+		gbcNext3months.gridy = 1;
+		add(getNext3months(), gbcNext3months);
+		GridBagConstraints gbcNextYear = new GridBagConstraints();
+		gbcNextYear.anchor = GridBagConstraints.WEST;
+		gbcNextYear.gridx = 0;
+		gbcNextYear.gridy = 2;
+		add(getNextYear(), gbcNextYear);
 	}
 
-	private JPanel getWestPanel() {
-		if (westPanel == null) {
-			westPanel = new JPanel();
-			westPanel.setBorder(new TitledBorder("Settings"));
-			GridBagLayout gblWestPanel = new GridBagLayout();
-			westPanel.setLayout(gblWestPanel);
-			GridBagConstraints gbcNextMonth = new GridBagConstraints();
-			gbcNextMonth.anchor = GridBagConstraints.WEST;
-			gbcNextMonth.insets = new Insets(0, 0, 5, 0);
-			gbcNextMonth.gridx = 0;
-			gbcNextMonth.gridy = 0;
-			westPanel.add(getNextMonth(), gbcNextMonth);
-			GridBagConstraints gbcNext3months = new GridBagConstraints();
-			gbcNext3months.insets = new Insets(0, 0, 5, 0);
-			gbcNext3months.anchor = GridBagConstraints.WEST;
-			gbcNext3months.gridx = 0;
-			gbcNext3months.gridy = 1;
-			westPanel.add(getNext3months(), gbcNext3months);
-			GridBagConstraints gbcNextYear = new GridBagConstraints();
-			gbcNextYear.anchor = GridBagConstraints.WEST;
-			gbcNextYear.gridx = 0;
-			gbcNextYear.gridy = 2;
-			westPanel.add(getNextYear(), gbcNextYear);
-		}
-		return westPanel;
-	}
-	private JLabel getDetailsLabel() {
-		if (detailsLabel == null) {
-			detailsLabel = new JLabel("New label");
-		}
-		return detailsLabel;
-	}
-	private JRadioButton getNextMonth() {
+	JRadioButton getNextMonth() {
 		if (nextMonth == null) {
 			nextMonth = new JRadioButton("Next month");
 			nextMonth.addItemListener(new ItemListener() {
@@ -89,7 +70,7 @@ public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 		}
 		return nextMonth;
 	}
-	private JRadioButton getNext3months() {
+	JRadioButton getNext3months() {
 		if (next3months == null) {
 			next3months = new JRadioButton("Next 3 months");
 			buttonGroup.add(next3months);
@@ -103,7 +84,7 @@ public class PeriodicalTransactionDetailedStatPanel extends JPanel {
 		}
 		return next3months;
 	}
-	private JRadioButton getNextYear() {
+	JRadioButton getNextYear() {
 		if (nextYear == null) {
 			nextYear = new JRadioButton("Next year");
 			buttonGroup.add(nextYear);

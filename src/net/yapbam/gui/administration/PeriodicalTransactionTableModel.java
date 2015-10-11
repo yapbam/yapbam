@@ -64,7 +64,6 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		this.periodicTransactionListPanel.data.getFilter().addObserver(new Observer() {
 			@Override
 			public void update(Observable o, Object arg) {
-				System.out.println("filter is changed"); //TODO
 				if (!ignoreFilter) {
 					updateTransactionList();
 				}

@@ -44,12 +44,8 @@ public abstract class AbstractStatPanel<T extends Observable, V> extends JPanel 
 	protected abstract T buildData(V data);
 	
 	protected abstract JComponent buildDetails();
-	
-	protected void setSummary (String text) {
-		getSummaryLabel().setText(text);
-	}
 
-	private void initialize() {
+	protected void initialize() {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints cShow = new GridBagConstraints();
 		cShow.insets = new Insets(0, 0, 5, 0);
@@ -62,7 +58,7 @@ public abstract class AbstractStatPanel<T extends Observable, V> extends JPanel 
 		gbcSummaryLabel.anchor = GridBagConstraints.WEST;
 		gbcSummaryLabel.gridx = 1;
 		gbcSummaryLabel.gridy = 0;
-		add(getSummaryLabel(), gbcSummaryLabel);
+		add(getSummary(), gbcSummaryLabel);
 		GridBagConstraints cContent = new GridBagConstraints();
 		cContent.anchor = GridBagConstraints.WEST;
 		cContent.insets = new Insets(0, 0, 5, 0);
@@ -75,7 +71,7 @@ public abstract class AbstractStatPanel<T extends Observable, V> extends JPanel 
 	
 	protected abstract void doUpdate();
 	
-	private void setDeployed(boolean deployed) {
+	protected void setDeployed(boolean deployed) {
 		getDetails().setVisible(deployed);
 		getShowButton().setIcon(IconManager.get(deployed?Name.SPREAD:Name.SPREADABLE));
 		getShowButton().setToolTipText(deployed?LocalizationData.get("MainFrame.stat.hide.tip"):LocalizationData.get("MainFrame.stat.show.tip")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -92,7 +88,7 @@ public abstract class AbstractStatPanel<T extends Observable, V> extends JPanel 
 		return details;
 	}
 	
-	private JLabel getShowButton() {
+	protected JLabel getShowButton() {
 		if (showButton==null) {
 			showButton = new JLabel(IconManager.get(IconManager.Name.SPREADABLE));
 			showButton.addMouseListener(new MouseAdapter() {
@@ -104,7 +100,7 @@ public abstract class AbstractStatPanel<T extends Observable, V> extends JPanel 
 		}
 		return showButton;
 	}
-	private JLabel getSummaryLabel() {
+	protected JLabel getSummary() {
 		if (summaryLabel == null) {
 			summaryLabel = new JLabel();
 		}
