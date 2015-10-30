@@ -5,19 +5,8 @@ import java.io.IOException;
 import net.yapbam.util.ApplicationContext;
 
 public abstract class VersionManager {
-	//TODO Use an update address not hosted explicitly by sourceforge but by www.yapbam.net
-	//When moving hosting from sourceforge to another location it would be useful to replace http://yapbam.sourceforge.net/updateInfo.php
-	//by the following in order to redirect to the new location (example with www.yapbam.net).
-	/*
-	<?php
-			$query = $_SERVER['QUERY_STRING'];
-			if (strlen($query)==0) {
-				http_response_code(400);
-			} else {
-				header("Location: http://www.yapbam.net/updateInfo.php?".$query);
-			}
-	?>
-	*/
+	//WARNING: It is important to stay on an address hosted explicitly by sourceforge and not by www.yapbam.net
+	//Probably, in the future, when the all the maintainers went away, the domain net yapbam.net will not remain active. Sourceforge will probably do
 	private static final String BASE_UPDATE_URL = "http://yapbam.sourceforge.net/updateInfo.php";
 	private static final String BETA_BASE_UPDATE_URL = "http://yapbam.sourceforge.net/updateInfoBeta.php";
 	

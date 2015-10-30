@@ -15,6 +15,7 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.CheckNewReleaseAction;
+import net.yapbam.gui.util.MessageWithLink;
 import net.yapbam.update.UpdateInformation;
 import net.yapbam.update.VersionManager;
 import net.yapbam.util.ApplicationContext;
@@ -37,8 +38,8 @@ import java.util.concurrent.ExecutionException;
  * This url could be a useful reading to understand this class : http://java.sun.com/docs/books/tutorial/uiswing/concurrency/index.html
  */
 public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
-	private static final boolean SLOW_UPDATE_CHECKING = Boolean.getBoolean("SlowUpdateChecking");
-	private static final String YABAM_HOME_URL = "http://www.yapbam.net";
+	private static final boolean SLOW_UPDATE_CHECKING = Boolean.getBoolean("SlowUpdateChecking"); //$NON-NLS-1$
+	private static final String YABAM_HOME_URL = "https://www.yapbam.net"; //$NON-NLS-1$
 
 	private boolean auto;
 
@@ -105,7 +106,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					UpdateInformation update = get();
 					CheckUpdateDialog.this.setVisible(false);
 					int code = update.getHttpErrorCode();
-					if (code!=HttpURLConnection.HTTP_OK) { // Connection error
+					if (code!=HttpURLConnection.HTTP_OK) {
 						// If an error occurred while getting the update information
 						if (!auto) {
 							String message;
@@ -158,10 +159,10 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 
 		/** Gets the action to do when an update is available.
 		 * @param update The update information
-		 * @return 1 if the update should be installed
+		 * @return true if the update should be installed
 		 */
 		private boolean isUpdateInstallable(UpdateInformation update) {
-			//TODO Use a HTMLPane in order to be able to display a the relnotes
+			//TODO Use a HTMLPane in order to be able to display the relnotes
 			File launchDirectory = Portable.getApplicationDirectory();
 			boolean canWrite = FileUtils.isWritable(launchDirectory);
 			if (auto && Preferences.INSTANCE.getAutoUpdateInstall() && canWrite) {
@@ -182,10 +183,10 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 					message = LocalizationData.get("MainMenu.CheckUpdate.Success.writeProtected"); //$NON-NLS-1$
 				}
 				message = Formatter.format(message, ApplicationContext.getVersion(), update.getLastestRelease());
-				int choice = JOptionPane.showOptionDialog(owner, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{cancel, open}, open);
+				int choice = JOptionPane.showOptionDialog(owner, new MessageWithLink(message), title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{cancel, open}, open);
 				if (choice==1) {
 					try {
-						HelpManager.show(owner, new URI("http://www.yapbam.net"));//$NON-NLS-1$
+						HelpManager.show(owner, new URI(YABAM_HOME_URL));
 					} catch (Exception e) {
 						ErrorManager.INSTANCE.log(owner, e);
 					}

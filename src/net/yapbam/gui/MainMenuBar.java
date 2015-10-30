@@ -238,7 +238,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "http://sourceforge.net/projects/yapbam/support"); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.web.support.tooltip")); //$NON-NLS-1$
 		menu.add(item);
-		item = getURLMenuItem(LocalizationData.get("MainMenu.web.yapbam"), "http://www.yapbam.net"); //$NON-NLS-1$ //$NON-NLS-2$
+		item = getURLMenuItem(LocalizationData.get("MainMenu.web.yapbam"), "https://www.yapbam.net"); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.web.yapbam.tooltip")); //$NON-NLS-1$
 		menu.add(item);
 		insertPluginMenuItems(menu, AbstractPlugIn.WEB_SITES_PART);
