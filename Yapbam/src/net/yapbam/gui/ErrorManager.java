@@ -173,7 +173,7 @@ public class ErrorManager {
 			addToBuffer(data, "version", message.version);
 			
 			// Send data
-			URL url = new URL("http://www.yapbam.net/crashReport.php");
+			URL url = new URL("https://www.yapbam.net/crashReport.php");
 			URLConnection conn = url.openConnection(Preferences.INSTANCE.getHttpProxy());
 			conn.setDoOutput(true);
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), ENC);

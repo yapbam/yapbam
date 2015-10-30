@@ -38,7 +38,7 @@ public abstract class MessagesBuilder {
 		private static final Logger LOGGER = LoggerFactory.getLogger(MessagesBuilder.class);
 		private static final boolean SLOW_UPDATE_CHECKING = false;
 		private static final String BASE_URL_PROPERTY = "newsURL"; //$NON-NLS-1$
-		private static final String BASE_URL = System.getProperty(BASE_URL_PROPERTY, "http://www.yapbam.net/messages"); //$NON-NLS-1$
+		private static final String BASE_URL = System.getProperty(BASE_URL_PROPERTY, "https://www.yapbam.net/messages"); //$NON-NLS-1$
 
 		private MessagesPanel infoPanel;
 
