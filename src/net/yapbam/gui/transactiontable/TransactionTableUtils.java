@@ -1,5 +1,8 @@
 package net.yapbam.gui.transactiontable;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import net.yapbam.data.AbstractTransaction;
@@ -10,21 +13,42 @@ import net.yapbam.gui.LocalizationData;
 public abstract class TransactionTableUtils {
 	private TransactionTableUtils() {}
 	
-	public static String getDescription (AbstractTransaction transaction, boolean spread, boolean mergeComment) {
+	public static String getDescription (AbstractTransaction transaction, boolean spread, boolean mergeComment, boolean withHtmlTags) {
+		StringBuilder buf = new StringBuilder();
+		if (withHtmlTags) {
+			buf.append("<html><body>");
+		}
 		if (spread) {
-			StringBuilder buf = new StringBuilder("<html><body>").append(StringEscapeUtils.escapeHtml3(transaction.getDescription(mergeComment))); //$NON-NLS-1$
+			buf.append(getDescription(transaction, false, mergeComment, false)); //$NON-NLS-1$
 			for (int i = 0; i < transaction.getSubTransactionSize(); i++) {
 				buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(transaction.getSubTransaction(i).getDescription())); //$NON-NLS-1$
 			}
 			if (transaction.getComplement()!=0) {
 				buf.append("<BR>&nbsp;&nbsp;").append(StringEscapeUtils.escapeHtml3(LocalizationData.get("Transaction.14"))); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			buf.append("</body></html>"); //$NON-NLS-1$
-			return buf.toString().replace(" ", "&nbsp;");
 		} else {
-			return transaction.getDescription(mergeComment);
+			buf.append (StringEscapeUtils.escapeHtml3(transaction.getDescription()));
+			if (mergeComment && (transaction.getComment()!=null)) {
+				buf.append(" (");
+				buf.append(getComment(transaction));
+				buf.append(")");
+			}
 		}
-		
+		if (withHtmlTags) {
+			buf.append("</body></html>"); //$NON-NLS-1$
+		}
+		return buf.toString().replace(" ", "&nbsp;");
+	}
+
+	public static String getComment(AbstractTransaction transaction) {
+		String comment = transaction.getComment();
+		try {
+			new URL(comment);
+			return "<a href=\""+comment+"\">"+StringEscapeUtils.escapeHtml3(comment)+"</a>";
+		} catch (MalformedURLException e) {
+			// Comment is not a valid URL
+			return StringEscapeUtils.escapeHtml3(comment);
+		}
 	}
 	
 	private static boolean isExpense (double amount) {
