@@ -151,7 +151,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		} else if (columnIndex==settings.getAccountColumn()) {
 			return transaction.getAccount().getName();
 		} else if (columnIndex==settings.getDescriptionColumn()) {
-			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription());
+			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription(), true);
 		} else if (columnIndex==settings.getCommentColumn()) {
 			return transaction.getComment();
 		} else if (columnIndex==settings.getAmountColumn()) {

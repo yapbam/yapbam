@@ -112,7 +112,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		} else if (columnIndex==settings.getDateColumn()) {
 			return transaction.getDate();
 		} else if (columnIndex==settings.getDescriptionColumn()) {
-			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription());
+			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription(), false);
 		} else if (columnIndex==settings.getAmountColumn()) {
 			return TransactionTableUtils.getAmount(transaction, spread);
 		} else if (columnIndex==settings.getReceiptColumn()) {
@@ -130,7 +130,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		} else if (columnIndex==settings.getStatementColumn()) {
 			return transaction.getStatement();
 		} else if (columnIndex==settings.getCommentColumn()) {
-			return transaction.getComment();
+			return TransactionTableUtils.getComment(transaction);
 		} else {
 			return null;
 		}
