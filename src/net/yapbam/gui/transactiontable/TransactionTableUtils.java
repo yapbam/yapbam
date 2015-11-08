@@ -1,14 +1,12 @@
 package net.yapbam.gui.transactiontable;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Category;
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.HtmlUtils;
 
 public abstract class TransactionTableUtils {
 	private TransactionTableUtils() {}
@@ -41,14 +39,7 @@ public abstract class TransactionTableUtils {
 	}
 
 	public static String getComment(AbstractTransaction transaction) {
-		String comment = transaction.getComment();
-		try {
-			new URL(comment);
-			return "<a href=\""+comment+"\">"+StringEscapeUtils.escapeHtml3(comment)+"</a>";
-		} catch (MalformedURLException e) {
-			// Comment is not a valid URL
-			return StringEscapeUtils.escapeHtml3(comment);
-		}
+		return HtmlUtils.toHtml(transaction.getComment());
 	}
 	
 	private static boolean isExpense (double amount) {
