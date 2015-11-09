@@ -16,7 +16,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.transactiontable.ColoredModel;
 import net.yapbam.gui.util.JTableUtils;
 import java.awt.Insets;
 
@@ -49,7 +48,7 @@ public class ImportErrorPanel extends JPanel {
 	}
 
 	@SuppressWarnings("serial")
-	private final class ImportErrorTableModel extends AbstractTableModel implements ColoredModel {
+	private final class ImportErrorTableModel extends AbstractTableModel {
 		private int columnsCount;
 		private String[] columnsHeaders;
 
@@ -113,15 +112,6 @@ public class ImportErrorPanel extends JPanel {
 		@Override
 		public String getColumnName(int column) {
 			return columnsHeaders[column];
-		}
-
-		@Override
-		public int getAlignment(int column) {
-			return 0;
-		}
-
-		@Override
-		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
 		}
 	}
 

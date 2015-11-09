@@ -78,7 +78,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		} else if (columnIndex==settings.getDateColumn()) {
 			return transaction.getDate();
 		} else if (columnIndex==settings.getDescriptionColumn()) {
-			return transaction.getDescription(!settings.isCommentSeparatedFromDescription());
+			return TransactionTableUtils.getDescription(transaction, false, !settings.isCommentSeparatedFromDescription(), false);
 		} else if (columnIndex==settings.getAmountColumn()) {
 			return transaction.getAmount();
 		} else if (columnIndex==settings.getReceiptColumn()) {
@@ -102,7 +102,7 @@ final class BalanceHistoryModel extends AbstractTableModel {
 		} else if (columnIndex==settings.getRemainingColumn()) {
 			return getRemaining(rowIndex);
 		} else if (columnIndex==settings.getCommentColumn()) {
-			return transaction.getComment();
+			return TransactionTableUtils.getComment(transaction);
 		} else {
 			return "?"; //$NON-NLS-1$
 		}
@@ -214,5 +214,11 @@ final class BalanceHistoryModel extends AbstractTableModel {
 
 	public Double getDayBalance(int row) {
 		return data.getBalanceHistory().getBalance(getTransaction(row).getValueDate());
+	}
+
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		// Cells that allow to click on HTML links should be editable
+		return (columnIndex==settings.getDescriptionColumn() || columnIndex==settings.getCommentColumn()) && columnIndex>=0;
 	}
 }

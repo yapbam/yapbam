@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs.periodicaltransaction;
 
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
@@ -170,21 +169,10 @@ public class PeriodicalTransactionGeneratorPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
-	@SuppressWarnings("serial")
 	private JTable getJTable() {
 		if (jTable == null) {
 			tableModel = new GenerateTableModel(data);
-			jTable = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel) {
-				/* (non-Javadoc)
-				 * @see javax.swing.JTable#getPreferredScrollableViewportSize()
-				 */
-				@Override
-				public Dimension getPreferredScrollableViewportSize() {
-					Dimension size = super.getPreferredScrollableViewportSize();
-					size.width = getPreferredSize().width;
-					return size;
-				}
-			};
+			jTable = new GeneratedTransactionsTable(tableModel);
 			jTable.setDefaultRenderer(Date.class, new DateRenderer());
 			jTable.setDefaultRenderer(double[].class, new AmountRenderer());
 			jTable.setDefaultRenderer(Boolean.class, new BooleanRenderer());

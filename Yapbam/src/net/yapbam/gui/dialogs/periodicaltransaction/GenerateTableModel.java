@@ -2,8 +2,6 @@ package net.yapbam.gui.dialogs.periodicaltransaction;
 
 import java.util.Date;
 
-import javax.swing.SwingConstants;
-
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.AbstractTransaction;
@@ -14,12 +12,12 @@ import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 
 @SuppressWarnings("serial")
 class GenerateTableModel extends GenericTransactionTableModel {
-	private static final int ACCOUNT_INDEX = 0;
-	private static final int DESCRIPTION_INDEX = 1;
-	private static final int DATE_INDEX = 2;
-	private static final int AMOUNT_INDEX = 3;
-	private static final int CANCELLED_INDEX = 4;
-	private static final int POSTPONED_INDEX = 5;
+	static final int ACCOUNT_INDEX = 0;
+	static final int DESCRIPTION_INDEX = 1;
+	static final int DATE_INDEX = 2;
+	static final int AMOUNT_INDEX = 3;
+	static final int CANCELLED_INDEX = 4;
+	static final int POSTPONED_INDEX = 5;
 	
 	private Generator generator; 
 	
@@ -60,17 +58,6 @@ class GenerateTableModel extends GenericTransactionTableModel {
 			return Boolean.class;
 		} else {
 			return String.class;
-		}
-	}
-
-	@Override
-	public int getAlignment(int column) {
-		if (column==AMOUNT_INDEX) {
-			return SwingConstants.RIGHT;
-		} else if ((column==ACCOUNT_INDEX) || (column==DESCRIPTION_INDEX)) {
-			return SwingConstants.LEFT;
-		} else {
-			return SwingConstants.CENTER;
 		}
 	}
 

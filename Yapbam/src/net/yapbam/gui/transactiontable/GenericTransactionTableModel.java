@@ -1,45 +1,20 @@
 package net.yapbam.gui.transactiontable;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.AbstractTransaction;
 
 @SuppressWarnings("serial")
-public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel, ColoredModel {
-	static Color[] BACK_COLORS;
+public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel {
 	private Set<Long> spreadTransactionId;
 
-	private void initBackgroundColors() {
-		BACK_COLORS = TransactionsPreferencePanel.getBackgroundColors();
-	}
-	
 	protected GenericTransactionTableModel() {
-		initBackgroundColors();
 		this.spreadTransactionId = new HashSet<Long>();
 	}
 	
-	@Override
-	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
-		if (isSelected) {
-			renderer.setBackground(table.getSelectionBackground());
-			renderer.setForeground(table.getSelectionForeground());
-		} else {
-			renderer.setForeground(table.getForeground());
-			if ((BACK_COLORS[0]!=null) && (BACK_COLORS[1]!=null)) {
-				boolean expense = this.getTransaction(row).getAmount() < 0;
-				renderer.setBackground(expense ? BACK_COLORS[0] : BACK_COLORS[1]);
-			} else {
-				renderer.setBackground(table.getBackground());
-			}
-		}
-	}
-
 	@Override
 	public boolean isSpreadable(int row) {
 		return this.getTransaction(row).getSubTransactionSize()>0;

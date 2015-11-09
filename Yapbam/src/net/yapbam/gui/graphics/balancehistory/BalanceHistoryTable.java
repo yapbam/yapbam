@@ -15,6 +15,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.util.FriendlyTable;
+import net.yapbam.gui.util.LinkEnabler;
 
 public class BalanceHistoryTable extends FriendlyTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +31,7 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 			BalanceHistoryCellRenderer cellRenderer = new BalanceHistoryCellRenderer(data);
 			setDefaultRenderer(Date.class, cellRenderer);
 			setDefaultRenderer(Object.class, cellRenderer);
+			LinkEnabler.enable(this, model.getSettings().getDescriptionColumn(), model.getSettings().getCommentColumn());
 		}
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.lastSelected = new Transaction[0];
@@ -87,7 +89,7 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 		}
 		setRowSorter(sorter);
 	}
-
+	
 	public Transaction[] getSelectedTransactions() {
 		int[] indexes = getSelectedRows();
 		Transaction[] result = new Transaction[indexes.length];

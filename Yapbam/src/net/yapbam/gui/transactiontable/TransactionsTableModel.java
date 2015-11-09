@@ -1,13 +1,8 @@
 package net.yapbam.gui.transactiontable;
 
-import java.awt.Component;
-import java.awt.Font;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 
 import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.FilteredData;
@@ -138,7 +133,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return false;
+		return (columnIndex==settings.getDescriptionColumn() || columnIndex==settings.getCommentColumn()) && columnIndex>=0;
 	}
 
 	@Override
@@ -171,26 +166,6 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		} else if ((event instanceof CategoryPropertyChangedEvent) ||
 				((event instanceof ModePropertyChangedEvent) && ((((ModePropertyChangedEvent)event).getChanges()&ModePropertyChangedEvent.NAME)!=0))) {
 			fireTableDataChanged();			
-		}
-	}
-
-	@Override
-	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
-		super.setRowLook(renderer, table, row, isSelected);
-		boolean isChecked = this.data.getTransaction(row).isChecked();
-		Font font = renderer.getFont().deriveFont(isChecked ? Font.ITALIC : Font.PLAIN + Font.BOLD);
-		renderer.setFont(font);
-	}
-	
-	@Override
-	public int getAlignment(int column) {
-		if ((column == settings.getAmountColumn()) || (column == settings.getReceiptColumn())
-				|| (column == settings.getExpenseColumn()) /*|| (column == settings.getNumberColumn())*/) {
-			return SwingConstants.RIGHT;
-		} else if ((column == settings.getAccountColumn()) || (column == settings.getDescriptionColumn())) {
-			return SwingConstants.LEFT;
-		} else {
-			return SwingConstants.CENTER;
 		}
 	}
 

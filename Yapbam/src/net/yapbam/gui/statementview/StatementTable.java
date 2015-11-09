@@ -15,6 +15,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.util.FriendlyTable;
+import net.yapbam.gui.util.LinkEnabler;
 
 public class StatementTable extends FriendlyTable implements TransactionSelector {
 	private static final long serialVersionUID = 1L;
@@ -32,6 +33,7 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 		setDefaultRenderer(Object.class, renderer);
 		setDefaultRenderer(Double.class, renderer);
 		setDefaultRenderer(Date.class, renderer);
+		LinkEnabler.enable(this, 1);
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		this.setRowSorter(new RowSorter<StatementTableModel>(model));
 		this.lastSelected = null;
