@@ -382,9 +382,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	private JTable getTable() {
 		if (table == null) {
-			table = new JTable(getTableModel());
-			table.setPreferredScrollableViewportSize (new Dimension(500, table.getRowCount() * table.getRowHeight()));
-			table.setDefaultRenderer(Object.class, new ObjectRenderer());
+			table = new MyTable();
 		}
 		return table;
 	}
@@ -396,8 +394,39 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 		return tableModel;
 	}
 	
+	class MyTable extends JTable implements PaintedTable {
+		private static final long serialVersionUID = 1L;
+		TablePainter painter = new TablePainter() {
+			
+			@Override
+			public void setRowLook(Component renderer, javax.swing.JTable table, int row, boolean isSelected) {
+				renderer.setForeground(table.getForeground());
+				if (getChckBxCustomBackground().isSelected()) {
+					renderer.setBackground(((MyTableModel)table.getModel()).isExpense(row) ? expenseColor : receiptColor);
+				} else {
+					renderer.setBackground(table.getBackground());
+				}
+			}
+			
+			@Override
+			public int getAlignment(int column) {
+				return SwingConstants.CENTER;
+			}
+		};
+		MyTable() {
+			super(getTableModel());
+			setPreferredScrollableViewportSize (new Dimension(500, getRowCount() * getRowHeight()));
+			setDefaultRenderer(Object.class, new ObjectRenderer());
+		}
+
+		@Override
+		public TablePainter getPainter() {
+			return painter;
+		}
+	}
+	
 	@SuppressWarnings("serial")
-	class MyTableModel extends AbstractTableModel implements ColoredModel {
+	class MyTableModel extends AbstractTableModel {
 		private int getCommentColumnIndex() {
 			return getSeparateCommentChkBx().isSelected() ? 1 : -1;
 		}
@@ -452,21 +481,6 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			} else {
 				return isExpense(row) ? "-100" : "100";
 			}
-		}
-
-		@Override
-		public void setRowLook(Component renderer, javax.swing.JTable table, int row, boolean isSelected) {
-				renderer.setForeground(table.getForeground());
-				if (getChckBxCustomBackground().isSelected()) {
-					renderer.setBackground(isExpense(row) ? expenseColor : receiptColor);
-				} else {
-					renderer.setBackground(table.getBackground());
-				}
-		}
-
-		@Override
-		public int getAlignment(int column) {
-			return SwingConstants.CENTER;
 		}
 		
 		public void refresh() {

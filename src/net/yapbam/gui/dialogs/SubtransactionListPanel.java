@@ -37,7 +37,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
-import net.yapbam.gui.transactiontable.SubTransactionsTableModel;
 
 public class SubtransactionListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -77,7 +76,7 @@ public class SubtransactionListPanel extends JPanel {
 		this.add(pane, BorderLayout.NORTH);
 		
 		tableModel = new SubTransactionsTableModel();
-		table = new com.fathzer.soft.ajlib.swing.table.JTable(tableModel);
+		table = new SubTransactionsTable(tableModel);
 		table.setRowSorter(new RowSorter<TableModel>(tableModel));
 		ListSelectionModel selModel = table.getSelectionModel();
 		selModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

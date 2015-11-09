@@ -3,7 +3,8 @@ package net.yapbam.gui.graphics.balancehistory;
 import net.yapbam.gui.transactiontable.TransactionTableSettings;
 
 class TableSettings extends TransactionTableSettings {
-	
+	private static final long serialVersionUID = 1L;
+
 	TableSettings() {
 		super();
 		this.isReceiptsSeparatedFromExpenses = TablePreferencePanel.isReceiptSeparatedFromExpense();

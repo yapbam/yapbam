@@ -1,17 +1,15 @@
 package net.yapbam.gui.transactiontable;
 
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.util.Comparator;
 import java.util.Date;
 
-import javax.swing.JEditorPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.LineBorder;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import com.fathzer.soft.ajlib.swing.table.JTableSelector;
@@ -24,45 +22,14 @@ import net.yapbam.data.Transaction;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.util.DoubleArrayComparator;
 import net.yapbam.gui.util.FriendlyTable;
+import net.yapbam.gui.util.LinkEnabler;
 
-public class TransactionTable extends FriendlyTable implements TransactionSelector {
+public class TransactionTable extends FriendlyTable implements TransactionSelector, PaintedTable {
 	private static final long serialVersionUID = 1L;
 	private Transaction[] lastSelected;
 	private FilteredData data;
 	
-    /**
-     * JEditorPane based renderer.  This gives me issues with fonts, so
-     * you may need to do some more playing around with this to 
-     * get it to work the way you want
-     */
-    public static class URLTableCellRenderer extends JEditorPane implements TableCellRenderer {
-		private static final long serialVersionUID = 1L;
-
-		public URLTableCellRenderer() {
-            // Set the content type
-            setContentType("text/html");
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-    		ColoredModel model = (ColoredModel) table.getModel();
-    		model.setRowLook(this, table, row, isSelected);
-            setBorder(new LineBorder(getBackground(), 1));
-            setText("<html><body style=\"" + getStyle() + "\">" + value + "</body></html>");
-            return this;
-        }
-        
-    	StringBuffer getStyle() {
-    		Color color = getBackground();
-    	    // create some css from the label's font
-    	    StringBuffer style = new StringBuffer();
-    	    style.append("background-color: rgb("+color.getRed()+","+color.getGreen()+","+color.getBlue()+");");
-    	    style.append("margin-left: 5px;");
-    	    return style;
-    	}
-    }
-
-	public TransactionTable(FilteredData data) {
+    public TransactionTable(FilteredData data) {
 		super();
 
 		this.data = data;
@@ -72,7 +39,7 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		this.setDefaultRenderer(double[].class, new AmountRenderer());
 		this.setDefaultRenderer(SpreadState.class, new SpreadStateRenderer());
 		this.setDefaultRenderer(Object.class, new ObjectRenderer());
-		this.getColumnModel().getColumn(model.getTableSettings().getDescriptionColumn()).setCellRenderer(new URLTableCellRenderer());
+		LinkEnabler.enable(this, model.getTableSettings().getDescriptionColumn(), model.getTableSettings().getCommentColumn());
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.addMouseListener(new SpreadableMouseAdapter());
 		TableRowSorter<TransactionsTableModel> sorter = new RowSorter<TransactionsTableModel>(model);
@@ -109,6 +76,34 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 			}
 		});
 	}
+    
+    TablePainter painter = new TransactionTablePainter() {
+		@Override
+		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
+			super.setRowLook(renderer, table, row, isSelected);
+			boolean isChecked = data.getTransaction(row).isChecked();
+			Font font = renderer.getFont().deriveFont(isChecked ? Font.ITALIC : Font.PLAIN + Font.BOLD);
+			renderer.setFont(font);
+		}
+		
+		@Override
+		public int getAlignment(int column) {
+			TableSettings settings = ((TransactionsTableModel)getModel()).getTableSettings();
+			if ((column == settings.getAmountColumn()) || (column == settings.getReceiptColumn())
+					|| (column == settings.getExpenseColumn()) /*|| (column == settings.getNumberColumn())*/) {
+				return SwingConstants.RIGHT;
+			} else if ((column == settings.getAccountColumn()) || (column == settings.getDescriptionColumn())) {
+				return SwingConstants.LEFT;
+			} else {
+				return SwingConstants.CENTER;
+			}
+		}
+	};
+	
+    @Override
+    public TablePainter getPainter() {
+    	return painter;
+    }
 
 	@Override
 	public Transaction[] getSelectedTransactions() {

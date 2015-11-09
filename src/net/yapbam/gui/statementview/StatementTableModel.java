@@ -9,6 +9,7 @@ import net.yapbam.data.Category;
 import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 class StatementTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
@@ -70,7 +71,7 @@ class StatementTableModel extends AbstractTableModel {
 		if (columnIndex==0) {
 			return transaction.getDate();
 		} else if (columnIndex==1) {
-			return transaction.getDescription(true);
+			return TransactionTableUtils.getDescription(transaction,false,true,false);
 		} else if (columnIndex==2) {
 			Category category = transaction.getCategory();
 			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
@@ -88,6 +89,12 @@ class StatementTableModel extends AbstractTableModel {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		// Cells that allow to click on HTML links should be editable
+		return (columnIndex==1) && columnIndex>=0;
 	}
 
 	public void setTransactions(Transaction[] transactions) {

@@ -20,10 +20,10 @@ public class BooleanRenderer extends JCheckBox implements TableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		ColoredModel model = (ColoredModel) table.getModel();
-		this.setHorizontalAlignment(model.getAlignment(table.convertColumnIndexToModel(column)));
+		TablePainter painter = ((PaintedTable) table).getPainter();
+		this.setHorizontalAlignment(painter.getAlignment(table.convertColumnIndexToModel(column)));
 		row = table.convertRowIndexToModel(row);
-		model.setRowLook(this, table, row, isSelected);
+		painter.setRowLook(this, table, row, isSelected);
 		setSelected((Boolean) value);
 		return this;
 	}

@@ -1,16 +1,10 @@
 package net.yapbam.gui.administration;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 
 import com.fathzer.jlocal.Formatter;
 
@@ -153,7 +147,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 		} else if (columnIndex==settings.getDescriptionColumn()) {
 			return TransactionTableUtils.getDescription(transaction, spread, !settings.isCommentSeparatedFromDescription(), true);
 		} else if (columnIndex==settings.getCommentColumn()) {
-			return transaction.getComment();
+			return TransactionTableUtils.getComment(transaction);
 		} else if (columnIndex==settings.getAmountColumn()) {
 			return TransactionTableUtils.getAmount(transaction, spread);
 		} else if (columnIndex==settings.getReceiptColumn()) {
@@ -215,18 +209,8 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return false;
-	}
-
-	@Override
-	public int getAlignment(int column) {
-    	if ((column==settings.getDescriptionColumn()) || (column==settings.getCommentColumn()) || (column==settings.getAccountColumn())) {
-    		return SwingConstants.LEFT;
-    	} else if (column==settings.getAmountColumn() || column==settings.getReceiptColumn() || column==settings.getExpenseColumn()) {
-    		return SwingConstants.RIGHT;
-    	} else {
-    		return SwingConstants.CENTER;
-    	}
+		// Cells that allow to click on HTML links should be editable
+		return (columnIndex==settings.getDescriptionColumn() || columnIndex==settings.getCommentColumn()) && columnIndex>=0;
 	}
 
 	GlobalData getGlobalData() {
@@ -236,17 +220,6 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	@Override
 	protected AbstractTransaction getTransaction(int rowIndex) {
 		return transactions.get(rowIndex);
-	}
-
-	@Override
-	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
-		super.setRowLook(renderer, table, row, isSelected);
-		boolean ended = ((PeriodicalTransaction) this.getTransaction(row)).getNextDate() == null;
-		Font font = renderer.getFont().deriveFont(ended ? Font.ITALIC : Font.PLAIN);
-		if (ended) {
-			renderer.setForeground(Color.GRAY);
-		}
-		renderer.setFont(font);
 	}
 
 	public PeriodicalTransactionsTableSettings getTableSettings() {
