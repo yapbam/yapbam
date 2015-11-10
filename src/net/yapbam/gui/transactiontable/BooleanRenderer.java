@@ -6,6 +6,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
+
 public class BooleanRenderer extends JCheckBox implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
 

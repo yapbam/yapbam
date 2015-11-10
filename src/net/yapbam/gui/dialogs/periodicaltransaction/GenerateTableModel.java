@@ -9,6 +9,7 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 @SuppressWarnings("serial")
 class GenerateTableModel extends GenericTransactionTableModel {
@@ -72,7 +73,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 		if (columnIndex==ACCOUNT_INDEX) {
 			return t.getAccount().getName();
 		} else if (columnIndex==DESCRIPTION_INDEX) {
-			return t.getDescription(true);
+			return TransactionTableUtils.getDescription(t, false, true, false);
 		} else if (columnIndex==DATE_INDEX) {
 			return t.getDate();
 		} else if (columnIndex==AMOUNT_INDEX) {
@@ -126,7 +127,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	}
 
 	@Override
-	protected AbstractTransaction getTransaction(int rowIndex) {
+	public AbstractTransaction getTransaction(int rowIndex) {
 		return generator.getTransaction(rowIndex);
 	}
 	

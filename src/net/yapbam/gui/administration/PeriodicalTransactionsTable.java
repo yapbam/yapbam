@@ -18,14 +18,14 @@ import net.yapbam.gui.transactiontable.AmountRenderer;
 import net.yapbam.gui.transactiontable.BooleanRenderer;
 import net.yapbam.gui.transactiontable.DateRenderer;
 import net.yapbam.gui.transactiontable.ObjectRenderer;
-import net.yapbam.gui.transactiontable.PaintedTable;
 import net.yapbam.gui.transactiontable.SpreadState;
 import net.yapbam.gui.transactiontable.SpreadStateRenderer;
 import net.yapbam.gui.transactiontable.SpreadableMouseAdapter;
-import net.yapbam.gui.transactiontable.TablePainter;
 import net.yapbam.gui.transactiontable.TransactionTablePainter;
 import net.yapbam.gui.util.DoubleArrayComparator;
 import net.yapbam.gui.util.LinkEnabler;
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
 
 class PeriodicalTransactionsTable extends JTable implements PaintedTable {
 	private static final long serialVersionUID = 1L;
@@ -54,6 +54,8 @@ class PeriodicalTransactionsTable extends JTable implements PaintedTable {
 		}
 		this.setRowSorter(sorter);
 		painter = new TransactionTablePainter() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setRowLook(Component renderer, javax.swing.JTable table, int row, boolean isSelected) {
 				super.setRowLook(renderer, table, row, isSelected);

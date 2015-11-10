@@ -1,4 +1,4 @@
-package net.yapbam.gui.transactiontable;
+package net.yapbam.gui.util;
 
 public interface PaintedTable {
 	TablePainter getPainter();

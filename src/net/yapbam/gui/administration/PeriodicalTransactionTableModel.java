@@ -218,7 +218,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	}
 
 	@Override
-	protected AbstractTransaction getTransaction(int rowIndex) {
+	public AbstractTransaction getTransaction(int rowIndex) {
 		return transactions.get(rowIndex);
 	}
 

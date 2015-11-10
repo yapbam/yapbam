@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import net.yapbam.data.AbstractTransaction;
 
 @SuppressWarnings("serial")
-public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel {
+public abstract class GenericTransactionTableModel extends AbstractTableModel implements SpreadableTableModel, TransactionsModel {
 	private Set<Long> spreadTransactionId;
 
 	protected GenericTransactionTableModel() {
@@ -56,5 +56,5 @@ public abstract class GenericTransactionTableModel extends AbstractTableModel im
 		}
 	}
 	
-	protected abstract AbstractTransaction getTransaction(int rowIndex);
+	public abstract AbstractTransaction getTransaction(int rowIndex);
 }
