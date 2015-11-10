@@ -15,9 +15,10 @@ import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.transactiontable.TransactionTableUtils;
+import net.yapbam.gui.transactiontable.TransactionsModel;
 
 /** The transaction's table model. */
-final class BalanceHistoryModel extends AbstractTableModel {
+final class BalanceHistoryModel extends AbstractTableModel implements TransactionsModel {
 	private static final long serialVersionUID = 1L;
 	
 	private BalanceData data;

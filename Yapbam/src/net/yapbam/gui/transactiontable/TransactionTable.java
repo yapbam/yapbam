@@ -23,6 +23,8 @@ import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.util.DoubleArrayComparator;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.LinkEnabler;
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
 
 public class TransactionTable extends FriendlyTable implements TransactionSelector, PaintedTable {
 	private static final long serialVersionUID = 1L;
@@ -77,7 +79,9 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		});
 	}
     
-    TablePainter painter = new TransactionTablePainter() {
+    private TablePainter painter = new TransactionTablePainter() {
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
 			super.setRowLook(renderer, table, row, isSelected);

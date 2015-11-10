@@ -7,9 +7,9 @@ import javax.swing.table.TableModel;
 
 import com.fathzer.soft.ajlib.swing.table.JTable;
 
-import net.yapbam.gui.transactiontable.PaintedTable;
-import net.yapbam.gui.transactiontable.TablePainter;
 import net.yapbam.gui.transactiontable.TransactionTablePainter;
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
 
 public class SubTransactionsTable extends JTable implements PaintedTable {
 	private static final long serialVersionUID = 1L;

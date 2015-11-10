@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.dialogs.preferences.PreferencePanel;
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -396,8 +398,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	
 	class MyTable extends JTable implements PaintedTable {
 		private static final long serialVersionUID = 1L;
-		TablePainter painter = new TablePainter() {
-			
+		private TablePainter painter = new TablePainter() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setRowLook(Component renderer, javax.swing.JTable table, int row, boolean isSelected) {
 				renderer.setForeground(table.getForeground());
@@ -410,7 +413,8 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			
 			@Override
 			public int getAlignment(int column) {
-				return SwingConstants.CENTER;
+				int firstNumberColumn = getSeparateCommentChkBx().isSelected()?2:1;
+				return column<firstNumberColumn?SwingConstants.LEFT:SwingConstants.RIGHT;
 			}
 		};
 		MyTable() {

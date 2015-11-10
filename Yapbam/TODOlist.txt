@@ -1,6 +1,6 @@
 Prise en compte des liens
-	Vérifier les couleurs quand on trie les opérations
-	Le reste ;-)
+	Voir si import erros panel fonctionne toujours
+	Mettre dans les relnotes l'amélioration sur la liste des opérations à générer
 
 Bug :
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.

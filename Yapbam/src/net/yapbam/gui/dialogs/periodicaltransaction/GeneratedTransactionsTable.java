@@ -3,12 +3,16 @@ package net.yapbam.gui.dialogs.periodicaltransaction;
 import java.awt.Dimension;
 
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
+import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.JTable;
 
-import net.yapbam.gui.transactiontable.PaintedTable;
-import net.yapbam.gui.transactiontable.TablePainter;
 import net.yapbam.gui.transactiontable.TransactionTablePainter;
+import net.yapbam.gui.util.LinkEnabler;
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
 
 public class GeneratedTransactionsTable extends JTable implements PaintedTable {
 	private static final long serialVersionUID = 1L;
@@ -17,6 +21,8 @@ public class GeneratedTransactionsTable extends JTable implements PaintedTable {
 	public GeneratedTransactionsTable(final GenerateTableModel model) {
 		super(model);
 		painter = new TransactionTablePainter() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public int getAlignment(int column) {
 				if (column==GenerateTableModel.AMOUNT_INDEX) {
@@ -28,6 +34,14 @@ public class GeneratedTransactionsTable extends JTable implements PaintedTable {
 				}
 			}
 		};
+		LinkEnabler.enable(this, GenerateTableModel.DESCRIPTION_INDEX);
+		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		model.addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				Utils.packColumns(GeneratedTransactionsTable.this, 2);
+			}
+		});
 	}
 
 	@Override

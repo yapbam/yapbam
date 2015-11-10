@@ -1,93 +1,27 @@
 package net.yapbam.gui.graphics.balancehistory;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
-import net.yapbam.data.Account;
-import net.yapbam.data.AlertThreshold;
-import net.yapbam.data.FilteredData;
-import net.yapbam.data.GlobalData;
-import net.yapbam.data.event.AccountPropertyChangedEvent;
-import net.yapbam.data.event.DataEvent;
-import net.yapbam.data.event.DataListener;
-import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.gui.transactiontable.TransactionsPreferencePanel;
 import net.yapbam.gui.util.CellRenderer;
+import net.yapbam.gui.util.PaintedTable;
 
 @SuppressWarnings("serial")
-public class BalanceHistoryCellRenderer extends CellRenderer {
-	private Color alertColor;
-	private Color receiptColor;
-	private Color expenseColor;
-	private AlertThreshold alertThreshold;
-	private FilteredData data;
+final class BalanceHistoryCellRenderer extends CellRenderer {
 	private Font defaultFont;
 	private Font boldFont;
 	
-	public BalanceHistoryCellRenderer(FilteredData data) {
-		this.data = data;
-		this.alertColor = TablePreferencePanel.isHighlightAlerts() ? new Color(255, 100, 100) : null;
-		if (TablePreferencePanel.isSameColors()) {
-			Color[] colors = TransactionsPreferencePanel.getBackgroundColors();
-			this.expenseColor = colors[0];
-			this.receiptColor = colors[1];
-		}
-		refreshMinMax();
-		data.addListener(new DataListener() {
-			@Override
-			public void processEvent(DataEvent event) {
-				boolean needRefresh = ((event instanceof EverythingChangedEvent) || (event instanceof AccountPropertyChangedEvent));
-				if (needRefresh) {
-					refreshMinMax();
-				}
-			}
-		});
+	BalanceHistoryCellRenderer() {
 	}
 	
-	@Override
-	protected Color getBackground(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
-		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
-		if ((alertColor!=null) && !isSelected && (alertThreshold.getTrigger(model.getDayBalance(rowModel))!=0)) {
-			return alertColor;
-		} else {
-			double amount = model.getTransaction(rowModel).getAmount();
-			if (!isSelected && (receiptColor!=null) && (GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)>0)) {
-				return receiptColor;
-			} else if (!isSelected && (expenseColor!=null) && (GlobalData.AMOUNT_COMPARATOR.compare(amount, 0.0)<=0)) {
-				return expenseColor;
-			} else {
-				return super.getBackground(table, value, isSelected, hasFocus, rowModel, columnModel);
-			}
-		}
-	}
-
 	@Override
 	protected Object getValue(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
 		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
 		return (columnModel==model.getSettings().getRemainingColumn() && model.getHideIntermediateBalances() && !model.isDayBalance(rowModel)) ?
 				"" : super.getValue(table, value, isSelected, hasFocus, rowModel, columnModel);
-	}
-
-	private void refreshMinMax() {
-		Account singleAccount = null;
-		if (data.getGlobalData().getAccountsNumber()==1) {
-			singleAccount = data.getGlobalData().getAccount(0);
-		} else {
-			List<Account> validAccounts = data.getFilter().getValidAccounts();
-			if ((validAccounts!=null) && (validAccounts.size()==1)) {
-				singleAccount = validAccounts.get(0);
-			}
-		}
-		if (singleAccount==null) {
-			this.alertThreshold = new AlertThreshold(0.0, Double.MAX_VALUE);
-		} else {
-			this.alertThreshold = singleAccount.getAlertThreshold();
-		}
 	}
 
 	@Override
@@ -106,15 +40,16 @@ public class BalanceHistoryCellRenderer extends CellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
 		row = table.convertRowIndexToModel(row);
 		column = table.convertColumnIndexToModel(column);
+		((PaintedTable)table).getPainter().setRowLook(result, table, row, isSelected);
+		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
 		TableSettings settings = model.getSettings();
 		Font font = (!model.getHideIntermediateBalances() && column==settings.getRemainingColumn() && model.isDayBalance(row)) ? getBoldFont(result) : getStdFont(result);
 		result.setFont(font);
 		return result;
 	}
-	
+
 	private Font getBoldFont(Component component) {
 		initFonts(component);
 		return boldFont;

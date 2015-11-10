@@ -3,6 +3,7 @@ package net.yapbam.gui.statementview;
 import java.util.Date;
 
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -16,11 +17,14 @@ import net.yapbam.data.Transaction;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.LinkEnabler;
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
 
-public class StatementTable extends FriendlyTable implements TransactionSelector {
+public class StatementTable extends FriendlyTable implements TransactionSelector, PaintedTable {
 	private static final long serialVersionUID = 1L;
 	private Transaction[] lastSelected;
 	private FilteredData data;
+	private TablePainter painter;
 
 	public StatementTable(FilteredData data) {
 		super();
@@ -33,6 +37,13 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 		setDefaultRenderer(Object.class, renderer);
 		setDefaultRenderer(Double.class, renderer);
 		setDefaultRenderer(Date.class, renderer);
+		this.painter = new TablePainter() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public int getAlignment(int column) {
+				return SwingConstants.LEFT;
+			}
+		};
 		LinkEnabler.enable(this, 1);
 		this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		this.setRowSorter(new RowSorter<StatementTableModel>(model));
@@ -88,5 +99,10 @@ public class StatementTable extends FriendlyTable implements TransactionSelector
 
 	public void setTransactions(Transaction[] transactions) {
 		((StatementTableModel)this.getModel()).setTransactions(transactions);
+	}
+
+	@Override
+	public TablePainter getPainter() {
+		return painter;
 	}
 }

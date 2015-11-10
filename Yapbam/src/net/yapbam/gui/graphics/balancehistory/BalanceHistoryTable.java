@@ -16,19 +16,23 @@ import net.yapbam.data.Transaction;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.LinkEnabler;
+import net.yapbam.gui.util.PaintedTable;
+import net.yapbam.gui.util.TablePainter;
 
-public class BalanceHistoryTable extends FriendlyTable implements TransactionSelector {
+public class BalanceHistoryTable extends FriendlyTable implements TransactionSelector, PaintedTable {
 	private static final long serialVersionUID = 1L;
 	private Transaction[] lastSelected;
 	private FilteredData data;
+	private TablePainter painter;
 
 	public BalanceHistoryTable(FilteredData data) {
 		super();
 		this.data = data;
+		this.painter = new BalanceHistoryTablePainter(data);
 		BalanceHistoryModel model = new BalanceHistoryModel(data==null?null:data.getBalanceData());
 		this.setModel(model);
 		if (data!=null) {
-			BalanceHistoryCellRenderer cellRenderer = new BalanceHistoryCellRenderer(data);
+			BalanceHistoryCellRenderer cellRenderer = new BalanceHistoryCellRenderer();
 			setDefaultRenderer(Date.class, cellRenderer);
 			setDefaultRenderer(Object.class, cellRenderer);
 			LinkEnabler.enable(this, model.getSettings().getDescriptionColumn(), model.getSettings().getCommentColumn());
@@ -115,5 +119,10 @@ public class BalanceHistoryTable extends FriendlyTable implements TransactionSel
 
 	public FilteredData getFilteredData() {
 		return data;
+	}
+
+	@Override
+	public TablePainter getPainter() {
+		return painter;
 	}
 }
