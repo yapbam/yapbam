@@ -1,5 +1,4 @@
 Prise en compte des liens
-	Voir si import erros panel fonctionne toujours
 	Mettre dans les relnotes l'amélioration sur la liste des opérations à générer
 
 Bug :

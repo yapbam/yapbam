@@ -29,7 +29,7 @@ final class BalanceHistoryTablePainter extends TransactionTablePainter {
 		data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				boolean needRefresh = ((event instanceof EverythingChangedEvent) || (event instanceof AccountPropertyChangedEvent));
+				boolean needRefresh = (event instanceof EverythingChangedEvent) || (event instanceof AccountPropertyChangedEvent);
 				if (needRefresh) {
 					refreshMinMax();
 				}

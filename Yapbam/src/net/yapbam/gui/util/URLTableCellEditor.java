@@ -97,8 +97,7 @@ public class URLTableCellEditor extends AbstractCellEditor implements TableCellE
             Object attribute = h.getAttributes().getAttribute(HTML.Tag.A);
             if (attribute instanceof AttributeSet) {
                 AttributeSet set = (AttributeSet) attribute;
-                String href = (String) set.getAttribute(HTML.Attribute.HREF);
-                return href;
+                return (String) set.getAttribute(HTML.Attribute.HREF);
             }
         }
         return null;

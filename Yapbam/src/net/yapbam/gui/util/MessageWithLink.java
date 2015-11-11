@@ -23,26 +23,27 @@ public class MessageWithLink extends JEditorPane {
 	    addHyperlinkListener(new HyperlinkListener() {
 	        @Override
 	        public void hyperlinkUpdate(HyperlinkEvent e) {
-	            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
+	            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
 					try {
 						HelpManager.show(null, e.getURL().toURI());
 					} catch (URISyntaxException e1) {
 						throw new IllegalArgumentException(e.getURL().toString()+" is not an valid URL");
 					}
+	            }
 	        }
 	    });
 	    setEditable(false);
 	    setBorder(null);
 	}
 	
-	static StringBuffer getStyle() {
+	static StringBuilder getStyle() {
 	    // for copying style
 	    JLabel label = new JLabel();
 	    Font font = label.getFont();
 	    Color color = label.getBackground();
 
 	    // create some css from the label's font
-	    StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
+	    StringBuilder style = new StringBuilder("font-family:" + font.getFamily() + ";");
 	    style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
 	    style.append("font-size:" + font.getSize() + "pt;");
 	    style.append("background-color: rgb("+color.getRed()+","+color.getGreen()+","+color.getBlue()+");");
