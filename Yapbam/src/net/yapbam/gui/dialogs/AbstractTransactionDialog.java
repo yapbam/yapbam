@@ -37,7 +37,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 
 	private AccountWidget accounts;
 	protected TextWidget description;
-	protected JTextField comment;
+	protected CommentWidget comment;
 	protected CurrencyWidget amount;
 	protected JCheckBox receipt;
 	protected ModeWidget modes;
@@ -173,7 +173,7 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 		panel.add(description, c);
 		
 		// Comment
-		comment = new JTextField();
+		comment = new CommentWidget();
 		comment.setToolTipText(LocalizationData.get("TransactionDialog.comment.tooltip")); //$NON-NLS-1$
 		c.gridx=2;
 		panel.add(comment, c);

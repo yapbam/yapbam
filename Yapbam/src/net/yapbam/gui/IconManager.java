@@ -17,7 +17,7 @@ public abstract class IconManager {
 		NEW_CATEGORY, DELETE_CATEGORY,
 		SPREAD, SPREADABLE, SPREAD_UP,
 		FIRST, PREVIOUS, NEXT, LAST, UP, DOWN, TOP, BOTTOM, DEPLOY, UNDEPLOY,
-		IMPORT, EXPORT, ARCHIVE, LOCK, ALERT, NEW_MESSAGE, MESSAGE, HELP, PRINT, SETTINGS
+		IMPORT, EXPORT, ARCHIVE, LOCK, ALERT, NEW_MESSAGE, MESSAGE, HELP, PRINT, SETTINGS, LINK
 	}
 	
 	static {
@@ -90,6 +90,7 @@ public abstract class IconManager {
 		map.put(Name.DEPLOY, get(Name.SPREADABLE)); //$NON-NLS-1$
 		map.put(Name.UNDEPLOY, create("images/undeploy.png", size)); //$NON-NLS-1$
 		map.put(Name.SETTINGS, create("images/settings.png", size)); //$NON-NLS-1$)
+		map.put(Name.LINK, create("images/link.png", size)); //$NON-NLS-1$)
 		currentSize = size;
 //		System.out.println ("icon size reset to "+size);
 	}
