@@ -1,5 +1,7 @@
 package net.yapbam.gui.widget;
 
+import java.awt.Dimension;
+
 import javax.swing.Icon;
 
 import net.yapbam.gui.IconManager;
@@ -21,6 +23,10 @@ public abstract class AbstractSelector<T,V> extends com.fathzer.soft.ajlib.swing
 	 */
 	public AbstractSelector(V parameters) {
 		super(parameters);
+		getNewButton().setOpaque(false);
+		getNewButton().setContentAreaFilled(false);
+		getNewButton().setBorderPainted(false);
+		getNewButton().setPreferredSize(new Dimension(16, 16));
 	}
 	
 	@Override

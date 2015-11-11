@@ -1,5 +1,5 @@
 Prise en compte des liens
-	Mettre dans les relnotes l'amélioration sur la liste des opérations à générer
+	Ajout de boutons d'assistance à la saisie dans le dialogue d'ajout d'une opération.
 
 Bug :
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
