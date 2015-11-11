@@ -26,7 +26,7 @@ public abstract class AbstractSelector<T,V> extends com.fathzer.soft.ajlib.swing
 		getNewButton().setOpaque(false);
 		getNewButton().setContentAreaFilled(false);
 		getNewButton().setBorderPainted(false);
-		getNewButton().setPreferredSize(new Dimension(16, 16));
+		getNewButton().setPreferredSize(new Dimension(getNewButton().getIcon().getIconWidth(),getNewButton().getIcon().getIconHeight()));
 	}
 	
 	@Override
