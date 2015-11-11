@@ -9,18 +9,20 @@ import net.yapbam.gui.util.TablePainter;
 
 public abstract class TransactionTablePainter extends TablePainter {
 	private static final long serialVersionUID = 1L;
-	public static Color[] BACK_COLORS;
+	private Color[] backColors;
+	
 	protected TransactionTablePainter() {
-		BACK_COLORS = TransactionsPreferencePanel.getBackgroundColors();
+		backColors = TransactionsPreferencePanel.getBackgroundColors();
 	}
+	
 	@Override
 	public void setRowLook(Component renderer, JTable table, int row, boolean isSelected) {
-		if (isSelected || (BACK_COLORS[0]==null) && (BACK_COLORS[1]==null)) {
+		if (isSelected || (backColors[0]==null) && (backColors[1]==null)) {
 			super.setRowLook(renderer, table, row, isSelected);
 		} else {
 			renderer.setForeground(table.getForeground());
 			boolean expense = ((TransactionsModel)table.getModel()).getTransaction(row).getAmount() < 0;
-			renderer.setBackground(expense ? BACK_COLORS[0] : BACK_COLORS[1]);
+			renderer.setBackground(expense ? backColors[0] : backColors[1]);
 		}
 	}
 }
