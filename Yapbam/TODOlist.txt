@@ -1,5 +1,6 @@
 Prise en compte des liens
-	Ajout de boutons d'assistance à la saisie dans le dialogue d'ajout d'une opération.
+	Tester le cas où on mets des [] dans le texte plus un lien.
+	Traduction en Français
 
 Bug :
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
