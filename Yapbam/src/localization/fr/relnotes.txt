@@ -4,7 +4,7 @@ known
 	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="https://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	
-version	0.18.6 (14/11/2015)
+version	0.18.6 (25/11/2015)
 improvement
 	Les commentaires d'opérations peuvent à présent contenir des liens vers des fichiers ou des pages web.
 	Les colonnes de la table affichant les opérations périodiques générées sont maintenant redimensionnées en fonction de leur contenu.

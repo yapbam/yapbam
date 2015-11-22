@@ -39,6 +39,7 @@ public class CommentWidget extends JPanel {
 		if (textField == null) {
 			textField = new TextWidget();
 			textField.setColumns(10);
+			textField.setToolTipText(LocalizationData.get("TransactionDialog.comment.tooltip")); //$NON-NLS-1$
 			textField.addFocusListener(new FocusListener() {
 				@Override
 				public void focusLost(FocusEvent e) {
