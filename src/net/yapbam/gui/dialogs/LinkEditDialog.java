@@ -10,13 +10,18 @@ import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.util.HtmlUtils;
 
 public class LinkEditDialog extends AbstractDialog<String[], String> {
 	private static final long serialVersionUID = 1L;
 	private LinkEditPanel linkEditPanel;
 	
 	public LinkEditDialog(Window owner, String[] data) {
-		super(owner, LocalizationData.get("LinkEditor.dialog.title"), data); //$NON-NLS-1$
+		super(owner, LocalizationData.get("LinkEditor.dialog.title"), decode(data)); //$NON-NLS-1$
+	}
+
+	private static String[] decode(String[] data) {
+		return new String[] { data[1] == null ? data[0] : HtmlUtils.decodeLinkName(data[0]), data[1] };
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class LinkEditDialog extends AbstractDialog<String[], String> {
 		if (linkEditPanel.getUrlField().getText().isEmpty()) {
 			return linkEditPanel.getTextField().getText();
 		} else {
-			return "["+linkEditPanel.getTextField().getText()+"["+linkEditPanel.getUrlField().getText()+"]]";
+			return HtmlUtils.toEncoded(linkEditPanel.getTextField().getText(), linkEditPanel.getUrlField().getText());
 		}
 	}
 

@@ -174,7 +174,6 @@ public abstract class AbstractTransactionDialog<V> extends AbstractDialog<Global
 		
 		// Comment
 		comment = new CommentWidget();
-		comment.setToolTipText(LocalizationData.get("TransactionDialog.comment.tooltip")); //$NON-NLS-1$
 		c.gridx=2;
 		panel.add(comment, c);
 
