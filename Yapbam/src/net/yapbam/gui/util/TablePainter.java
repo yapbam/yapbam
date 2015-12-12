@@ -22,7 +22,7 @@ public abstract class TablePainter extends DefaultTableCellRenderer {
 			renderer.setBackground(table.getSelectionBackground());
 		} else {
 			// Call super in order to have background color initialized
-			super.getTableCellRendererComponent(table, null, isSelected, false, table.convertRowIndexToModel(row), 0);
+			super.getTableCellRendererComponent(table, null, isSelected, false, table.convertRowIndexToView(row), 0);
 			Color bg = getBackground();
 			renderer.setForeground(getForeground());
 			// We have to create a new color object because Nimbus returns
