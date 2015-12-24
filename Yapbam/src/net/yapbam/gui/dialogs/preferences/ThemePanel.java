@@ -279,6 +279,9 @@ public class ThemePanel extends PreferencePanel {
 						selectedLookAndFeel = lfs[i].getName();
 					}
 					button.addItemListener(new LFAction(lfs[i].getName()));
+					if ("nimbus".equalsIgnoreCase(lfs[i].getName())) {
+						button.setText(lfs[i].getName()+" "+LocalizationData.get("generic.recommended.with.parenthesis"));
+					}
 					group.add(button);
 					lafPanel.add(button, index);
 					index++;
