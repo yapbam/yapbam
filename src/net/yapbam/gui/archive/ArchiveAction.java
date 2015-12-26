@@ -79,7 +79,7 @@ public class ArchiveAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Window owner = Utils.getOwnerWindow((Component)e.getSource());
+		final Window owner = Utils.getOwnerWindow((Component)e.getSource());
 
 		// Select archive file
 		URI uri = getArchiveURI(owner);
@@ -88,7 +88,7 @@ public class ArchiveAction extends AbstractAction {
 		}
 		
 		// Read the archive file
-		GlobalData archiveData = new GlobalData();
+		final GlobalData archiveData = new GlobalData();
 		YapbamDataWrapper wrapper = new YapbamDataWrapper(archiveData);
 		ReadErrorProcessor errProcessor = new ReadErrorProcessor();
 		boolean readIsOk = YapbamPersistenceManager.MANAGER.read(owner, wrapper, uri, errProcessor);
@@ -110,7 +110,7 @@ public class ArchiveAction extends AbstractAction {
 			}
 		}
 
-		// Select transactions to archive
+		// Select transactions to move
 		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data, alerts);
 		filterDialog.setVisible(true);
 		Collection<Transaction> selectedTransactions = filterDialog.getResult();
@@ -118,22 +118,21 @@ public class ArchiveAction extends AbstractAction {
 			return;
 		}
 		
-		// Copy archived transactions into archive
+		// Move transactions
+		final boolean old = archiveData.isArchive();
 		Transaction[] transactions = selectedTransactions.toArray(new Transaction[selectedTransactions.size()]);
+		Archiver archiver = new Archiver() {
+			@Override
+			protected boolean save(GlobalData data) {
+				archiveData.setArchive(old);
+				return YapbamPersistenceManager.MANAGER.save(owner, new YapbamDataWrapper(data));
+			}
+		};
 		// As the user can force to archive data in a "standard" file, we have to ensure the archiveData has the archive type  
-		boolean old = archiveData.isArchive();
 		archiveData.setArchive(true);
-		Archiver.archive(archiveData, transactions);
-		archiveData.setArchive(old);
-		
-		// Save the archive
-		if (!YapbamPersistenceManager.MANAGER.save(owner, wrapper)) {
-			return;
+		if (archiver.move(data, archiveData, transactions, true)) {
+			JOptionPane.showMessageDialog(owner, Formatter.format(LocalizationData.get("Archive.report"),transactions.length)); //$NON-NLS-1$
 		}
-		
-		// Remove transactions from the data
-		Archiver.remove(data, transactions);
-		JOptionPane.showMessageDialog(owner, Formatter.format(LocalizationData.get("Archive.report"),transactions.length)); //$NON-NLS-1$
 	}
 
 	private URI getArchiveURI(Window owner) {
