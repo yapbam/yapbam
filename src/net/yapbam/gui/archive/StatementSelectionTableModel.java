@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.Icon;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -25,19 +26,13 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 	
 	private GlobalData data;
 	private boolean[] ignored;
-	private String[] selectedStatements;
+	private Statement[] selectedStatements;
 	private Statement[][] statements;
 	private CharSequence[] alerts;
+	private boolean toArchive;
 
 	public StatementSelectionTableModel(GlobalData data, CharSequence[] alerts) {
-		this.data = data;
-		this.statements = new Statement[data.getAccountsNumber()][];
-		this.ignored = new boolean[data.getAccountsNumber()];
-		for (int i = 0; i < statements.length; i++) {
-			this.statements[i] = Statement.getStatements(data.getAccount(i));
-		}
-		Arrays.fill(ignored, true);
-		this.selectedStatements = new String[this.ignored.length];
+		setData(data, false);
 		this.alerts = alerts.clone();
 		if (ArrayUtils.isAllNull(alerts)) {
 			this.alertColumn = -1;
@@ -47,6 +42,20 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 		this.accountColumn = this.alertColumn + 1;
 		this.ignoredColumn = this.accountColumn + 1;
 		this.statementColumn = this.ignoredColumn +1;
+	}
+	
+	void setData(GlobalData data, boolean isArchive) {
+		this.toArchive = !isArchive;
+		this.data = data;
+		this.statements = new Statement[data.getAccountsNumber()][];
+		this.ignored = new boolean[data.getAccountsNumber()];
+		for (int i = 0; i < statements.length; i++) {
+			this.statements[i] = Statement.getStatements(data.getAccount(i));
+		}
+		Arrays.fill(ignored, true);
+		this.selectedStatements = new Statement[this.ignored.length];
+		fireTableDataChanged();
+		fireTableRowsUpdated(TableModelEvent.HEADER_ROW,TableModelEvent.HEADER_ROW); // Restore header
 	}
 
 	@Override
@@ -69,9 +78,9 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 			return ignored[rowIndex];
 		} else if (columnIndex==statementColumn) {
 			if (!hasStatement(rowIndex)) {
-				return LocalizationData.get("Archive.statementSelection.nothingSelected");  //$NON-NLS-1$
+				return new Statement(LocalizationData.get("Archive.statementSelection.nothingSelected"),0.0);  //$NON-NLS-1$
 			} else {
-				return (ignored[rowIndex] || (this.selectedStatements[rowIndex]==null))?"-":this.selectedStatements[rowIndex]; //$NON-NLS-1$
+				return (ignored[rowIndex] || (this.selectedStatements[rowIndex]==null))?new Statement("-",0.0):this.selectedStatements[rowIndex]; //$NON-NLS-1$
 			}
 		} else {
 			return null;
@@ -94,6 +103,8 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 			return String.class;
 		} else if (columnIndex==ignoredColumn) {
 			return Boolean.class;
+		} else if (columnIndex==statementColumn) {
+			return Statement.class;
 		} else {
 			return super.getColumnClass(columnIndex);
 		}
@@ -109,7 +120,7 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 		if (columnIndex==ignoredColumn) {
 			this.ignored[rowIndex] = ((Boolean)aValue);
 		} else if (columnIndex==statementColumn) {
-			this.selectedStatements[rowIndex] = (String) aValue;
+			this.selectedStatements[rowIndex] = (Statement) aValue;
 			this.ignored[rowIndex] = false;
 		}
 		this.fireTableRowsUpdated(rowIndex, rowIndex);
@@ -124,7 +135,9 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 		} else if (column == ignoredColumn) {
 			return LocalizationData.get("Archive.statementSelection.ignored.title"); //$NON-NLS-1$
 		} else if (column == statementColumn) {
-			return LocalizationData.get("Archive.statementSelection.until.title"); //$NON-NLS-1$
+			String key = this.toArchive ? "Archive.statementSelection.until.title" //$NON-NLS-1$
+					: "Archive.statementSelection.to.title"; //$NON-NLS-1$
+			return LocalizationData.get(key);
 		} else {
 			return super.getColumnName(column);
 		}
@@ -143,13 +156,13 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 
 	Set<String> getSelectedStatements(int index) {
 		if (!this.ignored[index] && (this.selectedStatements[index]!=null)) {
-			HashSet<String> result = new HashSet<String>();
-			for (int i = 0; i < statements[index].length; i++) {
+			Set<String> result = new HashSet<String>();
+			int i = toArchive ? -1:statements[index].length;
+			int increment = toArchive ? 1 : -1;
+			do {
+				i += increment;
 				result.add(statements[index][i].getId());
-				if (statements[index][i].getId().equals(selectedStatements[index])) {
-					break;
-				}
-			}
+			} while (!statements[index][i].getId().equals(selectedStatements[index].getId()));
 			return result;
 		} else {
 			return Collections.emptySet();

@@ -111,7 +111,7 @@ public class ArchiveAction extends AbstractAction {
 		}
 
 		// Select transactions to move
-		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data, alerts);
+		StatementSelectionDialog filterDialog = new StatementSelectionDialog(owner, data, archiveData, alerts);
 		filterDialog.setVisible(true);
 		Collection<Transaction> selectedTransactions = filterDialog.getResult();
 		if (selectedTransactions == null || selectedTransactions.isEmpty()) {
@@ -124,14 +124,19 @@ public class ArchiveAction extends AbstractAction {
 		Archiver archiver = new Archiver() {
 			@Override
 			protected boolean save(GlobalData data) {
-				archiveData.setArchive(old);
+				if (data==archiveData) {
+					archiveData.setArchive(old);
+				}
 				return YapbamPersistenceManager.MANAGER.save(owner, new YapbamDataWrapper(data));
 			}
 		};
 		// As the user can force to archive data in a "standard" file, we have to ensure the archiveData has the archive type  
 		archiveData.setArchive(true);
-		if (archiver.move(data, archiveData, transactions, true)) {
-			JOptionPane.showMessageDialog(owner, Formatter.format(LocalizationData.get("Archive.report"),transactions.length)); //$NON-NLS-1$
+		if (archiver.move(data, archiveData, transactions, filterDialog.isArchiveMode())) {
+			JOptionPane.showMessageDialog(owner, Formatter.format(LocalizationData.get(filterDialog.isArchiveMode()?
+					"Archive.report": //$NON-NLS-1$
+					"Archive.restore.report"), //$NON-NLS-1$
+					transactions.length));
 		}
 	}
 

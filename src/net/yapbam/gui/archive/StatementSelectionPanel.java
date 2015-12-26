@@ -13,7 +13,6 @@ import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.table.JTable;
@@ -26,14 +25,19 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.JTableUtils;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 @SuppressWarnings("serial")
 public class StatementSelectionPanel extends JPanel {
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
+	static final String ARCHIVE_MODE = "archiveMode"; //$NON-NLS-1$
 
 	private JLabel lblWhatAccountsDo;
 	private JTable table;
@@ -43,35 +47,44 @@ public class StatementSelectionPanel extends JPanel {
 	private JButton noneButton;
 	
 	private GlobalData data;
+	private GlobalData archiveData;
 	private CharSequence[] alerts;
 	private String invalidityCause;
+	private JPanel top;
+	private JPanel rdbtns;
+	private JRadioButton toArchive;
+	private JRadioButton fromArchive;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
-	/**
-	 * Create the panel.
-	 */
-	public StatementSelectionPanel() {
-		this(null, new CharSequence[0]);
-	}
-
-	public StatementSelectionPanel(GlobalData data, CharSequence[] alerts) {
+	public StatementSelectionPanel(GlobalData data, GlobalData archiveData, CharSequence[] alerts) {
 		this.data = data;
+		this.archiveData = archiveData;
 		this.alerts = alerts.clone();
 		initialize();
+		onModeChanged();
+	}
+	
+	private void onModeChanged() {
+		boolean isArchiveMode = isArchiveMode();
+		((StatementSelectionTableModel)getTable().getModel()).setData(getSource(), !isArchiveMode);
+		String message = LocalizationData.get(isArchiveMode?"Archive.statementSelection.helpMessage": //$NON-NLS-1$
+				"Archive.statementSelection.restoreHelpMessage"); //$NON-NLS-1$
+		StatementSelectionTableModel model = (StatementSelectionTableModel) getTable().getModel();
+		lblWhatAccountsDo.setText(Formatter.format(message, getTable().getColumnName(model.getStatementColumn())));
+		firePropertyChange(ARCHIVE_MODE, !isArchiveMode, isArchiveMode);
 	}
 
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
-		add(getLblWhatAccountsDo(), BorderLayout.NORTH);
 		add(getScrollPane(), BorderLayout.CENTER);
 		add(getPanel(), BorderLayout.SOUTH);
+		add(getTop(), BorderLayout.NORTH);
 		updateIsValid();
 	}
 
 	private JLabel getLblWhatAccountsDo() {
 		if (lblWhatAccountsDo == null) {
-			String message = LocalizationData.get("Archive.statementSelection.helpMessage"); //$NON-NLS-1$
-			StatementSelectionTableModel model = (StatementSelectionTableModel) getTable().getModel();
-			lblWhatAccountsDo = new JLabel(Formatter.format(message, getTable().getColumnName(model.getStatementColumn())));
+			lblWhatAccountsDo = new JLabel();
 		}
 		return lblWhatAccountsDo;
 	}
@@ -90,8 +103,7 @@ public class StatementSelectionPanel extends JPanel {
 			table.setPreferredScrollableViewportSize(table.getPreferredSize());
 
 			JComboBox fieldsCombo = new JComboBox();
-			TableColumn importedColumns = table.getColumnModel().getColumn(model.getStatementColumn());
-			importedColumns.setCellEditor(new DefaultCellEditor(fieldsCombo) {
+			table.setDefaultEditor(Statement.class, new DefaultCellEditor(fieldsCombo) {
 				@Override
 				public Component getTableCellEditorComponent(javax.swing.JTable table,
 						Object value, boolean isSelected, int row, int column) {
@@ -100,7 +112,7 @@ public class StatementSelectionPanel extends JPanel {
 					Statement[] statements = ((StatementSelectionTableModel)table.getModel()).getStatements(row);
 					for (Statement statement : statements) {
 						if (statement.getId()!=null) {
-							combo.addItem(statement.getId());
+							combo.addItem(statement);
 						}
 					}
 					Object current = table.getModel().getValueAt(row, column);
@@ -172,10 +184,14 @@ public class StatementSelectionPanel extends JPanel {
 		return noneButton;
 	}
 	
+	GlobalData getSource() {
+		return isArchiveMode()?data:archiveData;
+	}
+	
 	private void updateIsValid() {
 		String old = invalidityCause;
 		invalidityCause = LocalizationData.get("Archive.statementSelection.noTransactionSelected"); //$NON-NLS-1$
-		for (int i = 0; i < data.getAccountsNumber(); i++) {
+		for (int i = 0; i < getSource().getAccountsNumber(); i++) {
 			if (!((StatementSelectionTableModel)getTable().getModel()).getSelectedStatements(i).isEmpty()) {
 				invalidityCause = null;
 				break;
@@ -188,5 +204,50 @@ public class StatementSelectionPanel extends JPanel {
 
 	String getInvalidityCause() {
 		return invalidityCause;
+	}
+	private JPanel getTop() {
+		if (top == null) {
+			top = new JPanel();
+			top.setLayout(new BorderLayout(0, 0));
+			top.add(getLblWhatAccountsDo());
+			top.add(getRdbtns(), BorderLayout.NORTH);
+		}
+		return top;
+	}
+	private JPanel getRdbtns() {
+		if (rdbtns == null) {
+			rdbtns = new JPanel();
+			rdbtns.setLayout(new BorderLayout(0, 0));
+			rdbtns.add(getToArchive(), BorderLayout.NORTH);
+			rdbtns.add(getFromArchive(), BorderLayout.SOUTH);
+		}
+		return rdbtns;
+	}
+	private JRadioButton getToArchive() {
+		if (toArchive == null) {
+			toArchive = new JRadioButton("Archive");
+			buttonGroup.add(toArchive);
+			toArchive.setToolTipText("Select this option to archive transactions.");
+			toArchive.setSelected(true);
+			toArchive.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					onModeChanged();
+				}
+			});
+		}
+		return toArchive;
+	}
+	private JRadioButton getFromArchive() {
+		if (fromArchive == null) {
+			fromArchive = new JRadioButton("Restore");
+			buttonGroup.add(fromArchive);
+			fromArchive.setToolTipText("Select this option to restore some transactions from archive file to current data file.");
+		}
+		return fromArchive;
+	}
+	
+	public boolean isArchiveMode() {
+		return toArchive.isSelected();
 	}
 }
