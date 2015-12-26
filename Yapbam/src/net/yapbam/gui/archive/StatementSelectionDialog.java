@@ -1,6 +1,8 @@
 package net.yapbam.gui.archive;
 
 import java.awt.Window;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -19,22 +21,20 @@ import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 public class StatementSelectionDialog extends AbstractDialog<Object[], Collection<Transaction>> {
 	private StatementSelectionPanel panel;
 
-	public StatementSelectionDialog(Window owner, GlobalData data, CharSequence[] alerts) {
-		super(owner, LocalizationData.get("Archive.menu.name"), new Object[]{data, alerts}); //$NON-NLS-1$
-	}
-	
-	private GlobalData getCurrentData() {
-		return (GlobalData) data[0];
-	}
-	
-	private CharSequence[] getAlerts() {
-		return (CharSequence[]) data[1];
+	public StatementSelectionDialog(Window owner, GlobalData data, GlobalData archiveData, CharSequence[] alerts) {
+		super(owner, LocalizationData.get("Archive.menu.name"), new Object[]{data, archiveData, alerts}); //$NON-NLS-1$
 	}
 
 	@Override
 	protected JPanel createCenterPane() {
-		panel = new StatementSelectionPanel(this.getCurrentData(), this.getAlerts());
+		panel = new StatementSelectionPanel((GlobalData) data[0], (GlobalData) data[1], (CharSequence[]) data[2]);
 		panel.addPropertyChangeListener(StatementSelectionPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
+		panel.addPropertyChangeListener(StatementSelectionPanel.ARCHIVE_MODE, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setTitle(LocalizationData.get((Boolean)evt.getNewValue()?"Archive.menu.name":"Archive.restore.title.name"));
+			}
+		});
 		return panel;
 	}
 	
@@ -47,16 +47,16 @@ public class StatementSelectionDialog extends AbstractDialog<Object[], Collectio
 	protected Collection<Transaction> buildResult() {
 		StatementSelectionTableModel model = (StatementSelectionTableModel)panel.getTable().getModel();
 		Collection<Transaction> result = new ArrayList<Transaction>();
-		for (int i = 0; i < getCurrentData().getAccountsNumber(); i++) {
-			result.addAll(getTransactions(getCurrentData().getAccount(i), model.getSelectedStatements(i)));
+		for (int i = 0; i < panel.getSource().getAccountsNumber(); i++) {
+			result.addAll(getTransactions(panel.getSource().getAccount(i), model.getSelectedStatements(i)));
 		}
 		return result;
 	}
 
 	private Collection<Transaction> getTransactions(Account account, Set<String> statementIds) {
 		Collection<Transaction> transactions = new ArrayList<Transaction>();
-		for (int i = 0; i < getCurrentData().getTransactionsNumber(); i++) {
-			Transaction transaction = getCurrentData().getTransaction(i);
+		for (int i = 0; i < panel.getSource().getTransactionsNumber(); i++) {
+			Transaction transaction = panel.getSource().getTransaction(i);
 			Account tAccount = transaction.getAccount();
 			String tStatement = transaction.getStatement();
 			if (tAccount.equals(account) && statementIds.contains(tStatement)) {
@@ -69,5 +69,9 @@ public class StatementSelectionDialog extends AbstractDialog<Object[], Collectio
 	public boolean[] isAccountSelected() {
 		StatementSelectionTableModel model = (StatementSelectionTableModel)panel.getTable().getModel();
 		return model.isSelectedAccount();
+	}
+	
+	public boolean isArchiveMode() {
+		return panel.isArchiveMode();
 	}
 }
