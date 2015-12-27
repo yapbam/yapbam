@@ -48,11 +48,6 @@ public class LinkEditDialog extends AbstractDialog<String[], String> {
 	}
 
 	@Override
-	public void updateOkButtonEnabled() {
-		super.updateOkButtonEnabled();
-	}
-
-	@Override
 	protected String getOkDisabledCause() {
 		if (linkEditPanel.getTextField().getText().isEmpty()) {
 			return LocalizationData.get("LinkEditor.textIsEmpty"); //$NON-NLS-1$

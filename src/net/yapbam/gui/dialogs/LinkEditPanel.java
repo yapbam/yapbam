@@ -150,7 +150,7 @@ class LinkEditPanel extends JPanel {
 		if (!getUrlField().getText().isEmpty()) {
 			try {
 				URL url = new URL(getUrlField().getText());
-				if (url.getProtocol().equalsIgnoreCase("file")) {
+				if ("file".equalsIgnoreCase(url.getProtocol())) {
 					return new File(url.getFile());
 				}
 			} catch (MalformedURLException e) {

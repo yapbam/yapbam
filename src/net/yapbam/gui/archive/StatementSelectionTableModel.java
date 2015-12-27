@@ -55,7 +55,8 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 		Arrays.fill(ignored, true);
 		this.selectedStatements = new Statement[this.ignored.length];
 		fireTableDataChanged();
-		fireTableRowsUpdated(TableModelEvent.HEADER_ROW,TableModelEvent.HEADER_ROW); // Restore header
+		// Restore header
+		fireTableRowsUpdated(TableModelEvent.HEADER_ROW,TableModelEvent.HEADER_ROW);
 	}
 
 	@Override
