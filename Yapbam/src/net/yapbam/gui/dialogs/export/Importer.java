@@ -26,6 +26,7 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 
 public class Importer {
+	//TODO Make locale a parameter.
 	private static final Logger LOGGER = LoggerFactory.getLogger(Importer.class);
 	
 	private File file;

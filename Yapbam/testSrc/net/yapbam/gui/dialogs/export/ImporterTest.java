@@ -5,6 +5,7 @@ import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,6 +27,7 @@ public class ImporterTest {
 
     @Test
     public void testImportFile() throws Exception {
+    	//FIXME Only work if locale stored in yapbam prefs is FRENCH
         File f = createBoursoramaFile();
         Account account = new Account("test", 0.0);
         GlobalData data = new GlobalData();
@@ -40,12 +43,11 @@ public class ImporterTest {
         assertEquals("Number of transactions", 2, history.getTransactionsNumber());
         assertTransaction(history, 0, "27/03/2014", "28/03/2014", "PAIEMENT CARTE 260314 75 MONOP'", -4.68);
         assertTransaction(history, 1, "10/04/2014", "11/04/2014", "VIR appro", 370.0);
-
     }
 
     private void assertTransaction(BalanceHistory history, int transactionIndex, String operationDate, String valueDate, String description, double amount) throws ParseException {
         Transaction transaction = history.getTransaction(transactionIndex);
-        DateFormat dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
+        DateFormat dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, Locale.FRANCE);
 
         String message = "transaction[" + transactionIndex + "].";
         assertEquals(message + ".date", dateFormatter.parse(operationDate), transaction.getDate());

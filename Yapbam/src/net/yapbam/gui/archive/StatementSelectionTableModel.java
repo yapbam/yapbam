@@ -137,7 +137,7 @@ class StatementSelectionTableModel extends AbstractTableModel implements TableMo
 			return LocalizationData.get("Archive.statementSelection.ignored.title"); //$NON-NLS-1$
 		} else if (column == statementColumn) {
 			String key = this.toArchive ? "Archive.statementSelection.until.title" //$NON-NLS-1$
-					: "Archive.statementSelection.to.title"; //$NON-NLS-1$
+					: "Archive.statementSelection.from.title"; //$NON-NLS-1$
 			return LocalizationData.get(key);
 		} else {
 			return super.getColumnName(column);
