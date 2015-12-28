@@ -225,9 +225,9 @@ public class StatementSelectionPanel extends JPanel {
 	}
 	private JRadioButton getToArchive() {
 		if (toArchive == null) {
-			toArchive = new JRadioButton("Archive");
+			toArchive = new JRadioButton(LocalizationData.get("Archive.menu.name")); //$NON-NLS-1$
 			buttonGroup.add(toArchive);
-			toArchive.setToolTipText("Select this option to archive transactions.");
+			toArchive.setToolTipText(LocalizationData.get("Archive.archive.tooltip")); //$NON-NLS-1$
 			toArchive.setSelected(true);
 			toArchive.addItemListener(new ItemListener() {
 				@Override
@@ -240,9 +240,9 @@ public class StatementSelectionPanel extends JPanel {
 	}
 	private JRadioButton getFromArchive() {
 		if (fromArchive == null) {
-			fromArchive = new JRadioButton("Restore");
+			fromArchive = new JRadioButton(LocalizationData.get("Archive.restore.title")); //$NON-NLS-1$
 			buttonGroup.add(fromArchive);
-			fromArchive.setToolTipText("Select this option to restore some transactions from archive file to current data file.");
+			fromArchive.setToolTipText(LocalizationData.get("Archive.restore.tooltip")); //$NON-NLS-1$
 		}
 		return fromArchive;
 	}

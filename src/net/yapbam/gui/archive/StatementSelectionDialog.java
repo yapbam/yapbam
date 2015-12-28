@@ -32,7 +32,8 @@ public class StatementSelectionDialog extends AbstractDialog<Object[], Collectio
 		panel.addPropertyChangeListener(StatementSelectionPanel.ARCHIVE_MODE, new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				setTitle(LocalizationData.get((Boolean)evt.getNewValue()?"Archive.menu.name":"Archive.restore.title.name"));
+				setTitle(LocalizationData.get((Boolean)evt.getNewValue()?"Archive.menu.name": //$NON-NLS-1$
+					"Archive.restore.title")); //$NON-NLS-1$
 			}
 		});
 		return panel;
