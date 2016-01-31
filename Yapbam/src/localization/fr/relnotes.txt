@@ -5,6 +5,12 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.18.8 (31/01/2016)
+fix
+	Les commentaires d'opérations contenant des liens étaient parfois mal décodés.
+	Corrige l'alignement des boutons dans l'onglet d'administration.
+	Corrige le menu "Fichier" quand les données sont presque vides (pas de comptes créés, juste des catégories ou le séparateur de catégories).
+
 version	0.18.7 (28/12/2015)
 fix
 	Les couleurs de fond des cellules de l'onglet "Relevés de compte" étaient incorrectes quand les lignes étaient triées.

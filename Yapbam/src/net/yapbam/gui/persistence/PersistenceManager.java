@@ -80,7 +80,7 @@ public abstract class PersistenceManager {
 	 * @return true if the process can continue (everything is saved or the user wants to discard the changes).
 	 */
 	public boolean verify(Window owner, DataWrapper<?> data) {
-		if (data.isChanged()) {
+		if (data.isChanged() && !data.isEmpty()) {
 			// Some modifications has not been saved
 			String[] options =new String[]{LocalizationData.get("NotSavedDialog.save"),LocalizationData.get("NotSavedDialog.ignore"),LocalizationData.get("GenericButton.cancel")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			int n = JOptionPane.showOptionDialog(owner,

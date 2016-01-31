@@ -64,4 +64,9 @@ public class YapbamDataWrapper extends DataWrapper<GlobalData> {
 		data.setURI(uri);
 		data.setEventsEnabled(enabled);
 	}
+
+	@Override
+	public boolean isEmpty() {
+		return data.isEmpty();
+	}
 }

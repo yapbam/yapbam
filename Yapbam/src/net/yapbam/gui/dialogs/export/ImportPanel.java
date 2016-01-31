@@ -281,7 +281,7 @@ public class ImportPanel extends JPanel {
 	}
 
 	private void updateAddToAccountPanel() {
-		boolean ok = (addToCurrentFile.isSelected() && !(Boolean)getJTable().getValueAt(0, 1)) && !data.isEmpty();
+		boolean ok = (addToCurrentFile.isSelected() && !(Boolean)getJTable().getValueAt(0, 1)) && data.getAccountsNumber()!=0;
 		jLabel1.setEnabled(ok);
 		accounts.setEnabled(ok);
 		if (!ok) {
@@ -541,8 +541,9 @@ public class ImportPanel extends JPanel {
 		for (int i = 0; i < data.getAccountsNumber(); i++) {
 			accounts.addItem(data.getAccount(i).getName());
 		}
-		addToCurrentFile.setSelected(data.isEmpty());
-		addToCurrentFile.setEnabled(!data.isEmpty());
+		boolean empty = data.getAccountsNumber()==0;
+		addToCurrentFile.setSelected(empty);
+		addToCurrentFile.setEnabled(!empty);
 		updateAddToAccountPanel();
 	}
 	

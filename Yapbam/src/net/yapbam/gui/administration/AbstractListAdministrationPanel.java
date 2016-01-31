@@ -11,6 +11,7 @@ import javax.swing.ListSelectionModel;
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
+
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -157,6 +158,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 			
 			gridBagConstraints1.gridy = 1;
 			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.insets = new Insets(0, 0, getBottomInset(), 0);
 			southPanel.add(getNewButton(), gridBagConstraints1);
 			
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();

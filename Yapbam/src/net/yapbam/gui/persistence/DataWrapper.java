@@ -30,6 +30,8 @@ public abstract class DataWrapper<T> {
 	 */
 	public abstract boolean isChanged();
 	
+	public abstract boolean isEmpty();
+	
 	/** Sets the data as unchanged.
 	 * <br>After a call to this method, the isChanged method returns false ... until the data is changed again.
 	 * <br>Typically, this method is called by the PersistenceManager when the data is successfully saved.

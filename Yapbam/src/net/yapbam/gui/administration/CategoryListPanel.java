@@ -38,7 +38,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 
-public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel { //TODO Add split functions
+public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel {
 	private static final long serialVersionUID = 1L;
 	private CharWidget subcategorySeparator;
 
@@ -254,12 +254,6 @@ public class CategoryListPanel extends AbstractListAdministrationPanel<GlobalDat
 	@Override
 	public void saveState() {
 	}
-
-	@Override
-	protected int getBottomInset() {
-		return 5;
-	}
-
 
 	/* (non-Javadoc)
 	 * @see net.yapbam.gui.administration.AbstractListAdministrationPanel#getRightComponent()

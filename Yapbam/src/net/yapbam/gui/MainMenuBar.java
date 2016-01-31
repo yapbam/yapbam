@@ -38,8 +38,6 @@ import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
-import net.yapbam.data.event.URIChangedEvent;
-import net.yapbam.data.event.NeedToBeSavedChangedEvent;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
@@ -122,7 +120,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		this.menuItemExport.setMnemonic(LocalizationData.getChar("MainMenu.Export.Mnemonic")); //$NON-NLS-1$
 		this.menuItemExport.setToolTipText(LocalizationData.get("MainMenu.Export.ToolTip")); //$NON-NLS-1$
 		this.menuItemExport.addActionListener(this);
-		this.menuItemExport.setEnabled(!frame.getData().isEmpty());
+		this.menuItemExport.setEnabled(frame.getData().getAccountsNumber()>0);
 		menu.add(this.menuItemExport);
 		insertPluginMenuItems(menu, AbstractPlugIn.IMPORT_EXPORT_PART);
 
@@ -308,7 +306,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			this.frame.getJFrame().dispatchEvent(new WindowEvent(this.frame.getJFrame(), WindowEvent.WINDOW_CLOSING));
 		} else if (source.equals(this.menuItemNew)) {
 			if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData())) &&
-					!data.isEmpty() && JOptionPane.showConfirmDialog(this.frame,
+					JOptionPane.showConfirmDialog(this.frame,
 							LocalizationData.get("MainMenu.NewFile.ConfirmMessage"), //$NON-NLS-1$
 							LocalizationData.get("MainMenu.NewFile"), JOptionPane.YES_NO_OPTION)==0) { //$NON-NLS-1$
 						data.clear();
@@ -435,22 +433,17 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	class GlobalDataListener implements DataListener {
 	    public void processEvent(DataEvent event) {
 			GlobalData data = (GlobalData) event.getSource();
-			menuItemExport.setEnabled(!data.isEmpty());
-			if ((event instanceof NeedToBeSavedChangedEvent) || (event instanceof EverythingChangedEvent) || (event instanceof URIChangedEvent)) {
-				refreshState(data);
-			} else if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
+			boolean somethingToSave = !data.isEmpty();
+			menuItemSave.setEnabled(data.somethingHasChanged() && somethingToSave);
+			menuItemSaveAs.setEnabled(somethingToSave);
+			menuItemProtect.setEnabled(somethingToSave || (data.getURI() != null));
+			menuItemExport.setEnabled(data.getAccountsNumber()!=0);
+			if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
 					((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
 				updateFilterMenu();
 			}
 		}
 	}		
-
-	private void refreshState(GlobalData data) {
-		boolean somethingToSave = !data.isEmpty();
-		this.menuItemSave.setEnabled(data.somethingHasChanged());
-		this.menuItemSaveAs.setEnabled(somethingToSave);
-		this.menuItemProtect.setEnabled(somethingToSave || (data.getURI() != null));
-	}
 
 	private void updateFilterMenu() {
 		filterMenu.removeAll();
