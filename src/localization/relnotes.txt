@@ -5,6 +5,12 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
+version	0.18.8 (01/31/2016)
+fix
+	Transaction's comment containing links to files or web pages where sometimes decoded wrong.
+	Fixes buttons alignment in administration tab.
+	Fixes menu items when data is quite empty (no account created, but some categories or category separator).
+
 version	0.18.7 (12/28/2015)
 fix
 	The background colors of cells in the tab "Account statements" were incorrect when the lines were sorted.

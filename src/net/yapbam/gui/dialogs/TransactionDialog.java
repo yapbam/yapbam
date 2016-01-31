@@ -355,7 +355,7 @@ public class TransactionDialog extends AbstractTransactionDialog<Transaction> {
 			}
 		});
 		c.gridx++;
-		c.weightx = 1.0;
+		c.weightx = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		centerPane.add(date, c);
 		c.gridx++;
