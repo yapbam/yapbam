@@ -15,6 +15,8 @@ import java.util.TreeMap;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.util.ResourceBundleWrapper;
@@ -40,6 +42,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	private BarChartPanel bar;
 	private TabbedPane tabbedPane;
 	private JCheckBox groupSubCategories;
+	private JCheckBox netValues;
 	
 	public StatisticsPlugin(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
@@ -76,6 +79,12 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		this.pie = new PieChartPanel(categoryToAmount);
 		tabbedPane.addTab(LocalizationData.get("StatisticsPlugin.pie.tabname"), null, this.pie, LocalizationData.get("StatisticsPlugin.pie.tooltip")); //$NON-NLS-1$ //$NON-NLS-2$
 		buildSummaries();
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				getNetValues().setVisible(tabbedPane.getSelectedComponent()==bar);
+			}
+		});
 		
 /*
 // 	An implementation based on a JSplitPane
@@ -101,6 +110,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 		result.add(tabbedPane, BorderLayout.CENTER);
 		JPanel southPane = new JPanel(new BorderLayout());
 		southPane.add(getGroupSubCategories(), BorderLayout.WEST);
+		southPane.add(getNetValues(), BorderLayout.EAST);
 		southPane.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
 		result.add(southPane, BorderLayout.SOUTH);
 		return result;
@@ -118,6 +128,20 @@ public class StatisticsPlugin extends AbstractPlugIn {
 			});
 		}
 		return groupSubCategories;
+	}
+
+	private JCheckBox getNetValues() {
+		if (netValues==null) {
+			netValues = new JCheckBox(LocalizationData.get("StatisticsPlugin.bar.netValues.title")); //$NON-NLS-1$
+			netValues.setToolTipText(LocalizationData.get("StatisticsPlugin.bar.netValues.tooltip")); //$NON-NLS-1$
+			netValues.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					bar.setNetValues(netValues.isSelected());
+				}
+			});
+		}
+		return netValues;
 	}
 
 	@Override
@@ -197,15 +221,21 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
 		YapbamState.INSTANCE.put(getGroupSubCategoriesStateKey(), Boolean.toString(getGroupSubCategories().isSelected()));
+		YapbamState.INSTANCE.put(getNetValuesStateKey(), Boolean.toString(getNetValues().isSelected()));
 	}
 
 	@Override
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
 		getGroupSubCategories().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getGroupSubCategoriesStateKey(), "false")));
+		getNetValues().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getNetValuesStateKey(), "false")));
 	}
 
 	private String getGroupSubCategoriesStateKey() {
 		return this.getClass().getCanonicalName()+".groupSubCategories";
+	}
+
+	private String getNetValuesStateKey() {
+		return this.getClass().getCanonicalName()+".netValues";
 	}
 }

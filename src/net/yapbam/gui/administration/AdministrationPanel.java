@@ -8,7 +8,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.widget.TabbedPane;
-import net.yapbam.gui.widget.TabbedPaneWithOption;
+import net.yapbam.gui.widget.PanelWithOverlay;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JCheckBox;
@@ -88,7 +88,7 @@ public class AdministrationPanel extends JPanel {
 	}
 	private JLayeredPane getLayeredPane() {
 		if (layeredPane == null) {
-			layeredPane = new TabbedPaneWithOption(getTabbedPane(), getIgnoreFilter());
+			layeredPane = new PanelWithOverlay(getTabbedPane(), getIgnoreFilter());
 		}
 		return layeredPane;
 	}
