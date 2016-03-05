@@ -62,6 +62,5 @@ abstract class AbstractPredefinedComputer implements PredefinedDescriptionComput
 		} else {
 			map.put(value, (ranking + current));
 		}
-		
 	}
 }
