@@ -23,10 +23,12 @@ import org.jfree.data.category.DefaultCategoryDataset;
 class BarChartPanel extends ChartPanel {
 	private DefaultCategoryDataset dataset;
 	private Map<Category, Summary> categoryToAmount;
+	private boolean netValues;
 
 	BarChartPanel(Map<Category, Summary> map) {
 		super(null);
 		super.setPopupMenu(createPopupMenu(true, false, false, true, false));
+		this.netValues = false;
 		this.categoryToAmount = map;
 		dataset = new DefaultCategoryDataset();
 		updateDataSet();
@@ -57,11 +59,25 @@ class BarChartPanel extends ChartPanel {
 			Category category = (Category) it.next();
 			Summary summary = categoryToAmount.get(category);
 			String title = category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
-			if ((GlobalData.AMOUNT_COMPARATOR.compare(summary.getReceipts(), 0.0) != 0)
-					|| (GlobalData.AMOUNT_COMPARATOR.compare(summary.getDebts(), 0.0) != 0)) {
-				dataset.addValue(summary.getReceipts(), LocalizationData.get("StatisticsPlugin.bar.receipt"), title); //$NON-NLS-1$
-				dataset.addValue(summary.getDebts(), LocalizationData.get("StatisticsPlugin.bar.debts"), title); //$NON-NLS-1$
+			if (netValues) {
+				double balance = summary.getReceipts()+summary.getDebts();
+				if (GlobalData.AMOUNT_COMPARATOR.compare(balance, 0.0)!=0) {
+					dataset.addValue(balance>0?balance:0, LocalizationData.get("StatisticsPlugin.bar.receipt"), title); //$NON-NLS-1$
+					dataset.addValue(balance>0?0:balance, LocalizationData.get("StatisticsPlugin.bar.debts"), title); //$NON-NLS-1$
+				}
+			} else {
+				if ((GlobalData.AMOUNT_COMPARATOR.compare(summary.getReceipts(), 0.0) != 0)
+						|| (GlobalData.AMOUNT_COMPARATOR.compare(summary.getDebts(), 0.0) != 0)) {
+					dataset.addValue(summary.getReceipts(), LocalizationData.get("StatisticsPlugin.bar.receipt"), title); //$NON-NLS-1$
+					dataset.addValue(summary.getDebts(), LocalizationData.get("StatisticsPlugin.bar.debts"), title); //$NON-NLS-1$
+				}
 			}
 		}
+	}
+
+	public void setNetValues(boolean netValues) {
+		this.netValues = netValues;
+		updateDataSet();
+		((CategoryPlot)this.getChart().getPlot()).getRenderer();
 	}
 }

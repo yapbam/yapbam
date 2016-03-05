@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.info.MessagesPanel;
-import net.yapbam.gui.widget.TabbedPaneWithOption;
+import net.yapbam.gui.widget.PanelWithOverlay;
 
 import java.awt.BorderLayout;
 
@@ -35,7 +35,7 @@ public class GlobalPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		add(getInfoPanel(), BorderLayout.NORTH);
 		getInfoPanel().setDisplayButton(getInfoDisplayer());
-		add (new TabbedPaneWithOption(getMainPanel(), getInfoDisplayer()));
+		add (new PanelWithOverlay(getMainPanel(), getInfoDisplayer()));
 	}
 	
 	private JButton getInfoDisplayer() {

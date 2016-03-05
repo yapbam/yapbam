@@ -5,10 +5,12 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
-version	0.18.9 (03/??/2016)
+version	0.18.9 (03/06/2016)
 fix
 	It was possible to validate the custom filter dialog with the "Checked transactions" check box checked and not radio button selected. This resulted in an error when clicking the "Validate" button if statement field was not empty. 
-
+improvement
+	Add the ability to display the net balances in the "Statistics"/"receipts/expenses" tab.
+	
 version	0.18.8 (01/31/2016)
 fix
 	Transaction's comment containing links to files or web pages where sometimes decoded wrong.
