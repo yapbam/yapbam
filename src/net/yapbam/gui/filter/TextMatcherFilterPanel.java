@@ -221,6 +221,7 @@ public class TextMatcherFilterPanel extends ConsistencyCheckedPanel {
 	private JRadioButton getDescriptionContains() {
 		if (descriptionContains == null) {
 			descriptionContains = new JRadioButton();
+			descriptionContains.setSelected(true);
 			descriptionContains.setText(LocalizationData.get("CustomFilterPanel.description.contains")); //$NON-NLS-1$
 			descriptionContains.setToolTipText(wordings.containsToolTip);
 		}

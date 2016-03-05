@@ -5,6 +5,10 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.18.9 (??/03/2016)
+fix
+	Il était possible de valider la boîte de dialogue de filtre personnalisé avec la case "Opérations pointées" alors qu'aucun bouton radio n'était sélectionné. Cela provoquait une erreur lorsqu'on sur le bouton "Valider" si le champ "Relevé" n'était pas vide.
+
 version	0.18.8 (31/01/2016)
 fix
 	Les commentaires d'opérations contenant des liens étaient parfois mal décodés.
