@@ -17,14 +17,14 @@ text-decoration: underline;
         that no translation occurred since last build (if so build the project).<br>
         Launch the com.fathzer.localization.crowdin.GetTranslationsCmd in
         jlocal-tools project with arguments project=yapbam key=<span style="font-style: italic;">theyapbamkey</span>
-        lng=fr,pt-BR:pt,de,en:,zh-TW:zh,tr,nl,ru where=<span style="font-style: italic;">workspaceRoot</span><br>
+        lng=fr,pt-BR:pt,de,en:,zh-TW:zh,tr,nl,ru,ro where=<span style="font-style: italic;">workspaceRoot</span><br>
         Then, check whether YapbamCommons translations has changed. In such a
         case, update the artifact.<br>
         <span style="font-weight: bold; text-decoration: underline;">Be aware of
-          changes in Yapbam web resources</span>. Due to a Crowdin bug, ':'
-        and '=' characters are preceded by a escape '\' character. Note also
-        that the French and English versions of 'TranslationNeeded.supported'
-        key is not the one stored in Crowdin.</li>
+          changes in Yapbam web resources</span>. Due to a Crowdin bug, ':' and
+        '=' characters are preceded by a escape '\' character. Note also that
+        the French and English versions of 'TranslationNeeded.supported' key is
+        not the one stored in Crowdin.</li>
       <li>Set the version number in the pom.xml file<span class="variable"></span></li>
       <li>Run maven clean package on pom.xml =&gt; That creates a ready to
         deploy zip file in the project directory.<br>
@@ -35,7 +35,10 @@ text-decoration: underline;
       <li>Run the deployer in project YapbamDeployment (Be aware to set the
         right versions in the program arguments).<br>
         Wait for it completes (it is long as this class upload Yapbam to
-        sourceForge).<br><span style="font-weight: bold; text-decoration: underline;">Copy the release notes on the official site</span> (the deployer deploys only on sourceforge)</li>
+        sourceForge).<br>
+        <span style="font-weight: bold; text-decoration: underline;">Copy the
+          release notes on the official site</span> (the deployer deploys only
+        on sourceforge)</li>
       <li>Test that the autoupdate is ok with a copy of the previous version of
         yapbam. Also test that the&nbsp;archives on sourceforge are ok ...
         sometimes, upload results in a partial file.</li>
