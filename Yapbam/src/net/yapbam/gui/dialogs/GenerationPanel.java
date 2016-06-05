@@ -151,7 +151,6 @@ public class GenerationPanel extends JPanel {
 				}
 			});
 			date.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
-			date.setColumns(6);
 			date.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.nextDate.toolTip")); //$NON-NLS-1$
 		}
 		return date;
@@ -381,7 +380,6 @@ public class GenerationPanel extends JPanel {
 			lastDate = new DateWidget();
 			lastDate.setLocale(LocalizationData.getLocale());
 			lastDate.setDate(null);
-			lastDate.setColumns(6);
 			lastDate.setToolTipText(LocalizationData.get("PeriodicalTransactionDialog.lastDate.toolTip")); //$NON-NLS-1$
 			lastDate.getDateField().addFocusListener(AutoSelectFocusListener.INSTANCE);
 			lastDate.addPropertyChangeListener(DateWidget.DATE_PROPERTY, new PropertyChangeListener() {
