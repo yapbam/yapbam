@@ -106,6 +106,9 @@ public abstract class MessagesBuilder {
 					reader.close();
 				}
 			} else {
+				if (errorCode==HttpURLConnection.HTTP_MOVED_PERM || errorCode==HttpURLConnection.HTTP_MOVED_TEMP) {
+					LOGGER.error("Redirection to {} is not followed.",ct.getHeaderField("Location"));
+				}
 				throw new IOException ("Unexpected error code "+errorCode); //$NON-NLS-1$
 			}
 		}
