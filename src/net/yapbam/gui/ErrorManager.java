@@ -9,8 +9,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
@@ -174,13 +174,12 @@ public class ErrorManager {
 			
 			// Send data
 			URL url = new URL("https://www.yapbam.net/crashReport.php");
-			URLConnection conn = url.openConnection(Preferences.INSTANCE.getHttpProxy());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 			conn.setDoOutput(true);
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), ENC);
 			try {
 				wr.write(data.toString());
 				wr.flush();
-				
 				// Get the response
 				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),ENC));
 				try {
