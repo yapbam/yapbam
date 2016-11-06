@@ -156,12 +156,12 @@
 										<exclude>org/apache/commons/codec/language/**</exclude>
 									</excludes>
 								</filter>
-								<filter>
+								<!-- filter>
 									<artifact>org.slf4j:slf4j-simple</artifact>
 									<excludes>
 										<exclude>**</exclude>
 									</excludes>
-								</filter>
+								</filter-->
 							</filters>
 							<transformers>
 								<transformer
@@ -259,7 +259,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
-			<version>1.7.2</version>
+			<version>1.7.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -286,7 +286,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.12</version>
-			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
