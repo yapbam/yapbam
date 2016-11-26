@@ -1,49 +1,53 @@
 package net.yapbam.gui.persistence.dropbox;
 
-import java.util.Locale;
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.util.ResourceBundle;
 
 import net.yapbam.gui.Preferences;
 
-import com.dropbox.client2.session.AppKeyPair;
-import com.dropbox.client2.session.Session;
-import com.fathzer.soft.jclop.dropbox.AuthenticatedProxiedSession;
+import com.dropbox.core.DbxAppInfo;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.http.StandardHttpRequestor;
+import com.dropbox.core.http.StandardHttpRequestor.Config;
+import com.fathzer.soft.jclop.dropbox.DbxConnectionData;
 
 /** Yapbam <-> Dropbox session.
  */
-final class YapbamDropboxSession extends AuthenticatedProxiedSession {
-	private static final AppKeyPair APP_KEY_PAIR;
+final class YapbamDropboxSession extends DbxConnectionData {
+	private static final String NAME = "Yapbam";
+	private static final DbxAppInfo APP_INFO;
 	
 	static {
 		// For obvious security reasons, the key.properties file is not released with the source files.
 		ResourceBundle bundle = ResourceBundle.getBundle("net.yapbam.gui.persistence.dropbox.keys"); //$NON-NLS-1$
-		APP_KEY_PAIR = new AppKeyPair(bundle.getString("appKey"), bundle.getString("appSecret")); //$NON-NLS-1$ //$NON-NLS-2$
+		APP_INFO = new DbxAppInfo(bundle.getString("appKey"), bundle.getString("appSecret")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	YapbamDropboxSession() {
-		super(APP_KEY_PAIR, Session.AccessType.APP_FOLDER);
+		super(NAME, buildConfig(), APP_INFO);
 	}
-
-	@Override
-	public synchronized ProxyInfo getProxyInfo() {
-		return new ProxyInfo(Preferences.INSTANCE.getHttpProxyHost(), Preferences.INSTANCE.getHttpProxyPort());
-	}
-
-	@Override
-	public String getProxyUserName() {
-		return Preferences.INSTANCE.getHttpProxyUser();
-	}
-
-	@Override
-	public String getProxyPassword() {
-		return Preferences.INSTANCE.getHttpProxyPassword();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.dropbox.client2.session.AbstractSession#getLocale()
-	 */
-	@Override
-	public Locale getLocale() {
-		return Preferences.INSTANCE.getLocale();
+	
+	private static DbxRequestConfig buildConfig() {
+		Config.Builder builder = Config.builder();
+		String proxyHost = Preferences.INSTANCE.getHttpProxyHost();
+		if (proxyHost!=null) {
+	        Proxy proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress(proxyHost, Preferences.INSTANCE.getHttpProxyPort()));
+	        final String proxyUser = Preferences.INSTANCE.getHttpProxyUser();
+			if (proxyUser != null) {
+				Authenticator.setDefault(new Authenticator() {
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(proxyUser, Preferences.INSTANCE.getHttpProxyPassword().toCharArray());
+					}
+				});
+			}
+			builder.withProxy(proxy);
+		}
+		DbxRequestConfig.Builder rbuilder = DbxRequestConfig.newBuilder(NAME);
+		rbuilder.withHttpRequestor(new StandardHttpRequestor(builder.build()));
+		return rbuilder.build();
 	}
 }

@@ -1,5 +1,7 @@
 package net.yapbam.gui.persistence;
 
+import java.io.IOException;
+
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
@@ -15,8 +17,12 @@ public class YapbamPersistenceManager extends PersistenceManager {
 	private YapbamPersistenceManager() {
 		super();
 		add(new FilePersistenceAdapter());
-		add(new YapbamDropboxPersistenceAdapter());
-		add(new ClasspathPersistenceAdapter());
+		try {
+			add(new YapbamDropboxPersistenceAdapter());
+			add(new ClasspathPersistenceAdapter());
+		} catch (IOException e) {
+			ErrorManager.INSTANCE.display(null, e, "Strange"); //TODO
+		}
 		
 		// Load adapters under development
 		String testedAdapter = System.getProperty("testedPersistenceAdapter.className"); //$NON-NLS-1$
