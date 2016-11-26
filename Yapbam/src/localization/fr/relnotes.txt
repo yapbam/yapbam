@@ -8,6 +8,8 @@ known
 version	0.18.12 (??/12/2016)
 improvement
 	Compatibilité avec la version 2 des API de Dropbox.
+fix
+	Les messages de l'équipe Yapbam n'étaient plus affichés quand Yapbam était lancé à partir d'une version de Java antérieure à la 1.8.0_101.
 
 version	0.18.11 (06/11/2016)
 improvement
