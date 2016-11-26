@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.18.11</version>
+	<version>0.18.12</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<mainClass>net.yapbam.gui.Launcher</mainClass>
@@ -253,11 +253,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
-			<artifactId>jclop-dropbox</artifactId>
-			<version>0.0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
 			<version>1.7.3</version>
 		</dependency>
@@ -295,13 +290,23 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
-			<artifactId>jclop</artifactId>
-			<version>0.0.4</version>
+			<artifactId>jclop2</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fathzer</groupId>
+			<artifactId>jclop-dropbox2</artifactId>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-launcher</artifactId>
 			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
 		</dependency>
 	</dependencies>
 </project>

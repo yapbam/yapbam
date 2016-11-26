@@ -26,7 +26,7 @@ import com.fathzer.soft.jclop.swing.URIChooser;
 public class ClasspathPersistenceAdapter extends PersistenceAdapter {
 	public static final String SCHEME = "classpath";
 
-	public ClasspathPersistenceAdapter() {
+	public ClasspathPersistenceAdapter() throws IOException {
 		super(new Service(new File(Portable.getDataDirectory(), "cache"), true) {
 			
 			@Override
