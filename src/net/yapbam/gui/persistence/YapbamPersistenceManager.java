@@ -21,7 +21,7 @@ public class YapbamPersistenceManager extends PersistenceManager {
 			add(new YapbamDropboxPersistenceAdapter());
 			add(new ClasspathPersistenceAdapter());
 		} catch (IOException e) {
-			ErrorManager.INSTANCE.display(null, e, "Strange"); //TODO
+			throw new RuntimeException(e);
 		}
 		
 		// Load adapters under development
