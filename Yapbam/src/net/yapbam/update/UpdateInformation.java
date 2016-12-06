@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.util.CoolHttpConnection;
 import net.yapbam.util.ApplicationContext;
 import net.yapbam.util.CheckSum;
 
@@ -23,7 +24,7 @@ public class UpdateInformation {
 	private long autoUpdaterSize;
 	
 	UpdateInformation (URL url) throws IOException {
-		HttpURLConnection ct = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
+		CoolHttpConnection ct = new CoolHttpConnection(url, Preferences.INSTANCE.getHttpProxy());
 		errorCode = ct.getResponseCode();
 		if (errorCode==HttpURLConnection.HTTP_OK) {
 			Properties p = new Properties();
