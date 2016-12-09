@@ -5,11 +5,12 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
-version	0.18.12 (12/??/2016)
+version	0.19.0 (12/??/2016)
 improvement
-	Compatibility with version 2 of Dropbox API.
+	Compatibility with version 2 of Dropbox API (Dropbox will stop supporting previous versions on 6/28/2017).
 fix
 	Yapbam team messages were no longer displayed when Yapbam was launched from a Java version earlier than 1.8.0_101.
+	Yapbam is now able to follow http to https redirections while getting team messages or checking for updates.
 	
 version	0.18.11 (11/06/2016)
 improvement
