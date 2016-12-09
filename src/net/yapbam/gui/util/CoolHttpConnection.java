@@ -78,7 +78,12 @@ public class CoolHttpConnection {
 
 	public CoolHttpConnection(URL url, Proxy proxy) throws IOException {
 		this.ct = (HttpURLConnection) url.openConnection(proxy);
-		//TODO Catch redirect to https.
+		while (this.ct.getResponseCode()==HttpURLConnection.HTTP_MOVED_PERM || this.ct.getResponseCode()==HttpURLConnection.HTTP_MOVED_TEMP) {
+			String redirect = ct.getHeaderField("Location");
+			ct.disconnect();
+			url = new URL(redirect);
+			this.ct = (HttpURLConnection) url.openConnection(proxy);
+		}
 	}
 	
 	public int getResponseCode() throws IOException {
