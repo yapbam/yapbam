@@ -7,8 +7,7 @@ import net.yapbam.util.ApplicationContext;
 public abstract class VersionManager {
 	//WARNING: It is important to stay on an address hosted explicitly by sourceforge and not by www.yapbam.net
 	//Probably, in the future, when all the maintainers went away, the domain net yapbam.net will not remain active. Sourceforge will probably do
-//	private static final String BASE_UPDATE_URL = "http://yapbam.sourceforge.net/updateInfo.php";
-	private static final String BASE_UPDATE_URL = "http://test.yapbam.net/redirect.php"; //TODO
+	private static final String BASE_UPDATE_URL = "http://yapbam.sourceforge.net/updateInfo.php";
 	private static final String BETA_BASE_UPDATE_URL = "http://yapbam.sourceforge.net/updateInfoBeta.php";
 	
 	private VersionManager() {
