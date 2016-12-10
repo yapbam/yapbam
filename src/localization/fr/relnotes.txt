@@ -5,12 +5,13 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
-version	0.18.12 (??/12/2016)
+version	0.19.0 (10/12/2016)
 improvement
 	Compatibilité avec la version 2 des API de Dropbox (Dropbox cessera d'être utilisable avec les versions précédentes le 28 juin 2017).
+	Ajoute des traductions en Russe.
 fix
 	Les messages de l'équipe Yapbam n'étaient plus affichés quand Yapbam était lancé à partir d'une version de Java antérieure à la 1.8.0_101.
-	Yapbam peut à présent suivra les redirections d'http vers https lors du téléchargement des messages de l'équipe ou la recherche des mises à jour.
+	Yapbam peut à présent suivre les redirections d'http vers https lors du téléchargement des messages de l'équipe ou la recherche des mises à jour.
 
 version	0.18.11 (06/11/2016)
 improvement
