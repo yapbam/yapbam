@@ -53,14 +53,16 @@ public abstract class MessagesBuilder {
 				if (!isCancelled()) {
 					JSONArray json = get();
 					List<Message> news = new ArrayList<Message>();
-					for (int i = 0; i < json.size(); i++) {
-						JSONObject obj = (JSONObject) json.get(i);
-						Message info = Message.build(obj);
-						if (info!=null) {
-							news.add(info);
+					if (json!=null) {
+						for (int i = 0; i < json.size(); i++) {
+							JSONObject obj = (JSONObject) json.get(i);
+							Message info = Message.build(obj);
+							if (info!=null) {
+								news.add(info);
+							}
 						}
+						infoPanel.setMessages(news);
 					}
-					infoPanel.setMessages(news);
 				}
 			} catch (InterruptedException e) {
 				LOGGER.trace("Worker was interrupted", e); //$NON-NLS-1$
