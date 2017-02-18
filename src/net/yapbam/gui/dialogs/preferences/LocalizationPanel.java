@@ -36,8 +36,8 @@ import java.awt.Insets;
 
 public class LocalizationPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Locale[] LANGUAGES = new Locale[]{Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH, new Locale("pt"), Locale.TRADITIONAL_CHINESE, new Locale("nl"), new Locale("pl"), new Locale("ru"), new Locale("tr")};
-	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","&#23616;&#37096;","partieel","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","k&#305;smi"};
+	private static final Locale[] LANGUAGES = new Locale[]{Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH, new Locale("pt"), Locale.TRADITIONAL_CHINESE, new Locale("it"), new Locale("nl"), new Locale("pl"), new Locale("ru"), new Locale("tr")};
+	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","&#23616;&#37096;","parziale", "partieel","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","k&#305;smi"};
 	private JPanel countryPanel = null;
 	private JPanel languagePanel = null;
 	private JRadioButton defaultCButton = null;
