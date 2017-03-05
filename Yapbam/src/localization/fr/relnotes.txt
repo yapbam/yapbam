@@ -5,6 +5,12 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.19.4 (05/03/2017)
+improvement
+	Ajoute la possibilité de scroller la liste des comptes dans le menu "Filtre" lorsque ceux-ci sont trop nombreux.
+	Ajoute de nouvelles traductions en Italien.
+	Ajoute de nouvelles traductions en Russe.
+
 version	0.19.3 (18/02/2017)
 improvement
 	Ajoute la traduction partielle en Italien.

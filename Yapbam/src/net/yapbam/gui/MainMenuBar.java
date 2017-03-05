@@ -51,6 +51,7 @@ import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
+import net.yapbam.gui.util.MenuScroller;
 import net.yapbam.util.Portable;
 
 public class MainMenuBar extends JMenuBar implements ActionListener {
@@ -445,7 +446,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 	}		
 
+	private MenuScroller menuScroller;
 	private void updateFilterMenu() {
+		if (menuScroller!=null) {
+			menuScroller.dispose();
+		}
 		filterMenu.removeAll();
 		if (frame.getFilteredData()!=null) {
 			JCheckBoxMenuItem complexFilterMenuItem = new JCheckBoxMenuItem(new CustomFilterAction(frame.getFilteredData()));
@@ -501,6 +506,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 							LocalizationData.get("MainMenuBar.Expenses.toolTip"), LocalizationData.get("MainMenuBar.Receipts.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
 //			buildExpenseReceiptFilterChoiceMenu();
+			menuScroller = new MenuScroller(filterMenu, 16, 150, 3, 9, false);
 		}
 	}
 	
