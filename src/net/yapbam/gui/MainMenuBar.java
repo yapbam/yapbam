@@ -564,7 +564,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			Filter filter = frame.getFilteredData().getFilter();
 			if (this.kind==CHECKED_STATUS) {
-				filter.setStatementFilter(property,filter.getStatementMatcher());
+				filter.setStatementFilter(property, property==Filter.NOT_CHECKED?null:filter.getStatementMatcher());
 			} else {
 				filter.setAmountFilter(property, filter.getMinAmount(), filter.getMaxAmount());
 			}
