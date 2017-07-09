@@ -7,7 +7,7 @@ known
 	
 version	0.19.6 (09/07/2017)
 fix
-	Bascule vers la version 3.0.3 du SDK Dropbox, lequel corrige des bugs.
+	Bascule vers la version 3.0.3 du SDK Dropbox, laquelle corrige des bugs.
 
 version	0.19.5 (11/06/2017)
 fix
