@@ -5,6 +5,10 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.19.7 (08/10/2017)
+fix
+	Un changement d'URL de la source taux de change de Yahoo empêche le convertisseur de devise des versions précédentes de fonctionner.
+
 version	0.19.6 (09/07/2017)
 fix
 	Bascule vers la version 3.0.3 du SDK Dropbox, laquelle corrige des bugs.

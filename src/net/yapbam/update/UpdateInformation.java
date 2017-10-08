@@ -8,9 +8,10 @@ import java.util.Properties;
 
 import net.yapbam.gui.Preferences;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.util.CoolHttpConnection;
+
 import net.yapbam.util.ApplicationContext;
 import net.yapbam.util.CheckSum;
+import net.yapbam.util.CoolHttpConnection;
 
 public class UpdateInformation {
 	private int errorCode;

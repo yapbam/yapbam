@@ -19,8 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.Preferences;
-import net.yapbam.gui.util.CoolHttpConnection;
+
 import net.yapbam.util.ApplicationContext;
+import net.yapbam.util.CoolHttpConnection;
 
 import com.fathzer.soft.ajlib.swing.worker.Worker;
 
