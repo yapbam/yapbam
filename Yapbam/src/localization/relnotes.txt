@@ -5,6 +5,10 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
+version	0.19.8 (10/28/2017)
+fix
+	Reading an encrypted file using Java 9 resulted in an error.
+
 version	0.19.7 (10/08/2017)
 fix
 	Currency converter of previous versions was broken because Yahoo rates provider's URL changed.
