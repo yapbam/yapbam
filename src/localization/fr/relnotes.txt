@@ -5,6 +5,10 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.20.0 (??/11/2017)
+fix
+	Sous Java 9, certains montants étaient détectés comme invalides (par exemple "50,00 &euro;" en France).
+
 version	0.19.8 (28/10/2017)
 fix
 	La lecture d'un fichier crypté à l'aide de Java 9 entraînait une erreur.
