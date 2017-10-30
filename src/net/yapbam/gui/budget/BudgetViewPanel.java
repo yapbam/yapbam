@@ -69,6 +69,8 @@ public class BudgetViewPanel extends JPanel {
 	private JCheckBox chckbxAddSumColumn;
 	private JCheckBox chckbxAddSumLine;
 	private JCheckBox groupSubCategories;
+	private JRadioButton transactionDate;
+	private JRadioButton valueDate;
 	
 	/**
 	 * This is the default constructor
@@ -113,12 +115,12 @@ public class BudgetViewPanel extends JPanel {
 	private JPanel getTopPanel() {
 		if (topPanel == null) {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 3;
+			gridBagConstraints5.gridx = 4;
 			gridBagConstraints5.gridheight = 0;
 			gridBagConstraints5.insets = new Insets(5, 5, 0, 5);
 			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 4;
+			gridBagConstraints3.gridx = 5;
 			gridBagConstraints3.gridheight = 0;
 			gridBagConstraints3.fill = GridBagConstraints.NONE;
 			gridBagConstraints3.insets = new Insets(5, 5, 0, 0);
@@ -129,8 +131,7 @@ public class BudgetViewPanel extends JPanel {
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new Insets(0, 5, 0, 5);
+			gridBagConstraints1.insets = new Insets(0, 5, 5, 5);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
@@ -138,11 +139,18 @@ public class BudgetViewPanel extends JPanel {
 			topPanel = new JPanel();
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(getMonth(), gridBagConstraints1);
+			GridBagConstraints gbc_transactionDate = new GridBagConstraints();
+			gbc_transactionDate.weightx = 1.0;
+			gbc_transactionDate.anchor = GridBagConstraints.WEST;
+			gbc_transactionDate.insets = new Insets(0, 0, 5, 5);
+			gbc_transactionDate.gridx = 1;
+			gbc_transactionDate.gridy = 0;
+			topPanel.add(getTransactionDate(), gbc_transactionDate);
 			GridBagConstraints gbcChckbxAddSumLine = new GridBagConstraints();
 			gbcChckbxAddSumLine.anchor = GridBagConstraints.WEST;
 			gbcChckbxAddSumLine.weightx = 1.0;
-			gbcChckbxAddSumLine.insets = new Insets(0, 0, 0, 5);
-			gbcChckbxAddSumLine.gridx = 2;
+			gbcChckbxAddSumLine.insets = new Insets(0, 0, 5, 5);
+			gbcChckbxAddSumLine.gridx = 3;
 			gbcChckbxAddSumLine.gridy = 0;
 			topPanel.add(getChckbxAddSumLine(), gbcChckbxAddSumLine);
 			topPanel.add(getYear(), gridBagConstraints2);
@@ -151,17 +159,26 @@ public class BudgetViewPanel extends JPanel {
 			ButtonGroup group = new ButtonGroup();
 			group.add(getMonth());
 			group.add(getYear());
+			ButtonGroup group2 = new ButtonGroup();
+			group2.add(getValueDate());
+			group2.add(getTransactionDate());
+			GridBagConstraints gbc_valueDate = new GridBagConstraints();
+			gbc_valueDate.anchor = GridBagConstraints.WEST;
+			gbc_valueDate.insets = new Insets(0, 0, 0, 5);
+			gbc_valueDate.gridx = 1;
+			gbc_valueDate.gridy = 1;
+			topPanel.add(getValueDate(), gbc_valueDate);
 			GridBagConstraints gbcChckbxAddSumColumn = new GridBagConstraints();
 			gbcChckbxAddSumColumn.anchor = GridBagConstraints.WEST;
 			gbcChckbxAddSumColumn.insets = new Insets(0, 0, 0, 5);
-			gbcChckbxAddSumColumn.gridx = 2;
+			gbcChckbxAddSumColumn.gridx = 3;
 			gbcChckbxAddSumColumn.gridy = 1;
 			topPanel.add(getChckbxAddSumColumn(), gbcChckbxAddSumColumn);
 			GridBagConstraints gbcGroupSubCategories = new GridBagConstraints();
 			gbcGroupSubCategories.weightx = 1.0;
-			gbcGroupSubCategories.insets = new Insets(0, 0, 0, 5);
+			gbcGroupSubCategories.insets = new Insets(0, 0, 5, 5);
 			gbcGroupSubCategories.anchor = GridBagConstraints.WEST;
-			gbcGroupSubCategories.gridx = 1;
+			gbcGroupSubCategories.gridx = 2;
 			gbcGroupSubCategories.gridy = 0;
 			topPanel.add(getGroupSubCategories(), gbcGroupSubCategories);
 		}
@@ -248,7 +265,7 @@ public class BudgetViewPanel extends JPanel {
 			out.setSeparator(columnSeparator);
 			// Output header line
 			DateFormat dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
-			out.writeCell("");
+			out.writeCell(""); //$NON-NLS-1$
 			for (int i = 0; i < budget.getDatesSize(); i++) {
 				out.writeCell(dateFormater.format(budget.getDate(i)));
 			}
@@ -260,10 +277,10 @@ public class BudgetViewPanel extends JPanel {
 			for (int i=0;i<budget.getCategoriesSize();i++) {
 				Category category = budget.getCategory(i);
 				out.newLine();
-				out.writeCell(category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName());
+				out.writeCell(category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName()); //$NON-NLS-1$
 				for (int j = 0; j < budget.getDatesSize(); j++) {
 					Double value = budget.getAmount(budget.getDate(j), category);
-					out.writeCell(value!=null?currencyFormatter.format(value):"");
+					out.writeCell(value!=null?currencyFormatter.format(value):""); //$NON-NLS-1$
 				}
 				if (categorySumWording!=null) {
 					double value = budget.getSum(category);
@@ -279,7 +296,7 @@ public class BudgetViewPanel extends JPanel {
 				}
 				if (categorySumWording!=null) {
 					Double value = budget.getSum();
-					out.writeCell(value!=null?currencyFormatter.format(value):"");
+					out.writeCell(value!=null?currencyFormatter.format(value):""); //$NON-NLS-1$
 				}
 			}
 			out.flush();
@@ -511,5 +528,26 @@ public class BudgetViewPanel extends JPanel {
 		int[] fRows = filterSelected(rows, budget.getCategoriesSize());
 		int[] fColumns = filterSelected(columns, budget.getDatesSize());
 		getFilter().setEnabled((fRows.length>0) && (fColumns.length>0));
+	}
+	private JRadioButton getTransactionDate() {
+		if (transactionDate == null) {
+			transactionDate = new JRadioButton(LocalizationData.get("BudgetPanel.perTransactionDate")); //$NON-NLS-1$
+			transactionDate.setToolTipText(LocalizationData.get("BudgetPanel.perTransactionDate.tooltip")); //$NON-NLS-1$
+			transactionDate.setSelected(true);
+		}
+		return transactionDate;
+	}
+	JRadioButton getValueDate() {
+		if (valueDate == null) {
+			valueDate = new JRadioButton(LocalizationData.get("Transaction.valueDate")); //$NON-NLS-1$
+			valueDate.setToolTipText(LocalizationData.get("BudgetPanel.perValueDate.tooltip")); //$NON-NLS-1$
+			valueDate.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					budget.setValueDate(valueDate.isSelected());
+				}
+			});
+		}
+		return valueDate;
 	}
 }
