@@ -6,6 +6,8 @@ known
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
 version	0.20.0 (11/??/2017)
+improvement
+	Adds the ability use transaction's value date in budget tab.
 fix
 	Using Java 9, some amounts where detected as invalid (for instance "50,00 &euro;" in France).
 

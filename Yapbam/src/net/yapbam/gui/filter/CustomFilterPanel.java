@@ -366,6 +366,12 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	/** Apply the filter currently defined in this panel to the FilteredData.
 	 */
 	public boolean apply() {
+		return apply(filter);
+	}
+
+	/** Apply the filter currently defined in this panel to a filter.
+	 */
+	public boolean apply(Filter filter) {
 		filter.setSuspended(true);
 		// build the account and mode filter
 		Object[] selectedModes = getModes().getSelectedValues();
@@ -859,5 +865,19 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		return false;
+	}
+
+	/** Gets the edited filter in its original definition
+	 * @return a filter
+	 */
+	public Filter getFilter() {
+		return filter;
+	}
+
+	/** Gets the global data the filter refers to
+	 * @return A global data instance
+	 */
+	public GlobalData getData() {
+		return gData;
 	}
 }
