@@ -6,6 +6,8 @@ known
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
 version	0.20.0 (??/11/2017)
+improvement
+	Ajoute la possibilité d'utiliser les dates de valeurs des opérations comme référence dans l'onglet "budget".
 fix
 	Sous Java 9, certains montants étaient détectés comme invalides (par exemple "50,00 &euro;" en France).
 
