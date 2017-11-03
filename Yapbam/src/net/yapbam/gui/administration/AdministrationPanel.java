@@ -57,7 +57,8 @@ public class AdministrationPanel extends JPanel {
 			panels = new AbstractAdministrationPanel[]{
 					getPeriodicalTransactionsPanel(),
 					new AccountAdministrationPanel(data.getGlobalData()),
-					new CategoryListPanel(data.getGlobalData())
+					new CategoryListPanel(data.getGlobalData()),
+					new FilterListPanel(data.getGlobalData())
 			};
 			for (int i = 0; i < panels.length; i++) {
 				tabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());
