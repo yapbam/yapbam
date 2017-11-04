@@ -388,7 +388,11 @@ public class BudgetViewPanel extends JPanel {
 					if (selectedColumns.length!=budget.getDatesSize()) {
 						Date from = budget.getDate(selectedColumns[0]);
 						Date to = budget.getLastDate(selectedColumns[selectedColumns.length-1]);
-						theFilter.setDateFilter(from, to);
+						if (getValueDate().isSelected()) {
+							theFilter.setValueDateFilter(from, to);
+						} else {
+							theFilter.setDateFilter(from, to);
+						}
 					}
 					theFilter.setSuspended(false);
 				}
