@@ -1,4 +1,6 @@
 Bug :
+	Sélectionner une date incorrecte dans l'édition du Filtre puis sélectionner "toutes les dates" laisse le bouton "Ok" désactivé.
+	Le changement de nom d'un filtre n'est pas considéré comme un changement des données (pas de sauvegarde proposée).
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.
 	Changer la font size et le thème ne marche pas (la font size est ignorée).
 	Finir le "ignore end date" (mettre en pointillé ce qui dépasse de la date de fin dans le graphique).
@@ -11,7 +13,6 @@ Utiliser le framework AJLib pour créer l'application.
 
 Features :
 * Pouvoir choisir l'encoding dans l'import/export 
-* La possibilité de créer des raccourcis vers les filtres préférés.
 * Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done).
 * Tenir compte de la date de fin sélectionnée dans le filtre pour régler le zoom vertical dans le graphique de l'historique du solde
   (pour l'instant, cette échelle est fixée par rapport à la date de fin de l'historique de solde non filtré).
@@ -20,5 +21,3 @@ Features :
 * La possibilité de supprimer ou d'éditer plusieurs opérations à la fois.
 * La possibilité de définir un budget cible et de le comparer à la dure réalité ;-)
 * Peut-être la prise en charge des fichiers au format OFX (issus de Money ou de votre banque) ... ça dépendra du nombre de demandes.
-
-Le jour où on utilisera la nouvelle API Dropbox -> JClop-Dropbox 0.1.0+, penser à traduire les libellés manquants.

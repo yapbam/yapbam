@@ -364,12 +364,14 @@ public class CustomFilterPanel extends JPanel implements Scrollable {
 	}
 	
 	/** Apply the filter currently defined in this panel to the FilteredData.
+	 * @return true if the edited filter changed
 	 */
 	public boolean apply() {
 		return apply(filter);
 	}
 
 	/** Apply the filter currently defined in this panel to a filter.
+	 * @return true if the edited filter changed
 	 */
 	public boolean apply(Filter filter) {
 		filter.setSuspended(true);
