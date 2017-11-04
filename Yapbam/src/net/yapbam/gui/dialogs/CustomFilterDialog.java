@@ -3,23 +3,27 @@ package net.yapbam.gui.dialogs;
 import java.awt.Window;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
-import net.yapbam.data.FilteredData;
+import net.yapbam.data.Filter;
+import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.filter.CustomFilterPanel;
 import net.yapbam.gui.filter.SavePanel;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")
-public class CustomFilterDialog extends AbstractDialog<FilteredData, Boolean> {
-
+public class CustomFilterDialog extends AbstractDialog<CustomFilterDialog.FilterData, Boolean> {
+	public static interface FilterData {
+		Filter getFilter();
+		GlobalData getGlobalData();
+	}
+	
 	private CustomFilterPanel filterPanel;
 
-	public CustomFilterDialog(Window owner, FilteredData data) {
+	public CustomFilterDialog(Window owner, FilterData data) {
 		super(owner, LocalizationData.get("MainMenuBar.customizedFilter"), data); //$NON-NLS-1$
 		this.pack();
 	}
@@ -50,7 +54,7 @@ public class CustomFilterDialog extends AbstractDialog<FilteredData, Boolean> {
 		return new SavePanel(getFilterPanel());
 	}
 
-	private CustomFilterPanel getFilterPanel() {
+	protected CustomFilterPanel getFilterPanel() {
 		if (filterPanel==null) {
 			filterPanel = new CustomFilterPanel(data.getFilter(), data.getGlobalData());
 			filterPanel.addPropertyChangeListener(CustomFilterPanel.INCONSISTENCY_CAUSE_PROPERTY, new AutoUpdateOkButtonPropertyListener(this));
