@@ -79,7 +79,7 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 			}
 			//TODO It would be better to have a localized version for this formatter ...
 			// but I can't find how to do that (simple with the day, but not documented without)
-			return new SimpleDateFormat("yyyy/MM").format(date);
+			return new SimpleDateFormat("yyyy/MM").format(date); //$NON-NLS-1$
 		} else {
 			return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 		}
@@ -110,7 +110,7 @@ class BudgetTableModel extends AbstractTableModel implements TitledRowsTableMode
 			return LocalizationData.get("BudgetPanel.sum"); //$NON-NLS-1$
 		} else {
 			Category category = budget.getCategory(rowIndex);
-			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName(); //$NON-NLS-1$
 		}
 	}
 }

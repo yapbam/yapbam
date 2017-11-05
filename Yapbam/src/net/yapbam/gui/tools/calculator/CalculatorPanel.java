@@ -532,9 +532,9 @@ public class CalculatorPanel extends JPanel {
 	private CalculatorButton getBtnErase() {
 		if (btnErase == null) {
 			btnErase = new CalculatorButton('<');
-	    URL imgURL = getClass().getResource("backspace.png");
+	    URL imgURL = getClass().getResource("backspace.png"); //$NON-NLS-1$
 	    if (imgURL != null) {
-				btnErase.setText("");
+				btnErase.setText(""); //$NON-NLS-1$
 				btnErase.setIcon(new ImageIcon(imgURL));
 	    }
 			btnErase.character=(char)8;

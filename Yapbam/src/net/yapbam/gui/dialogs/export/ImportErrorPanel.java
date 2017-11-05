@@ -71,7 +71,7 @@ public class ImportErrorPanel extends JPanel {
 			columnsHeaders[0] = LocalizationData.get("ImportDialog.errorMessagelineNumberColumnHeader"); //$NON-NLS-1$
 			// Initialize with empty strings
 			for (int i = 1; i < columnsHeaders.length; i++) {
-				columnsHeaders[i] = "";
+				columnsHeaders[i] = ""; //$NON-NLS-1$
 			}
 			for (int i = 0; i < importedFileColumns.length; i++) {
 				if (importedFileColumns[i]>=0) {
@@ -88,7 +88,7 @@ public class ImportErrorPanel extends JPanel {
 			} else {
 				String[] fields = errors[rowIndex].getFields();
 				if (columnIndex>fields.length) {
-					return "";
+					return ""; //$NON-NLS-1$
 				}
 				return fields[columnIndex-1];
 			}

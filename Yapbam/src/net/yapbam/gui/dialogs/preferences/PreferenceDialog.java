@@ -27,7 +27,7 @@ public class PreferenceDialog extends AbstractDialog<Boolean, Boolean> {
 	private JTabbedPane tabbedPane;
 
 	public PreferenceDialog(MainFrame owner, boolean expertMode) {
-		super(owner, LocalizationData.get("PreferencesDialog.title"), expertMode);
+		super(owner, LocalizationData.get("PreferencesDialog.title"), expertMode); //$NON-NLS-1$
 		this.setLocationRelativeTo(owner.getJFrame());
 	}
 

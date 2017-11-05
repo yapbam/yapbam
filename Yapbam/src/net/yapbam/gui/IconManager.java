@@ -58,7 +58,7 @@ public abstract class IconManager {
 		map.put(Name.DELETE_TRANSACTION, map.get(Name.DELETE));
 		map.put(Name.EDIT_TRANSACTION, map.get(Name.EDIT));
 		map.put(Name.DUPLICATE_TRANSACTION, map.get(Name.DUPLICATE));
-		map.put(Name.NEW_BULK_TRANSACTION, create("images/bulk.png", size));
+		map.put(Name.NEW_BULK_TRANSACTION, create("images/bulk.png", size)); //$NON-NLS-1$
 		map.put(Name.NEW_MODE, map.get(Name.NEW));
 		map.put(Name.DELETE_MODE, map.get(Name.DELETE));
 		map.put(Name.EDIT_MODE, map.get(Name.EDIT));

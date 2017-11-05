@@ -16,7 +16,7 @@ import net.yapbam.gui.widget.TabbedPane;
  */
 @SuppressWarnings("serial")
 public class MainPanel extends TabbedPane {
-	public static final String SELECTED_PLUGIN_PROPERTY = "selectedPlugin";
+	public static final String SELECTED_PLUGIN_PROPERTY = "selectedPlugin"; //$NON-NLS-1$
 	private List<AbstractPlugIn> paneledPlugins;
 	private AbstractPlugIn selectedPlugin;
 

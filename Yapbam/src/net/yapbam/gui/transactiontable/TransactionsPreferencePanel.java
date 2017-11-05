@@ -93,7 +93,7 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 	}
 	
 	public static boolean isCustomBackgroundColors() {
-		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.CUSTOMIZED_BACKGROUND_KEY, "true"));
+		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(TransactionsPreferencePanel.CUSTOMIZED_BACKGROUND_KEY, "true")); //$NON-NLS-1$
 	}
 	
 	/** Gets the transaction's table background colors.
@@ -479,9 +479,9 @@ public class TransactionsPreferencePanel extends PreferencePanel {
 			} else if (column==getCommentColumnIndex()) {
 				return LocalizationData.get("Transaction.comment"); //$NON-NLS-1$
 			} else if (column==getReceiptColumnIndex()) {
-				return isExpense(row) ? "" : "100";
+				return isExpense(row) ? "" : "100"; //$NON-NLS-1$
 			} else if (column==getExpenseColumnIndex()) {
-				return isExpense(row) ? "-100" : "";
+				return isExpense(row) ? "-100" : ""; //$NON-NLS-2$
 			} else {
 				return isExpense(row) ? "-100" : "100";
 			}

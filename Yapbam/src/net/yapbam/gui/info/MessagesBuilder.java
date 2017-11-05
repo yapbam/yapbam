@@ -82,7 +82,7 @@ public abstract class MessagesBuilder {
 				Thread.sleep(2000);
 			}
 			URL url = ApplicationContext.toURL(BASE_URL);
-			LOGGER.debug("Getting news from {}",url.toString());
+			LOGGER.debug("Getting news from {}",url.toString()); //$NON-NLS-1$
 			CoolHttpConnection ct = new CoolHttpConnection(url,Preferences.INSTANCE.getHttpProxy());
 			int errorCode = ct.getResponseCode();
 			if (errorCode==HttpURLConnection.HTTP_OK) {
@@ -98,7 +98,7 @@ public abstract class MessagesBuilder {
 							if (line.startsWith("#")) { //$NON-NLS-1$
 								LOGGER.trace(line);
 							} else {
-								LOGGER.debug("info: {}",line);
+								LOGGER.debug("info: {}",line); //$NON-NLS-1$
 								return (JSONArray) JSONValue.parse(line);
 							}
 						}
@@ -111,7 +111,7 @@ public abstract class MessagesBuilder {
 				}
 			} else {
 				if (errorCode==HttpURLConnection.HTTP_MOVED_PERM || errorCode==HttpURLConnection.HTTP_MOVED_TEMP) {
-					LOGGER.error("Redirection to {} was not followed.",ct.getHeaderField("Location"));
+					LOGGER.error("Redirection to {} was not followed.",ct.getHeaderField("Location")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				throw new IOException ("Unexpected error code "+errorCode); //$NON-NLS-1$
 			}

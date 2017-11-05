@@ -36,8 +36,8 @@ import java.awt.Insets;
 
 public class LocalizationPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Locale[] LANGUAGES = new Locale[]{Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH, new Locale("pt"), Locale.TRADITIONAL_CHINESE, new Locale("it"), new Locale("nl"), new Locale("pl"), new Locale("ru"), new Locale("tr")};
-	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","&#23616;&#37096;","parziale", "partieel","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","k&#305;smi"};
+	private static final Locale[] LANGUAGES = new Locale[]{Locale.GERMAN, Locale.ENGLISH, Locale.FRENCH, new Locale("pt"), Locale.TRADITIONAL_CHINESE, new Locale("it"), new Locale("nl"), new Locale("pl"), new Locale("ru"), new Locale("tr")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","&#23616;&#37096;","parziale", "partieel","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","k&#305;smi"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 	private JPanel countryPanel = null;
 	private JPanel languagePanel = null;
 	private JRadioButton defaultCButton = null;
@@ -161,7 +161,7 @@ public class LocalizationPanel extends PreferencePanel {
 			for (int i = 0; i < LANGUAGES.length; i++) {
 				JRadioButton button = getLngButton(LANGUAGES[i]);
 				if (!LANGUAGES_ADDITIONNAL_WORDING[i].isEmpty()) {
-					button.setText("<html>"+button.getText()+" ("+LANGUAGES_ADDITIONNAL_WORDING[i]+")</html>");
+					button.setText("<html>"+button.getText()+" ("+LANGUAGES_ADDITIONNAL_WORDING[i]+")</html>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
 				group.add(button);
 			}

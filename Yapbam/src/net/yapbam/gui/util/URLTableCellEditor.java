@@ -63,7 +63,7 @@ public class URLTableCellEditor extends AbstractCellEditor implements TableCellE
                         try {
                             HelpManager.show(table, new URI(url));
                         } catch (Exception e) {
-                        	LoggerFactory.getLogger(URLTableCellEditor.class).debug("Invalid URL "+url, e);
+                        	LoggerFactory.getLogger(URLTableCellEditor.class).debug("Invalid URL "+url, e); //$NON-NLS-1$
                         }
                     }
                 }

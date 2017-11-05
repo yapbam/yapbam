@@ -74,10 +74,10 @@ class StatementTableModel extends AbstractTableModel {
 			return TransactionTableUtils.getDescription(transaction,false,true,false);
 		} else if (columnIndex==2) {
 			Category category = transaction.getCategory();
-			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName(); //$NON-NLS-1$
 		} else if (columnIndex==3) {
 			Mode mode = transaction.getMode();
-			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
+			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName(); //$NON-NLS-1$
 		} else if (columnIndex==4) {
 			return transaction.getNumber();
 		} else if (columnIndex==5) {

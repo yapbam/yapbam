@@ -126,7 +126,7 @@ public class AccountsSummaryPanel extends JPanel {
 							if (!getSplitPane().isDividerVisible()) {
 								getSplitPane().setDividerLocation(0.5);
 							}
-							getNotesField().setText(account.getComment()==null?"":account.getComment());
+							getNotesField().setText(account.getComment()==null?"":account.getComment()); //$NON-NLS-1$
 						}
 						getSplitPane().setDividerVisible(account!=null);
 						getBottomPanel().setVisible(account!=null);
@@ -157,7 +157,7 @@ public class AccountsSummaryPanel extends JPanel {
 
 	private JLabel getLblNotesLabel() {
 		if (lblNotesLabel == null) {
-			lblNotesLabel = new JLabel(LocalizationData.get("AccountDialog.notes"));
+			lblNotesLabel = new JLabel(LocalizationData.get("AccountDialog.notes")); //$NON-NLS-1$
 		}
 		return lblNotesLabel;
 	}
@@ -236,7 +236,7 @@ public class AccountsSummaryPanel extends JPanel {
 				renderer = getDefaultRenderer(Object.class);
 				column = AccountsSummaryTableModel.ACCOUNT_COLUMN;
 				JLabel component = (JLabel) super.prepareRenderer(renderer, row, column);
-				component.setText("");
+				component.setText(""); //$NON-NLS-1$
 				return component;
 			} else {
 				return super.prepareRenderer(renderer, row, column);
@@ -278,8 +278,8 @@ public class AccountsSummaryPanel extends JPanel {
 	}
 	private JButton getEditButton() {
 		if (editButton == null) {
-			editButton = new JButton(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT_ACCOUNT));
-			editButton.setToolTipText(LocalizationData.get("AccountManager.editAccount.toolTip"));
+			editButton = new JButton(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT_ACCOUNT)); //$NON-NLS-1$
+			editButton.setToolTipText(LocalizationData.get("AccountManager.editAccount.toolTip")); //$NON-NLS-1$
 			editButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

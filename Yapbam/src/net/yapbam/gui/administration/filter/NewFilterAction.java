@@ -28,8 +28,8 @@ public class NewFilterAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Window owner = e.getSource() instanceof Component ?Utils.getOwnerWindow((Component) e.getSource()):null;
+		final Filter filter = new Filter();
 		CustomFilterDialog.FilterData filterData = new CustomFilterDialog.FilterData() {
-			private Filter filter = new Filter();
 			@Override
 			public GlobalData getGlobalData() {
 				return data;

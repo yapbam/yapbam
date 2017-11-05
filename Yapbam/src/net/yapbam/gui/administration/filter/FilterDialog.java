@@ -54,4 +54,8 @@ public class FilterDialog extends CustomFilterDialog {
 		}
 		return cause;
 	}
+
+	void setFilterName(String name) {
+		namePanel.getNameField().setText(name);
+	}
 }

@@ -24,10 +24,10 @@ import com.fathzer.soft.jclop.SynchronizationState;
 import com.fathzer.soft.jclop.swing.URIChooser;
 
 public class ClasspathPersistenceAdapter extends PersistenceAdapter {
-	public static final String SCHEME = "classpath";
+	public static final String SCHEME = "classpath"; //$NON-NLS-1$
 
 	public ClasspathPersistenceAdapter() throws IOException {
-		super(new Service(new File(Portable.getDataDirectory(), "cache"), true) {
+		super(new Service(new File(Portable.getDataDirectory(), "cache"), true) { //$NON-NLS-1$
 			
 			@Override
 			public boolean upload(InputStream in, long length, URI uri,
@@ -42,7 +42,7 @@ public class ClasspathPersistenceAdapter extends PersistenceAdapter {
 			
 			@Override
 			public String getRemoteRevision(URI uri) throws JClopException {
-				return "1";
+				return "1"; //$NON-NLS-1$
 			}
 			
 			@Override
@@ -76,13 +76,13 @@ public class ClasspathPersistenceAdapter extends PersistenceAdapter {
 				if (!uri.getScheme().equals(getScheme())) {
 					throw new IllegalArgumentException();
 				}
-				Account account = new Account(this, "1", "common", BigInteger.ZERO);
+				Account account = new Account(this, "1", "common", BigInteger.ZERO); //$NON-NLS-1$ //$NON-NLS-2$
 				return new Entry(account, uri.toString().substring(SCHEME.length()+1));
 			}
 
 			@Override
 			public String getDisplayable(URI uri) {
-				return LocalizationData.get("Generic.example")+getEntry(uri).getDisplayName();
+				return LocalizationData.get("Generic.example")+getEntry(uri).getDisplayName(); //$NON-NLS-1$
 			}
 		});
 	}

@@ -56,7 +56,7 @@ public class ModeWidget extends AbstractSelector<Mode, ModeWidgetParams> {
 		
 	@Override
 	protected Object getDefaultRenderedValue(Mode mode) {
-		return mode==null ? mode : mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
+		return mode==null ? mode : mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName(); //$NON-NLS-1$
 	}
 
 	@Override

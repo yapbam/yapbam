@@ -17,7 +17,7 @@ import com.fathzer.soft.jclop.dropbox.DbxConnectionData;
 /** Yapbam <-> Dropbox session.
  */
 final class YapbamDropboxSession extends DbxConnectionData {
-	private static final String NAME = "Yapbam";
+	private static final String NAME = "Yapbam"; //$NON-NLS-1$
 	private static final DbxAppInfo APP_INFO;
 	
 	static {

@@ -12,7 +12,7 @@ import java.util.List;
 import net.yapbam.data.GlobalData;
 
 class YAxis {
-	public static final String SCALE_PROPERTY_NAME = "VERTICAL_SCALE";
+	public static final String SCALE_PROPERTY_NAME = "VERTICAL_SCALE"; //$NON-NLS-1$
 	
 	private Component owner;
 	private double min;

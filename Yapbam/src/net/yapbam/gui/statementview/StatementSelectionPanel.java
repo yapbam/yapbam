@@ -32,7 +32,7 @@ import java.util.List;
 
 public class StatementSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static final String SELECTED_STATEMENT_PROPERTY_NAME = "SelectedStatement";
+	public static final String SELECTED_STATEMENT_PROPERTY_NAME = "SelectedStatement"; //$NON-NLS-1$
 	
 	private ComboBox accountMenu;
 	private ComboBox statementMenu;

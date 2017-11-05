@@ -16,9 +16,9 @@ import net.yapbam.data.*;
  * </UL>
  */
 public class YapbamSerializer {
-	private static final String XML_EXTENSION = ".xml";
-	private static final String ZIP_EXTENSION = ".zip";
-	private static final String CLASSPATH_SCHEME = "classpath";
+	private static final String XML_EXTENSION = ".xml"; //$NON-NLS-1$
+	private static final String ZIP_EXTENSION = ".zip"; //$NON-NLS-1$
+	private static final String CLASSPATH_SCHEME = "classpath"; //$NON-NLS-1$
 
 	private YapbamSerializer() {
 		// To prevent instantiation
@@ -75,7 +75,7 @@ public class YapbamSerializer {
 		String root = FileUtils.getRootName(file);
 		String extension = FileUtils.getExtension(file);
 		for (int i = 1; i >0; i++) {
-			File candidate = new File(parent, root+"_backup"+i+extension);
+			File candidate = new File(parent, root+"_backup"+i+extension); //$NON-NLS-1$
 			if (!candidate.exists() || (candidate.length()==0)) {
 				return candidate;
 			}

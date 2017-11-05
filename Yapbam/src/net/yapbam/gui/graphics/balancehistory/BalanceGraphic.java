@@ -32,7 +32,7 @@ import net.yapbam.data.BalanceHistoryElement;
 import net.yapbam.gui.LocalizationData;
 
 class BalanceGraphic extends JPanel implements Scrollable {
-	static final String SELECTED_DATE_PROPERTY = "selectedDate";
+	static final String SELECTED_DATE_PROPERTY = "selectedDate"; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
 	private static final int X_OFFSET = 0;
 	private static final Color POSITIVE = new Color (127,255,127);
@@ -273,7 +273,7 @@ class BalanceGraphic extends JPanel implements Scrollable {
 					StringBuilder buf = new StringBuilder();
 					buf.append(months[month]);
 					if (month==0) {
-						buf.append(" ").append(date.getYear()+1900);
+						buf.append(" ").append(date.getYear()+1900); //$NON-NLS-1$
 					}
 					String dateString = buf.toString();
 					g2.drawString(dateString, x - metrics.stringWidth(dateString)/2, y0+metrics.getHeight());

@@ -14,7 +14,7 @@ public class DeleteFilterAction extends AbstractAction {
 	
 	public DeleteFilterAction(FilterListPanel panel) {
 		super(LocalizationData.get("GenericButton.delete"), IconManager.get(Name.DELETE_TRANSACTION)); //$NON-NLS-1$
-    putValue(SHORT_DESCRIPTION, "delete.toolTip"); //TODO
+    putValue(SHORT_DESCRIPTION, "Deletes the selected filter");
     this.panel = panel;
 	}
 	

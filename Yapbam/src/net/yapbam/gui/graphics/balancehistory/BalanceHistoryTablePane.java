@@ -49,7 +49,7 @@ import java.awt.event.ItemEvent;
 
 public class BalanceHistoryTablePane extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()+".hideIntermediateBalance";
+	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()+".hideIntermediateBalance"; //$NON-NLS-1$
 
 	private JLabel columnMenu;
 	BalanceHistoryTable table;
@@ -139,7 +139,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	private JCheckBox getHideIntermediateChkBx() {
 		if (hideIntermediateChkBx==null) {
-			hideIntermediateChkBx = new JCheckBox(LocalizationData.get("BalanceHistory.transaction.hideIntermediate"));
+			hideIntermediateChkBx = new JCheckBox(LocalizationData.get("BalanceHistory.transaction.hideIntermediate")); //$NON-NLS-1$
 			hideIntermediateChkBx.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					((BalanceHistoryModel)getTable().getModel()).setHideIntermediateBalances(e.getStateChange()==ItemEvent.SELECTED);
@@ -179,7 +179,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(getTable(), this.getClass().getCanonicalName());
-		getHideIntermediateChkBx().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(HIDE_INTERMEDIATE_BALANCE_KEY, "true")));
+		getHideIntermediateChkBx().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(HIDE_INTERMEDIATE_BALANCE_KEY, "true"))); //$NON-NLS-1$
 	}
 
 	private final class DefaultExporter implements FriendlyTable.ExportFormat {
@@ -204,7 +204,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		@Override
 		public String format(Object obj) {
 			if (obj==null) {
-				return "";
+				return ""; //$NON-NLS-1$
 			} else if (obj instanceof Date) {
 				return dateFormater.format(obj);
 			} else if (obj instanceof Double) {

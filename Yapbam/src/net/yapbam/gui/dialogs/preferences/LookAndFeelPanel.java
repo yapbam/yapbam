@@ -43,11 +43,11 @@ public class LookAndFeelPanel extends CompoundPreferencePanel {
 
 	@Override
 	public String getTitle() {
-		return LocalizationData.get("PreferencesDialog.LookAndFeel.title");
+		return LocalizationData.get("PreferencesDialog.LookAndFeel.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		return LocalizationData.get("PreferencesDialog.LookAndFeel.toolTip");
+		return LocalizationData.get("PreferencesDialog.LookAndFeel.toolTip"); //$NON-NLS-1$
 	}
 }

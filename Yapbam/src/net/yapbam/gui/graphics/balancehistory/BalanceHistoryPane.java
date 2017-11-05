@@ -188,7 +188,7 @@ public class BalanceHistoryPane extends JPanel {
 
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(tabbedPane, this.getClass().getCanonicalName());
-		YapbamState.INSTANCE.put(this.getClass().getCanonicalName()+".ignoreEnd", Boolean.toString(ignoreEnd.isSelected()));
+		YapbamState.INSTANCE.put(this.getClass().getCanonicalName()+".ignoreEnd", Boolean.toString(ignoreEnd.isSelected())); //$NON-NLS-1$
 		this.tablePane.saveState();
 		this.graph.saveState();
 	}
@@ -197,7 +197,7 @@ public class BalanceHistoryPane extends JPanel {
 		this.graph.restoreState();
 		this.tablePane.restoreState();
 		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
-		ignoreEnd.setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(this.getClass().getCanonicalName()+".ignoreEnd", "true")));
+		ignoreEnd.setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(this.getClass().getCanonicalName()+".ignoreEnd", "true"))); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Printable getPrintable() {

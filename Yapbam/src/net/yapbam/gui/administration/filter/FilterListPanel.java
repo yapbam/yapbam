@@ -48,8 +48,7 @@ public class FilterListPanel extends AbstractListAdministrationPanel<GlobalData>
 	}
 	@Override
 	protected Action getDuplicateButtonAction() {
-		System.out.println("duplicate was pressed");
-		return null;
+		return new DuplicateFilterAction(this);
 	}
 	@Override
 	protected JTable instantiateJTable() {

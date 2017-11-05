@@ -56,7 +56,7 @@ public class SubTransactionsTableModel extends AbstractTableModel {
 			return new double[]{st.getAmount()};
 		} else if (columnIndex==2) {
 			Category category = st.getCategory();
-			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName(); //$NON-NLS-1$
 		} else {
 			return null;
 		}

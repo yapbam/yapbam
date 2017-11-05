@@ -22,6 +22,6 @@ public class Graduation {
 
 	@Override
 	public String toString() {
-		return Formatter.format("{0,number,currency}[{1}]", getValue(), getPosition());
+		return Formatter.format("{0,number,currency}[{1}]", getValue(), getPosition()); //$NON-NLS-1$
 	}
 }

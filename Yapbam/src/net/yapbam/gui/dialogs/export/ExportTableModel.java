@@ -17,10 +17,10 @@ class ExportTableModel extends AbstractTableModel {
 	static final int VALUE_DATE_INDEX = 8;
 	static final int STATEMENT_INDEX = 9;
 	
-	static final String[] COLUMNS = new String[] {LocalizationData.get("Transaction.account"), LocalizationData.get("Transaction.date"),
-		LocalizationData.get("Transaction.description"), LocalizationData.get("Transaction.comment"), LocalizationData.get("Transaction.amount"),
-		LocalizationData.get("Transaction.category"), LocalizationData.get("Transaction.mode"), LocalizationData.get("Transaction.number"),
-		LocalizationData.get("Transaction.valueDate"), LocalizationData.get("Transaction.statement")};
+	static final String[] COLUMNS = new String[] {LocalizationData.get("Transaction.account"), LocalizationData.get("Transaction.date"), //$NON-NLS-1$ //$NON-NLS-2$
+		LocalizationData.get("Transaction.description"), LocalizationData.get("Transaction.comment"), LocalizationData.get("Transaction.amount"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		LocalizationData.get("Transaction.category"), LocalizationData.get("Transaction.mode"), LocalizationData.get("Transaction.number"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		LocalizationData.get("Transaction.valueDate"), LocalizationData.get("Transaction.statement")}; //$NON-NLS-1$ //$NON-NLS-2$
 	
 	private boolean[] allowed;
 

@@ -145,7 +145,7 @@ public class EditAccountPanel extends JPanel {
 		getHightThresholdField().setVisible(true);
 		getLblNotes().setVisible(true);
 		getNotePane().setVisible(true);
-		getNoteField().setText(account.getComment()==null?"":account.getComment());
+		getNoteField().setText(account.getComment()==null?"":account.getComment()); //$NON-NLS-1$
 		updateOkDisabledCause();
 	}
 	

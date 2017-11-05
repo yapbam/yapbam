@@ -16,7 +16,7 @@ public class Messages {
 	}
 
 	public static String getString(String key) {
-		return translatorMode?"net.yapbam.gui.tools.messages/"+key:RESOURCE_BUNDLE.getString(key);
+		return translatorMode?"net.yapbam.gui.tools.messages/"+key:RESOURCE_BUNDLE.getString(key); //$NON-NLS-1$
 	}
 	
 	static void reset() {

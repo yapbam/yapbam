@@ -246,7 +246,7 @@ public class MessagesPanel extends JPanel {
 	}
 
 	private String getNoMessageWording() {
-		return Formatter.format("<html>{0}</html>",LocalizationData.get("messagesnoMessageAvailable")); //$NON-NLS-1$
+		return Formatter.format("<html>{0}</html>",LocalizationData.get("messagesnoMessageAvailable")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {

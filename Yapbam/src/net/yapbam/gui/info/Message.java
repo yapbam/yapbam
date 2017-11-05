@@ -26,9 +26,9 @@ class Message {
 	Message(String id, String kind, String content) {
 		super();
 		this.id = id;
-		if ("news".equals(kind)) {
+		if ("news".equals(kind)) { //$NON-NLS-1$
 			this.kind = Kind.INFO;
-		} else if ("warning".equals(kind)) {
+		} else if ("warning".equals(kind)) { //$NON-NLS-1$
 			this.kind = Kind.WARNING;
 		} else {
 			this.kind = null;

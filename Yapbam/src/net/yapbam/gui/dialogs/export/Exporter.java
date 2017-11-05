@@ -91,7 +91,7 @@ public class Exporter {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		return result==null?"":result;
+		return result==null?"":result; //$NON-NLS-1$
 	}
 
 	private String format(double amount) {
@@ -114,7 +114,7 @@ public class Exporter {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		return result==null?"":result;
+		return result==null?"":result; //$NON-NLS-1$
 	}
 	
 	private String getField(Transaction transaction, int field) {
@@ -142,7 +142,7 @@ public class Exporter {
 		} else {
 			throw new IllegalArgumentException();
 		}
-		return result==null?"":result;
+		return result==null?"":result; //$NON-NLS-1$
 	}
 	
 	private static class GlobalTransactions implements Iterator<Transaction> {
