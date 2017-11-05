@@ -1,4 +1,4 @@
-package net.yapbam.gui.administration;
+package net.yapbam.gui.administration.filter;
 
 import java.awt.Component;
 import java.awt.Window;
@@ -41,7 +41,8 @@ public class NewFilterAction extends AbstractAction {
 		};
 		CustomFilterDialog dialog = new FilterDialog(owner, filterData);
 		dialog.setVisible(true);
-		if (dialog.getResult()) {
+		Boolean result = dialog.getResult();
+		if (result!=null && result) {
 			data.add(filterData.getFilter());
 		}
 	}

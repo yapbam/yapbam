@@ -1,4 +1,4 @@
-package net.yapbam.gui.administration;
+package net.yapbam.gui.administration.filter;
 
 import javax.swing.JPanel;
 
@@ -28,7 +28,7 @@ public class FilterNamePanel extends JPanel {
 			nameField = new TextWidget();
 			nameField.setColumns(10);
 			if (filterPanel!=null && filterPanel.getFilter().getName()!=null) {
-				nameField.setName(filterPanel.getFilter().getName());
+				nameField.setText(filterPanel.getFilter().getName());
 			}
 		}
 		return nameField;

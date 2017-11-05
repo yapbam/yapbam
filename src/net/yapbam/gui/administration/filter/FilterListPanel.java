@@ -1,11 +1,16 @@
-package net.yapbam.gui.administration;
+package net.yapbam.gui.administration.filter;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.table.TableRowSorter;
+
+import com.fathzer.soft.ajlib.swing.table.RowSorter;
 
 import net.yapbam.data.GlobalData;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.administration.AbstractAdministrationPanel;
+import net.yapbam.gui.administration.AbstractListAdministrationPanel;
 
 public class FilterListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAdministrationPanel {
 	private static final String STATE_PREFIX = "net.yapbam.filterAdministration."; //$NON-NLS-1$
@@ -35,8 +40,7 @@ public class FilterListPanel extends AbstractListAdministrationPanel<GlobalData>
 	}
 	@Override
 	protected Action getEditButtonAction() {
-		System.out.println("edit was pressed");
-		return null;
+		return new EditFilterAction(this);
 	}
 	@Override
 	protected Action getDeleteButtonAction() {
@@ -49,7 +53,10 @@ public class FilterListPanel extends AbstractListAdministrationPanel<GlobalData>
 	}
 	@Override
 	protected JTable instantiateJTable() {
-		return new JTable(getModel());
+		JTable table = new JTable(getModel());
+		TableRowSorter<FiltersTableModel> sorter = new RowSorter<FiltersTableModel>(getModel());
+		table.setRowSorter(sorter);
+		return table;
 	}
 	private FiltersTableModel getModel() {
 		if (model ==null) {
@@ -68,5 +75,10 @@ public class FilterListPanel extends AbstractListAdministrationPanel<GlobalData>
 	
 	GlobalData getData() {
 		return data;
+	}
+
+	@Override
+	protected JTable getJTable() {
+		return super.getJTable();
 	}
 }
