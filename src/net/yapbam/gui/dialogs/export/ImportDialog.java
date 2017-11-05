@@ -110,7 +110,7 @@ public class ImportDialog extends AbstractDialog<ImportDialog.Container, Importe
 	}
 
 	public static void doError(Component parent, IOException e) {
-		String title = LocalizationData.get("ImportDialog.errorMessage.title");
+		String title = LocalizationData.get("ImportDialog.errorMessage.title"); //$NON-NLS-1$
 		if (e instanceof EmptyImportFileException) {
 			JOptionPane.showMessageDialog(parent, LocalizationData.get("ImportDialog.error.emptyFile"), title, JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 		} else if (e instanceof FileNotFoundException) {

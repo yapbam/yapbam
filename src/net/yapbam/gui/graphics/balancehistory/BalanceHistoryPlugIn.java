@@ -24,9 +24,9 @@ public class BalanceHistoryPlugIn extends AbstractPlugIn {
 
 	public BalanceHistoryPlugIn(FilteredData filteredData, Object restartData) {
 		this.data = filteredData;
-		this.setPanelTitle(LocalizationData.get("BalanceHistory.title"));
+		this.setPanelTitle(LocalizationData.get("BalanceHistory.title")); //$NON-NLS-1$
 		this.panel = new BalanceHistoryPane(data);
-		this.setPanelToolTip(LocalizationData.get("BalanceHistory.toolTip"));
+		this.setPanelToolTip(LocalizationData.get("BalanceHistory.toolTip")); //$NON-NLS-1$
 		PropertyChangeListener listener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

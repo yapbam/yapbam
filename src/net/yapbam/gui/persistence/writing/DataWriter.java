@@ -82,7 +82,7 @@ public class DataWriter {
 		} catch (ExecutionException e) {
 			// An exception occurred while saving to the cache
 			if (e.getCause() instanceof FileNotFoundException) {
-				JOptionPane.showMessageDialog(owner, LocalizationData.get("saveDialog.fileNotWritable"), LocalizationData.get("Generic.error"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(owner, LocalizationData.get("saveDialog.fileNotWritable"), LocalizationData.get("Generic.error"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				ErrorManager.INSTANCE.log(owner, e.getCause());
 			}

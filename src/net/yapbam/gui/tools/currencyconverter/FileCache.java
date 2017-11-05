@@ -36,7 +36,7 @@ public class FileCache implements Cache {
 			cacheFile.delete();
 		}
 		if (!getTmpFile().renameTo(cacheFile)) {
-			throw new IOException("Unable to commit cache");
+			throw new IOException("Unable to commit cache"); //$NON-NLS-1$
 		}
 	}
 

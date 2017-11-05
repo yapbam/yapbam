@@ -166,7 +166,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	@Override
 	public void moveColumn(int oldIndex, int newIndex) {
 		if ((oldIndex < 0) || (oldIndex >= getColumnCount()) || (newIndex < 0) || (newIndex >= getColumnCount())) {
-			throw new IllegalArgumentException("moveColumn() - Index out of range");
+			throw new IllegalArgumentException("moveColumn() - Index out of range"); //$NON-NLS-1$
 		}
 		
 		TableColumn fromColumn = tableColumns.get(oldIndex);
@@ -222,7 +222,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 	 */
 	public int getColumnIndex(Object identifier, boolean onlyVisible) {
 		if (identifier == null) {
-			throw new IllegalArgumentException("Identifier is null");
+			throw new IllegalArgumentException("Identifier is null"); //$NON-NLS-1$
 		}
 
 		List<TableColumn> columns = onlyVisible ? tableColumns : allTableColumns;
@@ -235,7 +235,7 @@ public class XTableColumnModel extends DefaultTableColumnModel {
 				return columnIndex;
 			}
 		}
-		throw new IllegalArgumentException("Identifier not found");
+		throw new IllegalArgumentException("Identifier not found"); //$NON-NLS-1$
 	}
 
 	/**

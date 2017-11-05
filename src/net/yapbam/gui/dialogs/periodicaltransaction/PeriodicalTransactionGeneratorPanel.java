@@ -49,7 +49,7 @@ import com.fathzer.soft.ajlib.swing.table.RowSorter;
 import com.fathzer.soft.ajlib.swing.widget.date.DateWidget;
 
 public class PeriodicalTransactionGeneratorPanel extends JPanel {
-	static final String HAS_IMPACT_PROPERTY = "hasImpact";
+	static final String HAS_IMPACT_PROPERTY = "hasImpact"; //$NON-NLS-1$
 	
 	@SuppressWarnings("serial")
 	private final class EditTransactionAction extends AbstractAction {

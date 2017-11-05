@@ -121,8 +121,8 @@ public class ThemePanel extends PreferencePanel {
 		getFontSliderTitle().setEnabled(enabled);
 		getFontSelector().setEnabled(enabled);
 		getTextSampleLabel().setEnabled(enabled);
-		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+getEnableSuffix(enabled)));
-		getFontSelector().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSelector.tooltip."+getEnableSuffix(enabled)));
+		getFontSlider().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSize.tooltip."+getEnableSuffix(enabled))); //$NON-NLS-1$
+		getFontSelector().setToolTipText(LocalizationData.get("PreferencesDialog.Theme.fontSelector.tooltip."+getEnableSuffix(enabled))); //$NON-NLS-1$
 	}
 
 	private String getEnableSuffix(boolean enabled) {
@@ -279,8 +279,8 @@ public class ThemePanel extends PreferencePanel {
 						selectedLookAndFeel = lfs[i].getName();
 					}
 					button.addItemListener(new LFAction(lfs[i].getName()));
-					if ("nimbus".equalsIgnoreCase(lfs[i].getName())) {
-						button.setText(lfs[i].getName()+" "+LocalizationData.get("generic.recommended.with.parenthesis"));
+					if ("nimbus".equalsIgnoreCase(lfs[i].getName())) { //$NON-NLS-1$
+						button.setText(lfs[i].getName()+" "+LocalizationData.get("generic.recommended.with.parenthesis")); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					group.add(button);
 					lafPanel.add(button, index);
@@ -293,7 +293,7 @@ public class ThemePanel extends PreferencePanel {
 
 	private JLabel getFontSliderTitle() {
 		if (fontSliderTitle == null) {
-			fontSliderTitle = new JLabel(LocalizationData.get("PreferencesDialog.Theme.fontSize"));
+			fontSliderTitle = new JLabel(LocalizationData.get("PreferencesDialog.Theme.fontSize")); //$NON-NLS-1$
 		}
 		return fontSliderTitle;
 	}
@@ -332,7 +332,7 @@ public class ThemePanel extends PreferencePanel {
 		
 		@Override
 		protected String getLabel() {
-			return LocalizationData.get("PreferencesDialog.Theme.fontName");
+			return LocalizationData.get("PreferencesDialog.Theme.fontName"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -342,7 +342,7 @@ public class ThemePanel extends PreferencePanel {
 
 		@Override
 		protected String getPropertyName() {
-			return "SelectedFont";
+			return "SelectedFont"; //$NON-NLS-1$
 		}
 
 		@Override

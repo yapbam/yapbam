@@ -12,7 +12,7 @@ public class YapbamDefinition implements ApplicationDefinition {
 	public YapbamDefinition() {
 		try {
 			URI location = Portable.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-			if ("file".equals(location.getScheme())) {
+			if ("file".equals(location.getScheme())) { //$NON-NLS-1$
 				appDirectory = new File(location);
 				if (appDirectory.isFile()) {
 					appDirectory = appDirectory.getParentFile();
@@ -20,7 +20,7 @@ public class YapbamDefinition implements ApplicationDefinition {
 						appDirectory = appDirectory.getParentFile();
 					}
 				} else {
-					appDirectory = new File(System.getProperty("user.dir"));
+					appDirectory = new File(System.getProperty("user.dir")); //$NON-NLS-1$
 				}
 			}
 		} catch (URISyntaxException e) {
@@ -35,6 +35,6 @@ public class YapbamDefinition implements ApplicationDefinition {
 
 	@Override
 	public String getApplicationName() {
-		return "yapbam"; 
+		return "yapbam";  //$NON-NLS-1$
 	}
 }

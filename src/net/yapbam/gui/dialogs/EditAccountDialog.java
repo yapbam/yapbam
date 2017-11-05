@@ -54,7 +54,7 @@ public class EditAccountDialog extends AbstractDialog<GlobalData, Account> {
 	 * @return The newly created account or null if the operation was canceled
 	 */
 	public static Account open(GlobalData data, Window owner, String message) {
-		EditAccountDialog dialog = new EditAccountDialog(owner, LocalizationData.get("AccountDialog.title.new"), data);
+		EditAccountDialog dialog = new EditAccountDialog(owner, LocalizationData.get("AccountDialog.title.new"), data); //$NON-NLS-1$
 		if (message!=null) {
 			dialog.setMessage(message);
 			dialog.setLocationRelativeTo(owner);

@@ -190,10 +190,10 @@ public class MenuScroller {
    */
   public MenuScroller(JPopupMenu menu, int scrollCount, int interval, int topFixedCount, int bottomFixedCount, boolean addSeparators) {
     if (scrollCount <= 0 || interval <= 0) {
-      throw new IllegalArgumentException("scrollCount and interval must be greater than 0");
+      throw new IllegalArgumentException("scrollCount and interval must be greater than 0"); //$NON-NLS-1$
     }
     if (topFixedCount < 0 || bottomFixedCount < 0) {
-      throw new IllegalArgumentException("topFixedCount and bottomFixedCount cannot be negative");
+      throw new IllegalArgumentException("topFixedCount and bottomFixedCount cannot be negative"); //$NON-NLS-1$
     }
     this.addSeparators = addSeparators;
 
@@ -225,7 +225,7 @@ public class MenuScroller {
    */
   public void setInterval(int interval) {
     if (interval <= 0) {
-      throw new IllegalArgumentException("interval must be greater than 0");
+      throw new IllegalArgumentException("interval must be greater than 0"); //$NON-NLS-1$
     }
     upItem.setInterval(interval);
     downItem.setInterval(interval);
@@ -249,7 +249,7 @@ public class MenuScroller {
    */
   public void setScrollCount(int scrollCount) {
     if (scrollCount <= 0) {
-      throw new IllegalArgumentException("scrollCount must be greater than 0");
+      throw new IllegalArgumentException("scrollCount must be greater than 0"); //$NON-NLS-1$
     }
     this.scrollCount = scrollCount;
     MenuSelectionManager.defaultManager().clearSelectedPath();

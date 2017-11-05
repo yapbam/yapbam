@@ -131,7 +131,7 @@ public class CheckNumberWidget extends JPanel {
 	}
 
 	public void setText(String text) {
-		numbers.setSelectedItem((text==null) ?"":text);
+		numbers.setSelectedItem((text==null) ?"":text); //$NON-NLS-1$
 	}
 
 	public String getNumber() {

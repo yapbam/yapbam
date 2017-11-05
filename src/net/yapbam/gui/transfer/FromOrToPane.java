@@ -268,13 +268,13 @@ public class FromOrToPane extends JPanel {
 	}
 	private JLabel getLblDescription() {
 		if (lblDescription == null) {
-			lblDescription = new JLabel(LocalizationData.get("TransactionDialog.description"));
+			lblDescription = new JLabel(LocalizationData.get("TransactionDialog.description")); //$NON-NLS-1$
 		}
 		return lblDescription;
 	}
 	private JLabel getLblComment() {
 		if (lblComment == null) {
-			lblComment = new JLabel(LocalizationData.get("TransactionDialog.comment"));
+			lblComment = new JLabel(LocalizationData.get("TransactionDialog.comment")); //$NON-NLS-1$
 		}
 		return lblComment;
 	}

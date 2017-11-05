@@ -55,11 +55,11 @@ final class TablePreferencePanel extends PreferencePanel {
 	}
 	
 	public static boolean isHighlightAlerts() {
-		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(HIGHLIGHT_ALERTS, "true"));
+		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(HIGHLIGHT_ALERTS, "true")); //$NON-NLS-1$
 	}
 	
 	public static boolean isReceiptSeparatedFromExpense() {
-		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(SEPARATE_EXPENSE_RECEIPT, "false"));
+		return Boolean.parseBoolean(Preferences.INSTANCE.getProperty(SEPARATE_EXPENSE_RECEIPT, "false")); //$NON-NLS-1$
 	}
 
 	@Override

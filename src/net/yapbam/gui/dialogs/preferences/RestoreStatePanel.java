@@ -45,7 +45,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		add(chckbxTabsOrder, gbcChckbxConserverLordreDes);
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.StartState.tableTitle"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+		panel.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.StartState.tableTitle"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 		GridBagConstraints gbcPanel = new GridBagConstraints();
 		gbcPanel.insets = new Insets(5, 5, 5, 5);
 		gbcPanel.fill = GridBagConstraints.HORIZONTAL;
@@ -99,7 +99,7 @@ public class RestoreStatePanel extends PreferencePanel {
 		chckbxHiddenColumns.setToolTipText(LocalizationData.get("PreferencesDialog.StartState.hiddenColumns.tooltip")); //$NON-NLS-1$
 		
 		JPanel panel1 = new JPanel();
-		panel1.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.StartState.dataTitle"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+		panel1.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.StartState.dataTitle"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 		GridBagConstraints gbcPanel1 = new GridBagConstraints();
 		gbcPanel1.insets = new Insets(5, 5, 5, 5);
 		gbcPanel1.fill = GridBagConstraints.BOTH;

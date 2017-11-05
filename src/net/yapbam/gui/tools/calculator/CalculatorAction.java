@@ -27,7 +27,7 @@ public class CalculatorAction extends AbstractAction {
 		if (frame==null) {
 			Window owner = Utils.getOwnerWindow((Component) e.getSource());
 			frame = new ToolsFrame(owner, new CalculatorPanel());
-			frame.setTitle(Messages.getString("ToolsPlugIn.calculator.title"));
+			frame.setTitle(Messages.getString("ToolsPlugIn.calculator.title")); //$NON-NLS-1$
 		}
 		frame.setState(Frame.NORMAL);
 		frame.setVisible(true);

@@ -175,7 +175,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				}
 			} else {
 				//TODO
-				LoggerFactory.getLogger(StatisticsPlugin.class).warn("What a strange thing: transaction {} is in FilteredData but is not ok with its filter");
+				LoggerFactory.getLogger(StatisticsPlugin.class).warn("What a strange thing: transaction {} is in FilteredData but is not ok with its filter"); //$NON-NLS-1$
 			}
 		}
 		if (getGroupSubCategories().isSelected()) {
@@ -227,15 +227,15 @@ public class StatisticsPlugin extends AbstractPlugIn {
 	@Override
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(tabbedPane, this.getClass().getCanonicalName());
-		getGroupSubCategories().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getGroupSubCategoriesStateKey(), "false")));
-		getNetValues().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getNetValuesStateKey(), "false")));
+		getGroupSubCategories().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getGroupSubCategoriesStateKey(), "false"))); //$NON-NLS-1$
+		getNetValues().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getNetValuesStateKey(), "false"))); //$NON-NLS-1$
 	}
 
 	private String getGroupSubCategoriesStateKey() {
-		return this.getClass().getCanonicalName()+".groupSubCategories";
+		return this.getClass().getCanonicalName()+".groupSubCategories"; //$NON-NLS-1$
 	}
 
 	private String getNetValuesStateKey() {
-		return this.getClass().getCanonicalName()+".netValues";
+		return this.getClass().getCanonicalName()+".netValues"; //$NON-NLS-1$
 	}
 }

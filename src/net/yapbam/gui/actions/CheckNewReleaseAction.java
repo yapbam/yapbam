@@ -78,7 +78,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 						try {
 							VersionManager.getUpdateInformation();
 						} catch (IOException e) {
-							LoggerFactory.getLogger(CheckNewReleaseAction.class).warn("Unable to contact yapbam site", e);
+							LoggerFactory.getLogger(CheckNewReleaseAction.class).warn("Unable to contact yapbam site", e); //$NON-NLS-1$
 						}
 					}
 				}).start();

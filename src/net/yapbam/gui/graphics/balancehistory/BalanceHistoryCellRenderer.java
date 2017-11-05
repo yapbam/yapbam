@@ -21,7 +21,7 @@ final class BalanceHistoryCellRenderer extends CellRenderer {
 	protected Object getValue(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowModel, int columnModel) {
 		BalanceHistoryModel model = (BalanceHistoryModel) table.getModel();
 		return (columnModel==model.getSettings().getRemainingColumn() && model.getHideIntermediateBalances() && !model.isDayBalance(rowModel)) ?
-				"" : super.getValue(table, value, isSelected, hasFocus, rowModel, columnModel);
+				"" : super.getValue(table, value, isSelected, hasFocus, rowModel, columnModel); //$NON-NLS-1$
 	}
 
 	@Override

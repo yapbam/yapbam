@@ -34,7 +34,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 	private boolean auto;
 
 	public InstallUpdateDialog(Window owner, boolean auto, UpdateInformation data) {
-		super(owner, LocalizationData.get("Update.Downloading.title"), data);
+		super(owner, LocalizationData.get("Update.Downloading.title"), data); //$NON-NLS-1$
 		this.auto = auto;
 		if (auto) {
 			setDelay(Long.MAX_VALUE);
@@ -49,7 +49,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 	@Override
 	protected JPanel createCenterPane() {
 		waitPanel = new WaitPanel();
-		waitPanel.setMessage(Formatter.format(LocalizationData.get("Update.Downloading.message"),data.getLastestRelease().toString()));
+		waitPanel.setMessage(Formatter.format(LocalizationData.get("Update.Downloading.message"),data.getLastestRelease().toString())); //$NON-NLS-1$
 		waitPanel.setIndeterminate(false);
 		waitPanel.setMaximum(100);
 		return waitPanel;
@@ -89,17 +89,17 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 					boolean ok = false;
 					String errorMessage = null;
 					SecureDownloader sd = new MyDownloader(Preferences.INSTANCE.getHttpProxy());
-					DownloadInfo info = sd.download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip"));
+					DownloadInfo info = sd.download(data.getAutoUpdateURL(), new File(destinationFolder,"update.zip")); //$NON-NLS-1$
 					String zipChck = info==null?null:info.getCheckSum();
 					if (NullUtils.areEquals(zipChck, data.getAutoUpdateCheckSum())) {
-						DownloadInfo jarInfo = sd.download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar"));
+						DownloadInfo jarInfo = sd.download(data.getAutoUpdaterURL(), new File(destinationFolder,"updater.jar")); //$NON-NLS-1$
 						String updaterChck = jarInfo==null?null:jarInfo.getCheckSum();
 						ok = NullUtils.areEquals(updaterChck, data.getAutoUpdaterCheckSum());
 						if (!ok) {
-							errorMessage = "Checksum of "+data.getAutoUpdaterURL()+" is "+zipChck+" ("+data.getAutoUpdaterCheckSum()+" was expected)";
+							errorMessage = "Checksum of "+data.getAutoUpdaterURL()+Messages.getString("InstallUpdateDialog.5")+zipChck+Messages.getString("InstallUpdateDialog.6")+data.getAutoUpdaterCheckSum()+Messages.getString("InstallUpdateDialog.7"); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						}
 					} else {
-						errorMessage = "ALERT checksum of "+data.getAutoUpdateURL()+" is "+zipChck+" ("+data.getAutoUpdateCheckSum()+" was expected)";
+						errorMessage = Messages.getString("InstallUpdateDialog.8")+data.getAutoUpdateURL()+Messages.getString("InstallUpdateDialog.9")+zipChck+Messages.getString("InstallUpdateDialog.10")+data.getAutoUpdateCheckSum()+Messages.getString("InstallUpdateDialog.11"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					}
 
 					if (this.isCancelled() || !ok) {
@@ -155,9 +155,9 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 						// I preferred to use the "standard" MainFrame close job.
 						MainFrame.updater = getUpdaterFile();
 						// Display message to inform the user that the download is completed
-						String message = Formatter.format(LocalizationData.get("Update.Downloaded.message"),data.getLastestRelease().toString());
-						Object[] options = {LocalizationData.get("GenericButton.close"), LocalizationData.get("Update.Downloaded.quitNow")};
-						int choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION,
+						String message = Formatter.format(LocalizationData.get(Messages.getString("InstallUpdateDialog.12")),data.getLastestRelease().toString()); //$NON-NLS-1$
+						Object[] options = {LocalizationData.get("GenericButton.close"), LocalizationData.get("Update.Downloaded.quitNow")}; //$NON-NLS-1$ //$NON-NLS-2$
+						int choice = JOptionPane.showOptionDialog(owner, message, LocalizationData.get("Update.Downloaded.title"), JOptionPane.OK_OPTION, //$NON-NLS-1$
 								JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 						if (choice==1) {
 							// There could be some dialogs showing at this time (for instance, at launch time, the welcome screen could be displayed)
@@ -178,7 +178,7 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 		}
 
 		private File getUpdaterFile() {
-			return new File(Portable.getUpdateFileDirectory(),"updater.jar");
+			return new File(Portable.getUpdateFileDirectory(),"updater.jar"); //$NON-NLS-1$
 		}
 
 		class DoShowDialog implements Runnable {
@@ -186,9 +186,9 @@ public class InstallUpdateDialog extends LongTaskDialog<UpdateInformation, Void>
 
 			@Override
 			public void run() {
-				Object[] options = { LocalizationData.get("GenericButton.cancel"), LocalizationData.get("Update.DownloadFailed.retry") };
-				int n = JOptionPane.showOptionDialog(owner, LocalizationData.get("Update.DownloadFailed.message"),
-						LocalizationData.get("Update.DownloadFailed.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE,
+				Object[] options = { LocalizationData.get("GenericButton.cancel"), LocalizationData.get("Update.DownloadFailed.retry") }; //$NON-NLS-1$ //$NON-NLS-2$
+				int n = JOptionPane.showOptionDialog(owner, LocalizationData.get("Update.DownloadFailed.message"), //$NON-NLS-1$
+						LocalizationData.get("Update.DownloadFailed.title"), JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, //$NON-NLS-1$
 						null, options, options[1]);
 				proceedConfirmed = (n == 1);
 			}

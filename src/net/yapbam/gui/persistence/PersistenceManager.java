@@ -58,7 +58,7 @@ public abstract class PersistenceManager {
 	public void add(PersistenceAdapter adapter) {
 		String scheme = adapter.getService().getScheme();
 		if (adaptersMap.containsKey(scheme)) {
-			throw new IllegalArgumentException(Formatter.format("Can't have two adapters for {0} scheme",scheme));
+			throw new IllegalArgumentException(Formatter.format("Can't have two adapters for {0} scheme",scheme)); //$NON-NLS-1$
 		}
 		adaptersMap.put(scheme, adapter);
 		schemes.add(scheme);
@@ -193,7 +193,7 @@ public abstract class PersistenceManager {
 							if (file.exists()) {
 								String message;
 								// The file exist, but it is read protected
-								if ("file".equals(path.getScheme())) {
+								if ("file".equals(path.getScheme())) { //$NON-NLS-1$
 									message = Formatter.format(LocalizationData.get("openDialog.fileNotReadable"),displayedURI); //$NON-NLS-1$
 								} else {
 									message = Formatter.format(LocalizationData.get("openDialog.cacheNotReadable"),file); //$NON-NLS-1$

@@ -155,7 +155,7 @@ public class ProxyPanel extends PreferencePanel {
 		getUserField().setEnabled(enabled);
 		getPasswordField().setEnabled(enabled);
 		Color color = enabled?Color.BLACK:Color.GRAY;
-		TitledBorder border = BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Network.authentication"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color);
+		TitledBorder border = BorderFactory.createTitledBorder(null, LocalizationData.get("PreferencesDialog.Network.authentication"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color); //$NON-NLS-1$
 		getAuthenticationPanel().setBorder(border);
 	}
 

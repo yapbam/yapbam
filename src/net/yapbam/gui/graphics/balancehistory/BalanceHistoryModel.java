@@ -90,10 +90,10 @@ final class BalanceHistoryModel extends AbstractTableModel implements Transactio
 			return expenseReceipt==null?null:expenseReceipt[0];
 		} else if (columnIndex==settings.getCategoryColumn()) {
 			Category category = transaction.getCategory();
-			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+			return category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName(); //$NON-NLS-1$
 		} else if (columnIndex==settings.getModeColumn()) {
 			Mode mode = transaction.getMode();
-			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName();
+			return mode.equals(Mode.UNDEFINED)?LocalizationData.get("Mode.undefined"):mode.getName(); //$NON-NLS-1$
 		} else if (columnIndex==settings.getNumberColumn()) {
 			return transaction.getNumber();
 		} else if (columnIndex==settings.getValueDateColumn()) {

@@ -10,7 +10,7 @@ import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 public abstract class ConsistencyCheckedPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static String INCONSISTENCY_CAUSE_PROPERTY = "inconsistencyCause";
+	public static String INCONSISTENCY_CAUSE_PROPERTY = "inconsistencyCause"; //$NON-NLS-1$
 	private String inconsistencyCause;
 	protected PropertyChangeListener consistencyChecker;
 

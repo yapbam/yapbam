@@ -7,6 +7,6 @@ public abstract class LookAndFeelUtils {
 	}
 
 	public static boolean isValid(String lafName) {
-		return !"Mac OS X".equals(lafName);
+		return !"Mac OS X".equals(lafName); //$NON-NLS-1$
 	}
 }

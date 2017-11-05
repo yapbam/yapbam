@@ -546,7 +546,7 @@ public class StatementViewPanel extends JPanel {
 	}
 	private JButton getBtnRename() {
 		if (btnRename == null) {
-			btnRename = new JButton(LocalizationData.get("StatementDialog.button.name"));
+			btnRename = new JButton(LocalizationData.get("StatementDialog.button.name")); //$NON-NLS-1$
 			btnRename.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					GlobalData gData = data.getGlobalData();
@@ -558,9 +558,9 @@ public class StatementViewPanel extends JPanel {
 					if ((result!=null) && (!result.equals(current))) {
 						for (int i = 0; i < gData.getTransactionsNumber(); i++) {
 							if (result.equals(gData.getTransaction(i).getStatement())) {
-								String message = Formatter.format(LocalizationData.get("StatementDialog.existing.message"), result, current);
+								String message = Formatter.format(LocalizationData.get("StatementDialog.existing.message"), result, current); //$NON-NLS-1$
 								int choice = JOptionPane.showConfirmDialog(owner, message,
-										LocalizationData.get("StatementDialog.existing.title"),  JOptionPane.OK_CANCEL_OPTION,  JOptionPane.WARNING_MESSAGE);
+										LocalizationData.get("StatementDialog.existing.title"),  JOptionPane.OK_CANCEL_OPTION,  JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
 								if (choice==2) {
 									return;
 								}
@@ -586,7 +586,7 @@ public class StatementViewPanel extends JPanel {
 					}
 				}
 			});
-			btnRename.setToolTipText(LocalizationData.get("StatementDialog.button.tooltip"));
+			btnRename.setToolTipText(LocalizationData.get("StatementDialog.button.tooltip")); //$NON-NLS-1$
 		}
 		return btnRename;
 	}

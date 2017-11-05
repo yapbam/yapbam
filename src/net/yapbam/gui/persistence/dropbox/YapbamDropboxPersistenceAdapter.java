@@ -13,6 +13,6 @@ public class YapbamDropboxPersistenceAdapter extends DropboxPersistenceAdapter {
 	}
 	
 	private static File getCacheFolder() {
-		return new File(Portable.getDataDirectory(), "cache");
+		return new File(Portable.getDataDirectory(), "cache"); //$NON-NLS-1$
 	}
 }

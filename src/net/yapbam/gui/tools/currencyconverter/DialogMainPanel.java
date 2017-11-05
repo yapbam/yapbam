@@ -56,9 +56,9 @@ import javax.swing.SwingConstants;
 
 public class DialogMainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final String KEY_ROOT = "net.yapbam.gui.tools.currencyconverter.";
-	private static final String CURRENCY1_KEY = KEY_ROOT+"currency1";
-	private static final String CURRENCY2_KEY = KEY_ROOT+"currency2";
+	private static final String KEY_ROOT = "net.yapbam.gui.tools.currencyconverter."; //$NON-NLS-1$
+	private static final String CURRENCY1_KEY = KEY_ROOT+"currency1"; //$NON-NLS-1$
+	private static final String CURRENCY2_KEY = KEY_ROOT+"currency2"; //$NON-NLS-1$
 	
 	private ComboBox currency1 = null;
 	private ComboBox currency2 = null;

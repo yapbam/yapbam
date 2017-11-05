@@ -172,7 +172,7 @@ public class Preferences {
 	}
 
 	private static java.util.prefs.Preferences getJavaPref() {
-		return java.util.prefs.Preferences.userRoot().node("net.yapbam.prefs");
+		return java.util.prefs.Preferences.userRoot().node("net.yapbam.prefs"); //$NON-NLS-1$
 	}
 
 	/** Gets the preferred locale
@@ -557,7 +557,7 @@ public class Preferences {
 	
 	public EditingSettings getEditionSettings() {
 		if (editingOptions==null) {
-			String defaultPattern = "yyyyMM";
+			String defaultPattern = "yyyyMM"; //$NON-NLS-1$
 			String pattern = this.properties.getProperty(PREF_PREFIX+AUTO_STATEMENT_FORMAT, defaultPattern);
 			SimpleDateFormat format = new SimpleDateFormat(defaultPattern);
 			try {

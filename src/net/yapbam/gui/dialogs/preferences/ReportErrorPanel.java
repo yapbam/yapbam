@@ -37,7 +37,7 @@ public class ReportErrorPanel extends PreferencePanel {
 		gbcLabel1.gridy = 0;
 		add(label1, gbcLabel1);
 		
-		JLabel label = new JLabel(LocalizationData.get("ErrorManager.preferences.introduction"));
+		JLabel label = new JLabel(LocalizationData.get("ErrorManager.preferences.introduction")); //$NON-NLS-1$
 		GridBagConstraints gbcLabel = new GridBagConstraints();
 		gbcLabel.fill = GridBagConstraints.BOTH;
 		gbcLabel.insets = new Insets(0, 0, 5, 5);
@@ -47,8 +47,8 @@ public class ReportErrorPanel extends PreferencePanel {
 		
 		ButtonGroup group = new ButtonGroup();
 		
-		yes = new JRadioButton(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking"));
-		yes.setToolTipText(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking.tooltip"));
+		yes = new JRadioButton(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking")); //$NON-NLS-1$
+		yes.setToolTipText(LocalizationData.get("ErrorManager.preferences.sendWithoutAsking.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbcYes = new GridBagConstraints();
 		gbcYes.weightx = 1.0;
 		gbcYes.fill = GridBagConstraints.HORIZONTAL;
@@ -60,8 +60,8 @@ public class ReportErrorPanel extends PreferencePanel {
 		add(yes, gbcYes);
 		group.add(yes);
 		
-		no = new JRadioButton(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking"));
-		no.setToolTipText(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking.tooltip"));
+		no = new JRadioButton(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking")); //$NON-NLS-1$
+		no.setToolTipText(LocalizationData.get("ErrorManager.preferences.neverSendNorAsking.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbcNo = new GridBagConstraints();
 		gbcNo.fill = GridBagConstraints.HORIZONTAL;
 		gbcNo.gridwidth = 2;
@@ -72,9 +72,9 @@ public class ReportErrorPanel extends PreferencePanel {
 		add(no, gbcNo);
 		group.add(no);
 		
-		JRadioButton ask = new JRadioButton(LocalizationData.get("ErrorManager.preferences.alwaysAsk"));
+		JRadioButton ask = new JRadioButton(LocalizationData.get("ErrorManager.preferences.alwaysAsk")); //$NON-NLS-1$
 		ask.setVerticalAlignment(SwingConstants.TOP);
-		ask.setToolTipText(LocalizationData.get("ErrorManager.preferences.alwaysAsk.tooltip"));
+		ask.setToolTipText(LocalizationData.get("ErrorManager.preferences.alwaysAsk.tooltip")); //$NON-NLS-1$
 		GridBagConstraints gbcAsk = new GridBagConstraints();
 		gbcAsk.weighty = 1.0;
 		gbcAsk.fill = GridBagConstraints.BOTH;
@@ -98,12 +98,12 @@ public class ReportErrorPanel extends PreferencePanel {
 
 	@Override
 	public String getTitle() {
-		return LocalizationData.get("ErrorManager.preferences.title");
+		return LocalizationData.get("ErrorManager.preferences.title"); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getToolTip() {
-		return LocalizationData.get("ErrorManager.preferences.tooltip");
+		return LocalizationData.get("ErrorManager.preferences.tooltip"); //$NON-NLS-1$
 	}
 
 	@Override

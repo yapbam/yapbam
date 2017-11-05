@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.net.Proxy;
 
 public class AdminServerView extends UserServerView {
-	private static final String CREATE_USER_COMMAND = "CREATE_USER";
-	private static final String CREATE_ACCOUNT_COMMAND = "CREATE_ACCOUNT";
+	private static final String CREATE_USER_COMMAND = "CREATE_USER"; //$NON-NLS-1$
+	private static final String CREATE_ACCOUNT_COMMAND = "CREATE_ACCOUNT"; //$NON-NLS-1$
 	
 	private static final int INVALID_ADMIN_ACCOUNT = 8;
 	private static final int USER_EXISTS = 2;

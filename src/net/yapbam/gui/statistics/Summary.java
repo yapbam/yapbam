@@ -34,6 +34,6 @@ class Summary {
 
 	@Override
 	public String toString() {
-		return "{"+LocalizationData.getCurrencyInstance().format(this.receipts)+":"+LocalizationData.getCurrencyInstance().format(this.debts)+"}";
+		return "{"+LocalizationData.getCurrencyInstance().format(this.receipts)+":"+LocalizationData.getCurrencyInstance().format(this.debts)+"}"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 }

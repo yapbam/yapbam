@@ -58,7 +58,7 @@ class BarChartPanel extends ChartPanel {
 		while (it.hasNext()) {
 			Category category = (Category) it.next();
 			Summary summary = categoryToAmount.get(category);
-			String title = category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName();
+			String title = category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName(); //$NON-NLS-1$
 			if (netValues) {
 				double balance = summary.getReceipts()+summary.getDebts();
 				if (GlobalData.AMOUNT_COMPARATOR.compare(balance, 0.0)!=0) {

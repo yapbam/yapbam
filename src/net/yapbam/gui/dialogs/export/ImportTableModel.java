@@ -59,18 +59,18 @@ public class ImportTableModel extends AbstractTableModel {
 			return linked[rowIndex] && (to[rowIndex]>=0);
 		} else {
 			int index = this.to[rowIndex];
-			return (index==-1) || !linked[rowIndex]?"-":(fields.length>index?fields[index]:"");
+			return (index==-1) || !linked[rowIndex]?"-":(fields.length>index?fields[index]:""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	@Override
 	public String getColumnName(int column) {
 		if (column==0) {
-			return LocalizationData.get("ImportDialog.YapbamFields");
+			return LocalizationData.get("ImportDialog.YapbamFields"); //$NON-NLS-1$
 		} else if (column==1) {
-			return LocalizationData.get("ImportDialog.linkedTo");
+			return LocalizationData.get("ImportDialog.linkedTo"); //$NON-NLS-1$
 		} else {
-			return LocalizationData.get("ImportDialog.importedFields");
+			return LocalizationData.get("ImportDialog.importedFields"); //$NON-NLS-1$
 		}
 	}
 

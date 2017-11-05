@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.net.Proxy;
 
 public class UserServerView extends AbstractServerView {
-	private static final String POST_DATA_COMMAND = "POST_DATA";
-	private static final String GET_DATA_COMMAND = "GET_DATA";
+	private static final String POST_DATA_COMMAND = "POST_DATA"; //$NON-NLS-1$
+	private static final String GET_DATA_COMMAND = "GET_DATA"; //$NON-NLS-1$
 
 	private static final int UNEXPEXTED_ERROR = -1;
 	private static final int UNKNOWN_COMMAND = 1;
@@ -23,7 +23,7 @@ public class UserServerView extends AbstractServerView {
 	@Override
 	protected void codeToException(int errCode) {
 		if ((errCode==UNEXPEXTED_ERROR) || (errCode==UNKNOWN_COMMAND)) {
-			throw new RuntimeException("server error "+errCode);
+			throw new RuntimeException("server error "+errCode); //$NON-NLS-1$
 		} else if (errCode==UNKNOWN_USER) {
 			throw new UnknownUserException();
 		} else if (errCode==INVALID_PASSWORD) {

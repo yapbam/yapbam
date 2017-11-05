@@ -59,6 +59,6 @@ public class HelpManager {
 	 * @param uri The URI of the document to display.
 	 */
 	public static void show(Component parent, URI uri) {
-		Browser.show(uri, parent, LocalizationData.get("HelpManager.errorDialog.title"));
+		Browser.show(uri, parent, LocalizationData.get("HelpManager.errorDialog.title")); //$NON-NLS-1$
 	}
 }

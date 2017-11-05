@@ -190,7 +190,7 @@ public class TransactionEditingPanel extends PreferencePanel {
 		chckbxAutoFillStatement.addItemListener(itemListener);
 		
 		JPanel panelFormat = new JPanel();
-		panelFormat.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("TransactionEditingPreferencesPanel.format.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+		panelFormat.setBorder(BorderFactory.createTitledBorder(null, LocalizationData.get("TransactionEditingPreferencesPanel.format.title"), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION)); //$NON-NLS-1$
 		GridBagConstraints gbcPanelFormat = new GridBagConstraints();
 		gbcPanelFormat.anchor = GridBagConstraints.NORTHWEST;
 		gbcPanelFormat.weightx = 1.0;

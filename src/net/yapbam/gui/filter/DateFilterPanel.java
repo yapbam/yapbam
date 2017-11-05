@@ -18,22 +18,22 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.AutoSelectFocusListener;
 
 public class DateFilterPanel extends ConsistencyCheckedPanel {
-	public static final Wordings TRANSACTION_DATE = new Wordings(LocalizationData.get("Transaction.date"),
-			LocalizationData.get("CustomFilterPanel.date.all"), LocalizationData.get("CustomFilterPanel.date.all.toolTip"),
-			LocalizationData.get("CustomFilterPanel.date.equals"), LocalizationData.get("CustomFilterPanel.date.equals.toolTip"),
-			LocalizationData.get("CustomFilterPanel.date.between"), LocalizationData.get("CustomFilterPanel.date.between.toolTip"),
-			LocalizationData.get("CustomFilterPanel.date.from.toolTip"), LocalizationData.get("CustomFilterPanel.date.to.toolTip"),
-			LocalizationData.get("CustomFilterPanel.date.to"),
-			LocalizationData.get("CustomFilterPanel.error.dateFrom"), LocalizationData.get("CustomFilterPanel.error.date.to"),
-			LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo"));
-	public static final Wordings VALUE_DATE = new Wordings(LocalizationData.get("Transaction.valueDate"),
-			LocalizationData.get("CustomFilterPanel.valueDate.all"), LocalizationData.get("CustomFilterPanel.valueDate.all.toolTip"),
-			LocalizationData.get("CustomFilterPanel.valueDate.equals"), LocalizationData.get("CustomFilterPanel.valueDate.equals.toolTip"),
-			LocalizationData.get("CustomFilterPanel.valueDate.between"), LocalizationData.get("CustomFilterPanel.valueDate.between.toolTip"),
-			LocalizationData.get("CustomFilterPanel.valueDate.from.toolTip"), LocalizationData.get("CustomFilterPanel.valueDate.to.toolTip"),
-			LocalizationData.get("CustomFilterPanel.valueDate.to"),
-			LocalizationData.get("CustomFilterPanel.error.valueDateFrom"), LocalizationData.get("CustomFilterPanel.error.valueDateTo"),
-			LocalizationData.get("CustomFilterPanel.error.valueDateFromHigherThanTo"));
+	public static final Wordings TRANSACTION_DATE = new Wordings(LocalizationData.get("Transaction.date"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.date.all"), LocalizationData.get("CustomFilterPanel.date.all.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.date.equals"), LocalizationData.get("CustomFilterPanel.date.equals.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.date.between"), LocalizationData.get("CustomFilterPanel.date.between.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.date.from.toolTip"), LocalizationData.get("CustomFilterPanel.date.to.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.date.to"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.error.dateFrom"), LocalizationData.get("CustomFilterPanel.error.date.to"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.error.dateFromHigherThanTo")); //$NON-NLS-1$
+	public static final Wordings VALUE_DATE = new Wordings(LocalizationData.get("Transaction.valueDate"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.valueDate.all"), LocalizationData.get("CustomFilterPanel.valueDate.all.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.valueDate.equals"), LocalizationData.get("CustomFilterPanel.valueDate.equals.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.valueDate.between"), LocalizationData.get("CustomFilterPanel.valueDate.between.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.valueDate.from.toolTip"), LocalizationData.get("CustomFilterPanel.valueDate.to.toolTip"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.valueDate.to"), //$NON-NLS-1$
+			LocalizationData.get("CustomFilterPanel.error.valueDateFrom"), LocalizationData.get("CustomFilterPanel.error.valueDateTo"), //$NON-NLS-1$ //$NON-NLS-2$
+			LocalizationData.get("CustomFilterPanel.error.valueDateFromHigherThanTo")); //$NON-NLS-1$
 	
 	private static final long serialVersionUID = 1L;
 	private JRadioButton dateAll;
@@ -137,10 +137,10 @@ public class DateFilterPanel extends ConsistencyCheckedPanel {
 			dateAll.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (dateAll.isSelected()) {
-						getDateFromField().setEnabled(false);
 						getDateFromField().setDate(null);
-						getDateToField().setEnabled(false);
+						getDateFromField().setEnabled(false);
 						getDateToField().setDate(null);
+						getDateToField().setEnabled(false);
 					}
 				}
 			});

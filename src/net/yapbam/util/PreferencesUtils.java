@@ -23,10 +23,10 @@ public final class PreferencesUtils {
 	 */
 	public static void verifyPreferencesCompliance(String key, String value) {
 		if (key.length()>java.util.prefs.Preferences.MAX_KEY_LENGTH) {
-			throw new IllegalArgumentException("Key is to long: "+key);
+			throw new IllegalArgumentException("Key is to long: "+key); //$NON-NLS-1$
 		}
 		if (value.length()>java.util.prefs.Preferences.MAX_VALUE_LENGTH) {
-			throw new IllegalArgumentException("Value is to long: "+value);
+			throw new IllegalArgumentException("Value is to long: "+value); //$NON-NLS-1$
 		}
 	}
 

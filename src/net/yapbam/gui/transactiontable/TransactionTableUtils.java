@@ -9,7 +9,7 @@ public abstract class TransactionTableUtils {
 	private static final TransactionUtils UTILS = new TransactionUtils(new WordingProvider() {
 		@Override
 		public String getComplementWording() {
-			return LocalizationData.get("Transaction.14");
+			return LocalizationData.get("Transaction.14"); //$NON-NLS-1$
 		}
 	});
 	
