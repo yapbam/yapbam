@@ -1,4 +1,4 @@
-package net.yapbam.gui.administration;
+package net.yapbam.gui.administration.filter;
 
 import java.awt.event.ActionEvent;
 

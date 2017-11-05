@@ -7,6 +7,7 @@ import javax.swing.event.ChangeListener;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.administration.filter.FilterListPanel;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.gui.widget.PanelWithOverlay;
 
