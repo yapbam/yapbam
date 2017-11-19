@@ -1,3 +1,6 @@
+Trier les filtres prédéfinis par leur nom dans le menu.
+Traductions des libellés autour des filtres prédéfinis.
+
 Bug :
 	Sélectionner une date incorrecte dans l'édition du Filtre puis sélectionner "toutes les dates" laisse le bouton "Ok" désactivé.
 	Diminuer le nombre de plugins avec onglet fait planter la restauration.

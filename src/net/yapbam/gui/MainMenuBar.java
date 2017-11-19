@@ -38,6 +38,9 @@ import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
+import net.yapbam.data.event.FilterPropertyChangedEvent;
+import net.yapbam.data.event.FiltersAddedEvent;
+import net.yapbam.data.event.FiltersRemovedEvent;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.actions.*;
 import net.yapbam.gui.dialogs.AboutDialog;
@@ -48,6 +51,7 @@ import net.yapbam.gui.dialogs.export.ImportDialog;
 import net.yapbam.gui.dialogs.export.ImportError;
 import net.yapbam.gui.dialogs.export.ImportErrorDialog;
 import net.yapbam.gui.dialogs.export.Importer;
+import net.yapbam.gui.filter.UserDefinedFilterAction;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
@@ -258,8 +262,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					// If an account is added, the filter menu refresh is perform by the
 					// global data listener
 					// It's because this listener will not receive new account events if
-					// not all accounts are
-					// valid for the filter.
+					// not all accounts are valid for the filter.
 					updateFilterMenu();
 				}
 			}
@@ -439,8 +442,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			menuItemSaveAs.setEnabled(somethingToSave);
 			menuItemProtect.setEnabled(somethingToSave || (data.getURI() != null));
 			menuItemExport.setEnabled(data.getAccountsNumber()!=0);
-			if ((event instanceof AccountAddedEvent) || (event instanceof AccountRemovedEvent) ||
-					((event instanceof AccountPropertyChangedEvent) && (((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME)))) {
+			boolean accountEvent = event instanceof AccountAddedEvent || event instanceof AccountRemovedEvent ||
+					(event instanceof AccountPropertyChangedEvent && ((AccountPropertyChangedEvent)event).getProperty().equals(AccountPropertyChangedEvent.NAME));
+			boolean filterEvent = (event instanceof FiltersAddedEvent || event instanceof FiltersRemovedEvent || event instanceof FilterPropertyChangedEvent);
+			if (accountEvent || filterEvent) {
 				updateFilterMenu();
 			}
 		}
@@ -468,6 +473,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			filterMenu.add(eraseItem);
 			filterMenu.addSeparator();
 			GlobalData data = this.frame.getData();
+			buildUserDefinedFiltersMenu(data);
 			ActionListener listener = new AccountFilterActionListener();
 			List<Account> filterAccounts = frame.getFilteredData().getFilter().getValidAccounts();
 			boolean hasAccountFilter = filterAccounts!=null;
@@ -505,11 +511,23 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					new String[] {
 							LocalizationData.get("MainMenuBar.Expenses.toolTip"), LocalizationData.get("MainMenuBar.Receipts.toolTip") }, //$NON-NLS-1$ //$NON-NLS-2$
 					LocalizationData.get("MainMenuBar.NoAmountFilter.toolTip")); //$NON-NLS-1$
-//			buildExpenseReceiptFilterChoiceMenu();
-			menuScroller = new MenuScroller(filterMenu, 16, 150, 3, 9, false);
+			menuScroller = new MenuScroller(filterMenu, 16, 150, data.getFiltersNumber()>0?5:3, 9, false);
 		}
 	}
 	
+	private void buildUserDefinedFiltersMenu(final GlobalData data) {
+		if (data.getFiltersNumber()>0) {
+			JMenu menu = new JMenu("PredefinedFilters.menu.title");
+			menu.setToolTipText("PredefinedFilters.menu");
+			//TODO Sort filters by their names.
+			for (int i=0;i<data.getFiltersNumber();i++) {
+				menu.add(new JMenuItem(new UserDefinedFilterAction(frame.getFilteredData(), i)));
+			}
+			filterMenu.add(menu);
+			filterMenu.addSeparator();
+		}
+	}
+
 	/** Gets a filter complexity.
 	 * @param filter The filter to test
 	 * @return true if the filtered could not be obtained by the filter menu (other than customized one).
