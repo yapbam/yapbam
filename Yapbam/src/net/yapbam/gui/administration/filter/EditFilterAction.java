@@ -21,7 +21,7 @@ public class EditFilterAction extends AbstractAction {
 	
 	public EditFilterAction(FilterListPanel panel) {
 		super(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT_TRANSACTION)); //$NON-NLS-1$
-		putValue(SHORT_DESCRIPTION, "Edits the selected filter");
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("FilterManager.edit.tooltip")); //$NON-NLS-1$
     this.panel = panel;
 	}
 	

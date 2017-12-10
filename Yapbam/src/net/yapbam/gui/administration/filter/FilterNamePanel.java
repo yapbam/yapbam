@@ -2,6 +2,7 @@ package net.yapbam.gui.administration.filter;
 
 import javax.swing.JPanel;
 
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.filter.CustomFilterPanel;
 import javax.swing.JLabel;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
@@ -19,7 +20,7 @@ public class FilterNamePanel extends JPanel {
 
 	public FilterNamePanel(CustomFilterPanel filterPanel) {
 		this.filterPanel = filterPanel;
-		add(new JLabel("Name:"));
+		add(new JLabel(LocalizationData.get("FilterManager.nameField.label"))); //$NON-NLS-1$
 		add(getNameField());
 	}
 

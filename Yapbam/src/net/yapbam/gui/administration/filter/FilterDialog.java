@@ -10,6 +10,7 @@ import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 import net.yapbam.data.Filter;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.CustomFilterDialog;
 
 public class FilterDialog extends CustomFilterDialog {
@@ -47,9 +48,9 @@ public class FilterDialog extends CustomFilterDialog {
 			String oldName = data.getFilter().getName();
 			String name = namePanel.getNameField().getText();
 			if (name.isEmpty()) {
-				cause = "This button is disabled because you haven't entered a name for this filter";
+				cause = LocalizationData.get("CustomFilterPanel.error.filterNameIsMissing"); //$NON-NLS-1$
 			} else if (!name.equals(oldName) && data.getGlobalData().getFilter(name)!=null) {
-				cause = Formatter.format("This button is disabled because there's already a filter named {0}",name);
+				cause = Formatter.format(LocalizationData.get("CustomFilterPanel.error.filterNameExists"),name); //$NON-NLS-1$
 			}
 		}
 		return cause;

@@ -22,7 +22,7 @@ public class DuplicateFilterAction extends AbstractAction {
 	
 	public DuplicateFilterAction(FilterListPanel panel) {
 		super(LocalizationData.get("GenericButton.duplicate"), IconManager.get(Name.DUPLICATE_TRANSACTION)); //$NON-NLS-1$
-		putValue(SHORT_DESCRIPTION, "Duplicates the selected filter");
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("FilterManager.duplicates.tooltip")); //$NON-NLS-1$
     this.panel = panel;
 	}
 	
@@ -53,17 +53,17 @@ public class DuplicateFilterAction extends AbstractAction {
 	}
 
 	private String getCopyName(GlobalData data, String name) {
-		String candidate = Formatter.format("{0} - copy", name);
+		String candidate = Formatter.format("{0} - copy", name); //$NON-NLS-1$
 		if (data.getFilter(candidate)==null) {
 			return candidate;
 		}
 		name = candidate;
 		for (long i=1; i<Long.MAX_VALUE; i++) {
-			candidate = name + " - "+i;
+			candidate = name + " - "+i; //$NON-NLS-1$
 			if (data.getFilter(candidate)==null) {
 				return candidate;
 			}
 		}
-		throw new IllegalArgumentException("Unable to find an available copy name");
+		throw new IllegalArgumentException("Unable to find an available copy name"); //$NON-NLS-1$
 	}
 }
