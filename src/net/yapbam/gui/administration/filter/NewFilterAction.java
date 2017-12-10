@@ -21,7 +21,7 @@ public class NewFilterAction extends AbstractAction {
 	
 	public NewFilterAction(GlobalData data) {
 		super(LocalizationData.get("GenericButton.new"), IconManager.get(Name.NEW_TRANSACTION)); //$NON-NLS-1$
-		putValue(SHORT_DESCRIPTION, "Create a new pre-defined filter");
+		putValue(SHORT_DESCRIPTION, LocalizationData.get("FilterManager.new.tooltip")); //$NON-NLS-1$
 		this.data = data;
 	}
 	

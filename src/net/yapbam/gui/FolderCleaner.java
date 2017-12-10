@@ -53,7 +53,7 @@ class FolderCleaner {
 		for (String filePath : paths) {
 			String[] checksums = CheckSum.getCheckSums(folders, filePath);
 			if (checksums.length>0) {
-				System.out.print (URLEncoder.encode(filePath)+"=");
+				System.out.print (URLEncoder.encode(filePath)+"="); //$NON-NLS-1$
 				for (int i = 0; i < checksums.length; i++) {
 					if (i!=0) {
 						System.out.print(',');
@@ -74,21 +74,21 @@ class FolderCleaner {
 		try {
 			Collection<CleaningJob> jobs = new ArrayList<FolderCleaner.CleaningJob>();
 			// Files we need to remove are stored in a resource bundle file
-			ResourceBundle checksumsMap = ResourceBundle.getBundle(FolderCleaner.class.getPackage().getName()+".obsoleteFilesChecksums");
+			ResourceBundle checksumsMap = ResourceBundle.getBundle(FolderCleaner.class.getPackage().getName()+".obsoleteFilesChecksums"); //$NON-NLS-1$
 			for (String path : checksumsMap.keySet()) { // For every obsolete files
-				jobs.add(new CleaningJob(new File(installationFolder, URLDecoder.decode(path)), checksumsMap.getString(path).split(","), null));
+				jobs.add(new CleaningJob(new File(installationFolder, URLDecoder.decode(path)), checksumsMap.getString(path).split(","), null)); //$NON-NLS-1$
 			}
 			// Files we need to move ... are defined ... nowhere but below
-			jobs.add(new CleaningJob(new File(installationFolder,".yapbam"), new String[0], new File(Portable.getDataDirectory(),".yapbam")));
-			jobs.add(new CleaningJob(new File(installationFolder,".yapbampref"), new String[0], new File(Portable.getDataDirectory(),".yapbampref")));
+			jobs.add(new CleaningJob(new File(installationFolder,".yapbam"), new String[0], new File(Portable.getDataDirectory(),".yapbam"))); //$NON-NLS-1$ //$NON-NLS-2$
+			jobs.add(new CleaningJob(new File(installationFolder,".yapbampref"), new String[0], new File(Portable.getDataDirectory(),".yapbampref"))); //$NON-NLS-1$ //$NON-NLS-2$
 			for (CleaningJob job : jobs) {
 				job.clean();
 			}
 			// It remains that damned help directory
-			new File(installationFolder,"help/fr").delete();
-			new File(installationFolder,"help").delete();
+			new File(installationFolder,"help/fr").delete(); //$NON-NLS-1$
+			new File(installationFolder,"help").delete(); //$NON-NLS-1$
 			// ... and, maybe sample file directory
-			new File(installationFolder,"Other/samples").delete();
+			new File(installationFolder,"Other/samples").delete(); //$NON-NLS-1$
 		} catch (Throwable e) {
 			// This method must never fail.
 			// If there's a problem, forget cleaning ... it's not so important.

@@ -104,7 +104,7 @@ public class ErrorPanel extends JPanel {
 	}
 
 	private boolean hasExtendedMessage() {
-		return "fr".equals(LocalizationData.getLocale().getLanguage());
+		return "fr".equals(LocalizationData.getLocale().getLanguage()); //$NON-NLS-1$
 	}
 
 	public boolean isDontAskMeSelected() {

@@ -22,12 +22,12 @@ public class FilterListPanel extends AbstractListAdministrationPanel<GlobalData>
 	}
 	@Override
 	public String getPanelToolTip() {
-		return "FilterAdminstration.toolTip"; //TODO
+		return LocalizationData.get("FilterManager.tab.name"); //TODO //$NON-NLS-1$
 	}
 
 	@Override
 	public String getPanelTitle() {
-		return "Filters"; //LocalizationData.get("FilterAdminstration.title"); //TODO
+		return LocalizationData.get("FilterManager.tab.tooltip"); //LocalizationData.get("FilterAdminstration.title"); //TODO //$NON-NLS-1$
 	}
 
 	@Override

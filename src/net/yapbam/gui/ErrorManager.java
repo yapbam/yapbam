@@ -32,7 +32,7 @@ public class ErrorManager {
 
 	/** The instance of this class.*/
 	public static final ErrorManager INSTANCE = new ErrorManager();
-	private static final String ENC = "UTF-8";
+	private static final String ENC = "UTF-8"; //$NON-NLS-1$
 
 	private BlockingDeque<Message> errorsQueue;
 	private Set<String> encounteredErrors;
@@ -40,7 +40,7 @@ public class ErrorManager {
 	private ErrorManager() {
 		this.encounteredErrors = new HashSet<String>();
 		this.errorsQueue = new LinkedBlockingDeque<Message>();
-		final Thread thread = new Thread(new LogSender(), "LogSender");
+		final Thread thread = new Thread(new LogSender(), "LogSender"); //$NON-NLS-1$
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -106,10 +106,10 @@ public class ErrorManager {
 			if (action==1) {
 				errorsQueue.add(new Message(t));
 			} else {
-				LOGGER.error("Exception catched", t);
+				LOGGER.error("Exception catched", t); //$NON-NLS-1$
 			}
 		} catch (Throwable e) {
-			LOGGER.error("Error while logging exception", e);
+			LOGGER.error("Error while logging exception", e); //$NON-NLS-1$
 			// Ok ... the logging process failed.
 			// At this point, there's nothing to do.
 		}
@@ -154,7 +154,7 @@ public class ErrorManager {
 		}
 		
 		private void addToBuffer(StringBuilder buffer, String variable, String value) throws UnsupportedEncodingException {
-			buffer.append("&").append(URLEncoder.encode(variable, ENC)).append("=").append(URLEncoder.encode(value, ENC));
+			buffer.append("&").append(URLEncoder.encode(variable, ENC)).append("=").append(URLEncoder.encode(value, ENC)); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		private void postToYapbam(Message message) throws IOException {
@@ -163,17 +163,17 @@ public class ErrorManager {
 			message.error.printStackTrace(new PrintWriter(writer));
 			String trace = writer.getBuffer().toString();
 			StringBuilder data = new StringBuilder();
-			data.append(URLEncoder.encode("error", ENC)).append("=").append(URLEncoder.encode(trace, ENC));
-			addToBuffer(data, "country", message.country);
-			addToBuffer(data, "javaVendor", message.javaVendor);
-			addToBuffer(data, "javaVersion", message.javaVersion);
-			addToBuffer(data, "lang", message.lang);
-			addToBuffer(data, "osName", message.osName);
-			addToBuffer(data, "osVersion", message.osVersion);
-			addToBuffer(data, "version", message.version);
+			data.append(URLEncoder.encode("error", ENC)).append("=").append(URLEncoder.encode(trace, ENC)); //$NON-NLS-1$ //$NON-NLS-2$
+			addToBuffer(data, "country", message.country); //$NON-NLS-1$
+			addToBuffer(data, "javaVendor", message.javaVendor); //$NON-NLS-1$
+			addToBuffer(data, "javaVersion", message.javaVersion); //$NON-NLS-1$
+			addToBuffer(data, "lang", message.lang); //$NON-NLS-1$
+			addToBuffer(data, "osName", message.osName); //$NON-NLS-1$
+			addToBuffer(data, "osVersion", message.osVersion); //$NON-NLS-1$
+			addToBuffer(data, "version", message.version); //$NON-NLS-1$
 			
 			// Send data
-			URL url = new URL("https://www.yapbam.net/crashReport.php");
+			URL url = new URL("https://www.yapbam.net/crashReport.php"); //$NON-NLS-1$
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection(Preferences.INSTANCE.getHttpProxy());
 			conn.setDoOutput(true);
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), ENC);
@@ -211,15 +211,10 @@ public class ErrorManager {
 			this.version = ApplicationContext.getVersion().toString();
 			this.country = LocalizationData.getLocale().getCountry();
 			this.lang = LocalizationData.getLocale().getLanguage();
-			this.osName = System.getProperty("os.name", "?");
-			this.osVersion = System.getProperty("os.version", "?");
-			this.javaVendor = System.getProperty("java.vendor", "?");
-			this.javaVersion = System.getProperty("java.version", "?");
+			this.osName = System.getProperty("os.name", "?"); //$NON-NLS-1$ //$NON-NLS-2$
+			this.osVersion = System.getProperty("os.version", "?"); //$NON-NLS-1$ //$NON-NLS-2$
+			this.javaVendor = System.getProperty("java.vendor", "?"); //$NON-NLS-1$ //$NON-NLS-2$
+			this.javaVersion = System.getProperty("java.version", "?"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-	}
-	
-	public static void main (String[] args) {
-		INSTANCE.log(null, new RuntimeException("just a test")); //TODO
-		INSTANCE.log(null, new RuntimeException("just a second test")); //TODO
 	}
 }

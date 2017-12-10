@@ -517,8 +517,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	
 	private void buildUserDefinedFiltersMenu(final GlobalData data) {
 		if (data.getFiltersNumber()>0) {
-			JMenu menu = new JMenu("PredefinedFilters.menu.title");
-			menu.setToolTipText("PredefinedFilters.menu");
+			JMenu menu = new JMenu(LocalizationData.get("MainMenuBar.predefinedFilters.menu.title")); //$NON-NLS-1$
+			menu.setToolTipText(LocalizationData.get("MainMenuBar.predefinedFilters.menu.tooltip")); //$NON-NLS-1$
 			List<String> filterNames = new ArrayList<String>(data.getFiltersNumber());
 			for (int i=0;i<data.getFiltersNumber();i++) {
 				filterNames.add(data.getFilter(i).getName());

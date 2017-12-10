@@ -49,7 +49,7 @@ final class FiltersTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int columnIndex) {
 		if (columnIndex==0) {
-			return "Name"; //TODO
+			return LocalizationData.get("FilterManager.column.name.title"); //TODO //$NON-NLS-1$
 		} else {
 			return "?"; //$NON-NLS-1$
 		}

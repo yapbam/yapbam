@@ -8,6 +8,7 @@ import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.widget.TextWidget;
 
 import net.yapbam.data.Filter;
+import net.yapbam.gui.LocalizationData;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,10 +20,10 @@ import javax.swing.JButton;
 public class SavePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private static final String NAME_FIELD_TOOLTIP = "If you wish to save this filter for later use, enter a name here and click the {0} button.";
-	private static final String SAVE_BUTTON_NAME = "Save";
-	private static final String SAVE_BUTTON_ENABLED_TOOLTIP = "Click this button to save this filter";
-	private static final String SAVE_BUTTON_DISABLED_TOOLTIP = "This button is disabled because name is empty";
+	private static final String NAME_FIELD_TOOLTIP = LocalizationData.get("CustomFilterPanel.save.nameField.tooltip"); //$NON-NLS-1$
+	private static final String SAVE_BUTTON_NAME = LocalizationData.get("CustomFilterPanel.save.saveButton.title"); //$NON-NLS-1$
+	private static final String SAVE_BUTTON_ENABLED_TOOLTIP = LocalizationData.get("CustomFilterPanel.save.saveButton.tooltip"); //$NON-NLS-1$
+	private static final String SAVE_BUTTON_DISABLED_TOOLTIP = LocalizationData.get("CustomFilterPanel.save.saveButton.disabled.tooltip"); //$NON-NLS-1$
 	
 	private CustomFilterPanel filterPanel;
 	
@@ -39,7 +40,7 @@ public class SavePanel extends JPanel {
 	public SavePanel(CustomFilterPanel filterPanel) {
 		this.filterPanel = filterPanel;
 		
-		add(new JLabel("Save as"));
+		add(new JLabel(LocalizationData.get("CustomFilterPanel.error.filterNameField.title"))); //$NON-NLS-1$
 		add(getNameField());
 		add(getSaveBtn());
 	}
@@ -91,13 +92,15 @@ public class SavePanel extends JPanel {
 				editedFilter.setName(name);
 			} else {
 				// Ask the user if it wants to overwrite existing filter
-				JOptionPane.showConfirmDialog(this, "There's already a saved filter with this name. Do you want to overwrite it?");
+				if (JOptionPane.showConfirmDialog(this, LocalizationData.get("CustomFilterPanel.save.overwrite.question"), null, JOptionPane.YES_NO_OPTION)!=0) {//$NON-NLS-1$
+					return;
+				}
 			}
 			filterPanel.apply(editedFilter);
 			if (newOne) {
 				filterPanel.getData().add(editedFilter);
 			} else {
-				//TODO
+				filterPanel.getData().getFilter(name).copy(editedFilter);
 			}
 		}
 	}
