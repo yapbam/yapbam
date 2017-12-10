@@ -1,4 +1,3 @@
-Trier les filtres prédéfinis par leur nom dans le menu.
 Traductions des libellés autour des filtres prédéfinis.
 
 Bug :

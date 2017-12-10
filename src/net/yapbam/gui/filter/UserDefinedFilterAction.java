@@ -9,16 +9,16 @@ import net.yapbam.data.FilteredData;
 public final class UserDefinedFilterAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private FilteredData data;
-	private int index;
+	private String fileterName;
 
-	public UserDefinedFilterAction(FilteredData data, int i) {
-		super(data.getGlobalData().getFilter(i).getName());
+	public UserDefinedFilterAction(FilteredData data, String filterName) {
+		super(data.getGlobalData().getFilter(filterName).getName());
 		this.data = data;
-		this.index = i;
+		this.fileterName = filterName;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		data.getFilter().copy(data.getGlobalData().getFilter(index));
+		data.getFilter().copy(data.getGlobalData().getFilter(fileterName));
 	}
 }

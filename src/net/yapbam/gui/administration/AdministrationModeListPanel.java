@@ -3,7 +3,6 @@ package net.yapbam.gui.administration;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -78,10 +77,6 @@ class AdministrationModeListPanel extends AbstractListAdministrationPanel<Global
 		// Patch Nimbus bug (see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6723524)
 		table.setDefaultRenderer(Boolean.class, new NimbusPatchBooleanTableCellRenderer());
 		return table;
-	}
-	
-	public List<Mode> getModes() {
-		return (List<Mode>) this.data;
 	}
 
 	private final class ModeListTableModel extends AbstractModeListModel {
