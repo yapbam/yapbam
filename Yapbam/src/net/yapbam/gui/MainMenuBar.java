@@ -519,9 +519,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		if (data.getFiltersNumber()>0) {
 			JMenu menu = new JMenu("PredefinedFilters.menu.title");
 			menu.setToolTipText("PredefinedFilters.menu");
-			//TODO Sort filters by their names.
+			List<String> filterNames = new ArrayList<String>(data.getFiltersNumber());
 			for (int i=0;i<data.getFiltersNumber();i++) {
-				menu.add(new JMenuItem(new UserDefinedFilterAction(frame.getFilteredData(), i)));
+				filterNames.add(data.getFilter(i).getName());
+			}
+			Collections.sort(filterNames, String.CASE_INSENSITIVE_ORDER);
+			for (String name:filterNames) {
+				menu.add(new JMenuItem(new UserDefinedFilterAction(frame.getFilteredData(), name)));
 			}
 			filterMenu.add(menu);
 			filterMenu.addSeparator();

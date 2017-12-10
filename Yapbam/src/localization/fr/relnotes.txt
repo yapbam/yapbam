@@ -5,9 +5,10 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
-version	0.20.0 (??/11/2017)
+version	0.20.0 (10/12/2017)
 improvement
 	Ajoute la possibilité d'utiliser les dates de valeurs des opérations comme référence dans l'onglet "budget".
+	Ajoute la possibilité de sauvegarder des filtres personnalisés.
 fix
 	Sous Java 9, certains montants étaient détectés comme invalides (par exemple "50,00 &euro;" en France).
 
