@@ -5,6 +5,12 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
+version	0.20.2 (12/24/2017)
+improvement
+	Adds more translations into Spanish.
+fix
+	Fixes wrong end date in filter when filtering through "Budget-> Filter".
+
 version	0.20.1 (12/22/2017)
 improvement
 	Translation in Turkish almost complete. Adds partial translations into Spanish and Hungarian.
