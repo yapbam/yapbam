@@ -4,7 +4,6 @@ import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
-import net.yapbam.gui.LocalizationData;
 
 import org.junit.Rule;
 import org.junit.Test;
