@@ -115,7 +115,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 			this.fireTableRowsUpdated(rowIndex, rowIndex);
 		} else if (columnIndex==POSTPONED_INDEX) {
 			this.generator.setPostponed(rowIndex, !generator.isPostponed(rowIndex));
-			this.fireTableDataChanged();
+			this.fireTableRowsUpdated(rowIndex, rowIndex);
 		} else {
 			throw new IllegalArgumentException();
 		}

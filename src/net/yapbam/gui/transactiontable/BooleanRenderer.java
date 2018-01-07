@@ -27,7 +27,9 @@ public class BooleanRenderer extends JCheckBox implements TableCellRenderer {
 		this.setHorizontalAlignment(painter.getAlignment(table.convertColumnIndexToModel(column)));
 		row = table.convertRowIndexToModel(row);
 		painter.setRowLook(this, table, row, isSelected);
-		setSelected((Boolean) value);
+		if (value!=null) {
+			setSelected((Boolean) value);
+		}
 		return this;
 	}
 }
