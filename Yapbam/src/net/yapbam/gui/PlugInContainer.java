@@ -10,28 +10,29 @@ import java.util.jar.JarFile;
 import net.yapbam.data.FilteredData;
 
 public class PlugInContainer {
-//	private File location;
 	private Class<? extends AbstractPlugIn> plugin;
 	private boolean isActivated;
 	private Throwable e;
 	
 	PlugInContainer (File file) {
-//		this.location = file;
 		try {
 			JarFile jar = new JarFile(file);
-			Attributes attributes = jar.getManifest().getMainAttributes();
-			String className = attributes.getValue("Plugin-Class"); //$NON-NLS-1$
-			if (className!=null) {
-				this.plugin = (Class<AbstractPlugIn>) new URLClassLoader(new URL[]{file.toURI().toURL()}).loadClass(className);
+			try {
+				Attributes attributes = jar.getManifest().getMainAttributes();
+				String className = attributes.getValue("Plugin-Class"); //$NON-NLS-1$
+				if (className!=null) {
+					this.plugin = (Class<AbstractPlugIn>) new URLClassLoader(new URL[]{file.toURI().toURL()}).loadClass(className);
+				}
+				this.isActivated = true;
+			} finally {
+				jar.close();
 			}
-			this.isActivated = true;
 		} catch (Exception e) {
 			this.e = e;
 		}
 	}
 
 	PlugInContainer(Class<? extends AbstractPlugIn> plugin) {
-//		this.location = null;
 		this.plugin = plugin;
 		this.isActivated = true;
 	}
