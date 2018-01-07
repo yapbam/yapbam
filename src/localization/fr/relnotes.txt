@@ -5,6 +5,13 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.20.3 (07/01/2018)
+improvement
+	La traduction en espagnol est maintenant terminée.
+	Ajoute plus de traductions en polonais et certaines en arabe. 
+fix
+	Cliquer sur une cellule de la colonne "Reportée" dans le dialogue "Génération des opérations périodiques" ne sélectionnait pas la ligne. Sous Debian 9.3, il en résultait une erreur.
+
 version	0.20.2 (24/12/2017)
 improvement
 	Ajoute des traductions en espagnol.
