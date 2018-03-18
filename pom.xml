@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.20.4</version>
+	<version>0.20.5</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<mainClass>net.yapbam.gui.Launcher</mainClass>
@@ -12,11 +12,6 @@
 	<build>
 		<pluginManagement>
 		    <plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
-					<version>2.7.1</version>
-				</plugin>
 		        <plugin>
 		            <groupId>org.eclipse.m2e</groupId>
 		            <artifactId>lifecycle-mapping</artifactId>
@@ -254,7 +249,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
-			<version>1.8.4</version>
+			<version>1.8.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
