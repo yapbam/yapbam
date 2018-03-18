@@ -8,7 +8,6 @@ import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -30,7 +29,6 @@ import net.yapbam.gui.persistence.PersistenceManager;
 import net.yapbam.gui.persistence.UnsupportedSchemeException;
 import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
-import net.yapbam.gui.preferences.StartStateSettings;
 import net.yapbam.gui.welcome.WelcomeDialog;
 import net.yapbam.update.ReleaseInfo;
 import net.yapbam.util.ApplicationContext;
@@ -475,21 +473,15 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	}
 	
 	private void initData(String path) {
+		URI lastUri = Preferences.INSTANCE.getStartStateOptions().isRememberFile() && getStateSaver().contains(LAST_URI) ?
+			URI.create((String) getStateSaver().get(LAST_URI)) : null;
 		URI uri = null;
 		if (path!=null) {
 			// If a path was provided
 			uri = new File(path).toURI();
 		} else {
 			// Restore the data according to the Preferences
-			StartStateSettings startOptions = Preferences.INSTANCE.getStartStateOptions();
-			if (startOptions.isRememberFile() && getStateSaver().contains(LAST_URI)) {
-				try {
-					uri = new URI((String) getStateSaver().get(LAST_URI));
-				} catch (URISyntaxException e1) {
-					// The saved uri is invalidFormat
-					//TODO inform the user !!!
-				}
-			}
+			uri = lastUri;
 		}
 		final boolean restore = path == null;
 		if (uri!=null) {
@@ -530,7 +522,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 					return true;
 				}
 			});
-			if (restore && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
+			if (uri.equals(lastUri) && Preferences.INSTANCE.getStartStateOptions().isRememberFilter()) {
 				try {
 					Filter filter = getStateSaver().restoreFilter(LAST_FILTER_USED, getData());
 					if (filter!=null) {

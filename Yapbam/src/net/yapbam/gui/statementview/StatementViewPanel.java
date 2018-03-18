@@ -544,6 +544,35 @@ public class StatementViewPanel extends JPanel {
 	public boolean isCheckMode() {
 		return getCheckModeChkbx().isSelected();
 	}
+	
+	private boolean hasStatement(GlobalData gData, String accountName, String statement) {
+		for (int i = 0; i < gData.getTransactionsNumber(); i++) {
+			Transaction transaction = gData.getTransaction(i);
+			if (accountName.equals(transaction.getAccount().getName()) && statement.equals(transaction.getStatement())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void renameStatement(final GlobalData gData, final String accountName, final String newStatement, final String currentStatement) {
+		AbstractTransactionUpdater updater = new AbstractTransactionUpdater(gData) {
+			/* (non-Javadoc)
+			 * @see net.yapbam.data.AbstractTransactionUpdater#change(net.yapbam.data.Transaction)
+			 */
+			@Override
+			protected Transaction change(Transaction t) {
+				if (accountName.equals(t.getAccount().getName()) && currentStatement.equals(t.getStatement())) {
+					return new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getComment(), t.getAmount(),
+							t.getAccount(), t.getMode(), t.getCategory(), t.getValueDate(), newStatement, Arrays.asList(t.getSubTransactions()));
+				} else {
+					return null;
+				}
+			}
+		};
+		updater.doIt();
+	}
+	
 	private JButton getBtnRename() {
 		if (btnRename == null) {
 			btnRename = new JButton(LocalizationData.get("StatementDialog.button.name")); //$NON-NLS-1$
@@ -553,36 +582,20 @@ public class StatementViewPanel extends JPanel {
 					Window owner = Utils.getOwnerWindow(btnRename);
 					StatementRenameDialog dialog = new StatementRenameDialog(owner, gData);
 					dialog.setVisible(true);
-					final String result = dialog.getResult();
-					final String current = getStatementSelectionPanel().getSelectedStatement().getId();
-					if ((result!=null) && (!result.equals(current))) {
-						for (int i = 0; i < gData.getTransactionsNumber(); i++) {
-							if (result.equals(gData.getTransaction(i).getStatement())) {
-								String message = Formatter.format(LocalizationData.get("StatementDialog.existing.message"), result, current); //$NON-NLS-1$
-								int choice = JOptionPane.showConfirmDialog(owner, message,
-										LocalizationData.get("StatementDialog.existing.title"),  JOptionPane.OK_CANCEL_OPTION,  JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
-								if (choice==2) {
-									return;
-								}
-								break;
+					final String newStatement = dialog.getResult();
+					final String currentStatement = getStatementSelectionPanel().getSelectedStatement().getId();
+					if ((newStatement!=null) && (!newStatement.equals(currentStatement))) {
+						String accountName = statementSelectionPanel.getAccount().getName();
+						if (hasStatement(gData, accountName, newStatement)) {
+							String message = Formatter.format(LocalizationData.get("StatementDialog.existing.message"), newStatement, currentStatement); //$NON-NLS-1$
+							int choice = JOptionPane.showConfirmDialog(owner, message,
+									LocalizationData.get("StatementDialog.existing.title"),  JOptionPane.OK_CANCEL_OPTION,  JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+							if (choice==2) {
+								return;
 							}
 						}
-						AbstractTransactionUpdater updater = new AbstractTransactionUpdater(gData) {
-							/* (non-Javadoc)
-							 * @see net.yapbam.data.AbstractTransactionUpdater#change(net.yapbam.data.Transaction)
-							 */
-							@Override
-							protected Transaction change(Transaction t) {
-								if (current.equals(t.getStatement())) {
-									return new Transaction(t.getDate(), t.getNumber(), t.getDescription(), t.getComment(), t.getAmount(),
-											t.getAccount(), t.getMode(), t.getCategory(), t.getValueDate(), result, Arrays.asList(t.getSubTransactions()));
-								} else {
-									return null;
-								}
-							}
-						};
-						updater.doIt();
-						getStatementSelectionPanel().select(result);
+						renameStatement(gData, accountName, newStatement, currentStatement);
+						getStatementSelectionPanel().select(newStatement);
 					}
 				}
 			});
