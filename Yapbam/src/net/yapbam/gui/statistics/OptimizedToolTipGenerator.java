@@ -10,7 +10,7 @@ import com.fathzer.jlocal.Formatter;
 class OptimizedToolTipGenerator implements PieToolTipGenerator {
 	Double total = null;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public String generateToolTip(PieDataset dataset, Comparable key) {
 		if (total == null) {
@@ -21,7 +21,9 @@ class OptimizedToolTipGenerator implements PieToolTipGenerator {
 		}
 		Double amount = (Double) dataset.getValue(key);
 		String amountString = LocalizationData.getCurrencyInstance().format(amount);
-		return Formatter.format("{0} : {1} ({2,number,#.#}%)", key, amountString, amount/total*100);
+		return total==0 ? 
+				Formatter.format("{0} : {1}", key, amountString)
+				: Formatter.format("{0} : {1} ({2,number,#.#}%)", key, amountString, amount/total*100);
 	}
 
 	public void clear() {

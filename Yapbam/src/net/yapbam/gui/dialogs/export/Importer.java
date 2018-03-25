@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.text.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,8 +59,8 @@ public class Importer {
 		boolean accountPart = true;
 		ArrayList<ImportError> errors = new ArrayList<ImportError>();
 		try {
-			Reader fileReader = new InputStreamReader(new FileInputStream(FileUtils.getCanonical(file)), parameters.getEncoding());
-			CSVReader reader = new CSVReader(fileReader, parameters.getColumnSeparator(),'"', parameters.getIgnoredLeadingLines());
+			CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(FileUtils.getCanonical(file)), parameters.getEncoding()),
+					parameters.getColumnSeparator(),'"', parameters.getIgnoredLeadingLines());
 			try {
 				int lineNumber = parameters.getIgnoredLeadingLines();
 				for (String[] fields = reader.readNext(); fields != null; fields = reader.readNext()) {
@@ -75,10 +74,10 @@ public class Importer {
 				}
 			} finally {
 				try {
+					reader.close();
 					if (data!=null) {
 						recordCurrentTransaction(data);
 					}
-					reader.close();
 				} catch (IOException e) {
 					LOGGER.warn("Error while closing "+file, e); //$NON-NLS-1$
 				}

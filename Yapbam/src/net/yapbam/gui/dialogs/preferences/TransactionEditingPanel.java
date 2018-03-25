@@ -41,8 +41,8 @@ import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 @SuppressWarnings("serial")
 public class TransactionEditingPanel extends PreferencePanel {
-	private static SimpleDateFormat SHORT_FORMAT = new SimpleDateFormat("yyMM", LocalizationData.getLocale());  //$NON-NLS-1$
-	private static SimpleDateFormat LONG_FORMAT = new SimpleDateFormat("MMMM yyyy", LocalizationData.getLocale()); //$NON-NLS-1$
+	private static final SimpleDateFormat SHORT_FORMAT = new SimpleDateFormat("yyMM", LocalizationData.getLocale());  //$NON-NLS-1$
+	private static final SimpleDateFormat LONG_FORMAT = new SimpleDateFormat("MMMM yyyy", LocalizationData.getLocale()); //$NON-NLS-1$
 	
 	private JCheckBox chckbxAutoFillStatement;
 	private JRadioButton rdbtnShortStyle;

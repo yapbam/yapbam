@@ -35,9 +35,7 @@ public class RecentFilesPlugin extends AbstractPlugIn {
 		this.data.addListener(new DataListener() {
 			@Override
 			public void processEvent(DataEvent event) {
-				if (event instanceof URIChangedEvent) {
-					updateMenu();
-				} else if (event instanceof EverythingChangedEvent) {
+				if (event instanceof URIChangedEvent || event instanceof EverythingChangedEvent) {
 					updateMenu();
 				}
 			}

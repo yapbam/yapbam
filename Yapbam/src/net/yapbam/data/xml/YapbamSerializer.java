@@ -45,7 +45,7 @@ public class YapbamSerializer {
 		if (report!=null) {
 			report.setMax(-1);
 		}
-		if ((backupFile!=null) && !backupFile.delete()) {
+		if (backupFile!=null && !backupFile.delete()) {
 			// Unable to delete the backup file.
 			// It seems strange that we were able to write to a file and we can't delete it.
 			// It's strange, but possible (tested under Windows 8).
@@ -74,13 +74,15 @@ public class YapbamSerializer {
 		File parent = file.getParentFile();
 		String root = FileUtils.getRootName(file);
 		String extension = FileUtils.getExtension(file);
-		for (int i = 1; i >0; i++) {
-			File candidate = new File(parent, root+"_backup"+i+extension); //$NON-NLS-1$
+		if (extension==null) {
+			extension = "";
+		}
+		for (int index = 1; ; index++) {
+			File candidate = new File(parent, root+"_backup"+index+extension); //$NON-NLS-1$
 			if (!candidate.exists() || (candidate.length()==0)) {
 				return candidate;
 			}
 		}
-		return null;
 	}
 	
 	private static String getEntryName(String fileName) {

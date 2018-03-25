@@ -146,6 +146,8 @@ public class ErrorManager {
 					postToYapbam (errorsQueue.take());
 				} catch (InterruptedException e) {
 					// Ok, not a problem, the shutdown hook has interrupted this thread
+					Thread.currentThread().interrupt();
+					break;
 				} catch (Throwable e) {
 					// Well, at this point nothing could help us
 					e.printStackTrace();
