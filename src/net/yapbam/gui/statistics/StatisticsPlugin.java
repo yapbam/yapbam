@@ -175,7 +175,7 @@ public class StatisticsPlugin extends AbstractPlugIn {
 				}
 			} else {
 				//TODO
-				LoggerFactory.getLogger(StatisticsPlugin.class).warn("What a strange thing: transaction {} is in FilteredData but is not ok with its filter"); //$NON-NLS-1$
+				LoggerFactory.getLogger(StatisticsPlugin.class).warn("What a strange thing: transaction {} is in FilteredData but is not ok with its filter",transaction); //$NON-NLS-1$
 			}
 		}
 		if (getGroupSubCategories().isSelected()) {
