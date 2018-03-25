@@ -5,7 +5,7 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
-version	0.20.5 (??/03/2018)
+version	0.20.5 (25/03/2018)
 fix
 	Le bouton "Renommer" dans l'onglet "Relevés de comptes" ne renommait pas seulement le relevé sélectionné, mais également tous les relevés de même nom dans les autres comptes.
 	Lorsqu'on spécifiait le fichier à ouvrir comme argument de l'application Yapbam, le filtre précédent n'était jamais restauré. 
