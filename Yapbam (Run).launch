@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/Yapbam/src/net/yapbam/gui/MainFrame.java"/>
-</listAttribute>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
-</listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.yapbam.gui.MainFrame"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Yapbam"/>
-<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DxtestedPlugin.className=net.yapbam.gui.archive.ArchivePlugin -DxslowDataReading=true -DxBetaUpdating=true -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.showThreadName=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.graphics.balancehistory.YAxis=trace -Dxuser.country=RO -Dxuser.language=ro -Dsun.awt.disablegrab=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.dialogs=trace -DxsimulateJNLP=true -DxtestedPersistenceAdapter.className=net.yapbam.gui.persistence.classpath.ClasspathPersistenceAdapter -DxnewsURL=https://www.yapbam.net/messages?target=oper -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.info.MessagesBuilder=debug&#13;&#10;-Dorg.slf4j.simpleLogger.log.net.yapbam.data.StatData=trace"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/Yapbam/src/net/yapbam/gui/MainFrame.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.yapbam.gui.MainFrame"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Yapbam"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DxtestedPlugin.className=net.yapbam.gui.archive.ArchivePlugin -DxslowDataReading=true -DxBetaUpdating=true -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.showThreadName=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.graphics.balancehistory.YAxis=trace -Dxuser.country=RO -Dxuser.language=ro -Dsun.awt.disablegrab=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.dialogs=trace -DxsimulateJNLP=true -DxtestedPersistenceAdapter.className=net.yapbam.gui.persistence.classpath.ClasspathPersistenceAdapter -DxnewsURL=https://www.yapbam.net/messages?target=oper -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.info.MessagesBuilder=debug&#13;&#10;-Dorg.slf4j.simpleLogger.log.net.yapbam.data.StatData=trace"/>
 </launchConfiguration>

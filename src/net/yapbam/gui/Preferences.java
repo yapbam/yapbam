@@ -45,6 +45,7 @@ import net.yapbam.gui.transfer.TransferPlugin;
 import net.yapbam.gui.util.LookAndFeelUtils;
 import net.yapbam.gui.welcome.WelcomePlugin;
 import net.yapbam.util.Crypto;
+import net.yapbam.util.HttpsPatcherPlugin;
 import net.yapbam.util.Portable;
 import net.yapbam.util.PreferencesUtils;
 
@@ -392,6 +393,7 @@ public class Preferences {
 		plugins.add(new PlugInContainer(TransferPlugin.class));
 		plugins.add(new PlugInContainer(RecentFilesPlugin.class));
 		plugins.add(new PlugInContainer(ArchivePlugin.class));
+		plugins.add(new PlugInContainer(HttpsPatcherPlugin.class));
 
 		// Load additional plugins
 		File file = new File(Portable.getDataDirectory(),"plugins"); //$NON-NLS-1$

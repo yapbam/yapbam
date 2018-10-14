@@ -5,6 +5,12 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.20.7 (15/10/2018)
+improvement
+	Suppression de la source de données "Yahoo" dans le convertisseur de devises (Yahoo a fermé ce service).
+fix
+	Les news sont de nouveau disponibles en java 1.6 et 1.7.
+
 version	0.20.6 (16/06/2018)
 improvement
 	Ajoute la traduction en Grec.
