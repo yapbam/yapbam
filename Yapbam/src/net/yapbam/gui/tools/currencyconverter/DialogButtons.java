@@ -88,6 +88,7 @@ public class DialogButtons extends JPanel {
 		if (rdbtnYahoo == null) {
 			rdbtnYahoo = new JRadioButton(Messages.getString("YAHOO.name")); //$NON-NLS-1$
 			rdbtnYahoo.setSelected(Source.YAHOO.equals(source));
+			rdbtnYahoo.setVisible(false);
 		}
 		return rdbtnYahoo;
 	}

@@ -25,7 +25,13 @@ public class PlugInContainer {
 					try {
 						this.plugin = (Class<AbstractPlugIn>) classLoader.loadClass(className);
 					} finally {
-						classLoader.close();
+						//JDK6 has no close method
+						// classLoader.close();
+						try {
+							classLoader.getClass().getMethod("close").invoke(classLoader);
+						} catch (Exception e) {
+							// Method does not exist we're in JDK6.
+						}
 					}
 				}
 				this.isActivated = true;

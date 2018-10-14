@@ -12,7 +12,12 @@ public class SourceManager {
 	public static Source getSource() {
 		try {
 			String property = Preferences.INSTANCE.getProperty(SOURCE_PREF_KEY, Source.ECB.name());
-			return Source.valueOf(property);
+			Source preferedSource = Source.valueOf(property);
+			if (Source.YAHOO.equals(preferedSource)) {
+				// Unfortunately, Yahoo retired its FOREX rates source
+				preferedSource = Source.ECB;
+			}
+			return preferedSource;
 		} catch (IllegalArgumentException e) {
 			LOGGER.warn("Invalid value in preferences", e); //$NON-NLS-1$
 			return Source.ECB;
