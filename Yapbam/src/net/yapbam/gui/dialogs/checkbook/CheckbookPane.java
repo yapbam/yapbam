@@ -51,19 +51,20 @@ public class CheckbookPane extends JPanel {
 	 */
 	private void initialize() {
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-		gridBagConstraints4.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints4.gridy = 3;
 		gridBagConstraints4.weightx = 1.0;
 		gridBagConstraints4.anchor = GridBagConstraints.EAST;
 		gridBagConstraints4.insets = new Insets(5, 0, 0, 0);
 		gridBagConstraints4.gridx = 1;
 		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+		gridBagConstraints31.anchor = GridBagConstraints.WEST;
 		gridBagConstraints31.gridx = 0;
 		gridBagConstraints31.gridy = 3;
 		JLabel jLabel3 = new JLabel();
 		jLabel3.setText(LocalizationData.get("checkbookDialog.next")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-		gridBagConstraints21.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints21.gridy = 0;
 		gridBagConstraints21.weightx = 1.0;
 		gridBagConstraints21.anchor = GridBagConstraints.EAST;
@@ -75,7 +76,7 @@ public class CheckbookPane extends JPanel {
 		JLabel jLabel2 = new JLabel();
 		jLabel2.setText(LocalizationData.get("checkbookDialog.prefix")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.gridy = 2;
 		gridBagConstraints3.weightx = 1.0;
 		gridBagConstraints3.anchor = GridBagConstraints.EAST;
@@ -88,7 +89,7 @@ public class CheckbookPane extends JPanel {
 		JLabel jLabel1 = new JLabel();
 		jLabel1.setText(LocalizationData.get("checkbookDialog.number")); //$NON-NLS-1$
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints2.gridy = 1;
 		gridBagConstraints2.weightx = 1.0;
 		gridBagConstraints2.anchor = GridBagConstraints.EAST;
