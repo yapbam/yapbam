@@ -66,6 +66,7 @@ public class DataWriter {
 				if (result.getException() instanceof IOException) {
 					// An io error occurred ... probably we're not connected to the Internet
 					// Do nothing
+					//FIXME Should at least inform the user the synchronization failed (See DataReader.doSyncFailed).
 					result.getException().printStackTrace();//TODO
 				} else {
 					// Not an IO error => Log the error

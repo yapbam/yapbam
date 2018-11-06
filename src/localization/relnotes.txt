@@ -7,6 +7,7 @@ known
 
 version	0.20.8 (11/??/2018)
 fix
+	Fixes a major bug preventing the backup of new files in Dropbox. 
 	Fixes minor display bugs.
 
 version	0.20.7 (10/15/2018)
