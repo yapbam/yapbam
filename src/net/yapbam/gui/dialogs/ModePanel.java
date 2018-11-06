@@ -47,6 +47,29 @@ class ModePanel extends JPanel {
 	private JLabel relLabel;
 	private JCheckBox isSelectedBox;
 
+	/*
+	private static class RelativePanel extends JPanel {
+		private IntegerWidget relField;
+
+		public RelativePanel(PropertyChangeListener listener) {
+			super(new GridBagLayout());
+			if (DEBUG) {
+				setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
+			}
+			GridBagConstraints c2 = new GridBagConstraints();
+			c2.insets = new Insets(5, 5, 5, 5);
+			c2.anchor = GridBagConstraints.WEST;
+			add(new JLabel(LocalizationData.get("ModeDialog.daysNumber")), c2); //$NON-NLS-1$
+			c2.gridx = 1;
+			c2.weightx = 1.0;
+			relField = new IntegerWidget();
+			relField.addFocusListener(AutoSelectFocusListener.INSTANCE);
+			relField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, listener);
+			relField.setColumns(2);
+			add(relField, c2);
+		}
+	}*/
+
 	/** Constructor
 	 * @param title the panel title, displayed in the border
 	 * @param checkBookOption an optional component, displayed at the bottom of the panel (null if none)
@@ -57,6 +80,8 @@ class ModePanel extends JPanel {
 		this.setBorder(BorderFactory.createTitledBorder("")); //$NON-NLS-1$
 
 		GridBagConstraints c = new GridBagConstraints();
+		c.gridy = 0;
+		c.gridx = 0;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.insets = insets;
 		c.anchor = GridBagConstraints.WEST;
@@ -84,14 +109,15 @@ class ModePanel extends JPanel {
 			}});
 		this.add(isSelectedBox, c);
 		
-		c = new GridBagConstraints();
-		c.gridy=1;
-		c.anchor=GridBagConstraints.WEST;
-		c.insets=insets;
-		c.gridwidth=1;
+		GridBagConstraints comboConstraint = new GridBagConstraints();
+		comboConstraint.gridx = 0;
+		comboConstraint.gridy=1;
+		comboConstraint.anchor=GridBagConstraints.WEST;
+		comboConstraint.insets=insets;
+		comboConstraint.gridwidth=1;
 		comboLabel = new JLabel(LocalizationData.get("TransactionDialog.valueDate")); //$NON-NLS-1$
 		comboLabel.setEnabled(false);
-		this.add(comboLabel,c);
+		this.add(comboLabel,comboConstraint);
 		combo = new JComboBox(new String[]{LocalizationData.get("ModeDialog.immediate"),LocalizationData.get("ModeDialog.relative"),LocalizationData.get("ModeDialog.deferred")}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		combo.setEditable(false);
 		combo.setEnabled(false);
@@ -104,11 +130,11 @@ class ModePanel extends JPanel {
 				deferedPanel.setVisible(index==2);
 				checkValidity();
 			}});
-		c = new GridBagConstraints();
-		c.gridy=1;
-		c.gridx=1;
-		c.weightx=1;
-		this.add(combo, c);
+		GridBagConstraints cCombo = new GridBagConstraints();
+		cCombo.anchor = GridBagConstraints.WEST;
+		cCombo.gridy=1;
+		cCombo.gridx=1;
+		this.add(combo, cCombo);
 		
 		PropertyChangeListener listener = new PropertyChangeListener() {
 			@Override
@@ -122,43 +148,55 @@ class ModePanel extends JPanel {
 			relativePanel.setBorder(BorderFactory.createTitledBorder("relativePanel")); //$NON-NLS-1$
 		}
 		GridBagConstraints c2 = new GridBagConstraints();
+		c2.gridy = 0;
 		c2.insets = insets;
 		c2.anchor = GridBagConstraints.WEST;
 		relLabel = new JLabel(LocalizationData.get("ModeDialog.daysNumber")); //$NON-NLS-1$
 		relativePanel.add(relLabel, c2);
-		c2.gridx = 1;
-		c2.weightx = 1.0;
+		GridBagConstraints cRelField = new GridBagConstraints();
+		cRelField.gridx = 1;
+		cRelField.weightx = 1.0;
+		cRelField.anchor = GridBagConstraints.WEST;
 		relField = new IntegerWidget();
 		relField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		relField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, listener);
 		relField.setColumns(2);
-		relativePanel.add(relField, c2);
+		relativePanel.add(relField, cRelField);
 		relativePanel.setVisible(false);
 
 		deferedPanel = new JPanel(new GridBagLayout());
 		if (DEBUG) {
 			deferedPanel.setBorder(BorderFactory.createTitledBorder("defferedPanel")); //$NON-NLS-1$
 		}
-		c2 = new GridBagConstraints();
-		c2.weightx = 1.0;
-		c2.insets = insets;
+		GridBagConstraints stopLabelConstraints = new GridBagConstraints();
+		stopLabelConstraints.insets = insets;
+		stopLabelConstraints.anchor = GridBagConstraints.WEST;
 		stopLabel = new JLabel(LocalizationData.get("ModeDialog.stop")); //$NON-NLS-1$
-		deferedPanel.add(stopLabel, c2);
-		c2.gridx = 1;
+		deferedPanel.add(stopLabel, stopLabelConstraints);
+		GridBagConstraints cStopField = new GridBagConstraints();
+		cStopField.anchor = GridBagConstraints.WEST;
+		cStopField.gridx = 1;
+		cStopField.weightx = 0.0;
 		stopField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		stopField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		stopField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, listener);
 		stopField.setColumns(2);
-		deferedPanel.add(stopField, c2);
-		c2.gridx = 2;
+		deferedPanel.add(stopField, cStopField);
+		GridBagConstraints debtLabelConstraints = new GridBagConstraints();
+		debtLabelConstraints.anchor = GridBagConstraints.WEST;
+		debtLabelConstraints.gridx = 2;
+		debtLabelConstraints.insets = insets;
 		debtLabel = new JLabel(LocalizationData.get("ModeDialog.debt")); //$NON-NLS-1$
-		deferedPanel.add(debtLabel, c2);
+		deferedPanel.add(debtLabel, debtLabelConstraints);
+		GridBagConstraints debtFieldConstraints = new GridBagConstraints();
+		debtFieldConstraints.gridx = 3;
+		debtFieldConstraints.anchor = GridBagConstraints.WEST;
+		debtFieldConstraints.weightx = 1.0;
 		debtField = new IntegerWidget(BigInteger.ONE, BigInteger.valueOf(31));
 		debtField.addFocusListener(AutoSelectFocusListener.INSTANCE);
 		debtField.addPropertyChangeListener(IntegerWidget.VALUE_PROPERTY, listener);
 		debtField.setColumns(2);
-		c2.gridx = 3;
-		deferedPanel.add(debtField, c2);
+		deferedPanel.add(debtField, debtFieldConstraints.clone());
 		deferedPanel.setVisible(false);
 
 		emptyPanel = new JPanel();
@@ -167,13 +205,13 @@ class ModePanel extends JPanel {
 		}
 
 		homogeneizePreferedSize(new JPanel[]{emptyPanel,relativePanel,deferedPanel});
-		c.gridy = 2;
-		c.gridx=0;
-		c.gridwidth=GridBagConstraints.REMAINDER;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		this.add(relativePanel, c);
-		this.add(deferedPanel, c);
-		this.add(emptyPanel, c);
+		cCombo.gridy = 2;
+		cCombo.gridx=0;
+		cCombo.gridwidth=GridBagConstraints.REMAINDER;
+		cCombo.fill=GridBagConstraints.HORIZONTAL;
+		this.add(relativePanel, cCombo.clone());
+		this.add(deferedPanel, cCombo.clone());
+		this.add(emptyPanel, cCombo.clone());
 
 		if (checkBookOption) {
 			c = new GridBagConstraints();

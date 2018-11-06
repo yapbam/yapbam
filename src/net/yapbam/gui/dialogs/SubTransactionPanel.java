@@ -58,6 +58,7 @@ public class SubTransactionPanel extends JPanel {
 		gbcReceiptCheckBox.anchor = GridBagConstraints.WEST;
 		gbcReceiptCheckBox.gridy = 1;
 		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.anchor = GridBagConstraints.WEST;
 		gridBagConstraints11.gridx = 0;
 		gridBagConstraints11.insets = new Insets(5, 5, 5, 5);
 		gridBagConstraints11.gridy = 2;
@@ -71,7 +72,7 @@ public class SubTransactionPanel extends JPanel {
 		gridBagConstraints4.gridwidth = 2;
 		gridBagConstraints4.gridy = 2;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.gridy = 1;
 		gridBagConstraints3.weightx = 0.0D;
 		gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
