@@ -64,11 +64,15 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	}
 
 	public static void main(final String[] args) {
-		// Workaround of a bug in swing with Java 1.7
-		// Should absolutely be the first thing called in the program !!!
-		String current = System.getProperty("java.specification.version"); //$NON-NLS-1$
-		if (!"1.6".equals(current)) { //$NON-NLS-1$
+		if (!isJava6()) {
+			// Workaround of a bug in swing with Java 1.7
+			// Should absolutely be the first thing called in the program !!!
 			System.setProperty("java.util.Arrays.useLegacyMergeSort", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (!isJava7()) {
+				// If java 8 or more, activate basic authentication proxy
+				// see https://www.oracle.com/technetwork/java/javase/8u111-relnotes-3124969.html
+				System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
+			}
 		}
 
 		// Remove obsolete files from previous installations
@@ -131,7 +135,11 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	private static boolean isJava6() {
 		return "1.6".equals(System.getProperty("java.specification.version")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
+	private static boolean isJava7() {
+		return "1.7".equals(System.getProperty("java.specification.version")); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	private static void installEventQueue() {
 		EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
 		queue.push(new EventQueue() {

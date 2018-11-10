@@ -16,7 +16,7 @@
       <file><source>${basedir}/Yapbam.exe</source></file>
       <file>
           <source>${project.build.directory}/program.jar</source>
-          <outputDirectory>/App</outputDirectory>
+          <outputDirectory>App</outputDirectory>
       </file>
       <!-- file>
           <source>${settings.localRepository}/com/fathzer/yapbam-launcher/${launcher.version}/yapbam-launcher-${launcher.version}.jar</source>
