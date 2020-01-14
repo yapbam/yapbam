@@ -3,6 +3,7 @@ package net.yapbam.gui.administration.filter;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JTable;
 
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
@@ -20,7 +21,8 @@ public class DeleteFilterAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int index = panel.getJTable().getSelectedRow();
+		final JTable table = panel.getJTable();
+		final int index = table.convertRowIndexToModel(table.getSelectedRow());
 		panel.getData().remove(panel.getData().getFilter(index));
 	}
 }

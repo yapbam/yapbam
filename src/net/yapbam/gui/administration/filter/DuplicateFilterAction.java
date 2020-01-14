@@ -5,6 +5,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JTable;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
@@ -23,17 +24,18 @@ public class DuplicateFilterAction extends AbstractAction {
 	public DuplicateFilterAction(FilterListPanel panel) {
 		super(LocalizationData.get("GenericButton.duplicate"), IconManager.get(Name.DUPLICATE_TRANSACTION)); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION, LocalizationData.get("FilterManager.duplicates.tooltip")); //$NON-NLS-1$
-    this.panel = panel;
+		this.panel = panel;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int index = panel.getJTable().getSelectedRow();
+		final JTable table = panel.getJTable();
+		final int index = table.convertRowIndexToModel(table.getSelectedRow());
 		final Filter filter = new Filter();
 		filter.copy(panel.getData().getFilter(index));
 		filter.setName(null);
-		Window owner = e.getSource() instanceof Component ?Utils.getOwnerWindow((Component) e.getSource()):null;
-		CustomFilterDialog.FilterData filterData = new CustomFilterDialog.FilterData() {
+		final Window owner = e.getSource() instanceof Component ?Utils.getOwnerWindow((Component) e.getSource()):null;
+		final CustomFilterDialog.FilterData filterData = new CustomFilterDialog.FilterData() {
 			@Override
 			public GlobalData getGlobalData() {
 				return panel.getData();
@@ -43,10 +45,10 @@ public class DuplicateFilterAction extends AbstractAction {
 				return filter;
 			}
 		};
-		FilterDialog dialog = new FilterDialog(owner, filterData);
+		final FilterDialog dialog = new FilterDialog(owner, filterData);
 		dialog.setFilterName(getCopyName(panel.getData(), panel.getData().getFilter(index).getName()));
 		dialog.setVisible(true);
-		Boolean result = dialog.getResult();
+		final Boolean result = dialog.getResult();
 		if (result!=null && result) {
 			filterData.getGlobalData().add(filter);
 		}

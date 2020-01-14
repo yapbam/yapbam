@@ -5,6 +5,10 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
+version	0.20.10 (01/??/2020)
+fix
+	Fixes selection problem of Edited/Deleted/Duplicated filter in "Administration/Filter" tab.
+
 version	0.20.9 (11/11/2018)
 fix
 	Fixes a major bug preventing the backup of new files in Dropbox. 

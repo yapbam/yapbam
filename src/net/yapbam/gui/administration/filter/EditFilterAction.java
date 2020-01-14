@@ -5,6 +5,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JTable;
 
 import com.fathzer.soft.ajlib.swing.Utils;
 
@@ -22,15 +23,16 @@ public class EditFilterAction extends AbstractAction {
 	public EditFilterAction(FilterListPanel panel) {
 		super(LocalizationData.get("GenericButton.edit"), IconManager.get(Name.EDIT_TRANSACTION)); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION, LocalizationData.get("FilterManager.edit.tooltip")); //$NON-NLS-1$
-    this.panel = panel;
+		this.panel = panel;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int index = panel.getJTable().getSelectedRow();
+		final JTable table = panel.getJTable();
+		final int index = table.convertRowIndexToModel(table.getSelectedRow());
 		final Filter filter = panel.getData().getFilter(index);
-		Window owner = e.getSource() instanceof Component ?Utils.getOwnerWindow((Component) e.getSource()):null;
-		CustomFilterDialog.FilterData filterData = new CustomFilterDialog.FilterData() {
+		final Window owner = e.getSource() instanceof Component ?Utils.getOwnerWindow((Component) e.getSource()):null;
+		final CustomFilterDialog.FilterData filterData = new CustomFilterDialog.FilterData() {
 			@Override
 			public GlobalData getGlobalData() {
 				return panel.getData();
@@ -40,9 +42,9 @@ public class EditFilterAction extends AbstractAction {
 				return filter;
 			}
 		};
-		FilterDialog dialog = new FilterDialog(owner, filterData);
+		final FilterDialog dialog = new FilterDialog(owner, filterData);
 		dialog.setVisible(true);
-		Boolean result = dialog.getResult();
+		final Boolean result = dialog.getResult();
 		if (result!=null && result) {
 			((FiltersTableModel)panel.getJTable().getModel()).update(index);
 		}
