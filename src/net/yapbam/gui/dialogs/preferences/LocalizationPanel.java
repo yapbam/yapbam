@@ -36,14 +36,14 @@ import java.awt.Insets;
 
 public class LocalizationPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Locale[] LANGUAGES = new Locale[]{new Locale("ar"), Locale.GERMAN, Locale.ENGLISH, new Locale("es"), Locale.FRENCH, new Locale("el"), new Locale("pt"), new Locale("tr"), Locale.TRADITIONAL_CHINESE, new Locale("it"), new Locale("nl"), new Locale("pl"), new Locale("ru"), new Locale("hu"), new Locale("ja")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","","","","","&#23616;&#37096;","parziale", "partieel","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","részleges","&#x90E8;&#x5206;&#x7684;&#x306A;"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
+	private static final Locale[] LANGUAGES = new Locale[]{new Locale("ar"), Locale.GERMAN, Locale.ENGLISH, new Locale("es"), Locale.FRENCH, new Locale("el"), new Locale("nl"), new Locale("pt"), new Locale("tr"), Locale.TRADITIONAL_CHINESE, new Locale("it"), new Locale("pl"), new Locale("ru"), new Locale("hu"), new Locale("ja")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","","","","","","&#23616;&#37096;","parziale","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","részleges","&#x90E8;&#x5206;&#x7684;&#x306A;"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 	private JPanel countryPanel = null;
 	private JPanel languagePanel = null;
 	private JRadioButton defaultCButton = null;
 	private JRadioButton customButton = null;
 	private JScrollPane jScrollPane = null;
-	private JList jList = null;
+	private JList<String> jList = null;
 	
 	private boolean jListIsAdjusting = false;
 	
@@ -245,7 +245,7 @@ public class LocalizationPanel extends PreferencePanel {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if ((!jListIsAdjusting) && (jList.getSelectedIndex()<0)) {
+						if (!jListIsAdjusting && (jList.getSelectedIndex()<0)) {
 							jList.setSelectedValue(LocalizationData.SYS_LOCALE.getDisplayCountry(Preferences.INSTANCE.getLocale()), true);
 						}
 						checkSomethingChanged();
@@ -274,7 +274,7 @@ public class LocalizationPanel extends PreferencePanel {
 	 * 	
 	 * @return javax.swing.JList	
 	 */
-	private JList getJList() {
+	private JList<String> getJList() {
 		if (jList == null) {
 			String[] countryCodes = Locale.getISOCountries();
 			String[] countries = new String[countryCodes.length];
@@ -284,7 +284,7 @@ public class LocalizationPanel extends PreferencePanel {
 				displayCountrytoCode.put(countries[i], countryCodes[i]);
 			}
 			Arrays.sort(countries);
-			jList = new JList(countries);
+			jList = new JList<String>(countries);
 			jList.setToolTipText(LocalizationData.get("PreferencesDialog.Localization.countryList.tooltip")); //$NON-NLS-1$
 			jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jList.addListSelectionListener(new ListSelectionListener() {
@@ -319,7 +319,7 @@ public class LocalizationPanel extends PreferencePanel {
 	}
 
 	public Locale getBuiltLocale() {
-		String country = getDefaultCButton().isSelected()?LocalizationData.SYS_LOCALE.getCountry():displayCountrytoCode.get((String) jList.getSelectedValue());
+		String country = getDefaultCButton().isSelected()?LocalizationData.SYS_LOCALE.getCountry():displayCountrytoCode.get(jList.getSelectedValue());
 		
 		String lang = LocalizationData.SYS_LOCALE.getLanguage();
 		for (Locale locale : LANGUAGES) {
