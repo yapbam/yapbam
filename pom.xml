@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.20.10</version>
+	<version>0.20.11</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<mainClass>net.yapbam.gui.Launcher</mainClass>
@@ -239,7 +239,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>ajlib</artifactId>
-			<version>0.3.10</version>
+			<version>0.3.11</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
