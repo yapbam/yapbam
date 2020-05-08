@@ -7,12 +7,13 @@ import javax.swing.JPanel;
 import com.fathzer.soft.ajlib.swing.dialog.AbstractDialog;
 
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.MainFrame;
 
 @SuppressWarnings("serial")
 public class AboutDialog extends AbstractDialog<Void, Void> {
 
 	public AboutDialog(Window owner) {
-		super(owner, LocalizationData.get("ApplicationName"), null); //$NON-NLS-1$
+		super(owner, MainFrame.APPLICATION_NAME, null);
 		getCancelButton().setVisible(false);
 		getOkButton().setText(LocalizationData.get("GenericButton.close")); //$NON-NLS-1$
 		getOkButton().setToolTipText(LocalizationData.get("GenericButton.close.ToolTip")); //$NON-NLS-1$

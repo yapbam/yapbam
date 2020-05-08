@@ -35,6 +35,8 @@ import net.yapbam.util.ApplicationContext;
 import net.yapbam.util.HtmlUtils;
 
 public class MainFrame extends JFrame implements YapbamInstance {
+	public static final String APPLICATION_NAME = "Yet Another Personal Account Manager";
+
 	//TODO implements undo support (see package undo in JustSomeTests project)
 	//TODO implements copy/paste support ?
 	private static final long serialVersionUID = 1L;
@@ -355,15 +357,15 @@ public class MainFrame extends JFrame implements YapbamInstance {
 	}
 
 	private void updateWindowTitle() {
-		String title = LocalizationData.get("ApplicationName"); //$NON-NLS-1$
+		StringBuilder title = new StringBuilder(APPLICATION_NAME);
 		URI uri = data.getURI();
 		if (uri!=null) {
-			title = title + " - " + YapbamPersistenceManager.MANAGER.getAdapter(uri).getService().getDisplayable(uri); //$NON-NLS-1$
+			title.append(" - ").append(YapbamPersistenceManager.MANAGER.getAdapter(uri).getService().getDisplayable(uri)); //$NON-NLS-1$
 		}
 		if (data.somethingHasChanged()) {
-			title = title+" *"; //$NON-NLS-1$
+			title.append(" *"); //$NON-NLS-1$
 		}
-		this.getJFrame().setTitle(title);
+		this.getJFrame().setTitle(title.toString());
 	}
 	
 	public void restart() {
