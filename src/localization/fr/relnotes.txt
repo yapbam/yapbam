@@ -5,6 +5,11 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.20.14 (14/09/2020)
+fix
+	La bulle d'aide du bouton "Exporter" dans l'onglet "Historique du solde/Opérations" était incompréhensible.
+	Quelques modifications dans la traduction en Italien.
+
 version	0.20.13 (09/05/2020)
 improvement
 	La traduction en Italien est complète.

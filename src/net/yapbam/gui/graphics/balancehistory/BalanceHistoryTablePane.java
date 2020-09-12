@@ -127,7 +127,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		gbcChckbxHide.gridx = 0;
 		gbcChckbxHide.gridy = 2;
 		add(getHideIntermediateChkBx(), gbcChckbxHide);
-		btnExport.setToolTipText("BudgetPanel.export.toolTip"); //$NON-NLS-1$
+		btnExport.setToolTipText(LocalizationData.get("BudgetPanel.export.toolTip")); //$NON-NLS-1$
 		btnExport.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbcBtnExport = new GridBagConstraints();
 		gbcBtnExport.anchor = GridBagConstraints.EAST;
