@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.Transaction;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
@@ -17,7 +16,7 @@ import net.yapbam.data.event.TransactionsAddedEvent;
 import net.yapbam.data.event.TransactionsRemovedEvent;
 import net.yapbam.gui.LocalizationData;
 
-class TransactionsTableModel extends GenericTransactionTableModel implements DataListener {
+class TransactionsTableModel extends GenericTransactionTableModel<Transaction> implements DataListener {
 	private static final long serialVersionUID = 1L;
 
 	private transient DateFormat dateFormater;
@@ -95,7 +94,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 		if (dateFormater==null) {
 			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, LocalizationData.getLocale());
 		}
-		Transaction transaction = (Transaction) this.getTransaction(rowIndex);
+		Transaction transaction = this.getTransaction(rowIndex);
 		if (columnIndex==settings.getSpreadColumn()) {
 			if (transaction.getSubTransactionSize()==0) {
 				return SpreadState.NOT_SPREADABLE;
@@ -170,7 +169,7 @@ class TransactionsTableModel extends GenericTransactionTableModel implements Dat
 	}
 
 	@Override
-	public AbstractTransaction getTransaction (int row) {
+	public Transaction getTransaction (int row) {
 		return this.data.getTransaction(row);
 	}
 

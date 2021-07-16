@@ -82,7 +82,11 @@ class PeriodicalTransactionsTable extends JTable implements PaintedTable {
 
 	public PeriodicalTransaction getSelectedTransaction() {
 		int index = getSelectedRow();
-		return (index < 0)?null:getGlobalData().getPeriodicalTransaction(convertRowIndexToModel(index));
+		if (index<0) {
+			return null;
+		} else {
+			return ((PeriodicalTransactionTableModel)getModel()).getTransaction(convertRowIndexToModel(index));
+		}
 	}
 
 	public GlobalData getGlobalData() {

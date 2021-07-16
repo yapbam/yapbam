@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
-import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
@@ -12,7 +11,7 @@ import net.yapbam.gui.transactiontable.GenericTransactionTableModel;
 import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 @SuppressWarnings("serial")
-class GenerateTableModel extends GenericTransactionTableModel {
+class GenerateTableModel extends GenericTransactionTableModel<Transaction> {
 	static final int ACCOUNT_INDEX = 0;
 	static final int DESCRIPTION_INDEX = 1;
 	static final int DATE_INDEX = 2;
@@ -127,7 +126,7 @@ class GenerateTableModel extends GenericTransactionTableModel {
 	}
 
 	@Override
-	public AbstractTransaction getTransaction(int rowIndex) {
+	public Transaction getTransaction(int rowIndex) {
 		return generator.getTransaction(rowIndex);
 	}
 	
