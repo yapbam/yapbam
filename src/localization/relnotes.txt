@@ -5,10 +5,11 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 
-version	0.20.15 (??/06/2021)
+version	0.20.15 (07/??/2021)
 fix
 	When you disconnected a screen after exiting the application, the application window could be, at startup, outside the remaining screens.
 	The file selection dialogs (open, save or export) did not work with Java> = 16.
+	In the "Administration / Periodic transactions management" tab, when a filter was activated (and the "ignore filter" button was not checked) editing / deletion, etc... was not performed on the selected operation.
 
 version	0.20.14 (09/14/2020)
 fix

@@ -8,7 +8,6 @@ import java.util.Observer;
 
 import com.fathzer.jlocal.Formatter;
 
-import net.yapbam.data.AbstractTransaction;
 import net.yapbam.data.Filter;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
@@ -27,7 +26,7 @@ import net.yapbam.gui.transactiontable.SpreadState;
 import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 @SuppressWarnings("serial")
-final class PeriodicalTransactionTableModel extends GenericTransactionTableModel {
+final class PeriodicalTransactionTableModel extends GenericTransactionTableModel<PeriodicalTransaction> {
 	private final PeriodicalTransactionListPanel periodicTransactionListPanel;
 	private PeriodicalTransactionsTableSettings settings;
 	private boolean ignoreFilter;
@@ -135,7 +134,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		boolean spread = this.isSpread(rowIndex);
-		PeriodicalTransaction transaction = (PeriodicalTransaction) this.getTransaction(rowIndex);
+		PeriodicalTransaction transaction = this.getTransaction(rowIndex);
 		if (columnIndex==settings.getSpreadColumn()) {
 			if (transaction.getSubTransactionSize()==0) {
 				return SpreadState.NOT_SPREADABLE;
@@ -218,7 +217,7 @@ final class PeriodicalTransactionTableModel extends GenericTransactionTableModel
 	}
 
 	@Override
-	public AbstractTransaction getTransaction(int rowIndex) {
+	public PeriodicalTransaction getTransaction(int rowIndex) {
 		return transactions.get(rowIndex);
 	}
 

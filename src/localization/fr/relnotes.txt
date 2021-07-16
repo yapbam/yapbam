@@ -5,10 +5,11 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
-version	0.20.15 (??/06/2021)
+version	0.20.15 (??/07/2021)
 fix
 	Quand on débranchait un écran après avoir quitté l'application, la fenêtre de l'application pouvait, au démarrage, s'ouvrir en dehors des écrans restants.
 	Les dialogues de sélection de fichiers (ouverture, sauvegarde ou export) ne fonctionnait pas avec Java >= 16.
+	Dans l'onglet "Administration/Opérations périodiques", lorsqu'un filtre était activé (et que le bouton ignorer le filtre n'était pas coché) l'édition/suppression, etc, n'était pas effectuée sur l'opération sélectionnée.
 
 version	0.20.14 (14/09/2020)
 fix
