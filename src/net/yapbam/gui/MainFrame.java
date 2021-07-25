@@ -459,27 +459,7 @@ public class MainFrame extends JFrame implements YapbamInstance {
 		int y = Integer.parseInt((String) getStateSaver().get(FRAME_LOCATION_Y,"0")); //$NON-NLS-1$
 		int width = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_WIDTH,""+(screenSize.width/2))); //$NON-NLS-1$
 		int height = Integer.parseInt((String) getStateSaver().get(FRAME_SIZE_HEIGHT,""+(screenSize.height/2))); //$NON-NLS-1$
-//		getJFrame().setExtendedState(Frame.MAXIMIZED_BOTH); //TODO Save the maximized state
-		//TODO Beware of a screen size change (especially of a reduction) ?
-  /*
-		if ((width==0) || (width+x>screenSize.width)) {
-			x=0;
-			width = screenSize.width/2;
-		}
-		if ((height==0) || (height+y>screenSize.height)) {
-			y=0;
-			height = screenSize.height/2;
-		}*/
-		getJFrame().setLocation(x,y);
-		getJFrame().setSize(width,height);
-		int extendedState = Frame.NORMAL;
-		if (height<0) {
-			extendedState = extendedState | Frame.MAXIMIZED_VERT;
-		}
-		if (width<0) {
-			extendedState = extendedState | Frame.MAXIMIZED_HORIZ;
-		}
-		getJFrame().setExtendedState(extendedState);
+		Utils.setSafeBounds(getJFrame(), new Rectangle(new Point(x,y), new Dimension(width, height)));
 	}
 	
 	private void initData(String path) {
