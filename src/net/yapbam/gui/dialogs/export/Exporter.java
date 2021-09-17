@@ -1,5 +1,14 @@
 package net.yapbam.gui.dialogs.export;
 
+import static j2html.TagCreator.body;
+import static j2html.TagCreator.document;
+import static j2html.TagCreator.html;
+import static j2html.TagCreator.style;
+import static j2html.TagCreator.table;
+import static j2html.TagCreator.tbody;
+import static j2html.TagCreator.td;
+import static j2html.TagCreator.tr;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,6 +21,8 @@ import java.util.Iterator;
 
 import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
+import j2html.attributes.Attribute;
+import j2html.tags.ContainerTag;
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.SubTransaction;
@@ -31,47 +42,118 @@ public class Exporter {
 	}
 	
 	public void exportFile(File file, FilteredData data) throws IOException {
-		Writer fileWriter = new OutputStreamWriter(new FileOutputStream(file), parameters.getEncoding());
+
+		int[] fields = parameters.getExportedIndexes();
+
+		Iterator<Transaction> transactions = parameters.isExportFilteredData() //
+				? new FilteredTransactions(data)
+				: new GlobalTransactions(data);
+
+		FileOutputStream outputStream = new FileOutputStream(file);
+		Writer fileWriter = new OutputStreamWriter(outputStream, parameters.getEncoding());
 		try {
-			CSVWriter writer = new CSVWriter(fileWriter);
-			writer.setSeparator(parameters.getSeparator());
-			int[] fields = parameters.getExportedIndexes();
-			if (parameters.isInsertHeader()) {
-				// insert the header line
-				for (int i = 0; i < fields.length; i++) {
-					writer.writeCell(ExportTableModel.COLUMNS[fields[i]]);
+			if (ExportFormatType.CSV.equals(parameters.getExportFormat())) {
+				CSVWriter writer = new CSVWriter(fileWriter);
+				writer.setSeparator(parameters.getSeparator());
+				if (parameters.isInsertHeader()) {
+					// insert the header line
+					for (int i = 0; i < fields.length; i++) {
+						writer.writeCell(ExportTableModel.COLUMNS[fields[i]]);
+					}
+					writer.newLine();
 				}
-				writer.newLine();
-			}
-			if (parameters.isExportInitialBalance()) {
-				//Export accounts initial balance
-				for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
-					Account account = data.getGlobalData().getAccount(i);
-					if (data.getFilter().isOk(account) || !parameters.isExportFilteredData()) {
-						for (int j = 0; j < fields.length; j++) {
-							writer.writeCell(getField(account, fields[j]));
+				if (parameters.isExportInitialBalance()) {
+					// Export accounts initial balance
+					for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
+						Account account = data.getGlobalData().getAccount(i);
+						if (data.getFilter().isOk(account) || !parameters.isExportFilteredData()) {
+							for (int j = 0; j < fields.length; j++) {
+								writer.writeCell(getField(account, fields[j]));
+							}
+							writer.newLine();
+						}
+					}
+				}
+				while (transactions.hasNext()) {
+					Transaction transaction = transactions.next();
+					for (int i = 0; i < fields.length; i++) {
+						writer.writeCell(getField(transaction, fields[i]));
+					}
+					writer.newLine();
+					for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
+						SubTransaction sub = transaction.getSubTransaction(j);
+						for (int i = 0; i < fields.length; i++) {
+							writer.writeCell(getField(sub, fields[i]));
 						}
 						writer.newLine();
 					}
 				}
-			}
-			Iterator<Transaction> transactions = parameters.isExportFilteredData()?new FilteredTransactions(data):new GlobalTransactions(data);
-			while (transactions.hasNext()) {
-				Transaction transaction = transactions.next();
-				for (int i = 0; i < fields.length; i++) {
-					writer.writeCell(getField(transaction, fields[i]));
-				}
-				writer.newLine();
-				for (int j=0;j<transaction.getSubTransactionSize();j++) {
-					SubTransaction sub = transaction.getSubTransaction(j);
+				writer.flush();
+			} else if (ExportFormatType.HTML.equals(parameters.getExportFormat())) {
+
+				ContainerTag body = body();
+				ContainerTag tBody = tbody();
+
+				ContainerTag style = style();
+				style.withText("table, th, td {border: 1px solid black;border-collapse: collapse;}");
+				body.with(style);
+
+				if (parameters.isInsertHeader()) {
+					// insert the header line
+					ContainerTag tr = tr();
 					for (int i = 0; i < fields.length; i++) {
-						writer.writeCell(getField(sub, fields[i]));
+						tr.with(td(ExportTableModel.COLUMNS[fields[i]]));
 					}
-					writer.newLine();
+					tBody.with(tr);
 				}
+
+				if (parameters.isExportInitialBalance()) {
+					for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
+						Account account = data.getGlobalData().getAccount(i);
+						if (data.getFilter().isOk(account) || !parameters.isExportFilteredData()) {
+							ContainerTag tr = tr();
+							for (int j = 0; j < fields.length; j++) {
+								tr.with(td(getField(account, fields[j])));
+							}
+							tBody.with(tr);
+						}
+					}
+				}
+
+				while (transactions.hasNext()) {
+					Transaction transaction = transactions.next();
+
+					ContainerTag tr = tr();
+					for (int i = 0; i < fields.length; i++) {
+						tr.with(td(getField(transaction, fields[i])));
+					}
+
+					tBody.with(tr);
+
+					for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
+						tr = tr();
+						SubTransaction sub = transaction.getSubTransaction(j);
+						for (int i = 0; i < fields.length; i++) {
+							tr.with(td(getField(sub, fields[i])));
+						}
+						tBody.with(tr);
+					}
+
+				}
+
+				ContainerTag table = table(tBody);
+				table.attr(new Attribute("width", "90%"));
+				table.attr(new Attribute("style", "margin:0 auto;"));
+
+				body.with(table);
+
+				fileWriter.append(document(html(body)));
+				fileWriter.flush();
+			} else {
+				throw new IOException("Unsupported format: " + parameters.getExportFormat());
 			}
-			writer.flush();
 		} finally {
+			outputStream.close();
 			fileWriter.close();
 		}
 	}

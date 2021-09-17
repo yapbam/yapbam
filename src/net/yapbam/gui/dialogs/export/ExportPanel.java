@@ -1,15 +1,21 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.awt.GridBagLayout;
-import javax.swing.JPanel;
-import javax.swing.JCheckBox;
-import java.awt.GridBagConstraints;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
@@ -19,12 +25,11 @@ import javax.swing.table.TableColumnModel;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.gui.LocalizationData;
-import java.awt.Insets;
 
 public class ExportPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	static final String INVALIDITY_CAUSE = "invalidityCause"; //$NON-NLS-1$
-	
+
 	private JCheckBox title;
 	private JRadioButton all;
 	private JRadioButton filtered;
@@ -34,7 +39,8 @@ public class ExportPanel extends JPanel {
 	private String invalidityCause;
 	private SeparatorPanel separatorPanel;
 	private ButtonGroup group;
-	
+	private JComboBox<ExportFormatType> exportFormats;
+
 	public String getInvalidityCause() {
 		return invalidityCause;
 	}
@@ -51,78 +57,63 @@ public class ExportPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-		gridBagConstraints12.insets = new Insets(5, 0, 0, 0);
-		gridBagConstraints12.gridx = 0;
-		gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints12.gridwidth = 0;
-		gridBagConstraints12.gridy = 4;
-		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.anchor = GridBagConstraints.WEST;
-		gridBagConstraints3.gridy = 3;
-		gridBagConstraints3.gridx = 0;
-		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-		gridBagConstraints21.gridx = 0;
-		gridBagConstraints21.gridwidth = 0;
-		gridBagConstraints21.gridy = 0;
-		gridBagConstraints21.gridx = 0;
-		gridBagConstraints21.fill = GridBagConstraints.BOTH;
-		gridBagConstraints21.gridwidth = 0;
-		gridBagConstraints21.gridy = 0;
-		JLabel jLabel = new JLabel();
-		jLabel.setText(LocalizationData.get("ExportDialog.message")); //$NON-NLS-1$
-		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-		gridBagConstraints11.insets = new Insets(10, 0, 15, 0);
-		gridBagConstraints11.gridx = 0;
-		gridBagConstraints11.gridy = 1;
-		gridBagConstraints11.gridwidth = 0;
-		gridBagConstraints11.anchor = GridBagConstraints.WEST;
-		gridBagConstraints11.fill = GridBagConstraints.NONE;
-		gridBagConstraints11.weighty = 0.0;
-		gridBagConstraints11.gridx = 0;
-		gridBagConstraints11.gridy = 1;
-		gridBagConstraints11.gridwidth = 0;
-		gridBagConstraints11.weightx = 1.0;
-		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.gridx = 1;
-		gridBagConstraints2.gridy = 3;
-		gridBagConstraints2.gridx = 1;
-		gridBagConstraints2.anchor = GridBagConstraints.WEST;
-		gridBagConstraints2.gridy = 3;
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.insets = new Insets(5, 0, 0, 0);
-		gridBagConstraints1.gridx = 1;
-		gridBagConstraints1.gridy = 2;
-		gridBagConstraints1.gridx = 1;
-		gridBagConstraints1.anchor = GridBagConstraints.WEST;
-		gridBagConstraints1.gridy = 2;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.insets = new Insets(5, 0, 0, 0);
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 2;
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridheight = 1;
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.anchor = GridBagConstraints.WEST;
-		gridBagConstraints.gridy = 2;
-		this.setSize(538, 444);
-		this.setLayout(new GridBagLayout());
-		this.add(jLabel, gridBagConstraints21);
-		this.add(getJScrollPane(), gridBagConstraints11);
-		this.add(getTitle(), gridBagConstraints);
-		this.add(getIncludeInitialBalance(), gridBagConstraints3);
-		this.add(getAll(), gridBagConstraints1);
-		this.add(getFiltered(), gridBagConstraints2);
-		this.add(getSeparatorPanel(), gridBagConstraints12);
+
+		JLabel tableMessageLabel = new JLabel();
+		tableMessageLabel.setText(LocalizationData.get("ExportDialog.message")); //$NON-NLS-1$
+
+		JPanel tablePanel = new JPanel();
+		tablePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		tablePanel.setLayout(new BorderLayout());
+		tablePanel.add(tableMessageLabel, BorderLayout.NORTH);
+		tablePanel.add(getJScrollPane(), BorderLayout.CENTER);
+
+		JPanel preferencePanelLeft = new JPanel();
+		preferencePanelLeft.setBorder(new EmptyBorder(5, 5, 5, 5));
+		preferencePanelLeft.setLayout(new BoxLayout(preferencePanelLeft, BoxLayout.Y_AXIS));
+		preferencePanelLeft.add(getTitle());
+		preferencePanelLeft.add(getIncludeInitialBalance());
+
+		JPanel preferencePanelRight = new JPanel();
+		preferencePanelRight.setBorder(new EmptyBorder(5, 5, 5, 5));
+		preferencePanelRight.setLayout(new BoxLayout(preferencePanelRight, BoxLayout.Y_AXIS));
+		preferencePanelRight.add(getAll());
+		preferencePanelRight.add(getFiltered());
+
+		JLabel exportFormatLabel = new JLabel();
+		exportFormatLabel.setText(LocalizationData.get("ExportDialog.formatMessage"));
+
+		JPanel formatPanel = new JPanel();
+		formatPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		formatPanel.setLayout(new BorderLayout());
+		formatPanel.add(exportFormatLabel, BorderLayout.NORTH);
+		formatPanel.add(getExportFormats(), BorderLayout.CENTER);
+
+		JPanel preferencePanel = new JPanel();
+		preferencePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		preferencePanel.setLayout(new BorderLayout());
+		preferencePanel.add(preferencePanelLeft, BorderLayout.WEST);
+		preferencePanel.add(preferencePanelRight, BorderLayout.CENTER);
+		preferencePanel.add(formatPanel, BorderLayout.SOUTH);
+
+		JPanel preferenceSeparatorPanel = new JPanel();
+		preferenceSeparatorPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		preferenceSeparatorPanel.setLayout(new BorderLayout());
+		preferenceSeparatorPanel.add(getSeparatorPanel(), BorderLayout.CENTER);
+
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.add(tablePanel);
+		this.add(preferencePanel);
+		this.add(preferenceSeparatorPanel);
+
 		group = new ButtonGroup();
 		group.add(getAll());
 		group.add(getFiltered());
 	}
 
 	/**
-	 * This method initializes title	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes title
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getTitle() {
 		if (title == null) {
@@ -135,9 +126,9 @@ public class ExportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes all	
-	 * 	
-	 * @return javax.swing.JRadioButton	
+	 * This method initializes all
+	 * 
+	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getAll() {
 		if (all == null) {
@@ -150,9 +141,9 @@ public class ExportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes filtered	
-	 * 	
-	 * @return javax.swing.JRadioButton	
+	 * This method initializes filtered
+	 * 
+	 * @return javax.swing.JRadioButton
 	 */
 	JRadioButton getFiltered() {
 		if (filtered == null) {
@@ -164,9 +155,9 @@ public class ExportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes jTable	
-	 * 	
-	 * @return javax.swing.JTable	
+	 * This method initializes jTable
+	 * 
+	 * @return javax.swing.JTable
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
@@ -178,8 +169,8 @@ public class ExportPanel extends JPanel {
 			TableColumnModel columnModel = jTable.getColumnModel();
 			for (int i = 0; i < columnModel.getColumnCount(); i++) {
 				TableColumn column = columnModel.getColumn(i);
-				int w = renderer.getTableCellRendererComponent(null, column.getHeaderValue(),
-						false, false, 0, 0).getPreferredSize().width;
+				int w = renderer.getTableCellRendererComponent(null, column.getHeaderValue(), false, false, 0, 0)
+						.getPreferredSize().width;
 				column.setPreferredWidth(w);
 			}
 			// Disallow resizing of columns
@@ -206,16 +197,16 @@ public class ExportPanel extends JPanel {
 				break;
 			}
 		}
-		invalidityCause = oneSelected?null:LocalizationData.get("ExportDialog.nothingToExport"); //$NON-NLS-1$
+		invalidityCause = oneSelected ? null : LocalizationData.get("ExportDialog.nothingToExport"); //$NON-NLS-1$
 		if (!NullUtils.areEquals(invalidityCause, old)) {
 			this.firePropertyChange(INVALIDITY_CAUSE, old, invalidityCause);
 		}
 	}
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
@@ -227,24 +218,52 @@ public class ExportPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes includeInitialBalance	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes includeInitialBalance
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getIncludeInitialBalance() {
 		if (includeInitialBalance == null) {
 			includeInitialBalance = new JCheckBox();
 			includeInitialBalance.setText(LocalizationData.get("ExportDialog.includeInitialBalanceCheckBox")); //$NON-NLS-1$
 			includeInitialBalance.setSelected(true);
-			includeInitialBalance.setToolTipText(LocalizationData.get("ExportDialog.includeInitialBalanceCheckBox.toolTip")); //$NON-NLS-1$
+			includeInitialBalance
+					.setToolTipText(LocalizationData.get("ExportDialog.includeInitialBalanceCheckBox.toolTip")); //$NON-NLS-1$
 		}
 		return includeInitialBalance;
 	}
 
+	private JComboBox<ExportFormatType> getExportFormats() {
+		if (exportFormats == null) {
+			exportFormats = new JComboBox<ExportFormatType>(ExportFormatType.values());
+			exportFormats.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							if (ExportPanel.this.separatorPanel != null) {
+								Component[] components = ExportPanel.this.separatorPanel.getComponents();
+								for (Component component : components) {
+									component.setEnabled(ExportFormatType.CSV.equals(ExportPanel //
+											.this.exportFormats.getSelectedItem()));
+								}
+								ExportPanel.this.separatorPanel.updateUI();
+							}
+						}
+					});
+				}
+			});
+			exportFormats.setToolTipText(LocalizationData.get("ExportDialog.formatMessage.tooltip"));
+			exportFormats.setSelectedItem(ExportFormatType.CSV);
+		}
+		return exportFormats;
+	}
+
 	/**
-	 * This method initializes separatorPanel	
-	 * 	
-	 * @return net.yapbam.gui.dialogs.export.SeparatorPanel	
+	 * This method initializes separatorPanel
+	 * 
+	 * @return net.yapbam.gui.dialogs.export.SeparatorPanel
 	 */
 	private SeparatorPanel getSeparatorPanel() {
 		if (separatorPanel == null) {
@@ -254,7 +273,7 @@ public class ExportPanel extends JPanel {
 	}
 
 	public ExporterParameters getExporterParameters() {
-		ExportTableModel model = (ExportTableModel)getJTable().getModel();
+		ExportTableModel model = (ExportTableModel) getJTable().getModel();
 		int[] viewToModel = new int[getJTable().getColumnCount()];
 		boolean[] selected = new boolean[viewToModel.length];
 		for (int i = 0; i < viewToModel.length; i++) {
@@ -262,18 +281,24 @@ public class ExportPanel extends JPanel {
 			viewToModel[i] = modelColumn;
 			selected[modelColumn] = (Boolean) model.getValueAt(0, modelColumn);
 		}
-		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(), getIncludeInitialBalance().isSelected(), !all.isSelected());
+		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(),
+				getIncludeInitialBalance().isSelected(), !all.isSelected(),
+				ExportFormatType.valueOf(exportFormats.getSelectedItem() + ""));
 	}
 
 	public boolean setParameters(ExporterParameters parameters) {
 		title.setSelected(parameters.isInsertHeader());
 		separatorPanel.setSeparator(parameters.getSeparator());
+		exportFormats.setSelectedItem(parameters.getExportFormat() == null //
+				? ExportFormatType.CSV
+				: parameters.getExportFormat() //
+		);
 		getIncludeInitialBalance().setSelected(parameters.isExportInitialBalance());
-		JRadioButton sel = parameters.isExportFilteredData()?filtered:all;
+		JRadioButton sel = parameters.isExportFilteredData() ? filtered : all;
 		group.setSelected(sel.getModel(), true);
-		boolean ok = jTable.getColumnCount()==parameters.getViewIndexesToModel().length;
+		boolean ok = jTable.getColumnCount() == parameters.getViewIndexesToModel().length;
 		if (ok) {
-			for (int i = jTable.getColumnCount()-1; i>=0 ; i--) {
+			for (int i = jTable.getColumnCount() - 1; i >= 0; i--) {
 				int modelIndex = parameters.getViewIndexesToModel()[i];
 				jTable.moveColumn(jTable.convertColumnIndexToView(modelIndex), i);
 			}
