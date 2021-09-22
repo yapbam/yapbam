@@ -10,14 +10,11 @@ import javax.swing.JPopupMenu;
 
 import com.fathzer.soft.ajlib.swing.table.JTable;
 
-import net.yapbam.gui.util.FriendlyTable.ExportFormat;
 import net.yapbam.gui.widget.JLabelMenu;
 
-/**
- * A JTable that allows columns to be hidden.
- * 
- * @author Jean-Marc Astesana <BR>
- *         License : GPL v3
+/** A JTable that allows columns to be hidden.
+ * @author Jean-Marc Astesana
+ * <BR>License : GPL v3
  */
 public class FriendlyTable extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -30,21 +27,16 @@ public class FriendlyTable extends JTable {
 
 	/**
 	 * Tests whether a table column is visible or not.
-	 * 
-	 * @param index the view index of the column. This index takes into account the
-	 *              invisible columns.
+	 * @param index the view index of the column. This index takes into account the invisible columns.
 	 * @return true if the column is visible.
 	 */
 	public boolean isColumnVisible(int index) {
 		XTableColumnModel model = (XTableColumnModel) getColumnModel();
 		return model.isColumnVisible(model.getColumn(index, false));
 	}
-
-	/**
-	 * Sets the visibility of a column.
-	 * 
-	 * @param index   the view index of the column. This index takes into account
-	 *                the invisible columns.
+	
+	/** Sets the visibility of a column.
+	 * @param index the view index of the column. This index takes into account the invisible columns.
 	 * @param visible true to make the column visible, false to hide it
 	 */
 	public void setColumnVisible(int index, boolean visible) {
@@ -52,9 +44,7 @@ public class FriendlyTable extends JTable {
 		model.setColumnVisible(model.getColumn(index, false), visible);
 	}
 
-	/**
-	 * Gets the number of column in this table.
-	 * 
+	/** Gets the number of column in this table.
 	 * @param onlyVisible true if we want to ignore the hidden columns.
 	 * @return an int
 	 */
@@ -62,11 +52,9 @@ public class FriendlyTable extends JTable {
 		XTableColumnModel model = (XTableColumnModel) getColumnModel();
 		return model.getColumnCount(onlyVisible);
 	}
-
-	/**
-	 * Gets the name of a column of this table.
-	 * 
-	 * @param index       The index of the column
+	
+	/** Gets the name of a column of this table.
+	 * @param index The index of the column
 	 * @param onlyVisible true if we want to ignore hidden columns.
 	 * @return a String
 	 */
@@ -97,18 +85,14 @@ public class FriendlyTable extends JTable {
 		}
 	}
 
-	/**
-	 * A menu that interact with a friendly table to show/hide its columns.
-	 * 
+	/** A menu that interacts with a friendly table to show/hide its columns.
 	 * @see JLabelMenu
 	 */
 	public static class ShowHideColumsMenu extends JLabelMenu {
 		private static final long serialVersionUID = 1L;
 		private FriendlyTable table;
 
-		/**
-		 * Constructor.
-		 * 
+		/** Constructor.
 		 * @param table The table to interact with
 		 * @param title The menu title.
 		 */
@@ -127,33 +111,25 @@ public class FriendlyTable extends JTable {
 		}
 	}
 
-	/**
-	 * The format of an export.
-	 * 
+	/** The format of an export.
 	 * @see FriendlyTable#export(File, ExportFormat)
 	 */
 	public interface ExportFormat {
-		/**
-		 * Gets the header attribute of this format.
-		 * 
+		/** Gets the header attribute of this format.
 		 * @return true if we want an header line to be output
 		 */
 		public boolean hasHeader();
-
-		/**
-		 * Gets the columns separator.
-		 * 
+		
+		/** Gets the columns separator.
 		 * @return a char
 		 */
 		public char getSeparator();
-
-		/**
-		 * Gets the formatted view of a cell content.
-		 * 
+		
+		/** Gets the formatted view of a cell content.
 		 * @param obj The cell content.
 		 * @return a String that will be output to the file.
 		 */
-		public String formatValue(Object obj);
+		public String format(Object obj);
 
 		/**
 		 * Exports the visible content of the table on a file.

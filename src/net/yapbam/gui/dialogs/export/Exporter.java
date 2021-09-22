@@ -29,6 +29,7 @@ import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 
+//TODO Maybe could be split in two classes (CSV Exporter and HTML Exporter) 
 public class Exporter {
 	private ExporterParameters parameters;
 	private DateFormat dateFormatter;
@@ -42,15 +43,10 @@ public class Exporter {
 	}
 	
 	public void exportFile(File file, FilteredData data) throws IOException {
-
 		int[] fields = parameters.getExportedIndexes();
+		Iterator<Transaction> transactions = parameters.isExportFilteredData() ? new FilteredTransactions(data) : new GlobalTransactions(data);
 
-		Iterator<Transaction> transactions = parameters.isExportFilteredData() //
-				? new FilteredTransactions(data)
-				: new GlobalTransactions(data);
-
-		FileOutputStream outputStream = new FileOutputStream(file);
-		Writer fileWriter = new OutputStreamWriter(outputStream, parameters.getEncoding());
+		Writer fileWriter = new OutputStreamWriter(new FileOutputStream(file), parameters.getEncoding());
 		try {
 			if (ExportFormatType.CSV.equals(parameters.getExportFormat())) {
 				CSVWriter writer = new CSVWriter(fileWriter);
@@ -153,7 +149,6 @@ public class Exporter {
 				throw new IOException("Unsupported format: " + parameters.getExportFormat());
 			}
 		} finally {
-			outputStream.close();
 			fileWriter.close();
 		}
 	}

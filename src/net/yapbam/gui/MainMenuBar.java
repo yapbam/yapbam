@@ -125,7 +125,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.add(this.menuItemSaveAs);
 		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
 		menu.addSeparator();
-		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.get(Name.LOCK)); //$NON-NLS-1$ ;
+		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.get(Name.LOCK)); //$NON-NLS-1$
 		this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
 		this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
 		this.menuItemProtect.addActionListener(this);
@@ -172,7 +172,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		transactionMenu = new JMenu(LocalizationData.get("MainMenu.Transactions")); //$NON-NLS-1$
 		transactionMenu.setMnemonic(LocalizationData.getChar("MainMenu.Transactions.Mnemonic")); //$NON-NLS-1$
 		transactionMenu.setToolTipText(LocalizationData.get("MainMenu.Transactions.ToolTip")); //$NON-NLS-1$
-		JMenuItem menuItemNewAccount = new JMenuItem(new NewAccountAction(frame.getData())); // $NON-NLS-1$
+		JMenuItem menuItemNewAccount = new JMenuItem(new NewAccountAction(frame.getData())); //$NON-NLS-1$
 		menuItemNewAccount.setMnemonic(LocalizationData.getChar("MainMenu.Accounts.New.Mnemonic")); //$NON-NLS-1$
 		this.transactionMenu.add(menuItemNewAccount);
 		insertPluginMenuItems(this.transactionMenu, AbstractPlugIn.ACCOUNTS_PART);
@@ -384,24 +384,16 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
 			exportDialog.setVisible(true);
 			Exporter exporter = exportDialog.getResult();
-			if (exporter != null) {
-				final File dataDirectory = Portable.getApplicationDirectory();
-				final JFileChooser chooser = new FileChooser(
-						dataDirectory != null ? dataDirectory.toPath().toString() : null);
+			if (exporter!=null) {
+				JFileChooser chooser = new FileChooser(null);
 				chooser.setLocale(LocalizationData.getLocale());
 				for (ExportFormatType format : ExportFormatType.values()) {
-					chooser.addChoosableFileFilter(new FileNameExtensionFilter( //
-							format.getDescription(), //
-							format.getExtension()) //
-					);
+					chooser.addChoosableFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
 				}
 				chooser.updateUI();
-				File file = chooser.showSaveDialog(frame.getJFrame()) == JFileChooser.APPROVE_OPTION
-						? chooser.getSelectedFile()
-						: null;
-				if (file != null) {
+				File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+				if (file!=null) {
 					try {
-
 						FileNameExtensionFilter filter = (FileNameExtensionFilter) chooser.getFileFilter();
 						if (filter != null) {
 							String extension = FileUtils.getExtension(file);
@@ -409,13 +401,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 								file = new File(file.getPath() + "." + filter.getExtensions()[0]);
 							}
 						}
-
 						file = FileUtils.getCanonical(file);
 						exporter.exportFile(file, frame.getFilteredData());
-						JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), //$NON-NLS-1$
-								LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
-					} catch (IOException ex) {
-						ErrorManager.INSTANCE.display(frame.getJFrame(), ex);
+						JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+					} catch (IOException e1) {
+						ErrorManager.INSTANCE.display(frame.getJFrame(), e1);
 					}
 				}					
 			}

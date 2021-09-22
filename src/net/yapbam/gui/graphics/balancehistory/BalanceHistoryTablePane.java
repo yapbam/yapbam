@@ -230,7 +230,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		}
 
 		@Override
-		public String formatValue(Object obj) {
+		public String format(Object obj) {
 			if (obj == null) {
 				return ""; //$NON-NLS-1$
 			} else if (obj instanceof Date) {
@@ -278,7 +278,7 @@ public class BalanceHistoryTablePane extends JPanel {
 						for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
 							if (table.isColumnVisible(colIndex)) {
 								Object obj = table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
-								out.writeCell(formatValue(obj));
+								out.writeCell(format(obj));
 							}
 						}
 						out.newLine();
@@ -312,7 +312,7 @@ public class BalanceHistoryTablePane extends JPanel {
 			style.withText("table, th, td {border: 1px solid black;border-collapse: collapse;}");
 			body.with(style);
 
-			ContainerTag title = h2(formatValue(new Date()));
+			ContainerTag title = h2(format(new Date()));
 			title.attr(new Attribute("align", "center"));
 			body.with(title);
 
@@ -337,7 +337,7 @@ public class BalanceHistoryTablePane extends JPanel {
 						for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
 							if (table.isColumnVisible(colIndex)) {
 								Object obj = table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
-								tr.with(td(formatValue(obj)));
+								tr.with(td(format(obj)));
 							}
 						}
 						tBody.with(tr);
