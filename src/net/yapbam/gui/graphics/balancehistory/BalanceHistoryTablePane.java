@@ -29,6 +29,7 @@ import java.util.Locale;
 
 import javax.swing.Action;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -66,32 +67,46 @@ import net.yapbam.gui.util.FriendlyTable.ExportFormat;
 import net.yapbam.gui.util.XTableColumnModel;
 
 public class BalanceHistoryTablePane extends JPanel {
+	// If you ask yourself why this pane can't be displayed by Eclipse Window Builder, it seems the problem is
+	// with JSplitButton. If you replace the JSplitButton with a basic JButton, the component is displayed without any problem
+	//TODO Investigate more on this.
 	private static final long serialVersionUID = 1L;
-	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()
-			+ ".hideIntermediateBalance"; //$NON-NLS-1$
+	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()+".hideIntermediateBalance"; //$NON-NLS-1$
 
 	private JLabel columnMenu;
 	BalanceHistoryTable table;
 	private FilteredData data;
 	private JCheckBox hideIntermediateChkBx;
 
-	/**
-	 * Creates the panel.
-	 * 
-	 * @param data the data to be displayed
-	 */
 	public BalanceHistoryTablePane(FilteredData data) {
 		this.data = data;
+		setLayout(new BorderLayout());
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(getTable());
 
-		final JSplitButton btnExport = new JSplitButton(LocalizationData.get("BudgetPanel.export"));
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new BorderLayout());
+		northPanel.add(getColumnMenu(), BorderLayout.EAST);
+		northPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
+
+		JPanel southPanel = new JPanel();
+		southPanel.setLayout(new BorderLayout());
+		southPanel.add(getHideIntermediateChkBx(), BorderLayout.WEST);
+		southPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
+		southPanel.add(getBtnExport(), BorderLayout.EAST);
+
+		add(northPanel, BorderLayout.NORTH);
+		add(scrollPane, BorderLayout.CENTER);
+		add(southPanel, BorderLayout.SOUTH);
+	}
+	
+	private JButton getBtnExport() {
+		final JSplitButton btnExport = new JSplitButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
 		btnExport.setPreferredSize(new Dimension(150, 40));
-		btnExport.setToolTipText(LocalizationData.get("BudgetPanel.export.toolTip"));
+		btnExport.setToolTipText(LocalizationData.get("BudgetPanel.export.toolTip")); //$NON-NLS-1$
 
 		ActionListener exportActionListener = new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (StringUtils.isNotBlank(e.getActionCommand())) {
@@ -134,33 +149,15 @@ public class BalanceHistoryTablePane extends JPanel {
 
 		JPopupMenu exportMenu = new JPopupMenu();
 		for (ExportFormatType formatType : ExportFormatType.values()) {
-			JMenuItem menuItem = new JMenuItem(Formatter.format(LocalizationData.get("BudgetPanel.exportAs"), //
+			JMenuItem menuItem = new JMenuItem(Formatter.format(LocalizationData.get("BudgetPanel.exportAs"),  //$NON-NLS-1$
 					formatType.getDescription(), formatType.getExtension()) //
 			);
 			menuItem.setActionCommand(formatType.name());
 			menuItem.addActionListener(exportActionListener);
 			exportMenu.add(menuItem);
 		}
-
 		btnExport.setPopupMenu(exportMenu);
-
-		setLayout(new BorderLayout());
-
-		JPanel northPanel = new JPanel();
-		northPanel.setLayout(new BorderLayout());
-		northPanel.add(getColumnMenu(), BorderLayout.EAST);
-		northPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
-
-		JPanel southPanel = new JPanel();
-		southPanel.setLayout(new BorderLayout());
-		southPanel.add(getHideIntermediateChkBx(), BorderLayout.WEST);
-		southPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
-		southPanel.add(btnExport, BorderLayout.EAST);
-
-		add(northPanel, BorderLayout.NORTH);
-		add(scrollPane, BorderLayout.CENTER);
-		add(southPanel, BorderLayout.SOUTH);
-
+		return btnExport;
 	}
 
 	private JCheckBox getHideIntermediateChkBx() {
@@ -169,8 +166,7 @@ public class BalanceHistoryTablePane extends JPanel {
 			hideIntermediateChkBx.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					((BalanceHistoryModel) getTable().getModel())
-							.setHideIntermediateBalances(e.getStateChange() == ItemEvent.SELECTED);
+					((BalanceHistoryModel)getTable().getModel()).setHideIntermediateBalances(e.getStateChange()==ItemEvent.SELECTED);
 				}
 			});
 		}
@@ -179,8 +175,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	private JLabel getColumnMenu() {
 		if (columnMenu == null) {
-			columnMenu = new FriendlyTable.ShowHideColumsMenu(getTable(),
-					LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+			columnMenu = new FriendlyTable.ShowHideColumsMenu(getTable(), LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 			columnMenu.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 			columnMenu.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
@@ -194,9 +189,8 @@ public class BalanceHistoryTablePane extends JPanel {
 				Action edit = new EditTransactionAction(table);
 				Action delete = new DeleteTransactionAction(table);
 				Action duplicate = new DuplicateTransactionAction(table);
-				table.addMouseListener(new JTableListener(
-						new Action[] { edit, duplicate, delete, null, new ConvertToPeriodicalTransactionAction(table) },
-						edit));
+				table.addMouseListener(new JTableListener(new Action[] { edit, duplicate,
+						delete, null, new ConvertToPeriodicalTransactionAction(table) }, edit));
 			}
 		}
 		return table;
@@ -204,14 +198,12 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(getTable(), this.getClass().getCanonicalName());
-		YapbamState.INSTANCE.put(HIDE_INTERMEDIATE_BALANCE_KEY,
-				Boolean.toString(getHideIntermediateChkBx().isSelected()));
+		YapbamState.INSTANCE.put(HIDE_INTERMEDIATE_BALANCE_KEY, Boolean.toString(getHideIntermediateChkBx().isSelected()));
 	}
 
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(getTable(), this.getClass().getCanonicalName());
-		getHideIntermediateChkBx()
-				.setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(HIDE_INTERMEDIATE_BALANCE_KEY, "true"))); //$NON-NLS-1$
+		getHideIntermediateChkBx().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(HIDE_INTERMEDIATE_BALANCE_KEY, "true"))); //$NON-NLS-1$
 	}
 
 	private abstract class AbstractExporter implements FriendlyTable.ExportFormat {
