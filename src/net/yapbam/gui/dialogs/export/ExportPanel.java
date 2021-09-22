@@ -94,6 +94,7 @@ public class ExportPanel extends JPanel {
 		preferencePanel.add(preferencePanelLeft, BorderLayout.WEST);
 		preferencePanel.add(preferencePanelRight, BorderLayout.CENTER);
 		preferencePanel.add(formatPanel, BorderLayout.SOUTH);
+		
 
 		JPanel preferenceSeparatorPanel = new JPanel();
 		preferenceSeparatorPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -235,7 +236,12 @@ public class ExportPanel extends JPanel {
 
 	private JComboBox<ExportFormatType> getExportFormats() {
 		if (exportFormats == null) {
-			exportFormats = new JComboBox<ExportFormatType>(ExportFormatType.values());
+			// Warning: We could use the JComboBox(ExportFormatType[]) but it leads to Eclipse Window Builder not being able to parse the code
+			// So let's create an empty Combo and add its elements
+			exportFormats = new JComboBox<ExportFormatType>();
+			for (ExportFormatType value : ExportFormatType.values()) {
+				exportFormats.addItem(value);
+			}
 			exportFormats.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent event) {
