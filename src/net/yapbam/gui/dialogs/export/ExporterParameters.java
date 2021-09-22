@@ -16,16 +16,18 @@ public class ExporterParameters implements Serializable {
 	private char separator;
 	private boolean exportInitialBalance;
 	private boolean exportFilteredData;
-	
+	private ExportFormatType exportFormat;
+
 	private int[] exportedIndexes;
 
 	public ExporterParameters() {
-		this(ArrayUtils.buildIntArray(ExportTableModel.COLUMNS.length, 0, 1), ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true),
-				true, ';', true, true);
+		this(ArrayUtils.buildIntArray(ExportTableModel.COLUMNS.length, 0, 1),
+				ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true), true, ';', true, true,
+				ExportFormatType.CSV);
 	}
 	
-	public ExporterParameters(int[] viewindexesToModel, boolean[] selectedModelColumns, boolean insertHeader, char separator,
-			boolean exportInitialBalance, boolean exportFilteredData) {
+	public ExporterParameters(int[] viewindexesToModel, boolean[] selectedModelColumns, boolean insertHeader,
+			char separator, boolean exportInitialBalance, boolean exportFilteredData, ExportFormatType exportFormat) {
 		super();
 		this.viewIndexesToModel = viewindexesToModel;
 		this.selectedModelColumns = selectedModelColumns;
@@ -33,6 +35,7 @@ public class ExporterParameters implements Serializable {
 		this.separator = separator;
 		this.exportInitialBalance = exportInitialBalance;
 		this.exportFilteredData = exportFilteredData;
+		this.exportFormat = exportFormat;
 		int nbSelected = 0;
 		for (boolean b : selectedModelColumns) {
 			if (b) {
@@ -79,6 +82,14 @@ public class ExporterParameters implements Serializable {
 
 	public void setExportFilteredData(boolean exportFilteredData) {
 		this.exportFilteredData = exportFilteredData;
+	}
+
+	public ExportFormatType getExportFormat() {
+		return exportFormat;
+	}
+
+	public void setExportFormat(ExportFormatType exportFormat) {
+		this.exportFormat = exportFormat;
 	}
 
 	public Charset getEncoding() {

@@ -1,14 +1,57 @@
 package net.yapbam.gui.graphics.balancehistory;
 
+import static j2html.TagCreator.body;
+import static j2html.TagCreator.document;
+import static j2html.TagCreator.h2;
+import static j2html.TagCreator.html;
+import static j2html.TagCreator.style;
+import static j2html.TagCreator.table;
+import static j2html.TagCreator.tbody;
+import static j2html.TagCreator.td;
+import static j2html.TagCreator.tr;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.print.Printable;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import javax.swing.Action;
+import javax.swing.Box;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JTable.PrintMode;
-
-import java.awt.GridBagLayout;
-
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable.PrintMode;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.alexandriasoftware.swing.JSplitButton;
+import com.fathzer.jlocal.Formatter;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
+import com.fathzer.soft.ajlib.swing.table.JTableListener;
+import com.fathzer.soft.ajlib.utilities.CSVWriter;
+import com.fathzer.soft.ajlib.utilities.FileUtils;
+
+import j2html.attributes.Attribute;
+import j2html.tags.ContainerTag;
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
@@ -17,39 +60,15 @@ import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
+import net.yapbam.gui.dialogs.export.ExportFormatType;
 import net.yapbam.gui.util.FriendlyTable;
-
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-
-import com.fathzer.soft.ajlib.swing.Utils;
-import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
-import com.fathzer.soft.ajlib.swing.table.JTableListener;
-import com.fathzer.soft.ajlib.utilities.CSVWriter;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.print.Printable;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JCheckBox;
-
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
+import net.yapbam.gui.util.FriendlyTable.ExportFormat;
+import net.yapbam.gui.util.XTableColumnModel;
 
 public class BalanceHistoryTablePane extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()+".hideIntermediateBalance"; //$NON-NLS-1$
+	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()
+			+ ".hideIntermediateBalance"; //$NON-NLS-1$
 
 	private JLabel columnMenu;
 	BalanceHistoryTable table;
@@ -58,115 +77,126 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	/**
 	 * Creates the panel.
+	 * 
 	 * @param data the data to be displayed
 	 */
 	public BalanceHistoryTablePane(FilteredData data) {
 		this.data = data;
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		setLayout(gridBagLayout);
-		
-		GridBagConstraints gbcLabel = new GridBagConstraints();
-		gbcLabel.insets = new Insets(0, 5, 5, 0);
-		gbcLabel.anchor = GridBagConstraints.EAST;
-		gbcLabel.gridx = 1;
-		gbcLabel.gridy = 0;
-		add(getColumnMenu(), gbcLabel);
 
 		JScrollPane scrollPane = new JScrollPane();
-		GridBagConstraints gbcScrollPane = new GridBagConstraints();
-		gbcScrollPane.insets = new Insets(0, 0, 5, 0);
-		gbcScrollPane.weighty = 1.0;
-		gbcScrollPane.gridwidth = 0;
-		gbcScrollPane.fill = GridBagConstraints.BOTH;
-		gbcScrollPane.gridx = 0;
-		gbcScrollPane.gridy = 1;
-		add(scrollPane, gbcScrollPane);
 		scrollPane.setViewportView(getTable());
-		
-/*
-	JLabel lblSortBy = new JLabelMenu("Sort by:") {
-			private static final long serialVersionUID = 1L;
-			@Override
-			protected void fillPopUp(JPopupMenu popup) {
-				boolean valueDateSelected = true; //TODO
-				JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem("Value date", valueDateSelected);
-				popup.add(menuItem);
-				menuItem = new JRadioButtonMenuItem("Transaction's date", !valueDateSelected);
-				popup.add(menuItem);
-			}
-		};
 
-		lblSortBy.setToolTipText("Ce menu permet de trier les opérations par date ou date de valeur"); //LOCAL
-		GridBagConstraints gbcLblSortBy = new GridBagConstraints();
-		gbcLblSortBy.weightx = 1.0;
-		gbcLblSortBy.anchor = GridBagConstraints.WEST;
-		gbcLblSortBy.insets = new Insets(0, 5, 0, 5);
-		gbcLblSortBy.gridx = 0;
-		gbcLblSortBy.gridy = 0;
-		add(lblSortBy, gbcLblSortBy);
-		lblSortBy.setVisible(false); //TODO ... maybe
-*/		
-	
-		final JButton btnExport = new JButton(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
-		btnExport.addActionListener(new ActionListener() {
+		final JSplitButton btnExport = new JSplitButton(LocalizationData.get("BudgetPanel.export"));
+		btnExport.setPreferredSize(new Dimension(150, 40));
+		btnExport.setToolTipText(LocalizationData.get("BudgetPanel.export.toolTip"));
+
+		ActionListener exportActionListener = new ActionListener() {
+
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new FileChooser();
-				chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-				File file = chooser.showSaveDialog(Utils.getOwnerWindow(btnExport))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
-				if (file!=null) {
-					try {
-						getTable().export(file, new DefaultExporter(LocalizationData.getLocale()));
-					} catch (IOException e1) {
-						ErrorManager.INSTANCE.display(btnExport, e1);
+				if (StringUtils.isNotBlank(e.getActionCommand())) {
+
+					ExportFormatType exportType = ExportFormatType.valueOf(e.getActionCommand());
+
+					JFileChooser chooser = new FileChooser();
+					chooser.setAcceptAllFileFilterUsed(false);
+					chooser.setFileFilter(new FileNameExtensionFilter( //
+							exportType.getDescription(), //
+							exportType.getExtension() //
+					));
+					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
+
+					File file = chooser.showSaveDialog(Utils.getOwnerWindow(btnExport)) == JFileChooser.APPROVE_OPTION
+							? chooser.getSelectedFile()
+							: null;
+
+					if (file != null) {
+
+						if (!file.getPath().endsWith(exportType.getExtension()))
+							file = new File(file.getPath() + "." + exportType.getExtension());
+
+						try {
+							ExportFormat exportFormat = null;
+							if (ExportFormatType.CSV.equals(exportType)) {
+								exportFormat = new DefaultExporter(LocalizationData.getLocale());
+							} else if (ExportFormatType.HTML.equals(exportType)) {
+								exportFormat = new HtmlExporter(LocalizationData.getLocale());
+							}
+							if (exportFormat != null)
+								exportFormat.export(BalanceHistoryTablePane.this.table, file);
+						} catch (IOException ex) {
+							ErrorManager.INSTANCE.display(btnExport, ex);
+						}
 					}
 				}
 			}
-		});
-		GridBagConstraints gbcChckbxHide = new GridBagConstraints();
-		gbcChckbxHide.insets = new Insets(0, 0, 0, 5);
-		gbcChckbxHide.gridx = 0;
-		gbcChckbxHide.gridy = 2;
-		add(getHideIntermediateChkBx(), gbcChckbxHide);
-		btnExport.setToolTipText(LocalizationData.get("BudgetPanel.export.toolTip")); //$NON-NLS-1$
-		btnExport.setHorizontalAlignment(SwingConstants.RIGHT);
-		GridBagConstraints gbcBtnExport = new GridBagConstraints();
-		gbcBtnExport.anchor = GridBagConstraints.EAST;
-		gbcBtnExport.weightx = 1.0;
-		gbcBtnExport.gridx = 1;
-		gbcBtnExport.gridy = 2;
-		add(btnExport, gbcBtnExport);
+		};
+
+		JPopupMenu exportMenu = new JPopupMenu();
+		for (ExportFormatType formatType : ExportFormatType.values()) {
+			JMenuItem menuItem = new JMenuItem(Formatter.format(LocalizationData.get("BudgetPanel.exportAs"), //
+					formatType.getDescription(), formatType.getExtension()) //
+			);
+			menuItem.setActionCommand(formatType.name());
+			menuItem.addActionListener(exportActionListener);
+			exportMenu.add(menuItem);
+		}
+
+		btnExport.setPopupMenu(exportMenu);
+
+		setLayout(new BorderLayout());
+
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new BorderLayout());
+		northPanel.add(getColumnMenu(), BorderLayout.EAST);
+		northPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
+
+		JPanel southPanel = new JPanel();
+		southPanel.setLayout(new BorderLayout());
+		southPanel.add(getHideIntermediateChkBx(), BorderLayout.WEST);
+		southPanel.add(Box.createHorizontalGlue(), BorderLayout.CENTER);
+		southPanel.add(btnExport, BorderLayout.EAST);
+
+		add(northPanel, BorderLayout.NORTH);
+		add(scrollPane, BorderLayout.CENTER);
+		add(southPanel, BorderLayout.SOUTH);
+
 	}
 
 	private JCheckBox getHideIntermediateChkBx() {
-		if (hideIntermediateChkBx==null) {
+		if (hideIntermediateChkBx == null) {
 			hideIntermediateChkBx = new JCheckBox(LocalizationData.get("BalanceHistory.transaction.hideIntermediate")); //$NON-NLS-1$
 			hideIntermediateChkBx.addItemListener(new ItemListener() {
+				@Override
 				public void itemStateChanged(ItemEvent e) {
-					((BalanceHistoryModel)getTable().getModel()).setHideIntermediateBalances(e.getStateChange()==ItemEvent.SELECTED);
+					((BalanceHistoryModel) getTable().getModel())
+							.setHideIntermediateBalances(e.getStateChange() == ItemEvent.SELECTED);
 				}
 			});
 		}
 		return hideIntermediateChkBx;
 	}
-	
+
 	private JLabel getColumnMenu() {
-		if (columnMenu==null) {
-			columnMenu = new FriendlyTable.ShowHideColumsMenu(getTable(), LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
+		if (columnMenu == null) {
+			columnMenu = new FriendlyTable.ShowHideColumsMenu(getTable(),
+					LocalizationData.get("MainFrame.showColumns")); //$NON-NLS-1$
 			columnMenu.setToolTipText(LocalizationData.get("MainFrame.showColumns.ToolTip")); //$NON-NLS-1$
 			columnMenu.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return columnMenu;
 	}
-	
+
 	private BalanceHistoryTable getTable() {
-		if (table==null) {
+		if (table == null) {
 			table = new BalanceHistoryTable(data);
-			if (data!=null) {
+			if (data != null) {
 				Action edit = new EditTransactionAction(table);
 				Action delete = new DeleteTransactionAction(table);
 				Action duplicate = new DuplicateTransactionAction(table);
-				table.addMouseListener(new JTableListener(new Action[] { edit, duplicate,
-						delete, null, new ConvertToPeriodicalTransactionAction(table) }, edit));
+				table.addMouseListener(new JTableListener(
+						new Action[] { edit, duplicate, delete, null, new ConvertToPeriodicalTransactionAction(table) },
+						edit));
 			}
 		}
 		return table;
@@ -174,26 +204,50 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	public void saveState() {
 		YapbamState.INSTANCE.saveState(getTable(), this.getClass().getCanonicalName());
-		YapbamState.INSTANCE.put(HIDE_INTERMEDIATE_BALANCE_KEY, Boolean.toString(getHideIntermediateChkBx().isSelected()));
+		YapbamState.INSTANCE.put(HIDE_INTERMEDIATE_BALANCE_KEY,
+				Boolean.toString(getHideIntermediateChkBx().isSelected()));
 	}
 
 	public void restoreState() {
 		YapbamState.INSTANCE.restoreState(getTable(), this.getClass().getCanonicalName());
-		getHideIntermediateChkBx().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(HIDE_INTERMEDIATE_BALANCE_KEY, "true"))); //$NON-NLS-1$
+		getHideIntermediateChkBx()
+				.setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(HIDE_INTERMEDIATE_BALANCE_KEY, "true"))); //$NON-NLS-1$
 	}
 
-	private final class DefaultExporter implements FriendlyTable.ExportFormat {
+	private abstract class AbstractExporter implements FriendlyTable.ExportFormat {
+
 		private DateFormat dateFormater;
 		private NumberFormat currencyFormat;
 
-		private DefaultExporter (Locale locale) {
+		private AbstractExporter(Locale locale) {
 			dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
 			currencyFormat = CSVWriter.getDecimalFormater(locale);
 		}
-		
+
 		@Override
 		public boolean hasHeader() {
 			return true;
+		}
+
+		@Override
+		public String formatValue(Object obj) {
+			if (obj == null) {
+				return ""; //$NON-NLS-1$
+			} else if (obj instanceof Date) {
+				return dateFormater.format(obj);
+			} else if (obj instanceof Double) {
+				return currencyFormat.format(obj);
+			} else {
+				return obj.toString();
+			}
+		}
+
+	}
+
+	private final class DefaultExporter extends AbstractExporter {
+
+		private DefaultExporter(Locale locale) {
+			super(locale);
 		}
 
 		@Override
@@ -202,15 +256,104 @@ public class BalanceHistoryTablePane extends JPanel {
 		}
 
 		@Override
-		public String format(Object obj) {
-			if (obj==null) {
-				return ""; //$NON-NLS-1$
-			} else if (obj instanceof Date) {
-				return dateFormater.format(obj);
-			} else if (obj instanceof Double) {
-				return currencyFormat.format(obj);
-			} else {
-				return obj.toString();
+		public void export(FriendlyTable table, File onFile) throws IOException {
+			if (table != null && onFile != null) {
+				Writer fileWriter = new FileWriter(FileUtils.getCanonical(onFile));
+				try {
+					CSVWriter out = new CSVWriter(fileWriter);
+					out.setSeparator(getSeparator());
+					int[] modelIndexes = new int[table.getColumnCount(false)];
+					for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
+						if (table.isColumnVisible(colIndex)) {
+							modelIndexes[colIndex] = ((XTableColumnModel) table.getColumnModel())
+									.getColumn(colIndex, false).getModelIndex();
+							if (hasHeader()) {
+								out.writeCell(table.getModel().getColumnName(modelIndexes[colIndex]));
+							}
+						}
+					}
+					out.newLine();
+					for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+						int modelRowIndex = table.convertRowIndexToModel(rowIndex);
+						for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
+							if (table.isColumnVisible(colIndex)) {
+								Object obj = table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
+								out.writeCell(formatValue(obj));
+							}
+						}
+						out.newLine();
+					}
+					out.flush();
+				} finally {
+					fileWriter.close();
+				}
+			}
+		}
+	}
+
+	private final class HtmlExporter extends AbstractExporter {
+
+		private HtmlExporter(Locale locale) {
+			super(locale);
+		}
+
+		@Override
+		public char getSeparator() {
+			return '\0';
+		}
+
+		@Override
+		public void export(FriendlyTable table, File onFile) throws IOException {
+
+			ContainerTag body = body();
+			ContainerTag tBody = tbody();
+
+			ContainerTag style = style();
+			style.withText("table, th, td {border: 1px solid black;border-collapse: collapse;}");
+			body.with(style);
+
+			ContainerTag title = h2(formatValue(new Date()));
+			title.attr(new Attribute("align", "center"));
+			body.with(title);
+
+			if (table != null && onFile != null) {
+				Writer fileWriter = new FileWriter(FileUtils.getCanonical(onFile));
+				try {
+					int[] modelIndexes = new int[table.getColumnCount(false)];
+					ContainerTag columnTr = tr();
+					for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
+						if (table.isColumnVisible(colIndex)) {
+							modelIndexes[colIndex] = ((XTableColumnModel) table.getColumnModel())
+									.getColumn(colIndex, false).getModelIndex();
+							if (hasHeader()) {
+								columnTr.with(td(table.getModel().getColumnName(modelIndexes[colIndex])));
+							}
+						}
+					}
+					tBody.with(columnTr);
+					for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+						ContainerTag tr = tr();
+						int modelRowIndex = table.convertRowIndexToModel(rowIndex);
+						for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
+							if (table.isColumnVisible(colIndex)) {
+								Object obj = table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]);
+								tr.with(td(formatValue(obj)));
+							}
+						}
+						tBody.with(tr);
+					}
+
+					ContainerTag htmlTable = table(tBody);
+					htmlTable.attr(new Attribute("width", "90%"));
+					htmlTable.attr(new Attribute("style", "margin:0 auto;"));
+
+					body.with(htmlTable);
+
+					fileWriter.append(document(html(body)));
+					fileWriter.flush();
+				} finally {
+					fileWriter.close();
+				}
 			}
 		}
 	}
