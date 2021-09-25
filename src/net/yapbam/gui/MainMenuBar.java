@@ -383,7 +383,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		} else if (source.equals(this.menuItemExport)) {
 			ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
 			exportDialog.setVisible(true);
-			Exporter exporter = exportDialog.getResult();
+			Exporter<?> exporter = exportDialog.getResult();
 			if (exporter!=null) {
 				JFileChooser chooser = new FileChooser(null);
 				chooser.setLocale(LocalizationData.getLocale());

@@ -13,7 +13,7 @@ import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.util.AutoUpdateOkButtonPropertyListener;
 
 @SuppressWarnings("serial")
-public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
+public class ExportDialog extends AbstractDialog<FilteredData, Exporter<?>> {
 
 	private ExportPanel exportPanel;
 
@@ -22,10 +22,13 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter> {
 	}
 
 	@Override
-	protected Exporter buildResult() {
+	protected Exporter<?> buildResult() {
 		ExporterParameters parameters = exportPanel.getExporterParameters();
 		YapbamState.INSTANCE.save(getStateKey(), parameters);
-		return new Exporter(parameters);
+		if(ExportFormatType.HTML.equals(parameters.getExportFormat())) {
+			return new Exporter<ExporterHtmlFormat>(new ExporterHtmlFormat(), parameters);
+		}
+		return new Exporter<ExporterCsvFormat>(new ExporterCsvFormat(parameters.getSeparator()), parameters);
 	}
 
 	private String getStateKey() {

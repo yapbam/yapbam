@@ -1,5 +1,8 @@
 package net.yapbam.junit;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -7,20 +10,19 @@ import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Date;
 
+import org.junit.Test;
+
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.Transaction;
+import net.yapbam.gui.dialogs.export.ExporterCsvFormat;
 import net.yapbam.gui.dialogs.export.Exporter;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.dialogs.export.ImporterParameters;
-
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class ExportTest {
 	@Test
@@ -34,7 +36,7 @@ public class ExportTest {
 		data.add(t);
 		FilteredData fData = new FilteredData(data);
 		ExporterParameters parameters = new ExporterParameters();
-		Exporter exporter = new Exporter(parameters);
+		Exporter<ExporterCsvFormat> exporter = new Exporter<ExporterCsvFormat>(new ExporterCsvFormat(parameters.getSeparator()), parameters);
 		File file = File.createTempFile("ExportTest", "txt");
 		exporter.exportFile(file, fData);
 		GlobalData rdata = new GlobalData();
