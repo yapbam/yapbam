@@ -68,6 +68,8 @@ public class ExportComponent extends JSplitButton {
 								exportFormat = new TableCsvExporter(LocalizationData.getLocale());
 							} else if (ExportFormatType.HTML.equals(exportType)) {
 								exportFormat = new TableHtmlExporter(LocalizationData.getLocale());
+							} else if(ExportFormatType.JSON.equals(exportType)) {
+								exportFormat = new TableJsonExporter(LocalizationData.getLocale());
 							}
 							if (exportFormat != null)
 								exportFormat.export(ExportComponent.this.table, file);

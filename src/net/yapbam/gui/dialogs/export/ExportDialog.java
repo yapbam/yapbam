@@ -27,6 +27,8 @@ public class ExportDialog extends AbstractDialog<FilteredData, Exporter<?>> {
 		YapbamState.INSTANCE.save(getStateKey(), parameters);
 		if(ExportFormatType.HTML.equals(parameters.getExportFormat())) {
 			return new Exporter<ExporterHtmlFormat>(new ExporterHtmlFormat(), parameters);
+		} else if(ExportFormatType.JSON.equals(parameters.getExportFormat())) {
+			return new Exporter<ExporterJsonFormat>(new ExporterJsonFormat(), parameters);
 		}
 		return new Exporter<ExporterCsvFormat>(new ExporterCsvFormat(parameters.getSeparator()), parameters);
 	}
