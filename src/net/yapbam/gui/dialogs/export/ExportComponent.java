@@ -4,7 +4,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import javax.swing.JFileChooser;
@@ -62,19 +64,29 @@ public class ExportComponent extends JSplitButton {
 						if (!file.getPath().endsWith(exportType.getExtension()))
 							file = new File(file.getPath() + "." + exportType.getExtension());
 
+						FileOutputStream outputStream = null;
 						try {
+							outputStream = new FileOutputStream(file);
 							ExportFormat exportFormat = null;
 							if (ExportFormatType.CSV.equals(exportType)) {
-								exportFormat = new TableCsvExporter(LocalizationData.getLocale());
+								exportFormat = new TableCsvExporter(outputStream, ';', StandardCharsets.UTF_8, LocalizationData.getLocale());
 							} else if (ExportFormatType.HTML.equals(exportType)) {
-								exportFormat = new TableHtmlExporter(LocalizationData.getLocale());
+								exportFormat = new TableHtmlExporter(outputStream, StandardCharsets.UTF_8, LocalizationData.getLocale());
 							} else if(ExportFormatType.JSON.equals(exportType)) {
-								exportFormat = new TableJsonExporter(LocalizationData.getLocale());
+								exportFormat = new TableJsonExporter(outputStream, StandardCharsets.UTF_8, LocalizationData.getLocale());
 							}
 							if (exportFormat != null)
 								exportFormat.export(ExportComponent.this.table, file);
 						} catch (IOException ex) {
 							ErrorManager.INSTANCE.display(ExportComponent.this, ex);
+						} finally {
+							if(outputStream != null) {
+								try {
+									outputStream.close();
+								} catch (IOException ex) {
+									ErrorManager.INSTANCE.display(ExportComponent.this, ex);
+								}
+							}
 						}
 					}
 				}

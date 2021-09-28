@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
@@ -27,6 +29,8 @@ import net.yapbam.gui.dialogs.export.ImporterParameters;
 public class ExportTest {
 	@Test
 	public void test() throws IOException {
+		OutputStream outputStream = null;
+		try {
 		GlobalData data = new GlobalData();
 		Account account = new Account("toto", 100.0);
 		data.add(account);
@@ -36,9 +40,10 @@ public class ExportTest {
 		data.add(t);
 		FilteredData fData = new FilteredData(data);
 		ExporterParameters parameters = new ExporterParameters();
-		Exporter<ExporterCsvFormat> exporter = new Exporter<ExporterCsvFormat>(new ExporterCsvFormat(parameters.getSeparator()), parameters);
+		Exporter<ExporterCsvFormat> exporter = new Exporter<ExporterCsvFormat>(parameters);
 		File file = File.createTempFile("ExportTest", "txt");
-		exporter.exportFile(file, fData);
+		outputStream = new FileOutputStream(file);
+		exporter.exportFile(new ExporterCsvFormat(outputStream, parameters.getSeparator(), parameters.getEncoding()), fData);
 		GlobalData rdata = new GlobalData();
 		DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance();
 		char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
@@ -50,5 +55,10 @@ public class ExportTest {
 		assertEquals(description, rdata.getTransaction(0).getDescription());
 		assertEquals("toto", rdata.getAccount(0).getName());
 		assertTrue(GlobalData.AMOUNT_COMPARATOR.compare(100.0, rdata.getAccount(0).getInitialBalance())==0);
+		} finally {
+			if(outputStream != null) {
+				outputStream.close();
+			}
+		}
 	}
 }

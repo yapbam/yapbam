@@ -1,48 +1,54 @@
 package net.yapbam.gui.dialogs.export;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class ExporterJsonFormat implements IExportableFormat {
 
-	private StringBuffer writer;
+	private Writer writer;
 
-	public ExporterJsonFormat() {
-		this.writer = new StringBuffer();
+	public ExporterJsonFormat(OutputStream stream, Charset encoding) {
+		this.writer = new OutputStreamWriter(stream, encoding);
 	}
 
 	@Override
-	public void addHeader() {
+	public void addHeader() throws IOException {
 		this.writer.append("{");
 		this.writer.append("\"values\":[");
 	}
 
 	@Override
-	public void addLineStart() {
+	public void addLineStart() throws IOException {
 		this.writer.append("[");
 	}
 
 	@Override
-	public void addLineEnd() {
+	public void addLineEnd() throws IOException {
 		this.writer.append("],");
 	}
 
 	@Override
-	public void addValue(String value) {
-		this.writer.append(String.format("\"%s\"", value));
-		addValueSeparator();
-	}
-
-	@Override
-	public void addValueSeparator() {
+	public void addValue(String value) throws IOException {
+		this.writer.append(String.format( //
+				"\"%s\"", //
+				StringEscapeUtils.escapeJson(value) //
+		));
 		this.writer.append(",");
 	}
 
 	@Override
-	public void addFooter() {
+	public void addFooter() throws IOException {
 		this.writer.append("]}");
 	}
 
 	@Override
-	public String flushAndGetResultl() {
-		return this.writer.toString();
+	public void close() throws IOException {
+		this.writer.close();
 	}
 
 }

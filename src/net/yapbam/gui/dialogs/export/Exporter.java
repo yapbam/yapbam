@@ -1,10 +1,6 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -20,27 +16,23 @@ import net.yapbam.gui.LocalizationData;
 
 public class Exporter<F extends IExportableFormat> {
 	
-	private F format;
-	private ExporterParameters parameters;
+	private final ExporterParameters parameters;
 	private DateFormat dateFormatter;
 	private NumberFormat amountFormatter;
 	
-	public Exporter(F exporter, ExporterParameters parameters) {
+	public Exporter(ExporterParameters parameters) {
 		super();
-		format = exporter;
 		this.parameters = parameters;
 		this.dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
 		this.amountFormatter = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
 	}
 
-	public void exportFile(File file, FilteredData data) throws IOException {
+	public void exportFile(F format, FilteredData data) throws IOException {
 		int[] fields = parameters.getExportedIndexes();
 		Iterator<Transaction> transactions = parameters.isExportFilteredData() ? new FilteredTransactions(data)
 				: new GlobalTransactions(data);
 
-		Writer fileWriter = null;
 		try {
-			fileWriter = new OutputStreamWriter(new FileOutputStream(file), parameters.getEncoding());
 			format.addHeader();
 			if (parameters.isInsertHeader()) {
 				// insert the header line
@@ -80,10 +72,9 @@ public class Exporter<F extends IExportableFormat> {
 				}
 			}
 			format.addFooter();
-			fileWriter.append(format.flushAndGetResultl());
 		} finally {
-			if (fileWriter != null) {
-				fileWriter.close();
+			if (format != null) {
+				format.close();
 			}
 		}
 	}
@@ -110,6 +101,10 @@ public class Exporter<F extends IExportableFormat> {
 		return amountFormatter.format(amount);
 	}
 	
+	public ExporterParameters getParameters() {
+		return parameters;
+	}
+
 	private String getField(SubTransaction transaction, int field) {
 		String result = null;
 		if ((field==ExportTableModel.ACCOUNT_INDEX) || (field==ExportTableModel.DATE_INDEX) ||

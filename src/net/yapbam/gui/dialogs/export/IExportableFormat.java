@@ -1,19 +1,19 @@
 package net.yapbam.gui.dialogs.export;
 
+import java.io.IOException;
+
 public interface IExportableFormat {
 
-	public void addHeader();
+	public void addHeader() throws IOException;
 
-	public void addLineStart();
+	public void addLineStart() throws IOException;
 
-	public void addLineEnd();
+	public void addLineEnd() throws IOException;
 
-	public void addValue(String value);
+	public void addValue(String value) throws IOException;
 	
-	public void addValueSeparator();
+	public void addFooter() throws IOException;
 
-	public void addFooter();
-
-	public String flushAndGetResultl();
+	public void close() throws IOException;
 	
 }

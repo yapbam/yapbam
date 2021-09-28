@@ -1,52 +1,53 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.io.StringWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+
+import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
 public class ExporterCsvFormat implements IExportableFormat {
+	
+	private Writer writer;
+	private CSVWriter csv;
 
-	private char separator;
-
-	private StringWriter stringWriter;
-
-	public ExporterCsvFormat(char separator) {
-		this.separator = separator;
-		this.stringWriter = new StringWriter();
+	public ExporterCsvFormat(OutputStream stream, char separator, Charset encoding) {
+		this.writer = new OutputStreamWriter(stream, encoding);
+		this.csv = new CSVWriter(writer);
+		this.csv.setSeparator(separator);
 	}
 
 	@Override
-	public void addHeader() {
+	public void addHeader() throws IOException {
 		return;
 	}
 
 	@Override
-	public void addLineStart() {
+	public void addLineStart() throws IOException {
 		return;
 	}
 
 	@Override
-	public void addLineEnd() {
-		stringWriter.append("\n");
+	public void addLineEnd() throws IOException {
+		csv.newLine();
 	}
 
 	@Override
-	public void addValue(String value) {
-		stringWriter.append(value);
-		addValueSeparator();
+	public void addValue(String value) throws IOException {
+		csv.writeCell(value);
 	}
 	
 	@Override
-	public void addValueSeparator() {
-		stringWriter.append(separator);
-	}
-
-	@Override
-	public void addFooter() {
+	public void addFooter() throws IOException {
 		return;
 	}
 
 	@Override
-	public String flushAndGetResultl() {
-		return stringWriter.toString();
+	public void close() throws IOException {
+		csv.flush();
+		writer.close();
 	}
 
 }

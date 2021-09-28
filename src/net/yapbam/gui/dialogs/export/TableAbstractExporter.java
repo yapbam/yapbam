@@ -1,9 +1,7 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -11,7 +9,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.fathzer.soft.ajlib.utilities.CSVWriter;
-import com.fathzer.soft.ajlib.utilities.FileUtils;
 
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
@@ -27,7 +24,7 @@ public abstract class TableAbstractExporter<F extends IExportableFormat> impleme
 		dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
 		currencyFormat = CSVWriter.getDecimalFormater(locale);
 	}
-	
+
 	@Override
 	public char getSeparator() {
 		return 0;
@@ -53,10 +50,8 @@ public abstract class TableAbstractExporter<F extends IExportableFormat> impleme
 
 	@Override
 	public void export(FriendlyTable table, File onFile) throws IOException {
-		if (table != null && onFile != null) {
-			Writer fileWriter = null;
+		if (table != null && onFile != null && format != null) {
 			try {
-				fileWriter = new FileWriter(FileUtils.getCanonical(onFile));
 				format.addHeader();
 				format.addLineStart();
 				int[] modelIndexes = new int[table.getColumnCount(false)];
@@ -82,11 +77,8 @@ public abstract class TableAbstractExporter<F extends IExportableFormat> impleme
 					format.addLineEnd();
 				}
 				format.addFooter();
-				fileWriter.append(format.flushAndGetResultl());
 			} finally {
-				if (fileWriter != null) {
-					fileWriter.close();
-				}
+				format.close();
 			}
 		}
 	}
