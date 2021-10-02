@@ -3,9 +3,7 @@ package net.yapbam.gui.statementview;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -19,8 +17,6 @@ import java.awt.event.ItemListener;
 import java.awt.print.Printable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -28,13 +24,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -45,14 +39,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable.PrintMode;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.alexandriasoftware.swing.JSplitButton;
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
-import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -62,18 +51,13 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
-import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
-import net.yapbam.gui.dialogs.export.ExportFormatType;
-import net.yapbam.gui.dialogs.export.TableCsvExporter;
-import net.yapbam.gui.dialogs.export.TableHtmlExporter;
 import net.yapbam.gui.util.FriendlyTable;
-import net.yapbam.gui.util.FriendlyTable.ExportFormat;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
 
@@ -97,7 +81,6 @@ public class StatementViewPanel extends JPanel {
 	private JPanel menuPanel;
 	private JLabel lblNewLabel;
 	private SplitPane splitPane;
-	private JScrollPane notCheckedJScrollPane;
 	private JLabel notCheckedColumns;
 	
 	private boolean checkModeReady = false;
@@ -106,7 +89,7 @@ public class StatementViewPanel extends JPanel {
 	private ChangeValueDatePanel changeValueDatePanel;
 	private JLabel summaryLabel;
 	private JButton btnRename;
-	private JSplitButton btnExport;
+	private JButton btnExport;
 	private JPanel northPanel;
 	private JPanel panel1;
 	
@@ -367,9 +350,7 @@ public class StatementViewPanel extends JPanel {
 			gbcLabel.anchor = GridBagConstraints.WEST;
 			gbcLabel.gridx = 0;
 			gbcLabel.gridy = 0;
-			Font font = label.getFont();
-			font = label.getFont().deriveFont(14*label.getFont().getSize()/12);
-			label.setFont(font);
+			label.setFont(label.getFont().deriveFont(14*label.getFont().getSize()/12));
 			panel.add(label, gbcLabel);
 
 			GridBagConstraints gbcNotCheckedColumns = new GridBagConstraints();
@@ -379,7 +360,7 @@ public class StatementViewPanel extends JPanel {
 			gbcNotCheckedColumns.gridwidth = 0;
 			notCheckedPanel.add(getNotCheckedColumns(), gbcNotCheckedColumns);
 	
-			notCheckedJScrollPane = new JScrollPane();
+			JScrollPane notCheckedJScrollPane = new JScrollPane();
 			notCheckedJScrollPane.setViewportView(getUncheckedTransactionsTable());
 			GridBagConstraints gbcNotCheckedJScrollPane = new GridBagConstraints();
 			gbcNotCheckedJScrollPane.gridwidth = 0;
@@ -614,7 +595,7 @@ public class StatementViewPanel extends JPanel {
 		}
 		return btnRename;
 	}
-	private JSplitButton getBtnExport() {
+	private JButton getBtnExport() {
 		if(btnExport == null) {
 			btnExport = new ExportComponent(getTransactionsTable());
 		}

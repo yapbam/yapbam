@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import javax.swing.JFileChooser;
@@ -24,7 +23,6 @@ import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.FriendlyTable;
-import net.yapbam.gui.util.FriendlyTable.ExportFormat;
 
 public class ExportComponent extends JSplitButton {
 	
@@ -60,35 +58,24 @@ public class ExportComponent extends JSplitButton {
 							: null;
 
 					if (file != null) {
-
-						if (!file.getPath().endsWith(exportType.getExtension()))
+						if (!file.getPath().endsWith(exportType.getExtension())) {
 							file = new File(file.getPath() + "." + exportType.getExtension());
-
-						FileOutputStream outputStream = null;
-						try {
-							outputStream = new FileOutputStream(file);
-							ExportFormat exportFormat = null;
-							if (ExportFormatType.CSV.equals(exportType)) {
-								exportFormat = new TableCsvExporter(outputStream, ';', StandardCharsets.UTF_8, LocalizationData.getLocale());
-							} else if (ExportFormatType.HTML.equals(exportType)) {
-								exportFormat = new TableHtmlExporter(outputStream, StandardCharsets.UTF_8, LocalizationData.getLocale());
-							} else if(ExportFormatType.JSON.equals(exportType)) {
-								exportFormat = new TableJsonExporter(outputStream, StandardCharsets.UTF_8, LocalizationData.getLocale());
-							}
-							if (exportFormat != null)
-								exportFormat.export(ExportComponent.this.table, file);
-						} catch (IOException ex) {
-							ErrorManager.INSTANCE.display(ExportComponent.this, ex);
-						} finally {
-							if(outputStream != null) {
-								try {
-									outputStream.close();
-								} catch (IOException ex) {
-									ErrorManager.INSTANCE.display(ExportComponent.this, ex);
-								}
-							}
 						}
+						save(file, exportType);
 					}
+				}
+			}
+
+			private void save(File file, ExportFormatType exportType) {
+				try {
+					FileOutputStream outputStream = new FileOutputStream(file);
+					try {
+						new DefaultTableExporter(exportType.getTableExporter(outputStream), LocalizationData.getLocale()).export(ExportComponent.this.table, file);
+					} finally {
+						outputStream.close();
+					}
+				} catch (IOException ex) {
+					ErrorManager.INSTANCE.display(ExportComponent.this, ex);
 				}
 			}
 		};

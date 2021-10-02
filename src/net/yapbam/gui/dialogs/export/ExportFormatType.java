@@ -1,13 +1,14 @@
 package net.yapbam.gui.dialogs.export;
 
-public enum ExportFormatType {
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
+public enum ExportFormatType {
 	HTML("HyperText Markup Language", "html"), //
 	CSV("Comma Separated Values", "csv"),
 	JSON("JavaScript Object Notation", "json");
 
 	private final String description;
-
 	private final String extension;
 
 	ExportFormatType(String description, String extension) {
@@ -23,4 +24,15 @@ public enum ExportFormatType {
 		return extension;
 	}
 
+	public IExportableFormat getTableExporter(OutputStream stream) {
+		if (ExportFormatType.CSV.equals(this)) {
+			return new ExporterCsvFormat(stream, ';', StandardCharsets.UTF_8);
+		} else if (ExportFormatType.HTML.equals(this)) {
+			return new ExporterHtmlFormat(stream, StandardCharsets.UTF_8);
+		} else if(ExportFormatType.JSON.equals(this)) {
+			return new ExporterJsonFormat(stream, StandardCharsets.UTF_8);
+		} else {
+			throw new IllegalStateException(); // Ouch we forgot a format !
+		}
+	}
 }
