@@ -9,6 +9,7 @@ import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -64,6 +65,10 @@ import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
 import net.yapbam.gui.dialogs.export.ExportFormatType;
 import net.yapbam.gui.dialogs.export.Exporter;
+import net.yapbam.gui.dialogs.export.ExporterCsvFormat;
+import net.yapbam.gui.dialogs.export.ExporterHtmlFormat;
+import net.yapbam.gui.dialogs.export.ExporterJsonFormat;
+import net.yapbam.gui.dialogs.export.IExportableFormat;
 import net.yapbam.gui.dialogs.export.ImportDialog;
 import net.yapbam.gui.dialogs.export.ImportError;
 import net.yapbam.gui.dialogs.export.ImportErrorDialog;
@@ -383,29 +388,46 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		} else if (source.equals(this.menuItemExport)) {
 			ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
 			exportDialog.setVisible(true);
-			Exporter exporter = exportDialog.getResult();
+			Exporter<IExportableFormat> exporter = (Exporter<IExportableFormat>) exportDialog.getResult();
 			if (exporter!=null) {
 				JFileChooser chooser = new FileChooser(null);
 				chooser.setLocale(LocalizationData.getLocale());
-				for (ExportFormatType format : ExportFormatType.values()) {
-					chooser.addChoosableFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
-				}
+				chooser.setAcceptAllFileFilterUsed(Boolean.FALSE);
+				ExportFormatType format = exporter.getParameters().getExportFormat();
+				chooser.addChoosableFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
 				chooser.updateUI();
 				File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
 				if (file!=null) {
+					FileOutputStream outputStream = null;
 					try {
-						FileNameExtensionFilter filter = (FileNameExtensionFilter) chooser.getFileFilter();
-						if (filter != null) {
-							String extension = FileUtils.getExtension(file);
-							if (extension == null || !extension.endsWith(filter.getExtensions()[0])) {
-								file = new File(file.getPath() + "." + filter.getExtensions()[0]);
-							}
+						String extension = FileUtils.getExtension(file);
+						if (extension == null || !extension.endsWith(format.getExtension())) {
+							file = new File(file.getPath() + "." + format.getExtension());
 						}
 						file = FileUtils.getCanonical(file);
-						exporter.exportFile(file, frame.getFilteredData());
-						JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
-					} catch (IOException e1) {
-						ErrorManager.INSTANCE.display(frame.getJFrame(), e1);
+						outputStream = new FileOutputStream(file);
+						IExportableFormat exportFormat = null;
+						if (ExportFormatType.CSV.equals(format)) {
+							exportFormat = new ExporterCsvFormat(outputStream, exporter.getParameters().getSeparator(), exporter.getParameters().getEncoding());
+						} else if (ExportFormatType.HTML.equals(format)) {
+							exportFormat = new ExporterHtmlFormat(outputStream, exporter.getParameters().getEncoding());
+						} else if(ExportFormatType.JSON.equals(format)) {
+							exportFormat = new ExporterJsonFormat(outputStream, exporter.getParameters().getEncoding());
+						}
+						if (exportFormat != null) {
+							exporter.exportFile(exportFormat, frame.getFilteredData());
+							JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+						}
+					} catch (IOException ex) {
+						ErrorManager.INSTANCE.display(frame.getJFrame(), ex);
+					} finally {
+						if(outputStream != null) {
+							try {
+								outputStream.close();
+							} catch (IOException ex) {
+								ErrorManager.INSTANCE.display(frame.getJFrame(), ex);
+							}
+						}
 					}
 				}					
 			}

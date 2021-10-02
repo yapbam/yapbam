@@ -2,8 +2,9 @@ package net.yapbam.gui.dialogs.export;
 
 public enum ExportFormatType {
 
-	HTML("Hyper Text Markup Language", "html"), //
-	CSV("Comma Separated Values", "csv");
+	HTML("HyperText Markup Language", "html"), //
+	CSV("Comma Separated Values", "csv"),
+	JSON("JavaScript Object Notation", "json");
 
 	private final String description;
 
