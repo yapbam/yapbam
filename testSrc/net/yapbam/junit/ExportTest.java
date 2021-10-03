@@ -15,11 +15,15 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.w3c.tidy.Tidy;
 import org.w3c.tidy.TidyMessage;
 import org.w3c.tidy.TidyMessageListener;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Category;
@@ -30,6 +34,7 @@ import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.dialogs.export.ExporterCsvFormat;
 import net.yapbam.gui.dialogs.export.ExporterHtmlFormat;
+import net.yapbam.gui.dialogs.export.ExporterJsonFormat;
 import net.yapbam.gui.dialogs.export.Exporter;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.Importer;
@@ -111,5 +116,33 @@ public class ExportTest {
 				hasNoTitle = true;
 			}
 		}
+	}
+	
+	@Test
+	public void testJSON() throws IOException {
+		GlobalData data = new GlobalData();
+		Account account = new Account("toto", 100.0);
+		data.add(account);
+		String description = "A description with json reserved chars like \", { or ] and accent like אחי";
+		Transaction t = new Transaction(new Date(), null, description,null,0.0,account,Mode.UNDEFINED,
+				Category.UNDEFINED,new Date(), null, Collections.<SubTransaction>emptyList());
+		data.add(t);
+		FilteredData fData = new FilteredData(data);
+		ExporterParameters parameters = new ExporterParameters();
+		Exporter<ExporterJsonFormat> exporter = new Exporter<ExporterJsonFormat>(parameters);
+		File file = File.createTempFile("ExportTest", ".json");
+		OutputStream outputStream = new FileOutputStream(file);
+		try {
+			exporter.exportFile(new ExporterJsonFormat(outputStream, parameters.getEncoding()), fData);
+		} finally {
+			outputStream.close();
+		}
+		final ObjectMapper parser = new ObjectMapper();
+		Map<String, Object> obj = parser.readValue(file, Map.class);
+		assertTrue(obj.containsKey("values"));
+		List<List<String>> lines = (List<List<String>>) obj.get("values");
+		assertEquals(3,lines.size());
+		List<String> transaction = lines.get(2);
+		assertEquals(description, transaction.get(2));
 	}
 }
