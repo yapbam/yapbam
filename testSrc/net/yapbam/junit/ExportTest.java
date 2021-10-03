@@ -138,8 +138,10 @@ public class ExportTest {
 			outputStream.close();
 		}
 		final ObjectMapper parser = new ObjectMapper();
+		@SuppressWarnings("unchecked")
 		Map<String, Object> obj = parser.readValue(file, Map.class);
 		assertTrue(obj.containsKey("values"));
+		@SuppressWarnings("unchecked")
 		List<List<String>> lines = (List<List<String>>) obj.get("values");
 		assertEquals(3,lines.size());
 		List<String> transaction = lines.get(2);
