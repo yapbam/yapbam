@@ -19,7 +19,7 @@ public abstract class LocalizationData {
 	private static com.fathzer.soft.ajlib.utilities.LocalizationData locData;
 	
 	static {
-		SYS_LOCALE = new Locale(System.getProperty("user.language"), System.getProperty("user.country"));  //$NON-NLS-1$//$NON-NLS-2$
+		SYS_LOCALE = new Locale(System.getProperty("user.language","en"), System.getProperty("user.country","US"));  //$NON-NLS-1$//$NON-NLS-2$
 		reset();
 	}
 	
