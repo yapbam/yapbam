@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
@@ -35,6 +36,7 @@ import net.yapbam.data.Transaction;
 import net.yapbam.gui.dialogs.export.ExporterCsvFormat;
 import net.yapbam.gui.dialogs.export.ExporterHtmlFormat;
 import net.yapbam.gui.dialogs.export.ExporterJsonFormat;
+import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.export.Exporter;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.Importer;
@@ -63,14 +65,14 @@ public class ExportTest {
 		GlobalData rdata = new GlobalData();
 		DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance();
 		char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
-		Importer importer = new Importer(file, new ImporterParameters(parameters.getSeparator(), decimalSeparator, parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
+		Importer importer = new Importer(file, new ImporterParameters(parameters.getSeparator(), decimalSeparator, DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()), parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
 		importer.importFile(rdata);
 		
 		assertEquals(1,rdata.getAccountsNumber());
 		assertEquals(1,rdata.getTransactionsNumber());
 		assertEquals(description, rdata.getTransaction(0).getDescription());
 		assertEquals("toto", rdata.getAccount(0).getName());
-		assertTrue(GlobalData.AMOUNT_COMPARATOR.compare(100.0, rdata.getAccount(0).getInitialBalance())==0);
+		assertEquals(0, GlobalData.AMOUNT_COMPARATOR.compare(100.0, rdata.getAccount(0).getInitialBalance()));
 	}
 	
 	@Test

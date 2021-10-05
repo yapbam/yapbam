@@ -23,6 +23,9 @@ public abstract class LocalizationData {
 		reset();
 	}
 	
+	private LocalizationData() {
+	}
+	
 	public static void reset() {
 		Locale locale = Preferences.safeGetLocale(); // Be aware that Preferences.INSTANCE may not be initialized (if its instantiation failed)
 		GlobalData.setDefaultCurrency(Currency.getInstance(locale));
