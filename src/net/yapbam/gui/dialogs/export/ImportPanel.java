@@ -16,9 +16,9 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DateFormat;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.GlobalData;
@@ -50,7 +50,7 @@ public class ImportPanel extends JPanel {
 	private JButton first;
 	private JButton last;
 	private JCheckBox addToCurrentFile;
-	private JComboBox accounts;
+	private JComboBox<String> accounts;
 	private JPanel addToAccountPanel;
 	private JLabel jLabel1;
 	private SeparatorPanel columnSeparatorPanel;
@@ -60,7 +60,7 @@ public class ImportPanel extends JPanel {
 	private File file;
 	private int numberOfLines;
 	private int currentLine;
-	private JComboBox fieldsCombo;
+	private JComboBox<String> fieldsCombo;
 	private String invalidityCause;
 	private File canonicalFile;
 	
@@ -174,7 +174,7 @@ public class ImportPanel extends JPanel {
 			JTableUtils.initColumnSizes(jTable, Integer.MAX_VALUE);
 			jTable.setPreferredScrollableViewportSize(getJTable().getPreferredSize());
 
-			fieldsCombo = new JComboBox();
+			fieldsCombo = new JComboBox<String>();
 			TableColumn importedColumns = jTable.getColumnModel().getColumn(2);
 			importedColumns.setCellEditor(new DefaultCellEditor(fieldsCombo));
 
@@ -296,9 +296,9 @@ public class ImportPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private JComboBox getAccounts() {
+	private JComboBox<String> getAccounts() {
 		if (accounts == null) {
-			accounts = new JComboBox();
+			accounts = new JComboBox<String>();
 			accounts.setToolTipText(LocalizationData.get("ImportDialog.addToAccount.toolTip")); //$NON-NLS-1$
 		}
 		return accounts;
@@ -462,7 +462,7 @@ public class ImportPanel extends JPanel {
 		getLineNumber().setModel(model);
 	}
 
-	private void countFileLines() throws FileNotFoundException, IOException, EmptyImportFileException {
+	private void countFileLines() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(canonicalFile), columnSeparatorPanel.getSeparator(), '"');
 		try {
 			for (String[] fields = reader.readNext(); fields!=null; fields=reader.readNext()) {
@@ -553,6 +553,7 @@ public class ImportPanel extends JPanel {
 		Account defaultAccount = index>=0?data.getAccount(index):null;
         return new Importer(file, new ImporterParameters(columnSeparatorPanel.getSeparator(),
                 decimalSeparatorPanel.getSeparator(),
+                DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()),
                 getNumberOfHeaderLines(),
 				((ImportTableModel)getJTable().getModel()).getRelations()),
 				addToCurrentData?data:null, defaultAccount);

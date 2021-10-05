@@ -26,7 +26,6 @@ public class ImporterTest {
 
     @Test
     public void testImportFile() throws Exception {
-    	//FIXME Only work if locale stored in yapbam prefs is FRENCH
         File f = createBoursoramaFile();
         Account account = new Account("test", 0.0);
         GlobalData data = new GlobalData();
@@ -69,6 +68,6 @@ public class ImporterTest {
     }
 
     private ImporterParameters createBoursoramaParameters() {
-        return new ImporterParameters('\t', '.', 4, new int[]{-1, 0, 2, -1, 3, -1, -1, -1, 1, -1});
+        return new ImporterParameters('\t', '.', DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRENCH), 4, new int[]{-1, 0, 2, -1, 3, -1, -1, -1, 1, -1});
     }
 }
