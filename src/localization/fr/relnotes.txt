@@ -5,6 +5,11 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.21.0 (??/10/2021)
+improvement
+	Ajoute l'export en Html et en Json.
+	Les relevés de compte peuvent à présent être exportés.
+	
 version	0.20.15 (25/07/2021)
 fix
 	Quand on débranchait un écran après avoir quitté l'application, la fenêtre de l'application pouvait, au démarrage, s'ouvrir en dehors des écrans restants.

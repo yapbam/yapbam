@@ -9,8 +9,9 @@ import java.nio.charset.Charset;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class ExporterJsonFormat implements IExportableFormat {
-
 	private Writer writer;
+	private boolean isFirstLine = true;
+	private boolean isFirstValue = true;
 
 	public ExporterJsonFormat(OutputStream stream, Charset encoding) {
 		this.writer = new OutputStreamWriter(stream, encoding);
@@ -24,21 +25,28 @@ public class ExporterJsonFormat implements IExportableFormat {
 
 	@Override
 	public void addLineStart() throws IOException {
+		if (isFirstLine) {
+			isFirstLine = false;
+		} else {
+			this.writer.append(",");
+		}
 		this.writer.append("[");
 	}
 
 	@Override
 	public void addLineEnd() throws IOException {
-		this.writer.append("],");
+		this.writer.append("]");
+		this.isFirstValue = true;
 	}
 
 	@Override
 	public void addValue(String value) throws IOException {
-		this.writer.append(String.format( //
-				"\"%s\"", //
-				StringEscapeUtils.escapeJson(value) //
-		));
-		this.writer.append(",");
+		if (isFirstValue) {
+			isFirstValue = false;
+		} else {
+			this.writer.append(",");
+		}
+		this.writer.append(String.format("\"%s\"", StringEscapeUtils.escapeJson(value)));
 	}
 
 	@Override
@@ -50,5 +58,4 @@ public class ExporterJsonFormat implements IExportableFormat {
 	public void close() throws IOException {
 		this.writer.close();
 	}
-
 }

@@ -1,8 +1,6 @@
 package net.yapbam.gui.util;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
@@ -109,37 +107,5 @@ public class FriendlyTable extends JTable {
 				popup.add(menuItem);
 			}
 		}
-	}
-
-	/** The format of an export.
-	 * @see FriendlyTable#export(File, ExportFormat)
-	 */
-	public interface ExportFormat {
-		/** Gets the header attribute of this format.
-		 * @return true if we want an header line to be output
-		 */
-		public boolean hasHeader();
-		
-		/** Gets the columns separator.
-		 * @return a char
-		 */
-		public char getSeparator();
-		
-		/** Gets the formatted view of a cell content.
-		 * @param obj The cell content.
-		 * @return a String that will be output to the file.
-		 */
-		public String format(Object obj);
-
-		/**
-		 * Exports the visible content of the table on a file.
-		 * 
-		 * @param table    Table to be export
-		 * @param onFile   The file where to export the table
-		 * @param inFormat The export format
-		 * @throws IOException
-		 * @see ExportFormat
-		 */
-		public void export(FriendlyTable table, File onFile) throws IOException;
 	}
 }

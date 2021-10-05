@@ -21,12 +21,12 @@ public class ExporterCsvFormat implements IExportableFormat {
 
 	@Override
 	public void addHeader() throws IOException {
-		return;
+		// Nothing to do
 	}
 
 	@Override
 	public void addLineStart() throws IOException {
-		return;
+		// Nothing to do
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class ExporterCsvFormat implements IExportableFormat {
 	
 	@Override
 	public void addFooter() throws IOException {
-		return;
+		// Nothing to do
 	}
 
 	@Override
@@ -49,5 +49,4 @@ public class ExporterCsvFormat implements IExportableFormat {
 		csv.flush();
 		writer.close();
 	}
-
 }

@@ -18,9 +18,12 @@ public class ExporterHtmlFormat implements IExportableFormat {
 
 	@Override
 	public void addHeader() throws IOException {
+		this.writer.append("<!DOCTYPE html>\n");
 		this.writer.append("<html>\n");
+		this.writer.append("<head>\n");
+		this.writer.append("<style type=\"text/css\"> table, th, td {border: 1px solid black;border-collapse: collapse;} </style>\n");
+		this.writer.append("</head>\n");
 		this.writer.append("<body>\n");
-		this.writer.append("<style> table, th, td {border: 1px solid black;border-collapse: collapse;} </style>\n");
 		this.writer.append("<table width=\"90%\" style=\"margin:0 auto;\">\n");
 	}
 
@@ -37,10 +40,7 @@ public class ExporterHtmlFormat implements IExportableFormat {
 
 	@Override
 	public void addValue(String value) throws IOException {
-		this.writer.append(String.format( //
-				"<td>%s</td>", //
-				StringEscapeUtils.escapeHtml4(value)) //
-		);
+		this.writer.append(String.format("<td>%s</td>",StringEscapeUtils.escapeHtml4(value)));
 	}
 	
 	@Override
@@ -54,5 +54,4 @@ public class ExporterHtmlFormat implements IExportableFormat {
 	public void close() throws IOException {
 		this.writer.close();
 	}
-
 }

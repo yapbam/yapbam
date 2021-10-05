@@ -3,7 +3,6 @@ package net.yapbam.gui.dialogs.export;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import com.fathzer.soft.ajlib.utilities.CSVWriter;
@@ -23,7 +22,7 @@ public class Exporter<F extends IExportableFormat> {
 	public Exporter(ExporterParameters parameters) {
 		super();
 		this.parameters = parameters;
-		this.dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
+		this.dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale());
 		this.amountFormatter = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
 	}
 
@@ -194,6 +193,5 @@ public class Exporter<F extends IExportableFormat> {
 			index++;
 			return transaction;
 		}
-		
 	}
 }

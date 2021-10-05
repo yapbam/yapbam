@@ -7,6 +7,7 @@ import java.awt.print.Printable;
 
 import javax.swing.Action;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable.PrintMode;
 import javax.swing.SwingConstants;
 
-import com.alexandriasoftware.swing.JSplitButton;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 
 import net.yapbam.data.FilteredData;
@@ -62,9 +62,8 @@ public class BalanceHistoryTablePane extends JPanel {
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
-	private JSplitButton getBtnExport() {
-		JSplitButton btnExport = new ExportComponent(BalanceHistoryTablePane.this.table);
-		return btnExport;
+	private JButton getBtnExport() {
+		return new ExportComponent(BalanceHistoryTablePane.this.table);
 	}
 
 	private JCheckBox getHideIntermediateChkBx() {
