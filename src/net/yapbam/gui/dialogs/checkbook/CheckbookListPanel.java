@@ -1,5 +1,6 @@
 package net.yapbam.gui.dialogs.checkbook;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Window;
@@ -7,14 +8,22 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Box;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
+
+import org.apache.commons.lang3.math.NumberUtils;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
+import com.fathzer.soft.ajlib.utilities.StringUtils;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Checkbook;
@@ -29,7 +38,12 @@ import net.yapbam.gui.administration.AbstractListAdministrationPanel;
 
 @SuppressWarnings("serial")
 public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalData> {
+	
+	private static final Integer ALERT_THRESHOLD = 3;
+	
 	private Account account;
+	
+	private JLabel alertLabel;
 	
 	public CheckbookListPanel (GlobalData data) {
 		super(data);
@@ -58,6 +72,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		this.account = null;
 		getJTable().setPreferredScrollableViewportSize(new Dimension(1, getJTable().getRowHeight() * 6));
 		getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
+		getJTable().getColumnModel().getColumn(2).setCellRenderer(new AlertCellRender());
 	}
 		
 	public void setContent(Account account) {
@@ -144,10 +159,41 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 			}
 		};
 	}
+	
+	protected JLabel getAlertLabel() {
+		if (this.alertLabel == null) {
+			this.alertLabel = new JLabel();
+			this.alertLabel.setText(StringUtils.EMPTY);
+			this.alertLabel.setToolTipText(LocalizationData.get("checkbookDialog.alert.tooltip"));
+			this.alertLabel.setIcon(IconManager.get(Name.ALERT));
+		}
+		return this.alertLabel;
+	}
 
 	@Override
 	protected Action getDuplicateButtonAction() {
 		return null;
+	}
+	
+	@Override
+	protected Component getTopComponent() {
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new BorderLayout());
+		topPanel.add(Box.createVerticalStrut(30), BorderLayout.CENTER);
+		topPanel.add(getAlertLabel(), BorderLayout.EAST);
+		return topPanel;
+	}
+	
+	@Override
+	protected void refreshActions() {
+		super.refreshActions();
+		if (account == null || getJTable().getSelectedRow() == -1) {
+			alertLabel.setVisible(Boolean.FALSE);
+		} else {
+			Checkbook book = account.getCheckbook(getJTable().convertRowIndexToModel(getJTable().getSelectedRow()));
+			alertLabel.setText(Formatter.format(LocalizationData.get("checkbookDialog.alert"), book.getRemaining()));
+			alertLabel.setVisible(book.getRemaining() <= ALERT_THRESHOLD);
+		}
 	}
 
 	private void createBook(Window owner, Account account) {
@@ -157,5 +203,21 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		if (book!=null) {
 			data.add(account, book);
 		}
+	}
+	
+	class AlertCellRender extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (NumberUtils.isParsable(this.getText()) && Integer.valueOf(this.getText()) <= ALERT_THRESHOLD) {
+				this.setIcon(IconManager.get(Name.ALERT));
+			} else {
+				this.setIcon(null);
+			}
+			return this;
+		}
+		
 	}
 }
