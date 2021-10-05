@@ -13,69 +13,64 @@ import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
 import net.yapbam.gui.LocalizationData;
 
-public class Exporter<F extends IExportableFormat> {
-	
+public class DataExporter implements Exporter<FilteredData> {
+	// TODO date and number format should be part of the parameters
 	private final ExporterParameters parameters;
 	private DateFormat dateFormatter;
 	private NumberFormat amountFormatter;
 	
-	public Exporter(ExporterParameters parameters) {
+	public DataExporter(ExporterParameters parameters) {
 		super();
 		this.parameters = parameters;
 		this.dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale());
 		this.amountFormatter = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
 	}
 
-	public void exportFile(F format, FilteredData data) throws IOException {
+	@Override
+	public void export(FilteredData data, IExportableFormat format) throws IOException {
 		int[] fields = parameters.getExportedIndexes();
 		Iterator<Transaction> transactions = parameters.isExportFilteredData() ? new FilteredTransactions(data)
 				: new GlobalTransactions(data);
 
-		try {
-			format.addHeader();
-			if (parameters.isInsertHeader()) {
-				// insert the header line
+		format.addHeader();
+		if (parameters.isInsertHeader()) {
+			// insert the header line
+			format.addLineStart();
+			for (int i = 0; i < fields.length; i++) {
+				format.addValue(ExportTableModel.COLUMNS[fields[i]]);
+			}
+			format.addLineEnd();
+		}
+		if (parameters.isExportInitialBalance()) {
+			// Export accounts initial balance
+			for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
 				format.addLineStart();
-				for (int i = 0; i < fields.length; i++) {
-					format.addValue(ExportTableModel.COLUMNS[fields[i]]);
+				Account account = data.getGlobalData().getAccount(i);
+				if (data.getFilter().isOk(account) || !parameters.isExportFilteredData()) {
+					for (int j = 0; j < fields.length; j++) {
+						format.addValue(getField(account, fields[j]));
+					}
 				}
 				format.addLineEnd();
-			}
-			if (parameters.isExportInitialBalance()) {
-				// Export accounts initial balance
-				for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
-					format.addLineStart();
-					Account account = data.getGlobalData().getAccount(i);
-					if (data.getFilter().isOk(account) || !parameters.isExportFilteredData()) {
-						for (int j = 0; j < fields.length; j++) {
-							format.addValue(getField(account, fields[j]));
-						}
-					}
-					format.addLineEnd();
-				}
-			}
-			while (transactions.hasNext()) {
-				Transaction transaction = transactions.next();
-				format.addLineStart();
-				for (int i = 0; i < fields.length; i++) {
-					format.addValue(getField(transaction, fields[i]));
-				}
-				format.addLineEnd();
-				for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
-					SubTransaction sub = transaction.getSubTransaction(j);
-					format.addLineStart();
-					for (int i = 0; i < fields.length; i++) {
-						format.addValue(getField(sub, fields[i]));
-					}
-					format.addLineEnd();
-				}
-			}
-			format.addFooter();
-		} finally {
-			if (format != null) {
-				format.close();
 			}
 		}
+		while (transactions.hasNext()) {
+			Transaction transaction = transactions.next();
+			format.addLineStart();
+			for (int i = 0; i < fields.length; i++) {
+				format.addValue(getField(transaction, fields[i]));
+			}
+			format.addLineEnd();
+			for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
+				SubTransaction sub = transaction.getSubTransaction(j);
+				format.addLineStart();
+				for (int i = 0; i < fields.length; i++) {
+					format.addValue(getField(sub, fields[i]));
+				}
+				format.addLineEnd();
+			}
+		}
+		format.addFooter();
 	}
 	
 	private String getField(Account account, int field) {

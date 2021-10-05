@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -12,13 +11,12 @@ import com.fathzer.soft.ajlib.utilities.CSVWriter;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
 
-public class DefaultTableExporter {
-	private IExportableFormat format;
+public class DefaultTableExporter implements Exporter<FriendlyTable> {
+	// TODO dateFormat and currency format should be passed as parameters instead of being guessed by this class
 	private DateFormat dateFormater;
 	private NumberFormat currencyFormat;
 
-	public DefaultTableExporter(IExportableFormat exporter, Locale locale) {
-		format = exporter;
+	public DefaultTableExporter(Locale locale) {
 		dateFormater = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		currencyFormat = CSVWriter.getDecimalFormater(locale);
 	}
@@ -35,37 +33,32 @@ public class DefaultTableExporter {
 		}
 	}
 
-	public void export(final FriendlyTable table, File onFile) throws IOException {
-		if (table != null && onFile != null && format != null) {
-			try {
-				final int[] modelIndexes = buildModelIndex(table);
-				format.addHeader();
-				ValueGetter vg = new ValueGetter() {
-					@Override
-					public String get(int colIndex) {
-						return table.getModel().getColumnName(modelIndexes[colIndex]);
-					}
-				}; 
-
-				writeLine(table, vg);
-				for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
-					final int modelRowIndex = table.convertRowIndexToModel(rowIndex);
-					vg = new ValueGetter() {
-						@Override
-						public String get(int colIndex) {
-							return format(table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]));
-						}
-					};
-					writeLine(table, vg);
-				}
-				format.addFooter();
-			} finally {
-				format.close();
+	@Override
+	public void export(final FriendlyTable table, IExportableFormat format) throws IOException {
+		final int[] modelIndexes = buildModelIndex(table);
+		format.addHeader();
+		ValueGetter vg = new ValueGetter() {
+			@Override
+			public String get(int colIndex) {
+				return table.getModel().getColumnName(modelIndexes[colIndex]);
 			}
+		}; 
+
+		writeLine(table, format, vg);
+		for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+			final int modelRowIndex = table.convertRowIndexToModel(rowIndex);
+			vg = new ValueGetter() {
+				@Override
+				public String get(int colIndex) {
+					return format(table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]));
+				}
+			};
+			writeLine(table, format, vg);
 		}
+		format.addFooter();
 	}
 
-	private void writeLine(final FriendlyTable table, ValueGetter vg) throws IOException {
+	private void writeLine(final FriendlyTable table, IExportableFormat format, ValueGetter vg) throws IOException {
 		format.addLineStart();
 		for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
 			if (table.isColumnVisible(colIndex)) {

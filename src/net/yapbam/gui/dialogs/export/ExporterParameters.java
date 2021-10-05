@@ -6,13 +6,14 @@ import java.nio.charset.Charset;
 import net.yapbam.util.ArrayUtils;
 
 public class ExporterParameters implements Serializable {
-	private static final long serialVersionUID = 6487527320997875709L;
+	private static final long serialVersionUID = 1L;
 	// WARNING. If we change the attribute list or their names and forget to change the serial uid,
 	// we could have an inconsistent parameter instance that could cause crashes.
 	// Changing serialVersionUID would just lead to ignore saved configuration. 
 	private int[] viewIndexesToModel;
 	private boolean[] selectedModelColumns;
 	private boolean insertHeader;
+	//TODO for json and html exporters, separator is a non sense.
 	private char separator;
 	private boolean exportInitialBalance;
 	private boolean exportFilteredData;
@@ -93,7 +94,7 @@ public class ExporterParameters implements Serializable {
 	}
 
 	public Charset getEncoding() {
-		//TODO
+		//TODO For Json, non UTF encoding are not JSON standard compliant
 		return Charset.defaultCharset();
 	}
 }

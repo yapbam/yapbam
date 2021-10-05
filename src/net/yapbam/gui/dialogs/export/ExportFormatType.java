@@ -24,9 +24,9 @@ public enum ExportFormatType {
 		return extension;
 	}
 
-	public IExportableFormat getTableExporter(OutputStream stream) {
+	public IExportableFormat getTableExporter(OutputStream stream, ExporterParameters params) {
 		if (ExportFormatType.CSV.equals(this)) {
-			return new ExporterCsvFormat(stream, ';', StandardCharsets.UTF_8);
+			return new ExporterCsvFormat(stream, params.getSeparator(), params.getEncoding());
 		} else if (ExportFormatType.HTML.equals(this)) {
 			return new ExporterHtmlFormat(stream, StandardCharsets.UTF_8);
 		} else if(ExportFormatType.JSON.equals(this)) {

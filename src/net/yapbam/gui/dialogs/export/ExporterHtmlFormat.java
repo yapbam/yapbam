@@ -11,9 +11,11 @@ import org.apache.commons.text.StringEscapeUtils;
 public class ExporterHtmlFormat implements IExportableFormat {
 
 	private Writer writer;
+	private Charset encoding;
 
 	public ExporterHtmlFormat(OutputStream stream, Charset encoding) {
 		this.writer = new OutputStreamWriter(stream, encoding);
+		this.encoding = encoding;
 	}
 
 	@Override
@@ -21,6 +23,7 @@ public class ExporterHtmlFormat implements IExportableFormat {
 		this.writer.append("<!DOCTYPE html>\n");
 		this.writer.append("<html>\n");
 		this.writer.append("<head>\n");
+		this.writer.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset="+encoding.name()+"\"/>");
 		this.writer.append("<style type=\"text/css\"> table, th, td {border: 1px solid black;border-collapse: collapse;} </style>\n");
 		this.writer.append("</head>\n");
 		this.writer.append("<body>\n");
