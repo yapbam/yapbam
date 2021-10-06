@@ -2,6 +2,7 @@ package net.yapbam.gui.dialogs.export;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
@@ -136,6 +137,9 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 
 		@Override
 		public Transaction next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			Transaction transaction = data.getGlobalData().getTransaction(index);
 			index++;
 			return transaction;
@@ -158,6 +162,9 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 
 		@Override
 		public Transaction next() {
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			Transaction transaction = data.getTransaction(index);
 			index++;
 			return transaction;
