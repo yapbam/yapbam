@@ -3,6 +3,7 @@ package net.yapbam.gui.dialogs.export;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 
+import net.yapbam.export.ExportFormatType;
 import net.yapbam.util.ArrayUtils;
 
 public class ExporterParameters implements Serializable {

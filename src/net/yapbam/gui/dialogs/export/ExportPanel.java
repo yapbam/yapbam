@@ -24,6 +24,7 @@ import javax.swing.table.TableColumnModel;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
+import net.yapbam.export.ExportFormatType;
 import net.yapbam.gui.LocalizationData;
 
 public class ExportPanel extends JPanel {

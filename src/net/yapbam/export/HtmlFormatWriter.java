@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs.export;
+package net.yapbam.export;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,12 +8,12 @@ import java.nio.charset.Charset;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-public class ExporterHtmlFormat implements IExportableFormat {
+public class HtmlFormatWriter implements ExportWriter {
 
 	private Writer writer;
 	private Charset encoding;
 
-	public ExporterHtmlFormat(OutputStream stream, Charset encoding) {
+	public HtmlFormatWriter(OutputStream stream, Charset encoding) {
 		this.writer = new OutputStreamWriter(stream, encoding);
 		this.encoding = encoding;
 	}

@@ -23,6 +23,9 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
+import net.yapbam.export.Exporter;
+import net.yapbam.export.ExportFormatType;
+import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.FriendlyTable;
@@ -45,30 +48,10 @@ public class ExportComponent extends JSplitButton {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (StringUtils.isNotBlank(e.getActionCommand())) {
-
-					ExportFormatType exportType = ExportFormatType.valueOf(e.getActionCommand());
-
-					//TODO Commonalize with MainMenuBar dialog
-					// A main difference to verify is the fact the file filter is not choosable here which seems better
-					JFileChooser chooser = new FileChooser();
-					chooser.setLocale(LocalizationData.getLocale());
-					chooser.setAcceptAllFileFilterUsed(false);
-					chooser.setFileFilter(new FileNameExtensionFilter( //
-							exportType.getDescription(), //
-							exportType.getExtension() //
-					));
-
-					File file = chooser.showSaveDialog(Utils.getOwnerWindow(ExportComponent.this)) == JFileChooser.APPROVE_OPTION
-							? chooser.getSelectedFile()
-							: null;
-
-					if (file != null) {
-						if (!file.getPath().endsWith(exportType.getExtension())) {
-							file = new File(file.getPath() + "." + exportType.getExtension());
-						}
-						final Exporter<FriendlyTable> exporter = new DefaultTableExporter(LocalizationData.getLocale());
-						export(ExportComponent.this.table, exporter, file, exportType, new ExporterParameters(), Utils.getOwnerWindow(ExportComponent.this));
-					}
+					ExportFormatType format = ExportFormatType.valueOf(e.getActionCommand());
+					final Window ownerWindow = Utils.getOwnerWindow(ExportComponent.this);
+					final Exporter<FriendlyTable> exporter = new DefaultTableExporter(LocalizationData.getLocale());
+					chooseFileAndExport(ExportComponent.this.table, format, ownerWindow, exporter);
 				}
 			}
 		};
@@ -85,7 +68,24 @@ public class ExportComponent extends JSplitButton {
 		this.setPopupMenu(exportMenu);
 	}
 
-	public static <T> void export(T data, Exporter<T> exporter, File file, ExportFormatType exportType, ExporterParameters params, Window parent) {
+	public static <T> void chooseFileAndExport(T data, ExportFormatType format, final Window ownerWindow,
+			final Exporter<T> exporter) {
+		JFileChooser chooser = new FileChooser();
+		chooser.setLocale(LocalizationData.getLocale());
+		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
+		File file = chooser.showSaveDialog(ownerWindow) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
+
+		if (file != null) {
+			String extension = FileUtils.getExtension(file);
+			if (extension == null || !extension.endsWith(format.getExtension())) {
+				file = new File(file.getPath() + "." + format.getExtension());
+			}
+			export(data, exporter, file, format, new ExporterParameters(), ownerWindow);
+		}
+	}
+	
+	private static <T> void export(T data, Exporter<T> exporter, File file, ExportFormatType exportType, ExporterParameters params, Window parent) {
 		try {
 			export(data, exporter, file, exportType, params);
 			JOptionPane.showMessageDialog(parent, LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
@@ -96,13 +96,11 @@ public class ExportComponent extends JSplitButton {
 
 	public static <T> void export(T data, Exporter<T> exporter, File file, ExportFormatType exportType, ExporterParameters params) throws IOException {
 		file = FileUtils.getCanonical(file);
-		FileOutputStream outputStream = new FileOutputStream(file);
+		final ExportWriter formatter = exportType.getTableExporter(new FileOutputStream(file), params);
 		try {
-			final IExportableFormat formatter = exportType.getTableExporter(outputStream, params);
 			exporter.export(data, formatter);
-			formatter.close();
 		} finally {
-			outputStream.close();
+			formatter.close();
 		}
 	}
 }

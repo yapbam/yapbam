@@ -1,7 +1,9 @@
-package net.yapbam.gui.dialogs.export;
+package net.yapbam.export;
 
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+
+import net.yapbam.gui.dialogs.export.ExporterParameters;
 
 public enum ExportFormatType {
 	HTML("HyperText Markup Language", "html"), //
@@ -24,13 +26,13 @@ public enum ExportFormatType {
 		return extension;
 	}
 
-	public IExportableFormat getTableExporter(OutputStream stream, ExporterParameters params) {
+	public ExportWriter getTableExporter(OutputStream stream, ExporterParameters params) {
 		if (ExportFormatType.CSV.equals(this)) {
-			return new ExporterCsvFormat(stream, params.getSeparator(), params.getEncoding());
+			return new CsvFormatWriter(stream, params.getSeparator(), params.getEncoding());
 		} else if (ExportFormatType.HTML.equals(this)) {
-			return new ExporterHtmlFormat(stream, StandardCharsets.UTF_8);
+			return new HtmlFormatWriter(stream, StandardCharsets.UTF_8);
 		} else if(ExportFormatType.JSON.equals(this)) {
-			return new ExporterJsonFormat(stream, StandardCharsets.UTF_8);
+			return new JsonFormatWriter(stream, StandardCharsets.UTF_8);
 		} else {
 			throw new IllegalStateException(); // Ouch we forgot a format !
 		}

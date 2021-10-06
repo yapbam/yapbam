@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs.export;
+package net.yapbam.export;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -9,12 +9,12 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-public class ExporterJsonFormat implements IExportableFormat {
+public class JsonFormatWriter implements ExportWriter {
 	private Writer writer;
 	private boolean isFirstLine = true;
 	private boolean isFirstValue = true;
 
-	public ExporterJsonFormat(OutputStream stream, Charset encoding) {
+	public JsonFormatWriter(OutputStream stream, Charset encoding) {
 		if (!StandardCharsets.UTF_8.equals(encoding) &&  !StandardCharsets.UTF_16.equals(encoding)
 				&&  !StandardCharsets.UTF_16BE.equals(encoding) &&  !StandardCharsets.UTF_16LE.equals(encoding)) {
 			throw new IllegalArgumentException("JSON requires UTF encoding");

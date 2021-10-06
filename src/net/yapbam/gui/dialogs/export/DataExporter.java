@@ -11,6 +11,8 @@ import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
+import net.yapbam.export.Exporter;
+import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.LocalizationData;
 
 public class DataExporter implements Exporter<FilteredData> {
@@ -28,7 +30,7 @@ public class DataExporter implements Exporter<FilteredData> {
 	}
 
 	@Override
-	public void export(FilteredData data, IExportableFormat format) throws IOException {
+	public void export(FilteredData data, ExportWriter format) throws IOException {
 		int[] fields = parameters.getExportedIndexes();
 		Iterator<Transaction> transactions = parameters.isExportFilteredData() ? new FilteredTransactions(data)
 				: new GlobalTransactions(data);

@@ -8,6 +8,8 @@ import java.util.Locale;
 
 import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
+import net.yapbam.export.Exporter;
+import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
 
@@ -35,7 +37,7 @@ public class DefaultTableExporter implements Exporter<FriendlyTable> {
 	}
 
 	@Override
-	public void export(final FriendlyTable table, IExportableFormat format) throws IOException {
+	public void export(final FriendlyTable table, ExportWriter format) throws IOException {
 		final int[] modelIndexes = buildModelIndex(table);
 		format.addHeader();
 		ValueGetter vg = new ValueGetter() {
@@ -59,7 +61,7 @@ public class DefaultTableExporter implements Exporter<FriendlyTable> {
 		format.addFooter();
 	}
 
-	private void writeLine(final FriendlyTable table, IExportableFormat format, ValueGetter vg) throws IOException {
+	private void writeLine(final FriendlyTable table, ExportWriter format, ValueGetter vg) throws IOException {
 		format.addLineStart();
 		for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
 			if (table.isColumnVisible(colIndex)) {

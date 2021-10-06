@@ -1,8 +1,9 @@
-package net.yapbam.gui.dialogs.export;
+package net.yapbam.export;
 
+import java.io.Closeable;
 import java.io.IOException;
 
-public interface IExportableFormat {
+public interface ExportWriter extends Closeable {
 
 	public void addHeader() throws IOException;
 
