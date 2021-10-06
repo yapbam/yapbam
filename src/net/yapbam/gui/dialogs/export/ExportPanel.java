@@ -279,7 +279,7 @@ public class ExportPanel extends JPanel {
 		return separatorPanel;
 	}
 
-	public ExporterParameters getExporterParameters() {
+	public DataExporterParameters getExporterParameters() {
 		ExportTableModel model = (ExportTableModel) getJTable().getModel();
 		int[] viewToModel = new int[getJTable().getColumnCount()];
 		boolean[] selected = new boolean[viewToModel.length];
@@ -288,12 +288,12 @@ public class ExportPanel extends JPanel {
 			viewToModel[i] = modelColumn;
 			selected[modelColumn] = (Boolean) model.getValueAt(0, modelColumn);
 		}
-		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(),
+		return new DataExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(),
 				getIncludeInitialBalance().isSelected(), !all.isSelected(),
 				ExportFormatType.valueOf(exportFormats.getSelectedItem() + ""));
 	}
 
-	public boolean setParameters(ExporterParameters parameters) {
+	public boolean setParameters(DataExporterParameters parameters) {
 		title.setSelected(parameters.isInsertHeader());
 		separatorPanel.setSeparator(parameters.getSeparator());
 		exportFormats.setSelectedItem(parameters.getExportFormat() == null //

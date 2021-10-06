@@ -50,7 +50,7 @@ public class ExportComponent extends JSplitButton {
 				if (StringUtils.isNotBlank(e.getActionCommand())) {
 					ExportFormatType format = ExportFormatType.valueOf(e.getActionCommand());
 					final Window ownerWindow = Utils.getOwnerWindow(ExportComponent.this);
-					final Exporter<FriendlyTable> exporter = new DefaultTableExporter(LocalizationData.getLocale());
+					final Exporter<ExporterParameters, FriendlyTable> exporter = new TableExporter();
 					chooseFileAndExport(ExportComponent.this.table, format, ownerWindow, exporter);
 				}
 			}
@@ -68,8 +68,8 @@ public class ExportComponent extends JSplitButton {
 		this.setPopupMenu(exportMenu);
 	}
 
-	public static <T> void chooseFileAndExport(T data, ExportFormatType format, final Window ownerWindow,
-			final Exporter<T> exporter) {
+	public static <P extends ExporterParameters,T> void chooseFileAndExport(T data, ExportFormatType format, final Window ownerWindow,
+			final Exporter<P,T> exporter) {
 		JFileChooser chooser = new FileChooser();
 		chooser.setLocale(LocalizationData.getLocale());
 		chooser.setAcceptAllFileFilterUsed(false);
@@ -81,22 +81,22 @@ public class ExportComponent extends JSplitButton {
 			if (extension == null || !extension.endsWith(format.getExtension())) {
 				file = new File(file.getPath() + "." + format.getExtension());
 			}
-			export(data, exporter, file, format, new ExporterParameters(), ownerWindow);
+			export(data, exporter, file, format, ownerWindow);
 		}
 	}
 	
-	private static <T> void export(T data, Exporter<T> exporter, File file, ExportFormatType exportType, ExporterParameters params, Window parent) {
+	private static <P extends ExporterParameters,T> void export(T data, Exporter<P,T> exporter, File file, ExportFormatType exportType, Window parent) {
 		try {
-			export(data, exporter, file, exportType, params);
+			export(data, exporter, file, exportType);
 			JOptionPane.showMessageDialog(parent, LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (IOException ex) {
 			ErrorManager.INSTANCE.display(parent, ex);
 		}
 	}
 
-	public static <T> void export(T data, Exporter<T> exporter, File file, ExportFormatType exportType, ExporterParameters params) throws IOException {
+	public static <P extends ExporterParameters,T> void export(T data, Exporter<P,T> exporter, File file, ExportFormatType exportType) throws IOException {
 		file = FileUtils.getCanonical(file);
-		final ExportWriter formatter = exportType.getTableExporter(new FileOutputStream(file), params);
+		final ExportWriter formatter = exportType.getTableExporter(new FileOutputStream(file), exporter.getParameters());
 		try {
 			exporter.export(data, formatter);
 		} finally {

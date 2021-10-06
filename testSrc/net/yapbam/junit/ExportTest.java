@@ -35,8 +35,8 @@ import net.yapbam.data.Transaction;
 import net.yapbam.export.ExportFormatType;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.export.DataExporter;
+import net.yapbam.gui.dialogs.export.DataExporterParameters;
 import net.yapbam.gui.dialogs.export.ExportComponent;
-import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.dialogs.export.ImporterParameters;
 
@@ -44,7 +44,9 @@ public class ExportTest {
 	@Test
 	public void testCSV() throws IOException {
 		String description = "A description with \"special\" chars, like quote and ;";
-		ExporterParameters parameters = new ExporterParameters();
+		DataExporterParameters parameters = new DataExporterParameters();
+		// Test that Export parameters are taken in account
+		parameters.setSeparator('\t');
 		File file = exportNewData(ExportFormatType.CSV, description, parameters);
 
 		GlobalData rdata = new GlobalData();
@@ -60,7 +62,7 @@ public class ExportTest {
 		assertEquals(0, GlobalData.AMOUNT_COMPARATOR.compare(100.0, rdata.getAccount(0).getInitialBalance()));
 	}
 
-	private File exportNewData(ExportFormatType type, String description, ExporterParameters parameters)
+	private File exportNewData(ExportFormatType type, String description, DataExporterParameters parameters)
 			throws IOException {
 		GlobalData data = new GlobalData();
 		Account account = new Account("toto", 100.0);
@@ -71,14 +73,14 @@ public class ExportTest {
 		FilteredData fData = new FilteredData(data);
 		DataExporter exporter = new DataExporter(parameters);
 		File file = File.createTempFile("ExportTest", "."+type.getExtension());
-		ExportComponent.export(fData, exporter, file, type, parameters);
+		ExportComponent.export(fData, exporter, file, type);
 		return file;
 	}
 	
 	@Test
 	public void testHTML() throws IOException {
 		String description = "A description with html tags like </td> </tr> </table> &;";
-		File file = exportNewData(ExportFormatType.HTML, description, new ExporterParameters());
+		File file = exportNewData(ExportFormatType.HTML, description, new DataExporterParameters());
 
 		final Tidy tidy = new Tidy();
 		// Let's ignore the absence of title as its hard to set a valuable title to the document
@@ -109,7 +111,7 @@ public class ExportTest {
 	@Test
 	public void testJSON() throws IOException {
 		String description = "A description with json reserved chars like \", { or ] and accent like אחי";
-		File file = exportNewData(ExportFormatType.JSON, description, new ExporterParameters());
+		File file = exportNewData(ExportFormatType.JSON, description, new DataExporterParameters());
 
 		final ObjectMapper parser = new ObjectMapper();
 		@SuppressWarnings("unchecked")

@@ -23,7 +23,7 @@ public class ExportDialog extends AbstractDialog<FilteredData, DataExporter> {
 
 	@Override
 	protected DataExporter buildResult() {
-		ExporterParameters parameters = exportPanel.getExporterParameters();
+		DataExporterParameters parameters = exportPanel.getExporterParameters();
 		YapbamState.INSTANCE.save(getStateKey(), parameters);
 		return new DataExporter(parameters);
 	}
@@ -42,11 +42,11 @@ public class ExportDialog extends AbstractDialog<FilteredData, DataExporter> {
 		boolean hasFilter = data.getFilter().isActive();
 		exportPanel.getFiltered().setEnabled(hasFilter);
 		exportPanel.addPropertyChangeListener(ExportPanel.INVALIDITY_CAUSE, new AutoUpdateOkButtonPropertyListener(this));
-		ExporterParameters parameters = (ExporterParameters) YapbamState.INSTANCE.restore(getStateKey());
+		DataExporterParameters parameters = (DataExporterParameters) YapbamState.INSTANCE.restore(getStateKey());
 		// The key name has changed after 0.11.7 (the old key was too long to be saved by java.utils.Preferences)
 		// Try with the old name if the new one can't be found
 		if (parameters==null) {
-			parameters = (ExporterParameters) YapbamState.INSTANCE.restore(getOldStateKey());
+			parameters = (DataExporterParameters) YapbamState.INSTANCE.restore(getOldStateKey());
 			if (parameters != null) {
 				YapbamState.INSTANCE.remove(getOldStateKey());
 				YapbamState.INSTANCE.save(getStateKey(), parameters);

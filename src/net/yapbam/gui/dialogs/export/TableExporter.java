@@ -1,39 +1,15 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
 import net.yapbam.export.Exporter;
 import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
 
-public class DefaultTableExporter implements Exporter<FriendlyTable> {
-	//TODO A lot of code should be commonalized with DataExporter
-	//TODO dateFormat and currency format should be passed as parameters instead of being guessed by this class
-	private DateFormat dateFormater;
-	private NumberFormat currencyFormat;
-
-	public DefaultTableExporter(Locale locale) {
-		dateFormater = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-		currencyFormat = CSVWriter.getDecimalFormater(locale);
-	}
-
-	public String format(Object obj) {
-		if (obj == null) {
-			return ""; //$NON-NLS-1$
-		} else if (obj instanceof Date) {
-			return dateFormater.format(obj);
-		} else if (obj instanceof Double) {
-			return currencyFormat.format(obj);
-		} else {
-			return obj.toString();
-		}
+public class TableExporter extends Exporter<ExporterParameters ,FriendlyTable> {
+	public TableExporter() {
+		super(new ExporterParameters());
 	}
 
 	@Override
@@ -80,6 +56,6 @@ public class DefaultTableExporter implements Exporter<FriendlyTable> {
 	}
 
 	private interface ValueGetter {
-		String get(int cilIndex);
+		String get(int colIndex);
 	}
 }
