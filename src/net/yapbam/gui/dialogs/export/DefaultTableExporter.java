@@ -12,7 +12,8 @@ import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
 
 public class DefaultTableExporter implements Exporter<FriendlyTable> {
-	// TODO dateFormat and currency format should be passed as parameters instead of being guessed by this class
+	//TODO A lot of code should be commonalized with DataExporter
+	//TODO dateFormat and currency format should be passed as parameters instead of being guessed by this class
 	private DateFormat dateFormater;
 	private NumberFormat currencyFormat;
 

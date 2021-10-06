@@ -15,6 +15,7 @@ import net.yapbam.gui.LocalizationData;
 
 public class DataExporter implements Exporter<FilteredData> {
 	// TODO date and number format should be part of the parameters
+	//TODO A lot of code should be commonalized with DataExporter
 	private final ExporterParameters parameters;
 	private DateFormat dateFormatter;
 	private NumberFormat amountFormatter;

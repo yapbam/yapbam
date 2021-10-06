@@ -385,10 +385,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			exportDialog.setVisible(true);
 			DataExporter exporter = exportDialog.getResult();
 			if (exporter!=null) {
+				ExportFormatType format = exporter.getParameters().getExportFormat();
+
+				//TODO Commonalize with ExportComponent dialog
+				// A main difference to verify is the fact the file filter is not choosable here which seems better
 				JFileChooser chooser = new FileChooser(null);
 				chooser.setLocale(LocalizationData.getLocale());
-				chooser.setAcceptAllFileFilterUsed(Boolean.FALSE);
-				ExportFormatType format = exporter.getParameters().getExportFormat();
+				chooser.setAcceptAllFileFilterUsed(false);
 				chooser.addChoosableFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
 				chooser.updateUI();
 				File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;

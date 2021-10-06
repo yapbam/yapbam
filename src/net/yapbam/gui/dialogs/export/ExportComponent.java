@@ -8,7 +8,6 @@ import java.awt.Window;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -49,13 +48,15 @@ public class ExportComponent extends JSplitButton {
 
 					ExportFormatType exportType = ExportFormatType.valueOf(e.getActionCommand());
 
+					//TODO Commonalize with MainMenuBar dialog
+					// A main difference to verify is the fact the file filter is not choosable here which seems better
 					JFileChooser chooser = new FileChooser();
+					chooser.setLocale(LocalizationData.getLocale());
 					chooser.setAcceptAllFileFilterUsed(false);
 					chooser.setFileFilter(new FileNameExtensionFilter( //
 							exportType.getDescription(), //
 							exportType.getExtension() //
 					));
-					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
 
 					File file = chooser.showSaveDialog(Utils.getOwnerWindow(ExportComponent.this)) == JFileChooser.APPROVE_OPTION
 							? chooser.getSelectedFile()
