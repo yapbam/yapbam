@@ -27,19 +27,17 @@ import net.yapbam.export.ExportFormatType;
 import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.widget.JSplitButton;
 
-public class ExportComponent extends JSplitButton {
-	
+public abstract class ExportComponent<P extends ExporterParameters, C> extends JSplitButton {
 	private static final long serialVersionUID = 1L;
-
-	private FriendlyTable table;
 	
-	public ExportComponent(FriendlyTable table) {
+	private transient C content;
+	
+	protected ExportComponent(C table) {
 		super(LocalizationData.get("ExportComponent.export"));
 		
-		this.table = table;
+		this.content = table;
 		
 		this.setPreferredSize(new Dimension(120, this.getMinimumSize().height));
 		this.setToolTipText(LocalizationData.get("ExportComponent.export.toolTip")); //$NON-NLS-1$
@@ -50,8 +48,8 @@ public class ExportComponent extends JSplitButton {
 				if (StringUtils.isNotBlank(e.getActionCommand())) {
 					ExportFormatType format = ExportFormatType.valueOf(e.getActionCommand());
 					final Window ownerWindow = Utils.getOwnerWindow(ExportComponent.this);
-					final Exporter<ExporterParameters, FriendlyTable> exporter = new TableExporter();
-					chooseFileAndExport(ExportComponent.this.table, format, ownerWindow, exporter);
+					final Exporter<P, C> exporter = buildExporter();
+					chooseFileAndExport(ExportComponent.this.content, format, ownerWindow, exporter);
 				}
 			}
 		};
@@ -67,7 +65,9 @@ public class ExportComponent extends JSplitButton {
 		}
 		this.setPopupMenu(exportMenu);
 	}
-
+	
+	public abstract Exporter<P,C> buildExporter();
+	
 	public static <P extends ExporterParameters,T> void chooseFileAndExport(T data, ExportFormatType format, final Window ownerWindow,
 			final Exporter<P,T> exporter) {
 		JFileChooser chooser = new FileChooser();

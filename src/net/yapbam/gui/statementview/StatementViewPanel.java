@@ -51,12 +51,15 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
+import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
+import net.yapbam.gui.dialogs.export.TableExporter;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
@@ -595,9 +598,17 @@ public class StatementViewPanel extends JPanel {
 		}
 		return btnRename;
 	}
+	
+	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
 		if(btnExport == null) {
-			btnExport = new ExportComponent(getTransactionsTable());
+			btnExport = new ExportComponent<ExporterParameters, FriendlyTable>(getTransactionsTable()) {
+				@Override
+				public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
+					return new TableExporter();
+				}
+				
+			};
 		}
 		return btnExport;
 	}

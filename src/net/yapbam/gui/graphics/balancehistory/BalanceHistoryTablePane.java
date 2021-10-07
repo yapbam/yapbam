@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
@@ -25,6 +26,8 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
+import net.yapbam.gui.dialogs.export.TableExporter;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class BalanceHistoryTablePane extends JPanel {
@@ -33,7 +36,7 @@ public class BalanceHistoryTablePane extends JPanel {
 
 	private JLabel columnMenu;
 	BalanceHistoryTable table;
-	private FilteredData data;
+	private transient FilteredData data;
 	private JCheckBox hideIntermediateChkBx;
 
 	public BalanceHistoryTablePane(FilteredData data) {
@@ -59,8 +62,15 @@ public class BalanceHistoryTablePane extends JPanel {
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
+	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
-		return new ExportComponent(BalanceHistoryTablePane.this.table);
+		return new ExportComponent<ExporterParameters, FriendlyTable>(BalanceHistoryTablePane.this.table) {
+			@Override
+			public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
+				return new TableExporter();
+			}
+			
+		};
 	}
 
 	private JCheckBox getHideIntermediateChkBx() {
