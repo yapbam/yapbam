@@ -42,6 +42,7 @@ import javax.swing.border.Border;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.JTable;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -79,7 +80,7 @@ public class StatementViewPanel extends JPanel {
 	private StatementTable transactionsTable;
 	private JCheckBox checkModeChkbx;
 	
-	private FilteredData data;
+	private transient FilteredData data;
 	CheckTransactionAction checkAction;
 	private JPanel menuPanel;
 	private JLabel lblNewLabel;
@@ -229,8 +230,8 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(transactionsTable);
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
-			Action checkAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
-			transactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, checkAction));
+			Action uncheckAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
+			transactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, uncheckAction));
 		}
 		return transactionsTable;
 	}
@@ -605,7 +606,26 @@ public class StatementViewPanel extends JPanel {
 			ExportComponent<ExporterParameters, FriendlyTable> exportC = new ExportComponent<ExporterParameters, FriendlyTable>() {
 				@Override
 				public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
-					return new TableExporter();
+					return new TableExporter() {
+						@Override
+						protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
+							// Warning, in the table model, the description is already html encoded. It would lead to the export
+							// containing html tags or escape sequences. So we will rebuild the description as text
+							if (StatementTableModel.DESCRIPTION_COLUMN==modelColIndex) {
+								final Transaction transaction = ((StatementTableModel)table.getModel()).getTransactions()[modelRowIndex];
+								final StringBuilder buf = new StringBuilder();
+								buf.append (transaction.getDescription());
+								if (transaction.getComment()!=null) {
+									buf.append(" ("); //$NON-NLS-1$
+									buf.append(transaction.getComment());
+									buf.append(")"); //$NON-NLS-1$
+								}
+								return buf.toString();
+							} else {
+								return super.getValueAt(table, modelRowIndex, modelColIndex);
+							}
+						}
+					};
 				}
 			};
 			exportC.setContent(getTransactionsTable());

@@ -2,6 +2,8 @@ package net.yapbam.gui.dialogs.export;
 
 import java.io.IOException;
 
+import com.fathzer.soft.ajlib.swing.table.JTable;
+
 import net.yapbam.export.Exporter;
 import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.util.FriendlyTable;
@@ -29,12 +31,16 @@ public class TableExporter extends Exporter<ExporterParameters ,FriendlyTable> {
 			vg = new ValueGetter() {
 				@Override
 				public String get(int colIndex) {
-					return format(table.getModel().getValueAt(modelRowIndex, modelIndexes[colIndex]));
+					return format(getValueAt(table, modelRowIndex, modelIndexes[colIndex]));
 				}
 			};
 			writeLine(table, format, vg);
 		}
 		format.addFooter();
+	}
+	
+	protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
+		return table.getModel().getValueAt(modelRowIndex, modelColIndex);
 	}
 
 	private void writeLine(final FriendlyTable table, ExportWriter format, ValueGetter vg) throws IOException {

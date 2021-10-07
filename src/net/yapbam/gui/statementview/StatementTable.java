@@ -22,14 +22,14 @@ import net.yapbam.gui.util.TablePainter;
 
 public class StatementTable extends FriendlyTable implements TransactionSelector, PaintedTable {
 	private static final long serialVersionUID = 1L;
-	private Transaction[] lastSelected;
-	private FilteredData data;
+	private transient Transaction[] lastSelected;
+	private transient FilteredData data;
 	private TablePainter painter;
 
 	public StatementTable(FilteredData data) {
 		super();
 		this.data = data;
-		StatementTableModel model = new StatementTableModel(this, new Transaction[0]);
+		StatementTableModel model = new StatementTableModel(new Transaction[0]);
 		this.setModel(model);
 		setAutoCreateRowSorter(true);
 		
