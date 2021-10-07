@@ -10,6 +10,8 @@
 		<mainClass>net.yapbam.gui.Launcher</mainClass>
 		<sonar.organization>yapbam</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.exclusions>net/yapbam/gui/widget/JSplitButton,terai.xrea.jp</sonar.exclusions>
+		<sonar.coverage.exclusions>net/yapbam/gui/widget/JSplitButton,terai.xrea.jp</sonar.coverage.exclusions>
 	</properties>
 
 	<build>
