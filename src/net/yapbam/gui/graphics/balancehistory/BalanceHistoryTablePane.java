@@ -28,9 +28,6 @@ import net.yapbam.gui.dialogs.export.ExportComponent;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class BalanceHistoryTablePane extends JPanel {
-	// If you ask yourself why this pane can't be displayed by Eclipse Window Builder, it seems the problem is
-	// with JSplitButton. If you replace the JSplitButton with a basic JButton, the component is displayed without any problem
-	//TODO Investigate more on this.
 	private static final long serialVersionUID = 1L;
 	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()+".hideIntermediateBalance"; //$NON-NLS-1$
 

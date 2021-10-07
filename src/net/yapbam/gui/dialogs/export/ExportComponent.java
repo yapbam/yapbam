@@ -17,7 +17,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alexandriasoftware.swing.JSplitButton;
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
@@ -29,6 +28,7 @@ import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.util.FriendlyTable;
+import net.yapbam.gui.widget.JSplitButton;
 
 public class ExportComponent extends JSplitButton {
 	
