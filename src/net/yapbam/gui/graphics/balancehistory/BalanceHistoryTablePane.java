@@ -64,13 +64,14 @@ public class BalanceHistoryTablePane extends JPanel {
 	
 	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
-		return new ExportComponent<ExporterParameters, FriendlyTable>(BalanceHistoryTablePane.this.table) {
+		final ExportComponent<ExporterParameters, FriendlyTable> btn = new ExportComponent<ExporterParameters, FriendlyTable>() {
 			@Override
 			public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
 				return new TableExporter();
 			}
-			
 		};
+		btn.setContent(BalanceHistoryTablePane.this.table);
+		return btn;
 	}
 
 	private JCheckBox getHideIntermediateChkBx() {

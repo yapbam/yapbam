@@ -34,10 +34,8 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 	
 	private transient C content;
 	
-	protected ExportComponent(C table) {
+	protected ExportComponent() {
 		super(LocalizationData.get("ExportComponent.export"));
-		
-		this.content = table;
 		
 		this.setPreferredSize(new Dimension(120, this.getMinimumSize().height));
 		this.setToolTipText(LocalizationData.get("ExportComponent.export.toolTip")); //$NON-NLS-1$
@@ -64,6 +62,10 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 			exportMenu.add(menuItem);
 		}
 		this.setPopupMenu(exportMenu);
+	}
+	
+	public void setContent(C content) {
+		this.content = content;
 	}
 	
 	public abstract Exporter<P,C> buildExporter();

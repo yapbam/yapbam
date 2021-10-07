@@ -405,7 +405,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		DataExporter exporter = exportDialog.getResult();
 		if (exporter!=null) {
 			ExportFormatType format = exporter.getParameters().getExportFormat();
-			ExportComponent.chooseFileAndExport(frame.getFilteredData(), format, exportDialog, exporter); ;
+			ExportComponent.chooseFileAndExport(frame.getFilteredData(), format, exportDialog, exporter);
 		}
 	}
 
@@ -463,7 +463,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 	}		
 
-	private MenuScroller menuScroller;
+	private transient MenuScroller menuScroller;
 	private void updateFilterMenu() {
 		if (menuScroller!=null) {
 			menuScroller.dispose();
@@ -612,7 +612,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		getTransactionSelector().setInternalSelector(plugin==null?null:plugin.getTransactionSelector());
 	}
 	
-	private CompoundTransactionSelector selector; 
+	private transient CompoundTransactionSelector selector; 
 	public CompoundTransactionSelector getTransactionSelector() {
 		if (selector==null) {
 			selector = new CompoundTransactionSelector(frame.getFilteredData());

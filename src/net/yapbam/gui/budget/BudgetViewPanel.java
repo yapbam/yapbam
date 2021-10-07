@@ -48,7 +48,6 @@ public class BudgetViewPanel extends JPanel {
 	private JPanel topPanel = null;
 	private JRadioButton month = null;
 	private JRadioButton year = null;
-	private JButton export = null;
 	private Table budgetTable = null;
 	private JButton filter = null;
 	
@@ -214,19 +213,18 @@ public class BudgetViewPanel extends JPanel {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton getExport() {
-		if (export == null) {
-			export = new ExportComponent<BudgetExporterParameters, BudgetView>(budget) {
-				private static final long serialVersionUID = 1L;
+		ExportComponent<BudgetExporterParameters, BudgetView> c = new ExportComponent<BudgetExporterParameters, BudgetView>() {
+			private static final long serialVersionUID = 1L;
 
-				@Override
-				public Exporter<BudgetExporterParameters, BudgetView> buildExporter() {
-					String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
-					String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
-					return new BudgetExporter(new BudgetExporterParameters(sumLineName, sumColumnName));
-				}
-			};
-		}
-		return export;
+			@Override
+			public Exporter<BudgetExporterParameters, BudgetView> buildExporter() {
+				String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
+				String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
+				return new BudgetExporter(new BudgetExporterParameters(sumLineName, sumColumnName));
+			}
+		};
+		c.setContent(budget);
+		return c;
 	}
 
 	/**

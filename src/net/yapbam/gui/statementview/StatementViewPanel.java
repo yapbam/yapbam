@@ -602,13 +602,14 @@ public class StatementViewPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
 		if(btnExport == null) {
-			btnExport = new ExportComponent<ExporterParameters, FriendlyTable>(getTransactionsTable()) {
+			ExportComponent<ExporterParameters, FriendlyTable> exportC = new ExportComponent<ExporterParameters, FriendlyTable>() {
 				@Override
 				public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
 					return new TableExporter();
 				}
-				
 			};
+			exportC.setContent(getTransactionsTable());
+			btnExport = exportC;
 		}
 		return btnExport;
 	}
