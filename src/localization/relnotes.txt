@@ -9,6 +9,8 @@ version	0.21.0 (10/??/2021)
 improvement
 	Adds Html and JSon export format.
 	The statements can be exported.
+fix
+	The balance history export contained HTML encoded descriptions.
 	
 version	0.20.15 (07/25/2021)
 fix

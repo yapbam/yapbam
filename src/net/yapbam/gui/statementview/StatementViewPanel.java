@@ -61,6 +61,7 @@ import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.TableExporter;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
@@ -613,14 +614,7 @@ public class StatementViewPanel extends JPanel {
 							// containing html tags or escape sequences. So we will rebuild the description as text
 							if (StatementTableModel.DESCRIPTION_COLUMN==modelColIndex) {
 								final Transaction transaction = ((StatementTableModel)table.getModel()).getTransactions()[modelRowIndex];
-								final StringBuilder buf = new StringBuilder();
-								buf.append (transaction.getDescription());
-								if (transaction.getComment()!=null) {
-									buf.append(" ("); //$NON-NLS-1$
-									buf.append(transaction.getComment());
-									buf.append(")"); //$NON-NLS-1$
-								}
-								return buf.toString();
+								return TransactionTableUtils.getDescriptionAsText(transaction, true);
 							} else {
 								return super.getValueAt(table, modelRowIndex, modelColIndex);
 							}

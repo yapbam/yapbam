@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable.PrintMode;
 import javax.swing.SwingConstants;
 
+import com.fathzer.soft.ajlib.swing.table.JTable;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 
 import net.yapbam.data.FilteredData;
@@ -28,6 +29,7 @@ import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.TableExporter;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class BalanceHistoryTablePane extends JPanel {
@@ -67,7 +69,18 @@ public class BalanceHistoryTablePane extends JPanel {
 		final ExportComponent<ExporterParameters, FriendlyTable> btn = new ExportComponent<ExporterParameters, FriendlyTable>() {
 			@Override
 			public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
-				return new TableExporter();
+				return new TableExporter() {
+					@Override
+					protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
+						final BalanceHistoryModel model = ((BalanceHistoryModel)table.getModel());
+						final TableSettings settings = model.getSettings(); 
+						if (settings.getDescriptionColumn()==modelColIndex) {
+							return TransactionTableUtils.getDescriptionAsText(model.getTransaction(modelRowIndex), !settings.isCommentSeparatedFromDescription());
+						} else {
+							return super.getValueAt(table, modelRowIndex, modelColIndex);
+						}
+					}
+				};
 			}
 		};
 		btn.setContent(BalanceHistoryTablePane.this.table);
