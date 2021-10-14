@@ -54,8 +54,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 			public void processEvent(DataEvent event) {
 				((AbstractTableModel)getJTable().getModel()).fireTableDataChanged(); //TODO We should test the event class and ignore some events (ie : ModeAddedEvent) 
 				
-				getAlertSplitButton().setIcon(CheckbookListPanel.this.hasAlert() 
-						? IconManager.get(Name.ALERT) : IconManager.get(Name.SETTINGS));
+				updateStateOfAlertButton();
 				
 				if (event instanceof CheckbookPropertyChangedEvent) { // Test if a checkbook is finished
 					CheckbookPropertyChangedEvent checkbookChangedEvt = (CheckbookPropertyChangedEvent)event;
@@ -84,8 +83,12 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 		this.account = account;
 		this.getNewButton().getAction().setEnabled(account!=null);
 		((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
+		updateStateOfAlertButton();
+	}
+	
+	private void updateStateOfAlertButton() {
 		boolean alert =  hasAlert();
-		this.getAlertSplitButton().setEnabled(account != null && account.getCheckbooksNumber() > 0);
+		getAlertSplitButton().setEnabled(account != null && account.getCheckbooksNumber() > 0);
 		getAlertSplitButton().setIcon(alert ? IconManager.get(Name.ALERT) : IconManager.get(Name.SETTINGS));
 	}
 
