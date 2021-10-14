@@ -20,7 +20,6 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import com.alexandriasoftware.swing.JSplitButton;
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.RowSorter;
@@ -39,6 +38,7 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.administration.AbstractAlertPanel;
 import net.yapbam.gui.administration.AbstractListAdministrationPanel;
+import net.yapbam.gui.widget.JSplitButton;
 
 @SuppressWarnings("serial")
 public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalData> implements AbstractAlertPanel {

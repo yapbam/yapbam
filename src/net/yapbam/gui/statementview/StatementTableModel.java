@@ -2,7 +2,6 @@ package net.yapbam.gui.statementview;
 
 import java.util.Date;
 
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import net.yapbam.data.Category;
@@ -13,10 +12,11 @@ import net.yapbam.gui.transactiontable.TransactionTableUtils;
 
 class StatementTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
+	static final int DESCRIPTION_COLUMN = 1;
 
-	private Transaction[] transactions;
+	private transient Transaction[] transactions;
 	
-	StatementTableModel(JTable table, Transaction[] transactions) {
+	StatementTableModel(Transaction[] transactions) {
 		super();
 		if (transactions==null) {
 			throw new NullPointerException();
@@ -32,7 +32,7 @@ class StatementTableModel extends AbstractTableModel {
 	public String getColumnName(int columnIndex) {
 		if (columnIndex==0) {
 			return LocalizationData.get("Transaction.date"); //$NON-NLS-1$
-		} else if (columnIndex==1) {
+		} else if (columnIndex==DESCRIPTION_COLUMN) {
 			return LocalizationData.get("Transaction.description"); //$NON-NLS-1$
 		} else if (columnIndex==2) {
 			return LocalizationData.get("Transaction.category"); //$NON-NLS-1$
@@ -70,7 +70,7 @@ class StatementTableModel extends AbstractTableModel {
 		Transaction transaction = transactions[rowIndex];
 		if (columnIndex==0) {
 			return transaction.getDate();
-		} else if (columnIndex==1) {
+		} else if (columnIndex==DESCRIPTION_COLUMN) {
 			return TransactionTableUtils.getDescription(transaction,false,true,false);
 		} else if (columnIndex==2) {
 			Category category = transaction.getCategory();

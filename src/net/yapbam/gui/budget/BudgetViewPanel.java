@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.GridBagLayout;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -17,20 +16,11 @@ import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -43,29 +33,26 @@ import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
-import net.yapbam.gui.ErrorManager;
+import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
+import net.yapbam.gui.dialogs.export.ExportComponent;
 
 import javax.swing.JCheckBox;
 
 import com.fathzer.soft.ajlib.swing.Utils;
-import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import com.fathzer.soft.ajlib.swing.table.RowHeaderRenderer;
 import com.fathzer.soft.ajlib.swing.table.Table;
-import com.fathzer.soft.ajlib.utilities.CSVWriter;
-import com.fathzer.soft.ajlib.utilities.FileUtils;
 
 public class BudgetViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel topPanel = null;
 	private JRadioButton month = null;
 	private JRadioButton year = null;
-	private JButton export = null;
 	private Table budgetTable = null;
 	private JButton filter = null;
 	
-	private BudgetView budget;
-	private FilteredData data;
+	private transient BudgetView budget;
+	private transient FilteredData data;
 	private JCheckBox chckbxAddSumColumn;
 	private JCheckBox chckbxAddSumLine;
 	private JCheckBox groupSubCategories;
@@ -139,13 +126,13 @@ public class BudgetViewPanel extends JPanel {
 			topPanel = new JPanel();
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(getMonth(), gridBagConstraints1);
-			GridBagConstraints gbc_transactionDate = new GridBagConstraints();
-			gbc_transactionDate.weightx = 1.0;
-			gbc_transactionDate.anchor = GridBagConstraints.WEST;
-			gbc_transactionDate.insets = new Insets(0, 0, 5, 5);
-			gbc_transactionDate.gridx = 1;
-			gbc_transactionDate.gridy = 0;
-			topPanel.add(getTransactionDate(), gbc_transactionDate);
+			GridBagConstraints gbcTransactionDate = new GridBagConstraints();
+			gbcTransactionDate.weightx = 1.0;
+			gbcTransactionDate.anchor = GridBagConstraints.WEST;
+			gbcTransactionDate.insets = new Insets(0, 0, 5, 5);
+			gbcTransactionDate.gridx = 1;
+			gbcTransactionDate.gridy = 0;
+			topPanel.add(getTransactionDate(), gbcTransactionDate);
 			GridBagConstraints gbcChckbxAddSumLine = new GridBagConstraints();
 			gbcChckbxAddSumLine.anchor = GridBagConstraints.WEST;
 			gbcChckbxAddSumLine.weightx = 1.0;
@@ -162,12 +149,12 @@ public class BudgetViewPanel extends JPanel {
 			ButtonGroup group2 = new ButtonGroup();
 			group2.add(getValueDate());
 			group2.add(getTransactionDate());
-			GridBagConstraints gbc_valueDate = new GridBagConstraints();
-			gbc_valueDate.anchor = GridBagConstraints.WEST;
-			gbc_valueDate.insets = new Insets(0, 0, 0, 5);
-			gbc_valueDate.gridx = 1;
-			gbc_valueDate.gridy = 1;
-			topPanel.add(getValueDate(), gbc_valueDate);
+			GridBagConstraints gbcValueDate = new GridBagConstraints();
+			gbcValueDate.anchor = GridBagConstraints.WEST;
+			gbcValueDate.insets = new Insets(0, 0, 0, 5);
+			gbcValueDate.gridx = 1;
+			gbcValueDate.gridy = 1;
+			topPanel.add(getValueDate(), gbcValueDate);
 			GridBagConstraints gbcChckbxAddSumColumn = new GridBagConstraints();
 			gbcChckbxAddSumColumn.anchor = GridBagConstraints.WEST;
 			gbcChckbxAddSumColumn.insets = new Insets(0, 0, 0, 5);
@@ -226,85 +213,19 @@ public class BudgetViewPanel extends JPanel {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton getExport() {
-		if (export == null) {
-			export = new JButton();
-			export.setText(LocalizationData.get("BudgetPanel.export")); //$NON-NLS-1$
-			export.setToolTipText(LocalizationData.get("BudgetPanel.export.toolTip")); //$NON-NLS-1$
-			export.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JFileChooser chooser = new FileChooser();
-					chooser.setLocale(new Locale(LocalizationData.getLocale().getLanguage()));
-					File result = chooser.showSaveDialog(Utils.getOwnerWindow(export))==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null; //$NON-NLS-1$
-					if (result!=null) {
-						try {
-							result = FileUtils.getCanonical(result);
-							String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
-							String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
-							export(result, '\t', LocalizationData.getLocale(), sumLineName, sumColumnName);
-						} catch (IOException e1) {
-							ErrorManager.INSTANCE.display(BudgetViewPanel.this, e1);
-						}
-					}
-				}
-			});
-		}
-		return export;
-	}
-	
-	/** Exports this budget to a text file.
-	 * @param file that will receive the content.
-	 * @param columnSeparator the character to use to separate columns
-	 * @param locale The locale to use to export the dates and numbers
-	 * @throws IOException
-	 */
-	private void export(File file, char columnSeparator, Locale locale, String dateSumWording, String categorySumWording) throws IOException {
-		FileWriter fileWriter = new FileWriter(file);
-		try {
-			CSVWriter out = new CSVWriter(fileWriter);
-			out.setSeparator(columnSeparator);
-			// Output header line
-			DateFormat dateFormater = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
-			out.writeCell(""); //$NON-NLS-1$
-			for (int i = 0; i < budget.getDatesSize(); i++) {
-				out.writeCell(dateFormater.format(budget.getDate(i)));
-			}
-			if (categorySumWording!=null) {
-				out.writeCell(categorySumWording);
-			}
-			// Output category lines
-			NumberFormat currencyFormatter = CSVWriter.getDecimalFormater(locale);
-			for (int i=0;i<budget.getCategoriesSize();i++) {
-				Category category = budget.getCategory(i);
-				out.newLine();
-				out.writeCell(category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName()); //$NON-NLS-1$
-				for (int j = 0; j < budget.getDatesSize(); j++) {
-					Double value = budget.getAmount(budget.getDate(j), category);
-					out.writeCell(value!=null?currencyFormatter.format(value):""); //$NON-NLS-1$
-				}
-				if (categorySumWording!=null) {
-					double value = budget.getSum(category);
-					out.writeCell(currencyFormatter.format(value));
-				}
-			}
-			if (dateSumWording!=null) {
-				out.newLine();
-				out.writeCell(dateSumWording);
-				for (int j = 0; j < budget.getDatesSize(); j++) {
-					double value = budget.getSum(budget.getDate(j));
-					out.writeCell(currencyFormatter.format(value));
-				}
-				if (categorySumWording!=null) {
-					Double value = budget.getSum();
-					out.writeCell(value!=null?currencyFormatter.format(value):""); //$NON-NLS-1$
-				}
-			}
-			out.flush();
-		} finally {
-			fileWriter.close();
-		}
-	}
+		ExportComponent<BudgetExporterParameters, BudgetView> c = new ExportComponent<BudgetExporterParameters, BudgetView>() {
+			private static final long serialVersionUID = 1L;
 
+			@Override
+			public Exporter<BudgetExporterParameters, BudgetView> buildExporter() {
+				String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
+				String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
+				return new BudgetExporter(new BudgetExporterParameters(sumLineName, sumColumnName));
+			}
+		};
+		c.setContent(budget);
+		return c;
+	}
 
 	/**
 	 * This method initializes jScrollPane	
@@ -506,7 +427,7 @@ public class BudgetViewPanel extends JPanel {
 			}
 			Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			if (centered && (result instanceof JLabel)) {
-				((JLabel)result).setHorizontalAlignment(JLabel.CENTER);
+				((JLabel)result).setHorizontalAlignment(SwingConstants.CENTER);
 			}
 			return result;
 		}

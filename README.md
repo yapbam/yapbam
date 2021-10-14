@@ -3,7 +3,13 @@
 Work in progress
 
 # Developer notes
-You want to provide us with a pull request. Thank you :-)
+### FAQ
+
+* I try to compile the project in Eclipse, but Eclipse reports compilation errors.
+This project uses the Lombok library.
+In order to have Eclipse recognize the annotations used by this library, you should install it in Eclipse as explained [here](https://howtodoinjava.com/automation/lombok-eclipse-installation-examples/).
+
+### You want to provide us with a pull request. Thank you :-)
 
 Nevertheless here are some advices:
 - Read [The (written) unwritten guide to pull requests](https://www.atlassian.com/blog/git/written-unwritten-guide-pull-requests).

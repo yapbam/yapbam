@@ -42,6 +42,7 @@ import javax.swing.border.Border;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.JTable;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
@@ -51,12 +52,16 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
+import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
+import net.yapbam.gui.dialogs.export.TableExporter;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
@@ -76,7 +81,7 @@ public class StatementViewPanel extends JPanel {
 	private StatementTable transactionsTable;
 	private JCheckBox checkModeChkbx;
 	
-	private FilteredData data;
+	private transient FilteredData data;
 	CheckTransactionAction checkAction;
 	private JPanel menuPanel;
 	private JLabel lblNewLabel;
@@ -226,8 +231,8 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(transactionsTable);
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
-			Action checkAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
-			transactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, checkAction));
+			Action uncheckAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
+			transactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, uncheckAction));
 		}
 		return transactionsTable;
 	}
@@ -595,9 +600,30 @@ public class StatementViewPanel extends JPanel {
 		}
 		return btnRename;
 	}
+	
+	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
 		if(btnExport == null) {
-			btnExport = new ExportComponent(getTransactionsTable());
+			ExportComponent<ExporterParameters, FriendlyTable> exportC = new ExportComponent<ExporterParameters, FriendlyTable>() {
+				@Override
+				public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
+					return new TableExporter() {
+						@Override
+						protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
+							// Warning, in the table model, the description is already html encoded. It would lead to the export
+							// containing html tags or escape sequences. So we will rebuild the description as text
+							if (StatementTableModel.DESCRIPTION_COLUMN==modelColIndex) {
+								final Transaction transaction = ((StatementTableModel)table.getModel()).getTransactions()[modelRowIndex];
+								return TransactionTableUtils.getDescriptionAsText(transaction, true);
+							} else {
+								return super.getValueAt(table, modelRowIndex, modelColIndex);
+							}
+						}
+					};
+				}
+			};
+			exportC.setContent(getTransactionsTable());
+			btnExport = exportC;
 		}
 		return btnExport;
 	}
