@@ -1,11 +1,16 @@
 package net.yapbam.gui.administration;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
+import net.yapbam.gui.IconManager;
+import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 
 /** This plugin implements the Administration panel.
@@ -28,7 +33,13 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 				}
 			}
 		});
-
+		this.panel.addPropertyChangeListener(AlertType.CHECKBOOK_RUNNING_OUT.name(), new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				setPanelIcon(AbstractAlertPanel.ALERT_PROPERTY_ENABLE.equals(evt.getNewValue()) 
+						? IconManager.get(Name.ALERT) : null);
+			}
+		});
 		this.setPanelTitle(LocalizationData.get("AdministrationPlugIn.title")); //$NON-NLS-1$
 		this.setPanelToolTip(LocalizationData.get("AdministrationPlugIn.toolTip")); //$NON-NLS-1$
 	}
