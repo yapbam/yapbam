@@ -21,11 +21,4 @@
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Resources_pt.properties.ML</name>
-			<type>1</type>
-			<location>/home/jma/Bureau/Resources_pt.properties</location>
-		</link>
-	</linkedResources>
 </projectDescription>

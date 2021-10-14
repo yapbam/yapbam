@@ -15,9 +15,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable.PrintMode;
 import javax.swing.SwingConstants;
 
+import com.fathzer.soft.ajlib.swing.table.JTable;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
@@ -25,18 +27,18 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
+import net.yapbam.gui.dialogs.export.TableExporter;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 import net.yapbam.gui.util.FriendlyTable;
 
 public class BalanceHistoryTablePane extends JPanel {
-	// If you ask yourself why this pane can't be displayed by Eclipse Window Builder, it seems the problem is
-	// with JSplitButton. If you replace the JSplitButton with a basic JButton, the component is displayed without any problem
-	//TODO Investigate more on this.
 	private static final long serialVersionUID = 1L;
 	private static final String HIDE_INTERMEDIATE_BALANCE_KEY = BalanceHistoryTablePane.class.getPackage().getName()+".hideIntermediateBalance"; //$NON-NLS-1$
 
 	private JLabel columnMenu;
 	BalanceHistoryTable table;
-	private FilteredData data;
+	private transient FilteredData data;
 	private JCheckBox hideIntermediateChkBx;
 
 	public BalanceHistoryTablePane(FilteredData data) {
@@ -62,8 +64,27 @@ public class BalanceHistoryTablePane extends JPanel {
 		add(southPanel, BorderLayout.SOUTH);
 	}
 	
+	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
-		return new ExportComponent(BalanceHistoryTablePane.this.table);
+		final ExportComponent<ExporterParameters, FriendlyTable> btn = new ExportComponent<ExporterParameters, FriendlyTable>() {
+			@Override
+			public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
+				return new TableExporter() {
+					@Override
+					protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
+						final BalanceHistoryModel model = ((BalanceHistoryModel)table.getModel());
+						final TableSettings settings = model.getSettings(); 
+						if (settings.getDescriptionColumn()==modelColIndex) {
+							return TransactionTableUtils.getDescriptionAsText(model.getTransaction(modelRowIndex), !settings.isCommentSeparatedFromDescription());
+						} else {
+							return super.getValueAt(table, modelRowIndex, modelColIndex);
+						}
+					}
+				};
+			}
+		};
+		btn.setContent(BalanceHistoryTablePane.this.table);
+		return btn;
 	}
 
 	private JCheckBox getHideIntermediateChkBx() {

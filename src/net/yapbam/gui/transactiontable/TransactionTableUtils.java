@@ -20,6 +20,21 @@ public abstract class TransactionTableUtils {
 	public static String getDescription (AbstractTransaction transaction, boolean spread, boolean mergeComment, boolean withHtmlTags) {
 		return UTILS.getDescription(transaction, spread, mergeComment, withHtmlTags);
 	}
+	
+	public static String getDescriptionAsText(AbstractTransaction transaction, boolean mergeComment) {
+		if (mergeComment) {
+			final StringBuilder buf = new StringBuilder();
+			buf.append (transaction.getDescription());
+			if (transaction.getComment()!=null) {
+				buf.append(" ("); //$NON-NLS-1$
+				buf.append(transaction.getComment());
+				buf.append(")"); //$NON-NLS-1$
+			}
+			return buf.toString();
+		} else {
+			return transaction.getDescription();
+		}
+	}
 
 	public static String getComment(AbstractTransaction transaction) {
 		return UTILS.getComment(transaction);
