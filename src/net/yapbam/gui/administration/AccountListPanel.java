@@ -1,5 +1,8 @@
 package net.yapbam.gui.administration;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
@@ -27,9 +30,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
 import net.yapbam.gui.dialogs.EditAccountDialog;
 import net.yapbam.util.HtmlUtils;
-
-import java.awt.Component;
-import java.awt.event.ActionEvent;
 
 public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData> {
 	private static final long serialVersionUID = 1L;
@@ -93,6 +93,25 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			    this.setHorizontalAlignment(SwingConstants.RIGHT);
 		    	return this;
 		    }
+		});
+		jTable.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+					int row, int column) {
+				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				Account account = data.getAccount(row);
+				if (account != null) {
+					boolean result = false;
+					for (int c = 0; c < account.getCheckbooksNumber() && !result; c++) {
+						if (account.getCheckbook(c).getRemaining() > 0 && //
+								account.getCheckbook(c).getRemaining() <= account.getCheckNumberAlertThreshold()) {
+							result = true;
+						}
+					}
+					this.setIcon(result ? IconManager.get(Name.ALERT) : null);
+				}
+				return this;
+			}
 		});
 		jTable.setRowSorter(new RowSorter<TableModel>(getTableModel()));
 		return jTable;

@@ -3,8 +3,6 @@ package net.yapbam.gui.administration;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
@@ -13,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.lang3.StringUtils;
+import com.fathzer.jlocal.Formatter;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.FilteredData;
@@ -46,8 +44,6 @@ public class AdministrationPanel extends JPanel implements AbstractAlertPanel {
 	private JLayeredPane layeredPane;
 	private JCheckBox ignoreFilter;
 	
-	private String alertState;
-
 	private PeriodicalTransactionListPanel periodicalTransactionsPanel;
 	
 	/**
@@ -83,20 +79,7 @@ public class AdministrationPanel extends JPanel implements AbstractAlertPanel {
 				}
 			}
 		});
-		this.addPropertyChangeListener(AlertType.CHECKBOOK_RUNNING_OUT.name(), new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				Icon panelIcon = null;
-				if(StringUtils.equals(evt.getNewValue().toString(), AbstractAlertPanel.ALERT_PROPERTY_ENABLE)) {
-					panelIcon = IconManager.get(Name.ALERT);
-				}
-				for (int i = 0; i < getPanels().length; i++) {
-					if (getPanels()[i] instanceof AccountAdministrationPanel) {
-						getTabbedPane().setIconAt(i, panelIcon);
-					}
-				}
-			}
-		});
+		hasAlert();
 	}
 	
 	TabbedPane getTabbedPane() {
@@ -161,7 +144,6 @@ public class AdministrationPanel extends JPanel implements AbstractAlertPanel {
 
 	@Override
 	public boolean hasAlert() {
-		String oldAlertState = alertState; 
 		boolean result = false;
 		if (this.data != null) {
 			for (int i = 0; i < this.data.getGlobalData().getAccountsNumber() && !result; i++) {
@@ -176,8 +158,16 @@ public class AdministrationPanel extends JPanel implements AbstractAlertPanel {
 				}
 			}
 		}
-		alertState = result ? AbstractAlertPanel.ALERT_PROPERTY_ENABLE : AbstractAlertPanel.ALERT_PROPERTY_DISABLE;
-		firePropertyChange(AlertType.CHECKBOOK_RUNNING_OUT.name(), oldAlertState, alertState);
+		Icon panelIcon = result ? IconManager.get(Name.ALERT) : null;
+		for (int i = 0; i < getPanels().length; i++) {
+			if (getPanels()[i] instanceof AccountAdministrationPanel) {
+				getTabbedPane().setIconAt(i, panelIcon);
+				getTabbedPane().setToolTipTextAt(i, result ? //
+						Formatter.format(LocalizationData.get("AccountManager.toolTip.checkbookAlert"), LocalizationData.get("AccountManager.toolTip")) : //
+						getPanels()[i].getPanelToolTip() //
+				);
+			}
+		}
 		return result;
 	}
 
