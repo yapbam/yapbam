@@ -22,7 +22,7 @@ public class CheckbookAlertsPreferencesDialog extends AbstractDialog<Void, Integ
 	@Override
 	protected JPanel createCenterPane() {
 		this.pane = new CheckbookAlertsPreferencesPane();
-		this.pane.addPropertyChangeListener(CheckbookPane.INVALIDITY_CAUSE,
+		this.pane.addPropertyChangeListener(CheckbookAlertsPreferencesPane.INVALIDITY_CAUSE,
 				new AutoUpdateOkButtonPropertyListener(this));
 		return this.pane;
 	}
@@ -37,7 +37,7 @@ public class CheckbookAlertsPreferencesDialog extends AbstractDialog<Void, Integ
 		return this.pane.getInvalidityCause();
 	}
 
-	public static Integer open(Integer current, Window owner) {
+	public static Integer open(int current, Window owner) {
 		CheckbookAlertsPreferencesDialog dialog = new CheckbookAlertsPreferencesDialog(owner);
 		dialog.pane.setContent(current);
 		dialog.setVisible(true);
