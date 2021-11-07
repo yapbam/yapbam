@@ -40,7 +40,6 @@ public class CheckbookAlertsPreferencesPane extends JPanel {
 	public CheckbookAlertsPreferencesPane() {
 		super();
 		initialize();
-//TODO		parse();
 	}
 
 	/**
@@ -83,21 +82,7 @@ public class CheckbookAlertsPreferencesPane extends JPanel {
 			getAlertValue().setEnabled(Boolean.FALSE);
 			getAlertValue().setValue(1);
 		}
-//		parse();
 	}
-/*
-	private void parse() {
-		String old = this.invalidityCause;
-		this.invalidityCause = null;
-		if (getAlertState().isSelected()) {
-			if (getAlertValueModel().getNumber() == null) {
-				this.invalidityCause = LocalizationData.get("checkbookAlertsPreferencesDialog.error.valueIsBlank");
-			}
-		}
-		if (!NullUtils.areEquals(old, this.invalidityCause)) {
-			this.firePropertyChange(INVALIDITY_CAUSE, old, this.invalidityCause);
-		}
-	}*/
 
 	/**
 	 * This method initializes AlertState
