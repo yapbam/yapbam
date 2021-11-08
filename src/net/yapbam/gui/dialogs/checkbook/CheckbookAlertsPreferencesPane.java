@@ -111,6 +111,7 @@ public class CheckbookAlertsPreferencesPane extends JPanel {
 	private IntegerWidget getAlertValue() {
 		if (alertValue == null) {
 			alertValue = new IntegerWidget(BigInteger.ONE, null);
+			alertValue.setColumns(3);
 			alertValue.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
