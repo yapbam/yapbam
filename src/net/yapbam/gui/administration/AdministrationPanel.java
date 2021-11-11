@@ -4,9 +4,14 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.fathzer.jlocal.Formatter;
+
 import net.yapbam.data.FilteredData;
+import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
+import net.yapbam.gui.IconManager.Name;
+import net.yapbam.gui.administration.AccountAdministrationPanel.CheckBookAlertListener;
 import net.yapbam.gui.administration.filter.FilterListPanel;
 import net.yapbam.gui.widget.TabbedPane;
 import net.yapbam.gui.widget.PanelWithOverlay;
@@ -19,6 +24,7 @@ import java.awt.event.ItemEvent;
 
 public class AdministrationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	static final String ALERT_PROPERTY = "alert";
 
 	private FilteredData data;
 	private AbstractAdministrationPanel[] panels;
@@ -55,19 +61,46 @@ public class AdministrationPanel extends JPanel {
 	TabbedPane getTabbedPane() {
 		if (tabbedPane==null) {
 			tabbedPane = new TabbedPane();
-			panels = new AbstractAdministrationPanel[]{
-					getPeriodicalTransactionsPanel(),
-					new AccountAdministrationPanel(data.getGlobalData()),
-					new CategoryListPanel(data.getGlobalData()),
-					new FilterListPanel(data.getGlobalData())
-			};
+			panels = getPanels();
 			for (int i = 0; i < panels.length; i++) {
 				tabbedPane.addTab(panels[i].getPanelTitle(), null, panels[i].getPanel(), panels[i].getPanelToolTip());
 			}
 		}
 		return tabbedPane;
 	}
+
+	private AbstractAdministrationPanel[] getPanels() {
+		if (panels == null) {
+			final AccountAdministrationPanel accountAdministrationPanel = new AccountAdministrationPanel(data.getGlobalData());
+			accountAdministrationPanel.addCheckBookAlert(new CheckBookAlertListener() {
+				@Override
+				public void process(boolean hasAlert) {
+					final String alert = hasAlert ? LocalizationData.get("AdministrationPlugIn.toolTip.checkbookAlert") : null;
+					final String basicToolTip =  accountAdministrationPanel.getPanelToolTip();
+					final int accountPanelIndex = getAccountPanelIndex();
+					String toolTipText = hasAlert ? Formatter.format(alert, basicToolTip) : basicToolTip;
+					tabbedPane.setToolTipTextAt(accountPanelIndex, toolTipText);
+					tabbedPane.setIconAt(accountPanelIndex, hasAlert ? IconManager.get(Name.ALERT) : null);
+					firePropertyChange(ALERT_PROPERTY, null, alert);
+				}
+			});
+			panels = new AbstractAdministrationPanel[] { getPeriodicalTransactionsPanel(),
+					accountAdministrationPanel,
+					new CategoryListPanel(data.getGlobalData()),
+					new FilterListPanel(data.getGlobalData()) };
+		}
+		return panels;
+	}
 	
+	private int getAccountPanelIndex() {
+		for (int i=0 ; i<getPanels().length; i++) {
+			if (getTabbedPane().getComponentAt(i) instanceof AccountAdministrationPanel) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	private PeriodicalTransactionListPanel getPeriodicalTransactionsPanel() {
 		if (periodicalTransactionsPanel==null) {
 			periodicalTransactionsPanel = new PeriodicalTransactionListPanel(data);
