@@ -4,8 +4,6 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.fathzer.jlocal.Formatter;
-
 import net.yapbam.data.FilteredData;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.LocalizationData;
@@ -14,6 +12,7 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.administration.AccountAdministrationPanel.CheckBookAlertListener;
 import net.yapbam.gui.administration.filter.FilterListPanel;
 import net.yapbam.gui.widget.TabbedPane;
+import net.yapbam.util.Html;
 import net.yapbam.gui.widget.PanelWithOverlay;
 
 import javax.swing.JLayeredPane;
@@ -78,7 +77,7 @@ public class AdministrationPanel extends JPanel {
 					final String alert = hasAlert ? LocalizationData.get("AdministrationPlugIn.toolTip.checkbookAlert") : null;
 					final String basicToolTip =  accountAdministrationPanel.getPanelToolTip();
 					final int accountPanelIndex = getAccountPanelIndex();
-					String toolTipText = hasAlert ? Formatter.format(alert, basicToolTip) : basicToolTip;
+					String toolTipText = hasAlert ? Html.linesToHtml(true, basicToolTip, alert) : basicToolTip;
 					tabbedPane.setToolTipTextAt(accountPanelIndex, toolTipText);
 					tabbedPane.setIconAt(accountPanelIndex, hasAlert ? IconManager.get(Name.ALERT) : null);
 					firePropertyChange(ALERT_PROPERTY, null, alert);
