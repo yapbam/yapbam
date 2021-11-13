@@ -20,6 +20,7 @@ import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
 import net.yapbam.data.event.CheckbookAddedEvent;
+import net.yapbam.data.event.CheckbookPropertyChangedEvent;
 import net.yapbam.data.event.CheckbookRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
@@ -207,6 +208,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 					event instanceof AccountRemovedEvent ||
 					event instanceof CheckbookAddedEvent ||
 					event instanceof CheckbookRemovedEvent ||
+					event instanceof CheckbookPropertyChangedEvent ||
 					event instanceof EverythingChangedEvent;
 				if (usefulEvent && (hasCheckBookAlert != hasAlert(AccountListPanel.this.data))) {
 					hasCheckBookAlert = !hasCheckBookAlert;
@@ -218,7 +220,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 	}
 	
 	private static boolean hasAlert(Account account) {
-		return account.getRemainingChecks() < account.getCheckNumberAlertThreshold();
+		return account.getRemainingChecks() <= account.getCheckNumberAlertThreshold();
 	}
 	
 	private static boolean hasAlert(GlobalData data) {
