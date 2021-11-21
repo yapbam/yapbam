@@ -12,7 +12,7 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.administration.AccountAdministrationPanel.CheckBookAlertListener;
 import net.yapbam.gui.administration.filter.FilterListPanel;
 import net.yapbam.gui.widget.TabbedPane;
-import net.yapbam.util.Html;
+import net.yapbam.util.HtmlUtils;
 import net.yapbam.gui.widget.PanelWithOverlay;
 
 import javax.swing.JLayeredPane;
@@ -77,7 +77,7 @@ public class AdministrationPanel extends JPanel {
 					final String alert = hasAlert ? LocalizationData.get("AdministrationPlugIn.toolTip.checkbookAlert") : null;
 					final String basicToolTip =  accountAdministrationPanel.getPanelToolTip();
 					final int accountPanelIndex = getAccountPanelIndex();
-					String toolTipText = hasAlert ? Html.linesToHtml(true, basicToolTip, alert) : basicToolTip;
+					String toolTipText = hasAlert ? HtmlUtils.linesToHtml(true, basicToolTip, alert) : basicToolTip;
 					tabbedPane.setToolTipTextAt(accountPanelIndex, toolTipText);
 					tabbedPane.setIconAt(accountPanelIndex, hasAlert ? IconManager.get(Name.ALERT) : null);
 					firePropertyChange(ALERT_PROPERTY, null, alert);

@@ -150,7 +150,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			Account account = data.getAccount(rowIndex);
 			if (columnIndex==ALERT_COLUMN) {
-				return hasAlert(account) ? IconManager.get(Name.ALERT) : null;
+				return account.hasRemainingChecksAlert() ? IconManager.get(Name.ALERT) : null;
 			} else if (columnIndex==NAME_COLUMN) {
 				return account.getName();
 			} else if (columnIndex==INTIAL_BALANCE_COLUMN) {
@@ -219,13 +219,9 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		});
 	}
 	
-	private static boolean hasAlert(Account account) {
-		return account.getRemainingChecks() <= account.getCheckNumberAlertThreshold();
-	}
-	
 	private static boolean hasAlert(GlobalData data) {
 		for (int i=0; i<data.getAccountsNumber(); i++) {
-			if (hasAlert(data.getAccount(i))) {
+			if (data.getAccount(i).hasRemainingChecksAlert()) {
 				return true;
 			}
 		}

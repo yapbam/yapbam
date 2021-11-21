@@ -13,7 +13,6 @@ Code cleaning :
 Utiliser le framework AJLib pour créer l'application.
 
 Features :
-* Pouvoir choisir entre alerte par chéquier ou global au compte
 * Pouvoir choisir l'encoding dans l'import/export 
 * Permettre la consultation des relnotes dans le dialogue affiché lors de la détection d'une mise à jour (cf net.yapbam.update.CheckUpdateDialog#UpdateSwingWorker#done).
 * Tenir compte de la date de fin sélectionnée dans le filtre pour régler le zoom vertical dans le graphique de l'historique du solde

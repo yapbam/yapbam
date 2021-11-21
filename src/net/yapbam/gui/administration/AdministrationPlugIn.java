@@ -13,7 +13,7 @@ import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
-import net.yapbam.util.Html;
+import net.yapbam.util.HtmlUtils;
 
 /** This plugin implements the Administration panel.
  * @author Jean-Marc Astesana
@@ -30,7 +30,7 @@ public class AdministrationPlugIn extends AbstractPlugIn {
 			public void propertyChange(PropertyChangeEvent evt) {
 				final String alert = (String) evt.getNewValue();
 				AdministrationPlugIn.this.setPanelIcon(alert==null ? null : IconManager.get(Name.ALERT));
-				AdministrationPlugIn.this.setPanelToolTip(alert==null ? toolTip : Html.linesToHtml(true, toolTip, alert));
+				AdministrationPlugIn.this.setPanelToolTip(alert==null ? toolTip : HtmlUtils.linesToHtml(true, toolTip, alert));
 			}
 		}));
 		this.supportFilter = isPeriodicalTransactionDisplayed();
