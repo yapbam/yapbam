@@ -1,7 +1,10 @@
 package net.yapbam.gui;
 
 import java.awt.Toolkit;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,7 +29,6 @@ import javax.swing.KeyStroke;
 
 import com.fathzer.jlocal.Formatter;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
-import com.fathzer.soft.ajlib.utilities.FileUtils;
 
 import net.yapbam.data.Account;
 import net.yapbam.data.Filter;
@@ -41,12 +43,26 @@ import net.yapbam.data.event.EverythingChangedEvent;
 import net.yapbam.data.event.FilterPropertyChangedEvent;
 import net.yapbam.data.event.FiltersAddedEvent;
 import net.yapbam.data.event.FiltersRemovedEvent;
+import net.yapbam.export.ExportFormatType;
 import net.yapbam.gui.IconManager.Name;
-import net.yapbam.gui.actions.*;
+import net.yapbam.gui.actions.CheckNewReleaseAction;
+import net.yapbam.gui.actions.CompoundTransactionSelector;
+import net.yapbam.gui.actions.ConvertToPeriodicalTransactionAction;
+import net.yapbam.gui.actions.CustomFilterAction;
+import net.yapbam.gui.actions.DeleteTransactionAction;
+import net.yapbam.gui.actions.DuplicateTransactionAction;
+import net.yapbam.gui.actions.EditPreferenceAction;
+import net.yapbam.gui.actions.EditTransactionAction;
+import net.yapbam.gui.actions.NewAccountAction;
+import net.yapbam.gui.actions.NewTransactionAction;
+import net.yapbam.gui.actions.OpenAction;
+import net.yapbam.gui.actions.SaveAction;
+import net.yapbam.gui.actions.SaveAsAction;
 import net.yapbam.gui.dialogs.AboutDialog;
 import net.yapbam.gui.dialogs.GetPasswordDialog;
 import net.yapbam.gui.dialogs.export.ExportDialog;
-import net.yapbam.gui.dialogs.export.Exporter;
+import net.yapbam.gui.dialogs.export.DataExporter;
+import net.yapbam.gui.dialogs.export.ExportComponent;
 import net.yapbam.gui.dialogs.export.ImportDialog;
 import net.yapbam.gui.dialogs.export.ImportError;
 import net.yapbam.gui.dialogs.export.ImportErrorDialog;
@@ -108,7 +124,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.add(this.menuItemSaveAs);
 		insertPluginMenuItems(menu, AbstractPlugIn.FILE_MANIPULATION_PART);
 		menu.addSeparator();
-		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.get(Name.LOCK)); //$NON-NLS-1$;
+		this.menuItemProtect = new JMenuItem(LocalizationData.get("MainMenu.Protect"), IconManager.get(Name.LOCK)); //$NON-NLS-1$
 		this.menuItemProtect.setMnemonic(LocalizationData.getChar("MainMenu.Protect.Mnemonic")); //$NON-NLS-1$
 		this.menuItemProtect.setToolTipText(LocalizationData.get("MainMenu.Protect.ToolTip")); //$NON-NLS-1$
 		this.menuItemProtect.addActionListener(this);
@@ -272,14 +288,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 	private JMenuItem getURLMenuItem(String title, final String url) {
 		try {
 			final URI uri = new URI(url);
-			JMenuItem item = new JMenuItem(new AbstractAction(title) {
+			return new JMenuItem(new AbstractAction(title) {
 				private static final long serialVersionUID = 1L;
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					HelpManager.show(MainMenuBar.this, uri);
 				}
 			});
-			return item;
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -302,6 +317,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		// output.setText("Menu selected"+e.getSource().toString());
 		Object source = event.getSource();
@@ -327,60 +343,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 				this.frame.getData().setPassword(newPassword);
 			}
 		} else if (source.equals(this.menuItemImport)) {
-			JFileChooser chooser = new FileChooser(null);
-			chooser.setLocale(LocalizationData.getLocale());
-			File lastFile = ImportDialog.getLastFile();
-			if ((lastFile != null) && lastFile.exists() && lastFile.canRead()) {
-				chooser.setSelectedFile(lastFile);
-			}
-			chooser.updateUI();
-			File file = chooser.showOpenDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-			if (file!=null) {
-				try {
-					ImportDialog dialog = new ImportDialog(this.frame.getJFrame(), data, file);
-					dialog.setVisible(true);
-					Importer importer = dialog.getResult();
-					if (importer!=null) {
-						if (YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(this.frame.getData()))) {
-							if (!dialog.getAddToCurrentData()) {
-								data.clear();
-							}
-							ImportError[] errors = importer.importFile(null);
-							if (errors.length!=0) {
-								ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame.getJFrame(), importer.getParameters().getImportedFileColumns(), errors);
-								importErrorDialog.setVisible(true);
-								if (importErrorDialog.getResult()!=null) {
-									errors = new ImportError[0];
-								}
-							}
-							if (errors.length==0) {
-								importer.importFile(data);
-							}
-						}
-					}
-				} catch (IOException e) {
-					ImportDialog.doError(this.frame.getJFrame(), e);
-				}
-			}
+			doImport();
 		} else if (source.equals(this.menuItemExport)) {
-			ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
-			exportDialog.setVisible(true);
-			Exporter exporter = exportDialog.getResult();
-			if (exporter!=null) {
-				JFileChooser chooser = new FileChooser(null);
-				chooser.setLocale(LocalizationData.getLocale());
-				chooser.updateUI();
-				File file = chooser.showSaveDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
-				if (file!=null) {
-					try {
-						file = FileUtils.getCanonical(file);
-						exporter.exportFile(file, frame.getFilteredData());
-						JOptionPane.showMessageDialog(frame.getJFrame(), LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
-					} catch (IOException e1) {
-						ErrorManager.INSTANCE.display(frame.getJFrame(), e1);
-					}
-				}					
-			}
+			doExport();
 		} else if (source.equals(this.menuItemPrint)) {
 			try {
 				this.frame.getCurrentPlugIn().print();
@@ -394,6 +359,53 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			}
 		} else if (source.equals(this.menuItemAbout)) {
 			new AboutDialog(MainMenuBar.this.frame.getJFrame()).setVisible(true);
+		}
+	}
+
+	private void doImport() {
+		JFileChooser chooser = new FileChooser(null);
+		chooser.setLocale(LocalizationData.getLocale());
+		File lastFile = ImportDialog.getLastFile();
+		if ((lastFile != null) && lastFile.exists() && lastFile.canRead()) {
+			chooser.setSelectedFile(lastFile);
+		}
+		chooser.updateUI();
+		File file = chooser.showOpenDialog(frame.getJFrame())==JFileChooser.APPROVE_OPTION?chooser.getSelectedFile():null;
+		if (file!=null) {
+			try {
+				GlobalData data = this.frame.getData();
+				ImportDialog dialog = new ImportDialog(this.frame.getJFrame(), data, file);
+				dialog.setVisible(true);
+				Importer importer = dialog.getResult();
+				if (importer!=null && YapbamPersistenceManager.MANAGER.verify(this.frame, new YapbamDataWrapper(data))) {
+					if (!dialog.getAddToCurrentData()) {
+						data.clear();
+					}
+					ImportError[] errors = importer.importFile(null);
+					if (errors.length!=0) {
+						ImportErrorDialog importErrorDialog = new ImportErrorDialog(frame.getJFrame(), importer.getParameters().getImportedFileColumns(), errors);
+						importErrorDialog.setVisible(true);
+						if (importErrorDialog.getResult()!=null) {
+							errors = new ImportError[0];
+						}
+					}
+					if (errors.length==0) {
+						importer.importFile(data);
+					}
+				}
+			} catch (IOException e) {
+				ImportDialog.doError(this.frame.getJFrame(), e);
+			}
+		}
+	}
+
+	private void doExport() {
+		ExportDialog exportDialog = new ExportDialog(this.frame.getJFrame(), this.frame.getFilteredData());
+		exportDialog.setVisible(true);
+		DataExporter exporter = exportDialog.getResult();
+		if (exporter!=null) {
+			ExportFormatType format = exporter.getParameters().getExportFormat();
+			ExportComponent.chooseFileAndExport(frame.getFilteredData(), format, exportDialog, exporter);
 		}
 	}
 
@@ -451,7 +463,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 	}		
 
-	private MenuScroller menuScroller;
+	private transient MenuScroller menuScroller;
 	private void updateFilterMenu() {
 		if (menuScroller!=null) {
 			menuScroller.dispose();
@@ -600,7 +612,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		getTransactionSelector().setInternalSelector(plugin==null?null:plugin.getTransactionSelector());
 	}
 	
-	private CompoundTransactionSelector selector; 
+	private transient CompoundTransactionSelector selector; 
 	public CompoundTransactionSelector getTransactionSelector() {
 		if (selector==null) {
 			selector = new CompoundTransactionSelector(frame.getFilteredData());

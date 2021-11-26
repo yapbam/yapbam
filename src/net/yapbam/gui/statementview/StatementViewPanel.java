@@ -1,15 +1,22 @@
 package net.yapbam.gui.statementview;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
-
-import javax.swing.JPanel;
-
-import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.print.Printable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -18,7 +25,26 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable.PrintMode;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+
+import com.fathzer.jlocal.Formatter;
+import com.fathzer.soft.ajlib.swing.Utils;
+import com.fathzer.soft.ajlib.swing.table.JTable;
+import com.fathzer.soft.ajlib.swing.table.JTableListener;
+import com.fathzer.soft.ajlib.utilities.NullUtils;
 
 import net.yapbam.data.AbstractTransactionUpdater;
 import net.yapbam.data.Account;
@@ -26,50 +52,19 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
+import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.TransactionSelector;
 import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
+import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
+import net.yapbam.gui.dialogs.export.TableExporter;
+import net.yapbam.gui.transactiontable.TransactionTableUtils;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.SplitPane;
 import net.yapbam.util.DateUtils;
-
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-
-import java.awt.Insets;
-
-import javax.swing.JTable.PrintMode;
-
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.print.Printable;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.SwingConstants;
-
-import java.awt.Color;
-
-import javax.swing.JSplitPane;
-import javax.swing.border.Border;
-import javax.swing.JButton;
-
-import com.fathzer.jlocal.Formatter;
-import com.fathzer.soft.ajlib.swing.Utils;
-import com.fathzer.soft.ajlib.swing.table.JTableListener;
-import com.fathzer.soft.ajlib.utilities.NullUtils;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 public class StatementViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -86,12 +81,11 @@ public class StatementViewPanel extends JPanel {
 	private StatementTable transactionsTable;
 	private JCheckBox checkModeChkbx;
 	
-	private FilteredData data;
+	private transient FilteredData data;
 	CheckTransactionAction checkAction;
 	private JPanel menuPanel;
 	private JLabel lblNewLabel;
 	private SplitPane splitPane;
-	private JScrollPane notCheckedJScrollPane;
 	private JLabel notCheckedColumns;
 	
 	private boolean checkModeReady = false;
@@ -100,6 +94,7 @@ public class StatementViewPanel extends JPanel {
 	private ChangeValueDatePanel changeValueDatePanel;
 	private JLabel summaryLabel;
 	private JButton btnRename;
+	private JButton btnExport;
 	private JPanel northPanel;
 	private JPanel panel1;
 	
@@ -236,8 +231,8 @@ public class StatementViewPanel extends JPanel {
 			Action edit = new EditTransactionAction(transactionsTable);
 			Action delete = new DeleteTransactionAction(transactionsTable);
 			Action duplicate = new DuplicateTransactionAction(transactionsTable);
-			Action checkAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
-			transactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, checkAction));
+			Action uncheckAction = new CheckTransactionAction(this, transactionsTable, getUncheckedTransactionsTable(), false);
+			transactionsTable.addMouseListener(new MyListener(new Action[]{edit, duplicate, delete}, edit, uncheckAction));
 		}
 		return transactionsTable;
 	}
@@ -360,9 +355,7 @@ public class StatementViewPanel extends JPanel {
 			gbcLabel.anchor = GridBagConstraints.WEST;
 			gbcLabel.gridx = 0;
 			gbcLabel.gridy = 0;
-			Font font = label.getFont();
-			font = label.getFont().deriveFont(14*label.getFont().getSize()/12);
-			label.setFont(font);
+			label.setFont(label.getFont().deriveFont(14*label.getFont().getSize()/12));
 			panel.add(label, gbcLabel);
 
 			GridBagConstraints gbcNotCheckedColumns = new GridBagConstraints();
@@ -372,7 +365,7 @@ public class StatementViewPanel extends JPanel {
 			gbcNotCheckedColumns.gridwidth = 0;
 			notCheckedPanel.add(getNotCheckedColumns(), gbcNotCheckedColumns);
 	
-			notCheckedJScrollPane = new JScrollPane();
+			JScrollPane notCheckedJScrollPane = new JScrollPane();
 			notCheckedJScrollPane.setViewportView(getUncheckedTransactionsTable());
 			GridBagConstraints gbcNotCheckedJScrollPane = new GridBagConstraints();
 			gbcNotCheckedJScrollPane.gridwidth = 0;
@@ -446,7 +439,11 @@ public class StatementViewPanel extends JPanel {
 		
 		// Show/hide the check mode widget
 		getCheckModeChkbx().setVisible(checkModeAvailable);
-		getBtnRename().setVisible(statementSelected && (statement.getId()!=null));
+		
+		boolean visibility = statementSelected && (statement.getId()!=null);
+		
+		getBtnRename().setVisible(visibility);
+		getBtnExport().setVisible(visibility);
 		
 		// Show hide the widgets of the check mode
 		getNotCheckedPanel().setVisible(checkMode);
@@ -603,6 +600,33 @@ public class StatementViewPanel extends JPanel {
 		}
 		return btnRename;
 	}
+	
+	@SuppressWarnings("serial")
+	private JButton getBtnExport() {
+		if(btnExport == null) {
+			ExportComponent<ExporterParameters, FriendlyTable> exportC = new ExportComponent<ExporterParameters, FriendlyTable>() {
+				@Override
+				public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
+					return new TableExporter() {
+						@Override
+						protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
+							// Warning, in the table model, the description is already html encoded. It would lead to the export
+							// containing html tags or escape sequences. So we will rebuild the description as text
+							if (StatementTableModel.DESCRIPTION_COLUMN==modelColIndex) {
+								final Transaction transaction = ((StatementTableModel)table.getModel()).getTransactions()[modelRowIndex];
+								return TransactionTableUtils.getDescriptionAsText(transaction, true);
+							} else {
+								return super.getValueAt(table, modelRowIndex, modelColIndex);
+							}
+						}
+					};
+				}
+			};
+			exportC.setContent(getTransactionsTable());
+			btnExport = exportC;
+		}
+		return btnExport;
+	}
 	private JPanel getNorthPanel() {
 		if (northPanel == null) {
 			northPanel = new JPanel();
@@ -631,6 +655,7 @@ public class StatementViewPanel extends JPanel {
 			panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			panel1.add(getStatementSelectionPanel());
 			panel1.add(getBtnRename());
+			panel1.add(getBtnExport());
 		}
 		return panel1;
 	}

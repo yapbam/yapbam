@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -30,6 +31,7 @@ import net.yapbam.gui.administration.AbstractListAdministrationPanel;
 @SuppressWarnings("serial")
 public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalData> {
 	private Account account;
+	private JButton alertSettings;
 	
 	public CheckbookListPanel (GlobalData data) {
 		super(data);
@@ -63,8 +65,9 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	public void setContent(Account account) {
 		this.account = account;
 		this.getNewButton().getAction().setEnabled(account!=null);
+		getRightComponent().setEnabled(account!=null);
 		((AbstractTableModel)getJTable().getModel()).fireTableDataChanged();
-	}
+;	}
 
 	@Override
 	protected Action getDeleteButtonAction() {
@@ -79,6 +82,26 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 	@Override
 	protected Action getNewButtonAction() {
 		return new NewCheckbookAction();
+	}
+	
+	@Override
+	protected Component getRightComponent() {
+		if (alertSettings==null) {
+			final AbstractAction preferencesAction = new AbstractAction(LocalizationData.get("checkbookAlertsWidget.openPreferencesDialog")) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					final Integer threshold = CheckbookAlertsPreferencesDialog.open(account.getCheckNumberAlertThreshold(), Utils.getOwnerWindow((Component) e.getSource()));
+					if (threshold!=null) {
+						data.setCheckNumberAlertThreshold(account, threshold);
+					}
+				}
+			};
+			preferencesAction.putValue(Action.SHORT_DESCRIPTION, LocalizationData.get("checkbookAlertsWidget.openPreferencesDialog.tooltip"));
+			alertSettings = new JButton(preferencesAction);
+			alertSettings.setIcon(IconManager.get(Name.SETTINGS));
+			alertSettings.setEnabled(false);
+		}
+		return alertSettings;
 	}
 
 	private final class NewCheckbookAction extends AbstractAction {
@@ -106,7 +129,7 @@ public class CheckbookListPanel extends AbstractListAdministrationPanel<GlobalDa
 			dialog.setVisible(true);
 			Checkbook checkbook = dialog.getResult();
 			if (checkbook!=null) {
-				((GlobalData)data).setCheckbook(account, old, checkbook);
+				data.setCheckbook(account, old, checkbook);
 			}
 		}
 	}

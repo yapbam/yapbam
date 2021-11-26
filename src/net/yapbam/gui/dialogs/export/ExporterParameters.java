@@ -1,88 +1,59 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.NumberFormat;
 
-import net.yapbam.util.ArrayUtils;
+import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
-public class ExporterParameters implements Serializable {
-	private static final long serialVersionUID = 6487527320997875709L;
-	// WARNING. If we change the attribute list or their names and forget to change the serial uid,
-	// we could have an inconsistent parameter instance that could cause crashes.
-	// Changing serialVersionUID would just lead to ignore saved configuration. 
-	private int[] viewIndexesToModel;
-	private boolean[] selectedModelColumns;
-	private boolean insertHeader;
+import net.yapbam.export.ExportFormatType;
+import net.yapbam.gui.LocalizationData;
+
+public class ExporterParameters {
+	private final DateFormat dateFormatter;
+	private final NumberFormat amountFormatter;
+	// For json and html exporters, separator is a non sense ... but its not a big deal
 	private char separator;
-	private boolean exportInitialBalance;
-	private boolean exportFilteredData;
-	
-	private int[] exportedIndexes;
+	private ExportFormatType exportFormat;
 
 	public ExporterParameters() {
-		this(ArrayUtils.buildIntArray(ExportTableModel.COLUMNS.length, 0, 1), ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true),
-				true, ';', true, true);
+		this(';', ExportFormatType.CSV);
 	}
 	
-	public ExporterParameters(int[] viewindexesToModel, boolean[] selectedModelColumns, boolean insertHeader, char separator,
-			boolean exportInitialBalance, boolean exportFilteredData) {
+	public ExporterParameters(char separator, ExportFormatType exportFormat) {
 		super();
-		this.viewIndexesToModel = viewindexesToModel;
-		this.selectedModelColumns = selectedModelColumns;
-		this.insertHeader = insertHeader;
 		this.separator = separator;
-		this.exportInitialBalance = exportInitialBalance;
-		this.exportFilteredData = exportFilteredData;
-		int nbSelected = 0;
-		for (boolean b : selectedModelColumns) {
-			if (b) {
-				nbSelected++;
-			}
-		}
-		int i = 0;
-		this.exportedIndexes = new int[nbSelected];
-		for (int j=0; j<viewindexesToModel.length; j++) {
-			if (selectedModelColumns[viewindexesToModel[j]]) {
-				this.exportedIndexes[i] = viewindexesToModel[j];
-				i++;
-			}
-		}
+		this.exportFormat = exportFormat;
+		this.dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale());
+		this.amountFormatter = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
 	}
 
-	public int[] getExportedIndexes() {
-		return exportedIndexes;
+	public void setSeparator(char separator) {
+		this.separator = separator;
 	}
-
-	public int[] getViewIndexesToModel() {
-		return viewIndexesToModel;
-	}
-
-	public boolean[] getSelectedModelColumns() {
-		return selectedModelColumns;
-	}
-
-	public boolean isInsertHeader() {
-		return insertHeader;
-	}
-
+	
 	public char getSeparator() {
 		return separator;
 	}
 
-	public boolean isExportInitialBalance() {
-		return exportInitialBalance;
+	public ExportFormatType getExportFormat() {
+		return exportFormat;
 	}
 
-	public boolean isExportFilteredData() {
-		return exportFilteredData;
+	public void setExportFormat(ExportFormatType exportFormat) {
+		this.exportFormat = exportFormat;
+	}
+	
+	public DateFormat getDateFormat() {
+		return this.dateFormatter;
+	}
+	
+	public NumberFormat getAmountFormat() {
+		return this.amountFormatter;
 	}
 
-	public void setExportFilteredData(boolean exportFilteredData) {
-		this.exportFilteredData = exportFilteredData;
-	}
-
-	public Charset getEncoding() {
-		//TODO
+	public Charset getPreferredEncoding() {
+		// For Json, non UTF encoding are not JSON standard compliant, it's the reason why the method is named "preferred"
 		return Charset.defaultCharset();
 	}
 }

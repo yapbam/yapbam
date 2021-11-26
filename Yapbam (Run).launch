@@ -6,10 +6,13 @@
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
     </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.yapbam.gui.MainFrame"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="Yapbam"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Yapbam"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DxtestedPlugin.className=net.yapbam.gui.archive.ArchivePlugin -DxslowDataReading=true -DxBetaUpdating=true -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.showThreadName=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.graphics.balancehistory.YAxis=trace -Dxuser.country=RO -Dxuser.language=ro -Dsun.awt.disablegrab=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.dialogs=trace -DxsimulateJNLP=true -DxtestedPersistenceAdapter.className=net.yapbam.gui.persistence.classpath.ClasspathPersistenceAdapter -DxnewsURL=https://www.yapbam.net/messages?target=oper -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.info.MessagesBuilder=debug&#13;&#10;-Dorg.slf4j.simpleLogger.log.net.yapbam.data.StatData=trace"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DxtestedPlugin.className=net.yapbam.gui.archive.ArchivePlugin -DxslowDataReading=true -DxBetaUpdating=true -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.showThreadName=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.graphics.balancehistory.YAxis=trace -Dxuser.country=RO -Dxuser.language=ro -Dsun.awt.disablegrab=true -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.dialogs=trace -DxsimulateJNLP=true -DxtestedPersistenceAdapter.className=net.yapbam.gui.persistence.classpath.ClasspathPersistenceAdapter -DxnewsURL=https://www.yapbam.net/messages?target=oper -Dorg.slf4j.simpleLogger.log.net.yapbam.gui.info.MessagesBuilder=debug&#13;&#10;-Dxorg.slf4j.simpleLogger.log.net.yapbam.data.StatData=trace&#13;&#10;-Dxorg.slf4j.simpleLogger.log.net.yapbam.data=trace&#13;&#10;-DxtraceEvents=true"/>
 </launchConfiguration>

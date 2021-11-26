@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.20.15</version>
+	<version>0.21.0</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<mainClass>net.yapbam.gui.Launcher</mainClass>
@@ -13,35 +14,35 @@
 
 	<build>
 		<pluginManagement>
-		    <plugins>
-		        <plugin>
-		            <groupId>org.eclipse.m2e</groupId>
-		            <artifactId>lifecycle-mapping</artifactId>
-		            <version>1.0.0</version>
-		            <configuration>
-		                <lifecycleMappingMetadata>
-		                    <pluginExecutions>
-		                        <pluginExecution>
-		                            <pluginExecutionFilter>
-		                                <groupId>org.codehaus.mojo</groupId>
-		                                <artifactId>buildnumber-maven-plugin</artifactId>
-		                                <versionRange>[1.2,)</versionRange>
-		                                <goals>
-		                                    <goal>create-timestamp</goal>
-		                                </goals>
-		                            </pluginExecutionFilter>
-		                            <action>
-		                                <execute>
-		                                    <runOnConfiguration>true</runOnConfiguration>
-		                                    <runOnIncremental>true</runOnIncremental>
-		                                </execute>
-		                            </action>
-		                        </pluginExecution>
-		                    </pluginExecutions>
-		                </lifecycleMappingMetadata>
-		            </configuration>
-		        </plugin>
-		    </plugins>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>buildnumber-maven-plugin</artifactId>
+										<versionRange>[1.2,)</versionRange>
+										<goals>
+											<goal>create-timestamp</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnConfiguration>true</runOnConfiguration>
+											<runOnIncremental>true</runOnIncremental>
+										</execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
 		</pluginManagement>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -53,7 +54,7 @@
 			</resource>
 			<resource>
 				<directory>filteredResources</directory>
-		        <filtering>true</filtering>
+				<filtering>true</filtering>
 			</resource>
 		</resources>
 		<testSourceDirectory>testSrc</testSourceDirectory>
@@ -251,7 +252,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
-			<version>1.8.8</version>
+			<version>1.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -269,10 +270,9 @@
 			<version>1.10</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13</version>
-			<scope>test</scope>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -304,6 +304,29 @@
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jtidy</groupId>
+			<artifactId>jtidy</artifactId>
+			<version>1.0.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
 		</dependency>
 	</dependencies>
 </project>

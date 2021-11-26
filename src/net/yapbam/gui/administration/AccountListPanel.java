@@ -2,6 +2,7 @@ package net.yapbam.gui.administration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -18,6 +19,9 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.event.AccountAddedEvent;
 import net.yapbam.data.event.AccountPropertyChangedEvent;
 import net.yapbam.data.event.AccountRemovedEvent;
+import net.yapbam.data.event.CheckbookAddedEvent;
+import net.yapbam.data.event.CheckbookPropertyChangedEvent;
+import net.yapbam.data.event.CheckbookRemovedEvent;
 import net.yapbam.data.event.DataEvent;
 import net.yapbam.data.event.DataListener;
 import net.yapbam.data.event.EverythingChangedEvent;
@@ -26,6 +30,7 @@ import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.actions.NewAccountAction;
 import net.yapbam.gui.dialogs.EditAccountDialog;
+import net.yapbam.gui.util.JTableUtils;
 import net.yapbam.util.HtmlUtils;
 
 import java.awt.Component;
@@ -33,6 +38,10 @@ import java.awt.event.ActionEvent;
 
 public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData> {
 	private static final long serialVersionUID = 1L;
+	
+	static final String CHECK_BOOK_ALERT_PROPERTY = "checkBookAlert";
+	private boolean hasCheckBookAlert;
+	private AbstractTableModel tableModel;
 	
 	@SuppressWarnings("serial")
 	class DeleteAccountAction extends AbstractAction {
@@ -95,33 +104,42 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		    }
 		});
 		jTable.setRowSorter(new RowSorter<TableModel>(getTableModel()));
+		JTableUtils.fixColumnSize(jTable, AccountTableModel.ALERT_COLUMN, 10);
 		return jTable;
 	}
 	
 	@SuppressWarnings("serial")
 	private final class AccountTableModel extends AbstractTableModel implements DataListener {
+		private static final int ALERT_COLUMN = 0;
+		private static final int NAME_COLUMN = 1;
+		private static final int INTIAL_BALANCE_COLUMN = 2;
+		private static final int LESS_THRESHOLD_COLUMN = 3;
+		private static final int MORE_THRESHOLD_COLUMN = 4;
+
 		public AccountTableModel(GlobalData data) {
 			data.addListener(this);
 		}
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			if ((columnIndex>=1) && (columnIndex<=3)) {
+			if (columnIndex==ALERT_COLUMN) {
+				return Icon.class;
+			} else if ((columnIndex>=INTIAL_BALANCE_COLUMN) && (columnIndex<=MORE_THRESHOLD_COLUMN)) {
 				return Double.class;
-			} else if ((columnIndex>=4) && (columnIndex<=6)) {
-				return Integer.class;
 			} else {
 				return String.class;
 			}
 		}
 		@Override
 		public String getColumnName(int columnIndex) {
-			if (columnIndex==0) {
+			if (columnIndex==ALERT_COLUMN) {
+				return null;
+			} else if (columnIndex==NAME_COLUMN) {
 				return LocalizationData.get("Transaction.account"); //$NON-NLS-1$
-			} else if (columnIndex==1) {
+			} else if (columnIndex==INTIAL_BALANCE_COLUMN) {
 				return LocalizationData.get("AccountManager.balanceColumn.title"); //$NON-NLS-1$
-			} else if (columnIndex==2) {
+			} else if (columnIndex==LESS_THRESHOLD_COLUMN) {
 				return LocalizationData.get("AccountManager.alertThresholdLess.title"); //$NON-NLS-1$
-			} else if (columnIndex==3) {
+			} else if (columnIndex==MORE_THRESHOLD_COLUMN) {
 				return LocalizationData.get("AccountManager.alertThresholdMore.title"); //$NON-NLS-1$
 			} else {
 				return "?"; //$NON-NLS-1$
@@ -130,14 +148,16 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			Account account = ((GlobalData)data).getAccount(rowIndex);
-			if (columnIndex==0) {
+			Account account = data.getAccount(rowIndex);
+			if (columnIndex==ALERT_COLUMN) {
+				return account.hasRemainingChecksAlert() ? IconManager.get(Name.ALERT) : null;
+			} else if (columnIndex==NAME_COLUMN) {
 				return account.getName();
-			} else if (columnIndex==1) {
+			} else if (columnIndex==INTIAL_BALANCE_COLUMN) {
 				return account.getInitialBalance();
-			} else if (columnIndex==2) {
+			} else if (columnIndex==LESS_THRESHOLD_COLUMN) {
 				return account.getAlertThreshold().getLessThreshold();
-			} else if (columnIndex==3) {
+			} else if (columnIndex==MORE_THRESHOLD_COLUMN) {
 				return account.getAlertThreshold().getMoreThreshold();
 			} else {
 				return "?"; //$NON-NLS-1$
@@ -146,12 +166,12 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 		
 		@Override
 		public int getRowCount() {
-			return ((GlobalData)data).getAccountsNumber();
+			return data.getAccountsNumber();
 		}
 
 		@Override
 		public int getColumnCount() {
-			return 4;
+			return MORE_THRESHOLD_COLUMN+1;
 		}
 
 		@Override
@@ -160,7 +180,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 			if (event instanceof EverythingChangedEvent) {
 				this.fireTableDataChanged();
 			} else if (event instanceof AccountAddedEvent) {
-				int index = ((GlobalData)data).indexOf(((AccountAddedEvent)event).getAccount());
+				int index = data.indexOf(((AccountAddedEvent)event).getAccount());
 				this.fireTableRowsInserted(index, index);
 			} else if (event instanceof AccountRemovedEvent) {
 				int index = ((AccountRemovedEvent)event).getIndex();
@@ -169,7 +189,7 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 				account = ((AccountPropertyChangedEvent)event).getAccount();
 			}
 			if (account!=null) {
-				int row = ((GlobalData)data).indexOf(account);
+				int row = data.indexOf(account);
 				this.fireTableRowsUpdated(row, row);
 			}
 		}
@@ -181,14 +201,43 @@ public class AccountListPanel extends AbstractListAdministrationPanel<GlobalData
 
 	public AccountListPanel(GlobalData data) {
 		super(data);
+		data.addListener(new DataListener() {
+			@Override
+			public void processEvent(DataEvent event) {
+				boolean usefulEvent = (event instanceof AccountPropertyChangedEvent && AccountPropertyChangedEvent.CHECK_NUMBER_ALERT_THRESHOLD.equals(((AccountPropertyChangedEvent)event).getProperty())) ||
+					event instanceof AccountRemovedEvent ||
+					event instanceof CheckbookAddedEvent ||
+					event instanceof CheckbookRemovedEvent ||
+					event instanceof CheckbookPropertyChangedEvent ||
+					event instanceof EverythingChangedEvent;
+				if (usefulEvent && (hasCheckBookAlert != hasAlert(AccountListPanel.this.data))) {
+					hasCheckBookAlert = !hasCheckBookAlert;
+					getTableModel().fireTableDataChanged();
+					AccountListPanel.this.firePropertyChange(CHECK_BOOK_ALERT_PROPERTY, !hasCheckBookAlert, hasCheckBookAlert);
+				}
+			}
+		});
 	}
 	
-	private TableModel getTableModel() {
-		return new AccountTableModel((GlobalData) data);
+	private static boolean hasAlert(GlobalData data) {
+		for (int i=0; i<data.getAccountsNumber(); i++) {
+			if (data.getAccount(i).hasRemainingChecksAlert()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
+	private AbstractTableModel getTableModel() {
+		if (tableModel==null) {
+			tableModel = new AccountTableModel(data);
+		}
+		return tableModel;
 	}
 	@Override
 	protected Action getNewButtonAction() {
-		return new NewAccountAction((GlobalData) data);
+		return new NewAccountAction(data);
 	}
 	@Override
 	protected Action getEditButtonAction() {
