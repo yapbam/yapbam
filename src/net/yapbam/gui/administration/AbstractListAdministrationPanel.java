@@ -48,7 +48,7 @@ public abstract class AbstractListAdministrationPanel<V> extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public AbstractListAdministrationPanel() {
+	protected AbstractListAdministrationPanel() {
 		this(null);
 	}
 	

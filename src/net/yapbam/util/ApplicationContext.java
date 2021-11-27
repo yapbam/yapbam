@@ -13,7 +13,6 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 import net.yapbam.update.ReleaseInfo;
-import net.yapbam.util.Portable;
 
 public abstract class ApplicationContext {
 	//TODO Could be a generic class if update url and "version.txt" was not hard coded.

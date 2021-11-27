@@ -19,6 +19,9 @@ import javax.swing.event.ListSelectionListener;
 import net.yapbam.gui.dialogs.checkbook.CheckbookListPanel;
 
 import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeListenerProxy;
 
 public class AccountAdministrationPanel extends JPanel implements AbstractAdministrationPanel {
 	private static final long serialVersionUID = 1L;
@@ -99,6 +102,19 @@ public class AccountAdministrationPanel extends JPanel implements AbstractAdmini
 			accountListPanel = new AccountListPanel(data);
 		}
 		return accountListPanel;
+	}
+	
+	public interface CheckBookAlertListener {
+		void process(boolean hasAlert);
+	}
+	public void addCheckBookAlert(final CheckBookAlertListener listener) {
+		getAccountListPanel().addPropertyChangeListener(new PropertyChangeListenerProxy(AccountListPanel.CHECK_BOOK_ALERT_PROPERTY, new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				listener.process((Boolean)evt.getNewValue());
+			}
+		}));
+
 	}
 
 	/**

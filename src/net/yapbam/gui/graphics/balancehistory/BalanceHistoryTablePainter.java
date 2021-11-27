@@ -26,20 +26,24 @@ final class BalanceHistoryTablePainter extends TransactionTablePainter {
 		this.alertColor = TablePreferencePanel.isHighlightAlerts() ? new Color(255, 100, 100) : null;
 		this.data = data;
 		refreshMinMax();
-		data.addListener(new DataListener() {
-			@Override
-			public void processEvent(DataEvent event) {
-				boolean needRefresh = (event instanceof EverythingChangedEvent) || (event instanceof AccountPropertyChangedEvent);
-				if (needRefresh) {
-					refreshMinMax();
+		if (data!=null) {
+			data.addListener(new DataListener() {
+				@Override
+				public void processEvent(DataEvent event) {
+					boolean needRefresh = (event instanceof EverythingChangedEvent) || (event instanceof AccountPropertyChangedEvent);
+					if (needRefresh) {
+						refreshMinMax();
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	private void refreshMinMax() {
 		Account singleAccount = null;
-		if (data.getGlobalData().getAccountsNumber()==1) {
+		if (data==null) {
+			// Do nothing, account is null
+		} else if (data.getGlobalData().getAccountsNumber()==1) {
 			singleAccount = data.getGlobalData().getAccount(0);
 		} else {
 			List<Account> validAccounts = data.getFilter().getValidAccounts();

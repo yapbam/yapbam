@@ -3,6 +3,7 @@ package net.yapbam.gui.dialogs.export;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
 
 public class ImporterParameters implements Serializable {
 	private static final long serialVersionUID = 560758261413517776L;
@@ -14,12 +15,13 @@ public class ImporterParameters implements Serializable {
 	private int[] importedFileColumns;
     private char decimalSeparator;
 
-    public ImporterParameters(char columnSeparator, char decimalSeparator, int ignoredLeadingLines, int[] importedFileColumns) {
+    public ImporterParameters(char columnSeparator, char decimalSeparator, DateFormat dateFormat, int ignoredLeadingLines, int[] importedFileColumns) {
 		super();
 		if (importedFileColumns.length!=ExportTableModel.COLUMNS.length) {
 			throw new IllegalArgumentException();
 		}
 		this.separator = columnSeparator;
+		this.dateFormat = dateFormat;
         this.decimalSeparator = decimalSeparator;
 		this.ignoredLeadingLines = ignoredLeadingLines;
 		this.importedFileColumns = importedFileColumns;
@@ -43,6 +45,15 @@ public class ImporterParameters implements Serializable {
 			};
 		}
 		return this;
+	}
+	
+	private DateFormat dateFormat;
+	public DateFormat getDateFormatter() {
+		return dateFormat;
+	}
+	
+	public void setDateFormat(DateFormat dateFormat) {
+		this.dateFormat = dateFormat;
 	}
 
 	public char getColumnSeparator() {

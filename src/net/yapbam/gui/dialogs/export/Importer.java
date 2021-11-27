@@ -25,7 +25,6 @@ import net.yapbam.date.helpers.DateStepper;
 import net.yapbam.gui.LocalizationData;
 
 public class Importer {
-	//TODO Make locale a parameter.
 	private static final Logger LOGGER = LoggerFactory.getLogger(Importer.class);
 	
 	private File file;
@@ -33,7 +32,6 @@ public class Importer {
 	private Account defaultAccount;
 	
 	private CurrentTransaction current;
-	private DateFormat dateFormatter;
 	private int lastUsedColumnInImportedFile;
 	
 	public Importer(File file, ImporterParameters parameters, GlobalData data, Account defaultAccount) {
@@ -41,7 +39,6 @@ public class Importer {
 		this.file = file;
 		this.parameters = parameters;
 		this.defaultAccount = defaultAccount;
-		dateFormatter = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, LocalizationData.getLocale());
 		this.lastUsedColumnInImportedFile = -1;
 		for (int i = 0; i < parameters.getImportedFileColumns().length; i++) {
 			if (parameters.getImportedFileColumns()[i]>this.lastUsedColumnInImportedFile) {
@@ -293,7 +290,7 @@ public class Importer {
 		if (text.length()==0) {
 			return null;
 		}
-		return dateFormatter.parse(text);
+		return getParameters().getDateFormatter().parse(text);
 	}
 	
 	static class CurrentTransaction {

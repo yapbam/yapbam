@@ -24,6 +24,7 @@ import javax.swing.table.TableColumnModel;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
+import net.yapbam.export.ExportFormatType;
 import net.yapbam.gui.LocalizationData;
 
 public class ExportPanel extends JPanel {
@@ -94,6 +95,7 @@ public class ExportPanel extends JPanel {
 		preferencePanel.add(preferencePanelLeft, BorderLayout.WEST);
 		preferencePanel.add(preferencePanelRight, BorderLayout.CENTER);
 		preferencePanel.add(formatPanel, BorderLayout.SOUTH);
+		
 
 		JPanel preferenceSeparatorPanel = new JPanel();
 		preferenceSeparatorPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -235,7 +237,12 @@ public class ExportPanel extends JPanel {
 
 	private JComboBox<ExportFormatType> getExportFormats() {
 		if (exportFormats == null) {
-			exportFormats = new JComboBox<ExportFormatType>(ExportFormatType.values());
+			// Warning: We could use the JComboBox(ExportFormatType[]) but it leads to Eclipse Window Builder not being able to parse the code
+			// So let's create an empty Combo and add its elements
+			exportFormats = new JComboBox<ExportFormatType>();
+			for (ExportFormatType value : ExportFormatType.values()) {
+				exportFormats.addItem(value);
+			}
 			exportFormats.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent event) {
@@ -272,7 +279,7 @@ public class ExportPanel extends JPanel {
 		return separatorPanel;
 	}
 
-	public ExporterParameters getExporterParameters() {
+	public DataExporterParameters getExporterParameters() {
 		ExportTableModel model = (ExportTableModel) getJTable().getModel();
 		int[] viewToModel = new int[getJTable().getColumnCount()];
 		boolean[] selected = new boolean[viewToModel.length];
@@ -281,12 +288,12 @@ public class ExportPanel extends JPanel {
 			viewToModel[i] = modelColumn;
 			selected[modelColumn] = (Boolean) model.getValueAt(0, modelColumn);
 		}
-		return new ExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(),
+		return new DataExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(),
 				getIncludeInitialBalance().isSelected(), !all.isSelected(),
 				ExportFormatType.valueOf(exportFormats.getSelectedItem() + ""));
 	}
 
-	public boolean setParameters(ExporterParameters parameters) {
+	public boolean setParameters(DataExporterParameters parameters) {
 		title.setSelected(parameters.isInsertHeader());
 		separatorPanel.setSeparator(parameters.getSeparator());
 		exportFormats.setSelectedItem(parameters.getExportFormat() == null //
