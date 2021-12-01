@@ -110,6 +110,7 @@ public class CheckbookAlertsPreferencesPane extends JPanel {
 	private IntegerWidget getAlertValue() {
 		if (alertValue == null) {
 			alertValue = new IntegerWidget(BigInteger.ZERO, null);
+			alertValue.setToolTipText(LocalizationData.get("checkbookAlertsPreferencesDialog.Value.tooltip")); //$NON-NLS-1$
 			alertValue.setColumns(3);
 			alertValue.addPropertyChangeListener(TextWidget.TEXT_PROPERTY, new PropertyChangeListener() {
 				@Override
