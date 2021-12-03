@@ -5,6 +5,10 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.21.2 (??/12/2021)
+fix
+	Le menu File/Import ne fonctionnait plus dans les versions 0.21.0 et supérieures.
+
 version	0.21.1 (28/11/2021)
 fix
 	La version précédente se plantait quand elle était configuré dans une autre langue que français ou italien.
