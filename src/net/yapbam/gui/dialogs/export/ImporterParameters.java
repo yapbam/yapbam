@@ -13,7 +13,9 @@ public class ImporterParameters implements Serializable {
 	private char separator;
 	private int ignoredLeadingLines;
 	private int[] importedFileColumns;
-    private char decimalSeparator;
+	private char decimalSeparator;
+	// Warning making dateFormat not transient will make this class impossible to save in preferences => Yapbam would hang during import
+	private transient DateFormat dateFormat;
 
     public ImporterParameters(char columnSeparator, char decimalSeparator, DateFormat dateFormat, int ignoredLeadingLines, int[] importedFileColumns) {
 		super();
@@ -47,7 +49,6 @@ public class ImporterParameters implements Serializable {
 		return this;
 	}
 	
-	private DateFormat dateFormat;
 	public DateFormat getDateFormatter() {
 		return dateFormat;
 	}
@@ -89,10 +90,6 @@ public class ImporterParameters implements Serializable {
     }
 
 	public Charset getEncoding() {
-		//TODO
-//		for (Charset charset : Charset.availableCharsets().values()) {
-//			System.out.println (charset.name()+": "+charset.displayName(Locale.getDefault()));
-//		} 
 		return Charset.defaultCharset();
 	}
 }

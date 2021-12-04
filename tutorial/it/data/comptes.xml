@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><DATA version="1" nbAccounts="1" nbCategories="5" subCategorySeparator="." nbPeriodicalTransactions="0" nbTransactions="2">
+<ACCOUNT id="Conto corrente personale" initialBalance="1230.0">
+<MODE id="Pagamento">
+<EXPENSE kind="immediate"/>
+<RECEIPT kind="immediate"/>
+</MODE>
+<MODE id="Carta di credito">
+<EXPENSE stopDay="15" debtDay="31" kind="deferred"/>
+</MODE>
+</ACCOUNT>
+<CATEGORY id="Alimenti"/>
+<CATEGORY id="Auto"/>
+<CATEGORY id="Hobby"/>
+<CATEGORY id="Stipendio"/>
+<TRANSACTION account="Conto corrente personale" description="Stipendio" date="2009/9/24" amount="2000.0" mode="Pagamento" category="Stipendio" valueDate="2009/9/24"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2009/9/26" amount="-85.32" mode="Carta di credito" category="Alimenti" valueDate="2009/10/31">
+<SUBTRANSACTION description="DVD" amount="-19.9" category="Hobby"/>
+<SUBTRANSACTION description="Tergicristallo" amount="-17.35" category="Auto"/>
+</TRANSACTION>
+</DATA>
