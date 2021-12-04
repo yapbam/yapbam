@@ -4,6 +4,8 @@ import net.yapbam.data.Account;
 import net.yapbam.data.BalanceHistory;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Transaction;
+import net.yapbam.gui.YapbamState;
+import net.yapbam.util.PreferencesUtils;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -69,5 +71,15 @@ public class ImporterTest {
 
     private ImporterParameters createBoursoramaParameters() {
         return new ImporterParameters('\t', '.', DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRENCH), 4, new int[]{-1, 0, 2, -1, 3, -1, -1, -1, 1, -1});
+    }
+    
+    @Test
+    public void testParametersArePreferenceStorageCompatible() {
+    	new YapbamState() {
+			@Override
+			public void put(String key, String value) {
+				PreferencesUtils.verifyPreferencesCompliance(key, value);
+			}
+    	}.save("justATest", createBoursoramaParameters());;
     }
 }
