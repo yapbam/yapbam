@@ -6,15 +6,21 @@ import java.text.NumberFormat;
 
 import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.yapbam.export.ExportFormatType;
 import net.yapbam.gui.LocalizationData;
 
+@Getter
+@Setter
 public class ExporterParameters {
-	private final DateFormat dateFormatter;
-	private final NumberFormat amountFormatter;
+
+	private DateFormat dateFormat;
+	private NumberFormat amountFormat;
 	// For json and html exporters, separator is a non sense ... but its not a big deal
 	private char separator;
 	private ExportFormatType exportFormat;
+	private ExporterExtendedParameters exporterExtendedParameters;
 
 	public ExporterParameters() {
 		this(';', ExportFormatType.CSV);
@@ -24,32 +30,8 @@ public class ExporterParameters {
 		super();
 		this.separator = separator;
 		this.exportFormat = exportFormat;
-		this.dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale());
-		this.amountFormatter = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
-	}
-
-	public void setSeparator(char separator) {
-		this.separator = separator;
-	}
-	
-	public char getSeparator() {
-		return separator;
-	}
-
-	public ExportFormatType getExportFormat() {
-		return exportFormat;
-	}
-
-	public void setExportFormat(ExportFormatType exportFormat) {
-		this.exportFormat = exportFormat;
-	}
-	
-	public DateFormat getDateFormat() {
-		return this.dateFormatter;
-	}
-	
-	public NumberFormat getAmountFormat() {
-		return this.amountFormatter;
+		this.dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale());
+		this.amountFormat = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
 	}
 
 	public Charset getPreferredEncoding() {

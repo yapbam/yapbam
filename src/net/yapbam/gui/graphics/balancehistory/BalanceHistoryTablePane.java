@@ -69,7 +69,7 @@ public class BalanceHistoryTablePane extends JPanel {
 		final ExportComponent<ExporterParameters, FriendlyTable> btn = new ExportComponent<ExporterParameters, FriendlyTable>() {
 			@Override
 			public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
-				return new TableExporter() {
+				return new TableExporter<ExporterParameters>(new ExporterParameters()) {
 					@Override
 					protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
 						final BalanceHistoryModel model = ((BalanceHistoryModel)table.getModel());

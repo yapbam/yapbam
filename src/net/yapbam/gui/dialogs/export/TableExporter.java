@@ -9,9 +9,9 @@ import net.yapbam.export.ExportWriter;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
 
-public class TableExporter extends Exporter<ExporterParameters ,FriendlyTable> {
-	public TableExporter() {
-		super(new ExporterParameters());
+public class TableExporter<T extends ExporterParameters> extends Exporter<T ,FriendlyTable> {
+	public TableExporter(T params) {
+		super(params);
 	}
 
 	@Override
