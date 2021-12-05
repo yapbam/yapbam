@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?><DATA version="1" nbAccounts="4" nbCategories="29" subCategorySeparator="/" nbPeriodicalTransactions="16" nbTransactions="210">
+<ACCOUNT id="Conto corrente personale" initialBalance="588.0"><![CDATA[Conto corrente.
+Contatto: Mario Rossi - 1-541-754-3010.]]>
+<MODE id="Carta di credito">
+<EXPENSE stopDay="15" debtDay="31" kind="deferred"/>
+</MODE>
+<MODE id="Ritenuta su conto">
+<EXPENSE kind="immediate"/>
+</MODE>
+<MODE id="Bonifico">
+<EXPENSE kind="immediate"/>
+<RECEIPT kind="immediate"/>
+</MODE>
+<MODE id="Assegno bancario">
+<EXPENSE period="2" kind="daily"/>
+<RECEIPT period="2" kind="daily"/>
+</MODE>
+<MODE id="Cirtuito SEPA">
+<EXPENSE kind="immediate"/>
+</MODE>
+</ACCOUNT>
+<ACCOUNT id="Risparmio A" initialBalance="2500.0"/>
+<ACCOUNT id="Risparmio B" initialBalance="3000.0">
+<MODE id="Bonifico">
+<EXPENSE kind="immediate"/>
+<RECEIPT kind="immediate"/>
+</MODE>
+</ACCOUNT>
+<ACCOUNT id="Risparmio C" initialBalance="2322.4"/>
+<CATEGORY id="Casa/Acquisto"/>
+<CATEGORY id="Casa/Manutenzione"/>
+<CATEGORY id="Casa/Spese di servizio"/>
+<CATEGORY id="Contanti"/>
+<CATEGORY id="Imposta sul reddito"/>
+<CATEGORY id="Imposta/Locale"/>
+<CATEGORY id="Imposta/Proprietà"/>
+<CATEGORY id="Investimento/Risparmio A"/>
+<CATEGORY id="Investimento/Risparmio B"/>
+<CATEGORY id="Regali"/>
+<CATEGORY id="Spese figlio"/>
+<CATEGORY id="Stipendio"/>
+<CATEGORY id="Tassa scolastica"/>
+<CATEGORY id="Telefono/Cellulare/Abbonamenti"/>
+<CATEGORY id="Telefono/Cellulare/Hardware"/>
+<CATEGORY id="Tempo libero/Computer/Abbonamenti"/>
+<CATEGORY id="Tempo libero/Computer/Hardware"/>
+<CATEGORY id="Tempo libero/Sport"/>
+<CATEGORY id="Tempo libero/TV-Hifi-Video"/>
+<CATEGORY id="Tempo libero/Varie"/>
+<CATEGORY id="Trasporto/Auto"/>
+<CATEGORY id="Trasporto/Moto"/>
+<CATEGORY id="Trasporto/Transito"/>
+<CATEGORY id="Vacanza"/>
+<CATEGORY id="Vita quotidiana/Abbigliamento"/>
+<CATEGORY id="Vita quotidiana/Cibo"/>
+<CATEGORY id="Vita quotidiana/Salute"/>
+<CATEGORY id="Vita quotidiana/Varie"/>
+<PERIODICAL account="Conto corrente personale" description="Abbonamento internet" amount="-24.5" mode="Ritenuta su conto" category="Tempo libero/Computer/Abbonamenti" enabled="true" next="2013/12/10">
+<DATE_STEPPER kind="monthly" period="1" day="10"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Abbonamento internet" amount="-35.78" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" enabled="true" next="2013/11/10">
+<DATE_STEPPER kind="monthly" period="2" day="10"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Acqua" amount="-24.53" mode="Ritenuta su conto" category="Casa/Spese di servizio" enabled="true" next="2013/12/8">
+<DATE_STEPPER kind="monthly" period="1" day="8"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Assicurazione" amount="-281.09" mode="Cirtuito SEPA" enabled="true" next="2013/3/10">
+<DATE_STEPPER kind="monthly" period="6" day="10"/>
+<SUBTRANSACTION description="Fazer" amount="-125.69" category="Trasporto/Moto"/>
+<SUBTRANSACTION description="125 SR" amount="-11.7" category="Trasporto/Moto"/>
+<SUBTRANSACTION description="Home" amount="-93.63" category="Casa/Spese di servizio"/>
+<SUBTRANSACTION description="Contingency" amount="-33.57"/>
+<SUBTRANSACTION description="Natural disasters" amount="-10.66"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Donazione su yapbam.net" amount="-14.35" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" enabled="true" next="2013/9/11">
+<DATE_STEPPER kind="monthly" period="12" day="11"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Elettricità" amount="-46.0" mode="Ritenuta su conto" category="Casa/Spese di servizio" enabled="true" next="2013/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="FlickR" amount="-34.66" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" enabled="true" next="2013/7/23">
+<DATE_STEPPER kind="monthly" period="24" day="23"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Gas" amount="-115.11" mode="Ritenuta su conto" category="Casa/Spese di servizio" enabled="true" next="2013/12/14">
+<DATE_STEPPER kind="monthly" period="1" day="11"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Imposta locale" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Locale" enabled="true" next="2013/1/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Manutenzione caldaia" amount="-126.0" mode="Assegno bancario" category="Casa/Manutenzione" enabled="true" next="2013/10/30">
+<DATE_STEPPER kind="monthly" period="12" day="30"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Promozione telefono cellulare" amount="-31.9" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" enabled="true" next="2013/12/11">
+<DATE_STEPPER kind="monthly" period="1" day="11"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Stipendio" amount="3245.0" mode="Bonifico" category="Stipendio" enabled="true" next="2013/11/30">
+<DATE_STEPPER kind="monthly" period="1" day="30"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Tassa di proprietà" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Proprietà" enabled="true" next="2013/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Tassa sul reddito" amount="-216.0" mode="Ritenuta su conto" category="Imposta sul reddito" enabled="true" next="2013/12/15">
+<DATE_STEPPER kind="monthly" period="1" day="15"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Tasse di servizio" amount="-61.16" mode="Ritenuta su conto" category="Casa/Spese di servizio" enabled="true" next="2013/12/5">
+<DATE_STEPPER kind="monthly" period="1" day="5"/>
+</PERIODICAL>
+<PERIODICAL account="Conto corrente personale" description="Trasferimento sul conto del figlio" amount="-200.0" mode="Bonifico" enabled="true" next="2013/12/1">
+<DATE_STEPPER kind="monthly" period="1" day="1"/>
+<SUBTRANSACTION description="Contanti" amount="-60.0" category="Spese figlio"/>
+<SUBTRANSACTION description="Pasti" amount="-100.0" category="Vita quotidiana/Cibo"/>
+<SUBTRANSACTION description="Telefono cellulare" amount="-40.0" category="Telefono/Cellulare/Abbonamenti"/>
+</PERIODICAL>
+<TRANSACTION account="Conto corrente personale" description="Gas" date="2013/6/12" amount="-134.69" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/6/11" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Radio" date="2013/6/26" amount="-157.71" mode="Carta di credito" category="Vita quotidiana/Salute" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Gas" date="2013/7/12" amount="-134.69" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/7/12" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="FlickR" date="2013/7/23" amount="-34.66" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Kart" date="2013/8/5" amount="-26.0" mode="Carta di credito" category="Tempo libero/Varie" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Gas" date="2013/8/11" amount="-134.69" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/8/11" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Gas" date="2013/9/11" amount="-134.69" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/9/11" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="SIM card" date="2013/6/29" amount="-1.0" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Parcheggio della stazione ferroviaria" date="2013/5/17" amount="-2.8" mode="Carta di credito" category="Trasporto/Auto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Acquisto di telefoni cellulari" date="2013/5/18" amount="-188.22" mode="Carta di credito" category="Telefono/Cellulare/Hardware" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Passeggero pilota scala" date="2013/5/19" amount="-120.0" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Carta da parati... e non solo" date="2013/5/19" amount="-135.6" mode="Carta di credito" category="Casa/Manutenzione" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/5/20" amount="-17.9" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/5/22" amount="-105.44" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/5/22" amount="-20.59" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/5/25" amount="-40.0" mode="Carta di credito" category="Contanti" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/5/31" amount="-21.75" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Stipendio" date="2013/10/30" amount="3245.0" mode="Bonifico" category="Stipendio" valueDate="2013/10/30"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento cellulare del figlio" date="2013/11/20" amount="-32.0" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/12/31"/>
+<TRANSACTION account="Conto corrente personale" description="Bonus ambientale" date="2013/11/15" amount="2700.0" mode="Bonifico" category="Trasporto/Auto" valueDate="2013/11/15"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta locale" date="2013/11/15" amount="-42.0" mode="Ritenuta su conto" category="Imposta/Locale" valueDate="2013/11/15"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta di proprietà" date="2013/11/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Proprietà" valueDate="2013/11/15"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa sul reddito" date="2013/11/15" amount="-216.0" mode="Ritenuta su conto" category="Imposta sul reddito" valueDate="2013/11/15"/>
+<TRANSACTION account="Conto corrente personale" description="Elettricità" date="2013/11/15" amount="-46.0" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/11/15"/>
+<TRANSACTION account="Conto corrente personale" description="Elettricità" date="2013/6/15" amount="-46.0" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/6/16" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/10/15" amount="-46.71" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/10/22" amount="-19.09" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina auto" date="2013/10/30" amount="-35.5" mode="Carta di credito" category="Trasporto/Auto" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Acqua" date="2013/11/8" amount="-24.53" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/11/8"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/11/10" amount="-35.78" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/11/10" amount="-24.5" mode="Ritenuta su conto" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/11/10"/>
+<TRANSACTION account="Conto corrente personale" description="Dottore" date="2013/10/9" amount="-22.0" mode="Assegno bancario" number="0555380" category="Vita quotidiana/Salute" valueDate="2013/10/11"/>
+<TRANSACTION account="Conto corrente personale" description="Dottore" date="2013/10/28" amount="-22.0" mode="Assegno bancario" number="0555382" category="Vita quotidiana/Salute" valueDate="2013/10/30"/>
+<TRANSACTION account="Conto corrente personale" description="Stipendio" date="2013/7/31" amount="3245.0" mode="Bonifico" category="Stipendio" valueDate="2013/7/30" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Stipendio" date="2013/8/28" amount="3245.0" mode="Bonifico" category="Stipendio" valueDate="2013/8/28" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Stipendio" date="2013/9/29" amount="3245.0" mode="Bonifico" category="Stipendio" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Stipendio" date="2013/6/30" amount="3245.0" mode="Bonifico" category="Stipendio" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/6/23" amount="-86.18" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/6/19" amount="-33.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/7/10" amount="-21.8" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/9/15" amount="-29.64" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/30"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/9/25" amount="-168.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/10/23" amount="-12.29" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/6/10" amount="-61.03" mode="Ritenuta su conto" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/6/10" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento cellulare" date="2013/6/15" amount="-33.13" mode="Ritenuta su conto" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Acqua" date="2013/6/25" amount="-24.53" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/6/25" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Elettricità" date="2013/7/15" amount="-46.0" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/7/15" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Acqua" date="2013/7/27" amount="-24.53" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/7/27" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Elettricità" date="2013/9/15" amount="-46.0" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Acqua" date="2013/9/25" amount="-24.53" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/10/8" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Elettricità" date="2013/8/15" amount="-46.0" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/9/11" amount="-41.95" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/9/5" amount="-50.28" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/8/29" amount="-20.13" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/8/28" amount="-44.83" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/8/20" amount="-22.12" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/8/19" amount="-51.35" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/8/17" amount="-43.16" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Dottore" date="2013/9/18" amount="-22.0" mode="Assegno bancario" number="0555377" category="Vita quotidiana/Salute" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/6/19" amount="-22.57" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina auto" date="2013/6/27" amount="-34.0" mode="Carta di credito" category="Trasporto/Auto" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Parcheggio aereoporto" date="2013/7/5" amount="-120.0" mode="Carta di credito" category="Vacanza" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/7/10" amount="-40.0" mode="Carta di credito" category="Contanti" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/7/21" amount="-40.0" mode="Carta di credito" category="Contanti" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/7/24" amount="-80.0" mode="Carta di credito" category="Contanti" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/7/28" amount="-26.72" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/8/4" amount="-87.15" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/8/9" amount="-20.35" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/8/14" amount="-20.0" mode="Carta di credito" category="Contanti" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/8/29" amount="-60.0" mode="Carta di credito" category="Contanti" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/9/5" amount="-40.0" mode="Carta di credito" category="Contanti" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/9/9" amount="-21.27" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Donazione su yapbam.net" date="2013/9/11" amount="-14.35" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/9/28" amount="-50.0" mode="Carta di credito" category="Contanti" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Mensa" date="2013/10/20" amount="-60.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/6/11" amount="-21.65" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/6/5" amount="-33.84" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Mensa" date="2013/6/4" amount="-30.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/6/30" amount="-17.79" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Supermercato" date="2013/9/2" amount="-36.92" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Risparmio B" description="Dal conto principale" date="2013/6/30" amount="2000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/6/30" statement="x"/>
+<TRANSACTION account="Conto corrente personale" description="Assicurazione" date="2013/9/9" amount="-269.39" mode="Cirtuito SEPA" valueDate="2013/9/15" statement="201310">
+<SUBTRANSACTION description="Moto" amount="-125.69" category="Trasporto/Moto"/>
+<SUBTRANSACTION description="Casa" amount="-93.63" category="Casa/Spese di servizio"/>
+<SUBTRANSACTION description="Contingenza" amount="-33.57"/>
+<SUBTRANSACTION description="Disastri naturali" amount="-10.66"/>
+</TRANSACTION>
+<TRANSACTION account="Conto corrente personale" description="Acqua" date="2013/9/8" amount="-24.53" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/9/8" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta locale" date="2013/9/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Locale" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta locale" date="2013/8/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Locale" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta locale" date="2013/6/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Locale" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Parcheggio dell'ospedale" date="2013/8/9" amount="-1.0" mode="Carta di credito" category="Trasporto/Auto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Parcheggio dell'ospedale" date="2013/8/7" amount="-1.0" mode="Carta di credito" category="Trasporto/Auto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Parcheggio dell'ospedale" date="2013/8/6" amount="-2.0" mode="Carta di credito" category="Trasporto/Auto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento cellulare del figlio" date="2013/9/20" amount="-32.0" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/10/31" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/8/10" amount="-12.7" mode="Ritenuta su conto" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento cellulare del figlio" date="2013/6/17" amount="-32.0" mode="Ritenuta su conto" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/6/17" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta di proprietà" date="2013/6/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Proprietà" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta di proprietà" date="2013/7/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Proprietà" valueDate="2013/6/15" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta di proprietà" date="2013/10/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Proprietà" valueDate="2013/10/15"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta locale" date="2013/10/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Locale" valueDate="2013/10/15"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta locale" date="2013/7/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Locale" valueDate="2013/6/15" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/9/10" amount="-27.55" mode="Ritenuta su conto" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/9/10" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/10/7" amount="-40.0" mode="Carta di credito" category="Contanti" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti" date="2013/9/17" amount="-40.0" mode="Carta di credito" category="Contanti" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Mensa" date="2013/6/19" amount="-30.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Mensa" date="2013/7/6" amount="-30.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Mensa" date="2013/7/28" amount="-30.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Mensa" date="2013/8/24" amount="-60.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Acquisto monitor 22&quot;" date="2013/6/29" amount="-164.0" mode="Carta di credito" category="Tempo libero/Computer/Hardware" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Acquisto monitor 24&quot;" date="2013/7/3" amount="-249.0" mode="Carta di credito" category="Tempo libero/Computer/Hardware" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Cavi audio" date="2013/8/7" amount="-19.99" mode="Carta di credito" category="Tempo libero/TV-Hifi-Video" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Pennelli e vernice" date="2013/8/15" amount="-17.61" mode="Carta di credito" category="Casa/Manutenzione" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Mensa" date="2013/9/21" amount="-60.0" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Anticipo auto" date="2013/8/10" amount="-350.0" mode="Ritenuta su conto" category="Trasporto/Auto" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Parcheggio aereoporto" date="2013/7/20" amount="-15.0" mode="Carta di credito" category="Vacanza" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Assicurazione auto" date="2013/8/10" amount="-185.28" mode="Ritenuta su conto" category="Trasporto/Auto" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso elettricità" date="2013/10/9" amount="38.4" category="Casa/Spese di servizio" valueDate="2013/10/9"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta di proprietà" date="2013/9/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Proprietà" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/10/10" amount="-27.5" mode="Ritenuta su conto" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/10/10"/>
+<TRANSACTION account="Conto corrente personale" description="Profumo" date="2013/6/2" amount="-67.3" mode="Carta di credito" category="Regali" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Panini" date="2013/7/12" amount="-52.0" mode="Carta di credito" category="Vacanza" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Imposta di proprietà" date="2013/8/15" amount="-95.0" mode="Ritenuta su conto" category="Imposta/Proprietà" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Vacanza eccezionale" date="2013/6/23" amount="-1419.93" mode="Carta di credito" category="Vacanza" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Risparmio B" description="Al conto principale" date="2013/7/28" amount="-2000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/7/15" statement="x"/>
+<TRANSACTION account="Risparmio B" description="Al conto principale" date="2013/9/29" amount="-500.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/9/29" statement="x"/>
+<TRANSACTION account="Risparmio B" description="Al conto principale" date="2013/11/2" amount="-3000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/11/2" statement="x"/>
+<TRANSACTION account="Risparmio A" description="Al conto principale" date="2013/8/18" amount="-2450.0" category="Investimento/Risparmio B" valueDate="2013/8/15" statement="x"/>
+<TRANSACTION account="Conto corrente personale" description="Racchette da tennis" date="2013/7/3" amount="-149.5" mode="Carta di credito" category="Tempo libero/Sport" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Al risparmio A" date="2013/6/30" amount="-2000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/6/30" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Al risparmio A" date="2013/10/15" amount="-2000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/10/15"/>
+<TRANSACTION account="Conto corrente personale" description="Trasferimento sul conto del figlio" date="2013/11/1" amount="-200.0" mode="Bonifico" valueDate="2013/11/1">
+<SUBTRANSACTION description="Spese varie" amount="-60.0" category="Spese figlio"/>
+<SUBTRANSACTION description="Pranzi" amount="-100.0" category="Vita quotidiana/Cibo"/>
+<SUBTRANSACTION description="Abbonamento cellulare" amount="-40.0" category="Telefono/Cellulare/Abbonamenti"/>
+</TRANSACTION>
+<TRANSACTION account="Conto corrente personale" description="Rimborso della retta scolastica del figlio" date="2013/11/7" amount="1500.0" mode="Bonifico" category="Tassa scolastica" valueDate="2013/11/7"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa scolastica del figlio (2^ rata)" date="2013/8/23" amount="-5200.0" mode="Assegno bancario" number="0555373" category="Tassa scolastica" valueDate="2013/8/28" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa scolastica del figlio (1^ rata)" date="2013/7/9" amount="-800.0" mode="Assegno bancario" number="0555372" category="Tassa scolastica" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Tasse di servizio" date="2013/6/10" amount="-59.91" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/6/10" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Tasse di servizio" date="2013/7/10" amount="-61.16" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/7/10" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Tasse di servizio" date="2013/8/10" amount="-61.16" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/8/10" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Tasse di servizio" date="2013/9/10" amount="-61.15" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/9/10" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Tasse di servizio" date="2013/10/5" amount="-61.16" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/10/5" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Tasse di servizio" date="2013/11/5" amount="-61.16" mode="Ritenuta su conto" category="Casa/Spese di servizio" valueDate="2013/11/5"/>
+<TRANSACTION account="Conto corrente personale" description="Settimana bianca" date="2013/9/28" amount="-880.0" mode="Assegno bancario" number="0555379" category="Vacanza" valueDate="2013/9/30"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento cellulare del figlio" date="2013/7/17" amount="-42.23" mode="Ritenuta su conto" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/7/17" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento cellulare del figlio" date="2013/8/18" amount="-73.42" mode="Ritenuta su conto" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/8/18" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento cellulare del figlio" date="2013/10/20" amount="-40.57" mode="Ritenuta su conto" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/10/20"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/10/13" amount="6.9" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/10/13"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/6/26" amount="6.6" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/6/26" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/7/3" amount="10.37" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/7/3" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/7/15" amount="6.9" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/7/15" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/7/28" amount="6.9" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/7/28" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/8/4" amount="6.9" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/8/4" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/9/25" amount="6.6" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/9/25" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/10/1" amount="24.58" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/10/1" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/7/31" amount="-21.36" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Fiori per gli amici" date="2013/9/19" amount="-25.0" mode="Carta di credito" category="Regali" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Licenza calcio" date="2013/9/12" amount="-31.3" mode="Assegno bancario" number="0555375" category="Tempo libero/Sport" valueDate="2013/9/30" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Maglia" date="2013/7/10" amount="-24.99" mode="Carta di credito" category="Vita quotidiana/Abbigliamento" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Dal risparmio B" date="2013/8/18" amount="2450.0" mode="Bonifico" category="Investimento/Risparmio B" valueDate="2013/8/18" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Dal risparmio A" date="2013/11/2" amount="3000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/11/2"/>
+<TRANSACTION account="Conto corrente personale" description="Dal risparmio A" date="2013/7/28" amount="2000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/7/28" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Dal risparmio A" date="2013/10/1" amount="500.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/10/1" statement="201310"/>
+<TRANSACTION account="Risparmio B" description="Dal conto principale" date="2013/10/15" amount="2000.0" mode="Bonifico" category="Investimento/Risparmio A" valueDate="2013/10/15" statement="x"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento calcio" date="2013/9/12" amount="-44.0" mode="Assegno bancario" number="0555376" category="Tempo libero/Sport" valueDate="2013/9/14"/>
+<TRANSACTION account="Conto corrente personale" description="Scarpe da calcio ... e altro" date="2013/9/3" amount="-60.8" mode="Carta di credito" category="Tempo libero/Sport" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/9/18" amount="-20.5" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/9/30" amount="-21.22" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Benzina moto" date="2013/10/9" amount="-21.11" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Riparazione degli altoparlanti" date="2013/7/3" amount="-39.1" mode="Carta di credito" category="Tempo libero/TV-Hifi-Video" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento telefono" date="2013/9/7" amount="-6.55" mode="Ritenuta su conto" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/9/7" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa sul reddito" date="2013/10/15" amount="-216.0" mode="Ritenuta su conto" category="Imposta sul reddito" valueDate="2013/10/15"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa sul reddito" date="2013/6/15" amount="-216.0" mode="Ritenuta su conto" category="Imposta sul reddito" valueDate="2013/6/15" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa sul reddito" date="2013/7/15" amount="-216.0" mode="Ritenuta su conto" category="Imposta sul reddito" valueDate="2013/7/15" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa sul reddito" date="2013/9/15" amount="-216.0" mode="Ritenuta su conto" category="Imposta sul reddito" valueDate="2013/9/15" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Tassa sul reddito" date="2013/8/15" amount="-216.0" mode="Ritenuta su conto" category="Imposta sul reddito" valueDate="2013/8/15" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Riviste" date="2013/7/11" amount="-18.05" mode="Carta di credito" category="Vacanza" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Pneumatico moto" date="2013/7/24" amount="-120.2" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Riviste" date="2013/7/12" amount="-27.65" mode="Carta di credito" category="Vacanza" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Parrucchiere" date="2013/6/17" amount="-22.0" mode="Carta di credito" category="Vita quotidiana/Varie" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Parrucchiere" date="2013/8/26" amount="-22.0" mode="Carta di credito" category="Vita quotidiana/Varie" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Parrucchiere" date="2013/10/27" amount="-22.0" mode="Carta di credito" category="Vita quotidiana/Varie" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Manutenzione caldaia" date="2013/10/30" amount="-126.0" mode="Assegno bancario" number="0555383" category="Casa/Manutenzione" valueDate="2013/11/1"/>
+<TRANSACTION account="Conto corrente personale" description="Raccomandata assicurazione auto" date="2013/10/30" amount="-6.93" mode="Carta di credito" category="Trasporto/Auto" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Libretto auto" date="2013/9/1" amount="-191.5" mode="Assegno bancario" number="0555374" category="Trasporto/Auto" valueDate="2013/11/3"/>
+<TRANSACTION account="Conto corrente personale" description="Saldo auto nuova" date="2013/11/5" amount="-4615.4" mode="Ritenuta su conto" category="Trasporto/Auto" valueDate="2013/11/5"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso gas" date="2013/10/6" amount="44.35" category="Casa/Spese di servizio" valueDate="2013/10/6" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/6/12" amount="-28.79" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/6/29" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/6/27" amount="-35.7" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/7/7" amount="-18.71" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/7/11" amount="-14.89" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/7/31" amount="-12.76" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/8/6" amount="-54.48" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/9/30" amount="-32.74" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/10/9" amount="-44.42" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/10/17" amount="-20.72" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/10/28" amount="-20.72" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Drogheria" date="2013/10/30" amount="-19.73" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/6/24" amount="13.9" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/6/24" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/7/1" amount="144.84" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/7/1" statement="201307"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/7/10" amount="15.1" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/7/10" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/7/24" amount="14.1" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/7/24" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/7/31" amount="15.1" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/7/31" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/9/23" amount="14.4" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/9/23" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Rimborso assicurazione sanitaria" date="2013/9/28" amount="57.36" mode="Bonifico" category="Vita quotidiana/Salute" valueDate="2013/9/28" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Contanti 80 DT" date="2013/7/13" amount="-47.34" mode="Carta di credito" category="Vacanza" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Fai da te" date="2013/7/24" amount="-20.9" mode="Carta di credito" category="Casa/Manutenzione" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Manopola del gas" date="2013/8/9" amount="-4.84" mode="Carta di credito" category="Trasporto/Moto" valueDate="2013/8/31" statement="201309"/>
+<TRANSACTION account="Conto corrente personale" description="Visita ospedale" date="2013/9/18" amount="-6.9" mode="Assegno bancario" number="0555378" category="Vita quotidiana/Salute" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento telefono" date="2013/7/12" amount="-32.66" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/7/31" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento telefono" date="2013/9/11" amount="-64.86" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento telefono" date="2013/10/11" amount="-35.33" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/10/31"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento telefono" date="2013/11/11" amount="-31.9" mode="Carta di credito" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/11/30"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento telefono" date="2013/8/7" amount="-11.16" mode="Ritenuta su conto" category="Telefono/Cellulare/Abbonamenti" valueDate="2013/8/7" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/7/10" amount="-35.78" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/7/29" statement="201308"/>
+<TRANSACTION account="Conto corrente personale" description="Abbonamento Internet" date="2013/9/10" amount="-35.78" mode="Carta di credito" category="Tempo libero/Computer/Abbonamenti" valueDate="2013/9/29" statement="201310"/>
+<TRANSACTION account="Conto corrente personale" description="MaCdonald" date="2013/8/16" amount="-17.3" mode="Carta di credito" category="Vita quotidiana/Cibo" valueDate="2013/9/29" statement="201310"/>
+</DATA>
