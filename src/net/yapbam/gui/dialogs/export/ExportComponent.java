@@ -78,6 +78,7 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 		chooser.setFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
 		
 		ExportAccessoryPanel<P> accessoryPanel = new ExportAccessoryPanel<P>(exporter.getParameters());
+		accessoryPanel.restoreState();
 		if(ExportFormatType.HTML.equals(format)) {
 			chooser.setAccessory(accessoryPanel);
 		}
@@ -91,6 +92,7 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 			if(ExportFormatType.HTML.equals(format)) {
 				exporter.getParameters().setExporterExtendedParameters(accessoryPanel.getExporterExtendedParameters());
 			}
+			accessoryPanel.saveState();
 			export(data, exporter, file, format, ownerWindow);
 		}
 	}

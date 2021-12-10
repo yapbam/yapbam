@@ -608,7 +608,7 @@ public class StatementViewPanel extends JPanel {
 				public Exporter<StatementExporterParameters, FriendlyTable> buildExporter() {
 					Statement statement = getStatementSelectionPanel().getSelectedStatement();
 					DecimalFormat ci = LocalizationData.getCurrencyInstance();
-					String statementId = statement.getId();
+					String statementId = Formatter.format("{0} {1}", LocalizationData.get("TransactionDialog.statement"), statement.getId());
 					String startBalance = Formatter.format(LocalizationData.get("StatementView.startBalance"), ci.format(statement.getStartBalance()));
 					String endBalance = Formatter.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()));
 					return new TableExporter<StatementExporterParameters>(new StatementExporterParameters(statementId, startBalance, endBalance)) {
