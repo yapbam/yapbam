@@ -35,8 +35,8 @@ public class CsvFormatWriter implements ExportWriter {
 	}
 
 	@Override
-	public void addValue(String value) throws IOException {
-		csv.writeCell(value);
+	public void addValue(String ...value) throws IOException {
+		csv.writeCell(value[0]);
 	}
 	
 	@Override

@@ -45,13 +45,13 @@ public class JsonFormatWriter implements ExportWriter {
 	}
 
 	@Override
-	public void addValue(String value) throws IOException {
+	public void addValue(String ...value) throws IOException {
 		if (isFirstValue) {
 			isFirstValue = false;
 		} else {
 			this.writer.append(",");
 		}
-		this.writer.append(String.format("\"%s\"", StringEscapeUtils.escapeJson(value)));
+		this.writer.append(String.format("\"%s\"", StringEscapeUtils.escapeJson(value[0])));
 	}
 
 	@Override

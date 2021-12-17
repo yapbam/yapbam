@@ -623,6 +623,16 @@ public class StatementViewPanel extends JPanel {
 								return super.getValueAt(table, modelRowIndex, modelColIndex);
 							}
 						}
+
+						@Override
+						protected AdditionalValueInfo getAdditionalValueInfo(int modelRowIndex, int modelColIndex) {
+							if (StatementTableModel.DEBT_COLUMN == modelColIndex) {
+								return AdditionalValueInfo.DEBT;
+							} else if (StatementTableModel.RECEIPT_COLUMN == modelColIndex) {
+								return AdditionalValueInfo.RECEIPT;
+							}
+							return super.getAdditionalValueInfo(modelRowIndex, modelColIndex);
+						}
 					};
 				}
 			};

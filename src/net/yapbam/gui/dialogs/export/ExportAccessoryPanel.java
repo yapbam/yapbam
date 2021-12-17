@@ -131,11 +131,12 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							boolean isLocal = CssTypeEnum.LOCAL.equals(selectCssTypeComboBox.getSelectedItem());
-							boolean isNone = CssTypeEnum.NONE.equals(selectCssTypeComboBox.getSelectedItem());
+							CssTypeEnum type = ((CssTypeEnum) getSelectCssTypeComboBox().getSelectedItem());
+							boolean isLocal = CssTypeEnum.LOCAL.equals(type);
+							boolean isNone = CssTypeEnum.NONE.equals(type);
 							getSelectCssTextField().setEnabled(!isNone);
 							getSelectCssTextField().setEditable(!isLocal);
-							getSelectCssTextField().setText(StringUtils.EMPTY);
+							getSelectCssTextField().setText(YapbamState.INSTANCE.get(getSelectCssTextFieldStateKey(type), StringUtils.EMPTY));
 							getSelectCssButton().setEnabled(isLocal && !isNone);
 						}
 					});
@@ -210,6 +211,10 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 			});
 		}
 		return selectCssTextField;
+	}
+	
+	private String getSelectCssTextFieldStateKey(CssTypeEnum type) {
+		return this.getClass().getCanonicalName() + "." + type.name() + ".selectCssTextField";
 	}
 	
 	private JButton getSelectCssButton() {
@@ -298,7 +303,9 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 		YapbamState.INSTANCE.put(getIncludeTitleStateKey(), Boolean.toString(getIncludeTitle().isSelected()));
 		YapbamState.INSTANCE.put(getIncludeStartBalanceStateKey(), Boolean.toString(getIncludeStartBalance().isSelected()));
 		YapbamState.INSTANCE.put(getIncludeEndBalanceStateKey(), Boolean.toString(getIncludeEndBalance().isSelected()));
-		YapbamState.INSTANCE.put(getSelectCssTypeComboBoxStateKey(), ((CssTypeEnum) getSelectCssTypeComboBox().getSelectedItem()).name());
+		final CssTypeEnum type = ((CssTypeEnum) getSelectCssTypeComboBox().getSelectedItem());
+		YapbamState.INSTANCE.put(getSelectCssTypeComboBoxStateKey(), type.name());
+		YapbamState.INSTANCE.put(getSelectCssTextFieldStateKey(type), getSelectCssTextField().getText());
 	}
 
 	public void restoreState() {
