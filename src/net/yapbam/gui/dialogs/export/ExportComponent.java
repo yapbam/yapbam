@@ -1,10 +1,9 @@
 package net.yapbam.gui.dialogs.export;
 
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Window;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,9 +21,9 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import com.fathzer.soft.ajlib.utilities.FileUtils;
 
-import net.yapbam.export.Exporter;
 import net.yapbam.export.ExportFormatType;
 import net.yapbam.export.ExportWriter;
+import net.yapbam.export.Exporter;
 import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.JSplitButton;
@@ -62,6 +61,7 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 			exportMenu.add(menuItem);
 		}
 		this.setPopupMenu(exportMenu);
+		this.setAlwaysPopup(true);
 	}
 	
 	public void setContent(C content) {
@@ -76,13 +76,23 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 		chooser.setLocale(LocalizationData.getLocale());
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
+		
+		ExportAccessoryPanel<P> accessoryPanel = new ExportAccessoryPanel<P>(exporter.getParameters());
+		accessoryPanel.restoreState();
+		if(ExportFormatType.HTML.equals(format)) {
+			chooser.setAccessory(accessoryPanel);
+		}
+		
 		File file = chooser.showSaveDialog(ownerWindow) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
-
 		if (file != null) {
 			String extension = FileUtils.getExtension(file);
 			if (extension == null || !extension.endsWith(format.getExtension())) {
 				file = new File(file.getPath() + "." + format.getExtension());
 			}
+			if(ExportFormatType.HTML.equals(format)) {
+				exporter.getParameters().setExporterExtendedParameters(accessoryPanel.getExporterExtendedParameters());
+			}
+			accessoryPanel.saveState();
 			export(data, exporter, file, format, ownerWindow);
 		}
 	}

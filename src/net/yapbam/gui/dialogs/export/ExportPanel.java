@@ -37,6 +37,7 @@ public class ExportPanel extends JPanel {
 	private JTable jTable;
 	private JScrollPane jScrollPane;
 	private JCheckBox includeInitialBalance;
+	private JCheckBox includeFinalBalance;
 	private String invalidityCause;
 	private SeparatorPanel separatorPanel;
 	private ButtonGroup group;
@@ -73,6 +74,7 @@ public class ExportPanel extends JPanel {
 		preferencePanelLeft.setLayout(new BoxLayout(preferencePanelLeft, BoxLayout.Y_AXIS));
 		preferencePanelLeft.add(getTitle());
 		preferencePanelLeft.add(getIncludeInitialBalance());
+		preferencePanelLeft.add(getIncludeFinalBalance());
 
 		JPanel preferencePanelRight = new JPanel();
 		preferencePanelRight.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -234,6 +236,22 @@ public class ExportPanel extends JPanel {
 		}
 		return includeInitialBalance;
 	}
+	
+	/**
+	 * This method initializes includeInitialBalance
+	 * 
+	 * @return javax.swing.JCheckBox
+	 */
+	private JCheckBox getIncludeFinalBalance() {
+		if (includeFinalBalance == null) {
+			includeFinalBalance = new JCheckBox();
+			includeFinalBalance.setText(LocalizationData.get("ExportDialog.includeFinalBalanceCheckBox")); //$NON-NLS-1$
+			includeFinalBalance.setSelected(true);
+			includeFinalBalance
+					.setToolTipText(LocalizationData.get("ExportDialog.includeFinalBalanceCheckBox.toolTip")); //$NON-NLS-1$
+		}
+		return includeFinalBalance;
+	}
 
 	private JComboBox<ExportFormatType> getExportFormats() {
 		if (exportFormats == null) {
@@ -289,7 +307,7 @@ public class ExportPanel extends JPanel {
 			selected[modelColumn] = (Boolean) model.getValueAt(0, modelColumn);
 		}
 		return new DataExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(),
-				getIncludeInitialBalance().isSelected(), !all.isSelected(),
+				getIncludeInitialBalance().isSelected(), getIncludeFinalBalance().isSelected(), !all.isSelected(),
 				ExportFormatType.valueOf(exportFormats.getSelectedItem() + ""));
 	}
 
@@ -301,6 +319,7 @@ public class ExportPanel extends JPanel {
 				: parameters.getExportFormat() //
 		);
 		getIncludeInitialBalance().setSelected(parameters.isExportInitialBalance());
+		getIncludeFinalBalance().setSelected(parameters.isExportFinalBalance());
 		JRadioButton sel = parameters.isExportFilteredData() ? filtered : all;
 		group.setSelected(sel.getModel(), true);
 		boolean ok = jTable.getColumnCount() == parameters.getViewIndexesToModel().length;

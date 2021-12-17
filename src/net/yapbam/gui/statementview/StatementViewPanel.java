@@ -59,7 +59,6 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
-import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.TableExporter;
 import net.yapbam.gui.transactiontable.TransactionTableUtils;
 import net.yapbam.gui.util.FriendlyTable;
@@ -604,10 +603,15 @@ public class StatementViewPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
 		if(btnExport == null) {
-			ExportComponent<ExporterParameters, FriendlyTable> exportC = new ExportComponent<ExporterParameters, FriendlyTable>() {
+			ExportComponent<StatementExporterParameters, FriendlyTable> exportC = new ExportComponent<StatementExporterParameters, FriendlyTable>() {
 				@Override
-				public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
-					return new TableExporter() {
+				public Exporter<StatementExporterParameters, FriendlyTable> buildExporter() {
+					Statement statement = getStatementSelectionPanel().getSelectedStatement();
+					DecimalFormat ci = LocalizationData.getCurrencyInstance();
+					String statementId = Formatter.format("{0} {1}", LocalizationData.get("TransactionDialog.statement"), statement.getId());
+					String startBalance = Formatter.format(LocalizationData.get("StatementView.startBalance"), ci.format(statement.getStartBalance()));
+					String endBalance = Formatter.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()));
+					return new TableExporter<StatementExporterParameters>(new StatementExporterParameters(statementId, startBalance, endBalance)) {
 						@Override
 						protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
 							// Warning, in the table model, the description is already html encoded. It would lead to the export
@@ -618,6 +622,16 @@ public class StatementViewPanel extends JPanel {
 							} else {
 								return super.getValueAt(table, modelRowIndex, modelColIndex);
 							}
+						}
+
+						@Override
+						protected AdditionalValueInfo getAdditionalValueInfo(int modelRowIndex, int modelColIndex) {
+							if (StatementTableModel.DEBT_COLUMN == modelColIndex) {
+								return AdditionalValueInfo.DEBT;
+							} else if (StatementTableModel.RECEIPT_COLUMN == modelColIndex) {
+								return AdditionalValueInfo.RECEIPT;
+							}
+							return super.getAdditionalValueInfo(modelRowIndex, modelColIndex);
 						}
 					};
 				}

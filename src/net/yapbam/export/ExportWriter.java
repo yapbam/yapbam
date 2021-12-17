@@ -11,7 +11,7 @@ public interface ExportWriter extends Closeable {
 
 	public void addLineEnd() throws IOException;
 
-	public void addValue(String value) throws IOException;
+	public void addValue(String ...value) throws IOException;
 	
 	public void addFooter() throws IOException;
 

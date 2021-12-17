@@ -119,7 +119,7 @@ public class ExportTest {
 		assertTrue(obj.containsKey("values"));
 		@SuppressWarnings("unchecked")
 		List<List<String>> lines = (List<List<String>>) obj.get("values");
-		assertEquals(3,lines.size());
+		assertEquals(4,lines.size());
 		List<String> transaction = lines.get(2);
 		assertEquals(description, transaction.get(2));
 	}

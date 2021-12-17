@@ -3,6 +3,7 @@ package net.yapbam.export;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+import net.yapbam.gui.dialogs.export.ExporterExtendedParameters;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 
 public enum ExportFormatType {
@@ -30,6 +31,17 @@ public enum ExportFormatType {
 		if (ExportFormatType.CSV.equals(this)) {
 			return new CsvFormatWriter(stream, params.getSeparator(), params.getPreferredEncoding());
 		} else if (ExportFormatType.HTML.equals(this)) {
+			if (params.getExporterExtendedParameters() != null) {
+				ExporterExtendedParameters extendedParameters = params.getExporterExtendedParameters();
+				return new HtmlFormatWriter( //
+						stream, //
+						StandardCharsets.UTF_8, //
+						extendedParameters.getStatementId(), //
+						extendedParameters.getStartBalance(), //
+						extendedParameters.getEndBalance(), //
+						extendedParameters.getCss() //
+				);
+			}
 			return new HtmlFormatWriter(stream, StandardCharsets.UTF_8);
 		} else if(ExportFormatType.JSON.equals(this)) {
 			return new JsonFormatWriter(stream, StandardCharsets.UTF_8);

@@ -14,23 +14,25 @@ public class DataExporterParameters extends ExporterParameters implements Serial
 	private boolean[] selectedModelColumns;
 	private boolean insertHeader;
 	private boolean exportInitialBalance;
+	private boolean exportFinalBalance;
 	private boolean exportFilteredData;
 
 	private int[] exportedIndexes;
 
 	public DataExporterParameters() {
 		this(ArrayUtils.buildIntArray(ExportTableModel.COLUMNS.length, 0, 1),
-				ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true), true, ';', true, true,
+				ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true), true, ';', true, true, true,
 				ExportFormatType.CSV);
 	}
 	
 	public DataExporterParameters(int[] viewindexesToModel, boolean[] selectedModelColumns, boolean insertHeader,
-			char separator, boolean exportInitialBalance, boolean exportFilteredData, ExportFormatType exportFormat) {
+			char separator, boolean exportInitialBalance, boolean exportFinalBalance, boolean exportFilteredData, ExportFormatType exportFormat) {
 		super(separator, exportFormat);
 		this.viewIndexesToModel = viewindexesToModel;
 		this.selectedModelColumns = selectedModelColumns;
 		this.insertHeader = insertHeader;
 		this.exportInitialBalance = exportInitialBalance;
+		this.exportFinalBalance = exportFinalBalance;
 		this.exportFilteredData = exportFilteredData;
 		int nbSelected = 0;
 		for (boolean b : selectedModelColumns) {
@@ -66,6 +68,10 @@ public class DataExporterParameters extends ExporterParameters implements Serial
 
 	public boolean isExportInitialBalance() {
 		return exportInitialBalance;
+	}
+
+	public boolean isExportFinalBalance() {
+		return exportFinalBalance;
 	}
 
 	public boolean isExportFilteredData() {

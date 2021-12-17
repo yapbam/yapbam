@@ -60,10 +60,27 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 				format.addLineEnd();
 			}
 		}
+		if (getParameters().isExportFinalBalance()) {
+			// Export accounts final balance
+			for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
+				format.addLineStart();
+				Account account = data.getGlobalData().getAccount(i);
+				if (data.getFilter().isOk(account) || !getParameters().isExportFilteredData()) {
+					for (int j = 0; j < fields.length; j++) {
+						format.addValue(format(getField(account, fields[j], true)));
+					}
+				}
+				format.addLineEnd();
+			}
+		}
 		format.addFooter();
 	}
 	
 	private Object getField(Account account, int field) {
+		return getField(account, field, false);
+	}
+	
+	private Object getField(Account account, int field, boolean isFinal) {
 		if ((field==ExportTableModel.DATE_INDEX) || (field==ExportTableModel.CATEGORY_INDEX) ||
 				(field==ExportTableModel.MODE_INDEX) || (field==ExportTableModel.NUMBER_INDEX) ||
 				(field==ExportTableModel.STATEMENT_INDEX) || (field==ExportTableModel.VALUE_DATE_INDEX) ||
@@ -72,7 +89,11 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 		} else if (field==ExportTableModel.ACCOUNT_INDEX) {
 			return account.getName();
 		} else if (field==ExportTableModel.AMOUNT_INDEX) {
-			return account.getInitialBalance();
+			if(isFinal) {
+				return account.getBalanceData().getFinalBalance();
+			} else {
+				return account.getInitialBalance();
+			}
 		} else {
 			throw new IllegalArgumentException();
 		}

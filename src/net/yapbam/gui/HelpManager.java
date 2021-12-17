@@ -27,6 +27,8 @@ public class HelpManager {
 	public static final Content IMPORT = new Content("import"); //$NON-NLS-1$
 	/** Help about backup. */
 	public static final Content BACKUP = new Content("backup"); //$NON-NLS-1$
+	/** Help about backup. */
+	public static final Content EXPORT_CSS = new Content("export_css"); //$NON-NLS-1$
 	
 	private static final String BUNDLE_NAME = "net.yapbam.gui.helpUrls"; //$NON-NLS-1$
 	private static ResourceBundle RESOURCE_BUNDLE;
