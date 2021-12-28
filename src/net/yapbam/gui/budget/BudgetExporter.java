@@ -1,7 +1,6 @@
 package net.yapbam.gui.budget;
 
 import java.io.IOException;
-import java.text.NumberFormat;
 
 import net.yapbam.data.BudgetView;
 import net.yapbam.data.Category;
@@ -21,12 +20,11 @@ public class BudgetExporter extends Exporter<BudgetExporterParameters, BudgetVie
 		out.addHeader();
 		exportColumnNames(out, budget, withSumColumn);
 		// Output category lines
-		NumberFormat currencyFormatter = getParameters().getAmountFormat();
 		for (int i=0;i<budget.getCategoriesSize();i++) {
 			Category category = budget.getCategory(i);
-			exportCategoryLine(out, currencyFormatter, budget, category, withSumColumn);
+			exportCategoryLine(out, budget, category, withSumColumn);
 		}
-		exportDateSumLine(out, currencyFormatter, budget, withSumColumn);
+		exportDateSumLine(out, budget, withSumColumn);
 		out.addFooter();
 	}
 
@@ -35,7 +33,7 @@ public class BudgetExporter extends Exporter<BudgetExporterParameters, BudgetVie
 		out.addLineStart();
 		out.addValue(""); //$NON-NLS-1$
 		for (int i = 0; i < budget.getDatesSize(); i++) {
-			out.addValue(getParameters().getDateFormat().format(budget.getDate(i)));
+			out.addValue(getParameters().format(budget.getDate(i)));
 		}
 		if (withSumColumn) {
 			out.addValue(getParameters().getCategorySumWording());
@@ -43,32 +41,32 @@ public class BudgetExporter extends Exporter<BudgetExporterParameters, BudgetVie
 		out.addLineEnd();
 	}
 
-	private void exportCategoryLine(ExportWriter out, NumberFormat currencyFormatter, BudgetView budget,
+	private void exportCategoryLine(ExportWriter out, BudgetView budget,
 			Category category, final boolean withSumColumn) throws IOException {
 		out.addLineStart();
 		out.addValue(category.equals(Category.UNDEFINED)?LocalizationData.get("Category.undefined"):category.getName()); //$NON-NLS-1$
 		for (int j = 0; j < budget.getDatesSize(); j++) {
 			Double value = budget.getAmount(budget.getDate(j), category);
-			out.addValue(value!=null?currencyFormatter.format(value):""); //$NON-NLS-1$
+			out.addValue(value!=null?getParameters().format(value):""); //$NON-NLS-1$
 		}
 		if (withSumColumn) {
 			double value = budget.getSum(category);
-			out.addValue(currencyFormatter.format(value));
+			out.addValue(getParameters().format(value));
 		}
 		out.addLineEnd();
 	}
 
-	private void exportDateSumLine(ExportWriter out, NumberFormat currencyFormatter, BudgetView budget, final boolean withSumColumn) throws IOException {
+	private void exportDateSumLine(ExportWriter out, BudgetView budget, final boolean withSumColumn) throws IOException {
 		if (getParameters().getDateSumWording()!=null) {
 			out.addLineStart();
 			out.addValue(getParameters().getDateSumWording());
 			for (int j = 0; j < budget.getDatesSize(); j++) {
 				double value = budget.getSum(budget.getDate(j));
-				out.addValue(currencyFormatter.format(value));
+				out.addValue(getParameters().format(value));
 			}
 			if (withSumColumn) {
 				Double value = budget.getSum();
-				out.addValue(value!=null?currencyFormatter.format(value):""); //$NON-NLS-1$
+				out.addValue(value!=null?getParameters().format(value):""); //$NON-NLS-1$
 			}
 			out.addLineEnd();
 		}

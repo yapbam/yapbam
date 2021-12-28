@@ -17,6 +17,7 @@ import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.CurrencyWidget;
+import net.yapbam.util.HtmlUtils;
 
 import java.awt.GridBagConstraints;
 import java.beans.PropertyChangeEvent;
@@ -213,8 +214,8 @@ public class BalancePanel extends JPanel {
 
 	private void updateBalances() {
 		DecimalFormat ci = LocalizationData.getCurrencyInstance();
-		setStart(Formatter.format(LocalizationData.get("StatementView.startBalance"), statement!=null?ci.format(statement.getStartBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
-		setEnd(Formatter.format(LocalizationData.get("StatementView.endBalance"), statement!=null?ci.format(statement.getEndBalance()):"")); //$NON-NLS-1$ //$NON-NLS-2$
+		setStart(getCoolBalance("StatementView.startBalance", statement!=null ? statement.getStartBalance():null, ci)); //$NON-NLS-1$
+		setEnd(getCoolBalance("StatementView.endBalance", statement!=null ? statement.getEndBalance():null, ci)); //$NON-NLS-1$
 		
 		Double target = targetAmount.getValue();
 		if ((statement==null) || (target==null) || (GlobalData.AMOUNT_COMPARATOR.compare(target,statement.getEndBalance())==0)) {
@@ -223,5 +224,9 @@ public class BalancePanel extends JPanel {
 			gapLabel.setText(Formatter.format(LocalizationData.get("CheckModePanel.gap"),ci.format(target-statement.getEndBalance()))); //$NON-NLS-1$
 			gapLabel.setVisible(true);
 		}
+	}
+	
+	private String getCoolBalance(String formatKey, Double value, DecimalFormat ci) {
+		return HtmlUtils.START_TAG+Formatter.format(LocalizationData.get(formatKey), value!=null?"<b>"+ci.format(value)+"</b>":"")+HtmlUtils.END_TAG; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 }

@@ -52,6 +52,7 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
 import net.yapbam.data.Statement;
 import net.yapbam.data.Transaction;
+import net.yapbam.export.ExportFormatType;
 import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.TransactionSelector;
@@ -607,11 +608,7 @@ public class StatementViewPanel extends JPanel {
 				@Override
 				public Exporter<StatementExporterParameters, FriendlyTable> buildExporter() {
 					Statement statement = getStatementSelectionPanel().getSelectedStatement();
-					DecimalFormat ci = LocalizationData.getCurrencyInstance();
-					String statementId = Formatter.format("{0} {1}", LocalizationData.get("TransactionDialog.statement"), statement.getId());
-					String startBalance = Formatter.format(LocalizationData.get("StatementView.startBalance"), ci.format(statement.getStartBalance()));
-					String endBalance = Formatter.format(LocalizationData.get("StatementView.endBalance"), ci.format(statement.getEndBalance()));
-					return new TableExporter<StatementExporterParameters>(new StatementExporterParameters(statementId, startBalance, endBalance)) {
+					return new TableExporter<StatementExporterParameters>(new StatementExporterParameters(statement.getId(), statement.getStartBalance(), statement.getEndBalance())) {
 						@Override
 						protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
 							// Warning, in the table model, the description is already html encoded. It would lead to the export
@@ -625,15 +622,20 @@ public class StatementViewPanel extends JPanel {
 						}
 
 						@Override
-						protected AdditionalValueInfo getAdditionalValueInfo(int modelRowIndex, int modelColIndex) {
+						protected String[] getStyles(int modelRowIndex, int modelColIndex) {
 							if (StatementTableModel.DEBT_COLUMN == modelColIndex) {
-								return AdditionalValueInfo.DEBT;
+								return new String[] {"debt"};
 							} else if (StatementTableModel.RECEIPT_COLUMN == modelColIndex) {
-								return AdditionalValueInfo.RECEIPT;
+								return new String[] {"receipt"};
 							}
-							return super.getAdditionalValueInfo(modelRowIndex, modelColIndex);
+							return super.getStyles(modelRowIndex, modelColIndex);
 						}
 					};
+				}
+
+				@Override
+				public ExtraFileSelectionPanel<StatementExporterParameters> getExtraPanel(ExportFormatType format) {
+					return ExportFormatType.HTML.equals(format) ? new ExportAccessoryPanel() : super.getExtraPanel(format);
 				}
 			};
 			exportC.setContent(getTransactionsTable());

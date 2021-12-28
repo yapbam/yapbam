@@ -38,7 +38,7 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 				Account account = data.getGlobalData().getAccount(i);
 				if (data.getFilter().isOk(account) || !getParameters().isExportFilteredData()) {
 					for (int j = 0; j < fields.length; j++) {
-						format.addValue(format(getField(account, fields[j])));
+						format.addValue(getParameters().format(getField(account, fields[j])));
 					}
 				}
 				format.addLineEnd();
@@ -48,14 +48,14 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 			Transaction transaction = transactions.next();
 			format.addLineStart();
 			for (int i = 0; i < fields.length; i++) {
-				format.addValue(format(getField(transaction, fields[i])));
+				format.addValue(getParameters().format(getField(transaction, fields[i])));
 			}
 			format.addLineEnd();
 			for (int j = 0; j < transaction.getSubTransactionSize(); j++) {
 				SubTransaction sub = transaction.getSubTransaction(j);
 				format.addLineStart();
 				for (int i = 0; i < fields.length; i++) {
-					format.addValue(format(getField(sub, fields[i])));
+					format.addValue(getParameters().format(getField(sub, fields[i])));
 				}
 				format.addLineEnd();
 			}
@@ -67,7 +67,7 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 				Account account = data.getGlobalData().getAccount(i);
 				if (data.getFilter().isOk(account) || !getParameters().isExportFilteredData()) {
 					for (int j = 0; j < fields.length; j++) {
-						format.addValue(format(getField(account, fields[j], true)));
+						format.addValue(getParameters().format(getField(account, fields[j], true)));
 					}
 				}
 				format.addLineEnd();

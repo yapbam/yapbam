@@ -10,6 +10,14 @@ import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
 
 public class TableExporter<T extends ExporterParameters> extends Exporter<T ,FriendlyTable> {
+	private interface ValueGetter {
+		String get(int colIndex);
+	}
+	
+	private interface StylesGetter {
+		String[] getStyles(int colIndex);
+	}
+	
 	public TableExporter(T params) {
 		super(params);
 	}
@@ -31,13 +39,13 @@ public class TableExporter<T extends ExporterParameters> extends Exporter<T ,Fri
 			vg = new ValueGetter() {
 				@Override
 				public String get(int colIndex) {
-					return format(getValueAt(table, modelRowIndex, modelIndexes[colIndex]));
+					return getParameters().format(getValueAt(table, modelRowIndex, modelIndexes[colIndex]));
 				}
 			};
-			AdditionalValueGetter avg = new AdditionalValueGetter() {
+			StylesGetter avg = new StylesGetter() {
 				@Override
-				public String[] getAdditional(int colIndex) {
-					return getAdditionalValueInfo(modelRowIndex, modelIndexes[colIndex]).getInfos();
+				public String[] getStyles(int colIndex) {
+					return TableExporter.this.getStyles(modelRowIndex, modelIndexes[colIndex]);
 				}
 			};
 			writeLine(table, format, vg, avg);
@@ -49,15 +57,15 @@ public class TableExporter<T extends ExporterParameters> extends Exporter<T ,Fri
 		return table.getModel().getValueAt(modelRowIndex, modelColIndex);
 	}
 	
-	protected AdditionalValueInfo getAdditionalValueInfo(int modelRowIndex, int modelColIndex) {
-		return AdditionalValueInfo.NO_INFO;
+	protected String[] getStyles(int modelRowIndex, int modelColIndex) {
+		return null;
 	}
 
-	private void writeLine(final FriendlyTable table, ExportWriter format, ValueGetter vg, AdditionalValueGetter avg) throws IOException {
+	private void writeLine(final FriendlyTable table, ExportWriter format, ValueGetter vg, StylesGetter avg) throws IOException {
 		format.addLineStart();
 		for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
 			if (table.isColumnVisible(colIndex)) {
-				format.addValue(vg.get(colIndex), avg != null ? avg.getAdditional(colIndex) : null);
+				format.addValue(vg.get(colIndex), avg != null ? avg.getStyles(colIndex) : null);
 			}
 		}
 		format.addLineEnd();
@@ -69,31 +77,5 @@ public class TableExporter<T extends ExporterParameters> extends Exporter<T ,Fri
 			modelIndexes[colIndex] = ((XTableColumnModel) table.getColumnModel()).getColumn(colIndex, false).getModelIndex();
 		}
 		return modelIndexes;
-	}
-
-	private interface ValueGetter {
-		String get(int colIndex);
-	}
-	
-	private interface AdditionalValueGetter {
-		String[] getAdditional(int colIndex);
-	}
-	
-	protected enum AdditionalValueInfo {
-		
-		NO_INFO(), 
-		RECEIPT("receipt"), 
-		DEBT("debit");
-		
-		private final String[] infos;
-		
-		AdditionalValueInfo(String ...infos) {
-			this.infos = infos;
-		}
-
-		public String[] getInfos() {
-			return infos;
-		}
-		
 	}
 }

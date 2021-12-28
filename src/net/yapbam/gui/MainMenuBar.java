@@ -405,7 +405,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		DataExporter exporter = exportDialog.getResult();
 		if (exporter!=null) {
 			ExportFormatType format = exporter.getParameters().getExportFormat();
-			ExportComponent.chooseFileAndExport(frame.getFilteredData(), format, exportDialog, exporter);
+			ExportComponent.chooseFileAndExport(frame.getFilteredData(), format, exportDialog, exporter, null);
 		}
 	}
 

@@ -13,38 +13,30 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 public class HtmlFormatWriter implements ExportWriter {
-
+	public static class HeaderAndFooterBuilder {
+		public String getHeader() {
+			return null;
+		}
+		public String getFooter() {
+			return null;
+		}
+	}
+	
 	private AtomicInteger tableRowIndex;
 	private Writer writer;
 	private Charset encoding;
-	private String statementId;
-	private String startBalance;
-	private String endBalance;
+	private HeaderAndFooterBuilder headAndFoot;
 	private URL css;
 
 	public HtmlFormatWriter(OutputStream stream, Charset encoding) {
-		this(stream, encoding, null);
+		this(stream, encoding, new HeaderAndFooterBuilder(), null);
 	}
 	
-	public HtmlFormatWriter(OutputStream stream, Charset encoding, String statementId) {
-		this(stream, encoding, statementId, null);
-	}
-	
-	public HtmlFormatWriter(OutputStream stream, Charset encoding, String statementId, String startBalance) {
-		this(stream, encoding, statementId, startBalance, null);
-	}
-	
-	public HtmlFormatWriter(OutputStream stream, Charset encoding, String statementId, String startBalance, String endBalance) {
-		this(stream, encoding, statementId, startBalance, endBalance, null);
-	}
-	
-	public HtmlFormatWriter(OutputStream stream, Charset encoding, String statementId, String startBalance, String endBalance, URL css) {
+	public HtmlFormatWriter(OutputStream stream, Charset encoding, HeaderAndFooterBuilder headAndFoot, URL css) {
 		this.tableRowIndex = new AtomicInteger(0);
 		this.writer = new OutputStreamWriter(stream, encoding);
 		this.encoding = encoding;
-		this.statementId = statementId;
-		this.startBalance = startBalance;
-		this.endBalance = endBalance;
+		this.headAndFoot = headAndFoot;
 		this.css = css;
 	}
 
@@ -65,15 +57,9 @@ public class HtmlFormatWriter implements ExportWriter {
 		}
 		this.writer.append("</head>\n");
 		this.writer.append("<body>\n");
-		if (!StringUtils.isBlank(statementId) || !StringUtils.isBlank(startBalance)) {
-			this.writer.append("<center>");
-			if (!StringUtils.isBlank(statementId)) {
-				this.writer.append(String.format("<p id=\"statement-id\">%s</p>", statementId));
-			}
-			if (!StringUtils.isBlank(startBalance)) {
-				this.writer.append(String.format("<p id=\"start-balance\">%s</p>", startBalance));
-			}
-			this.writer.append("</center>\n");
+		final String header = headAndFoot==null ? null : headAndFoot.getHeader();
+		if (header!=null) {
+			this.writer.append(header);
 		}
 		this.writer.append("<table id=\"transaction-table\">\n");
 	}
@@ -97,8 +83,9 @@ public class HtmlFormatWriter implements ExportWriter {
 	@Override
 	public void addFooter() throws IOException {
 		this.writer.append("</table>");
-		if (!StringUtils.isBlank(endBalance)) {
-			this.writer.append(String.format("<center><p id=\"end-balance\">%s</p></center>", endBalance));
+		final String footer = headAndFoot==null ? null : headAndFoot.getFooter();
+		if (footer!=null) {
+			this.writer.append(footer);
 		}
 		this.writer.append("</body>");
 		this.writer.append("</html>");

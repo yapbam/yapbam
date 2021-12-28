@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -31,6 +32,19 @@ import net.yapbam.gui.widget.JSplitButton;
 public abstract class ExportComponent<P extends ExporterParameters, C> extends JSplitButton {
 	private static final long serialVersionUID = 1L;
 	
+	public static class ExtraFileSelectionPanel<P> extends JPanel {
+		private static final long serialVersionUID = 1L;
+		public void restoreState() {
+			// Does nothing by default
+		}
+		public void saveState() {
+			// Does nothing by default
+		}
+		public void setExtraParameters(P params) {
+			// Does nothing by default
+		}
+	}
+	
 	private transient C content;
 	
 	protected ExportComponent() {
@@ -46,7 +60,7 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 					ExportFormatType format = ExportFormatType.valueOf(e.getActionCommand());
 					final Window ownerWindow = Utils.getOwnerWindow(ExportComponent.this);
 					final Exporter<P, C> exporter = buildExporter();
-					chooseFileAndExport(ExportComponent.this.content, format, ownerWindow, exporter);
+					chooseFileAndExport(ExportComponent.this.content, format, ownerWindow, exporter, getExtraPanel(format));
 				}
 			}
 		};
@@ -70,17 +84,20 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 	
 	public abstract Exporter<P,C> buildExporter();
 	
+	public ExtraFileSelectionPanel<P> getExtraPanel(ExportFormatType format) {
+		return null;
+	}
+	
 	public static <P extends ExporterParameters,T> void chooseFileAndExport(T data, ExportFormatType format, final Window ownerWindow,
-			final Exporter<P,T> exporter) {
+			final Exporter<P,T> exporter, ExtraFileSelectionPanel<P> extraPanel) {
 		JFileChooser chooser = new FileChooser();
 		chooser.setLocale(LocalizationData.getLocale());
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileFilter(new FileNameExtensionFilter(format.getDescription(),format.getExtension()));
 		
-		ExportAccessoryPanel<P> accessoryPanel = new ExportAccessoryPanel<P>(exporter.getParameters());
-		accessoryPanel.restoreState();
-		if(ExportFormatType.HTML.equals(format)) {
-			chooser.setAccessory(accessoryPanel);
+		if (extraPanel!=null) {
+			extraPanel.restoreState();
+			chooser.setAccessory(extraPanel);
 		}
 		
 		File file = chooser.showSaveDialog(ownerWindow) == JFileChooser.APPROVE_OPTION ? chooser.getSelectedFile() : null;
@@ -89,10 +106,10 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 			if (extension == null || !extension.endsWith(format.getExtension())) {
 				file = new File(file.getPath() + "." + format.getExtension());
 			}
-			if(ExportFormatType.HTML.equals(format)) {
-				exporter.getParameters().setExporterExtendedParameters(accessoryPanel.getExporterExtendedParameters());
+			if (extraPanel!=null) {
+				extraPanel.setExtraParameters(exporter.getParameters());
+				extraPanel.saveState();
 			}
-			accessoryPanel.saveState();
 			export(data, exporter, file, format, ownerWindow);
 		}
 	}

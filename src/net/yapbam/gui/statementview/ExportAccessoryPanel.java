@@ -1,4 +1,4 @@
-package net.yapbam.gui.dialogs.export;
+package net.yapbam.gui.statementview;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,11 +37,12 @@ import com.fathzer.soft.ajlib.utilities.StringUtils;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
+import net.yapbam.gui.dialogs.export.ExportComponent.ExtraFileSelectionPanel;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.statementview.StatementExporterParameters;
 
-public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
+public class ExportAccessoryPanel extends ExtraFileSelectionPanel<StatementExporterParameters> {
+	//TODO Split this into 2 classes (1 for the css, one, specific to statements view to select included fields).
 
 	private static final long serialVersionUID = 1L;
 
@@ -64,7 +65,6 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 
 	}
 
-	private transient P parameters;
 	private JCheckBox includeTitle;
 	private JCheckBox includeStartBalance;
 	private JCheckBox includeEndBalance;
@@ -75,8 +75,7 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 	private JButton selectCssButton;
 	private JLabel selectCssInvalidityCauseLabel;
 	
-	public ExportAccessoryPanel(P parameters) {
-		this.parameters = parameters;
+	public ExportAccessoryPanel() {
 		initialize();
 	}
 
@@ -105,9 +104,7 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 		
 		this.setBorder(BorderFactory.createTitledBorder(LocalizationData.get("ExportAccessoryPanel.title")));
 		this.setLayout(new BorderLayout());
-		if (parameters instanceof StatementExporterParameters) {
-			this.add(checkPanel, BorderLayout.NORTH);
-		}
+		this.add(checkPanel, BorderLayout.NORTH);
 		this.add(stylePanel, BorderLayout.CENTER);
 		this.setPreferredSize(new Dimension(400, this.getMinimumSize().height));
 	}
@@ -299,6 +296,7 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 		return this.getClass().getCanonicalName() + ".includeEndBalance";
 	}
 
+	@Override
 	public void saveState() {
 		YapbamState.INSTANCE.put(getIncludeTitleStateKey(), Boolean.toString(getIncludeTitle().isSelected()));
 		YapbamState.INSTANCE.put(getIncludeStartBalanceStateKey(), Boolean.toString(getIncludeStartBalance().isSelected()));
@@ -308,6 +306,7 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 		YapbamState.INSTANCE.put(getSelectCssTextFieldStateKey(type), getSelectCssTextField().getText());
 	}
 
+	@Override
 	public void restoreState() {
 		getIncludeTitle().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getIncludeTitleStateKey())));
 		getIncludeStartBalance().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getIncludeStartBalanceStateKey())));
@@ -315,20 +314,11 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 		getSelectCssTypeComboBox().setSelectedItem(CssTypeEnum.valueOf(YapbamState.INSTANCE.get(getSelectCssTypeComboBoxStateKey(), CssTypeEnum.LOCAL.name())));
 	}
 
-	public ExporterExtendedParameters getExporterExtendedParameters() {
-		ExporterExtendedParameters extendedParameters = new ExporterExtendedParameters();
-		if (parameters instanceof StatementExporterParameters) {
-			StatementExporterParameters statementExporterParameters = (StatementExporterParameters) parameters;
-			if (getIncludeTitle().isSelected()) {
-				extendedParameters.setStatementId(statementExporterParameters.getStatementId());
-			}
-			if (getIncludeStartBalance().isSelected()) {
-				extendedParameters.setStartBalance(statementExporterParameters.getStartBalance());
-			}
-			if (getIncludeEndBalance().isSelected()) {
-				extendedParameters.setEndBalance(statementExporterParameters.getEndBalance());
-			}
-		}
+	@Override
+	public void setExtraParameters(StatementExporterParameters params) {
+		params.setWithStatementId(getIncludeTitle().isSelected());
+		params.setWithStartBalance(getIncludeStartBalance().isSelected());
+		params.setWithEndBalance(getIncludeEndBalance().isSelected());
 		if (getSelectCssTextField().getInputVerifier().verify(getSelectCssTextField())) {
 			String url = org.apache.commons.lang3.StringUtils.trimToNull(getSelectCssTextField().getText());
 			if (url != null) {
@@ -337,13 +327,12 @@ public class ExportAccessoryPanel<P extends ExporterParameters> extends JPanel {
 					if (CssTypeEnum.LOCAL.equals(cssType)) {
 						url = "file://" + url;
 					}
-					extendedParameters.setCss(new URL(url));
+					params.setCss(new URL(url));
 				} catch (MalformedURLException e) {
-					extendedParameters.setCss(null);
+					params.setCss(null);
 				}
 			}
 		}
-		return extendedParameters;
 	}
 
 }
