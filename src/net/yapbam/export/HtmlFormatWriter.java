@@ -15,7 +15,6 @@ import org.apache.commons.text.StringEscapeUtils;
 public class HtmlFormatWriter implements ExportWriter {
 
 	private AtomicInteger tableRowIndex;
-	private AtomicInteger tableCellIndex;
 	private Writer writer;
 	private Charset encoding;
 	private String statementId;
@@ -41,7 +40,6 @@ public class HtmlFormatWriter implements ExportWriter {
 	
 	public HtmlFormatWriter(OutputStream stream, Charset encoding, String statementId, String startBalance, String endBalance, URL css) {
 		this.tableRowIndex = new AtomicInteger(0);
-		this.tableCellIndex = new AtomicInteger(0); 
 		this.writer = new OutputStreamWriter(stream, encoding);
 		this.encoding = encoding;
 		this.statementId = statementId;
@@ -68,12 +66,12 @@ public class HtmlFormatWriter implements ExportWriter {
 		this.writer.append("</head>\n");
 		this.writer.append("<body>\n");
 		if (!StringUtils.isBlank(statementId) || !StringUtils.isBlank(startBalance)) {
-			this.writer.append("<center>\n");
+			this.writer.append("<center>");
 			if (!StringUtils.isBlank(statementId)) {
-				this.writer.append(String.format("<p id=\"statement-id\">%s</p>\n", statementId));
+				this.writer.append(String.format("<p id=\"statement-id\">%s</p>", statementId));
 			}
 			if (!StringUtils.isBlank(startBalance)) {
-				this.writer.append(String.format("<p id=\"start-balance\">%s</p>\n", startBalance));
+				this.writer.append(String.format("<p id=\"start-balance\">%s</p>", startBalance));
 			}
 			this.writer.append("</center>\n");
 		}
@@ -82,7 +80,7 @@ public class HtmlFormatWriter implements ExportWriter {
 
 	@Override
 	public void addLineStart() throws IOException {
-		this.writer.append(String.format("<tr id=\"row-%d\">\n", getTableRowIndex()));
+		this.writer.append(String.format("<tr id=\"row-%d\">", getTableRowIndex()));
 	}
 
 	@Override
@@ -92,15 +90,15 @@ public class HtmlFormatWriter implements ExportWriter {
 
 	@Override
 	public void addValue(String value, String... styles) throws IOException {
-		String classes = (styles!=null && styles.length > 0) ? String.format(" class=\"%s\"", StringUtils.join(styles, ';')) : "";
-		this.writer.append(String.format("<td id=\"cell-%d\"%s>%s</td>", getTabelCellIndex(), classes, StringEscapeUtils.escapeHtml4(value)));
+		final String classes = (styles!=null && styles.length > 0) ? String.format(" class=\"%s\"", StringUtils.join(styles, ';')) : "";
+		this.writer.append(String.format("<td%s>%s</td>", classes, StringEscapeUtils.escapeHtml4(value)));
 	}
 	
 	@Override
 	public void addFooter() throws IOException {
 		this.writer.append("</table>");
 		if (!StringUtils.isBlank(endBalance)) {
-			this.writer.append(String.format("<center><p id=\"end-balance\">%s</p></center>\n", endBalance));
+			this.writer.append(String.format("<center><p id=\"end-balance\">%s</p></center>", endBalance));
 		}
 		this.writer.append("</body>");
 		this.writer.append("</html>");
@@ -113,9 +111,5 @@ public class HtmlFormatWriter implements ExportWriter {
 	
 	private Integer getTableRowIndex()  {
 		return tableRowIndex.incrementAndGet();
-	}
-	
-	private Integer getTabelCellIndex()  {
-		return tableCellIndex.incrementAndGet();
 	}
 }
