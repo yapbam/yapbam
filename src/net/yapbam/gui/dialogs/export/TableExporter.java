@@ -2,8 +2,6 @@ package net.yapbam.gui.dialogs.export;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.fathzer.soft.ajlib.swing.table.JTable;
 
 import net.yapbam.export.ExportWriter;
@@ -59,7 +57,7 @@ public class TableExporter<T extends ExporterParameters> extends Exporter<T ,Fri
 		format.addLineStart();
 		for (int colIndex = 0; colIndex < table.getColumnCount(false); colIndex++) {
 			if (table.isColumnVisible(colIndex)) {
-				format.addValue(ArrayUtils.addFirst(avg != null ? avg.getAdditional(colIndex) : null, vg.get(colIndex)));
+				format.addValue(vg.get(colIndex), avg != null ? avg.getAdditional(colIndex) : null);
 			}
 		}
 		format.addLineEnd();

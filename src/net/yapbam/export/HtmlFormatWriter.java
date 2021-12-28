@@ -9,7 +9,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -92,9 +91,9 @@ public class HtmlFormatWriter implements ExportWriter {
 	}
 
 	@Override
-	public void addValue(String ...value) throws IOException {
-		this.writer.append(String.format("<td id=\"cell-%d\"%s>%s</td>", getTabelCellIndex(), ((value.length > 1) ? //
-				String.format(" class=\"%s\"", StringUtils.join(ArrayUtils.remove(value, 0), ';')) : ""), StringEscapeUtils.escapeHtml4(value[0])));
+	public void addValue(String value, String... styles) throws IOException {
+		String classes = (styles!=null && styles.length > 0) ? String.format(" class=\"%s\"", StringUtils.join(styles, ';')) : "";
+		this.writer.append(String.format("<td id=\"cell-%d\"%s>%s</td>", getTabelCellIndex(), classes, StringEscapeUtils.escapeHtml4(value)));
 	}
 	
 	@Override
