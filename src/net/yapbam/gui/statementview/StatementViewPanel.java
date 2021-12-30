@@ -60,6 +60,7 @@ import net.yapbam.gui.actions.DeleteTransactionAction;
 import net.yapbam.gui.actions.DuplicateTransactionAction;
 import net.yapbam.gui.actions.EditTransactionAction;
 import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.TableExporter;
 import net.yapbam.gui.transactiontable.TransactionTableUtils;
 import net.yapbam.gui.util.FriendlyTable;
@@ -604,11 +605,11 @@ public class StatementViewPanel extends JPanel {
 	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
 		if(btnExport == null) {
-			ExportComponent<StatementExporterParameters, FriendlyTable> exportC = new ExportComponent<StatementExporterParameters, FriendlyTable>() {
+			ExportComponent<ExtraExportData, FriendlyTable> exportC = new ExportComponent<ExtraExportData, FriendlyTable>() {
 				@Override
-				public Exporter<StatementExporterParameters, FriendlyTable> buildExporter() {
+				public Exporter<ExporterParameters<ExtraExportData>, FriendlyTable> buildExporter(ExportFormatType format) {
 					Statement statement = getStatementSelectionPanel().getSelectedStatement();
-					return new TableExporter<StatementExporterParameters>(new StatementExporterParameters(statement.getId(), statement.getStartBalance(), statement.getEndBalance())) {
+					return new TableExporter<ExporterParameters<ExtraExportData>>(new ExporterParameters<ExtraExportData>(new ExtraExportData(statement.getId(), statement.getStartBalance(), statement.getEndBalance()))) {
 						@Override
 						protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
 							// Warning, in the table model, the description is already html encoded. It would lead to the export
@@ -634,7 +635,7 @@ public class StatementViewPanel extends JPanel {
 				}
 
 				@Override
-				public ExtraFileSelectionPanel<StatementExporterParameters> getExtraPanel(ExportFormatType format) {
+				public ExtraFileSelectionPanel<ExtraExportData> getExtraPanel(ExportFormatType format) {
 					return ExportFormatType.HTML.equals(format) ? new ExportAccessoryPanel() : super.getExtraPanel(format);
 				}
 			};

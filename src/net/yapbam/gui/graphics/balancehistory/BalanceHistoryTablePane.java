@@ -19,6 +19,7 @@ import com.fathzer.soft.ajlib.swing.table.JTable;
 import com.fathzer.soft.ajlib.swing.table.JTableListener;
 
 import net.yapbam.data.FilteredData;
+import net.yapbam.export.ExportFormatType;
 import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
@@ -66,10 +67,10 @@ public class BalanceHistoryTablePane extends JPanel {
 	
 	@SuppressWarnings("serial")
 	private JButton getBtnExport() {
-		final ExportComponent<ExporterParameters, FriendlyTable> btn = new ExportComponent<ExporterParameters, FriendlyTable>() {
+		final ExportComponent<Void, FriendlyTable> btn = new ExportComponent<Void, FriendlyTable>() {
 			@Override
-			public Exporter<ExporterParameters, FriendlyTable> buildExporter() {
-				return new TableExporter<ExporterParameters>(new ExporterParameters()) {
+			public Exporter<ExporterParameters<Void>, FriendlyTable> buildExporter(ExportFormatType format) {
+				return new TableExporter<ExporterParameters<Void>>(new ExporterParameters<Void>(null)) {
 					@Override
 					protected Object getValueAt(JTable table, int modelRowIndex, int modelColIndex) {
 						final BalanceHistoryModel model = ((BalanceHistoryModel)table.getModel());

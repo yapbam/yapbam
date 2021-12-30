@@ -34,15 +34,18 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
+import net.yapbam.export.ExportFormatType;
+import net.yapbam.export.HtmlFormatWriter;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.ExportComponent.ExtraFileSelectionPanel;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
 
-public class ExportAccessoryPanel extends ExtraFileSelectionPanel<StatementExporterParameters> {
-	//TODO Split this into 2 classes (1 for the css, one, specific to statements view to select included fields).
+public class ExportAccessoryPanel extends ExtraFileSelectionPanel<ExtraExportData> {
+	//TODO Split this into 2 classes (1 for the css, and one, specific to statements view, to select included fields).
 
 	private static final long serialVersionUID = 1L;
 
@@ -313,12 +316,10 @@ public class ExportAccessoryPanel extends ExtraFileSelectionPanel<StatementExpor
 		getIncludeEndBalance().setSelected(Boolean.parseBoolean(YapbamState.INSTANCE.get(getIncludeEndBalanceStateKey())));
 		getSelectCssTypeComboBox().setSelectedItem(CssTypeEnum.valueOf(YapbamState.INSTANCE.get(getSelectCssTypeComboBoxStateKey(), CssTypeEnum.LOCAL.name())));
 	}
-
+	
 	@Override
-	public void setExtraParameters(StatementExporterParameters params) {
-		params.setWithStatementId(getIncludeTitle().isSelected());
-		params.setWithStartBalance(getIncludeStartBalance().isSelected());
-		params.setWithEndBalance(getIncludeEndBalance().isSelected());
+	public void setFormatParameters(ExporterParameters<ExtraExportData> params) {
+		URL theUrl = null;
 		if (getSelectCssTextField().getInputVerifier().verify(getSelectCssTextField())) {
 			String url = org.apache.commons.lang3.StringUtils.trimToNull(getSelectCssTextField().getText());
 			if (url != null) {
@@ -327,12 +328,20 @@ public class ExportAccessoryPanel extends ExtraFileSelectionPanel<StatementExpor
 					if (CssTypeEnum.LOCAL.equals(cssType)) {
 						url = "file://" + url;
 					}
-					params.setCss(new URL(url));
+					theUrl = new URL(url);
 				} catch (MalformedURLException e) {
-					params.setCss(null);
+					//TODO It should be better to inform the user the url is wrong
+					// Let url as null
 				}
 			}
 		}
+		params.setFormat(ExportFormatType.HTML, new HtmlFormatWriter.HtmlExportParameters(theUrl, new StatementHeaderAndFooterBuilder(params)));
 	}
-
+	
+	@Override
+	public void setDataParameters(ExporterParameters<ExtraExportData> params) {
+		params.getDataExtension().setWithStatementId(getIncludeTitle().isSelected());
+		params.getDataExtension().setWithStartBalance(getIncludeStartBalance().isSelected());
+		params.getDataExtension().setWithEndBalance(getIncludeEndBalance().isSelected());
+	}
 }

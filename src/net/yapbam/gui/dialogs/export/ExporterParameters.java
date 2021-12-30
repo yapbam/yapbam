@@ -1,6 +1,5 @@
 package net.yapbam.gui.dialogs.export;
 
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -13,30 +12,28 @@ import net.yapbam.export.ExportFormatType;
 import net.yapbam.gui.LocalizationData;
 
 @Setter
-public class ExporterParameters {
-	private DateFormat dateFormat;
-	private NumberFormat amountFormat;
-	// For json and html exporters, separator is a non sense ... but its not a big deal
+public class ExporterParameters<D> {
+	private final DateFormat dateFormat;
+	private final NumberFormat amountFormat;
 	@Getter
-	private char separator;
+	private final D dataExtension;
+	@Getter
+	private Object formatParams;
 	@Getter
 	private ExportFormatType exportFormat;
 
-	public ExporterParameters() {
-		this(';', ExportFormatType.CSV);
-	}
-	
-	public ExporterParameters(char separator, ExportFormatType exportFormat) {
+	public ExporterParameters(D dataExtension) {
 		super();
-		this.separator = separator;
-		this.exportFormat = exportFormat;
+		this.exportFormat = ExportFormatType.JSON;
+		this.formatParams = null;
 		this.dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale());
 		this.amountFormat = CSVWriter.getDecimalFormater(LocalizationData.getLocale());
+		this.dataExtension = dataExtension;
 	}
-
-	public Charset getPreferredEncoding() {
-		// For Json, non UTF encoding are not JSON standard compliant, it's the reason why the method is named "preferred"
-		return Charset.defaultCharset();
+	
+	public void setFormat(ExportFormatType exportFormat, Object formatParams) {
+		this.exportFormat = exportFormat;
+		this.formatParams = formatParams;
 	}
 	
 	public String format(Object obj) {

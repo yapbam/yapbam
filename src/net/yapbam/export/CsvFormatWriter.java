@@ -8,15 +8,30 @@ import java.nio.charset.Charset;
 
 import com.fathzer.soft.ajlib.utilities.CSVWriter;
 
+import lombok.AllArgsConstructor;
+
 public class CsvFormatWriter implements ExportWriter {
-	
+	@AllArgsConstructor
+	public static class CsvExportParameters {
+		private Charset encoding;
+		private char separator;
+		
+		public CsvExportParameters() {
+			this(Charset.defaultCharset(), ';');
+		}
+
+		public CsvExportParameters(char separator) {
+			this(Charset.defaultCharset(), separator);
+		}
+}
+
 	private Writer writer;
 	private CSVWriter csv;
 
-	public CsvFormatWriter(OutputStream stream, char separator, Charset encoding) {
-		this.writer = new OutputStreamWriter(stream, encoding);
+	public CsvFormatWriter(OutputStream stream, CsvExportParameters parameters) {
+		this.writer = new OutputStreamWriter(stream, parameters.encoding);
 		this.csv = new CSVWriter(writer);
-		this.csv.setSeparator(separator);
+		this.csv.setSeparator(parameters.separator);
 	}
 
 	@Override

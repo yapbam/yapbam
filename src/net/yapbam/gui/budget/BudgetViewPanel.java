@@ -33,6 +33,7 @@ import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.export.ExportFormatType;
 import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.export.ExportComponent;
@@ -217,7 +218,7 @@ public class BudgetViewPanel extends JPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Exporter<BudgetExporterParameters, BudgetView> buildExporter() {
+			public Exporter<BudgetExporterParameters, BudgetView> buildExporter(ExportFormatType format) {
 				String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
 				String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
 				return new BudgetExporter(new BudgetExporterParameters(sumLineName, sumColumnName));

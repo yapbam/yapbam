@@ -6,13 +6,25 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
+import lombok.AllArgsConstructor;
+
 public class HtmlFormatWriter implements ExportWriter {
+	@AllArgsConstructor
+	public static class HtmlExportParameters {
+		private URL css;
+		private HeaderAndFooterBuilder headAndFoot;
+		
+		public HtmlExportParameters() {
+			this(null, new HeaderAndFooterBuilder());
+		}
+	}
+	
 	public static class HeaderAndFooterBuilder {
 		public String getHeader() {
 			return null;
@@ -23,21 +35,13 @@ public class HtmlFormatWriter implements ExportWriter {
 	}
 	
 	private AtomicInteger tableRowIndex;
-	private Writer writer;
-	private Charset encoding;
-	private HeaderAndFooterBuilder headAndFoot;
-	private URL css;
+	private final Writer writer;
+	private final HtmlExportParameters exportParameters;
 
-	public HtmlFormatWriter(OutputStream stream, Charset encoding) {
-		this(stream, encoding, new HeaderAndFooterBuilder(), null);
-	}
-	
-	public HtmlFormatWriter(OutputStream stream, Charset encoding, HeaderAndFooterBuilder headAndFoot, URL css) {
+	public HtmlFormatWriter(OutputStream stream, HtmlExportParameters parameters) {
 		this.tableRowIndex = new AtomicInteger(0);
-		this.writer = new OutputStreamWriter(stream, encoding);
-		this.encoding = encoding;
-		this.headAndFoot = headAndFoot;
-		this.css = css;
+		this.writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
+		this.exportParameters = parameters;
 	}
 
 	@Override
@@ -45,10 +49,10 @@ public class HtmlFormatWriter implements ExportWriter {
 		this.writer.append("<!DOCTYPE html>\n");
 		this.writer.append("<html>\n");
 		this.writer.append("<head>\n");
-		this.writer.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset="+encoding.name()+"\"/>");
-		if(css != null) {
+		this.writer.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset="+StandardCharsets.UTF_8.name()+"\"/>");
+		if(exportParameters.css != null) {
 			try {
-				this.writer.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + css.toURI() + "\"/>\n");
+				this.writer.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + exportParameters.css.toURI() + "\"/>\n");
 			} catch (URISyntaxException ex) {
 				throw new IOException(ex.getMessage());
 			}
@@ -57,7 +61,7 @@ public class HtmlFormatWriter implements ExportWriter {
 		}
 		this.writer.append("</head>\n");
 		this.writer.append("<body>\n");
-		final String header = headAndFoot==null ? null : headAndFoot.getHeader();
+		final String header = exportParameters.headAndFoot.getHeader();
 		if (header!=null) {
 			this.writer.append(header);
 		}
@@ -83,7 +87,7 @@ public class HtmlFormatWriter implements ExportWriter {
 	@Override
 	public void addFooter() throws IOException {
 		this.writer.append("</table>");
-		final String footer = headAndFoot==null ? null : headAndFoot.getFooter();
+		final String footer = exportParameters.headAndFoot.getFooter();
 		if (footer!=null) {
 			this.writer.append(footer);
 		}

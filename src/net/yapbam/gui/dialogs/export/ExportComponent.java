@@ -29,10 +29,10 @@ import net.yapbam.gui.ErrorManager;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.widget.JSplitButton;
 
-public abstract class ExportComponent<P extends ExporterParameters, C> extends JSplitButton {
+public abstract class ExportComponent<D, C> extends JSplitButton {
 	private static final long serialVersionUID = 1L;
 	
-	public static class ExtraFileSelectionPanel<P> extends JPanel {
+	public static class ExtraFileSelectionPanel<D> extends JPanel {
 		private static final long serialVersionUID = 1L;
 		public void restoreState() {
 			// Does nothing by default
@@ -40,7 +40,10 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 		public void saveState() {
 			// Does nothing by default
 		}
-		public void setExtraParameters(P params) {
+		public void setFormatParameters(ExporterParameters<D> params) {
+			// Does nothing by default
+		}
+		public void setDataParameters(ExporterParameters<D> params) {
 			// Does nothing by default
 		}
 	}
@@ -57,9 +60,9 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (StringUtils.isNotBlank(e.getActionCommand())) {
-					ExportFormatType format = ExportFormatType.valueOf(e.getActionCommand());
+					final ExportFormatType format = ExportFormatType.valueOf(e.getActionCommand());
 					final Window ownerWindow = Utils.getOwnerWindow(ExportComponent.this);
-					final Exporter<P, C> exporter = buildExporter();
+					final Exporter<ExporterParameters<D>, C> exporter = buildExporter(format);
 					chooseFileAndExport(ExportComponent.this.content, format, ownerWindow, exporter, getExtraPanel(format));
 				}
 			}
@@ -82,14 +85,14 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 		this.content = content;
 	}
 	
-	public abstract Exporter<P,C> buildExporter();
+	public abstract Exporter<ExporterParameters<D>,C> buildExporter(ExportFormatType format);
 	
-	public ExtraFileSelectionPanel<P> getExtraPanel(ExportFormatType format) {
+	public ExtraFileSelectionPanel<D> getExtraPanel(ExportFormatType format) {
 		return null;
 	}
 	
-	public static <P extends ExporterParameters,T> void chooseFileAndExport(T data, ExportFormatType format, final Window ownerWindow,
-			final Exporter<P,T> exporter, ExtraFileSelectionPanel<P> extraPanel) {
+	public static <D,T> void chooseFileAndExport(T data, ExportFormatType format, final Window ownerWindow,
+			final Exporter<ExporterParameters<D>,T> exporter, ExtraFileSelectionPanel<D> extraPanel) {
 		JFileChooser chooser = new FileChooser();
 		chooser.setLocale(LocalizationData.getLocale());
 		chooser.setAcceptAllFileFilterUsed(false);
@@ -107,14 +110,15 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 				file = new File(file.getPath() + "." + format.getExtension());
 			}
 			if (extraPanel!=null) {
-				extraPanel.setExtraParameters(exporter.getParameters());
+				extraPanel.setFormatParameters(exporter.getParameters());
+				extraPanel.setDataParameters(exporter.getParameters());
 				extraPanel.saveState();
 			}
 			export(data, exporter, file, format, ownerWindow);
 		}
 	}
 	
-	private static <P extends ExporterParameters,T> void export(T data, Exporter<P,T> exporter, File file, ExportFormatType exportType, Window parent) {
+	private static <D,T> void export(T data, Exporter<ExporterParameters<D>,T> exporter, File file, ExportFormatType exportType, Window parent) {
 		try {
 			export(data, exporter, file, exportType);
 			JOptionPane.showMessageDialog(parent, LocalizationData.get("ExportDialog.done"), LocalizationData.get("ExportDialog.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
@@ -123,7 +127,7 @@ public abstract class ExportComponent<P extends ExporterParameters, C> extends J
 		}
 	}
 
-	public static <P extends ExporterParameters,T> void export(T data, Exporter<P,T> exporter, File file, ExportFormatType exportType) throws IOException {
+	public static <D,T> void export(T data, Exporter<ExporterParameters<D>,T> exporter, File file, ExportFormatType exportType) throws IOException {
 		file = FileUtils.getCanonical(file);
 		final ExportWriter formatter = exportType.getTableExporter(new FileOutputStream(file), exporter.getParameters());
 		try {
