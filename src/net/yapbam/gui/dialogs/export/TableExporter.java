@@ -9,7 +9,7 @@ import net.yapbam.export.Exporter;
 import net.yapbam.gui.util.FriendlyTable;
 import net.yapbam.gui.util.XTableColumnModel;
 
-public class TableExporter<T extends ExporterParameters> extends Exporter<T ,FriendlyTable> {
+public class TableExporter<T extends ExporterParameters<?>> extends Exporter<T ,FriendlyTable> {
 	private interface ValueGetter {
 		String get(int colIndex);
 	}

@@ -32,11 +32,14 @@ import net.yapbam.data.GlobalData;
 import net.yapbam.data.Mode;
 import net.yapbam.data.SubTransaction;
 import net.yapbam.data.Transaction;
+import net.yapbam.export.CsvExportParameters;
 import net.yapbam.export.ExportFormatType;
+import net.yapbam.export.FormatParams;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.export.DataExporter;
 import net.yapbam.gui.dialogs.export.DataExporterParameters;
 import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
 import net.yapbam.gui.dialogs.export.Importer;
 import net.yapbam.gui.dialogs.export.ImporterParameters;
 
@@ -46,13 +49,13 @@ public class ExportTest {
 		String description = "A description with \"special\" chars, like quote and ;";
 		DataExporterParameters parameters = new DataExporterParameters();
 		// Test that Export parameters are taken in account
-		parameters.setSeparator('\t');
-		File file = exportNewData(ExportFormatType.CSV, description, parameters);
+		char sep = '\t';
+		File file = exportNewData(new CsvExportParameters(sep), description, parameters);
 
 		GlobalData rdata = new GlobalData();
 		DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance();
 		char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
-		Importer importer = new Importer(file, new ImporterParameters(parameters.getSeparator(), decimalSeparator, DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()), parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
+		Importer importer = new Importer(file, new ImporterParameters(sep, decimalSeparator, DateFormat.getDateInstance(DateFormat.SHORT, LocalizationData.getLocale()), parameters.isInsertHeader()?1:0, parameters.getExportedIndexes()), rdata, null);
 		importer.importFile(rdata);
 		
 		assertEquals(1,rdata.getAccountsNumber());
@@ -62,8 +65,7 @@ public class ExportTest {
 		assertEquals(0, GlobalData.AMOUNT_COMPARATOR.compare(100.0, rdata.getAccount(0).getInitialBalance()));
 	}
 
-	private File exportNewData(ExportFormatType type, String description, DataExporterParameters parameters)
-			throws IOException {
+	private File exportNewData(FormatParams format, String description, DataExporterParameters dataParams) throws IOException {
 		GlobalData data = new GlobalData();
 		Account account = new Account("toto", 100.0);
 		data.add(account);
@@ -71,8 +73,12 @@ public class ExportTest {
 				Category.UNDEFINED,new Date(), null, Collections.<SubTransaction>emptyList());
 		data.add(t);
 		FilteredData fData = new FilteredData(data);
-		DataExporter exporter = new DataExporter(parameters);
+		final ExporterParameters<DataExporterParameters> params = new ExporterParameters<DataExporterParameters>(dataParams);
+		params.setFormatParams(format);
+		DataExporter exporter = new DataExporter(params);
+		final ExportFormatType type = format.getType();
 		File file = File.createTempFile("ExportTest", "."+type.getExtension());
+		file.deleteOnExit();
 		ExportComponent.export(fData, exporter, file, type);
 		return file;
 	}
@@ -80,7 +86,7 @@ public class ExportTest {
 	@Test
 	public void testHTML() throws IOException {
 		String description = "A description with html tags like </td> </tr> </table> &;";
-		File file = exportNewData(ExportFormatType.HTML, description, new DataExporterParameters());
+		File file = exportNewData(ExportFormatType.HTML.getDefaultFormatParameters(), description, new DataExporterParameters());
 
 		final Tidy tidy = new Tidy();
 		// Let's ignore the absence of title as its hard to set a valuable title to the document
@@ -111,7 +117,7 @@ public class ExportTest {
 	@Test
 	public void testJSON() throws IOException {
 		String description = "A description with json reserved chars like \", { or ] and accent like אחי";
-		File file = exportNewData(ExportFormatType.JSON, description, new DataExporterParameters());
+		File file = exportNewData(ExportFormatType.JSON.getDefaultFormatParameters(), description, new DataExporterParameters());
 
 		final ObjectMapper parser = new ObjectMapper();
 		@SuppressWarnings("unchecked")

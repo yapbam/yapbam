@@ -5,26 +5,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
-import lombok.AllArgsConstructor;
-
 public class HtmlFormatWriter implements ExportWriter {
-	@AllArgsConstructor
-	public static class HtmlExportParameters {
-		private URL css;
-		private HeaderAndFooterBuilder headAndFoot;
-		
-		public HtmlExportParameters() {
-			this(null, new HeaderAndFooterBuilder());
-		}
-	}
-	
 	public static class HeaderAndFooterBuilder {
 		public String getHeader() {
 			return null;
@@ -50,9 +37,9 @@ public class HtmlFormatWriter implements ExportWriter {
 		this.writer.append("<html>\n");
 		this.writer.append("<head>\n");
 		this.writer.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset="+StandardCharsets.UTF_8.name()+"\"/>");
-		if(exportParameters.css != null) {
+		if(exportParameters.getCss() != null) {
 			try {
-				this.writer.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + exportParameters.css.toURI() + "\"/>\n");
+				this.writer.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + exportParameters.getCss().toURI() + "\"/>\n");
 			} catch (URISyntaxException ex) {
 				throw new IOException(ex.getMessage());
 			}
@@ -61,7 +48,7 @@ public class HtmlFormatWriter implements ExportWriter {
 		}
 		this.writer.append("</head>\n");
 		this.writer.append("<body>\n");
-		final String header = exportParameters.headAndFoot.getHeader();
+		final String header = exportParameters.getHeadAndFoot().getHeader();
 		if (header!=null) {
 			this.writer.append(header);
 		}
@@ -87,7 +74,7 @@ public class HtmlFormatWriter implements ExportWriter {
 	@Override
 	public void addFooter() throws IOException {
 		this.writer.append("</table>");
-		final String footer = exportParameters.headAndFoot.getFooter();
+		final String footer = exportParameters.getHeadAndFoot().getFooter();
 		if (footer!=null) {
 			this.writer.append(footer);
 		}

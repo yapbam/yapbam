@@ -5,7 +5,7 @@ import java.io.IOException;
 import lombok.Getter;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 
-public abstract class Exporter<P extends ExporterParameters,C> {
+public abstract class Exporter<P extends ExporterParameters<?>,C> {
 	@Getter
 	private final P parameters;
 

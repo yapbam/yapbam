@@ -34,8 +34,7 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.dialog.FileChooser;
 import com.fathzer.soft.ajlib.utilities.StringUtils;
 
-import net.yapbam.export.ExportFormatType;
-import net.yapbam.export.HtmlFormatWriter;
+import net.yapbam.export.HtmlExportParameters;
 import net.yapbam.gui.HelpManager;
 import net.yapbam.gui.IconManager;
 import net.yapbam.gui.IconManager.Name;
@@ -335,7 +334,7 @@ public class ExportAccessoryPanel extends ExtraFileSelectionPanel<ExtraExportDat
 				}
 			}
 		}
-		params.setFormat(ExportFormatType.HTML, new HtmlFormatWriter.HtmlExportParameters(theUrl, new StatementHeaderAndFooterBuilder(params)));
+		params.setFormatParams(new HtmlExportParameters(theUrl, new StatementHeaderAndFooterBuilder(params)));
 	}
 	
 	@Override

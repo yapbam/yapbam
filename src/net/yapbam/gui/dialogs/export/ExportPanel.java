@@ -24,7 +24,9 @@ import javax.swing.table.TableColumnModel;
 
 import com.fathzer.soft.ajlib.utilities.NullUtils;
 
+import net.yapbam.export.CsvExportParameters;
 import net.yapbam.export.ExportFormatType;
+import net.yapbam.export.FormatParams;
 import net.yapbam.gui.LocalizationData;
 
 public class ExportPanel extends JPanel {
@@ -297,7 +299,7 @@ public class ExportPanel extends JPanel {
 		return separatorPanel;
 	}
 
-	public DataExporterParameters getExporterParameters() {
+	public ExporterParameters<DataExporterParameters> getExporterParameters() {
 		ExportTableModel model = (ExportTableModel) getJTable().getModel();
 		int[] viewToModel = new int[getJTable().getColumnCount()];
 		boolean[] selected = new boolean[viewToModel.length];
@@ -306,31 +308,44 @@ public class ExportPanel extends JPanel {
 			viewToModel[i] = modelColumn;
 			selected[modelColumn] = (Boolean) model.getValueAt(0, modelColumn);
 		}
-		return new DataExporterParameters(viewToModel, selected, title.isSelected(), separatorPanel.getSeparator(),
-				getIncludeInitialBalance().isSelected(), getIncludeFinalBalance().isSelected(), !all.isSelected(),
-				ExportFormatType.valueOf(exportFormats.getSelectedItem() + ""));
+		separatorPanel.getSeparator();
+		
+		final DataExporterParameters dataExporterParameters = new DataExporterParameters(viewToModel, selected, title.isSelected(), 
+				getIncludeInitialBalance().isSelected(), getIncludeFinalBalance().isSelected(), !all.isSelected());
+		ExportFormatType format = ExportFormatType.valueOf(exportFormats.getSelectedItem().toString());
+		FormatParams formatParams = format.getDefaultFormatParameters();
+		if (ExportFormatType.CSV.equals(format)) {
+			((CsvExportParameters)formatParams).setSeparator(separatorPanel.getSeparator());
+		}
+		final ExporterParameters<DataExporterParameters> result = new ExporterParameters<DataExporterParameters>(dataExporterParameters);
+		result.setFormatParams(formatParams);
+		return result;
 	}
 
-	public boolean setParameters(DataExporterParameters parameters) {
-		title.setSelected(parameters.isInsertHeader());
-		separatorPanel.setSeparator(parameters.getSeparator());
-		exportFormats.setSelectedItem(parameters.getExportFormat() == null //
-				? ExportFormatType.CSV
-				: parameters.getExportFormat() //
-		);
-		getIncludeInitialBalance().setSelected(parameters.isExportInitialBalance());
-		getIncludeFinalBalance().setSelected(parameters.isExportFinalBalance());
-		JRadioButton sel = parameters.isExportFilteredData() ? filtered : all;
+	public boolean setParameters(ExporterParameters<DataExporterParameters> parameters) {
+		FormatParams formatParams = parameters.getFormatParams();
+		if (formatParams==null) {
+			formatParams = ExportFormatType.CSV.getDefaultFormatParameters();
+		}
+		if (ExportFormatType.CSV.equals(formatParams.getType())) {
+			separatorPanel.setSeparator(((CsvExportParameters)formatParams).getSeparator());
+		}
+		exportFormats.setSelectedItem(formatParams.getType());
+		final DataExporterParameters extra = parameters.getDataExtension();
+		title.setSelected(extra.isInsertHeader());
+		getIncludeInitialBalance().setSelected(extra.isExportInitialBalance());
+		getIncludeFinalBalance().setSelected(extra.isExportFinalBalance());
+		JRadioButton sel = extra.isExportFilteredData() ? filtered : all;
 		group.setSelected(sel.getModel(), true);
-		boolean ok = jTable.getColumnCount() == parameters.getViewIndexesToModel().length;
+		boolean ok = jTable.getColumnCount() == extra.getViewIndexesToModel().length;
 		if (ok) {
 			for (int i = jTable.getColumnCount() - 1; i >= 0; i--) {
-				int modelIndex = parameters.getViewIndexesToModel()[i];
+				int modelIndex = extra.getViewIndexesToModel()[i];
 				jTable.moveColumn(jTable.convertColumnIndexToView(modelIndex), i);
 			}
 			ExportTableModel model = (ExportTableModel) jTable.getModel();
-			for (int i = 0; i < parameters.getSelectedModelColumns().length; i++) {
-				model.setValueAt(parameters.getSelectedModelColumns()[i], 0, i);
+			for (int i = 0; i < extra.getSelectedModelColumns().length; i++) {
+				model.setValueAt(extra.getSelectedModelColumns()[i], 0, i);
 			}
 		}
 		return ok;

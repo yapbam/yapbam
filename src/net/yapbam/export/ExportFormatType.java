@@ -3,8 +3,6 @@ package net.yapbam.export;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import net.yapbam.export.CsvFormatWriter.CsvExportParameters;
-import net.yapbam.export.HtmlFormatWriter.HtmlExportParameters;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 
 public enum ExportFormatType {
@@ -38,5 +36,18 @@ public enum ExportFormatType {
 		} else {
 			throw new IllegalStateException(); // Ouch we forgot a format !
 		}
+	}
+	
+	public FormatParams getDefaultFormatParameters() {
+		if (ExportFormatType.CSV.equals(this)) {
+			return new CsvExportParameters();
+		} else if (ExportFormatType.HTML.equals(this)) {
+			return new HtmlExportParameters();
+		} else if(ExportFormatType.JSON.equals(this)) {
+			return new JsonExportParameters();
+		} else {
+			throw new IllegalStateException(); // Ouch we forgot a format !
+		}
+		
 	}
 }

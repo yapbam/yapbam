@@ -6,7 +6,6 @@ import net.yapbam.data.FilteredData;
 import net.yapbam.gui.AbstractPlugIn;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.YapbamState;
-import net.yapbam.gui.budget.BudgetViewPanel;
 
 public class BudgetPlugin extends AbstractPlugIn {
 	private final static String STATE_PREFIX = "BudgetView"; //$NON-NLS-1$

@@ -33,10 +33,12 @@ import net.yapbam.data.Category;
 import net.yapbam.data.Filter;
 import net.yapbam.data.FilteredData;
 import net.yapbam.data.GlobalData;
+import net.yapbam.export.CsvExportParameters;
 import net.yapbam.export.ExportFormatType;
 import net.yapbam.export.Exporter;
 import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.dialogs.export.ExportComponent;
+import net.yapbam.gui.dialogs.export.ExporterParameters;
 
 import javax.swing.JCheckBox;
 
@@ -44,7 +46,7 @@ import com.fathzer.soft.ajlib.swing.Utils;
 import com.fathzer.soft.ajlib.swing.table.RowHeaderRenderer;
 import com.fathzer.soft.ajlib.swing.table.Table;
 
-public class BudgetViewPanel extends JPanel {
+class BudgetViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPanel topPanel = null;
 	private JRadioButton month = null;
@@ -63,11 +65,11 @@ public class BudgetViewPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public BudgetViewPanel() {
+	BudgetViewPanel() {
 		this(new FilteredData(new GlobalData()));
 	}
 
-	public BudgetViewPanel(FilteredData data) {
+	BudgetViewPanel(FilteredData data) {
 		this.budget = new BudgetView(data, false);
 		this.data = data;
 		initialize();
@@ -214,14 +216,18 @@ public class BudgetViewPanel extends JPanel {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton getExport() {
-		ExportComponent<BudgetExporterParameters, BudgetView> c = new ExportComponent<BudgetExporterParameters, BudgetView>() {
+		ExportComponent<BudgetExporterExtraData, BudgetView> c = new ExportComponent<BudgetExporterExtraData, BudgetView>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Exporter<BudgetExporterParameters, BudgetView> buildExporter(ExportFormatType format) {
+			public Exporter<ExporterParameters<BudgetExporterExtraData>, BudgetView> buildExporter(ExportFormatType format) {
 				String sumColumnName = getChckbxAddSumColumn().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
 				String sumLineName = getChckbxAddSumLine().isSelected()?LocalizationData.get("BudgetPanel.sum"):null; //$NON-NLS-1$
-				return new BudgetExporter(new BudgetExporterParameters(sumLineName, sumColumnName));
+				ExporterParameters<BudgetExporterExtraData> parameters = new ExporterParameters<BudgetExporterExtraData>(new BudgetExporterExtraData(sumLineName, sumColumnName));
+				if (ExportFormatType.CSV.equals(parameters.getFormatParams().getType())) {
+					((CsvExportParameters)parameters.getFormatParams()).setSeparator('\t');
+				}
+				return new BudgetExporter(parameters);
 			}
 		};
 		c.setContent(budget);

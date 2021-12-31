@@ -11,19 +11,20 @@ import net.yapbam.data.Transaction;
 import net.yapbam.export.Exporter;
 import net.yapbam.export.ExportWriter;
 
-public class DataExporter extends Exporter<DataExporterParameters, FilteredData> {
-	public DataExporter(DataExporterParameters parameters) {
+public class DataExporter extends Exporter<ExporterParameters<DataExporterParameters>, FilteredData> {
+	public DataExporter(ExporterParameters<DataExporterParameters> parameters) {
 		super(parameters);
 	}
 
 	@Override
 	public void export(FilteredData data, ExportWriter format) throws IOException {
-		int[] fields = getParameters().getExportedIndexes();
-		Iterator<Transaction> transactions = getParameters().isExportFilteredData() ? new FilteredTransactions(data)
+		final DataExporterParameters extra = getParameters().getDataExtension();
+		int[] fields = extra.getExportedIndexes();
+		Iterator<Transaction> transactions = extra.isExportFilteredData() ? new FilteredTransactions(data)
 				: new GlobalTransactions(data);
 
 		format.addHeader();
-		if (getParameters().isInsertHeader()) {
+		if (extra.isInsertHeader()) {
 			// insert the header line
 			format.addLineStart();
 			for (int i = 0; i < fields.length; i++) {
@@ -31,12 +32,12 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 			}
 			format.addLineEnd();
 		}
-		if (getParameters().isExportInitialBalance()) {
+		if (extra.isExportInitialBalance()) {
 			// Export accounts initial balance
 			for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
 				format.addLineStart();
 				Account account = data.getGlobalData().getAccount(i);
-				if (data.getFilter().isOk(account) || !getParameters().isExportFilteredData()) {
+				if (data.getFilter().isOk(account) || !extra.isExportFilteredData()) {
 					for (int j = 0; j < fields.length; j++) {
 						format.addValue(getParameters().format(getField(account, fields[j])));
 					}
@@ -60,12 +61,12 @@ public class DataExporter extends Exporter<DataExporterParameters, FilteredData>
 				format.addLineEnd();
 			}
 		}
-		if (getParameters().isExportFinalBalance()) {
+		if (extra.isExportFinalBalance()) {
 			// Export accounts final balance
 			for (int i = 0; i < data.getGlobalData().getAccountsNumber(); i++) {
 				format.addLineStart();
 				Account account = data.getGlobalData().getAccount(i);
-				if (data.getFilter().isOk(account) || !getParameters().isExportFilteredData()) {
+				if (data.getFilter().isOk(account) || !extra.isExportFilteredData()) {
 					for (int j = 0; j < fields.length; j++) {
 						format.addValue(getParameters().format(getField(account, fields[j], true)));
 					}

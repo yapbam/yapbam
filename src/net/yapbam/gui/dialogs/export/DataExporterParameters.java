@@ -2,11 +2,10 @@ package net.yapbam.gui.dialogs.export;
 
 import java.io.Serializable;
 
-import net.yapbam.export.ExportFormatType;
 import net.yapbam.util.ArrayUtils;
 
-public class DataExporterParameters extends ExporterParameters implements Serializable {
-	private static final long serialVersionUID = 2L;
+public class DataExporterParameters implements Serializable {
+	private static final long serialVersionUID = 3L;
 	// WARNING. If we change the attribute list or their names and forget to change the serial uid,
 	// we could have an inconsistent parameter instance that could cause crashes.
 	// Changing serialVersionUID would just lead to ignore saved configuration. 
@@ -21,13 +20,11 @@ public class DataExporterParameters extends ExporterParameters implements Serial
 
 	public DataExporterParameters() {
 		this(ArrayUtils.buildIntArray(ExportTableModel.COLUMNS.length, 0, 1),
-				ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true), true, ';', true, true, true,
-				ExportFormatType.CSV);
+				ArrayUtils.buildBooleanArray(ExportTableModel.COLUMNS.length, true), true, true, true, true);
 	}
 	
 	public DataExporterParameters(int[] viewindexesToModel, boolean[] selectedModelColumns, boolean insertHeader,
-			char separator, boolean exportInitialBalance, boolean exportFinalBalance, boolean exportFilteredData, ExportFormatType exportFormat) {
-		super(separator, exportFormat);
+			boolean exportInitialBalance, boolean exportFinalBalance, boolean exportFilteredData) {
 		this.viewIndexesToModel = viewindexesToModel;
 		this.selectedModelColumns = selectedModelColumns;
 		this.insertHeader = insertHeader;
