@@ -7,8 +7,9 @@ known
 
 version	0.21.3 (02/??/2023)
 fix
-	Creating a new Dropbox connection did not work anymore (Dropbox has stop delivering long-lived tokens).
-	Reading through network was very, very slow
+	Creating a new Dropbox connection did not work anymore (Dropbox has stop delivering long-lived tokens used before).
+	Reading through network was very, very slow.
+	When changing the date in the dialog for generating periodic operations, an error could occur.
 
 version	0.21.2 (12/04/2021)
 improvement
