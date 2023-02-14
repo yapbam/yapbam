@@ -5,12 +5,13 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
-version	0.21.3 (13/02/2023)
+version	0.21.3 (14/02/2023)
 fix
 	La création d'une nouvelle connexion à Dropbox ne fonctionnait plus (Dropbox a cessé de fournir des jetons de connexion éternels utilisés jusqu'alors).
 	La lecture des données sur un disque réseau était extrêmement lente.
 	Lorsqu'on changeait la date dans le dialogue de génération des opérations périodiques, une erreur pouvait survenir.
 	L'application plantait au démarrage lorsqu'elle était configurée en arabe.
+	Les versions 0.21.0 à 0.21.2 n'étaient plus compatibles avec java 1.6 et 1.7, sans que ce soit intentionnel. 
 
 version	0.21.2 (04/12/2021)
 improvement
