@@ -3,6 +3,7 @@ package net.yapbam.gui.dialogs.periodicaltransaction;
 import java.awt.Dimension;
 
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -35,11 +36,18 @@ public class GeneratedTransactionsTable extends JTable implements PaintedTable {
 			}
 		};
 		LinkEnabler.enable(this, GenerateTableModel.DESCRIPTION_INDEX);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		this.setAutoResizeMode(AUTO_RESIZE_OFF);
 		model.addTableModelListener(new TableModelListener() {
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				Utils.packColumns(GeneratedTransactionsTable.this, 2);
+				// We use a invokeLater because table internal (typically its row sorter) is refreshed after this method is called
+				// Calling directly packColums resulted in exceptions when rows were removed 
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						Utils.packColumns(GeneratedTransactionsTable.this, 2);
+					}
+				});
 			}
 		});
 	}

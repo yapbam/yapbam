@@ -12,7 +12,7 @@
   </fileSets>
   <files>
       <file><source>${basedir}/help.html</source></file>
-      <file><source>${basedir}/yapbam.sh</source><fileMode>0755</fileMode></file>
+      <file><source>${basedir}/yapbam.sh</source><fileMode>0755</fileMode><lineEnding>unix</lineEnding></file>
       <file><source>${basedir}/Yapbam.exe</source></file>
       <file>
           <source>${project.build.directory}/program.jar</source>

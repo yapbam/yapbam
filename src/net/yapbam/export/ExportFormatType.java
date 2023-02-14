@@ -1,7 +1,7 @@
 package net.yapbam.export;
 
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 
@@ -30,9 +30,9 @@ public enum ExportFormatType {
 		if (ExportFormatType.CSV.equals(this)) {
 			return new CsvFormatWriter(stream, params.getSeparator(), params.getPreferredEncoding());
 		} else if (ExportFormatType.HTML.equals(this)) {
-			return new HtmlFormatWriter(stream, StandardCharsets.UTF_8);
+			return new HtmlFormatWriter(stream, Charset.forName("UTF-8"));
 		} else if(ExportFormatType.JSON.equals(this)) {
-			return new JsonFormatWriter(stream, StandardCharsets.UTF_8);
+			return new JsonFormatWriter(stream);
 		} else {
 			throw new IllegalStateException(); // Ouch we forgot a format !
 		}

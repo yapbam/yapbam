@@ -1,10 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.21.2</version>
+	<version>0.21.3</version>
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<mainClass>net.yapbam.gui.Launcher</mainClass>
@@ -60,21 +58,21 @@
 		<testSourceDirectory>testSrc</testSourceDirectory>
 		<plugins>
 			<plugin>
-			    <groupId>org.codehaus.mojo</groupId>
-			    <artifactId>buildnumber-maven-plugin</artifactId>
-			    <version>1.2</version>
-			    <executions>
-			        <execution>
-			            <phase>validate</phase>
-			            <goals>
-			                <goal>create-timestamp</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			    <configuration>
-			        <timestampFormat>dd/MM/yyyy</timestampFormat>
-			        <timestampPropertyName>build.date</timestampPropertyName>
-			    </configuration>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create-timestamp</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<timestampFormat>dd/MM/yyyy</timestampFormat>
+					<timestampPropertyName>build.date</timestampPropertyName>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -91,6 +89,57 @@
 				<configuration>
 					<encoding>ISO-8859-1</encoding>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>animal-sniffer-maven-plugin</artifactId>
+				<version>1.22</version>
+				<configuration>
+					<signature>
+						<groupId>org.codehaus.mojo.signature</groupId>
+						<artifactId>java16</artifactId>
+						<version>1.0</version>
+					</signature>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<id>enforce-bytecode-version</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<enforceBytecodeVersion>
+									<maxJdkVersion>1.6</maxJdkVersion>
+									<ignoredScopes>
+										<ignoreScope>test</ignoreScope>
+									</ignoredScopes>
+								</enforceBytecodeVersion>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>extra-enforcer-rules</artifactId>
+						<version>1.6.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -162,8 +211,7 @@
 								</filter-->
 							</filters>
 							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
 										<Main-Class>${mainClass}</Main-Class>
 										<SplashScreen-Image>net/yapbam/gui/images/splash.png</SplashScreen-Image>
@@ -203,24 +251,24 @@
 				</configuration>
 			</plugin-->
 			<plugin>
-			  <artifactId>maven-assembly-plugin</artifactId>
-			  <version>2.5.4</version>
-			  <configuration>
-			    <descriptors>
-			      <descriptor>assembly.xml</descriptor>
-			    </descriptors>
-			  	<appendAssemblyId>false</appendAssemblyId>
- 				<outputDirectory>${basedir}</outputDirectory>
-			  </configuration>
-			  <executions>
-			    <execution>
-			      <id>make-assembly</id> <!-- this is used for inheritance merges -->
-			      <phase>package</phase> <!-- append to the packaging phase. -->
-			      <goals>
-			        <goal>single</goal> <!-- goals == mojos -->
-			      </goals>
-			    </execution>
-			  </executions>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.4</version>
+				<configuration>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+					<appendAssemblyId>false</appendAssemblyId>
+					<outputDirectory>${basedir}</outputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- append to the packaging phase. -->
+						<goals>
+							<goal>single</goal> <!-- goals == mojos -->
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-install-plugin</artifactId>
@@ -242,7 +290,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>ajlib</artifactId>
-			<version>0.3.13</version>
+			<version>0.3.14</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
@@ -252,7 +300,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
-			<version>1.9.0</version>
+			<version>1.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -270,11 +318,6 @@
 			<version>1.10</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-text</artifactId>
-			<version>1.9</version>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.12</version>
@@ -287,13 +330,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
-			<artifactId>jclop2</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fathzer</groupId>
 			<artifactId>jclop-dropbox2</artifactId>
-			<version>0.1.4</version>
+			<version>0.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
