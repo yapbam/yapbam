@@ -5,11 +5,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
+import net.yapbam.util.HtmlUtils;
 
 public class HtmlFormatWriter implements ExportWriter {
 	public static class HeaderAndFooterBuilder {
@@ -27,7 +28,7 @@ public class HtmlFormatWriter implements ExportWriter {
 
 	public HtmlFormatWriter(OutputStream stream, HtmlExportParameters parameters) {
 		this.tableRowIndex = new AtomicInteger(0);
-		this.writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
+		this.writer = new OutputStreamWriter(stream, Charset.forName("UTF-8"));
 		this.exportParameters = parameters;
 	}
 
@@ -68,7 +69,7 @@ public class HtmlFormatWriter implements ExportWriter {
 	@Override
 	public void addValue(String value, String... styles) throws IOException {
 		final String classes = (styles!=null && styles.length > 0) ? String.format(" class=\"%s\"", StringUtils.join(styles, ';')) : "";
-		this.writer.append(String.format("<td%s>%s</td>", classes, StringEscapeUtils.escapeHtml4(value)));
+		this.writer.append(String.format("<td%s>%s</td>", classes, HtmlUtils.escape(value)));
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 package net.yapbam.export;
 
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 
@@ -32,7 +31,7 @@ public enum ExportFormatType {
 		} else if (ExportFormatType.HTML.equals(this)) {
 			return new HtmlFormatWriter(stream, (HtmlExportParameters) params.getFormatParams());
 		} else if(ExportFormatType.JSON.equals(this)) {
-			return new JsonFormatWriter(stream, StandardCharsets.UTF_8);
+			return new JsonFormatWriter(stream);
 		} else {
 			throw new IllegalStateException(); // Ouch we forgot a format !
 		}
