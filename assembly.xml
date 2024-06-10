@@ -1,17 +1,18 @@
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+<assembly xmlns="https://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 https://maven.apache.org/xsd/assembly-1.1.0.xsd">
   <id>make-assembly</id>
   <baseDirectory>/</baseDirectory>
   <formats>
     <format>zip</format>
   </formats>
+  <!-- Other directory contains outdated files
   <fileSets>
     <fileSet>
       <directory>${basedir}/Other</directory>
     </fileSet>
   </fileSets>
+   -->
   <files>
-      <file><source>${basedir}/help.html</source></file>
       <file><source>${basedir}/yapbam.sh</source><fileMode>0755</fileMode><lineEnding>unix</lineEnding></file>
       <file><source>${basedir}/Yapbam.exe</source></file>
       <file>

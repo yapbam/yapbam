@@ -4,6 +4,16 @@ known
 	When selecting a shortcut to a folder in the drop down menu of a file selection dialog, under java 1.6, Yapbam hangs.<br/>In fact, this is not a Yapbam bug, but a <a href="https://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">java1.6 bug</a>. The best way to fix the problem is use java 1.7.
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
+	
+version	0.21.4 (06/??/2024)
+improvement
+	<b>WARNING: This release requires Java 1.8 or more.</b>
+fix
+	The "?/Help" menu is removed. It was opening a test page.
+	Fixes the support address in the "?/Get support" menu.
+	The Windows application (Yapbam.exe) did not start with Java versions greater than 1.8 (it said it required Java version 1.6+).
+	The decoding of amounts in certain languages ​​(French for example) did not work correctly with Java 17+.
+	Shortcut files in Windows 11 were not properly handled.
 
 version	0.21.3 (02/14/2023)
 fix
@@ -236,7 +246,7 @@ fix
 improvement
 	Adds ability to hide the intermediate balances in the "Operations" table of the "History of the balance" tab.
 
-version 0.17.8 (01/04/2015)
+version	0.17.8 (01/04/2015)
 fix
 	When selecting a predefined label in the sub-transaction creation dialog, the receipt box was systematically checked.
 	When entering transactions in bulk mode, for an operation other than the first, when we chose a predefined label involving the use of a checkbook, check number was not filled.

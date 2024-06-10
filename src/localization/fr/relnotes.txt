@@ -1,10 +1,19 @@
 Version en cours de développement	Bug connu :	Bugs connus :	Changement :	Changements :	Correction de bug :	Corrections de bugs :
 version	next
 known
-	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="https://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.21.4 (??/06/2024)
+improvement
+	<b>ATTENTION : Cette version requiert Java 1.8 ou ultérieur.</b>
+fix
+	Suppression du menu "?/Aide" qui ouvrait une page de test.
+	Correction de l'adresse du support dans le menu "?/Support".
+	L'application Windows (Yapbam.exe) ne démarrait pas avec les versions de Java supérieures à 1.8 (elle disait nécessiter une version 1.6+ de Java).
+	Le décodage des montants dans certaines langues (en français par example), ne fonctionnait pas correctement avec Java 17+.
+	Les fichiers raccourcis dans Windows 11 n'étaient pas correctement gérés.
+
 version	0.21.3 (14/02/2023)
 fix
 	La création d'une nouvelle connexion à Dropbox ne fonctionnait plus (Dropbox a cessé de fournir des jetons de connexion éternels utilisés jusqu'alors).
