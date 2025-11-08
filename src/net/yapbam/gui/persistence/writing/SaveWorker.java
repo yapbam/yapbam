@@ -1,5 +1,7 @@
 package net.yapbam.gui.persistence.writing;
 
+import static net.yapbam.gui.persistence.writing.WriterResult.State.*;
+
 import java.io.File;
 import java.net.URI;
 
@@ -13,7 +15,6 @@ import net.yapbam.gui.LocalizationData;
 import net.yapbam.gui.persistence.CancelManager;
 import net.yapbam.gui.persistence.DataWrapper;
 import net.yapbam.gui.persistence.PersistenceManager;
-import net.yapbam.gui.persistence.writing.WriterResult.State;
 
 class SaveWorker extends Worker<WriterResult, Void> implements Cancellable {
 		private PersistenceManager manager;
@@ -49,14 +50,14 @@ class SaveWorker extends Worker<WriterResult, Void> implements Cancellable {
 				}
 			}
 			if (service.isLocal()) {
-				return new WriterResult(State.FINISHED, SynchronizationState.SYNCHRONIZED, null);
+				return new WriterResult(FINISHED, SynchronizationState.SYNCHRONIZED, null);
 			} else {
 				try {
 					setPhase(LocalizationData.get("synchronization.synchronizing"), -1); //$NON-NLS-1$
 					SynchronizationState state = service.synchronize(uri, this, LocalizationData.getLocale());
-					return new WriterResult(State.FINISHED, state, null);
+					return new WriterResult(FINISHED, state, null);
 				} catch (Exception e) {
-					return new WriterResult(State.EXCEPTION_WHILE_SYNC, null, e);
+					return new WriterResult(EXCEPTION_WHILE_SYNC, null, e);
 				}
 			}
 		}

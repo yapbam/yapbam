@@ -1,5 +1,7 @@
 package net.yapbam.gui.persistence.reading;
 
+import static net.yapbam.gui.persistence.reading.State.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
@@ -46,7 +48,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 			// There's no local java.io.File as the data is loaded from a classpath resource.
 			// So, we have to make this ugly patch 
 			this.data = YapbamSerializer.read(uri, null, null);
-			return new ReaderResult(State.FINISHED, SynchronizationState.SYNCHRONIZED);
+			return new ReaderResult(FINISHED, SynchronizationState.SYNCHRONIZED);
 		}
 		SynchronizationState syncState;
 		if (!command.equals(SynchronizeCommand.NOTHING)) {
@@ -69,7 +71,7 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 			} catch (FileNotFoundException e) {
 				throw e;
 			} catch (Exception e) {
-				return new ReaderResult(State.EXCEPTION_WHILE_SYNC, null, e); 
+				return new ReaderResult(EXCEPTION_WHILE_SYNC, null, e); 
 			}
 			if (this.isCancelled()) {
 				return null;
@@ -83,14 +85,14 @@ class SyncAndReadWorker extends Worker<ReaderResult, Void> implements Cancellabl
 			boolean passwordRequired = dataAdapter.needPassword(localURI);
 			// Retrieving the file password
 			if (passwordRequired) {
-				return new ReaderResult(State.NEED_PASSWORD, syncState);
+				return new ReaderResult(NEED_PASSWORD, syncState);
 			} else {
 				setPhase(MessageFormat.format(LocalizationData.get("Generic.wait.readingFrom"), service.getDisplayable(uri)),-1); //$NON-NLS-1$
 				this.data = dataAdapter.deserialize(localURI, null, service, this);
-				return new ReaderResult(State.FINISHED, syncState);
+				return new ReaderResult(FINISHED, syncState);
 			}
 		} else {
-			return new ReaderResult(State.REQUEST_USER, syncState);
+			return new ReaderResult(REQUEST_USER, syncState);
 		}
 	}
 
