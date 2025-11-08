@@ -36,7 +36,7 @@ public class AboutPanel extends AbstractTitledPanel<Void> {
 	 * This is the default constructor
 	 */
 	public AboutPanel() {
-		super(Formatter.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", ApplicationContext.getVersion(), "2024"), UIManager.getIcon("OptionPane.informationIcon"), null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		super(Formatter.format(LocalizationData.get("AboutDialog.Content"), "Jean-Marc Astesana (Fathzer)", ApplicationContext.getVersion(), "2025"), UIManager.getIcon("OptionPane.informationIcon"), null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	/**

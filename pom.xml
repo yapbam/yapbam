@@ -225,7 +225,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>java-check-launcher</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
