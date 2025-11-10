@@ -16,7 +16,7 @@ public class JsonFormatWriterTest {
 		final JsonFormatWriter writer = new JsonFormatWriter(out);
 		writer.addValue("a string with a \" and 	tab");
 		writer.close();
-		assertEquals("\"a string with a \\\" and \\ttab\"",out.toString(StandardCharsets.UTF_8));
+		assertEquals("\"a string with a \\\" and \\ttab\"",out.toString(StandardCharsets.UTF_8.name()));
 	}
 
 }

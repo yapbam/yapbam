@@ -116,7 +116,7 @@ public class ExportTest {
 	
 	@Test
 	public void testJSON() throws IOException {
-		String description = "A description with json reserved chars like \", { or ] and accent like àçé";
+		String description = "A description with json reserved chars like \", { or ] and accent like ï¿½ï¿½ï¿½";
 		File file = exportNewData(ExportFormatType.JSON.getDefaultFormatParameters(), description, new DataExporterParameters());
 
 		final ObjectMapper parser = new ObjectMapper();
