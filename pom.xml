@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.21.4</version>
+	<version>0.21.5</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mainClass>com.fathzer.launcher.Launcher</mainClass>
@@ -271,7 +271,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>jclop-dropbox2</artifactId>
-			<version>0.1.7</version>
+			<version>0.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
