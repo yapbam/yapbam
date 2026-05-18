@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
@@ -230,7 +230,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>ajlib</artifactId>
-			<version>0.3.16</version>
+			<version>0.3.18</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
@@ -240,7 +240,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
-			<version>1.9.1</version>
+			<version>1.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -272,11 +272,6 @@
 			<groupId>com.fathzer</groupId>
 			<artifactId>jclop-dropbox2</artifactId>
 			<version>0.1.8</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

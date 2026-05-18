@@ -25,20 +25,20 @@ import javax.swing.SwingConstants;
 
 import com.fathzer.jlocal.Formatter;
 
-public class DialogButtons extends JPanel {
+public class SourceSelectionButtons extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final String SOURCE_PROPERTY = "CurrencySource"; //$NON-NLS-1$
 
 	private JLabel lblMessage;
-	private JRadioButton rdbtnYahoo;
 	private JRadioButton rdbtnECB;
+	private JRadioButton rdbtnFrankfurter;
 	private JPanel panel;
 	private Source source;
 
 	/**
 	 * Create the panel.
 	 */
-	public DialogButtons(Source source) {
+	public SourceSelectionButtons(Source source) {
 		this.source = source;
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -61,19 +61,32 @@ public class DialogButtons extends JPanel {
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(getRdbtnECB());
-		group.add(getRdbtnYahoo());
-		ItemListener listener = new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				Source old = DialogButtons.this.source;
-				DialogButtons.this.source = getRdbtnECB().isSelected() ? Source.ECB : Source.YAHOO;
-				if (!old.equals(DialogButtons.this.source)) {
-					firePropertyChange(SOURCE_PROPERTY, old, DialogButtons.this.source);
+		group.add(getRdbtnFrankfurter());
+		
+		ItemListener listener = e -> {
+				Source old = SourceSelectionButtons.this.source;
+				SourceSelectionButtons.this.source = getSource(e);
+				if (!old.equals(SourceSelectionButtons.this.source)) {
+					firePropertyChange(SOURCE_PROPERTY, old, SourceSelectionButtons.this.source);
 				}
-			}
-		};
+			};
 		getRdbtnECB().addItemListener(listener);
-		getRdbtnYahoo().addItemListener(listener);
+		getRdbtnFrankfurter().addItemListener(listener);
+	}
+
+	private Source getSource(ItemEvent e) {
+		if (e.getSource() == getRdbtnECB()) {
+			return Source.ECB;
+		} else if (e.getSource() == getRdbtnFrankfurter()) {
+			return Source.FRANKFURTER;
+		}
+		return source;
+	}
+
+	void setSource(Source source) {
+		this.source = source;
+		getRdbtnECB().setSelected(Source.ECB.equals(source));
+		getRdbtnFrankfurter().setSelected(Source.FRANKFURTER.equals(source));
 	}
 
 	private JLabel getLblMessage() {
@@ -84,20 +97,19 @@ public class DialogButtons extends JPanel {
 		}
 		return lblMessage;
 	}
-	private JRadioButton getRdbtnYahoo() {
-		if (rdbtnYahoo == null) {
-			rdbtnYahoo = new JRadioButton(Messages.getString("YAHOO.name")); //$NON-NLS-1$
-			rdbtnYahoo.setSelected(Source.YAHOO.equals(source));
-			rdbtnYahoo.setVisible(false);
-		}
-		return rdbtnYahoo;
-	}
 	private JRadioButton getRdbtnECB() {
 		if (rdbtnECB == null) {
-			rdbtnECB = new JRadioButton(Messages.getString("ECB.name")); //$NON-NLS-1$
+			rdbtnECB = new JRadioButton(Messages.getString("ECB.name")); //-NLS-1$
 			rdbtnECB.setSelected(Source.ECB.equals(source));
 		}
 		return rdbtnECB;
+	}
+	private JRadioButton getRdbtnFrankfurter() {
+		if (rdbtnFrankfurter == null) {
+			rdbtnFrankfurter = new JRadioButton(Messages.getString("FRANKFURTER.name")); //-NLS-1$
+			rdbtnFrankfurter.setSelected(Source.FRANKFURTER.equals(source));
+		}
+		return rdbtnFrankfurter;
 	}
 	private JPanel getPanel() {
 		if (panel == null) {
@@ -105,7 +117,7 @@ public class DialogButtons extends JPanel {
 			panel.setBorder(BorderFactory.createTitledBorder(Messages.getString("CurrencyConverterPanel.source"))); //$NON-NLS-1$
 			panel.setLayout(new BorderLayout(5, 0));
 			panel.add(getRdbtnECB(), BorderLayout.WEST);
-			panel.add(getRdbtnYahoo(), BorderLayout.EAST);
+			panel.add(getRdbtnFrankfurter(), BorderLayout.EAST);
 		}
 		return panel;
 	}
@@ -121,5 +133,12 @@ public class DialogButtons extends JPanel {
 		if (!converter.isSynchronized()) {
 			getLblMessage().setIcon(IconManager.get(Name.ALERT));
 		}
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		getRdbtnECB().setEnabled(enabled);
+		getRdbtnFrankfurter().setEnabled(enabled);
 	}
 }
