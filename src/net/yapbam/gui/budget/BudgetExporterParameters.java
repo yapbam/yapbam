@@ -1,9 +1,7 @@
 package net.yapbam.gui.budget;
 
-import lombok.Getter;
 import net.yapbam.gui.dialogs.export.ExporterParameters;
 
-@Getter
 public class BudgetExporterParameters extends ExporterParameters {
 	private String dateSumWording;
 	private String categorySumWording;
@@ -12,5 +10,13 @@ public class BudgetExporterParameters extends ExporterParameters {
 		this.dateSumWording = dateSumWording;
 		this.categorySumWording = categorySumWording;
 		super.setSeparator('\t');
+	}
+
+	public String getDateSumWording() {
+		return dateSumWording;
+	}
+
+	public String getCategorySumWording() {
+		return categorySumWording;
 	}
 }

@@ -37,7 +37,7 @@ import java.awt.Insets;
 public class LocalizationPanel extends PreferencePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Locale[] LANGUAGES = new Locale[]{new Locale("ar"), Locale.GERMAN, Locale.ENGLISH, new Locale("es"), Locale.FRENCH, new Locale("el"), new Locale("it"), new Locale("nl"), new Locale("pt"), new Locale("tr"), Locale.TRADITIONAL_CHINESE, new Locale("pl"), new Locale("ru"), new Locale("hu"), new Locale("ja")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","","","","","","","&#23616;&#37096;","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","részleges","&#x90E8;&#x5206;&#x7684;&#x306A;"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
+	private static final String[] LANGUAGES_ADDITIONNAL_WORDING = new String[]{"","","","","","","","","","","&#23616;&#37096;","cz&#281;&#347;ciowy","&#1095;&#1072;&#1089;&#1090;&#1080;&#1095;&#1085;&#1099;&#1081;","rÃ©szleges","&#x90E8;&#x5206;&#x7684;&#x306A;"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 	private JPanel countryPanel = null;
 	private JPanel languagePanel = null;
 	private JRadioButton defaultCButton = null;

@@ -1,10 +1,31 @@
 Version en cours de développement	Bug connu :	Bugs connus :	Changement :	Changements :	Correction de bug :	Corrections de bugs :
 version	next
 known
-	Yapbam, lorsqu'il est exécuté par Java 1.6, plante quand on sélectionne un raccourci vers un dossier dans le menu déroulant d'un dialogue de sélection de fichier.<br/>En fait, ce n'est pas un bug de Yapbam, mais un <a href="https://bugs.sun.com/bugdatabase/view_bug.do;jsessionid=518b010bce71d8547e0dfeee596a?bug_id=6550546">bug de java 1.6</a>. La meilleure façon de régler le problème est d'utiliser Java 1.7.
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
+version	0.21.5 (06/01/2026)
+fix
+	Corrige le bug qui empêchait, depuis le 01/01/2026, et avec les versions jusqu'à 0.21.4, la synchronisation des données avec Dropbox (Dropbox a changé ses certificats https, lesquels ne sont plus compatibles avec l'ancienne version de leur kit de développement utilisée jusqu'alors).
+
+version	0.21.4 (08/11/2025)
+improvement
+	<b>ATTENTION : Cette version requiert Java 1.8 ou ultérieur.</b>
+fix
+	Suppression du menu "?/Aide" qui ouvrait une page de test.
+	Correction de l'adresse du support dans le menu "?/Support".
+	L'application Windows (Yapbam.exe) ne démarrait pas avec certaines versions de Java supérieures à 1.8 (elle disait nécessiter une version 1.6+ de Java).
+	Le décodage des montants dans certaines langues (en français par exemple), ne fonctionnait pas correctement avec Java 17+.
+	Les fichiers raccourcis dans Windows 11 n'étaient pas correctement gérés.
+
+version	0.21.3 (14/02/2023)
+fix
+	La création d'une nouvelle connexion à Dropbox ne fonctionnait plus (Dropbox a cessé de fournir des jetons de connexion éternels utilisés jusqu'alors).
+	La lecture des données sur un disque réseau était extrêmement lente.
+	Lorsqu'on changeait la date dans le dialogue de génération des opérations périodiques, une erreur pouvait survenir.
+	L'application plantait au démarrage lorsqu'elle était configurée en arabe.
+	Les versions 0.21.0 à 0.21.2 n'étaient plus compatibles avec java 1.6 et 1.7, sans que ce soit intentionnel. 
+
 version	0.21.2 (04/12/2021)
 improvement
 	Traduction en italien des pages d'aide ainsi que de la license et de la page des contributeurs.
@@ -13,7 +34,7 @@ fix
 
 version	0.21.1 (28/11/2021)
 fix
-	La version précédente se plantait quand elle était configuré dans une autre langue que français ou italien.
+	La version précédente se plantait quand elle était configurée dans une autre langue que français ou italien.
 
 version	0.21.0 (26/11/2021)
 improvement

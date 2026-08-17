@@ -134,6 +134,7 @@ public class DataReader {
 	}
 
 	private boolean doSyncFailed(Throwable throwable) throws ExecutionException {
+		//TODO When connection data is wrong, we should inform the user, and, maybe allow him to connect again to its account
 		boolean internetIsDown = throwable instanceof UnreachableHostException;
 		if (!adapter.getLocalFile(uri).exists()) {
 			String message = LocalizationData.get("synchronization.downloadFailed"); //$NON-NLS-1$

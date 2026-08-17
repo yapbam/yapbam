@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
-import org.apache.commons.text.StringEscapeUtils;
+import net.yapbam.util.HtmlUtils;
 
 public class HtmlFormatWriter implements ExportWriter {
 
@@ -43,7 +43,7 @@ public class HtmlFormatWriter implements ExportWriter {
 
 	@Override
 	public void addValue(String value) throws IOException {
-		this.writer.append(String.format("<td>%s</td>",StringEscapeUtils.escapeHtml4(value)));
+		this.writer.append(String.format("<td>%s</td>",HtmlUtils.escape(value)));
 	}
 	
 	@Override

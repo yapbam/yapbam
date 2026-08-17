@@ -1,13 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.21.2</version>
+	<version>0.21.5</version>
 	<properties>
-		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-		<mainClass>net.yapbam.gui.Launcher</mainClass>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mainClass>com.fathzer.launcher.Launcher</mainClass>
+		<maven.install.skip>true</maven.install.skip>
+		<maven.deploy.skip>true</maven.deploy.skip>
 		<sonar.organization>yapbam</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
@@ -60,41 +60,64 @@
 		<testSourceDirectory>testSrc</testSourceDirectory>
 		<plugins>
 			<plugin>
-			    <groupId>org.codehaus.mojo</groupId>
-			    <artifactId>buildnumber-maven-plugin</artifactId>
-			    <version>1.2</version>
-			    <executions>
-			        <execution>
-			            <phase>validate</phase>
-			            <goals>
-			                <goal>create-timestamp</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			    <configuration>
-			        <timestampFormat>dd/MM/yyyy</timestampFormat>
-			        <timestampPropertyName>build.date</timestampPropertyName>
-			    </configuration>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create-timestamp</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<timestampFormat>dd/MM/yyyy</timestampFormat>
+					<timestampPropertyName>build.date</timestampPropertyName>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<encoding>ISO-8859-1</encoding>
-				</configuration>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<id>enforce-bytecode-version</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<enforceBytecodeVersion>
+									<maxJdkVersion>1.8</maxJdkVersion>
+									<ignoredScopes>
+										<ignoreScope>test</ignoreScope>
+									</ignoredScopes>
+								</enforceBytecodeVersion>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>extra-enforcer-rules</artifactId>
+						<version>1.6.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.2</version>
+				<version>3.6.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -116,7 +139,7 @@
 								</filter>
 								<filter>
 									<!-- include Launcher -->
-									<artifact>com.fathzer:yapbam-launcher</artifact>
+									<artifact>com.fathzer:java-check-launcher</artifact>
 									<includes>
 										<include>**</include>
 									</includes>
@@ -162,10 +185,9 @@
 								</filter-->
 							</filters>
 							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>${mainClass}</mainClass>
 									<manifestEntries>
-										<Main-Class>${mainClass}</Main-Class>
 										<SplashScreen-Image>net/yapbam/gui/images/splash.png</SplashScreen-Image>
 										<Permissions>all-permissions</Permissions>
 										<Application-Name>Yapbam</Application-Name>
@@ -177,82 +199,48 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--plugin>
-				<artifactId>maven-jarsigner-plugin</artifactId>
-				<version>1.2</version>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.4</version>
+				<configuration>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+					<appendAssemblyId>false</appendAssemblyId>
+					<outputDirectory>${basedir}</outputDirectory>
+				</configuration>
 				<executions>
 					<execution>
-						<id>sign</id>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- append to the packaging phase. -->
 						<goals>
-							<goal>sign</goal>
+							<goal>single</goal> <!-- goals == mojos -->
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<archiveDirectory>${project.build.directory}</archiveDirectory>
-					<includes>
-						<include>${customized.jar.name}.jar</include>
-					</includes-->
-					<!-- keystore and password should be defined in the settings.xml file 
-						example: <profile> <id>yapbam</id> ... <properties> <yapbam.keystore.pwd>the 
-						keystore pwd</yapbam.keystore.pwd> </properties> </profile>
-					-->
-					<!--keystore>${yapbam.keystore}</keystore>
-					<storepass>${yapbam.keystore.pwd}</storepass>
-					<alias>fathzer</alias>
-				</configuration>
-			</plugin-->
-			<plugin>
-			  <artifactId>maven-assembly-plugin</artifactId>
-			  <version>2.5.4</version>
-			  <configuration>
-			    <descriptors>
-			      <descriptor>assembly.xml</descriptor>
-			    </descriptors>
-			  	<appendAssemblyId>false</appendAssemblyId>
- 				<outputDirectory>${basedir}</outputDirectory>
-			  </configuration>
-			  <executions>
-			    <execution>
-			      <id>make-assembly</id> <!-- this is used for inheritance merges -->
-			      <phase>package</phase> <!-- append to the packaging phase. -->
-			      <goals>
-			        <goal>single</goal> <!-- goals == mojos -->
-			      </goals>
-			    </execution>
-			  </executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>com.fathzer</groupId>
+			<artifactId>java-check-launcher</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fathzer</groupId>
 			<artifactId>ajlib</artifactId>
-			<version>0.3.13</version>
+			<version>0.3.16</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>javaluator</artifactId>
-			<version>3.0.3</version>
+			<version>3.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>yapbam-commons</artifactId>
-			<version>1.9.0</version>
+			<version>1.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jfree</groupId>
@@ -270,11 +258,6 @@
 			<version>1.10</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-text</artifactId>
-			<version>1.9</version>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.12</version>
@@ -287,18 +270,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>
-			<artifactId>jclop2</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fathzer</groupId>
 			<artifactId>jclop-dropbox2</artifactId>
-			<version>0.1.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fathzer</groupId>
-			<artifactId>yapbam-launcher</artifactId>
-			<version>1.0.1</version>
+			<version>0.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
@@ -322,12 +295,6 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.13.0</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.20</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

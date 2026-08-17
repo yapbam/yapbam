@@ -116,7 +116,7 @@ public class SubtransactionListPanel extends JPanel {
 					//editSelected(data); //TODO Strange, the enterKey go to next line
 				} else if ((code==KeyEvent.VK_DELETE) || (code==KeyEvent.VK_BACK_SPACE)) {
 					int ok = JOptionPane.showOptionDialog(SubtransactionListPanel.this,
-							"Voulez-vous réellement supprimer la sous-opération sélectionnée ?",
+							"Voulez-vous rï¿½ellement supprimer la sous-opÃ©ration sÃ©lectionnÃ©e?",
 							"Confirmez la suppression",
 						    JOptionPane.YES_NO_OPTION,
 						    JOptionPane.WARNING_MESSAGE,

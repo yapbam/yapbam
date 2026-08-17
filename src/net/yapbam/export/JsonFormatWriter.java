@@ -5,21 +5,16 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.text.StringEscapeUtils;
+import org.json.simple.JSONValue;
 
 public class JsonFormatWriter implements ExportWriter {
 	private Writer writer;
 	private boolean isFirstLine = true;
 	private boolean isFirstValue = true;
 
-	public JsonFormatWriter(OutputStream stream, Charset encoding) {
-		if (!StandardCharsets.UTF_8.equals(encoding) &&  !StandardCharsets.UTF_16.equals(encoding)
-				&&  !StandardCharsets.UTF_16BE.equals(encoding) &&  !StandardCharsets.UTF_16LE.equals(encoding)) {
-			throw new IllegalArgumentException("JSON requires UTF encoding");
-		}
-		this.writer = new OutputStreamWriter(stream, encoding);
+	public JsonFormatWriter(OutputStream stream) {
+		this.writer = new OutputStreamWriter(stream, Charset.forName("UTF-8"));
 	}
 
 	@Override
@@ -51,7 +46,7 @@ public class JsonFormatWriter implements ExportWriter {
 		} else {
 			this.writer.append(",");
 		}
-		this.writer.append(String.format("\"%s\"", StringEscapeUtils.escapeJson(value)));
+		this.writer.append(String.format("\"%s\"", JSONValue.escape(value)));
 	}
 
 	@Override

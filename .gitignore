@@ -2,6 +2,8 @@
 .classpath
 .settings/
 /target/
-/Data/
+/Data*/
 /*.zip
-/yapbam-0.21.1.exe
+/yapbam-*.exe
+/bin/
+/dependency-reduced-pom.xml

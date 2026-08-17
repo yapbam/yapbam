@@ -31,7 +31,7 @@ import javax.swing.JScrollPane;
 
 import com.fathzer.soft.ajlib.swing.table.JTable;
 
-/*Le GenericTransactionModel semble utilisé un peu partout, à voir ...
+/*Le GenericTransactionModel semble utilisÃ© un peu partout, Ã  voir ...
  */
 
 public class TransactionsPreferencePanel extends PreferencePanel {

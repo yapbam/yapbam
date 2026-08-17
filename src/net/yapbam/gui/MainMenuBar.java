@@ -251,10 +251,10 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 			insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
 			menu.addSeparator();
 		}
-		item = getURLMenuItem(LocalizationData.get("MainMenu.help"), new File(Portable.getApplicationDirectory(),"help.html").toURI().toString()); //$NON-NLS-1$ //$NON-NLS-2$
+/*		item = getURLMenuItem(LocalizationData.get("MainMenu.help"), "https://www.yapbam.net"); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.help.tooltip")); //$NON-NLS-1$
-		menu.add(item);
-		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "http://sourceforge.net/projects/yapbam/support"); //$NON-NLS-1$ //$NON-NLS-2$
+		menu.add(item);*/
+		item = getURLMenuItem(LocalizationData.get("MainMenu.web.support"), "https://sourceforge.net/p/yapbam/_list/tickets"); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.web.support.tooltip")); //$NON-NLS-1$
 		menu.add(item);
 		item = getURLMenuItem(LocalizationData.get("MainMenu.web.yapbam"), "https://www.yapbam.net"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -358,7 +358,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 					    new String[]{okButton}, okButton);
 			}
 		} else if (source.equals(this.menuItemAbout)) {
-			new AboutDialog(MainMenuBar.this.frame.getJFrame()).setVisible(true);
+			new AboutDialog(MainMenuBar.this.frame.getJFrame(), (event.getModifiers() & ActionEvent.SHIFT_MASK)!=0).setVisible(true);
 		}
 	}
 

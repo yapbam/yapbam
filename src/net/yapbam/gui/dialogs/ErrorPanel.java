@@ -97,7 +97,7 @@ public class ErrorPanel extends JPanel {
 	protected String getMessage() {
 		String message = LocalizationData.get("ErrorManager.sendReport.message"); //$NON-NLS-1$
 		if (hasExtendedMessage()) { //$NON-NLS-1$
-			String mailMessage = Formatter.format("<br><br>Vous pouvez également nous envoyer un mail à l''adresse <b>bug@yapbam.net</b> en nous indiquant ce que vous tentiez de faire lorsque ce bug est survenu et, si possible, comment le reproduire.<br>Merci de mentionner la référence suivante dans le titre du mail : {0}", new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss-Z").format(new Date()))+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			String mailMessage = Formatter.format("<br><br>Vous pouvez Ã©galement nous envoyer un mail Ã  l''adresse <b>bug@yapbam.net</b> en nous indiquant ce que vous tentiez de faire lorsque ce bug est survenu et, si possible, comment le reproduire.<br>Merci de mentionner la rÃ©fÃ©rence suivante dans le titre du mail : {0}", new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss-Z").format(new Date()))+"</html>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			message = message.replace("</html>", mailMessage); //$NON-NLS-1$
 		}
 		return message;
