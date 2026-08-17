@@ -56,12 +56,6 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		if (settings.getExpenseColumn()!=-1) {
 			sorter.setComparator(settings.getExpenseColumn(), doubleArrayComparator);
 		}
-		sorter.setComparator(4, new Comparator<double[]>() {
-			@Override
-			public int compare(double[] o1, double[] o2) {
-				return (int) Math.signum(o1[0]-o2[0]);
-			}
-		});
 		this.setRowSorter(sorter);
 		this.lastSelected = null;
 		//TODO this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
