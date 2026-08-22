@@ -4,9 +4,13 @@ known
 	Sur MacOS, Le raccourci clavier du copier/coller est CTRL C/V et non commande C/V. Malheureusement, c'est un bug de Java qui ne peut être corrigé.
 	Sur Windows, les thèmes autre que Nimbus rendent incorrect l'alignement vertical des colonnes "description" et "commentaire" (Cela semble un bug de Java).
 	
-version	0.21.6 (06/04/2026)
+version	0.21.6 (24/08/2026)
 fix
 	L'application Windows (Yapbam.exe) ne démarrait pas avec certaines versions de Java supérieures à 1.8 (elle disait nécessiter une version 1.6+ de Java).
+	Ajout d'un convertisseur utilisant les taux de conversion fournis par frankfurter.dev.
+	Amélioration de la stabilité du convertisseur de devises en cas de coupure réseau.
+	Correction d'un bug dans les transferts entre comptes incluant des sous opérations.
+	Correction de certains libellés italiens.
 
 version	0.21.5 (06/01/2026)
 fix
