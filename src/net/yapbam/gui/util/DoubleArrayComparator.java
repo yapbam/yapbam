@@ -10,7 +10,7 @@ public class DoubleArrayComparator implements Comparator<double[]>, Serializable
 	public int compare(double[] o1, double[] o2) {
 		int len = Math.min(o1.length,o2.length);
 		for (int i = 0; i < len; i++) {
-			int result = (int) Math.signum(o1[0]-o2[0]);
+			int result = Double.compare(o1[i], o2[i]);
 			if (result!=0) {
 				return result;
 			}
