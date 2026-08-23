@@ -113,9 +113,6 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see net.yapbam.gui.actions.TransactionSelector#setSelectedTransactions(net.yapbam.data.Transaction[])
-	 */
 	@Override
 	public void setSelectedTransactions(Transaction[] transactions) {
 		JTableSelector<Transaction> selector = new JTableSelector<Transaction>(this) {

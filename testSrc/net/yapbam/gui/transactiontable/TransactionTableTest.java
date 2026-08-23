@@ -1,6 +1,6 @@
 package net.yapbam.gui.transactiontable;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Comparator;
 
@@ -28,7 +28,6 @@ public class TransactionTableTest {
 
 		double[] o1 = {1.0, 2.0};
 		double[] o2 = {1.0, 3.0};
-		assertTrue("Column 4 comparator must compare beyond the first array element",
-				comparator.compare(o1, o2) != 0);
+		assertNotEquals("Column 4 comparator must compare beyond the first array element", 0, comparator.compare(o1, o2));
 	}
 }

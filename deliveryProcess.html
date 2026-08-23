@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <title>Yapbam delivery process</title>
     <style type="text/css">
 .variable {
@@ -15,15 +15,16 @@ text-decoration: underline;
       <li>Get the translations from Crowdin.<br>
         First check on <a href="https://crowdin.com/project/yapbam">Crowdin</a>
         that no translation occurred since last build (if so build the project).<br>
-        Launch the com.fathzer.localization.crowdin.GetTranslationsCmd in
-        jlocal-tools project with arguments project=yapbam key=<span style="font-style: italic;">theyapbamkey</span>
-        lng=fr,pt-BR:pt,de,en:,zh-TW:zh,tr,nl,ru,ro,pl,hu,es-ES:es,it,ar,ja,el where=<span style="font-style: italic;">workspaceRoot</span><br>
-        Then, check whether YapbamCommons translations has changed. In such a
-        case, update the artifact.<br>
-        <span style="font-weight: bold; text-decoration: underline;">Be aware of
-          changes in Yapbam web resources</span>. Due to a Crowdin bug, ':' and
-        '=' characters are preceded by a escape '\' character. Note also that
-        the French and English versions of 'TranslationNeeded.supported' key is
+        Launch the com.fathzer.localization.crowdin.GetTranslationsCmd from
+        the jlocal-tools (private) project with arguments projectId=46987 token=<span style="font-style: italic;">yourToken</span>
+        lng=fr-FR:fr,pt-BR:pt,de-DE:de,en-US:,zh-TW:zh,tr-TR:tr,nl-NL:nl,ru-RU:ru,ro-RO:ro,pl-PL:pl,hu-HU:hu,es-ES:es,it-IT:it,ar-SA:ar,ja-JP:ja,el-GR:el where=<span style="font-style: italic;">workspaceRoot</span> moved=YapbamWeb:hosting/yapbam/www,YapbamCommons:yapbam-commons<br>
+        <br>⚠️<b>Be aware that there's a bug in <i>ar</i> language export</b>: The <i>Tip.1</i> key</b> in Yapbam Resource_ar.properties file is corrupted during this export. You'll have to carefully check the differences before committing the changes to Git 😞<br>
+        <b>Be aware that Crowdin sometimes changes the format of the downloaded files</b>, this command may simply fail or return a partial set of languages.<br>
+        <br>The alternative is to download the translations manually from Crowdin and place them in the right directories.<br>
+        <br>
+        Then, check whether YapbamCommons translations has changed. In such a case, update the artifact.<br>
+        <span style="font-weight: bold; text-decoration: underline;">Be aware of changes in Yapbam web resources</span>. Due to a Crowdin bug, ':' and
+        '=' characters are preceded by a escape '\' character. Note also that the French and English versions of 'TranslationNeeded.supported' key is
         not the one stored in Crowdin.</li>
       <li>Set the version number in the pom.xml file<span class="variable"></span></li>
       <li>Run maven clean package on pom.xml =&gt; That creates a ready to

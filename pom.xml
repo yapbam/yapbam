@@ -8,6 +8,7 @@
 		<mainClass>com.fathzer.launcher.Launcher</mainClass>
 		<maven.install.skip>true</maven.install.skip>
 		<maven.deploy.skip>true</maven.deploy.skip>
+		<sonar.java.source>1.8</sonar.java.source>
 		<sonar.organization>yapbam</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>

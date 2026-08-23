@@ -68,29 +68,35 @@ public class Dialog extends ToolsFrame {
 		SourceSelectionButtons buttons = panel.getSourceSelectionButtons();
 		worker.addPropertyChangeListener(evt -> {
 			if (evt.getPropertyName().equals(Worker.STATE_PROPERTY_NAME) && evt.getNewValue().equals(StateValue.DONE) && !worker.isCancelled()) {
-				AbstractCurrencyConverter newConverter = null;
-				try {
-					newConverter = worker.get();
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				} catch (ExecutionException e) {
-					waitFrame.disposeNow();
-					if (e.getCause() instanceof IOException) {
-						ErrorManager.INSTANCE.display(Dialog.this, null, Messages.getString("ToolsPlugin.currencyConverter.ioErrorMessage")); //$NON-NLS-1$
-					} else {
-						String message = Formatter.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.getCause()); //$NON-NLS-1$
-						ErrorManager.INSTANCE.display(Dialog.this, null, message);
-					}
-				} finally {
-					buttons.setEnabled(true);
-				}
-				if (newConverter!=null) {
-					setConverter(newConverter);
-				}
+				onSourceLoaded(worker, waitFrame, buttons);
 			}
 		});
 		buttons.setEnabled(false);
 		waitFrame.setVisible(true);
+	}
+
+
+	private void onSourceLoaded(final Worker<AbstractCurrencyConverter, Void> worker,
+			final WorkInProgressFrame waitFrame, SourceSelectionButtons buttons) {
+		AbstractCurrencyConverter newConverter = null;
+		try {
+			newConverter = worker.get();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} catch (ExecutionException e) {
+			waitFrame.disposeNow();
+			if (e.getCause() instanceof IOException) {
+				ErrorManager.INSTANCE.display(Dialog.this, null, Messages.getString("ToolsPlugin.currencyConverter.ioErrorMessage")); //$NON-NLS-1$
+			} else {
+				String message = Formatter.format(Messages.getString("CurrencyConverterPanel.errorMessage"), e.getCause()); //$NON-NLS-1$
+				ErrorManager.INSTANCE.display(Dialog.this, null, message);
+			}
+		} finally {
+			buttons.setEnabled(true);
+		}
+		if (newConverter!=null) {
+			setConverter(newConverter);
+		}
 	}
 	
 	private AbstractCurrencyConverter getConverter(Source source) {
@@ -110,6 +116,5 @@ public class Dialog extends ToolsFrame {
 	private void setConverter(AbstractCurrencyConverter converter) {
 		this.panel.setConverter(converter);
 		this.setSize(this.getPreferredSize());
-//		SwingUtilities.invokeLater(() -> Dialog.this.setLocationRelativeTo(Dialog.this.getOwner()));
 	}
 }
