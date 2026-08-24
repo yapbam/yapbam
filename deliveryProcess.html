@@ -4,61 +4,77 @@
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <title>Yapbam delivery process</title>
     <style type="text/css">
-.variable {
-font-style: italic;
-text-decoration: underline;
-}
-</style></head>
+      body { font-family: Arial, sans-serif; margin: 20px; background: #1e1e1e; color: #e0e0e0; }
+      h1 { color: #f1f1f1; }
+      a { color: #58a6ff; }
+      .process-list { list-style: none; padding: 0; counter-reset: step; }
+      .process-list > li { border: 1px solid #444; border-radius: 8px; padding: 20px; margin: 25px 0; background: #2b2b2b; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+      .process-list > li::before { counter-increment: step; content: counter(step); display: inline-block; vertical-align: middle; width: 32px; height: 32px; line-height: 32px; text-align: center; background: #58a6ff; color: #1e1e1e; border-radius: 50%; font-weight: bold; margin-right: 10px; }
+      .card { border: 1px solid #444; border-radius: 8px; padding: 20px; margin: 25px 0; background: #2b2b2b; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+      .card h2 { margin-top: 0; margin-bottom: 25px; color: #58a6ff; padding-bottom: 10px; border-bottom: 1px solid #444; }
+      .warning { background: #3d3315; border-left: 5px solid #d39e00; padding: 10px 15px; margin: 15px 0; border-radius: 0 4px 4px 0; color: #ffd966; font-weight: bold; }
+      .warning::before { content: "⚠️ "; }
+      .variable { font-style: italic; text-decoration: underline; }
+      code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 0.9em; background: #6e768166; padding: 0.2em 0.4em; border-radius: 6px; color: #e0e0e0; white-space: pre-wrap; }
+      .point { border: 1px solid #555; border-radius: 6px; padding: 8px 12px; margin: 12px 0; background: #333; }
+    </style>
+  </head>
   <body>
     <h1>Yapbam delivery process</h1>
-    <ol>
-      <li>Get the translations from Crowdin.<br>
-        First check on <a href="https://crowdin.com/project/yapbam">Crowdin</a>
-        that no translation occurred since last build (if so build the project).<br>
-        Launch the com.fathzer.localization.crowdin.GetTranslationsCmd from
-        the jlocal-tools (private) project with arguments projectId=46987 token=<span style="font-style: italic;">yourToken</span>
-        lng=fr-FR:fr,pt-BR:pt,de-DE:de,en-US:,zh-TW:zh,tr-TR:tr,nl-NL:nl,ru-RU:ru,ro-RO:ro,pl-PL:pl,hu-HU:hu,es-ES:es,it-IT:it,ar-SA:ar,ja-JP:ja,el-GR:el where=<span style="font-style: italic;">workspaceRoot</span> moved=YapbamWeb:hosting/yapbam/www,YapbamCommons:yapbam-commons<br>
-        <br>⚠️<b>Be aware that there's a bug in <i>ar</i> language export</b>: The <i>Tip.1</i> key</b> in Yapbam Resource_ar.properties file is corrupted during this export. You'll have to carefully check the differences before committing the changes to Git 😞<br>
-        <b>Be aware that Crowdin sometimes changes the format of the downloaded files</b>, this command may simply fail or return a partial set of languages.<br>
-        <br>The alternative is to download the translations manually from Crowdin and place them in the right directories.<br>
-        <br>
-        Then, check whether YapbamCommons translations has changed. In such a case, update the artifact.<br>
-        <span style="font-weight: bold; text-decoration: underline;">Be aware of changes in Yapbam web resources</span>. Due to a Crowdin bug, ':' and
-        '=' characters are preceded by a escape '\' character. Note also that the French and English versions of 'TranslationNeeded.supported' key is
-        not the one stored in Crowdin.</li>
-      <li>Set the version number in the pom.xml file<span class="variable"></span></li>
-      <li>Run maven clean package on pom.xml =&gt; That creates a ready to
-        deploy zip file in the project directory.<br>
-        <span class="variable"></span></li>
-      <li>Create the windows installer with NSIS.<br>
-        select the "Installer based on a zip file" option and enter
-        "$EXEDIR\Yapbam" as default folder.</li>
-      <li>Run <b>net.yapbam.deployment.YapbamDeployer</b> in project <a href="https://github.com/yapbam/yapbam-deployment">YapbamDeployment</a> (Be aware to set the
-        right versions in the program fields).<br>
-        Wait for it completes (it is long as this class upload Yapbam to
-        sourceForge).<br>
-        <span style="font-weight: bold; text-decoration: underline;">Copy the
-          release notes on the official site</span> (the deployer deploys only
-        on sourceforge)</li>
-      <li>Test that the autoupdate is ok with a copy of the previous version of
-        yapbam. Also test that the&nbsp;archives on sourceforge are ok ...
-        sometimes, upload results in a partial file.</li>
-      <li>In the sourceforge file browser, give the linux, BSD, etc...
-        attributes (or windows) to the new uploaded files.</li>
-      <li>Commit pending changes to <a href="https://github.com/yapbam/yapbam">GitHub repository</a>.</li>
-      <li>Post a comment on twitter.</li>
-      <li>Post replies on opened bug report or feature requests.</li>
+    <ol class="process-list">
+      <li>Get the translations from Crowdin.
+        <div class="point">First check on <a href="https://crowdin.com/project/yapbam">Crowdin</a> that no translation occurred since last build (if so build the project).</div>
+        <div class="point">Launch the <code>com.fathzer.localization.crowdin.GetTranslationsCmd</code> from
+        the jlocal-tools (private) project with arguments <code>projectId=46987 token=<span class="variable">yourToken</span> lng=fr-FR:fr,pt-BR:pt,de-DE:de,en-US:,zh-TW:zh,tr-TR:tr,nl-NL:nl,ru-RU:ru,ro-RO:ro,pl-PL:pl,hu-HU:hu,es-ES:es,it-IT:it,ar-SA:ar,ja-JP:ja,el-GR:el where=<span class="variable">workspaceRoot</span> moved=YapbamWeb:hosting/yapbam/www,YapbamCommons:yapbam-commons</code>
+          <div class="warning">Be aware that there's a bug in <i>ar</i> language export: The <i>Tip.1</i> key in Yapbam Resource_ar.properties file is corrupted during this export.<br>
+          You'll have to carefully check the differences before committing the changes to Git.</div>
+          <div class="warning">Be aware that Crowdin sometimes changes the format of the downloaded files, this command may simply fail or return a partial set of languages<br>
+          The alternative is then to download the translations manually from Crowdin and place them in the right directories.</div>
+        </div>
+        <div class="point">Then, check if YapbamCommons translations have changed. In such a case, update the artifact.</div>
+        <div class="point">Check if Yapbam web resources have changed. If so, update them on the yapbam server (see private <code>hosting</code> project).
+        <div class="warning">Be aware of changes in Yapbam web resources. Due to a Crowdin bug, ':' and
+        '=' characters are preceded by an escape '\' character. Note also that the French and English versions of 'TranslationNeeded.supported' key are
+        not the one stored in Crowdin.</div></div>
+      </li>
+      <li>Ensure version number and release notes are correct.
+        <p>Set the version number in the <code>pom.xml</code> file.</p>
+        <p>Update the release notes in the <code>src/localization/[fr/]relnotes.txt</code> file and ensure the release dates are correct.</p>
+      </li>
+      <li>Run <code>mvn clean package</code> at the project root folder. This creates a ready to deploy zip file in the project directory.<br></li>
+      <li>Create the windows installer with NSIS.
+        <p>Select the "Installer based on a zip file" option and enter <code>$EXEDIR\Yapbam</code> as default folder.</p>
+      </li>
+      <li>Run <b>net.yapbam.deployment.YapbamDeployer</b> in project <a href="https://github.com/yapbam/yapbam-deployment">YapbamDeployment</a>.
+        <div class="warning">Make sure to set the right versions in the program fields.</div>
+        <p>Wait for it to complete (it is long as this class uploads Yapbam to SourceForge).</p>
+        <p><span style="font-weight: bold; text-decoration: underline;">Copy the release notes on the official site</span> (the deployer deploys only on SourceForge)</p>
+      </li>
+      <li>Test everything is fine.
+        <p>Test that the autoupdate is ok with a copy of the previous version of
+        yapbam.</p>
+        <p>Also test that the&nbsp;archives on SourceForge are ok (sometimes, upload results in a partial file).</p>
+        <p>The good news: If something is wrong, you can start again the process from any previous point.</p>
+      </li>
+      <li>In the SourceForge file browser, give the linux, BSD, etc... attributes (or windows) to the new uploaded files.</li>
+      <li>Commit pending changes to <a href="https://github.com/yapbam/yapbam">GitHub repository</a>.
+        <p>Then, create a release for the deployed version on GitHub.</p>
+      </li>
+      <li>Post a comment on <a href="https://bsky.app/">Bluesky</a>.</li>
+      <li>Post replies on opened bug reports or feature requests.</li>
     </ol>
     <br>
-    <h2>A way to&nbsp;carefully test the auto update</h2>
-    <ol>
-      <li>In net.yapbam.update.VersionManager#getUpdateURL, change the
-        updateinfo URL to a local file and put a fake version number in
-        net.yapbam.update.version.txt</li>
-      <li>In this local file, copy the following lines ouputed by
-        srcTests/net.yapbam.update.GetHashAndSize</li>
-      <li>Launch this modified version of yapbam.</li>
-      <li>Try to update.</li>
-    </ol>
+    <div class="card">
+      <h2>A way to carefully test the auto update before any deployment</h2>
+      <ol>
+        <li>In <code>net.yapbam.update.VersionManager#getUpdateURL</code>, change the
+          updateinfo URL to a local file and put a fake version number in
+          <code>net.yapbam.update.version.txt</code></li>
+        <li>In this local file, copy the lines output by <code>srcTests/net.yapbam.update.GetHashAndSize</code></li>
+        <li>Launch this modified version of yapbam.</li>
+        <li>Try to update.</li>
+        <div class="warning">Make sure to revert <code>net.yapbam.update.VersionManager#getUpdateURL</code> after testing.</div>
+      </ol>
+    </div>
   </body>
 </html>
