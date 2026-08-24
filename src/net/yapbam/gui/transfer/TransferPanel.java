@@ -250,7 +250,7 @@ public class TransferPanel extends JPanel {
 		}
 	}
 
-	private SubtransactionListPanel getSubTransactionsPanel() {
+	SubtransactionListPanel getSubTransactionsPanel() {
 		if (subTransactionsPanel == null) {
 			subTransactionsPanel = new SubtransactionListPanel(data);
 			subTransactionsPanel.addPropertyChangeListener(SubtransactionListPanel.SUM_PROPERTY, new PropertyChangeListener() {
@@ -285,7 +285,7 @@ public class TransferPanel extends JPanel {
 				getToPane().getDescriptionField().getText(), getToPane().getCommentField().getText(),
 				getAmountField().getValue(), getToPane().getAccountWidget().get(), getToPane().getModeWidget().get(),
 				getCategoryWidget().get(), getToPane().getValueDateField().getDate(),
-				getToPane().getStatementField().getText(), subFrom);
+				getToPane().getStatementField().getText(), subTo);
 		return result;
 	}
 }
