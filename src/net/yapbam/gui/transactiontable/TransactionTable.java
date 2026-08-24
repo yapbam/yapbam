@@ -56,12 +56,6 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		if (settings.getExpenseColumn()!=-1) {
 			sorter.setComparator(settings.getExpenseColumn(), doubleArrayComparator);
 		}
-		sorter.setComparator(4, new Comparator<double[]>() {
-			@Override
-			public int compare(double[] o1, double[] o2) {
-				return (int) Math.signum(o1[0]-o2[0]);
-			}
-		});
 		this.setRowSorter(sorter);
 		this.lastSelected = null;
 		//TODO this.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -119,9 +113,6 @@ public class TransactionTable extends FriendlyTable implements TransactionSelect
 		return result;
 	}
 	
-	/* (non-Javadoc)
-	 * @see net.yapbam.gui.actions.TransactionSelector#setSelectedTransactions(net.yapbam.data.Transaction[])
-	 */
 	@Override
 	public void setSelectedTransactions(Transaction[] transactions) {
 		JTableSelector<Transaction> selector = new JTableSelector<Transaction>(this) {

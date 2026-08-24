@@ -7,12 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import java.awt.GridBagConstraints;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Currency;
 import java.util.Iterator;
 import java.util.List;
@@ -36,9 +33,6 @@ import java.awt.Color;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableModel;
 import javax.swing.JButton;
 
 import com.fathzer.soft.ajlib.swing.Utils;
@@ -46,8 +40,6 @@ import com.fathzer.soft.ajlib.swing.table.RowSorter;
 import com.fathzer.soft.ajlib.swing.widget.ComboBox;
 import com.fathzer.soft.ajlib.swing.widget.NumberWidget;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -60,8 +52,8 @@ public class DialogMainPanel extends JPanel {
 	private static final String CURRENCY1_KEY = KEY_ROOT+"currency1"; //$NON-NLS-1$
 	private static final String CURRENCY2_KEY = KEY_ROOT+"currency2"; //$NON-NLS-1$
 	
-	private ComboBox currency1 = null;
-	private ComboBox currency2 = null;
+	private ComboBox<String> currency1 = null;
+	private ComboBox<String> currency2 = null;
 	private NumberWidget amount1 = null;
 	private NumberWidget amount2 = null;
 	
@@ -72,7 +64,7 @@ public class DialogMainPanel extends JPanel {
 	private JTable jTable = null;
 	private CurrenciesTableModel tableModel;
 	private JButton swapButton;
-	private DialogButtons bottomPanel;
+	private SourceSelectionButtons bottomPanel;
 	private JLayeredPane swapPanel;
 	private JLabel extendButton;
 	
@@ -165,7 +157,7 @@ public class DialogMainPanel extends JPanel {
 		gbcBottomPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbcBottomPanel.gridx = 0;
 		gbcBottomPanel.gridy = 3;
-		add(getBottomPanel(), gbcBottomPanel);
+		add(getSourceSelectionButtons(), gbcBottomPanel);
 	}
 
 	private JLabel getErrField() {
@@ -181,21 +173,18 @@ public class DialogMainPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private ComboBox getCurrency1() {
+	private ComboBox<String> getCurrency1() {
 		if (currency1 == null) {
-			currency1 = new ComboBox();
+			currency1 = new ComboBox<>();
 			currency1.setToolTipText(Messages.getString("CurrencyConverterPanel.origin.toolTip")); //$NON-NLS-1$
-			currency1.addActionListener(new java.awt.event.ActionListener() {
-				@Override
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (tableModel!=null) {
-						String currencyCode = codes[currency1.getSelectedIndex()];
-						YapbamState.INSTANCE.put(CURRENCY1_KEY, currencyCode);
-						tableModel.setCurrency(currencyCode);
-					}
-					Utils.packColumns(getJTable(), 2);
-					doConvert();
+			currency1.addActionListener(e -> {
+				if (tableModel!=null) {
+					String currencyCode = codes[currency1.getSelectedIndex()];
+					YapbamState.INSTANCE.put(CURRENCY1_KEY, currencyCode);
+					tableModel.setCurrency(currencyCode);
 				}
+				Utils.packColumns(getJTable(), 2);
+				doConvert();
 			});
 		}
 		return currency1;
@@ -206,25 +195,22 @@ public class DialogMainPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private ComboBox getCurrency2() {
+	private ComboBox<String> getCurrency2() {
 		if (currency2 == null) {
-			currency2 = new ComboBox();
+			currency2 = new ComboBox<>();
 			currency2.setToolTipText(Messages.getString("CurrencyConverterPanel.destination.toolTip")); //$NON-NLS-1$
-			currency2.addActionListener(new java.awt.event.ActionListener() {
-				@Override
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String currencyCode = codes[currency2.getSelectedIndex()];
-					int index = tableModel.indexOf(currencyCode);
-					if (index<0) {
-						getJTable().clearSelection();
-					} else {
-						index = getJTable().convertRowIndexToView(index);
-						getJTable().getSelectionModel().setSelectionInterval(index, index);
-						getJTable().scrollRectToVisible(getJTable().getCellRect(index, 0, true));
-						YapbamState.INSTANCE.put(CURRENCY2_KEY, currencyCode);
-					}
-					doConvert();
+			currency2.addActionListener(e -> {
+				String currencyCode = codes[currency2.getSelectedIndex()];
+				int index = tableModel.indexOf(currencyCode);
+				if (index<0) {
+					getJTable().clearSelection();
+				} else {
+					index = getJTable().convertRowIndexToView(index);
+					getJTable().getSelectionModel().setSelectionInterval(index, index);
+					getJTable().scrollRectToVisible(getJTable().getCellRect(index, 0, true));
+					YapbamState.INSTANCE.put(CURRENCY2_KEY, currencyCode);
 				}
+				doConvert();
 			});
 		}
 		return currency2;
@@ -242,12 +228,7 @@ public class DialogMainPanel extends JPanel {
 			amount1.setToolTipText(Messages.getString("CurrencyConverterPanel.amount.toolTip")); //$NON-NLS-1$
 			amount1.setValue(0.0);
 			amount1.addFocusListener(AutoSelectFocusListener.INSTANCE);
-			amount1.addPropertyChangeListener(NumberWidget.VALUE_PROPERTY, new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					doConvert();
-				}
-			});
+			amount1.addPropertyChangeListener(NumberWidget.VALUE_PROPERTY, evt -> doConvert());
 		}
 		return amount1;
 	}
@@ -307,7 +288,7 @@ public class DialogMainPanel extends JPanel {
 					if (countries==null) {
 						return super.getToolTipText(event);
 					} else {
-						List<String> lines = new ArrayList<String>(countries.size());
+						List<String> lines = new ArrayList<>(countries.size());
 						Iterator<String> iter = countries.iterator();
 						while (iter.hasNext()) {
 							lines.add(new Locale("",iter.next()).getDisplayCountry()); //$NON-NLS-1$
@@ -324,20 +305,17 @@ public class DialogMainPanel extends JPanel {
 					}
 				}
 			};
-			getJTable().setRowSorter(new RowSorter<TableModel>(getJTable().getModel()));
+			getJTable().setRowSorter(new RowSorter<>(getJTable().getModel()));
 			getJTable().setDefaultRenderer(Double.class, new ConversionRateRenderer());
 			Utils.packColumns(jTable, 2);
 			getJTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			getJTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					if (!e.getValueIsAdjusting()) {
-						int viewRow = getJTable().getSelectedRow();
-						if (viewRow>=0) {
-							int selectedRow = getJTable().convertRowIndexToModel(viewRow);
-							String selectedCode = tableModel.getCode(selectedRow);
-							getCurrency2().setSelectedItem(CurrencyNames.get(selectedCode));
-						}
+			getJTable().getSelectionModel().addListSelectionListener(e -> {
+				if (!e.getValueIsAdjusting()) {
+					int viewRow = getJTable().getSelectedRow();
+					if (viewRow>=0) {
+						int selectedRow = getJTable().convertRowIndexToModel(viewRow);
+						String selectedCode = tableModel.getCode(selectedRow);
+						getCurrency2().setSelectedItem(CurrencyNames.get(selectedCode));
 					}
 				}
 			});
@@ -346,14 +324,12 @@ public class DialogMainPanel extends JPanel {
 	}
 	private JButton getSwapButton() {
 		if (swapButton == null) {
-			swapButton = new JButton(Utils.createIcon(getClass().getResource("swap.png"), ((float)getFont().getSize())/32f)); //$NON-NLS-1$
+			swapButton = new JButton(Utils.createIcon(getClass().getResource("swap.png"), getFont().getSize()/32f)); //$NON-NLS-1$
 			swapButton.setFocusable(false);
-			swapButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					int old1 = getCurrency1().getSelectedIndex();
-					getCurrency1().setSelectedIndex(getCurrency2().getSelectedIndex());
-					getCurrency2().setSelectedIndex(old1);
-				}
+			swapButton.addActionListener(e-> {
+				int old1 = getCurrency1().getSelectedIndex();
+				getCurrency1().setSelectedIndex(getCurrency2().getSelectedIndex());
+				getCurrency2().setSelectedIndex(old1);
 			});
 			swapButton.setToolTipText(Messages.getString("CurrencyConverterPanel.swapButton.toolTipText")); //$NON-NLS-1$
 		}
@@ -362,17 +338,14 @@ public class DialogMainPanel extends JPanel {
 
 	void setConverter (AbstractCurrencyConverter converter) {
 		this.converter = converter;
-		this.getBottomPanel().setConverter(converter);
+		this.getSourceSelectionButtons().setConverter(converter);
 		
 		// Sort the codes accordingly to their wordings
 		this.codes = this.converter.getCurrencies();
-		Arrays.sort(this.codes, new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				String w1 = CurrencyNames.get(o1);
-				String w2 = CurrencyNames.get(o2);
-				return w1.compareToIgnoreCase(w2);
-			}
+		Arrays.sort(this.codes, (o1,o2) -> {
+			String w1 = CurrencyNames.get(o1);
+			String w2 = CurrencyNames.get(o2);
+			return w1.compareToIgnoreCase(w2);
 		});
 		
 		// Fill the table model
@@ -402,7 +375,7 @@ public class DialogMainPanel extends JPanel {
 			tryToSet(getCurrency2(), currencyCode);
 		}
 	}
-	private boolean tryToSet(JComboBox selector, String currencyCode) {
+	private boolean tryToSet(JComboBox<String> selector, String currencyCode) {
 		int index = currencyCode==null ? -1 : Arrays.asList(this.codes).indexOf(currencyCode);
 		if (index>=0) {
 			selector.setSelectedIndex(index);
@@ -410,15 +383,12 @@ public class DialogMainPanel extends JPanel {
 		return index>=0;
 	}
 	
-	private DialogButtons getBottomPanel() {
+	SourceSelectionButtons getSourceSelectionButtons() {
 		if (bottomPanel == null) {
-			bottomPanel = new DialogButtons(SourceManager.getSource());
-			bottomPanel.addPropertyChangeListener(new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					if (DialogButtons.SOURCE_PROPERTY.equals(evt.getPropertyName())) {
-						firePropertyChange(DialogButtons.SOURCE_PROPERTY, evt.getOldValue(), evt.getNewValue());
-					}
+			bottomPanel = new SourceSelectionButtons(SourceManager.getSource());
+			bottomPanel.addPropertyChangeListener(evt -> {
+				if (SourceSelectionButtons.SOURCE_PROPERTY.equals(evt.getPropertyName())) {
+					firePropertyChange(SourceSelectionButtons.SOURCE_PROPERTY, evt.getOldValue(), evt.getNewValue());
 				}
 			});
 		}
@@ -448,7 +418,6 @@ public class DialogMainPanel extends JPanel {
 	private JLabel getExtendButton() {
 		if (extendButton == null) {
 			extendButton = new JLabel(IconManager.get(Name.SPREAD));
-//			extendButton.setToolTipText("kjkfgdjml");
 			extendButton.setVerticalAlignment(SwingConstants.BOTTOM);
 			getSwapPanel().setLayer(extendButton, 1);
 			extendButton.addMouseListener(new MouseAdapter() {
@@ -457,7 +426,7 @@ public class DialogMainPanel extends JPanel {
 					  boolean deploy = extendButton.getIcon()!=IconManager.get(Name.SPREAD); 
 					  extendButton.setIcon(IconManager.get(deploy?Name.SPREAD:Name.SPREADABLE));
 					  getJScrollPane().setVisible(deploy);
-					  getBottomPanel().setVisible(deploy);
+					  getSourceSelectionButtons().setVisible(deploy);
 					  Utils.getOwnerWindow(DialogMainPanel.this).pack();
 				  }
 			});

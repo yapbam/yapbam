@@ -20,6 +20,9 @@ public final class CurrencyConverterAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final Window owner = Utils.getOwnerWindow((Component) e.getSource());
-		new Dialog(owner).setVisible(true);
+		Dialog dialog = new Dialog(owner);
+		Source source = SourceManager.getSource();
+		dialog.setSource(source, source);
+		dialog.setVisible(true);
 	}
 }

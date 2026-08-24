@@ -4,6 +4,16 @@ known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
 	
+version	0.21.6 (08/24/2026)
+improvement
+	Adds a currency converter using exchange rates provided by frankfurter.dev.
+fix
+	The Windows application (Yapbam.exe) did not start with Java versions greater than 1.8 (it said it required Java version 1.6+).
+	Improves currency converter stability during network outages.
+	Fixes a bug in transfers between accounts involving sub-transactions.
+	
+	Fixes some Italian translations.
+
 version	0.21.5 (01/06/2026)
 fix
 	Fixes the bug that, since 01/01/2026, and with versions up to 0.21.4, prevented data synchronization with Dropbox (Dropbox changed its https certificates, which are no longer compatible with the old version of their development kit used until then).
@@ -14,7 +24,6 @@ improvement
 fix
 	The "?/Help" menu is removed. It was opening a test page.
 	Fixes the support address in the "?/Get support" menu.
-	The Windows application (Yapbam.exe) did not start with Java versions greater than 1.8 (it said it required Java version 1.6+).
 	The decoding of amounts in certain languages ​​(French for example) did not work correctly with Java 17+.
 	Shortcut files in Windows 11 were not properly handled.
 
