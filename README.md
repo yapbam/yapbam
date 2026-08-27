@@ -12,10 +12,12 @@ across machines (e.g. via Dropbox). It is written in Java and runs on any system
 ### FAQ
 
 * I try to compile the project in Eclipse, but Eclipse reports compilation errors.
+
 This project uses the Lombok library.
 In order to have Eclipse recognize the annotations used by this library, you should install it in Eclipse as explained [here](https://howtodoinjava.com/automation/lombok-eclipse-installation-examples/).
 
 * How is the Windows executable `Yapbam.exe` built?
+
 The executable is generated with [Launch4j](https://launch4j.sourceforge.net/), using the configuration file
 [launch4JDefinitionFiles/yapbam.xml](launch4JDefinitionFiles/yapbam.xml). Launch4j can be run from its GUI, but also
 from the command line with the `launch4jc.exe` binary, which is convenient for build scripts:
