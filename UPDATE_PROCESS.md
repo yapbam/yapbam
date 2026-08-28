@@ -207,14 +207,5 @@ The `preReleaseComment` (e.g. `.beta`) is **not** used in comparisons. A
 
 ## Testing auto-update before deployment
 
-1. In `VersionManager`, change the update info URL to a local file.
-2. Put a fake version number in `net.yapbam.update.version.txt` (higher than
-   the current version).
-3. In the local update info file, copy the lines output by
-   `srcTests/net.yapbam.update.GetHashAndSize` (which computes checksums and
-   sizes of `update.zip` and `updater.jar`).
-4. Launch the modified Yapbam and trigger an update.
-5. Revert `VersionManager` after testing.
-
-Alternatively, use the **Shift + "Check for updates"** trick to select the beta
+The safer way is to [deploy](deliveryProcess.html) the update to the beta channel and use the **Shift + "Check for updates"** trick to select the beta
 channel, and publish a beta on the beta update info URL.
