@@ -42,7 +42,22 @@ public class CheckNewReleaseAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		CheckUpdateDialog.check(owner, false, false);
+		boolean beta = false;
+		if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+			// Shift trick: let the user choose between release and beta channels
+			String release = LocalizationData.get("MainMenu.CheckUpdate.Channel.Release"); //$NON-NLS-1$
+			String betaChannel = LocalizationData.get("MainMenu.CheckUpdate.Channel.Beta"); //$NON-NLS-1$
+			int choice = JOptionPane.showOptionDialog(owner,
+					LocalizationData.get("MainMenu.CheckUpdate.Channel.Message"), //$NON-NLS-1$
+					LocalizationData.get("MainMenu.CheckUpdate.Channel.Title"), //$NON-NLS-1$
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+					new String[] { release, betaChannel }, release);
+			if (choice != 0 && choice != 1) {
+				return; // User closed the dialog without choosing
+			}
+			beta = choice == 1;
+		}
+		CheckUpdateDialog.check(owner, false, false, beta);
 	}
 
 	/**
@@ -76,7 +91,7 @@ public class CheckNewReleaseAction extends AbstractAction {
 					@Override
 					public void run() {
 						try {
-							VersionManager.getUpdateInformation();
+							VersionManager.getUpdateInformation(false);
 						} catch (IOException e) {
 							LoggerFactory.getLogger(CheckNewReleaseAction.class).warn("Unable to contact yapbam site", e); //$NON-NLS-1$
 						}

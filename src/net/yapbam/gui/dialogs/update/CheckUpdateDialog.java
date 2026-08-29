@@ -42,6 +42,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	private static final String YABAM_HOME_URL = "https://www.yapbam.net"; //$NON-NLS-1$
 
 	private boolean auto;
+	private boolean beta;
 
 	/** Constructor.
 	 * @param owner The owner window of the this dialog. 
@@ -49,8 +50,19 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	 * @param forced true if the dialog is created because the release is very old, despite of user's preferences
 	 */
 	CheckUpdateDialog(Window owner, boolean auto, boolean forced) {
+		this(owner, auto, forced, false);
+	}
+
+	/** Constructor.
+	 * @param owner The owner window of the this dialog. 
+	 * @param auto true if the dialog is created by an automated task, false, if it is the result of a user action.
+	 * @param forced true if the dialog is created because the release is very old, despite of user's preferences
+	 * @param beta true to check the beta channel, false to check the release channel.
+	 */
+	CheckUpdateDialog(Window owner, boolean auto, boolean forced, boolean beta) {
 		super(owner, LocalizationData.get("MainMenu.CheckUpdate.Dialog.title"), null); //$NON-NLS-1$
 		this.auto = auto;
+		this.beta = beta;
 		if (auto) {
 			setDelay(Long.MAX_VALUE);
 		}
@@ -78,7 +90,17 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 	}
 	
 	public static void check(Window owner, boolean auto, boolean forced) {
-		CheckUpdateDialog dialog = new CheckUpdateDialog(owner, auto, forced);
+		check(owner, auto, forced, false);
+	}
+
+	/** Checks for updates.
+	 * @param owner The owner window of the dialog.
+	 * @param auto true if the dialog is created by an automated task, false, if it is the result of a user action.
+	 * @param forced true if the dialog is created because the release is very old, despite of user's preferences.
+	 * @param beta true to check the beta channel, false to check the release channel.
+	 */
+	public static void check(Window owner, boolean auto, boolean forced, boolean beta) {
+		CheckUpdateDialog dialog = new CheckUpdateDialog(owner, auto, forced, beta);
 		dialog.setVisible(true);
 		dialog.dispose(); //TODO This should be useless ... but it seems there's a bug in LongTaskDialog that don't release the dialog once the task has ended
 	}
@@ -96,7 +118,7 @@ public class CheckUpdateDialog extends LongTaskDialog<Void, Void> {
 			if (SLOW_UPDATE_CHECKING) {
 				Thread.sleep(2000);
 			}
-			return VersionManager.getUpdateInformation();
+			return VersionManager.getUpdateInformation(beta);
 		}
 		
 		@Override
