@@ -46,10 +46,11 @@
         <p>Select the "Installer based on a zip file" option and enter <code>$EXEDIR\Yapbam</code> as default folder.</p>
       </li>
       <li>Run <code>net.yapbam.deployment.YapbamDeployer</code> in (private) project <a href="https://github.com/yapbam/yapbam-deployment">YapbamDeployment</a>.
-        <div class="warning">Make sure to set the right versions in the program fields.</div>
+        <p class="warning">Make sure to set the right versions in the program fields.</p>
+        <p class="warning">You can start by deploying to the beta channel. Then you can check the update will work well by using the <strong>Shift + "Check for updates"</strong> trick to update a copy of current version from the beta channel.</p>
         <p>Wait for it to complete (it is long as this class uploads Yapbam to SourceForge).</p>
-        <p><span style="font-weight: bold; text-decoration: underline;">Copy the release notes on the official site</span> (the deployer deploys only on SourceForge)</p>
       </li>
+      <li><span style="font-weight: bold; text-decoration: underline;">Copy the release notes on the official site</span> (the deployer deploys only on SourceForge)</li>
       <li>Test everything is fine.
         <p>Test that the autoupdate is ok with a copy of the previous version of
         yapbam.</p>
@@ -63,18 +64,5 @@
       <li>Post a comment on <a href="https://bsky.app/">Bluesky</a>.</li>
       <li>Post replies on opened bug reports or feature requests.</li>
     </ol>
-    <br>
-    <div class="card">
-      <h2>A way to carefully test the auto update before any deployment</h2>
-      <ol>
-        <li>In <code>net.yapbam.update.VersionManager#getUpdateURL</code>, change the
-          updateinfo URL to a local file and put a fake version number in
-          <code>net.yapbam.update.version.txt</code></li>
-        <li>In this local file, copy the lines output by <code>srcTests/net.yapbam.update.GetHashAndSize</code></li>
-        <li>Launch this modified version of yapbam.</li>
-        <li>Try to update.</li>
-        <div class="warning">Make sure to revert <code>net.yapbam.update.VersionManager#getUpdateURL</code> after testing.</div>
-      </ol>
-    </div>
   </body>
 </html>

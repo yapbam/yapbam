@@ -15,7 +15,12 @@ public abstract class VersionManager {
 		super();
 	}
 
-	public static UpdateInformation getUpdateInformation() throws IOException {
-		return new UpdateInformation(ApplicationContext.toURL(Boolean.getBoolean("BetaUpdating")?BETA_BASE_UPDATE_URL:BASE_UPDATE_URL)); //$NON-NLS-1$
+	/** Gets the update information from the specified channel.
+	 * @param beta true to check the beta channel, false to check the release channel.
+	 * @return The update information.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public static UpdateInformation getUpdateInformation(boolean beta) throws IOException {
+		return new UpdateInformation(ApplicationContext.toURL(beta?BETA_BASE_UPDATE_URL:BASE_UPDATE_URL));
 	}
 }
