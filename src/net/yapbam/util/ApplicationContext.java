@@ -70,7 +70,6 @@ public abstract class ApplicationContext {
 			addPropertyParameter (url, "javaVendor", "java.vendor");
 			addPropertyParameter (url, "javaVersion", "java.version");
 			url.appendParameter("portable", Boolean.toString(Portable.isPortable()));
-			url.appendParameter("jnlp", Boolean.toString(Portable.isWebStarted()));
 			String serialNumber = YapbamState.INSTANCE.get(SERIAL_NUMBER);
 			if (serialNumber!=null) {
 				url.appendParameter("id", serialNumber);
