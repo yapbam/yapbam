@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fathzer</groupId>
 	<artifactId>yapbam</artifactId>
-	<version>0.21.7</version>
+	<version>0.21.8</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mainClass>com.fathzer.launcher.Launcher</mainClass>
@@ -227,7 +227,7 @@
 		<dependency>
 			<groupId>com.fathzer</groupId>
 			<artifactId>java-check-launcher</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fathzer</groupId>

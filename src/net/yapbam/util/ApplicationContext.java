@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Properties;
 
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import net.yapbam.update.ReleaseInfo;
 
 public abstract class ApplicationContext {
 	//TODO Could be a generic class if update url and "version.txt" was not hard coded.
-	private static final String UTF_8 = "UTF-8";
 	private static final String VERSION_PROPERTY_NAME = "version";
 	public static final String SERIAL_NUMBER = "serialNumber";
 	private static ReleaseInfo version;
@@ -57,29 +55,27 @@ public abstract class ApplicationContext {
 		return version;
 	}
 	
-	private static void addPropertyParameter(StringBuilder url, String paramName, String key) throws UnsupportedEncodingException {
-		String property = System.getProperty(key, "?");
-		url.append("&").append(paramName).append("=").append(URLEncoder.encode(property,UTF_8));
+	private static void addPropertyParameter(UrlBuilder url, String paramName, String key) throws UnsupportedEncodingException {
+		url.appendParameter(paramName, System.getProperty(key, "?"));
 	}
 
 	public static URL toURL(String baseURL) {
 		try {
-			StringBuilder url = new StringBuilder(baseURL);
-			url.append(baseURL.indexOf('?')>=0?'&':'?');
-			url.append("version=").append(URLEncoder.encode(getVersion().toString(),UTF_8));
-			url.append("&country=").append(URLEncoder.encode(LocalizationData.getLocale().getCountry(),UTF_8));
-			url.append("&lang=").append(URLEncoder.encode(LocalizationData.getLocale().getLanguage(),UTF_8));
+			UrlBuilder url = new UrlBuilder(baseURL);
+			url.appendParameter(VERSION_PROPERTY_NAME, getVersion().toString());
+			url.appendParameter("country", LocalizationData.getLocale().getCountry());
+			url.appendParameter("lang", LocalizationData.getLocale().getLanguage());
 			addPropertyParameter (url, "osName", "os.name");
 			addPropertyParameter (url, "osRelease", "os.version");
 			addPropertyParameter (url, "javaVendor", "java.vendor");
 			addPropertyParameter (url, "javaVersion", "java.version");
-			url.append("&portable=").append(URLEncoder.encode(Boolean.toString(Portable.isPortable()),UTF_8));
-			url.append("&jnlp=").append(URLEncoder.encode(Boolean.toString(Portable.isWebStarted()),UTF_8));
+			url.appendParameter("portable", Boolean.toString(Portable.isPortable()));
+			url.appendParameter("jnlp", Boolean.toString(Portable.isWebStarted()));
 			String serialNumber = YapbamState.INSTANCE.get(SERIAL_NUMBER);
 			if (serialNumber!=null) {
-				url.append("&id=").append(URLEncoder.encode(serialNumber,UTF_8));
+				url.appendParameter("id", serialNumber);
 			}
-			return new URL(url.toString());
+			return url.toURL();
 		} catch (Exception e) {
 			ErrorManager.INSTANCE.log(null,e);
 			return null;
