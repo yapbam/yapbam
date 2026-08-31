@@ -6,6 +6,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mainClass>com.fathzer.launcher.Launcher</mainClass>
+		<updater.version>1.1.0</updater.version>
 		<maven.install.skip>true</maven.install.skip>
 		<maven.deploy.skip>true</maven.deploy.skip>
 		<sonar.java.source>1.8</sonar.java.source>
@@ -61,6 +62,32 @@
 		</resources>
 		<testSourceDirectory>testSrc</testSourceDirectory>
 		<plugins>
+			<plugin>
+				<!-- Generates updater.version at the project root. This file contains the version
+				     of the yapbam-updater artifact to use for auto-updates. It is read by
+				     yapbam-deployment to select which updater version to download from Maven
+				     Central and deploy alongside the release. -->
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>generate-updater-version</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>filteredResources-updater</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
@@ -218,6 +245,29 @@
 						<goals>
 							<goal>single</goal> <!-- goals == mojos -->
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!-- Builds the Windows installer (.exe) with NSIS after the zip is created.
+				     Requires makensis to be installed (sudo apt install nsis on Ubuntu). -->
+				<groupId>org.digitalmediaserver</groupId>
+				<artifactId>nsis-maven-plugin</artifactId>
+				<version>1.0.6</version>
+				<executions>
+					<execution>
+						<id>build-windows-installer</id>
+						<phase>package</phase>
+						<goals>
+							<goal>generate-headerfile</goal>
+							<goal>make</goal>
+						</goals>
+						<configuration>
+							<scriptFile>${basedir}/nsis/installer.nsi</scriptFile>
+							<outputFile>${basedir}/yapbam-${project.version}.exe</outputFile>
+							<makeFolder>${basedir}</makeFolder>
+							<attachArtifact>false</attachArtifact>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

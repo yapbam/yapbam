@@ -41,9 +41,10 @@
         <p>Set the version number in the <code>pom.xml</code> file.</p>
         <p>Update the release notes in the <code>src/localization/[fr/]relnotes.txt</code> file and ensure the release dates are correct.</p>
       </li>
-      <li>Run <code>mvn clean package</code> at the project root folder. This creates a ready to deploy zip file in the project directory.<br></li>
-      <li>Create the windows installer with NSIS.
-        <p>Select the "Installer based on a zip file" option and enter <code>$EXEDIR\Yapbam</code> as default folder.</p>
+      <li>Run <code>mvn clean package</code> at the project root folder.
+        <p>This creates a ready to deploy zip file in the project directory.<br>
+        The Windows installer (<code>yapbam-&lt;version&gt;.exe</code>) is also built automatically during this step by the <code>nsis-maven-plugin</code>.</p>
+        <p class="warning">Building the installer requires <code>makensis</code> to be installed (<code>sudo apt install nsis</code> on Ubuntu). If it is not installed, the build will fail.</p>
       </li>
       <li>Run <code>net.yapbam.deployment.YapbamDeployer</code> in (private) project <a href="https://github.com/yapbam/yapbam-deployment">YapbamDeployment</a>.
         <p class="warning">Make sure to set the right versions in the program fields.</p>
