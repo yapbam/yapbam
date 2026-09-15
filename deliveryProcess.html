@@ -46,12 +46,12 @@
         The Windows installer (<code>yapbam-&lt;version&gt;.exe</code>) is also built automatically during this step by the <code>nsis-maven-plugin</code>.</p>
         <p class="warning">Building the installer requires <code>makensis</code> to be installed (<code>sudo apt install nsis</code> on Ubuntu). If it is not installed, the build will fail.</p>
       </li>
-      <li>Run <code>net.yapbam.deployment.YapbamDeployer</code> in (private) project <a href="https://github.com/yapbam/yapbam-deployment">YapbamDeployment</a>.
+      <li>Run <code>net.yapbam.deployment.YapbamDeployer</code> in project <a href="https://github.com/yapbam/yapbam-deployment">YapbamDeployment</a>.
+        <p class="warning">Current infrastructure requires you to be connected to the same network as the web server (no sftp access allowed from outside the network).</p>
         <p class="warning">Make sure to set the right versions in the program fields.</p>
         <p class="warning">You can start by deploying to the beta channel. Then you can check the update will work well by using the <strong>Shift + "Check for updates"</strong> trick to update a copy of current version from the beta channel.</p>
         <p>Wait for it to complete (it is long as this class uploads Yapbam to SourceForge).</p>
       </li>
-      <li><span style="font-weight: bold; text-decoration: underline;">Copy the release notes on the official site</span> (the deployer deploys only on SourceForge)</li>
       <li>Test everything is fine.
         <p>Test that the autoupdate is ok with a copy of the previous version of
         yapbam.</p>
