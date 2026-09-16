@@ -3,7 +3,11 @@ version	next
 known
 	On MacOS, The copy/paste shortcut is ctrl C/V and not Command C/V. Unfortunately, this is a bug in java JTextField and can't be fixed.
 	On windows, using other themes than Nimbus makes description and comment columns not to be correctly vertically aligned (seems to be a Java bug).
-	
+
+version	0.21.8 (09/16/2026)
+improvement
+	The update service now uses yapbam.net instead of SourceForge (SourceForge dropped support for hosting dynamic web sites, which would have broken the update check).
+
 version	0.21.7 (08/29/2026)
 fix
 	The Windows application (Yapbam.exe) was opening a command prompt window on startup (regression introduced in version 0.21.6). This window no longer appears.

@@ -69,7 +69,7 @@ The server returns a `.properties` file (loaded via `UpdateInformation`) contain
 | `autoUpdateUpdaterSize` | Size of `updater.jar` in bytes |
 
 The request URL also carries analytics parameters (version, country, language,
-OS, Java version, portable mode, JNLP, serial number) appended by
+OS, Java version, portable mode, serial number) appended by
 `ApplicationContext.toURL()`. This information is used for analytics purposes
 and can be useful to return a different update package based on the user's
 configuration (typically if the user uses a specific Java version or operating

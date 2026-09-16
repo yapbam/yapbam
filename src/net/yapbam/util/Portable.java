@@ -23,7 +23,6 @@ public final class Portable {
 	private static boolean IS_PORTABLE;
 	private static File APP_DIRECTORY;
 	private static File DATA_DIRECTORY;
-	private static boolean IS_JNLP;
 	private static boolean inited;
 	
 	public interface ApplicationDefinition {
@@ -92,8 +91,7 @@ public final class Portable {
 		if (Portable.appDefinition==null) {
 			throw new IllegalStateException();
 		}
-		APP_DIRECTORY = Boolean.getBoolean("simulateJNLP") ? null : Portable.appDefinition.getAppDirectory();
-		IS_JNLP = APP_DIRECTORY==null;
+		APP_DIRECTORY = Portable.appDefinition.getAppDirectory();
 		IS_PORTABLE = (APP_DIRECTORY!=null) && FileUtils.isWritable(APP_DIRECTORY);
 		File file = APP_DIRECTORY;
 		if (IS_PORTABLE) {
@@ -141,16 +139,7 @@ public final class Portable {
 		init();
 		return IS_PORTABLE;
 	}
-	
-	/** Tests whether this application is launched by Java Web Start.
-	 * <br>A Java Web started application is not portable because the application can't write to its launch directory.
-	 * @return a boolean, true if the application is launched through Java Web Start
-	 */
-	public static boolean isWebStarted() {
-		init();
-		return IS_JNLP;
-	}
-	
+
 	/** Gets the application's installation directory.
 	 * @return a File.
 	 */
@@ -191,12 +180,4 @@ public final class Portable {
 		init();
 		return new File(getDataDirectory(),"update");
 	}
-	
-	/** Gets the directory where patches are installed.
-	 * @return a directory or null if not such directory is available
-	 */
-/*	public static File getJarDirectory() {
-		if (IS_PORTABLE) return new File(getLaunchDirectory(), "App");
-		return DATA_IS_TEMPORARY ? null : new File(getDataDirectory(), "patches");
-	}*/
 }

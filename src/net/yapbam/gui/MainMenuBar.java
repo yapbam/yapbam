@@ -72,7 +72,6 @@ import net.yapbam.gui.persistence.YapbamDataWrapper;
 import net.yapbam.gui.persistence.YapbamPersistenceManager;
 import net.yapbam.gui.transactiontable.GeneratePeriodicalTransactionsAction;
 import net.yapbam.gui.util.MenuScroller;
-import net.yapbam.util.Portable;
 
 public class MainMenuBar extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -246,11 +245,9 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
 		menu.setToolTipText(LocalizationData.get("MainMenu.QuestionMark.ToolTip")); //$NON-NLS-1$
 		this.add(menu);
 
-		if (!Portable.isWebStarted()) {
-			menu.add(new CheckNewReleaseAction(this.frame.getJFrame()));
-			insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
-			menu.addSeparator();
-		}
+		menu.add(new CheckNewReleaseAction(this.frame.getJFrame()));
+		insertPluginMenuItems(menu, AbstractPlugIn.UPDATES_PART);
+		menu.addSeparator();
 /*		item = getURLMenuItem(LocalizationData.get("MainMenu.help"), "https://www.yapbam.net"); //$NON-NLS-1$ //$NON-NLS-2$
 		item.setToolTipText(LocalizationData.get("MainMenu.help.tooltip")); //$NON-NLS-1$
 		menu.add(item);*/
